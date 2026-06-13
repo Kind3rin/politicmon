@@ -1,0 +1,1330 @@
+import { BALLOT_ART, MONSTER_ART, MONSTER_ACTION_ART } from "../../art/monsters";
+import { ITEMS } from "../../data/items";
+import { MOVES, STATUS_LABELS, STATUS_NAMES, moveSummary, moveKindLabel, type Move } from "../../data/moves";
+import { TYPE_COLORS } from "../../data/poltypes";
+import { BADGE_TEASER, type TrainerDef } from "../../data/trainers";
+import { audio } from "../../engine/audio";
+import type { Input } from "../../engine/input";
+import type { Scene, SceneStack } from "../../engine/scene";
+import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
+import { markCaught, markSeen, saveGame, type GameState } from "../state";
+import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
+import {
+  evolve, expForLevel, expYield, gainExp, speciesOf, statsOf, type Monster
+} from "../monster";
+import { typeMultiplier } from "../../data/poltypes";
+import {
+  calcDamage, catchChance, chooseFoeMove, effectiveStat, makeCombatant, runChance, statName,
+  type Combatant
+} from "./sim";
+import { Menu, MessageBox, drawHpBar, wrapText, GREY, INK, PAPER } from "../../ui/widgets";
+import { PartyScene } from "../../scenes/PartyScene";
+import { BagScene } from "../../scenes/BagScene";
+
+export type BattleResult = "win" | "loss" | "caught" | "run";
+
+interface Step {
+  text?: string;
+  run?: () => void;
+  waitHp?: boolean;
+  pause?: number;
+}
+
+export interface BattleOptions {
+  state: GameState;
+  foeTeam: Monster[];
+  trainer?: TrainerDef;
+  music?: string; // override (es. leggendari)
+  onEnd: (result: BattleResult) => void;
+}
+
+// Boss narrativi: tema musicale dedicato.
+const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano"];
+
+function battleMusic(opts: BattleOptions): string {
+  if (opts.music) {
+    return opts.music;
+  }
+  if (!opts.trainer) {
+    return "battle-wild";
+  }
+  if (BOSS_TRAINER_IDS.includes(opts.trainer.id)) {
+    return "battle-boss";
+  }
+  return opts.trainer.badge ? "battle-gym" : "battle-trainer";
+}
+
+export class BattleScene implements Scene {
+  private state: GameState;
+  private foeTeam: Monster[];
+  private trainer?: TrainerDef;
+  private onEnd: (result: BattleResult) => void;
+
+  private player!: Combatant;
+  private foe!: Combatant;
+  private foeIndex = 0;
+
+  private queue: Step[] = [];
+  private mode: "queue" | "menu" | "fight" | "ask" = "queue";
+  private msg = new MessageBox();
+  private mainMenu = new Menu([
+    { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUGA" }
+  ]);
+  private fightMenu = new Menu([]);
+  private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
+  private askText = "";
+  private askYes: (() => void) | null = null;
+  private askNo: (() => void) | null = null;
+
+  private displayHp = { player: 0, foe: 0 };
+  private displayExp = 0;
+  private runAttempts = 0;
+  private finished = false;
+  private shake = 0;
+  private ballAnim: { t: number; shakes: number; success: boolean } | null = null;
+  private stepTimer = 0;
+  private time = 0;
+  private introT = 0; // apertura a cerchio + slide degli sprite
+  private lungeT = { player: 0, foe: 0 }; // affondo dell'attaccante
+  private flashT = { player: 0, foe: 0 }; // lampeggio del colpito
+  private levelFlash = 0; // bagliore dorato sul level-up
+
+  constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
+    this.state = opts.state;
+    this.foeTeam = opts.foeTeam;
+    this.trainer = opts.trainer;
+    this.onEnd = opts.onEnd;
+
+    const lead = this.state.party.find((m) => m.hp > 0) ?? this.state.party[0];
+    this.player = makeCombatant(lead);
+    this.foe = makeCombatant(this.foeTeam[0]);
+    this.displayHp.player = lead.hp;
+    this.displayHp.foe = this.foe.mon.hp;
+    this.displayExp = this.expRatio();
+    markSeen(this.state, this.foe.mon.speciesId);
+
+    audio.playMusic(battleMusic(opts));
+    if (this.trainer) {
+      this.push({ text: `${this.trainer.name} ti sfida!` });
+      for (const line of this.trainer.intro) {
+        this.push({ text: line });
+      }
+      this.push({ text: `${this.trainer.name} manda in campo ${this.foeName()}!` });
+    } else {
+      this.push({ text: `Un ${this.foeName()} selvatico sbuca dalla campagna elettorale!` });
+    }
+    this.push({ text: `Vai, ${this.playerName()}!` });
+  }
+
+  // ---- Helpers ----
+
+  private playerName(): string {
+    return speciesOf(this.player.mon).name;
+  }
+
+  private foeName(): string {
+    return speciesOf(this.foe.mon).name;
+  }
+
+  private push(step: Step): void {
+    this.queue.push(step);
+  }
+
+  private expRatio(): number {
+    const mon = this.player.mon;
+    if (mon.level >= 50) {
+      return 1;
+    }
+    const cur = expForLevel(mon.level);
+    const next = expForLevel(mon.level + 1);
+    return Math.max(0, Math.min(1, (mon.exp - cur) / (next - cur)));
+  }
+
+  private endBattle(result: BattleResult): void {
+    this.push({
+      run: () => {
+        this.finished = true;
+        audio.playMusic(null);
+        this.onEnd(result);
+      }
+    });
+  }
+
+  // ---- Turn building ----
+
+  private startTurn(playerMove: Move): void {
+    const slot = this.player.mon.moves.find((s) => s.id === playerMove.id);
+    if (slot) {
+      slot.pp = Math.max(0, slot.pp - 1);
+    }
+    const foeMove = chooseFoeMove(this.foe, this.player);
+    const pPriority = playerMove.effect?.priority ?? 0;
+    const fPriority = foeMove.effect?.priority ?? 0;
+    const playerFirst =
+      pPriority !== fPriority
+        ? pPriority > fPriority
+        : effectiveStat(this.player, "spd") === effectiveStat(this.foe, "spd")
+          ? Math.random() < 0.5
+          : effectiveStat(this.player, "spd") > effectiveStat(this.foe, "spd");
+
+    const first = playerFirst ? "player" : "foe";
+    const second = playerFirst ? "foe" : "player";
+    this.pushMove(first, first === "player" ? playerMove : foeMove);
+    this.push({
+      run: () => {
+        if (this.player.mon.hp > 0 && this.foe.mon.hp > 0) {
+          this.pushMoveNow(second, second === "player" ? playerMove : foeMove);
+        }
+      }
+    });
+    this.pushEndOfTurn();
+  }
+
+  private pushMoveNow(side: "player" | "foe", move: Move): void {
+    // Inserisce gli step della mossa in testa alla coda (dopo lo step corrente).
+    const saved = this.queue;
+    this.queue = [];
+    this.pushMove(side, move);
+    this.queue = [...this.queue, ...saved];
+  }
+
+  private pushMove(side: "player" | "foe", move: Move): void {
+    const attacker = side === "player" ? this.player : this.foe;
+    const defender = side === "player" ? this.foe : this.player;
+    const attackerName = side === "player" ? this.playerName() : `Il nemico ${this.foeName()}`;
+
+    this.push({
+      run: () => {
+        if (attacker.mon.hp <= 0 || defender.mon.hp <= 0) {
+          return;
+        }
+        // Status: INDAGATO può bloccare il turno.
+        if (attacker.mon.status === "indagato" && Math.random() < 0.25) {
+          this.pushFront([{ text: `${attackerName} è trattenuto in audizione! Non può agire!` }]);
+          return;
+        }
+        // GAFFE: come la confusione.
+        if (attacker.gaffeTurns > 0) {
+          attacker.gaffeTurns -= 1;
+          if (attacker.gaffeTurns === 0) {
+            this.pushFront([{ text: `${attackerName} ha chiarito la GAFFE con una nota stampa!` }]);
+          } else if (Math.random() < 0.33) {
+            const self = Math.max(1, Math.floor((attacker.mon.level * 2) / 3) + 2);
+            attacker.mon.hp = Math.max(0, attacker.mon.hp - self);
+            this.pushFront([
+              { text: `${attackerName} riformula la GAFFE e peggiora tutto!`, waitHp: true, run: () => audio.hit() },
+              ...this.koCheckSteps(side === "player" ? "player" : "foe")
+            ]);
+            return;
+          }
+        }
+        this.pushFront(this.moveSteps(side, attacker, defender, move, attackerName));
+      }
+    });
+  }
+
+  private pushFront(steps: Step[]): void {
+    this.queue = [...steps, ...this.queue];
+  }
+
+  private moveSteps(
+    side: "player" | "foe",
+    attacker: Combatant,
+    defender: Combatant,
+    move: Move,
+    attackerName: string
+  ): Step[] {
+    const defenderName = side === "player" ? `Il nemico ${this.foeName()}` : this.playerName();
+    const steps: Step[] = [{ text: `${attackerName} usa ${move.name}!` }];
+
+    if (side === "foe") {
+      const slot = attacker.mon.moves.find((s) => s.id === move.id);
+      if (slot) {
+        slot.pp = Math.max(0, slot.pp - 1);
+      }
+    }
+
+    const selfTargeted = move.power === 0 && !move.effect?.status && move.effect?.stat?.target !== "foe";
+    if (!selfTargeted && Math.random() * 100 >= move.accuracy) {
+      steps.push({ text: "Ma manca il bersaglio! La piazza fischia." });
+      return steps;
+    }
+
+    if (move.power > 0) {
+      const result = calcDamage(attacker, defender, move);
+      steps.push({
+        run: () => {
+          defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
+          this.lungeT[side] = 0.3;
+          this.flashT[side === "player" ? "foe" : "player"] = 0.45;
+          this.shake = side === "foe" || result.crit ? 0.3 : 0;
+          if (result.typeMult >= 2) {
+            audio.hitSuper();
+          } else if (result.typeMult > 0 && result.typeMult < 1) {
+            audio.hitWeak();
+          } else {
+            audio.hit();
+          }
+        },
+        waitHp: true,
+        pause: 0.25
+      });
+      if (result.crit) {
+        steps.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
+      }
+      if (result.typeMult === 0) {
+        steps.push({ text: "Non ha alcun effetto..." });
+      } else if (result.typeMult >= 2) {
+        steps.push({
+          text:
+            move.type === "SINISTRA" && speciesOf(defender.mon).types.includes("SINISTRA")
+              ? "È super efficace! La SINISTRA è fortissima contro se stessa!"
+              : "È super efficace!"
+        });
+      } else if (result.typeMult < 1) {
+        steps.push({ text: "Non è molto efficace..." });
+      }
+      if (move.effect?.drainRatio) {
+        const healed = Math.max(1, Math.floor(result.damage * move.effect.drainRatio));
+        steps.push({
+          text: `${attackerName} assorbe consenso!`,
+          run: () => {
+            attacker.mon.hp = Math.min(statsOf(attacker.mon).hp, attacker.mon.hp + healed);
+          },
+          waitHp: true
+        });
+      }
+      if (move.effect?.recoilRatio) {
+        const recoil = Math.max(1, Math.floor(result.damage * move.effect.recoilRatio));
+        steps.push({
+          text: `${attackerName} subisce il contraccolpo della corrente interna!`,
+          run: () => {
+            attacker.mon.hp = Math.max(0, attacker.mon.hp - recoil);
+            audio.hit();
+          },
+          waitHp: true
+        });
+      }
+    }
+
+    const effect = move.effect;
+    if (effect?.healRatio) {
+      steps.push({
+        run: () => {
+          const max = statsOf(attacker.mon).hp;
+          attacker.mon.hp = Math.min(max, attacker.mon.hp + Math.floor(max * effect.healRatio!));
+          if (effect.cureStatus) {
+            attacker.mon.status = null;
+          }
+          audio.heal();
+        },
+        waitHp: true
+      });
+      steps.push({ text: `${attackerName} recupera consenso!` });
+    }
+    if (effect?.stat) {
+      const target = effect.stat.target === "self" ? attacker : defender;
+      const targetName = effect.stat.target === "self" ? attackerName : defenderName;
+      if ((effect.stat.chance ?? 100) > Math.random() * 100) {
+        steps.push({
+          run: () => {
+            target.stages[effect.stat!.key] = Math.max(
+              -6, Math.min(6, target.stages[effect.stat!.key] + effect.stat!.stages)
+            );
+          }
+        });
+        steps.push({
+          text: `${statName(effect.stat.key)} di ${targetName} ${effect.stat.stages > 0 ? "sale" : "scende"}${Math.abs(effect.stat.stages) > 1 ? " di brutto" : ""}!`
+        });
+      }
+    }
+    if (effect?.status && defender.mon.hp > 0) {
+      if (Math.random() * 100 < effect.status.chance) {
+        const id = effect.status.id;
+        if (defender.mon.status || (id === "gaffe" && defender.gaffeTurns > 0)) {
+          if (effect.status.chance >= 100) {
+            steps.push({ text: `${defenderName} è già nei guai fino al collo!` });
+          }
+        } else {
+          steps.push({
+            run: () => {
+              if (id === "gaffe") {
+                defender.gaffeTurns = 2 + Math.floor(Math.random() * 3);
+              } else {
+                defender.mon.status = id;
+              }
+            }
+          });
+          steps.push({ text: `${defenderName} è ${STATUS_NAMES[id]}!` });
+        }
+      }
+    }
+
+    steps.push(...this.koCheckSteps(side === "player" ? "foe" : "player"));
+    return steps;
+  }
+
+  private koCheckSteps(side: "player" | "foe"): Step[] {
+    return [
+      {
+        run: () => {
+          const c = side === "player" ? this.player : this.foe;
+          if (c.mon.hp > 0) {
+            return;
+          }
+          if (side === "foe") {
+            this.pushFront(this.foeFaintedSteps());
+          } else {
+            this.pushFront(this.playerFaintedSteps());
+          }
+        }
+      }
+    ];
+  }
+
+  private foeFaintedSteps(): Step[] {
+    const steps: Step[] = [
+      { run: () => audio.faint() },
+      { text: `Il nemico ${this.foeName()} si ritira dalla corsa!` }
+    ];
+    const istruzione = hasMinistro(this.state, "istruzione");
+    const base = expYield(this.foe.mon, Boolean(this.trainer));
+    // ONDA DEL CONSENSO (feature originale): l'EXP scala coi SONDAGGI.
+    // Popolarità alta = i tuoi crescono in fretta; impopolarità = penalità.
+    const sond = this.state.sondaggi;
+    const wave = sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.85;
+    const gained = Math.max(1, Math.floor(base * (istruzione ? 1.15 : 1) * wave));
+    steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
+    if (wave > 1) {
+      steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
+    } else if (wave < 1) {
+      steps.push({ text: `Sondaggi a terra (${sond}%): l'entusiasmo scarseggia (-15%).` });
+    }
+    if (istruzione) {
+      steps.push({ text: "Il MIN. ISTRUZIONE ha preparato la squadra: bonus del 15%!" });
+    }
+    // DIVISA EQUA: condivide metà EXP con il resto della squadra viva.
+    const hasShare = (this.state.bag["divisa"] ?? 0) > 0;
+    if (hasShare) {
+      steps.push({ text: "La DIVISA EQUA spartisce il consenso con tutta la squadra!" });
+    }
+    steps.push({
+      run: () => {
+        const followUp: Step[] = [];
+        // EXP condivisa (silenziosa) agli altri membri vivi, prima del lead
+        // così i loro level-up non interrompono l'animazione del protagonista.
+        if (hasShare) {
+          const shared = Math.max(1, Math.floor(gained / 2));
+          for (const mon of this.state.party) {
+            if (mon === this.player.mon || mon.hp <= 0) {
+              continue;
+            }
+            const ev = gainExp(mon, shared, this.state.sondaggi);
+            if (ev.length > 0) {
+              followUp.push({ text: `${speciesOf(mon).name} cresce in panchina: ora è L${mon.level}!` });
+            }
+          }
+        }
+        const events = gainExp(this.player.mon, gained, this.state.sondaggi);
+        for (const event of events) {
+          followUp.push({ run: () => { audio.levelUp(); this.levelFlash = 0.6; } });
+          followUp.push({ text: `${this.playerName()} sale al livello ${event.newLevel}!`, waitHp: true });
+          for (const moveId of event.learnableMoves) {
+            followUp.push(...this.learnMoveSteps(moveId));
+          }
+          if (event.evolvesTo) {
+            followUp.push(...this.evolveSteps(event.evolvesTo));
+          }
+        }
+        followUp.push({ run: () => this.afterFoeDown() });
+        this.pushFront(followUp);
+      }
+    });
+    return steps;
+  }
+
+  private learnMoveSteps(moveId: string): Step[] {
+    const move = MOVES[moveId];
+    return [
+      {
+        run: () => {
+          const mon = this.player.mon;
+          if (mon.moves.length < 4) {
+            mon.moves.push({ id: moveId, pp: move.pp });
+            this.pushFront([{ text: `${this.playerName()} impara ${move.name}!` }]);
+            return;
+          }
+          this.ask(
+            `Vuoi dimenticare una mossa per imparare ${move.name}?`,
+            () => {
+              const choice = new Menu(
+                mon.moves.map((slot) => ({ label: MOVES[slot.id].name }))
+              );
+              this.fightMenu = choice;
+              this.mode = "fight";
+              this.onFightSelect = (index) => {
+                const old = MOVES[mon.moves[index].id];
+                mon.moves[index] = { id: moveId, pp: move.pp };
+                this.mode = "queue";
+                this.pushFront([
+                  { text: `1, 2, 3... PUF! ${this.playerName()} dimentica ${old.name}...` },
+                  { text: `...e impara ${move.name}!` }
+                ]);
+              };
+              this.onFightCancel = () => {
+                this.mode = "queue";
+                this.pushFront([{ text: `${this.playerName()} rinuncia a ${move.name}.` }]);
+              };
+            },
+            () => {
+              this.pushFront([{ text: `${this.playerName()} rinuncia a ${move.name}.` }]);
+            }
+          );
+        }
+      }
+    ];
+  }
+
+  private evolveSteps(targetId: string): Step[] {
+    return [
+      { text: `Aspetta! ${this.playerName()} sta cambiando casacca!` },
+      {
+        run: () => {
+          const oldName = this.playerName();
+          evolve(this.player.mon, targetId);
+          markSeen(this.state, this.player.mon.speciesId);
+          markCaught(this.state, this.player.mon.speciesId);
+          audio.catchJingle();
+          this.pushFront([
+            { text: `${oldName} si è evoluto in ${this.playerName()}!` }
+          ]);
+        }
+      }
+    ];
+  }
+
+  private afterFoeDown(): void {
+    if (this.trainer && this.foeIndex < this.foeTeam.length - 1) {
+      this.foeIndex += 1;
+      this.foe = makeCombatant(this.foeTeam[this.foeIndex]);
+      this.displayHp.foe = this.foe.mon.hp;
+      markSeen(this.state, this.foe.mon.speciesId);
+      this.pushFront([
+        { text: `${this.trainer.name} manda in campo ${this.foeName()}!` }
+      ]);
+      return;
+    }
+    const steps: Step[] = [];
+    if (this.trainer) {
+      const trainer = this.trainer;
+      const economia = hasMinistro(this.state, "economia");
+      const payout = Math.round(trainer.money * (economia ? 1.25 : 1));
+      steps.push({ run: () => audio.victory() });
+      steps.push({ text: `Hai sconfitto ${trainer.name}!` });
+      for (const line of trainer.defeat) {
+        steps.push({ text: line });
+      }
+      steps.push({
+        text: `Ricevi ${payout}€ di rimborso elettorale!`,
+        run: () => {
+          this.state.money += payout;
+        }
+      });
+      if (economia) {
+        steps.push({ text: "Il MIN. ECONOMIA ha trovato la copertura: +25%!" });
+      }
+      steps.push({
+        run: () => {
+          const { value, milestone } = bumpSondaggi(this.state, 6);
+          const lines: Step[] = [{ text: `I SONDAGGI ti premiano: gradimento al ${value}%!` }];
+          if (milestone) {
+            // Notifica gamificata quando superi una soglia chiave.
+            lines.push({ text: milestone, run: () => audio.catchJingle() });
+          }
+          this.pushFront(lines);
+        }
+      });
+      if (trainer.badge) {
+        const badgeName = trainer.badge.toUpperCase();
+        steps.push({ run: () => audio.catchJingle() });
+        steps.push({
+          text: `Conquisti la MEDAGLIA ${badgeName}!`,
+          run: () => {
+            if (!this.state.badges.includes(trainer.badge!)) {
+              this.state.badges.push(trainer.badge!);
+            }
+            addSondaggi(this.state, 8);
+            const lead: Step[] = [];
+            if (this.state.badges.length === 1) {
+              lead.push(
+                { text: "Con una medaglia in tasca puoi formare il GOVERNO OMBRA!" },
+                { text: "Assegna i ministeri dal menu (START): ogni incarico dà un bonus." }
+              );
+            }
+            // Cliffhanger: anticipa la prossima tappa per invogliare a continuare.
+            const teaser = BADGE_TEASER[trainer.badge!];
+            if (teaser) {
+              for (const line of teaser) {
+                lead.push({ text: line });
+              }
+            }
+            if (lead.length > 0) {
+              this.pushFront(lead);
+            }
+          }
+        });
+      }
+      if (trainer.reward) {
+        const item = ITEMS[trainer.reward.itemId];
+        steps.push({
+          text: `Ottieni ${item.name} x${trainer.reward.qty}!`,
+          run: () => {
+            this.state.bag[item.id] = (this.state.bag[item.id] ?? 0) + trainer.reward!.qty;
+          }
+        });
+      }
+      // BONUS A SORPRESA: ~30% di pescare un extra dalla "mazzetta elettorale".
+      // Variabilità della ricompensa = quel "ancora una battaglia".
+      if (Math.random() < 0.3) {
+        const drop = rollLootDrop();
+        steps.push({ run: () => audio.catchJingle() });
+        steps.push({
+          text: `BUSTA A SORPRESA! Dentro c'è: ${ITEMS[drop.id].name} x${drop.qty}!`,
+          run: () => {
+            this.state.bag[drop.id] = (this.state.bag[drop.id] ?? 0) + drop.qty;
+          }
+        });
+      }
+    } else {
+      steps.push({
+        run: () => {
+          audio.victory();
+          addSondaggi(this.state, 2);
+        }
+      });
+    }
+    this.pushFront(steps);
+    this.endBattle("win");
+  }
+
+  private playerFaintedSteps(): Step[] {
+    return [
+      { run: () => audio.faint() },
+      { text: `${this.playerName()} si ritira dalla corsa!` },
+      {
+        run: () => {
+          const alive = this.state.party.filter((m) => m.hp > 0);
+          if (alive.length === 0) {
+            this.pushFront([{ text: "Sei rimasto senza candidati..." }]);
+            this.endBattle("loss");
+            return;
+          }
+          this.stack.push(
+            new PartyScene(this.stack, this.input, this.state, {
+              mode: "forced-switch",
+              onChoose: (mon) => this.switchTo(mon, true)
+            })
+          );
+        }
+      }
+    ];
+  }
+
+  private switchTo(mon: Monster, afterFaint: boolean): void {
+    this.player = makeCombatant(mon);
+    this.displayHp.player = mon.hp;
+    this.displayExp = this.expRatio();
+    const steps: Step[] = [{ text: `Tocca a te, ${this.playerName()}!` }];
+    if (!afterFaint) {
+      // Il cambio consuma il turno: il nemico attacca.
+      steps.push({
+        run: () => {
+          if (this.foe.mon.hp > 0) {
+            this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+          }
+        }
+      });
+      steps.push(...this.endOfTurnSteps());
+    }
+    this.pushFront(steps);
+    this.mode = "queue";
+  }
+
+  private pushEndOfTurn(): void {
+    this.push({
+      run: () => this.pushFront(this.endOfTurnSteps())
+    });
+  }
+
+  private endOfTurnSteps(): Step[] {
+    const apply = (c: Combatant, name: string): Step[] => {
+      if (c.mon.hp <= 0 || c.mon.status !== "scandalo") {
+        return [];
+      }
+      return [
+        {
+          text: `${name} è logorato dallo SCANDALO!`,
+          run: () => {
+            c.mon.hp = Math.max(0, c.mon.hp - Math.max(1, Math.floor(statsOf(c.mon).hp / 8)));
+            audio.hit();
+          },
+          waitHp: true
+        },
+        ...this.koCheckSteps(c === this.player ? "player" : "foe")
+      ];
+    };
+    return [...apply(this.player, this.playerName()), ...apply(this.foe, `Il nemico ${this.foeName()}`)];
+  }
+
+  // ---- Oggetti ----
+
+  useItem(itemId: string): void {
+    const item = ITEMS[itemId];
+    if (!item) {
+      return;
+    }
+    if (item.kind === "ball") {
+      this.throwBall(itemId);
+      return;
+    }
+    if (item.kind === "evo") {
+      this.pushFront([
+        { text: "Le tessere si firmano in segreteria, non in diretta TV!" }
+      ]);
+      this.mode = "queue";
+      return;
+    }
+    this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
+    const steps: Step[] = [];
+    if (item.kind === "heal") {
+      steps.push({
+        text: `Usi ${item.name} su ${this.playerName()}!`,
+        run: () => {
+          this.player.mon.hp = Math.min(
+            statsOf(this.player.mon).hp,
+            this.player.mon.hp + (item.amount ?? 20)
+          );
+          audio.heal();
+        },
+        waitHp: true
+      });
+    } else {
+      steps.push({
+        text: `${this.playerName()} si scrolla di dosso ogni guaio!`,
+        run: () => {
+          this.player.mon.status = null;
+          this.player.gaffeTurns = 0;
+          audio.heal();
+        }
+      });
+    }
+    // Usare un oggetto consuma il turno.
+    steps.push({
+      run: () => {
+        if (this.foe.mon.hp > 0) {
+          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+        }
+      }
+    });
+    steps.push(...this.endOfTurnSteps());
+    this.pushFront(steps);
+    this.mode = "queue";
+  }
+
+  private throwBall(itemId: string): void {
+    const item = ITEMS[itemId];
+    if (this.trainer) {
+      this.pushFront([
+        { text: "Non si reclutano i candidati altrui in diretta!" },
+        { text: "Il regolamento di campagna lo vieta. Sezione 7, comma maleducazione." }
+      ]);
+      this.mode = "queue";
+      return;
+    }
+    this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
+    const propaganda = hasMinistro(this.state, "propaganda");
+    const chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1);
+    const success = Math.random() < chance;
+    const shakes = success ? 3 : Math.min(2, Math.floor(chance * 4 * Math.random()));
+    this.pushFront([
+      { text: `Lanci una ${item.name}!`, run: () => audio.ballThrow() },
+      {
+        run: () => {
+          this.ballAnim = { t: 0, shakes, success };
+        },
+        pause: 1.2 + shakes * 0.55
+      },
+      {
+        run: () => {
+          this.ballAnim = null;
+          if (success) {
+            this.pushFront(this.captureSteps());
+          } else {
+            this.pushFront([
+              { text: `Maledizione! ${this.foeName()} si è astenuto!` },
+              {
+                run: () => {
+                  if (this.foe.mon.hp > 0) {
+                    this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+                  }
+                }
+              },
+              ...this.endOfTurnSteps()
+            ]);
+          }
+        }
+      }
+    ]);
+    this.mode = "queue";
+  }
+
+  private captureSteps(): Step[] {
+    const steps: Step[] = [
+      { run: () => audio.catchJingle() },
+      { text: `Fatto! ${this.foeName()} è stato eletto nella tua squadra!` },
+      {
+        run: () => {
+          markCaught(this.state, this.foe.mon.speciesId);
+          addSondaggi(this.state, 3);
+          if (this.state.party.length < 6) {
+            this.state.party.push(this.foe.mon);
+          } else {
+            this.pushFront([
+              { text: "La squadra è piena: viene spedito al CIRCOLO DI PARTITO a fare tesseramenti." }
+            ]);
+          }
+          saveGame(this.state);
+        }
+      },
+      { text: `I dati di ${this.foeName()} sono nel POLITICDEX.` }
+    ];
+    this.endBattle("caught");
+    return steps;
+  }
+
+  // ---- Ask (sì/no) ----
+
+  private ask(question: string, yes: () => void, no: () => void): void {
+    this.askText = question;
+    this.askMenu.index = 0;
+    this.askYes = yes;
+    this.askNo = no;
+    this.mode = "ask";
+  }
+
+  private onFightSelect: ((index: number) => void) | null = null;
+  private onFightCancel: (() => void) | null = null;
+
+  // ---- Update ----
+
+  update(dt: number): void {
+    if (this.finished) {
+      return;
+    }
+    this.time += dt;
+    this.shake = Math.max(0, this.shake - dt);
+    this.lungeT.player = Math.max(0, this.lungeT.player - dt);
+    this.lungeT.foe = Math.max(0, this.lungeT.foe - dt);
+    this.flashT.player = Math.max(0, this.flashT.player - dt);
+    this.flashT.foe = Math.max(0, this.flashT.foe - dt);
+    this.levelFlash = Math.max(0, this.levelFlash - dt);
+    if (this.introT < 1.2) {
+      this.introT += dt;
+      if (this.introT < 0.55) {
+        return; // il cerchio si sta ancora aprendo
+      }
+    }
+
+    // Anima barre HP ed EXP.
+    const speed = dt * 60;
+    this.displayHp.player = approach(this.displayHp.player, this.player.mon.hp, speed * 0.8);
+    this.displayHp.foe = approach(this.displayHp.foe, this.foe.mon.hp, speed * 0.8);
+    this.displayExp = approach(this.displayExp, this.expRatio(), dt * 1.5);
+    if (this.ballAnim) {
+      this.ballAnim.t += dt;
+    }
+
+    if (this.mode === "queue") {
+      this.msg.update(dt, this.input);
+      if (this.msg.isOpen) {
+        return;
+      }
+      if (this.stepTimer > 0) {
+        this.stepTimer -= dt;
+        return;
+      }
+      const hpSettled =
+        Math.abs(this.displayHp.player - this.player.mon.hp) < 0.5 &&
+        Math.abs(this.displayHp.foe - this.foe.mon.hp) < 0.5;
+      const step = this.queue[0];
+      if (!step) {
+        if (hpSettled) {
+          this.mainMenu.index = 0;
+          this.mode = "menu";
+        }
+        return;
+      }
+      if (step.waitHp && !hpSettled) {
+        return;
+      }
+      this.queue.shift();
+      step.run?.();
+      if (step.pause) {
+        this.stepTimer = step.pause;
+      }
+      if (step.text) {
+        this.msg.show([step.text]);
+      }
+      return;
+    }
+
+    if (this.mode === "menu") {
+      const result = this.menuGridUpdate();
+      if (result === null) {
+        return;
+      }
+      if (result === 0) {
+        this.openFightMenu();
+      } else if (result === 1) {
+        this.stack.push(
+          new BagScene(this.stack, this.input, this.state, {
+            inBattle: true,
+            onUse: (itemId) => this.useItem(itemId)
+          })
+        );
+      } else if (result === 2) {
+        this.stack.push(
+          new PartyScene(this.stack, this.input, this.state, {
+            mode: "battle-switch",
+            currentUid: this.player.mon.uid,
+            onChoose: (mon) => this.switchTo(mon, false)
+          })
+        );
+      } else if (result === 3) {
+        this.tryRun();
+      }
+      return;
+    }
+
+    if (this.mode === "fight") {
+      const action = this.fightGridUpdate();
+      if (action === "select") {
+        if (this.onFightSelect) {
+          const handler = this.onFightSelect;
+          this.onFightSelect = null;
+          this.onFightCancel = null;
+          handler(this.fightMenu.index);
+          return;
+        }
+        const slot = this.player.mon.moves[this.fightMenu.index];
+        if (!slot || slot.pp <= 0) {
+          audio.cancel();
+          return;
+        }
+        this.mode = "queue";
+        this.startTurn(MOVES[slot.id]);
+      } else if (action === "cancel") {
+        if (this.onFightCancel) {
+          const handler = this.onFightCancel;
+          this.onFightSelect = null;
+          this.onFightCancel = null;
+          handler();
+          return;
+        }
+        this.mode = "menu";
+      }
+      return;
+    }
+
+    if (this.mode === "ask") {
+      const action = this.askMenu.update(this.input);
+      if (action === "select") {
+        const handler = this.askMenu.index === 0 ? this.askYes : this.askNo;
+        this.mode = "queue";
+        handler?.();
+      } else if (action === "cancel") {
+        this.mode = "queue";
+        this.askNo?.();
+      }
+    }
+  }
+
+  private menuGridUpdate(): number | null {
+    // Menu 2x2: LOTTA BORSA / SQUADRA FUGA.
+    const idx = this.mainMenu.index;
+    if (this.input.wasPressed("left") || this.input.wasPressed("right")) {
+      this.mainMenu.index = idx % 2 === 0 ? idx + 1 : idx - 1;
+      audio.cursor();
+    }
+    if (this.input.wasPressed("up") || this.input.wasPressed("down")) {
+      this.mainMenu.index = (idx + 2) % 4;
+      audio.cursor();
+    }
+    if (this.input.wasPressed("a")) {
+      audio.confirm();
+      return this.mainMenu.index;
+    }
+    return null;
+  }
+
+  // Navigazione 2x2 del menu mosse (stesso schema del menu principale).
+  private fightGridUpdate(): "select" | "cancel" | null {
+    const n = this.fightMenu.items.length;
+    const move = (target: number) => {
+      if (target >= 0 && target < n && target !== this.fightMenu.index) {
+        this.fightMenu.index = target;
+        audio.cursor();
+      }
+    };
+    if (this.input.wasPressed("left")) {
+      move(this.fightMenu.index - 1);
+    }
+    if (this.input.wasPressed("right")) {
+      move(this.fightMenu.index + 1);
+    }
+    if (this.input.wasPressed("up")) {
+      move(this.fightMenu.index - 2);
+    }
+    if (this.input.wasPressed("down")) {
+      move(this.fightMenu.index + 2);
+    }
+    if (this.input.wasPressed("a")) {
+      if (this.fightMenu.items[this.fightMenu.index]?.disabled) {
+        audio.cancel();
+        return null;
+      }
+      audio.confirm();
+      return "select";
+    }
+    if (this.input.wasPressed("b")) {
+      audio.cancel();
+      return "cancel";
+    }
+    return null;
+  }
+
+  private openFightMenu(): void {
+    // Se hai già ELETTO la specie avversaria, il Dex suggerisce i matchup.
+    const known = this.state.dex[this.foe.mon.speciesId] === "caught";
+    const foeTypes = speciesOf(this.foe.mon).types;
+    this.fightMenu = new Menu(
+      this.player.mon.moves.map((slot) => {
+        const move = MOVES[slot.id];
+        let marker = "";
+        if (known && move.power > 0) {
+          const mult = typeMultiplier(move.type, foeTypes);
+          marker = mult === 0 ? "X " : mult >= 2 ? "▲ " : mult < 1 ? "▼ " : "";
+        }
+        return {
+          label: move.name,
+          rightLabel: `${marker}PP ${slot.pp}/${move.pp}`,
+          disabled: slot.pp <= 0
+        };
+      })
+    );
+    this.mode = "fight";
+  }
+
+  private tryRun(): void {
+    if (this.trainer) {
+      this.pushFront([{ text: "Non si scappa da un confronto televisivo!" }]);
+      this.mode = "queue";
+      return;
+    }
+    this.runAttempts += 1;
+    if (Math.random() < runChance(this.player, this.foe, this.runAttempts)) {
+      audio.run();
+      addSondaggi(this.state, -2);
+      this.pushFront([{ text: "Fuga riuscita! Dirai che era una pausa di riflessione." }]);
+      this.endBattle("run");
+    } else {
+      this.pushFront([
+        { text: "I cronisti ti bloccano! Niente fuga!" },
+        {
+          run: () => {
+            if (this.foe.mon.hp > 0) {
+              this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+            }
+          }
+        },
+        ...this.endOfTurnSteps()
+      ]);
+    }
+    this.mode = "queue";
+  }
+
+  // ---- Draw ----
+
+  draw(screen: Screen): void {
+    const shakeX = this.shake > 0 ? Math.round(Math.sin(this.shake * 60) * 2) : 0;
+    screen.clear("#f0f0e0");
+    screen.rect(0, 0, VIEW_W, 76, "#d8e8c8");
+    screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, "#e8e0c8");
+
+    // Slide-in iniziale degli sprite.
+    const slide = Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
+    const foeSlide = Math.round((1 - slide) * 90);
+    const playerSlide = Math.round((1 - slide) * -90);
+
+    // Piattaforme.
+    drawEllipse(screen, 162 + shakeX + foeSlide, 64, 64, 14, "#c0cc9c");
+    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
+
+    // Nemico: animazione idle (respiro), affondo all'attacco, blink se colpito.
+    const foeBlink = this.flashT.foe > 0 && Math.floor(this.flashT.foe * 16) % 2 === 0;
+    if (this.foe.mon.hp > 0 && !this.ballAnim && !foeBlink) {
+      this.drawMonster(screen, this.foe.mon.speciesId, 162 + shakeX + foeSlide, 66, this.lungeT.foe, false, "foe");
+    }
+    if (this.ballAnim) {
+      this.drawBall(screen);
+    }
+
+    // Player (di spalle: specchiato e più grande).
+    const playerBlink = this.flashT.player > 0 && Math.floor(this.flashT.player * 16) % 2 === 0;
+    if (this.player.mon.hp > 0 && !playerBlink) {
+      this.drawMonster(screen, this.player.mon.speciesId, 56 + playerSlide, 116, this.lungeT.player, true, "player");
+    }
+
+    this.drawFoeBox(screen);
+    this.drawPlayerBox(screen);
+
+    // Riquadro testo.
+    screen.panel(0, VIEW_H - 44, VIEW_W, 44);
+    if (this.mode === "menu") {
+      this.drawMainMenu(screen);
+    } else if (this.mode === "fight") {
+      // Mosse in griglia 2x2 dentro il pannello: niente sovrapposizioni.
+      const items = this.fightMenu.items;
+      const y = VIEW_H - 44;
+      for (let i = 0; i < items.length; i += 1) {
+        const cx = 8 + (i % 2) * 114;
+        const cy = y + 6 + Math.floor(i / 2) * 13;
+        const color = items[i].disabled ? GREY : INK;
+        if (this.fightMenu.index === i) {
+          screen.text("►", cx, cy, INK);
+        }
+        screen.text(items[i].label.slice(0, 17), cx + 8, cy, color);
+      }
+      const slot = this.player.mon.moves[this.fightMenu.index];
+      if (this.onFightSelect) {
+        screen.text("Quale dimentichi? B: annulla", 8, y + 32, GREY);
+      } else if (slot) {
+        const move = MOVES[slot.id];
+        const item = items[this.fightMenu.index];
+        // Striscia info sopra il pannello: TIPO • CATEGORIA • PP.
+        screen.panel(8, 117, 226, 17);
+        const typeLabel = move.type.slice(0, 9);
+        screen.text(typeLabel, 14, 122, INK);
+        screen.rect(14, 130, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
+        screen.text(moveKindLabel(move), 14 + typeLabel.length * 6 + 10, 122, GREY);
+        screen.textRight(item?.rightLabel ?? "", 228, 122, INK);
+        // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
+        screen.text(moveSummary(move).slice(0, 35), 8, y + 32, INK);
+      }
+    } else if (this.mode === "ask") {
+      const lines = wrapText(this.askText, 28);
+      for (let i = 0; i < Math.min(2, lines.length); i += 1) {
+        screen.text(lines[i], 10, VIEW_H - 34 + i * 13, INK);
+      }
+      this.askMenu.draw(screen, VIEW_W - 58, VIEW_H - 42, 50, 11);
+    }
+    this.msg.draw(screen);
+
+    // Bagliore dorato al level-up + raggi che pulsano dallo sprite del player.
+    if (this.levelFlash > 0) {
+      const ctx = screen.ctx;
+      const a = this.levelFlash / 0.6;
+      ctx.save();
+      ctx.fillStyle = `rgba(244, 211, 74, ${0.35 * a})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.restore();
+    }
+
+    // Apertura a cerchio in stile Game Boy.
+    if (this.introT < 0.55) {
+      const ctx = screen.ctx;
+      const radius = (this.introT / 0.55) * 160;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(0, 0, VIEW_W, VIEW_H);
+      ctx.arc(VIEW_W / 2, VIEW_H / 2, Math.max(1, radius), 0, Math.PI * 2);
+      ctx.clip("evenodd");
+      ctx.fillStyle = "#10141f";
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.restore();
+    }
+  }
+
+  // Disegna un mostro con animazione procedurale:
+  // - idle: leggero "respiro" (squash/stretch sinusoidale) ancorato alla base;
+  // - affondo: scatto in avanti + stretch nella direzione del colpo;
+  // - mostri chiave (starter/leggendari): bocca urlante durante l'affondo.
+  // (cx, by) = centro orizzontale e bordo inferiore del riquadro dello sprite.
+  private drawMonster(
+    screen: Screen,
+    speciesId: string,
+    cx: number,
+    by: number,
+    lungeT: number,
+    flipX: boolean,
+    who: "player" | "foe"
+  ): void {
+    const baseArt = MONSTER_ART[speciesId];
+    if (!baseArt) {
+      return;
+    }
+    const w = baseArt.art[0]?.length ?? 24;
+    const h = baseArt.art.length;
+    const scale = 2;
+
+    // Affondo: 0 a riposo, ~1 al picco del colpo.
+    const lunge = lungeT > 0 ? Math.sin((0.3 - lungeT) / 0.3 * Math.PI) : 0;
+
+    // Respiro idle: ampiezza piccola, opposta su X/Y per conservare il volume.
+    // Più marcato quando il giocatore è al menu (il mostro "aspetta").
+    const breath = Math.sin(this.time * 2.4 + (who === "foe" ? 1.3 : 0)) * 0.03;
+    let sx = 1 - breath;
+    let sy = 1 + breath;
+
+    // Lo scatto schiaccia verticalmente e allunga in avanti (anticipa il colpo).
+    sx += lunge * 0.14;
+    sy -= lunge * 0.12;
+
+    // Spostamento orizzontale dell'affondo (verso l'avversario).
+    const dir = who === "foe" ? -1 : 1;
+    const dx = Math.round(lunge * 10 * dir);
+
+    // Frame d'azione (bocca urlante) per i mostri chiave durante l'affondo.
+    const action = MONSTER_ACTION_ART[speciesId];
+    const useAction = action && lunge > 0.4;
+    const art = useAction ? action : baseArt;
+    const key = `${who === "foe" ? "battle" : "battleback"}:${speciesId}${useAction ? ":a" : ""}`;
+
+    const drawW = w * scale * sx;
+    const drawH = h * scale * sy;
+    // Ancoraggio: centro in basso resta fermo (lo scaling non fa "fluttuare").
+    const x = cx - drawW / 2 + dx;
+    const y = by - drawH;
+    screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
+  }
+
+  private drawBall(screen: Screen): void {
+    if (!this.ballAnim) {
+      return;
+    }
+    const anim = this.ballAnim;
+    let x = 168;
+    let y = 44;
+    if (anim.t < 0.5) {
+      // Parabola di lancio.
+      const p = anim.t / 0.5;
+      x = 40 + p * 128;
+      y = 70 - Math.sin(p * Math.PI) * 52 - p * 26;
+    } else {
+      const shakePhase = Math.floor((anim.t - 0.7) / 0.55);
+      if (anim.t > 0.7 && shakePhase < anim.shakes) {
+        const wobble = Math.sin((anim.t - 0.7) * 18) * 3;
+        x += wobble;
+        if (Math.abs(wobble) > 2.6) {
+          audio.ballShake();
+        }
+      }
+    }
+    screen.sprite("ballot", BALLOT_ART, x - 5, y - 5, { scale: 1 });
+  }
+
+  private drawFoeBox(screen: Screen): void {
+    const x = 6;
+    const y = 8;
+    screen.panel(x, y, 104, 30);
+    const mon = this.foe.mon;
+    screen.text(speciesOf(mon).name, x + 6, y + 6, INK);
+    screen.textRight(`L${mon.level}`, x + 98, y + 6, INK);
+    drawHpBar(screen, x + 22, y + 17, 70, this.displayHp.foe, statsOf(mon).hp);
+    if (mon.status) {
+      screen.rect(x + 6, y + 16, 16, 9, "#b04848");
+      screen.text(STATUS_LABELS[mon.status], x + 7, y + 17, PAPER);
+    }
+  }
+
+  private drawPlayerBox(screen: Screen): void {
+    const x = 126;
+    const y = 78;
+    screen.panel(x, y, 110, 38);
+    const mon = this.player.mon;
+    screen.text(speciesOf(mon).name, x + 6, y + 6, INK);
+    screen.textRight(`L${mon.level}`, x + 104, y + 6, INK);
+    drawHpBar(screen, x + 22, y + 16, 76, this.displayHp.player, statsOf(mon).hp);
+    screen.textRight(
+      `${Math.round(this.displayHp.player)}/${statsOf(mon).hp}`,
+      x + 98, y + 25, INK
+    );
+    if (mon.status) {
+      screen.rect(x + 6, y + 25, 16, 9, "#b04848");
+      screen.text(STATUS_LABELS[mon.status], x + 7, y + 26, PAPER);
+    }
+    // Barra esperienza.
+    screen.rect(x + 6, y + 34, 98, 2, "#c8c8c0");
+    screen.rect(x + 6, y + 34, Math.round(98 * this.displayExp), 2, "#4878d8");
+  }
+
+  private drawMainMenu(screen: Screen): void {
+    const x = VIEW_W - 116;
+    const y = VIEW_H - 44;
+    screen.panel(x, y, 116, 44);
+    const labels = ["LOTTA", "BORSA", "SQUADRA", "FUGA"];
+    for (let i = 0; i < 4; i += 1) {
+      const cx = x + 10 + (i % 2) * 56;
+      const cy = y + 10 + Math.floor(i / 2) * 16;
+      if (this.mainMenu.index === i) {
+        screen.text("►", cx - 2, cy, INK);
+      }
+      screen.text(labels[i], cx + 6, cy, INK);
+    }
+    // Prompt su due righe: niente testo tagliato accanto al menu.
+    screen.text("Cosa deve fare", 8, y + 10, INK);
+    const pname = this.playerName();
+    screen.text(pname.length > 18 ? `${pname.slice(0, 15)}...?` : `${pname}?`, 8, y + 23, INK);
+  }
+}
+
+function approach(current: number, target: number, delta: number): number {
+  if (current < target) {
+    return Math.min(target, current + delta);
+  }
+  if (current > target) {
+    return Math.max(target, current - delta);
+  }
+  return current;
+}
+
+// Tabella di loot a sorpresa (pesata): oggetti comuni frequenti, rari saltuari.
+// Tutti gli id esistono in ITEMS. Il peso più alto = più probabile.
+const LOOT_TABLE: Array<{ id: string; qty: number; weight: number }> = [
+  { id: "scheda", qty: 2, weight: 30 },
+  { id: "caffe", qty: 1, weight: 24 },
+  { id: "spritz", qty: 1, weight: 16 },
+  { id: "schedona", qty: 1, weight: 14 },
+  { id: "maalox", qty: 1, weight: 8 },
+  { id: "mojito", qty: 1, weight: 5 },
+  { id: "tessera", qty: 1, weight: 3 } // jackpot: oggetto evolutivo raro
+];
+
+function rollLootDrop(): { id: string; qty: number } {
+  const total = LOOT_TABLE.reduce((s, e) => s + e.weight, 0);
+  let roll = Math.random() * total;
+  for (const entry of LOOT_TABLE) {
+    roll -= entry.weight;
+    if (roll <= 0) {
+      return { id: entry.id, qty: entry.qty };
+    }
+  }
+  return { id: "scheda", qty: 1 };
+}
+
+function drawEllipse(screen: Screen, cx: number, cy: number, rx: number, ry: number, color: string): void {
+  for (let dy = -ry; dy <= ry; dy += 1) {
+    const span = Math.floor(rx * Math.sqrt(Math.max(0, 1 - (dy / ry) * (dy / ry))));
+    screen.rect(cx - span, cy + dy, span * 2, 1, color);
+  }
+}

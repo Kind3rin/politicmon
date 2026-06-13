@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#10141f" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Politicmon" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./politicmon-icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="Politicmon: catturali tutti, prima che ti tassino. RPG satirico in stile Game Boy sulla politica italiana."
+    />
+    <title>Politicmon</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="console-shell">
+        <div id="console-top" aria-hidden="true">
+          <span class="console-brand">Politicoy Colore</span>
+          <span class="console-power"><i></i> POWER</span>
+        </div>
+        <div id="screen-frame">
+          <canvas id="game-canvas" width="240" height="180"></canvas>
+        </div>
+        <div id="touch-ui" aria-hidden="true">
+          <div id="touch-move">
+            <div id="touch-dpad">
+              <button data-key="up" class="dpad-btn dpad-up">▲</button>
+              <button data-key="left" class="dpad-btn dpad-left">◀</button>
+              <button data-key="right" class="dpad-btn dpad-right">▶</button>
+              <button data-key="down" class="dpad-btn dpad-down">▼</button>
+            </div>
+            <div id="touch-stick" data-stick aria-label="Levetta direzionale">
+              <div id="touch-stick-base"></div>
+              <div id="touch-stick-cap"></div>
+            </div>
+          </div>
+          <div id="touch-buttons">
+            <button data-key="b" class="ab-btn b-btn">B</button>
+            <button data-key="a" class="ab-btn a-btn">A</button>
+            <button data-key="start" class="start-btn">START</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

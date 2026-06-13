@@ -1,0 +1,23 @@
+node_modules/
+dist/
+releases/
+portable-build/
+.swarm/
+.ruflo/
+.claude-flow/
+.vite/
+*.log
+artifacts/
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db
+.codex-remote-attachments/
+
+.vercel
+.env
+.env.local
+.partykit/
+
+# Config locale del harness e screenshot di debug (non fanno parte del progetto)
+.claude/
+problemitest/

@@ -8,6 +8,12 @@ installabile come app (PWA), con **multiplayer peer-to-peer** gratuito.
 
 🎮 **Gioca ora:** https://politicmon.vercel.app
 
+<p align="center">
+  <img src="docs/img/title.png" width="32%" alt="Schermata titolo">
+  <img src="docs/img/battle.png" width="32%" alt="Battaglia">
+  <img src="docs/img/world.png" width="32%" alt="Esplorazione e rivale">
+</p>
+
 ## Avvio rapido
 
 ```bash
@@ -62,4 +68,9 @@ node scripts/gen-icons.mjs   # rigenera le icone PNG della PWA
 - **Zero dipendenze runtime** tranne il P2P del multiplayer.
 - **Multiplayer gratis per sempre**: peer-to-peer, nessun account o server fatturabile.
 
-I personaggi sono parodie di fantasia ispirate al dibattito pubblico italiano e internazionale.
+I personaggi sono parodie di fantasia ispirate al dibattito pubblico italiano e
+internazionale, senza intento diffamatorio.
+
+## Licenza
+
+[MIT](LICENSE) — il codice è libero. La satira è di chi la fa.

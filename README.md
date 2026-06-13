@@ -74,3 +74,5 @@ internazionale, senza intento diffamatorio.
 ## Licenza
 
 [MIT](LICENSE) — il codice è libero. La satira è di chi la fa.
+
+<!-- deploy git collegato -->

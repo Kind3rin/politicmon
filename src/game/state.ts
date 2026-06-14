@@ -24,6 +24,7 @@ export interface GameState {
   bulldozed: string[]; // alberi abbattuti dalla RUSPA, chiavi "mapId:x:y"
   vehicle: string | null; // veicolo attivo: "monopattino" | "ruspa" | null
   rivalWins: number; // quante volte hai battuto il RIVALE GIANNI (memoria scontri)
+  chips: number; // FICHE del casinò: valuta separata dai fondi (come i gettoni Pokémon)
 }
 
 export const SAVE_KEY = "politicmon-save-v6";
@@ -45,7 +46,8 @@ export function newGameState(): GameState {
     ministri: {},
     bulldozed: [],
     vehicle: null,
-    rivalWins: 0
+    rivalWins: 0,
+    chips: 0
   };
 }
 
@@ -84,6 +86,7 @@ function parseState(raw: string | null): GameState | null {
     parsed.bulldozed = Array.isArray(parsed.bulldozed) ? parsed.bulldozed : [];
     parsed.vehicle = parsed.vehicle ?? null;
     parsed.rivalWins = typeof parsed.rivalWins === "number" ? parsed.rivalWins : 0;
+    parsed.chips = typeof parsed.chips === "number" ? parsed.chips : 0;
     return parsed;
   } catch {
     return null;

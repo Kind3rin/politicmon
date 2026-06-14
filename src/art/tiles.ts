@@ -472,6 +472,46 @@ const barArt = rows(
   "................"
 );
 
+// Letto (arredo casa): testiera scura, coperta colorata, cuscino chiaro.
+const bedArt = rows(
+  "................",
+  ".oooooooooooooo.",
+  ".oDDDDDDDDDDDDo.",
+  ".oMMMMoBBBBBBBo.",
+  ".oMMMMoBBBBBBBo.",
+  ".oMMMMoBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oBBBBBBBBBBBBo.",
+  ".oDDDDDDDDDDDDo.",
+  ".oooooooooooooo.",
+  "................"
+);
+
+// Pianta in vaso (arredo casa): foglie verdi, vaso terracotta.
+const plantArt = rows(
+  "................",
+  "......gg........",
+  "....ggGggg......",
+  "...gGgggGgg.....",
+  "..ggGgtgGggg....",
+  "..gGggtggGgg....",
+  "...ggttgggg.....",
+  "....ggtgg.......",
+  ".....ott........",
+  ".....obo........",
+  ".....obo........",
+  "....obbbo.......",
+  "....obbbo.......",
+  ".....ooo........",
+  "................",
+  "................"
+);
+
 // ---- Palette condivise ----
 
 const P = {
@@ -538,6 +578,9 @@ export const TILES: Record<string, TileDef> = {
   k: { pix: pix(machineArt, { g: "#58c878", w: "#283848", r: "#d04848", y: "#d8b848", b: "#4868c8" }), solid: true },
   c: { pix: pix(carpetArt, { r: "#b04040", R: "#d86060" }), solid: false },
   h: { pix: pix(barArt, { s: "#b8884a", m: "#d8c8a8", w: "#f0e8d8", b: "#6a4a2a" }), solid: true, overlay: true },
+  // Arredi casa
+  L: { pix: pix(bedArt, { D: "#6a4a2a", M: "#f0e8d8", B: "#5878c8" }), solid: true },
+  P: { pix: pix(plantArt, { g: "#4ca84c", G: "#2f8a3c", t: "#3a7a2a", b: "#b06838" }), solid: true, overlay: true },
   // Stretto di Messina
   z: { pix: pix(sandArt, { z: "#eed9a6", Z: "#d8bc7c" }), solid: false },
   j: { pix: pix(deckArt, { n: "#8a8a96", N: "#74747f" }), solid: false },

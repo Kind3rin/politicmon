@@ -100,8 +100,8 @@ const BORGO_TILES = [
   "TT....=......====......=....TT",
   "TT....==================....TT",
   "TT.s.........====...hh......TT",
-  "TT...,,......====......,,...TT",
-  "TT...,,......====......,,...TT",
+  "TT..eeee.....====......,,...TT",
+  "TT..mdnm.....====......,,...TT",
   "TT...........====...........TT",
   "TT..wwww.....====.....wwww..TT",
   "TT..wwww.....====.....wwww..TT",
@@ -126,11 +126,11 @@ const MEDIOPOLI_TILES = [
   "TT....=......====.....=.....TT",
   "TT....=......====.....=.....TT",
   "TT....=================.....TT",
-  "TT...........====...........TT",
-  "TT...hh......====......,,...TT",
-  "TT...........====......,,...TT",
-  "TT..,,.......====...........TT",
-  "TT..,,.......====.......s...TT",
+  "TT...........====....rrrr...TT",
+  "TT...hh......====....rrrr...TT",
+  "TT...........====....mdnm...TT",
+  "TT..eeee.....====......=....TT",
+  "TT..mdnm.....====.......s...TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
@@ -146,10 +146,10 @@ const EUROTOWN_TILES = [
   "TT..mmdnmm...====...mdnm....TT",
   "TT....=......====.....=.....TT",
   "TT....=================.....TT",
-  "TT...........====...........TT",
+  "TT..xxxx.....====...yyyy....TT",
+  "TT..mdnm.....====...mdnm....TT",
   "TT....ww.....====.....hh....TT",
-  "TT....ww.....====...........TT",
-  "TT...........====....s......TT",
+  "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT...........====...........TT",
@@ -176,8 +176,8 @@ const CAPITALE_TILES = [
   "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT..~~~~~....====....~~~~~..TT",
-  "TT..~~~~~....====....~~~~~..TT",
-  "TT...........====...........TT",
+  "TT.rrrr~~....====....~~yyyy.TT",
+  "TT.mdnm......====......mdnm.TT",
   "TT.....s.....====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
@@ -187,8 +187,8 @@ const CAPITALE_TILES = [
 
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-  "TT..........................TT",
-  "TT..~~~~......s.......~~~~..TT",
+  "TT.......eeee...............TT",
+  "TT..~~~~.mdnm.s.......~~~~..TT",
   "TT..~~~~..............~~~~..TT",
   "TT..~~~~.....hh.......~~~~..TT",
   "TT...s......................TT",
@@ -314,6 +314,74 @@ function marketMap(id: string, city: string, doorX: number, doorY: number): MapD
   };
 }
 
+// Interni di case visitabili. Tre piantine diverse per non farle sembrare
+// tutte uguali: tile A=parete, p=pavimento, L=letto, t=tavolo, b=scaffale,
+// P=pianta, c=tappeto/zerbino d'uscita (le 2 celle in basso fanno da porta).
+const HOUSE_TILES_A = [
+  "AAAAAAAAAA",
+  "ALLApppbbA",
+  "ALLAppptpA",
+  "ApppppptpA",
+  "AppPpppppA",
+  "AppppccppA",
+  "AAAAAAAAAA"
+];
+
+const HOUSE_TILES_B = [
+  "AAAAAAAAAA",
+  "AbbbppLLpA",
+  "ApttpLLppA",
+  "AptttppppA",
+  "AppppppPpA",
+  "AppppccppA",
+  "AAAAAAAAAA"
+];
+
+const HOUSE_TILES_C = [
+  "AAAAAAAAAAAA",
+  "ALLAppppbbbA",
+  "ALLApttpbbbA",
+  "AppppttppppA",
+  "AppppppppPpA",
+  "AppPpppppppA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+
+const HOUSE_LAYOUTS = [HOUSE_TILES_A, HOUSE_TILES_B, HOUSE_TILES_C];
+
+// Genera l'interno di una casa. `variant` sceglie la piantina; `door` è la
+// cella della città su cui si riemerge uscendo.
+function houseMap(
+  id: string,
+  name: string,
+  city: string,
+  doorX: number,
+  doorY: number,
+  npcs: NpcDef[],
+  opts: { variant?: number; signs?: SignDef[]; pickups?: PickupDef[] } = {}
+): MapDef {
+  const tiles = HOUSE_LAYOUTS[(opts.variant ?? 0) % HOUSE_LAYOUTS.length];
+  const exitY = tiles.length - 2; // riga delle due celle "cc"
+  // Trova la prima 'c' per centrare il warp d'uscita.
+  const row = tiles[exitY];
+  const cx = Math.max(0, row.indexOf("c"));
+  return {
+    id,
+    name,
+    tiles,
+    outdoor: false,
+    music: "interior",
+    warps: [
+      { x: cx, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" },
+      { x: cx + 1, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" }
+    ],
+    signs: opts.signs ?? [],
+    pickups: opts.pickups ?? [],
+    npcs
+  };
+}
+
 export const MAPS: Record<string, MapDef> = {
   borgo: {
     id: "borgo",
@@ -322,7 +390,11 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "borgo",
     edges: { north: { toMap: "mediopoli", offsetX: 0 } },
-    warps: [{ x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" }],
+    warps: [
+      { x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
+      { x: 23, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
+      { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" }
+    ],
     encounterRate: 0.10,
     encounters: [
       { speciesId: "salvinott", weight: 40, minLv: 2, maxLv: 4 },
@@ -418,7 +490,9 @@ export const MAPS: Record<string, MapDef> = {
     },
     warps: [
       { x: 6, y: 10, toMap: "gymtv", toX: 4, toY: 6, facing: "up" },
-      { x: 21, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" }
+      { x: 21, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" },
+      { x: 5, y: 18, toMap: "attico", toX: 4, toY: 5, facing: "up" },
+      { x: 22, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" }
     ],
     encounterRate: 0.10,
     encounters: [
@@ -504,7 +578,9 @@ export const MAPS: Record<string, MapDef> = {
     },
     warps: [
       { x: 6, y: 5, toMap: "gymue", toX: 4, toY: 6, facing: "up" },
-      { x: 21, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" }
+      { x: 21, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
+      { x: 5, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
+      { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" }
     ],
     encounterRate: 0.10,
     encounters: [
@@ -561,6 +637,8 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 6, y: 11, toMap: "gymglobal", toX: 4, toY: 6, facing: "up" },
       { x: 21, y: 11, toMap: "casino", toX: 4, toY: 4, facing: "up" },
+      { x: 4, y: 18, toMap: "salotto", toX: 4, toY: 5, facing: "up" },
+      { x: 24, y: 18, toMap: "retroscena", toX: 4, toY: 5, facing: "up" },
       {
         x: 14, y: 5, toMap: "palazzo", toX: 5, toY: 7, facing: "up",
         requiresBadges: 3,
@@ -779,7 +857,7 @@ export const MAPS: Record<string, MapDef> = {
     tiles: STRETTO_TILES,
     outdoor: true,
     music: "stretto",
-    warps: [],
+    warps: [{ x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" }],
     encounterRate: 0.11,
     encounters: [
       { speciesId: "salvinott", weight: 28, minLv: 19, maxLv: 21 },
@@ -993,7 +1071,137 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["La sala dei bilanci è sigillata. Si apre solo nelle crisi."]
       }
     ]
-  }
+  },
+
+  // ----------------------------------------------------- CASE VISITABILI -----
+
+  // BORGO — casa tua.
+  home: houseMap("home", "CASA TUA", "borgo", 23, 13, [
+    {
+      id: "home-mom", pal: "granny", x: 7, y: 2, facing: "down",
+      lines: [
+        "MAMMA: torni a casa solo quando ti serve qualcosa, come i partiti a gennaio.",
+        "Ho rifatto il letto e stirato la fascia tricolore. Vai a prenderti quel PALAZZO!",
+        "E mangia, che a digiuno non si vincono i ballottaggi."
+      ]
+    }
+  ], {
+    variant: 2,
+    signs: [{ x: 9, y: 1, lines: ["Diploma di MAMMA POLITICA dell'anno.", "Conferito da: se stessa."] }],
+    pickups: [{ id: "home-pk", x: 1, y: 1, itemId: "caffe", qty: 1 }]
+  }),
+
+  // BORGO — circolo del paese.
+  circolo: houseMap("circolo", "CIRCOLO DEL BORGO", "borgo", 5, 19, [
+    {
+      id: "circolo-anziano", pal: "granny", x: 2, y: 2, facing: "right",
+      lines: [
+        "Al CIRCOLO si gioca a carte e si rifà il governo ogni sera.",
+        "Nessuno ha mai vinto una partita, ma tutti hanno sempre ragione."
+      ]
+    },
+    {
+      id: "circolo-tesserato", pal: "aide", x: 6, y: 3, facing: "down",
+      lines: ["Ho la tessera n.1 dal 1974. Di quale partito? Cambia ogni martedì."]
+    }
+  ], { variant: 1 }),
+
+  // MEDIOPOLI — appartamento influencer.
+  attico: houseMap("attico", "ATTICO INFLUENCER", "mediopoli", 5, 19, [
+    {
+      id: "attico-influencer", pal: "influencer", x: 5, y: 2, facing: "down",
+      lines: [
+        "Sto girando un reel: 'cinque promesse che non manterrò, la terza vi sorprenderà'.",
+        "Il consenso? Si fa coi like, non con le idee. Idee è un account che non seguo."
+      ]
+    }
+  ], {
+    variant: 0,
+    pickups: [{ id: "attico-pk", x: 8, y: 1, itemId: "schedona", qty: 1 }]
+  }),
+
+  // MEDIOPOLI — redazione del TG.
+  redazione: houseMap("redazione", "REDAZIONE DEL TG", "mediopoli", 22, 17, [
+    {
+      id: "redaz-direttore", pal: "journalist", x: 2, y: 1, facing: "right",
+      lines: [
+        "Notizia in apertura: tu. Domani: ancora tu. La verità? In coda, dopo lo sport.",
+        "Un consiglio: se vuoi i SONDAGGI alti, falli scrivere a noi."
+      ]
+    },
+    {
+      id: "redaz-stagista", pal: "kid", x: 6, y: 3, facing: "left",
+      lines: ["Sono lo stagista. Scrivo i titoli, firmano gli altri. Il giornalismo!"]
+    }
+  ], { variant: 1 }),
+
+  // EUROTOWN — ufficio del lobbista.
+  lobbystudio: houseMap("lobbystudio", "STUDIO DI LOBBYING", "eurotown", 5, 10, [
+    {
+      id: "lobby-capo", pal: "boss", x: 6, y: 2, facing: "down",
+      lines: [
+        "Una lobby? Che parolaccia. Diciamo 'consulenza per il bene comune'.",
+        "Il bene di chi? Dettaglio tecnico. Firma qui, qui e qui."
+      ]
+    }
+  ], { variant: 0 }),
+
+  // EUROTOWN — bistrot della burocrazia.
+  bistrot: houseMap("bistrot", "BISTROT DELLE DIRETTIVE", "eurotown", 21, 10, [
+    {
+      id: "bistrot-funz", pal: "professor", x: 3, y: 2, facing: "right",
+      lines: [
+        "La DIRETTIVA 2024/banane stabilisce la curvatura massima del consenso.",
+        "Allegato B, comma 12: ogni promessa va tradotta in 24 lingue prima di romperla."
+      ]
+    }
+  ], {
+    variant: 1,
+    pickups: [{ id: "bistrot-pk", x: 1, y: 1, itemId: "maalox", qty: 1 }]
+  }),
+
+  // CAPUT MUNDI — salotto romano.
+  salotto: houseMap("salotto", "SALOTTO ROMANO", "capitale", 4, 19, [
+    {
+      id: "salotto-vip", pal: "influencer", x: 7, y: 2, facing: "down",
+      lines: [
+        "Tesoro, al SALOTTO contano due cose: con chi ti siedi e da chi ti fai vedere.",
+        "Il programma elettorale? Lo serviamo come antipasto, tanto nessuno lo finisce."
+      ]
+    },
+    {
+      id: "salotto-trombato", pal: "aide", x: 2, y: 4, facing: "right",
+      lines: ["Sono un ex-ministro. Di cosa? Bella domanda. Anche io me lo chiedo."]
+    }
+  ], { variant: 2 }),
+
+  // CAPUT MUNDI — covo dei retroscenisti.
+  retroscena: houseMap("retroscena", "COVO DEI RETROSCENISTI", "capitale", 24, 19, [
+    {
+      id: "retro-cronista", pal: "journalist", x: 5, y: 2, facing: "down",
+      lines: [
+        "Fonti vicine al PALAZZO dicono che fonti vicine a te smentiscono le fonti.",
+        "Scrivo retroscena da vent'anni. Non è ancora successo nessuno scena, solo retro."
+      ]
+    }
+  ], {
+    variant: 0,
+    pickups: [{ id: "retro-pk", x: 8, y: 4, itemId: "scheda", qty: 3 }]
+  }),
+
+  // STRETTO — chiosco del ponte.
+  chiosco: houseMap("chiosco", "CHIOSCO DEL PONTE", "stretto", 10, 3, [
+    {
+      id: "chiosco-oste", pal: "barista", x: 3, y: 2, facing: "right",
+      lines: [
+        "Vendo granite e plastici del PONTE da trent'anni. Il ponte non c'è, le granite sì.",
+        "Tutti chiedono: 'quando lo finite?'. Io rispondo: 'quale, il ponte o la granita?'."
+      ]
+    }
+  ], {
+    variant: 1,
+    pickups: [{ id: "chiosco-pk", x: 1, y: 1, itemId: "mojito", qty: 1 }]
+  })
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

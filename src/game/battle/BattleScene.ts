@@ -17,7 +17,7 @@ import {
   calcDamage, catchChance, chooseFoeMove, effectiveStat, makeCombatant, runChance, statName,
   type Combatant
 } from "./sim";
-import { Menu, MessageBox, drawHpBar, wrapText, GREY, INK, PAPER } from "../../ui/widgets";
+import { Menu, MessageBox, clipToWidth, drawHpBar, wrapText, GREY, INK, PAPER } from "../../ui/widgets";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
 
@@ -71,6 +71,9 @@ export class BattleScene implements Scene {
     { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUGA" }
   ]);
   private fightMenu = new Menu([]);
+  // Efficacia per mossa (allineata a fightMenu.items): colora le label nel
+  // menu LOTTA se la specie avversaria è già nel Dex.
+  private fightEff: Array<"super" | "weak" | "immune" | null> = [];
   private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
   private askText = "";
   private askYes: (() => void) | null = null;
@@ -87,7 +90,20 @@ export class BattleScene implements Scene {
   private introT = 0; // apertura a cerchio + slide degli sprite
   private lungeT = { player: 0, foe: 0 }; // affondo dell'attaccante
   private flashT = { player: 0, foe: 0 }; // lampeggio del colpito
+  private knockback = { player: 0, foe: 0 }; // contraccolpo del colpito (super efficace)
   private levelFlash = 0; // bagliore dorato sul level-up
+  private catchFlash = 0; // lampo dorato di celebrazione alla cattura riuscita
+  // Particelle d'impatto: scintille che esplodono nel punto colpito.
+  private particles: Array<{
+    x: number; y: number; vx: number; vy: number; life: number; max: number; color: string; size: number;
+  }> = [];
+  // Banner "SUPER EFFICACE / POCO EFFICACE / CRITICO" che pulsa a schermo.
+  private effFx: { kind: "super" | "weak" | "crit"; t: number } | null = null;
+  // Hit-stop: micro-congelamento del tempo all'impatto, dà peso ai colpi.
+  private hitStop = 0;
+  // Telegrafia: aura colorata sul nemico che "carica" la mossa prima di agire.
+  // category -> colore (fisico=grinta rossa, speciale=retorica blu, status=viola).
+  private telegraph: { side: "player" | "foe"; color: string; t: number; max: number } | null = null;
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
     this.state = opts.state;
@@ -235,7 +251,22 @@ export class BattleScene implements Scene {
     attackerName: string
   ): Step[] {
     const defenderName = side === "player" ? `Il nemico ${this.foeName()}` : this.playerName();
-    const steps: Step[] = [{ text: `${attackerName} usa ${move.name}!` }];
+    const steps: Step[] = [];
+
+    // Telegrafia: il nemico "carica" la mossa con un'aura colorata per categoria,
+    // così il giocatore può leggere se sarà fisica, speciale o di status.
+    if (side === "foe") {
+      const color =
+        move.category === "fisico" ? "#e85a5a" : move.category === "speciale" ? "#5a9ae8" : "#b86ad8";
+      steps.push({
+        run: () => {
+          this.telegraph = { side: "foe", color, t: 0.5, max: 0.5 };
+        },
+        pause: 0.5
+      });
+    }
+
+    steps.push({ text: `${attackerName} usa ${move.name}!` });
 
     if (side === "foe") {
       const slot = attacker.mon.moves.find((s) => s.id === move.id);
@@ -255,14 +286,25 @@ export class BattleScene implements Scene {
       steps.push({
         run: () => {
           defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
+          const defSide: "player" | "foe" = side === "player" ? "foe" : "player";
           this.lungeT[side] = 0.3;
-          this.flashT[side === "player" ? "foe" : "player"] = 0.45;
-          this.shake = side === "foe" || result.crit ? 0.3 : 0;
-          if (result.typeMult >= 2) {
+          this.flashT[defSide] = 0.45;
+          const superHit = result.typeMult >= 2;
+          // Lo shake e il contraccolpo scalano col "peso" del colpo.
+          this.shake = superHit || result.crit ? 0.42 : side === "foe" ? 0.22 : 0.16;
+          this.hitStop = superHit || result.crit ? 0.09 : 0.05;
+          this.knockback[defSide] = superHit ? 1 : 0.55;
+          this.spawnImpact(defSide, result.typeMult, result.crit);
+          if (superHit) {
+            this.effFx = { kind: "super", t: 0.9 };
             audio.hitSuper();
           } else if (result.typeMult > 0 && result.typeMult < 1) {
+            this.effFx = { kind: "weak", t: 0.7 };
             audio.hitWeak();
           } else {
+            if (result.crit) {
+              this.effFx = { kind: "crit", t: 0.8 };
+            }
             audio.hit();
           }
         },
@@ -780,7 +822,28 @@ export class BattleScene implements Scene {
 
   private captureSteps(): Step[] {
     const steps: Step[] = [
-      { run: () => audio.catchJingle() },
+      {
+        run: () => {
+          audio.catchJingle();
+          // Celebrazione: lampo dorato a schermo + scintille dal punto del nemico.
+          this.catchFlash = 0.7;
+          const c = this.monsterCenter("foe");
+          for (let i = 0; i < 22; i += 1) {
+            const ang = (Math.PI * 2 * i) / 22 + 0.2;
+            const speed = 70 * (0.6 + Math.random() * 0.8);
+            this.particles.push({
+              x: c.x + (Math.random() - 0.5) * 12,
+              y: c.y + (Math.random() - 0.5) * 12,
+              vx: Math.cos(ang) * speed,
+              vy: Math.sin(ang) * speed - 30,
+              life: 0,
+              max: 0.5 + Math.random() * 0.4,
+              color: ["#ffe98a", "#ffd23c", "#fff4c0"][i % 3],
+              size: 2
+            });
+          }
+        }
+      },
       { text: `Fatto! ${this.foeName()} è stato eletto nella tua squadra!` },
       {
         run: () => {
@@ -827,7 +890,30 @@ export class BattleScene implements Scene {
     this.lungeT.foe = Math.max(0, this.lungeT.foe - dt);
     this.flashT.player = Math.max(0, this.flashT.player - dt);
     this.flashT.foe = Math.max(0, this.flashT.foe - dt);
+    // Contraccolpo: rientra in ~0.25s (1 -> 0).
+    this.knockback.player = Math.max(0, this.knockback.player - dt * 4);
+    this.knockback.foe = Math.max(0, this.knockback.foe - dt * 4);
     this.levelFlash = Math.max(0, this.levelFlash - dt);
+    this.catchFlash = Math.max(0, this.catchFlash - dt);
+    this.updateParticles(dt);
+    if (this.effFx) {
+      this.effFx.t -= dt;
+      if (this.effFx.t <= 0) {
+        this.effFx = null;
+      }
+    }
+    if (this.telegraph) {
+      this.telegraph.t -= dt;
+      if (this.telegraph.t <= 0) {
+        this.telegraph = null;
+      }
+    }
+    // Hit-stop: congela l'avanzamento della battaglia per pochi centesimi,
+    // dando "peso" al colpo. Animazioni cosmetiche (sopra) continuano.
+    if (this.hitStop > 0) {
+      this.hitStop = Math.max(0, this.hitStop - dt);
+      return;
+    }
     if (this.introT < 1.2) {
       this.introT += dt;
       if (this.introT < 0.55) {
@@ -1007,14 +1093,18 @@ export class BattleScene implements Scene {
     // Se hai già ELETTO la specie avversaria, il Dex suggerisce i matchup.
     const known = this.state.dex[this.foe.mon.speciesId] === "caught";
     const foeTypes = speciesOf(this.foe.mon).types;
+    this.fightEff = [];
     this.fightMenu = new Menu(
       this.player.mon.moves.map((slot) => {
         const move = MOVES[slot.id];
         let marker = "";
+        let eff: "super" | "weak" | "immune" | null = null;
         if (known && move.power > 0) {
           const mult = typeMultiplier(move.type, foeTypes);
           marker = mult === 0 ? "X " : mult >= 2 ? "▲ " : mult < 1 ? "▼ " : "";
+          eff = mult === 0 ? "immune" : mult >= 2 ? "super" : mult < 1 ? "weak" : null;
         }
+        this.fightEff.push(eff);
         return {
           label: move.name,
           rightLabel: `${marker}PP ${slot.pp}/${move.pp}`,
@@ -1070,6 +1160,11 @@ export class BattleScene implements Scene {
     drawEllipse(screen, 162 + shakeX + foeSlide, 64, 64, 14, "#c0cc9c");
     drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
 
+    // Telegrafia: aura pulsante dietro il nemico che sta per attaccare.
+    if (this.telegraph && this.telegraph.side === "foe" && this.foe.mon.hp > 0 && !this.ballAnim) {
+      this.drawTelegraph(screen, 162 + shakeX + foeSlide, 50);
+    }
+
     // Nemico: animazione idle (respiro), affondo all'attacco, blink se colpito.
     const foeBlink = this.flashT.foe > 0 && Math.floor(this.flashT.foe * 16) % 2 === 0;
     if (this.foe.mon.hp > 0 && !this.ballAnim && !foeBlink) {
@@ -1085,8 +1180,14 @@ export class BattleScene implements Scene {
       this.drawMonster(screen, this.player.mon.speciesId, 56 + playerSlide, 116, this.lungeT.player, true, "player");
     }
 
+    // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
+    this.drawParticles(screen);
+
     this.drawFoeBox(screen);
     this.drawPlayerBox(screen);
+
+    // Banner "SUPER EFFICACE / POCO EFFICACE / CRITICO".
+    this.drawEffFx(screen);
 
     // Riquadro testo.
     screen.panel(0, VIEW_H - 44, VIEW_W, 44);
@@ -1099,11 +1200,24 @@ export class BattleScene implements Scene {
       for (let i = 0; i < items.length; i += 1) {
         const cx = 8 + (i % 2) * 114;
         const cy = y + 6 + Math.floor(i / 2) * 13;
-        const color = items[i].disabled ? GREY : INK;
+        // Colore: grigio se senza PP, altrimenti tinta d'efficacia (se nota dal
+        // Dex) — verde super, rosso ruggine poco efficace, grigio scuro immune.
+        const eff = this.fightEff[i];
+        const color = items[i].disabled
+          ? GREY
+          : eff === "super"
+            ? "#2f9a4c"
+            : eff === "weak"
+              ? "#c06030"
+              : eff === "immune"
+                ? "#8a8a98"
+                : INK;
         if (this.fightMenu.index === i) {
           screen.text("►", cx, cy, INK);
         }
-        screen.text(items[i].label.slice(0, 17), cx + 8, cy, color);
+        // Tronca con ellissi se la mossa è troppo lunga per la colonna (98px),
+        // così non si legge "APPELLO AGLI ALLE" tagliato a metà parola.
+        screen.text(clipToWidth(items[i].label, 98), cx + 8, cy, color);
       }
       const slot = this.player.mon.moves[this.fightMenu.index];
       if (this.onFightSelect) {
@@ -1140,6 +1254,16 @@ export class BattleScene implements Scene {
       ctx.restore();
     }
 
+    // Lampo di celebrazione alla cattura: whiteout dorato che svanisce in fretta.
+    if (this.catchFlash > 0) {
+      const ctx = screen.ctx;
+      const a = this.catchFlash / 0.7;
+      ctx.save();
+      ctx.fillStyle = `rgba(255, 246, 200, ${0.55 * a})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.restore();
+    }
+
     // Apertura a cerchio in stile Game Boy.
     if (this.introT < 0.55) {
       const ctx = screen.ctx;
@@ -1160,6 +1284,125 @@ export class BattleScene implements Scene {
   // - affondo: scatto in avanti + stretch nella direzione del colpo;
   // - mostri chiave (starter/leggendari): bocca urlante durante l'affondo.
   // (cx, by) = centro orizzontale e bordo inferiore del riquadro dello sprite.
+  // Centro approssimativo dello sprite di un combattente (per le particelle).
+  private monsterCenter(who: "player" | "foe"): { x: number; y: number } {
+    return who === "foe" ? { x: 162, y: 50 } : { x: 56, y: 100 };
+  }
+
+  // Esplosione di scintille nel punto colpito. Colore e quantità scalano con
+  // l'efficacia: super = giallo abbondante, poco efficace = grigio sparso,
+  // critico = bianco intenso.
+  private spawnImpact(defSide: "player" | "foe", typeMult: number, crit: boolean): void {
+    const c = this.monsterCenter(defSide);
+    const superHit = typeMult >= 2;
+    const weak = typeMult > 0 && typeMult < 1;
+    const count = superHit ? 16 : weak ? 6 : crit ? 14 : 10;
+    const palette = superHit
+      ? ["#ffe98a", "#ffd23c", "#ff9a3c"]
+      : weak
+        ? ["#b8c0d0", "#8a93a8"]
+        : crit
+          ? ["#ffffff", "#ffe98a", "#ff6a6a"]
+          : ["#f4f4e8", "#ffd23c"];
+    const spread = superHit || crit ? 90 : 60;
+    for (let i = 0; i < count; i += 1) {
+      const ang = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+      const speed = spread * (0.5 + Math.random() * 0.8);
+      this.particles.push({
+        x: c.x + (Math.random() - 0.5) * 10,
+        y: c.y + (Math.random() - 0.5) * 10,
+        vx: Math.cos(ang) * speed,
+        vy: Math.sin(ang) * speed - 20,
+        life: 0,
+        max: 0.35 + Math.random() * 0.3,
+        color: palette[Math.floor(Math.random() * palette.length)],
+        size: superHit || crit ? 2 : 1
+      });
+    }
+  }
+
+  private updateParticles(dt: number): void {
+    for (const p of this.particles) {
+      p.life += dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vy += 220 * dt; // gravità
+      p.vx *= 0.92;
+    }
+    this.particles = this.particles.filter((p) => p.life < p.max);
+  }
+
+  private drawParticles(screen: Screen): void {
+    for (const p of this.particles) {
+      const a = 1 - p.life / p.max;
+      if (a <= 0) {
+        continue;
+      }
+      const ctx = screen.ctx;
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, a * 1.4);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size + 1, p.size + 1);
+      ctx.restore();
+    }
+  }
+
+  // Banner d'efficacia che entra "a molla", resta, poi svanisce.
+  private drawEffFx(screen: Screen): void {
+    if (!this.effFx) {
+      return;
+    }
+    const { kind, t } = this.effFx;
+    const label = kind === "super" ? "SUPER EFFICACE!" : kind === "weak" ? "POCO EFFICACE" : "CRITICO!";
+    const color = kind === "super" ? "#ffd23c" : kind === "weak" ? "#9aa0b8" : "#ff6a6a";
+    // Entrata: il primo terzo del tempo ingrandisce; poi sta; ultimo terzo sfuma.
+    const total = kind === "super" ? 0.9 : kind === "weak" ? 0.7 : 0.8;
+    const prog = 1 - t / total;
+    const pop = Math.min(1, prog / 0.25);
+    const fade = prog > 0.7 ? 1 - (prog - 0.7) / 0.3 : 1;
+    const ctx = screen.ctx;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, fade);
+    // Leggera oscillazione verticale per "vivacità". Posizionato sotto le
+    // barre HP del nemico per non coprirle.
+    const wob = Math.sin(prog * 14) * (kind === "super" ? 2 : 1) * (1 - prog);
+    const y = 40 + (1 - pop) * -8 + wob;
+    const scale = kind === "weak" ? 1 : 1 + (1 - pop) * 0.6;
+    // Ombra + testo centrato, scalato.
+    const drawScaled = (txt: string, oy: number, col: string) => {
+      // Sfrutta textCenter con dimensione intera; per "scale" usiamo size 1..2.
+      const size = scale >= 1.5 ? 2 : 1;
+      screen.textCenter(txt, VIEW_W / 2, y + oy, col, size);
+    };
+    drawScaled(label, 2, "rgba(16,20,31,0.7)");
+    drawScaled(label, 0, color);
+    ctx.restore();
+  }
+
+  // Aura di "carica" della mossa nemica: anelli concentrici che pulsano nel
+  // colore della categoria (rosso fisico / blu speciale / viola status).
+  private drawTelegraph(screen: Screen, cx: number, cy: number): void {
+    const tg = this.telegraph;
+    if (!tg) {
+      return;
+    }
+    const ctx = screen.ctx;
+    const prog = 1 - tg.t / tg.max; // 0 -> 1
+    const pulse = 0.5 + 0.5 * Math.sin(prog * Math.PI * 4);
+    ctx.save();
+    // Due anelli che si stringono verso il mostro mentre carica.
+    for (let i = 0; i < 2; i += 1) {
+      const r = 26 - prog * 10 + i * 8;
+      ctx.globalAlpha = (0.45 - i * 0.15) * (0.6 + pulse * 0.4);
+      ctx.strokeStyle = tg.color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.max(4, r), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   private drawMonster(
     screen: Screen,
     speciesId: string,
@@ -1192,7 +1435,35 @@ export class BattleScene implements Scene {
 
     // Spostamento orizzontale dell'affondo (verso l'avversario).
     const dir = who === "foe" ? -1 : 1;
-    const dx = Math.round(lunge * 10 * dir);
+    let dx = Math.round(lunge * 10 * dir);
+
+    // Contraccolpo: il colpito viene spinto indietro (più forte se super eff.).
+    const kb = this.knockback[who];
+    if (kb > 0) {
+      // Oscillazione smorzata: scatta indietro e rientra.
+      dx += Math.round(Math.sin(kb * Math.PI) * 9 * -dir);
+    }
+
+    // Status visivi: il movimento dello sprite "racconta" la condizione.
+    const comb = who === "foe" ? this.foe : this.player;
+    const status = comb.mon.status;
+    let scandaloFlicker = false;
+    if (lunge < 0.1) {
+      // (gli effetti status non sovrascrivono l'affondo del proprio attacco)
+      if (status === "indagato") {
+        // Trattenuto: dondola lento da un lato all'altro.
+        dx += Math.round(Math.sin(this.time * 2) * 2);
+      } else if (status === "scandalo") {
+        // Logorato: tremolio rapido + lampeggio rossastro.
+        dx += Math.round(Math.sin(this.time * 22) * 1.5);
+        scandaloFlicker = Math.floor(this.time * 10) % 2 === 0;
+      }
+      if (comb.gaffeTurns > 0) {
+        // Confuso dalla gaffe: scossoni erratici su entrambi gli assi.
+        dx += Math.round(Math.sin(this.time * 17) * 2);
+        sy += Math.sin(this.time * 13) * 0.04;
+      }
+    }
 
     // Frame d'azione (bocca urlante) per i mostri chiave durante l'affondo.
     const action = MONSTER_ACTION_ART[speciesId];
@@ -1206,6 +1477,26 @@ export class BattleScene implements Scene {
     const x = cx - drawW / 2 + dx;
     const y = by - drawH;
     screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
+
+    // Velo rosso pulsante sopra il mostro logorato dallo SCANDALO.
+    if (scandaloFlicker) {
+      const ctx = screen.ctx;
+      ctx.save();
+      ctx.globalAlpha = 0.22;
+      ctx.fillStyle = "#d83c3c";
+      ctx.fillRect(Math.round(x), Math.round(y), Math.ceil(drawW), Math.ceil(drawH));
+      ctx.restore();
+    }
+
+    // Simbolo fluttuante dello status sopra la testa (oltre all'icona nel box).
+    if (lunge < 0.1) {
+      const sym = status === "indagato" ? "!" : status === "scandalo" ? "$" : comb.gaffeTurns > 0 ? "?" : "";
+      if (sym) {
+        const symColor = status === "scandalo" ? "#ffd23c" : status === "indagato" ? "#e8e8e8" : "#b86ad8";
+        const floatY = y - 8 + Math.sin(this.time * 3 + (who === "foe" ? 0 : 1.5)) * 2;
+        screen.text(sym, Math.round(cx) - 2, Math.round(floatY), symColor);
+      }
+    }
   }
 
   private drawBall(screen: Screen): void {

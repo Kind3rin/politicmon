@@ -25,6 +25,7 @@ export interface NpcDef {
   };
   showIfFlag?: string;
   hideIfFlag?: string;
+  setFlag?: string; // flag impostato quando ci parli (per le quest "hai parlato con...")
 }
 
 export interface WarpDef {
@@ -1078,7 +1079,7 @@ export const MAPS: Record<string, MapDef> = {
   // BORGO — casa tua.
   home: houseMap("home", "CASA TUA", "borgo", 23, 13, [
     {
-      id: "home-mom", pal: "granny", x: 7, y: 2, facing: "down",
+      id: "home-mom", pal: "granny", x: 7, y: 2, facing: "down", setFlag: "talked-mom",
       lines: [
         "MAMMA: torni a casa solo quando ti serve qualcosa, come i partiti a gennaio.",
         "Ho rifatto il letto e stirato la fascia tricolore. Vai a prenderti quel PALAZZO!",
@@ -1102,6 +1103,13 @@ export const MAPS: Record<string, MapDef> = {
     },
     {
       id: "circolo-tesserato", pal: "aide", x: 6, y: 3, facing: "down",
+      gift: {
+        itemId: "dirGreen", qty: 1, flag: "gift-circolo",
+        lines: [
+          "Tu sei la giovane promessa, vero? Tieni, una vecchia DIRETTIVA che non uso più.",
+          "GREENWASHING: fa sembrare ecologico anche un inceneritore. Falla tua."
+        ]
+      },
       lines: ["Ho la tessera n.1 dal 1974. Di quale partito? Cambia ogni martedì."]
     }
   ], { variant: 1 }),
@@ -1109,7 +1117,7 @@ export const MAPS: Record<string, MapDef> = {
   // MEDIOPOLI — appartamento influencer.
   attico: houseMap("attico", "ATTICO INFLUENCER", "mediopoli", 5, 19, [
     {
-      id: "attico-influencer", pal: "influencer", x: 5, y: 2, facing: "down",
+      id: "attico-influencer", pal: "influencer", x: 5, y: 2, facing: "down", setFlag: "talked-influencer",
       lines: [
         "Sto girando un reel: 'cinque promesse che non manterrò, la terza vi sorprenderà'.",
         "Il consenso? Si fa coi like, non con le idee. Idee è un account che non seguo."

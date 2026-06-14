@@ -100,7 +100,21 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **UX & leggibilità (sessione corrente):**
+- **Contenuti & ricchezza del mondo (sessione corrente):**
+  - **9 case visitabili:** il mondo era vuoto (9 interni, zero case). Aggiunto
+    `houseMap()` riutilizzabile (3 piantine + tile arredo `L` letto, `P` pianta)
+    e una/due case per città con NPC satirici e pickup nascosti. Porte aggiunte
+    nelle facciate cittadine; 56 warp validati in entrambe le direzioni.
+    NB: quando aggiungi case, verifica che il warp di ritorno cada su una cella
+    calpestabile (non `T`/parete) — usa lo script di validazione warp.
+  - **Casinò profondo:** valuta FICHE separata dai fondi (`chips` in GameState,
+    migrato a 0 sui save v6 senza bump chiave). CAMBIO FICHE con commissione,
+    PREMI DI PALAZZO (shop oggetti rari coi gettoni: direttive, TESSERA),
+    slot in fiche con rigioco rapido + stats sessione, BUNGA CLUB ibrido €+sondaggi.
+  - **Più cose da fare:** 3 nuove side-quest (GIRO DI PORTE, PORTAFOGLI DI FICHE,
+    SEGRETERIA DI PARTITO) + NPC con `setFlag` (nuovo campo NpcDef: setta un flag
+    quando ci parli) e un gift di direttiva al circolo del borgo.
+- **UX & leggibilità (sessione precedente):**
   - **Overflow menu risolto alla radice:** nuovo `clipToWidth(text, px)` in
     `ui/widgets.ts` + glifo `…` nel font; `Menu.draw` ora tronca ogni voce alla
     larghezza del box (tenendo conto di cursore e rightLabel) invece di sforare.

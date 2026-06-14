@@ -444,6 +444,12 @@ export class WorldScene implements Scene {
       return;
     }
 
+    // Flag "hai parlato con..." per le quest secondarie (es. GIRO DI PORTE).
+    if (npc.setFlag && !this.state.flags[npc.setFlag]) {
+      this.state.flags[npc.setFlag] = true;
+      saveGame(this.state);
+    }
+
     if (npc.lines && npc.lines.length > 0) {
       this.say(npc.lines);
     }

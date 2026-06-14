@@ -163,6 +163,32 @@ export const QUESTS: QuestDef[] = [
     hint: "CASINÒ DI PALAZZO a Caput Mundi. Tre simboli uguali = jackpot.",
     step: "Vinci un tris alle slot del casinò.",
     isDone: (s) => Boolean(s.flags["casino-jackpot"])
+  },
+  {
+    id: "side-portineria", side: true,
+    title: "GIRO DI PORTE",
+    desc: "Curiosa nelle case del mondo: ogni porta nasconde un personaggio.",
+    hint: "Le città hanno case visitabili: CASA TUA, il CIRCOLO, l'ATTICO, la REDAZIONE e altre.",
+    step: "Entra e parla con la gente delle case.",
+    isDone: (s) => Boolean(s.flags["talked-mom"] && s.flags["talked-influencer"])
+  },
+  {
+    id: "side-fiches", side: true,
+    title: "PORTAFOGLI DI FICHE",
+    desc: "Metti da parte 200 FICHE del casinò: i premi grossi aspettano.",
+    hint: "Cambia € in FICHE al CASINÒ e vinci alle slot. Coi gettoni compri direttive rare e la TESSERA DORATA.",
+    step: "Accumula 200 FICHE.",
+    isDone: (s) => s.chips >= 200
+  },
+  {
+    id: "side-direttive", side: true,
+    title: "SEGRETERIA DI PARTITO",
+    desc: "Colleziona 4 DIRETTIVE DI PARTITO diverse nella tua BORSA.",
+    hint: "Si comprano al Discount, ai PREMI del casinò, o si trovano in giro.",
+    step: "Possiedi 4 direttive diverse.",
+    isDone: (s) =>
+      ["dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",
+       "dirInciucio", "dirBunga", "dirGreen"].filter((d) => (s.bag[d] ?? 0) > 0).length >= 4
   }
 ];
 

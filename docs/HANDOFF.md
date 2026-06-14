@@ -100,6 +100,57 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
+- **UX & leggibilità (sessione corrente):**
+  - **Overflow menu risolto alla radice:** nuovo `clipToWidth(text, px)` in
+    `ui/widgets.ts` + glifo `…` nel font; `Menu.draw` ora tronca ogni voce alla
+    larghezza del box (tenendo conto di cursore e rightLabel) invece di sforare.
+  - **Menu pausa auto-largo:** `PauseScene.draw` usa `measureWidth()` clampato a
+    schermo (fix "VEICOLO: MONOPATTINO" che usciva di ~22px). Mosse lunghe in
+    battaglia troncate con ellissi (clipToWidth a 98px) invece di taglio secco.
+  - **Onboarding primi minuti:** intro WorldScene ora spiega i comandi base
+    (FRECCE/A/B) e dice di seguire la freccia gialla; il prof nel LAB spiega
+    "premi A per esaminare, ne scegli una sola"; la freccia GUIDA non punta più
+    all'uscita quando sei già dentro un interno (LAB) col target sulla porta.
+- **Feel & touch (sessione precedente):**
+  - **Veicoli visibili:** sotto il player ora si disegna lo sprite del mezzo
+    (`vehicleSprite` in `art/characters.ts`); il personaggio è rialzato "in sella"
+    (lift 4px monopattino / 6px ruspa, jitter motore sulla ruspa). Disegno in
+    `WorldScene.draw`.
+  - **Titolo prima del nome:** la `TitleScene` non apre più la `NicknameScene`
+    all'avvio. Il nome si imposta dal menu; se manca, lo si chiede solo al click
+    su NUOVA CAMPAGNA.
+  - **Touch diretto sullo schermo:** `Input` traccia i tap sul canvas in coord.
+    interne 240x180 (`consumeTap`/`tapInRect`/`clearTap`, soglia anti-swipe).
+    `Menu` evidenzia/conferma le voci al tocco; `MessageBox` avanza al tocco. Il
+    marchio "Politicoy Colore" del guscio è un `<button data-key="start">` che
+    apre il menu (index.html + styles.css).
+  - **Vibrazioni semantiche:** nuovo `engine/haptics.ts`, agganciato agli SFX in
+    `audio.ts` (tap/confirm/cancel/hit/hitSuper/faint/catch/levelUp/alert) — non
+    più casuali, seguono gli eventi reali. Toggle VIBRA nel menu pausa (solo se
+    `navigator.vibrate` esiste), preferenza in localStorage.
+  - **Feeling battaglia:** in `BattleScene` aggiunti particelle d'impatto
+    (`spawnImpact`, colore/quantità per efficacia), banner animato SUPER
+    EFFICACE/POCO EFFICACE/CRITICO (`drawEffFx`), hit-stop, knockback del colpito
+    e shake scalato col peso del colpo.
+  - **Telegrafia mossa nemica:** prima che il nemico agisca, anelli pulsanti
+    colorati per categoria (`telegraph`/`drawTelegraph`: rosso fisico, blu
+    speciale, viola status) — il giocatore "legge" la mossa in arrivo.
+  - **Status visivi:** lo sprite del mostro ora racconta la condizione in
+    `drawMonster` — INDAGATO dondola lento, SCANDALO trema + velo rosso pulsante,
+    GAFFE (gaffeTurns) scossoni erratici; simbolo fluttuante !/$/? sopra la testa.
+    NB: `gaffe` vive in `gaffeTurns`, non in `mon.status`.
+  - **Debug:** in DEV `window.stack` espone lo SceneStack (main.ts).
+  - **Intro video (Higgsfield):** splash `public/intro.mp4` (Ponte sullo Stretto
+    epico-satirico + marcetta da comizio), generato con l'MCP Higgsfield (immagine
+    nano_banana → Veo 3.1 Lite 4s → jingle Sonilo → montati con ffmpeg). Overlay
+    HTML `#intro-overlay` in index.html, logica in `engine/intro.ts`: parte sopra
+    la TitleScene, si chiude a fine video / al tap / su SALTA, una volta per
+    sessione (sessionStorage `politicmon-intro-seen`). La TitleScene è pushata
+    SUBITO (il game loop non dipende dalla Promise dell'intro → niente schermo
+    nero). Il SW cache-first lo cacha al primo caricamento (non in PRECACHE).
+    Sorgenti grezze in `artifacts/` (non committate: bridge-frame.png,
+    intro-bridge.mp4, intro-jingle.m4a).
+    NB: la grafica DI GIOCO resta 100% pixel-map da codice; l'AI è solo lo splash.
 - **Rivale ricorrente:** GIANNI a 5 tappe con team scalato e memoria (`data/rival.ts`, `rivalWins` in save v6).
 - **Audit + fix:** overflow UI mobile corretti, incontri ribilanciati, 3 hook retention (teaser/milestone/loot).
 - **Migliorie gameplay:** animazioni battaglia, preview starter, condivisione EXP (DIVISA EQUA), modalità guidata, polish.

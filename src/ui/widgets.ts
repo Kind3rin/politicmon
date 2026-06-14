@@ -7,6 +7,22 @@ export const INK = "#10141f";
 export const PAPER = "#f8f8f0";
 export const GREY = "#9aa0b8";
 
+// Tronca una stringa perché stia in `maxWidth` px (font 5x7), aggiungendo "…"
+// se serve. Usato dai menu per non far sforare le voci lunghe oltre il box.
+export function clipToWidth(text: string, maxWidth: number): string {
+  const maxChars = Math.floor(maxWidth / CHAR_W);
+  if (maxChars <= 0) {
+    return "";
+  }
+  if (text.length <= maxChars) {
+    return text;
+  }
+  if (maxChars === 1) {
+    return "…";
+  }
+  return text.slice(0, maxChars - 1) + "…";
+}
+
 // Spezza il testo in righe che stanno nel box di dialogo.
 export function wrapText(text: string, maxChars: number): string[] {
   const words = text.split(" ");
@@ -66,16 +82,20 @@ export class MessageBox {
     if (!this.isOpen) {
       return;
     }
+    // Toccare il box di dialogo avanza/completa la pagina (come premere A).
+    const boxY = VIEW_H - 44;
+    const tapped = input.tapInRect(0, boxY, VIEW_W, 44);
+    const advance = input.wasPressed("a") || input.wasPressed("b") || tapped;
     const page = this.pages[this.pageIndex];
     const total = page.join("").length;
     if (this.chars < total) {
       this.chars = Math.min(total, this.chars + dt * 60);
-      if (input.wasPressed("a") || input.wasPressed("b")) {
+      if (advance) {
         this.chars = total;
       }
       return;
     }
-    if (input.wasPressed("a") || input.wasPressed("b")) {
+    if (advance) {
       audio.cursor();
       if (this.pageIndex < this.pages.length - 1) {
         this.pageIndex += 1;
@@ -88,10 +108,14 @@ export class MessageBox {
     }
   }
 
+  // Tempo per far lampeggiare l'indicatore "continua".
+  private blink = 0;
+
   draw(screen: Screen): void {
     if (!this.isOpen) {
       return;
     }
+    this.blink += 1;
     const boxY = VIEW_H - 44;
     screen.panel(0, boxY, VIEW_W, 44);
     const page = this.pages[this.pageIndex];
@@ -104,7 +128,13 @@ export class MessageBox {
     }
     const total = page.join("").length;
     if (this.chars >= total) {
-      screen.text("▼", VIEW_W - 16, boxY + 32, INK);
+      // Freccia lampeggiante: segnala chiaramente che si può proseguire.
+      if (Math.floor(this.blink / 20) % 2 === 0) {
+        screen.text("▼", VIEW_W - 16, boxY + 32, INK);
+      }
+      // Hint discreto: come avanzare (utile per i nuovi giocatori).
+      const more = this.pageIndex < this.pages.length - 1;
+      screen.text(more ? "A: AVANTI" : "A: OK", 10, boxY + 33, GREY);
     }
   }
 }
@@ -118,10 +148,18 @@ export interface MenuItem {
 // Menu verticale con cursore.
 export class Menu {
   index = 0;
+  // Geometria dell'ultima draw(): serve per il tocco diretto sulle voci.
+  private geom: { x: number; y: number; w: number; rowH: number } | null = null;
 
   constructor(public items: MenuItem[]) {}
 
   update(input: Input): "select" | "cancel" | null {
+    // Tocco diretto su una voce (puntatore): tap su una voce diversa la
+    // seleziona, tap di nuovo sulla voce già evidenziata = conferma.
+    const touchResult = this.handleTap(input);
+    if (touchResult !== undefined) {
+      return touchResult;
+    }
     if (this.items.length === 0) {
       if (input.wasPressed("b")) {
         return "cancel";
@@ -151,7 +189,41 @@ export class Menu {
     return null;
   }
 
+  // Gestisce il tocco sul pannello del menu. Restituisce undefined se non c'è
+  // stato un tap rilevante (così update() prosegue con tastiera/d-pad).
+  private handleTap(input: Input): "select" | "cancel" | null | undefined {
+    if (!this.geom || this.items.length === 0) {
+      return undefined;
+    }
+    const { x, y, w, rowH } = this.geom;
+    const h = this.items.length * rowH + 14;
+    const tap = input.consumeTap();
+    if (!tap) {
+      return undefined;
+    }
+    if (tap.x < x || tap.x >= x + w || tap.y < y || tap.y >= y + h) {
+      return undefined; // tocco fuori dal menu: lascia decidere alla scena
+    }
+    const row = Math.floor((tap.y - (y + 8) + rowH / 2) / rowH);
+    if (row < 0 || row >= this.items.length) {
+      return undefined;
+    }
+    input.clearTap();
+    if (row === this.index) {
+      if (this.items[this.index]?.disabled) {
+        audio.cancel();
+        return null;
+      }
+      audio.confirm();
+      return "select";
+    }
+    this.index = row;
+    audio.cursor();
+    return null;
+  }
+
   draw(screen: Screen, x: number, y: number, w: number, rowH = 13): void {
+    this.geom = { x, y, w, rowH };
     const h = this.items.length * rowH + 14;
     screen.panel(x, y, w, h);
     for (let i = 0; i < this.items.length; i += 1) {
@@ -161,7 +233,12 @@ export class Menu {
       if (i === this.index) {
         screen.text("►", x + 7, rowY, INK);
       }
-      screen.text(item.label, x + 16, rowY, color);
+      // Spazio disponibile per la label: dal margine sinistro (x+16) al bordo
+      // destro del box (x+w-8), meno la rightLabel se presente. Così le voci
+      // lunghe vengono troncate dentro al pannello invece di sforare.
+      const rightW = item.rightLabel ? item.rightLabel.length * CHAR_W + 6 : 0;
+      const labelMaxW = w - 24 - rightW;
+      screen.text(clipToWidth(item.label, labelMaxW), x + 16, rowY, color);
       if (item.rightLabel) {
         screen.textRight(item.rightLabel, x + w - 8, rowY, color);
       }

@@ -657,7 +657,8 @@ export const MAPS: Record<string, MapDef> = {
         id: "professor", pal: "professor", x: 9, y: 4, facing: "left",
         lines: [
           "Io sono il PROFESSOR QUIRINO, studioso del consenso.",
-          "Sul tavolo ci sono tre SCHEDE STARTER: esaminale e scegli il tuo primo POLITICMON!"
+          "Sul tavolo ci sono tre SCHEDE STARTER: avvicinati a una e premi A per esaminarla.",
+          "Ne scegli SOLO una: sarà il tuo primo POLITICMON. Le altre? Le prenderà chi viene dopo di te..."
         ]
       }
     ]

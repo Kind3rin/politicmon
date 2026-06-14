@@ -3,6 +3,7 @@ import { MAPS } from "../data/maps";
 import { BADGES } from "../data/trainers";
 import { audio } from "../engine/audio";
 import { isGuideOn, loadControlMode, toggleControlMode, toggleGuide } from "../engine/controls";
+import { haptics } from "../engine/haptics";
 import { ownedVehicles, VEHICLES, type VehicleId } from "../game/vehicles";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -45,6 +46,10 @@ export class PauseScene implements Scene {
       this.entries.push(`VEICOLO: ${v}`);
     }
     this.entries.push(`GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`, "SALVA", `AUDIO ${audio.enabled ? "SÌ" : "NO"}`);
+    // Vibrazione: solo dove il dispositivo la supporta (telefoni).
+    if (haptics.isSupported) {
+      this.entries.push(`VIBRA ${haptics.enabled ? "SÌ" : "NO"}`);
+    }
     // La scelta levetta/d-pad ha senso solo coi controlli touch a schermo.
     if (document.body.classList.contains("touch")) {
       this.entries.push(`TASTI: ${loadControlMode() === "stick" ? "LEVETTA" : "CROCE"}`);
@@ -121,6 +126,9 @@ export class PauseScene implements Scene {
         } else if (label.startsWith("TASTI")) {
           toggleControlMode();
           audio.confirm();
+        } else if (label.startsWith("VIBRA")) {
+          haptics.toggle();
+          audio.confirm(); // dà anche un feedback tattile immediato se riattivata
         } else {
           // Audio.
           const enabled = audio.toggle();
@@ -149,7 +157,9 @@ export class PauseScene implements Scene {
       this.drawCard(screen);
       return;
     }
-    const w = 110;
+    // Larghezza adattata al contenuto (la voce VEICOLO: MONOPATTINO è la più
+    // lunga), con un minimo e un massimo che non sfori lo schermo.
+    const w = Math.max(110, Math.min(this.menu.measureWidth(), VIEW_W - 8));
     this.menu.draw(screen, VIEW_W - w - 4, 4, w);
     this.msg.draw(screen);
   }

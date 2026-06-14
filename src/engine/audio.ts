@@ -1,5 +1,6 @@
 // Audio chiptune via WebAudio: effetti + loop musicali leggeri.
 // Si attiva al primo input utente (policy autoplay dei browser).
+import { haptics } from "./haptics";
 
 const NOTE_BASE: Record<string, number> = {
   C: -9, "C#": -8, D: -7, "D#": -6, E: -5, F: -4,
@@ -318,24 +319,30 @@ class AudioEngine {
   // ---- Effetti ----
   cursor(): void {
     this.tone(860, 0.045, { vol: 0.07 });
+    haptics.tap();
   }
   confirm(): void {
     this.tone(1180, 0.07, { vol: 0.08 });
+    haptics.confirm();
   }
   cancel(): void {
     this.tone(420, 0.08, { vol: 0.08 });
+    haptics.cancel();
   }
   hit(): void {
     this.tone(220, 0.12, { sweepTo: 110, vol: 0.14 });
+    haptics.hit();
   }
   hitSuper(): void {
     this.tone(330, 0.2, { sweepTo: 70, vol: 0.16 });
+    haptics.hitSuper();
   }
   hitWeak(): void {
     this.tone(480, 0.06, { vol: 0.09 });
   }
   faint(): void {
     this.tone(380, 0.5, { sweepTo: 45, vol: 0.14 });
+    haptics.faint();
   }
   ballThrow(): void {
     this.tone(320, 0.18, { sweepTo: 980, vol: 0.1 });
@@ -351,9 +358,11 @@ class AudioEngine {
   }
   catchJingle(): void {
     [659, 784, 1047, 1319].forEach((f, i) => this.tone(f, 0.16, { delaySec: i * 0.13, vol: 0.1 }));
+    haptics.catch();
   }
   levelUp(): void {
     [523, 659, 784, 1047, 784, 1047].forEach((f, i) => this.tone(f, 0.1, { delaySec: i * 0.08, vol: 0.09 }));
+    haptics.levelUp();
   }
   victory(): void {
     const seq = [523, 523, 523, 659, 784, 1047];
@@ -361,6 +370,7 @@ class AudioEngine {
   }
   encounterSting(): void {
     [880, 830, 880, 830, 880].forEach((f, i) => this.tone(f, 0.07, { delaySec: i * 0.07, vol: 0.1 }));
+    haptics.alert();
   }
 
   // ---- Musica ----

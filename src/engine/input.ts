@@ -1,3 +1,5 @@
+import { VIEW_H, VIEW_W } from "./screen";
+
 export type Button = "up" | "down" | "left" | "right" | "a" | "b" | "start";
 
 const KEY_MAP: Record<string, Button> = {
@@ -21,10 +23,19 @@ const KEY_MAP: Record<string, Button> = {
   Tab: "start"
 };
 
+// Punto in coordinate interne dello schermo (240x180).
+export interface ScreenPoint {
+  x: number;
+  y: number;
+}
+
 // Stato input unificato tastiera + touch. `pressed` dura un solo frame.
 export class Input {
   private held = new Set<Button>();
   private pressedNow = new Set<Button>();
+  // Tocco diretto sul canvas: posizione (in coord. interne) del tap rilasciato
+  // in questo frame. Un singolo frame, come pressedNow.
+  private tapNow: ScreenPoint | null = null;
 
   constructor() {
     document.addEventListener("keydown", (event) => {
@@ -46,6 +57,51 @@ export class Input {
     });
     this.bindTouch();
     this.bindStick();
+    this.bindCanvas();
+  }
+
+  // Tocco diretto sullo schermo di gioco: traduce le coordinate del puntatore
+  // sul canvas in coordinate interne 240x180, così le scene possono fare
+  // hit-test su voci di menu, pulsanti a schermo e box di dialogo. Un "tap" è
+  // un tocco che si solleva senza essere trascinato troppo (non è uno swipe).
+  private bindCanvas(): void {
+    const canvas = document.querySelector<HTMLCanvasElement>("#game-canvas");
+    if (!canvas) {
+      return;
+    }
+    let downId: number | null = null;
+    let downClientX = 0;
+    let downClientY = 0;
+
+    const toInternal = (clientX: number, clientY: number): ScreenPoint => {
+      const rect = canvas.getBoundingClientRect();
+      const x = ((clientX - rect.left) / rect.width) * VIEW_W;
+      const y = ((clientY - rect.top) / rect.height) * VIEW_H;
+      return { x, y };
+    };
+
+    canvas.addEventListener("pointerdown", (event) => {
+      downId = event.pointerId;
+      downClientX = event.clientX;
+      downClientY = event.clientY;
+    });
+    const lift = (event: PointerEvent) => {
+      if (event.pointerId !== downId) {
+        return;
+      }
+      const moved = Math.hypot(event.clientX - downClientX, event.clientY - downClientY);
+      const rect = canvas.getBoundingClientRect();
+      // Soglia swipe proporzionale alla scala del canvas (~ mezza cella font).
+      const threshold = (rect.width / VIEW_W) * 6;
+      if (moved <= threshold) {
+        this.tapNow = toInternal(event.clientX, event.clientY);
+      }
+      downId = null;
+    };
+    canvas.addEventListener("pointerup", lift);
+    canvas.addEventListener("pointercancel", () => {
+      downId = null;
+    });
   }
 
   private bindTouch(): void {
@@ -184,8 +240,29 @@ export class Input {
     return null;
   }
 
+  // Tap rilasciato sul canvas in questo frame (coord. interne 240x180), o null.
+  consumeTap(): ScreenPoint | null {
+    return this.tapNow;
+  }
+
+  // È stato fatto tap dentro il rettangolo (x,y,w,h)? Consuma il tap se sì,
+  // così non viene gestito due volte nello stesso frame.
+  tapInRect(x: number, y: number, w: number, h: number): boolean {
+    const t = this.tapNow;
+    if (!t || t.x < x || t.x >= x + w || t.y < y || t.y >= y + h) {
+      return false;
+    }
+    this.tapNow = null;
+    return true;
+  }
+
+  clearTap(): void {
+    this.tapNow = null;
+  }
+
   // Da chiamare a fine frame.
   endFrame(): void {
     this.pressedNow.clear();
+    this.tapNow = null;
   }
 }

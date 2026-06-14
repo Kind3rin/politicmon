@@ -18,10 +18,16 @@
     <title>Politicmon</title>
   </head>
   <body>
+    <!-- Intro video: splash satirico (Ponte sullo Stretto + marcetta). Si chiude
+         da solo a fine video o al tocco. Gestito da src/engine/intro.ts. -->
+    <div id="intro-overlay" hidden>
+      <video id="intro-video" playsinline preload="auto" src="./intro.mp4"></video>
+      <button id="intro-skip" type="button">SALTA ▶</button>
+    </div>
     <div id="app">
       <div id="console-shell">
-        <div id="console-top" aria-hidden="true">
-          <span class="console-brand">Politicoy Colore</span>
+        <div id="console-top">
+          <button class="console-brand" data-key="start" aria-label="Apri il menu di gioco">Politicoy Colore</button>
           <span class="console-power"><i></i> POWER</span>
         </div>
         <div id="screen-frame">

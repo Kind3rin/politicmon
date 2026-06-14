@@ -1,5 +1,6 @@
 import { audio } from "./engine/audio";
 import { applyControlMode, loadControlMode } from "./engine/controls";
+import { playIntro } from "./engine/intro";
 import { initPwaInstall } from "./engine/pwa";
 import { mp } from "./net/mp";
 import { loadNick } from "./net/profile";
@@ -40,7 +41,21 @@ const screen = new Screen(canvas);
 const input = new Input();
 const stack = new SceneStack();
 
+// In sviluppo esponiamo lo stack delle scene per ispezione/test manuali.
+if (import.meta.env.DEV) {
+  (window as unknown as { stack: SceneStack }).stack = stack;
+}
+
+// La schermata del titolo viene creata SUBITO, così il game loop ha sempre una
+// scena da aggiornare/disegnare (niente schermo nero se l'intro tarda).
 stack.push(new TitleScene(stack, input));
+
+// Splash video iniziale: un overlay HTML che copre il canvas sopra la TitleScene
+// finché il video non finisce (o l'utente lo salta). L'audio del gioco resta
+// bloccato finché non c'è un gesto utente, quindi il tema del titolo non si
+// accavalla col jingle del video. Non blocca nulla: se l'intro è già stata vista
+// o non è disponibile, l'overlay si chiude subito e si vede il titolo.
+void playIntro();
 
 // L'audio si può attivare solo dopo il primo input utente.
 const unlock = () => {

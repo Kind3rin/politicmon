@@ -1,4 +1,4 @@
-import { charSprite, remotePalId, type Facing } from "../../art/characters";
+import { charSprite, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART } from "../../art/monsters";
 import { TILE, TILES, waterFrames } from "../../art/tiles";
@@ -104,8 +104,9 @@ export class WorldScene implements Scene {
       this.state.flags["intro-done"] = true;
       this.say([
         "PROF. QUIRINO (al megafono): Benvenuto a BORGO URNE, giovane!",
-        "Ti aspetto nel mio LABORATORIO DEL CONSENSO, l'edificio col tetto blu.",
-        "Scegli il tuo POLITICMON e parti per la scalata: tre MEDAGLIE e poi il PALAZZO!"
+        "Muoviti con le FRECCE (o il D-PAD). A per parlare e confermare, B per tornare indietro.",
+        "Segui la FRECCIA GIALLA: ti porta al mio LABORATORIO, l'edificio col tetto blu.",
+        "Lì scegli il tuo primo POLITICMON e parti per la scalata: tre MEDAGLIE e poi il PALAZZO!"
       ]);
     }
   }
@@ -1162,9 +1163,26 @@ export class WorldScene implements Scene {
 
     const frame = this.moving ? (Math.floor(this.moveT * 2) % 2 === 0 ? 1 : 0) : 0;
     const playerSprite = charSprite("player", pos.facing, frame);
-    screen.sprite(playerSprite.key, playerSprite.pix, Math.round(playerPx) - camX, Math.round(playerPy) - camY - 2, {
-      flipX: playerSprite.flip
-    });
+    const baseX = Math.round(playerPx) - camX;
+    const baseY = Math.round(playerPy) - camY - 2;
+    // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
+    // così si vede chiaramente che ci sei sopra.
+    const vehicle = this.state.vehicle as VehicleId | null;
+    if (vehicle) {
+      const veh = vehicleSprite(vehicle, pos.facing);
+      // La ruspa è più alta: solleva di più; il monopattino di poco.
+      const lift = vehicle === "ruspa" ? 6 : 4;
+      // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
+      const jitter = this.moving && vehicle === "ruspa" ? (frame === 0 ? 0 : 1) : 0;
+      screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
+      screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - lift + jitter, {
+        flipX: playerSprite.flip
+      });
+    } else {
+      screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY, {
+        flipX: playerSprite.flip
+      });
+    }
 
     // Fruscio dell'erba alta.
     for (const rustle of this.rustles) {
@@ -1223,8 +1241,19 @@ export class WorldScene implements Scene {
       screen.text(label, 6, VIEW_H - 13, "#e8c84a");
     }
 
-    // Modalità guidata: freccia gialla che punta verso l'obiettivo.
-    if (quest?.target && isGuideOn() && !this.msg.isOpen && !this.askMenu && !this.transportMenu) {
+    // Modalità guidata: freccia gialla che punta verso l'obiettivo. La
+    // nascondiamo quando siamo in un INTERNO (es. il LAB) ma il target è la
+    // porta su un'altra mappa: la freccia ti direbbe di USCIRE proprio dal posto
+    // in cui devi restare per completare l'obiettivo. In quel caso sei arrivato.
+    const guideMisleading = quest?.target && !this.map.outdoor && quest.target.mapId !== this.map.id;
+    if (
+      quest?.target &&
+      !guideMisleading &&
+      isGuideOn() &&
+      !this.msg.isOpen &&
+      !this.askMenu &&
+      !this.transportMenu
+    ) {
       this.drawGuideArrow(screen, quest.target, playerPx, playerPy, camX, camY);
     }
 

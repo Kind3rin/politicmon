@@ -120,6 +120,124 @@ const UP_1 = [
   "................"
 ];
 
+// ---- Veicoli: si disegnano SOTTO il personaggio, per direzione. ----
+// Palette: o outline, k carrozzeria, w ruota/cingolo, g vetro/accento,
+// y giallo cantiere (ruspa). Solo la metà bassa è dipinta: la testa/busto del
+// personaggio resta sopra, così "si vede" che è in sella.
+
+const MONOPATTINO_SIDE = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  ".........ooo....",
+  ".........ogo....",
+  "..o......ooo....",
+  "..oooooooooo....",
+  ".owo......owo...",
+  ".owo......owo...",
+  "..o........o...."
+];
+
+const MONOPATTINO_FRONT = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  ".......ooo......",
+  ".......ogo......",
+  ".......ooo......",
+  ".....oooooo.....",
+  "....owo..owo....",
+  "....owo..owo....",
+  ".....o....o....."
+];
+
+const RUSPA_SIDE = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "...........oooo.",
+  "..........oyyyo.",
+  ".oo......oyyyyo.",
+  "oyyooooooyyyyy..",
+  "oyyyyyyyyyyyyo..",
+  "oyyyyyyyyyyyyo..",
+  ".owwwwwwwwwwo...",
+  ".owkwkwkwkwko...",
+  ".owwwwwwwwwwo...",
+  "..oooooooooo....",
+  "................"
+];
+
+const RUSPA_FRONT = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "....oooooooo....",
+  "...oyyyyyyyyo...",
+  "...oyyyyyyyyo...",
+  "...oyyyyyyyyo...",
+  "..owwwwwwwwwwo..",
+  "..owkwkwkwkwko..",
+  "..owwwwwwwwwwo..",
+  "..owwwwwwwwwwo..",
+  "...oooooooooo...",
+  "................"
+];
+
+const VEHICLE_PAL: Record<string, string> = {
+  o: "#1c2333",
+  k: "#2a3142",
+  w: "#3a4150",
+  g: "#9fd0e8",
+  y: "#e8b020"
+};
+
+export interface VehicleSprite {
+  pix: Pixmap;
+  flip: boolean;
+  key: string;
+}
+
+const vehicleCache = new Map<string, Pixmap>();
+
+// Sprite del veicolo per (id, direzione). down/up usano la vista frontale,
+// left/right la vista laterale (right specchiata).
+export function vehicleSprite(vehicleId: string, facing: Facing): VehicleSprite {
+  const side = facing === "left" || facing === "right";
+  const isRuspa = vehicleId === "ruspa";
+  const art = isRuspa
+    ? side
+      ? RUSPA_SIDE
+      : RUSPA_FRONT
+    : side
+      ? MONOPATTINO_SIDE
+      : MONOPATTINO_FRONT;
+  const cacheKey = `${vehicleId}:${side ? "side" : "front"}`;
+  let pix = vehicleCache.get(cacheKey);
+  if (!pix) {
+    pix = { art, pal: VEHICLE_PAL };
+    vehicleCache.set(cacheKey, pix);
+  }
+  return { pix, flip: facing === "right", key: `veh:${cacheKey}` };
+}
+
 export interface CharPalette {
   h: string;
   c: string;

@@ -4,6 +4,53 @@
   box-sizing: border-box;
 }
 
+/* ---- Splash video iniziale ---- */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#intro-overlay[hidden] {
+  display: none;
+}
+
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+#intro-skip {
+  position: absolute;
+  right: calc(14px + env(safe-area-inset-right));
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  appearance: none;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(16, 20, 31, 0.55);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.05s ease, background 0.1s ease;
+}
+
+#intro-skip:active {
+  transform: scale(0.94);
+  background: rgba(16, 20, 31, 0.8);
+}
+
 /* ---- Banner installazione PWA ---- */
 #pwa-banner {
   position: fixed;
@@ -205,6 +252,29 @@ body.touch #console-top {
 
 .console-brand {
   font-style: italic;
+  /* Reset del button: deve sembrare la scritta serigrafata, ma è toccabile
+     e apre il menu di gioco (START) su mobile. */
+  appearance: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 4px 6px;
+  font: inherit;
+  font-style: italic;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-shadow: inherit;
+  cursor: pointer;
+  border-radius: 6px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.05s ease, background 0.1s ease;
+}
+
+.console-brand:active {
+  transform: scale(0.94);
+  background: rgba(232, 200, 74, 0.18);
 }
 
 .console-power {

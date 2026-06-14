@@ -23,7 +23,6 @@ export class TitleScene implements Scene {
   private menu: Menu;
   private time = 0;
   private confirmDelete = false;
-  private askedNick = false;
 
   constructor(private stack: SceneStack, private input: Input) {
     this.menu = this.buildMenu();
@@ -43,12 +42,8 @@ export class TitleScene implements Scene {
 
   update(dt: number): void {
     this.time += dt;
-    // Alla prima apertura in assoluto, chiedi un nome online (una sola volta).
-    if (!this.askedNick && !hasNick()) {
-      this.askedNick = true;
-      this.openNickname(true);
-      return;
-    }
+    // Nota: NON chiediamo più il nome all'avvio. Prima si vede la schermata del
+    // titolo; il nome si imposta dal menu o, se manca, alla prima campagna.
     const action = this.menu.update(this.input);
     if (action !== "select") {
       return;
@@ -60,7 +55,18 @@ export class TitleScene implements Scene {
         this.start(state);
       }
     } else if (label === "NUOVA CAMPAGNA") {
-      this.start(newGameState());
+      // Se non hai ancora un nome (per la chat online), te lo chiediamo ora —
+      // ma solo al momento di iniziare davvero, non all'apertura del gioco.
+      if (!hasNick()) {
+        this.stack.push(
+          new NicknameScene(this.stack, this.input, (nick) => {
+            mp.setIdentity(nick, "player");
+            this.start(newGameState());
+          }, true)
+        );
+      } else {
+        this.start(newGameState());
+      }
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {

@@ -103,9 +103,9 @@ const BORGO_TILES = [
   "TT....=......====......=....TT",
   "TT....=......====......=....TT",
   "TT....==================....TT",
-  "TT.s.........====...hh......TT",
-  "TT..eeee.....====......,,...TT",
-  "TT..mdnm.....====......,,...TT",
+  "TT.s.........====..eeee.....TT",
+  "TT..eeee.....====..hmdnh....TT",
+  "TT..mdnm.....====..mmdmm....TT",
   "TT...........====...........TT",
   "TT..wwww.....====.....wwww..TT",
   "TT..wwww.....====.....wwww..TT",
@@ -130,9 +130,9 @@ const MEDIOPOLI_TILES = [
   "TT....=......====.....=.....TT",
   "TT....=......====.....=.....TT",
   "TT....=================.....TT",
-  "TT...........====....rrrr...TT",
-  "TT...hh......====....rrrr...TT",
-  "TT...........====....mdnm...TT",
+  "TT...eeee....====....rrrr...TT",
+  "TT...hmdnh...====....rrrr...TT",
+  "TT...mmdmm...====....mdnm...TT",
   "TT..eeee.....====......=....TT",
   "TT..mdnm.....====.......s...TT",
   "TT...........====...........TT",
@@ -152,10 +152,10 @@ const EUROTOWN_TILES = [
   "TT....=================.....TT",
   "TT..xxxx.....====...yyyy....TT",
   "TT..mdnm.....====...mdnm....TT",
-  "TT....ww.....====.....hh....TT",
-  "TT...........====...........TT",
-  "TT..~~~~~....====....~~~~~..TT",
-  "TT..~~~~~....====....~~~~~..TT",
+  "TT....ww.....====...........TT",
+  "TT....ee.....====...........TT",
+  "TT....hmdnh..====....~~~~..TT",
+  "TT....mmdmm..====....~~~~..TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
@@ -169,13 +169,13 @@ const CAPITALE_TILES = [
   "TT........MGMMMMMMGM........TT",
   "TT........MMMMMMMMMM........TT",
   "TT........CMMMDDMMMC........TT",
-  "TT..,,....==========....,,..TT",
-  "TT..,,......======......,,..TT",
+  "TT..,,....==========..eeee..TT",
+  "TT..,,......======....mdnm..TT",
   "TT...........====...........TT",
   "TT..xxxxxx...====..yyyyyy...TT",
   "TT..xxxxxx...====..yyyyyy...TT",
   "TT..mmdnmm...====..mmdnmm...TT",
-  "TT....=......====.....=.h...TT",
+  "TT....=......====.....=.....TT",
   "TT....============...===....TT",
   "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
@@ -193,9 +193,9 @@ const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......eeee......xxxx.....TT",
   "TT..~~~~.mdnm.s....mdnm.....TT",
-  "TT..~~~~..............~~~~..TT",
-  "TT..~~~~.....hh.......~~~~..TT",
-  "TT...s......................TT",
+  "TT..~~~~....eeee......~~~~..TT",
+  "TT..~~~~....hmdnh.....~~~~..TT",
+  "TT...s......mmdmm...........TT",
   "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
   "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
@@ -386,6 +386,49 @@ function houseMap(
   };
 }
 
+// Interno del BAR SPORT: il "centro cura" del gioco (come il Pokémon Center).
+// Bancone `h` in fondo dietro cui sta il barista, tavolini `t`, scaffale di
+// bottiglie `b`, una pianta `P`. Le due celle `cc` in basso sono l'uscita.
+// Interno del BAR SPORT. Riga 1: scaffali `b` di bottiglie. Riga 2: bancone `h`.
+// Il barista sta a riga 3, davanti al bancone, su pavimento. Tavolini `t`, una
+// pianta `P`. La porta di uscita `cc` è in basso; il giocatore entra a (5,5),
+// pavimento, ben dentro la stanza.
+const BAR_TILES = [
+  "AAAAAAAAAAAA",
+  "AbbbbbbbbbbA",
+  "AhhhhhhhhhhA",
+  "AppppppppppA",
+  "AptpppppptpA",
+  "AppppppppPpA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+
+// Genera l'interno di un BAR SPORT con il barista che cura al bancone.
+function barMap(id: string, name: string, city: string, doorX: number, doorY: number): MapDef {
+  const exitY = BAR_TILES.length - 2;
+  const cx = Math.max(0, BAR_TILES[exitY].indexOf("c"));
+  return {
+    id,
+    name,
+    tiles: BAR_TILES,
+    outdoor: false,
+    music: "interior",
+    warps: [
+      { x: cx, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" },
+      { x: cx + 1, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" }
+    ],
+    signs: [{ x: 1, y: 3, lines: [`${name}`, "Una vetrina di bottiglie e promesse. Qui la squadra si rimette in sesto."] }],
+    pickups: [],
+    npcs: [
+      {
+        id: `${id}-barista`, pal: "barista", x: 5, y: 3, facing: "down", healer: true,
+        lines: [`${name}: benvenuto. Il banco offre, la squadra si riprende.`]
+      }
+    ]
+  };
+}
+
 export const MAPS: Record<string, MapDef> = {
   borgo: {
     id: "borgo",
@@ -397,7 +440,8 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
       { x: 23, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
-      { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" }
+      { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
+      { x: 21, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.10,
     encounters: [
@@ -454,10 +498,6 @@ export const MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        id: "barista-borgo", pal: "barista", x: 20, y: 17, facing: "down", healer: true,
-        lines: ["Benvenuto al BAR SPORT, sede di ogni dibattito che conta."]
-      },
-      {
         id: "scorta-borgo", pal: "guard", x: 25, y: 22, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "Salta su: la macchina elettorale conosce ogni scorciatoia."]
       },
@@ -499,7 +539,8 @@ export const MAPS: Record<string, MapDef> = {
       { x: 6, y: 10, toMap: "gymtv", toX: 4, toY: 6, facing: "up" },
       { x: 21, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" },
       { x: 5, y: 18, toMap: "attico", toX: 4, toY: 5, facing: "up" },
-      { x: 22, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" }
+      { x: 22, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" },
+      { x: 7, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.10,
     encounters: [
@@ -529,10 +570,6 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-m-hide2", x: 2, y: 19, itemId: "maalox", qty: 1, hidden: true }
     ],
     npcs: [
-      {
-        id: "barista-medio", pal: "barista", x: 4, y: 16, facing: "down", healer: true,
-        lines: ["BAR SPORT di MEDIOPOLI: qui il dibattito è in onda h24."]
-      },
       {
         id: "scorta-medio", pal: "guard", x: 24, y: 19, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "Destinazioni rapide, sirena inclusa, spiegazioni escluse."]
@@ -596,7 +633,8 @@ export const MAPS: Record<string, MapDef> = {
       { x: 6, y: 5, toMap: "gymue", toX: 4, toY: 6, facing: "up" },
       { x: 21, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
       { x: 5, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
-      { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" }
+      { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
+      { x: 8, y: 13, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.10,
     encounters: [
@@ -622,10 +660,6 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-e-hide2", x: 2, y: 14, itemId: "mojito", qty: 1, hidden: true }
     ],
     npcs: [
-      {
-        id: "barista-euro", pal: "barista", x: 22, y: 10, facing: "down", healer: true,
-        lines: ["BAR SPORT di EUROTOWN. Il caffè qui si chiama espresso normato."]
-      },
       {
         id: "scorta-euro", pal: "guard", x: 24, y: 14, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "Abbiamo una corsia preferenziale approvata in 27 lingue."]
@@ -669,6 +703,7 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 6, y: 11, toMap: "gymglobal", toX: 4, toY: 6, facing: "up" },
       { x: 21, y: 11, toMap: "casino", toX: 4, toY: 4, facing: "up" },
+      { x: 23, y: 7, toMap: "bar-cap", toX: 5, toY: 5, facing: "up" },
       { x: 4, y: 18, toMap: "salotto", toX: 4, toY: 5, facing: "up" },
       { x: 24, y: 18, toMap: "retroscena", toX: 4, toY: 5, facing: "up" },
       {
@@ -714,10 +749,6 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-c-hide2", x: 26, y: 14, itemId: "mojito", qty: 1, hidden: true }
     ],
     npcs: [
-      {
-        id: "barista-cap", pal: "barista", x: 21, y: 11, facing: "down", healer: true,
-        lines: ["BAR SPORT di CAPUT MUNDI: i cappuccini costano come un emendamento."]
-      },
       {
         id: "scorta-cap", pal: "guard", x: 24, y: 18, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "Davanti al Palazzo non si cammina: si arriva con lampeggiante istituzionale."]
@@ -921,7 +952,8 @@ export const MAPS: Record<string, MapDef> = {
     music: "stretto",
     warps: [
       { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
-      { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" }
+      { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
+      { x: 14, y: 5, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.11,
     encounters: [
@@ -958,13 +990,6 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-s4", x: 3, y: 7, itemId: "dirVaffa", qty: 1 }
     ],
     npcs: [
-      {
-        id: "bagnino-stretto", pal: "barista", x: 12, y: 4, facing: "down", healer: true,
-        lines: [
-          "CHIRINGUITO PAPEETE: il bar che ha visto cadere un governo.",
-          "Un mojito alla squadra e si riparte. Cubista compresa nel prezzo."
-        ]
-      },
       {
         id: "elevato", pal: "professor", x: 20, y: 3, facing: "down",
         lines: [
@@ -1292,7 +1317,16 @@ export const MAPS: Record<string, MapDef> = {
   ], {
     variant: 1,
     pickups: [{ id: "chiosco-pk", x: 1, y: 1, itemId: "mojito", qty: 1 }]
-  })
+  }),
+
+  // ------------------------------------------------ BAR SPORT (centri cura) ---
+  // Un "Pokémon Center" tematico per città: entri, il barista dietro al bancone
+  // ti rimette in sesto la squadra. Sostituiscono i vecchi barista-in-piazza.
+  "bar-borgo": barMap("bar-borgo", "BAR SPORT BORGO", "borgo", 21, 18),
+  "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 7, 16),
+  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 14),
+  "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 23, 8),
+  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 14, 6)
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

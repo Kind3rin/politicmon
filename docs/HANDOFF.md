@@ -105,7 +105,18 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Bilanciamento lotte + Mafia + AUTO (sessione corrente):**
+- **Centri cura BAR SPORT (sessione corrente):** i guaritori erano NPC `barista`
+  piazzati all'aperto in mezzo alla città (brutto). Ora sono 5 EDIFICI interni
+  visitabili (`barMap()` + tileset `BAR_TILES`: scaffali, bancone `h`, tavolini),
+  uno per area (BAR SPORT BORGO/MEDIOPOLI, CAFFÈ EUROPA, GRAN CAFFÈ ROMANO,
+  CHIRINGUITO PAPEETE). Porte aggiunte nelle facciate cittadine, barista healer
+  dentro al bancone. TUTTI i barista-in-piazza rimossi.
+  ⚠️ Trappola tile imparata: nei tileset città ogni riga DEVE essere lunga quanto
+  le altre (le mappe sono 28 o 30 colonne); un carattere in meno sfasa l'intera
+  mappa. La porta `d` di un edificio va nella riga del MURO BASE, con cella
+  calpestabile SOTTO (è lì che si riemerge). Validare sempre i warp in entrambe
+  le direzioni via lo script di check (vedi sessioni precedenti).
+- **Bilanciamento lotte + Mafia + AUTO (sessione precedente):**
   - **Lotte più accessibili** (diagnosi via simulazione Monte Carlo in
     `scripts/sim-balance.mjs`): l'IA era CIECA al contesto (un wild giocava come
     il boss finale). Ora `chooseFoeMove(foe, target, ai)` accetta un `AiProfile`

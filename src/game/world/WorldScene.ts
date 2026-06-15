@@ -31,6 +31,7 @@ import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 const STEP_TIME = 0.18;
 const RUN_FACTOR = 1.85;
 const SCOOTER_FACTOR = 2.5; // il MONOPATTINO deve battere la corsa, non pareggiarla
+const AUTO_FACTOR = 3.0; // l'AUTO BLU è il mezzo più rapido all'aperto
 
 // Annunci una-tantum quando si entra in una mappa per la prima volta: servono a
 // far scoprire feature che la storia principale non segnala (es. il CASINÒ).
@@ -1261,9 +1262,16 @@ export class WorldScene implements Scene {
     const pos = this.state.pos;
 
     if (this.moving) {
-      // Il monopattino è più veloce della semplice corsa (B): si sente davvero.
-      const onScooter = this.state.vehicle === "monopattino" && this.map.outdoor;
-      const factor = onScooter ? SCOOTER_FACTOR : this.running ? RUN_FACTOR : 1;
+      // Monopattino e auto sono più veloci della semplice corsa (B): si sente.
+      const fast = this.map.outdoor ? this.state.vehicle : null;
+      const factor =
+        fast === "auto"
+          ? AUTO_FACTOR
+          : fast === "monopattino"
+            ? SCOOTER_FACTOR
+            : this.running
+              ? RUN_FACTOR
+              : 1;
       this.moveT += (dt / STEP_TIME) * factor;
       if (this.moveT >= 1) {
         this.moving = false;
@@ -1317,9 +1325,10 @@ export class WorldScene implements Scene {
     if (this.isBlocked(nx, ny)) {
       return;
     }
-    // Col MONOPATTINO si va sempre veloci all'aperto; B resta la corsa manuale.
-    const onScooter = this.state.vehicle === "monopattino" && this.map.outdoor;
-    this.running = this.input.isHeld("b") || onScooter;
+    // Con MONOPATTINO o AUTO si va sempre veloci all'aperto; B resta la corsa.
+    const onVehicle =
+      (this.state.vehicle === "monopattino" || this.state.vehicle === "auto") && this.map.outdoor;
+    this.running = this.input.isHeld("b") || onVehicle;
     this.fromX = pos.x;
     this.fromY = pos.y;
     pos.x = nx;
@@ -1438,10 +1447,12 @@ export class WorldScene implements Scene {
     const vehicle = this.state.vehicle as VehicleId | null;
     if (vehicle) {
       const veh = vehicleSprite(vehicle, pos.facing);
-      // La ruspa è più alta: solleva di più; il monopattino di poco.
-      const lift = vehicle === "ruspa" ? 6 : 4;
+      // Quanto sollevare il personaggio per "sedercelo" sopra: la ruspa è alta,
+      // l'auto lo mette in abitacolo, il monopattino di poco.
+      const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;
       // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
-      const jitter = this.moving && vehicle === "ruspa" ? (frame === 0 ? 0 : 1) : 0;
+      const motor = vehicle === "ruspa" || vehicle === "auto";
+      const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
       screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
       screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - lift + jitter, {
         flipX: playerSprite.flip

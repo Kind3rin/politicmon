@@ -201,12 +201,75 @@ const RUSPA_FRONT = [
   "................"
 ];
 
+// AUTO BLU elettorale: berlina tozza e ben visibile. Vista laterale (muso a
+// destra), frontale (paraurti + fari) e posteriore (luci rosse). Carrozzeria
+// blu `b`, vetri `g`, fari `f`, stop `s`, ruote `w`.
+const AUTO_SIDE = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  ".....ooooo......",
+  "....obgggboo....",
+  "...obbbbbbbbo...",
+  "..obbbbbbbbbfo..",
+  "..obbbbbbbbbbo..",
+  "..obbbbbbbbbbo..",
+  "..oowwoooowwoo..",
+  "...owwo..owwo...",
+  "....oo....oo....",
+  "................",
+  "................"
+];
+
+const AUTO_FRONT = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "...oooooooo.....",
+  "..obggggggbo....",
+  "..obgggggggo....",
+  ".obbbbbbbbbbo...",
+  ".ofbbbbbbbbfo...",
+  ".obbbbbbbbbbo...",
+  ".oowwoooowwoo...",
+  "..owwo..owwo....",
+  "...oo....oo.....",
+  "................",
+  "................"
+];
+
+const AUTO_BACK = [
+  "................",
+  "................",
+  "................",
+  "................",
+  "................",
+  "...oooooooo.....",
+  "..obggggggbo....",
+  "..obgggggggo....",
+  ".obbbbbbbbbbo...",
+  ".osbbbbbbbbso...",
+  ".obbbbbbbbbbo...",
+  ".oowwoooowwoo...",
+  "..owwo..owwo....",
+  "...oo....oo.....",
+  "................",
+  "................"
+];
+
 const VEHICLE_PAL: Record<string, string> = {
   o: "#1c2333",
   k: "#2a3142",
   w: "#3a4150",
   g: "#9fd0e8",
-  y: "#e8b020"
+  y: "#e8b020",
+  b: "#2e5aa8", // carrozzeria auto blu
+  f: "#ffe98a", // fari
+  s: "#d04848" // stop posteriori
 };
 
 export interface VehicleSprite {
@@ -221,15 +284,28 @@ const vehicleCache = new Map<string, Pixmap>();
 // left/right la vista laterale (right specchiata).
 export function vehicleSprite(vehicleId: string, facing: Facing): VehicleSprite {
   const side = facing === "left" || facing === "right";
-  const isRuspa = vehicleId === "ruspa";
-  const art = isRuspa
-    ? side
-      ? RUSPA_SIDE
-      : RUSPA_FRONT
-    : side
-      ? MONOPATTINO_SIDE
-      : MONOPATTINO_FRONT;
-  const cacheKey = `${vehicleId}:${side ? "side" : "front"}`;
+  // L'AUTO ha tre viste (front/back/side); monopattino e ruspa solo front/side.
+  let art: string[];
+  let viewKey: string;
+  if (vehicleId === "auto") {
+    if (side) {
+      art = AUTO_SIDE;
+      viewKey = "side";
+    } else if (facing === "up") {
+      art = AUTO_BACK;
+      viewKey = "back";
+    } else {
+      art = AUTO_FRONT;
+      viewKey = "front";
+    }
+  } else if (vehicleId === "ruspa") {
+    art = side ? RUSPA_SIDE : RUSPA_FRONT;
+    viewKey = side ? "side" : "front";
+  } else {
+    art = side ? MONOPATTINO_SIDE : MONOPATTINO_FRONT;
+    viewKey = side ? "side" : "front";
+  }
+  const cacheKey = `${vehicleId}:${viewKey}`;
   let pix = vehicleCache.get(cacheKey);
   if (!pix) {
     pix = { art, pal: VEHICLE_PAL };

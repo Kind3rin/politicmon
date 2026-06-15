@@ -14,7 +14,7 @@ export interface NpcDef {
   casino?: boolean;
   transport?: boolean;
   gift?: { itemId: string; qty: number; flag: string; lines: string[] };
-  vehicleGift?: { vehicle: "monopattino" | "ruspa"; flag: string; lines: string[] };
+  vehicleGift?: { vehicle: "monopattino" | "ruspa" | "auto"; flag: string; lines: string[] };
   legendary?: {
     speciesId: string;
     level: number;
@@ -739,6 +739,18 @@ export const MAPS: Record<string, MapDef> = {
           ]
         },
         lines: ["La RUSPA ce l'hai. Usala con parsimonia... o no, fai te."]
+      },
+      {
+        id: "autista-cap", pal: "guard", x: 17, y: 18, facing: "down",
+        vehicleGift: {
+          vehicle: "auto", flag: "gift-auto",
+          lines: [
+            "Ehi, candidato! Il PARTITO ti assegna un'AUTO BLU tutta tua.",
+            "Tienila: attivala dal menu (START) alla voce VEICOLO.",
+            "All'aperto sfreccia. In città fai scena. Il pieno lo paga lo Stato."
+          ]
+        },
+        lines: ["L'AUTO BLU è tua. Lampeggiante a discrezione, multe mai."]
       },
       {
         id: "turista-cap", pal: "kid", x: 17, y: 19, facing: "up",

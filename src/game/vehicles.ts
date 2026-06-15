@@ -3,9 +3,10 @@ import type { GameState } from "./state";
 // Veicoli speciali: si sbloccano con un flag e si attivano/disattivano dal menu.
 // MONOPATTINO: in città cammini sempre "di corsa" (più veloce).
 // RUSPA: puoi abbattere gli alberi (tile "T") che bloccano i passaggi.
-// AUTO BLU: trasporto rapido fra le città (gestito dalla SCORTA, già esistente).
+// AUTO BLU: veicolo guidabile, veloce all'aperto. (Il teletrasporto fra città
+//   resta gestito a parte dalla SCORTA col menu di trasporto.)
 
-export type VehicleId = "monopattino" | "ruspa";
+export type VehicleId = "monopattino" | "ruspa" | "auto";
 
 export interface VehicleDef {
   id: VehicleId;
@@ -26,10 +27,16 @@ export const VEHICLES: Record<VehicleId, VehicleDef> = {
     name: "RUSPA",
     flag: "veh-ruspa",
     desc: "Ruspa simbolica: abbatte gli alberi che sbarrano i passaggi."
+  },
+  auto: {
+    id: "auto",
+    name: "AUTO BLU",
+    flag: "veh-auto",
+    desc: "La macchina elettorale: scorre veloce su strada e in città."
   }
 };
 
-export const VEHICLE_ORDER: VehicleId[] = ["monopattino", "ruspa"];
+export const VEHICLE_ORDER: VehicleId[] = ["monopattino", "ruspa", "auto"];
 
 export function hasVehicle(state: GameState, id: VehicleId): boolean {
   return Boolean(state.flags[VEHICLES[id].flag]);

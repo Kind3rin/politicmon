@@ -9,6 +9,7 @@ import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
 import { Menu, MessageBox, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 import { PartyScene } from "./PartyScene";
 import { TeachScene } from "./TeachScene";
+import { EvolutionScene } from "./EvolutionScene";
 
 export interface BagOptions {
   inBattle: boolean;
@@ -112,17 +113,17 @@ export class BagScene implements Scene {
               this.msg.show(["Annusa la tessera, la restituisce.", "Questa carriera non fa per lui."]);
               return;
             }
-            const oldName = speciesOf(mon).name;
-            evolve(mon, targetId);
-            markSeen(this.state, targetId);
-            markCaught(this.state, targetId);
-            audio.catchJingle();
+            const fromId = mon.speciesId;
             this.consume(itemId);
-            saveGame(this.state);
-            this.msg.show([
-              `${oldName} firma la TESSERA DORATA...`,
-              `Congratulazioni! Si è evoluto in ${speciesOf(mon).name}!`
-            ]);
+            // Scena dedicata con animazione; l'evoluzione si applica al termine.
+            this.stack.push(
+              new EvolutionScene(this.stack, this.input, fromId, targetId, () => {
+                evolve(mon, targetId);
+                markSeen(this.state, targetId);
+                markCaught(this.state, targetId);
+                saveGame(this.state);
+              })
+            );
             return;
           }
           if (item.kind === "heal") {

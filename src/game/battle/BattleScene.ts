@@ -20,6 +20,7 @@ import {
 import { Menu, MessageBox, clipToWidth, drawHpBar, wrapText, GREY, INK, PAPER } from "../../ui/widgets";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
+import { EvolutionScene } from "../../scenes/EvolutionScene";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -529,17 +530,18 @@ export class BattleScene implements Scene {
 
   private evolveSteps(targetId: string): Step[] {
     return [
-      { text: `Aspetta! ${this.playerName()} sta cambiando casacca!` },
       {
+        // Apre la scena dedicata con l'animazione. La coda resta ferma finché la
+        // scena è in cima allo stack; al termine l'evoluzione è già applicata.
         run: () => {
-          const oldName = this.playerName();
-          evolve(this.player.mon, targetId);
-          markSeen(this.state, this.player.mon.speciesId);
-          markCaught(this.state, this.player.mon.speciesId);
-          audio.catchJingle();
-          this.pushFront([
-            { text: `${oldName} si è evoluto in ${this.playerName()}!` }
-          ]);
+          const fromId = this.player.mon.speciesId;
+          this.stack.push(
+            new EvolutionScene(this.stack, this.input, fromId, targetId, () => {
+              evolve(this.player.mon, targetId);
+              markSeen(this.state, this.player.mon.speciesId);
+              markCaught(this.state, this.player.mon.speciesId);
+            })
+          );
         }
       }
     ];

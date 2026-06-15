@@ -48,6 +48,16 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
 interface RuntimeNpc extends NpcDef {
   currentFacing: Facing;
   turnTimer: number;
+  // Wander: gli NPC ambientali camminano un po' attorno al loro punto iniziale.
+  homeX: number;
+  homeY: number;
+  dispX: number; // posizione di disegno in px (interpolata durante il passo)
+  dispY: number;
+  walkTimer: number; // tempo al prossimo tentativo di passo
+  stepFrom: { x: number; y: number } | null; // cella di partenza del passo corrente
+  stepT: number; // 0..1 avanzamento del passo
+  canWander: boolean;
+  path?: Array<{ x: number; y: number }>; // percorso scriptato (es. entrata di Gianni)
 }
 
 interface Rustle {
@@ -132,21 +142,16 @@ export class WorldScene implements Scene {
 
   private loadMap(mapId: string): void {
     this.map = MAPS[mapId];
-    this.npcs = this.map.npcs.map((npc) => ({
-      ...npc,
-      currentFacing: npc.facing,
-      turnTimer: 2 + Math.random() * 4
-    }));
+    this.npcs = this.map.npcs.map((npc) => this.makeRuntimeNpc(npc));
     // RIVALE GIANNI ricorrente: se la tappa corrente è su questa mappa e non
     // l'hai ancora battuta, aggiungi il suo NPC (con linea di vista).
     const stage = rivalStageFor(this.state.rivalWins);
     if (stage && stage.mapId === mapId && !this.state.defeatedTrainers.includes(stage.id)) {
-      this.npcs.push({
+      this.npcs.push(this.makeRuntimeNpc({
         id: stage.id, pal: "rival", x: stage.x, y: stage.y, facing: stage.facing,
         trainerId: stage.id, sightRange: stage.sightRange,
-        lines: ["GIANNI: ehi! Sì, dico a te."],
-        currentFacing: stage.facing, turnTimer: 999
-      });
+        lines: ["GIANNI: ehi! Sì, dico a te."]
+      }));
     }
     this.rustles = [];
     audio.playMusic(this.map.music ?? "borgo");
@@ -154,6 +159,141 @@ export class WorldScene implements Scene {
     // Multiplayer: entra nella room di questa mappa (vedi solo chi è qui).
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
+  }
+
+  // Crea lo stato runtime di un NPC. Decide se può vagare: esplicito via
+  // `wander`, oppure di default per gli NPC "ambientali" (niente trainer, ruolo
+  // funzionale o linea di vista — quelli devono restare al loro posto).
+  private makeRuntimeNpc(npc: NpcDef): RuntimeNpc {
+    const ambient =
+      !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
+      !npc.transport && !npc.gift && !npc.vehicleGift && !npc.legendary;
+    const canWander = npc.wander ?? (ambient && this.map.outdoor);
+    return {
+      ...npc,
+      currentFacing: npc.facing,
+      turnTimer: 2 + Math.random() * 4,
+      homeX: npc.x,
+      homeY: npc.y,
+      dispX: npc.x * TILE,
+      dispY: npc.y * TILE,
+      walkTimer: 2 + Math.random() * 4,
+      stepFrom: null,
+      stepT: 0,
+      canWander
+    };
+  }
+
+  // Aggiorna la camminata di un NPC vagante: interpola il passo in corso o, se
+  // fermo, ogni tanto ne avvia uno nuovo verso una cella libera vicino a casa.
+  private updateNpcWalk(npc: RuntimeNpc, dt: number): void {
+    if (npc.stepFrom) {
+      npc.stepT += dt / 0.3; // ~0.3s per cella, andatura tranquilla
+      if (npc.stepT >= 1) {
+        npc.stepT = 0;
+        npc.stepFrom = null;
+        npc.dispX = npc.x * TILE;
+        npc.dispY = npc.y * TILE;
+        npc.walkTimer = 1.5 + Math.random() * 4; // pausa prima del prossimo passo
+      } else {
+        npc.dispX = (npc.stepFrom.x + (npc.x - npc.stepFrom.x) * npc.stepT) * TILE;
+        npc.dispY = (npc.stepFrom.y + (npc.y - npc.stepFrom.y) * npc.stepT) * TILE;
+      }
+      return;
+    }
+    npc.walkTimer -= dt;
+    if (npc.walkTimer > 0) {
+      return;
+    }
+    npc.walkTimer = 1.5 + Math.random() * 3;
+    // Prova una direzione a caso; resta entro 2 celle dalla posizione iniziale.
+    const dir = FACINGS[Math.floor(Math.random() * FACINGS.length)];
+    npc.currentFacing = dir;
+    const d = DIR_DELTA[dir];
+    const nx = npc.x + d.dx;
+    const ny = npc.y + d.dy;
+    if (Math.abs(nx - npc.homeX) > 2 || Math.abs(ny - npc.homeY) > 2) {
+      return; // troppo lontano da casa: questo giro gira solo la testa
+    }
+    if (!this.npcCanEnter(nx, ny, npc)) {
+      return;
+    }
+    npc.stepFrom = { x: npc.x, y: npc.y };
+    npc.stepT = 0;
+    npc.x = nx;
+    npc.y = ny;
+  }
+
+  // Sceglie la prima cella candidata libera (no player, no NPC, calpestabile).
+  // Fallback all'ultima se tutte occupate.
+  private firstFreeLabSpot(candidates: Array<{ x: number; y: number }>): { x: number; y: number } {
+    for (const c of candidates) {
+      const tile = TILES[this.tileAt(c.x, c.y)];
+      const free =
+        tile && !tile.solid &&
+        !(this.state.pos.x === c.x && this.state.pos.y === c.y) &&
+        !this.npcs.some((n) => n.id !== "rival-lab-cameo" && n.x === c.x && n.y === c.y);
+      if (free) {
+        return c;
+      }
+    }
+    return candidates[candidates.length - 1];
+  }
+
+  // Avvia un cammino scriptato: l'NPC seguirà i waypoint uno dopo l'altro.
+  private scriptedWalk(npc: RuntimeNpc, path: Array<{ x: number; y: number }>): void {
+    npc.path = [...path];
+  }
+
+  // Avanza un NPC lungo il suo percorso scriptato, interpolando ogni passo.
+  private advanceScriptedWalk(npc: RuntimeNpc, dt: number): void {
+    const next = npc.path![0];
+    if (!npc.stepFrom) {
+      // Imposta direzione e parti verso il prossimo waypoint.
+      const dx = Math.sign(next.x - npc.x);
+      const dy = Math.sign(next.y - npc.y);
+      npc.currentFacing = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down";
+      npc.stepFrom = { x: npc.x, y: npc.y };
+      npc.stepT = 0;
+      npc.x = next.x;
+      npc.y = next.y;
+    }
+    npc.stepT += dt / 0.22; // andatura un po' svelta: "ingresso a effetto"
+    if (npc.stepT >= 1) {
+      npc.stepT = 0;
+      npc.stepFrom = null;
+      npc.dispX = npc.x * TILE;
+      npc.dispY = npc.y * TILE;
+      npc.path!.shift();
+      if (npc.path!.length === 0) {
+        npc.path = undefined;
+      }
+    } else {
+      npc.dispX = (npc.stepFrom.x + (npc.x - npc.stepFrom.x) * npc.stepT) * TILE;
+      npc.dispY = (npc.stepFrom.y + (npc.y - npc.stepFrom.y) * npc.stepT) * TILE;
+    }
+  }
+
+  // Una cella è agibile per un NPC se: tile calpestabile, non c'è il player, né
+  // un altro NPC, né un warp o un pickup visibile (per non bloccare il giocatore).
+  private npcCanEnter(x: number, y: number, self: RuntimeNpc): boolean {
+    const tile = TILES[this.tileAt(x, y)];
+    if (!tile || tile.solid || tile.encounter) {
+      return false; // niente erba alta: eviterebbe trigger strani e sembra più sensato
+    }
+    if (this.state.pos.x === x && this.state.pos.y === y) {
+      return false;
+    }
+    if (this.npcs.some((n) => n !== self && n.x === x && n.y === y)) {
+      return false;
+    }
+    if (this.map.warps.some((w) => w.x === x && w.y === y)) {
+      return false;
+    }
+    if (this.map.pickups.some((p) => !p.hidden && p.x === x && p.y === y && !this.state.pickedItems.includes(p.id))) {
+      return false;
+    }
+    return true;
   }
 
   private visibleNpcs(): RuntimeNpc[] {
@@ -639,6 +779,19 @@ export class WorldScene implements Scene {
     const rivalStarterId = RIVAL_COUNTER[speciesId];
     const rivalSpecies = SPECIES[rivalStarterId];
     markSeen(this.state, rivalStarterId);
+
+    // Gianni ENTRA in scena dalla porta del lab (5,7) e si piazza al centro,
+    // così non è solo testo: lo si vede arrivare di corsa. Evita la cella del
+    // player: si ferma in una libera, accanto a lui.
+    const gianni = this.makeRuntimeNpc({
+      id: "rival-lab-cameo", pal: "rival", x: 5, y: 7, facing: "up",
+      lines: []
+    });
+    gianni.canWander = false;
+    this.npcs.push(gianni);
+    const target = this.firstFreeLabSpot([{ x: 6, y: 5 }, { x: 7, y: 5 }, { x: 6, y: 4 }, { x: 5, y: 5 }]);
+    this.scriptedWalk(gianni, [{ x: 5, y: 6 }, { x: 5, y: 5 }, target]);
+
     this.say(
       [
         `${SPECIES[speciesId].name} è il tuo primo POLITICMON!`,
@@ -661,6 +814,7 @@ export class WorldScene implements Scene {
         this.startTrainerBattle(def, () => {
           this.state.flags["rival1-beaten"] = true;
           this.state.rivalWins = 1; // sblocca la prima tappa ricorrente (Mediopoli)
+          this.npcs = this.npcs.filter((n) => n.id !== "rival-lab-cameo"); // Gianni esce
           saveGame(this.state);
           this.giveDex();
         });
@@ -1002,15 +1156,25 @@ export class WorldScene implements Scene {
     mp.update(dt); // interpolazione avatar remoti + decadimento emote
     this.rustles = this.rustles.filter((r) => (r.t -= dt) > 0);
 
-    // NPC che si guardano attorno (solo quelli senza linea di vista da trainer).
+    // NPC vivi: i "vaganti" camminano attorno a casa, gli altri si guardano
+    // intorno girando la testa. (I trainer/healer restano immobili al loro posto.)
     for (const npc of this.npcs) {
+      // Percorso scriptato (es. Gianni che entra nel lab): ha la precedenza.
+      if (npc.path && npc.path.length > 0) {
+        this.advanceScriptedWalk(npc, dt);
+        continue;
+      }
       if (npc.trainerId || npc.healer) {
         continue;
       }
-      npc.turnTimer -= dt;
-      if (npc.turnTimer <= 0) {
-        npc.turnTimer = 2 + Math.random() * 5;
-        npc.currentFacing = FACINGS[Math.floor(Math.random() * FACINGS.length)];
+      if (npc.canWander) {
+        this.updateNpcWalk(npc, dt);
+      } else {
+        npc.turnTimer -= dt;
+        if (npc.turnTimer <= 0) {
+          npc.turnTimer = 2 + Math.random() * 5;
+          npc.currentFacing = FACINGS[Math.floor(Math.random() * FACINGS.length)];
+        }
       }
     }
 
@@ -1229,13 +1393,15 @@ export class WorldScene implements Scene {
     }
 
     for (const npc of this.visibleNpcs()) {
-      const sprite = charSprite(npc.pal, npc.currentFacing, 0);
-      screen.sprite(sprite.key, sprite.pix, npc.x * TILE - camX, npc.y * TILE - camY - 1, {
-        flipX: sprite.flip
-      });
+      // Frame di camminata mentre l'NPC fa un passo (altrimenti fermo).
+      const walkFrame = npc.stepFrom ? (Math.floor(this.time * 6) % 2 === 0 ? 1 : 0) : 0;
+      const sprite = charSprite(npc.pal, npc.currentFacing, walkFrame);
+      const nx = Math.round(npc.dispX) - camX;
+      const ny = Math.round(npc.dispY) - camY - 1;
+      screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
       if (this.exclaimNpc === npc) {
-        screen.panel(npc.x * TILE - camX + 2, npc.y * TILE - camY - 14, 12, 13);
-        screen.text("!", npc.x * TILE - camX + 5, npc.y * TILE - camY - 11, INK);
+        screen.panel(nx + 2, ny - 13, 12, 13);
+        screen.text("!", nx + 5, ny - 10, INK);
       }
     }
 

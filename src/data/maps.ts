@@ -26,6 +26,7 @@ export interface NpcDef {
   showIfFlag?: string;
   hideIfFlag?: string;
   setFlag?: string; // flag impostato quando ci parli (per le quest "hai parlato con...")
+  wander?: boolean; // se true, l'NPC cammina attorno alla sua posizione iniziale
 }
 
 export interface WarpDef {

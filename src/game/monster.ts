@@ -77,9 +77,9 @@ export function createMonster(speciesId: string, level: number): Monster {
 
 export function expYield(foe: Monster, isTrainer: boolean): number {
   const base = speciesOf(foe).expYield;
-  // Divisore 7 -> 6: ~+17% EXP per rendere l'early game un filo più gratificante
-  // (sali di livello un po' prima) senza sfondare la curva expForLevel.
-  const amount = Math.floor((base * foe.level) / 6);
+  // Divisore 5.5: l'EXP è più generosa per tenere il passo coi trainer
+  // obbligatori (il giocatore reale arrivava sotto-livello alle palestre).
+  const amount = Math.floor((base * foe.level) / 5.5);
   return Math.max(1, Math.floor(amount * (isTrainer ? 1.5 : 1)));
 }
 

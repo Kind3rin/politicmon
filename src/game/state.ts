@@ -33,7 +33,7 @@ const LEGACY_KEYS = ["politicmon-save-v5", "politicmon-save-v4", "politicmon-sav
 export function newGameState(): GameState {
   return {
     party: [],
-    bag: { caffe: 3, scheda: 1, maalox: 1 },
+    bag: { caffe: 6, scheda: 2, maalox: 1 },
     dex: {},
     flags: {},
     defeatedTrainers: [],

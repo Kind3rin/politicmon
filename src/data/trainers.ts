@@ -34,7 +34,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   lobbista: {
     id: "lobbista", name: "LOBBISTA EUGENIO", pal: "aide",
-    team: [["calendauro", 12], ["macronfox", 13]],
+    team: [["tajanide", 11], ["contemorfo", 12]],
     intro: ["Rappresento interessi molto, molto importanti.", "I tuoi, se il prezzo è giusto. Intanto ti sfido!"],
     defeat: ["Interessante... posso rappresentare anche te?"],
     money: 560

@@ -5,12 +5,12 @@
 // ---------------------- DATA (copied from src/data) ----------------------
 
 const SPECIES = {
-  giorgetta: { types: ["DESTRA"], base: { hp: 45, atk: 52, def: 48, spc: 56, spd: 50 }, learnset: [[1,"comizio"],[1,"slogan"],[1,"radici"],[5,"iosonogiorgia"],[11,"giravolta"]] },
-  giorgiagon: { types: ["DESTRA"], base: { hp: 70, atk: 80, def: 70, spc: 95, spd: 75 }, learnset: [[1,"comizio"],[1,"radici"],[16,"fiammatricolore"],[22,"blocconavale"],[28,"decreto"]] },
-  ellyna: { types: ["SINISTRA"], base: { hp: 44, atk: 48, def: 50, spc: 58, spd: 52 }, learnset: [[1,"comizio"],[1,"ztl"],[1,"corteo"],[5,"greenwashing"],[11,"sciopero"]] },
-  schleinix: { types: ["SINISTRA","VERDE"], base: { hp: 68, atk: 70, def: 72, spc: 98, spd: 74 }, learnset: [[1,"corteo"],[1,"ztl"],[16,"greenwashing"],[20,"sciopero"],[26,"scissione"]] },
-  renzino: { types: ["CENTRO"], base: { hp: 44, atk: 52, def: 45, spc: 50, spd: 62 }, learnset: [[1,"comizio"],[1,"promessa"],[1,"giravolta"],[5,"terzopolo"],[11,"inciucio"]] },
-  renzilla: { types: ["CENTRO"], base: { hp: 65, atk: 85, def: 66, spc: 80, spd: 90 }, learnset: [[1,"giravolta"],[1,"terzopolo"],[16,"staisereno"],[22,"inciucio"],[28,"editoriale"]] },
+  giorgetta: { types: ["DESTRA"], base: { hp: 50, atk: 58, def: 55, spc: 56, spd: 50 }, learnset: [[1,"comizio"],[1,"slogan"],[1,"radici"],[5,"iosonogiorgia"],[11,"giravolta"],[13,"blocconavale"]] },
+  giorgiagon: { types: ["DESTRA"], base: { hp: 76, atk: 84, def: 76, spc: 95, spd: 75 }, learnset: [[1,"comizio"],[1,"radici"],[16,"fiammatricolore"],[22,"blocconavale"],[28,"decreto"]] },
+  ellyna: { types: ["SINISTRA"], base: { hp: 49, atk: 54, def: 57, spc: 58, spd: 52 }, learnset: [[1,"comizio"],[1,"ztl"],[1,"corteo"],[5,"greenwashing"],[11,"sciopero"],[13,"scissione"]] },
+  schleinix: { types: ["SINISTRA","VERDE"], base: { hp: 74, atk: 74, def: 78, spc: 98, spd: 74 }, learnset: [[1,"corteo"],[1,"ztl"],[16,"greenwashing"],[20,"sciopero"],[26,"scissione"]] },
+  renzino: { types: ["CENTRO"], base: { hp: 49, atk: 57, def: 52, spc: 50, spd: 62 }, learnset: [[1,"comizio"],[1,"promessa"],[1,"giravolta"],[5,"terzopolo"],[11,"inciucio"],[13,"staisereno"]] },
+  renzilla: { types: ["CENTRO"], base: { hp: 71, atk: 88, def: 72, spc: 80, spd: 90 }, learnset: [[1,"giravolta"],[1,"terzopolo"],[16,"staisereno"],[22,"inciucio"],[28,"editoriale"]] },
   salvinott: { types: ["POPULISMO"], base: { hp: 50, atk: 56, def: 42, spc: 40, spd: 46 }, learnset: [[1,"comizio"],[3,"slogan"],[7,"citofonata"],[12,"ruspa"]] },
   salvinator: { types: ["POPULISMO","DESTRA"], base: { hp: 75, atk: 88, def: 62, spc: 58, spd: 68 }, learnset: [[1,"ruspa"],[1,"citofonata"],[18,"mojito"],[23,"blocconavale"],[28,"vaffa"]] },
   grillix: { types: ["POPULISMO","VERDE"], base: { hp: 55, atk: 62, def: 50, spc: 72, spd: 82 }, learnset: [[1,"comizio"],[5,"monopattino"],[9,"slogan"],[14,"greenwashing"],[19,"vaffa"]] },
@@ -169,7 +169,7 @@ function calcDamage(attacker, defender, move) {
 
 // Profili IA come nel codice reale (post-fix). Default = competente.
 const AI_COMPETENT = { whiff: 0.25, canHeal: true, finisher: true };
-const AI_NORMAL = { whiff: 0.45, canHeal: false, finisher: false }; // wild/comune a 0 medaglie
+const AI_NORMAL = { whiff: 0.48, canHeal: false, finisher: false }; // wild/comune a 0 medaglie
 
 function chooseFoeMove(foe, target, ai = AI_COMPETENT) {
   const usable = foe.mon.moves.filter((s) => s.pp > 0).map((s) => MOVES[s.id]);
@@ -394,7 +394,7 @@ const FIRST_TRAINERS = [
   { name: "PORTABORSE PIERO", team: [["salvinott",4],["salvinott",5]], playerLv: 6 },
   { name: "GIORNALISTA RITA", team: [["tajanide",7]], playerLv: 8 },
   { name: "INFLUENCER CHIARA", team: [["vannaccix",9],["bojoon",9]], playerLv: 10 },
-  { name: "LOBBISTA EUGENIO", team: [["calendauro",13],["macronfox",14]], playerLv: 14 },
+  { name: "LOBBISTA EUGENIO", team: [["contemorfo",11],["tajanide",12]], playerLv: 14 },
 ];
 
 function trainerWinRate(t) {

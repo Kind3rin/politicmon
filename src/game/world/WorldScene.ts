@@ -363,7 +363,8 @@ export class WorldScene implements Scene {
     speciesId: string,
     level: number,
     after?: (result: BattleResult) => void,
-    music?: string
+    music?: string,
+    legendary = false
   ): void {
     this.queueBattle(() => {
       const foe = createMonster(speciesId, level);
@@ -372,6 +373,7 @@ export class WorldScene implements Scene {
           state: this.state,
           foeTeam: [foe],
           music,
+          legendary,
           onEnd: (result) => {
             this.onBattleEnd(result);
             after?.(result);
@@ -459,9 +461,11 @@ export class WorldScene implements Scene {
         ]);
         return;
       }
-      const lost = Math.floor(this.state.money / 2);
+      // Sconfitta meno punitiva: perdi un quarto dei fondi (max 250€) invece
+      // della metà, così una sconfitta non azzera la campagna né demotiva.
+      const lost = Math.min(Math.floor(this.state.money / 4), 250);
       this.state.money -= lost;
-      const sondaggi = addSondaggi(this.state, -8);
+      const sondaggi = addSondaggi(this.state, -5);
       for (const mon of this.state.party) {
         healMonster(mon);
       }
@@ -704,7 +708,7 @@ export class WorldScene implements Scene {
         if (result === "run") {
           this.say(legendary.afterRunLines ?? [`${SPECIES[legendary.speciesId].name} resta nei paraggi.`]);
         }
-      }, "battle-legend");
+      }, "battle-legend", true);
     });
   }
 

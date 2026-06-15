@@ -20,12 +20,12 @@ export const ITEMS: Record<string, Item> = {
     desc: "Scheda di lista bloccata: il candidato entra, che lo voglia o no."
   },
   caffe: {
-    id: "caffe", name: "CAFFÈ DEL BAR SPORT", kind: "heal", amount: 20, price: 80,
-    desc: "Ristretto, bollente, con dibattito incluso. Recupera 20 PV."
+    id: "caffe", name: "CAFFÈ DEL BAR SPORT", kind: "heal", amount: 25, price: 50,
+    desc: "Ristretto, bollente, con dibattito incluso. Recupera 25 PV."
   },
   spritz: {
-    id: "spritz", name: "SPRITZ APERITIVO", kind: "heal", amount: 50, price: 220,
-    desc: "L'arancione che unisce il paese. Recupera 50 PV."
+    id: "spritz", name: "SPRITZ APERITIVO", kind: "heal", amount: 55, price: 150,
+    desc: "L'arancione che unisce il paese. Recupera 55 PV."
   },
   mojito: {
     id: "mojito", name: "MOJITO DEL PAPEETE", kind: "heal", amount: 60, price: 600,

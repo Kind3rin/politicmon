@@ -105,7 +105,24 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Audit & polish (sessione corrente):** workflow di audit (case/testi/incontri)
+- **Bilanciamento reale + leggendario epico (sessione corrente):**
+  - **Lotte per il giocatore REALE** (non quello ottimale della sim): starter
+    buffati (HP/ATK/DEF +, e una mossa STAB forte a lv13 prima dell'evoluzione,
+    risolve il "danno troppo basso" che trascinava le lotte); cure più accessibili
+    (6 caffè iniziali, caffè 80→50€ e cura 20→25, spritz 220→150€); EXP +
+    (divisore 6→5.5, per non arrivare sotto-livello); IA un filo più clemente
+    (whiff 0.45→0.48, floor 0.33); sconfitta meno punitiva (perdi 25% max 250€,
+    -5 sondaggi invece di -8); LOBBISTA (outlier) team ammorbidito. Misurato:
+    primi allenatori 77-98%, LOBBISTA 33→44%. La sim resta pessimistica (1 mostro,
+    no cure/cambi) quindi il win-rate reale è più alto. `scripts/sim-balance.mjs`
+    aggiornato — rieseguilo se ritocchi stat/mosse.
+  - **Incontro leggendario EPICO:** nuovo flag `BattleOptions.legendary`. Messa
+    in scena in `BattleScene`: flash dorato d'apertura, banner "POLITICMON
+    LEGGENDARIO!", **aura dorata pulsante con raggi** attorno al mostro per tutta
+    la lotta (`drawLegendaryAura`), scintille dorate continue, sting sonoro e
+    dialogo enfatico. `WorldScene.startWildBattle` accetta `legendary` (passato
+    da `interactLegendary`).
+- **Audit & polish (sessione precedente):** workflow di audit (case/testi/incontri)
   poi fix verificati:
   - **Case allineate:** i tetti-insegna bar (`eQQe`, 4 col) erano più stretti
     delle facciate (`mmdnm`, 5 col) → muro che "galleggia" + porta non centrata.

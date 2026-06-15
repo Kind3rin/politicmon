@@ -36,6 +36,7 @@ export interface BattleOptions {
   foeTeam: Monster[];
   trainer?: TrainerDef;
   music?: string; // override (es. leggendari)
+  legendary?: boolean; // mette in scena l'incontro come "leggendario" (epico)
   onEnd: (result: BattleResult) => void;
 }
 
@@ -106,11 +107,16 @@ export class BattleScene implements Scene {
   // Telegrafia: aura colorata sul nemico che "carica" la mossa prima di agire.
   // category -> colore (fisico=grinta rossa, speciale=retorica blu, status=viola).
   private telegraph: { side: "player" | "foe"; color: string; t: number; max: number } | null = null;
+  // Incontro leggendario: aura dorata permanente sul nemico + banner d'ingresso.
+  private isLegendary = false;
+  private legendBanner = 0; // tempo del banner "LEGGENDARIO!" all'ingresso
+  private legendIntroFlash = 0; // lampo d'apertura drammatico
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
     this.state = opts.state;
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
+    this.isLegendary = opts.legendary ?? false;
     this.onEnd = opts.onEnd;
 
     const lead = this.state.party.find((m) => m.hp > 0) ?? this.state.party[0];
@@ -123,7 +129,15 @@ export class BattleScene implements Scene {
 
     this.ai = this.computeAiProfile();
     audio.playMusic(battleMusic(opts));
-    if (this.trainer) {
+    if (this.isLegendary) {
+      // Messa in scena epica: lampo d'ingresso + banner "LEGGENDARIO!" + sting,
+      // così si capisce subito che NON è un incontro qualsiasi.
+      this.legendIntroFlash = 1.0;
+      this.legendBanner = 2.4;
+      audio.encounterSting();
+      this.push({ text: `Un'aura dorata squarcia la campagna elettorale...` });
+      this.push({ text: `POLITICMON LEGGENDARIO! ${this.foeName()} si manifesta!` });
+    } else if (this.trainer) {
       this.push({ text: `${this.trainer.name} ti sfida!` });
       for (const line of this.trainer.intro) {
         this.push({ text: line });
@@ -156,7 +170,7 @@ export class BattleScene implements Scene {
     // (più avanti sei, meno sbagliano), con un floor a 0.30 per non sembrare
     // "rotti". Niente cure perfette né colpo di grazia automatico.
     const badges = this.state.badges.length;
-    const whiff = Math.max(0.3, 0.45 - badges * 0.05);
+    const whiff = Math.max(0.33, 0.48 - badges * 0.05);
     return { whiff, canHeal: false, finisher: false };
   }
 
@@ -922,6 +936,23 @@ export class BattleScene implements Scene {
     this.knockback.foe = Math.max(0, this.knockback.foe - dt * 4);
     this.levelFlash = Math.max(0, this.levelFlash - dt);
     this.catchFlash = Math.max(0, this.catchFlash - dt);
+    this.legendBanner = Math.max(0, this.legendBanner - dt);
+    this.legendIntroFlash = Math.max(0, this.legendIntroFlash - dt);
+    // I leggendari spruzzano scintille dorate di continuo: aura "viva".
+    if (this.isLegendary && this.foe.mon.hp > 0 && Math.random() < 0.25) {
+      const c = this.monsterCenter("foe");
+      const ang = Math.random() * Math.PI * 2;
+      this.particles.push({
+        x: c.x + Math.cos(ang) * 22,
+        y: c.y + Math.sin(ang) * 16,
+        vx: Math.cos(ang) * 8,
+        vy: -12 - Math.random() * 10,
+        life: 0,
+        max: 0.6 + Math.random() * 0.4,
+        color: ["#ffe98a", "#ffd23c", "#fff4c0"][Math.floor(Math.random() * 3)],
+        size: 1
+      });
+    }
     this.updateParticles(dt);
     if (this.effFx) {
       this.effFx.t -= dt;
@@ -1187,6 +1218,12 @@ export class BattleScene implements Scene {
     drawEllipse(screen, 162 + shakeX + foeSlide, 64, 64, 14, "#c0cc9c");
     drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
 
+    // Aura dorata pulsante attorno al leggendario: alone "sacro" che lo
+    // distingue da un mostro qualsiasi per tutta la durata dello scontro.
+    if (this.isLegendary && this.foe.mon.hp > 0 && !this.ballAnim) {
+      this.drawLegendaryAura(screen, 162 + shakeX + foeSlide, 52);
+    }
+
     // Telegrafia: aura pulsante dietro il nemico che sta per attaccare.
     if (this.telegraph && this.telegraph.side === "foe" && this.foe.mon.hp > 0 && !this.ballAnim) {
       this.drawTelegraph(screen, 162 + shakeX + foeSlide, 50);
@@ -1215,6 +1252,9 @@ export class BattleScene implements Scene {
 
     // Banner "SUPER EFFICACE / POCO EFFICACE / CRITICO".
     this.drawEffFx(screen);
+
+    // Lampo d'apertura + banner "LEGGENDARIO!" per l'incontro epico.
+    this.drawLegendIntro(screen);
 
     // Riquadro testo.
     screen.panel(0, VIEW_H - 44, VIEW_W, 44);
@@ -1428,6 +1468,61 @@ export class BattleScene implements Scene {
       ctx.stroke();
     }
     ctx.restore();
+  }
+
+  // Alone dorato dietro il leggendario: cerchio luminoso pulsante + raggi.
+  private drawLegendaryAura(screen: Screen, cx: number, cy: number): void {
+    const ctx = screen.ctx;
+    const t = this.time;
+    const pulse = 0.5 + 0.5 * Math.sin(t * 3);
+    ctx.save();
+    // Bagliore radiale.
+    const r = 30 + pulse * 4;
+    const grad = ctx.createRadialGradient(cx, cy, 4, cx, cy, r);
+    grad.addColorStop(0, `rgba(255, 230, 130, ${0.35 + pulse * 0.15})`);
+    grad.addColorStop(1, "rgba(255, 210, 60, 0)");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+    // Raggi rotanti, pochi e netti.
+    ctx.strokeStyle = `rgba(255, 240, 170, ${0.25 + pulse * 0.2})`;
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 8; i += 1) {
+      const a = t * 0.6 + (i * Math.PI) / 4;
+      const r0 = 18;
+      const r1 = 30 + pulse * 5;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * r0, cy + Math.sin(a) * r0);
+      ctx.lineTo(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // Lampo d'apertura a tutto schermo + banner "LEGGENDARIO!" che entra a molla.
+  private drawLegendIntro(screen: Screen): void {
+    const ctx = screen.ctx;
+    if (this.legendIntroFlash > 0) {
+      ctx.save();
+      ctx.fillStyle = `rgba(255, 246, 200, ${0.7 * this.legendIntroFlash})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.restore();
+    }
+    if (this.legendBanner > 0) {
+      const prog = 1 - this.legendBanner / 2.4;
+      const pop = Math.min(1, prog / 0.2);
+      const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
+      const y = 34 + (1 - pop) * -10;
+      const size = pop >= 1 ? 2 : 1;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, fade);
+      // Pannello scuro dietro per stacco.
+      const label = "POLITICMON LEGGENDARIO!";
+      screen.textCenter(label, VIEW_W / 2 + 1, y + 1, "rgba(16,20,31,0.8)", size);
+      screen.textCenter(label, VIEW_W / 2, y, "#ffd23c", size);
+      ctx.restore();
+    }
   }
 
   private drawMonster(

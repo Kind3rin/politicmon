@@ -38,16 +38,16 @@ export const SPECIES: Record<string, Species> = {
   giorgetta: S({
     id: "giorgetta", dexNum: 1, name: "GIORGETTA", category: "FIAMMELLA",
     types: ["DESTRA"],
-    base: { hp: 45, atk: 52, def: 48, spc: 56, spd: 50 },
+    base: { hp: 50, atk: 58, def: 55, spc: 56, spd: 50 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "comizio"], [1, "slogan"], [1, "radici"], [5, "iosonogiorgia"], [11, "giravolta"]],
+    learnset: [[1, "comizio"], [1, "slogan"], [1, "radici"], [5, "iosonogiorgia"], [11, "giravolta"], [13, "blocconavale"]],
     evolutions: [{ id: "giorgiagon", level: 16 }],
     dexLine: "URLA IL PROPRIO NOME OGNI MATTINA ALLO SPECCHIO. SE NESSUNO LA INTERROMPE, SI EVOLVE."
   }),
   giorgiagon: S({
     id: "giorgiagon", dexNum: 2, name: "GIORGIAGON", category: "DRAGO UNDERDOG",
     types: ["DESTRA"],
-    base: { hp: 70, atk: 80, def: 70, spc: 95, spd: 75 },
+    base: { hp: 76, atk: 84, def: 76, spc: 95, spd: 75 },
     catchRate: 25, expYield: 180,
     learnset: [[1, "comizio"], [1, "radici"], [16, "fiammatricolore"], [22, "blocconavale"], [28, "decreto"]],
     dexLine: "DRAGO UNDERDOG. PIÙ LO CRITICANO A BRUXELLES, PIÙ LA SUA FIAMMA TRICOLORE DIVAMPA."
@@ -55,16 +55,16 @@ export const SPECIES: Record<string, Species> = {
   ellyna: S({
     id: "ellyna", dexNum: 3, name: "ELLYNA", category: "GATTINA ROSSA",
     types: ["SINISTRA"],
-    base: { hp: 44, atk: 48, def: 50, spc: 58, spd: 52 },
+    base: { hp: 49, atk: 54, def: 57, spc: 58, spd: 52 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "comizio"], [1, "ztl"], [1, "corteo"], [5, "greenwashing"], [11, "sciopero"]],
+    learnset: [[1, "comizio"], [1, "ztl"], [1, "corteo"], [5, "greenwashing"], [11, "sciopero"], [13, "scissione"]],
     evolutions: [{ id: "schleinix", level: 16 }],
     dexLine: "GATTINA GENTILE. PASSA PIÙ TEMPO A DISCUTERE CON LE ALTRE ELLYNA CHE COL NEMICO."
   }),
   schleinix: S({
     id: "schleinix", dexNum: 4, name: "SCHLEINIX", category: "VOLPE ARMOCROMICA",
     types: ["SINISTRA", "VERDE"],
-    base: { hp: 68, atk: 70, def: 72, spc: 98, spd: 74 },
+    base: { hp: 74, atk: 74, def: 78, spc: 98, spd: 74 },
     catchRate: 25, expYield: 180,
     learnset: [[1, "corteo"], [1, "ztl"], [16, "greenwashing"], [20, "sciopero"], [26, "scissione"]],
     dexLine: "SCEGLIE I COLORI CON L'ARMOCROMISTA. LA SUA MOSSA PIÙ FORTE COLPISCE ANCHE IL SUO PARTITO."
@@ -72,16 +72,16 @@ export const SPECIES: Record<string, Species> = {
   renzino: S({
     id: "renzino", dexNum: 5, name: "RENZINO", category: "LUCERTOLA SVELTA",
     types: ["CENTRO"],
-    base: { hp: 44, atk: 52, def: 45, spc: 50, spd: 62 },
+    base: { hp: 49, atk: 57, def: 52, spc: 50, spd: 62 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "comizio"], [1, "promessa"], [1, "giravolta"], [5, "terzopolo"], [11, "inciucio"]],
+    learnset: [[1, "comizio"], [1, "promessa"], [1, "giravolta"], [5, "terzopolo"], [11, "inciucio"], [13, "staisereno"]],
     evolutions: [{ id: "renzilla", level: 16 }],
     dexLine: "SORRIDE SEMPRE. SE GLI STRINGI LA ZAMPA, CONTA LE DITA E POI FONDA UN PARTITO NUOVO."
   }),
   renzilla: S({
     id: "renzilla", dexNum: 6, name: "RENZILLA", category: "KAIJU ROTTAMA",
     types: ["CENTRO"],
-    base: { hp: 65, atk: 85, def: 66, spc: 80, spd: 90 },
+    base: { hp: 71, atk: 88, def: 72, spc: 80, spd: 90 },
     catchRate: 25, expYield: 180,
     learnset: [[1, "giravolta"], [1, "terzopolo"], [16, "staisereno"], [22, "inciucio"], [28, "editoriale"]],
     dexLine: "DISTRUGGE GOVERNI CHE HA COSTRUITO LUI STESSO. DICE CHE LO FA PER IL BENE DEL PAESE."

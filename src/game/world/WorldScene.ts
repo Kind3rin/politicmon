@@ -906,7 +906,7 @@ export class WorldScene implements Scene {
 
   // ---- Incontri PG casuali su strada ----
 
-  private wanderCooldown = 18; // passi minimi prima del primo/prossimo incontro
+  private wanderCooldown = 30; // passi minimi prima del primo/prossimo incontro
   private recentWanderers: string[] = []; // ultimi PG, per non ripeterli subito
 
   private checkWanderingChallenger(): boolean {
@@ -920,15 +920,15 @@ export class WorldScene implements Scene {
       this.wanderCooldown -= 1;
       return false;
     }
-    // ~4.5% per passo una volta scaduto il cooldown (non invadente).
-    if (Math.random() > 0.045) {
+    // ~3% per passo una volta scaduto il cooldown (raro, non invadente).
+    if (Math.random() > 0.03) {
       return false;
     }
     const def = pickWanderer(this.state, this.recentWanderers, Math.random());
     if (!def) {
       return false;
     }
-    this.wanderCooldown = 28 + Math.floor(Math.random() * 16);
+    this.wanderCooldown = 45 + Math.floor(Math.random() * 30);
     this.recentWanderers.push(def.id);
     if (this.recentWanderers.length > 3) {
       this.recentWanderers.shift();
@@ -1036,7 +1036,7 @@ export class WorldScene implements Scene {
 
   // ---- Eventi morale casuali su strada ----
 
-  private streetCooldown = 30;
+  private streetCooldown = 60;
 
   private checkStreetEvent(): boolean {
     if (!this.map.outdoor || !this.state.flags["dex-received"]) {
@@ -1046,10 +1046,10 @@ export class WorldScene implements Scene {
       this.streetCooldown -= 1;
       return false;
     }
-    if (Math.random() > 0.035) {
+    if (Math.random() > 0.025) {
       return false;
     }
-    this.streetCooldown = 50 + Math.floor(Math.random() * 30);
+    this.streetCooldown = 90 + Math.floor(Math.random() * 50);
     const ev = STREET_EVENTS[Math.floor(Math.random() * STREET_EVENTS.length)];
     if (ev.sondaggi) {
       addSondaggi(this.state, ev.sondaggi);
@@ -1066,6 +1066,10 @@ export class WorldScene implements Scene {
   // ---- Step resolution ----
 
   private stepCount = 0;
+  // Cooldown globale fra interruzioni (incontri, PG vaganti, eventi morale):
+  // dopo una qualsiasi, si concede una "tregua" di pochi passi prima che possa
+  // scattarne un'altra. Evita la raffica di interruzioni ravvicinate.
+  private interruptCooldown = 0;
 
   // Annunci one-shot all'arrivo in una mappa: segnalano feature che altrimenti
   // resterebbero invisibili a chi segue solo la storia. Flag per non ripetere.
@@ -1128,15 +1132,27 @@ export class WorldScene implements Scene {
       return;
     }
 
+    // Le sfide a vista degli allenatori NON passano dal cooldown: sono fisse,
+    // non casuali, e vanno innescate sempre.
     if (this.checkTrainerSight()) {
+      this.interruptCooldown = 6;
+      return;
+    }
+
+    // Tregua globale: dopo una qualsiasi interruzione si saltano gli eventi
+    // casuali per qualche passo, così non si accavallano in raffica.
+    if (this.interruptCooldown > 0) {
+      this.interruptCooldown -= 1;
       return;
     }
 
     if (this.checkWanderingChallenger()) {
+      this.interruptCooldown = 6;
       return;
     }
 
     if (this.checkStreetEvent()) {
+      this.interruptCooldown = 6;
       return;
     }
 
@@ -1161,6 +1177,7 @@ export class WorldScene implements Scene {
           roll -= entry.weight;
           if (roll <= 0) {
             const level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
+            this.interruptCooldown = 6;
             this.startWildBattle(entry.speciesId, level);
             return;
           }

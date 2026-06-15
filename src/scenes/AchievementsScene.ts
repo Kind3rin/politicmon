@@ -59,7 +59,7 @@ export class AchievementsScene implements Scene {
       if (i === this.index) {
         screen.text("►", 9, y, INK);
       }
-      screen.text(ok ? "★" : "•", 18, y, ok ? "#e8c84a" : GREY);
+      screen.text(ok ? "★" : "-", 18, y, ok ? "#e8c84a" : GREY);
       const title = ok ? clip(a.name, 28) : "?????????";
       screen.text(title, 28, y, ok ? INK : "#555068");
     }

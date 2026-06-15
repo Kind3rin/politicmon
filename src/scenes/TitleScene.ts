@@ -56,7 +56,7 @@ export class TitleScene implements Scene {
       items.unshift({ label: "CONTINUA IL MANDATO" });
       items.push({ label: "CANCELLA DOSSIER" });
     }
-    items.push({ label: `NOME: ${loadNick() || "—"}`.slice(0, 18) });
+    items.push({ label: `NOME: ${loadNick() || "-"}`.slice(0, 18) });
     items.push({ label: `AUDIO ${audio.enabled ? "SÌ" : "NO"}` });
     return new Menu(items);
   }

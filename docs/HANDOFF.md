@@ -105,7 +105,23 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Centri cura BAR SPORT (sessione corrente):** i guaritori erano NPC `barista`
+- **Audit & polish (sessione corrente):** workflow di audit (case/testi/incontri)
+  poi fix verificati:
+  - **Case allineate:** i tetti-insegna bar (`eQQe`, 4 col) erano più stretti
+    delle facciate (`mmdnm`, 5 col) → muro che "galleggia" + porta non centrata.
+    Allineate a `mdnm` (4 col) come Capitale, aggiornando warp+barMap insieme
+    (atomico, la porta si sposta di 1). Più nubi `=` riallineate sotto le porte e
+    porta asimmetrica del borgo (`mndm`→`mdnm`).
+  - **Glifo € nel font:** mancava → buco vuoto ovunque ci fosse il denaro
+    (~33 punti). Aggiunto a `font.ts`. Sostituiti altri char fuori-font (em-dash
+    nel titolo, bullet negli achievement) con `-`.
+  - **Incontri diradati:** erano ~1 ogni 7.5 passi (troppo). Cooldown GLOBALE
+    condiviso (`interruptCooldown`, 6 passi dopo ogni interruzione) in
+    `WorldScene.onStepComplete` + encounterRate 0.10/0.11→0.07/0.08 + vaganti
+    (0.045→0.03, cd 45-75) ed eventi morale (0.035→0.025, cd 90-140) diradati.
+    Misurato: ~1 ogni 17 passi (range Pokémon 10-20). Le sfide a vista NON
+    passano dal cooldown (sono deterministiche).
+- **Centri cura BAR SPORT (sessione precedente):** i guaritori erano NPC `barista`
   piazzati all'aperto in mezzo alla città (brutto). Ora sono 5 EDIFICI interni
   visitabili (`barMap()` + tileset `BAR_TILES`: scaffali, bancone `h`, tavolini),
   uno per area (BAR SPORT BORGO/MEDIOPOLI, CAFFÈ EUROPA, GRAN CAFFÈ ROMANO,

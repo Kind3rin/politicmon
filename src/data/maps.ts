@@ -99,12 +99,12 @@ const BORGO_TILES = [
   "TT...........====...........TT",
   "TT...uuuu....====....rrrr...TT",
   "TT...uuuu....====....rrrr...TT",
-  "TT...mdnm....====....mndm...TT",
+  "TT...mdnm....====....mdnm...TT",
   "TT....=......====......=....TT",
   "TT....=......====......=....TT",
   "TT....==================....TT",
   "TT.s.........====..eQQe.....TT",
-  "TT..eeee.....====..mmdnm....TT",
+  "TT..eeee.....====..mdnm.....TT",
   "TT..mdnm.....====...........TT",
   "TT...........====...........TT",
   "TT..wwww.....====.....wwww..TT",
@@ -127,13 +127,13 @@ const MEDIOPOLI_TILES = [
   "TT..yyyyyy...====...rrrr....TT",
   "TT..yyyyyy...====...rrrr....TT",
   "TT..mmdnmm...====...mdnm....TT",
-  "TT....=......====.....=.....TT",
-  "TT....=......====.....=.....TT",
+  "TT....=......====....=......TT",
+  "TT....=......====....=......TT",
   "TT....=================.....TT",
   "TT...eQQe....====....rrrr...TT",
-  "TT...mmdnm...====....rrrr...TT",
+  "TT...mdnm....====....rrrr...TT",
   "TT...........====....mdnm...TT",
-  "TT..eeee.....====......=....TT",
+  "TT..eeee.....====.....=.....TT",
   "TT..mdnm.....====.......s...TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
@@ -148,13 +148,13 @@ const EUROTOWN_TILES = [
   "TT..BBBBBB...====...rrrr....TT",
   "TT..BBBBBB...====...rrrr....TT",
   "TT..mmdnmm...====...mdnm....TT",
-  "TT....=......====.....=.....TT",
+  "TT....=......====....=......TT",
   "TT....=================.....TT",
   "TT..xxxx.....====...yyyy....TT",
   "TT..mdnm.....====...mdnm....TT",
   "TT....ww.....====...........TT",
   "TT....eQQe...====...........TT",
-  "TT....mmdnm..====....~~~~~..TT",
+  "TT....mdnm...====....~~~~~..TT",
   "TT...........====....~~~~~..TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
@@ -175,7 +175,7 @@ const CAPITALE_TILES = [
   "TT..xxxxxx...====..yyyyyy...TT",
   "TT..xxxxxx...====..yyyyyy...TT",
   "TT..mmdnmm...====..mmdnmm...TT",
-  "TT....=......====.....=.....TT",
+  "TT....=......====....=......TT",
   "TT....============...===....TT",
   "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
@@ -194,7 +194,7 @@ const STRETTO_TILES = [
   "TT.......eeee......xxxx.....TT",
   "TT..~~~~.mdnm.s....mdnm.....TT",
   "TT..~~~~....eQQe......~~~~..TT",
-  "TT..~~~~....mmdnm.....~~~~..TT",
+  "TT..~~~~....mdnm......~~~~..TT",
   "TT...s..............~~~~....TT",
   "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
   "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
@@ -441,9 +441,9 @@ export const MAPS: Record<string, MapDef> = {
       { x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
       { x: 23, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
       { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
-      { x: 21, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
+      { x: 20, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.10,
+    encounterRate: 0.07,
     encounters: [
       { speciesId: "salvinott", weight: 40, minLv: 2, maxLv: 4 },
       { speciesId: "grillix", weight: 20, minLv: 3, maxLv: 5 },
@@ -540,9 +540,9 @@ export const MAPS: Record<string, MapDef> = {
       { x: 21, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" },
       { x: 5, y: 18, toMap: "attico", toX: 4, toY: 5, facing: "up" },
       { x: 22, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" },
-      { x: 7, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
+      { x: 6, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.10,
+    encounterRate: 0.07,
     encounters: [
       { speciesId: "vannaccix", weight: 20, minLv: 8, maxLv: 11 },
       { speciesId: "contemorfo", weight: 18, minLv: 8, maxLv: 11 },
@@ -634,9 +634,9 @@ export const MAPS: Record<string, MapDef> = {
       { x: 21, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
       { x: 5, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
       { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
-      { x: 8, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
+      { x: 7, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.10,
+    encounterRate: 0.07,
     encounters: [
       { speciesId: "macronfox", weight: 24, minLv: 12, maxLv: 15 },
       { speciesId: "zelenskir", weight: 20, minLv: 13, maxLv: 15 },
@@ -717,7 +717,7 @@ export const MAPS: Record<string, MapDef> = {
         lockedLines: ["Il portone è sbarrato.", "Un cartello: 'SI RICEVE SOLO CON 3 MEDAGLIE.'"]
       }
     ],
-    encounterRate: 0.11,
+    encounterRate: 0.08,
     encounters: [
       { speciesId: "zelenskir", weight: 18, minLv: 15, maxLv: 18 },
       { speciesId: "muskrat", weight: 16, minLv: 15, maxLv: 18 },
@@ -953,9 +953,9 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
       { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
-      { x: 14, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
+      { x: 13, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.11,
+    encounterRate: 0.08,
     encounters: [
       { speciesId: "salvinott", weight: 28, minLv: 19, maxLv: 21 },
       { speciesId: "vannaccix", weight: 18, minLv: 20, maxLv: 22 },
@@ -1322,11 +1322,11 @@ export const MAPS: Record<string, MapDef> = {
   // ------------------------------------------------ BAR SPORT (centri cura) ---
   // Un "Pokémon Center" tematico per città: entri, il barista dietro al bancone
   // ti rimette in sesto la squadra. Sostituiscono i vecchi barista-in-piazza.
-  "bar-borgo": barMap("bar-borgo", "BAR SPORT BORGO", "borgo", 21, 18),
-  "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 7, 16),
-  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 13),
+  "bar-borgo": barMap("bar-borgo", "BAR SPORT BORGO", "borgo", 20, 18),
+  "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 6, 16),
+  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 7, 13),
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 23, 8),
-  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 14, 5)
+  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 13, 5)
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

@@ -15,7 +15,7 @@ import {
 import { typeMultiplier } from "../../data/poltypes";
 import {
   calcDamage, catchChance, chooseFoeMove, effectiveStat, makeCombatant, runChance, statName,
-  type Combatant
+  type AiProfile, type Combatant
 } from "./sim";
 import { Menu, MessageBox, clipToWidth, drawHpBar, wrapText, GREY, INK, PAPER } from "../../ui/widgets";
 import { PartyScene } from "../../scenes/PartyScene";
@@ -64,6 +64,7 @@ export class BattleScene implements Scene {
   private player!: Combatant;
   private foe!: Combatant;
   private foeIndex = 0;
+  private ai!: AiProfile; // profilo di difficoltà, calcolato dal contesto
 
   private queue: Step[] = [];
   private mode: "queue" | "menu" | "fight" | "ask" = "queue";
@@ -120,6 +121,7 @@ export class BattleScene implements Scene {
     this.displayExp = this.expRatio();
     markSeen(this.state, this.foe.mon.speciesId);
 
+    this.ai = this.computeAiProfile();
     audio.playMusic(battleMusic(opts));
     if (this.trainer) {
       this.push({ text: `${this.trainer.name} ti sfida!` });
@@ -134,6 +136,29 @@ export class BattleScene implements Scene {
   }
 
   // ---- Helpers ----
+
+  // Profilo di difficoltà dell'IA in base al contesto. I wild e i primi
+  // allenatori sbagliano spesso, non si curano da fenomeni e lasciano scampo al
+  // giocatore agli sgoccioli; palestre e boss restano competenti. Così la curva
+  // di difficoltà sale con la partita invece di partire al massimo.
+  private computeAiProfile(): AiProfile {
+    const id = this.trainer?.id ?? "";
+    const isBoss = BOSS_TRAINER_IDS.includes(id) || id.startsWith("rival");
+    if (isBoss) {
+      // Boss narrativi e RIVALE: sempre competenti, è il loro momento.
+      return { whiff: 0.2, canHeal: true, finisher: true };
+    }
+    if (this.trainer?.badge) {
+      // Capipalestra: tosti ma non perfetti.
+      return { whiff: 0.28, canHeal: true, finisher: true };
+    }
+    // Wild e allenatori comuni: clemenza scalata sulle medaglie conquistate
+    // (più avanti sei, meno sbagliano), con un floor a 0.30 per non sembrare
+    // "rotti". Niente cure perfette né colpo di grazia automatico.
+    const badges = this.state.badges.length;
+    const whiff = Math.max(0.3, 0.45 - badges * 0.05);
+    return { whiff, canHeal: false, finisher: false };
+  }
 
   private playerName(): string {
     return speciesOf(this.player.mon).name;
@@ -174,7 +199,7 @@ export class BattleScene implements Scene {
     if (slot) {
       slot.pp = Math.max(0, slot.pp - 1);
     }
-    const foeMove = chooseFoeMove(this.foe, this.player);
+    const foeMove = chooseFoeMove(this.foe, this.player, this.ai);
     const pPriority = playerMove.effect?.priority ?? 0;
     const fPriority = foeMove.effect?.priority ?? 0;
     const playerFirst =
@@ -684,7 +709,7 @@ export class BattleScene implements Scene {
       steps.push({
         run: () => {
           if (this.foe.mon.hp > 0) {
-            this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+            this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
           }
         }
       });
@@ -766,7 +791,7 @@ export class BattleScene implements Scene {
     steps.push({
       run: () => {
         if (this.foe.mon.hp > 0) {
-          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
         }
       }
     });
@@ -809,7 +834,7 @@ export class BattleScene implements Scene {
               {
                 run: () => {
                   if (this.foe.mon.hp > 0) {
-                    this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+                    this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
                   }
                 }
               },
@@ -1135,7 +1160,7 @@ export class BattleScene implements Scene {
         {
           run: () => {
             if (this.foe.mon.hp > 0) {
-              this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player));
+              this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
             }
           }
         },

@@ -76,15 +76,26 @@ export function runChance(player: Combatant, foe: Combatant, attempts: number): 
   return Math.min(0.95, (ps / fs) * 0.7 + attempts * 0.15);
 }
 
+// Profilo di difficoltà dell'IA: regola quanto spesso "sbaglia" (whiff = mossa
+// a caso), se sa curarsi al momento perfetto e se infierisce sul bersaglio
+// agli sgoccioli. I wild e i primi allenatori sono clementi; palestre e boss
+// giocano quasi senza errori. Il default tiene il comportamento "competente".
+export interface AiProfile {
+  whiff: number; // probabilità di una mossa casuale (più alto = più facile)
+  canHeal: boolean; // si auto-cura al timing ottimale
+  finisher: boolean; // dà priorità a finire il bersaglio sotto soglia HP
+}
+export const AI_COMPETENT: AiProfile = { whiff: 0.25, canHeal: true, finisher: true };
+
 // L'IA legge la situazione: picchia super-efficace, cura quando è ferita, si
-// potenzia quando è in salute, infligge status/debuff quando conviene. Sbaglia
-// abbastanza (25% mossa a caso) da lasciare spazio al giocatore.
-export function chooseFoeMove(foe: Combatant, target: Combatant): Move {
+// potenzia quando è in salute, infligge status/debuff quando conviene. Il
+// profilo `ai` decide quanto è dura (whiff alto + niente cura/finisher = facile).
+export function chooseFoeMove(foe: Combatant, target: Combatant, ai: AiProfile = AI_COMPETENT): Move {
   const usable = foe.mon.moves.filter((slot) => slot.pp > 0).map((slot) => MOVES[slot.id]);
   if (usable.length === 0) {
     return MOVES.comizio;
   }
-  if (Math.random() < 0.25) {
+  if (Math.random() < ai.whiff) {
     return usable[Math.floor(Math.random() * usable.length)];
   }
   const maxHp = statsOf(foe.mon).hp;
@@ -103,12 +114,15 @@ export function chooseFoeMove(foe: Combatant, target: Combatant): Move {
       const stab = speciesOf(foe.mon).types.includes(move.type) ? 1.5 : 1;
       score = move.power * tMult * stab * (move.accuracy / 100);
       // Se il bersaglio è agli sgoccioli, finiscilo: priorità ai colpi.
-      if (targetLow) {
+      // Solo gli avversari "competenti" infieriscono; i comuni lasciano scampo.
+      if (targetLow && ai.finisher) {
         score *= 1.4;
       }
     } else if (move.effect?.healRatio) {
-      // Cura solo se serve davvero, e tanto più quanto è ferita.
-      score = foeHurt ? 120 + (0.45 - hpRatio) * 200 : 0;
+      // Cura solo se serve davvero, e tanto più quanto è ferita. Gli avversari
+      // comuni (canHeal=false) non si curano al timing perfetto: la mossa cade
+      // nel punteggio neutro più sotto e viene usata solo ogni tanto.
+      score = ai.canHeal && foeHurt ? 120 + (0.45 - hpRatio) * 200 : 0;
     } else if (move.effect?.stat) {
       const buff = move.effect.stat.target === "self";
       if (buff) {

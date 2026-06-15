@@ -39,14 +39,21 @@ export function typeMultiplier(attack: PolType, defenderTypes: PolType[]): numbe
   for (const def of defenderTypes) {
     mult *= CHART[attack]?.[def] ?? 1;
   }
-  // Comprime gli estremi del doppio-tipo: 4x e 0.25x sono troppo netti con gli
-  // HP attuali (one-shot / muri). Restano 2x e 0.5x, che danno pepe sano.
-  // Lo 0 (immunità) non esiste in questa tabella, ma lo lasciamo passare.
+  // Comprime gli estremi: col danno attuale 2x super-efficace = ~40% HP/colpo
+  // nell'early game (KO in 2-3 colpi, frustrante per chi non conosce la tabella
+  // tipi). Ammorbidiamo: 4x->2.2, 2x->1.7, 0.5x->0.6, 0.25x->0.45. Il vantaggio
+  // di tipo resta leggibile e premiante, ma non più letale al primo errore.
   if (mult >= 4) {
-    return 2.5;
+    return 2.2;
+  }
+  if (mult >= 2) {
+    return 1.7;
   }
   if (mult > 0 && mult <= 0.25) {
-    return 0.4;
+    return 0.45;
+  }
+  if (mult > 0 && mult < 1) {
+    return 0.6;
   }
   return mult;
 }

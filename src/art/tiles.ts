@@ -168,6 +168,32 @@ const roofArt = (c: string, C: string) => rows(
   "oooooooooooooooo"
 );
 
+// Tetto del BAR SPORT con INSEGNA: tetto verde + cartello chiaro appeso con una
+// tazzina di caffè e una croce-cuore, così a colpo d'occhio si riconosce il
+// "centro cura" dalle case normali. e/E verde tetto, m insegna, i bordo cartello,
+// k icona scura, r accento rosso (la croce).
+// Insegna in UN solo tile: tetto verde + cartello bianco con croce rossa
+// centrata (simbolo cura, leggibile a colpo d'occhio). Si usa una sola `Q` al
+// centro del tetto del bar, gli altri restano `e` (tetto verde normale).
+const barRoofArt = rows(
+  "oooooooooooooooo",
+  "oeeeeeeeeeeeeeeo",
+  "oEEEEEEEEEEEEEEo",
+  "oeeiiiiiiiiiieeo",
+  "oeimmmmmmmmmmieo",
+  "oeimmmmrrmmmmieo",
+  "oeimmmmrrmmmmieo",
+  "oeimmrrrrrrmmieo",
+  "oeimmrrrrrrmmieo",
+  "oeimmmmrrmmmmieo",
+  "oeimmmmrrmmmmieo",
+  "oeimmmmmmmmmmieo",
+  "oeiiiiiiiiiiiieo",
+  "oeeeeeeeeeeeeeeo",
+  "oEEEEEEEEEEEEEEo",
+  "oooooooooooooooo"
+);
+
 const wallArt = rows(
   "mmmmmmmmmmmmmmmm",
   "mmmmmmmmmmmmmmmm",
@@ -559,6 +585,13 @@ export const TILES: Record<string, TileDef> = {
   r: { pix: pix(roofArt("r", "R")), solid: true },
   u: { pix: pix(roofArt("B", "v"), { v: "#3450a0" }), solid: true },
   e: { pix: pix(roofArt("e", "E"), { e: "#3f9a5c", E: "#2f7a46" }), solid: true },
+  // Tetto-insegna del BAR SPORT (centro cura): verde + cartello riconoscibile.
+  Q: {
+    pix: pix(barRoofArt, {
+      e: "#3f9a5c", E: "#2f7a46", m: "#f4f4ec", i: "#7a5a28", r: "#d83c3c"
+    }),
+    solid: true
+  },
   y: { pix: pix(roofArt("y", "Y"), { y: "#d8a830", Y: "#b88820" }), solid: true },
   B: { pix: pix(roofArt("B", "Y"), { B: "#2e4a9a", Y: "#d8b838" }), solid: true },
   x: { pix: pix(roofArt("x", "X"), { x: "#b89048", X: "#8a6830" }), solid: true },

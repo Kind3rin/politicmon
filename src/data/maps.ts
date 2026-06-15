@@ -103,9 +103,9 @@ const BORGO_TILES = [
   "TT....=......====......=....TT",
   "TT....=......====......=....TT",
   "TT....==================....TT",
-  "TT.s.........====..eeee.....TT",
-  "TT..eeee.....====..hmdnh....TT",
-  "TT..mdnm.....====..mmdmm....TT",
+  "TT.s.........====..eQQe.....TT",
+  "TT..eeee.....====..mmdnm....TT",
+  "TT..mdnm.....====...........TT",
   "TT...........====...........TT",
   "TT..wwww.....====.....wwww..TT",
   "TT..wwww.....====.....wwww..TT",
@@ -130,9 +130,9 @@ const MEDIOPOLI_TILES = [
   "TT....=......====.....=.....TT",
   "TT....=......====.....=.....TT",
   "TT....=================.....TT",
-  "TT...eeee....====....rrrr...TT",
-  "TT...hmdnh...====....rrrr...TT",
-  "TT...mmdmm...====....mdnm...TT",
+  "TT...eQQe....====....rrrr...TT",
+  "TT...mmdnm...====....rrrr...TT",
+  "TT...........====....mdnm...TT",
   "TT..eeee.....====......=....TT",
   "TT..mdnm.....====.......s...TT",
   "TT...........====...........TT",
@@ -153,9 +153,9 @@ const EUROTOWN_TILES = [
   "TT..xxxx.....====...yyyy....TT",
   "TT..mdnm.....====...mdnm....TT",
   "TT....ww.....====...........TT",
-  "TT....ee.....====...........TT",
-  "TT....hmdnh..====....~~~~..TT",
-  "TT....mmdmm..====....~~~~..TT",
+  "TT....eQQe...====...........TT",
+  "TT....mmdnm..====....~~~~~..TT",
+  "TT...........====....~~~~~..TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
@@ -169,7 +169,7 @@ const CAPITALE_TILES = [
   "TT........MGMMMMMMGM........TT",
   "TT........MMMMMMMMMM........TT",
   "TT........CMMMDDMMMC........TT",
-  "TT..,,....==========..eeee..TT",
+  "TT..,,....==========..eQQe..TT",
   "TT..,,......======....mdnm..TT",
   "TT...........====...........TT",
   "TT..xxxxxx...====..yyyyyy...TT",
@@ -193,9 +193,9 @@ const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......eeee......xxxx.....TT",
   "TT..~~~~.mdnm.s....mdnm.....TT",
-  "TT..~~~~....eeee......~~~~..TT",
-  "TT..~~~~....hmdnh.....~~~~..TT",
-  "TT...s......mmdmm...........TT",
+  "TT..~~~~....eQQe......~~~~..TT",
+  "TT..~~~~....mmdnm.....~~~~..TT",
+  "TT...s..............~~~~....TT",
   "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
   "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
@@ -634,7 +634,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 21, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
       { x: 5, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
       { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
-      { x: 8, y: 13, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
+      { x: 8, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.10,
     encounters: [
@@ -953,7 +953,7 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
       { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
-      { x: 14, y: 5, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
+      { x: 14, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.11,
     encounters: [
@@ -1324,9 +1324,9 @@ export const MAPS: Record<string, MapDef> = {
   // ti rimette in sesto la squadra. Sostituiscono i vecchi barista-in-piazza.
   "bar-borgo": barMap("bar-borgo", "BAR SPORT BORGO", "borgo", 21, 18),
   "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 7, 16),
-  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 14),
+  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 13),
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 23, 8),
-  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 14, 6)
+  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 14, 5)
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

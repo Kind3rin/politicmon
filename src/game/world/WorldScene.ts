@@ -26,6 +26,7 @@ import { isGuideOn } from "../../engine/controls";
 import { PauseScene } from "../../scenes/PauseScene";
 import { ShopScene } from "../../scenes/ShopScene";
 import { CasinoScene } from "../../scenes/CasinoScene";
+import { MafiaScene } from "../../scenes/MafiaScene";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 
 const STEP_TIME = 0.18;
@@ -168,7 +169,7 @@ export class WorldScene implements Scene {
   private makeRuntimeNpc(npc: NpcDef): RuntimeNpc {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
-      !npc.transport && !npc.gift && !npc.vehicleGift && !npc.legendary;
+      !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift && !npc.legendary;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -577,8 +578,24 @@ export class WorldScene implements Scene {
       return;
     }
 
-    if (npc.healer) {
+    if (npc.mafia) {
       this.say(npc.lines ?? [], () => {
+        this.stack.push(new MafiaScene(this.stack, this.input, this.state));
+      });
+      return;
+    }
+
+    if (npc.healer) {
+      const lines = [...(npc.lines ?? [])];
+      // Primo BAR SPORT: spiega che qui si cura GRATIS, quando serve.
+      if (!this.state.flags["heal-hint"]) {
+        this.state.flags["heal-hint"] = true;
+        lines.push(
+          "Quando la squadra è malconcia, passa da un BAR SPORT come questo: rimetto tutti in sesto, gratis.",
+          "Ne trovi uno in ogni città. Tornaci ogni volta che ti serve."
+        );
+      }
+      this.say(lines, () => {
         for (const mon of this.state.party) {
           healMonster(mon);
         }
@@ -1127,7 +1144,11 @@ export class WorldScene implements Scene {
     if (tile?.encounter) {
       this.rustles.push({ x: pos.x, y: pos.y, t: 0.4 });
       const baseRate = this.map.encounterRate ?? 0.08;
-      const rate = baseRate * (hasMinistro(this.state, "interno") ? 0.65 : 1);
+      // Ministero dell'Interno e PROTEZIONE della famiglia diradano gli incontri.
+      const rate =
+        baseRate *
+        (hasMinistro(this.state, "interno") ? 0.65 : 1) *
+        (this.state.flags["mafia-protezione"] ? 0.6 : 1);
       if (
         this.map.encounters &&
         this.state.party.some((m) => m.hp > 0) &&

@@ -105,6 +105,29 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
+- **Bilanciamento lotte + Mafia + AUTO (sessione corrente):**
+  - **Lotte più accessibili** (diagnosi via simulazione Monte Carlo in
+    `scripts/sim-balance.mjs`): l'IA era CIECA al contesto (un wild giocava come
+    il boss finale). Ora `chooseFoeMove(foe, target, ai)` accetta un `AiProfile`
+    {whiff, canHeal, finisher}; `BattleScene.computeAiProfile()` lo scala sul
+    contesto (wild/comuni clementi con whiff 0.45→0.30 sulle medaglie, niente
+    cura/finisher perfetti; palestre whiff 0.28; boss/rival 0.2 invariati).
+    Super-efficace compresso 2x→1.7x in `poltypes.ts` (i contro-tipo early non
+    one-shottano più). expYield 7→6 (+17%). Bag iniziale +scheda+maalox. Barista
+    spiega la cura gratis al 1° accesso. LOBBISTA (outlier) -1 livello.
+    Win-rate alla pari misurato 54%→58%, primi allenatori 66-94%.
+    NB: scartati di proposito (su critica adversariale) divisore 60, HP starter,
+    targetLow — sommavano troppe leve e banalizzavano. Lo script sim replica le
+    formule reali: aggiornalo se cambi sim.ts/poltypes.ts.
+  - **AUTO BLU guidabile**: 3° veicolo, sprite a 3 viste (front/back/side),
+    veloce all'aperto (AUTO_FACTOR 3.0), player in abitacolo. Dono NPC a Caput
+    Mundi. `vehicleSprite` ora gestisce front/back/side per l'auto.
+  - **Fazione MAFIA (satira bonaria, no violenza/apologia):** covo "RETROBOTTEGA
+    DEL PADRINO" allo STRETTO (warp da 20,2), `MafiaScene` con 4 attività che
+    AIUTANO ma COMPROMETTONO (costano SONDAGGI): mercato nero direttive a metà
+    prezzo, raccomandazione (cura+regalo), protezione/pizzo (dirada gli incontri,
+    flag `mafia-protezione`), scommessa clandestina. Nuovo campo `NpcDef.mafia`.
+    Side-quest "UN'OFFERTA RAGIONEVOLE".
 - **Nuova schermata titolo (splash AI):** la TitleScene aveva sfondo procedurale
   "piatto" (Partenone + fasce di colore). Ora usa uno **splash AI a tutto schermo**
   (`public/title-bg.png`, 240×180) generato con Higgsfield (modello `z_image`,

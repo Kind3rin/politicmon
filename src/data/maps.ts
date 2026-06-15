@@ -12,6 +12,7 @@ export interface NpcDef {
   healer?: boolean;
   shop?: boolean;
   casino?: boolean;
+  mafia?: boolean;
   transport?: boolean;
   gift?: { itemId: string; qty: number; flag: string; lines: string[] };
   vehicleGift?: { vehicle: "monopattino" | "ruspa" | "auto"; flag: string; lines: string[] };
@@ -190,8 +191,8 @@ const CAPITALE_TILES = [
 
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-  "TT.......eeee...............TT",
-  "TT..~~~~.mdnm.s.......~~~~..TT",
+  "TT.......eeee......xxxx.....TT",
+  "TT..~~~~.mdnm.s....mdnm.....TT",
   "TT..~~~~..............~~~~..TT",
   "TT..~~~~.....hh.......~~~~..TT",
   "TT...s......................TT",
@@ -918,7 +919,10 @@ export const MAPS: Record<string, MapDef> = {
     tiles: STRETTO_TILES,
     outdoor: true,
     music: "stretto",
-    warps: [{ x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" }],
+    warps: [
+      { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
+      { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" }
+    ],
     encounterRate: 0.11,
     encounters: [
       { speciesId: "salvinott", weight: 28, minLv: 19, maxLv: 21 },
@@ -1255,6 +1259,25 @@ export const MAPS: Record<string, MapDef> = {
   ], {
     variant: 0,
     pickups: [{ id: "retro-pk", x: 8, y: 4, itemId: "scheda", qty: 3 }]
+  }),
+
+  // STRETTO — covo della "famiglia": fazione satirica del clientelismo.
+  covo: houseMap("covo", "RETROBOTTEGA DEL PADRINO", "stretto", 20, 3, [
+    {
+      id: "covo-padrino", pal: "boss", x: 5, y: 2, facing: "down", mafia: true,
+      lines: [
+        "IL PADRINO: ti aspettavo, candidato. Una cosa la dico sempre:",
+        "il consenso è come l'acqua, va incanalato. Noi sappiamo dove.",
+        "Favori, scorciatoie, qualche... cortesia. Ma certe cose si pagano due volte."
+      ]
+    },
+    {
+      id: "covo-picciotto", pal: "aide", x: 2, y: 4, facing: "right",
+      lines: ["Il PADRINO riceve tutti. Anche chi poi se ne pente. Specialmente quelli."]
+    }
+  ], {
+    variant: 1,
+    signs: [{ x: 8, y: 1, lines: ["'Una mano lava l'altra.'", "Qui ce ne sono parecchie, di mani."] }]
   }),
 
   // STRETTO — chiosco del ponte.

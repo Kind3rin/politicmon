@@ -189,6 +189,14 @@ export const QUESTS: QuestDef[] = [
     isDone: (s) =>
       ["dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",
        "dirInciucio", "dirBunga", "dirGreen"].filter((d) => (s.bag[d] ?? 0) > 0).length >= 4
+  },
+  {
+    id: "side-famiglia", side: true,
+    title: "UN'OFFERTA RAGIONEVOLE",
+    desc: "Fatti dare PROTEZIONE dal PADRINO nella RETROBOTTEGA allo STRETTO.",
+    hint: "Il covo è allo STRETTO DI MESSINA. La protezione costa fondi e rispettabilità (sondaggi).",
+    step: "Paga il pizzo e ottieni la PROTEZIONE.",
+    isDone: (s) => Boolean(s.flags["mafia-protezione"])
   }
 ];
 

@@ -5,7 +5,7 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { speciesOf, statsOf, type Monster } from "../game/monster";
+import { canLearnMove, speciesOf, statsOf, type Monster } from "../game/monster";
 import type { GameState } from "../game/state";
 import { drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
@@ -13,6 +13,8 @@ export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
   currentUid?: string;
   title?: string; // intestazione personalizzata (es. nomina di un ministro)
+  // Quando si sta usando una DIRETTIVA: marca chi può impararla (✓/✗ in lista).
+  directiveMoveId?: string;
   onChoose?: (mon: Monster) => void;
 }
 
@@ -113,7 +115,13 @@ export class PartyScene implements Scene {
       screen.textRight(`L${mon.level}`, VIEW_W - 64, y + 3, ink);
       drawHpBar(screen, 50, y + 13, 70, mon.hp, statsOf(mon).hp);
       screen.textRight(`${mon.hp}/${statsOf(mon).hp}`, VIEW_W - 14, y + 13, ink);
-      if (mon.status) {
+      // Compatibilità con la direttiva in uso: chi può impararla è evidenziato.
+      if (this.opts.directiveMoveId) {
+        const ok = canLearnMove(mon, this.opts.directiveMoveId);
+        const tag = ok ? "OK" : "NO";
+        screen.rect(VIEW_W - 32, y + 2, 17, 9, ok ? "#3a8c4a" : "#5a5a5a");
+        screen.text(tag, VIEW_W - 30, y + 3, PAPER);
+      } else if (mon.status) {
         screen.rect(VIEW_W - 32, y + 2, 17, 9, "#b04848");
         screen.text(STATUS_LABELS[mon.status], VIEW_W - 31, y + 3, PAPER);
       }

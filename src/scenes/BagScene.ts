@@ -77,7 +77,8 @@ export class BagScene implements Scene {
       this.stack.push(
         new PartyScene(this.stack, this.input, this.state, {
           mode: "use-item",
-          title: `A chi imparti la direttiva ${MOVES[moveId].name}?`,
+          title: `Direttiva ${MOVES[moveId].name} (tipo ${MOVES[moveId].type}):`,
+          directiveMoveId: moveId,
           onChoose: (mon) => {
             if (!canLearnMove(mon, moveId)) {
               const has = mon.moves.some((slot) => slot.id === moveId);

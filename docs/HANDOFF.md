@@ -92,15 +92,98 @@ Non committare senza che l'utente lo chieda.
 
 ## Idee non ancora fatte (backlog, dall'audit di retention)
 
-- Traguardi/achievement satirici sbloccabili (con schermata dedicata).
+- ~~Traguardi/achievement satirici sbloccabili~~ ✓ FATTO.
+- ~~Feedback veicoli / onboarding feature~~ ✓ FATTO (vedi sessione corrente).
 - Sfida del giorno (daily) con bonus.
 - Ministero speciale / epilogo aperto / leaderboard P2P.
+- Mappe ancora migliorabili: aggiunti NPC ambientali e tesori, ma la densità
+  resta sotto un Pokémon classico. Bonus ministri ancora poco "tattili" in HUD.
+- NB falso positivo noto (preesistente): a `capitale` il pickup `pk-c2` (spritz)
+  è sulla stessa cella del warp `salotto` @(4,18). Funziona nel gioco, non toccato.
 
 Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Contenuti & ricchezza del mondo (sessione corrente):**
+- **Nuova schermata titolo (splash AI):** la TitleScene aveva sfondo procedurale
+  "piatto" (Partenone + fasce di colore). Ora usa uno **splash AI a tutto schermo**
+  (`public/title-bg.png`, 240×180) generato con Higgsfield (modello `z_image`,
+  4:3, prompt pixel-art GBA satirico — Palazzo italiano + mostri-politici buffi +
+  tricolore). Logo "POLITICMON", slogan rotante e menu restano pixel-art da codice
+  SOPRA l'immagine, con un velo scuro semitrasparente per la leggibilità.
+  - Nuovo metodo `Screen.image(img, x, y, w, h)` per disegnare bitmap sul canvas.
+  - `TitleScene` carica lo splash async (modulo-level `loadTitleBg`); se manca o
+    non carica, **fallback automatico** allo sfondo procedurale (`drawSky/Palace/
+    Podium`) — niente schermo nero, niente crash.
+  - Il SW lo cacha cache-first al primo caricamento (come `intro.mp4`, NON in
+    PRECACHE: è 106KB, non rallentiamo il primo avvio).
+  - Coerente col vincolo del progetto: l'AI è solo lo SPLASH; la grafica DI GIOCO
+    resta 100% pixel-map da codice. L'utente ha scelto la candidata #2 (Palazzo
+    imponente centrato + 3 mostri sui podi che richiamano i 3 starter); le sorgenti
+    sono in `artifacts/title-cand1.png` e `title-cand2.png` (quella in uso è la 2).
+  - Screenshot di verifica: `scripts/shot-title.mjs` → `artifacts/screens/title_v3_a.png`.
+
+- **Onboarding, veicoli, mappe più vive (sessione corrente, 2ª parte):**
+  - **Onboarding feature** (erano invisibili a chi segue solo la storia):
+    intro del borgo estesa (ricorda di entrare negli edifici per storie/tesori);
+    hint one-shot delle DIRETTIVE al primo accesso a un negozio (flag `tm-hint`);
+    annuncio del CASINÒ all'arrivo a Caput Mundi (`MAP_ENTRY_HINTS` in WorldScene,
+    metodo `showMapEntryHint`, flag `hint-casino`, valutato in update a controllo
+    libero come gli achievement). Il messaggio del GOVERNO OMBRA alla 1ª medaglia
+    era già completo (dice "dal menu START").
+  - **Veicoli ora si sentono:** il MONOPATTINO usa `SCOOTER_FACTOR=2.5` (prima
+    riusava `RUN_FACTOR=1.85` = identico alla corsa B → impercettibile). La RUSPA
+    che abbatte un albero fa `audio.hitSuper()` + scossone camera (`this.shake`,
+    applicato a camX/camY dopo il clamp nel draw, decadimento in update).
+  - **Mappe più vive:** +5 NPC ambientali satirici (solo battute, niente lotte)
+    nelle mappe più spoglie — Mediopoli (talkshow-fan), Eurotown (euroburocrate,
+    pensionato-euro), Capitale (turista-cap, influencer-cap). Validati con
+    `scripts/check-npcs.mjs` (tile calpestabili + niente sovrapposizioni).
+  - Tutto verificato: typecheck+build puliti, screenshot in `artifacts/screens/`.
+
+- **Analisi gameplay & ribilanciamento (sessione corrente, 1ª parte):** audit dei 4 pilastri
+  (battaglie/progresso/esplorazione/feature invisibili) e fix a maggior impatto.
+  - **Battaglie ribilanciate (il fix più importante):** prima duravano 2 turni
+    (one/two-shot), zero tensione. Ora ~5-8 turni (early/mid) e ~4 (evoluti),
+    verificato con `scripts/shot-battle-balance.mjs` (simula scontri e conta i
+    turni medi). Cosa è cambiato: HP più alti e difese che scalano col livello
+    (`statsOf` in `monster.ts`, non più `+5` flat su def/spc); divisore danno
+    50→70 (`sim.ts`); moltiplicatori di tipo estremi compressi (4x→2.5x, 0.25x→0.4x
+    in `typeMultiplier`, `poltypes.ts`) perché col doppio-tipo erano one-shot.
+    NB: bilanciamento globale e coerente — vale per player e nemici, il rapporto
+    di forze resta; i boss non diventano ingiocabili.
+  - **IA di battaglia riscritta** (`chooseFoeMove` in `sim.ts`): da "50% a caso,
+    50% mossa più forte" a un'euristica vera (cura se ferita, si potenzia se sana,
+    debuff/status quando conviene, finisce il bersaglio basso). Random sceso al 25%.
+    Effetto collaterale positivo: status (scandalo logora 1/8 HP/turno, indagato,
+    gaffe) ora "contano" perché le battaglie durano abbastanza.
+  - **Curva EXP addolcita** (`expForLevel`): da cubica pura `lv³` (rallentava
+    brutalmente già a lv6-9) a `0.8·lv³ + 10·lv²` — sali più spesso nella fascia
+    5-25 dove il giocatore mollava.
+  - **HUD SONDAGGI potenziato** (`WorldScene.draw`): la barra c'era ma era solo
+    testo `SOND xx%`; ora barra colorata + etichetta breve del momento politico
+    (`sondaggiLabelShort` in `governo.ts`, max ~13 char per stare nel pannello).
+  - **Direttive (MT) più leggibili:** il PartyScene in modalità use-item mostra
+    un badge OK/NO di compatibilità accanto a ogni mostro (`directiveMoveId` in
+    PartyOptions, usa `canLearnMove`), e il titolo dice il tipo richiesto. Niente
+    più "provo e fallisce in silenzio".
+  - **Tesori nascosti** (`PickupDef.hidden`): 8 tesori segreti negli angoli morti
+    delle 4 mappe outdoor, non disegnati, raccolti CALPESTANDOLI (in
+    `onStepComplete`, con jingle + messaggio "TESORO SEGRETO"). NON bloccano il
+    movimento (niente muri invisibili — fix in `isBlocked`). Hint satirico nel
+    cartello "CAMPAGNA ELETTORALE NORD" del borgo. Validati da
+    `scripts/check-pickups.mjs` (controlla che i nascosti siano calpestabili).
+  - **Sistema TRAGUARDI** (`game/achievements.ts` + `scenes/AchievementsScene.ts`):
+    14 achievement satirici valutati in `WorldScene.update` quando il giocatore ha
+    il controllo libero (copre vittorie/catture/sblocchi senza agganci sparsi).
+    Notifica "TRAGUARDO SBLOCCATO" + premio in €. Persistiti in `state.flags` con
+    prefisso `ach:` — NIENTE bump della save key. Voce TRAGUARDI nel menu pausa.
+    Doppia funzione: carote continue + rendono scopribili le feature (un traguardo
+    "vinci al casinò" segnala che il casinò esiste).
+  - **Diagnosi non implementata (vedi backlog):** mappe ancora sparse oltre ai
+    tesori; onboarding delle feature; feedback veicoli. Sono i prossimi candidati.
+
+- **Contenuti & ricchezza del mondo (sessione precedente):**
   - **9 case visitabili:** il mondo era vuoto (9 interni, zero case). Aggiunto
     `houseMap()` riutilizzabile (3 piantine + tile arredo `L` letto, `P` pianta)
     e una/due case per città con NPC satirici e pickup nascosti. Porte aggiunte

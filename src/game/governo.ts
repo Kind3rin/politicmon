@@ -56,6 +56,27 @@ export function sondaggiLabel(value: number): string {
   return "FUORI DAL PARLAMENTO";
 }
 
+// Versione corta per l'HUD (max ~11 caratteri): la barra in alto a destra non
+// ha spazio per "FUORI DAL PARLAMENTO".
+export function sondaggiLabelShort(value: number): string {
+  if (value >= 85) {
+    return "PLEBISCITO";
+  }
+  if (value >= 70) {
+    return "TRIONFO";
+  }
+  if (value >= 55) {
+    return "MAGGIORANZA";
+  }
+  if (value >= 40) {
+    return "TESTA A TESTA";
+  }
+  if (value >= 25) {
+    return "OPPOSIZIONE";
+  }
+  return "A PICCO";
+}
+
 // ---------------------------------------------------------------- MINISTERI
 // Il Governo Ombra: ogni Politicmon della squadra può ricoprire un ministero
 // e fornire un bonus passivo. Se il ministro è KO, l'effetto è sospeso

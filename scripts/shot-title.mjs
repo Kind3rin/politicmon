@@ -15,19 +15,19 @@ const shots = await page.evaluate(async () => {
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
 
-  function render(t) {
-    const canvas = document.createElement("canvas");
-    canvas.width = 240; canvas.height = 180;
-    const screen = new Screen(canvas);
-    const input = new Input();
-    const stack = new SceneStack();
-    const title = new TitleScene(stack, input);
-    stack.push(title);
-    for (let i = 0; i < Math.round(t * 30); i++) { stack.update(1 / 30); input.endFrame(); }
-    stack.draw(screen);
-    return canvas.toDataURL("image/png");
-  }
-  return { t0: render(0.1), t6: render(6.2) };
+  const canvas = document.createElement("canvas");
+  canvas.width = 240; canvas.height = 180;
+  const screen = new Screen(canvas);
+  const input = new Input();
+  const stack = new SceneStack();
+  stack.push(new TitleScene(stack, input));
+  const frame = () => { stack.update(1 / 30); stack.draw(screen); input.endFrame(); };
+  // Lascia caricare lo splash AI (Image.onload è async): frame con attesa reale.
+  for (let i = 0; i < 40; i++) { frame(); await new Promise((r) => setTimeout(r, 30)); }
+  const a = canvas.toDataURL("image/png");
+  for (let i = 0; i < 90; i++) frame(); // slogan successivo
+  const b = canvas.toDataURL("image/png");
+  return { t0: a, t6: b };
 });
 
 function save(name, dataUrl) {

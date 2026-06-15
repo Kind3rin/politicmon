@@ -52,6 +52,7 @@ export interface PickupDef {
   y: number;
   itemId: string;
   qty: number;
+  hidden?: boolean; // tesoro segreto: non disegnato, si trova esaminando il tile
 }
 
 export interface EncounterEntry {
@@ -411,7 +412,7 @@ export const MAPS: Record<string, MapDef> = {
       },
       {
         x: 7, y: 8,
-        lines: ["CAMPAGNA ELETTORALE NORD", "Attenti ai candidati selvatici nell'erba alta.", "A nord: MEDIOPOLI, la città che decide cosa pensi."]
+        lines: ["CAMPAGNA ELETTORALE NORD", "Attenti ai candidati selvatici nell'erba alta.", "Dicono che nei vicoli più sperduti qualcuno nasconda 'fondi neri'... esplora gli angoli!", "A nord: MEDIOPOLI, la città che decide cosa pensi."]
       },
       {
         x: 23, y: 12,
@@ -421,7 +422,10 @@ export const MAPS: Record<string, MapDef> = {
     pickups: [
       { id: "pk-b1", x: 4, y: 6, itemId: "scheda", qty: 2 },
       { id: "pk-b2", x: 4, y: 22, itemId: "caffe", qty: 1 },
-      { id: "pk-b3", x: 25, y: 19, itemId: "spritz", qty: 1 }
+      { id: "pk-b3", x: 25, y: 19, itemId: "spritz", qty: 1 },
+      // Tesori nascosti: angoli morti che premiano chi gironzola.
+      { id: "pk-b-hide1", x: 26, y: 1, itemId: "schedona", qty: 1, hidden: true },
+      { id: "pk-b-hide2", x: 2, y: 16, itemId: "caffe", qty: 2, hidden: true }
     ],
     npcs: [
       {
@@ -518,7 +522,9 @@ export const MAPS: Record<string, MapDef> = {
     ],
     pickups: [
       { id: "pk-m1", x: 3, y: 17, itemId: "maalox", qty: 1 },
-      { id: "pk-m2", x: 26, y: 16, itemId: "schedona", qty: 1 }
+      { id: "pk-m2", x: 26, y: 16, itemId: "schedona", qty: 1 },
+      { id: "pk-m-hide1", x: 26, y: 1, itemId: "spritz", qty: 2, hidden: true },
+      { id: "pk-m-hide2", x: 2, y: 19, itemId: "maalox", qty: 1, hidden: true }
     ],
     npcs: [
       {
@@ -563,6 +569,13 @@ export const MAPS: Record<string, MapDef> = {
           ]
         },
         lines: ["Il MONOPATTINO te l'ho già dato. Pedala, anzi... spingi."]
+      },
+      {
+        id: "talkshow-fan", pal: "journalist", x: 3, y: 7, facing: "right",
+        lines: [
+          "Stasera tre talk show in contemporanea, stessi ospiti su ogni canale.",
+          "Cambio rete, stessa faccia. Cambio idea, stessa faccia. Magia della TV."
+        ]
       }
     ]
   },
@@ -602,7 +615,9 @@ export const MAPS: Record<string, MapDef> = {
     ],
     pickups: [
       { id: "pk-e1", x: 26, y: 2, itemId: "spritz", qty: 1 },
-      { id: "pk-e2", x: 2, y: 2, itemId: "dirGreen", qty: 1 }
+      { id: "pk-e2", x: 2, y: 2, itemId: "dirGreen", qty: 1 },
+      { id: "pk-e-hide1", x: 26, y: 14, itemId: "dirBunga", qty: 1, hidden: true },
+      { id: "pk-e-hide2", x: 2, y: 14, itemId: "mojito", qty: 1, hidden: true }
     ],
     npcs: [
       {
@@ -623,6 +638,20 @@ export const MAPS: Record<string, MapDef> = {
         lines: [
           "LADY DIRETTIVA ha regolamentato persino questa conversazione.",
           "Il suo URSULAX multa chiunque la sfidi."
+        ]
+      },
+      {
+        id: "euroburocrate", pal: "aide", x: 3, y: 11, facing: "right",
+        lines: [
+          "Modulo 27/B per attraversare la piazza: l'ha compilato?",
+          "No? Allora tecnicamente lei non è qui. Buona giornata."
+        ]
+      },
+      {
+        id: "pensionato-euro", pal: "granny", x: 21, y: 11, facing: "down",
+        lines: [
+          "Ai miei tempi il consenso si conquistava in fabbrica, non su TikTok.",
+          "Adesso vince chi balla meglio. Mah."
         ]
       }
     ]
@@ -677,7 +706,10 @@ export const MAPS: Record<string, MapDef> = {
     pickups: [
       { id: "pk-c1", x: 25, y: 8, itemId: "schedona", qty: 2 },
       { id: "pk-c2", x: 4, y: 18, itemId: "spritz", qty: 1 },
-      { id: "pk-c3", x: 4, y: 2, itemId: "dirWhatever", qty: 1 }
+      { id: "pk-c3", x: 4, y: 2, itemId: "dirWhatever", qty: 1 },
+      // Tesoro grosso nella capitale: la TESSERA DORATA per evolvere.
+      { id: "pk-c-hide1", x: 2, y: 8, itemId: "tessera", qty: 1, hidden: true },
+      { id: "pk-c-hide2", x: 26, y: 14, itemId: "mojito", qty: 1, hidden: true }
     ],
     npcs: [
       {
@@ -706,6 +738,21 @@ export const MAPS: Record<string, MapDef> = {
           ]
         },
         lines: ["La RUSPA ce l'hai. Usala con parsimonia... o no, fai te."]
+      },
+      {
+        id: "turista-cap", pal: "kid", x: 17, y: 19, facing: "up",
+        lines: [
+          "Sono venuto a Roma per la storia, la cultura, l'arte...",
+          "...e invece sto facendo la fila per un selfie col PRESIDENTE OMBRA.",
+          "Bravo eh, però spostati che non si vede il monumento."
+        ]
+      },
+      {
+        id: "influencer-cap", pal: "influencer", x: 22, y: 19, facing: "left",
+        lines: [
+          "Story, reel, dirette: il consenso oggi si fa col telefono.",
+          "Tu invece giri a piedi nell'erba alta come nel 2005. Tenero."
+        ]
       }
     ]
   },

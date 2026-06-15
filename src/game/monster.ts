@@ -33,17 +33,23 @@ export function speciesOf(mon: Monster): Species {
 export function statsOf(mon: Monster): Stats {
   const base = speciesOf(mon).base;
   const lv = mon.level;
+  // HP gonfiati e difese che scalano col livello (non più +5 flat): così il
+  // bersaglio regge più colpi e le battaglie durano ~5-8 turni invece di 2.
+  // L'HP cresce più che linearmente (lv*2) per reggere le mosse evolute (power
+  // 85-110) nel tardo gioco, dove prima gli scontri tornavano a 2 turni.
   return {
-    hp: Math.floor((base.hp * 2 * lv) / 100) + lv + 10,
+    hp: Math.floor((base.hp * 3 * lv) / 100) + lv * 2 + 16,
     atk: Math.floor((base.atk * 2 * lv) / 100) + 5,
-    def: Math.floor((base.def * 2 * lv) / 100) + 5,
-    spc: Math.floor((base.spc * 2 * lv) / 100) + 5,
+    def: Math.floor((base.def * 2 * lv) / 100) + lv + 5,
+    spc: Math.floor((base.spc * 2 * lv) / 100) + lv + 5,
     spd: Math.floor((base.spd * 2 * lv) / 100) + 5
   };
 }
 
+// Curva "medio-veloce": più dolce della cubica pura (lv³) nella fascia 5-25,
+// dove il giocatore prima si stancava di salire. Resta crescente e mai banale.
 export function expForLevel(level: number): number {
-  return level * level * level;
+  return Math.floor((4 * level * level * level) / 5 + 10 * level * level);
 }
 
 // Le ultime 4 mosse del learnset fino al livello dato.

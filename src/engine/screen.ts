@@ -157,4 +157,16 @@ export class Screen {
     this.ctx.fillStyle = `rgba(8, 10, 18, ${alpha})`;
     this.ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   }
+
+  // Disegna un'immagine bitmap (es. splash AI della title) coprendo l'area data
+  // (default: tutto lo schermo). Nearest-neighbor, coerente col resto.
+  image(
+    img: CanvasImageSource,
+    x = 0,
+    y = 0,
+    w = VIEW_W,
+    h = VIEW_H
+  ): void {
+    this.ctx.drawImage(img, Math.round(x), Math.round(y), w, h);
+  }
 }

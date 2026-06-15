@@ -19,7 +19,8 @@ import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
-import { addSondaggi, curaPassiva, hasMinistro, sondaggiColor } from "../governo";
+import { addSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
+import { checkAchievements } from "../achievements";
 import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } from "../vehicles";
 import { isGuideOn } from "../../engine/controls";
 import { PauseScene } from "../../scenes/PauseScene";
@@ -29,6 +30,20 @@ import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 
 const STEP_TIME = 0.18;
 const RUN_FACTOR = 1.85;
+const SCOOTER_FACTOR = 2.5; // il MONOPATTINO deve battere la corsa, non pareggiarla
+
+// Annunci una-tantum quando si entra in una mappa per la prima volta: servono a
+// far scoprire feature che la storia principale non segnala (es. il CASINÒ).
+const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
+  capitale: {
+    flag: "hint-casino",
+    lines: [
+      "Sei a CAPUT MUNDI, il cuore del potere.",
+      "Dietro l'angolo c'è il CASINÒ DI PALAZZO: SLOT, FICHE e un certo CLUB...",
+      "Si gioca consenso a soldi. Cerca la porta tra i palazzi, verso destra."
+    ]
+  }
+};
 
 interface RuntimeNpc extends NpcDef {
   currentFacing: Facing;
@@ -80,6 +95,7 @@ export class WorldScene implements Scene {
   private moving = false;
   private running = false;
   private moveT = 0;
+  private shake = 0; // scossone camera (es. RUSPA che abbatte un albero)
   private fromX = 0;
   private fromY = 0;
   private time = 0;
@@ -106,7 +122,8 @@ export class WorldScene implements Scene {
         "PROF. QUIRINO (al megafono): Benvenuto a BORGO URNE, giovane!",
         "Muoviti con le FRECCE (o il D-PAD). A per parlare e confermare, B per tornare indietro.",
         "Segui la FRECCIA GIALLA: ti porta al mio LABORATORIO, l'edificio col tetto blu.",
-        "Lì scegli il tuo primo POLITICMON e parti per la scalata: tre MEDAGLIE e poi il PALAZZO!"
+        "Lì scegli il tuo primo POLITICMON e parti per la scalata: tre MEDAGLIE e poi il PALAZZO!",
+        "Un consiglio: non tutti gli edifici sono palestre. Circoli, redazioni, salotti... molti nascondono STORIE e tesori. Entra ed esplora!"
       ]);
     }
   }
@@ -170,10 +187,10 @@ export class WorldScene implements Scene {
     }
     if (
       this.map.pickups.some(
-        (p) => p.x === x && p.y === y && !this.state.pickedItems.includes(p.id)
+        (p) => p.x === x && p.y === y && !p.hidden && !this.state.pickedItems.includes(p.id)
       )
     ) {
-      return true;
+      return true; // i tesori nascosti NON bloccano: niente muri invisibili
     }
     if (this.map.id === "lab" && STARTER_SPOTS.some((s) => s.x === x && s.y === y)) {
       return true;
@@ -335,7 +352,8 @@ export class WorldScene implements Scene {
     const raw = this.map.tiles[ty]?.[tx];
     if (raw === "T" && this.state.vehicle === "ruspa" && !isBulldozed(this.state, this.map.id, tx, ty)) {
       this.state.bulldozed.push(bulldozedKey(this.map.id, tx, ty));
-      audio.hit();
+      audio.hitSuper(); // tonfo più corposo dell'hit normale
+      this.shake = 0.45; // scossone: l'albero crolla, si sente
       saveGame(this.state);
       this.say(["VRRRRR... la RUSPA fa il suo dovere.", "L'albero è stato 'riqualificato'. Passaggio libero!"]);
       return;
@@ -361,9 +379,18 @@ export class WorldScene implements Scene {
     if (pickup) {
       this.state.pickedItems.push(pickup.id);
       this.state.bag[pickup.itemId] = (this.state.bag[pickup.itemId] ?? 0) + pickup.qty;
-      audio.confirm();
-      this.say([`Trovi ${ITEMS[pickup.itemId].name} x${pickup.qty}!`]);
       saveGame(this.state);
+      if (pickup.hidden) {
+        // Tesoro segreto: ricompensa la curiosità con una piccola celebrazione.
+        audio.catchJingle();
+        this.say([
+          "Ehi! Qui c'era qualcosa di nascosto...",
+          `TESORO SEGRETO! ${ITEMS[pickup.itemId].name} x${pickup.qty}!`
+        ]);
+      } else {
+        audio.confirm();
+        this.say([`Trovi ${ITEMS[pickup.itemId].name} x${pickup.qty}!`]);
+      }
     }
   }
 
@@ -387,7 +414,16 @@ export class WorldScene implements Scene {
     }
 
     if (npc.shop) {
-      this.say(npc.lines ?? [], () => {
+      // Primo accesso a un negozio: spiega cosa sono le DIRETTIVE (le "MT").
+      const lines = [...(npc.lines ?? [])];
+      if (!this.state.flags["tm-hint"]) {
+        this.state.flags["tm-hint"] = true;
+        lines.push(
+          "Occhio alle DIRETTIVE: insegnano una mossa nuova a un POLITICMON dello stesso schieramento.",
+          "Si riusano all'infinito. Le impari dalla BORSA, fuori dalla lotta."
+        );
+      }
+      this.say(lines, () => {
         this.stack.push(new ShopScene(this.stack, this.input, this.state));
       });
       return;
@@ -859,6 +895,19 @@ export class WorldScene implements Scene {
 
   private stepCount = 0;
 
+  // Annunci one-shot all'arrivo in una mappa: segnalano feature che altrimenti
+  // resterebbero invisibili a chi segue solo la storia. Flag per non ripetere.
+  private showMapEntryHint(): boolean {
+    const hint = MAP_ENTRY_HINTS[this.map.id];
+    if (!hint || this.state.flags[hint.flag]) {
+      return false;
+    }
+    this.state.flags[hint.flag] = true;
+    saveGame(this.state);
+    this.say(hint.lines);
+    return true;
+  }
+
   private onStepComplete(): void {
     const pos = this.state.pos;
 
@@ -888,6 +937,22 @@ export class WorldScene implements Scene {
       this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
       this.loadMap(warp.toMap);
       audio.confirm();
+      return;
+    }
+
+    // Tesori nascosti: si scoprono calpestandoli (non hanno sprite a terra).
+    const buried = this.map.pickups.find(
+      (p) => p.hidden && p.x === pos.x && p.y === pos.y && !this.state.pickedItems.includes(p.id)
+    );
+    if (buried) {
+      this.state.pickedItems.push(buried.id);
+      this.state.bag[buried.itemId] = (this.state.bag[buried.itemId] ?? 0) + buried.qty;
+      saveGame(this.state);
+      audio.catchJingle();
+      this.say([
+        "Un attimo... il terreno qui suona strano.",
+        `TESORO SEGRETO! ${ITEMS[buried.itemId].name} x${buried.qty}!`
+      ]);
       return;
     }
 
@@ -932,6 +997,7 @@ export class WorldScene implements Scene {
 
   update(dt: number): void {
     this.time += dt;
+    this.shake = Math.max(0, this.shake - dt);
     this.fadeT = Math.max(0, this.fadeT - dt);
     mp.update(dt); // interpolazione avatar remoti + decadimento emote
     this.rustles = this.rustles.filter((r) => (r.t -= dt) > 0);
@@ -1007,10 +1073,34 @@ export class WorldScene implements Scene {
       return;
     }
 
+    // Traguardi: valutati quando il giocatore ha il controllo libero (così
+    // scattano dopo battaglie, catture, sblocchi senza agganci sparsi). La
+    // notifica appare come BREAKING NEWS dei traguardi.
+    if (!this.moving) {
+      const fresh = checkAchievements(this.state);
+      if (fresh.length > 0) {
+        const lines: string[] = [];
+        for (const a of fresh) {
+          lines.push(`TRAGUARDO SBLOCCATO: ${a.name}!`, `${a.desc} Premio: ${a.reward}€.`);
+        }
+        saveGame(this.state);
+        audio.catchJingle();
+        this.say(lines);
+        return;
+      }
+      // Hint one-shot all'arrivo in certe mappe (segnala le feature nascoste).
+      if (this.showMapEntryHint()) {
+        return;
+      }
+    }
+
     const pos = this.state.pos;
 
     if (this.moving) {
-      this.moveT += (dt / STEP_TIME) * (this.running ? RUN_FACTOR : 1);
+      // Il monopattino è più veloce della semplice corsa (B): si sente davvero.
+      const onScooter = this.state.vehicle === "monopattino" && this.map.outdoor;
+      const factor = onScooter ? SCOOTER_FACTOR : this.running ? RUN_FACTOR : 1;
+      this.moveT += (dt / STEP_TIME) * factor;
       if (this.moveT >= 1) {
         this.moving = false;
         this.moveT = 0;
@@ -1091,6 +1181,12 @@ export class WorldScene implements Scene {
     let camY = Math.round(playerPy + TILE / 2 - VIEW_H / 2);
     camX = Math.max(0, Math.min(mapW - VIEW_W, camX));
     camY = Math.max(0, Math.min(Math.max(0, mapH - VIEW_H), camY));
+    // Scossone (RUSPA): sposta la camera di qualche pixel, dà peso all'impatto.
+    if (this.shake > 0) {
+      const amp = this.shake * 4;
+      camX += Math.round((Math.random() - 0.5) * amp);
+      camY += Math.round((Math.random() - 0.5) * amp);
+    }
 
     screen.clear("#10141f");
 
@@ -1120,8 +1216,8 @@ export class WorldScene implements Scene {
     }
 
     for (const pickup of this.map.pickups) {
-      if (this.state.pickedItems.includes(pickup.id)) {
-        continue;
+      if (this.state.pickedItems.includes(pickup.id) || pickup.hidden) {
+        continue; // i tesori nascosti non si disegnano: vanno scovati esaminando
       }
       screen.sprite("ballot", BALLOT_ART, pickup.x * TILE - camX + 3, pickup.y * TILE - camY + 3);
     }
@@ -1223,20 +1319,31 @@ export class WorldScene implements Scene {
       }
     }
 
-    // Sondaggi in tempo reale (appena hai un Politicmon da sondare).
+    // Sondaggi in tempo reale: barra colorata + etichetta del momento politico,
+    // così il giocatore "legge" il suo consenso a colpo d'occhio (non solo un numero).
+    let hudBottom = 2;
     if (this.state.party.length > 0) {
-      const label = `SOND ${this.state.sondaggi}%`;
-      const w = label.length * 6 + 8;
-      screen.rect(VIEW_W - w - 2, 2, w, 12, "rgba(16,20,31,0.92)");
-      screen.text(label, VIEW_W - w + 2, 4, sondaggiColor(this.state.sondaggi));
+      const sond = this.state.sondaggi;
+      const col = sondaggiColor(sond);
+      const panelW = 80;
+      const px = VIEW_W - panelW - 2;
+      screen.rect(px, 2, panelW, 22, "rgba(16,20,31,0.92)");
+      screen.text(`SOND ${sond}%`, px + 4, 4, col);
+      // Barra di riempimento.
+      const barW = panelW - 8;
+      screen.rect(px + 4, 12, barW, 4, "rgba(255,255,255,0.15)");
+      screen.rect(px + 4, 12, Math.max(1, Math.round((barW * sond) / 100)), 4, col);
+      // Etichetta del momento (PLEBISCITO, OPPOSIZIONE, ...): troncata se serve.
+      screen.text(clipHud(sondaggiLabelShort(sond), 13), px + 4, 17, "#cfe6ff");
+      hudBottom = 26;
     }
 
     // Veicolo attivo: piccola targhetta sotto i sondaggi.
     if (this.state.vehicle) {
       const vlabel = VEHICLES[this.state.vehicle as VehicleId].name;
       const w = vlabel.length * 6 + 8;
-      screen.rect(VIEW_W - w - 2, 16, w, 12, "rgba(16,20,31,0.92)");
-      screen.text(vlabel, VIEW_W - w + 2, 18, "#9cc8e8");
+      screen.rect(VIEW_W - w - 2, hudBottom, w, 12, "rgba(16,20,31,0.92)");
+      screen.text(vlabel, VIEW_W - w + 2, hudBottom + 2, "#9cc8e8");
     }
 
     // Obiettivo corrente in basso (solo all'aperto e a schermo libero).

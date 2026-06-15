@@ -19,6 +19,26 @@ const SLOGANS = [
   "SATIRA PORTATILE, CONSENSO TASCABILE."
 ];
 
+// Splash AI di sfondo (generato con Higgsfield, in stile pixel coerente col
+// gioco). Caricato una volta sola e condiviso tra le istanze della TitleScene.
+// Se manca o non carica, si ricade sullo sfondo procedurale: niente crash.
+let bgImage: HTMLImageElement | null = null;
+let bgReady = false;
+function loadTitleBg(): void {
+  if (bgImage) {
+    return;
+  }
+  const img = new Image();
+  img.onload = () => {
+    bgReady = true;
+  };
+  img.onerror = () => {
+    bgReady = false;
+  };
+  img.src = "title-bg.png";
+  bgImage = img;
+}
+
 export class TitleScene implements Scene {
   private menu: Menu;
   private time = 0;
@@ -26,6 +46,7 @@ export class TitleScene implements Scene {
 
   constructor(private stack: SceneStack, private input: Input) {
     this.menu = this.buildMenu();
+    loadTitleBg();
     audio.playMusic("title");
   }
 
@@ -105,6 +126,17 @@ export class TitleScene implements Scene {
   }
 
   draw(screen: Screen): void {
+    if (bgReady && bgImage) {
+      // Splash AI a tutto schermo + velo per far risaltare logo e menu.
+      screen.image(bgImage);
+      // Velo in alto (dietro al logo) e in basso (dietro al menu) per leggibilità.
+      screen.rect(0, 0, VIEW_W, 46, "rgba(10,14,28,0.42)");
+      screen.rect(0, VIEW_H - this.menu.measureHeight(12) - 22, VIEW_W, this.menu.measureHeight(12) + 22, "rgba(10,14,28,0.5)");
+      this.drawLogo(screen);
+      this.drawMenu(screen);
+      return;
+    }
+    // Fallback procedurale (se lo splash non è ancora caricato o manca).
     this.drawSky(screen);
     this.drawPalace(screen);
     this.drawLogo(screen);

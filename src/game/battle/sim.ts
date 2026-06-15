@@ -45,8 +45,12 @@ export function calcDamage(attacker: Combatant, defender: Combatant, move: Move)
   const level = attacker.mon.level * (crit ? 2 : 1);
   const stab = speciesOf(attacker.mon).types.includes(move.type) ? 1.5 : 1;
   const tMult = typeMultiplier(move.type, speciesOf(defender.mon).types);
-  const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 50 + 2;
-  const random = 0.85 + Math.random() * 0.15;
+  // Divisore alzato (50 -> 70) per accorciare meno bruscamente gli scontri:
+  // con HP/difese più alti il bersaglio regge ~5-8 colpi, lasciando spazio a
+  // status, buff e cambi tattici. Frena soprattutto le mosse evolute ad alto
+  // power (il termine power*atk/def domina), il +2 flat salva quelle deboli.
+  const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 70 + 2;
+  const random = 0.88 + Math.random() * 0.12;
   const damage = Math.max(1, Math.floor(base * stab * tMult * random));
   return { damage: tMult === 0 ? 0 : damage, crit, typeMult: tMult };
 }
@@ -72,15 +76,24 @@ export function runChance(player: Combatant, foe: Combatant, attempts: number): 
   return Math.min(0.95, (ps / fs) * 0.7 + attempts * 0.15);
 }
 
-// L'IA sa leggere i matchup, ma sbaglia abbastanza da lasciare spazio al player.
+// L'IA legge la situazione: picchia super-efficace, cura quando è ferita, si
+// potenzia quando è in salute, infligge status/debuff quando conviene. Sbaglia
+// abbastanza (25% mossa a caso) da lasciare spazio al giocatore.
 export function chooseFoeMove(foe: Combatant, target: Combatant): Move {
   const usable = foe.mon.moves.filter((slot) => slot.pp > 0).map((slot) => MOVES[slot.id]);
   if (usable.length === 0) {
     return MOVES.comizio;
   }
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.25) {
     return usable[Math.floor(Math.random() * usable.length)];
   }
+  const maxHp = statsOf(foe.mon).hp;
+  const hpRatio = foe.mon.hp / maxHp;
+  const foeHurt = hpRatio < 0.45;
+  const foeHealthy = hpRatio > 0.6;
+  const targetMaxHp = statsOf(target.mon).hp;
+  const targetLow = target.mon.hp / targetMaxHp < 0.35;
+
   let best = usable[0];
   let bestScore = -1;
   for (const move of usable) {
@@ -89,11 +102,29 @@ export function chooseFoeMove(foe: Combatant, target: Combatant): Move {
       const tMult = typeMultiplier(move.type, speciesOf(target.mon).types);
       const stab = speciesOf(foe.mon).types.includes(move.type) ? 1.5 : 1;
       score = move.power * tMult * stab * (move.accuracy / 100);
+      // Se il bersaglio è agli sgoccioli, finiscilo: priorità ai colpi.
+      if (targetLow) {
+        score *= 1.4;
+      }
     } else if (move.effect?.healRatio) {
-      const maxHp = statsOf(foe.mon).hp;
-      score = foe.mon.hp / maxHp < 0.4 ? 90 : 5;
+      // Cura solo se serve davvero, e tanto più quanto è ferita.
+      score = foeHurt ? 120 + (0.45 - hpRatio) * 200 : 0;
+    } else if (move.effect?.stat) {
+      const buff = move.effect.stat.target === "self";
+      if (buff) {
+        // Potenziarsi conviene da sani e a inizio scontro (stage non già alti).
+        const current = foe.stages[move.effect.stat.key];
+        score = foeHealthy && current < 3 ? 70 + move.effect.stat.stages * 8 : 12;
+      } else {
+        // Debuffare il nemico: utile se non l'abbiamo già fatto.
+        const current = target.stages[move.effect.stat.key];
+        score = current > -3 ? 55 : 10;
+      }
+    } else if (move.effect?.status) {
+      // Status: ottimo se il bersaglio è ancora "pulito" e ha HP da logorare.
+      score = target.mon.status || targetLow ? 8 : 50 + move.effect.status.chance * 0.3;
     } else {
-      score = 25;
+      score = 30;
     }
     if (score > bestScore) {
       bestScore = score;

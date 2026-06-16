@@ -469,11 +469,13 @@ export class WorldScene implements Scene {
       for (const mon of this.state.party) {
         healMonster(mon);
       }
-      this.state.pos = { mapId: "borgo", x: 19, y: 17, facing: "right" };
+      // Risveglio in piazza, davanti al BAR SPORT (cella aperta e calpestabile):
+      // (19,17) era la PORTA, circondata da muri -> sembrava incastrati nel bar.
+      this.state.pos = { mapId: "borgo", x: 19, y: 18, facing: "down" };
       this.loadMap("borgo");
       this.say([
         "Hai perso il consenso e anche i sensi...",
-        `Ti risvegli al BAR SPORT di BORGO URNE, più leggero di ${lost}€.`,
+        `Ti risvegli davanti al BAR SPORT di BORGO URNE, più leggero di ${lost}€.`,
         `I SONDAGGI crollano al ${sondaggi}%. I retroscenisti parlano già di rimpasto.`,
         "Il barista ha rimesso in sesto la squadra. Si riparte!"
       ]);

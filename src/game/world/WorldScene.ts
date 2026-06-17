@@ -10,7 +10,6 @@ import { RIVAL_COUNTER, SPECIES } from "../../data/species";
 import { buildRivalStageTeam, RIVAL_STAGES, rivalStageFor } from "../../data/rival";
 import { TRAINERS, type TrainerDef } from "../../data/trainers";
 import { pickWanderer, wandererLevel, type WanderingDef } from "../../data/encounters";
-import { STREET_EVENTS } from "../../data/streetevents";
 import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
@@ -1042,32 +1041,10 @@ export class WorldScene implements Scene {
 
   // ---- Eventi morale casuali su strada ----
 
-  private streetCooldown = 60;
-
-  private checkStreetEvent(): boolean {
-    if (!this.map.outdoor || !this.state.flags["dex-received"]) {
-      return false;
-    }
-    if (this.streetCooldown > 0) {
-      this.streetCooldown -= 1;
-      return false;
-    }
-    if (Math.random() > 0.025) {
-      return false;
-    }
-    this.streetCooldown = 90 + Math.floor(Math.random() * 50);
-    const ev = STREET_EVENTS[Math.floor(Math.random() * STREET_EVENTS.length)];
-    if (ev.sondaggi) {
-      addSondaggi(this.state, ev.sondaggi);
-    }
-    if (ev.money) {
-      this.state.money = Math.max(0, this.state.money + ev.money);
-    }
-    audio.confirm();
-    saveGame(this.state);
-    this.say(ev.lines);
-    return true;
-  }
+  // Eventi morale di strada DISABILITATI: comparivano come nuvolette di testo dal
+  // nulla (nessun personaggio in scena), ovunque all'aperto e troppo spesso. Non
+  // divertenti. La chiamata in onStepComplete è stata rimossa. Il pool
+  // STREET_EVENTS resta in src/data/streetevents.ts se si volesse riattivare.
 
   // ---- Step resolution ----
 
@@ -1157,10 +1134,6 @@ export class WorldScene implements Scene {
       return;
     }
 
-    if (this.checkStreetEvent()) {
-      this.interruptCooldown = 6;
-      return;
-    }
 
     const tile = TILES[this.tileAt(pos.x, pos.y)];
     if (tile?.encounter) {

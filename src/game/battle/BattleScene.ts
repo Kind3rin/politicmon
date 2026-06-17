@@ -829,7 +829,10 @@ export class BattleScene implements Scene {
     const chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1);
     const success = Math.random() < chance;
     const shakes = success ? 3 : Math.min(2, Math.floor(chance * 4 * Math.random()));
+    const pct = Math.round(chance * 100);
+    const verdict = pct >= 60 ? "alta" : pct >= 30 ? "media" : "bassa";
     this.pushFront([
+      { text: `Probabilità di reclutamento: ${pct}% (${verdict}).` },
       { text: `Lanci una ${item.name}!`, run: () => audio.ballThrow() },
       {
         run: () => {

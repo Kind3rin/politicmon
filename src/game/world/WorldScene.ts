@@ -1165,7 +1165,7 @@ export class WorldScene implements Scene {
     const tile = TILES[this.tileAt(pos.x, pos.y)];
     if (tile?.encounter) {
       this.rustles.push({ x: pos.x, y: pos.y, t: 0.4 });
-      const baseRate = this.map.encounterRate ?? 0.08;
+      const baseRate = this.map.encounterRate ?? 0.06;
       // Ministero dell'Interno e PROTEZIONE della famiglia diradano gli incontri.
       const rate =
         baseRate *

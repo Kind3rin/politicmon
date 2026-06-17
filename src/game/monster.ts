@@ -38,7 +38,7 @@ export function statsOf(mon: Monster): Stats {
   // L'HP cresce più che linearmente (lv*2) per reggere le mosse evolute (power
   // 85-110) nel tardo gioco, dove prima gli scontri tornavano a 2 turni.
   return {
-    hp: Math.floor((base.hp * 3 * lv) / 100) + lv * 2 + 16,
+    hp: Math.floor((base.hp * 3 * lv) / 100) + lv + 14,
     atk: Math.floor((base.atk * 2 * lv) / 100) + 5,
     def: Math.floor((base.def * 2 * lv) / 100) + lv + 5,
     spc: Math.floor((base.spc * 2 * lv) / 100) + lv + 5,

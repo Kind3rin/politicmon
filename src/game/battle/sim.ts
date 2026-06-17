@@ -45,11 +45,11 @@ export function calcDamage(attacker: Combatant, defender: Combatant, move: Move)
   const level = attacker.mon.level * (crit ? 2 : 1);
   const stab = speciesOf(attacker.mon).types.includes(move.type) ? 1.5 : 1;
   const tMult = typeMultiplier(move.type, speciesOf(defender.mon).types);
-  // Divisore alzato (50 -> 70) per accorciare meno bruscamente gli scontri:
-  // con HP/difese più alti il bersaglio regge ~5-8 colpi, lasciando spazio a
-  // status, buff e cambi tattici. Frena soprattutto le mosse evolute ad alto
-  // power (il termine power*atk/def domina), il +2 flat salva quelle deboli.
-  const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 70 + 2;
+  // Divisore 58: il giocatore reale (sotto-livello, mosse non ottimali) infligge
+  // ~40% del danno teorico, quindi le lotte gli sembravano lunghissime. Con 58 il
+  // danno sale ~20% e le lotte tornano corte anche per chi non gioca perfetto,
+  // lasciando comunque spazio a status/buff (target ~5-7 turni player-perfetto).
+  const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 58 + 2;
   const random = 0.88 + Math.random() * 0.12;
   const damage = Math.max(1, Math.floor(base * stab * tMult * random));
   return { damage: tMult === 0 ? 0 : damage, crit, typeMult: tMult };
@@ -60,7 +60,11 @@ export function calcDamage(attacker: Combatant, defender: Combatant, move: Move)
 export function catchChance(foe: Monster, ballId: string, extraBonus = 1): number {
   const species = speciesOf(foe);
   const maxHp = statsOf(foe).hp;
-  const hpFactor = 1 - (2 / 3) * (foe.hp / maxHp);
+  // A HP pieno fattore 0.45, a HP quasi a zero fattore ~1.9: indebolire il
+  // bersaglio premia molto di più (prima il cap a 0.333 rendeva la cattura
+  // frustrante anche a 1 HP). hpFrac alto = sano, basso = agli sgoccioli.
+  const hpFrac = foe.hp / maxHp;
+  const hpFactor = 0.45 + (1 - hpFrac) * 1.45;
   const statusBonus = foe.status ? 1.5 : 1;
   const ballBonus = ITEMS[ballId]?.ballBonus ?? 1;
   const rate = (species.catchRate / 255) * hpFactor * statusBonus * ballBonus * extraBonus;

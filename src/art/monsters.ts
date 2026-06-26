@@ -12,10 +12,6 @@ function c(s: string, shift = 0): string {
   return ".".repeat(pad) + s;
 }
 
-function flipV(art: string[]): string[] {
-  return [...art].reverse();
-}
-
 // Riga testa: interno di 12 char (più eventuale colonna capelli esterna).
 function hd(inner: string, side = "."): string {
   return `....${side}o${inner}o${side}....`;
@@ -50,7 +46,6 @@ interface PolOpts {
   sash?: boolean;
   rainbow?: boolean;
   kid?: boolean;
-  flip?: boolean;
 }
 
 function caricature(opts: PolOpts): Pixmap {
@@ -59,20 +54,25 @@ function caricature(opts: PolOpts): Pixmap {
 
   // ---- Capelli / cima della testa ----
   if (opts.halo) {
-    rows.push(c("yyyyyyyyyy"), c(""));
+    // Aureola sopra la testa: niente riga vuota di stacco (prima l'aureola
+    // fluttuava distante dal cranio). Un anello sottile largo quanto la testa.
+    rows.push(c("yyyyyyyyyyyy"));
   }
   if (opts.ears) {
     rows.push("....PPP..........PPP....", "....PPP..........PPP....");
   }
   switch (opts.hairStyle) {
     case "tuft":
-      rows.push(c("hhhhhhhhhhhhh", -2), HEAD_ARC, hd("hhhhhhhhhhhh"), hd("hhsssssssshh"));
+      // Ciuffo (Trumpon): confinato sopra la testa (col 6..17) con leggero flop
+      // a destra, niente più sbordo a sinistra fuori dal cranio.
+      rows.push(c("hhhhhhhhhhhh", 1), HEAD_ARC, hd("hhhhhhhhhhhh"), hd("hhsssssssshh"));
       break;
     case "straw":
-      rows.push(c("h.hhh.hh.hhh.h"), HEAD_ARC, hd("hh.hhhhhh.hh"), hd("hhsssssssshh"));
+      // 12 char allineati al cranio (col 6..17): ciuffi spettinati senza sbordo.
+      rows.push(c("h.hhh.hh.hhh"), HEAD_ARC, hd("hh.hhhhhh.hh"), hd("hhsssssssshh"));
       break;
     case "curly":
-      rows.push(c("hh.hhh.hhh.hh"), HEAD_ARC, hd("hhhhhhhhhhhh"), hd("hhsssssssshh"));
+      rows.push(c("hh.hhh.hhh.h"), HEAD_ARC, hd("hhhhhhhhhhhh"), hd("hhsssssssshh"));
       break;
     case "bob":
     case "long":
@@ -200,10 +200,7 @@ function caricature(opts: PolOpts): Pixmap {
     grid[bodyStart + 5][12] = "t";
   }
 
-  let art = grid.map((r) => r.join(""));
-  if (opts.flip) {
-    art = flipV(art);
-  }
+  const art = grid.map((r) => r.join(""));
 
   const pal: Record<string, string> = {
     o: "#1c2333",
@@ -276,7 +273,7 @@ export const MONSTER_ART: Record<string, Pixmap> = {
   }),
   vannaccix: caricature({
     hair: "#3a3228", hairStyle: "buzz", suit: "#4a6838", suitStyle: "military",
-    mustache: true, brows: true, flip: true
+    mustache: true, brows: true
   }),
   tajanide: caricature({
     hair: "#b8b8c0", hairStyle: "short", suit: "#3a4258", shirt: "#f8f8f0",

@@ -17,7 +17,7 @@ import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, type Monster } from "../monster";
-import { markCaught, markSeen, saveGame, type GameState } from "../state";
+import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
 import { checkAchievements } from "../achievements";
 import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } from "../vehicles";
@@ -117,6 +117,7 @@ export class WorldScene implements Scene {
   private exclaimNpc: RuntimeNpc | null = null;
   private exclaimT = 0;
   private pendingTrainer: TrainerDef | null = null;
+  private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
 
   private askMenu: Menu | null = null;
   private askYes: (() => void) | null = null;
@@ -126,6 +127,9 @@ export class WorldScene implements Scene {
   private transportDestinations: TransportDestination[] = [];
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
+    // Registra lo stato come "attivo" per il salvataggio su chiusura/background
+    // (gestito a livello globale in main.ts).
+    setActiveState(this.state);
     this.loadMap(this.state.pos.mapId);
     if (!this.state.flags["intro-done"]) {
       this.state.flags["intro-done"] = true;
@@ -144,6 +148,10 @@ export class WorldScene implements Scene {
   private loadMap(mapId: string): void {
     this.map = MAPS[mapId];
     this.npcs = this.map.npcs.map((npc) => this.makeRuntimeNpc(npc));
+    // Cambiando mappa la vecchia lista NPC viene sostituita: scarta il ref allo
+    // sprite del PG vagante (altrimenti puntereebbe a un NPC non più disegnato).
+    this.wanderNpc = null;
+    this.exclaimNpc = null;
     // RIVALE GIANNI ricorrente: se la tappa corrente è su questa mappa e non
     // l'hai ancora battuta, aggiungi il suo NPC (con linea di vista).
     const stage = rivalStageFor(this.state.rivalWins);
@@ -160,6 +168,10 @@ export class WorldScene implements Scene {
     // Multiplayer: entra nella room di questa mappa (vedi solo chi è qui).
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
+    // Autosave a ogni cambio mappa: warp e bordi nord/sud aggiornano state.pos e
+    // chiamano loadMap, ma prima nessuno salvava — chiudendo l'app si tornava a
+    // un punto vecchio, spesso su un'altra mappa. saveGame è try/catch: sicuro.
+    saveGame(this.state);
   }
 
   // Crea lo stato runtime di un NPC. Decide se può vagare: esplicito via
@@ -404,6 +416,14 @@ export class WorldScene implements Scene {
             // registriamo tra i trainer sconfitti.
             if (result === "win" && !def.id.startsWith("wander:")) {
               this.state.defeatedTrainers.push(def.id);
+            }
+            // Rimuovi lo sprite temporaneo del PG vagante a fine lotta (qualsiasi
+            // esito): la vittoria su un "wander:*" non ricarica la mappa, quindi
+            // senza questo l'NPC resterebbe sullo schermo per sempre.
+            if (this.wanderNpc) {
+              const gone = this.wanderNpc;
+              this.npcs = this.npcs.filter((n) => n !== gone);
+              this.wanderNpc = null;
             }
             this.onBattleEnd(result);
             after?.(result);
@@ -911,7 +931,7 @@ export class WorldScene implements Scene {
 
   // ---- Incontri PG casuali su strada ----
 
-  private wanderCooldown = 30; // passi minimi prima del primo/prossimo incontro
+  private wanderCooldown = 50; // passi minimi prima del primo/prossimo incontro
   private recentWanderers: string[] = []; // ultimi PG, per non ripeterli subito
 
   private checkWanderingChallenger(): boolean {
@@ -925,24 +945,64 @@ export class WorldScene implements Scene {
       this.wanderCooldown -= 1;
       return false;
     }
-    // ~3% per passo una volta scaduto il cooldown (raro, non invadente).
-    if (Math.random() > 0.03) {
+    // ~2% per passo una volta scaduto il cooldown (raro, non invadente).
+    if (Math.random() > 0.02) {
       return false;
     }
     const def = pickWanderer(this.state, this.recentWanderers, Math.random());
     if (!def) {
       return false;
     }
-    this.wanderCooldown = 45 + Math.floor(Math.random() * 30);
+    // Serve una cella libera ACCANTO al player dove far comparire il PG: senza
+    // sprite l'incontro sembrerebbe partire "dal nulla" (la nuvoletta "!" si
+    // disegna solo sopra un NPC reale). Se è tutto occupato, niente incontro.
+    const spot = this.freeAdjacentSpot();
+    if (!spot) {
+      return false;
+    }
+    this.wanderCooldown = 70 + Math.floor(Math.random() * 40);
     this.recentWanderers.push(def.id);
     if (this.recentWanderers.length > 3) {
       this.recentWanderers.shift();
     }
     const trainer = this.buildWandererTrainer(def);
+    // Crea lo sprite del PG vagante rivolto verso il player e mostragli la "!".
+    const npc = this.makeRuntimeNpc({
+      id: `wanderer-${def.id}`,
+      pal: def.pal,
+      x: spot.x,
+      y: spot.y,
+      facing: spot.facing
+    });
+    this.npcs.push(npc);
+    this.wanderNpc = npc;
     audio.encounterSting();
+    this.exclaimNpc = npc;
     this.exclaimT = 0.7;
     this.pendingTrainer = trainer;
     return true;
+  }
+
+  // Cella calpestabile e libera adiacente al player, col facing rivolto verso
+  // di lui. Usata per far "spuntare" un PG vagante accanto al giocatore.
+  private freeAdjacentSpot(): { x: number; y: number; facing: Facing } | null {
+    const pos = this.state.pos;
+    // facing dell'NPC = opposto della direzione in cui sta rispetto al player.
+    const opp: Record<Facing, Facing> = { up: "down", down: "up", left: "right", right: "left" };
+    for (const dir of FACINGS) {
+      const d = DIR_DELTA[dir];
+      const nx = pos.x + d.dx;
+      const ny = pos.y + d.dy;
+      const tile = TILES[this.tileAt(nx, ny)];
+      if (!tile || tile.solid) {
+        continue;
+      }
+      if (this.npcs.some((n) => n.x === nx && n.y === ny)) {
+        continue;
+      }
+      return { x: nx, y: ny, facing: opp[dir] };
+    }
+    return null;
   }
 
   private buildWandererTrainer(def: WanderingDef): TrainerDef {

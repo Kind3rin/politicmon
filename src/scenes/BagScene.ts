@@ -132,7 +132,8 @@ export class BagScene implements Scene {
               this.msg.show(["Non avrebbe alcun effetto."]);
               return;
             }
-            mon.hp = Math.min(max, mon.hp + (item.amount ?? 20));
+            const heal = item.percent != null ? Math.ceil(max * item.percent) : (item.amount ?? 20);
+            mon.hp = Math.min(max, mon.hp + heal);
             audio.heal();
             this.consume(itemId);
             this.msg.show([`${item.name} ridà fiato alla campagna!`]);

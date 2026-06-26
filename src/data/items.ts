@@ -3,6 +3,7 @@ export interface Item {
   name: string;
   kind: "ball" | "heal" | "cure" | "evo" | "tm" | "key";
   amount?: number;
+  percent?: number; // cura come % dei PV max (0-1); ha priorità su amount
   ballBonus?: number; // moltiplicatore di cattura
   price?: number; // prezzo al Discount Elettorale
   moveId?: string; // mossa insegnata dalle DIRETTIVE DI PARTITO (kind "tm")
@@ -20,16 +21,16 @@ export const ITEMS: Record<string, Item> = {
     desc: "Scheda di lista bloccata: il candidato entra, che lo voglia o no."
   },
   caffe: {
-    id: "caffe", name: "CAFFÈ DEL BAR SPORT", kind: "heal", amount: 25, price: 50,
-    desc: "Ristretto, bollente, con dibattito incluso. Recupera 25 PV."
+    id: "caffe", name: "CAFFÈ DEL BAR SPORT", kind: "heal", percent: 0.3, amount: 30, price: 50,
+    desc: "Ristretto, bollente, con dibattito incluso. Recupera il 30% dei PV."
   },
   spritz: {
-    id: "spritz", name: "SPRITZ APERITIVO", kind: "heal", amount: 55, price: 150,
-    desc: "L'arancione che unisce il paese. Recupera 55 PV."
+    id: "spritz", name: "SPRITZ APERITIVO", kind: "heal", percent: 0.6, amount: 70, price: 150,
+    desc: "L'arancione che unisce il paese. Recupera il 60% dei PV."
   },
   mojito: {
-    id: "mojito", name: "MOJITO DEL PAPEETE", kind: "heal", amount: 60, price: 600,
-    desc: "Ghiaccio, menta e pieni poteri. Recupera 60 PV e tutta l'autostima."
+    id: "mojito", name: "MOJITO DEL PAPEETE", kind: "heal", percent: 1, amount: 999, price: 600,
+    desc: "Ghiaccio, menta e pieni poteri. Recupera tutti i PV e l'autostima."
   },
   maalox: {
     id: "maalox", name: "MAALOX DI STATO", kind: "cure", price: 160,

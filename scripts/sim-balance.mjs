@@ -5,11 +5,11 @@
 // ---------------------- DATA (copied from src/data) ----------------------
 
 const SPECIES = {
-  giorgetta: { types: ["DESTRA"], base: { hp: 50, atk: 58, def: 55, spc: 56, spd: 50 }, learnset: [[1,"comizio"],[1,"slogan"],[1,"radici"],[5,"iosonogiorgia"],[11,"giravolta"],[13,"blocconavale"]] },
+  giorgetta: { types: ["DESTRA"], base: { hp: 50, atk: 58, def: 55, spc: 56, spd: 50 }, learnset: [[1,"radici"],[1,"comizio"],[1,"slogan"],[5,"iosonogiorgia"],[11,"giravolta"],[13,"blocconavale"]] },
   giorgiagon: { types: ["DESTRA"], base: { hp: 76, atk: 84, def: 76, spc: 95, spd: 75 }, learnset: [[1,"comizio"],[1,"radici"],[16,"fiammatricolore"],[22,"blocconavale"],[28,"decreto"]] },
-  ellyna: { types: ["SINISTRA"], base: { hp: 49, atk: 54, def: 57, spc: 58, spd: 52 }, learnset: [[1,"comizio"],[1,"ztl"],[1,"corteo"],[5,"greenwashing"],[11,"sciopero"],[13,"scissione"]] },
+  ellyna: { types: ["SINISTRA"], base: { hp: 49, atk: 54, def: 57, spc: 58, spd: 52 }, learnset: [[1,"corteo"],[1,"comizio"],[1,"ztl"],[5,"greenwashing"],[11,"sciopero"],[13,"scissione"]] },
   schleinix: { types: ["SINISTRA","VERDE"], base: { hp: 74, atk: 74, def: 78, spc: 98, spd: 74 }, learnset: [[1,"corteo"],[1,"ztl"],[16,"greenwashing"],[20,"sciopero"],[26,"scissione"]] },
-  renzino: { types: ["CENTRO"], base: { hp: 49, atk: 57, def: 52, spc: 50, spd: 62 }, learnset: [[1,"comizio"],[1,"promessa"],[1,"giravolta"],[5,"terzopolo"],[11,"inciucio"],[13,"staisereno"]] },
+  renzino: { types: ["CENTRO"], base: { hp: 49, atk: 57, def: 52, spc: 50, spd: 62 }, learnset: [[1,"giravolta"],[1,"comizio"],[1,"promessa"],[5,"terzopolo"],[11,"inciucio"],[13,"staisereno"]] },
   renzilla: { types: ["CENTRO"], base: { hp: 71, atk: 88, def: 72, spc: 80, spd: 90 }, learnset: [[1,"giravolta"],[1,"terzopolo"],[16,"staisereno"],[22,"inciucio"],[28,"editoriale"]] },
   salvinott: { types: ["POPULISMO"], base: { hp: 50, atk: 56, def: 42, spc: 40, spd: 46 }, learnset: [[1,"comizio"],[3,"slogan"],[7,"citofonata"],[12,"ruspa"]] },
   salvinator: { types: ["POPULISMO","DESTRA"], base: { hp: 75, atk: 88, def: 62, spc: 58, spd: 68 }, learnset: [[1,"ruspa"],[1,"citofonata"],[18,"mojito"],[23,"blocconavale"],[28,"vaffa"]] },
@@ -118,7 +118,7 @@ function statsOf(speciesId, level) {
   const lv = level;
   return {
     hp: Math.floor((base.hp * 3 * lv) / 100) + lv * 2 + 16,
-    atk: Math.floor((base.atk * 2 * lv) / 100) + 5,
+    atk: Math.floor((base.atk * 2 * lv) / 100) + lv + 5,
     def: Math.floor((base.def * 2 * lv) / 100) + lv + 5,
     spc: Math.floor((base.spc * 2 * lv) / 100) + lv + 5,
     spd: Math.floor((base.spd * 2 * lv) / 100) + 5,

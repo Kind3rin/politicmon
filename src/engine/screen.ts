@@ -35,9 +35,27 @@ export class Screen {
     const availW = Math.max(240, viewportW - (touch ? 38 : 28));
     const availH = Math.max(160, viewportH - reservedH);
     const rawScale = Math.min(availW / VIEW_W, availH / VIEW_H);
-    const scale = touch ? Math.max(1, rawScale) : Math.max(1, Math.floor(rawScale));
+    // Scala INTERA anche su touch: una scala frazionaria su upscale nearest-
+    // neighbour produce pixel di dimensioni diverse (shimmering). Meglio un po'
+    // di letterbox in più ma pixel uniformi.
+    const scale = Math.max(1, Math.floor(rawScale));
+
+    // Backing store ad alta densità: senza tener conto di devicePixelRatio, su
+    // ogni schermo HiDPI/Retina (tutti i telefoni moderni) il browser sfoca il
+    // bitmap 240x180. Disegniamo a risoluzione fisica e teniamo le coordinate
+    // logiche a 240x180 via setTransform.
+    const dpr = Math.max(1, Math.round(window.devicePixelRatio || 1));
+    const bw = VIEW_W * scale * dpr;
+    const bh = VIEW_H * scale * dpr;
+    if (this.canvas.width !== bw || this.canvas.height !== bh) {
+      this.canvas.width = bw;
+      this.canvas.height = bh;
+    }
     this.canvas.style.width = `${VIEW_W * scale}px`;
     this.canvas.style.height = `${VIEW_H * scale}px`;
+    // Cambiare width/height resetta il contesto: ri-applica transform e smoothing.
+    this.ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
+    this.ctx.imageSmoothingEnabled = false;
   }
 
   clear(color: string): void {

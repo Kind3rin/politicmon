@@ -39,7 +39,9 @@ export function statsOf(mon: Monster): Stats {
   // 85-110) nel tardo gioco, dove prima gli scontri tornavano a 2 turni.
   return {
     hp: Math.floor((base.hp * 3 * lv) / 100) + lv + 14,
-    atk: Math.floor((base.atk * 2 * lv) / 100) + 5,
+    // atk scala con +lv come def/spc: prima era +5 flat e l'offesa restava
+    // indietro rispetto alle difese gonfiate, affamando il danno early-game.
+    atk: Math.floor((base.atk * 2 * lv) / 100) + lv + 5,
     def: Math.floor((base.def * 2 * lv) / 100) + lv + 5,
     spc: Math.floor((base.spc * 2 * lv) / 100) + lv + 5,
     spd: Math.floor((base.spd * 2 * lv) / 100) + 5

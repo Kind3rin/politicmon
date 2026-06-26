@@ -474,13 +474,13 @@ export class BattleScene implements Scene {
     // ONDA DEL CONSENSO (feature originale): l'EXP scala coi SONDAGGI.
     // Popolarità alta = i tuoi crescono in fretta; impopolarità = penalità.
     const sond = this.state.sondaggi;
-    const wave = sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.85;
+    const wave = sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.92;
     const gained = Math.max(1, Math.floor(base * (istruzione ? 1.15 : 1) * wave));
     steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
     if (wave > 1) {
       steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
     } else if (wave < 1) {
-      steps.push({ text: `Sondaggi a terra (${sond}%): l'entusiasmo scarseggia (-15%).` });
+      steps.push({ text: `Sondaggi a terra (${sond}%): l'entusiasmo scarseggia (-8%).` });
     }
     if (istruzione) {
       steps.push({ text: "Il MIN. ISTRUZIONE ha preparato la squadra: bonus del 15%!" });
@@ -783,10 +783,9 @@ export class BattleScene implements Scene {
       steps.push({
         text: `Usi ${item.name} su ${this.playerName()}!`,
         run: () => {
-          this.player.mon.hp = Math.min(
-            statsOf(this.player.mon).hp,
-            this.player.mon.hp + (item.amount ?? 20)
-          );
+          const max = statsOf(this.player.mon).hp;
+          const heal = item.percent != null ? Math.ceil(max * item.percent) : (item.amount ?? 20);
+          this.player.mon.hp = Math.min(max, this.player.mon.hp + heal);
           audio.heal();
         },
         waitHp: true
@@ -896,8 +895,11 @@ export class BattleScene implements Scene {
           if (this.state.party.length < 6) {
             this.state.party.push(this.foe.mon);
           } else {
+            // Squadra piena: lo si conserva nel box (CIRCOLO DI PARTITO) invece
+            // di perderlo. Prima il box non esisteva e il mostro spariva.
+            this.state.boxed.push(this.foe.mon);
             this.pushFront([
-              { text: "La squadra è piena: viene spedito al CIRCOLO DI PARTITO a fare tesseramenti." }
+              { text: "La squadra è piena: viene spedito al CIRCOLO DI PARTITO (resta nel box)." }
             ]);
           }
           saveGame(this.state);

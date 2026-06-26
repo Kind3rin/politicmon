@@ -56,6 +56,57 @@ export const WANDERERS: WanderingDef[] = [
     intro: ["LOL ti distruggo nei commenti.", "Anzi no, qui di persona. PREPARATI."],
     defeat: ["Era ironico. Ovviamente. Bloccato."],
     species: ["grillix", "salvinott", "muskrat"], size: 2, money: 480, minBadges: 2
+  },
+  {
+    id: "w-rider", name: "RIDER IN SCIOPERO", pal: "kid",
+    intro: ["Consegno volantini, non consensi.", "Ma oggi sciopero pure contro di te!"],
+    defeat: ["Ricomincio a pedalare. Verso il nulla."],
+    species: ["grillix", "muskrat"], size: 1, money: 260, minBadges: 0
+  },
+  {
+    id: "w-prof", name: "PROF UNIVERSITARIO", pal: "granny",
+    intro: ["In aula questa tesi la demolivo in dieci minuti.", "Vediamo se regge alla prova dei fatti."],
+    defeat: ["Interessante. Ci scrivo un paper."],
+    species: ["calendauro", "ursulax"], size: 2, money: 480, minBadges: 1
+  },
+  {
+    id: "w-sindaco", name: "SINDACO DI PROVINCIA", pal: "guard",
+    intro: ["Nel mio comune comando io.", "Le buche le ho promesse, mica asfaltate!"],
+    defeat: ["Metto la sconfitta a bilancio. Pareggio creativo."],
+    species: ["salvinott", "tajanide", "contemorfo"], size: 2, money: 520, minBadges: 2,
+    reward: { itemId: "scheda", qty: 2 }
+  },
+  {
+    id: "w-sovranista", name: "SOVRANISTA DA BAR", pal: "aide",
+    intro: ["Ce lo chiede l'Europa? E io dico no!", "Lo dimostro coi miei POLITICMON, non con le slide."],
+    defeat: ["Complotto di Bruxelles. Ovvio."],
+    species: ["vannaccix", "salvinott", "grillix"], size: 2, money: 540, minBadges: 2
+  },
+  {
+    id: "w-eurocrate", name: "EUROCRATE GRIGIO", pal: "journalist",
+    intro: ["Allegato A, comma 4, paragrafo 7.", "La sfida è conforme. Proceda pure a perdere."],
+    defeat: ["Verbalizzo l'anomalia in 24 lingue."],
+    species: ["ursulax", "macronfox", "calendauro"], size: 3, money: 880, minBadges: 3,
+    reward: { itemId: "schedona", qty: 1 }
+  },
+  {
+    id: "w-startupparo", name: "STARTUPPARO SERIALE", pal: "influencer",
+    intro: ["Ho una app che disrompe la democrazia.", "Round di finanziamento: il tuo consenso. Pitch time!"],
+    defeat: ["Pivotiamo. La sconfitta era nel business plan."],
+    species: ["muskrat", "macronfox"], size: 2, money: 600, minBadges: 3
+  },
+  {
+    id: "w-pensionato", name: "PENSIONATO ARRABBIATO", pal: "granny",
+    intro: ["Ai miei tempi la politica era seria!", "Adesso ve lo dimostro coi POLITICMON, non col bastone."],
+    defeat: ["Mah. Scrivo al direttore."],
+    species: ["tajanide", "contemorfo"], size: 1, money: 300, minBadges: 0
+  },
+  {
+    id: "w-influencer2", name: "VIRGINIA DA REELS", pal: "influencer",
+    intro: ["Sto in diretta, salutate tutti!", "Questo scontro sblocca il prossimo livello di engagement."],
+    defeat: ["Va be', taglio in post-produzione."],
+    species: ["bojoon", "macronfox"], size: 1, money: 320, minBadges: 1,
+    reward: { itemId: "spritz", qty: 1 }
   }
 ];
 

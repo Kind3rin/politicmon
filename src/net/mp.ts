@@ -39,6 +39,37 @@ type PosMsg = { x: number; y: number; facing: Facing };
 // Namespace univoco dell'app (separa Politicmon da altre room sui relay).
 const APP_ID = "politicmon-v1";
 
+// Configurazione ICE per la connessione WebRTC tra peer. Senza un server TURN il
+// solo STUN basta in LAN e con NAT "cone", ma fallisce con NAT simmetrico/CGNAT
+// (la maggior parte delle reti mobili e molti router domestici): nessuna coppia
+// di candidate riesce a collegarsi e il multiplayer "funziona solo in locale".
+// Il TURN fa da relay quando il collegamento diretto è impossibile; la voce
+// `turns:443?transport=tcp` salva pure le reti che bloccano l'UDP.
+//
+// Le credenziali di default sono il relay pubblico demo OpenRelay (quota bassa,
+// ok per sbloccare subito). Per la versione pubblica registrare un TURN gratuito
+// (Metered/Cloudflare/Twilio) e passarlo via env senza hardcodarlo.
+const TURN_URL = import.meta.env.VITE_TURN_URL as string | undefined;
+const TURN_USER = import.meta.env.VITE_TURN_USER as string | undefined;
+const TURN_CRED = import.meta.env.VITE_TURN_CRED as string | undefined;
+
+const ICE_SERVERS: RTCIceServer[] = [
+  { urls: ["stun:stun.l.google.com:19302", "stun:stun.cloudflare.com:3478"] },
+  TURN_URL && TURN_USER && TURN_CRED
+    ? { urls: TURN_URL, username: TURN_USER, credential: TURN_CRED }
+    : {
+        urls: [
+          "turn:openrelay.metered.ca:80",
+          "turn:openrelay.metered.ca:443",
+          "turns:openrelay.metered.ca:443?transport=tcp",
+        ],
+        username: "openrelayproject",
+        credential: "openrelayproject",
+      },
+];
+
+const RTC_CONFIG: RTCConfiguration = { iceServers: ICE_SERVERS };
+
 class MultiplayerClient {
   private room: Room | null = null;
   private roomMap: string | null = null;
@@ -141,7 +172,12 @@ class MultiplayerClient {
     this.roomMap = mapId;
     let room: Room;
     try {
-      room = joinRoom({ appId: APP_ID }, `map-${mapId}`);
+      room = joinRoom({ appId: APP_ID, rtcConfig: RTC_CONFIG }, `map-${mapId}`, {
+        onJoinError: (details) => {
+          // Errore in fase di join alla room (relay irraggiungibile, ecc.).
+          console.warn("[mp] join error", details.error);
+        },
+      });
     } catch {
       // WebRTC/relay non disponibili: il gioco resta in singleplayer.
       this.connected = false;

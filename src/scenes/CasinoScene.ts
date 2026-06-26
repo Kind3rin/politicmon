@@ -312,7 +312,11 @@ export class CasinoScene implements Scene {
       { d: 5, money: 200, lines: ["Barzellette, cori e qualche stretta di mano.", "Il pubblico si diverte: +5 sondaggi, +200€."] },
       { d: -6, money: -200, lines: ["Un video imbarazzante finisce online entro l'alba.", "Scandalo e cause: -6 sondaggi e -200€ di avvocati."] },
       { d: -3, money: 0, lines: ["Conto salatissimo, polemiche sui rimborsi.", "I retroscenisti rosicchiano: -3 sondaggi."] },
-      { d: 0, money: 0, lines: ["Serata fiacca, nessuno ti riconosce.", "Zero gossip. FICHE buttate."] }
+      { d: 0, money: 0, lines: ["Serata fiacca, nessuno ti riconosce.", "Zero gossip. FICHE buttate."] },
+      { d: 6, money: 0, lines: ["Un imitatore ti scambia per il vero leader.", "Foto coi fan dell'imitatore: +6 sondaggi, gratis."] },
+      { d: -4, money: 150, lines: ["Tavolo coi soliti palazzinari: brindisi e strette di mano.", "+150€ di 'donazioni', ma qualcuno fotografa: -4 sondaggi."] },
+      { d: 2, money: -100, lines: ["Karaoke istituzionale: canti l'inno fuori tempo.", "Simpatico ma stonato: +2 sondaggi, -100€ di sala."] },
+      { d: -2, money: 0, lines: ["Discorso troppo lungo: metà sala si addormenta.", "Il video del russare gira: -2 sondaggi."] }
     ];
     const ev = events[Math.floor(Math.random() * events.length)];
     const now = addSondaggi(this.state, ev.d);

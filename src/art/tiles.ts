@@ -96,11 +96,11 @@ const treeArt = rows(
   "...ooLLLLLLoo...",
   "..oLLLLLLLLddo..",
   ".oLLLLLLLLddddo.",
-  ".oLLLLLLLddddro.",
-  "oLLLLLLLddddddro",
-  "oLLLLLLddddddrro",
-  "oLLLLLdddddddro.",
-  ".oLLLddddddro...",
+  ".oLLLLLLLdddddo.",
+  "oLLLLLLLdddddddo",
+  "oLLLLLLddddddddo",
+  "oLLLLLddddddddo.",
+  ".oLLLdddddddo...",
   "..ooLdddddoo....",
   "....oottoo......",
   ".....obto.......",
@@ -125,7 +125,7 @@ const fenceArt = rows(
   ".obbooooooobbbo.",
   ".obbo......obbo.",
   ".oboo......oboo.",
-  "..o..........o.",
+  "..o..........o..",
   "................"
 );
 

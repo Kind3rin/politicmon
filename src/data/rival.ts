@@ -87,8 +87,11 @@ export function buildRivalStageTeam(
   const evoRule = SPECIES[counterBase].evolutions?.find((r) => r.level !== undefined);
   const ace = evoRule && stage.level >= (evoRule.level ?? 99) ? evoRule.id : counterBase;
 
-  // Riempitivi a tema "carrierista": grillix (trasformista) e contemorfo (blob).
-  const fillers = ["grillix", "contemorfo", "bojoon"];
+  // Riempitivi a tema "carrierista trasformista": pool ampio scorrevole per
+  // stage, così i 4 rematch non mostrano sempre la stessa squadra.
+  const fillerPool = ["grillix", "contemorfo", "bojoon", "calendauro", "macronfox", "tajanide"];
+  const offset = Math.max(0, stage.showAfterWins - 1);
+  const fillers = [...fillerPool.slice(offset), ...fillerPool.slice(0, offset)];
   const team: Array<[string, number]> = [];
   for (let i = 0; i < stage.size - 1; i += 1) {
     const sp = fillers[i % fillers.length];

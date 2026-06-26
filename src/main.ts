@@ -4,6 +4,7 @@ import { playIntro } from "./engine/intro";
 import { initPwaInstall } from "./engine/pwa";
 import { mp } from "./net/mp";
 import { loadNick } from "./net/profile";
+import { flushActiveState } from "./game/state";
 import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
@@ -67,6 +68,10 @@ document.addEventListener("pointerdown", unlock);
 document.addEventListener("keydown", unlock);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
+    // Salva PRIMA di mettere in pausa: su mobile l'OS può uccidere la scheda
+    // in background senza altri eventi, e tutto il progresso non salvato
+    // andrebbe perso.
+    flushActiveState();
     audio.pauseForLifecycle();
   } else {
     audio.resumeForLifecycle();
@@ -76,9 +81,15 @@ document.addEventListener("visibilitychange", () => {
 // non solo quando la scheda viene nascosta.
 window.addEventListener("blur", () => audio.pauseForLifecycle());
 window.addEventListener("focus", () => audio.resumeForLifecycle());
-window.addEventListener("pagehide", () => audio.destroy());
+window.addEventListener("pagehide", () => {
+  flushActiveState();
+  audio.destroy();
+});
 window.addEventListener("pageshow", () => audio.resumeForLifecycle());
-window.addEventListener("beforeunload", () => audio.destroy());
+window.addEventListener("beforeunload", () => {
+  flushActiveState();
+  audio.destroy();
+});
 
 let last = performance.now();
 

@@ -40,7 +40,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["DESTRA"],
     base: { hp: 50, atk: 58, def: 55, spc: 56, spd: 50 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "comizio"], [1, "slogan"], [1, "radici"], [5, "iosonogiorgia"], [11, "giravolta"], [13, "blocconavale"]],
+    learnset: [[1, "radici"], [1, "comizio"], [1, "slogan"], [5, "iosonogiorgia"], [11, "giravolta"], [13, "blocconavale"]],
     evolutions: [{ id: "giorgiagon", level: 16 }],
     dexLine: "URLA IL PROPRIO NOME OGNI MATTINA ALLO SPECCHIO. SE NESSUNO LA INTERROMPE, SI EVOLVE."
   }),
@@ -57,7 +57,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["SINISTRA"],
     base: { hp: 49, atk: 54, def: 57, spc: 58, spd: 52 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "comizio"], [1, "ztl"], [1, "corteo"], [5, "greenwashing"], [11, "sciopero"], [13, "scissione"]],
+    learnset: [[1, "corteo"], [1, "comizio"], [1, "ztl"], [5, "greenwashing"], [11, "sciopero"], [13, "scissione"]],
     evolutions: [{ id: "schleinix", level: 16 }],
     dexLine: "GATTINA GENTILE. PASSA PIÙ TEMPO A DISCUTERE CON LE ALTRE ELLYNA CHE COL NEMICO."
   }),
@@ -74,7 +74,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["CENTRO"],
     base: { hp: 49, atk: 57, def: 52, spc: 50, spd: 62 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "comizio"], [1, "promessa"], [1, "giravolta"], [5, "terzopolo"], [11, "inciucio"], [13, "staisereno"]],
+    learnset: [[1, "giravolta"], [1, "comizio"], [1, "promessa"], [5, "terzopolo"], [11, "inciucio"], [13, "staisereno"]],
     evolutions: [{ id: "renzilla", level: 16 }],
     dexLine: "SORRIDE SEMPRE. SE GLI STRINGI LA ZAMPA, CONTA LE DITA E POI FONDA UN PARTITO NUOVO."
   }),
@@ -187,7 +187,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 90, atk: 90, def: 88, spc: 70, spd: 58 },
     catchRate: 5, expYield: 245,
     learnset: [[1, "comizio"], [1, "tavololungo"], [16, "gasdotto"], [24, "dossier"], [30, "blocconavale"]],
-    dexLine: "GOVERNA DA SEMPRE E PER SEMPRE. CHI LO INTERVISTA SIEDE A SEI METRI DI DISTANZA."
+    dexLine: "TIENE IL DITO SUL RUBINETTO DEL GAS. D'INVERNO L'EUROPA RICEVE LA BOLLETTA E TREMA."
   }),
   xipanda: S({
     id: "xipanda", dexNum: 19, name: "XIPANDA", category: "PANDA PIANIFICATORE",
@@ -236,7 +236,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 20, expYield: 200,
     learnset: [[1, "tweet"], [1, "memedoge"], [14, "grafico"], [20, "razzox"], [26, "spread"]],
     evolutions: [{ id: "marsrat", item: "tessera" }],
-    dexLine: "HA COMPRATO UN SOCIAL PER POSTARE MEME IN PACE. VUOLE MORIRE SU MARTE, POSSIBILMENTE NON SUBITO."
+    dexLine: "ADDESTRA UNA IA A RISPONDERE AL POSTO SUO. POI LITIGA COL SUO STESSO ALGORITMO ALLE 3 DI NOTTE."
   }),
   // ---- Evoluzioni avanzate (rami e tessere) ----
   vaffenix: S({

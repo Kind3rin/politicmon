@@ -451,12 +451,12 @@ export const MAPS: Record<string, MapDef> = {
       { x: 20, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.18,
+    // BORGO = politica italiana di base. Zona-casa di salvinott e grillix.
     encounters: [
-      { speciesId: "salvinott", weight: 40, minLv: 2, maxLv: 4 },
-      { speciesId: "grillix", weight: 20, minLv: 3, maxLv: 5 },
-      { speciesId: "tajanide", weight: 16, minLv: 3, maxLv: 5 },
-      { speciesId: "bojoon", weight: 14, minLv: 4, maxLv: 5 },
-      { speciesId: "contemorfo", weight: 10, minLv: 4, maxLv: 5 }
+      { speciesId: "salvinott", weight: 38, minLv: 2, maxLv: 4 },
+      { speciesId: "grillix", weight: 26, minLv: 3, maxLv: 5 },
+      { speciesId: "tajanide", weight: 22, minLv: 3, maxLv: 5 },
+      { speciesId: "contemorfo", weight: 14, minLv: 4, maxLv: 5 }
     ],
     signs: [
       {
@@ -556,15 +556,14 @@ export const MAPS: Record<string, MapDef> = {
       { x: 6, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.18,
+    // MEDIOPOLI = media/talk-show + destra italiana. Zona-casa di vannaccix e
+    // calendauro. contemorfo qui è la versione più alta di livello (come in
+    // Pokémon la stessa specie ricompare più forte nella zona avanzata).
     encounters: [
-      { speciesId: "vannaccix", weight: 20, minLv: 8, maxLv: 11 },
-      { speciesId: "contemorfo", weight: 18, minLv: 8, maxLv: 11 },
-      { speciesId: "calendauro", weight: 16, minLv: 9, maxLv: 12 },
-      { speciesId: "bojoon", weight: 15, minLv: 9, maxLv: 12 },
-      { speciesId: "macronfox", weight: 10, minLv: 10, maxLv: 12 },
-      { speciesId: "grillix", weight: 8, minLv: 9, maxLv: 12 },
-      { speciesId: "salvinott", weight: 6, minLv: 8, maxLv: 10 },
-      { speciesId: "muskrat", weight: 3, minLv: 12, maxLv: 13 }
+      { speciesId: "vannaccix", weight: 32, minLv: 8, maxLv: 11 },
+      { speciesId: "calendauro", weight: 26, minLv: 9, maxLv: 12 },
+      { speciesId: "contemorfo", weight: 24, minLv: 9, maxLv: 12 },
+      { speciesId: "macronfox", weight: 18, minLv: 10, maxLv: 12 }
     ],
     signs: [
       {
@@ -656,15 +655,15 @@ export const MAPS: Record<string, MapDef> = {
       { x: 7, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.18,
+    // EUROTOWN = leader europei/esteri. Zona-casa di macronfox, zelenskir,
+    // bojoon (UK), ursulax. draghimon tolto dal wild: resta SOLO il leggendario
+    // gift al COLLE, così l'evento riacquista valore.
     encounters: [
-      { speciesId: "macronfox", weight: 24, minLv: 12, maxLv: 15 },
-      { speciesId: "zelenskir", weight: 20, minLv: 13, maxLv: 15 },
-      { speciesId: "bojoon", weight: 15, minLv: 12, maxLv: 15 },
-      { speciesId: "tajanide", weight: 14, minLv: 12, maxLv: 14 },
-      { speciesId: "calendauro", weight: 12, minLv: 12, maxLv: 15 },
-      { speciesId: "ursulax", weight: 5, minLv: 15, maxLv: 15 },
-      { speciesId: "draghimon", weight: 5, minLv: 16, maxLv: 16 },
-      { speciesId: "muskrat", weight: 5, minLv: 14, maxLv: 15 }
+      { speciesId: "macronfox", weight: 28, minLv: 12, maxLv: 15 },
+      { speciesId: "zelenskir", weight: 24, minLv: 13, maxLv: 15 },
+      { speciesId: "bojoon", weight: 20, minLv: 12, maxLv: 15 },
+      { speciesId: "ursulax", weight: 16, minLv: 14, maxLv: 15 },
+      { speciesId: "calendauro", weight: 12, minLv: 13, maxLv: 15 }
     ],
     signs: [
       {
@@ -737,16 +736,14 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     encounterRate: 0.20,
+    // CAPUT MUNDI = potenze mondiali. La "vetrina": 4 esclusive (putingrad,
+    // xipanda, trumpon e il rarissimo mattarellux) + muskrat zona-casa.
     encounters: [
-      { speciesId: "zelenskir", weight: 18, minLv: 15, maxLv: 18 },
-      { speciesId: "muskrat", weight: 16, minLv: 15, maxLv: 18 },
-      { speciesId: "vannaccix", weight: 13, minLv: 15, maxLv: 18 },
-      { speciesId: "macronfox", weight: 10, minLv: 15, maxLv: 18 },
-      { speciesId: "putingrad", weight: 8, minLv: 18, maxLv: 18 },
-      { speciesId: "xipanda", weight: 8, minLv: 18, maxLv: 18 },
-      { speciesId: "draghimon", weight: 6, minLv: 17, maxLv: 18 },
-      { speciesId: "trumpon", weight: 5, minLv: 18, maxLv: 18 },
-      { speciesId: "grillix", weight: 4, minLv: 16, maxLv: 18 },
+      { speciesId: "muskrat", weight: 24, minLv: 15, maxLv: 18 },
+      { speciesId: "putingrad", weight: 16, minLv: 18, maxLv: 18 },
+      { speciesId: "xipanda", weight: 16, minLv: 18, maxLv: 18 },
+      { speciesId: "trumpon", weight: 14, minLv: 18, maxLv: 18 },
+      { speciesId: "zelenskir", weight: 14, minLv: 16, maxLv: 18 },
       { speciesId: "mattarellux", weight: 1, minLv: 20, maxLv: 20 }
     ],
     signs: [
@@ -975,14 +972,15 @@ export const MAPS: Record<string, MapDef> = {
       { x: 13, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.20,
+    // STRETTO = endgame meme italiano. L'UNICO posto dove pescare salvinator
+    // selvatico e — novità — capitanone allo stato brado (prima solo evo-tessera).
+    // Un vero motivo per venire qui: roba che non trovi altrove.
     encounters: [
-      { speciesId: "salvinott", weight: 28, minLv: 19, maxLv: 21 },
-      { speciesId: "vannaccix", weight: 18, minLv: 20, maxLv: 22 },
-      { speciesId: "grillix", weight: 16, minLv: 19, maxLv: 22 },
-      { speciesId: "contemorfo", weight: 12, minLv: 20, maxLv: 22 },
-      { speciesId: "salvinator", weight: 12, minLv: 21, maxLv: 23 },
-      { speciesId: "bojoon", weight: 8, minLv: 20, maxLv: 22 },
-      { speciesId: "muskrat", weight: 6, minLv: 21, maxLv: 23 }
+      { speciesId: "salvinator", weight: 34, minLv: 19, maxLv: 22 },
+      { speciesId: "capitanone", weight: 12, minLv: 22, maxLv: 24 },
+      { speciesId: "vannaccix", weight: 22, minLv: 20, maxLv: 22 },
+      { speciesId: "muskrat", weight: 18, minLv: 21, maxLv: 23 },
+      { speciesId: "contemorfo", weight: 14, minLv: 20, maxLv: 22 }
     ],
     signs: [
       {

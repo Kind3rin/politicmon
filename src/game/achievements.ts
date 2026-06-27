@@ -39,6 +39,18 @@ export const ACHIEVEMENTS: Achievement[] = [
     done: (s) => caughtCount(s) >= 6
   },
   {
+    id: "collector2", name: "COLLEZIONISTA",
+    desc: "Recluta almeno 14 POLITICMON diversi.",
+    reward: 1200,
+    done: (s) => caughtCount(s) >= 14
+  },
+  {
+    id: "collector3", name: "TASSIDERMISTA DEL POTERE",
+    desc: "Recluta almeno 22 POLITICMON diversi.",
+    reward: 3000,
+    done: (s) => caughtCount(s) >= 22
+  },
+  {
     id: "first-badge", name: "ESORDIO IN TV",
     desc: "Conquista la tua prima medaglia.",
     reward: 400,

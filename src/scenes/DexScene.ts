@@ -1,6 +1,6 @@
 import { MONSTER_ART } from "../art/monsters";
 import { TYPE_COLORS } from "../data/poltypes";
-import { DEX_ORDER, SPECIES } from "../data/species";
+import { DEX_ORDER, SPECIES, STARTERS } from "../data/species";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -62,8 +62,12 @@ export class DexScene implements Scene {
     }
     const seen = Object.keys(this.state.dex).length;
     const caught = Object.values(this.state.dex).filter((v) => v === "caught").length;
+    // Target REALISTICO: i 2 starter non scelti non sono ottenibili in un save,
+    // quindi escluderli rende il Dex davvero completabile (e quindi motivante).
+    const skipped = STARTERS.filter((s) => s !== this.state.starterId).length;
+    const target = DEX_ORDER.length - skipped;
     screen.text("POLITICDEX", 8, 5, PAPER);
-    screen.textRight(`VISTI ${seen}  ELETTI ${caught}`, VIEW_W - 8, 5, PAPER);
+    screen.textRight(`VISTI ${seen}  ELETTI ${caught}/${target}`, VIEW_W - 8, 5, PAPER);
     screen.panel(4, 15, VIEW_W - 8, VIEW_H - 19);
     const visibleRows = 10;
     for (let row = 0; row < visibleRows; row += 1) {
@@ -86,7 +90,7 @@ export class DexScene implements Scene {
         screen.text("•", VIEW_W - 22, y, GREY);
       }
     }
-    if (caught >= DEX_ORDER.length) {
+    if (caught >= target) {
       screen.text("DEX COMPLETO! ORA SEI IL PALAZZO!", 12, VIEW_H - 12, "#e8c84a");
     }
   }

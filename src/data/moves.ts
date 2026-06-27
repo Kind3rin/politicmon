@@ -162,6 +162,24 @@ export const MOVES: Record<string, Move> = {
     effect: { highCrit: true },
     flavor: "Rassicura la vittima. Poi colpisce. Critico facile."
   }),
+  pacchiafinita: M({
+    id: "pacchiafinita", name: "LA PACCHIA È FINITA", type: "DESTRA", category: "status",
+    power: 0, accuracy: 100, pp: 15,
+    effect: { stat: { key: "atk", stages: -1, target: "foe" } },
+    flavor: "Taglia i sussidi: il nemico stringe la cinghia e cala l'ATTACCO."
+  }),
+  rottamazione: M({
+    id: "rottamazione", name: "ROTTAMAZIONE", type: "CENTRO", category: "fisico",
+    power: 80, accuracy: 85, pp: 10,
+    effect: { highCrit: true },
+    flavor: "Manda in pensione il vecchio. Colpo duro, critico facile."
+  }),
+  noncene: M({
+    id: "noncene", name: "NON CE N'È", type: "POPULISMO", category: "status",
+    power: 0, accuracy: 100, pp: 20,
+    effect: { cureStatus: true, stat: { key: "def", stages: 1, target: "self" } },
+    flavor: "Nega ogni problema con serenità assoluta: si cura e alza la DIFESA."
+  }),
   terzopolo: M({
     id: "terzopolo", name: "TERZO POLO", type: "CENTRO", category: "status",
     power: 0, accuracy: 100, pp: 20,

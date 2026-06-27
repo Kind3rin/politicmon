@@ -10,7 +10,7 @@ import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
 import {
-  evolve, expForLevel, expYield, gainExp, speciesOf, statsOf, type Monster
+  evolve, expForLevel, expYield, gainExp, healMonster, speciesOf, statsOf, type Monster
 } from "../monster";
 import { typeMultiplier } from "../../data/poltypes";
 import {
@@ -119,6 +119,14 @@ export class BattleScene implements Scene {
     this.isLegendary = opts.legendary ?? false;
     this.onEnd = opts.onEnd;
 
+    // Difesa: non mandare mai in campo un mon a 0 HP. Se l'intero party è
+    // svenuto (save corrotto da kill in background mid-lotta) lo si cura, così
+    // non si entra in battaglia con un mostro morto che sviene subito.
+    if (this.state.party.length > 0 && this.state.party.every((m) => m.hp <= 0)) {
+      for (const m of this.state.party) {
+        healMonster(m);
+      }
+    }
     const lead = this.state.party.find((m) => m.hp > 0) ?? this.state.party[0];
     this.player = makeCombatant(lead);
     this.foe = makeCombatant(this.foeTeam[0]);

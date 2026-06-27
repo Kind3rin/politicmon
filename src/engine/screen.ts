@@ -31,30 +31,34 @@ export class Screen {
     const viewport = window.visualViewport;
     const viewportW = viewport?.width ?? window.innerWidth;
     const viewportH = viewport?.height ?? window.innerHeight;
-    const reservedH = touch ? 186 : 30;
-    const availW = Math.max(240, viewportW - (touch ? 38 : 28));
+    const reservedH = touch ? 150 : 30;
+    const availW = Math.max(240, viewportW - (touch ? 16 : 28));
     const availH = Math.max(160, viewportH - reservedH);
     const rawScale = Math.min(availW / VIEW_W, availH / VIEW_H);
-    // Scala INTERA anche su touch: una scala frazionaria su upscale nearest-
-    // neighbour produce pixel di dimensioni diverse (shimmering). Meglio un po'
-    // di letterbox in più ma pixel uniformi.
-    const scale = Math.max(1, Math.floor(rawScale));
 
     // Backing store ad alta densità: senza tener conto di devicePixelRatio, su
     // ogni schermo HiDPI/Retina (tutti i telefoni moderni) il browser sfoca il
     // bitmap 240x180. Disegniamo a risoluzione fisica e teniamo le coordinate
     // logiche a 240x180 via setTransform.
     const dpr = Math.max(1, Math.round(window.devicePixelRatio || 1));
-    const bw = VIEW_W * scale * dpr;
-    const bh = VIEW_H * scale * dpr;
+
+    // Il backing store resta un multiplo INTERO di 240x180 (pixel del bitmap
+    // tutti uguali, niente shimmer). Per la nitidezza lo teniamo denso: arrotonda
+    // per ECCESSO la scala * dpr, così il buffer fisico è sempre >= della box CSS
+    // e il browser fa un downscale pulito (non un upscale nearest sfocato).
+    const backScale = Math.max(1, Math.ceil(rawScale * dpr));
+    const bw = VIEW_W * backScale;
+    const bh = VIEW_H * backScale;
     if (this.canvas.width !== bw || this.canvas.height !== bh) {
       this.canvas.width = bw;
       this.canvas.height = bh;
     }
-    this.canvas.style.width = `${VIEW_W * scale}px`;
-    this.canvas.style.height = `${VIEW_H * scale}px`;
+    // La dimensione CSS usa la scala FRAZIONARIA: riempie lo spazio disponibile
+    // (niente letterbox da floor). Il downscale del buffer denso resta nitido.
+    this.canvas.style.width = `${VIEW_W * rawScale}px`;
+    this.canvas.style.height = `${VIEW_H * rawScale}px`;
     // Cambiare width/height resetta il contesto: ri-applica transform e smoothing.
-    this.ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
+    this.ctx.setTransform(backScale, 0, 0, backScale, 0, 0);
     this.ctx.imageSmoothingEnabled = false;
   }
 

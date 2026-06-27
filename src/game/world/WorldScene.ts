@@ -1182,14 +1182,14 @@ export class WorldScene implements Scene {
       return;
     }
 
-    // Tregua globale: dopo una qualsiasi interruzione si saltano gli eventi
-    // casuali per qualche passo, così non si accavallano in raffica.
-    if (this.interruptCooldown > 0) {
-      this.interruptCooldown -= 1;
-      return;
-    }
-
-    if (this.checkWanderingChallenger()) {
+    // Tregua globale: dopo una qualsiasi interruzione si saltano i PG VAGANTI
+    // per qualche passo, così non si accavallano in raffica. Il cooldown frena
+    // SOLO trainer/vaganti: l'erba alta non ci passa (ha il suo rate come freno
+    // statistico), altrimenti 6 passi morti dopo ogni incontro la renderebbero
+    // quasi sterile.
+    const onCooldown = this.interruptCooldown > 0;
+    if (onCooldown) this.interruptCooldown -= 1;
+    if (!onCooldown && this.checkWanderingChallenger()) {
       this.interruptCooldown = 6;
       return;
     }
@@ -1198,7 +1198,7 @@ export class WorldScene implements Scene {
     const tile = TILES[this.tileAt(pos.x, pos.y)];
     if (tile?.encounter) {
       this.rustles.push({ x: pos.x, y: pos.y, t: 0.4 });
-      const baseRate = this.map.encounterRate ?? 0.06;
+      const baseRate = this.map.encounterRate ?? 0.18;
       // Ministero dell'Interno e PROTEZIONE della famiglia diradano gli incontri.
       const rate =
         baseRate *
@@ -1216,7 +1216,6 @@ export class WorldScene implements Scene {
           roll -= entry.weight;
           if (roll <= 0) {
             const level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
-            this.interruptCooldown = 6;
             this.startWildBattle(entry.speciesId, level);
             return;
           }

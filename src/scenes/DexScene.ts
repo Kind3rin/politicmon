@@ -6,7 +6,8 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { clipToWidth, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { zoneProgress } from "../data/dexzones";
 
 export class DexScene implements Scene {
   private index = 0;
@@ -90,8 +91,16 @@ export class DexScene implements Scene {
         screen.text("•", VIEW_W - 22, y, GREY);
       }
     }
+    // Progresso ZONE: quante complete su 5 + dettaglio della zona corrente.
+    // Spinge a completare il roster locale per la ricompensa.
+    const zp = zoneProgress(this.state.dex);
+    const doneZones = zp.filter((p) => p.done).length;
+    const here = zp.find((p) => p.zone.id === this.state.pos.mapId);
+    const hereTxt = here ? `  -  QUI ${here.zone.name} ${here.caught}/${here.total}` : "";
+    const col = doneZones >= zp.length ? "#e8c84a" : GREY;
+    screen.text(clipToWidth(`ZONE COMPLETE ${doneZones}/${zp.length}${hereTxt}`, 224), 8, VIEW_H - 11, col);
     if (caught >= target) {
-      screen.text("DEX COMPLETO! ORA SEI IL PALAZZO!", 12, VIEW_H - 12, "#e8c84a");
+      screen.text("DEX COMPLETO! ORA SEI IL PALAZZO!", 12, VIEW_H - 21, "#e8c84a");
     }
   }
 

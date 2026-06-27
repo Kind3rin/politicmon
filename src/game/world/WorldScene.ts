@@ -1859,13 +1859,13 @@ export class WorldScene implements Scene {
 
     if (this.transportMenu) {
       screen.panel(0, VIEW_H - 58, VIEW_W, 58);
-      screen.text(this.askLabel, 10, VIEW_H - 46, INK);
+      screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 46, INK);
       this.transportMenu.draw(screen, VIEW_W - 104, VIEW_H - 58 - this.transportMenu.measureHeight(), 96);
     }
 
     if (this.askMenu) {
       screen.panel(0, VIEW_H - 44, VIEW_W, 44);
-      screen.text(this.askLabel, 10, VIEW_H - 32, INK);
+      screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 32, INK);
       this.askMenu.draw(screen, VIEW_W - 64, VIEW_H - 44 - this.askMenu.measureHeight(), 56);
     }
 

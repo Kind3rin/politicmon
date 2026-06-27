@@ -7,7 +7,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { clearSave, hasSave, loadGame, newGameState, type GameState } from "../game/state";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
-import { Menu, GREY, PAPER } from "../ui/widgets";
+import { Menu, clipToWidth, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { WorldScene } from "../game/world/WorldScene";
 
@@ -212,7 +212,8 @@ export class TitleScene implements Scene {
     // Slogan rotante (indice sempre valido, anche se this.time è NaN/negativo).
     const t = Number.isFinite(this.time) ? this.time : 0;
     const slogan = SLOGANS[Math.abs(Math.floor(t / 3)) % SLOGANS.length] ?? SLOGANS[0];
-    screen.textCenter(slogan, VIEW_W / 2, 42, PAPER);
+    // Clamp a 232px: nessuno slogan deve toccare i bordi dello schermo.
+    screen.textCenter(clipToWidth(slogan, 232), VIEW_W / 2, 42, PAPER);
   }
 
   // ---- Podio con i tre starter, ben staccati e con etichetta VOTA. ----

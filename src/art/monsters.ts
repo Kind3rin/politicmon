@@ -340,6 +340,16 @@ export const MONSTER_ART: Record<string, Pixmap> = {
   marsrat: caricature({
     hair: "#5a4632", hairStyle: "buzz", suit: "#4a4e58", suitStyle: "mao",
     glasses: "sun", mouth: "grin", ears: "mouse", pin: "#d23c3c"
+  }),
+  // MEDIOCRATE: mezzobusto da TV — capelli impomatati, completo, occhiali tondi.
+  mediocrate: caricature({
+    hair: "#3a3630", hairStyle: "slick", suit: "#2a3344", shirt: "#f8f8f0",
+    tie: "#b83030", glasses: "round", mouth: "grin", pin: "#e8c030"
+  }),
+  // PONTIGÒR: kaiju da cantiere — casco/giacca hi-vis, occhiali da sole, barba.
+  pontigor: caricature({
+    hair: "#caa030", hairStyle: "buzz", suit: "#c87a1a", suitStyle: "military",
+    glasses: "sun", beard: "#6a5a3a", mouth: "shout", brows: true, pin: "#e8c84a"
   })
 };
 

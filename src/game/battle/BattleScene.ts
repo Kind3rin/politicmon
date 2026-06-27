@@ -9,6 +9,7 @@ import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
+import { zoneProgress } from "../../data/dexzones";
 import {
   evolve, expForLevel, expYield, gainExp, healMonster, speciesOf, statsOf, type Monster
 } from "../monster";
@@ -960,6 +961,24 @@ export class BattleScene implements Scene {
               { text: "La squadra è piena: viene spedito al CIRCOLO DI PARTITO (resta nel box)." }
             ]);
           }
+          // Ricompensa di completamento ZONA: se questa cattura riempie il
+          // roster di una zona (e non l'hai già riscossa), premio + annuncio.
+          for (const p of zoneProgress(this.state.dex)) {
+            if (p.done && !this.state.zoneRewardsClaimed.includes(p.zone.id)) {
+              this.state.zoneRewardsClaimed.push(p.zone.id);
+              const r = p.zone.reward;
+              this.state.bag[r.itemId] = (this.state.bag[r.itemId] ?? 0) + r.qty;
+              if (r.money > 0) {
+                this.state.money += r.money;
+              }
+              addSondaggi(this.state, 5);
+              const moneyTxt = r.money > 0 ? ` e ${r.money} FONDI` : "";
+              this.pushFront([
+                { text: `ZONA ${p.zone.name} COMPLETATA! Tutti i candidati schedati.` },
+                { text: `Ricompensa: ${r.qty}x ${ITEMS[r.itemId].name}${moneyTxt}!` }
+              ]);
+            }
+          }
           saveGame(this.state);
         }
       },
@@ -1476,23 +1495,28 @@ export class BattleScene implements Scene {
         screen.text(moveSummary(move).slice(0, 35), 8, y + 32, INK);
       }
     } else if (this.mode === "campaign") {
-      // Lista mosse da campagna (1 colonna) + costo + descrizione + consenso.
+      // Mosse da campagna in GRIGLIA 2x2 (come il menu LOTTA): libera spazio per
+      // la descrizione COMPLETA su 2 righe, che prima veniva tagliata.
       const items = this.campaignMenu.items;
       const y = VIEW_H - 44;
       for (let i = 0; i < items.length; i += 1) {
-        const cy = y + 4 + i * 9;
+        const cx = 8 + (i % 2) * 116;
+        const cy = y + 4 + Math.floor(i / 2) * 11;
         const color = items[i].disabled ? GREY : INK;
         if (this.campaignMenu.index === i) {
-          screen.text("►", 8, cy, INK);
+          screen.text("►", cx, cy, INK);
         }
-        screen.text(clipToWidth(items[i].label, 140), 16, cy, color);
-        screen.textRight(items[i].rightLabel ?? "", 150, cy, items[i].disabled ? GREY : "#d86868");
+        screen.text(clipToWidth(items[i].label, 86), cx + 8, cy, color);
+        screen.textRight(items[i].rightLabel ?? "", cx + 110, cy, items[i].disabled ? GREY : "#d86868");
       }
       const sel = CAMPAIGN_ACTIONS[this.campaignMenu.index];
       screen.panel(154, 117, 80, 17);
       screen.text(`SOND ${this.state.sondaggi}%`, 160, 122, "#7ad858");
       if (sel) {
-        screen.text(wrapText(sel.desc, 38)[0] ?? "", 8, VIEW_H - 8, GREY);
+        // Descrizione completa su 2 righe: l'effetto della mossa si legge tutto.
+        const lines = wrapText(sel.desc, 38);
+        screen.text(lines[0] ?? "", 8, y + 28, GREY);
+        screen.text(lines[1] ?? "", 8, y + 37, GREY);
       }
     } else if (this.mode === "ask") {
       const lines = wrapText(this.askText, 28);

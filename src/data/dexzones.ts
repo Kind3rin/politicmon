@@ -29,7 +29,9 @@ export const DEX_ZONES: DexZone[] = [
   },
   {
     id: "capitale", name: "CAPUT MUNDI",
-    species: ["muskrat", "putingrad", "xipanda", "trumpon", "mattarellux"],
+    // mattarellux è 1% (leggendario di fatto): escluso dal gate così la zona
+    // resta completabile. Resta comunque catturabile e conta nel Dex globale.
+    species: ["muskrat", "putingrad", "xipanda", "trumpon"],
     reward: { itemId: "mojito", qty: 2, money: 2500 }
   },
   {

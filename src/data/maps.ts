@@ -259,11 +259,11 @@ const COLLE_TILES = [
   "AppppccppppA",
   "AppppccppppA",
   "AppppccppppA",
-  "AAAAAAAAAAAA"
+  "AAAAAggAAAAA"
 ];
 
 const PALAZZO_TILES = [
-  "AAAAAAAAAAAA",
+  "AAAAAggAAAAA",
   "AkpppccpppkA",
   "AppppccppppA",
   "AppppccppppA",
@@ -446,7 +446,7 @@ export const MAPS: Record<string, MapDef> = {
     edges: { north: { toMap: "mediopoli", offsetX: 0 } },
     warps: [
       { x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
-      { x: 23, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
+      { x: 22, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
       { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
       { x: 20, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
     ],
@@ -753,8 +753,14 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["CAPUT MUNDI", "Qui i potenti del mondo vengono a farsi fotografare."]
       },
       {
-        x: 23, y: 12,
+        // Accanto alla porta PALESTRA (6,11), non più scambiata col casinò.
+        x: 7, y: 12,
         lines: ["PALESTRA GLOBAL TOWER", "Capopalestra: MR. TYCOON.", "Medaglia DAZIO. Ingresso gratuito, uscita tassata."]
+      },
+      {
+        // Accanto alla porta del CASINÒ (21,11): prima non c'era nessun cartello.
+        x: 22, y: 12,
+        lines: ["CASINÒ DI PALAZZO", "SLOT DEL CONSENSO e BUNGA BUNGA CLUB. Entra dalla porta."]
       }
     ],
     pickups: [
@@ -1009,6 +1015,10 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-s4", x: 3, y: 7, itemId: "dirVaffa", qty: 1 }
     ],
     npcs: [
+      {
+        id: "scorta-stretto", pal: "guard", x: 8, y: 5, facing: "left", transport: true,
+        lines: ["SCORTA AUTO BLU:", "L'AUTO BLU è qui pronta: ti riporto sulla terraferma quando vuoi."]
+      },
       {
         id: "elevato", pal: "professor", x: 20, y: 3, facing: "down",
         lines: [

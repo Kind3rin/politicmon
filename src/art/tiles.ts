@@ -603,6 +603,9 @@ export const TILES: Record<string, TileDef> = {
   C: { pix: pix(columnArt), solid: true },
   G: { pix: pix(flagArt, { g: "#2f9a4c" }), solid: true },
   D: { pix: pix(doorArt, { m: "#e2dcc8" }), solid: false },
+  // Porta dorata: il varco verso il COLLE (Atto 2). Sempre visibile come
+  // aspirazione; sbloccata dal flag boss-beaten sul warp.
+  g: { pix: pix(doorArt, { D: "#d8b020", d: "#f0d040", m: "#8a6810", o: "#5a4408", w: "#fff0a0" }), solid: false },
   // Interni
   p: { pix: pix(floorArt), solid: false },
   A: { pix: pix(innerWallArt), solid: true },

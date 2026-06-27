@@ -13,11 +13,11 @@ export interface Item {
 
 export const ITEMS: Record<string, Item> = {
   scheda: {
-    id: "scheda", name: "SCHEDA ELETTORALE", kind: "ball", ballBonus: 1, price: 100,
+    id: "scheda", name: "SCHEDA ELETTORALE", kind: "ball", ballBonus: 1.4, price: 100,
     desc: "Lanciala su un politico indebolito per reclutarlo. Matita copiativa inclusa."
   },
   schedona: {
-    id: "schedona", name: "SCHEDA BLINDATA", kind: "ball", ballBonus: 1.8, price: 350,
+    id: "schedona", name: "SCHEDA BLINDATA", kind: "ball", ballBonus: 3.0, price: 350,
     desc: "Scheda di lista bloccata: il candidato entra, che lo voglia o no."
   },
   caffe: {

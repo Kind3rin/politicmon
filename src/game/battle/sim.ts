@@ -64,8 +64,11 @@ export function catchChance(foe: Monster, ballId: string, extraBonus = 1): numbe
   // bersaglio premia molto di più (prima il cap a 0.333 rendeva la cattura
   // frustrante anche a 1 HP). hpFrac alto = sano, basso = agli sgoccioli.
   const hpFrac = foe.hp / maxHp;
-  const hpFactor = 0.45 + (1 - hpFrac) * 1.45;
-  const statusBonus = foe.status ? 1.5 : 1;
+  // Indebolire deve PREMIARE forte (come in Pokémon): a 1 HP il fattore arriva
+  // a ~3.1, così "indebolito + status + scheda base" cattura un comune ~95%.
+  // I rari/leggendari restano duri grazie al loro catchRate basso (3-15).
+  const hpFactor = 0.55 + (1 - hpFrac) * 2.6;
+  const statusBonus = foe.status ? 2.0 : 1;
   const ballBonus = ITEMS[ballId]?.ballBonus ?? 1;
   const rate = (species.catchRate / 255) * hpFactor * statusBonus * ballBonus * extraBonus;
   return Math.max(0.02, Math.min(0.95, rate));

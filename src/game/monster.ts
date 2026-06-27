@@ -114,6 +114,22 @@ export function itemEvolution(mon: Monster, itemId: string): string | undefined 
   return (speciesOf(mon).evolutions ?? []).find((rule) => rule.item === itemId)?.id;
 }
 
+// Prossima evoluzione per livello ancora da raggiungere (per anticiparla al
+// giocatore: "EVOLVE a Lv16"). Restituisce il livello soglia, o undefined se
+// non ci sono evoluzioni per livello in arrivo.
+export function nextEvolutionLevel(mon: Monster): number | undefined {
+  let best: number | undefined;
+  for (const rule of speciesOf(mon).evolutions ?? []) {
+    if (rule.item || rule.level === undefined || mon.level >= rule.level) {
+      continue;
+    }
+    if (best === undefined || rule.level < best) {
+      best = rule.level;
+    }
+  }
+  return best;
+}
+
 // Applica exp; restituisce gli eventi di level-up uno per livello guadagnato.
 export function gainExp(mon: Monster, amount: number, sondaggi = 50): LevelUpResult[] {
   const results: LevelUpResult[] = [];

@@ -68,6 +68,8 @@ export interface EncounterEntry {
 export interface EdgeDef {
   toMap: string;
   offsetX: number;
+  requiresBadges?: number; // medaglie minime per attraversare il confine
+  lockedLines?: string[]; // messaggio se la strada è ancora chiusa
 }
 
 export interface MapDef {
@@ -537,7 +539,13 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "mediopoli",
     edges: {
-      north: { toMap: "eurotown", offsetX: 0 },
+      north: {
+        toMap: "eurotown", offsetX: 0, requiresBadges: 1,
+        lockedLines: [
+          "La strada per EUROTOWN è presidiata dai gazebo.",
+          "«Senza la MEDAGLIA AUDITEL non si passa: prima conquista la palestra di MEDIOPOLI.»"
+        ]
+      },
       south: { toMap: "borgo", offsetX: 0 }
     },
     warps: [
@@ -631,7 +639,13 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "eurotown",
     edges: {
-      north: { toMap: "capitale", offsetX: 0 },
+      north: {
+        toMap: "capitale", offsetX: 0, requiresBadges: 2,
+        lockedLines: [
+          "Il confine di CAPUT MUNDI è blindato da transenne istituzionali.",
+          "«Per accedere serve la MEDAGLIA SPREAD: torna quando avrai vinto a EUROTOWN.»"
+        ]
+      },
       south: { toMap: "mediopoli", offsetX: 0 }
     },
     warps: [

@@ -5,7 +5,7 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { canLearnMove, speciesOf, statsOf, type Monster } from "../game/monster";
+import { canLearnMove, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
 import type { GameState } from "../game/state";
 import { drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
@@ -181,6 +181,11 @@ export class PartyScene implements Scene {
     }
     screen.text(species.name, 70, 12, INK);
     screen.text(`L${mon.level}  ${species.category}`, 70, 22, GREY);
+    // Anticipa la prossima evoluzione: dà il gancio "ancora un livello".
+    const evoLv = nextEvolutionLevel(mon);
+    if (evoLv !== undefined) {
+      screen.textRight(`EVOLVE a L${evoLv}`, 226, 22, "#e8c84a");
+    }
     let tx = 70;
     for (const type of species.types) {
       screen.rect(tx, 32, type.length * 6 + 6, 11, TYPE_COLORS[type]);

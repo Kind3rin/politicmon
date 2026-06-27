@@ -1587,6 +1587,11 @@ export class WorldScene implements Scene {
     const mapH = this.map.tiles.length;
     if (ny < 0 && this.map.edges?.north) {
       const edge = this.map.edges.north;
+      // Confine gated da medaglie: ogni palestra apre la regione successiva.
+      if (edge.requiresBadges && this.state.badges.length < edge.requiresBadges) {
+        this.say(edge.lockedLines ?? ["La strada è ancora chiusa."]);
+        return;
+      }
       const target = MAPS[edge.toMap];
       this.state.pos = {
         mapId: edge.toMap, x: nx + edge.offsetX, y: target.tiles.length - 1, facing
@@ -1596,6 +1601,10 @@ export class WorldScene implements Scene {
     }
     if (ny >= mapH && this.map.edges?.south) {
       const edge = this.map.edges.south;
+      if (edge.requiresBadges && this.state.badges.length < edge.requiresBadges) {
+        this.say(edge.lockedLines ?? ["La strada è ancora chiusa."]);
+        return;
+      }
       this.state.pos = { mapId: edge.toMap, x: nx + edge.offsetX, y: 0, facing };
       this.loadMap(edge.toMap);
       return;

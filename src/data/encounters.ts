@@ -130,8 +130,12 @@ export const WANDERERS: WanderingDef[] = [
 // sotto il massimo, mai banale, con un minimo che cresce con le medaglie).
 export function wandererLevel(state: GameState): number {
   const partyMax = state.party.reduce((m, mon) => Math.max(m, mon.level), 5);
+  // Il livello dei vaganti dipende dalla REGIONE (medaglie), non insegue il
+  // player all'infinito: così sovra-livellando un'area la si può "spianare" e
+  // si SENTE di essere diventati più forti (prima il mondo scalava con te).
   const floor = 4 + state.badges.length * 6;
-  return Math.max(floor, partyMax - 1);
+  const cap = 8 + state.badges.length * 9; // tetto per regione
+  return Math.max(floor, Math.min(cap, partyMax - 1));
 }
 
 // Sceglie un PG vagante ammesso dal progresso, escludendo quelli già battuti

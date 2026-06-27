@@ -68,11 +68,13 @@ export class BattleScene implements Scene {
   private ai!: AiProfile; // profilo di difficoltà, calcolato dal contesto
 
   private queue: Step[] = [];
-  private mode: "queue" | "menu" | "fight" | "ask" = "queue";
+  private mode: "queue" | "menu" | "fight" | "ask" | "campaign" = "queue";
   private msg = new MessageBox();
   private mainMenu = new Menu([
-    { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUGA" }
+    { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "CAMPAGNA" }, { label: "FUGA" }
   ]);
+  private campaignMenu = new Menu([]);
+  private catchBoost = false; // APPELLO AL VOTO: raddoppia la prossima cattura
   private fightMenu = new Menu([]);
   // Efficacia per mossa (allineata a fightMenu.items): colora le label nel
   // menu LOTTA se la specie avversaria è già nel Dex.
@@ -867,7 +869,12 @@ export class BattleScene implements Scene {
     }
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
     const propaganda = hasMinistro(this.state, "propaganda");
-    const chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1);
+    let chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1);
+    // APPELLO AL VOTO (mossa da campagna): raddoppia la prossima cattura, una volta.
+    if (this.catchBoost) {
+      this.catchBoost = false;
+      chance = Math.min(0.95, chance * 2);
+    }
     const success = Math.random() < chance;
     const shakes = success ? 3 : Math.min(2, Math.floor(chance * 4 * Math.random()));
     const pct = Math.round(chance * 100);
@@ -1095,7 +1102,20 @@ export class BattleScene implements Scene {
           })
         );
       } else if (result === 3) {
+        this.openCampaignMenu();
+      } else if (result === 4) {
         this.tryRun();
+      }
+      return;
+    }
+
+    if (this.mode === "campaign") {
+      const action = this.campaignMenu.update(this.input);
+      if (action === "select") {
+        this.useCampaign(CAMPAIGN_ACTIONS[this.campaignMenu.index]);
+      } else if (action === "cancel") {
+        audio.cancel();
+        this.mode = "menu";
       }
       return;
     }
@@ -1144,15 +1164,27 @@ export class BattleScene implements Scene {
   }
 
   private menuGridUpdate(): number | null {
-    // Menu 2x2: LOTTA BORSA / SQUADRA FUGA.
+    // Griglia a 2 colonne, 5 voci: LOTTA BORSA / SQUADRA CAMPAGNA / FUGA.
+    const n = this.mainMenu.items.length; // 5
     const idx = this.mainMenu.index;
-    if (this.input.wasPressed("left") || this.input.wasPressed("right")) {
-      this.mainMenu.index = idx % 2 === 0 ? idx + 1 : idx - 1;
-      audio.cursor();
+    const set = (target: number) => {
+      const clamped = Math.max(0, Math.min(n - 1, target));
+      if (clamped !== this.mainMenu.index) {
+        this.mainMenu.index = clamped;
+        audio.cursor();
+      }
+    };
+    if (this.input.wasPressed("left")) {
+      if (idx % 2 === 1) set(idx - 1);
     }
-    if (this.input.wasPressed("up") || this.input.wasPressed("down")) {
-      this.mainMenu.index = (idx + 2) % 4;
-      audio.cursor();
+    if (this.input.wasPressed("right")) {
+      if (idx % 2 === 0 && idx + 1 < n) set(idx + 1);
+    }
+    if (this.input.wasPressed("up")) {
+      set(idx - 2);
+    }
+    if (this.input.wasPressed("down")) {
+      set(idx + 2);
     }
     if (this.input.wasPressed("a")) {
       audio.confirm();
@@ -1222,6 +1254,88 @@ export class BattleScene implements Scene {
       })
     );
     this.mode = "fight";
+  }
+
+  private openCampaignMenu(): void {
+    const sond = this.state.sondaggi;
+    this.campaignMenu = new Menu(
+      CAMPAIGN_ACTIONS.map((a) => {
+        const affordable = sond >= a.cost && sond >= a.minSond;
+        return {
+          label: a.label,
+          rightLabel: `-${a.cost}%`,
+          disabled: !affordable
+        };
+      })
+    );
+    this.mode = "campaign";
+  }
+
+  private useCampaign(action: { kind: CampaignKind; label: string; cost: number; minSond: number }): void {
+    const sond = this.state.sondaggi;
+    if (sond < action.cost || sond < action.minSond) {
+      audio.cancel();
+      this.pushFront([{ text: "Consenso insufficiente per questa mossa." }]);
+      this.mode = "queue";
+      return;
+    }
+    audio.confirm();
+    const steps: Step[] = [
+      { text: `${this.playerName()} gioca la carta ${action.label}!`, run: () => addSondaggi(this.state, -action.cost) }
+    ];
+
+    if (action.kind === "spin") {
+      steps.push({
+        text: "Spin mediatico: la narrazione cambia, la squadra si rianima!",
+        run: () => {
+          const m = this.player.mon;
+          m.status = null;
+          this.player.gaffeTurns = 0;
+          m.hp = Math.min(statsOf(m).hp, m.hp + Math.ceil(statsOf(m).hp * 0.3));
+          audio.heal();
+        },
+        waitHp: true
+      });
+    } else if (action.kind === "farlocco") {
+      steps.push({
+        text: "Sondaggio farlocco: i numeri gonfiati danno GRINTA!",
+        run: () => {
+          this.player.stages.atk = Math.min(6, this.player.stages.atk + 2);
+          audio.confirm();
+        }
+      });
+    } else if (action.kind === "ruspa") {
+      steps.push({
+        text: "RUSPA DEL CONSENSO! Travolge ogni difesa!",
+        run: () => {
+          const dmg = Math.max(8, Math.floor(statsOf(this.foe.mon).hp * 0.28));
+          this.foe.mon.hp = Math.max(0, this.foe.mon.hp - dmg);
+          audio.hitSuper();
+          this.shake = 0.25;
+        },
+        waitHp: true
+      });
+      steps.push(...this.koCheckSteps("foe"));
+    } else if (action.kind === "appello") {
+      steps.push({
+        text: "Appello al voto: l'elettorato è pronto a essere reclutato!",
+        run: () => {
+          this.catchBoost = true;
+        }
+      });
+    }
+
+    // La CAMPAGNA consuma il turno: il nemico risponde (se ancora in piedi).
+    steps.push({
+      run: () => {
+        if (this.foe.mon.hp > 0) {
+          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
+        }
+      }
+    });
+    steps.push(...this.endOfTurnSteps());
+    this.pushFront(steps);
+    this.mode = "queue";
   }
 
   private tryRun(): void {
@@ -1353,6 +1467,25 @@ export class BattleScene implements Scene {
         screen.textRight(item?.rightLabel ?? "", 228, 122, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
         screen.text(moveSummary(move).slice(0, 35), 8, y + 32, INK);
+      }
+    } else if (this.mode === "campaign") {
+      // Lista mosse da campagna (1 colonna) + costo + descrizione + consenso.
+      const items = this.campaignMenu.items;
+      const y = VIEW_H - 44;
+      for (let i = 0; i < items.length; i += 1) {
+        const cy = y + 4 + i * 9;
+        const color = items[i].disabled ? GREY : INK;
+        if (this.campaignMenu.index === i) {
+          screen.text("►", 8, cy, INK);
+        }
+        screen.text(clipToWidth(items[i].label, 140), 16, cy, color);
+        screen.textRight(items[i].rightLabel ?? "", 150, cy, items[i].disabled ? GREY : "#d86868");
+      }
+      const sel = CAMPAIGN_ACTIONS[this.campaignMenu.index];
+      screen.panel(154, 117, 80, 17);
+      screen.text(`SOND ${this.state.sondaggi}%`, 160, 122, "#7ad858");
+      if (sel) {
+        screen.text(wrapText(sel.desc, 38)[0] ?? "", 8, VIEW_H - 8, GREY);
       }
     } else if (this.mode === "ask") {
       const lines = wrapText(this.askText, 28);
@@ -1734,22 +1867,23 @@ export class BattleScene implements Scene {
   }
 
   private drawMainMenu(screen: Screen): void {
+    const labels = ["LOTTA", "BORSA", "SQUADRA", "CAMPAGNA", "FUGA"];
+    const rows = Math.ceil(labels.length / 2); // 3
+    const h = 12 + rows * 16;
     const x = VIEW_W - 116;
-    const y = VIEW_H - 44;
-    screen.panel(x, y, 116, 44);
-    const labels = ["LOTTA", "BORSA", "SQUADRA", "FUGA"];
-    for (let i = 0; i < 4; i += 1) {
+    const y = VIEW_H - h;
+    screen.panel(x, y, 116, h);
+    for (let i = 0; i < labels.length; i += 1) {
       const cx = x + 10 + (i % 2) * 56;
-      const cy = y + 10 + Math.floor(i / 2) * 16;
+      const cy = y + 8 + Math.floor(i / 2) * 16;
       if (this.mainMenu.index === i) {
         screen.text("►", cx - 2, cy, INK);
       }
       screen.text(labels[i], cx + 6, cy, INK);
     }
-    // Prompt su due righe: niente testo tagliato accanto al menu.
-    screen.text("Cosa deve fare", 8, y + 10, INK);
-    const pname = this.playerName();
-    screen.text(pname.length > 18 ? `${pname.slice(0, 15)}...?` : `${pname}?`, 8, y + 23, INK);
+    // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
+    screen.text("Che mossa?", 8, y + 8, INK);
+    screen.text(`CONSENSO ${this.state.sondaggi}%`, 8, y + 21, "#7ad858");
   }
 }
 
@@ -1762,6 +1896,23 @@ function approach(current: number, target: number, delta: number): number {
   }
   return current;
 }
+
+// MOSSE DA CAMPAGNA: spendi SONDAGGI per effetti una-tantum in battaglia. Sono
+// la risorsa che collega il consenso (prima solo passivo) al loop di lotta.
+// `minSond` = soglia minima di sondaggi per poterle usare.
+type CampaignKind = "spin" | "farlocco" | "ruspa" | "appello";
+const CAMPAIGN_ACTIONS: Array<{
+  kind: CampaignKind; label: string; cost: number; minSond: number; desc: string;
+}> = [
+  { kind: "spin", label: "SPIN MEDIATICO", cost: 8, minSond: 8,
+    desc: "Cura gli status e recupera il 30% dei PV." },
+  { kind: "farlocco", label: "SONDAGGIO FARLOCCO", cost: 12, minSond: 12,
+    desc: "Gonfia i numeri: GRINTA +2." },
+  { kind: "ruspa", label: "RUSPA DEL CONSENSO", cost: 20, minSond: 55,
+    desc: "Colpo fisso che ignora la difesa (serve consenso alto)." },
+  { kind: "appello", label: "APPELLO AL VOTO", cost: 15, minSond: 12,
+    desc: "Raddoppia la probabilità della prossima cattura." }
+];
 
 // Tabella di loot a sorpresa (pesata): oggetti comuni frequenti, rari saltuari.
 // Tutti gli id esistono in ITEMS. Il peso più alto = più probabile.

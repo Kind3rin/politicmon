@@ -5,7 +5,7 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: sessione "rivale ricorrente" (vedi § Storico in fondo).
+Ultimo aggiornamento: **Round 11 — fix accessi (porta dorata/casinò/casa/stretto)**, 2026-06-27 (vedi § Storico in fondo).
 
 ## Cos'è Politicmon
 
@@ -50,7 +50,18 @@ Tutte queste feature sono **complete, verificate e in produzione**:
 | PWA | Manifest, service worker, prompt installazione (iOS incluso) | `engine/pwa.ts`, `public/sw.js` |
 | Multiplayer P2P | Presence (vedi gli altri sulla tua mappa), chat di zona, emote, nickname | `net/mp.ts`, `net/profile.ts`, `scenes/ChatScene.ts` |
 
-Numeri attuali: **28 specie, 57 mosse, 21 allenatori fissi (+ rivale dinamico), 18 quest, 9 mappe**.
+Numeri attuali: **30 specie, ~70 mosse, 21 allenatori fissi (+ rivale dinamico), 18 quest, 9 mappe**.
+
+Aggiunte recenti alla tabella sopra (round 8-11):
+
+| Area | Cosa | File chiave |
+|------|------|-------------|
+| Dex per zona | Roster nativo per mappa + ricompensa una-tantum al 100% di zona | `data/dexzones.ts` (`zoneProgress`), hook in `BattleScene` post-`markCaught` |
+| Gating città | Le città oltre il borgo richiedono medaglie (edge `requiresBadges` + `lockedLines`) → progressione percepita | `game/world/WorldScene.ts`, `data/maps.ts` (edges) |
+| Mosse CAMPAGNA | Comando CAMPAGNA in lotta (azioni `CAMPAIGN_ACTIONS`, griglia 2-col + descrizioni) | `game/battle/BattleScene.ts` |
+| Menu pausa v2 | Ridisegnato: azioni principali + sotto-menu OPZIONI (Salva/Guida/Audio/Vibra/Tasti) | `scenes/PauseScene.ts` |
+| PC BOX | Scambio party↔box (mancava il deposito mostri) | `scenes/BoxScene.ts` |
+| GUIDA TIPI | Schermata che spiega le 8 ideologie e le forze/debolezze | `scenes/TypesScene.ts` |
 
 ## Decisioni di prodotto già prese (rispettale)
 
@@ -61,9 +72,15 @@ Numeri attuali: **28 specie, 57 mosse, 21 allenatori fissi (+ rivale dinamico), 
 
 ## Salvataggio (importante per le migrazioni)
 
-`src/game/state.ts`, chiave **`politicmon-save-v6`**. Se cambi la forma di
-`GameState`: bumpa la chiave (`-v7`), aggiungi la vecchia a `LEGACY_KEYS`, e
-gestisci il default del nuovo campo in `parseState`. Mai rompere i salvataggi esistenti.
+`src/game/state.ts`, chiave **`politicmon-save-v9`** (`LEGACY_KEYS` = v8…v3 per
+migrazione automatica). Se cambi la forma di `GameState`: bumpa la chiave (`-v10`),
+aggiungi la vecchia in cima a `LEGACY_KEYS`, e gestisci il default del nuovo campo
+in `parseState`. **Mai rompere i salvataggi esistenti.** `parseState` difende OGNI
+campo con un default + rete di sicurezza sugli HP (mai 0/NaN allo spawn).
+
+⚠️ **Save ≠ cache SW.** Il salvataggio è in `localStorage`, la cache del service
+worker è separata: aggiornare il gioco (nuovo bundle) NON cancella il save. L'auto-
+update del SW è save-safe.
 
 ## Verifica visiva (la tab di preview è "nascosta")
 
@@ -75,12 +92,20 @@ nearest-neighbor con System.Drawing in PowerShell. Esempi pronti: `scripts/shot-
 `scripts/shot-casino.mjs`. Per il multiplayer servono 2 context Playwright isolati.
 `scripts/check-err.mjs` controlla gli errori console in produzione.
 
-## ⚠️ Git: NON ci sono commit
+## Git & deploy (workflow stabilito)
 
-Il repo **non ha ancora commit** (`git log` vuoto). Tutto il lavoro è solo sul
-filesystem + deploy Vercel. Se l'utente vuole versionare, proponi un primo commit
-(la `.gitignore` è già pronta: esclude `node_modules`, `dist`, `.env`, `artifacts`, ecc.).
-Non committare senza che l'utente lo chieda.
+- **Branch:** si lavora su `master`. Convenzione di sessione: ogni round si fa su
+  un branch `roundN-*`, poi `git merge --no-ff` in `master`.
+- **Deploy = Vercel Git integration su `master`** (NON GitHub Pages). Ogni push su
+  `master` fa partire il deploy automatico. URL: https://politicmon.vercel.app.
+  Progetto `prj_7E1cxq0mRjUjlfnpCZl6AQ9zva0p`, team `team_WDtxJ0CdxHeUGGHVqYD8u0XT`.
+  `.vercel/project.json` è **gitignored**.
+- **L'utente vuole commit + push + deploy AUTONOMI** ("Vai e pusha sempre") — non
+  chiedere conferma, fai tutto fino al deploy e poi riepiloga.
+- ⚠️ **Webhook Vercel a volte non scatta** sul push. Se il deploy non parte, forza
+  con un commit vuoto: `git commit --allow-empty -m "chore: re-trigger deploy" && git push`.
+- Verifica live: `node scripts/check-err.mjs` (errori console in prod) e cerca i
+  marker nel bundle servito (es. `curl -s https://politicmon.vercel.app/assets/index-*.js | grep "CASINÒ DI PALAZZO"`).
 
 ## Trappole note (imparate sul campo)
 
@@ -89,13 +114,33 @@ Non committare senza che l'utente lo chieda.
 - **`Math.random()`/`Date.now()`** sono vietati DENTRO gli script Workflow (rompono il resume), NON nel codice di gioco (lì vanno benissimo).
 - **Bilanciamento incontri:** tarato per interrompere ~ogni 10-12 passi. Se ritocchi `encounterRate` (maps.ts) o le probabilità in `WorldScene` (`checkWanderingChallenger`/`checkStreetEvent`), rifai i conti — tre sistemi si sommano.
 - **Trystero**: API `room.makeAction(ns)` → oggetto `{send, onMessage}`; `room.onPeerJoin = fn` (assegnazione). Il rendezvous P2P richiede qualche secondo.
+- **Multiplayer remoto (NAT) serve TURN:** in LAN funziona senza, ma da rete a rete
+  i peer dietro NAT simmetrico non si connettono senza un server TURN. Default
+  `openrelay` (gratuito), override via env `VITE_TURN_*`. Vincolo: niente backend
+  fatturabile — il TURN deve restare gratuito.
+- **Input sintetico inaffidabile per i test:** il movimento legge lo stato dei tasti
+  TENUTI frame-per-frame (`input.ts`, `KEY_MAP` su `event.code`: KeyZ=a, KeyX=b,
+  KeyP=start). Un keydown+keyup istantaneo via `preview_eval` NON fa camminare il
+  player → non riesci a entrare in battaglia "guidando". **Workaround collaudato:**
+  chiama i metodi direttamente via `window.stack` in DEV, es.
+  `w.startWildBattle('mediocrate', 12)`, `b.openCampaignMenu()`.
+- **Accesso ai contenuti = bug silenzioso ricorrente.** Più volte feature corrette
+  erano *irraggiungibili*: warp su tile solido (finestra/muro), spawn dentro un
+  muro, mappa senza uscita (con autosave che intrappola), tile non disegnato (porta
+  dorata invisibile), contenuto senza segnaletica. Quando aggiungi/sposti un warp o
+  uno spawn: verifica che la cella di arrivo sia **calpestabile** e che esista un
+  ritorno. Lo script di check warp è il guardrail.
 
 ## Idee non ancora fatte (backlog, dall'audit di retention)
 
 - ~~Traguardi/achievement satirici sbloccabili~~ ✓ FATTO.
-- ~~Feedback veicoli / onboarding feature~~ ✓ FATTO (vedi sessione corrente).
+- ~~Feedback veicoli / onboarding feature~~ ✓ FATTO.
+- ~~Dex completabile (roster per zona) + PC BOX + scambio party~~ ✓ FATTO (round 9-10).
+- ~~Progressione percepita (gating città, anticipazione)~~ ✓ FATTO (round 8).
 - Sfida del giorno (daily) con bonus.
 - Ministero speciale / epilogo aperto / leaderboard P2P.
+- **Multiplayer da remoto** ancora dipendente dalla qualità del TURN gratuito
+  (vedi trappola NAT): funziona ma fragile dietro NAT simmetrico.
 - Mappe ancora migliorabili: aggiunti NPC ambientali e tesori, ma la densità
   resta sotto un Pokémon classico. Bonus ministri ancora poco "tattili" in HUD.
 - NB falso positivo noto (preesistente): a `capitale` il pickup `pk-c2` (spritz)
@@ -105,7 +150,43 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Bilanciamento reale + leggendario epico (sessione corrente):**
+- **Round 11 — fix accessi ai contenuti (2026-06-27):** workflow di bug-hunt (8
+  agenti, verifica avversariale) ha stanato 6 bug di *accesso* — feature corrette
+  ma irraggiungibili. Tutti fixati e live:
+  - **PORTA DORATA (Atto 2) non disegnata:** il warp c'era ma solo tappeto rosso
+    contro un muro, nessun tile dorato. Aggiunto tile `g` (porta dorata) in
+    `art/tiles.ts` + righe `…ggA…` in cima a `PALAZZO_TILES` e in fondo a
+    `COLLE_TILES` (`data/maps.ts`). Ora sempre visibile. Verificato a schermo.
+  - **CASINÒ senza segnaletica:** raggiungibile ma nessun cartello, e il cartello
+    PALESTRA era per sbaglio davanti alla porta del casinò. Spostato PALESTRA su
+    (7,12), aggiunto cartello CASINÒ DI PALAZZO su (22,12).
+  - **CASA TUA (BORGO) irraggiungibile:** il warp `home` era su una finestra (tile
+    solido `n`) → MAMMA/caffè/quest bloccati. Spostato sulla porta (x:23→22).
+  - **STRETTO vicolo cieco:** nessuna uscita → chi entrava restava intrappolato
+    (con la posizione salvata!). Aggiunto NPC `scorta-stretto` (SCORTA AUTO BLU) che
+    riporta indietro.
+  - **AUTO BLU → Caput Mundi** spawnava dentro un muro (`TRANSPORT_DESTINATIONS`
+    capitale y:18→19, cella libera).
+  - **Zona Dex Caput Mundi** richiedeva `mattarellux` (leggendario 1%) → non
+    completabile. Tolto dal gate in `data/dexzones.ts` (resta nel Dex globale).
+  - Lezione: la maggior parte erano problemi di *discoverability/grafica mancante*,
+    non warp rotti. Vedi nuova trappola "Accesso ai contenuti" sopra.
+- **Round 10 — zone-dex + 2 specie + fix overflow:** `data/dexzones.ts`
+  (`zoneProgress`), ricompensa una-tantum al 100% di zona (hook in `BattleScene`
+  dopo `markCaught`, flag `zoneRewardsClaimed` in save). +2 specie (`mediocrate`
+  #29, `pontigor` #30 → 30 totali). Fix overflow descrizioni CAMPAGNA (griglia
+  2-col + desc su 2 righe). Save bumpata a v9.
+- **Round 9 — incontri esclusivi + Dex completabile + menu pausa v2:** roster wild
+  per-zona (specie esclusive, niente doppioni cross-mappa) così il 100% è davvero
+  raggiungibile; PC BOX (`scenes/BoxScene.ts`) per depositare/scambiare mostri;
+  menu pausa ridisegnato (azioni principali + sotto-menu OPZIONI). GUIDA TIPI
+  (`scenes/TypesScene.ts`).
+- **Round 8 — cattura soddisfacente + progressione percepita:** formula di cattura
+  rivista in `sim.ts` (comune indebolito+status 49%→95%, leggendari restano 22-27%);
+  animazione di cattura leggibile (niente "salto fuori" confuso); **gating città**
+  (le città oltre il borgo richiedono medaglie, edge `requiresBadges`+`lockedLines`)
+  per dare senso di avanzamento; teaser/anticipazione post-medaglia.
+- **Bilanciamento reale + leggendario epico (sessione precedente):**
   - **Lotte per il giocatore REALE** (non quello ottimale della sim): starter
     buffati (HP/ATK/DEF +, e una mossa STAB forte a lv13 prima dell'evoluzione,
     risolve il "danno troppo basso" che trascinava le lotte); cure più accessibili

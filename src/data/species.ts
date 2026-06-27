@@ -49,7 +49,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["DESTRA"],
     base: { hp: 76, atk: 84, def: 76, spc: 95, spd: 75 },
     catchRate: 25, expYield: 180,
-    learnset: [[1, "comizio"], [1, "radici"], [16, "fiammatricolore"], [22, "blocconavale"], [28, "decreto"]],
+    learnset: [[1, "comizio"], [1, "radici"], [16, "fiammatricolore"], [19, "pacchiafinita"], [22, "blocconavale"], [28, "decreto"]],
     dexLine: "DRAGO UNDERDOG. PIÙ LO CRITICANO A BRUXELLES, PIÙ LA SUA FIAMMA TRICOLORE DIVAMPA."
   }),
   ellyna: S({
@@ -83,7 +83,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["CENTRO"],
     base: { hp: 71, atk: 88, def: 72, spc: 80, spd: 90 },
     catchRate: 25, expYield: 180,
-    learnset: [[1, "giravolta"], [1, "terzopolo"], [16, "staisereno"], [22, "inciucio"], [28, "editoriale"]],
+    learnset: [[1, "giravolta"], [1, "terzopolo"], [16, "staisereno"], [20, "rottamazione"], [22, "inciucio"], [28, "editoriale"]],
     dexLine: "DISTRUGGE GOVERNI CHE HA COSTRUITO LUI STESSO. DICE CHE LO FA PER IL BENE DEL PAESE."
   }),
   salvinott: S({
@@ -100,7 +100,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["POPULISMO", "DESTRA"],
     base: { hp: 75, atk: 88, def: 62, spc: 58, spd: 68 },
     catchRate: 60, expYield: 160,
-    learnset: [[1, "ruspa"], [1, "citofonata"], [18, "mojito"], [23, "blocconavale"], [28, "vaffa"]],
+    learnset: [[1, "ruspa"], [1, "citofonata"], [15, "noncene"], [18, "mojito"], [23, "blocconavale"], [28, "vaffa"]],
     evolutions: [{ id: "capitanone", item: "tessera" }],
     dexLine: "SI INDEBOLISCE SE RESTA TROPPO AL MINISTERO. RECUPERA TUTTI I PV CON UN MOJITO IN SPIAGGIA."
   }),

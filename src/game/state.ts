@@ -1,5 +1,6 @@
 import type { Facing } from "../art/characters";
 import type { Monster } from "./monster";
+import { statsOf } from "./monster";
 
 export interface PlayerPos {
   mapId: string;
@@ -128,6 +129,26 @@ function parseState(raw: string | null): GameState | null {
     parsed.rivalWins = typeof parsed.rivalWins === "number" ? parsed.rivalWins : 0;
     parsed.chips = typeof parsed.chips === "number" ? parsed.chips : 0;
     parsed.boxed = Array.isArray(parsed.boxed) ? parsed.boxed : [];
+
+    // Rete di sicurezza sugli HP: un mon caricato non deve avere hp invalido, e
+    // il party non può essere interamente svenuto al load. Succede se l'app
+    // viene uccisa in background mentre una lotta persa è in corso (il flush di
+    // lifecycle salva il party a 0 HP prima che onBattleEnd lo curi al risveglio).
+    if (parsed.party.length > 0) {
+      for (const mon of parsed.party) {
+        const max = statsOf(mon).hp;
+        if (typeof mon.hp !== "number" || Number.isNaN(mon.hp)) {
+          mon.hp = max;
+        }
+        mon.hp = Math.max(0, Math.min(max, mon.hp));
+      }
+      if (parsed.party.every((m) => m.hp <= 0)) {
+        for (const mon of parsed.party) {
+          mon.hp = statsOf(mon).hp;
+          mon.status = null;
+        }
+      }
+    }
     return parsed;
   } catch {
     return null;

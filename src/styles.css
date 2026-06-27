@@ -172,8 +172,11 @@ body {
 }
 
 #game-canvas {
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+  /* Il backing store è un multiplo intero DENSO di 240x180 (vedi screen.ts),
+     la box CSS è una scala frazionaria più piccola: il resampling è un
+     DOWNSCALE. "auto" lo fa liscio (niente righe scartate = niente shimmer);
+     i game-pixel restano netti perché internamente imageSmoothingEnabled=false. */
+  image-rendering: auto;
   display: block;
   background: #000;
 }

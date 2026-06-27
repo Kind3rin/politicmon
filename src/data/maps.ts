@@ -443,7 +443,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
       { x: 20, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.05,
+    encounterRate: 0.18,
     encounters: [
       { speciesId: "salvinott", weight: 40, minLv: 2, maxLv: 4 },
       { speciesId: "grillix", weight: 20, minLv: 3, maxLv: 5 },
@@ -542,7 +542,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 22, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" },
       { x: 6, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.05,
+    encounterRate: 0.18,
     encounters: [
       { speciesId: "vannaccix", weight: 20, minLv: 8, maxLv: 11 },
       { speciesId: "contemorfo", weight: 18, minLv: 8, maxLv: 11 },
@@ -636,7 +636,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
       { x: 7, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.05,
+    encounterRate: 0.18,
     encounters: [
       { speciesId: "macronfox", weight: 24, minLv: 12, maxLv: 15 },
       { speciesId: "zelenskir", weight: 20, minLv: 13, maxLv: 15 },
@@ -717,7 +717,7 @@ export const MAPS: Record<string, MapDef> = {
         lockedLines: ["Il portone è sbarrato.", "Un cartello: 'SI RICEVE SOLO CON 3 MEDAGLIE.'"]
       }
     ],
-    encounterRate: 0.06,
+    encounterRate: 0.20,
     encounters: [
       { speciesId: "zelenskir", weight: 18, minLv: 15, maxLv: 18 },
       { speciesId: "muskrat", weight: 16, minLv: 15, maxLv: 18 },
@@ -955,7 +955,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
       { x: 13, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
     ],
-    encounterRate: 0.06,
+    encounterRate: 0.20,
     encounters: [
       { speciesId: "salvinott", weight: 28, minLv: 19, maxLv: 21 },
       { speciesId: "vannaccix", weight: 18, minLv: 20, maxLv: 22 },

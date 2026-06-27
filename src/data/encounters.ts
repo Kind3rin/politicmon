@@ -107,7 +107,23 @@ export const WANDERERS: WanderingDef[] = [
     defeat: ["Va be', taglio in post-produzione."],
     species: ["bojoon", "macronfox"], size: 1, money: 320, minBadges: 1,
     reward: { itemId: "spritz", qty: 1 }
-  }
+  },
+  {
+    id: "w-signora-mare", name: "SIGNORA DEL LIDO", pal: "granny",
+    intro: ["Crisi? Quale crisi?", "Non ce n'è! Non ce n'è proprio, mi creda!"],
+    defeat: ["E va be'. Ma il problema non c'era lo stesso."],
+    species: ["salvinott", "contemorfo"], size: 1, money: 280, minBadges: 0 },
+  {
+    id: "w-cetto", name: "CETTO IL CANDIDATO", pal: "guard",
+    intro: ["Nel mio programma c'è una cosa sola:", "PIÙ COSE PER TUTTI! ...quali cose? TUTTE le cose!"],
+    defeat: ["Macché sconfitta. Ho vinto il riconteggio. A modo mio."],
+    species: ["bojoon", "tajanide", "contemorfo"], size: 2, money: 560, minBadges: 2,
+    reward: { itemId: "scheda", qty: 2 } },
+  {
+    id: "w-avvocato", name: "AVVOCATO DEL POPOLO", pal: "aide",
+    intro: ["Buonasera. Stanotte, con apposito decreto,", "ho stabilito che potete sfidarmi. Ma solo i congiunti."],
+    defeat: ["Prendo atto. Firmo un altro decreto e ci riaggiorniamo."],
+    species: ["contemorfo", "calendauro"], size: 2, money: 500, minBadges: 1 }
 ];
 
 // Livello-obiettivo dell'incontro: segue la squadra del giocatore (un filo

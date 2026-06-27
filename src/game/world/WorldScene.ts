@@ -90,7 +90,7 @@ const TRANSPORT_DESTINATIONS: TransportDestination[] = [
   { label: "BORGO URNE", mapId: "borgo", x: 24, y: 22, facing: "right" },
   { label: "MEDIOPOLI", mapId: "mediopoli", x: 23, y: 19, facing: "right", requires: (s) => Boolean(s.flags["dex-received"]) },
   { label: "EUROTOWN", mapId: "eurotown", x: 23, y: 14, facing: "right", requires: (s) => s.badges.includes("auditel") },
-  { label: "CAPUT MUNDI", mapId: "capitale", x: 23, y: 18, facing: "right", requires: (s) => s.badges.includes("spread") },
+  { label: "CAPUT MUNDI", mapId: "capitale", x: 23, y: 19, facing: "right", requires: (s) => s.badges.includes("spread") },
   { label: "STRETTO DI MESSINA", mapId: "stretto", x: 7, y: 5, facing: "down", requires: (s) => s.badges.length >= 3 }
 ];
 

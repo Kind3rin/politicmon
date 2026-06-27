@@ -119,7 +119,7 @@ export const SPECIES: Record<string, Species> = {
   }),
   contemorfo: S({
     id: "contemorfo", dexNum: 10, name: "CONTEMORFO", category: "BLOB ELEGANTE",
-    types: ["CENTRO", "POPULISMO"],
+    types: ["SINISTRA", "POPULISMO"],
     base: { hp: 62, atk: 50, def: 72, spc: 76, spd: 45 },
     catchRate: 100, expYield: 130,
     learnset: [[1, "comizio"], [6, "pochette"], [10, "inciucio"], [15, "telepromessa"], [21, "conferenza"]],
@@ -143,7 +143,7 @@ export const SPECIES: Record<string, Species> = {
   }),
   tajanide: S({
     id: "tajanide", dexNum: 13, name: "TAJANIDE", category: "COLOMBA PLACIDA",
-    types: ["CENTRO", "MEDIA"],
+    types: ["CENTRO", "DESTRA"],
     base: { hp: 56, atk: 45, def: 66, spc: 66, spd: 58 },
     catchRate: 120, expYield: 110,
     learnset: [[1, "comizio"], [5, "promessa"], [10, "conferenza"], [16, "moralsuasion"], [22, "inciucio"]],
@@ -151,7 +151,7 @@ export const SPECIES: Record<string, Species> = {
   }),
   berlusconix: S({
     id: "berlusconix", dexNum: 14, name: "BERLUSCONIX", category: "BISCIONE LEGGENDARIO",
-    types: ["MEDIA"],
+    types: ["MEDIA", "DESTRA"],
     base: { hp: 80, atk: 70, def: 65, spc: 105, spd: 85 },
     catchRate: 8, expYield: 240,
     learnset: [[1, "tweet"], [1, "telepromessa"], [12, "conferenza"], [18, "editoriale"], [25, "bunga"]],
@@ -231,7 +231,7 @@ export const SPECIES: Record<string, Species> = {
   }),
   muskrat: S({
     id: "muskrat", dexNum: 24, name: "MUSKRAT", category: "TOPO RAZZO",
-    types: ["TECNO", "MEDIA"],
+    types: ["TECNO", "DESTRA"],
     base: { hp: 65, atk: 70, def: 56, spc: 100, spd: 96 },
     catchRate: 20, expYield: 200,
     learnset: [[1, "tweet"], [1, "memedoge"], [14, "grafico"], [20, "razzox"], [26, "spread"]],
@@ -249,7 +249,7 @@ export const SPECIES: Record<string, Species> = {
   }),
   movimenton: S({
     id: "movimenton", dexNum: 26, name: "MOVIMENTON", category: "PILASTRO DI GOVERNO",
-    types: ["POPULISMO", "ISTITUZIONE"],
+    types: ["POPULISMO", "SINISTRA"],
     base: { hp: 82, atk: 68, def: 88, spc: 92, spd: 58 },
     catchRate: 15, expYield: 200,
     learnset: [[1, "comizio"], [1, "greenwashing"], [22, "redditone"], [26, "fiducia"], [31, "decreto"]],
@@ -265,7 +265,7 @@ export const SPECIES: Record<string, Species> = {
   }),
   marsrat: S({
     id: "marsrat", dexNum: 28, name: "MARSRAT", category: "RATTO MARZIANO",
-    types: ["TECNO", "MEDIA"],
+    types: ["TECNO", "DESTRA"],
     base: { hp: 72, atk: 74, def: 62, spc: 112, spd: 104 },
     catchRate: 10, expYield: 210,
     learnset: [[1, "tweet"], [1, "algoritmo"], [30, "razzox"], [34, "coloniamarte"]],

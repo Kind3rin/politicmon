@@ -34,6 +34,28 @@ const CHART: Partial<Record<PolType, Partial<Record<PolType, number>>>> = {
   VERDE: { DESTRA: 2, MEDIA: 2, POPULISMO: 0.5 }
 };
 
+// Ordine canonico degli 8 tipi (per la schermata GUIDA TIPI).
+export const TYPE_ORDER: PolType[] = [
+  "POPULISMO", "TECNO", "DESTRA", "SINISTRA", "CENTRO", "MEDIA", "ISTITUZIONE", "VERDE"
+];
+
+// Relazioni di un tipo ATTACCANTE: contro chi è forte (2x) e contro chi è
+// debole (0.5x). Usato dalla schermata di aiuto e dalle schede del Dex.
+export function typeRelations(attack: PolType): { strong: PolType[]; weak: PolType[] } {
+  const row = CHART[attack] ?? {};
+  const strong: PolType[] = [];
+  const weak: PolType[] = [];
+  for (const def of TYPE_ORDER) {
+    const m = row[def];
+    if (m !== undefined && m >= 2) {
+      strong.push(def);
+    } else if (m !== undefined && m < 1) {
+      weak.push(def);
+    }
+  }
+  return { strong, weak };
+}
+
 export function typeMultiplier(attack: PolType, defenderTypes: PolType[]): number {
   let mult = 1;
   for (const def of defenderTypes) {

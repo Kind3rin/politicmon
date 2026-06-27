@@ -74,13 +74,17 @@ export class ShopScene implements Scene {
     this.menu.draw(screen, 10, 20, VIEW_W - 20);
     const item = ITEMS[this.itemIds[this.menu.index]];
     if (item) {
+      // "Ne possiedi" va nell'header (accanto ai fondi): libera spazio nel
+      // pannello per mostrare la descrizione COMPLETA (prima troncata a 2 righe).
+      screen.text(`Hai: ${this.state.bag[item.id] ?? 0}`, 8, 14, GREY);
       const y = 24 + this.menu.measureHeight();
-      screen.panel(10, y, VIEW_W - 20, 42);
       const lines = wrapText(item.desc, 34);
-      for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-        screen.text(lines[i], 18, y + 9 + i * 10, INK);
+      const shown = Math.min(4, lines.length);
+      const panelH = 12 + shown * 10;
+      screen.panel(10, y, VIEW_W - 20, panelH);
+      for (let i = 0; i < shown; i += 1) {
+        screen.text(lines[i], 18, y + 7 + i * 10, INK);
       }
-      screen.text(`Ne possiedi: ${this.state.bag[item.id] ?? 0}`, 18, y + 30, GREY);
     }
     const note =
       this.state.sondaggi >= 70

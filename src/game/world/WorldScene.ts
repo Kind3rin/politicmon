@@ -1,6 +1,6 @@
 import { charSprite, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
-import { BALLOT_ART } from "../../art/monsters";
+import { BALLOT_ART, MONSTER_ART } from "../../art/monsters";
 import { TILE, TILES, waterFrames } from "../../art/tiles";
 import { ITEMS } from "../../data/items";
 import { MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
@@ -14,9 +14,9 @@ import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
+import { Menu, MessageBox, drawHpBar, GREY, INK, PAPER } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
-import { createMonster, healMonster, type Monster } from "../monster";
+import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
 import { checkAchievements } from "../achievements";
@@ -97,6 +97,17 @@ function clipHud(value: string, max: number): string {
   return value.length > max ? `${value.slice(0, max - 3)}...` : value;
 }
 
+// Avvicina `current` a `target` di al più `delta` (lerp clampato per le barre).
+function approachWorld(current: number, target: number, delta: number): number {
+  if (current < target) {
+    return Math.min(target, current + delta);
+  }
+  if (current > target) {
+    return Math.max(target, current - delta);
+  }
+  return current;
+}
+
 export class WorldScene implements Scene {
   private map!: MapDef;
   private npcs: RuntimeNpc[] = [];
@@ -118,6 +129,22 @@ export class WorldScene implements Scene {
   private exclaimT = 0;
   private pendingTrainer: TrainerDef | null = null;
   private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
+
+  // ---- Effetto di CURA (BAR SPORT, risveglio, raccomandazione mafia) ----
+  private healFx = 0; // durata residua dell'animazione di cura
+  private afterHeal: (() => void) | null = null; // callback a fine animazione
+  private healSparks: Array<{ x: number; y: number; vx: number; vy: number; life: number; max: number; color: string }> = [];
+  // Snapshot HP pre-cura: le barre si riempiono "a vista" da `from` a `to`.
+  private healSnapshot: Array<{ mon: Monster; from: number; to: number; disp: number }> = [];
+
+  // ---- Banner "evento" (traguardo, breaking news): entra a molla + flash ----
+  private banner: { text: string; sub: string; t: number; color: string } | null = null;
+  private bannerFlash = 0;
+
+  // ---- HUD sondaggi animata: il valore mostrato insegue quello reale ----
+  private displaySondaggi = -1; // -1 = non inizializzato
+  private sondPulse = 0; // durata residua del flash colore sulla barra
+  private sondDelta: { text: string; t: number; up: boolean } | null = null;
 
   private askMenu: Menu | null = null;
   private askYes: (() => void) | null = null;
@@ -621,12 +648,10 @@ export class WorldScene implements Scene {
         );
       }
       this.say(lines, () => {
-        for (const mon of this.state.party) {
-          healMonster(mon);
-        }
-        audio.heal();
-        this.say(["Un giro di caffè per tutta la squadra... offre la casa!", "I tuoi POLITICMON sono al massimo del consenso."]);
-        saveGame(this.state);
+        this.playHealFx(() => {
+          saveGame(this.state);
+          this.say(["Un giro di caffè per tutta la squadra... offre la casa!", "I tuoi POLITICMON sono al massimo del consenso."]);
+        });
       });
       return;
     }
@@ -1226,10 +1251,69 @@ export class WorldScene implements Scene {
 
   // ---- Update ----
 
+  // Avvia l'animazione di cura sull'intero party: snapshot HP, scintille,
+  // velo verde, anelli e barre che si riempiono a vista. La cura dei DATI è
+  // immediata (sotto il velo); a fine effetto scatta `done`. Riusato da BAR
+  // SPORT, risveglio post-KO e raccomandazione mafia.
+  private playHealFx(done: () => void): void {
+    this.healSnapshot = this.state.party.map((m) => ({
+      mon: m, from: m.hp, to: statsOf(m).hp, disp: m.hp
+    }));
+    this.healFx = 1.6;
+    this.afterHeal = done;
+    audio.heal();
+    this.spawnHealSparks(18);
+    for (const mon of this.state.party) {
+      healMonster(mon);
+    }
+  }
+
+  private spawnHealSparks(n: number): void {
+    const colors = ["#7ad858", "#bdf0a0", "#fff6c8"];
+    for (let i = 0; i < n; i += 1) {
+      this.healSparks.push({
+        x: VIEW_W / 2 + (Math.random() - 0.5) * 28,
+        y: VIEW_H / 2 + 6 + (Math.random() - 0.5) * 18,
+        vx: (Math.random() - 0.5) * 24,
+        vy: -30 - Math.random() * 40, // salgono verso l'alto
+        life: 0,
+        max: 0.7 + Math.random() * 0.6,
+        color: colors[i % colors.length]
+      });
+    }
+  }
+
+  private updateHealSparks(dt: number): void {
+    for (const s of this.healSparks) {
+      s.life += dt;
+      s.x += s.vx * dt;
+      s.y += s.vy * dt;
+      s.vy += 18 * dt; // gravità lieve: rallentano salendo
+    }
+    this.healSparks = this.healSparks.filter((s) => s.life < s.max);
+  }
+
+  // Mostra un banner "evento" (traguardo, breaking news) con entrata a molla.
+  private showBanner(text: string, sub: string, color: string): void {
+    this.banner = { text, sub, t: 0, color };
+    this.bannerFlash = 0.4;
+  }
+
   update(dt: number): void {
     this.time += dt;
     this.shake = Math.max(0, this.shake - dt);
     this.fadeT = Math.max(0, this.fadeT - dt);
+    this.bannerFlash = Math.max(0, this.bannerFlash - dt);
+    this.sondPulse = Math.max(0, this.sondPulse - dt);
+    if (this.banner) {
+      this.banner.t += dt;
+    }
+    if (this.sondDelta) {
+      this.sondDelta.t -= dt;
+      if (this.sondDelta.t <= 0) {
+        this.sondDelta = null;
+      }
+    }
     mp.update(dt); // interpolazione avatar remoti + decadimento emote
     this.rustles = this.rustles.filter((r) => (r.t -= dt) > 0);
 
@@ -1253,6 +1337,37 @@ export class WorldScene implements Scene {
           npc.currentFacing = FACINGS[Math.floor(Math.random() * FACINGS.length)];
         }
       }
+    }
+
+    // Sondaggi: il valore mostrato insegue quello reale (barra che ticchetta).
+    // Al primo giro si allinea senza animare; poi un cambio fa flash + delta.
+    if (this.displaySondaggi < 0) {
+      this.displaySondaggi = this.state.sondaggi;
+    } else if (Math.round(this.displaySondaggi) !== this.state.sondaggi) {
+      const diff = this.state.sondaggi - Math.round(this.displaySondaggi);
+      // Segnala il delta solo se non c'è già un tooltip in corso (evita spam).
+      if (!this.sondDelta || this.sondPulse <= 0) {
+        this.sondDelta = { text: `${diff > 0 ? "+" : ""}${diff}`, t: 1.4, up: diff > 0 };
+        this.sondPulse = 0.5;
+      }
+      this.displaySondaggi = approachWorld(this.displaySondaggi, this.state.sondaggi, dt * 28);
+    }
+
+    // Animazione di cura: blocca movimento/input finché finisce (come encounterFlash).
+    if (this.healFx > 0) {
+      this.healFx = Math.max(0, this.healFx - dt);
+      this.updateHealSparks(dt);
+      for (const s of this.healSnapshot) {
+        s.disp = approachWorld(s.disp, s.to, dt * 60);
+      }
+      if (this.healFx === 0 && this.afterHeal) {
+        const f = this.afterHeal;
+        this.afterHeal = null;
+        this.healSnapshot = [];
+        this.healSparks = [];
+        f();
+      }
+      return;
     }
 
     if (this.encounterFlash > 0) {
@@ -1325,7 +1440,10 @@ export class WorldScene implements Scene {
           lines.push(`TRAGUARDO SBLOCCATO: ${a.name}!`, `${a.desc} Premio: ${a.reward}€.`);
         }
         saveGame(this.state);
-        audio.catchJingle();
+        // Banner dorato + fanfara di "evento" (non più il jingle riciclato della
+        // cattura): un traguardo si DEVE sentire come un traguardo.
+        audio.victory();
+        this.showBanner("TRAGUARDO SBLOCCATO!", fresh[0].name, "#e8c84a");
         this.say(lines);
         return;
       }
@@ -1577,17 +1695,29 @@ export class WorldScene implements Scene {
     let hudBottom = 2;
     if (this.state.party.length > 0) {
       const sond = this.state.sondaggi;
+      // Valore mostrato: insegue quello reale (barra che ticchetta, non salta).
+      const shown = this.displaySondaggi < 0 ? sond : Math.round(this.displaySondaggi);
       const col = sondaggiColor(sond);
       const panelW = 80;
       const px = VIEW_W - panelW - 2;
-      screen.rect(px, 2, panelW, 22, "rgba(16,20,31,0.92)");
-      screen.text(`SOND ${sond}%`, px + 4, 4, col);
-      // Barra di riempimento.
+      // Flash colore sulla cornice quando il consenso cambia (verde su / rosso giù).
+      const pulse = this.sondPulse > 0 && Math.floor(this.sondPulse * 16) % 2 === 0;
+      const bg = pulse
+        ? (this.sondDelta?.up ? "rgba(122,216,88,0.85)" : "rgba(208,72,72,0.85)")
+        : "rgba(16,20,31,0.92)";
+      screen.rect(px, 2, panelW, 22, bg);
+      screen.text(`SOND ${shown}%`, px + 4, 4, col);
+      // Barra di riempimento (segue il valore animato).
       const barW = panelW - 8;
       screen.rect(px + 4, 12, barW, 4, "rgba(255,255,255,0.15)");
-      screen.rect(px + 4, 12, Math.max(1, Math.round((barW * sond) / 100)), 4, col);
+      screen.rect(px + 4, 12, Math.max(1, Math.round((barW * shown) / 100)), 4, col);
       // Etichetta del momento (PLEBISCITO, OPPOSIZIONE, ...): troncata se serve.
       screen.text(clipHud(sondaggiLabelShort(sond), 13), px + 4, 17, "#cfe6ff");
+      // Delta flottante (+8 / -2) che sale e svanisce accanto alla barra.
+      if (this.sondDelta) {
+        const dy = Math.round(6 - (1.4 - this.sondDelta.t) * 8);
+        screen.text(this.sondDelta.text, px - 18, dy, this.sondDelta.up ? "#7ad858" : "#d04848");
+      }
       hudBottom = 26;
     }
 
@@ -1651,6 +1781,102 @@ export class WorldScene implements Scene {
     // Dissolvenza d'ingresso nella nuova mappa (più dolce dei cambi secchi).
     if (this.fadeT > 0) {
       screen.dim(this.fadeT / 0.35 * 0.9);
+    }
+
+    // Effetto di cura sopra tutto (velo verde, anelli, scintille, barre HP).
+    if (this.healFx > 0) {
+      this.drawHealOverlay(screen);
+    }
+
+    // Banner "evento" (traguardo, breaking news) sopra tutto.
+    if (this.banner) {
+      this.drawBanner(screen);
+    }
+  }
+
+  private drawHealOverlay(screen: Screen): void {
+    const ctx = screen.ctx;
+    const prog = this.healFx / 1.6; // 1 -> 0 mentre l'effetto svanisce
+    const cx = VIEW_W / 2;
+    const cy = VIEW_H / 2 + 6;
+
+    // 1) Velo verde che si accende e svanisce.
+    ctx.fillStyle = `rgba(122,216,88,${0.26 * prog})`;
+    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+
+    // 2) Anelli curativi che si stringono verso il centro.
+    ctx.save();
+    ctx.globalAlpha = 0.55 * prog;
+    ctx.strokeStyle = "#9aff7a";
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 3; i += 1) {
+      const r = 8 + ((1 - prog) * 18 + i * 9) % 30;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // 3) Scintille verdi/bianche che salgono.
+    for (const s of this.healSparks) {
+      const a = 1 - s.life / s.max;
+      ctx.globalAlpha = Math.max(0, a);
+      ctx.fillStyle = s.color;
+      ctx.fillRect(Math.round(s.x), Math.round(s.y), 2, 2);
+    }
+    ctx.globalAlpha = 1;
+
+    // 4) Mini-pannello party: ritratti + barre HP che si riempiono a vista.
+    const rows = this.healSnapshot.length;
+    if (rows > 0) {
+      const panelH = 14 + rows * 12;
+      const py = VIEW_H - panelH - 4;
+      screen.panel(6, py, 150, panelH);
+      screen.text("CONSENSO RECUPERATO", 12, py + 5, INK);
+      for (let i = 0; i < rows; i += 1) {
+        const s = this.healSnapshot[i];
+        const ry = py + 14 + i * 12;
+        const art = MONSTER_ART[s.mon.speciesId];
+        if (art) {
+          screen.sprite(`heal-${s.mon.speciesId}`, art, 12, ry - 2, { scale: 0.42 });
+        }
+        drawHpBar(screen, 26, ry + 3, 100, s.disp, s.to);
+      }
+    }
+  }
+
+  private drawBanner(screen: Screen): void {
+    const b = this.banner;
+    if (!b) {
+      return;
+    }
+    // Flash schermo all'apparizione.
+    if (this.bannerFlash > 0) {
+      const ctx = screen.ctx;
+      ctx.fillStyle = `rgba(255,240,180,${0.5 * (this.bannerFlash / 0.4)})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    }
+    // Entrata a molla: scende dall'alto con un piccolo rimbalzo, resta, poi sale.
+    const dur = 2.4;
+    const t = b.t;
+    let y: number;
+    if (t < 0.3) {
+      const p = t / 0.3;
+      y = -28 + (28 + 4) * p; // entra fino a y=4 con leggero overshoot
+    } else if (t > dur - 0.3) {
+      const p = (t - (dur - 0.3)) / 0.3;
+      y = 8 - (8 + 28) * p; // esce verso l'alto
+    } else {
+      y = 8 - Math.sin((t - 0.3) * 6) * 2; // oscilla appena
+    }
+    const w = VIEW_W - 24;
+    screen.rect(12, Math.round(y), w, 22, "rgba(16,20,31,0.95)");
+    screen.rect(12, Math.round(y), w, 2, b.color);
+    screen.rect(12, Math.round(y) + 20, w, 2, b.color);
+    screen.textCenter(b.text, VIEW_W / 2, Math.round(y) + 4, b.color);
+    screen.textCenter(clipHud(b.sub, 36), VIEW_W / 2, Math.round(y) + 13, "#cfe6ff");
+    if (t > dur) {
+      this.banner = null;
     }
   }
 }

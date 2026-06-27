@@ -62,10 +62,14 @@ export function newGameState(): GameState {
   };
 }
 
-export function markSeen(state: GameState, speciesId: string): void {
+// Ritorna true se la specie era SCONOSCIUTA (prima vista): serve a mostrare il
+// banner "UN VOLTO MAI VISTO!" nel momento della scoperta.
+export function markSeen(state: GameState, speciesId: string): boolean {
   if (!state.dex[speciesId]) {
     state.dex[speciesId] = "seen";
+    return true;
   }
+  return false;
 }
 
 export function markCaught(state: GameState, speciesId: string): void {

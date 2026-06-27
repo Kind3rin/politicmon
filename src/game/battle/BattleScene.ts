@@ -113,6 +113,7 @@ export class BattleScene implements Scene {
   // Incontro leggendario: aura dorata permanente sul nemico + banner d'ingresso.
   private isLegendary = false;
   private legendBanner = 0; // tempo del banner "LEGGENDARIO!" all'ingresso
+  private firstSeenBanner = 0; // banner "UN VOLTO MAI VISTO!" alla scoperta
   private legendIntroFlash = 0; // lampo d'apertura drammatico
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
@@ -136,7 +137,12 @@ export class BattleScene implements Scene {
     this.displayHp.player = lead.hp;
     this.displayHp.foe = this.foe.mon.hp;
     this.displayExp = this.expRatio();
-    markSeen(this.state, this.foe.mon.speciesId);
+    // Prima volta che incontri questa specie: banner "UN VOLTO MAI VISTO!"
+    // (la scoperta del nuovo è il gancio più forte della collezione).
+    const firstTime = markSeen(this.state, this.foe.mon.speciesId);
+    if (firstTime && !opts.legendary && !opts.trainer) {
+      this.firstSeenBanner = 2.2;
+    }
 
     this.ai = this.computeAiProfile();
     audio.playMusic(battleMusic(opts));
@@ -994,6 +1000,7 @@ export class BattleScene implements Scene {
     this.levelFlash = Math.max(0, this.levelFlash - dt);
     this.catchFlash = Math.max(0, this.catchFlash - dt);
     this.legendBanner = Math.max(0, this.legendBanner - dt);
+    this.firstSeenBanner = Math.max(0, this.firstSeenBanner - dt);
     this.legendIntroFlash = Math.max(0, this.legendIntroFlash - dt);
     // I leggendari spruzzano scintille dorate di continuo: aura "viva".
     if (this.isLegendary && this.foe.mon.hp > 0 && Math.random() < 0.25) {
@@ -1706,6 +1713,20 @@ export class BattleScene implements Scene {
       const label = "POLITICMON LEGGENDARIO!";
       screen.textCenter(label, VIEW_W / 2 + 1, y + 1, "rgba(16,20,31,0.8)", size);
       screen.textCenter(label, VIEW_W / 2, y, "#ffd23c", size);
+      ctx.restore();
+    }
+    // Banner "prima vista" (ciano, per distinguerlo dall'oro leggendario).
+    if (this.firstSeenBanner > 0) {
+      const prog = 1 - this.firstSeenBanner / 2.2;
+      const pop = Math.min(1, prog / 0.2);
+      const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
+      const y = 30 + (1 - pop) * -10;
+      const size = pop >= 1 ? 2 : 1;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, fade);
+      const label = "UN VOLTO MAI VISTO!";
+      screen.textCenter(label, VIEW_W / 2 + 1, y + 1, "rgba(16,20,31,0.8)", size);
+      screen.textCenter(label, VIEW_W / 2, y, "#4ad0e8", size);
       ctx.restore();
     }
   }

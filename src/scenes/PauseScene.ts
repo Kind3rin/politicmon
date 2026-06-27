@@ -27,11 +27,17 @@ export class PauseScene implements Scene {
   private entries: string[] = [];
   private msg = new MessageBox();
   private showCard = false;
+  // Sotto-menu OPZIONI (toggle raccolti, fuori dalla lista principale).
+  private optionsMenu: Menu | null = null;
+  private optEntries: string[] = [];
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     this.menu = this.buildMenu();
   }
 
+  // Menu principale: SOLO le azioni di gioco + VEICOLO + OPZIONI + CHIUDI.
+  // I toggle (audio/vibra/guida/salva/tasti) sono raccolti in OPZIONI così la
+  // lista non è più un muro di 13 voci miste.
   private buildMenu(): Menu {
     this.entries = [];
     if (this.state.flags["dex-received"]) {
@@ -47,17 +53,25 @@ export class PauseScene implements Scene {
       const v = this.state.vehicle ? VEHICLES[this.state.vehicle as VehicleId].name : "A PIEDI";
       this.entries.push(`VEICOLO: ${v}`);
     }
-    this.entries.push(`GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`, "SALVA", `AUDIO ${audio.enabled ? "SÌ" : "NO"}`);
-    // Vibrazione: solo dove il dispositivo la supporta (telefoni).
-    if (haptics.isSupported) {
-      this.entries.push(`VIBRA ${haptics.enabled ? "SÌ" : "NO"}`);
-    }
-    // La scelta levetta/d-pad ha senso solo coi controlli touch a schermo.
-    if (document.body.classList.contains("touch")) {
-      this.entries.push(`TASTI: ${loadControlMode() === "stick" ? "LEVETTA" : "CROCE"}`);
-    }
-    this.entries.push("CHIUDI");
+    this.entries.push("OPZIONI", "CHIUDI");
     return new Menu(this.entries.map((label) => ({ label })));
+  }
+
+  // Sotto-menu OPZIONI: tutti i toggle/impostazioni in un posto solo.
+  private buildOptionsMenu(): Menu {
+    this.optEntries = [
+      "SALVA",
+      `GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`,
+      `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`
+    ];
+    if (haptics.isSupported) {
+      this.optEntries.push(`VIBRA: ${haptics.enabled ? "SÌ" : "NO"}`);
+    }
+    if (document.body.classList.contains("touch")) {
+      this.optEntries.push(`TASTI: ${loadControlMode() === "stick" ? "LEVETTA" : "CROCE"}`);
+    }
+    this.optEntries.push("INDIETRO");
+    return new Menu(this.optEntries.map((label) => ({ label })));
   }
 
   update(dt: number): void {
@@ -69,6 +83,19 @@ export class PauseScene implements Scene {
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
         audio.cancel();
         this.showCard = false;
+      }
+      return;
+    }
+    // Sotto-menu OPZIONI attivo: gestisci i toggle, B/INDIETRO torna al menu.
+    if (this.optionsMenu) {
+      const a = this.optionsMenu.update(this.input);
+      if (a === "cancel") {
+        audio.cancel();
+        this.optionsMenu = null;
+        return;
+      }
+      if (a === "select") {
+        this.handleOption(this.optEntries[this.optionsMenu.index]);
       }
       return;
     }
@@ -113,42 +140,59 @@ export class PauseScene implements Scene {
       case "CHAT ONLINE":
         this.stack.push(new ChatScene(this.stack, this.input));
         break;
-      case "SALVA":
-        this.msg.show(
-          saveGame(this.state)
-            ? ["Partita salvata!", "A differenza delle riforme, questa resta."]
-            : ["Errore di salvataggio..."]
-        );
+      case "OPZIONI":
+        audio.confirm();
+        this.optionsMenu = this.buildOptionsMenu();
         break;
       case "CHIUDI":
         this.stack.pop();
         break;
       default: {
-        const index = this.menu.index;
+        // L'unica voce "ciclabile" rimasta nel menu principale è il VEICOLO.
         if (label.startsWith("VEICOLO")) {
+          const index = this.menu.index;
           this.cycleVehicle();
           audio.confirm();
-        } else if (label.startsWith("GUIDA")) {
-          toggleGuide();
-          audio.confirm();
-        } else if (label.startsWith("TASTI")) {
-          toggleControlMode();
-          audio.confirm();
-        } else if (label.startsWith("VIBRA")) {
-          haptics.toggle();
-          audio.confirm(); // dà anche un feedback tattile immediato se riattivata
-        } else {
-          // Audio.
-          const enabled = audio.toggle();
-          if (enabled) {
-            audio.playMusic(MAPS[this.state.pos.mapId]?.music ?? "borgo");
-          }
+          this.menu = this.buildMenu();
+          this.menu.index = index;
         }
-        this.menu = this.buildMenu();
-        this.menu.index = index;
         break;
       }
     }
+  }
+
+  // Gestisce una voce del sotto-menu OPZIONI (toggle + salva).
+  private handleOption(label: string): void {
+    if (label === "INDIETRO") {
+      audio.cancel();
+      this.optionsMenu = null;
+      return;
+    }
+    if (label === "SALVA") {
+      this.msg.show(
+        saveGame(this.state)
+          ? ["Partita salvata!", "A differenza delle riforme, questa resta."]
+          : ["Errore di salvataggio..."]
+      );
+      this.optionsMenu = null;
+      return;
+    }
+    const index = this.optionsMenu?.index ?? 0;
+    if (label.startsWith("GUIDA")) {
+      toggleGuide();
+    } else if (label.startsWith("TASTI")) {
+      toggleControlMode();
+    } else if (label.startsWith("VIBRA")) {
+      haptics.toggle();
+    } else if (label.startsWith("AUDIO")) {
+      const enabled = audio.toggle();
+      if (enabled) {
+        audio.playMusic(MAPS[this.state.pos.mapId]?.music ?? "borgo");
+      }
+    }
+    audio.confirm();
+    this.optionsMenu = this.buildOptionsMenu();
+    this.optionsMenu.index = index;
   }
 
   // Cicla: a piedi -> primo veicolo -> ... -> a piedi.
@@ -165,8 +209,17 @@ export class PauseScene implements Scene {
       this.drawCard(screen);
       return;
     }
-    // Larghezza adattata al contenuto (la voce VEICOLO: MONOPATTINO è la più
-    // lunga), con un minimo e un massimo che non sfori lo schermo.
+    // Sotto-menu OPZIONI: lista compatta dei toggle con intestazione.
+    if (this.optionsMenu) {
+      const ow = Math.max(120, Math.min(this.optionsMenu.measureWidth(), VIEW_W - 8));
+      const ox = VIEW_W - ow - 4;
+      screen.rect(ox, 4, ow, 10, "rgba(16,20,31,0.92)");
+      screen.text("OPZIONI", ox + 4, 5, "#e8c84a");
+      this.optionsMenu.draw(screen, ox, 16, ow);
+      this.msg.draw(screen);
+      return;
+    }
+    // Menu principale: solo azioni. Larghezza adattata al contenuto.
     const w = Math.max(110, Math.min(this.menu.measureWidth(), VIEW_W - 8));
     this.menu.draw(screen, VIEW_W - w - 4, 4, w);
     this.msg.draw(screen);

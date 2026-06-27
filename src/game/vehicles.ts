@@ -6,7 +6,7 @@ import type { GameState } from "./state";
 // AUTO BLU: veicolo guidabile, veloce all'aperto. (Il teletrasporto fra città
 //   resta gestito a parte dalla SCORTA col menu di trasporto.)
 
-export type VehicleId = "monopattino" | "ruspa" | "auto";
+export type VehicleId = "monopattino" | "ruspa" | "auto" | "traghetto";
 
 export interface VehicleDef {
   id: VehicleId;
@@ -33,10 +33,16 @@ export const VEHICLES: Record<VehicleId, VehicleDef> = {
     name: "AUTO BLU",
     flag: "veh-auto",
     desc: "La macchina elettorale: scorre veloce su strada e in città."
+  },
+  traghetto: {
+    id: "traghetto",
+    name: "TRAGHETTO",
+    flag: "veh-traghetto",
+    desc: "Comandato dal CAPITANO SCHETTINO: naviga l'acqua. Inchino compreso."
   }
 };
 
-export const VEHICLE_ORDER: VehicleId[] = ["monopattino", "ruspa", "auto"];
+export const VEHICLE_ORDER: VehicleId[] = ["monopattino", "ruspa", "auto", "traghetto"];
 
 export function hasVehicle(state: GameState, id: VehicleId): boolean {
   return Boolean(state.flags[VEHICLES[id].flag]);

@@ -47,8 +47,8 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
   }
 };
 
-// Scafo del TRAGHETTO (MN): disegnato sotto il personaggio mentre attraversa
-// l'acqua. Legno con bordo chiaro e scia, ~18x7.
+// Scafo del TRAGHETTO: disegnato sotto il personaggio mentre naviga l'acqua.
+// Legno con bordo chiaro e scia, ~18x8.
 const FERRY_PIX = pix(
   [
     "...bbbbbbbbbbbb...",
@@ -61,6 +61,26 @@ const FERRY_PIX = pix(
     ".~~..~~..~~..~~..~"
   ],
   { b: "#4a2e16", B: "#9a6a36", w: "#d8b070", "~": "#cfeeff" }
+);
+
+// CAPITANO SCHETTINO al timone (satira bonaria): divisa bianca, cappello da
+// comandante, una mano sul fianco. ~9x11. o outline, c cappello/divisa bianca,
+// v visiera nera, s pelle, g gradi dorati.
+const SCHETTINO_PIX = pix(
+  [
+    "..ooooo..",
+    ".ovvvvvo.",
+    ".ogggggo.",
+    "..ossso..",
+    "..ossso..",
+    ".occccco.",
+    "occccccco",
+    "occgcgcco",
+    "occccccco",
+    ".occ.cco.",
+    ".os...so."
+  ],
+  { o: "#1c2333", v: "#10141f", c: "#f2f2ec", g: "#e8c84a", s: "#e0a070" }
 );
 
 interface RuntimeNpc extends NpcDef {
@@ -136,6 +156,7 @@ export class WorldScene implements Scene {
   private running = false;
   private moveT = 0;
   private shake = 0; // scossone camera (es. RUSPA che abbatte un albero)
+  private landVehicle: VehicleId | null = null; // mezzo terrestre messo da parte mentre sei in TRAGHETTO
   private fromX = 0;
   private fromY = 0;
   private time = 0;
@@ -234,7 +255,7 @@ export class WorldScene implements Scene {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
       !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift &&
-      !npc.hmGift && !npc.legendary;
+      !npc.legendary;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -414,15 +435,26 @@ export class WorldScene implements Scene {
     return false;
   }
 
-  // MN TRAGHETTO sbloccata: serve il flag + almeno un POLITICMON in squadra non KO
-  // (qualcuno deve remare). Coerente con Pokémon: senza il mostro non si surfa.
+  // L'acqua è navigabile solo se POSSIEDI il TRAGHETTO (al timone il CAPITANO
+  // SCHETTINO). L'imbarco è automatico: niente menu, niente soft-lock.
   private canFerry(): boolean {
-    return Boolean(this.state.flags["hm-traghetto"]) && this.state.party.some((m) => m.hp > 0);
+    return Boolean(this.state.flags["veh-traghetto"]);
   }
 
-  // Il giocatore è attualmente su una cella d'acqua? (per disegnare il traghetto)
-  private isOnWater(): boolean {
-    return Boolean(TILES[this.tileAt(this.state.pos.x, this.state.pos.y)]?.water);
+  // Imbarco/sbarco automatico: se sei su acqua col traghetto posseduto, il
+  // veicolo "traghetto" è attivo (scafo+Schettino); appena torni a terra,
+  // ripristina il veicolo terrestre precedente. Chiamato dopo ogni passo.
+  private syncFerryVehicle(): void {
+    if (!this.canFerry()) {
+      return;
+    }
+    const onWater = Boolean(TILES[this.tileAt(this.state.pos.x, this.state.pos.y)]?.water);
+    if (onWater && this.state.vehicle !== "traghetto") {
+      this.landVehicle = (this.state.vehicle as VehicleId | null) ?? null; // ricorda il mezzo terrestre
+      this.state.vehicle = "traghetto";
+    } else if (!onWater && this.state.vehicle === "traghetto") {
+      this.state.vehicle = this.landVehicle ?? null;
+    }
   }
 
   private say(lines: string[], after?: () => void): void {
@@ -755,36 +787,23 @@ export class WorldScene implements Scene {
 
     if (npc.vehicleGift && !this.state.flags[npc.vehicleGift.flag]) {
       const vg = npc.vehicleGift;
+      // Gating opzionale (es. il TRAGHETTO serve 3 medaglie).
+      if (vg.requiresBadges && this.state.badges.length < vg.requiresBadges) {
+        this.say(vg.lockedLines ?? ["Non sei ancora pronto."]);
+        return;
+      }
       this.say(vg.lines, () => {
         this.state.flags[vg.flag] = true;
         unlockVehicle(this.state, vg.vehicle);
         audio.catchJingle();
-        this.say([
-          `Hai ottenuto: ${VEHICLES[vg.vehicle].name}!`,
-          "Attivalo dal menu (START) alla voce VEICOLO."
-        ]);
+        // Il TRAGHETTO si imbarca da solo sull'acqua; gli altri si attivano dal menu.
+        const howto = vg.vehicle === "traghetto"
+          ? "Cammina verso il mare: t'imbarchi da solo, SCHETTINO al timone."
+          : "Attivalo dal menu (START) alla voce VEICOLO.";
+        this.say([`Hai ottenuto: ${VEHICLES[vg.vehicle].name}!`, howto]);
         saveGame(this.state);
       });
       return;
-    }
-
-    if (npc.hmGift) {
-      const hm = npc.hmGift;
-      if (!this.state.flags[hm.flag]) {
-        // Gating opzionale (es. serve la 3ª medaglia per la traversata).
-        if (hm.requiresBadges && this.state.badges.length < hm.requiresBadges) {
-          this.say(hm.lockedLines ?? ["Non sei ancora pronto."]);
-          return;
-        }
-        this.say(hm.lines, () => {
-          this.state.flags[hm.flag] = true;
-          audio.catchJingle();
-          this.say(["Hai ottenuto la MN TRAGHETTO!", "Ora puoi attraversare l'acqua. Cammina verso il mare."]);
-          saveGame(this.state);
-        });
-        return;
-      }
-      // Già ottenuta: cade nelle lines normali sotto.
     }
 
     // Flag "hai parlato con..." per le quest secondarie (es. GIRO DI PORTE).
@@ -1253,6 +1272,9 @@ export class WorldScene implements Scene {
 
   private onStepComplete(): void {
     const pos = this.state.pos;
+
+    // Imbarco/sbarco automatico sul TRAGHETTO (su acqua) prima di tutto il resto.
+    this.syncFerryVehicle();
 
     // Multiplayer: comunica la nuova posizione agli altri sulla mappa.
     mp.sendMove(pos.x, pos.y, pos.facing);
@@ -1790,7 +1812,17 @@ export class WorldScene implements Scene {
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.
     const vehicle = this.state.vehicle as VehicleId | null;
-    if (vehicle) {
+    if (vehicle === "traghetto") {
+      // TRAGHETTO: scafo che ondeggia, al timone il CAPITANO SCHETTINO (satira),
+      // e il giocatore a bordo. Lo scafo si vede su acqua e a terra (è il mezzo).
+      const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
+      screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
+      // Schettino al timone, leggermente di lato; il player accanto.
+      screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
+      screen.sprite(playerSprite.key, playerSprite.pix, baseX - 4, baseY + bob, {
+        flipX: playerSprite.flip
+      });
+    } else if (vehicle) {
       const veh = vehicleSprite(vehicle, pos.facing);
       // Quanto sollevare il personaggio per "sedercelo" sopra: la ruspa è alta,
       // l'auto lo mette in abitacolo, il monopattino di poco.
@@ -1800,14 +1832,6 @@ export class WorldScene implements Scene {
       const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
       screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
       screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - lift + jitter, {
-        flipX: playerSprite.flip
-      });
-    } else if (this.isOnWater()) {
-      // MN TRAGHETTO: scafo sotto il personaggio mentre attraversa l'acqua.
-      // Il personaggio è rialzato "a bordo"; lo scafo ondeggia leggermente.
-      const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
-      screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
-      screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - 2 + bob, {
         flipX: playerSprite.flip
       });
     } else {

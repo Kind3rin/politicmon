@@ -16,10 +16,13 @@ export interface NpcDef {
   mafia?: boolean;
   transport?: boolean;
   gift?: { itemId: string; qty: number; flag: string; lines: string[] };
-  vehicleGift?: { vehicle: "monopattino" | "ruspa" | "auto"; flag: string; lines: string[] };
-  // Dono di una MN (mossa macchina): setta un flag che sblocca un'abilità sul
-  // campo (es. hm-traghetto = attraversa l'acqua). requiresBadges opzionale.
-  hmGift?: { flag: string; requiresBadges?: number; lines: string[]; lockedLines?: string[] };
+  vehicleGift?: {
+    vehicle: "monopattino" | "ruspa" | "auto" | "traghetto";
+    flag: string;
+    lines: string[];
+    requiresBadges?: number; // gating opzionale (es. TRAGHETTO a 3 medaglie)
+    lockedLines?: string[];
+  };
   legendary?: {
     speciesId: string;
     level: number;
@@ -117,6 +120,45 @@ const BORGO_TILES = [
   "TT..wwww.....====.....wwww..TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+];
+
+// ----------------------------------------------- PERCORSO 1 (BORGO-MEDIOPOLI)
+// Route pilota stile Pokémon: corridoio verticale tra le due città, con erba
+// alta (~ incontri), un LAGHETTO (w) navigabile col TRAGHETTO che nasconde
+// un'isoletta col tesoro, e l'ingresso di una GROTTA (porta d → grotta1).
+// 28 colonne come le città, strada ==== a idx13-16 per allinearsi agli edge.
+const ROUTE1_TILES = [
+  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
+  "TT..~~~~~...====...~~~~~~..TT",
+  "TT..~~~~~...====...~~~~~~..TT",
+  "TT..~~~~~...====...~~~dT...TT",
+  "TT..wwww....====...~~~~~...TT",
+  "TT..wwww....====....~~~....TT",
+  "TT..ww.w....====...........TT",
+  "TT..wwww....====...,,,,....TT",
+  "TT..wwww....=======,,,,....TT",
+  "TT..~~~~....====...,,,,....TT",
+  "TT..~~~~....====...........TT",
+  "TT..~~~~....====...~~~~~...TT",
+  "TT..........====...~~~~~...TT",
+  "TT..~~~~~...====...~~~~~...TT",
+  "TT..~~~~~...====...........TT",
+  "TT..~~~~~...====...~~~~~~..TT",
+  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+];
+
+// La GROTTA 1: piccola caverna con un paio di incontri (erba/ombra ~) e un
+// tesoro. Bordi in roccia (A = muro interno), pavimento p, uscita cc in basso.
+const GROTTA1_TILES = [
+  "AAAAAAAAAAAA",
+  "AppppppppppA",
+  "Appp~~~ppppA",
+  "Appp~~~ppppA",
+  "Apppppppp~pA",
+  "Appppppp~~pA",
+  "App~~ppppppA",
+  "ApppppccpppA",
+  "AAAAAAAAAAAA"
 ];
 
 // ---------------------------------------------------------------- MEDIOPOLI
@@ -469,7 +511,7 @@ export const MAPS: Record<string, MapDef> = {
     tiles: BORGO_TILES,
     outdoor: true,
     music: "borgo",
-    edges: { north: { toMap: "mediopoli", offsetX: 0 } },
+    edges: { north: { toMap: "route1", offsetX: 0 } },
     warps: [
       { x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
       { x: 22, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
@@ -558,6 +600,78 @@ export const MAPS: Record<string, MapDef> = {
     ]
   },
 
+  // PERCORSO 1: route tra BORGO (sud) e MEDIOPOLI (nord). Erba alta con incontri,
+  // un LAGHETTO con isoletta-tesoro (solo col TRAGHETTO) e una GROTTA opzionale.
+  route1: {
+    id: "route1",
+    name: "PERCORSO 1",
+    tiles: ROUTE1_TILES,
+    outdoor: true,
+    music: "borgo",
+    edges: {
+      north: { toMap: "mediopoli", offsetX: 0 },
+      south: { toMap: "borgo", offsetX: 0 }
+    },
+    warps: [
+      { x: 22, y: 3, toMap: "grotta1", toX: 5, toY: 7, facing: "up" }
+    ],
+    encounterRate: 0.16,
+    // Mix delle due città a livello intermedio: chi attraversa allena la squadra.
+    encounters: [
+      { speciesId: "salvinott", weight: 24, minLv: 4, maxLv: 6 },
+      { speciesId: "grillix", weight: 22, minLv: 4, maxLv: 6 },
+      { speciesId: "contemorfo", weight: 20, minLv: 5, maxLv: 7 },
+      { speciesId: "vannaccix", weight: 18, minLv: 5, maxLv: 7 },
+      { speciesId: "calendauro", weight: 16, minLv: 6, maxLv: 7 }
+    ],
+    signs: [
+      { x: 17, y: 7, lines: ["PERCORSO 1", "Nord: MEDIOPOLI. Sud: BORGO URNE.", "L'erba alta pullula di candidati. La GROTTA a est nasconde qualcosa."] }
+    ],
+    pickups: [
+      // Tesoro sull'isoletta in mezzo al LAGHETTO: ci arrivi solo col TRAGHETTO.
+      { id: "pk-r1-isola", x: 6, y: 6, itemId: "schedona", qty: 2 },
+      { id: "pk-r1", x: 24, y: 9, itemId: "caffe", qty: 2 }
+    ],
+    npcs: [
+      {
+        id: "tr-route1", pal: "kid", x: 20, y: 9, facing: "left",
+        trainerId: "aide", sightRange: 3,
+        lines: ["Mi alleno tra le due città. Tu dove credi di andare?"]
+      },
+      {
+        id: "viandante-r1", pal: "granny", x: 9, y: 12, facing: "right",
+        lines: ["Una volta tra BORGO e MEDIOPOLI c'era solo erba.", "Ora c'è ancora solo erba. Ma con più sondaggi."]
+      }
+    ]
+  },
+
+  // GROTTA 1: caverna opzionale sul PERCORSO 1, con incontri e un tesoro.
+  grotta1: {
+    id: "grotta1",
+    name: "GROTTA DEL CONSENSO",
+    tiles: GROTTA1_TILES,
+    outdoor: false,
+    music: "interior",
+    warps: [
+      { x: 5, y: 7, toMap: "route1", toX: 22, toY: 4, facing: "down" },
+      { x: 6, y: 7, toMap: "route1", toX: 22, toY: 4, facing: "down" }
+    ],
+    encounterRate: 0.22,
+    encounters: [
+      { speciesId: "muskrat", weight: 30, minLv: 5, maxLv: 7 },
+      { speciesId: "grillix", weight: 24, minLv: 5, maxLv: 7 },
+      { speciesId: "contemorfo", weight: 20, minLv: 6, maxLv: 8 }
+    ],
+    signs: [
+      { x: 8, y: 1, lines: ["GROTTA DEL CONSENSO", "Buio, umido e pieno di voti dimenticati."] }
+    ],
+    pickups: [
+      { id: "pk-grotta1", x: 9, y: 1, itemId: "tessera", qty: 1 },
+      { id: "pk-grotta1b", x: 2, y: 6, itemId: "spritz", qty: 1, hidden: true }
+    ],
+    npcs: []
+  },
+
   mediopoli: {
     id: "mediopoli",
     name: "MEDIOPOLI",
@@ -572,7 +686,7 @@ export const MAPS: Record<string, MapDef> = {
           "«Senza la MEDAGLIA AUDITEL non si passa: prima conquista la palestra di MEDIOPOLI.»"
         ]
       },
-      south: { toMap: "borgo", offsetX: 0 }
+      south: { toMap: "route1", offsetX: 0 }
     },
     warps: [
       { x: 6, y: 10, toMap: "gymtv", toX: 4, toY: 6, facing: "up" },
@@ -755,8 +869,8 @@ export const MAPS: Record<string, MapDef> = {
         // IMBARCO per la SICILIA: traversata via MN TRAGHETTO. Senza la MN il
         // molo è sbarrato (vedi NPC marinaio accanto, che la regala a 3 medaglie).
         x: 12, y: 19, toMap: "mare", toX: 8, toY: 2, facing: "down",
-        requiresFlag: "hm-traghetto",
-        lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza la MN TRAGHETTO."]
+        requiresFlag: "veh-traghetto",
+        lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza il TRAGHETTO."]
       },
       {
         x: 14, y: 5, toMap: "palazzo", toX: 5, toY: 7, facing: "up",
@@ -828,22 +942,23 @@ export const MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        // MARINAIO dell'IMBARCO: regala la MN TRAGHETTO a 3 medaglie. Da qui (molo
-        // a 12,19) si attraversa il BRACCIO DI MARE fino alla SICILIA (STRETTO).
+        // MARINAIO dell'IMBARCO: regala il VEICOLO TRAGHETTO a 3 medaglie. Da qui
+        // (molo a 12,19) si naviga il BRACCIO DI MARE fino alla SICILIA (STRETTO).
         id: "marinaio-cap", pal: "guard", x: 11, y: 19, facing: "right",
-        hmGift: {
-          flag: "hm-traghetto", requiresBadges: 3,
+        vehicleGift: {
+          vehicle: "traghetto", flag: "veh-traghetto", requiresBadges: 3,
           lines: [
             "MARINAIO: vuoi raggiungere la SICILIA? Di là si va solo per mare.",
-            "Hai le 3 MEDAGLIE: meriti la MN TRAGHETTO. Tienila.",
-            "Davanti all'acqua, ora, non ti fermi più: la attraversi col tuo POLITICMON."
+            "Hai le 3 MEDAGLIE: ti affido il TRAGHETTO. Al timone c'è il CAPITANO SCHETTINO.",
+            "Attivalo dal menu (START) alla voce VEICOLO e l'acqua diventa la tua strada.",
+            "Mi raccomando: prima si naviga, l'inchino dopo."
           ],
           lockedLines: [
             "MARINAIO: il mare è mosso e il molo è chiuso ai dilettanti.",
-            "Torna con 3 MEDAGLIE e ti consegno la MN TRAGHETTO."
+            "Torna con 3 MEDAGLIE e ti consegno il TRAGHETTO."
           ]
         },
-        lines: ["MARINAIO: il MOLO è dietro di me. Verso il mare, sempre dritto fino alla Sicilia."]
+        lines: ["MARINAIO: il MOLO è dietro di me. Attiva il TRAGHETTO dal menu e vai verso la Sicilia."]
       },
       {
         id: "ruspista", pal: "aide", x: 8, y: 18, facing: "down",

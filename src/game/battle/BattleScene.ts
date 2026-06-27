@@ -679,13 +679,46 @@ export class BattleScene implements Scene {
       // Variabilità della ricompensa = quel "ancora una battaglia".
       if (Math.random() < 0.3) {
         const drop = rollLootDrop();
-        steps.push({ run: () => audio.catchJingle() });
-        steps.push({
-          text: `BUSTA A SORPRESA! Dentro c'è: ${ITEMS[drop.id].name} x${drop.qty}!`,
-          run: () => {
-            this.state.bag[drop.id] = (this.state.bag[drop.id] ?? 0) + drop.qty;
-          }
-        });
+        const isJackpot = drop.id === "tessera";
+        if (isJackpot) {
+          // JACKPOT: la rara TESSERA DORATA merita un trattamento speciale
+          // (lampo dorato + scintille + fanfara di vittoria, come la cattura).
+          steps.push({
+            run: () => {
+              audio.victory();
+              this.catchFlash = 0.9;
+              const c = this.monsterCenter("foe");
+              for (let i = 0; i < 26; i += 1) {
+                const ang = (Math.PI * 2 * i) / 26 + 0.2;
+                const speed = 80 * (0.6 + Math.random() * 0.9);
+                this.particles.push({
+                  x: c.x + (Math.random() - 0.5) * 14,
+                  y: c.y + (Math.random() - 0.5) * 14,
+                  vx: Math.cos(ang) * speed,
+                  vy: Math.sin(ang) * speed - 36,
+                  life: 0,
+                  max: 0.6 + Math.random() * 0.5,
+                  color: ["#ffe98a", "#ffd23c", "#fff4c0"][i % 3],
+                  size: 2
+                });
+              }
+            }
+          });
+          steps.push({
+            text: `JACKPOT! È uscita una rarissima ${ITEMS[drop.id].name}!`,
+            run: () => {
+              this.state.bag[drop.id] = (this.state.bag[drop.id] ?? 0) + drop.qty;
+            }
+          });
+        } else {
+          steps.push({ run: () => audio.catchJingle() });
+          steps.push({
+            text: `BUSTA A SORPRESA! Dentro c'è: ${ITEMS[drop.id].name} x${drop.qty}!`,
+            run: () => {
+              this.state.bag[drop.id] = (this.state.bag[drop.id] ?? 0) + drop.qty;
+            }
+          });
+        }
       }
     } else {
       steps.push({

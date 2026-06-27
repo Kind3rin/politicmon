@@ -12,6 +12,7 @@ export interface NpcDef {
   healer?: boolean;
   shop?: boolean;
   casino?: boolean;
+  box?: boolean; // COMPUTER DI PARTITO: apre il box (CIRCOLO DI PARTITO)
   mafia?: boolean;
   transport?: boolean;
   gift?: { itemId: string; qty: number; flag: string; lines: string[] };
@@ -424,6 +425,10 @@ function barMap(id: string, name: string, city: string, doorX: number, doorY: nu
       {
         id: `${id}-barista`, pal: "barista", x: 5, y: 3, facing: "down", healer: true,
         lines: [`${name}: benvenuto. Il banco offre, la squadra si riprende.`]
+      },
+      {
+        id: `${id}-pc`, pal: "aide", x: 9, y: 3, facing: "down", box: true,
+        lines: ["COMPUTER DI PARTITO: qui gestisci chi sta in squadra e chi al CIRCOLO."]
       }
     ]
   };
@@ -1184,7 +1189,7 @@ export const MAPS: Record<string, MapDef> = {
   // BORGO — circolo del paese.
   circolo: houseMap("circolo", "CIRCOLO DEL BORGO", "borgo", 5, 19, [
     {
-      id: "circolo-anziano", pal: "granny", x: 2, y: 2, facing: "right",
+      id: "circolo-anziano", pal: "granny", x: 1, y: 3, facing: "right",
       lines: [
         "Al CIRCOLO si gioca a carte e si rifà il governo ogni sera.",
         "Nessuno ha mai vinto una partita, ma tutti hanno sempre ragione."
@@ -1220,7 +1225,7 @@ export const MAPS: Record<string, MapDef> = {
   // MEDIOPOLI — redazione del TG.
   redazione: houseMap("redazione", "REDAZIONE DEL TG", "mediopoli", 22, 17, [
     {
-      id: "redaz-direttore", pal: "journalist", x: 2, y: 1, facing: "right",
+      id: "redaz-direttore", pal: "journalist", x: 1, y: 2, facing: "right",
       lines: [
         "Notizia in apertura: tu. Domani: ancora tu. La verità? In coda, dopo lo sport.",
         "Un consiglio: se vuoi i SONDAGGI alti, falli scrivere a noi."
@@ -1246,7 +1251,7 @@ export const MAPS: Record<string, MapDef> = {
   // EUROTOWN — bistrot della burocrazia.
   bistrot: houseMap("bistrot", "BISTROT DELLE DIRETTIVE", "eurotown", 21, 10, [
     {
-      id: "bistrot-funz", pal: "professor", x: 3, y: 2, facing: "right",
+      id: "bistrot-funz", pal: "professor", x: 4, y: 2, facing: "left",
       lines: [
         "La DIRETTIVA 2024/banane stabilisce la curvatura massima del consenso.",
         "Allegato B, comma 12: ogni promessa va tradotta in 24 lingue prima di romperla."
@@ -1289,7 +1294,7 @@ export const MAPS: Record<string, MapDef> = {
   // STRETTO — covo della "famiglia": fazione satirica del clientelismo.
   covo: houseMap("covo", "RETROBOTTEGA DEL PADRINO", "stretto", 20, 3, [
     {
-      id: "covo-padrino", pal: "boss", x: 5, y: 2, facing: "down", mafia: true,
+      id: "covo-padrino", pal: "boss", x: 5, y: 3, facing: "down", mafia: true,
       lines: [
         "IL PADRINO: ti aspettavo, candidato. Una cosa la dico sempre:",
         "il consenso è come l'acqua, va incanalato. Noi sappiamo dove.",
@@ -1308,7 +1313,7 @@ export const MAPS: Record<string, MapDef> = {
   // STRETTO — chiosco del ponte.
   chiosco: houseMap("chiosco", "CHIOSCO DEL PONTE", "stretto", 10, 3, [
     {
-      id: "chiosco-oste", pal: "barista", x: 3, y: 2, facing: "right",
+      id: "chiosco-oste", pal: "barista", x: 4, y: 2, facing: "left",
       lines: [
         "Vendo granite e plastici del PONTE da trent'anni. Il ponte non c'è, le granite sì.",
         "Tutti chiedono: 'quando lo finite?'. Io rispondo: 'quale, il ponte o la granita?'."
@@ -1327,6 +1332,17 @@ export const MAPS: Record<string, MapDef> = {
   "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 7, 13),
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 23, 8),
   "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 13, 5)
+};
+
+// Punto di risveglio dopo un KO totale: la cella calpestabile davanti al BAR
+// SPORT di ogni città (coincide col warp d'uscita del bar). Si respawna al bar
+// dell'ultima città visitata (state.lastBar), non sempre a BORGO.
+export const BAR_RESPAWN: Record<string, { x: number; y: number }> = {
+  borgo: { x: 20, y: 18 },
+  mediopoli: { x: 6, y: 16 },
+  eurotown: { x: 7, y: 13 },
+  capitale: { x: 23, y: 8 },
+  stretto: { x: 13, y: 5 }
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

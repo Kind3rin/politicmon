@@ -155,12 +155,18 @@ export function rimuoviMinistro(state: GameState, id: MinisteroId): void {
   delete state.ministri[id];
 }
 
-export function curaPassiva(state: GameState): void {
+// Ritorna true se ha effettivamente curato almeno 1 PV (per dare un feedback
+// visivo solo quando serve, non a vuoto a squadra già piena).
+export function curaPassiva(state: GameState): boolean {
+  let healed = false;
   for (const mon of state.party) {
-    if (mon.hp > 0) {
-      mon.hp = Math.min(statsOf(mon).hp, mon.hp + 1);
+    const max = statsOf(mon).hp;
+    if (mon.hp > 0 && mon.hp < max) {
+      mon.hp = Math.min(max, mon.hp + 1);
+      healed = true;
     }
   }
+  return healed;
 }
 
 // ---------------------------------------------------------------- PREZZI

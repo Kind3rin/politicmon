@@ -21,6 +21,7 @@ export interface PartyOptions {
 export class PartyScene implements Scene {
   private index = 0;
   private summary: Monster | null = null;
+  private moveFrom: number | null = null; // slot "preso" per lo scambio (mode view)
 
   constructor(
     private stack: SceneStack,
@@ -38,6 +39,24 @@ export class PartyScene implements Scene {
       }
       return;
     }
+    // Riordino squadra (solo nel menu PARTY): START prende lo slot, START su un
+    // altro lo scambia. Il primo della lista combatte per primo.
+    if (this.opts.mode === "view" && this.input.wasPressed("start") && party.length > 1) {
+      if (this.moveFrom === null) {
+        this.moveFrom = this.index;
+        audio.confirm();
+      } else if (this.moveFrom === this.index) {
+        this.moveFrom = null;
+        audio.cancel();
+      } else {
+        const tmp = party[this.moveFrom];
+        party[this.moveFrom] = party[this.index];
+        party[this.index] = tmp;
+        this.moveFrom = null;
+        audio.confirm();
+      }
+      return;
+    }
     if (this.input.wasPressed("up")) {
       this.index = (this.index + party.length - 1) % party.length;
       audio.cursor();
@@ -46,10 +65,18 @@ export class PartyScene implements Scene {
       this.index = (this.index + 1) % party.length;
       audio.cursor();
     }
-    if (this.input.wasPressed("b") && this.opts.mode !== "forced-switch") {
-      audio.cancel();
-      this.stack.pop();
-      return;
+    if (this.input.wasPressed("b")) {
+      // In modalità "sposta" B annulla lo spostamento invece di uscire.
+      if (this.moveFrom !== null) {
+        this.moveFrom = null;
+        audio.cancel();
+        return;
+      }
+      if (this.opts.mode !== "forced-switch") {
+        audio.cancel();
+        this.stack.pop();
+        return;
+      }
     }
     if (this.input.wasPressed("a")) {
       const mon = party[this.index];
@@ -58,6 +85,7 @@ export class PartyScene implements Scene {
       }
       if (this.opts.mode === "view") {
         audio.confirm();
+        this.moveFrom = null;
         this.summary = mon;
         return;
       }
@@ -99,9 +127,14 @@ export class PartyScene implements Scene {
       const mon = party[i];
       const y = 16 + i * 23;
       const selected = i === this.index;
+      const picked = i === this.moveFrom;
       screen.rect(4, y, VIEW_W - 8, 22, selected ? "#f8f8f0" : "#3a4c64");
-      if (selected) {
-        screen.frame(4, y, VIEW_W - 8, 22, INK);
+      if (picked) {
+        // Slot "preso" per lo scambio: cornice gialla evidente.
+        screen.frame(4, y, VIEW_W - 8, 22, "#f0c040");
+        screen.frame(5, y + 1, VIEW_W - 10, 20, "#f0c040");
+      } else if (selected) {
+        screen.frame(4, y, VIEW_W - 8, 22, this.moveFrom !== null ? "#f0c040" : INK);
       }
       const art = MONSTER_ART[mon.speciesId];
       if (art) {
@@ -129,7 +162,12 @@ export class PartyScene implements Scene {
         screen.text("KO", VIEW_W - 56, y + 3, "#d04848");
       }
     }
-    screen.text(this.opts.mode === "view" ? "A: dettagli  B: chiudi" : "A: scegli", 8, VIEW_H - 10, GREY);
+    const hint = this.opts.mode !== "view"
+      ? "A: scegli"
+      : this.moveFrom !== null
+        ? "START: scambia qui  B: annulla"
+        : "A: dettagli  START: sposta  B: chiudi";
+    screen.text(hint, 8, VIEW_H - 10, GREY);
   }
 
   private drawSummary(screen: Screen, mon: Monster): void {

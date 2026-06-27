@@ -3,7 +3,7 @@ import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART } from "../../art/monsters";
 import { TILE, TILES, waterFrames } from "../../art/tiles";
 import { ITEMS } from "../../data/items";
-import { MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
+import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
 import { MOVES } from "../../data/moves";
 import { currentQuest } from "../../data/quests";
 import { RIVAL_COUNTER, SPECIES } from "../../data/species";
@@ -25,6 +25,7 @@ import { isGuideOn } from "../../engine/controls";
 import { PauseScene } from "../../scenes/PauseScene";
 import { ShopScene } from "../../scenes/ShopScene";
 import { CasinoScene } from "../../scenes/CasinoScene";
+import { BoxScene } from "../../scenes/BoxScene";
 import { MafiaScene } from "../../scenes/MafiaScene";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 
@@ -124,6 +125,8 @@ export class WorldScene implements Scene {
   private rustles: Rustle[] = [];
   private encounterFlash = 0;
   private fadeT = 0; // dissolvenza d'ingresso mappa
+  private fadeOut = 0; // dissolvenza d'USCITA prima di un warp
+  private pendingWarp: (() => void) | null = null;
   private pendingBattle: (() => void) | null = null;
   private exclaimNpc: RuntimeNpc | null = null;
   private exclaimT = 0;
@@ -136,6 +139,8 @@ export class WorldScene implements Scene {
   private healSparks: Array<{ x: number; y: number; vx: number; vy: number; life: number; max: number; color: string }> = [];
   // Snapshot HP pre-cura: le barre si riempiono "a vista" da `from` a `to`.
   private healSnapshot: Array<{ mon: Monster; from: number; to: number; disp: number }> = [];
+  // Scintille della cura passiva (Min. Salute), in coordinate-MONDO (px mappa).
+  private stepSparks: Array<{ x: number; y: number; vy: number; life: number; max: number }> = [];
 
   // ---- Banner "evento" (traguardo, breaking news): entra a molla + flash ----
   private banner: { text: string; sub: string; t: number; color: string } | null = null;
@@ -192,6 +197,10 @@ export class WorldScene implements Scene {
     this.rustles = [];
     audio.playMusic(this.map.music ?? "borgo");
     this.fadeT = 0.35; // breve dissolvenza d'ingresso nella nuova mappa
+    // Memorizza l'ultima città-con-bar visitata: è lì che si respawna al KO.
+    if (this.map.outdoor && BAR_RESPAWN[mapId]) {
+      this.state.lastBar = mapId;
+    }
     // Multiplayer: entra nella room di questa mappa (vedi solo chi è qui).
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
@@ -207,7 +216,7 @@ export class WorldScene implements Scene {
   private makeRuntimeNpc(npc: NpcDef): RuntimeNpc {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
-      !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift && !npc.legendary;
+      !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift && !npc.legendary;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -397,6 +406,29 @@ export class WorldScene implements Scene {
     this.pendingBattle = start;
   }
 
+  // Sapore casuale dell'incontro selvatico: ~22% delle volte applica un
+  // modificatore di livello con un annuncio, modulato dai SONDAGGI. Restituisce
+  // null per un incontro "normale".
+  private rollEncounterFlavor(): { dLevel: number; line: string } | null {
+    if (Math.random() > 0.22) {
+      return null;
+    }
+    const sond = this.state.sondaggi;
+    const pool: Array<{ dLevel: number; line: string }> = [
+      { dLevel: 3, line: "COMIZIO AFFOLLATO! Un POLITICMON carico e agguerrito ti sbarra la strada." },
+      { dLevel: -2, line: "Un ASTENSIONISTA svogliato ti incrocia, senza troppa voglia di lottare." },
+      { dLevel: 1, line: "Aria di campagna elettorale: l'avversario sembra più motivato del solito." }
+    ];
+    // SONDAGGI alti -> più probabile il "VIP" tosto; bassi -> più astensionisti.
+    if (sond >= 70 && Math.random() < 0.6) {
+      return pool[0];
+    }
+    if (sond < 40 && Math.random() < 0.6) {
+      return pool[1];
+    }
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
   private startWildBattle(
     speciesId: string,
     level: number,
@@ -515,13 +547,16 @@ export class WorldScene implements Scene {
       for (const mon of this.state.party) {
         healMonster(mon);
       }
-      // Risveglio in piazza, davanti al BAR SPORT (cella aperta e calpestabile):
-      // (19,17) era la PORTA, circondata da muri -> sembrava incastrati nel bar.
-      this.state.pos = { mapId: "borgo", x: 19, y: 18, facing: "down" };
-      this.loadMap("borgo");
+      // Risveglio davanti al BAR SPORT dell'ULTIMA città visitata (non sempre
+      // BORGO). Lo spot è la cella calpestabile davanti alla porta del bar.
+      const city = this.state.lastBar && BAR_RESPAWN[this.state.lastBar] ? this.state.lastBar : "borgo";
+      const spot = BAR_RESPAWN[city];
+      const cityName = MAPS[city]?.name ?? "BORGO URNE";
+      this.state.pos = { mapId: city, x: spot.x, y: spot.y, facing: "down" };
+      this.loadMap(city);
       this.say([
         "Hai perso il consenso e anche i sensi...",
-        `Ti risvegli davanti al BAR SPORT di BORGO URNE, più leggero di ${lost}€.`,
+        `Ti risvegli davanti al BAR SPORT di ${cityName}, più leggero di ${lost}€.`,
         `I SONDAGGI crollano al ${sondaggi}%. I retroscenisti parlano già di rimpasto.`,
         "Il barista ha rimesso in sesto la squadra. Si riparte!"
       ]);
@@ -626,6 +661,13 @@ export class WorldScene implements Scene {
     if (npc.casino) {
       this.say(npc.lines ?? [], () => {
         this.stack.push(new CasinoScene(this.stack, this.input, this.state));
+      });
+      return;
+    }
+
+    if (npc.box) {
+      this.say(npc.lines ?? [], () => {
+        this.stack.push(new BoxScene(this.stack, this.input, this.state));
       });
       return;
     }
@@ -1160,8 +1202,19 @@ export class WorldScene implements Scene {
 
     // Sanità di prossimità: il Min. Salute fa recuperare 1 PV ogni 6 passi.
     this.stepCount += 1;
-    if (this.stepCount % 6 === 0 && hasMinistro(this.state, "salute")) {
-      curaPassiva(this.state);
+    if (this.stepCount % 6 === 0 && hasMinistro(this.state, "salute") && curaPassiva(this.state)) {
+      // Feedback leggero: 2 scintille verdi salgono dal player (cura del ministero).
+      const px = this.state.pos.x * TILE + 8;
+      const py = this.state.pos.y * TILE;
+      for (let i = 0; i < 2; i += 1) {
+        this.stepSparks.push({
+          x: px + (Math.random() - 0.5) * 10,
+          y: py + (Math.random() - 0.5) * 6,
+          vy: -22 - Math.random() * 14,
+          life: 0,
+          max: 0.5
+        });
+      }
     }
 
     const warp = this.map.warps.find((w) => w.x === pos.x && w.y === pos.y);
@@ -1178,9 +1231,14 @@ export class WorldScene implements Scene {
         this.say(warp.lockedLines ?? ["È chiuso."]);
         return;
       }
-      this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
-      this.loadMap(warp.toMap);
+      // Transizione morbida: dissolvenza in uscita, poi carica la mappa nuova
+      // (che fa il suo fade-in). Niente più stacco secco a ogni porta/scala.
       audio.confirm();
+      this.fadeOut = 0.22;
+      this.pendingWarp = () => {
+        this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
+        this.loadMap(warp.toMap);
+      };
       return;
     }
 
@@ -1240,8 +1298,17 @@ export class WorldScene implements Scene {
         for (const entry of table) {
           roll -= entry.weight;
           if (roll <= 0) {
-            const level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
-            this.startWildBattle(entry.speciesId, level);
+            let level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
+            // Modificatore d'incontro (~22%): rompe la monotonia dei selvatici.
+            // A SONDAGGI alti compaiono più "VIP" (tosti); a SONDAGGI bassi più
+            // astensionisti deboli. Un annuncio dà colore al momento.
+            const mod = this.rollEncounterFlavor();
+            if (mod) {
+              level = Math.max(2, level + mod.dLevel);
+              this.say([mod.line], () => this.startWildBattle(entry.speciesId, level));
+            } else {
+              this.startWildBattle(entry.speciesId, level);
+            }
             return;
           }
         }
@@ -1305,6 +1372,12 @@ export class WorldScene implements Scene {
     this.fadeT = Math.max(0, this.fadeT - dt);
     this.bannerFlash = Math.max(0, this.bannerFlash - dt);
     this.sondPulse = Math.max(0, this.sondPulse - dt);
+    // Scintille cura passiva: salgono e svaniscono (sempre, non bloccano nulla).
+    for (const s of this.stepSparks) {
+      s.life += dt;
+      s.y += s.vy * dt;
+    }
+    this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
     if (this.banner) {
       this.banner.t += dt;
     }
@@ -1351,6 +1424,18 @@ export class WorldScene implements Scene {
         this.sondPulse = 0.5;
       }
       this.displaySondaggi = approachWorld(this.displaySondaggi, this.state.sondaggi, dt * 28);
+    }
+
+    // Dissolvenza d'uscita prima di un warp: a nero completo esegue il cambio
+    // mappa. Blocca l'input nel frattempo (come encounterFlash).
+    if (this.fadeOut > 0) {
+      this.fadeOut = Math.max(0, this.fadeOut - dt);
+      if (this.fadeOut === 0 && this.pendingWarp) {
+        const w = this.pendingWarp;
+        this.pendingWarp = null;
+        w();
+      }
+      return;
     }
 
     // Animazione di cura: blocca movimento/input finché finisce (come encounterFlash).
@@ -1657,6 +1742,16 @@ export class WorldScene implements Scene {
       });
     }
 
+    // Scintille della cura passiva (Min. Salute): in coordinate-mondo.
+    for (const s of this.stepSparks) {
+      const a = 1 - s.life / s.max;
+      if (a <= 0) {
+        continue;
+      }
+      const col = a > 0.5 ? "#bdf0a0" : "#7ad858";
+      screen.rect(Math.round(s.x - camX), Math.round(s.y - camY), 2, 2, col);
+    }
+
     // Fruscio dell'erba alta.
     for (const rustle of this.rustles) {
       const rx = rustle.x * TILE - camX;
@@ -1781,6 +1876,10 @@ export class WorldScene implements Scene {
     // Dissolvenza d'ingresso nella nuova mappa (più dolce dei cambi secchi).
     if (this.fadeT > 0) {
       screen.dim(this.fadeT / 0.35 * 0.9);
+    }
+    // Dissolvenza d'uscita prima del warp: oscura crescente fino al nero.
+    if (this.fadeOut > 0) {
+      screen.dim((1 - this.fadeOut / 0.22) * 0.95);
     }
 
     // Effetto di cura sopra tutto (velo verde, anelli, scintille, barre HP).

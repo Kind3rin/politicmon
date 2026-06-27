@@ -88,6 +88,7 @@ export class BattleScene implements Scene {
   private finished = false;
   private shake = 0;
   private ballAnim: { t: number; shakes: number; success: boolean } | null = null;
+  private captured = false; // il nemico è stato reclutato: niente più sprite in campo
   private stepTimer = 0;
   private time = 0;
   private introT = 0; // apertura a cerchio + slide degli sprite
@@ -851,6 +852,9 @@ export class BattleScene implements Scene {
         run: () => {
           this.ballAnim = null;
           if (success) {
+            // Reclutato: il mostro è "dentro la tessera", non va più disegnato in
+            // campo (altrimenti ricompare e sembra essere evaso).
+            this.captured = true;
             this.pushFront(this.captureSteps());
           } else {
             this.pushFront([
@@ -1243,8 +1247,9 @@ export class BattleScene implements Scene {
     }
 
     // Nemico: animazione idle (respiro), affondo all'attacco, blink se colpito.
+    // Se è stato reclutato (captured) non si disegna più: è dentro la tessera.
     const foeBlink = this.flashT.foe > 0 && Math.floor(this.flashT.foe * 16) % 2 === 0;
-    if (this.foe.mon.hp > 0 && !this.ballAnim && !foeBlink) {
+    if (this.foe.mon.hp > 0 && !this.ballAnim && !foeBlink && !this.captured) {
       this.drawMonster(screen, this.foe.mon.speciesId, 162 + shakeX + foeSlide, 66, this.lungeT.foe, false, "foe");
     }
     if (this.ballAnim) {

@@ -591,7 +591,7 @@ const P = {
   s: "#8898a8"
 };
 
-function pix(art: string[], extra?: Record<string, string>): Pixmap {
+export function pix(art: string[], extra?: Record<string, string>): Pixmap {
   return { art, pal: { ...P, ...extra } };
 }
 

@@ -17,6 +17,9 @@ export interface NpcDef {
   transport?: boolean;
   gift?: { itemId: string; qty: number; flag: string; lines: string[] };
   vehicleGift?: { vehicle: "monopattino" | "ruspa" | "auto"; flag: string; lines: string[] };
+  // Dono di una MN (mossa macchina): setta un flag che sblocca un'abilità sul
+  // campo (es. hm-traghetto = attraversa l'acqua). requiresBadges opzionale.
+  hmGift?: { flag: string; requiresBadges?: number; lines: string[]; lockedLines?: string[] };
   legendary?: {
     speciesId: string;
     level: number;
@@ -187,6 +190,29 @@ const CAPITALE_TILES = [
   "TT.mdnm......====......mdnm.TT",
   "TT.....s.....====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+];
+
+// ------------------------------------------------------- BRACCIO DI MARE
+// La "strada d'acqua" Calabria→Sicilia. Si attraversa SOLO con la MN TRAGHETTO
+// (l'acqua 'w' è invalicabile senza). Sbarchi a NORD (sponda Calabria, sabbia
+// 'z' col molo 'j'), attraversi il mare, approdi a SUD (edge → stretto/Sicilia).
+// Larghezza 20, il bordo 'T' (montagne/costa) chiude i lati.
+const MARE_TILES = [
+  "TTTTTTTTTTTTTTTTTTTT",
+  "TzzzzzzzzzzzzzzzzzzT",
+  "TzzzzzzzzjjzzzzzzzzT",
+  "TwwwwwwwwjjwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwwwwwwwwwwwT",
+  "TwwwwwwwwjjwwwwwwwwT",
+  "TzzzzzzzzjjzzzzzzzzT",
+  "TzzzzzzzzzzzzzzzzzzT",
+  "TTTTTTTTTTTTTTTTTTTT"
 ];
 
 // ---------------------------------------------------- STRETTO DI MESSINA
@@ -684,7 +710,7 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["SCORTA AUTO BLU:", "Abbiamo una corsia preferenziale approvata in 27 lingue."]
       },
       {
-        id: "tr-lobbista", pal: "aide", x: 9, y: 11, facing: "right",
+        id: "tr-lobbista", pal: "aide", x: 9, y: 13, facing: "up",
         trainerId: "lobbista", sightRange: 3,
         lines: ["Rappresento interessi. Quali? Dipende da chi paga."]
       },
@@ -726,6 +752,13 @@ export const MAPS: Record<string, MapDef> = {
       { x: 4, y: 18, toMap: "salotto", toX: 4, toY: 5, facing: "up" },
       { x: 24, y: 18, toMap: "retroscena", toX: 4, toY: 5, facing: "up" },
       {
+        // IMBARCO per la SICILIA: traversata via MN TRAGHETTO. Senza la MN il
+        // molo è sbarrato (vedi NPC marinaio accanto, che la regala a 3 medaglie).
+        x: 12, y: 19, toMap: "mare", toX: 8, toY: 2, facing: "down",
+        requiresFlag: "hm-traghetto",
+        lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza la MN TRAGHETTO."]
+      },
+      {
         x: 14, y: 5, toMap: "palazzo", toX: 5, toY: 7, facing: "up",
         requiresBadges: 3,
         lockedLines: ["Il portone è sbarrato.", "Un cartello: 'SI RICEVE SOLO CON 3 MEDAGLIE.'"]
@@ -764,10 +797,9 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["CASINÒ DI PALAZZO", "Cerca il TETTO ROSSO E ORO col simbolo $.", "Dentro: SLOT DEL CONSENSO e BUNGA BUNGA CLUB."]
       },
       {
-        // Accanto alla SCORTA AUTO BLU (24,18): annuncia lo STRETTO (mappa
-        // altrimenti "invisibile", raggiungibile solo con 3 medaglie).
-        x: 22, y: 18,
-        lines: ["FERMATA AUTO BLU", "Con 3 MEDAGLIE la SCORTA ti porta allo STRETTO DI MESSINA.", "Ponte infinito, meme e il mini-boss IL CAPITANO."]
+        // Cartello dell'IMBARCO (molo a 12,19): la via per la Sicilia/STRETTO.
+        x: 10, y: 19,
+        lines: ["IMBARCO PER LA SICILIA", "Col MOLO attraversi il mare fino allo STRETTO.", "Serve la MN TRAGHETTO: chiedi al MARINAIO."]
       }
     ],
     pickups: [
@@ -781,7 +813,7 @@ export const MAPS: Record<string, MapDef> = {
     ],
     npcs: [
       {
-        id: "scorta-cap", pal: "guard", x: 24, y: 18, facing: "left", transport: true,
+        id: "scorta-cap", pal: "guard", x: 20, y: 18, facing: "right", transport: true,
         lines: [
           "SCORTA AUTO BLU:",
           "Con 3 MEDAGLIE ti porto fino allo STRETTO DI MESSINA: ponte, meme e un mini-boss.",
@@ -794,6 +826,24 @@ export const MAPS: Record<string, MapDef> = {
           "Il PALAZZO riceve solo candidati con 3 MEDAGLIE.",
           "AUDITEL, SPREAD e DAZIO. Poi possiamo parlare."
         ]
+      },
+      {
+        // MARINAIO dell'IMBARCO: regala la MN TRAGHETTO a 3 medaglie. Da qui (molo
+        // a 12,19) si attraversa il BRACCIO DI MARE fino alla SICILIA (STRETTO).
+        id: "marinaio-cap", pal: "guard", x: 11, y: 19, facing: "right",
+        hmGift: {
+          flag: "hm-traghetto", requiresBadges: 3,
+          lines: [
+            "MARINAIO: vuoi raggiungere la SICILIA? Di là si va solo per mare.",
+            "Hai le 3 MEDAGLIE: meriti la MN TRAGHETTO. Tienila.",
+            "Davanti all'acqua, ora, non ti fermi più: la attraversi col tuo POLITICMON."
+          ],
+          lockedLines: [
+            "MARINAIO: il mare è mosso e il molo è chiuso ai dilettanti.",
+            "Torna con 3 MEDAGLIE e ti consegno la MN TRAGHETTO."
+          ]
+        },
+        lines: ["MARINAIO: il MOLO è dietro di me. Verso il mare, sempre dritto fino alla Sicilia."]
       },
       {
         id: "ruspista", pal: "aide", x: 8, y: 18, facing: "down",
@@ -979,6 +1029,32 @@ export const MAPS: Record<string, MapDef> = {
     ]
   },
 
+  // BRACCIO DI MARE: la traversata Calabria→Sicilia. Si entra dall'IMBARCO di
+  // Caput Mundi (sbarco a NORD), si attraversa l'acqua con la MN TRAGHETTO e si
+  // approda a SUD nello STRETTO. Senza MN l'acqua è invalicabile.
+  mare: {
+    id: "mare",
+    name: "BRACCIO DI MARE",
+    tiles: MARE_TILES,
+    outdoor: true,
+    music: "stretto",
+    warps: [
+      // Ritorno alla terraferma: dal molo nord si rientra a Caput Mundi.
+      { x: 8, y: 1, toMap: "capitale", toX: 13, toY: 19, facing: "down" },
+      { x: 9, y: 1, toMap: "capitale", toX: 13, toY: 19, facing: "down" },
+      // Approdo a SUD: dal molo sud si entra nello STRETTO (Sicilia).
+      { x: 8, y: 13, toMap: "stretto", toX: 13, toY: 6, facing: "up" },
+      { x: 9, y: 13, toMap: "stretto", toX: 14, toY: 6, facing: "up" }
+    ],
+    encounterRate: 0,
+    encounters: [],
+    signs: [
+      { x: 10, y: 2, lines: ["IMBARCADERO", "A nord la CALABRIA, a sud la SICILIA.", "Usa la MN TRAGHETTO per attraversare l'acqua."] }
+    ],
+    pickups: [],
+    npcs: []
+  },
+
   stretto: {
     id: "stretto",
     name: "STRETTO DI MESSINA",
@@ -986,6 +1062,9 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "stretto",
     warps: [
+      // Ritorno via mare verso la Calabria (sbarchi al molo sud del BRACCIO DI MARE).
+      { x: 13, y: 5, toMap: "mare", toX: 8, toY: 12, facing: "up" },
+      { x: 14, y: 5, toMap: "mare", toX: 9, toY: 12, facing: "up" },
       { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
       { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
       { x: 13, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
@@ -1023,7 +1102,8 @@ export const MAPS: Record<string, MapDef> = {
     pickups: [
       { id: "pk-s1", x: 3, y: 6, itemId: "schedona", qty: 1 },
       { id: "pk-s2", x: 26, y: 7, itemId: "spritz", qty: 1 },
-      { id: "pk-s3", x: 13, y: 15, itemId: "mojito", qty: 1 },
+      // Spostato da (13,15): coincideva con l'NPC capitano-after (post ponte-beaten).
+      { id: "pk-s3", x: 14, y: 9, itemId: "mojito", qty: 1 },
       { id: "pk-s4", x: 3, y: 7, itemId: "dirVaffa", qty: 1 }
     ],
     npcs: [
@@ -1061,7 +1141,7 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["Citofonare prima di entrare. Sempre. È il mio format."]
       },
       {
-        id: "tr-noponte", pal: "journalist", x: 10, y: 2, facing: "down",
+        id: "tr-noponte", pal: "journalist", x: 8, y: 2, facing: "left",
         trainerId: "noponte", sightRange: 3,
         lines: ["Protesto contro il ponte da prima che non esistesse."]
       },
@@ -1227,7 +1307,7 @@ export const MAPS: Record<string, MapDef> = {
   ], {
     variant: 2,
     signs: [{ x: 9, y: 1, lines: ["Diploma di MAMMA POLITICA dell'anno.", "Conferito da: se stessa."] }],
-    pickups: [{ id: "home-pk", x: 1, y: 1, itemId: "caffe", qty: 1 }]
+    pickups: [{ id: "home-pk", x: 4, y: 1, itemId: "caffe", qty: 1 }]
   }),
 
   // BORGO — circolo del paese.
@@ -1263,7 +1343,7 @@ export const MAPS: Record<string, MapDef> = {
     }
   ], {
     variant: 0,
-    pickups: [{ id: "attico-pk", x: 8, y: 1, itemId: "schedona", qty: 1 }]
+    pickups: [{ id: "attico-pk", x: 4, y: 1, itemId: "schedona", qty: 1 }]
   }),
 
   // MEDIOPOLI — redazione del TG.
@@ -1303,7 +1383,7 @@ export const MAPS: Record<string, MapDef> = {
     }
   ], {
     variant: 1,
-    pickups: [{ id: "bistrot-pk", x: 1, y: 1, itemId: "maalox", qty: 1 }]
+    pickups: [{ id: "bistrot-pk", x: 4, y: 1, itemId: "maalox", qty: 1 }]
   }),
 
   // CAPUT MUNDI — salotto romano.
@@ -1365,7 +1445,7 @@ export const MAPS: Record<string, MapDef> = {
     }
   ], {
     variant: 1,
-    pickups: [{ id: "chiosco-pk", x: 1, y: 1, itemId: "mojito", qty: 1 }]
+    pickups: [{ id: "chiosco-pk", x: 4, y: 1, itemId: "mojito", qty: 1 }]
   }),
 
   // ------------------------------------------------ BAR SPORT (centri cura) ---

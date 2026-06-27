@@ -19,6 +19,7 @@ import { GovScene } from "./GovScene";
 import { PartyScene } from "./PartyScene";
 import { QuestScene } from "./QuestScene";
 import { AchievementsScene } from "./AchievementsScene";
+import { TypesScene } from "./TypesScene";
 
 export class PauseScene implements Scene {
   readonly transparent = true;
@@ -40,7 +41,7 @@ export class PauseScene implements Scene {
     if (this.state.badges.length > 0) {
       this.entries.push("GOVERNO");
     }
-    this.entries.push("MISSIONI", "TRAGUARDI", "TESSERA", "CHAT ONLINE");
+    this.entries.push("MISSIONI", "TRAGUARDI", "GUIDA TIPI", "TESSERA", "CHAT ONLINE");
     // Veicoli: voce che cicla tra quelli posseduti (e "a piedi").
     if (ownedVehicles(this.state).length > 0) {
       const v = this.state.vehicle ? VEHICLES[this.state.vehicle as VehicleId].name : "A PIEDI";
@@ -102,6 +103,9 @@ export class PauseScene implements Scene {
         break;
       case "TRAGUARDI":
         this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
+        break;
+      case "GUIDA TIPI":
+        this.stack.push(new TypesScene(this.stack, this.input));
         break;
       case "TESSERA":
         this.showCard = true;

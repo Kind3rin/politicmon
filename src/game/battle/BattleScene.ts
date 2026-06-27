@@ -1198,8 +1198,9 @@ export class BattleScene implements Scene {
   }
 
   private openFightMenu(): void {
-    // Se hai già ELETTO la specie avversaria, il Dex suggerisce i matchup.
-    const known = this.state.dex[this.foe.mon.speciesId] === "caught";
+    // Suggerimento matchup sempre visibile (▲ super / ▼ poco efficace): è il
+    // modo principale per imparare il sistema dei tipi senza tentativi a vuoto.
+    // La GUIDA TIPI nel menu pausa è il riferimento completo.
     const foeTypes = speciesOf(this.foe.mon).types;
     this.fightEff = [];
     this.fightMenu = new Menu(
@@ -1207,7 +1208,7 @@ export class BattleScene implements Scene {
         const move = MOVES[slot.id];
         let marker = "";
         let eff: "super" | "weak" | "immune" | null = null;
-        if (known && move.power > 0) {
+        if (move.power > 0) {
           const mult = typeMultiplier(move.type, foeTypes);
           marker = mult === 0 ? "X " : mult >= 2 ? "▲ " : mult < 1 ? "▼ " : "";
           eff = mult === 0 ? "immune" : mult >= 2 ? "super" : mult < 1 ? "weak" : null;

@@ -175,8 +175,8 @@ const CAPITALE_TILES = [
   "TT..,,....==========..eQQe..TT",
   "TT..,,......======....mdnm..TT",
   "TT...........====...........TT",
-  "TT..xxxxxx...====..yyyyyy...TT",
-  "TT..xxxxxx...====..yyyyyy...TT",
+  "TT..xxxxxx...====..$$$$$$...TT",
+  "TT..xxxxxx...====..$$$$$$...TT",
   "TT..mmdnmm...====..mmdnmm...TT",
   "TT....=......====....=......TT",
   "TT....============...===....TT",
@@ -758,14 +758,22 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["PALESTRA GLOBAL TOWER", "Capopalestra: MR. TYCOON.", "Medaglia DAZIO. Ingresso gratuito, uscita tassata."]
       },
       {
-        // Accanto alla porta del CASINÒ (21,11): prima non c'era nessun cartello.
+        // Accanto alla porta del CASINÒ (21,11). Il tetto bordeaux-oro con "$"
+        // ora lo distingue dalle case; il cartello conferma l'ingresso.
         x: 22, y: 12,
-        lines: ["CASINÒ DI PALAZZO", "SLOT DEL CONSENSO e BUNGA BUNGA CLUB. Entra dalla porta."]
+        lines: ["CASINÒ DI PALAZZO", "Cerca il TETTO ROSSO E ORO col simbolo $.", "Dentro: SLOT DEL CONSENSO e BUNGA BUNGA CLUB."]
+      },
+      {
+        // Accanto alla SCORTA AUTO BLU (24,18): annuncia lo STRETTO (mappa
+        // altrimenti "invisibile", raggiungibile solo con 3 medaglie).
+        x: 22, y: 18,
+        lines: ["FERMATA AUTO BLU", "Con 3 MEDAGLIE la SCORTA ti porta allo STRETTO DI MESSINA.", "Ponte infinito, meme e il mini-boss IL CAPITANO."]
       }
     ],
     pickups: [
       { id: "pk-c1", x: 25, y: 8, itemId: "schedona", qty: 2 },
-      { id: "pk-c2", x: 4, y: 18, itemId: "spritz", qty: 1 },
+      // Spostato da (4,18): era sulla stessa cella del warp SALOTTO (porta) → conflitto.
+      { id: "pk-c2", x: 5, y: 19, itemId: "spritz", qty: 1 },
       { id: "pk-c3", x: 4, y: 2, itemId: "dirWhatever", qty: 1 },
       // Tesoro grosso nella capitale: la TESSERA DORATA per evolvere.
       { id: "pk-c-hide1", x: 2, y: 8, itemId: "tessera", qty: 1, hidden: true },
@@ -774,7 +782,11 @@ export const MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "scorta-cap", pal: "guard", x: 24, y: 18, facing: "left", transport: true,
-        lines: ["SCORTA AUTO BLU:", "Davanti al Palazzo non si cammina: si arriva con lampeggiante istituzionale."]
+        lines: [
+          "SCORTA AUTO BLU:",
+          "Con 3 MEDAGLIE ti porto fino allo STRETTO DI MESSINA: ponte, meme e un mini-boss.",
+          "Davanti al Palazzo non si cammina: si arriva con lampeggiante istituzionale."
+        ]
       },
       {
         id: "corazziere", pal: "guard", x: 12, y: 6, facing: "right",
@@ -1198,10 +1210,18 @@ export const MAPS: Record<string, MapDef> = {
   home: houseMap("home", "CASA TUA", "borgo", 23, 13, [
     {
       id: "home-mom", pal: "granny", x: 7, y: 2, facing: "down", setFlag: "talked-mom",
+      gift: {
+        itemId: "divisa", qty: 1, flag: "gift-divisa",
+        lines: [
+          "MAMMA: torni a casa solo quando ti serve qualcosa, come i partiti a gennaio.",
+          "Tieni la DIVISA EQUA: spartisce i PUNTI CONSENSO con TUTTA la squadra.",
+          "Anche chi resta in panchina cresce. Equità, almeno tra i tuoi POLITICMON!",
+          "Ora vai a prenderti quel PALAZZO. E mangia, che a digiuno non si vincono i ballottaggi."
+        ]
+      },
       lines: [
-        "MAMMA: torni a casa solo quando ti serve qualcosa, come i partiti a gennaio.",
-        "Ho rifatto il letto e stirato la fascia tricolore. Vai a prenderti quel PALAZZO!",
-        "E mangia, che a digiuno non si vincono i ballottaggi."
+        "MAMMA: la DIVISA EQUA ce l'hai. Nessuno resta indietro... in teoria.",
+        "Ho rifatto il letto e stirato la fascia tricolore. Vai a prenderti quel PALAZZO!"
       ]
     }
   ], {

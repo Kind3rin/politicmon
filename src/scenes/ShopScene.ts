@@ -1,4 +1,5 @@
 import { BAG_ORDER, ITEMS, SHOP_DIRECTIVES } from "../data/items";
+import { itemIcon } from "../art/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -28,7 +29,9 @@ export class ShopScene implements Scene {
     this.menu = new Menu(
       this.itemIds.map((id) => ({
         label: ITEMS[id].name,
-        rightLabel: `${shopPrice(this.state, ITEMS[id])}€`
+        rightLabel: `${shopPrice(this.state, ITEMS[id])}€`,
+        icon: itemIcon(id),
+        iconId: `shop-${id}`
       }))
     );
   }
@@ -71,19 +74,22 @@ export class ShopScene implements Scene {
     screen.clear("#2e4434");
     screen.text("DISCOUNT ELETTORALE", 8, 6, PAPER);
     screen.textRight(`${this.state.money}€`, VIEW_W - 8, 6, "#e8c84a");
-    this.menu.draw(screen, 10, 20, VIEW_W - 20);
+    const MAX_VIS = 6; // finestra scorrevole: lascia spazio al pannello descrizione
+    this.menu.draw(screen, 10, 20, VIEW_W - 20, 13, MAX_VIS);
     const item = ITEMS[this.itemIds[this.menu.index]];
     if (item) {
       // "Ne possiedi" va nell'header (accanto ai fondi): libera spazio nel
       // pannello per mostrare la descrizione COMPLETA (prima troncata a 2 righe).
       screen.text(`Hai: ${this.state.bag[item.id] ?? 0}`, 8, 14, GREY);
-      const y = 24 + this.menu.measureHeight();
-      const lines = wrapText(item.desc, 34);
-      const shown = Math.min(4, lines.length);
-      const panelH = 12 + shown * 10;
+      const y = 24 + this.menu.measureHeight(13, MAX_VIS);
+      // Icona oggetto (24x24) a sinistra; descrizione a destra dell'icona.
+      const lines = wrapText(item.desc, 28);
+      const shown = Math.min(3, lines.length);
+      const panelH = Math.max(30, 10 + shown * 10);
       screen.panel(10, y, VIEW_W - 20, panelH);
+      screen.sprite(`item-${item.id}`, itemIcon(item.id), 16, y + Math.floor((panelH - 24) / 2), { scale: 2 });
       for (let i = 0; i < shown; i += 1) {
-        screen.text(lines[i], 18, y + 7 + i * 10, INK);
+        screen.text(lines[i], 44, y + 6 + i * 10, INK);
       }
     }
     const note =

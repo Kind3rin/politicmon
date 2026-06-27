@@ -194,6 +194,29 @@ const barRoofArt = rows(
   "oooooooooooooooo"
 );
 
+// Tetto-insegna del CASINÒ: tetto bordeaux + cartello dorato con simbolo "$"
+// (slot/fiche), per distinguerlo a colpo d'occhio dalle case col tetto giallo.
+// c/C bordeaux tetto, m insegna oro, i bordo scuro, $ simbolo (usa 'r' come
+// inchiostro del simbolo per riuso palette).
+const casinoRoofArt = rows(
+  "oooooooooooooooo",
+  "occcccccccccccco",
+  "oCCCCCCCCCCCCCCo",
+  "occiiiiiiiiiicco",
+  "ocimmmmmmmmmmico",
+  "ocimmmrrrrmmmico",
+  "ocimmrrmmmmmmico",
+  "ocimmrrmmmmmmico",
+  "ocimmmrrrrmmmico",
+  "ocimmmmmmrrmmico",
+  "ocimmmmmmrrmmico",
+  "ocimmrrrrrrmmico",
+  "ociiiiiiiiiiiico",
+  "occcccccccccccco",
+  "oCCCCCCCCCCCCCCo",
+  "oooooooooooooooo"
+);
+
 const wallArt = rows(
   "mmmmmmmmmmmmmmmm",
   "mmmmmmmmmmmmmmmm",
@@ -593,6 +616,14 @@ export const TILES: Record<string, TileDef> = {
     solid: true
   },
   y: { pix: pix(roofArt("y", "Y"), { y: "#d8a830", Y: "#b88820" }), solid: true },
+  // Tetto-insegna del CASINÒ: bordeaux + cartello oro con "$". c/C bordeaux,
+  // m oro cartello, i bordo scuro, r inchiostro del simbolo (oro scuro).
+  $: {
+    pix: pix(casinoRoofArt, {
+      c: "#7a1e2a", C: "#5a141e", m: "#f0d040", i: "#3a1015", r: "#8a6810"
+    }),
+    solid: true
+  },
   B: { pix: pix(roofArt("B", "Y"), { B: "#2e4a9a", Y: "#d8b838" }), solid: true },
   x: { pix: pix(roofArt("x", "X"), { x: "#b89048", X: "#8a6830" }), solid: true },
   m: { pix: pix(wallArt), solid: true },

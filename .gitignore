@@ -21,3 +21,4 @@ ruvector.db
 # Config locale del harness e screenshot di debug (non fanno parte del progetto)
 .claude/
 problemitest/
+graphify-out/

@@ -39,7 +39,8 @@ Tutte queste feature sono **complete, verificate e in produzione**:
 | Storia Atto 1+2 | 3 medaglie → PALAZZO → COLLE/Garante → leggendario DRAGHIMON | `data/maps.ts`, `data/quests.ts`, `data/trainers.ts` |
 | Area Stretto | Ponte di Messina, satira meme, boss IL CAPITANO | `data/maps.ts` (`stretto`) |
 | Casinò | Slot del consenso + Bunga Bunga Club (satira) | `scenes/CasinoScene.ts` |
-| Veicoli | MONOPATTINO (veloce), RUSPA (abbatte alberi) | `game/vehicles.ts` |
+| Veicoli | MONOPATTINO (veloce), RUSPA (abbatte alberi), AUTO BLU | `game/vehicles.ts` |
+| MN TRAGHETTO | Abilità sul campo stile SURF: attraversa l'acqua (`canFerry`/`isOnWater` in WorldScene, flag `hm-traghetto`, `NpcDef.hmGift`). Sblocca la traversata Calabria→Sicilia via mappa `mare` | `game/world/WorldScene.ts`, `data/maps.ts` (`mare`) |
 | Incontri PG casuali | Allenatori vaganti scalati | `data/encounters.ts` |
 | Eventi morale | Siparietti di strada che muovono sondaggi/fondi | `data/streetevents.ts` |
 | Rivale ricorrente | GIANNI a 5 tappe, squadra che cresce, battute con memoria | `data/rival.ts` |
@@ -50,7 +51,13 @@ Tutte queste feature sono **complete, verificate e in produzione**:
 | PWA | Manifest, service worker, prompt installazione (iOS incluso) | `engine/pwa.ts`, `public/sw.js` |
 | Multiplayer P2P | Presence (vedi gli altri sulla tua mappa), chat di zona, emote, nickname | `net/mp.ts`, `net/profile.ts`, `scenes/ChatScene.ts` |
 
-Numeri attuali: **30 specie, ~70 mosse, 21 allenatori fissi (+ rivale dinamico), 18 quest, 9 mappe**.
+Numeri attuali: **30 specie, ~70 mosse, 21 allenatori fissi (+ rivale dinamico), 18 quest, ~30 mappe (5 outdoor + mare + interni)**.
+
+**STRETTO: come ci si arriva (round 13).** NON più con la SCORTA AUTO BLU (rimossa
+dal menu transport). Ora: a Caput Mundi il MARINAIO (11,19) regala la MN TRAGHETTO
+a 3 medaglie → l'IMBARCO (warp 12,19, gated `hm-traghetto`) porta alla mappa `mare`
+(BRACCIO DI MARE) → si attraversa l'acqua con la MN → si approda nello STRETTO.
+La SCORTA resta solo per il fast-travel tra città già visitate.
 
 Aggiunte recenti alla tabella sopra (round 8-11):
 
@@ -150,6 +157,27 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
+- **Round 13 — MN TRAGHETTO + fix placement (2026-06-27):** lo STRETTO ora si
+  raggiunge *via mappa* invece che con l'NPC-taxi. Nuova abilità sul campo stile
+  SURF: `NpcDef.hmGift` (one-shot, gated medaglie) sblocca il flag `hm-traghetto`;
+  in `WorldScene.isBlocked` i tile `water` diventano valicabili con `canFerry()`
+  (flag + un mostro vivo); sprite scafo `FERRY_PIX` sotto il player su acqua
+  (`isOnWater`). Nuova mappa `mare` (BRACCIO DI MARE): imbarco a Caput Mundi
+  (MARINAIO regala la MN a 3 medaglie; warp 12,19 gated `requiresFlag`) →
+  attraversi l'acqua → approdi allo STRETTO. STRETTO tolto dal menu SCORTA.
+  Inoltre fix di **8 placement** (NPC/pickup su tetti/mobili/porte-warp), trovati
+  con audit cella-per-cella: `tr-lobbista` (sul tetto bar eurotown), `tr-noponte`
+  e `scorta-cap` (su porte-warp), 5 pickup dentro letti/scaffali + `pk-s3` su un
+  NPC. Nuovo guardrail `scripts/check-placement.mjs` (0 placement su solido/warp).
+- **Round 12 — discoverability (2026-06-27):** le "feature mancanti" segnalate
+  esistevano già: il problema era scopribilità/grafica. CASINÒ ora ha un tetto-
+  insegna dedicato (tile `$` bordeaux/oro) per distinguerlo dalle case; nuovo
+  `src/art/items.ts` con 16 icone oggetto 12x12, disegnate per-voce in BORSA/SHOP
+  + il `Menu` ora scorre (`maxVisible`+▲▼) così le liste lunghe non sforano;
+  DIVISA EQUA (condivisore EXP) regalata dalla MAMMA a inizio partita + badge
+  "EXP+" in lotta; STRETTO segnalato; fix conflitto pickup/warp `pk-c2`. Poi
+  (stessa sessione) fix menu SCORTA che troncava "STRETTO DI MESSINA" → pannello
+  auto-largo. Vedi memoria `politicmon-discoverability-trap`.
 - **Round 11 — fix accessi ai contenuti (2026-06-27):** workflow di bug-hunt (8
   agenti, verifica avversariale) ha stanato 6 bug di *accesso* — feature corrette
   ma irraggiungibili. Tutti fixati e live:

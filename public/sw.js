@@ -1,8 +1,15 @@
 // Service worker di Politicmon: gioco offline una volta installato.
 // Gli asset buildati hanno hash nel nome -> cache-first sicura.
 // index.html e manifest -> network-first per ricevere gli aggiornamenti.
+//
+// Auto-update: la versione del nome cache va bumpata a ogni release (o cambia
+// comunque perché il file sw.js viene rigenerato). All'attivazione le cache
+// vecchie vengono cancellate. Lo skipWaiting NON è automatico all'install: la
+// pagina chiede l'attivazione via messaggio SKIP_WAITING così il reload avviene
+// solo quando c'è davvero una versione nuova (vedi main.ts). Il salvataggio è
+// in localStorage, mai toccato da questa cache.
 
-const CACHE = "politicmon-v1";
+const CACHE = "politicmon-v2";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -15,9 +22,17 @@ const PRECACHE = [
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
-  );
+  // NON chiamare skipWaiting qui: il nuovo SW resta "waiting" finché la pagina
+  // non conferma (messaggio SKIP_WAITING). Così il reload scatta solo su un vero
+  // aggiornamento, non alla primissima installazione.
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));
+});
+
+// La pagina (main.ts) invia SKIP_WAITING quando un SW nuovo è pronto: attivalo.
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener("activate", (event) => {

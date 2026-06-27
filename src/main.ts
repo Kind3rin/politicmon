@@ -21,9 +21,52 @@ applyControlMode(loadControlMode());
 
 // PWA: offline e installazione su telefono (solo in produzione,
 // in dev il service worker intralcerebbe l'HMR di Vite).
+//
+// Auto-update: quando viene pubblicata una build nuova, il SW nuovo si installa
+// in background; appena è pronto la pagina si ricarica UNA volta sola per
+// servire la versione aggiornata. Il salvataggio NON è toccato: vive in
+// localStorage, separato dalla cache del service worker (che gestisce solo i
+// file statici). Quindi un aggiornamento non può cancellare i progressi.
 if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  // C'era già un SW al primo caricamento? Se no, è la prima installazione e NON
+  // dobbiamo ricaricare (eviteremmo un reload inutile al primo avvio).
+  const hadController = Boolean(navigator.serviceWorker.controller);
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => undefined);
+    navigator.serviceWorker
+      .register("./sw.js")
+      .then((reg) => {
+        // Controlla subito se c'è una versione nuova, e poi ogni 60s mentre giochi.
+        reg.update().catch(() => undefined);
+        setInterval(() => reg.update().catch(() => undefined), 60_000);
+
+        // Un nuovo SW è stato trovato: quando finisce di installarsi, se c'è già
+        // un controller attivo (= non è la primissima installazione) significa
+        // che è un AGGIORNAMENTO -> attivalo subito.
+        reg.addEventListener("updatefound", () => {
+          const fresh = reg.installing;
+          if (!fresh) {
+            return;
+          }
+          fresh.addEventListener("statechange", () => {
+            if (fresh.state === "installed" && navigator.serviceWorker.controller) {
+              fresh.postMessage?.({ type: "SKIP_WAITING" });
+            }
+          });
+        });
+      })
+      .catch(() => undefined);
+
+    // Quando il SW nuovo prende il controllo, ricarica UNA volta sola per
+    // mostrare la versione aggiornata (guardia anti-loop).
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      // Solo se c'era già un SW prima (= aggiornamento, non prima installazione).
+      if (reloaded || !hadController) {
+        return;
+      }
+      reloaded = true;
+      window.location.reload();
+    });
   });
 }
 

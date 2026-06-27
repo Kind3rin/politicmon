@@ -195,9 +195,11 @@ export class PauseScene implements Scene {
     this.optionsMenu.index = index;
   }
 
-  // Cicla: a piedi -> primo veicolo -> ... -> a piedi.
+  // Cicla: a piedi -> primo veicolo -> ... -> a piedi. Il TRAGHETTO è escluso:
+  // si attiva/disattiva da solo quando entri/esci dall'acqua (gestito in
+  // WorldScene.syncFerryVehicle), non è un mezzo terrestre selezionabile a mano.
   private cycleVehicle(): void {
-    const owned = ownedVehicles(this.state);
+    const owned = ownedVehicles(this.state).filter((v) => v !== "traghetto");
     const order: (VehicleId | null)[] = [null, ...owned];
     const cur = order.indexOf((this.state.vehicle as VehicleId | null) ?? null);
     this.state.vehicle = order[(cur + 1) % order.length];

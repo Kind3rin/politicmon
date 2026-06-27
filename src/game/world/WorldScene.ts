@@ -1,7 +1,7 @@
 import { charSprite, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART } from "../../art/monsters";
-import { TILE, TILES, waterFrames } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix } from "../../art/tiles";
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
 import { MOVES } from "../../data/moves";
@@ -47,6 +47,22 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
   }
 };
 
+// Scafo del TRAGHETTO (MN): disegnato sotto il personaggio mentre attraversa
+// l'acqua. Legno con bordo chiaro e scia, ~18x7.
+const FERRY_PIX = pix(
+  [
+    "...bbbbbbbbbbbb...",
+    "..bBBBBBBBBBBBBb..",
+    ".bBwwwwwwwwwwwwBb.",
+    "bBwwwwwwwwwwwwwwBb",
+    "bBwBBBBBBBBBBBBwBb",
+    ".bBBBBBBBBBBBBBBb.",
+    "..bbbbbbbbbbbbbb..",
+    ".~~..~~..~~..~~..~"
+  ],
+  { b: "#4a2e16", B: "#9a6a36", w: "#d8b070", "~": "#cfeeff" }
+);
+
 interface RuntimeNpc extends NpcDef {
   currentFacing: Facing;
   turnTimer: number;
@@ -90,8 +106,9 @@ const TRANSPORT_DESTINATIONS: TransportDestination[] = [
   { label: "BORGO URNE", mapId: "borgo", x: 24, y: 22, facing: "right" },
   { label: "MEDIOPOLI", mapId: "mediopoli", x: 23, y: 19, facing: "right", requires: (s) => Boolean(s.flags["dex-received"]) },
   { label: "EUROTOWN", mapId: "eurotown", x: 23, y: 14, facing: "right", requires: (s) => s.badges.includes("auditel") },
-  { label: "CAPUT MUNDI", mapId: "capitale", x: 23, y: 19, facing: "right", requires: (s) => s.badges.includes("spread") },
-  { label: "STRETTO DI MESSINA", mapId: "stretto", x: 7, y: 5, facing: "down", requires: (s) => s.badges.length >= 3 }
+  { label: "CAPUT MUNDI", mapId: "capitale", x: 23, y: 19, facing: "right", requires: (s) => s.badges.includes("spread") }
+  // STRETTO rimosso dal taxi: ora ci si arriva dall'IMBARCO a Caput Mundi e si
+  // attraversa l'acqua con la MN TRAGHETTO (vedi warp "imbarco" + canFerry).
 ];
 
 function clipHud(value: string, max: number): string {
@@ -216,7 +233,8 @@ export class WorldScene implements Scene {
   private makeRuntimeNpc(npc: NpcDef): RuntimeNpc {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
-      !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift && !npc.legendary;
+      !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift &&
+      !npc.hmGift && !npc.legendary;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -368,7 +386,16 @@ export class WorldScene implements Scene {
 
   private isBlocked(x: number, y: number): boolean {
     const tile = TILES[this.tileAt(x, y)];
-    if (!tile || tile.solid) {
+    if (!tile) {
+      return true;
+    }
+    // MN TRAGHETTO: con la mossa macchina sbloccata, l'acqua diventa
+    // attraversabile (come SURF). Senza, resta un muro liquido.
+    if (tile.water) {
+      if (!this.canFerry()) {
+        return true;
+      }
+    } else if (tile.solid) {
       return true;
     }
     if (this.visibleNpcs().some((npc) => npc.x === x && npc.y === y)) {
@@ -385,6 +412,17 @@ export class WorldScene implements Scene {
       return true;
     }
     return false;
+  }
+
+  // MN TRAGHETTO sbloccata: serve il flag + almeno un POLITICMON in squadra non KO
+  // (qualcuno deve remare). Coerente con Pokémon: senza il mostro non si surfa.
+  private canFerry(): boolean {
+    return Boolean(this.state.flags["hm-traghetto"]) && this.state.party.some((m) => m.hp > 0);
+  }
+
+  // Il giocatore è attualmente su una cella d'acqua? (per disegnare il traghetto)
+  private isOnWater(): boolean {
+    return Boolean(TILES[this.tileAt(this.state.pos.x, this.state.pos.y)]?.water);
   }
 
   private say(lines: string[], after?: () => void): void {
@@ -728,6 +766,25 @@ export class WorldScene implements Scene {
         saveGame(this.state);
       });
       return;
+    }
+
+    if (npc.hmGift) {
+      const hm = npc.hmGift;
+      if (!this.state.flags[hm.flag]) {
+        // Gating opzionale (es. serve la 3ª medaglia per la traversata).
+        if (hm.requiresBadges && this.state.badges.length < hm.requiresBadges) {
+          this.say(hm.lockedLines ?? ["Non sei ancora pronto."]);
+          return;
+        }
+        this.say(hm.lines, () => {
+          this.state.flags[hm.flag] = true;
+          audio.catchJingle();
+          this.say(["Hai ottenuto la MN TRAGHETTO!", "Ora puoi attraversare l'acqua. Cammina verso il mare."]);
+          saveGame(this.state);
+        });
+        return;
+      }
+      // Già ottenuta: cade nelle lines normali sotto.
     }
 
     // Flag "hai parlato con..." per le quest secondarie (es. GIRO DI PORTE).
@@ -1743,6 +1800,14 @@ export class WorldScene implements Scene {
       const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
       screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
       screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - lift + jitter, {
+        flipX: playerSprite.flip
+      });
+    } else if (this.isOnWater()) {
+      // MN TRAGHETTO: scafo sotto il personaggio mentre attraversa l'acqua.
+      // Il personaggio è rialzato "a bordo"; lo scafo ondeggia leggermente.
+      const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
+      screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
+      screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - 2 + bob, {
         flipX: playerSprite.flip
       });
     } else {

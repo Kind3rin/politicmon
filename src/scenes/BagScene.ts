@@ -1,4 +1,5 @@
 import { BAG_ORDER, ITEMS } from "../data/items";
+import { itemIcon } from "../art/items";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -31,7 +32,9 @@ export class BagScene implements Scene {
     this.menu = new Menu(
       this.itemIds.map((id) => ({
         label: ITEMS[id].name,
-        rightLabel: `x${this.state.bag[id]}`
+        rightLabel: `x${this.state.bag[id]}`,
+        icon: itemIcon(id),
+        iconId: `bag-${id}`
       }))
     );
   }
@@ -158,7 +161,9 @@ export class BagScene implements Scene {
     this.menu = new Menu(
       this.itemIds.map((id) => ({
         label: ITEMS[id].name,
-        rightLabel: `x${this.state.bag[id]}`
+        rightLabel: `x${this.state.bag[id]}`,
+        icon: itemIcon(id),
+        iconId: `bag-${id}`
       }))
     );
   }
@@ -171,14 +176,17 @@ export class BagScene implements Scene {
       screen.text("La borsa è vuota.", 20, 36, INK);
       screen.text("Come le promesse mantenute.", 20, 48, GREY);
     } else {
-      this.menu.draw(screen, 10, 20, VIEW_W - 20);
+      const MAX_VIS = 7; // finestra scorrevole: lascia spazio al pannello descrizione
+      this.menu.draw(screen, 10, 20, VIEW_W - 20, 13, MAX_VIS);
       const item = ITEMS[this.itemIds[this.menu.index]];
       if (item) {
-        const y = 24 + this.menu.measureHeight();
-        screen.panel(10, y, VIEW_W - 20, 40);
-        const lines = wrapText(item.desc, 34);
+        const y = 24 + this.menu.measureHeight(13, MAX_VIS);
+        const panelH = 40;
+        screen.panel(10, y, VIEW_W - 20, panelH);
+        screen.sprite(`item-${item.id}`, itemIcon(item.id), 16, y + Math.floor((panelH - 24) / 2), { scale: 2 });
+        const lines = wrapText(item.desc, 28);
         for (let i = 0; i < Math.min(3, lines.length); i += 1) {
-          screen.text(lines[i], 18, y + 9 + i * 10, INK);
+          screen.text(lines[i], 44, y + 7 + i * 10, INK);
         }
       }
     }

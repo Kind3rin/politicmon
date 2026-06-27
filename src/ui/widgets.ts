@@ -1,6 +1,6 @@
 import type { Input } from "../engine/input";
 import { CHAR_W, LINE_H } from "../engine/font";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen, VIEW_H, VIEW_W, type Pixmap } from "../engine/screen";
 import { audio } from "../engine/audio";
 
 export const INK = "#10141f";
@@ -143,13 +143,18 @@ export interface MenuItem {
   label: string;
   rightLabel?: string;
   disabled?: boolean;
+  icon?: Pixmap; // icona 12x12 opzionale, disegnata a sinistra della voce
+  iconId?: string; // chiave di cache per lo sprite dell'icona
 }
 
 // Menu verticale con cursore.
 export class Menu {
   index = 0;
+  // Finestra di scorrimento: prima voce visibile quando la lista è più lunga
+  // del numero di righe mostrabili (impostato in draw via maxVisible).
+  private scroll = 0;
   // Geometria dell'ultima draw(): serve per il tocco diretto sulle voci.
-  private geom: { x: number; y: number; w: number; rowH: number } | null = null;
+  private geom: { x: number; y: number; w: number; rowH: number; first: number } | null = null;
 
   constructor(public items: MenuItem[]) {}
 
@@ -195,8 +200,9 @@ export class Menu {
     if (!this.geom || this.items.length === 0) {
       return undefined;
     }
-    const { x, y, w, rowH } = this.geom;
-    const h = this.items.length * rowH + 14;
+    const { x, y, w, rowH, first } = this.geom;
+    const visible = this.lastVisibleCount();
+    const h = visible * rowH + 14;
     const tap = input.consumeTap();
     if (!tap) {
       return undefined;
@@ -204,8 +210,9 @@ export class Menu {
     if (tap.x < x || tap.x >= x + w || tap.y < y || tap.y >= y + h) {
       return undefined; // tocco fuori dal menu: lascia decidere alla scena
     }
-    const row = Math.floor((tap.y - (y + 8) + rowH / 2) / rowH);
-    if (row < 0 || row >= this.items.length) {
+    const rowOnScreen = Math.floor((tap.y - (y + 8) + rowH / 2) / rowH);
+    const row = first + rowOnScreen;
+    if (rowOnScreen < 0 || row < 0 || row >= this.items.length) {
       return undefined;
     }
     input.clearTap();
@@ -222,31 +229,66 @@ export class Menu {
     return null;
   }
 
-  draw(screen: Screen, x: number, y: number, w: number, rowH = 13): void {
-    this.geom = { x, y, w, rowH };
-    const h = this.items.length * rowH + 14;
+  // Numero di righe visibili date altezza riga e finestra max impostata in draw.
+  private maxVisible = Infinity;
+  private hasIcons = false;
+
+  private lastVisibleCount(): number {
+    return Math.min(this.items.length, this.maxVisible);
+  }
+
+  // `maxVisible`: se la lista è più lunga, scorre mostrando solo questa finestra
+  // (con frecce ▲▼). Evita che liste lunghe (borsa/shop) sforino lo schermo.
+  draw(screen: Screen, x: number, y: number, w: number, rowH = 13, maxVisible = Infinity): void {
+    this.maxVisible = maxVisible;
+    this.hasIcons = this.items.some((it) => it.icon);
+    const visible = Math.min(this.items.length, maxVisible);
+    // Tieni il cursore nella finestra visibile.
+    if (this.index < this.scroll) {
+      this.scroll = this.index;
+    } else if (this.index >= this.scroll + visible) {
+      this.scroll = this.index - visible + 1;
+    }
+    this.scroll = Math.max(0, Math.min(this.scroll, Math.max(0, this.items.length - visible)));
+    const first = this.scroll;
+    this.geom = { x, y, w, rowH, first };
+    const h = visible * rowH + 14;
     screen.panel(x, y, w, h);
-    for (let i = 0; i < this.items.length; i += 1) {
+    const iconPad = this.hasIcons ? 16 : 0;
+    for (let row = 0; row < visible; row += 1) {
+      const i = first + row;
       const item = this.items[i];
-      const rowY = y + 8 + i * rowH;
+      if (!item) {
+        break;
+      }
+      const rowY = y + 8 + row * rowH;
       const color = item.disabled ? GREY : INK;
       if (i === this.index) {
         screen.text("►", x + 7, rowY, INK);
       }
-      // Spazio disponibile per la label: dal margine sinistro (x+16) al bordo
-      // destro del box (x+w-8), meno la rightLabel se presente. Così le voci
-      // lunghe vengono troncate dentro al pannello invece di sforare.
+      if (item.icon) {
+        // Icona 12x12 allineata alla riga (leggermente alzata per centrare).
+        screen.sprite(item.iconId ?? `mi-${i}`, item.icon, x + 15, rowY - 3);
+      }
       const rightW = item.rightLabel ? item.rightLabel.length * CHAR_W + 6 : 0;
-      const labelMaxW = w - 24 - rightW;
-      screen.text(clipToWidth(item.label, labelMaxW), x + 16, rowY, color);
+      const labelX = x + 16 + iconPad;
+      const labelMaxW = w - 24 - iconPad - rightW;
+      screen.text(clipToWidth(item.label, labelMaxW), labelX, rowY, color);
       if (item.rightLabel) {
         screen.textRight(item.rightLabel, x + w - 8, rowY, color);
       }
     }
+    // Indicatori di scorrimento.
+    if (first > 0) {
+      screen.text("▲", x + w - 12, y + 4, GREY);
+    }
+    if (first + visible < this.items.length) {
+      screen.text("▼", x + w - 12, y + h - 10, GREY);
+    }
   }
 
-  measureHeight(rowH = 13): number {
-    return this.items.length * rowH + 14;
+  measureHeight(rowH = 13, maxVisible = Infinity): number {
+    return Math.min(this.items.length, maxVisible) * rowH + 14;
   }
 
   measureWidth(): number {

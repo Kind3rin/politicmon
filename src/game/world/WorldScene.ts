@@ -1860,7 +1860,10 @@ export class WorldScene implements Scene {
     if (this.transportMenu) {
       screen.panel(0, VIEW_H - 58, VIEW_W, 58);
       screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 46, INK);
-      this.transportMenu.draw(screen, VIEW_W - 104, VIEW_H - 58 - this.transportMenu.measureHeight(), 96);
+      // Pannello largo abbastanza da NON troncare "STRETTO DI MESSINA" (prima
+      // era 96px → "STRETTO DI ..."); auto-largo sul label più lungo, clampato.
+      const w = Math.min(VIEW_W - 8, Math.max(96, this.transportMenu.measureWidth() + 8));
+      this.transportMenu.draw(screen, VIEW_W - 4 - w, VIEW_H - 58 - this.transportMenu.measureHeight(), w);
     }
 
     if (this.askMenu) {

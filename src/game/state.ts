@@ -28,10 +28,12 @@ export interface GameState {
   chips: number; // FICHE del casinò: valuta separata dai fondi (come i gettoni Pokémon)
   boxed: Monster[]; // CIRCOLO DI PARTITO: mostri catturati con la squadra piena (box PC)
   lastBar: string; // id dell'ultima città-con-bar visitata: respawn al KO totale
+  zoneRewardsClaimed: string[]; // id zone Dex già ricompensate al 100% catture
 }
 
-export const SAVE_KEY = "politicmon-save-v8";
+export const SAVE_KEY = "politicmon-save-v9";
 const LEGACY_KEYS = [
+  "politicmon-save-v8",
   "politicmon-save-v7",
   "politicmon-save-v6",
   "politicmon-save-v5",
@@ -58,7 +60,8 @@ export function newGameState(): GameState {
     rivalWins: 0,
     chips: 0,
     boxed: [],
-    lastBar: "borgo"
+    lastBar: "borgo",
+    zoneRewardsClaimed: []
   };
 }
 
@@ -137,6 +140,7 @@ function parseState(raw: string | null): GameState | null {
     parsed.chips = typeof parsed.chips === "number" ? parsed.chips : 0;
     parsed.boxed = Array.isArray(parsed.boxed) ? parsed.boxed : [];
     parsed.lastBar = typeof parsed.lastBar === "string" ? parsed.lastBar : "borgo";
+    parsed.zoneRewardsClaimed = Array.isArray(parsed.zoneRewardsClaimed) ? parsed.zoneRewardsClaimed : [];
 
     // Rete di sicurezza sugli HP: un mon caricato non deve avere hp invalido, e
     // il party non può essere interamente svenuto al load. Succede se l'app

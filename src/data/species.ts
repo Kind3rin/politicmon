@@ -270,6 +270,24 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 10, expYield: 210,
     learnset: [[1, "tweet"], [1, "algoritmo"], [30, "razzox"], [34, "coloniamarte"]],
     dexLine: "HA COMPRATO UN PIANETA PER POSTARE MEME SENZA CONNESSIONE TERRESTRE."
+  }),
+  // FIRMA di MEDIOPOLI: l'opinionista onnipresente da talk show.
+  mediocrate: S({
+    id: "mediocrate", dexNum: 29, name: "MEDIOCRATE", category: "MEZZOBUSTO ONNIPRESENTE",
+    types: ["MEDIA", "CENTRO"],
+    base: { hp: 68, atk: 52, def: 64, spc: 84, spd: 70 },
+    catchRate: 70, expYield: 145,
+    learnset: [[1, "tweet"], [1, "giravolta"], [8, "conferenza"], [13, "telepromessa"], [18, "editoriale"], [24, "inciucio"]],
+    dexLine: "OSPITE FISSO DI OGNI TALK SHOW. HA UN'OPINIONE FORTISSIMA SU TUTTO E NESSUNA SU NIENTE. SE CAMBI CANALE, È GIÀ LÌ."
+  }),
+  // FIRMA dello STRETTO: il mostro-cantiere del ponte mai finito.
+  pontigor: S({
+    id: "pontigor", dexNum: 30, name: "PONTIGÒR", category: "KAIJU DA CANTIERE",
+    types: ["POPULISMO", "TECNO"],
+    base: { hp: 90, atk: 88, def: 92, spc: 56, spd: 38 },
+    catchRate: 35, expYield: 200,
+    learnset: [[1, "ruspa"], [1, "grafico"], [10, "comizio"], [16, "spread"], [22, "slogan"], [28, "vaffa"]],
+    dexLine: "ENORME E INCOMPIUTO DA CINQUANT'ANNI. OGNI GOVERNO LO ANNUNCIA, NESSUNO LO FINISCE. CRESCE SOLO IN CAMPAGNA ELETTORALE."
   })
 };
 

@@ -560,10 +560,11 @@ export const MAPS: Record<string, MapDef> = {
     // calendauro. contemorfo qui è la versione più alta di livello (come in
     // Pokémon la stessa specie ricompare più forte nella zona avanzata).
     encounters: [
-      { speciesId: "vannaccix", weight: 32, minLv: 8, maxLv: 11 },
-      { speciesId: "calendauro", weight: 26, minLv: 9, maxLv: 12 },
-      { speciesId: "contemorfo", weight: 24, minLv: 9, maxLv: 12 },
-      { speciesId: "macronfox", weight: 18, minLv: 10, maxLv: 12 }
+      { speciesId: "vannaccix", weight: 30, minLv: 8, maxLv: 11 },
+      { speciesId: "calendauro", weight: 24, minLv: 9, maxLv: 12 },
+      { speciesId: "mediocrate", weight: 22, minLv: 9, maxLv: 12 },
+      { speciesId: "contemorfo", weight: 14, minLv: 9, maxLv: 12 },
+      { speciesId: "macronfox", weight: 10, minLv: 10, maxLv: 12 }
     ],
     signs: [
       {
@@ -976,11 +977,12 @@ export const MAPS: Record<string, MapDef> = {
     // selvatico e — novità — capitanone allo stato brado (prima solo evo-tessera).
     // Un vero motivo per venire qui: roba che non trovi altrove.
     encounters: [
-      { speciesId: "salvinator", weight: 34, minLv: 19, maxLv: 22 },
+      { speciesId: "salvinator", weight: 30, minLv: 19, maxLv: 22 },
+      { speciesId: "pontigor", weight: 18, minLv: 21, maxLv: 24 },
       { speciesId: "capitanone", weight: 12, minLv: 22, maxLv: 24 },
-      { speciesId: "vannaccix", weight: 22, minLv: 20, maxLv: 22 },
-      { speciesId: "muskrat", weight: 18, minLv: 21, maxLv: 23 },
-      { speciesId: "contemorfo", weight: 14, minLv: 20, maxLv: 22 }
+      { speciesId: "vannaccix", weight: 18, minLv: 20, maxLv: 22 },
+      { speciesId: "muskrat", weight: 14, minLv: 21, maxLv: 23 },
+      { speciesId: "contemorfo", weight: 8, minLv: 20, maxLv: 22 }
     ],
     signs: [
       {

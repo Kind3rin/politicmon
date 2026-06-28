@@ -2144,8 +2144,12 @@ export class WorldScene implements Scene {
           // si disegna solo il veicolo (più grande, riempie la cella). I mezzi
           // APERTI (monopattino): il player sta SOPRA, visibile in sella.
           const enclosed = vehicle === "auto" || vehicle === "ruspa";
-          const target = enclosed ? 26 : 24;
-          const vs = target / vehImg.height;
+          // Scala sul lato MAGGIORE così le viste laterali (east/west, più larghe
+          // che alte) non si deformano né sbordano. Target più grande dei 26px
+          // precedenti: il mezzo deve "riempire" la cella ed essere chiaramente
+          // più grosso di un pedone (l'utente lo voleva ben visibile).
+          const target = enclosed ? 30 : 24;
+          const vs = target / Math.max(vehImg.width, vehImg.height);
           const vw = vehImg.width * vs;
           const vh = vehImg.height * vs;
           if (enclosed) {

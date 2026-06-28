@@ -22,12 +22,12 @@ const shot = await page.evaluate(async () => {
     "veh:auto:east": "chars/auto_east.png", "veh:auto:west": "chars/auto_west.png",
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png"
   });
-  await new Promise((r) => setTimeout(r, 1500));
+  await new Promise((r) => setTimeout(r, 3500));
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
   const input = new Input();
-  function render(veh, facing) {
+  async function render(veh, facing) {
     const state = newGameState();
     state.flags["intro-done"] = true;
     state.party = [createMonster("giorgetta", 18)];
@@ -36,11 +36,13 @@ const shot = await page.evaluate(async () => {
     const stack = new SceneStack();
     stack.push(new WorldScene(stack, input, state));
     for (let i = 0; i < 6; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
+    await new Promise((r) => setTimeout(r, 800));
+    for (let i = 0; i < 6; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
     return canvas.toDataURL("image/png");
   }
   return {
-    auto_down: render("auto", "down"), auto_up: render("auto", "up"),
-    auto_left: render("auto", "left"), auto_right: render("auto", "right")
+    auto_down: await render("auto", "down"), auto_up: await render("auto", "up"),
+    auto_left: await render("auto", "left"), auto_right: await render("auto", "right")
   };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }

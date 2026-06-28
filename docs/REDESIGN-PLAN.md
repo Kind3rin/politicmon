@@ -108,6 +108,19 @@ animazioni (walk/idle/water), si fonde col contesto (trasparenza/ancoraggio/no b
 NPC, icone item, erba alta (overlay), monopattino, casa, cornice dialog 9-slice,
 sfondo battaglia. Edifici multi-tile = round dedicato (richiede rilevamento blocchi).
 
+**EDIFICI — decisione (round 15):** gli edifici (case `uuuu/mdnm`, lab, bar, palestre,
+casinò, palazzo) sono blocchi multi-tile **tetto + facciata** di dimensioni che
+VARIANO tra mappe. Due approcci valutati:
+- *Building-PNG con rilevamento blocco*: disegnare 1 PNG sull'intero edificio.
+  ALTO RISCHIO di regressione sul renderer mappa (core) + dimensioni non uniformi.
+- *Tetti-tile seamless 16px*: sostituire solo i char tetto. Problema: la facciata
+  (`mdnm`) resta vecchia → mismatch tetto/facciata.
+Provati i tetti-tile seamless (tegole rosse/blu/verdi). Se stridono con la
+facciata vecchia → **edifici = ROUND DEDICATO** (building-PNG completi tetto+
+facciata, con rilevamento blocco fatto bene). NON forzato in questo round per
+non rischiare il renderer mappa. Le facciate (porta `d`/finestra `n`/muro `m`)
+sono comunque già riconoscibili come pixmap.
+
 ## Stato (aggiornato 2026-06-28)
 
 - **TASK 1 mostri — FATTO 30/30.** Tutti gli sprite PixelLab scaricati e cablati

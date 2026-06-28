@@ -12,7 +12,11 @@ export const TILE = 16;
 // sentiero è più pulito. L'infrastruttura (tileImage + fallback nel renderer)
 // resta pronta: per riattivare basta rimettere qui le coppie char->png SEAMLESS,
 // o implementare l'autotiling Wang vero (16 varianti per coppia di terreni).
-const TILE_PNG: Record<string, string> = {};
+const TILE_PNG: Record<string, string> = {
+  // I fiori `,` sono sparsi (non si ripetono su grandi aree) -> niente bande,
+  // si può usare la texture PNG senza l'artefatto del tiling.
+  ",": "tiles/flowers16.png",
+};
 
 export function tileImage(ch: string): HTMLImageElement | null {
   const path = TILE_PNG[ch];
@@ -20,6 +24,22 @@ export function tileImage(ch: string): HTMLImageElement | null {
     return null;
   }
   return getSpriteImage(`tile:${ch}`, path);
+}
+
+// Oggetti OVERLAY (alberi, segnali, recinti, fiori): PNG ~32px disegnati sopra il
+// terreno e ancorati in BASSO al tile (così la chioma dell'albero sborda verso
+// l'alto, stile Pokémon). Fallback al Pixmap dell'overlay finché il PNG non c'è.
+const OBJECT_PNG: Record<string, string> = {
+  T: "tiles/tree.png",
+  s: "tiles/sign.png",
+};
+
+export function objectImage(ch: string): HTMLImageElement | null {
+  const path = OBJECT_PNG[ch];
+  if (!path) {
+    return null;
+  }
+  return getSpriteImage(`obj:${ch}`, path);
 }
 
 export interface TileDef {

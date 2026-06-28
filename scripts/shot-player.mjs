@@ -17,7 +17,8 @@ const shot = await page.evaluate(async () => {
   audio.enabled = false;
   preloadSprites({
     "player:south": "chars/player_south.png", "player:north": "chars/player_north.png",
-    "player:east": "chars/player_east.png", "player:west": "chars/player_west.png"
+    "player:east": "chars/player_east.png", "player:west": "chars/player_west.png",
+    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png"
   });
   await new Promise((r) => setTimeout(r, 1500));
   const canvas = document.createElement("canvas");

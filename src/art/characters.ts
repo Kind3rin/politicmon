@@ -14,6 +14,12 @@ export function playerImage(facing: Facing): HTMLImageElement | null {
   return getSpriteImage(`player:${dir}`, `chars/player_${dir}.png`);
 }
 
+// Scafo del TRAGHETTO (PixelLab, vista dall'alto, 1 sola direzione: ondeggia
+// sull'acqua sotto il player). Fallback a FERRY_PIX se il PNG non c'è.
+export function ferryImage(): HTMLImageElement | null {
+  return getSpriteImage("veh:ferry", "chars/ferry.png");
+}
+
 // Sprite personaggi 16x16, stile GBC: testa grande, corpo piccolo.
 // Palette parametrica: o outline, h cappello/capelli, s pelle, e occhi,
 // c maglia, p pantaloni, x scarpe/accento.

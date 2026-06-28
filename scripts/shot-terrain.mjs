@@ -15,7 +15,10 @@ const shots = await page.evaluate(async () => {
   const { preloadSprites } = await import("/src/engine/assets.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
-  preloadSprites({ "tile:.": "tiles/grass.png", "tile:~": "tiles/tallgrass.png", "tile:z": "tiles/sand.png" });
+  preloadSprites({
+    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "tile:,": "tiles/flowers16.png",
+    "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png"
+  });
   await new Promise((r) => setTimeout(r, 1500));
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
@@ -34,10 +37,10 @@ const shots = await page.evaluate(async () => {
     for (let i = 0; i < 8; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
     return canvas.toDataURL("image/png");
   }
-  return { route1: shotMap("route1", 14, 10), borgo: shotMap("borgo", 8, 8) };
+  return { route1: shotMap("route1", 14, 10), stretto: shotMap("stretto", 14, 7) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);
-save("terrain_borgo", shots.borgo);
+save("terrain_stretto", shots.stretto);
 console.log("salvati");
 await browser.close();

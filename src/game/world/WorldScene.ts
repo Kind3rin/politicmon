@@ -1,7 +1,7 @@
-import { charSprite, playerImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
+import { charSprite, playerImage, ferryImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage, objectImage } from "../../art/tiles";
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
 import { MOVES } from "../../data/moves";
@@ -1755,6 +1755,15 @@ export class WorldScene implements Scene {
         }
         if (def.water) {
           screen.sprite(`tile:w:${waterFrame}`, waterFrames[waterFrame], dx, dy);
+        } else if (def.overlay) {
+          // Oggetto overlay (albero/segnale/...): PNG 32px ancorato in basso al
+          // tile (la chioma sborda verso l'alto), o pixmap di fallback.
+          const obj = objectImage(ch);
+          if (obj) {
+            screen.imageSprite(obj, dx + (TILE - obj.width) / 2, dy + TILE - obj.height);
+          } else {
+            screen.sprite(`tile:${ch}`, def.pix, dx, dy);
+          }
         } else {
           // Texture PNG PixelLab del terreno, con fallback alla pixmap testuale.
           const img = tileImage(ch);
@@ -1841,7 +1850,12 @@ export class WorldScene implements Scene {
       // TRAGHETTO: scafo che ondeggia, al timone il CAPITANO SCHETTINO (satira),
       // e il giocatore a bordo. Lo scafo si vede su acqua e a terra (è il mezzo).
       const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
-      screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
+      const ferryImg = ferryImage();
+      if (ferryImg) {
+        screen.imageSprite(ferryImg, baseX + 8 - ferryImg.width / 2, baseY + 12 + bob - ferryImg.height / 2);
+      } else {
+        screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
+      }
       // Schettino al timone, leggermente di lato; il player accanto.
       screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
       drawPlayer(baseX - 4, baseY + bob);

@@ -1,7 +1,33 @@
-import type { Pixmap } from "../engine/screen";
+import type { Pixmap, Screen } from "../engine/screen";
 import { ITEMS } from "../data/items";
 import { MOVES } from "../data/moves";
 import { TYPE_COLORS } from "../data/poltypes";
+import { getSpriteImage } from "../engine/assets";
+
+// Redesign PixelLab: alcune icone item hanno un PNG dedicato in
+// public/sprites/items/. `ITEMS_WITH_PNG` elenca le migrate.
+const ITEMS_WITH_PNG = new Set<string>([]);
+
+function itemImage(itemId: string): HTMLImageElement | null {
+  if (!ITEMS_WITH_PNG.has(itemId)) {
+    return null;
+  }
+  return getSpriteImage(`item:${itemId}`, `items/${itemId}.png`);
+}
+
+// Disegna l'icona di un oggetto in una box quadrata (x, y, size): PNG PixelLab
+// (centrato/fit) se disponibile, altrimenti la pixmap 12px disegnata com'era.
+export function drawItemIcon(screen: Screen, itemId: string, x: number, y: number, size = 12): void {
+  const png = itemImage(itemId);
+  if (png) {
+    const s = Math.min(size / png.width, size / png.height);
+    const dw = png.width * s;
+    const dh = png.height * s;
+    screen.imageSprite(png, x + (size - dw) / 2, y + (size - dh) / 2, { scaleX: s, scaleY: s });
+    return;
+  }
+  screen.sprite(`itemgfx:${itemId}`, itemIcon(itemId), x, y);
+}
 
 // Icone pixel-art 12x12 per gli oggetti, disegnate da codice (niente asset
 // binari, coerente col resto del gioco). Ogni icona è un Pixmap {art, pal}.

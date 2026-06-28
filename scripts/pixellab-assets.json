@@ -1,0 +1,22 @@
+{
+  "_note": "Tracking asset PixelLab non-mostri (NPC, UI, icone, edifici). Download: NPC/UI via get_character/get_ui_asset (URL); icone/oggetti via /mcp/map-objects/<id>/download.",
+  "npc": [
+    { "pal": "professor", "charId": "1ac1dfcc-7e5c-4ae7-8363-59897690b074" },
+    { "pal": "guard", "charId": "f274d0cd-7279-45e5-b2ef-722af1af329a" },
+    { "pal": "kid", "charId": "1ef87791-8b38-4fba-8e50-d0028cda17b5" },
+    { "pal": "journalist", "charId": "21ded9d6-3be4-48de-a041-6bf2e54cd5b0" },
+    { "pal": "boss", "charId": "4e18d7c1-79c3-4619-b9b9-159126b6b4ec" }
+  ],
+  "ui": [
+    { "id": "dialog", "uiId": "1a085cdc-47e1-49d9-87f6-2bd16d20741d" }
+  ],
+  "icons": [
+    { "item": "scheda", "objectId": "3fc68774-f5df-4873-92f0-5598c22e3da6" },
+    { "item": "caffe", "objectId": "c518591f-b5ca-4db7-9215-100062431d37" },
+    { "item": "spritz", "objectId": "356ccdfd-d77a-4948-8a53-7997e5aed964" },
+    { "item": "mojito", "objectId": "0c463682-34a9-4c4b-a4d9-a228a385784a" },
+    { "item": "maalox", "objectId": "979aec75-0ffc-4b36-a7f5-74f410ec6d36" },
+    { "item": "tessera", "objectId": "" }
+  ],
+  "buildings": []
+}

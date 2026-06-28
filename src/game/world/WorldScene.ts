@@ -1,4 +1,4 @@
-import { charSprite, playerImage, ferryImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
+import { charSprite, playerImage, ferryImage, npcImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, waterFrames, pix, tileImage, objectImage } from "../../art/tiles";
@@ -1795,7 +1795,16 @@ export class WorldScene implements Scene {
       const sprite = charSprite(npc.pal, npc.currentFacing, walkFrame);
       const nx = Math.round(npc.dispX) - camX;
       const ny = Math.round(npc.dispY) - camY - 1;
-      screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
+      // PNG PixelLab dell'NPC (4 dir, scalato ai 16px, ancorato in basso) se
+      // l'archetipo è migrato, altrimenti il pixmap parametrico.
+      const npcImg = npcImage(npc.pal, npc.currentFacing);
+      if (npcImg) {
+        const ns = 22 / npcImg.height;
+        const dw = npcImg.width * ns;
+        screen.imageSprite(npcImg, nx + 8 - dw / 2, ny + 16 - npcImg.height * ns, { scaleX: ns, scaleY: ns });
+      } else {
+        screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
+      }
       if (this.exclaimNpc === npc) {
         screen.panel(nx + 2, ny - 13, 12, 13);
         screen.text("!", nx + 5, ny - 10, INK);

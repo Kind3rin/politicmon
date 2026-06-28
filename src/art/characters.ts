@@ -20,6 +20,18 @@ export function ferryImage(): HTMLImageElement | null {
   return getSpriteImage("veh:ferry", "chars/ferry.png");
 }
 
+// NPC PixelLab: solo alcuni archetipi (palette) hanno uno sprite PNG dedicato a
+// 4 direzioni. Gli altri restano sul pixmap parametrico (tinta da palette).
+export const NPC_WITH_PNG = new Set<string>([]);
+
+export function npcImage(palId: string, facing: Facing): HTMLImageElement | null {
+  if (!NPC_WITH_PNG.has(palId)) {
+    return null;
+  }
+  const dir = FACING_FILE[facing] ?? "south";
+  return getSpriteImage(`npc:${palId}:${dir}`, `chars/npc_${palId}_${dir}.png`);
+}
+
 // Sprite personaggi 16x16, stile GBC: testa grande, corpo piccolo.
 // Palette parametrica: o outline, h cappello/capelli, s pelle, e occhi,
 // c maglia, p pantaloni, x scarpe/accento.

@@ -1,5 +1,5 @@
 import { BAG_ORDER, ITEMS } from "../data/items";
-import { itemIcon } from "../art/items";
+import { itemIcon, drawItemIcon } from "../art/items";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -183,7 +183,7 @@ export class BagScene implements Scene {
         const y = 24 + this.menu.measureHeight(13, MAX_VIS);
         const panelH = 40;
         screen.panel(10, y, VIEW_W - 20, panelH);
-        screen.sprite(`item-${item.id}`, itemIcon(item.id), 16, y + Math.floor((panelH - 24) / 2), { scale: 2 });
+        drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
         const lines = wrapText(item.desc, 28);
         for (let i = 0; i < Math.min(3, lines.length); i += 1) {
           screen.text(lines[i], 44, y + 7 + i * 10, INK);

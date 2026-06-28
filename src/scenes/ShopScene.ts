@@ -1,5 +1,5 @@
 import { BAG_ORDER, ITEMS, SHOP_DIRECTIVES } from "../data/items";
-import { itemIcon } from "../art/items";
+import { itemIcon, drawItemIcon } from "../art/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -87,7 +87,7 @@ export class ShopScene implements Scene {
       const shown = Math.min(3, lines.length);
       const panelH = Math.max(30, 10 + shown * 10);
       screen.panel(10, y, VIEW_W - 20, panelH);
-      screen.sprite(`item-${item.id}`, itemIcon(item.id), 16, y + Math.floor((panelH - 24) / 2), { scale: 2 });
+      drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
       for (let i = 0; i < shown; i += 1) {
         screen.text(lines[i], 44, y + 6 + i * 10, INK);
       }

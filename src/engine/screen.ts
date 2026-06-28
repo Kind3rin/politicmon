@@ -142,6 +142,35 @@ export class Screen {
     return pix.art.length;
   }
 
+  // Disegna uno sprite PNG (redesign PixelLab) con le stesse opzioni di `sprite`.
+  // Pensato per essere intercambiabile col rendering Pixmap: stesso ancoraggio
+  // (top-left a x,y), stesso flip/scala. La sorgente è già un'immagine bitmap
+  // pronta (vedi engine/assets.ts), nearest-neighbor garantito da imageSmoothing
+  // disabilitato. `flipX` usa una trasformazione locale per non sporcare lo stato.
+  imageSprite(
+    img: HTMLImageElement,
+    x: number,
+    y: number,
+    opts?: { flipX?: boolean; scale?: number; scaleX?: number; scaleY?: number }
+  ): void {
+    const s = opts?.scale ?? 1;
+    const sx = (opts?.scaleX ?? 1) * s;
+    const sy = (opts?.scaleY ?? 1) * s;
+    const w = img.width * sx;
+    const h = img.height * sy;
+    const dx = Math.round(x);
+    const dy = Math.round(y);
+    if (opts?.flipX) {
+      this.ctx.save();
+      this.ctx.translate(dx + w, dy);
+      this.ctx.scale(-1, 1);
+      this.ctx.drawImage(img, 0, 0, w, h);
+      this.ctx.restore();
+    } else {
+      this.ctx.drawImage(img, dx, dy, w, h);
+    }
+  }
+
   text(value: string, x: number, y: number, color = "#10141f", scale = 1): void {
     if (value == null) {
       return; // difesa: niente crash se arriva un valore mancante

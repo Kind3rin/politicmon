@@ -181,6 +181,28 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
+- **Round 15 — REDESIGN PixelLab + fix canale STRETTO (2026-06-28, IN CORSO):**
+  - **Fix bug STRETTO** (segnalato dall'utente): l'approdo dal traghetto cadeva su
+    una fascia di SABBIA continua (righe 6-7 di `STRETTO_TILES`) che faceva da
+    "isola di terra" e tagliava la traversata — il ponte sembrava irraggiungibile,
+    niente collegamento d'acqua visivo. Ridisegnate righe 5-7: ora un **canale
+    d'acqua centrale (col 11-16)** scende ininterrotto dal molo nord all'acqua
+    aperta e al cantiere del ponte. Edifici/warp/NPC ricontrollati cella-per-cella
+    (chiosco door col10, covo col20, bar col13 invariati; capitano/geometra/pickup
+    su `j` ponte ok). Verificato con `scripts/shot-stretto.mjs` (approdo/canale/ponte).
+  - **DECISIONE: vincolo "grafica 100% pixel-map da codice" ABBANDONATO.** L'utente
+    ha scelto di rifare il design con **PixelLab** (MCP, sub Tier 2, 5000 gen).
+    Gli asset diventano PNG serviti da `public/sprites/{monsters,tiles,chars,ui}/`.
+  - **Infrastruttura asset PNG (non bloccante, anti-regressione):** nuovo
+    `src/engine/assets.ts` (registry async: `getSpriteImage`/`preloadSprites`,
+    fallback al Pixmap finché il PNG non è `ready` o se manca) + `Screen.imageSprite()`
+    (disegna PNG con stesso ancoraggio/flip/scala di `sprite`). I save NON sono
+    toccati (grafica = presentazione pura).
+  - Tool PixelLab: mostri statici → `create_1_direction_object` (size 64, view
+    sidescroller); tile → `create_topdown_tileset` (Wang 16px); player/NPC →
+    `create_character` (8-dir). Generazione async (~2-7 min/asset), si scarica con
+    `get_object`/`get_character` (URL) → salva in `public/sprites/...`.
+
 - **Round 14 — TRAGHETTO-veicolo + PERCORSO 1 + grotta (2026-06-28):**
   - **TRAGHETTO da MN a VEICOLO** (richiesta utente): `VehicleId "traghetto"` +
     flag `veh-traghetto`; lo regala il MARINAIO (`vehicleGift` con `requiresBadges:3`,

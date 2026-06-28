@@ -1,4 +1,4 @@
-import { BALLOT_ART, MONSTER_ART, MONSTER_ACTION_ART } from "../../art/monsters";
+import { BALLOT_ART, MONSTER_ART, MONSTER_ACTION_ART, monsterImage } from "../../art/monsters";
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_LABELS, STATUS_NAMES, moveSummary, moveKindLabel, type Move } from "../../data/moves";
 import { TYPE_COLORS } from "../../data/poltypes";
@@ -1823,12 +1823,32 @@ export class BattleScene implements Scene {
     const art = useAction ? action : baseArt;
     const key = `${who === "foe" ? "battle" : "battleback"}:${speciesId}${useAction ? ":a" : ""}`;
 
-    const drawW = w * scale * sx;
-    const drawH = h * scale * sy;
-    // Ancoraggio: centro in basso resta fermo (lo scaling non fa "fluttuare").
-    const x = cx - drawW / 2 + dx;
-    const y = by - drawH;
-    screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
+    // Redesign PixelLab: se c'è uno sprite PNG pronto per la specie, lo si disegna
+    // al posto della pixmap, conservando TUTTA l'animazione procedurale (respiro,
+    // affondo, contraccolpo, status) già calcolata in sx/sy/dx. Ancoraggio
+    // identico (centro in basso fermo). Il PNG è 64px: lo si scala per stare in
+    // linea con gli altri mostri (pixmap ~48px renderizzati). Gli effetti
+    // post-draw (velo SCANDALO, simbolo status) restano condivisi sotto.
+    const png = monsterImage(speciesId);
+    let drawW: number;
+    let drawH: number;
+    let x: number;
+    let y: number;
+    if (png) {
+      const pngScale = 56 / png.height; // altezza target ~56px
+      drawW = png.width * pngScale * sx;
+      drawH = png.height * pngScale * sy;
+      x = cx - drawW / 2 + dx;
+      y = by - drawH;
+      screen.imageSprite(png, x, y, { flipX, scaleX: sx * pngScale, scaleY: sy * pngScale });
+    } else {
+      drawW = w * scale * sx;
+      drawH = h * scale * sy;
+      // Ancoraggio: centro in basso resta fermo (lo scaling non fa "fluttuare").
+      x = cx - drawW / 2 + dx;
+      y = by - drawH;
+      screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
+    }
 
     // Velo rosso pulsante sopra il mostro logorato dallo SCANDALO.
     if (scandaloFlicker) {

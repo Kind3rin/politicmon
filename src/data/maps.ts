@@ -260,15 +260,20 @@ const MARE_TILES = [
 // ---------------------------------------------------- STRETTO DI MESSINA
 // Spiaggia stile Papeete + ponte eternamente incompiuto che finisce in mare.
 
+// Lo STRETTO: spiaggia Papeete a nord con i suoi edifici, poi il MOLO da cui
+// approda il traghetto si apre su un CANALE D'ACQUA CONTINUO (righe 6-7) che si
+// raccorda all'acqua aperta in basso e al ponte. Prima qui c'era una fascia di
+// sabbia che faceva da "isola di terra" e tagliava la traversata: ora dall'molo
+// (col 13-14) l'acqua scende ininterrotta fino al cantiere del ponte.
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......eeee......xxxx.....TT",
   "TT..~~~~.mdnm.s....mdnm.....TT",
   "TT..~~~~....eQQe......~~~~..TT",
   "TT..~~~~....mdnm......~~~~..TT",
-  "TT...s..............~~~~....TT",
-  "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
-  "TTzzzzzzzzzzzz==zzzzzzzzzzzzTT",
+  "TT...s.zzzzz=zz=zzzzz.~~~~..TT",
+  "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
+  "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",

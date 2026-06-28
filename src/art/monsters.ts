@@ -1,4 +1,21 @@
 import type { Pixmap } from "../engine/screen";
+import { getSpriteImage } from "../engine/assets";
+
+// Redesign PixelLab: se esiste un PNG per la specie in `public/sprites/monsters/<id>.png`
+// lo si usa al posto della caricatura testuale. Finché il PNG non è caricato (o se
+// manca) si ricade sul Pixmap. `MONSTERS_WITH_PNG` elenca le specie già migrate:
+// si aggiorna mano a mano che si generano gli sprite, così non si tenta di caricare
+// PNG inesistenti (niente 404 a raffica).
+export const MONSTERS_WITH_PNG = new Set<string>([
+  "salvinator", "giorgiagon", "ellyna", "schleinix", "renzino", "grillix"
+]);
+
+export function monsterImage(speciesId: string): HTMLImageElement | null {
+  if (!MONSTERS_WITH_PNG.has(speciesId)) {
+    return null;
+  }
+  return getSpriteImage(`mon:${speciesId}`, `monsters/${speciesId}.png`);
+}
 
 // Caricature dei politici, 24px di larghezza, bottom-aligned.
 // Generatore parametrico: testa 14px (cols 5-18), busto 18px (cols 3-20).

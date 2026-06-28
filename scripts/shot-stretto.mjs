@@ -6,7 +6,8 @@ const BASE = process.env.BASE_URL ?? "http://127.0.0.1:5179";
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 960, height: 720 } });
-await page.goto(BASE, { waitUntil: "networkidle" });
+await page.goto(BASE, { waitUntil: "load" });
+await page.waitForTimeout(1500);
 
 const shots = await page.evaluate(async () => {
   const { Screen } = await import("/src/engine/screen.ts");
@@ -34,7 +35,8 @@ const shots = await page.evaluate(async () => {
     return canvas.toDataURL("image/png");
   }
   return {
-    beach: render(14, 7, "down"),
+    approdo: render(14, 6, "down"),
+    canale: render(14, 8, "down"),
     bridge: render(14, 13, "down")
   };
 });
@@ -44,7 +46,8 @@ function save(name, dataUrl) {
   writeFileSync(`artifacts/screens/${name}.png`, Buffer.from(b64, "base64"));
   console.log(`salvato artifacts/screens/${name}.png`);
 }
-save("stretto_beach", shots.beach);
+save("stretto_approdo", shots.approdo);
+save("stretto_canale", shots.canale);
 save("stretto_bridge", shots.bridge);
 
 await browser.close();

@@ -246,6 +246,9 @@ export class TitleScene implements Scene {
     const x = VIEW_W / 2 - w / 2;
     const y = VIEW_H - menuH - 12;
     this.menu.draw(screen, x, y, w, 12);
+    // Disclaimer satira: opera di parodia, personaggi caricaturali di fantasia.
+    // Best practice di settore (parodia + continenza) per tono bonario e copertura.
+    screen.textCenter("SATIRA - PERSONAGGI DI FANTASIA", VIEW_W / 2, y - 8, GREY);
     screen.textCenter("A/Z: SCEGLI   B/X: INDIETRO", VIEW_W / 2, VIEW_H - 9, GREY);
   }
 }

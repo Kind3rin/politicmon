@@ -1,4 +1,4 @@
-import { MONSTER_ART } from "../art/monsters";
+import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { TYPE_COLORS } from "../data/poltypes";
 import { DEX_ORDER, SPECIES, STARTERS } from "../data/species";
 import { audio } from "../engine/audio";
@@ -109,11 +109,8 @@ export class DexScene implements Scene {
     const species = SPECIES[id];
     screen.clear("#7a2828");
     screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8);
-    const art = MONSTER_ART[id];
-    if (art) {
-      const h = art.art.length * 2;
-      screen.sprite(`dex:${id}`, art, 16, 70 - h, { scale: 2 });
-    }
+    // Box mostro: ancorato in basso a y=70, max 60x54 (PNG PixelLab o pixmap).
+    drawMonsterSprite(screen, id, MONSTER_ART[id], 8, 16, 60, 54);
     screen.text(`N.${String(species.dexNum).padStart(2, "0")} ${species.name}`, 76, 14, INK);
     screen.text(species.category, 76, 26, GREY);
     let tx = 76;

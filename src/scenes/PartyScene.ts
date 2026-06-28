@@ -1,4 +1,4 @@
-import { MONSTER_ART } from "../art/monsters";
+import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { MOVES, STATUS_LABELS } from "../data/moves";
 import { TYPE_COLORS } from "../data/poltypes";
 import { audio } from "../engine/audio";
@@ -136,13 +136,8 @@ export class PartyScene implements Scene {
       } else if (selected) {
         screen.frame(4, y, VIEW_W - 8, 22, this.moveFrom !== null ? "#f0c040" : INK);
       }
-      const art = MONSTER_ART[mon.speciesId];
-      if (art) {
-        const h = art.art.length;
-        screen.sprite(`party:${mon.speciesId}`, art, 8, y + 21 - Math.min(21, h) - (h > 21 ? 0 : 1), {
-          scale: 1
-        });
-      }
+      // Mini-sprite nello slot lista (box 26x21, ancorato in basso).
+      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 6, y + 1, 26, 21);
       const ink = selected ? INK : PAPER;
       screen.text(speciesOf(mon).name, 36, y + 3, ink);
       screen.textRight(`L${mon.level}`, VIEW_W - 64, y + 3, ink);
@@ -174,11 +169,7 @@ export class PartyScene implements Scene {
     const species = speciesOf(mon);
     screen.clear("#2e3e52");
     screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8);
-    const art = MONSTER_ART[mon.speciesId];
-    if (art) {
-      const h = art.art.length * 2;
-      screen.sprite(`summary:${mon.speciesId}`, art, 14, 62 - h, { scale: 2 });
-    }
+    drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 8, 8, 56, 54);
     screen.text(species.name, 70, 12, INK);
     screen.text(`L${mon.level}  ${species.category}`, 70, 22, GREY);
     // Anticipa la prossima evoluzione: dà il gancio "ancora un livello".

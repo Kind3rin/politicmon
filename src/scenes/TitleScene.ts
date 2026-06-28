@@ -1,4 +1,4 @@
-import { MONSTER_ART } from "../art/monsters";
+import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { STARTERS } from "../data/species";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -227,15 +227,12 @@ export class TitleScene implements Scene {
     const spots = [46, VIEW_W / 2, VIEW_W - 46];
     for (let i = 0; i < ids.length && i < spots.length; i += 1) {
       const art = MONSTER_ART[ids[i]];
-      if (!art) {
-        continue;
-      }
       const bob = Math.round(Math.sin(this.time * 3 + i * 2.1) * 2);
-      const h = art.art.length;
       const cx = spots[i] - 12;
       // Ombra a terra.
       screen.rect(cx - 2, stageY + 14, 28, 4, "rgba(0,0,0,0.25)");
-      screen.sprite(`title:${ids[i]}`, art, cx, stageY + 12 - h + bob, { scale: 1 });
+      // PNG PixelLab (o pixmap) ancorato in basso sul podio, con bob.
+      drawMonsterSprite(screen, ids[i], art, cx - 6, stageY - 28 + bob, 40, 40);
     }
   }
 

@@ -1,4 +1,4 @@
-import type { Pixmap } from "../engine/screen";
+import type { Pixmap, Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
 
 // Redesign PixelLab: se esiste un PNG per la specie in `public/sprites/monsters/<id>.png`
@@ -7,7 +7,10 @@ import { getSpriteImage } from "../engine/assets";
 // si aggiorna mano a mano che si generano gli sprite, così non si tenta di caricare
 // PNG inesistenti (niente 404 a raffica).
 export const MONSTERS_WITH_PNG = new Set<string>([
-  "salvinator", "giorgiagon", "ellyna", "schleinix", "renzino", "grillix"
+  "salvinator", "giorgiagon", "ellyna", "schleinix", "renzino", "grillix",
+  "renzilla", "contemorfo", "calendauro", "vannaccix", "tajanide", "berlusconix",
+  "draghimon", "trumpon", "xipanda", "macronfox", "mattarellux", "putingrad",
+  "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate"
 ]);
 
 export function monsterImage(speciesId: string): HTMLImageElement | null {
@@ -15,6 +18,38 @@ export function monsterImage(speciesId: string): HTMLImageElement | null {
     return null;
   }
   return getSpriteImage(`mon:${speciesId}`, `monsters/${speciesId}.png`);
+}
+
+// Disegna lo sprite di una specie dentro una box (x, y, boxW, boxH), ancorato in
+// BASSO e centrato orizzontalmente, scalando per riempire la box mantenendo le
+// proporzioni. Prova il PNG PixelLab; se manca ricade sulla pixmap testuale
+// (passata dal chiamante). Usato da tutte le scene fuori battaglia (dex, party,
+// box, title, evoluzione) per avere un rendering uniforme PNG-o-fallback.
+export function drawMonsterSprite(
+  screen: Screen,
+  speciesId: string,
+  pix: Pixmap | undefined,
+  x: number,
+  y: number,
+  boxW: number,
+  boxH: number,
+  opts?: { flipX?: boolean }
+): void {
+  const png = monsterImage(speciesId);
+  if (png) {
+    const scale = Math.min(boxW / png.width, boxH / png.height);
+    const dw = png.width * scale;
+    const dh = png.height * scale;
+    screen.imageSprite(png, x + (boxW - dw) / 2, y + boxH - dh, { scaleX: scale, scaleY: scale, flipX: opts?.flipX });
+    return;
+  }
+  if (!pix) {
+    return;
+  }
+  const scale = Math.max(1, Math.floor(Math.min(boxW / (pix.art[0]?.length ?? 24), boxH / pix.art.length)));
+  const dw = (pix.art[0]?.length ?? 24) * scale;
+  const dh = pix.art.length * scale;
+  screen.sprite(`mongfx:${speciesId}`, pix, x + (boxW - dw) / 2, y + boxH - dh, { scale, flipX: opts?.flipX });
 }
 
 // Caricature dei politici, 24px di larghezza, bottom-aligned.

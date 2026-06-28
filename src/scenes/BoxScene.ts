@@ -1,4 +1,4 @@
-import { MONSTER_ART } from "../art/monsters";
+import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -121,11 +121,7 @@ export class BoxScene implements Scene {
       if (selected) {
         screen.frame(x + 2, y, w - 4, 20, INK);
       }
-      const art = MONSTER_ART[mon.speciesId];
-      if (art) {
-        const h = art.art.length;
-        screen.sprite(`box:${side}:${mon.speciesId}`, art, x + 5, y + 19 - Math.min(19, h), { scale: 0.7 });
-      }
+      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], x + 3, y + 1, 20, 19);
       const ink = selected ? INK : PAPER;
       screen.text(speciesOf(mon).name.slice(0, 9), x + 24, y + 2, ink);
       screen.text(`L${mon.level}`, x + 24, y + 11, ink);

@@ -1,4 +1,4 @@
-import { MONSTER_ART } from "../art/monsters";
+import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { SPECIES } from "../data/species";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -94,7 +94,8 @@ export class EvolutionScene implements Scene {
       screen.ctx.fill();
       screen.ctx.restore();
     }
-    screen.sprite(`evo:${speciesId}`, art, x, y, { scale });
+    // PNG PixelLab (o pixmap fallback) dentro la stessa box dell'animazione.
+    drawMonsterSprite(screen, speciesId, art, x, y, drawW, drawH);
   }
 
   draw(screen: Screen): void {

@@ -1,6 +1,6 @@
 import { charSprite, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
-import { BALLOT_ART, MONSTER_ART } from "../../art/monsters";
+import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, waterFrames, pix } from "../../art/tiles";
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
@@ -2036,10 +2036,7 @@ export class WorldScene implements Scene {
       for (let i = 0; i < rows; i += 1) {
         const s = this.healSnapshot[i];
         const ry = py + 14 + i * 12;
-        const art = MONSTER_ART[s.mon.speciesId];
-        if (art) {
-          screen.sprite(`heal-${s.mon.speciesId}`, art, 12, ry - 2, { scale: 0.42 });
-        }
+        drawMonsterSprite(screen, s.mon.speciesId, MONSTER_ART[s.mon.speciesId], 11, ry - 2, 13, 12);
         drawHpBar(screen, 26, ry + 3, 100, s.disp, s.to);
       }
     }

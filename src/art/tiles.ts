@@ -6,12 +6,13 @@ export const TILE = 16;
 // Redesign PixelLab: i tile di TERRENO (non overlay, non animati) possono avere
 // una texture PNG 16x16 in public/sprites/tiles/. Mapping char -> file. Finché il
 // PNG non è caricato (o se manca) il renderer ricade sul Pixmap testuale.
-const TILE_PNG: Record<string, string> = {
-  // I terreni PNG vanno popolati SOLO con texture SEAMLESS (il tile si ripete su
-  // tutta la mappa: un pattern direzionale crea bande orizzontali brutte). I
-  // primi tile generati con create_tiles_pro non lo erano; in attesa di texture
-  // seamless (via create_topdown_tileset base-tile) si resta sul Pixmap.
-};
+// Texture terreno PNG: DISATTIVATO per ora. Il texture-swap 1-char-1-PNG senza
+// autotiling Wang completo dà tile ripetuti con artefatti (bande/blob) perché i
+// base-tile estratti non sono perfettamente uniformi. Il Pixmap testuale erba/
+// sentiero è più pulito. L'infrastruttura (tileImage + fallback nel renderer)
+// resta pronta: per riattivare basta rimettere qui le coppie char->png SEAMLESS,
+// o implementare l'autotiling Wang vero (16 varianti per coppia di terreni).
+const TILE_PNG: Record<string, string> = {};
 
 export function tileImage(ch: string): HTMLImageElement | null {
   const path = TILE_PNG[ch];

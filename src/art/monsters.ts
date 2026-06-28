@@ -10,7 +10,8 @@ export const MONSTERS_WITH_PNG = new Set<string>([
   "salvinator", "giorgiagon", "ellyna", "schleinix", "renzino", "grillix",
   "renzilla", "contemorfo", "calendauro", "vannaccix", "tajanide", "berlusconix",
   "draghimon", "trumpon", "xipanda", "macronfox", "mattarellux", "putingrad",
-  "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate"
+  "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
+  "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor"
 ]);
 
 export function monsterImage(speciesId: string): HTMLImageElement | null {

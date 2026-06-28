@@ -1,4 +1,18 @@
 import type { Pixmap } from "../engine/screen";
+import { getSpriteImage } from "../engine/assets";
+
+// Redesign PixelLab: il PLAYER (e in futuro gli NPC) usa sprite PNG a 4 direzioni
+// in public/sprites/chars/. Il PNG ha la direzione "west" nativa, quindi NIENTE
+// flip (a differenza del pixmap che specchia "right"). Fallback al pixmap finché
+// il PNG non è pronto/presente.
+const FACING_FILE: Record<string, string> = {
+  down: "south", up: "north", left: "west", right: "east"
+};
+
+export function playerImage(facing: Facing): HTMLImageElement | null {
+  const dir = FACING_FILE[facing] ?? "south";
+  return getSpriteImage(`player:${dir}`, `chars/player_${dir}.png`);
+}
 
 // Sprite personaggi 16x16, stile GBC: testa grande, corpo piccolo.
 // Palette parametrica: o outline, h cappello/capelli, s pelle, e occhi,

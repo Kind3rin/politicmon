@@ -1,4 +1,4 @@
-import { charSprite, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
+import { charSprite, playerImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, waterFrames, pix, tileImage } from "../../art/tiles";
@@ -1824,6 +1824,19 @@ export class WorldScene implements Scene {
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.
     const vehicle = this.state.vehicle as VehicleId | null;
+    // Disegna il player: PNG PixelLab (4 dir native, scalato ai 16px del mondo,
+    // ancorato in basso) se pronto, altrimenti il pixmap con flip.
+    const playerImg = playerImage(pos.facing);
+    const drawPlayer = (px: number, py: number): void => {
+      if (playerImg) {
+        const ps = 22 / playerImg.height; // altezza target ~22px
+        const dw = playerImg.width * ps;
+        // Centra sul riquadro 16px e ancora i piedi a py+16.
+        screen.imageSprite(playerImg, px + 8 - dw / 2, py + 16 - playerImg.height * ps, { scaleX: ps, scaleY: ps });
+      } else {
+        screen.sprite(playerSprite.key, playerSprite.pix, px, py, { flipX: playerSprite.flip });
+      }
+    };
     if (vehicle === "traghetto") {
       // TRAGHETTO: scafo che ondeggia, al timone il CAPITANO SCHETTINO (satira),
       // e il giocatore a bordo. Lo scafo si vede su acqua e a terra (è il mezzo).
@@ -1831,9 +1844,7 @@ export class WorldScene implements Scene {
       screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
       // Schettino al timone, leggermente di lato; il player accanto.
       screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
-      screen.sprite(playerSprite.key, playerSprite.pix, baseX - 4, baseY + bob, {
-        flipX: playerSprite.flip
-      });
+      drawPlayer(baseX - 4, baseY + bob);
     } else if (vehicle) {
       const veh = vehicleSprite(vehicle, pos.facing);
       // Quanto sollevare il personaggio per "sedercelo" sopra: la ruspa è alta,
@@ -1843,13 +1854,9 @@ export class WorldScene implements Scene {
       const motor = vehicle === "ruspa" || vehicle === "auto";
       const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
       screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
-      screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY - lift + jitter, {
-        flipX: playerSprite.flip
-      });
+      drawPlayer(baseX, baseY - lift + jitter);
     } else {
-      screen.sprite(playerSprite.key, playerSprite.pix, baseX, baseY, {
-        flipX: playerSprite.flip
-      });
+      drawPlayer(baseX, baseY);
     }
 
     // Scintille della cura passiva (Min. Salute): in coordinate-mondo.

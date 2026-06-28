@@ -162,7 +162,10 @@ export function isRoof(ch: string): boolean {
 // (muro `m`, porta `d`, finestra `n`, porta-palazzo `D`/`g`). Il renderer estende
 // il footprint del building-PNG verso il basso finché trova queste celle, così il
 // PNG copre tetto + muro + porta in un colpo solo, scalato alla footprint reale.
-const FACADE_CHARS = new Set(["m", "d", "n", "D", "g"]);
+// `C` (colonna) e `G` (bandiera) compaiono SOLO nel blocco del palazzo (mai
+// standalone): le contiamo come facciata così il building-PNG del palazzo le
+// copre invece di lasciarle come tile-pixmap esposti ai lati.
+const FACADE_CHARS = new Set(["m", "d", "n", "D", "g", "C", "G"]);
 
 export function isFacade(ch: string): boolean {
   return FACADE_CHARS.has(ch);

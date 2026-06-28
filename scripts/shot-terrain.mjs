@@ -20,7 +20,7 @@ const shots = await page.evaluate(async () => {
     "build:r": "tiles/build_house.png", "build:u": "tiles/build_lab.png",
     "build:e": "tiles/build_bar.png", "build:Q": "tiles/build_bar.png",
     "build:y": "tiles/build_gym.png", "build:B": "tiles/build_gym.png", "build:x": "tiles/build_gym.png",
-    "build:$": "tiles/build_casino.png",
+    "build:$": "tiles/build_casino.png", "build:M": "tiles/build_palace.png",
     "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png",
     "npc:granny:south": "chars/npc_granny_south.png",
     "npc:aide:south": "chars/npc_aide_south.png",
@@ -51,7 +51,7 @@ const shots = await page.evaluate(async () => {
       res(canvas.toDataURL("image/png"));
     }, 2500));
   }
-  return { route1: await shotMap("mediopoli", 5, 9), borgo: await shotMap("capitale", 20, 9) };
+  return { route1: await shotMap("capitale", 14, 7), borgo: await shotMap("capitale", 20, 9) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);

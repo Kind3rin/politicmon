@@ -63,6 +63,7 @@ const BUILDING_PNG: Record<string, string> = {
   B: "tiles/build_gym.png",
   x: "tiles/build_gym.png",
   $: "tiles/build_casino.png", // 96x48 (6x3)
+  M: "tiles/build_palace.png", // 160x64 (10x4) — palazzo della capitale
 };
 
 // I char che fanno parte del "tetto" (per il rilevamento del blocco).

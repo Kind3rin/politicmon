@@ -5,7 +5,65 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 14 — TRAGHETTO-veicolo (Schettino) + PERCORSO 1 (route stile Pokémon) + grotta**, 2026-06-28 (vedi § Storico in fondo).
+Ultimo aggiornamento: **Round 15 — REDESIGN GRAFICO TOTALE PixelLab (in corso)**, 2026-06-28 (vedi § Storico + § REDESIGN sotto).
+
+## ⚠️ REDESIGN PixelLab — STATO E MANCANZE (leggi per primo se continui il redesign)
+
+Obiettivo utente: **tutta la grafica su PixelLab, ZERO pixmap residuo**, come
+rifare da zero. Roadmap operativa completa: **`docs/REDESIGN-TOTALE.md`** (audit
+esaustivo di ogni char/scena). Tracking asset: `scripts/pixellab-assets.json`,
+`scripts/pixellab-monsters.json`.
+
+**Infrastruttura (tutta non-bloccante, fallback al Pixmap → save intatti):**
+`src/engine/assets.ts` (registry async PNG + loadPanelImage/loadWangSet),
+`Screen.imageSprite/imageRegion/nineSlice/setPanelImage`. Asset in `public/sprites/{monsters,chars,tiles,items,ui}/`.
+
+### ✅ GIÀ PixelLab (fatto + verificato in-game)
+- **30 mostri** (battaglia + dex/party/box/titolo/evo/HUD) — `MONSTERS_WITH_PNG`.
+- **Player + 10 NPC** 4 viste N/S/E/O **+ camminata animata** (`_<dir>_w<n>.png`,
+  `playerImage`/`npcImage` con `(facing,frame,moving)`; `NPC_WALK`).
+- **Veicoli terrestri** (auto/ruspa/monopattino) **4 viste**; **traghetto** 1 vista.
+- **Edifici** building-PNG con rilevamento blocco: case/lab/bar 64x48, palestre/
+  casinò 96x48, palazzo 160x64 (`isRoof`/`buildingImage`).
+- **Oggetti**: albero/segnale/recinto (`OBJECT_PNG`).
+- **TERRENO autotiling Wang**: erba `.`/sentiero `=` + acqua `w`/sabbia `z`
+  (`wang_grass_path.png`/`wang_water_sand.png`, `WorldScene.drawWangTerrain`,
+  `cornerMask`/`wangSrc`, `WANG_INDEX=[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]`).
+- **Icone borsa** (scheda/caffè/spritz/mojito/maalox), **cornice dialog 9-slice**
+  (tutti i box/menu/HP), **sfondo battaglia**, **pickup scheda**.
+
+### ❌ ANCORA PIXMAP — MANCANZE da coprire (priorità ~ ordine)
+1. **Terreno**: erba alta `~`, fiori `,` (→ overlay trasparenti). Pavimento interno
+   `p`, marmo `M`-facciata, **roccia grotta** (tileset 6f6cd97e era FAILED, rigenerare).
+2. **INTERNI** (tutti pixmap): muro `A`, pavimento `p`, scaffale `b`, tavolo `t`,
+   macchina/computer `k`, tappeto `c`, bancone bar `h`, letto `L`, pianta `P`.
+   Mappe interne: lab/gym/market/case/bar/palazzo/colle/casino/grotta1.
+3. **STRETTO tile-meme**: impalcato ponte `j`, traliccio acciaio `J`, gru cantiere `K`.
+4. **PALAZZO esterno**: `M` ha il building-PNG ma `C` colonne, `G` bandiera, `D`
+   portone, `g` porta dorata restano pixmap (estendere il PNG o tileset facciata).
+5. **PERSONAGGI**: **SCHETTINO** al timone traghetto (pixmap, disegnato in WorldScene
+   sopra ferry.png), **avatar remoti MP** (usano `charSprite` pixmap, non PNG).
+6. **MOSTRI**: `MONSTER_ACTION_ART` (frame bocca-urlante, 8 specie, pixmap);
+   `BALLOT_ART` (scheda lanciata in battaglia); `BADGE_ART` (medaglie 12x12).
+7. **UI/HUD (tutto a codice)**: barre HP/EXP/SONDAGGI, **type-badge** 8 tipi
+   (`TYPE_COLORS` rect, in Types/Dex/Party/Teach/Battle), icone stato (IND/SCA/GAF),
+   freccia guida (triangolo), **slot casinò** (cabinet+simboli), **tastiere**
+   Nickname/Chat, **title** logo/filetto/podio (lo sfondo è già `title-bg.png`),
+   banner evento/BREAKING NEWS, tag nome-mappa, targhetta veicolo.
+
+### Trappole imparate (redesign)
+- **Limite 10 job PixelLab in volo**; oggi la coda andava in **timeout** sui
+  tileset (rigenerare con descrizioni minimali tipo lower="grass" upper="dirt").
+- **Verifica del registry async in DEV è inaffidabile** (HMR duplica i moduli →
+  `buildingImage()` può tornare null anche con status ready): verifica nel gioco
+  reale (shot-*.mjs con attesa caricamento), non con import freschi.
+- **Wang**: la metadata (`/metadata`) ha `corners` (NE/NW/SE/SW) + `bounding_box`
+  per ogni tile → calibrare `WANG_INDEX` (bit 1=TL/NW,2=TR/NE,4=BR/SE,8=BL/SW).
+- **Edifici PixelLab** escono in vista 3/4 (high top-down), non top-down puro:
+  l'utente l'ha notato. Coerenza vista terreno↔edifici↔personaggi da curare.
+- **Download animazioni walk**: NON zip — URL diretti `animations/<animId>/<dir>/<n>.png`
+  (animId diverso per direzione, da `get_character`).
+- Regola viste cardinali: si muove→4 viste/walk; statico→1. Verifica SEMPRE in-game.
 
 ## Cos'è Politicmon
 

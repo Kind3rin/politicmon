@@ -12,11 +12,13 @@ viste, dove cablare. Spuntare quando FATTO+verificato in-game.
 
 ## 1. TERRENO (priorità MAX — "mappa tutto vecchio")
 TILE_PNG è VUOTO. Erba/sentiero/erba-alta/fiori/acqua/sabbia girano su pixmap.
-- [x] **Autotiling Wang INFRA + CABLAGGIO FATTI**: `Screen.imageRegion`, `cornerMask`,
-  `wangSrc`, `registerWangSet`/`loadWangSet`, `WorldScene.drawWangTerrain` (coppie
-  erba/sentiero e acqua/sabbia). MANCA solo: i 2 fogli Wang reali (rigenerati dopo
-  timeout: 97372961 erba/sentiero, cdc7a236 acqua/sabbia) + calibrare `WANG_INDEX`
-  dalla metadata, poi verifica in-game (bordi morbidi, niente bande).
+- [x] **Autotiling Wang FATTO E VERIFICATO**: erba `.`/sentiero `=` (wang_grass_path.png)
+  e acqua `w`/sabbia `z` (wang_water_sand.png) con bordi morbidi. `WANG_INDEX`
+  calibrato dalla metadata = `[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]` (vale per
+  ENTRAMBI i fogli, layout identico). Verificato borgo + mare.
+- [ ] Erba alta `~`, fiori `,` come overlay trasparenti (ancora pixmap).
+- [ ] Tile pieni roccia-grotta / pavimento interno / marmo (tileset 6f6cd97e era
+  FAILED; rigenerare). Il pavimento interno `p` e ancora pixmap.
 - [ ] Tileset Wang: erba→sentiero, erba→acqua, sabbia→acqua, erba→sabbia
   (create_topdown_tileset, 16px). Esistono già `grass_path_wang.png` (non agganciato).
 - [ ] Tile pieni seamless (tileset 6f6cd97e: erba/sentiero/sabbia/roccia/pavimento/marmo).

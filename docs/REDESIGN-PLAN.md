@@ -120,7 +120,19 @@ animazioni (walk/idle/water), si fonde col contesto (trasparenza/ancoraggio/no b
 NPC, icone item, erba alta (overlay), monopattino, casa, cornice dialog 9-slice,
 sfondo battaglia. Edifici multi-tile = round dedicato (richiede rilevamento blocchi).
 
-**EDIFICI — decisione (round 15):** gli edifici (case `uuuu/mdnm`, lab, bar, palestre,
+**EDIFICI — FATTI (round 15, aggiornamento finale):** building-PNG per tutti i
+tipi principali, con rilevamento del blocco-tetto nel renderer (angolo alto-sx,
+disegno in secondo passo dopo il terreno). Dimensioni gestite per tipo:
+- case `r` / lab `u` / bar `e`/`Q` → 64x48 (4x3 tile)
+- palestre `y`/`B`/`x` / casinò `$` → 96x48 (6x3 tile)
+- palazzo `M` (capitale) → 160x64 (10x4 tile), porta-warp resta accessibile
+Verificato in borgo, mediopoli, capitale. `isRoof()`/`buildingImage()` in tiles.ts.
+RESTANO pixmap (decisione, basso ROI/alto rischio o satira tematica):
+- **Ponte stretto** (j/J/K): cantiere satirico già tematico (asfalto+tralicci+gru) → LASCIATO.
+- **Acqua/laghetto** (w): bordo squadrato; servirebbe autotiling Wang riva (rischio bande) → LASCIATO.
+- Interni (pavimenti/mobili `p`/`b`/`t`/`k`/`L`/`P`), erba alta `~` → pixmap.
+
+**EDIFICI — decisione iniziale (storica):** gli edifici (case `uuuu/mdnm`, lab, bar, palestre,
 casinò, palazzo) sono blocchi multi-tile **tetto + facciata** di dimensioni che
 VARIANO tra mappe. Due approcci valutati:
 - *Building-PNG con rilevamento blocco*: disegnare 1 PNG sull'intero edificio.

@@ -91,6 +91,23 @@ pannello menu pausa, cornice borsa/dex.
 
 ---
 
+## REDESIGN TOTALE (richiesta utente: title, UI, menu, vignette, oggetti scena)
+
+Domande-guida per OGNI asset (sempre): risoluzione/dimensione (tile 16px, mai
+sforare 240x180), quante VISTE (overworld N/S/E/O; mostri/oggetti frontale-o-topdown),
+animazioni (walk/idle/water), si fonde col contesto (trasparenza/ancoraggio/no box).
+
+**Infra trasversale (alto impatto, una modifica → tutte le scene):**
+- [x] `Screen.panel` ora supporta una cornice **9-slice** PixelLab (`nineSlice`,
+  `setPanelImage`); `loadPanelImage` in assets la carica all'avvio (main.ts).
+  Fallback al doppio-bordo GB finché il PNG non c'è. → cambia TUTTI i dialoghi/menu.
+- [ ] Sfondo battaglia (oggi rect piatti) → backdrop PixelLab (in coda).
+- [ ] Type-badge 8 tipi: restano rect colorati (a 11px un'icona perde leggibilità — basso ROI).
+
+**Da rifare (catalogo completo in coda di lavorazione):**
+NPC, icone item, erba alta (overlay), monopattino, casa, cornice dialog 9-slice,
+sfondo battaglia. Edifici multi-tile = round dedicato (richiede rilevamento blocchi).
+
 ## Stato (aggiornato 2026-06-28)
 
 - **TASK 1 mostri — FATTO 30/30.** Tutti gli sprite PixelLab scaricati e cablati

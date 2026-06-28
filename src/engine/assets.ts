@@ -63,3 +63,16 @@ export function preloadSprites(entries: Record<string, string>): void {
 export function spriteStatus(id: string): SpriteStatus {
   return registry.get(id)?.status ?? "idle";
 }
+
+// Carica la cornice 9-slice PixelLab e la registra su `screen` appena pronta.
+// Non bloccante: finché non c'è, `panel()` usa il fallback Game Boy a codice.
+export function loadPanelImage(
+  setPanel: (img: HTMLImageElement, border: number) => void,
+  path = "ui/dialog.png",
+  border = 12
+): void {
+  const img = new Image();
+  img.onload = () => setPanel(img, border);
+  const base = import.meta.env.BASE_URL ?? "/";
+  img.src = `${base.replace(/\/$/, "")}/sprites/${path}`;
+}

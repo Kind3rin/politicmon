@@ -80,13 +80,61 @@ export class Screen {
     this.ctx.fillRect(x + w - 1, y, 1, h);
   }
 
-  // Riquadro di dialogo in stile Game Boy: doppio bordo arrotondato.
+  // Cornice 9-slice PixelLab (opzionale). Se impostata, `panel()` la usa al posto
+  // del doppio bordo disegnato a codice. `border` = spessore (px sorgente) degli
+  // angoli che NON si stirano. Si imposta da engine/assets via setPanelImage().
+  private panelImg: HTMLImageElement | null = null;
+  private panelBorder = 8;
+
+  setPanelImage(img: HTMLImageElement | null, border = 8): void {
+    this.panelImg = img;
+    this.panelBorder = border;
+  }
+
+  // Riquadro di dialogo. Con cornice 9-slice PixelLab se disponibile, altrimenti
+  // il doppio bordo in stile Game Boy (fallback, identico a prima).
   panel(x: number, y: number, w: number, h: number): void {
+    if (this.panelImg) {
+      this.nineSlice(this.panelImg, this.panelBorder, Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+      return;
+    }
     this.rect(x + 1, y + 1, w - 2, h - 2, "#f8f8f0");
     this.frame(x + 1, y + 1, w - 2, h - 2, "#f8f8f0");
     this.frame(x + 2, y + 2, w - 4, h - 4, "#10141f");
     this.frame(x + 4, y + 4, w - 8, h - 8, "#9aa0b8");
     this.rect(x + 5, y + 5, w - 10, h - 10, "#f8f8f0");
+  }
+
+  // Disegna `img` come box 9-slice: i 4 angoli (b×b) restano fissi, i 4 bordi si
+  // stirano lungo un asse, il centro si stira su entrambi. Niente deformazione
+  // degli angoli a qualsiasi dimensione (w,h). imageSmoothing già off (nitido).
+  nineSlice(img: HTMLImageElement, b: number, x: number, y: number, w: number, h: number): void {
+    const iw = img.width;
+    const ih = img.height;
+    const sb = Math.min(b, Math.floor(iw / 2), Math.floor(ih / 2));
+    const sMidW = iw - sb * 2;
+    const sMidH = ih - sb * 2;
+    const dMidW = Math.max(0, w - sb * 2);
+    const dMidH = Math.max(0, h - sb * 2);
+    const ctx = this.ctx;
+    const d = (sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw: number, dh: number) => {
+      if (sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0) {
+        return;
+      }
+      ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
+    };
+    // angoli
+    d(0, 0, sb, sb, x, y, sb, sb);
+    d(iw - sb, 0, sb, sb, x + w - sb, y, sb, sb);
+    d(0, ih - sb, sb, sb, x, y + h - sb, sb, sb);
+    d(iw - sb, ih - sb, sb, sb, x + w - sb, y + h - sb, sb, sb);
+    // bordi
+    d(sb, 0, sMidW, sb, x + sb, y, dMidW, sb);
+    d(sb, ih - sb, sMidW, sb, x + sb, y + h - sb, dMidW, sb);
+    d(0, sb, sb, sMidH, x, y + sb, sb, dMidH);
+    d(iw - sb, sb, sb, sMidH, x + w - sb, y + sb, sb, dMidH);
+    // centro
+    d(sb, sb, sMidW, sMidH, x + sb, y + sb, dMidW, dMidH);
   }
 
   // Pre-rasterizza una pixmap su canvas off-screen (cache per id+flip).

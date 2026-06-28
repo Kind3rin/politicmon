@@ -33,12 +33,12 @@ esaustivo di ogni char/scena). Tracking asset: `scripts/pixellab-assets.json`,
   (tutti i box/menu/HP), **sfondo battaglia**, **pickup scheda**.
 
 ### ❌ ANCORA PIXMAP — MANCANZE da coprire (priorità ~ ordine)
-1. **Terreno**: erba alta `~`, fiori `,` (→ overlay trasparenti). Pavimento interno
-   `p`, marmo `M`-facciata, **roccia grotta** (tileset 6f6cd97e era FAILED, rigenerare).
-2. **INTERNI** (tutti pixmap): muro `A`, pavimento `p`, scaffale `b`, tavolo `t`,
-   macchina/computer `k`, tappeto `c`, bancone bar `h`, letto `L`, pianta `P`.
-   Mappe interne: lab/gym/market/case/bar/palazzo/colle/casino/grotta1.
-3. **STRETTO tile-meme**: impalcato ponte `j`, traliccio acciaio `J`, gru cantiere `K`.
+1. ~~Terreno erba/sentiero/acqua/sabbia~~ FATTO (Wang). ~~Interni pavimento/muro+arredi~~
+   FATTO. Erba alta `~`/fiori `,`/ponte `j`/traliccio `J`/gru `K`: CABLATI, asset in
+   coda PixelLab (obj_tallgrass/flowers/girder/crane/deck_asphalt) — scaricare+verificare.
+   Tappeto `c`, roccia-grotta dedicata (cave_rock.png estratto, non cablato): TODO.
+2. **PALAZZO esterno**: `M` ha building-PNG ma `C` colonne, `G` bandiera, `D` portone,
+   `g` porta dorata = pixmap (estendere PNG palazzo o tileset facciata).
 4. **PALAZZO esterno**: `M` ha il building-PNG ma `C` colonne, `G` bandiera, `D`
    portone, `g` porta dorata restano pixmap (estendere il PNG o tileset facciata).
 5. **PERSONAGGI**: **SCHETTINO** al timone traghetto (pixmap, disegnato in WorldScene

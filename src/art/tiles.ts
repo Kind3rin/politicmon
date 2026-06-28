@@ -15,7 +15,11 @@ export const TILE = 16;
 // I fiori `,` erano mappati qui ma il PNG ridotto a 16px mostrava un bordo/box
 // che non si fondeva con l'erba -> rimosso. I fiori restano sul Pixmap (pulito)
 // finché non si rigenerano come overlay trasparente.
-const TILE_PNG: Record<string, string> = {};
+// Tile-terreno pieni SEAMLESS (no autotiling, rettangoli pieni): interni.
+const TILE_PNG: Record<string, string> = {
+  p: "tiles/floor_wood.png",   // pavimento interno (case/negozi)
+  A: "tiles/wall_interior.png" // muro interno in pietra
+};
 
 export function tileImage(ch: string): HTMLImageElement | null {
   const path = TILE_PNG[ch];
@@ -101,6 +105,13 @@ const OBJECT_PNG: Record<string, string> = {
   T: "tiles/tree.png",
   s: "tiles/sign.png",
   f: "tiles/fence.png",
+  // Arredi interni (overlay 32px su pavimento, ancorati in basso).
+  L: "tiles/obj_bed.png",
+  t: "tiles/obj_table.png",
+  b: "tiles/obj_shelf.png",
+  P: "tiles/obj_plant.png",
+  h: "tiles/obj_counter.png",
+  k: "tiles/obj_machine.png",
   // erba alta `~` NON qui: il ciuffo singolo 32px (con base di terra) ripetuto su
   // un'area densa fa pasticcio (terra ripetuta + sovrapposizioni). Resta sul
   // Pixmap pulito; servirebbe un tile seamless dedicato, non un oggetto.

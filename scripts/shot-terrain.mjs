@@ -19,6 +19,11 @@ const shots = await page.evaluate(async () => {
   loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
   loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
   preloadSprites({
+    "tile:p": "tiles/floor_wood.png", "tile:A": "tiles/wall_interior.png",
+    "obj:L": "tiles/obj_bed.png", "obj:t": "tiles/obj_table.png", "obj:b": "tiles/obj_shelf.png",
+    "obj:P": "tiles/obj_plant.png", "obj:h": "tiles/obj_counter.png", "obj:k": "tiles/obj_machine.png"
+  });
+  preloadSprites({
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:f": "tiles/fence.png",
     "build:r": "tiles/build_house.png", "build:u": "tiles/build_lab.png",
     "build:e": "tiles/build_bar.png", "build:Q": "tiles/build_bar.png",
@@ -54,7 +59,7 @@ const shots = await page.evaluate(async () => {
       res(canvas.toDataURL("image/png"));
     }, 2500));
   }
-  return { route1: await shotMap("mare", 8, 6), borgo: await shotMap("stretto", 14, 6) };
+  return { route1: await shotMap("lab", 5, 4), borgo: await shotMap("home", 4, 4) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);

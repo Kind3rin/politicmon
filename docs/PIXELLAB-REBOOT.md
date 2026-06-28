@@ -59,3 +59,5 @@ Docs: https://api.pixellab.ai/mcp/docs
   statici 4-dir e walk 4-frame.
 - `npc-archetypes-wave2-2026-06-28`: boss, granny, influencer, aide con
   statici 4-dir e walk 4-frame.
+- `vehicles-wave-2026-06-28`: auto, ruspa, monopattino 4-dir; ferry e
+  Schettino statici.

@@ -5,7 +5,40 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 23 — PixelLab NPC archetypes wave 2**, 2026-06-28.
+Ultimo aggiornamento: **Round 24 — PixelLab vehicle wave + handoff domani**, 2026-06-28.
+
+## Handoff domani
+
+Stato repo:
+- Branch: `master`.
+- Tutti i blocchi completati sono stati pushati a fine blocco.
+- Ultimo blocco in corso da pushare: `vehicles-wave-2026-06-28` dopo verifica.
+
+Verifiche gia fatte nella sessione:
+- `npm run pixellab:coverage`
+- `npm run typecheck`
+- `npm run build`
+- Screenshot/playtest mirati su mondo, terrain, battle, walk frame.
+
+Da testare su device:
+- Apri la build aggiornata e controlla mondo iniziale, Stretto, veicoli e dialoghi.
+- In particolare guarda auto/ruspa/monopattino in movimento: sono nuovi asset
+  PixelLab direzionali, senza animazione dedicata.
+- Il monopattino e volutamente sottile; se su telefono risulta poco leggibile,
+  rigenerarlo piu largo o scalarlo leggermente nel renderer.
+
+Prossima wave consigliata:
+- Mostri/battle sprites da rigenerare in batch PixelLab mantenendo nomi specie.
+- Subito dopo: UI battle/menu (`battle_bg`, badge/type icons, slot cabinet).
+- Rimane da rifare bene `floor_wood.png`: una generazione era quasi vuota, non
+  e stata usata.
+
+### 🎨 Round 24 — PixelLab vehicle wave
+FATTO R24:
+- Rigenerati e integrati: auto, ruspa, monopattino, ferry, Schettino.
+- Auto/ruspa/monopattino usano 4 direzioni da `create_8_direction_object`.
+- Ferry e Schettino sono statici da `create_map_object`.
+- Aggiornato manifest con batch `vehicles-wave-2026-06-28`.
 
 ### 🎨 Round 23 — PixelLab NPC archetypes wave 2
 FATTO R23:

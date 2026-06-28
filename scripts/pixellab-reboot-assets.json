@@ -211,6 +211,36 @@
       ]
     },
     {
+      "id": "vehicles-wave-2026-06-28",
+      "tool": "create_8_direction_object + create_map_object",
+      "state": "downloaded",
+      "outputs": [
+        {
+          "file": "chars/auto_*",
+          "objectId": "a650d9ec-a8f4-489b-b760-774257291e2f",
+          "directions": ["south", "north", "east", "west"]
+        },
+        {
+          "file": "chars/ruspa_*",
+          "objectId": "f2f7430d-888e-481f-b590-82aa06adeca8",
+          "directions": ["south", "north", "east", "west"]
+        },
+        {
+          "file": "chars/monopattino_*",
+          "objectId": "29a8a56a-6528-432c-b898-2dd5a58f2c84",
+          "directions": ["south", "north", "east", "west"]
+        },
+        {
+          "file": "chars/ferry.png",
+          "objectId": "84bc5300-4ef7-4631-9cbf-f86cb3967fd6"
+        },
+        {
+          "file": "chars/schettino.png",
+          "objectId": "769ff106-893e-4c8e-8ea8-d4ef6c2ab94c"
+        }
+      ]
+    },
+    {
       "id": "missing-item-icons-2026-06-28",
       "tool": "create_map_object",
       "state": "downloaded",

@@ -20,8 +20,8 @@ const shot = await page.evaluate(async () => {
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
-  loadPanelImage((img, b) => screen.setPanelImage(img, b));
-  await new Promise((r) => setTimeout(r, 800));
+  loadPanelImage((img, b) => screen.setPanelImage(img, b), "ui/dialog.png", 22);
+  await new Promise((r) => setTimeout(r, 1000));
   const state = newGameState();
   state.bag = { scheda: 5, caffe: 3, spritz: 2, mojito: 1, maalox: 4 };
   const stack = new SceneStack();

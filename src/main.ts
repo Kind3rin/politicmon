@@ -88,7 +88,7 @@ const stack = new SceneStack();
 
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
-loadPanelImage((img, border) => screen.setPanelImage(img, border));
+loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 18);
 
 // In sviluppo esponiamo lo stack delle scene per ispezione/test manuali.
 if (import.meta.env.DEV) {

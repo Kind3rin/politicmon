@@ -17,6 +17,7 @@ const shots = await page.evaluate(async () => {
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
   loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
+  loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
   preloadSprites({
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:f": "tiles/fence.png",
     "build:r": "tiles/build_house.png", "build:u": "tiles/build_lab.png",
@@ -53,7 +54,7 @@ const shots = await page.evaluate(async () => {
       res(canvas.toDataURL("image/png"));
     }, 2500));
   }
-  return { route1: await shotMap("borgo", 8, 13), borgo: await shotMap("borgo", 8, 8) };
+  return { route1: await shotMap("mare", 8, 6), borgo: await shotMap("stretto", 14, 6) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);

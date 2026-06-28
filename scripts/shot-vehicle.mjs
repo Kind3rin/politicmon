@@ -24,21 +24,23 @@ const shot = await page.evaluate(async () => {
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
   const input = new Input();
-  function render(veh) {
+  function render(veh, facing) {
     const state = newGameState();
     state.flags["intro-done"] = true;
     state.party = [createMonster("giorgetta", 18)];
     state.vehicle = veh;
-    state.pos = { mapId: "borgo", x: 8, y: 8, facing: "down" };
+    state.pos = { mapId: "borgo", x: 8, y: 8, facing };
     const stack = new SceneStack();
     stack.push(new WorldScene(stack, input, state));
     for (let i = 0; i < 6; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
     return canvas.toDataURL("image/png");
   }
-  return { auto: render("auto"), ruspa: render("ruspa") };
+  return {
+    auto_down: render("auto", "down"), auto_up: render("auto", "up"),
+    auto_left: render("auto", "left"), auto_right: render("auto", "right")
+  };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
-save("veh_auto", shot.auto);
-save("veh_ruspa", shot.ruspa);
+for (const [k,v] of Object.entries(shot)) save(`veh_${k}`, v);
 console.log("salvati");
 await browser.close();

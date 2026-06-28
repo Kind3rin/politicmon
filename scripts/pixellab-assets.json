@@ -23,7 +23,9 @@
     { "item": "tessera", "objectId": "" }
   ],
   "vehicles": [
-    { "id": "monopattino", "objectId": "fbd490b3-5132-42c2-a386-e9f9566deb7f" }
+    { "id": "auto", "objectId8dir": "add09983-3b11-45cd-8b55-13526f8623de", "note": "8-dir, usa 4 cardinali -> chars/auto_<dir>.png" },
+    { "id": "ruspa", "objectId8dir": "b689e7c1-7b69-46ad-94bd-5023aa24a05b" },
+    { "id": "monopattino", "objectId8dir": "195e8461-fea0-4df5-b88d-fb73ac5151a6" }
   ],
   "overlays": [
     { "char": "~", "name": "tallgrass", "objectId": "6376faac-ac9c-4646-bf43-487a070fbaa0" }

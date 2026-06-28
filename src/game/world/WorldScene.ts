@@ -1886,7 +1886,7 @@ export class WorldScene implements Scene {
       // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
       const motor = vehicle === "ruspa" || vehicle === "auto";
       const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
-      const vehImg = vehicleImage(vehicle);
+      const vehImg = vehicleImage(vehicle, pos.facing);
       if (vehImg) {
         // PNG vista dall'alto, 32px, centrato sotto il player (mezzo a terra).
         const vs = 28 / vehImg.height; // ~28px, un filo più largo del player

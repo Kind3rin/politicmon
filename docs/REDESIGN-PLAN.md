@@ -91,6 +91,18 @@ pannello menu pausa, cornice borsa/dex.
 
 ---
 
+## REGOLA VISTE CARDINALI (obbligatoria — gameplay)
+
+Ogni risorsa deve vedersi bene IN GIOCO a NORD/SUD/EST/OVEST.
+- **Si muove / cambia direzione** (player, NPC, veicoli terrestri auto/ruspa/
+  monopattino) → **4 viste N/S/E/O** (file `_south/_north/_east/_west.png`),
+  generate con `create_character` (4-8 dir) o `create_8_direction_object`. MAI 1
+  vista riusata per tutte le direzioni: si vede l'oggetto puntare sempre uguale.
+- **Statico / frontale / vista unica** (mostri in battaglia, alberi, segnali,
+  recinti, edifici, oggetti scena, icone, traghetto su acqua) → **1 vista** basta.
+Prima di cablare un asset, CHIEDITI: "si muove e cambia verso? quante viste?
+che dimensione in tile (16px)? si fonde col contesto (trasparenza/ancoraggio)?".
+
 ## REDESIGN TOTALE (richiesta utente: title, UI, menu, vignette, oggetti scena)
 
 Domande-guida per OGNI asset (sempre): risoluzione/dimensione (tile 16px, mai

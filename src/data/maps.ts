@@ -91,6 +91,11 @@ export interface MapDef {
   encounters?: EncounterEntry[];
   encounterRate?: number;
   music?: string; // traccia di audio.playMusic (default "borgo")
+  // Override texture-tile per questa mappa (char -> file PNG in sprites/tiles/).
+  // Permette di riusare gli stessi char con look diverso per ambiente (es. la
+  // GROTTA: pavimento `p` -> roccia, muro `A` -> roccia scura). Non tocca la
+  // logica di collisione (resta quella di TILES[ch]).
+  tileOverrides?: Record<string, string>;
 }
 
 // ---------------------------------------------------------------- BORGO URNE
@@ -657,6 +662,12 @@ export const MAPS: Record<string, MapDef> = {
     tiles: GROTTA1_TILES,
     outdoor: false,
     music: "interior",
+    // Look da caverna: pavimento/uscita e muri diventano roccia (texture
+    // PixelLab). L'uscita `c` (era tappeto rosso) diventa roccia: il varco è già
+    // segnato dal warp, niente quadrato rosso fuori contesto nella grotta.
+    tileOverrides: {
+      p: "tiles/cave_floor.png", A: "tiles/cave_rock.png", c: "tiles/cave_floor.png"
+    },
     warps: [
       { x: 5, y: 7, toMap: "route1", toX: 22, toY: 4, facing: "down" },
       { x: 6, y: 7, toMap: "route1", toX: 22, toY: 4, facing: "down" }

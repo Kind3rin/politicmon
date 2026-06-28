@@ -38,9 +38,9 @@ const shots = await page.evaluate(async () => {
     }, 3000));
   }
   return {
-    euro_gym: await shotMap("capitale", 14, 6),
-    euro_top: await shotMap("capitale", 18, 10),
-    medio_gym: await shotMap("borgo", 14, 11)
+    euro_gym: await shotMap("grotta1", 5, 4),
+    euro_top: await shotMap("grotta1", 6, 5),
+    medio_gym: await shotMap("colle", 10, 8)
   };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }

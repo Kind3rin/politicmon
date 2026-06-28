@@ -2,7 +2,7 @@ import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalI
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, wangSet, wangSrc, cornerMask } from "../../art/tiles";
-import { sceneImage } from "../../engine/assets";
+import { sceneImage, getSpriteImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
 // altrimenti la pixmap BALLOT_ART. Disegnato 14px centrato nella cella.
@@ -421,6 +421,16 @@ export class WorldScene implements Scene {
   // Autotiling Wang del terreno: per le coppie note (erba `.`<->sentiero `=`,
   // acqua `w`<->sabbia `z`) sceglie la variante in base ai 4 angoli (bordi
   // morbidi). Ritorna true se ha disegnato. Foglio assente -> false (fallback).
+  // Texture PNG di un tile per la mappa corrente: prima l'override di mappa
+  // (es. roccia in grotta), poi il PNG di default (`tileImage`). null = pixmap.
+  private tilePng(ch: string): HTMLImageElement | null {
+    const ov = this.map.tileOverrides?.[ch];
+    if (ov) {
+      return getSpriteImage(`tile:ov:${this.map.id}:${ch}`, ov);
+    }
+    return tileImage(ch);
+  }
+
   private drawWangTerrain(
     screen: Screen, ch: string, tx: number, ty: number, dx: number, dy: number
   ): boolean {
@@ -1888,12 +1898,12 @@ export class WorldScene implements Scene {
           if (this.map.outdoor) {
             // sotto l'edificio il terreno è erba: lascia che il Wang lo gestisca
             if (!this.drawWangTerrain(screen, ".", tx, ty, dx, dy)) {
-              const bImg = tileImage(baseCh2);
+              const bImg = this.tilePng(baseCh2);
               if (bImg) screen.imageSprite(bImg, dx, dy);
               else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
             }
           } else {
-            const bImg = tileImage(baseCh2);
+            const bImg = this.tilePng(baseCh2);
             if (bImg) screen.imageSprite(bImg, dx, dy);
             else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
           }
@@ -1902,7 +1912,7 @@ export class WorldScene implements Scene {
         if (def.overlay) {
           // Terreno di base sotto l'overlay (PNG se disponibile, altrimenti pixmap).
           const baseCh = this.map.outdoor ? "." : "p";
-          const baseImg = tileImage(baseCh);
+          const baseImg = this.tilePng(baseCh);
           if (baseImg) {
             screen.imageSprite(baseImg, dx, dy);
           } else {
@@ -1926,7 +1936,7 @@ export class WorldScene implements Scene {
             // Tile non-overlay con oggetto PNG (es. erba alta `~`): prima il
             // terreno base (erba/pavimento), poi i ciuffi PNG ancorati in basso.
             const baseCh = this.map.outdoor ? "." : "p";
-            const baseImg2 = tileImage(baseCh);
+            const baseImg2 = this.tilePng(baseCh);
             if (baseImg2) {
               screen.imageSprite(baseImg2, dx, dy);
             } else {
@@ -1936,8 +1946,9 @@ export class WorldScene implements Scene {
           } else if (this.drawWangTerrain(screen, ch, tx, ty, dx, dy)) {
             // disegnato dall'autotiling Wang (erba/sentiero, acqua/sabbia)
           } else {
-            // Texture PNG PixelLab del terreno, con fallback alla pixmap testuale.
-            const img = tileImage(ch);
+            // Texture PNG PixelLab del terreno (override mappa o default), con
+            // fallback alla pixmap testuale.
+            const img = this.tilePng(ch);
             if (img) {
               screen.imageSprite(img, dx, dy);
             } else {

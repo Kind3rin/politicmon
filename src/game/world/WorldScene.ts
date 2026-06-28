@@ -2042,7 +2042,18 @@ export class WorldScene implements Scene {
       if (sx < -20 || sx > VIEW_W + 20 || sy < -20 || sy > VIEW_H + 20) {
         continue;
       }
-      screen.sprite(sprite.key, sprite.pix, sx, sy, { flipX: sprite.flip });
+      // Avatar remoto: stesso PNG del player (4 viste + walk) per coerenza con
+      // il resto del mondo; il nickname sopra la testa li distingue. Fallback al
+      // pixmap parametrico colorato se i PNG non sono pronti.
+      const rWalk = r.moving ? Math.floor(this.time * 8) % 4 : 0;
+      const rImg = playerImage(r.facing, rWalk, r.moving);
+      if (rImg) {
+        const rs = 22 / rImg.height;
+        const rdw = rImg.width * rs;
+        screen.imageSprite(rImg, sx + 8 - rdw / 2, sy + 15 - rImg.height * rs, { scaleX: rs, scaleY: rs });
+      } else {
+        screen.sprite(sprite.key, sprite.pix, sx, sy, { flipX: sprite.flip });
+      }
       // Targhetta col nickname sopra la testa.
       const name = r.nick.slice(0, 10);
       const w = name.length * 6 + 4;

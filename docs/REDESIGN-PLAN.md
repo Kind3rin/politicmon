@@ -91,6 +91,24 @@ pannello menu pausa, cornice borsa/dex.
 
 ---
 
+## Stato (aggiornato 2026-06-28)
+
+- **TASK 1 mostri — FATTO 30/30.** Tutti gli sprite PixelLab scaricati e cablati
+  in battaglia + dex/party/box/titolo/evoluzione/HUD (helper `drawMonsterSprite`).
+- **TASK 1b cablaggio scene — FATTO.**
+- **TASK 2 player — FATTO** (4 dir PixelLab, `playerImage`, 3 rami rendering).
+  NPC: non fatti (restano pixmap parametrici).
+- **TASK 4 oggetti — FATTO il core** (albero, segnale, recinto, fiori, traghetto).
+  Edifici multi-tile + veicoli terrestri 4-dir: non fatti (basso ROI/complessi).
+- **TASK 3 terreno — DECLASSATO.** Texture-swap senza autotiling Wang dà artefatti.
+  Infra pronta, mapping quasi vuoto (solo fiori sparsi).
+- **TASK 5 UI — NON fatto.** Il panel GBA attuale è già pulito (basso ROI).
+- **TASK 6 icone item — NON fatto.** Icone 12px: PixelLab perde dettaglio a quella
+  scala (basso ROI).
+
+Le 3 aree ad alto impatto visivo (mostri, player, oggetti) sono complete. Il resto
+è micro-polish a basso ROI: da fare solo se richiesto.
+
 ## Ordine di esecuzione
 
 1. Finire TASK 1 (mostri) + cablare in tutte le scene → impatto massimo.

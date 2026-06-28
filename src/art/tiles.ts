@@ -32,6 +32,7 @@ export function tileImage(ch: string): HTMLImageElement | null {
 const OBJECT_PNG: Record<string, string> = {
   T: "tiles/tree.png",
   s: "tiles/sign.png",
+  f: "tiles/fence.png",
 };
 
 export function objectImage(ch: string): HTMLImageElement | null {

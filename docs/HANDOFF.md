@@ -5,7 +5,38 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 16 — fix EDIFICI + UI/HUD PixelLab (type-badge, slot, grotta, avatar MP)**, 2026-06-28.
+Ultimo aggiornamento: **Round 17 — Z-ORDER profondità + fix VEICOLI (pivot verso 3/4 iso)**, 2026-06-28.
+
+### 🔧 Round 17 — z-order + veicoli + decisione PROSPETTIVA
+Feedback utente: "case in diagonale ma ingressi dritti, mappa stile vecchio,
+oggetti/veicoli fuori proporzione". Causa radice: **PixelLab genera gli edifici
+SEMPRE in vista 3/4 isometrica** (anche con view "low top-down" + "directly above"
++ "flat orthographic": il modello ignora e fa 3/4). Il mondo era top-down piatto →
+mix incoerente, ingresso poco chiaro. **Decisione utente: portare il mondo a 3/4
+isometrico** per accordarlo agli edifici (vedi memory `politicmon-isometric-pivot`).
+
+FATTO in R17 (primo pezzo del pivot, alto impatto, basso rischio):
+- **Z-ORDER per profondità** (`WorldScene.draw`): edifici building-PNG + NPC +
+  remoti MP + player raccolti in una lista `tall[{baseY, draw}]`, ordinata per Y
+  di base, disegnata dal più in alto al più in basso. Il personaggio passa DIETRO
+  una casa quando è sopra di essa, DAVANTI quando è sotto → **niente più
+  personaggio sul tetto; l'ingresso (porta in basso) è leggibile.** Mantiene
+  footprint scalata (R16), fallback Pixmap, offset veicolo, exclaim, nick/emote MP.
+  Verificato in-game (player dietro/davanti casa borgo). Shot: `scripts/shot-zorder.mjs`.
+- **VEICOLI**: auto/ruspa target 30px (era 26) e scala sul **lato maggiore** (non
+  height) → le 4 viste N/S/E/O non si deformano/sbordano, il mezzo riempie la cella
+  ed è chiaramente più grosso di un pedone. Verificato auto+ruspa+monopattino in
+  tutte e 4 le direzioni. (NB: lo shot DEVE attendere il caricamento PNG, altrimenti
+  cade sul fallback pixmap che disegna il player sopra l'auto.)
+
+❌ RESTA del pivot 3/4 (blocco successivo, NON ancora fatto): per coerenza piena
+servirebbe portare a stile 3/4 anche **terreno** (i tile sono ancora top-down
+piatti) e rifinire **personaggio/NPC** in 3/4. Lo z-order già integra bene gli
+sprite con gli edifici (stile Stardew: terreno a griglia + sprite/edifici 3/4 +
+profondità), quindi l'incoerenza è molto ridotta. Valutare se il terreno iso vero
+(tile a rombo) vale la riscrittura della proiezione o se il look attuale basta.
+
+### 🔧 Round 16 — fix EDIFICI + UI/HUD PixelLab (type-badge, slot, grotta, avatar MP)
 
 ### 🔧 Round 16b — UI/HUD PixelLab + residui
 - **8 TYPE-BADGE** (megafono/ingranaggio/foglia/pugno/rosa/tv/bilancia/stretta-mano)

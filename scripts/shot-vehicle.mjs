@@ -20,6 +20,11 @@ const shot = await page.evaluate(async () => {
     "player:east": "chars/player_east.png", "player:west": "chars/player_west.png",
     "veh:auto:south": "chars/auto_south.png", "veh:auto:north": "chars/auto_north.png",
     "veh:auto:east": "chars/auto_east.png", "veh:auto:west": "chars/auto_west.png",
+    "veh:ruspa:south": "chars/ruspa_south.png", "veh:ruspa:north": "chars/ruspa_north.png",
+    "veh:ruspa:east": "chars/ruspa_east.png", "veh:ruspa:west": "chars/ruspa_west.png",
+    "veh:monopattino:south": "chars/monopattino_south.png", "veh:monopattino:north": "chars/monopattino_north.png",
+    "veh:monopattino:east": "chars/monopattino_east.png", "veh:monopattino:west": "chars/monopattino_west.png",
+    "player:south": "chars/player_south.png", "player:east": "chars/player_east.png",
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png"
   });
   await new Promise((r) => setTimeout(r, 3500));

@@ -1,7 +1,7 @@
 import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, buildingImage } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, buildingImage, wangSet, wangSrc, cornerMask } from "../../art/tiles";
 import { sceneImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
@@ -416,6 +416,35 @@ export class WorldScene implements Scene {
       return this.map.outdoor ? "." : "p";
     }
     return ch;
+  }
+
+  // Autotiling Wang del terreno: per le coppie note (erba `.`<->sentiero `=`,
+  // acqua `w`<->sabbia `z`) sceglie la variante in base ai 4 angoli (bordi
+  // morbidi). Ritorna true se ha disegnato. Foglio assente -> false (fallback).
+  private drawWangTerrain(
+    screen: Screen, ch: string, tx: number, ty: number, dx: number, dy: number
+  ): boolean {
+    // (lowerChar, upperChars, wangKey)
+    let key: string | null = null;
+    let isUpper: ((c: string) => boolean) | null = null;
+    if (ch === "." || ch === "=") {
+      key = "grass_path";
+      isUpper = (c) => c === "=";
+    } else if (ch === "w" || ch === "z") {
+      key = "water_sand";
+      isUpper = (c) => c === "z" || c === "." || c === "=" || c === "~"; // terra = upper
+    }
+    if (!key || !isUpper) {
+      return false;
+    }
+    const set = wangSet(key);
+    if (!set) {
+      return false;
+    }
+    const mask = cornerMask(tx, ty, (x, y) => this.tileAt(x, y), isUpper);
+    const { sx, sy } = wangSrc(mask);
+    screen.imageRegion(set.img, sx, sy, TILE, TILE, dx, dy, TILE, TILE);
+    return true;
   }
 
   private isBlocked(x: number, y: number): boolean {
@@ -1804,6 +1833,8 @@ export class WorldScene implements Scene {
               screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
             }
             screen.imageSprite(objImg, dx + (TILE - objImg.width) / 2, dy + TILE - objImg.height);
+          } else if (this.drawWangTerrain(screen, ch, tx, ty, dx, dy)) {
+            // disegnato dall'autotiling Wang (erba/sentiero, acqua/sabbia)
           } else {
             // Texture PNG PixelLab del terreno, con fallback alla pixmap testuale.
             const img = tileImage(ch);

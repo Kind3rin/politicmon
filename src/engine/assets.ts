@@ -71,6 +71,18 @@ export function sceneImage(id: string, path: string): HTMLImageElement | null {
   return getSpriteImage(id, path);
 }
 
+// Carica i fogli Wang dell'autotiling terreno e li registra in tiles.ts appena
+// pronti. Non bloccante: finché non ci sono, il renderer usa il fallback Pixmap.
+export function loadWangSet(
+  register: (key: string, img: HTMLImageElement, upperChars: string[]) => void,
+  key: string, path: string, upperChars: string[]
+): void {
+  const img = new Image();
+  img.onload = () => register(key, img, upperChars);
+  const base = import.meta.env.BASE_URL ?? "/";
+  img.src = `${base.replace(/\/$/, "")}/sprites/${path}`;
+}
+
 // Carica la cornice 9-slice PixelLab e la registra su `screen` appena pronta.
 // Non bloccante: finché non c'è, `panel()` usa il fallback Game Boy a codice.
 export function loadPanelImage(

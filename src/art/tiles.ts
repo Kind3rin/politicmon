@@ -65,6 +65,34 @@ export function wangSrc(mask: number): { sx: number; sy: number } {
   return { sx: (idx % 4) * 16, sy: Math.floor(idx / 4) * 16 };
 }
 
+// Coppie di terreno per l'autotiling: per ogni char-tile "lower" indica il foglio
+// Wang e quali char contano come "upper" (il terreno con cui fa transizione).
+// `at(x,y)` legge il char a quella cella (gestito dal renderer).
+export interface TerrainWang {
+  key: string;          // chiave del WangSet registrato
+  isUpper: (ch: string) => boolean; // un vicino conta come "upper"?
+}
+
+// Calcola la maschera dei 4 ANGOLI per la cella (cx,cy): un angolo e "upper" se
+// almeno uno dei 3 tile che lo condividono (diagonale + 2 ortogonali) e upper.
+// Bit: 1=TL, 2=TR, 4=BR, 8=BL.
+export function cornerMask(
+  cx: number, cy: number,
+  at: (x: number, y: number) => string,
+  isUpper: (ch: string) => boolean
+): number {
+  const up = (x: number, y: number): boolean => isUpper(at(x, y));
+  // un angolo e upper se il diagonale o uno dei due ortogonali adiacenti lo e
+  const corner = (ox: number, oy: number): boolean =>
+    up(cx + ox, cy + oy) || up(cx + ox, cy) || up(cx, cy + oy);
+  let m = 0;
+  if (corner(-1, -1)) m |= 1; // TL
+  if (corner(1, -1)) m |= 2;  // TR
+  if (corner(1, 1)) m |= 4;   // BR
+  if (corner(-1, 1)) m |= 8;  // BL
+  return m;
+}
+
 // Oggetti OVERLAY (alberi, segnali, recinti, fiori): PNG ~32px disegnati sopra il
 // terreno e ancorati in BASSO al tile (così la chioma dell'albero sborda verso
 // l'alto, stile Pokémon). Fallback al Pixmap dell'overlay finché il PNG non c'è.

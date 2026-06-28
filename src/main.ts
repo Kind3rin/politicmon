@@ -8,7 +8,8 @@ import { flushActiveState } from "./game/state";
 import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
-import { loadPanelImage } from "./engine/assets";
+import { loadPanelImage, loadWangSet } from "./engine/assets";
+import { registerWangSet } from "./art/tiles";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
 
@@ -89,6 +90,10 @@ const stack = new SceneStack();
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
 loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 7);
+
+// Autotiling Wang del terreno: registra i fogli erba/sentiero e acqua/sabbia.
+loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
+loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
 
 // In sviluppo esponiamo lo stack delle scene per ispezione/test manuali.
 if (import.meta.env.DEV) {

@@ -5,7 +5,34 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 17 — Z-ORDER profondità + fix VEICOLI (pivot verso 3/4 iso)**, 2026-06-28.
+Ultimo aggiornamento: **Round 18 — direzione design STARDEW/3-4 COZY: terreno+oggetti tenui (no più "vecchio")**, 2026-06-28.
+
+### 🎨 Round 18 — direzione di design unica (Stardew/RPG 3/4 cozy)
+Feedback utente: "è tutto sbagliato, va rifatto il gioco come INSIEME coerente,
+non toppe sul vecchio; provalo, il personaggio si muove in 2D". **Decisione utente
+(AskUserQuestion): stile "Stardew / RPG 3/4 cozy"** — sfrutta gli edifici 3/4
+PixelLab + lo z-order (R17). Memory: `politicmon-isometric-pivot` (aggiornata).
+Causa del "vecchio": il **terreno**. Il Wang erba/sentiero era verde FLUO + sentiero
+a ricciolini.
+
+FATTO R18:
+- **TERRENO tenue**: rigenerati i Wang erba→sentiero e acqua→sabbia con toni
+  morbidi naturali (no neon, sentiero terra liscio, bordi morbidi). WANG_INDEX
+  invariato `[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]` (stesso layout 4x4,
+  verificato da metadata corners+bounding_box). File: `wang_grass_path.png`,
+  `wang_water_sand.png`.
+- **OGGETTI scena cozy**: albero (`tree.png`), erba alta (`obj_tallgrass.png`),
+  recinto (`fence.png`), segnale (`sign.png`) rigenerati in stile morbido coerente.
+- Verificato in-game (borgo/mediopoli/eurotown + playtest mondo): terreno, case,
+  oggetti, NPC ora condividono lo stesso linguaggio Stardew 3/4. Niente più look anni 90.
+- Tool playtest: `scripts/playtest.mjs` (inietta WorldScene via window.stack, cammina).
+
+❌ RESTA (rifinitura, non bloccante): sprite **player/NPC** sono PixelLab ma in posa
+più "frontale/ritta" che 3/4 puro — leggibili, a 4 viste+walk, ma rigenerabili in
+3/4 più coerente se si vuole spingere. Terreno iso a rombo NON necessario (il look
+cozy a griglia + 3/4 + z-order basta). UI/menu già coerenti.
+
+### 🔧 Round 17 — Z-ORDER profondità + fix VEICOLI (pivot verso 3/4 iso)
 
 ### 🔧 Round 17 — z-order + veicoli + decisione PROSPETTIVA
 Feedback utente: "case in diagonale ma ingressi dritti, mappa stile vecchio,

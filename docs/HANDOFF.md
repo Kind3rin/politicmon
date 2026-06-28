@@ -34,11 +34,18 @@ esaustivo di ogni char/scena). Tracking asset: `scripts/pixellab-assets.json`,
 
 ### ❌ ANCORA PIXMAP — MANCANZE da coprire (priorità ~ ordine)
 1. ~~Terreno erba/sentiero/acqua/sabbia~~ FATTO (Wang). ~~Interni pavimento/muro+arredi~~
-   FATTO. Erba alta `~`/fiori `,`/ponte `j`/traliccio `J`/gru `K`: CABLATI, asset in
-   coda PixelLab (obj_tallgrass/flowers/girder/crane/deck_asphalt) — scaricare+verificare.
-   Tappeto `c`, roccia-grotta dedicata (cave_rock.png estratto, non cablato): TODO.
-2. **PALAZZO esterno**: `M` ha building-PNG ma `C` colonne, `G` bandiera, `D` portone,
-   `g` porta dorata = pixmap (estendere PNG palazzo o tileset facciata).
+   FATTO. ~~Erba alta/fiori/ponte/traliccio/gru~~ FATTO. ~~Porta dorata `g`, Schettino,
+   badge medaglie, scheda cattura~~ FATTO. **Resta**: tappeto `c`, roccia-grotta
+   dedicata (`cave_rock.png` estratto, non cablato — `A` grotta usa muro-interno).
+2. **UI/HUD** (decisione utente: TUTTO PixelLab, ma il TESTO/numeri resta bitmap font):
+   - Type-badge 8 tipi: infra `typeIcon` FATTA + cablato TypesScene; **asset in coda**
+     (8 icone), poi cablare anche Dex/Party/Teach/Battle. Slot casinò cabinet + barra
+     HP frame: **in coda**, da cablare.
+   - Ancora a codice: barre EXP/SONDAGGI, icone stato, freccia guida, tastiere
+     Nickname/Chat, title logo/podio/filetto, banner evento, tag nome-mappa.
+3. **MOSTRI**: `MONSTER_ACTION_ART` (frame bocca-urlante, 8 specie) ancora pixmap
+   (in battaglia il base è PNG ma l'affondo usa il pixmap urlante).
+4. **Avatar remoti MP**: usano `charSprite` pixmap (non PNG).
 4. **PALAZZO esterno**: `M` ha il building-PNG ma `C` colonne, `G` bandiera, `D`
    portone, `g` porta dorata restano pixmap (estendere il PNG o tileset facciata).
 5. **PERSONAGGI**: **SCHETTINO** al timone traghetto (pixmap, disegnato in WorldScene

@@ -5,7 +5,7 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 11 — fix accessi (porta dorata/casinò/casa/stretto)**, 2026-06-27 (vedi § Storico in fondo).
+Ultimo aggiornamento: **Round 14 — TRAGHETTO-veicolo (Schettino) + PERCORSO 1 (route stile Pokémon) + grotta**, 2026-06-28 (vedi § Storico in fondo).
 
 ## Cos'è Politicmon
 
@@ -22,8 +22,21 @@ TypeScript + Vite, canvas 2D puro, **zero dipendenze runtime** tranne `trystero`
 1. `npm run dev:local -- --port 5179` per il dev server (o usa il preview tool del harness).
 2. **`npm run typecheck` è obbligatorio prima di consegnare** (`tsc --noEmit`, deve essere pulito).
 3. `npm run build` = typecheck + bundle Vite in `dist/`.
-4. Deploy: `npx vercel --prod --yes` (il frontend è statico; **non c'è server** da deployare, il multiplayer è P2P).
+4. Deploy: push su `master` → Vercel deploya da solo (Git integration). NON serve
+   `npx vercel`. Se il webhook non scatta, commit vuoto per ri-triggerare.
 5. Verifica: vedi § Verifica visiva.
+
+### Tool: pixel-plugin (installato round 14)
+
+È installato il **pixel-plugin** (`willibrandon/pixel-plugin`, plugin Claude Code,
+scope user): comandi pixel-art + MCP `pixel-mcp` (40+ tool) basato su **Aseprite**.
+Si carica al riavvio della sessione; il setup è `/pixel-setup`.
+⚠️ **Richiede Aseprite installato** (editor a pagamento) — al momento NON risulta nel
+PATH, va installato/configurato. ⚠️ **Vincolo del progetto:** la grafica DI GIOCO è
+100% pixel-map da codice (niente asset binari committati). Usa pixel-plugin/Aseprite
+per *prototipare/visualizzare* sprite, poi traducili in pixel-map (`src/art/*`) —
+NON committare `.aseprite`/PNG come asset di gioco (le sole eccezioni esistenti sono
+gli splash AI `public/title-bg.png`/`intro.mp4` e le icone PWA generate da script).
 
 ## Stato attuale (cosa c'è già — NON rifarlo)
 
@@ -39,8 +52,9 @@ Tutte queste feature sono **complete, verificate e in produzione**:
 | Storia Atto 1+2 | 3 medaglie → PALAZZO → COLLE/Garante → leggendario DRAGHIMON | `data/maps.ts`, `data/quests.ts`, `data/trainers.ts` |
 | Area Stretto | Ponte di Messina, satira meme, boss IL CAPITANO | `data/maps.ts` (`stretto`) |
 | Casinò | Slot del consenso + Bunga Bunga Club (satira) | `scenes/CasinoScene.ts` |
-| Veicoli | MONOPATTINO (veloce), RUSPA (abbatte alberi), AUTO BLU | `game/vehicles.ts` |
-| MN TRAGHETTO | Abilità sul campo stile SURF: attraversa l'acqua (`canFerry`/`isOnWater` in WorldScene, flag `hm-traghetto`, `NpcDef.hmGift`). Sblocca la traversata Calabria→Sicilia via mappa `mare` | `game/world/WorldScene.ts`, `data/maps.ts` (`mare`) |
+| Veicoli | MONOPATTINO (veloce), RUSPA (abbatte alberi), AUTO BLU, **TRAGHETTO** | `game/vehicles.ts` |
+| TRAGHETTO (acqua) | **Veicolo** (non MN). Naviga l'acqua; imbarco/sbarco AUTOMATICO su acqua (`syncFerryVehicle`), `canFerry` = possiedi `veh-traghetto`. Al timone CAPITANO SCHETTINO (`SCHETTINO_PIX`). Lo regala il MARINAIO a Caput Mundi (`vehicleGift` con `requiresBadges`) | `game/world/WorldScene.ts`, `game/vehicles.ts` |
+| Route/percorsi | PERCORSO 1 tra Borgo e Mediopoli: erba alta+incontri, LAGHETTO con isola-tesoro (solo col traghetto), GROTTA DEL CONSENSO. Pattern replicabile (vedi memoria `politicmon-route-pattern`) | `data/maps.ts` (`route1`, `grotta1`) |
 | Incontri PG casuali | Allenatori vaganti scalati | `data/encounters.ts` |
 | Eventi morale | Siparietti di strada che muovono sondaggi/fondi | `data/streetevents.ts` |
 | Rivale ricorrente | GIANNI a 5 tappe, squadra che cresce, battute con memoria | `data/rival.ts` |
@@ -51,13 +65,20 @@ Tutte queste feature sono **complete, verificate e in produzione**:
 | PWA | Manifest, service worker, prompt installazione (iOS incluso) | `engine/pwa.ts`, `public/sw.js` |
 | Multiplayer P2P | Presence (vedi gli altri sulla tua mappa), chat di zona, emote, nickname | `net/mp.ts`, `net/profile.ts`, `scenes/ChatScene.ts` |
 
-Numeri attuali: **30 specie, ~70 mosse, 21 allenatori fissi (+ rivale dinamico), 18 quest, ~30 mappe (5 outdoor + mare + interni)**.
+Numeri attuali: **30 specie, ~70 mosse, 21 allenatori fissi (+ rivale dinamico), 18 quest, ~32 mappe (borgo, route1, mediopoli, eurotown, capitale, mare, stretto, palazzo, colle, grotta1 + interni)**.
 
-**STRETTO: come ci si arriva (round 13).** NON più con la SCORTA AUTO BLU (rimossa
-dal menu transport). Ora: a Caput Mundi il MARINAIO (11,19) regala la MN TRAGHETTO
-a 3 medaglie → l'IMBARCO (warp 12,19, gated `hm-traghetto`) porta alla mappa `mare`
-(BRACCIO DI MARE) → si attraversa l'acqua con la MN → si approda nello STRETTO.
-La SCORTA resta solo per il fast-travel tra città già visitate.
+**STRETTO: come ci si arriva (aggiornato round 14).** A Caput Mundi il MARINAIO
+(11,19) regala il **VEICOLO TRAGHETTO** a 3 medaglie (al timone SCHETTINO). L'IMBARCO
+(warp 12,19, gated `requiresFlag: veh-traghetto`) porta alla mappa `mare` (BRACCIO DI
+MARE) → **attivi il traghetto camminando sull'acqua (automatico)** → approdi nello
+STRETTO. La SCORTA AUTO BLU resta solo per il fast-travel tra città già visitate
+(STRETTO è stato tolto dal suo menu). Flag vecchio `hm-traghetto` ABBANDONATO: ora
+è `veh-traghetto` (flag veicolo).
+
+**Geografia (route stile Pokémon, in corso).** Le città non sono più tutte
+attaccate: **Borgo ↔ PERCORSO 1 ↔ Mediopoli** ha una route in mezzo (erba/acqua/
+grotta). Le altre tratte (Mediopoli↔Eurotown, Eurotown↔Caput Mundi) sono ANCORA
+edge diretti — backlog: replicare il pattern PERCORSO 1 (documentato in memoria).
 
 Aggiunte recenti alla tabella sopra (round 8-11):
 
@@ -144,6 +165,9 @@ nearest-neighbor con System.Drawing in PowerShell. Esempi pronti: `scripts/shot-
 - ~~Feedback veicoli / onboarding feature~~ ✓ FATTO.
 - ~~Dex completabile (roster per zona) + PC BOX + scambio party~~ ✓ FATTO (round 9-10).
 - ~~Progressione percepita (gating città, anticipazione)~~ ✓ FATTO (round 8).
+- ~~Route pilota stile Pokémon (erba/acqua/grotta tra città)~~ ✓ FATTO (round 14, PERCORSO 1).
+- **Route rimanenti** (Mediopoli↔Eurotown, Eurotown↔Caput Mundi): replicare il
+  pattern PERCORSO 1. È il prossimo passo richiesto dall'utente ("provo prima" la 1).
 - Sfida del giorno (daily) con bonus.
 - Ministero speciale / epilogo aperto / leaderboard P2P.
 - **Multiplayer da remoto** ancora dipendente dalla qualità del TURN gratuito
@@ -157,7 +181,26 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Round 13 — MN TRAGHETTO + fix placement (2026-06-27):** lo STRETTO ora si
+- **Round 14 — TRAGHETTO-veicolo + PERCORSO 1 + grotta (2026-06-28):**
+  - **TRAGHETTO da MN a VEICOLO** (richiesta utente): `VehicleId "traghetto"` +
+    flag `veh-traghetto`; lo regala il MARINAIO (`vehicleGift` con `requiresBadges:3`,
+    gating aggiunto al handler vehicleGift). **Imbarco/sbarco automatico**
+    (`syncFerryVehicle` in `onStepComplete`): su acqua il veicolo passa a
+    "traghetto" e ripristina il mezzo terrestre allo sbarco (niente soft-lock;
+    escluso dal ciclo VEICOLO del menu pausa). `canFerry` = possiedi `veh-traghetto`.
+    Sprite: scafo `FERRY_PIX` + **CAPITANO SCHETTINO** al timone (`SCHETTINO_PIX`,
+    satira bonaria). Rimosso `hmGift`/`isOnWater` (sostituiti).
+  - **PERCORSO 1** (route pilota stile Pokémon tra Borgo e Mediopoli): nuova mappa
+    `route1` (erba alta+incontri intermedi, LAGHETTO con isola-tesoro accessibile
+    solo col traghetto, ingresso GROTTA) + nuova mappa `grotta1` (GROTTA DEL
+    CONSENSO: incontri + TESSERA DORATA). Riagganciati gli edge **borgo↔route1↔
+    mediopoli** (prima diretto). Le città non sono più tutte "attaccate".
+  - Pattern route documentato in memoria (`politicmon-route-pattern`): mappe a **29
+    colonne**, strada `====` a idx 13-16, erba `~`, validare con `check-placement.mjs`.
+  - Installato **pixel-plugin** (vedi § Tool sopra) per futuro lavoro su sprite.
+  - NB: round 13 introdusse il TRAGHETTO come MN (`hm-traghetto`); round 14 l'ha
+    convertito in veicolo. Il flag `hm-traghetto` è morto, usa `veh-traghetto`.
+- **Round 13 — TRAGHETTO (prima versione, MN) + fix placement (2026-06-27):** lo STRETTO ora si
   raggiunge *via mappa* invece che con l'NPC-taxi. Nuova abilità sul campo stile
   SURF: `NpcDef.hmGift` (one-shot, gated medaglie) sblocca il flag `hm-traghetto`;
   in `WorldScene.isBlocked` i tile `water` diventano valicabili con `canFerry()`

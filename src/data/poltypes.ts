@@ -21,6 +21,33 @@ export const TYPE_COLORS: Record<PolType, string> = {
   VERDE: "#48a058"
 };
 
+// Icona-simbolo PixelLab per ogni ideologia (megafono/ingranaggio/...), disegnata
+// sul chip colorato accanto al nome del tipo. Null finché il PNG non c'è.
+const TYPE_ICON_FILE: Record<PolType, string> = {
+  POPULISMO: "type_populismo",
+  TECNO: "type_tecno",
+  DESTRA: "type_destra",
+  SINISTRA: "type_sinistra",
+  CENTRO: "type_centro",
+  MEDIA: "type_media",
+  ISTITUZIONE: "type_istituzione",
+  VERDE: "type_verde"
+};
+
+export function typeIcon(type: PolType): HTMLImageElement | null {
+  // import dinamico evitato: assets è leggero e già caricato altrove
+  return getTypeIconImage(`type:${type}`, `ui/${TYPE_ICON_FILE[type]}.png`);
+}
+
+// piccolo wrapper per non importare assets in cima (mantiene poltypes data-only).
+let _getImg: ((id: string, path: string) => HTMLImageElement | null) | null = null;
+export function setTypeIconLoader(fn: (id: string, path: string) => HTMLImageElement | null): void {
+  _getImg = fn;
+}
+function getTypeIconImage(id: string, path: string): HTMLImageElement | null {
+  return _getImg ? _getImg(id, path) : null;
+}
+
 // Moltiplicatori: 2 super efficace, 0.5 non molto efficace, 1 default.
 // Nota di design: SINISTRA è super efficace contro SINISTRA.
 const CHART: Partial<Record<PolType, Partial<Record<PolType, number>>>> = {

@@ -2,7 +2,7 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { TYPE_COLORS, TYPE_ORDER, typeRelations, type PolType } from "../data/poltypes";
+import { TYPE_COLORS, TYPE_ORDER, typeRelations, typeIcon, type PolType } from "../data/poltypes";
 import { GREY, PAPER } from "../ui/widgets";
 
 // GUIDA TIPI: spiega il sistema politico di efficacia (chi batte chi). Scegli
@@ -32,9 +32,14 @@ export class TypesScene implements Scene {
   }
 
   private chip(screen: Screen, label: PolType, x: number, y: number): number {
-    const w = label.length * 6 + 6;
+    const icon = typeIcon(label);
+    const iconW = icon ? 11 : 0;
+    const w = label.length * 6 + 6 + iconW;
     screen.rect(x, y, w, 11, TYPE_COLORS[label]);
-    screen.text(label, x + 3, y + 2, PAPER);
+    if (icon) {
+      screen.imageSprite(icon, x + 1, y + 1, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
+    }
+    screen.text(label, x + 3 + iconW, y + 2, PAPER);
     return w;
   }
 

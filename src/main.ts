@@ -8,8 +8,9 @@ import { flushActiveState } from "./game/state";
 import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
-import { loadPanelImage, loadWangSet } from "./engine/assets";
+import { loadPanelImage, loadWangSet, getSpriteImage } from "./engine/assets";
 import { registerWangSet } from "./art/tiles";
+import { setTypeIconLoader } from "./data/poltypes";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
 
@@ -94,6 +95,9 @@ loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.pn
 // Autotiling Wang del terreno: registra i fogli erba/sentiero e acqua/sabbia.
 loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
 loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
+
+// Icone-tipo (type-badge): collega il loader async di assets.ts a poltypes.ts.
+setTypeIconLoader(getSpriteImage);
 
 // In sviluppo esponiamo lo stack delle scene per ispezione/test manuali.
 if (import.meta.env.DEV) {

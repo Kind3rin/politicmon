@@ -31,6 +31,20 @@
     { "char": "~", "name": "tallgrass", "objectId": "6376faac-ac9c-4646-bf43-487a070fbaa0" }
   ],
   "buildings": [
-    { "name": "house_red", "objectId": "f8e64ea6-6e6c-4cb8-90f6-6c18d38e4586" }
-  ]
+    { "name": "house_red", "objectId": "f8e64ea6-6e6c-4cb8-90f6-6c18d38e4586", "note": "edifici = round dedicato, non cablato" }
+  ],
+  "walk_animations": {
+    "_note": "animate_character walking-4-frames; frame URL pubblici animations/<animId>/<dir>/<n>.png. Salvare chars/<char>_<dir>_w<n>.png. Player FATTO. Aggiungere pal a NPC_WALK in characters.ts.",
+    "player": { "charId": "fa21c486-982c-4abc-93b6-64406e7efd1c", "status": "DONE" },
+    "granny": { "charId": "e9b4349a-4cab-450f-875e-640988402129", "status": "queued" },
+    "guard": { "charId": "f274d0cd-7279-45e5-b2ef-722af1af329a", "status": "queued" },
+    "kid": { "charId": "1ef87791-8b38-4fba-8e50-d0028cda17b5", "status": "todo" },
+    "aide": { "charId": "107c8c20-5ee8-4dae-bd55-27bf97ac3a2f", "status": "todo" },
+    "barista": { "charId": "63a76a35-bcd6-432c-8d10-39682991a837", "status": "todo" },
+    "professor": { "charId": "1ac1dfcc-7e5c-4ae7-8363-59897690b074", "status": "todo" },
+    "journalist": { "charId": "21ded9d6-3be4-48de-a041-6bf2e54cd5b0", "status": "todo" },
+    "boss": { "charId": "4e18d7c1-79c3-4619-b9b9-159126b6b4ec", "status": "todo" },
+    "rival": { "charId": "ad116a1f-7af7-477b-842b-540ac469556f", "status": "todo" },
+    "influencer": { "charId": "751c5d7f-ebe4-473f-912e-7149db2111dd", "status": "todo" }
+  }
 }

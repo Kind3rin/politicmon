@@ -56,7 +56,8 @@ export const NPC_WITH_PNG = new Set<string>([
 
 // Archetipi NPC con frame di camminata PixelLab disponibili (chars/npc_<pal>_<dir>_w<n>.png).
 export const NPC_WALK = new Set<string>([
-  "granny", "guard", "kid", "aide", "barista", "professor", "journalist", "boss"
+  "granny", "guard", "kid", "aide", "barista", "professor", "journalist", "boss",
+  "rival", "influencer"
 ]);
 export const NPC_WALK_FRAMES = 4;
 

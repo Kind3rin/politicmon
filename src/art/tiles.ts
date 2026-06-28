@@ -25,6 +25,46 @@ export function tileImage(ch: string): HTMLImageElement | null {
   return getSpriteImage(`tile:${ch}`, path);
 }
 
+// ---- AUTOTILING WANG (corner-based) ----
+// Un tileset Wang PixelLab e un foglio 4x4 (16 tile da 16px) che copre tutte le
+// 16 combinazioni dei 4 ANGOLI (ogni angolo = terreno "lower" o "upper"). Per
+// rendere un bordo morbido tra due terreni, per ogni cella calcoliamo quali dei
+// 4 angoli appartengono al terreno "upper" guardando i tile vicini, otteniamo
+// una maschera 4-bit e disegniamo il sub-tile corrispondente dal foglio.
+//
+// Bit della maschera: 1=TL, 2=TR, 4=BR, 8=BL (angoli). WANG_INDEX[mask] = indice
+// row-major nel foglio 4x4. La convenzione del foglio PixelLab e dedotta dalla
+// metadata del tileset; se l'ordine non combacia, basta correggere questa tabella
+// (16 valori) senza toccare l'algoritmo.
+export const WANG_INDEX: number[] = [
+  // mask (TL,TR,BR,BL) -> tile idx 0..15. Default: identita (idx = mask).
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+];
+
+export interface WangSet {
+  img: HTMLImageElement;
+  // i char-tile che contano come "upper" (l'altro terreno); gli altri = "lower".
+  upper: Set<string>;
+}
+
+// Foglio Wang per coppia di terreni. Registrati al caricamento (vedi assets).
+const wangSets = new Map<string, WangSet>();
+
+export function registerWangSet(key: string, img: HTMLImageElement, upperChars: string[]): void {
+  wangSets.set(key, { img, upper: new Set(upperChars) });
+}
+
+export function wangSet(key: string): WangSet | undefined {
+  return wangSets.get(key);
+}
+
+// Dato un foglio Wang e una maschera angoli (0..15), ritorna il rettangolo
+// sorgente (sx, sy) del tile 16x16 nel foglio.
+export function wangSrc(mask: number): { sx: number; sy: number } {
+  const idx = WANG_INDEX[mask & 15] ?? 0;
+  return { sx: (idx % 4) * 16, sy: Math.floor(idx / 4) * 16 };
+}
+
 // Oggetti OVERLAY (alberi, segnali, recinti, fiori): PNG ~32px disegnati sopra il
 // terreno e ancorati in BASSO al tile (così la chioma dell'albero sborda verso
 // l'alto, stile Pokémon). Fallback al Pixmap dell'overlay finché il PNG non c'è.

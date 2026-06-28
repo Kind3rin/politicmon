@@ -190,6 +190,16 @@ export class Screen {
     return pix.art.length;
   }
 
+  // Disegna una REGIONE (sx,sy,sw,sh) di un'immagine bitmap su (dx,dy,dw,dh).
+  // Usato per l'autotiling: ritaglia il tile giusto da un foglio Wang.
+  imageRegion(
+    img: HTMLImageElement,
+    sx: number, sy: number, sw: number, sh: number,
+    dx: number, dy: number, dw: number, dh: number
+  ): void {
+    this.ctx.drawImage(img, sx, sy, sw, sh, Math.round(dx), Math.round(dy), dw, dh);
+  }
+
   // Disegna uno sprite PNG (redesign PixelLab) con le stesse opzioni di `sprite`.
   // Pensato per essere intercambiabile col rendering Pixmap: stesso ancoraggio
   // (top-left a x,y), stesso flip/scala. La sorgente è già un'immagine bitmap

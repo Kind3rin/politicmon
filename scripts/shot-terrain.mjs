@@ -19,13 +19,10 @@ const shots = await page.evaluate(async () => {
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:~": "tiles/tallgrass_obj.png",
     "obj:f": "tiles/fence.png",
     "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png",
-    "npc:professor:south": "chars/npc_professor_south.png",
+    "npc:granny:south": "chars/npc_granny_south.png",
+    "npc:aide:south": "chars/npc_aide_south.png",
     "npc:guard:south": "chars/npc_guard_south.png",
-    "npc:kid:south": "chars/npc_kid_south.png",
-    "npc:journalist:south": "chars/npc_journalist_south.png",
-    "npc:boss:south": "chars/npc_boss_south.png",
-    "npc:professor:west": "chars/npc_professor_west.png",
-    "npc:guard:left": "chars/npc_guard_west.png"
+    "npc:kid:south": "chars/npc_kid_south.png"
   });
   await new Promise((r) => setTimeout(r, 1500));
   const canvas = document.createElement("canvas");

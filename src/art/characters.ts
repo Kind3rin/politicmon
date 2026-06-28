@@ -35,7 +35,7 @@ export function vehicleImage(vehicleId: string): HTMLImageElement | null {
 // NPC PixelLab: solo alcuni archetipi (palette) hanno uno sprite PNG dedicato a
 // 4 direzioni. Gli altri restano sul pixmap parametrico (tinta da palette).
 export const NPC_WITH_PNG = new Set<string>([
-  "professor", "guard", "kid", "journalist", "boss", "granny"
+  "professor", "guard", "kid", "journalist", "boss", "granny", "rival", "influencer"
 ]);
 
 export function npcImage(palId: string, facing: Facing): HTMLImageElement | null {

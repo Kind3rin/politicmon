@@ -18,7 +18,8 @@ export const TILE = 16;
 // Tile-terreno pieni SEAMLESS (no autotiling, rettangoli pieni): interni.
 const TILE_PNG: Record<string, string> = {
   p: "tiles/floor_wood.png",   // pavimento interno (case/negozi)
-  A: "tiles/wall_interior.png" // muro interno in pietra
+  A: "tiles/wall_interior.png", // muro interno in pietra
+  j: "tiles/deck_asphalt.png"   // impalcato ponte (asfalto+mezzeria)
 };
 
 export function tileImage(ch: string): HTMLImageElement | null {
@@ -112,9 +113,12 @@ const OBJECT_PNG: Record<string, string> = {
   P: "tiles/obj_plant.png",
   h: "tiles/obj_counter.png",
   k: "tiles/obj_machine.png",
-  // erba alta `~` NON qui: il ciuffo singolo 32px (con base di terra) ripetuto su
-  // un'area densa fa pasticcio (terra ripetuta + sovrapposizioni). Resta sul
-  // Pixmap pulito; servirebbe un tile seamless dedicato, non un oggetto.
+  // erba alta + fiori: ciuffi/decori trasparenti SENZA base di terra, disegnati
+  // sopra l'erba. Stretto: traliccio e gru come strutture overlay sull'acqua.
+  "~": "tiles/obj_tallgrass.png",
+  ",": "tiles/obj_flowers.png",
+  J: "tiles/obj_girder.png",
+  K: "tiles/obj_crane.png",
 };
 
 export function objectImage(ch: string): HTMLImageElement | null {

@@ -26,10 +26,13 @@ TILE_PNG è VUOTO. Erba/sentiero/erba-alta/fiori/acqua/sabbia girano su pixmap.
 - [ ] Erba alta `~` (overlay trasparente ciuffi) + fiori `,` (overlay).
 
 ## 2. INTERNI (grotta, case, negozi, bar, palazzo interno)
-- [ ] Tileset GROTTA: roccia `A` + pavimento caverna `p` (grotta1). MANCA del tutto.
-- [ ] Tileset INTERNI: muro `A` + pavimento `p` (lab/gym/market/case/bar/palazzo/colle/casino).
-- [ ] Arredi object-PNG ~32px ancorati basso: letto `L`, tavolo `t`, scaffale `b`,
-  pianta `P`, bancone bar `h`, macchina/computer `k`, tappeto `c`.
+- [x] Tileset INTERNI: muro `A` (wall_interior) + pavimento `p` (floor_wood) — FATTO,
+  verificato lab. Roccia/caverna estratti (cave_rock/cave_floor) per la grotta.
+- [x] Arredi object-PNG: letto `L`, tavolo `t`, scaffale `b`, pianta `P`, bancone `h`,
+  macchina `k` — FATTO (OBJECT_PNG).
+- [ ] GROTTA `grotta1`: `A` ora = muro-pietra-interno (va bene-ish); idealmente
+  cablare cave_rock.png per la roccia grotta (char `A` in contesto grotta) + tappeto `c`.
+- [ ] Tappeto `c` (calpestabile) ancora pixmap.
 
 ## 3. STRETTO (tile meme unici)
 - [ ] Impalcato ponte `j`, traliccio acciaio `J`, gru cantiere `K` (object/tile dedicati).

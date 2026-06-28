@@ -199,6 +199,18 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
   - **REGOLA VISTE CARDINALI** (vedi memoria `politicmon-asset-views-rule` +
     REDESIGN-PLAN): risorsa che si muove = 4 viste N/S/E/O; statica/frontale = 1.
     Bug corretto: i veicoli avevano 1 sola vista (guardavano sempre uguale guidando).
+  - **EDIFICI building-PNG (FATTI):** rilevamento blocco-tetto nel renderer
+    (`isRoof`/`buildingImage` in tiles.ts, angolo alto-sx → disegno in 2° passo).
+    Dimensioni per tipo: case/lab/bar 64x48 (4x3), palestre/casinò 96x48 (6x3),
+    palazzo 160x64 (10x4). Verificato borgo/mediopoli/capitale.
+  - **CAMMINATA animata (FATTA):** `animate_character` walking-4-frames →
+    `chars/<char>_<dir>_w<n>.png` (16 file/personaggio). `playerImage`/`npcImage`
+    prendono `(facing, frame, moving)`; il renderer cicla `walkCycle` mentre si
+    muove. Player + NPC (granny/guard/kid/aide/barista/professor; journalist/boss/
+    rival/influencer in coda). Fix scivolamento (prima 1 frame statico).
+  - **RESTA pixmap (di proposito):** ponte stretto (cantiere satirico), acqua/
+    laghetto bordo, interni (pavimenti/mobili), erba alta, frame d'azione mostri
+    (bocca urlante), HUD, title-screen, medaglie. Round dedicato se richiesto.
   - **NON fatto (round dedicato / basso ROI):** EDIFICI (tetti multi-tile +
     facciata: serve building-PNG completi con rilevamento blocco — rischio
     renderer); ERBA ALTA `~` (ciuffo ripetuto fa pasticcio); TERRENO base

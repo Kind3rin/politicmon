@@ -1,7 +1,7 @@
 import { charSprite, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage } from "../../art/tiles";
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
 import { MOVES } from "../../data/moves";
@@ -1744,13 +1744,25 @@ export class WorldScene implements Scene {
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
         if (def.overlay) {
-          const base = TILES[this.map.outdoor ? "." : "p"];
-          screen.sprite(`tile:${this.map.outdoor ? "." : "p"}`, base.pix, dx, dy);
+          // Terreno di base sotto l'overlay (PNG se disponibile, altrimenti pixmap).
+          const baseCh = this.map.outdoor ? "." : "p";
+          const baseImg = tileImage(baseCh);
+          if (baseImg) {
+            screen.imageSprite(baseImg, dx, dy);
+          } else {
+            screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
+          }
         }
         if (def.water) {
           screen.sprite(`tile:w:${waterFrame}`, waterFrames[waterFrame], dx, dy);
         } else {
-          screen.sprite(`tile:${ch}`, def.pix, dx, dy);
+          // Texture PNG PixelLab del terreno, con fallback alla pixmap testuale.
+          const img = tileImage(ch);
+          if (img) {
+            screen.imageSprite(img, dx, dy);
+          } else {
+            screen.sprite(`tile:${ch}`, def.pix, dx, dy);
+          }
         }
       }
     }

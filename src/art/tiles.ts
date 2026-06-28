@@ -1,6 +1,25 @@
 import type { Pixmap } from "../engine/screen";
+import { getSpriteImage } from "../engine/assets";
 
 export const TILE = 16;
+
+// Redesign PixelLab: i tile di TERRENO (non overlay, non animati) possono avere
+// una texture PNG 16x16 in public/sprites/tiles/. Mapping char -> file. Finché il
+// PNG non è caricato (o se manca) il renderer ricade sul Pixmap testuale.
+const TILE_PNG: Record<string, string> = {
+  // I terreni PNG vanno popolati SOLO con texture SEAMLESS (il tile si ripete su
+  // tutta la mappa: un pattern direzionale crea bande orizzontali brutte). I
+  // primi tile generati con create_tiles_pro non lo erano; in attesa di texture
+  // seamless (via create_topdown_tileset base-tile) si resta sul Pixmap.
+};
+
+export function tileImage(ch: string): HTMLImageElement | null {
+  const path = TILE_PNG[ch];
+  if (!path) {
+    return null;
+  }
+  return getSpriteImage(`tile:${ch}`, path);
+}
 
 export interface TileDef {
   pix: Pixmap;

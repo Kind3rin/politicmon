@@ -23,29 +23,29 @@ const shots = await page.evaluate(async () => {
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
   const input = new Input();
-  function shotMap(mapId, x, y) {
+  // Posiziona il player SOPRA il blocco-casa di borgo per testare lo z-order:
+  // borgo riga 9-11 ha "rrrr" (casa) a col 21-24. Mettiamo il player a col 22,
+  // riga 9 (sul tetto) e riga 11 (davanti alla porta).
+  function shotAt(x, y) {
     const state = newGameState();
     state.flags["intro-done"] = true;
     state.party = [createMonster("giorgetta", 18)];
-    state.badges = ["auditel", "spread", "dazio"];
-    state.pos = { mapId, x, y, facing: "down" };
+    state.pos = { mapId: "borgo", x, y, facing: "down" };
     const stack = new SceneStack();
     stack.push(new WorldScene(stack, input, state));
     for (let i = 0; i < 8; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
     return new Promise((res) => setTimeout(() => {
       for (let i = 0; i < 8; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
       res(canvas.toDataURL("image/png"));
-    }, 3000));
+    }, 2500));
   }
   return {
-    euro_gym: await shotMap("borgo", 6, 11),
-    euro_top: await shotMap("mediopoli", 6, 9),
-    medio_gym: await shotMap("eurotown", 6, 5)
+    behind: await shotAt(22, 9),   // player sul tetto -> deve sparire DIETRO
+    front: await shotAt(22, 12)    // player davanti -> deve stare DAVANTI
   };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
-save("euro_gym", shots.euro_gym);
-save("euro_top", shots.euro_top);
-save("medio_gym", shots.medio_gym);
+save("zorder_behind", shots.behind);
+save("zorder_front", shots.front);
 console.log("salvati");
 await browser.close();

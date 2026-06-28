@@ -1966,6 +1966,14 @@ export class WorldScene implements Scene {
     // ancora in alto-sx e si stira/comprime per combaciare con l'impronta ASCII.
     // Disegnato in un range esteso a sinistra/sopra così gli edifici a cavallo
     // del bordo schermo entrano comunque.
+    // Z-ORDER per profondità: edifici, NPC, remoti e player vengono raccolti in
+    // una lista con la loro Y di base (bordo inferiore in px-mondo) e disegnati
+    // ordinati per Y crescente. Così chi è più in ALTO (Y minore) finisce DIETRO
+    // (es. il player dietro la casa quando è sopra di essa), risolvendo il
+    // "personaggio sopra il tetto". Gli edifici senza building-PNG restano gestiti
+    // dal 1° passo (pixmap) e quindi sotto, come prima.
+    const tall: Array<{ baseY: number; draw: () => void }> = [];
+
     for (let ty = y0 - 4; ty <= y0 + Math.ceil(VIEW_H / TILE) + 1; ty += 1) {
       for (let tx = x0 - 10; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
         const ch = this.tileAt(tx, ty);
@@ -1986,9 +1994,14 @@ export class WorldScene implements Scene {
         const dy = ty * TILE - camY;
         const dw = fp.w * TILE;
         const dh = fp.h * TILE;
-        screen.imageSprite(build, dx, dy, {
-          scaleX: dw / build.width,
-          scaleY: dh / build.height
+        const bImg = build;
+        const bScaleX = dw / build.width;
+        const bScaleY = dh / build.height;
+        // baseY = bordo inferiore dell'edificio in px-mondo.
+        const baseYb = (ty + fp.h) * TILE;
+        tall.push({
+          baseY: baseYb,
+          draw: () => screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
         });
       }
     }
@@ -2018,17 +2031,23 @@ export class WorldScene implements Scene {
       const npcMoving = Boolean(npc.stepFrom);
       const npcWalkCycle = npcMoving ? Math.floor(this.time * 8) % 4 : 0;
       const npcImg = npcImage(npc.pal, npc.currentFacing, npcWalkCycle, npcMoving);
-      if (npcImg) {
-        const ns = 22 / npcImg.height;
-        const dw = npcImg.width * ns;
-        screen.imageSprite(npcImg, nx + 8 - dw / 2, ny + 16 - npcImg.height * ns, { scaleX: ns, scaleY: ns });
-      } else {
-        screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
-      }
-      if (this.exclaimNpc === npc) {
-        screen.panel(nx + 2, ny - 13, 12, 13);
-        screen.text("!", nx + 5, ny - 10, INK);
-      }
+      const exclaim = this.exclaimNpc === npc;
+      tall.push({
+        baseY: npc.dispY + TILE,
+        draw: () => {
+          if (npcImg) {
+            const ns = 22 / npcImg.height;
+            const dw = npcImg.width * ns;
+            screen.imageSprite(npcImg, nx + 8 - dw / 2, ny + 16 - npcImg.height * ns, { scaleX: ns, scaleY: ns });
+          } else {
+            screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
+          }
+          if (exclaim) {
+            screen.panel(nx + 2, ny - 13, 12, 13);
+            screen.text("!", nx + 5, ny - 10, INK);
+          }
+        }
+      });
     }
 
     // Altri giocatori online sulla mia stessa mappa (interpolati).
@@ -2047,23 +2066,29 @@ export class WorldScene implements Scene {
       // pixmap parametrico colorato se i PNG non sono pronti.
       const rWalk = r.moving ? Math.floor(this.time * 8) % 4 : 0;
       const rImg = playerImage(r.facing, rWalk, r.moving);
-      if (rImg) {
-        const rs = 22 / rImg.height;
-        const rdw = rImg.width * rs;
-        screen.imageSprite(rImg, sx + 8 - rdw / 2, sy + 15 - rImg.height * rs, { scaleX: rs, scaleY: rs });
-      } else {
-        screen.sprite(sprite.key, sprite.pix, sx, sy, { flipX: sprite.flip });
-      }
-      // Targhetta col nickname sopra la testa.
-      const name = r.nick.slice(0, 10);
-      const w = name.length * 6 + 4;
-      screen.rect(sx + 8 - w / 2, sy - 9, w, 8, "rgba(16,20,31,0.8)");
-      screen.text(name, sx + 8 - w / 2 + 2, sy - 8, "#9cd8e8");
-      // Bolla emote.
-      if (r.emote) {
-        screen.panel(sx + 6, sy - 22, 16, 13);
-        screen.text(r.emote.slice(0, 1), sx + 10, sy - 19, INK);
-      }
+      const rEmote = r.emote;
+      const rNick = r.nick.slice(0, 10);
+      tall.push({
+        baseY: r.dispY + TILE,
+        draw: () => {
+          if (rImg) {
+            const rs = 22 / rImg.height;
+            const rdw = rImg.width * rs;
+            screen.imageSprite(rImg, sx + 8 - rdw / 2, sy + 15 - rImg.height * rs, { scaleX: rs, scaleY: rs });
+          } else {
+            screen.sprite(sprite.key, sprite.pix, sx, sy, { flipX: sprite.flip });
+          }
+          // Targhetta col nickname sopra la testa.
+          const w = rNick.length * 6 + 4;
+          screen.rect(sx + 8 - w / 2, sy - 9, w, 8, "rgba(16,20,31,0.8)");
+          screen.text(rNick, sx + 8 - w / 2 + 2, sy - 8, "#9cd8e8");
+          // Bolla emote.
+          if (rEmote) {
+            screen.panel(sx + 6, sy - 22, 16, 13);
+            screen.text(rEmote.slice(0, 1), sx + 10, sy - 19, INK);
+          }
+        }
+      });
     }
 
     const frame = this.moving ? (Math.floor(this.moveT * 2) % 2 === 0 ? 1 : 0) : 0;
@@ -2089,55 +2114,65 @@ export class WorldScene implements Scene {
         screen.sprite(playerSprite.key, playerSprite.pix, px, py, { flipX: playerSprite.flip });
       }
     };
-    if (vehicle === "traghetto") {
-      // TRAGHETTO: scafo che ondeggia, al timone il CAPITANO SCHETTINO (satira),
-      // e il giocatore a bordo. Lo scafo si vede su acqua e a terra (è il mezzo).
-      const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
-      const ferryImg = ferryImage();
-      if (ferryImg) {
-        screen.imageSprite(ferryImg, baseX + 8 - ferryImg.width / 2, baseY + 12 + bob - ferryImg.height / 2);
-      } else {
-        screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
-      }
-      // Schettino al timone (PNG PixelLab se pronto, altrimenti pixmap).
-      const schImg = sceneImage("char:schettino", "chars/schettino.png");
-      if (schImg) {
-        const ss = 18 / schImg.height;
-        screen.imageSprite(schImg, baseX + 10 - (schImg.width * ss) / 2, baseY - 2 + bob, { scaleX: ss, scaleY: ss });
-      } else {
-        screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
-      }
-      drawPlayer(baseX - 4, baseY + bob);
-    } else if (vehicle) {
-      // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
-      const motor = vehicle === "ruspa" || vehicle === "auto";
-      const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
-      const vehImg = vehicleImage(vehicle, pos.facing);
-      if (vehImg) {
-        // Mezzi CHIUSI (auto, ruspa): vista dall'alto, il player è DENTRO →
-        // si disegna solo il veicolo (più grande, riempie la cella). I mezzi
-        // APERTI (monopattino): il player sta SOPRA, visibile in sella.
-        const enclosed = vehicle === "auto" || vehicle === "ruspa";
-        const target = enclosed ? 26 : 24;
-        const vs = target / vehImg.height;
-        const vw = vehImg.width * vs;
-        const vh = vehImg.height * vs;
-        if (enclosed) {
-          // Solo l'auto/ruspa, centrata sulla cella, ancorata in basso.
-          screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+    const drawPlayerAndVehicle = (): void => {
+      if (vehicle === "traghetto") {
+        // TRAGHETTO: scafo che ondeggia, al timone il CAPITANO SCHETTINO (satira),
+        // e il giocatore a bordo. Lo scafo si vede su acqua e a terra (è il mezzo).
+        const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
+        const ferryImg = ferryImage();
+        if (ferryImg) {
+          screen.imageSprite(ferryImg, baseX + 8 - ferryImg.width / 2, baseY + 12 + bob - ferryImg.height / 2);
         } else {
-          // Monopattino sotto, player in sella sopra.
-          screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
-          drawPlayer(baseX, baseY - 5 + jitter);
+          screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
+        }
+        // Schettino al timone (PNG PixelLab se pronto, altrimenti pixmap).
+        const schImg = sceneImage("char:schettino", "chars/schettino.png");
+        if (schImg) {
+          const ss = 18 / schImg.height;
+          screen.imageSprite(schImg, baseX + 10 - (schImg.width * ss) / 2, baseY - 2 + bob, { scaleX: ss, scaleY: ss });
+        } else {
+          screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
+        }
+        drawPlayer(baseX - 4, baseY + bob);
+      } else if (vehicle) {
+        // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
+        const motor = vehicle === "ruspa" || vehicle === "auto";
+        const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
+        const vehImg = vehicleImage(vehicle, pos.facing);
+        if (vehImg) {
+          // Mezzi CHIUSI (auto, ruspa): vista dall'alto, il player è DENTRO →
+          // si disegna solo il veicolo (più grande, riempie la cella). I mezzi
+          // APERTI (monopattino): il player sta SOPRA, visibile in sella.
+          const enclosed = vehicle === "auto" || vehicle === "ruspa";
+          const target = enclosed ? 26 : 24;
+          const vs = target / vehImg.height;
+          const vw = vehImg.width * vs;
+          const vh = vehImg.height * vs;
+          if (enclosed) {
+            // Solo l'auto/ruspa, centrata sulla cella, ancorata in basso.
+            screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+          } else {
+            // Monopattino sotto, player in sella sopra.
+            screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+            drawPlayer(baseX, baseY - 5 + jitter);
+          }
+        } else {
+          const veh = vehicleSprite(vehicle, pos.facing);
+          const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;
+          screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
+          drawPlayer(baseX, baseY - lift + jitter);
         }
       } else {
-        const veh = vehicleSprite(vehicle, pos.facing);
-        const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;
-        screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
-        drawPlayer(baseX, baseY - lift + jitter);
+        drawPlayer(baseX, baseY);
       }
-    } else {
-      drawPlayer(baseX, baseY);
+    };
+    // Il player entra nello z-order: baseY = piedi in px-mondo.
+    tall.push({ baseY: playerPy + TILE, draw: drawPlayerAndVehicle });
+
+    // Disegna tutti gli oggetti "alti" ordinati per Y (chi è più in alto va dietro).
+    tall.sort((a, b) => a.baseY - b.baseY);
+    for (const e of tall) {
+      e.draw();
     }
 
     // Scintille della cura passiva (Min. Salute): in coordinate-mondo.

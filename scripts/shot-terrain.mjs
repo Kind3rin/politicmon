@@ -22,7 +22,9 @@ const shots = await page.evaluate(async () => {
     "npc:granny:south": "chars/npc_granny_south.png",
     "npc:aide:south": "chars/npc_aide_south.png",
     "npc:guard:south": "chars/npc_guard_south.png",
-    "npc:kid:south": "chars/npc_kid_south.png"
+    "npc:guard:left": "chars/npc_guard_west.png",
+    "npc:kid:south": "chars/npc_kid_south.png",
+    "npc:barista:south": "chars/npc_barista_south.png"
   });
   await new Promise((r) => setTimeout(r, 1500));
   const canvas = document.createElement("canvas");

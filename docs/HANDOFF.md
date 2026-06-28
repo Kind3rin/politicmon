@@ -181,7 +181,36 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 
 ## Storico sessioni (append in cima)
 
-- **Round 15 — REDESIGN PixelLab + fix canale STRETTO (2026-06-28, IN CORSO):**
+- **Round 15 — REDESIGN GRAFICO PixelLab (totale) + fix canale STRETTO (2026-06-28):**
+  - **Vincolo "grafica 100% pixel-map" ABBANDONATO** (scelta utente): tutta la
+    grafica passa a PNG PixelLab, serviti da `public/sprites/{monsters,chars,tiles,items,ui}/`.
+  - **Infra anti-regressione:** `src/engine/assets.ts` (registry async PNG con
+    fallback al Pixmap) + `Screen.imageSprite()`/`Screen.nineSlice()`. I save NON
+    sono toccati. Ogni asset ha fallback → niente si rompe durante la migrazione.
+  - **FATTO e in produzione:** 30/30 MOSTRI (battaglia+dex/party/box/titolo/evo/HUD,
+    helper `drawMonsterSprite`); PLAYER 4 dir (`playerImage`); NPC 4 dir
+    (`NPC_WITH_PNG`: professor/guard/kid/journalist/boss/granny/rival/influencer;
+    aide/barista in coda); VEICOLI terrestri 4 viste N/S/E/O (`vehicleImage(id,facing)`,
+    auto/ruspa chiusi=solo veicolo, monopattino=player sopra); TRAGHETTO (1 vista);
+    OGGETTI overlay (albero T/segnale s/recinto f); ICONE borsa (scheda/caffe/
+    spritz/mojito/maalox, `ITEMS_WITH_PNG`+`drawItemIcon`); CORNICE DIALOG 9-slice
+    (`ui/dialog.png`, `loadPanelImage`+`Screen.panel`, border 7 → tutti i dialoghi/
+    menu/box HP); SFONDO BATTAGLIA (`ui/battle_bg.png`).
+  - **REGOLA VISTE CARDINALI** (vedi memoria `politicmon-asset-views-rule` +
+    REDESIGN-PLAN): risorsa che si muove = 4 viste N/S/E/O; statica/frontale = 1.
+    Bug corretto: i veicoli avevano 1 sola vista (guardavano sempre uguale guidando).
+  - **NON fatto (round dedicato / basso ROI):** EDIFICI (tetti multi-tile +
+    facciata: serve building-PNG completi con rilevamento blocco — rischio
+    renderer); ERBA ALTA `~` (ciuffo ripetuto fa pasticcio); TERRENO base
+    (texture-swap senza autotiling Wang dà bande); type-badge 11px (rect colorati ok).
+  - **Tracking:** `scripts/pixellab-monsters.json` (30 mostri) +
+    `scripts/pixellab-assets.json` (npc/ui/icone/veicoli/sfondi). Download:
+    `scripts/pixellab-fetch.mjs` (mostri); NPC via `get_character`, oggetti/icone
+    via `/mcp/map-objects/<id>/download`, UI via `get_ui_asset`, veicoli 8-dir via
+    `get_object`. Verifica: `scripts/shot-{pilot,terrain,vehicle,bag,dex-pilot}.mjs`.
+  - **Fix bug STRETTO** (segnalato dall'utente): vedi sotto.
+
+- **Round 15 (dettaglio fix STRETTO):**
   - **Fix bug STRETTO** (segnalato dall'utente): l'approdo dal traghetto cadeva su
     una fascia di SABBIA continua (righe 6-7 di `STRETTO_TILES`) che faceva da
     "isola di terra" e tagliava la traversata — il ponte sembrava irraggiungibile,

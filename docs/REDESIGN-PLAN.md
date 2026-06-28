@@ -127,11 +127,14 @@ VARIANO tra mappe. Due approcci valutati:
   ALTO RISCHIO di regressione sul renderer mappa (core) + dimensioni non uniformi.
 - *Tetti-tile seamless 16px*: sostituire solo i char tetto. Problema: la facciata
   (`mdnm`) resta vecchia → mismatch tetto/facciata.
-Provati i tetti-tile seamless (tegole rosse/blu/verdi). Se stridono con la
-facciata vecchia → **edifici = ROUND DEDICATO** (building-PNG completi tetto+
-facciata, con rilevamento blocco fatto bene). NON forzato in questo round per
-non rischiare il renderer mappa. Le facciate (porta `d`/finestra `n`/muro `m`)
-sono comunque già riconoscibili come pixmap.
+Provati i tetti-tile seamless (tegole rosse/blu/verdi, tiles f8b28457). VERDETTO:
+i tile tegola hanno bordi (transizione, non perfettamente seamless) e
+striderebbero con la facciata `mdnm` vecchia (pixmap). → **EDIFICI = ROUND
+DEDICATO**, NON cablati in questo round (evitato il rischio sul renderer mappa).
+Serve: building-PNG COMPLETI tetto+facciata per ogni tipo (casa/lab/bar/palestra/
+casinò/palazzo), con rilevamento del blocco-edificio nel render loop (gli edifici
+sono blocchi ~4×3 tile di dimensione che varia tra mappe). Le facciate attuali
+(porta `d`/finestra `n`/muro `m`) restano pixmap, già riconoscibili.
 
 ## Stato (aggiornato 2026-06-28)
 

@@ -1,6 +1,6 @@
 import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { MOVES, STATUS_LABELS } from "../data/moves";
-import { TYPE_COLORS } from "../data/poltypes";
+import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -179,9 +179,15 @@ export class PartyScene implements Scene {
     }
     let tx = 70;
     for (const type of species.types) {
-      screen.rect(tx, 32, type.length * 6 + 6, 11, TYPE_COLORS[type]);
-      screen.text(type, tx + 3, 34, PAPER);
-      tx += type.length * 6 + 10;
+      const icon = typeIcon(type);
+      const iconW = icon ? 11 : 0;
+      const w = type.length * 6 + 6 + iconW;
+      screen.rect(tx, 32, w, 11, TYPE_COLORS[type]);
+      if (icon) {
+        screen.imageSprite(icon, tx + 1, 33, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
+      }
+      screen.text(type, tx + 3 + iconW, 34, PAPER);
+      tx += w + 4;
     }
     const stats = statsOf(mon);
     const rows: Array<[string, number]> = [

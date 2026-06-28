@@ -1,5 +1,5 @@
 import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
-import { TYPE_COLORS } from "../data/poltypes";
+import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { DEX_ORDER, SPECIES, STARTERS } from "../data/species";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -115,9 +115,15 @@ export class DexScene implements Scene {
     screen.text(species.category, 76, 26, GREY);
     let tx = 76;
     for (const type of species.types) {
-      screen.rect(tx, 38, type.length * 6 + 6, 11, TYPE_COLORS[type]);
-      screen.text(type, tx + 3, 40, PAPER);
-      tx += type.length * 6 + 10;
+      const icon = typeIcon(type);
+      const iconW = icon ? 11 : 0;
+      const w = type.length * 6 + 6 + iconW;
+      screen.rect(tx, 38, w, 11, TYPE_COLORS[type]);
+      if (icon) {
+        screen.imageSprite(icon, tx + 1, 39, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
+      }
+      screen.text(type, tx + 3 + iconW, 40, PAPER);
+      tx += w + 4;
     }
     const lines = wrapText(species.dexLine, 35);
     for (let i = 0; i < lines.length && i < 6; i += 1) {

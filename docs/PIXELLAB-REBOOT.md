@@ -57,3 +57,5 @@ Docs: https://api.pixellab.ai/mcp/docs
   fence, tallgrass, flowers, interni principali, cantiere, gold door, wall.
 - `npc-archetypes-wave1-2026-06-28`: kid, journalist, rival, barista con
   statici 4-dir e walk 4-frame.
+- `npc-archetypes-wave2-2026-06-28`: boss, granny, influencer, aide con
+  statici 4-dir e walk 4-frame.

@@ -184,6 +184,33 @@
       ]
     },
     {
+      "id": "npc-archetypes-wave2-2026-06-28",
+      "tool": "create_character + animate_character",
+      "state": "downloaded",
+      "outputs": [
+        {
+          "file": "chars/npc_boss_*",
+          "characterId": "6d6c3896-b792-4858-9ee5-10e4f765be30",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_granny_*",
+          "characterId": "5195cc5b-f99d-4741-91ab-1cc5487e4123",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_influencer_*",
+          "characterId": "1edec158-fb43-4404-8b76-16e56dfa329d",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_aide_*",
+          "characterId": "14b59979-6758-4e6d-860a-f1217415401b",
+          "animation": "walking-4-frames"
+        }
+      ]
+    },
+    {
       "id": "missing-item-icons-2026-06-28",
       "tool": "create_map_object",
       "state": "downloaded",

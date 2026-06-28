@@ -45,6 +45,36 @@ export function objectImage(ch: string): HTMLImageElement | null {
   return getSpriteImage(`obj:${ch}`, path);
 }
 
+// EDIFICI come building-PNG: ogni tipo di tetto mappa a un PNG 64x48 (4x3 tile)
+// che copre tetto + facciata. I char tetto coinvolti (case `r`, lab `u`, bar
+// `e`/`Q`, palestre `y`/`B`/`x`). Il renderer rileva l'angolo alto-sx del blocco
+// tetto e disegna il building una volta. Le celle facciata (`m`/`d`/`n`) NON si
+// disegnano separatamente sotto un edificio coperto dal PNG.
+const BUILDING_PNG: Record<string, string> = {
+  r: "tiles/build_house.png",
+  u: "tiles/build_lab.png",
+  e: "tiles/build_bar.png",
+  Q: "tiles/build_bar.png",
+  y: "tiles/build_gym.png",
+  B: "tiles/build_gym.png",
+  x: "tiles/build_gym.png",
+};
+
+// I char che fanno parte del "tetto" (per il rilevamento del blocco).
+const ROOF_CHARS = new Set(Object.keys(BUILDING_PNG));
+
+export function isRoof(ch: string): boolean {
+  return ROOF_CHARS.has(ch);
+}
+
+export function buildingImage(ch: string): HTMLImageElement | null {
+  const path = BUILDING_PNG[ch];
+  if (!path) {
+    return null;
+  }
+  return getSpriteImage(`build:${ch}`, path);
+}
+
 export interface TileDef {
   pix: Pixmap;
   solid: boolean;

@@ -1,7 +1,7 @@
 import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage, objectImage } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, buildingImage } from "../../art/tiles";
 import { sceneImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
@@ -1756,6 +1756,20 @@ export class WorldScene implements Scene {
         }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
+        // EDIFICI: se questo tile è un tetto e c'è il building-PNG, disegno solo
+        // il terreno base qui (l'edificio intero è disegnato in un secondo passo,
+        // sotto, così copre correttamente tetto+facciata). Se il PNG non è pronto,
+        // ricade sul tetto pixmap (ramo normale più sotto).
+        if (isRoof(ch) && buildingImage(ch)) {
+          const baseCh2 = this.map.outdoor ? "." : "p";
+          const bImg = tileImage(baseCh2);
+          if (bImg) {
+            screen.imageSprite(bImg, dx, dy);
+          } else {
+            screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
+          }
+          continue;
+        }
         if (def.overlay) {
           // Terreno di base sotto l'overlay (PNG se disponibile, altrimenti pixmap).
           const baseCh = this.map.outdoor ? "." : "p";
@@ -1800,6 +1814,30 @@ export class WorldScene implements Scene {
             }
           }
         }
+      }
+    }
+
+    // EDIFICI (secondo passo): disegna il building-PNG sull'angolo ALTO-SX di
+    // ogni blocco-tetto. Angolo = cella tetto del tipo `ch` con la cella sopra e
+    // la cella a sinistra di tipo diverso. Il PNG (64x48 = 4x3 tile) copre tetto
+    // + facciata. Disegnato dopo il terreno così non viene sovrascritto.
+    for (let ty = y0; ty <= y0 + Math.ceil(VIEW_H / TILE) + 1; ty += 1) {
+      for (let tx = x0; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
+        const ch = this.tileAt(tx, ty);
+        if (!isRoof(ch)) {
+          continue;
+        }
+        const build = buildingImage(ch);
+        if (!build) {
+          continue;
+        }
+        // È l'angolo alto-sx del blocco?
+        if (this.tileAt(tx - 1, ty) === ch || this.tileAt(tx, ty - 1) === ch) {
+          continue;
+        }
+        const dx = tx * TILE - camX;
+        const dy = ty * TILE - camY;
+        screen.imageSprite(build, dx, dy);
       }
     }
 

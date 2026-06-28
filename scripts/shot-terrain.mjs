@@ -16,8 +16,10 @@ const shots = await page.evaluate(async () => {
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
   preloadSprites({
-    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:~": "tiles/tallgrass_obj.png",
-    "obj:f": "tiles/fence.png",
+    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:f": "tiles/fence.png",
+    "build:r": "tiles/build_house.png", "build:u": "tiles/build_lab.png",
+    "build:e": "tiles/build_bar.png", "build:Q": "tiles/build_bar.png",
+    "build:y": "tiles/build_gym.png", "build:B": "tiles/build_gym.png", "build:x": "tiles/build_gym.png",
     "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png",
     "npc:granny:south": "chars/npc_granny_south.png",
     "npc:aide:south": "chars/npc_aide_south.png",
@@ -26,7 +28,7 @@ const shots = await page.evaluate(async () => {
     "npc:kid:south": "chars/npc_kid_south.png",
     "npc:barista:south": "chars/npc_barista_south.png"
   });
-  await new Promise((r) => setTimeout(r, 1500));
+  await new Promise((r) => setTimeout(r, 2800));
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
@@ -41,10 +43,14 @@ const shots = await page.evaluate(async () => {
     state.pos = { mapId, x, y, facing: "down" };
     const stack = new SceneStack();
     stack.push(new WorldScene(stack, input, state));
+    // Primo giro: i draw avviano il load lazy dei building/tile via il renderer.
     for (let i = 0; i < 8; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
-    return canvas.toDataURL("image/png");
+    return new Promise((res) => setTimeout(() => {
+      for (let i = 0; i < 8; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
+      res(canvas.toDataURL("image/png"));
+    }, 2500));
   }
-  return { route1: shotMap("route1", 14, 10), borgo: shotMap("borgo", 8, 8) };
+  return { route1: await shotMap("borgo", 7, 11), borgo: await shotMap("borgo", 8, 8) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);

@@ -5,7 +5,24 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 15 — REDESIGN GRAFICO TOTALE PixelLab (in corso)**, 2026-06-28 (vedi § Storico + § REDESIGN sotto).
+Ultimo aggiornamento: **Round 16 — fix rendering EDIFICI (no più duplicati/tagli)**, 2026-06-28 (vedi § REDESIGN sotto).
+
+### 🔧 Round 16 — fix rendering edifici (feedback utente: "edifici doppi/storti")
+Gli edifici multi-tile col building-PNG erano **spezzati/duplicati/tagliati**:
+- `bar eQQe` e `palestre y/B/x` venivano resi come 3 micro-edifici affiancati
+  (il rilevamento blocco confrontava il **char identico**, non il **gruppo PNG**).
+- Il PNG a dimensione fissa (64/96/160px) sbordava o lasciava celle-tetto scoperte.
+- Colonne `C`/bandiere `G` del palazzo restavano tile-pixmap esposti ai lati.
+
+**Fix** (`tiles.ts` + `WorldScene.ts`): `buildingKey(ch)` = file PNG → i char-tetto
+dello stesso gruppo (e/Q, y/B/x) sono UN edificio; `buildingFootprint()` misura
+l'impronta reale (tetto + righe facciata) dalla mappa ASCII e il PNG si **scala**
+su quella; `buildingCovering()` sopprime il terreno sotto tetto+facciata; `C`/`G`
+aggiunti ai FACADE_CHARS (palazzo li ingloba). Verificato in-game su borgo/
+mediopoli/eurotown/capitale (case, bar col simbolo cura, palestre, palazzo) —
+tutti coerenti, entrata centrata visibile. **Le viti dei vecchi screenshot
+(blob nero NPC, recinti pixmap) erano il deploy VECCHIO**: nel bundle attuale
+NPC=PNG, recinti/segnali=PNG. Shot helper: `scripts/shot-buildings.mjs`.
 
 ## ⚠️ REDESIGN PixelLab — STATO E MANCANZE (leggi per primo se continui il redesign)
 
@@ -23,8 +40,10 @@ esaustivo di ogni char/scena). Tracking asset: `scripts/pixellab-assets.json`,
 - **Player + 10 NPC** 4 viste N/S/E/O **+ camminata animata** (`_<dir>_w<n>.png`,
   `playerImage`/`npcImage` con `(facing,frame,moving)`; `NPC_WALK`).
 - **Veicoli terrestri** (auto/ruspa/monopattino) **4 viste**; **traghetto** 1 vista.
-- **Edifici** building-PNG con rilevamento blocco: case/lab/bar 64x48, palestre/
-  casinò 96x48, palazzo 160x64 (`isRoof`/`buildingImage`).
+- **Edifici** building-PNG con rilevamento blocco **per gruppo + footprint scalata**
+  (R16): case/lab/bar 64x48, palestre/casinò 96x48, palazzo 160x64 inclusi colonne/
+  bandiere (`isRoof`/`buildingKey`/`buildingFootprint`/`buildingCovering`). No più
+  duplicazioni/tagli; entrata centrata visibile.
 - **Oggetti**: albero/segnale/recinto (`OBJECT_PNG`).
 - **TERRENO autotiling Wang**: erba `.`/sentiero `=` + acqua `w`/sabbia `z`
   (`wang_grass_path.png`/`wang_water_sand.png`, `WorldScene.drawWangTerrain`,
@@ -45,11 +64,9 @@ esaustivo di ogni char/scena). Tracking asset: `scripts/pixellab-assets.json`,
      Nickname/Chat, title logo/podio/filetto, banner evento, tag nome-mappa.
 3. **MOSTRI**: `MONSTER_ACTION_ART` (frame bocca-urlante, 8 specie) ancora pixmap
    (in battaglia il base è PNG ma l'affondo usa il pixmap urlante).
-4. **Avatar remoti MP**: usano `charSprite` pixmap (non PNG).
-4. **PALAZZO esterno**: `M` ha il building-PNG ma `C` colonne, `G` bandiera, `D`
-   portone, `g` porta dorata restano pixmap (estendere il PNG o tileset facciata).
-5. **PERSONAGGI**: **SCHETTINO** al timone traghetto (pixmap, disegnato in WorldScene
-   sopra ferry.png), **avatar remoti MP** (usano `charSprite` pixmap, non PNG).
+4. ~~**PALAZZO** colonne/bandiere esposti~~ FATTO R16 (C/G come facciata, inglobati nel PNG).
+5. **PERSONAGGI**: **avatar remoti MP** (usano `charSprite` pixmap, non PNG).
+   (Schettino al timone = già `chars/schettino.png` PNG, R14.)
 6. **MOSTRI**: `MONSTER_ACTION_ART` (frame bocca-urlante, 8 specie, pixmap);
    `BALLOT_ART` (scheda lanciata in battaglia); `BADGE_ART` (medaglie 12x12).
 7. **UI/HUD (tutto a codice)**: barre HP/EXP/SONDAGGI, **type-badge** 8 tipi

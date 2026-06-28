@@ -119,6 +119,7 @@ const OBJECT_PNG: Record<string, string> = {
   ",": "tiles/obj_flowers.png",
   J: "tiles/obj_girder.png",
   K: "tiles/obj_crane.png",
+  g: "tiles/obj_golddoor.png", // porta dorata (varco Atto 2 palazzo->colle)
 };
 
 export function objectImage(ch: string): HTMLImageElement | null {

@@ -1,4 +1,5 @@
 import { BADGE_ART } from "../art/monsters";
+import { sceneImage } from "../engine/assets";
 import { MAPS } from "../data/maps";
 import { BADGES } from "../data/trainers";
 import { audio } from "../engine/audio";
@@ -253,7 +254,13 @@ export class PauseScene implements Scene {
     for (let i = 0; i < badgeIds.length; i += 1) {
       const x = 88 + i * 30;
       if (this.state.badges.includes(badgeIds[i])) {
-        screen.sprite("badge", BADGE_ART, x, 90);
+        const badgeImg = sceneImage("ui:badge", "ui/badge.png");
+        if (badgeImg) {
+          const bs = 14 / Math.max(badgeImg.width, badgeImg.height);
+          screen.imageSprite(badgeImg, x - 1, 89, { scaleX: bs, scaleY: bs });
+        } else {
+          screen.sprite("badge", BADGE_ART, x, 90);
+        }
       } else {
         screen.frame(x, 90, 12, 12, GREY);
       }

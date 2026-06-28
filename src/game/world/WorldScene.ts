@@ -1967,8 +1967,14 @@ export class WorldScene implements Scene {
       } else {
         screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
       }
-      // Schettino al timone, leggermente di lato; il player accanto.
-      screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
+      // Schettino al timone (PNG PixelLab se pronto, altrimenti pixmap).
+      const schImg = sceneImage("char:schettino", "chars/schettino.png");
+      if (schImg) {
+        const ss = 18 / schImg.height;
+        screen.imageSprite(schImg, baseX + 10 - (schImg.width * ss) / 2, baseY - 2 + bob, { scaleX: ss, scaleY: ss });
+      } else {
+        screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
+      }
       drawPlayer(baseX - 4, baseY + bob);
     } else if (vehicle) {
       // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").

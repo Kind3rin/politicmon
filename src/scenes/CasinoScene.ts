@@ -3,6 +3,7 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { sceneImage } from "../engine/assets";
 import { addSondaggi, sondaggiColor } from "../game/governo";
 import { saveGame, type GameState } from "../game/state";
 import { Menu, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
@@ -361,6 +362,14 @@ export class CasinoScene implements Scene {
       screen.text("A: riscatta  B: indietro", 8, VIEW_H - 10, GREY);
     } else {
       this.menu.draw(screen, 14, 36, VIEW_W - 28);
+      // Mobile slot PixelLab come decoro della schermata menu (spazio libero in
+      // basso a destra): dà identità da casinò senza coprire testo/menu.
+      const cab = sceneImage("ui:slot", "ui/slot_cabinet.png");
+      if (cab) {
+        const dh = 48;
+        const dw = cab.width * (dh / cab.height);
+        screen.imageSprite(cab, VIEW_W - 12 - dw, VIEW_H - 30 - dh, { scaleX: dh / cab.height, scaleY: dh / cab.height });
+      }
       screen.text("Il banco vince. Ma i premi sono reali.", 14, VIEW_H - 22, GREY);
       screen.text("A: scegli  B: esci", 8, VIEW_H - 10, GREY);
     }

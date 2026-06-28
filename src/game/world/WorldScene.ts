@@ -1,7 +1,7 @@
 import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, buildingImage, wangSet, wangSrc, cornerMask } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, wangSet, wangSrc, cornerMask } from "../../art/tiles";
 import { sceneImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
@@ -445,6 +445,95 @@ export class WorldScene implements Scene {
     const { sx, sy } = wangSrc(mask);
     screen.imageRegion(set.img, sx, sy, TILE, TILE, dx, dy, TILE, TILE);
     return true;
+  }
+
+  // Footprint di un EDIFICIO a partire dall'angolo alto-sx (atx,aty) di un blocco
+  // tetto: misura larghezza/altezza in tile inglobando le righe di FACCIATA
+  // (muro/porta/finestra) contigue sotto il tetto. Così il building-PNG si scala
+  // ESATTAMENTE sull'impronta disegnata nella mappa ASCII, qualunque sia la sua
+  // dimensione (4x3 casa, 6x3 palestra/casinò, 10x4 palazzo) — niente overflow,
+  // niente celle-tetto scoperte, niente edifici che galleggiano o si tagliano.
+  private buildingFootprint(atx: number, aty: number, roofCh: string): { w: number; h: number } {
+    const groupKey = buildingKey(roofCh);
+    // Stessa "famiglia" di tetto = stesso file PNG (es. e/Q bar, y/B/x palestra).
+    const sameGroup = (x: number, y: number): boolean => buildingKey(this.tileAt(x, y)) === groupKey;
+    // Larghezza: celle tetto dello stesso GRUPPO contigue verso destra.
+    let w = 0;
+    while (sameGroup(atx + w, aty)) {
+      w += 1;
+    }
+    // Altezza: righe di tetto (stesso gruppo) + righe di facciata sotto, larghe
+    // almeno quanto il tetto (centrate). Mi fermo alla prima riga senza facciata.
+    let roofRows = 0;
+    while (sameGroup(atx, aty + roofRows)) {
+      roofRows += 1;
+    }
+    let facadeRows = 0;
+    for (let r = aty + roofRows; ; r += 1) {
+      // La riga conta come facciata se almeno una cella nella fascia [atx, atx+w)
+      // è un char-facciata. (Il muro può essere più largo del tetto: `mmdnmm`.)
+      let any = false;
+      for (let c = atx - 1; c < atx + w + 1; c += 1) {
+        if (isFacade(this.tileAt(c, r))) {
+          any = true;
+          break;
+        }
+      }
+      if (!any) {
+        break;
+      }
+      facadeRows += 1;
+      if (facadeRows > 2) {
+        break; // le facciate sono 1 riga (case) o eccezione; cap di sicurezza
+      }
+    }
+    return { w, h: roofRows + facadeRows };
+  }
+
+  // Se la cella (tx,ty) cade dentro la footprint di un edificio col building-PNG
+  // pronto, ritorna il char-tetto di quell'edificio (così il 1° passo sa che il
+  // terreno sotto va lasciato libero e il PNG ci penserà). Altrimenti null.
+  // Cerca l'angolo alto-sx del blocco-tetto scorrendo su/sinistra dalla cella, su
+  // entrambi i char tetto E facciata, poi verifica che (tx,ty) sia nella footprint.
+  private buildingCovering(tx: number, ty: number): string | null {
+    const here = this.tileAt(tx, ty);
+    if (!isRoof(here) && !isFacade(here)) {
+      return null;
+    }
+    // Trova un char-tetto risalendo: se sono su una facciata salgo finché trovo
+    // il tetto; se sono già su un tetto resto. Poi vado all'angolo alto-sx.
+    let rx = tx;
+    let ry = ty;
+    if (isFacade(here)) {
+      // sali finché trovi un tetto (max poche righe)
+      let steps = 0;
+      while (steps < 4 && !isRoof(this.tileAt(rx, ry))) {
+        ry -= 1;
+        steps += 1;
+      }
+      if (!isRoof(this.tileAt(rx, ry))) {
+        return null;
+      }
+    }
+    const roofCh = this.tileAt(rx, ry);
+    if (!buildingImage(roofCh)) {
+      return null; // PNG non pronto: usa i pixmap
+    }
+    const groupKey = buildingKey(roofCh);
+    // angolo alto-sx del blocco tetto (stesso GRUPPO, non stesso char)
+    let atx = rx;
+    let aty = ry;
+    while (buildingKey(this.tileAt(atx - 1, aty)) === groupKey) atx -= 1;
+    while (buildingKey(this.tileAt(atx, aty - 1)) === groupKey) aty -= 1;
+    const fp = this.buildingFootprint(atx, aty, roofCh);
+    // (tx,ty) dentro la footprint? La facciata può sbordare di 1 col per lato.
+    if (tx >= atx - 1 && tx < atx + fp.w + 1 && ty >= aty && ty < aty + fp.h) {
+      // ma solo se è davvero tetto o facciata (non erba a fianco)
+      if (isRoof(here) || isFacade(here)) {
+        return roofCh;
+      }
+    }
+    return null;
   }
 
   private isBlocked(x: number, y: number): boolean {
@@ -1785,17 +1874,28 @@ export class WorldScene implements Scene {
         }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
-        // EDIFICI: se questo tile è un tetto e c'è il building-PNG, disegno solo
-        // il terreno base qui (l'edificio intero è disegnato in un secondo passo,
-        // sotto, così copre correttamente tetto+facciata). Se il PNG non è pronto,
-        // ricade sul tetto pixmap (ramo normale più sotto).
-        if (isRoof(ch) && buildingImage(ch)) {
+        // EDIFICI: se questo tile è un tetto/facciata di un edificio col
+        // building-PNG pronto, disegno solo il terreno base qui (l'edificio intero
+        // è disegnato in un secondo passo, scalato sulla footprint, così copre
+        // tetto+muro+porta senza overflow). Se il PNG non è pronto, ricade sui
+        // pixmap (tetto/muro/porta normali, rami sotto).
+        const coveringRoof = this.buildingCovering(tx, ty);
+        if (coveringRoof) {
+          // Terreno per ancorare l'edificio: erba/sentiero (esterno) o pavimento
+          // (interno). Per i tile-facciata usiamo il terreno della cella sopra il
+          // tetto così la base resta coerente col contorno.
           const baseCh2 = this.map.outdoor ? "." : "p";
-          const bImg = tileImage(baseCh2);
-          if (bImg) {
-            screen.imageSprite(bImg, dx, dy);
+          if (this.map.outdoor) {
+            // sotto l'edificio il terreno è erba: lascia che il Wang lo gestisca
+            if (!this.drawWangTerrain(screen, ".", tx, ty, dx, dy)) {
+              const bImg = tileImage(baseCh2);
+              if (bImg) screen.imageSprite(bImg, dx, dy);
+              else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
+            }
           } else {
-            screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
+            const bImg = tileImage(baseCh2);
+            if (bImg) screen.imageSprite(bImg, dx, dy);
+            else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
           }
           continue;
         }
@@ -1849,11 +1949,14 @@ export class WorldScene implements Scene {
     }
 
     // EDIFICI (secondo passo): disegna il building-PNG sull'angolo ALTO-SX di
-    // ogni blocco-tetto. Angolo = cella tetto del tipo `ch` con la cella sopra e
-    // la cella a sinistra di tipo diverso. Il PNG (64x48 = 4x3 tile) copre tetto
-    // + facciata. Disegnato dopo il terreno così non viene sovrascritto.
-    for (let ty = y0; ty <= y0 + Math.ceil(VIEW_H / TILE) + 1; ty += 1) {
-      for (let tx = x0; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
+    // ogni blocco-tetto, SCALATO sulla footprint reale (tetto + righe facciata).
+    // Così un PNG 64x48 nativo copre esattamente un blocco 4x3 in tile, e un
+    // 96x48 un blocco 6x3, qualunque mappa — niente overflow né tagli. Il PNG si
+    // ancora in alto-sx e si stira/comprime per combaciare con l'impronta ASCII.
+    // Disegnato in un range esteso a sinistra/sopra così gli edifici a cavallo
+    // del bordo schermo entrano comunque.
+    for (let ty = y0 - 4; ty <= y0 + Math.ceil(VIEW_H / TILE) + 1; ty += 1) {
+      for (let tx = x0 - 10; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
         const ch = this.tileAt(tx, ty);
         if (!isRoof(ch)) {
           continue;
@@ -1862,13 +1965,20 @@ export class WorldScene implements Scene {
         if (!build) {
           continue;
         }
-        // È l'angolo alto-sx del blocco?
-        if (this.tileAt(tx - 1, ty) === ch || this.tileAt(tx, ty - 1) === ch) {
+        // È l'angolo alto-sx del blocco? (gruppo PNG, non char: e/Q, y/B/x)
+        const groupKey = buildingKey(ch);
+        if (buildingKey(this.tileAt(tx - 1, ty)) === groupKey || buildingKey(this.tileAt(tx, ty - 1)) === groupKey) {
           continue;
         }
+        const fp = this.buildingFootprint(tx, ty, ch);
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
-        screen.imageSprite(build, dx, dy);
+        const dw = fp.w * TILE;
+        const dh = fp.h * TILE;
+        screen.imageSprite(build, dx, dy, {
+          scaleX: dw / build.width,
+          scaleY: dh / build.height
+        });
       }
     }
 

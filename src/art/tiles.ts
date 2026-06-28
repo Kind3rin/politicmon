@@ -158,12 +158,30 @@ export function isRoof(ch: string): boolean {
   return ROOF_CHARS.has(ch);
 }
 
+// Char di FACCIATA che stanno SOTTO un tetto e fanno parte dello stesso edificio
+// (muro `m`, porta `d`, finestra `n`, porta-palazzo `D`/`g`). Il renderer estende
+// il footprint del building-PNG verso il basso finché trova queste celle, così il
+// PNG copre tetto + muro + porta in un colpo solo, scalato alla footprint reale.
+const FACADE_CHARS = new Set(["m", "d", "n", "D", "g"]);
+
+export function isFacade(ch: string): boolean {
+  return FACADE_CHARS.has(ch);
+}
+
 export function buildingImage(ch: string): HTMLImageElement | null {
   const path = BUILDING_PNG[ch];
   if (!path) {
     return null;
   }
   return getSpriteImage(`build:${ch}`, path);
+}
+
+// Chiave-gruppo di un edificio = il file PNG che lo rappresenta. Char di tetto
+// diversi che mappano allo STESSO PNG (es. `e` ed `Q` del bar, `y`/`B`/`x` delle
+// palestre) appartengono allo stesso blocco-edificio: il renderer li tratta come
+// un'unica impronta invece di spezzarli in tanti micro-edifici. null se non-tetto.
+export function buildingKey(ch: string): string | null {
+  return BUILDING_PNG[ch] ?? null;
 }
 
 export interface TileDef {

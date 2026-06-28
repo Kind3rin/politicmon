@@ -157,6 +157,33 @@
       ]
     },
     {
+      "id": "npc-archetypes-wave1-2026-06-28",
+      "tool": "create_character + animate_character",
+      "state": "downloaded",
+      "outputs": [
+        {
+          "file": "chars/npc_kid_*",
+          "characterId": "14cc80f0-33c8-42d6-89da-ee5cf1ff3709",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_journalist_*",
+          "characterId": "a8a8bd28-f499-4c5e-aa8a-60046efb7d6d",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_rival_*",
+          "characterId": "b17af425-1590-4336-a7ad-925f9728fae9",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_barista_*",
+          "characterId": "043454d5-c359-4421-ac56-829e29aeb25a",
+          "animation": "walking-4-frames"
+        }
+      ]
+    },
+    {
       "id": "missing-item-icons-2026-06-28",
       "tool": "create_map_object",
       "state": "downloaded",

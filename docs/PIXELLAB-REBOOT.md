@@ -55,3 +55,5 @@ Docs: https://api.pixellab.ai/mcp/docs
   dialog frame, player walk, professor walk, guard walk.
 - `world-buildings-props-2026-06-28`: lab, bar, gym, casino, palazzo, sign,
   fence, tallgrass, flowers, interni principali, cantiere, gold door, wall.
+- `npc-archetypes-wave1-2026-06-28`: kid, journalist, rival, barista con
+  statici 4-dir e walk 4-frame.

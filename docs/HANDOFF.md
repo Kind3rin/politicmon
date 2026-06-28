@@ -5,7 +5,13 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 21 — PixelLab edifici e props mondo**, 2026-06-28.
+Ultimo aggiornamento: **Round 22 — PixelLab NPC archetypes wave 1**, 2026-06-28.
+
+### 🎨 Round 22 — PixelLab NPC archetypes wave 1
+FATTO R22:
+- Rigenerati e integrati con 4 direzioni + walk 4-frame: kid, journalist,
+  rival, barista.
+- Aggiornato manifest con batch `npc-archetypes-wave1-2026-06-28`.
 
 ### 🎨 Round 21 — PixelLab edifici e props mondo
 FATTO R21:

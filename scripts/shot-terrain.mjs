@@ -16,8 +16,16 @@ const shots = await page.evaluate(async () => {
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
   preloadSprites({
-    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "tile:,": "tiles/flowers16.png",
-    "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png"
+    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:~": "tiles/tallgrass_obj.png",
+    "obj:f": "tiles/fence.png",
+    "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png",
+    "npc:professor:south": "chars/npc_professor_south.png",
+    "npc:guard:south": "chars/npc_guard_south.png",
+    "npc:kid:south": "chars/npc_kid_south.png",
+    "npc:journalist:south": "chars/npc_journalist_south.png",
+    "npc:boss:south": "chars/npc_boss_south.png",
+    "npc:professor:west": "chars/npc_professor_west.png",
+    "npc:guard:left": "chars/npc_guard_west.png"
   });
   await new Promise((r) => setTimeout(r, 1500));
   const canvas = document.createElement("canvas");
@@ -37,10 +45,10 @@ const shots = await page.evaluate(async () => {
     for (let i = 0; i < 8; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
     return canvas.toDataURL("image/png");
   }
-  return { route1: shotMap("route1", 14, 10), stretto: shotMap("stretto", 14, 7) };
+  return { route1: shotMap("route1", 14, 10), borgo: shotMap("borgo", 8, 8) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);
-save("terrain_stretto", shots.stretto);
+save("terrain_borgo", shots.borgo);
 console.log("salvati");
 await browser.close();

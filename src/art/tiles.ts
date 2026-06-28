@@ -32,6 +32,9 @@ const OBJECT_PNG: Record<string, string> = {
   T: "tiles/tree.png",
   s: "tiles/sign.png",
   f: "tiles/fence.png",
+  // erba alta `~` NON qui: il ciuffo singolo 32px (con base di terra) ripetuto su
+  // un'area densa fa pasticcio (terra ripetuta + sovrapposizioni). Resta sul
+  // Pixmap pulito; servirebbe un tile seamless dedicato, non un oggetto.
 };
 
 export function objectImage(ch: string): HTMLImageElement | null {

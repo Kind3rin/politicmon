@@ -6,7 +6,9 @@ import { getSpriteImage } from "../engine/assets";
 
 // Redesign PixelLab: alcune icone item hanno un PNG dedicato in
 // public/sprites/items/. `ITEMS_WITH_PNG` elenca le migrate.
-const ITEMS_WITH_PNG = new Set<string>([]);
+const ITEMS_WITH_PNG = new Set<string>([
+  "scheda", "caffe", "spritz", "mojito", "maalox"
+]);
 
 function itemImage(itemId: string): HTMLImageElement | null {
   if (!ITEMS_WITH_PNG.has(itemId)) {

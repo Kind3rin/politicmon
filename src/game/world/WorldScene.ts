@@ -1765,12 +1765,26 @@ export class WorldScene implements Scene {
             screen.sprite(`tile:${ch}`, def.pix, dx, dy);
           }
         } else {
-          // Texture PNG PixelLab del terreno, con fallback alla pixmap testuale.
-          const img = tileImage(ch);
-          if (img) {
-            screen.imageSprite(img, dx, dy);
+          const objImg = objectImage(ch);
+          if (objImg) {
+            // Tile non-overlay con oggetto PNG (es. erba alta `~`): prima il
+            // terreno base (erba/pavimento), poi i ciuffi PNG ancorati in basso.
+            const baseCh = this.map.outdoor ? "." : "p";
+            const baseImg2 = tileImage(baseCh);
+            if (baseImg2) {
+              screen.imageSprite(baseImg2, dx, dy);
+            } else {
+              screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
+            }
+            screen.imageSprite(objImg, dx + (TILE - objImg.width) / 2, dy + TILE - objImg.height);
           } else {
-            screen.sprite(`tile:${ch}`, def.pix, dx, dy);
+            // Texture PNG PixelLab del terreno, con fallback alla pixmap testuale.
+            const img = tileImage(ch);
+            if (img) {
+              screen.imageSprite(img, dx, dy);
+            } else {
+              screen.sprite(`tile:${ch}`, def.pix, dx, dy);
+            }
           }
         }
       }

@@ -20,6 +20,18 @@ export function ferryImage(): HTMLImageElement | null {
   return getSpriteImage("veh:ferry", "chars/ferry.png");
 }
 
+// Veicoli terrestri PixelLab (auto, ruspa, monopattino): UN PNG vista dall'alto
+// per veicolo (niente direzioni: dall'alto la rotazione conta poco e il pixmap
+// "blob" era il problema peggiore). Fallback al pixmap se il PNG non c'è.
+const VEHICLE_WITH_PNG = new Set<string>(["auto", "ruspa", "monopattino"]);
+
+export function vehicleImage(vehicleId: string): HTMLImageElement | null {
+  if (!VEHICLE_WITH_PNG.has(vehicleId)) {
+    return null;
+  }
+  return getSpriteImage(`veh:${vehicleId}`, `chars/${vehicleId}.png`);
+}
+
 // NPC PixelLab: solo alcuni archetipi (palette) hanno uno sprite PNG dedicato a
 // 4 direzioni. Gli altri restano sul pixmap parametrico (tinta da palette).
 export const NPC_WITH_PNG = new Set<string>([]);

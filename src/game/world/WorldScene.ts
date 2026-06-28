@@ -1,4 +1,4 @@
-import { charSprite, playerImage, ferryImage, npcImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
+import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, waterFrames, pix, tileImage, objectImage } from "../../art/tiles";
@@ -1869,15 +1869,26 @@ export class WorldScene implements Scene {
       screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
       drawPlayer(baseX - 4, baseY + bob);
     } else if (vehicle) {
-      const veh = vehicleSprite(vehicle, pos.facing);
-      // Quanto sollevare il personaggio per "sedercelo" sopra: la ruspa è alta,
-      // l'auto lo mette in abitacolo, il monopattino di poco.
-      const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;
       // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
       const motor = vehicle === "ruspa" || vehicle === "auto";
       const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
-      screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
-      drawPlayer(baseX, baseY - lift + jitter);
+      const vehImg = vehicleImage(vehicle);
+      if (vehImg) {
+        // PNG vista dall'alto, 32px, centrato sotto il player (mezzo a terra).
+        const vs = 28 / vehImg.height; // ~28px, un filo più largo del player
+        const vw = vehImg.width * vs;
+        const vh = vehImg.height * vs;
+        // Centrato sulla cella 16px del player; ancorato col baricentro un po'
+        // più in basso così il player sembra "sopra" il mezzo.
+        screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 18 - vh + jitter, { scaleX: vs, scaleY: vs });
+        // Il player "in sella", appena più in alto e centrato sul mezzo.
+        drawPlayer(baseX, baseY - 5 + jitter);
+      } else {
+        const veh = vehicleSprite(vehicle, pos.facing);
+        const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;
+        screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
+        drawPlayer(baseX, baseY - lift + jitter);
+      }
     } else {
       drawPlayer(baseX, baseY);
     }

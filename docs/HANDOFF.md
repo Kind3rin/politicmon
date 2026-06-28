@@ -5,9 +5,38 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 16 — fix rendering EDIFICI (no più duplicati/tagli)**, 2026-06-28 (vedi § REDESIGN sotto).
+Ultimo aggiornamento: **Round 16 — fix EDIFICI + UI/HUD PixelLab (type-badge, slot, grotta, avatar MP)**, 2026-06-28.
 
-### 🔧 Round 16 — fix rendering edifici (feedback utente: "edifici doppi/storti")
+### 🔧 Round 16b — UI/HUD PixelLab + residui
+- **8 TYPE-BADGE** (megafono/ingranaggio/foglia/pugno/rosa/tv/bilancia/stretta-mano)
+  in `ui/type_*.png`, cablati in **GUIDA TIPI, Dex dettaglio, Party, StarterPreview**
+  (`typeIcon` sul chip colorato). Verificato in-game. **NB: gli ID PixelLab dei
+  map-object scadono dopo 8h** → rigenerati da zero (i vecchi ID del round prima
+  erano morti). `setTypeIconLoader(getSpriteImage)` in main.ts collega il loader.
+- **Mobile SLOT** (`ui/slot_cabinet.png`) come **decoro del menu casinò** (basso-dx),
+  NON dietro i rulli: messo dietro i 3 rulli li rendeva illeggibili. Rulli puliti.
+- **GROTTA** con texture roccia: nuovo `MapDef.tileOverrides` (char→PNG per-mappa,
+  non tocca collisioni) → `cave_floor.png`/`cave_rock.png`; uscita `c`→roccia.
+  `WorldScene.tilePng()` applica override poi delega a `tileImage`.
+- **Avatar remoti MP** → ora PNG player (4 viste+walk), nick li distingue; fallback
+  pixmap. (Era l'ultimo personaggio a pixmap.)
+- **DECISIONI "non cablare" (peggiorerebbero / nessun valore)**:
+  - **Barra HP** (`ui/hpbar.png` scaricato ma NON cablato): la barra è alta 7px e
+    leggibile; una cornice 9-slice 192px la ingombrerebbe. L'utente vuole HP leggibili.
+  - **Title logo/podio/filetto**: già c'è `public/title-bg.png` (splash AI 240x180 a
+    tutto schermo) + logo testo bitmap nitido scalato 3x con filetto tricolore. Un
+    logo-PNG peggiorerebbe leggibilità/coerenza. Podio/palazzo procedurali sono solo
+    fallback (raramente visti). **Tenuto com'è.**
+  - **`MONSTER_ACTION_ART`** (bocca urlante): **codice morto** per le specie attive —
+    in `BattleScene.drawMonster` il ramo PNG (`monsterImage`) vince SEMPRE e ignora
+    `art`/`useAction`; tutte le 8 specie con action-art sono in `MONSTERS_WITH_PNG`.
+    L'affondo usa il base PNG con squash/stretch. Resta come fallback se una specie
+    futura non avrà PNG. **Nessun lavoro utile.**
+  - **Tastiere Nickname/Chat**: griglia di tasti = testo dinamico; un PNG non aiuta.
+  - **Tappeto `c`**: nel palazzo (colle) è una passatoia rossa coerente → tenuto pixmap;
+    in grotta è stato sostituito con roccia via override.
+
+### 🔧 Round 16a — fix rendering edifici (feedback utente: "edifici doppi/storti")
 Gli edifici multi-tile col building-PNG erano **spezzati/duplicati/tagliati**:
 - `bar eQQe` e `palestre y/B/x` venivano resi come 3 micro-edifici affiancati
   (il rilevamento blocco confrontava il **char identico**, non il **gruppo PNG**).
@@ -50,23 +79,25 @@ esaustivo di ogni char/scena). Tracking asset: `scripts/pixellab-assets.json`,
   `cornerMask`/`wangSrc`, `WANG_INDEX=[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]`).
 - **Icone borsa** (scheda/caffè/spritz/mojito/maalox), **cornice dialog 9-slice**
   (tutti i box/menu/HP), **sfondo battaglia**, **pickup scheda**.
+- **8 type-badge** (icone ideologia su chip) in Types/Dex/Party/Starter (R16b).
+- **Mobile slot** (decoro menu casinò), **grotta roccia** (tileOverrides), **avatar MP** (R16b).
 
-### ❌ ANCORA PIXMAP — MANCANZE da coprire (priorità ~ ordine)
-1. ~~Terreno erba/sentiero/acqua/sabbia~~ FATTO (Wang). ~~Interni pavimento/muro+arredi~~
-   FATTO. ~~Erba alta/fiori/ponte/traliccio/gru~~ FATTO. ~~Porta dorata `g`, Schettino,
-   badge medaglie, scheda cattura~~ FATTO. **Resta**: tappeto `c`, roccia-grotta
-   dedicata (`cave_rock.png` estratto, non cablato — `A` grotta usa muro-interno).
-2. **UI/HUD** (decisione utente: TUTTO PixelLab, ma il TESTO/numeri resta bitmap font):
-   - Type-badge 8 tipi: infra `typeIcon` FATTA + cablato TypesScene; **asset in coda**
-     (8 icone), poi cablare anche Dex/Party/Teach/Battle. Slot casinò cabinet + barra
-     HP frame: **in coda**, da cablare.
-   - Ancora a codice: barre EXP/SONDAGGI, icone stato, freccia guida, tastiere
-     Nickname/Chat, title logo/podio/filetto, banner evento, tag nome-mappa.
-3. **MOSTRI**: `MONSTER_ACTION_ART` (frame bocca-urlante, 8 specie) ancora pixmap
-   (in battaglia il base è PNG ma l'affondo usa il pixmap urlante).
-4. ~~**PALAZZO** colonne/bandiere esposti~~ FATTO R16 (C/G come facciata, inglobati nel PNG).
-5. **PERSONAGGI**: **avatar remoti MP** (usano `charSprite` pixmap, non PNG).
-   (Schettino al timone = già `chars/schettino.png` PNG, R14.)
+### ❌ ANCORA PIXMAP — residui (per ognuno: decisione presa, vedi § Round 16b)
+Tutti i residui sono stati VALUTATI; quelli sotto restano pixmap **per scelta
+motivata** (peggiorerebbero leggibilità o non danno valore), non per dimenticanza:
+1. **Barra HP frame** — `ui/hpbar.png` scaricato, NON cablato (ingombrerebbe la barra
+   7px leggibile). Se si vuole ritentare: serve un frame SOTTILE, e tenere i numeri sopra.
+2. **Title logo/podio** — bg AI + logo bitmap nitido, tenuto com'è (un PNG peggiora).
+3. **`MONSTER_ACTION_ART`** — codice morto (il PNG vince sempre in battaglia). No-op.
+4. **Tastiere Nickname/Chat** — testo dinamico, PNG non aiuta.
+5. **Tappeto `c`** palazzo — passatoia rossa coerente, tenuta (in grotta = roccia).
+6. **Micro-UI a codice** (basso valore, testo-centriche): barre EXP/SONDAGGI, icone
+   stato (IND/SCA/GAF), freccia guida, banner BREAKING NEWS, tag nome-mappa. Sono
+   composizioni di rect+testo già leggibili; PixelLab darebbe poco e rischia rumore.
+
+> In pratica il redesign grafico **sostanziale** è completo: mondo, personaggi,
+> edifici, mostri, oggetti, terreno, interni, grotta, UI principali = PixelLab.
+> Ciò che resta pixmap è per leggibilità/valore, documentato sopra.
 6. **MOSTRI**: `MONSTER_ACTION_ART` (frame bocca-urlante, 8 specie, pixmap);
    `BALLOT_ART` (scheda lanciata in battaglia); `BADGE_ART` (medaglie 12x12).
 7. **UI/HUD (tutto a codice)**: barre HP/EXP/SONDAGGI, **type-badge** 8 tipi

@@ -1888,15 +1888,22 @@ export class WorldScene implements Scene {
       const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
       const vehImg = vehicleImage(vehicle, pos.facing);
       if (vehImg) {
-        // PNG vista dall'alto, 32px, centrato sotto il player (mezzo a terra).
-        const vs = 28 / vehImg.height; // ~28px, un filo più largo del player
+        // Mezzi CHIUSI (auto, ruspa): vista dall'alto, il player è DENTRO →
+        // si disegna solo il veicolo (più grande, riempie la cella). I mezzi
+        // APERTI (monopattino): il player sta SOPRA, visibile in sella.
+        const enclosed = vehicle === "auto" || vehicle === "ruspa";
+        const target = enclosed ? 26 : 24;
+        const vs = target / vehImg.height;
         const vw = vehImg.width * vs;
         const vh = vehImg.height * vs;
-        // Centrato sulla cella 16px del player; ancorato col baricentro un po'
-        // più in basso così il player sembra "sopra" il mezzo.
-        screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 18 - vh + jitter, { scaleX: vs, scaleY: vs });
-        // Il player "in sella", appena più in alto e centrato sul mezzo.
-        drawPlayer(baseX, baseY - 5 + jitter);
+        if (enclosed) {
+          // Solo l'auto/ruspa, centrata sulla cella, ancorata in basso.
+          screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+        } else {
+          // Monopattino sotto, player in sella sopra.
+          screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+          drawPlayer(baseX, baseY - 5 + jitter);
+        }
       } else {
         const veh = vehicleSprite(vehicle, pos.facing);
         const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;

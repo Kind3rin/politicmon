@@ -16,8 +16,11 @@ const shot = await page.evaluate(async () => {
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
   preloadSprites({
-    "player:south": "chars/player_south.png", "veh:auto": "chars/auto.png",
-    "veh:ruspa": "chars/ruspa.png", "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png"
+    "player:south": "chars/player_south.png", "player:north": "chars/player_north.png",
+    "player:east": "chars/player_east.png", "player:west": "chars/player_west.png",
+    "veh:auto:south": "chars/auto_south.png", "veh:auto:north": "chars/auto_north.png",
+    "veh:auto:east": "chars/auto_east.png", "veh:auto:west": "chars/auto_west.png",
+    "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png"
   });
   await new Promise((r) => setTimeout(r, 1500));
   const canvas = document.createElement("canvas");
@@ -29,7 +32,7 @@ const shot = await page.evaluate(async () => {
     state.flags["intro-done"] = true;
     state.party = [createMonster("giorgetta", 18)];
     state.vehicle = veh;
-    state.pos = { mapId: "borgo", x: 8, y: 8, facing };
+    state.pos = { mapId: "borgo", x: 14, y: 9, facing };
     const stack = new SceneStack();
     stack.push(new WorldScene(stack, input, state));
     for (let i = 0; i < 6; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }

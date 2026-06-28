@@ -5,7 +5,16 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 20 — PixelLab style foundation scaricato e integrato**, 2026-06-28.
+Ultimo aggiornamento: **Round 21 — PixelLab edifici e props mondo**, 2026-06-28.
+
+### 🎨 Round 21 — PixelLab edifici e props mondo
+FATTO R21:
+- Rigenerati in PixelLab e integrati: lab, bar, gym, casino, palazzo,
+  sign, fence, tallgrass, flowers, counter, table, shelf, plant, bed, machine,
+  girder, crane, gold door, wall interior.
+- Aggiornato manifest con batch `world-buildings-props-2026-06-28`.
+- Non sovrascritto `floor_wood.png`: la generazione PixelLab era quasi vuota,
+  quindi resta da rifare con workflow terrain/tile più adatto.
 
 ### 🎨 Round 20 — PixelLab style foundation
 FATTO R20:

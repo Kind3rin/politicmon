@@ -66,6 +66,97 @@
       ]
     },
     {
+      "id": "world-buildings-props-2026-06-28",
+      "tool": "create_map_object",
+      "state": "downloaded",
+      "styleReference": "same style foundation: cozy top-down Italian RPG, clean outlines, natural palette",
+      "outputs": [
+        {
+          "file": "tiles/build_lab.png",
+          "objectId": "17a25447-b4f2-44c1-96e5-4e2b3c008590"
+        },
+        {
+          "file": "tiles/build_bar.png",
+          "objectId": "4dfab069-271b-483c-af24-01206668fa5b"
+        },
+        {
+          "file": "tiles/build_gym.png",
+          "objectId": "39a18139-488d-4c29-a6d5-cd990ed9d691"
+        },
+        {
+          "file": "tiles/build_casino.png",
+          "objectId": "04e8f3e8-aaf3-4802-94f8-cfe1da67b678"
+        },
+        {
+          "file": "tiles/build_palace.png",
+          "objectId": "5c7d4d58-a367-438a-92c4-c2e35c101c17"
+        },
+        {
+          "file": "tiles/sign.png",
+          "objectId": "9b785678-a8f6-4044-8c60-f1f5f3b54a60"
+        },
+        {
+          "file": "tiles/fence.png",
+          "objectId": "79fd7366-6ce8-4b38-bc0f-28326e51d2ea"
+        },
+        {
+          "file": "tiles/obj_tallgrass.png",
+          "objectId": "9ccf5612-b433-4fec-ba11-4fd868df41e5"
+        },
+        {
+          "file": "tiles/obj_flowers.png",
+          "objectId": "33ad5a08-1d5f-4201-81ec-822597e72065"
+        },
+        {
+          "file": "tiles/obj_counter.png",
+          "objectId": "b7d040aa-ac42-4149-88dc-1ce78b35ffc1"
+        },
+        {
+          "file": "tiles/obj_table.png",
+          "objectId": "f2459401-d04a-4f2a-ace8-4e6484f1627f"
+        },
+        {
+          "file": "tiles/obj_shelf.png",
+          "objectId": "eae736bc-5a24-4455-8c6b-7c77e133c79d"
+        },
+        {
+          "file": "tiles/obj_plant.png",
+          "objectId": "9ac97c63-ae5b-4131-95ff-27b27d611385"
+        },
+        {
+          "file": "tiles/obj_bed.png",
+          "objectId": "548c10e5-5273-4680-9a29-1d4857c527c9"
+        },
+        {
+          "file": "tiles/obj_machine.png",
+          "objectId": "149aac1d-a60f-4de9-aa43-8ab4676f6da2"
+        },
+        {
+          "file": "tiles/obj_girder.png",
+          "objectId": "e3db5fc5-6f00-45f6-bf11-0a4a428750fa"
+        },
+        {
+          "file": "tiles/obj_crane.png",
+          "objectId": "0e67e125-c128-44a5-92d4-b487935a55ef"
+        },
+        {
+          "file": "tiles/obj_golddoor.png",
+          "objectId": "62c455ca-e4ec-4b56-9921-eea0af3bcc13"
+        },
+        {
+          "file": "tiles/wall_interior.png",
+          "objectId": "d77dad05-5a5d-4327-b3f4-35d41f4fdb55"
+        }
+      ],
+      "skipped": [
+        {
+          "file": "tiles/floor_wood.png",
+          "objectId": "683b5b0b-2835-4e75-941e-e4f38ce0e57e",
+          "reason": "Generated too close to empty/transparent; keep existing asset until a better terrain-tile workflow."
+        }
+      ]
+    },
+    {
       "id": "missing-item-icons-2026-06-28",
       "tool": "create_map_object",
       "state": "downloaded",

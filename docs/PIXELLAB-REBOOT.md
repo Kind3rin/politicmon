@@ -53,3 +53,5 @@ Docs: https://api.pixellab.ai/mcp/docs
 
 - `style-foundation-2026-06-28`: Wang grass/path, Wang water/sand, house, tree,
   dialog frame, player walk, professor walk, guard walk.
+- `world-buildings-props-2026-06-28`: lab, bar, gym, casino, palazzo, sign,
+  fence, tallgrass, flowers, interni principali, cantiere, gold door, wall.

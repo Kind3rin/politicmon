@@ -23,8 +23,9 @@ const shots = await page.evaluate(async () => {
   // Preload mostro + sfondo battaglia + cornice 9-slice.
   const { preloadSprites, loadPanelImage } = await import("/src/engine/assets.ts");
   monsterImage("giorgiagon");
-  preloadSprites({ "battle:bg": "ui/battle_bg.png" });
-  await new Promise((r) => setTimeout(r, 1400));
+  monsterImage("giorgetta");
+  preloadSprites({ "battle:bg": "ui/battle_bg.png", "mon:giorgetta": "monsters/giorgetta.png", "mon:giorgiagon": "monsters/giorgiagon.png" });
+  await new Promise((r) => setTimeout(r, 1600));
 
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;

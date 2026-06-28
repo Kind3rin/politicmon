@@ -64,6 +64,13 @@ export function spriteStatus(id: string): SpriteStatus {
   return registry.get(id)?.status ?? "idle";
 }
 
+// Immagine generica per id+path (sfondi scena, ecc.): ritorna l'HTMLImageElement
+// pronto o null, avviando il caricamento lazy. Wrapper su getSpriteImage con
+// chiave esplicita.
+export function sceneImage(id: string, path: string): HTMLImageElement | null {
+  return getSpriteImage(id, path);
+}
+
 // Carica la cornice 9-slice PixelLab e la registra su `screen` appena pronta.
 // Non bloccante: finché non c'è, `panel()` usa il fallback Game Boy a codice.
 export function loadPanelImage(

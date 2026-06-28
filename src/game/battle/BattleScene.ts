@@ -7,6 +7,7 @@ import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
+import { sceneImage } from "../../engine/assets";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
 import { zoneProgress } from "../../data/dexzones";
@@ -1397,8 +1398,15 @@ export class BattleScene implements Scene {
   draw(screen: Screen): void {
     const shakeX = this.shake > 0 ? Math.round(Math.sin(this.shake * 60) * 2) : 0;
     screen.clear("#f0f0e0");
-    screen.rect(0, 0, VIEW_W, 76, "#d8e8c8");
-    screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, "#e8e0c8");
+    // Sfondo battaglia PixelLab (se pronto) dietro tutto, fino al box azioni;
+    // altrimenti le due fasce di colore (cielo/terra) di prima.
+    const bg = sceneImage("battle:bg", "ui/battle_bg.png");
+    if (bg) {
+      screen.image(bg, 0, 0, VIEW_W, VIEW_H - 44);
+    } else {
+      screen.rect(0, 0, VIEW_W, 76, "#d8e8c8");
+      screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, "#e8e0c8");
+    }
 
     // Slide-in iniziale degli sprite.
     const slide = Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));

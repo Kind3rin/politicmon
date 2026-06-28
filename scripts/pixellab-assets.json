@@ -8,7 +8,11 @@
     { "pal": "boss", "charId": "4e18d7c1-79c3-4619-b9b9-159126b6b4ec" }
   ],
   "ui": [
-    { "id": "dialog", "uiId": "1a085cdc-47e1-49d9-87f6-2bd16d20741d" }
+    { "id": "dialog_old", "uiId": "1a085cdc-47e1-49d9-87f6-2bd16d20741d" },
+    { "id": "dialog9slice", "uiId": "28f49270-8554-4e35-a4cd-87a70acccb0f", "note": "salva ui/dialog.png, border ~12, gia cablato via loadPanelImage" }
+  ],
+  "backgrounds": [
+    { "id": "battle_bg", "objectId": "b0500fed-af7a-4ab5-a07c-3dd651e3c95a", "note": "sfondo battaglia 256x160" }
   ],
   "icons": [
     { "item": "scheda", "objectId": "3fc68774-f5df-4873-92f0-5598c22e3da6" },

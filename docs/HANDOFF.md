@@ -5,7 +5,37 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 18 — direzione design STARDEW/3-4 COZY: terreno+oggetti tenui (no più "vecchio")**, 2026-06-28.
+Ultimo aggiornamento: **Round 20 — PixelLab style foundation scaricato e integrato**, 2026-06-28.
+
+### 🎨 Round 20 — PixelLab style foundation
+FATTO R20:
+- Confermato abbonamento PixelLab attivo: Tier 2 Pixel Artisan.
+- Generato e integrato primo blocco grafico nuovo: Wang grass/path,
+  Wang water/sand, house, tree, dialog frame, player 4-dir + walk,
+  professor 4-dir + walk, guard 4-dir + walk.
+- Aggiornato `scripts/pixellab-reboot-assets.json` con gli ID MCP del batch
+  `style-foundation-2026-06-28`.
+- Normalizzato `ui/dialog.png` da 192x192 a 48x48 per la 9-slice del gioco;
+  border in `src/main.ts` portato a 8.
+
+Regola nuova richiesta utente: dopo ogni blocco di modifiche completato, fare
+commit e push, così il gioco è testabile da device.
+
+### 🎨 Round 19 — PixelLab reboot da zero
+Richiesta utente: rifare **tutta** la grafica in PixelLab da zero, tenendo le
+logiche di gameplay. Decisione operativa: il vecchio compromesso "alcuni residui
+pixmap per scelta" e superato. Ora ogni fallback visibile e debito temporaneo.
+
+FATTO R19:
+- Configurato MCP globale `pixellab` in Codex (`https://api.pixellab.ai/mcp`).
+  Serve restart della sessione per far comparire i tool `create_*`/`get_*`.
+- Aggiunto source of truth `scripts/pixellab-reboot-assets.json`.
+- Aggiunto guardrail `scripts/check-pixellab-coverage.mjs` con script npm
+  `pixellab:coverage` e `pixellab:coverage:strict`.
+- Aggiunta guida corta `docs/PIXELLAB-REBOOT.md`.
+
+Regola R19: non toccare salvataggi, mappe, quest, formule battaglia, multiplayer
+o progressione mentre si sostituisce la grafica.
 
 ### 🎨 Round 18 — direzione di design unica (Stardew/RPG 3/4 cozy)
 Feedback utente: "è tutto sbagliato, va rifatto il gioco come INSIEME coerente,

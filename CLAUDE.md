@@ -4,6 +4,10 @@ Clone di Pokémon (stile GBA) a tema satira politica italiana. TypeScript + Vite
 canvas 2D puro, zero dipendenze runtime (tranne `trystero` per il multiplayer P2P).
 Risoluzione interna 240x180 scalata pixel-perfect.
 
+> **PixelLab reboot attivo.** Il vecchio vincolo "grafica tutta da codice" non vale
+> piu per la grafica visibile: l'utente vuole rifare tutto in PixelLab da zero,
+> mantenendo solo le logiche di gameplay. Vedi `docs/PIXELLAB-REBOOT.md`.
+
 > **Nuova sessione?** Leggi prima `docs/HANDOFF.md` (stato, decisioni prese,
 > trappole, storico). Poi `docs/ARCHITETTURA.md` per la mappa dei moduli e
 > `docs/GLOSSARIO.md` per il lessico. Questo file resta la guida operativa rapida.

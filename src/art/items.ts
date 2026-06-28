@@ -1,14 +1,12 @@
 import type { Pixmap, Screen } from "../engine/screen";
-import { ITEMS } from "../data/items";
+import { BAG_ORDER, ITEMS } from "../data/items";
 import { MOVES } from "../data/moves";
 import { TYPE_COLORS } from "../data/poltypes";
 import { getSpriteImage } from "../engine/assets";
 
-// Redesign PixelLab: alcune icone item hanno un PNG dedicato in
-// public/sprites/items/. `ITEMS_WITH_PNG` elenca le migrate.
-const ITEMS_WITH_PNG = new Set<string>([
-  "scheda", "caffe", "spritz", "mojito", "maalox"
-]);
+// PixelLab reboot: prova un PNG per ogni item canonico. Finche il file manca
+// resta il fallback pixmap; quando si aggiunge l'asset non serve toccare codice.
+const ITEMS_WITH_PNG = new Set<string>(BAG_ORDER);
 
 function itemImage(itemId: string): HTMLImageElement | null {
   if (!ITEMS_WITH_PNG.has(itemId)) {

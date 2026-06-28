@@ -90,7 +90,7 @@ const stack = new SceneStack();
 
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
-loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 7);
+loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 8);
 
 // Autotiling Wang del terreno: registra i fogli erba/sentiero e acqua/sabbia.
 loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);

@@ -9,6 +9,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
+    "pixellab:coverage": "node scripts/check-pixellab-coverage.mjs",
+    "pixellab:coverage:strict": "node scripts/check-pixellab-coverage.mjs --strict",
     "package:portable": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-portable.ps1"
   },
   "devDependencies": {

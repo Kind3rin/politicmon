@@ -1,0 +1,324 @@
+{
+  "version": 1,
+  "objective": "Regenerate the complete Politicmon presentation layer in PixelLab while preserving gameplay logic, map data, battle math, saves, quests, and multiplayer.",
+  "style": {
+    "direction": "cozy 3/4 RPG pixel art, Stardew-like readability, Italian political satire, soft natural palette, no neon terrain, consistent outline weight",
+    "canvas": "240x180 internal resolution, 16px world tile, pixel-perfect nearest-neighbor scaling",
+    "viewRules": [
+      "Moving directional actors use 4 cardinal views plus walking frames.",
+      "Static objects use one transparent view unless they are entered, boarded, or direction-sensitive.",
+      "Terrain transitions use PixelLab Wang tilesets, not one-off noisy tile swaps.",
+      "Text remains bitmap font; all frames, chips, icons, panels, props, terrain, actors, monsters, and battle backdrops come from PixelLab."
+    ]
+  },
+  "mcp": {
+    "server": "pixellab",
+    "docs": "https://api.pixellab.ai/mcp/docs",
+    "note": "Use MCP tools directly after Codex restart. Do not use REST creation endpoints from scripts; direct HTTP is only for public download URLs returned by MCP."
+  },
+  "generatedBatches": [
+    {
+      "id": "style-foundation-2026-06-28",
+      "tool": "create_topdown_tileset + create_map_object + create_ui_asset + create_character + animate_character",
+      "state": "downloaded",
+      "styleReference": "cozy 3/4 top-down RPG pixel art, natural green/earth palette, clean outlines, readable 16px world scale",
+      "outputs": [
+        {
+          "file": "tiles/wang_grass_path.png",
+          "tilesetId": "c7185dd6-1691-4cec-a482-201680720516",
+          "lowerBaseTileId": "4fecc765-4676-4f86-b674-c7ec94f6a756",
+          "upperBaseTileId": "a9d5cc46-9288-44f3-8d03-aedbde2b5472"
+        },
+        {
+          "file": "tiles/wang_water_sand.png",
+          "tilesetId": "8a53199f-00a9-47d6-b507-57b6d0c48688",
+          "lowerBaseTileId": "29f180d0-5d3b-4bfe-bf34-5db69931c8a5",
+          "upperBaseTileId": "0d632897-cf4f-4071-ae58-17323a2f2667"
+        },
+        {
+          "file": "tiles/build_house.png",
+          "objectId": "448d136a-5547-48bb-890a-a01f2f48302e"
+        },
+        {
+          "file": "tiles/tree.png",
+          "objectId": "cd391468-5ce7-4eaf-90d5-0544abbaf692"
+        },
+        {
+          "file": "ui/dialog.png",
+          "uiAssetId": "bad8735a-f2bd-4e1d-a048-7e1cbb88d5eb",
+          "postprocess": "nearest-neighbor resize 192x192 -> 48x48"
+        },
+        {
+          "file": "chars/player_*",
+          "characterId": "2087e1e8-7aae-43e9-aab5-9d5ba1508cae",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_professor_*",
+          "characterId": "69a64602-2f29-4b6e-87af-1d6128e3fe4c",
+          "animation": "walking-4-frames"
+        },
+        {
+          "file": "chars/npc_guard_*",
+          "characterId": "eb8be47b-865c-46ef-aaae-7bcd54327651",
+          "animation": "walking-4-frames"
+        }
+      ]
+    },
+    {
+      "id": "missing-item-icons-2026-06-28",
+      "tool": "create_map_object",
+      "state": "downloaded",
+      "outputs": [
+        {
+          "file": "items/schedona.png",
+          "objectId": "5142260c-8f3a-4d6b-8436-be776a743b9a"
+        },
+        {
+          "file": "items/tessera.png",
+          "objectId": "dd756e6f-7e89-49fb-9188-abc1ed4074de"
+        },
+        {
+          "file": "items/divisa.png",
+          "objectId": "1e7fa080-0538-4cb6-a2e9-5133081e69e2"
+        },
+        {
+          "file": "items/dirVaffa.png",
+          "objectId": "5c0ab2df-594d-4004-8dbd-b59e6f093750"
+        },
+        {
+          "file": "items/dirDecreto.png",
+          "objectId": "b1e06474-fc9e-448d-9599-3dfed5a4573f"
+        },
+        {
+          "file": "items/dirWhatever.png",
+          "objectId": "af0390b9-b535-4891-affa-7b480b119c8b"
+        },
+        {
+          "file": "items/dirFiamma.png",
+          "objectId": "e793ab7a-f4dc-49f1-9249-7dba061f99ed"
+        },
+        {
+          "file": "items/dirSciopero.png",
+          "objectId": "8e283a76-2a95-4f84-a608-d250cb3a6f84"
+        },
+        {
+          "file": "items/dirInciucio.png",
+          "objectId": "d2b98dfb-1d41-4705-a8a3-7b4756c41d27"
+        },
+        {
+          "file": "items/dirBunga.png",
+          "objectId": "36e56195-6cb6-495f-bd51-ed2f4620cc8f"
+        },
+        {
+          "file": "items/dirGreen.png",
+          "objectId": "c37045fa-24ca-475b-995e-763765e1256a"
+        }
+      ]
+    }
+  ],
+  "delegatedManifests": [
+    {
+      "path": "scripts/pixellab-monsters.json",
+      "domain": "monsters",
+      "outputTemplate": "monsters/{id}.png",
+      "state": "regenerate-from-zero"
+    }
+  ],
+  "assets": [
+    {
+      "id": "player",
+      "domain": "characters",
+      "tool": "create_character + animate_character",
+      "prompt": "young Italian RPG protagonist, neutral clothes, red accent, cozy 3/4 RPG pixel art, readable at 22px in game",
+      "output": [
+        "chars/player_south.png",
+        "chars/player_north.png",
+        "chars/player_east.png",
+        "chars/player_west.png",
+        "chars/player_south_w0.png",
+        "chars/player_south_w1.png",
+        "chars/player_south_w2.png",
+        "chars/player_south_w3.png",
+        "chars/player_north_w0.png",
+        "chars/player_north_w1.png",
+        "chars/player_north_w2.png",
+        "chars/player_north_w3.png",
+        "chars/player_east_w0.png",
+        "chars/player_east_w1.png",
+        "chars/player_east_w2.png",
+        "chars/player_east_w3.png",
+        "chars/player_west_w0.png",
+        "chars/player_west_w1.png",
+        "chars/player_west_w2.png",
+        "chars/player_west_w3.png"
+      ],
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "npc-archetypes",
+      "domain": "characters",
+      "tool": "create_character + animate_character",
+      "output": [
+        "chars/npc_professor_south.png",
+        "chars/npc_guard_south.png",
+        "chars/npc_kid_south.png",
+        "chars/npc_journalist_south.png",
+        "chars/npc_boss_south.png",
+        "chars/npc_granny_south.png",
+        "chars/npc_rival_south.png",
+        "chars/npc_influencer_south.png",
+        "chars/npc_aide_south.png",
+        "chars/npc_barista_south.png"
+      ],
+      "note": "Each archetype must include north/east/west static frames and 4 walking frames per direction; south is listed here as the coverage representative.",
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "vehicles",
+      "domain": "characters",
+      "tool": "create_8_direction_object or create_character",
+      "output": [
+        "chars/auto_south.png",
+        "chars/auto_north.png",
+        "chars/auto_east.png",
+        "chars/auto_west.png",
+        "chars/ruspa_south.png",
+        "chars/ruspa_north.png",
+        "chars/ruspa_east.png",
+        "chars/ruspa_west.png",
+        "chars/monopattino_south.png",
+        "chars/monopattino_north.png",
+        "chars/monopattino_east.png",
+        "chars/monopattino_west.png",
+        "chars/ferry.png",
+        "chars/schettino.png"
+      ],
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "world-terrain-wang",
+      "domain": "tiles",
+      "tool": "create_topdown_tileset",
+      "output": [
+        "tiles/wang_grass_path.png",
+        "tiles/wang_water_sand.png"
+      ],
+      "note": "First pass keeps existing map projection. Add grass-water and grass-sand only if visual tests show hard edges.",
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "solid-terrain",
+      "domain": "tiles",
+      "tool": "create_tiles_pro or create_map_object",
+      "output": [
+        "tiles/floor_wood.png",
+        "tiles/wall_interior.png",
+        "tiles/cave_floor.png",
+        "tiles/cave_rock.png",
+        "tiles/deck_asphalt.png",
+        "tiles/sand.png"
+      ],
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "world-objects",
+      "domain": "tiles",
+      "tool": "create_map_object",
+      "output": [
+        "tiles/tree.png",
+        "tiles/sign.png",
+        "tiles/fence.png",
+        "tiles/obj_tallgrass.png",
+        "tiles/obj_flowers.png",
+        "tiles/obj_bed.png",
+        "tiles/obj_table.png",
+        "tiles/obj_shelf.png",
+        "tiles/obj_plant.png",
+        "tiles/obj_counter.png",
+        "tiles/obj_machine.png",
+        "tiles/obj_girder.png",
+        "tiles/obj_crane.png",
+        "tiles/obj_golddoor.png"
+      ],
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "buildings",
+      "domain": "tiles",
+      "tool": "create_map_object",
+      "output": [
+        "tiles/build_house.png",
+        "tiles/build_lab.png",
+        "tiles/build_bar.png",
+        "tiles/build_gym.png",
+        "tiles/build_casino.png",
+        "tiles/build_palace.png"
+      ],
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "items",
+      "domain": "items",
+      "tool": "create_map_object",
+      "output": [
+        "items/scheda.png",
+        "items/schedona.png",
+        "items/caffe.png",
+        "items/spritz.png",
+        "items/mojito.png",
+        "items/maalox.png",
+        "items/tessera.png",
+        "items/divisa.png",
+        "items/dirVaffa.png",
+        "items/dirDecreto.png",
+        "items/dirWhatever.png",
+        "items/dirFiamma.png",
+        "items/dirSciopero.png",
+        "items/dirInciucio.png",
+        "items/dirBunga.png",
+        "items/dirGreen.png"
+      ],
+      "state": "regenerate-from-zero"
+    },
+    {
+      "id": "ui-core",
+      "domain": "ui",
+      "tool": "create_ui_asset + create_map_object",
+      "output": [
+        "ui/dialog.png",
+        "ui/battle_bg.png",
+        "ui/hpbar.png",
+        "ui/badge.png",
+        "ui/slot_cabinet.png",
+        "ui/type_populismo.png",
+        "ui/type_tecno.png",
+        "ui/type_destra.png",
+        "ui/type_sinistra.png",
+        "ui/type_centro.png",
+        "ui/type_media.png",
+        "ui/type_istituzione.png",
+        "ui/type_verde.png"
+      ],
+      "note": "Also covers status icons, guide arrow, map tag, news banner, and casino reel symbols in later code passes.",
+      "state": "regenerate-from-zero"
+    }
+  ],
+  "codeDebtPatterns": [
+    {
+      "id": "screen-sprite-fallbacks",
+      "pattern": "screen.sprite(",
+      "meaning": "Pixmap rendering path still exists. It is allowed as temporary fallback only until the matching PixelLab asset is loaded."
+    },
+    {
+      "id": "procedural-pixmaps",
+      "pattern": "pix(",
+      "meaning": "Procedural art definitions still exist. Keep gameplay data; replace visible presentation with PixelLab assets."
+    },
+    {
+      "id": "manual-ui-rects",
+      "pattern": "screen.rect(",
+      "meaning": "Manual UI/FX drawing. Some combat particles and text backgrounds can remain code; frames/icons/chips should move to PixelLab."
+    }
+  ]
+}

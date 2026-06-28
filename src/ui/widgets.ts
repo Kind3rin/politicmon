@@ -2,6 +2,7 @@ import type { Input } from "../engine/input";
 import { CHAR_W, LINE_H } from "../engine/font";
 import { Screen, VIEW_H, VIEW_W, type Pixmap } from "../engine/screen";
 import { audio } from "../engine/audio";
+import { getSpriteImage } from "../engine/assets";
 
 export const INK = "#10141f";
 export const PAPER = "#f8f8f0";
@@ -310,12 +311,20 @@ export function drawHpBar(
   max: number
 ): void {
   const ratio = Math.max(0, Math.min(1, current / max));
-  const fillW = Math.round((width - 2) * ratio);
+  const hpFrame = getSpriteImage("ui:hpbar", "ui/hpbar.png");
+  const insetX = hpFrame ? Math.max(2, Math.round(width * 0.045)) : 1;
+  const insetY = hpFrame ? 2 : 1;
+  const innerH = hpFrame ? 3 : 5;
+  const fillW = Math.round((width - insetX * 2) * ratio);
   const color = ratio > 0.5 ? "#48b848" : ratio > 0.2 ? "#d8b838" : "#d04848";
   screen.text("PV", x - 14, y - 1, INK);
-  screen.frame(x, y, width, 7, INK);
-  screen.rect(x + 1, y + 1, width - 2, 5, "#c8c8c0");
+  if (hpFrame) {
+    screen.imageSprite(hpFrame, x, y, { scaleX: width / hpFrame.width, scaleY: 7 / hpFrame.height });
+  } else {
+    screen.frame(x, y, width, 7, INK);
+  }
+  screen.rect(x + insetX, y + insetY, width - insetX * 2, innerH, "#c8c8c0");
   if (fillW > 0) {
-    screen.rect(x + 1, y + 1, fillW, 5, color);
+    screen.rect(x + insetX, y + insetY, fillW, innerH, color);
   }
 }

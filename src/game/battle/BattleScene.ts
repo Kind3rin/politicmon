@@ -1901,7 +1901,14 @@ export class BattleScene implements Scene {
         }
       }
     }
-    screen.sprite("ballot", BALLOT_ART, x - 5, y - 5, { scale: 1 });
+    // Scheda elettorale (cattura): PNG PixelLab se pronto, altrimenti pixmap.
+    const ballotImg = sceneImage("item:scheda", "items/scheda.png");
+    if (ballotImg) {
+      const s = 14 / Math.max(ballotImg.width, ballotImg.height);
+      screen.imageSprite(ballotImg, x - (ballotImg.width * s) / 2, y - (ballotImg.height * s) / 2, { scaleX: s, scaleY: s });
+    } else {
+      screen.sprite("ballot", BALLOT_ART, x - 5, y - 5, { scale: 1 });
+    }
   }
 
   private drawFoeBox(screen: Screen): void {

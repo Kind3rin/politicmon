@@ -23,7 +23,10 @@ const shots = await page.evaluate(async () => {
     "obj:L": "tiles/obj_bed.png", "obj:t": "tiles/obj_table.png", "obj:b": "tiles/obj_shelf.png",
     "obj:P": "tiles/obj_plant.png", "obj:h": "tiles/obj_counter.png", "obj:k": "tiles/obj_machine.png",
     "obj:~": "tiles/obj_tallgrass.png", "obj:,": "tiles/obj_flowers.png",
-    "obj:J": "tiles/obj_girder.png", "obj:K": "tiles/obj_crane.png"
+    "obj:J": "tiles/obj_girder.png", "obj:K": "tiles/obj_crane.png",
+    "obj:g": "tiles/obj_golddoor.png", "char:schettino": "chars/schettino.png",
+    "build:M": "tiles/build_palace.png", "build:$": "tiles/build_casino.png",
+    "npc:guard:south": "chars/npc_guard_south.png"
   });
   preloadSprites({
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:f": "tiles/fence.png",
@@ -61,7 +64,7 @@ const shots = await page.evaluate(async () => {
       res(canvas.toDataURL("image/png"));
     }, 2500));
   }
-  return { route1: await shotMap("route1", 14, 5), borgo: await shotMap("stretto", 14, 11) };
+  return { route1: await shotMap("colle", 5, 9), borgo: await shotMap("stretto", 14, 9) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);

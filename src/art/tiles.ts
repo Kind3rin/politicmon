@@ -36,9 +36,10 @@ export function tileImage(ch: string): HTMLImageElement | null {
 // row-major nel foglio 4x4. La convenzione del foglio PixelLab e dedotta dalla
 // metadata del tileset; se l'ordine non combacia, basta correggere questa tabella
 // (16 valori) senza toccare l'algoritmo.
+// mask (bit 1=TL/NW, 2=TR/NE, 4=BR/SE, 8=BL/SW; upper=1) -> indice tile nel foglio
+// 4x4. Calibrato dalla metadata del tileset PixelLab (corners + bounding_box).
 export const WANG_INDEX: number[] = [
-  // mask (TL,TR,BR,BL) -> tile idx 0..15. Default: identita (idx = mask).
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+  6, 5, 2, 3, 7, 14, 11, 0, 10, 1, 4, 13, 9, 8, 15, 12
 ];
 
 export interface WangSet {

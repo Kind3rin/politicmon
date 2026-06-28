@@ -12,9 +12,11 @@ viste, dove cablare. Spuntare quando FATTO+verificato in-game.
 
 ## 1. TERRENO (priorità MAX — "mappa tutto vecchio")
 TILE_PNG è VUOTO. Erba/sentiero/erba-alta/fiori/acqua/sabbia girano su pixmap.
-- [ ] **Autotiling Wang** vero nel renderer: scegliere la variante (16) per coppia
-  di terreni in base ai 4 vicini → bordi puliti erba↔sentiero, terra↔acqua,
-  terra↔sabbia. Riscrittura del draw-loop tiles in WorldScene.
+- [x] **Autotiling Wang INFRA + CABLAGGIO FATTI**: `Screen.imageRegion`, `cornerMask`,
+  `wangSrc`, `registerWangSet`/`loadWangSet`, `WorldScene.drawWangTerrain` (coppie
+  erba/sentiero e acqua/sabbia). MANCA solo: i 2 fogli Wang reali (rigenerati dopo
+  timeout: 97372961 erba/sentiero, cdc7a236 acqua/sabbia) + calibrare `WANG_INDEX`
+  dalla metadata, poi verifica in-game (bordi morbidi, niente bande).
 - [ ] Tileset Wang: erba→sentiero, erba→acqua, sabbia→acqua, erba→sabbia
   (create_topdown_tileset, 16px). Esistono già `grass_path_wang.png` (non agganciato).
 - [ ] Tile pieni seamless (tileset 6f6cd97e: erba/sentiero/sabbia/roccia/pavimento/marmo).

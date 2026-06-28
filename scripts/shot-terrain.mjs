@@ -12,9 +12,11 @@ const shots = await page.evaluate(async () => {
   const { newGameState } = await import("/src/game/state.ts");
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
   const { createMonster } = await import("/src/game/monster.ts");
-  const { preloadSprites } = await import("/src/engine/assets.ts");
+  const { preloadSprites, loadWangSet } = await import("/src/engine/assets.ts");
+  const { registerWangSet } = await import("/src/art/tiles.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
+  loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
   preloadSprites({
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:f": "tiles/fence.png",
     "build:r": "tiles/build_house.png", "build:u": "tiles/build_lab.png",
@@ -51,7 +53,7 @@ const shots = await page.evaluate(async () => {
       res(canvas.toDataURL("image/png"));
     }, 2500));
   }
-  return { route1: await shotMap("capitale", 14, 7), borgo: await shotMap("capitale", 20, 9) };
+  return { route1: await shotMap("borgo", 8, 13), borgo: await shotMap("borgo", 8, 8) };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }
 save("terrain_route1", shots.route1);

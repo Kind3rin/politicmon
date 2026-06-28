@@ -18,5 +18,13 @@
     { "item": "maalox", "objectId": "979aec75-0ffc-4b36-a7f5-74f410ec6d36" },
     { "item": "tessera", "objectId": "" }
   ],
-  "buildings": []
+  "vehicles": [
+    { "id": "monopattino", "objectId": "fbd490b3-5132-42c2-a386-e9f9566deb7f" }
+  ],
+  "overlays": [
+    { "char": "~", "name": "tallgrass", "objectId": "6376faac-ac9c-4646-bf43-487a070fbaa0" }
+  ],
+  "buildings": [
+    { "name": "house_red", "objectId": "f8e64ea6-6e6c-4cb8-90f6-6c18d38e4586" }
+  ]
 }

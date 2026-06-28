@@ -12,11 +12,10 @@ export const TILE = 16;
 // sentiero è più pulito. L'infrastruttura (tileImage + fallback nel renderer)
 // resta pronta: per riattivare basta rimettere qui le coppie char->png SEAMLESS,
 // o implementare l'autotiling Wang vero (16 varianti per coppia di terreni).
-const TILE_PNG: Record<string, string> = {
-  // I fiori `,` sono sparsi (non si ripetono su grandi aree) -> niente bande,
-  // si può usare la texture PNG senza l'artefatto del tiling.
-  ",": "tiles/flowers16.png",
-};
+// I fiori `,` erano mappati qui ma il PNG ridotto a 16px mostrava un bordo/box
+// che non si fondeva con l'erba -> rimosso. I fiori restano sul Pixmap (pulito)
+// finché non si rigenerano come overlay trasparente.
+const TILE_PNG: Record<string, string> = {};
 
 export function tileImage(ch: string): HTMLImageElement | null {
   const path = TILE_PNG[ch];

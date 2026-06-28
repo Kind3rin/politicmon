@@ -2,6 +2,19 @@ import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalI
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, waterFrames, pix, tileImage, objectImage } from "../../art/tiles";
+import { sceneImage } from "../../engine/assets";
+
+// Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
+// altrimenti la pixmap BALLOT_ART. Disegnato 14px centrato nella cella.
+function drawBallot(screen: Screen, dx: number, dy: number): void {
+  const img = sceneImage("item:scheda", "items/scheda.png");
+  if (img) {
+    const s = 14 / Math.max(img.width, img.height);
+    screen.imageSprite(img, dx + (TILE - img.width * s) / 2, dy + (TILE - img.height * s) / 2, { scaleX: s, scaleY: s });
+  } else {
+    screen.sprite("ballot", BALLOT_ART, dx + 3, dy + 3);
+  }
+}
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
 import { MOVES } from "../../data/moves";
@@ -1794,12 +1807,12 @@ export class WorldScene implements Scene {
       if (this.state.pickedItems.includes(pickup.id) || pickup.hidden) {
         continue; // i tesori nascosti non si disegnano: vanno scovati esaminando
       }
-      screen.sprite("ballot", BALLOT_ART, pickup.x * TILE - camX + 3, pickup.y * TILE - camY + 3);
+      drawBallot(screen, pickup.x * TILE - camX, pickup.y * TILE - camY);
     }
 
     if (this.map.id === "lab" && !this.state.flags["starter-chosen"]) {
       for (const spot of STARTER_SPOTS) {
-        screen.sprite("ballot", BALLOT_ART, spot.x * TILE - camX + 3, spot.y * TILE - camY + 1);
+        drawBallot(screen, spot.x * TILE - camX, spot.y * TILE - camY);
       }
     }
 
@@ -1810,8 +1823,11 @@ export class WorldScene implements Scene {
       const nx = Math.round(npc.dispX) - camX;
       const ny = Math.round(npc.dispY) - camY - 1;
       // PNG PixelLab dell'NPC (4 dir, scalato ai 16px, ancorato in basso) se
-      // l'archetipo è migrato, altrimenti il pixmap parametrico.
-      const npcImg = npcImage(npc.pal, npc.currentFacing);
+      // l'archetipo è migrato, altrimenti il pixmap parametrico. Frame walk
+      // mentre l'NPC fa un passo (stepFrom), così non scivola.
+      const npcMoving = Boolean(npc.stepFrom);
+      const npcWalkCycle = npcMoving ? Math.floor(this.time * 8) % 4 : 0;
+      const npcImg = npcImage(npc.pal, npc.currentFacing, npcWalkCycle, npcMoving);
       if (npcImg) {
         const ns = 22 / npcImg.height;
         const dw = npcImg.width * ns;
@@ -1858,7 +1874,10 @@ export class WorldScene implements Scene {
     const vehicle = this.state.vehicle as VehicleId | null;
     // Disegna il player: PNG PixelLab (4 dir native, scalato ai 16px del mondo,
     // ancorato in basso) se pronto, altrimenti il pixmap con flip.
-    const playerImg = playerImage(pos.facing);
+    // Frame di camminata: alterna i fotogrammi walk mentre il player si muove,
+    // così non "scivola". `walkCycle` è un indice 0..3 derivato dal tempo di passo.
+    const walkCycle = this.moving ? Math.floor(this.moveT * 8) % 4 : 0;
+    const playerImg = playerImage(pos.facing, walkCycle, this.moving);
     const drawPlayer = (px: number, py: number): void => {
       if (playerImg) {
         const ps = 22 / playerImg.height; // altezza target ~22px

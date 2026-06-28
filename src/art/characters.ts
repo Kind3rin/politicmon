@@ -9,8 +9,22 @@ const FACING_FILE: Record<string, string> = {
   down: "south", up: "north", left: "west", right: "east"
 };
 
-export function playerImage(facing: Facing): HTMLImageElement | null {
+// Numero di frame di camminata PixelLab disponibili per il player (0 = solo
+// sprite statico). Quando si scaricano i frame walk (chars/player_<dir>_w<n>.png)
+// si imposta a >0 e il rendering li alterna mentre il player cammina.
+export const PLAYER_WALK_FRAMES = 4;
+
+// `frame` indica il fotogramma di camminata desiderato (0..N-1); con `moving=false`
+// si usa lo sprite a riposo. Se i frame walk non ci sono, ricade sullo statico.
+export function playerImage(facing: Facing, frame = 0, moving = false): HTMLImageElement | null {
   const dir = FACING_FILE[facing] ?? "south";
+  if (moving && PLAYER_WALK_FRAMES > 0) {
+    const f = frame % PLAYER_WALK_FRAMES;
+    const img = getSpriteImage(`player:${dir}:w${f}`, `chars/player_${dir}_w${f}.png`);
+    if (img) {
+      return img;
+    }
+  }
   return getSpriteImage(`player:${dir}`, `chars/player_${dir}.png`);
 }
 
@@ -40,11 +54,22 @@ export const NPC_WITH_PNG = new Set<string>([
   "influencer", "aide", "barista"
 ]);
 
-export function npcImage(palId: string, facing: Facing): HTMLImageElement | null {
+// Archetipi NPC con frame di camminata PixelLab disponibili (chars/npc_<pal>_<dir>_w<n>.png).
+export const NPC_WALK = new Set<string>([]);
+export const NPC_WALK_FRAMES = 4;
+
+export function npcImage(palId: string, facing: Facing, frame = 0, moving = false): HTMLImageElement | null {
   if (!NPC_WITH_PNG.has(palId)) {
     return null;
   }
   const dir = FACING_FILE[facing] ?? "south";
+  if (moving && NPC_WALK.has(palId)) {
+    const f = frame % NPC_WALK_FRAMES;
+    const img = getSpriteImage(`npc:${palId}:${dir}:w${f}`, `chars/npc_${palId}_${dir}_w${f}.png`);
+    if (img) {
+      return img;
+    }
+  }
   return getSpriteImage(`npc:${palId}:${dir}`, `chars/npc_${palId}_${dir}.png`);
 }
 

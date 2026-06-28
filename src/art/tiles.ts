@@ -50,14 +50,19 @@ export function objectImage(ch: string): HTMLImageElement | null {
 // `e`/`Q`, palestre `y`/`B`/`x`). Il renderer rileva l'angolo alto-sx del blocco
 // tetto e disegna il building una volta. Le celle facciata (`m`/`d`/`n`) NON si
 // disegnano separatamente sotto un edificio coperto dal PNG.
+// Building-PNG per char-tetto. La dimensione del PNG (64x48 = 4x3 tile, oppure
+// 96x48 = 6x3) determina quanti tile copre: il renderer lo disegna a dimensione
+// nativa dall'angolo alto-sx. Palestre (y/B/x) e casinò ($) sono blocchi a 6
+// tile di larghezza → PNG 96px.
 const BUILDING_PNG: Record<string, string> = {
-  r: "tiles/build_house.png",
-  u: "tiles/build_lab.png",
-  e: "tiles/build_bar.png",
+  r: "tiles/build_house.png",  // 64x48 (4x3)
+  u: "tiles/build_lab.png",    // 64x48
+  e: "tiles/build_bar.png",    // 64x48
   Q: "tiles/build_bar.png",
-  y: "tiles/build_gym.png",
+  y: "tiles/build_gym.png",    // 96x48 (6x3)
   B: "tiles/build_gym.png",
   x: "tiles/build_gym.png",
+  $: "tiles/build_casino.png", // 96x48 (6x3)
 };
 
 // I char che fanno parte del "tetto" (per il rilevamento del blocco).

@@ -5,17 +5,18 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 27 — PixelLab Politicmon italiani wave 2**, 2026-06-29.
+Ultimo aggiornamento: **Round 28 — PixelLab Politicmon wave 3 + fix battle menu**, 2026-06-29.
 
 ## Handoff domani
 
 Stato repo:
 - Branch: `master`.
 - Tutti i blocchi completati sono stati pushati a fine blocco.
-- Ultimo blocco completato: altri 11 Politicmon italiani rifatti come
-  caricature-mostriciattoli dei politici italiani, non fantasy generico.
-- Nota importante: il primo tentativo fantasy e stato scartato e sovrascritto.
-  Non riprenderlo.
+- Ultimo blocco gia pushato: fix overflow menu battaglia (`CAMPAGNA` non esce
+  piu dal box azioni).
+- Blocco in chiusura: wave 3 dei rimanenti Politicmon sovrascritta da
+  caricature umane piatte a mostriciattoli satirici con attributi politici
+  riconoscibili.
 
 Verifiche gia fatte nella sessione:
 - `npm run pixellab:coverage`
@@ -23,6 +24,8 @@ Verifiche gia fatte nella sessione:
 - `npm run build`
 - Contact sheet: `artifacts/screens/monster-wave1-contact.png`
 - Contact sheet: `artifacts/screens/monster-wave2-contact.png`
+- Contact sheet: `artifacts/screens/monster-wave3-contact.png`
+- Screenshot fix overflow: `artifacts/screens/battle_menu_v2.png`
 - Screenshot/playtest mirati su titolo, mondo, terrain, battle, starter preview.
 
 Da testare su device:
@@ -32,17 +35,32 @@ Da testare su device:
 - Mostri wave 2 da giudicare: `salvinott`, `salvinator`, `grillix`, `vaffenix`,
   `contemorfo`, `calendauro`, `vannaccix`, `tajanide`, `berlusconix`,
   `draghimon`, `mattarellux`.
-- Criterio: devono ricordare i politici italiani tramite volto/capelli/pose/meme,
-  restando mostri satirici leggibili.
+- Mostri wave 3 da giudicare: `trumpon`, `putingrad`, `xipanda`, `macronfox`,
+  `ursulax`, `bojoon`, `zelenskir`, `muskrat`, `marsrat`, `movimenton`,
+  `capitanone`, `mediocrate`, `pontigor`.
+- Criterio: devono ricordare le figure politiche/meme del roster tramite
+  volto/capelli/pose/props, restando mostri satirici leggibili.
 
 Prossima wave consigliata:
-- Continuare con i rimanenti Politicmon esteri/mondo e meme: Trumpon, Putingrad,
-  Xipanda, Macronfox, Ursulax, Bojoon, Zelenskir, Muskrat/Marsrat, Movimenton,
-  Capitanone, Mediocrate, Pontigor.
-- Subito dopo: UI battle/menu (`battle_bg`, badge/type icons, slot cabinet) se i
-  mostri sono approvati.
+- Controllare in device wave 3 e, se approvata, passare a UI battle/menu
+  (`battle_bg`, badge/type icons, box HP/menu) con asset PixelLab coerenti.
 - Rimane da rifare bene `floor_wood.png`: una generazione era quasi vuota, non
   e stata usata.
+
+### 🎨 Round 28 — PixelLab Politicmon wave 3 + fix battle menu
+FATTO R28:
+- Fixato il menu battaglia: pannello azioni piu largo, colonne calcolate e
+  label sempre clippate con `clipToWidth`; verificato con
+  `artifacts/screens/battle_menu_v2.png`.
+- Rigenerati/riscaricati i rimanenti 13 Politicmon: Trumpon, Putingrad,
+  Xipanda, Macronfox, Ursulax, Bojoon, Zelenskir, Muskrat, Marsrat,
+  Movimenton, Capitanone, Mediocrate, Pontigor.
+- Motivo del rework: la prima wave 3 era troppo "politico umano chibi".
+  I nuovi sprite hanno silhouette da mostro, code/ali/artigli/props meme e
+  facce/capelli/vestiti riconoscibili.
+- Aggiornati `scripts/pixellab-monsters.json`,
+  `scripts/pixellab-reboot-assets.json`, `docs/PIXELLAB-REBOOT.md` e questa
+  handoff.
 
 ### 🎨 Round 27 — PixelLab Politicmon italiani wave 2
 FATTO R27:

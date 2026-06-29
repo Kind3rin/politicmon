@@ -414,6 +414,98 @@
           "objectId": "90096d84-85ca-49a7-afd8-2937cf35659d"
         }
       ]
+    },
+    {
+      "id": "monster-politicmon-wave3-2026-06-29",
+      "tool": "create_1_direction_object + select_object_frames",
+      "state": "downloaded",
+      "styleReference": "remaining Politicmon regenerated from flat caricatures into satirical monster mascots with recognizable political hair, face, outfit, props, and non-human silhouettes",
+      "outputs": [
+        {
+          "file": "monsters/trumpon.png",
+          "sourceReviewId": "d1c1ac5d-6079-4de1-a0ff-b8ea591105e7",
+          "selectedFrame": 15,
+          "objectId": "f2bc318d-7137-420b-bca1-0b9646a73c24"
+        },
+        {
+          "file": "monsters/putingrad.png",
+          "sourceReviewId": "263c2e4f-e8ec-4b01-823c-3bc16c35f08f",
+          "selectedFrame": 14,
+          "objectId": "35affebc-6cbc-45af-ba9f-c4630d107005"
+        },
+        {
+          "file": "monsters/xipanda.png",
+          "sourceReviewId": "98b5effd-a2ec-41bd-bbe0-112ec2f2e5e2",
+          "selectedFrame": 9,
+          "objectId": "19adcd4a-bf23-43df-ae2b-0d39c04478ca"
+        },
+        {
+          "file": "monsters/macronfox.png",
+          "sourceReviewId": "41075da7-3662-4c86-a9c5-629c9a766e46",
+          "selectedFrame": 6,
+          "objectId": "d7fc3e20-6ccd-44d7-ac42-f4d0b86db630"
+        },
+        {
+          "file": "monsters/ursulax.png",
+          "sourceReviewId": "e5116a4e-7b01-4f67-bd62-514ad8dda4b6",
+          "selectedFrame": 0,
+          "objectId": "f11796c5-cea7-46fa-bf94-3e16a1470ab7"
+        },
+        {
+          "file": "monsters/bojoon.png",
+          "sourceReviewId": "d06f9a5f-e689-4fbf-93f3-8e9f49d3a9de",
+          "selectedFrame": 7,
+          "objectId": "ff72c6db-e247-4231-b9ad-421efbf52ec6"
+        },
+        {
+          "file": "monsters/zelenskir.png",
+          "sourceReviewId": "e4648a83-0124-40b5-83c0-3269cb4c9f44",
+          "selectedFrame": 0,
+          "objectId": "011f6616-b0ff-45ec-9152-3f50c556dc17"
+        },
+        {
+          "file": "monsters/muskrat.png",
+          "sourceReviewId": "08c04551-91f0-42a0-8dc7-8ec1b13a81c0",
+          "selectedFrame": 0,
+          "objectId": "bd6cca91-f97b-45fe-b0f9-327dceb75051"
+        },
+        {
+          "file": "monsters/marsrat.png",
+          "sourceReviewId": "dbe4d7d7-98c6-443e-add8-fb82b6ac4811",
+          "selectedFrame": 1,
+          "objectId": "964b8c6f-20e0-4aa3-96bb-df6d77dadb9c"
+        },
+        {
+          "file": "monsters/movimenton.png",
+          "sourceReviewId": "ecdd5bfe-df91-4960-8c03-49c7ca86243b",
+          "selectedFrame": 14,
+          "objectId": "d804615c-723c-49dd-b383-c13230b897ab"
+        },
+        {
+          "file": "monsters/capitanone.png",
+          "sourceReviewId": "4153d85b-4b0f-49ef-99db-9e9d3c947f6f",
+          "selectedFrame": 0,
+          "objectId": "79bac032-c054-4ace-9583-c0f3492c6861"
+        },
+        {
+          "file": "monsters/mediocrate.png",
+          "sourceReviewId": "df57bbbe-e55e-402d-b7ff-22e046bfb35b",
+          "selectedFrame": 0,
+          "objectId": "ed42e762-a19a-456e-b16d-30457f8a6cb8"
+        },
+        {
+          "file": "monsters/pontigor.png",
+          "sourceReviewId": "5fa96e5f-22d1-4193-8158-efe66d5c9f1b",
+          "selectedFrame": 0,
+          "objectId": "91964fd6-e9e6-43e9-aac8-bcee0c961093"
+        }
+      ],
+      "rejected": [
+        {
+          "batch": "flat-human-chibi-wave3-2026-06-28",
+          "reason": "Sovrascritto: troppo umano/piatto, non abbastanza mostriciattolo satirico."
+        }
+      ]
     }
   ],
   "delegatedManifests": [

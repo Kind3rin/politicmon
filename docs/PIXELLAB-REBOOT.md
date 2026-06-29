@@ -69,3 +69,7 @@ Docs: https://api.pixellab.ai/mcp/docs
   Vaffenix, Contemorfo, Calendauro, Vannaccix, Tajanide, Berlusconix,
   Draghimon, Mattarellux rigenerati come caricature-mostro italiane aderenti
   alle categorie in `species.ts`.
+- `monster-politicmon-wave3-2026-06-29`: Trumpon, Putingrad, Xipanda,
+  Macronfox, Ursulax, Bojoon, Zelenskir, Muskrat, Marsrat, Movimenton,
+  Capitanone, Mediocrate, Pontigor sovrascritti con sprite piu mostruosi:
+  silhouette non umana, attributi politici riconoscibili e niente testo/scena.

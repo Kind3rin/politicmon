@@ -15,7 +15,7 @@ interface Entry {
 }
 
 const registry = new Map<string, Entry>();
-const SPRITE_VERSION = "building-footprints-91e1e8c";
+const SPRITE_VERSION = "bar-sport-290db8e";
 
 // Base path degli sprite serviti staticamente. In Vite tutto ciò che sta in
 // `public/` è servito dalla radice; con base relativa (PWA) `import.meta.env.BASE_URL`

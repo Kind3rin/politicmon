@@ -713,7 +713,7 @@
         {
           "file": "tiles/build_bar_front.png",
           "objectId": "3589c92b-eee1-42a9-8609-fb9a9ceee9f8",
-          "postprocess": "normalized to 64x32 for 4x2 buildings; visible entrance locked to tile x 32-47"
+          "postprocess": "redesigned as a readable BAR SPORT storefront; normalized to 64x32 for 4x2 buildings; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_studio_front.png",

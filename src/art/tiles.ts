@@ -134,27 +134,10 @@ export function objectImage(ch: string): HTMLImageElement | null {
   return getSpriteImage(`obj:${ch}`, path);
 }
 
-// EDIFICI come building-PNG: ogni tipo di tetto mappa a un PNG 64x48 (4x3 tile)
-// che copre tetto + facciata. I char tetto coinvolti (case `r`/`v`/`o`/`H`, lab
-// `u`, bar `e`/`Q`, palestre `y`/`B`/`x`). Il renderer rileva l'angolo alto-sx del blocco
-// tetto e disegna il building una volta. Le celle facciata (`m`/`d`/`n`) NON si
-// disegnano separatamente sotto un edificio coperto dal PNG.
-// Building-PNG per char-tetto. La dimensione del PNG (64x48 = 4x3 tile, oppure
-// 96x48 = 6x3) determina quanti tile copre: il renderer lo disegna a dimensione
-// nativa dall'angolo alto-sx. Palestre (y/B/x) e casinò ($) sono blocchi a 6
-// tile di larghezza → PNG 96px.
+// EDIFICI PNG: usati solo per asset frontali coerenti col grid. Le case/lab/bar/
+// palestre/casinò restano sui tile ortogonali: i PNG 3/4 rompevano la coerenza
+// visiva della mappa e facevano sembrare alcune porte/sentieri fuori scala.
 const BUILDING_PNG: Record<string, string> = {
-  r: "tiles/build_house.png",  // 64x48 (4x3)
-  v: "tiles/build_house_blue.png",
-  o: "tiles/build_house_green.png",
-  H: "tiles/build_house_brick.png",
-  u: "tiles/build_lab.png",    // 64x48
-  e: "tiles/build_bar.png",    // 64x48
-  Q: "tiles/build_bar.png",
-  y: "tiles/build_gym.png",    // 96x48 (6x3)
-  B: "tiles/build_gym.png",
-  x: "tiles/build_gym.png",
-  $: "tiles/build_casino.png", // 96x48 (6x3)
   M: "tiles/build_palace.png", // 160x64 (10x4) — palazzo della capitale
 };
 

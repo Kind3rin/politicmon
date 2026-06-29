@@ -1,5 +1,7 @@
 // Guardrail mirato per i bug di layout segnalati:
 // - niente Wang grass/path che sembra scarpata attraversabile
+// - niente PNG edificio 3/4 nelle mappe città/location
+// - ogni porta outdoor->interno deve avere un sentiero `=` davanti
 // - porte outdoor->interni solo dal fronte, con ritorno davanti alla porta
 // - nessun ingresso laterale attiva un warp
 import { chromium } from "playwright";
@@ -15,6 +17,23 @@ for (const file of ["src/main.ts", "scripts/shot-buildings.mjs", "scripts/shot-z
   const text = readFileSync(file, "utf8");
   if (text.includes('loadWangSet(registerWangSet, "grass_path"')) {
     staticProblems.push(`${file}: riattiva il Wang grass_path`);
+  }
+}
+{
+  const text = readFileSync("src/art/tiles.ts", "utf8");
+  for (const forbidden of [
+    "build_house.png",
+    "build_house_blue.png",
+    "build_house_green.png",
+    "build_house_brick.png",
+    "build_lab.png",
+    "build_bar.png",
+    "build_gym.png",
+    "build_casino.png"
+  ]) {
+    if (text.includes(`"${forbidden}"`) || text.includes(`"tiles/${forbidden}"`)) {
+      staticProblems.push(`src/art/tiles.ts: PNG 3/4 ancora mappato (${forbidden})`);
+    }
   }
 }
 
@@ -68,6 +87,16 @@ const runtimeProblems = await page.evaluate(async () => {
       if (!frontDef || frontDef.solid || frontDef.water) {
         out.push(`${mapId}->${warp.toMap}: fronte porta non libero (${warp.x},${warp.y + 1}) '${front}'`);
       }
+      if (front !== "=") {
+        out.push(`${mapId}->${warp.toMap}: manca sentiero davanti alla porta (${warp.x},${warp.y + 1}) '${front}'`);
+      }
+      const connected =
+        tileAt(map, warp.x - 1, warp.y + 1) === "=" ||
+        tileAt(map, warp.x + 1, warp.y + 1) === "=" ||
+        tileAt(map, warp.x, warp.y + 2) === "=";
+      if (!connected) {
+        out.push(`${mapId}->${warp.toMap}: sentiero porta isolato (${warp.x},${warp.y + 1})`);
+      }
 
       const returnsToFront = (target.warps ?? []).some(
         (back) => back.toMap === mapId && back.toX === warp.x && back.toY === warp.y + 1
@@ -100,7 +129,7 @@ const runtimeProblems = await page.evaluate(async () => {
 
 const problems = [...staticProblems, ...runtimeProblems];
 if (problems.length === 0) {
-  console.log("OK — layout world: terreno piatto, porte frontali, ingressi laterali respinti, scoglio accessibile solo dal gradino.");
+  console.log("OK — layout world: terreno piatto, edifici ortogonali, sentieri davanti alle porte, ingressi laterali respinti, scoglio solo dal gradino.");
 } else {
   console.log(`TROVATI ${problems.length} problemi world layout:`);
   for (const p of problems) console.log("  " + p);

@@ -1,7 +1,7 @@
 import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingDoorOffset } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
@@ -2010,14 +2010,17 @@ export class WorldScene implements Scene {
         const dw = fp.w * TILE;
         const dh = fp.h * TILE;
         const bImg = build;
-        const bBounds = screen.imageBounds(build);
-        const bScaleX = dw / bBounds.w;
-        const bScaleY = dh / bBounds.h;
+        const rawCanvas = buildingDoorOffset(ch) != null;
+        const bBounds = rawCanvas ? null : screen.imageBounds(build);
+        const bScaleX = dw / (rawCanvas ? bImg.width : bBounds!.w);
+        const bScaleY = dh / (rawCanvas ? bImg.height : bBounds!.h);
         // baseY = bordo inferiore dell'edificio in px-mondo.
         const baseYb = (ty + fp.h) * TILE;
         tall.push({
           baseY: baseYb,
-          draw: () => screen.imageSpriteCropped(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
+          draw: () => rawCanvas
+            ? screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
+            : screen.imageSpriteCropped(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
         });
       }
     }

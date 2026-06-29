@@ -683,6 +683,49 @@
           "postprocess": "alpha-cropped from 256x256 and normalized to 256x72 transparent badge"
         }
       ]
+    },
+    {
+      "id": "building-grid-door-alignment-2026-06-29",
+      "tool": "create_map_object + grid normalization",
+      "state": "downloaded",
+      "styleReference": "front-facing PixelLab RPG buildings constrained to 16px gameplay grid; final PNGs redrawn/normalized to exact footprints so visible doors align with ASCII `d` tiles and warps",
+      "outputs": [
+        {
+          "file": "tiles/build_house_front_red.png",
+          "objectId": "addb7eff-369c-47c0-a1f7-b76c647fc453",
+          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_house_front_blue.png",
+          "objectId": "26d1c536-1e3e-4490-a005-44480c9fcd60",
+          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_house_front_green.png",
+          "objectId": "371d2c3b-f4ae-45f4-9f1b-cae98b7a01a1",
+          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_lab_front.png",
+          "objectId": "f66de73e-4e99-40ab-a3db-ed7c873aed14",
+          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_bar_front.png",
+          "objectId": "2cf14ca1-bdea-4e29-abfd-2b8479008ebe",
+          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_gym_front.png",
+          "objectId": "eed425aa-034f-4453-afd0-d01020cb7150",
+          "postprocess": "normalized to 96x48; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_casino_front.png",
+          "objectId": "bbc1ae75-7492-40bf-b191-ed7453da1c31",
+          "postprocess": "normalized to 96x48; visible entrance locked to tile x 32-47"
+        }
+      ]
     }
   ],
   "delegatedManifests": [

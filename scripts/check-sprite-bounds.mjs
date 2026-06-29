@@ -34,13 +34,23 @@ const fullTileTerrain = new Set([
   "tiles/cave_rock.png",
   "tiles/deck_asphalt.png"
 ]);
+const gridBuildings = new Map([
+  ["tiles/build_house_front_red.png", [64, 48]],
+  ["tiles/build_house_front_blue.png", [64, 48]],
+  ["tiles/build_house_front_green.png", [64, 48]],
+  ["tiles/build_lab_front.png", [64, 48]],
+  ["tiles/build_bar_front.png", [64, 48]],
+  ["tiles/build_gym_front.png", [96, 48]],
+  ["tiles/build_casino_front.png", [96, 48]]
+]);
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
 await page.goto(BASE, { waitUntil: "networkidle" });
 
-const problems = await page.evaluate(async ({ files, fullTileTerrain }) => {
+const problems = await page.evaluate(async ({ files, fullTileTerrain, gridBuildings }) => {
   const fullTile = new Set(fullTileTerrain);
+  const buildingDims = new Map(gridBuildings);
   const out = [];
 
   async function loadImage(path) {
@@ -106,9 +116,19 @@ const problems = await page.evaluate(async ({ files, fullTileTerrain }) => {
         out.push(`${path}: terrain core non copre tutto il tile (bounds ${minX},${minY}-${maxX},${maxY})`);
       }
     }
+    const expected = buildingDims.get(path);
+    if (expected) {
+      const [ew, eh] = expected;
+      if (w !== ew || h !== eh) {
+        out.push(`${path}: edificio grid deve essere ${ew}x${eh}, trovato ${w}x${h}`);
+      }
+      if (minX !== 0 || maxX !== w - 1 || maxY !== h - 1) {
+        out.push(`${path}: edificio grid non copre footprint orizzontale/basso (bounds ${minX},${minY}-${maxX},${maxY})`);
+      }
+    }
   }
   return out;
-}, { files, fullTileTerrain: [...fullTileTerrain] });
+}, { files, fullTileTerrain: [...fullTileTerrain], gridBuildings: [...gridBuildings] });
 
 if (problems.length === 0) {
   console.log(`OK - sprite bounds: ${files.length} PNG non vuoti, terrain core full-tile.`);

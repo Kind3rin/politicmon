@@ -1,0 +1,103 @@
+// Verifica che asset-edificio, porta ASCII e warp siano sullo stesso tile.
+// Richiede dev server attivo (come check-world-layout): BASE_URL opzionale.
+import { chromium } from "playwright";
+
+const BASE = process.env.BASE_URL ?? "http://127.0.0.1:5179";
+const browser = await chromium.launch();
+const page = await browser.newPage();
+await page.goto(BASE, { waitUntil: "networkidle" });
+
+const problems = await page.evaluate(async () => {
+  const { MAPS } = await import("/src/data/maps.ts");
+  const { TILES, isRoof, isFacade, buildingKey, buildingDoorOffset } = await import("/src/art/tiles.ts");
+  const out = [];
+  const doorChars = new Set(["d", "D", "g"]);
+  const tileAt = (map, x, y) => map.tiles[y]?.[x] ?? "T";
+
+  function buildingFootprint(map, atx, aty, roofCh) {
+    const groupKey = buildingKey(roofCh);
+    const sameGroup = (x, y) => buildingKey(tileAt(map, x, y)) === groupKey;
+    let w = 0;
+    while (sameGroup(atx + w, aty)) w += 1;
+
+    let roofRows = 0;
+    while (sameGroup(atx, aty + roofRows)) roofRows += 1;
+
+    let facadeRows = 0;
+    for (let r = aty + roofRows; ; r += 1) {
+      let any = false;
+      for (let c = atx - 1; c < atx + w + 1; c += 1) {
+        if (isFacade(tileAt(map, c, r))) {
+          any = true;
+          break;
+        }
+      }
+      if (!any) break;
+      facadeRows += 1;
+      if (facadeRows > 2) break;
+    }
+    return { w, h: roofRows + facadeRows };
+  }
+
+  for (const [mapId, map] of Object.entries(MAPS)) {
+    if (!map.outdoor) continue;
+    for (let y = 0; y < map.tiles.length; y += 1) {
+      for (let x = 0; x < map.tiles[y].length; x += 1) {
+        const ch = tileAt(map, x, y);
+        if (!isRoof(ch)) continue;
+        const groupKey = buildingKey(ch);
+        if (!groupKey) continue;
+        if (buildingKey(tileAt(map, x - 1, y)) === groupKey || buildingKey(tileAt(map, x, y - 1)) === groupKey) {
+          continue;
+        }
+
+        const doorOffset = buildingDoorOffset(ch);
+        if (doorOffset == null) continue; // palazzi/speciali con porta doppia.
+        const fp = buildingFootprint(map, x, y, ch);
+        const doorX = x + doorOffset;
+        const doorY = y + fp.h - 1;
+        const expectedDoor = tileAt(map, doorX, doorY);
+        if (!doorChars.has(expectedDoor)) {
+          out.push(`${mapId}: edificio '${ch}' a (${x},${y}) porta attesa a (${doorX},${doorY}), trovato '${expectedDoor}'`);
+        }
+
+        for (let yy = y; yy < y + fp.h; yy += 1) {
+          for (let xx = x - 1; xx < x + fp.w + 1; xx += 1) {
+            const here = tileAt(map, xx, yy);
+            if (doorChars.has(here) && (xx !== doorX || yy !== doorY)) {
+              out.push(`${mapId}: edificio '${ch}' a (${x},${y}) ha porta fuori offset a (${xx},${yy})`);
+            }
+          }
+        }
+
+        const targetWarp = (map.warps ?? []).find((warp) => {
+          const target = MAPS[warp.toMap];
+          return warp.x === doorX && warp.y === doorY && target && !target.outdoor;
+        });
+        if (!targetWarp) {
+          out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza warp interno sulla porta (${doorX},${doorY})`);
+        }
+
+        const front = tileAt(map, doorX, doorY + 1);
+        const frontDef = TILES[front];
+        if (front !== "=" || !frontDef || frontDef.solid || frontDef.water) {
+          out.push(`${mapId}: fronte porta non coerente a (${doorX},${doorY + 1}), trovato '${front}'`);
+        }
+      }
+    }
+  }
+
+  return out;
+});
+
+if (problems.length === 0) {
+  console.log("OK - building doors: porte visive, tile `d` e warp interni allineati su tutti gli edifici outdoor.");
+} else {
+  console.log(`TROVATI ${problems.length} problemi porte/building:`);
+  for (const problem of problems) {
+    console.log("  " + problem);
+  }
+  process.exitCode = 1;
+}
+
+await browser.close();

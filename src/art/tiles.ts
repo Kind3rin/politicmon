@@ -78,6 +78,22 @@ const BUILDING_PNG: Record<string, string> = {
   M: "tiles/build_palace.png", // 160x64 (10x4) — palazzo della capitale
 };
 
+// Offset orizzontale della porta visiva rispetto all'angolo sx del tetto.
+// Le mappe usano `mndm` e `mmdnmm`, quindi la porta sta nel terzo tile.
+const BUILDING_DOOR_OFFSET: Record<string, number> = {
+  r: 2,
+  H: 2,
+  v: 2,
+  o: 2,
+  u: 2,
+  e: 2,
+  Q: 2,
+  y: 2,
+  B: 2,
+  x: 2,
+  $: 2
+};
+
 // I char che fanno parte del "tetto" (per il rilevamento del blocco).
 const ROOF_CHARS = new Set(Object.keys(BUILDING_PNG));
 
@@ -112,6 +128,10 @@ export function buildingImage(ch: string): HTMLImageElement | null {
 // un'unica impronta invece di spezzarli in tanti micro-edifici. null se non-tetto.
 export function buildingKey(ch: string): string | null {
   return BUILDING_PNG[ch] ?? null;
+}
+
+export function buildingDoorOffset(ch: string): number | null {
+  return BUILDING_DOOR_OFFSET[ch] ?? null;
 }
 
 export interface TileDef {

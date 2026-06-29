@@ -536,6 +536,36 @@
           "reason": "Topdown tileset attempt produced furniture/corner-like sheet instead of solid wood floor."
         }
       ]
+    },
+    {
+      "id": "menu-map-hud-polish-2026-06-29",
+      "tool": "create_topdown_tileset + code integration",
+      "state": "downloaded",
+      "styleReference": "flat readable PixelLab terrain textures plus compact RPG UI proportions",
+      "outputs": [
+        {
+          "file": "tiles/path_flat.png",
+          "tilesetId": "18ac996c-f813-4fac-a72e-527685c3836a",
+          "sourceTileIndex": 6,
+          "postprocess": "cropped pure 16x16 path tile; used instead of grass/path Wang transitions"
+        },
+        {
+          "file": "tiles/grass_flat.png",
+          "tilesetId": "18ac996c-f813-4fac-a72e-527685c3836a",
+          "sourceTileIndex": 12,
+          "postprocess": "cropped pure 16x16 grass tile; used instead of grass/path Wang transitions"
+        }
+      ],
+      "rejected": [
+        {
+          "tilesetId": "636f3f08-f725-406e-9c90-251b0e032928",
+          "reason": "Pro tileset produced 25-tile island/blob geometry incompatible with current 4x4 Wang renderer."
+        },
+        {
+          "tilesetId": "18ac996c-f813-4fac-a72e-527685c3836a",
+          "reason": "Transition tiles still looked like cliffs/raised ledges; only pure flat tile crops were accepted."
+        }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -622,10 +652,11 @@
       "domain": "tiles",
       "tool": "create_topdown_tileset",
       "output": [
-        "tiles/wang_grass_path.png",
+        "tiles/grass_flat.png",
+        "tiles/path_flat.png",
         "tiles/wang_water_sand.png"
       ],
-      "note": "First pass keeps existing map projection. Add grass-water and grass-sand only if visual tests show hard edges.",
+      "note": "Grass/path Wang first pass was disabled because it read as traversable cliffs. Current outdoor ground uses flat PixelLab tiles; water/sand still uses Wang.",
       "state": "regenerate-from-zero"
     },
     {

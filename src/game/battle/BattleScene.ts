@@ -1944,8 +1944,9 @@ export class BattleScene implements Scene {
     // Badge DIVISA EQUA: segnala a colpo d'occhio che l'EXP è condivisa con la
     // panchina (la feature prima era invisibile finché non finiva la lotta).
     if ((this.state.bag["divisa"] ?? 0) > 0) {
-      screen.rect(x + 79, y + 25, 25, 8, "#b8901a");
-      screen.text("EXP+", x + 80, y + 26, "#fff0a0");
+      const bx = mon.status ? x + 40 : x + 6;
+      screen.rect(bx, y + 25, 25, 8, "#b8901a");
+      screen.text("EXP+", bx + 1, y + 26, "#fff0a0");
     }
     // Barra esperienza.
     screen.rect(x + 6, y + 34, 98, 2, "#c8c8c0");

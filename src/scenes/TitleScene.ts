@@ -51,13 +51,13 @@ export class TitleScene implements Scene {
   }
 
   private buildMenu(): Menu {
-    const items = [{ label: "NUOVA CAMPAGNA" }];
+    const items: Array<{ label: string; rightLabel?: string }> = [{ label: "NUOVA CAMPAGNA" }];
     if (hasSave()) {
-      items.unshift({ label: "CONTINUA IL MANDATO" });
+      items.unshift({ label: "CONTINUA" });
       items.push({ label: "CANCELLA DOSSIER" });
     }
-    items.push({ label: `NOME: ${loadNick() || "-"}`.slice(0, 18) });
-    items.push({ label: `AUDIO ${audio.enabled ? "SÌ" : "NO"}` });
+    items.push({ label: "NOME", rightLabel: clipToWidth(loadNick() || "—", 60) });
+    items.push({ label: "AUDIO", rightLabel: audio.enabled ? "SÌ" : "NO" });
     return new Menu(items);
   }
 
@@ -70,12 +70,12 @@ export class TitleScene implements Scene {
       return;
     }
     const label = this.menu.items[this.menu.index].label;
-    if (label === "CONTINUA IL MANDATO") {
+    if (label.startsWith("CONTINUA")) {
       const state = loadGame();
       if (state) {
         this.start(state);
       }
-    } else if (label === "NUOVA CAMPAGNA") {
+    } else if (label.startsWith("NUOVA")) {
       // Se non hai ancora un nome (per la chat online), te lo chiediamo ora —
       // ma solo al momento di iniziare davvero, non all'apertura del gioco.
       if (!hasNick()) {
@@ -98,10 +98,10 @@ export class TitleScene implements Scene {
       const index = this.menu.index;
       this.menu = this.buildMenu();
       this.menu.index = Math.min(index, this.menu.items.length - 1);
-    } else if (label === "CANCELLA DOSSIER" || label === "SICURO? PREMI ANCORA A") {
+    } else if (label.startsWith("CANCELLA") || label.startsWith("SICURO")) {
       if (!this.confirmDelete) {
         this.confirmDelete = true;
-        this.menu.items[this.menu.index].label = "SICURO? PREMI ANCORA A";
+        this.menu.items[this.menu.index].label = "SICURO? PREMI A";
       } else {
         clearSave();
         this.confirmDelete = false;
@@ -127,11 +127,11 @@ export class TitleScene implements Scene {
 
   draw(screen: Screen): void {
     if (bgReady && bgImage) {
-      // Splash AI a tutto schermo + velo per far risaltare logo e menu.
+      // Splash AI a tutto schermo + veli graduali per far risaltare logo e menu.
       screen.image(bgImage);
-      // Velo in alto (dietro al logo) e in basso (dietro al menu) per leggibilità.
-      screen.rect(0, 0, VIEW_W, 40, "rgba(10,14,28,0.42)");
-      screen.rect(0, VIEW_H - this.menu.measureHeight(11) - 20, VIEW_W, this.menu.measureHeight(11) + 20, "rgba(10,14,28,0.5)");
+      // Velo in alto (dietro al logo): due fasce per una sfumatura morbida.
+      screen.rect(0, 0, VIEW_W, 30, "rgba(10,14,28,0.52)");
+      screen.rect(0, 30, VIEW_W, 12, "rgba(10,14,28,0.28)");
       this.drawLogo(screen);
       this.drawMenu(screen);
       return;
@@ -199,21 +199,20 @@ export class TitleScene implements Scene {
 
   // ---- Logo con ombra netta e bandiera tricolore sotto. ----
   private drawLogo(screen: Screen): void {
-    // Banda tricolore dietro al titolo.
-    screen.rect(0, 8, VIEW_W, 18, "rgba(16,20,31,0.18)");
-    screen.textCenter("POLITICMON", VIEW_W / 2 + 1, 13, "#0a1a3a", 2);
-    screen.textCenter("POLITICMON", VIEW_W / 2, 12, "#f4d34a", 2);
-    // Filetto tricolore sotto il titolo.
-    const tw = 112;
-    const tx = VIEW_W / 2 - tw / 2;
-    screen.rect(tx, 30, tw / 3, 2, "#2f9a4c");
-    screen.rect(tx + tw / 3, 30, tw / 3, 2, "#f0f0e8");
-    screen.rect(tx + (tw / 3) * 2, 30, tw / 3, 2, "#d23c3c");
+    // Titolo con doppia ombra per staccarsi dallo sfondo (nero + blu scuro).
+    screen.textCenter("POLITICMON", VIEW_W / 2 + 1, 8, "#06080f", 2);
+    screen.textCenter("POLITICMON", VIEW_W / 2, 6, "#f4d34a", 2);
+    // Filetto tricolore sotto il titolo, centrato e largo quanto il logo.
+    const tw = 120;
+    const tx = Math.round(VIEW_W / 2 - tw / 2);
+    screen.rect(tx, 23, Math.round(tw / 3), 2, "#2f9a4c");
+    screen.rect(tx + Math.round(tw / 3), 23, Math.round(tw / 3), 2, "#f0f0e8");
+    screen.rect(tx + Math.round(tw / 3) * 2, 23, tw - Math.round(tw / 3) * 2, 2, "#d23c3c");
     // Slogan rotante (indice sempre valido, anche se this.time è NaN/negativo).
     const t = Number.isFinite(this.time) ? this.time : 0;
     const slogan = SLOGANS[Math.abs(Math.floor(t / 3)) % SLOGANS.length] ?? SLOGANS[0];
-    // Clamp a 232px: nessuno slogan deve toccare i bordi dello schermo.
-    screen.textCenter(clipToWidth(slogan, 232), VIEW_W / 2, 35, PAPER);
+    // Clamp a 220px: lo slogan non tocca mai i bordi (margine 10px per lato).
+    screen.textCenter(clipToWidth(slogan, 220), VIEW_W / 2, 30, PAPER);
   }
 
   // ---- Podio con i tre starter, ben staccati e con etichetta VOTA. ----
@@ -236,16 +235,18 @@ export class TitleScene implements Scene {
     }
   }
 
-  // ---- Menu in basso, riquadrato e con i comandi. ----
+  // ---- Menu in basso, centrato e riquadrato, con comandi e disclaimer. ----
   private drawMenu(screen: Screen): void {
-    const w = 138;
-    const menuH = this.menu.measureHeight(11);
-    const x = VIEW_W / 2 - w / 2;
-    const y = VIEW_H - menuH - 13;
-    this.menu.draw(screen, x, y, w, 11);
-    // Disclaimer satira: opera di parodia, personaggi caricaturali di fantasia.
-    // Best practice di settore (parodia + continenza) per tono bonario e copertura.
-    screen.textCenter("SATIRA - PERSONAGGI DI FANTASIA", VIEW_W / 2, y - 8, GREY);
-    screen.textCenter("A/Z: SCEGLI   B/X: INDIETRO", VIEW_W / 2, VIEW_H - 9, GREY);
+    const rowH = 12;
+    const w = Math.min(VIEW_W - 16, Math.max(120, this.menu.measureWidth()));
+    const menuH = this.menu.measureHeight(rowH);
+    const footerH = 9;
+    const x = Math.round((VIEW_W - w) / 2);
+    const y = VIEW_H - menuH - footerH - 6;
+    // Velo morbido dietro il menu (sotto il pannello) per leggibilità.
+    screen.rect(0, y - 4, VIEW_W, menuH + footerH + 10, "rgba(10,14,28,0.5)");
+    this.menu.draw(screen, x, y, w, rowH);
+    // Riga comandi + disclaimer satira, centrata sotto il pannello.
+    screen.textCenter("A SCEGLI   B INDIETRO   ·   SATIRA", VIEW_W / 2, VIEW_H - 8, GREY);
   }
 }

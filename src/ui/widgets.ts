@@ -131,11 +131,11 @@ export class MessageBox {
     if (this.chars >= total) {
       // Freccia lampeggiante: segnala chiaramente che si può proseguire.
       if (Math.floor(this.blink / 20) % 2 === 0) {
-        screen.text("▼", VIEW_W - 16, boxY + 32, INK);
+        screen.text("▼", VIEW_W - 16, boxY + 30, INK);
       }
       // Hint discreto: come avanzare (utile per i nuovi giocatori).
       const more = this.pageIndex < this.pages.length - 1;
-      screen.text(more ? "A: AVANTI" : "A: OK", 10, boxY + 33, GREY);
+      screen.text(more ? "A: AVANTI" : "A: OK", 12, boxY + 30, GREY);
     }
   }
 }

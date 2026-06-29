@@ -92,7 +92,11 @@ const stack = new SceneStack();
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
 loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 8);
 
-// Autotiling Wang del terreno: registra i fogli erba/sentiero e acqua/sabbia.
+// Autotiling Wang del terreno. Erba `.`/sentiero `=`: nuovo foglio PixelLab
+// FLAT (stesso livello, niente scarpata/contorno nero) → il sentiero si fonde
+// nell'erba senza sembrare un'altura. Acqua/sabbia come prima.
+// `upper` = il terreno "in rilievo" del foglio = il SENTIERO `=`; tutto il resto
+// (erba, alberi, edifici, erba alta, fiori) conta come erba (lower).
 loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
 loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
 

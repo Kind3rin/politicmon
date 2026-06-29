@@ -443,9 +443,9 @@ export class WorldScene implements Scene {
     return ch;
   }
 
-  // Autotiling Wang del terreno: per le coppie note (erba `.`<->sentiero `=`,
-  // acqua `w`<->sabbia `z`) sceglie la variante in base ai 4 angoli (bordi
-  // morbidi). Ritorna true se ha disegnato. Foglio assente -> false (fallback).
+  // Autotiling Wang del terreno: acqua `w`<->sabbia `z` usa bordi morbidi.
+  // Erba/sentiero restano tile flat PixelLab: il Wang precedente sembrava una
+  // scarpata ma il gameplay lo trattava come piano calpestabile.
   // Texture PNG di un tile per la mappa corrente: prima l'override di mappa
   // (es. roccia in grotta), poi il PNG di default (`tileImage`). null = pixmap.
   private tilePng(ch: string): HTMLImageElement | null {
@@ -463,6 +463,8 @@ export class WorldScene implements Scene {
     let key: string | null = null;
     let isUpper: ((c: string) => boolean) | null = null;
     if (ch === "." || ch === "=") {
+      // Erba/sentiero: foglio Wang FLAT. Il sentiero `=` è "upper", tutto il resto
+      // (erba, alberi, edifici, erba alta, fiori, recinti...) conta come erba.
       key = "grass_path";
       isUpper = (c) => c === "=";
     } else if (ch === "w" || ch === "z") {
@@ -605,6 +607,16 @@ export class WorldScene implements Scene {
   // SCHETTINO). L'imbarco è automatico: niente menu, niente soft-lock.
   private canFerry(): boolean {
     return Boolean(this.state.flags["veh-traghetto"]);
+  }
+
+  private isOutdoorDoorWarp(warp: MapDef["warps"][number]): boolean {
+    const target = MAPS[warp.toMap];
+    const ch = this.tileAt(warp.x, warp.y);
+    return Boolean(this.map.outdoor && target && !target.outdoor && (ch === "d" || ch === "D" || ch === "g"));
+  }
+
+  private enteredDoorFromFront(warp: MapDef["warps"][number]): boolean {
+    return this.state.pos.facing === "up" && this.fromX === warp.x && this.fromY === warp.y + 1;
   }
 
   // Imbarco/sbarco automatico: se sei su acqua col traghetto posseduto, il
@@ -1464,6 +1476,11 @@ export class WorldScene implements Scene {
 
     const warp = this.map.warps.find((w) => w.x === pos.x && w.y === pos.y);
     if (warp) {
+      if (this.isOutdoorDoorWarp(warp) && !this.enteredDoorFromFront(warp)) {
+        pos.x = this.fromX;
+        pos.y = this.fromY;
+        return;
+      }
       if (warp.requiresBadges && this.state.badges.length < warp.requiresBadges) {
         pos.x = this.fromX;
         pos.y = this.fromY;

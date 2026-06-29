@@ -15,8 +15,12 @@ export const TILE = 16;
 // I fiori `,` erano mappati qui ma il PNG ridotto a 16px mostrava un bordo/box
 // che non si fondeva con l'erba -> rimosso. I fiori restano sul Pixmap (pulito)
 // finché non si rigenerano come overlay trasparente.
-// Tile-terreno pieni SEAMLESS (no autotiling, rettangoli pieni): interni.
+// Tile-terreno pieni SEAMLESS (no autotiling, rettangoli pieni): terreno piatto
+// e interni. Grass/path usano texture piatte perché il Wang precedente sembrava
+// una scarpata attraversabile.
 const TILE_PNG: Record<string, string> = {
+  ".": "tiles/grass_flat.png",
+  "=": "tiles/path_flat.png",
   p: "tiles/floor_wood.png",   // pavimento interno (case/negozi)
   A: "tiles/wall_interior.png", // muro interno in pietra
   j: "tiles/deck_asphalt.png"   // impalcato ponte (asfalto+mezzeria)

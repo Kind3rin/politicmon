@@ -101,7 +101,7 @@ export interface MapDef {
 // ---------------------------------------------------------------- BORGO URNE
 
 const BORGO_TILES = [
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
+  "TTTTTTTTTTTTT====TTTTTTTTTTTTT",
   "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT..~~~~~....====....~~~~~..TT",
@@ -169,7 +169,7 @@ const GROTTA1_TILES = [
 // ---------------------------------------------------------------- MEDIOPOLI
 
 const MEDIOPOLI_TILES = [
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
+  "TTTTTTTTTTTTT====TTTTTTTTTTTTT",
   "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT..~~~~~....====....~~~~~..TT",
@@ -189,13 +189,13 @@ const MEDIOPOLI_TILES = [
   "TT..eeee.....====.....=.....TT",
   "TT..mdnm.....====.......s...TT",
   "TT...........====...........TT",
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+  "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
 // ---------------------------------------------------------------- EUROTOWN
 
 const EUROTOWN_TILES = [
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
+  "TTTTTTTTTTTTT====TTTTTTTTTTTTT",
   "TT...........====...........TT",
   "TT..,,.......====.......,,..TT",
   "TT..BBBBBB...====...rrrr....TT",
@@ -210,7 +210,7 @@ const EUROTOWN_TILES = [
   "TT....mdnm...====....~~~~~..TT",
   "TT...........====....~~~~~..TT",
   "TT...........====...........TT",
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+  "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
 // ------------------------------------------------------------- CAPUT MUNDI
@@ -236,7 +236,7 @@ const CAPITALE_TILES = [
   "TT.rrrr~~....====....~~yyyy.TT",
   "TT.mdnm......====......mdnm.TT",
   "TT.....s.....====...........TT",
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+  "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
 // ------------------------------------------------------- BRACCIO DI MARE

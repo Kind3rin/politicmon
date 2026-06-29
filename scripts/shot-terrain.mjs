@@ -16,9 +16,9 @@ const shots = await page.evaluate(async () => {
   const { registerWangSet } = await import("/src/art/tiles.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
-  loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
   loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
   preloadSprites({
+    "tile:.": "tiles/grass_flat.png", "tile:=": "tiles/path_flat.png",
     "tile:p": "tiles/floor_wood.png", "tile:A": "tiles/wall_interior.png", "tile:j": "tiles/deck_asphalt.png",
     "obj:L": "tiles/obj_bed.png", "obj:t": "tiles/obj_table.png", "obj:b": "tiles/obj_shelf.png",
     "obj:P": "tiles/obj_plant.png", "obj:h": "tiles/obj_counter.png", "obj:k": "tiles/obj_machine.png",

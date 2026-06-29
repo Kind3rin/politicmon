@@ -1956,17 +1956,19 @@ export class BattleScene implements Scene {
     const labels = ["LOTTA", "BORSA", "SQUADRA", "CAMPAGNA", "FUGA"];
     const rows = Math.ceil(labels.length / 2); // 3
     const h = 12 + rows * 16;
-    const w = 142;
+    const w = 148;
     const x = VIEW_W - w;
     const y = VIEW_H - h;
+    const padX = 10;
+    const colW = Math.floor((w - padX * 2) / 2);
     screen.panel(x, y, w, h);
     for (let i = 0; i < labels.length; i += 1) {
-      const cx = x + 10 + (i % 2) * 62;
+      const cx = x + padX + (i % 2) * colW;
       const cy = y + 8 + Math.floor(i / 2) * 16;
       if (this.mainMenu.index === i) {
         screen.text("►", cx - 2, cy, INK);
       }
-      screen.text(labels[i], cx + 6, cy, INK);
+      screen.text(clipToWidth(labels[i], colW - 8), cx + 6, cy, INK);
     }
     // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
     screen.text("Che mossa?", 8, y + 8, INK);

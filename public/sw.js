@@ -9,7 +9,7 @@
 // solo quando c'è davvero una versione nuova (vedi main.ts). Il salvataggio è
 // in localStorage, mai toccato da questa cache.
 
-const CACHE = "politicmon-v2";
+const CACHE = "politicmon-v3";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -49,6 +49,7 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET" || !request.url.startsWith(self.location.origin)) {
     return;
   }
+  const url = new URL(request.url);
 
   // Navigazioni e manifest: prova la rete, ripiega sulla cache (offline).
   if (request.mode === "navigate" || request.url.includes("manifest.webmanifest")) {
@@ -64,7 +65,24 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Tutto il resto (bundle con hash, icone): cache-first.
+  // Gli sprite in public/ mantengono spesso lo stesso nome: network-first evita
+  // case/personaggi vecchi presi dalla cache PWA dopo una rigenerazione asset.
+  if (url.pathname.includes("/sprites/")) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Bundle con hash e icone: cache-first.
   event.respondWith(
     caches.match(request).then(
       (hit) =>

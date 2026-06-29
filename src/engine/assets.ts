@@ -15,13 +15,14 @@ interface Entry {
 }
 
 const registry = new Map<string, Entry>();
+const SPRITE_VERSION = "building-footprints-91e1e8c";
 
 // Base path degli sprite serviti staticamente. In Vite tutto ciò che sta in
 // `public/` è servito dalla radice; con base relativa (PWA) `import.meta.env.BASE_URL`
 // tiene conto di eventuali sottocartelle di deploy.
 function spriteUrl(path: string): string {
   const base = import.meta.env.BASE_URL ?? "/";
-  return `${base.replace(/\/$/, "")}/sprites/${path}`;
+  return `${base.replace(/\/$/, "")}/sprites/${path}?v=${SPRITE_VERSION}`;
 }
 
 // Restituisce l'immagine pronta per `id`, oppure null se non ancora caricata /
@@ -80,6 +81,5 @@ export function loadPanelImage(
 ): void {
   const img = new Image();
   img.onload = () => setPanel(img, border);
-  const base = import.meta.env.BASE_URL ?? "/";
-  img.src = `${base.replace(/\/$/, "")}/sprites/${path}`;
+  img.src = spriteUrl(path);
 }

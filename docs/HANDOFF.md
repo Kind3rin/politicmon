@@ -5,18 +5,16 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 28 — PixelLab Politicmon wave 3 + fix battle menu**, 2026-06-29.
+Ultimo aggiornamento: **Round 29 — PixelLab UI/terrain polish + battle overflow**, 2026-06-29.
 
 ## Handoff domani
 
 Stato repo:
 - Branch: `master`.
 - Tutti i blocchi completati sono stati pushati a fine blocco.
-- Ultimo blocco gia pushato: fix overflow menu battaglia (`CAMPAGNA` non esce
-  piu dal box azioni).
-- Blocco in chiusura: wave 3 dei rimanenti Politicmon sovrascritta da
-  caricature umane piatte a mostriciattoli satirici con attributi politici
-  riconoscibili.
+- Ultimo blocco: UI/terrain polish PixelLab + ritocco overflow menu battaglia.
+- Wave 3 dei rimanenti Politicmon e gia pushata: caricature umane piatte
+  sovrascritte da mostriciattoli satirici con attributi politici riconoscibili.
 
 Verifiche gia fatte nella sessione:
 - `npm run pixellab:coverage`
@@ -26,6 +24,8 @@ Verifiche gia fatte nella sessione:
 - Contact sheet: `artifacts/screens/monster-wave2-contact.png`
 - Contact sheet: `artifacts/screens/monster-wave3-contact.png`
 - Screenshot fix overflow: `artifacts/screens/battle_menu_v2.png`
+- Screenshot menu mosse: `artifacts/screens/battle_fight_v2.png`
+- Screenshot floor wood in game: `artifacts/screens/terrain_route1.png`
 - Screenshot/playtest mirati su titolo, mondo, terrain, battle, starter preview.
 
 Da testare su device:
@@ -43,9 +43,23 @@ Da testare su device:
 
 Prossima wave consigliata:
 - Controllare in device wave 3 e, se approvata, passare a UI battle/menu
-  (`battle_bg`, badge/type icons, box HP/menu) con asset PixelLab coerenti.
-- Rimane da rifare bene `floor_wood.png`: una generazione era quasi vuota, non
-  e stata usata.
+  (`battle_bg`, badge/type icons, EXP/sondaggi/status icons) con asset PixelLab
+  coerenti.
+- `floor_wood.png` ora e PixelLab-derived 16x16 e non trasparente; se su device
+  sembra troppo rigato, rigenerare solo quel tile con style reference migliore.
+
+### 🎨 Round 29 — PixelLab UI/terrain polish + battle overflow
+FATTO R29:
+- Integrata nuova `ui/hpbar.png` da PixelLab (`30bcb94b-a3c3-471a-b98b-e927e986cb9e`),
+  croppata a 210x41 e verificata in battaglia.
+- Integrato `tiles/floor_wood.png` da frame PixelLab selezionato
+  (`9080abd2-ddab-4a16-840a-305444d1dd00`), normalizzato a tile opaco 16x16.
+- Scartati i tentativi floor trasparenti/furniture-like e documentati nel
+  manifest.
+- Rifinito il menu battaglia: `CAMPAGNA` resta nel box, prompt compatto
+  `AZIONE?`, riepilogo mossa clippato con `clipToWidth`.
+- Shot di verifica: `artifacts/screens/battle_menu_v2.png`,
+  `artifacts/screens/battle_fight_v2.png`, `artifacts/screens/terrain_route1.png`.
 
 ### 🎨 Round 28 — PixelLab Politicmon wave 3 + fix battle menu
 FATTO R28:

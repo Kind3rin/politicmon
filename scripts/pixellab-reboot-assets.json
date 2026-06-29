@@ -506,6 +506,36 @@
           "reason": "Sovrascritto: troppo umano/piatto, non abbastanza mostriciattolo satirico."
         }
       ]
+    },
+    {
+      "id": "ui-terrain-polish-2026-06-29",
+      "tool": "create_ui_asset + create_1_direction_object + select_object_frames",
+      "state": "downloaded",
+      "styleReference": "PixelLab RPG battle HUD polish plus warm interior terrain at 16px world scale",
+      "outputs": [
+        {
+          "file": "ui/hpbar.png",
+          "uiAssetId": "30bcb94b-a3c3-471a-b98b-e927e986cb9e",
+          "postprocess": "alpha crop 210x41 from generated 256x192; renderer scales to battle/world HP widths"
+        },
+        {
+          "file": "tiles/floor_wood.png",
+          "sourceReviewId": "a98954f5-287d-4aef-868e-37cc71e307cb",
+          "selectedFrame": 5,
+          "objectId": "9080abd2-ddab-4a16-840a-305444d1dd00",
+          "postprocess": "selected PixelLab plank texture normalized to opaque 16x16 tile"
+        }
+      ],
+      "rejected": [
+        {
+          "objectId": "afbf3091-bdba-4c58-b366-fbb289cee75c",
+          "reason": "Map object floor attempt generated fully transparent."
+        },
+        {
+          "tilesetId": "b63335c8-c1b9-4d61-ab24-7a49518b5e66",
+          "reason": "Topdown tileset attempt produced furniture/corner-like sheet instead of solid wood floor."
+        }
+      ]
     }
   ],
   "delegatedManifests": [

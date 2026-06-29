@@ -17,8 +17,8 @@ TILE_PNG è VUOTO. Erba/sentiero/erba-alta/fiori/acqua/sabbia girano su pixmap.
   calibrato dalla metadata = `[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]` (vale per
   ENTRAMBI i fogli, layout identico). Verificato borgo + mare.
 - [ ] Erba alta `~`, fiori `,` come overlay trasparenti (ancora pixmap).
-- [ ] Tile pieni roccia-grotta / pavimento interno / marmo (tileset 6f6cd97e era
-  FAILED; rigenerare). Il pavimento interno `p` e ancora pixmap.
+- [ ] Tile pieni roccia-grotta / marmo (tileset 6f6cd97e era FAILED; rigenerare).
+  Il pavimento interno `p` ora usa `tiles/floor_wood.png` PixelLab-derived 16x16.
 - [ ] Tileset Wang: erba→sentiero, erba→acqua, sabbia→acqua, erba→sabbia
   (create_topdown_tileset, 16px). Esistono già `grass_path_wang.png` (non agganciato).
 - [ ] Tile pieni seamless (tileset 6f6cd97e: erba/sentiero/sabbia/roccia/pavimento/marmo).
@@ -53,7 +53,8 @@ TILE_PNG è VUOTO. Erba/sentiero/erba-alta/fiori/acqua/sabbia girano su pixmap.
 - [ ] BADGE_ART (medaglie 12x12) → icone PixelLab.
 
 ## 7. UI / HUD (tutto a codice)
-- [ ] Barre HP / EXP / SONDAGGI → asset barra PixelLab (cornice+fill) o 9-slice.
+- [ ] Barre HP / EXP / SONDAGGI → HP frame PixelLab cablato; restano EXP e
+  SONDAGGI da portare su asset coerenti.
 - [ ] Type-badge 8 tipi (TYPE_COLORS rect) → icone tipo (Types/Dex/Party/Teach/Battle).
 - [ ] Icone stato (IND/SCA/GAF + simboli !$?) → icone.
 - [ ] Freccia guida (triangolo) → icona freccia.

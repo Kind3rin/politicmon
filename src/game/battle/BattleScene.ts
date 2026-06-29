@@ -1500,7 +1500,7 @@ export class BattleScene implements Scene {
         screen.text(moveKindLabel(move), 14 + typeLabel.length * 6 + 10, 122, GREY);
         screen.textRight(item?.rightLabel ?? "", 228, 122, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.text(moveSummary(move).slice(0, 35), 8, y + 32, INK);
+        screen.text(clipToWidth(moveSummary(move), 210), 8, y + 30, INK);
       }
     } else if (this.mode === "campaign") {
       // Mosse da campagna in GRIGLIA 2x2 (come il menu LOTTA): libera spazio per
@@ -1971,7 +1971,7 @@ export class BattleScene implements Scene {
       screen.text(clipToWidth(labels[i], colW - 8), cx + 6, cy, INK);
     }
     // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
-    screen.text("Che mossa?", 8, y + 8, INK);
+    screen.text("AZIONE?", 16, y + 8, INK);
     screen.text(`CONSENSO ${this.state.sondaggi}%`, 8, y + 21, "#7ad858");
   }
 }

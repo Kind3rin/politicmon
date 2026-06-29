@@ -73,3 +73,6 @@ Docs: https://api.pixellab.ai/mcp/docs
   Macronfox, Ursulax, Bojoon, Zelenskir, Muskrat, Marsrat, Movimenton,
   Capitanone, Mediocrate, Pontigor sovrascritti con sprite piu mostruosi:
   silhouette non umana, attributi politici riconoscibili e niente testo/scena.
+- `ui-terrain-polish-2026-06-29`: nuova barra HP PixelLab croppata e cablata,
+  `floor_wood.png` sostituito con frame PixelLab selezionato e normalizzato a
+  16x16, fix extra per overflow/prompt nel menu battaglia.

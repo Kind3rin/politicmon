@@ -5,12 +5,15 @@ import { writeFileSync } from "node:fs";
 const URL = "https://politicmon.vercel.app";
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 480, height: 720 } });
+await page.addInitScript(() => {
+  sessionStorage.setItem("politicmon-intro-seen", "1");
+});
 const errors = [];
 page.on("pageerror", (e) => errors.push(String(e)));
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
 
 await page.goto(URL, { waitUntil: "networkidle" });
-await page.waitForTimeout(2500);
+await page.waitForTimeout(3500);
 
 const info = await page.evaluate(async () => {
   const canvas = document.querySelector("#game-canvas");

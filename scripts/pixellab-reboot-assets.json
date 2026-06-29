@@ -712,8 +712,18 @@
         },
         {
           "file": "tiles/build_bar_front.png",
-          "objectId": "2cf14ca1-bdea-4e29-abfd-2b8479008ebe",
-          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+          "objectId": "3589c92b-eee1-42a9-8609-fb9a9ceee9f8",
+          "postprocess": "normalized to 64x32 for 4x2 buildings; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_studio_front.png",
+          "objectId": "c2ea2431-29a3-4e73-a736-f1f65b7cc0f7",
+          "postprocess": "normalized to 64x32 for 4x2 studio/covo buildings; visible entrance locked to tile x 32-47"
+        },
+        {
+          "file": "tiles/build_bistro_front.png",
+          "objectId": "58b41c5f-d4f8-4f03-ae8e-bb796d4bdf0e",
+          "postprocess": "normalized to 64x32 for 4x2 bistro buildings; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_gym_front.png",
@@ -869,6 +879,8 @@
         "tiles/build_lab_front.png",
         "tiles/build_bar.png",
         "tiles/build_bar_front.png",
+        "tiles/build_studio_front.png",
+        "tiles/build_bistro_front.png",
         "tiles/build_gym.png",
         "tiles/build_gym_front.png",
         "tiles/build_casino.png",

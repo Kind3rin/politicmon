@@ -9,10 +9,23 @@ await page.goto(BASE, { waitUntil: "networkidle" });
 
 const problems = await page.evaluate(async () => {
   const { MAPS } = await import("/src/data/maps.ts");
-  const { TILES, isRoof, isFacade, buildingKey, buildingDoorOffset } = await import("/src/art/tiles.ts");
+  const { TILES, isRoof, isFacade, buildingKey, buildingDoorOffset, buildingPath } = await import("/src/art/tiles.ts");
   const out = [];
   const doorChars = new Set(["d", "D", "g"]);
   const tileAt = (map, x, y) => map.tiles[y]?.[x] ?? "T";
+  const images = new Map();
+
+  async function loadImage(path) {
+    if (images.has(path)) return images.get(path);
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error(path));
+      el.src = `/sprites/${path}`;
+    });
+    images.set(path, img);
+    return img;
+  }
 
   function buildingFootprint(map, atx, aty, roofCh) {
     const groupKey = buildingKey(roofCh);
@@ -54,6 +67,23 @@ const problems = await page.evaluate(async () => {
         const doorOffset = buildingDoorOffset(ch);
         if (doorOffset == null) continue; // palazzi/speciali con porta doppia.
         const fp = buildingFootprint(map, x, y, ch);
+        const path = buildingPath(ch, fp);
+        if (!path) {
+          out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza PNG per footprint ${fp.w}x${fp.h}`);
+          continue;
+        }
+        try {
+          const img = await loadImage(path);
+          const expectedW = fp.w * 16;
+          const expectedH = fp.h * 16;
+          const actualW = img.naturalWidth || img.width;
+          const actualH = img.naturalHeight || img.height;
+          if (actualW !== expectedW || actualH !== expectedH) {
+            out.push(`${mapId}: ${path} per edificio '${ch}' a (${x},${y}) deve essere ${expectedW}x${expectedH}, trovato ${actualW}x${actualH}`);
+          }
+        } catch {
+          out.push(`${mapId}: PNG edificio non caricabile ${path}`);
+        }
         const doorX = x + doorOffset;
         const doorY = y + fp.h - 1;
         const expectedDoor = tileAt(map, doorX, doorY);

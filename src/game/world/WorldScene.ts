@@ -526,9 +526,6 @@ export class WorldScene implements Scene {
       }
     }
     const roofCh = this.tileAt(rx, ry);
-    if (!buildingImage(roofCh)) {
-      return null; // PNG non pronto: usa i pixmap
-    }
     const groupKey = buildingKey(roofCh);
     // angolo alto-sx del blocco tetto (stesso GRUPPO, non stesso char)
     let atx = rx;
@@ -536,6 +533,9 @@ export class WorldScene implements Scene {
     while (buildingKey(this.tileAt(atx - 1, aty)) === groupKey) atx -= 1;
     while (buildingKey(this.tileAt(atx, aty - 1)) === groupKey) aty -= 1;
     const fp = this.buildingFootprint(atx, aty, roofCh);
+    if (!buildingImage(roofCh, fp)) {
+      return null; // PNG esatto per questa footprint non pronto: usa i pixmap.
+    }
     // (tx,ty) dentro la footprint? La facciata può sbordare di 1 col per lato.
     if (tx >= atx - 1 && tx < atx + fp.w + 1 && ty >= aty && ty < aty + fp.h) {
       // ma solo se è davvero tetto o facciata (non erba a fianco)
@@ -1995,16 +1995,16 @@ export class WorldScene implements Scene {
         if (!isRoof(ch)) {
           continue;
         }
-        const build = buildingImage(ch);
-        if (!build) {
-          continue;
-        }
         // È l'angolo alto-sx del blocco? (gruppo PNG, non char: e/Q, y/B/x)
         const groupKey = buildingKey(ch);
         if (buildingKey(this.tileAt(tx - 1, ty)) === groupKey || buildingKey(this.tileAt(tx, ty - 1)) === groupKey) {
           continue;
         }
         const fp = this.buildingFootprint(tx, ty, ch);
+        const build = buildingImage(ch, fp);
+        if (!build) {
+          continue;
+        }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
         const dw = fp.w * TILE;

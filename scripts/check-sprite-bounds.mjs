@@ -39,7 +39,9 @@ const gridBuildings = new Map([
   ["tiles/build_house_front_blue.png", [64, 48]],
   ["tiles/build_house_front_green.png", [64, 48]],
   ["tiles/build_lab_front.png", [64, 48]],
-  ["tiles/build_bar_front.png", [64, 48]],
+  ["tiles/build_bar_front.png", [64, 32]],
+  ["tiles/build_studio_front.png", [64, 32]],
+  ["tiles/build_bistro_front.png", [64, 32]],
   ["tiles/build_gym_front.png", [96, 48]],
   ["tiles/build_casino_front.png", [96, 48]]
 ]);

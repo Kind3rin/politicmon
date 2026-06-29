@@ -78,6 +78,15 @@ const BUILDING_PNG: Record<string, string> = {
   M: "tiles/build_palace.png", // 160x64 (10x4) — palazzo della capitale
 };
 
+const BUILDING_FOOTPRINT_PNG: Record<string, Record<string, string>> = {
+  x: {
+    "4x2": "tiles/build_studio_front.png"
+  },
+  y: {
+    "4x2": "tiles/build_bistro_front.png"
+  }
+};
+
 // Offset orizzontale della porta visiva rispetto all'angolo sx del tetto.
 // Le mappe usano `mndm` e `mmdnmm`, quindi la porta sta nel terzo tile.
 const BUILDING_DOOR_OFFSET: Record<string, number> = {
@@ -114,12 +123,22 @@ export function isFacade(ch: string): boolean {
   return FACADE_CHARS.has(ch);
 }
 
-export function buildingImage(ch: string): HTMLImageElement | null {
-  const path = BUILDING_PNG[ch];
+export interface BuildingFootprint {
+  w: number;
+  h: number;
+}
+
+export function buildingPath(ch: string, footprint?: BuildingFootprint): string | null {
+  const key = footprint ? `${footprint.w}x${footprint.h}` : "";
+  return BUILDING_FOOTPRINT_PNG[ch]?.[key] ?? BUILDING_PNG[ch] ?? null;
+}
+
+export function buildingImage(ch: string, footprint?: BuildingFootprint): HTMLImageElement | null {
+  const path = buildingPath(ch, footprint);
   if (!path) {
     return null;
   }
-  return getSpriteImage(`build:${ch}`, path);
+  return getSpriteImage(`build:${ch}:${path}`, path);
 }
 
 // Chiave-gruppo di un edificio = il file PNG che lo rappresenta. Char di tetto

@@ -31,6 +31,27 @@ const runtimeProblems = await page.evaluate(async () => {
   const stack = new SceneStack();
   const tileAt = (map, x, y) => map.tiles[y]?.[x] ?? "T";
 
+  const stretto = MAPS.stretto;
+  if (stretto) {
+    const stair = tileAt(stretto, 24, 5);
+    if (stair !== "l" || TILES[stair]?.solid || TILES[stair]?.water) {
+      out.push("stretto: lo scoglio sopraelevato deve avere un gradino attraversabile a (24,5)");
+    }
+    for (let y = 2; y <= 5; y += 1) {
+      for (let x = 22; x <= 26; x += 1) {
+        const edge = y === 2 || y === 5 || x === 22 || x === 26;
+        if (!edge || (x === 24 && y === 5)) {
+          continue;
+        }
+        const ch = tileAt(stretto, x, y);
+        const def = TILES[ch];
+        if (ch !== "^" || !def?.solid) {
+          out.push(`stretto: bordo scoglio non bloccante a (${x},${y}) '${ch}'`);
+        }
+      }
+    }
+  }
+
   for (const [mapId, map] of Object.entries(MAPS)) {
     if (!map.outdoor) {
       continue;
@@ -79,7 +100,7 @@ const runtimeProblems = await page.evaluate(async () => {
 
 const problems = [...staticProblems, ...runtimeProblems];
 if (problems.length === 0) {
-  console.log("OK — layout world: terreno piatto, porte frontali, ingressi laterali respinti.");
+  console.log("OK — layout world: terreno piatto, porte frontali, ingressi laterali respinti, scoglio accessibile solo dal gradino.");
 } else {
   console.log(`TROVATI ${problems.length} problemi world layout:`);
   for (const p of problems) console.log("  " + p);

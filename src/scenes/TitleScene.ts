@@ -270,6 +270,38 @@ export class TitleScene implements Scene {
     screen.rect(cx - 8, cy + 2, 16, 2, "#f4f4ec");
   }
 
+  private drawMenuIcon(screen: Screen, label: string, x: number, y: number, selected: boolean): void {
+    const dark = selected ? "#10141f" : "#f4d34a";
+    const light = selected ? "#4868c8" : "#f4f4ec";
+    if (label.startsWith("NUOVA") || label.startsWith("CONTINUA")) {
+      screen.rect(x, y, 8, 8, light);
+      screen.frame(x, y, 8, 8, dark);
+      screen.rect(x + 2, y + 2, 4, 1, "#d23c3c");
+      screen.rect(x + 2, y + 4, 4, 1, "#2f9a4c");
+      screen.rect(x + 2, y + 6, 4, 1, "#4868c8");
+      return;
+    }
+    if (label.startsWith("NOME")) {
+      screen.rect(x + 1, y, 6, 6, "#f0c8a0");
+      screen.frame(x + 1, y, 6, 6, dark);
+      screen.rect(x + 2, y + 2, 1, 1, dark);
+      screen.rect(x + 5, y + 2, 1, 1, dark);
+      screen.rect(x + 2, y + 7, 4, 1, light);
+      return;
+    }
+    if (label.startsWith("AUDIO")) {
+      screen.rect(x, y + 3, 3, 3, light);
+      screen.rect(x + 3, y + 1, 2, 7, light);
+      const on = audio.enabled;
+      screen.rect(x + 6, y + 2, 1, on ? 5 : 2, on ? "#6aa8ff" : "#5f6d8a");
+      screen.rect(x + 8, y + 1, 1, on ? 7 : 2, on ? "#6aa8ff" : "#5f6d8a");
+      return;
+    }
+    screen.rect(x + 1, y + 2, 7, 6, "#6b1f2a");
+    screen.frame(x + 1, y + 2, 7, 6, "#f06060");
+    screen.rect(x + 2, y, 5, 1, "#f06060");
+  }
+
   // ---- Menu compatto: comandi a sinistra, anteprima visuale a destra. ----
   private drawMenu(screen: Screen): void {
     const rowH = 12;
@@ -293,7 +325,8 @@ export class TitleScene implements Scene {
       }
       const color = selected ? "#10141f" : PAPER;
       const rightW = item.rightLabel ? item.rightLabel.length * 6 + 6 : 0;
-      screen.text(clipToWidth(item.label, w - 20 - rightW), x + 10, rowY + 3, color);
+      this.drawMenuIcon(screen, item.label, x + 7, rowY + 2, selected);
+      screen.text(clipToWidth(item.label, w - 30 - rightW), x + 20, rowY + 3, color);
       if (item.rightLabel) {
         screen.textRight(item.rightLabel, x + w - 8, rowY + 3, selected ? "#10141f" : "#cfe6ff");
       }

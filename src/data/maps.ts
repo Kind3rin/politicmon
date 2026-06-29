@@ -371,7 +371,11 @@ function gymMap(
       { x: 4, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" },
       { x: 5, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" }
     ],
-    signs: [{ x: 0, y: 1, lines: signLines }, { x: 9, y: 1, lines: signLines }],
+    // Cartelli sul muro di fondo, sopra una cella di pavimento: prima erano a
+    // (0,1)/(9,1), fiancheggiati dalle macchine `k` e dai muri `A` su tutti i
+    // lati ortogonali → illeggibili. (3,0)/(6,0) hanno pavimento sotto: si
+    // leggono stando a (3,1)/(6,1) rivolti in alto.
+    signs: [{ x: 3, y: 0, lines: signLines }, { x: 6, y: 0, lines: signLines }],
     pickups: [],
     npcs
   };
@@ -824,7 +828,10 @@ export const MAPS: Record<string, MapDef> = {
     ],
     signs: [
       {
-        x: 21, y: 11,
+        // Spostato da (21,11): lì coincideva con l'NPC pensionato-euro, che lo
+        // shadowava (interact() controlla gli NPC prima dei cartelli) → cartello
+        // illeggibile. (22,11) è erba libera, accessibile da (23,11)/(22,12).
+        x: 22, y: 11,
         lines: ["EUROTOWN", "Gemellata con se stessa in 27 lingue diverse.", "PALESTRA UE: medaglia SPREAD in palio."]
       }
     ],
@@ -1145,7 +1152,9 @@ export const MAPS: Record<string, MapDef> = {
       { x: 5, y: 5, toMap: "capitale", toX: 21, toY: 12, facing: "down" }
     ],
     signs: [
-      { x: 0, y: 1, lines: ["CASINÒ DI PALAZZO", "Si entra elettori, si esce contribuenti."] }
+      // Spostato da (0,1): lì era circondato dagli scaffali `b` (illeggibile).
+      // (0,2) è muro laterale con pavimento accanto → leggibile da (1,2).
+      { x: 0, y: 2, lines: ["CASINÒ DI PALAZZO", "Si entra elettori, si esce contribuenti."] }
     ],
     pickups: [],
     npcs: [
@@ -1193,9 +1202,13 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "stretto",
     warps: [
-      // Ritorno via mare verso la Calabria (sbarchi al molo sud del BRACCIO DI MARE).
-      { x: 13, y: 5, toMap: "mare", toX: 8, toY: 12, facing: "up" },
-      { x: 14, y: 5, toMap: "mare", toX: 9, toY: 12, facing: "up" },
+      // Ritorno via mare verso la Calabria: l'imbarco è sulle celle d'acqua del
+      // molo sud (13-14,6), le STESSE su cui si approda dal BRACCIO DI MARE. Così
+      // NON coincidono più con il fronte della porta del bar (13,5): prima il bar
+      // CHIRINGUITO PAPEETE era irraggiungibile (si veniva spediti in mare invece
+      // di entrare). Si salpa col TRAGHETTO/AUTO BLU che si possiede già qui.
+      { x: 13, y: 6, toMap: "mare", toX: 8, toY: 12, facing: "up" },
+      { x: 14, y: 6, toMap: "mare", toX: 9, toY: 12, facing: "up" },
       { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
       { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
       { x: 13, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
@@ -1318,8 +1331,10 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     signs: [
-      { x: 0, y: 1, lines: ["Albo dei governi:", "68 in 80 anni. Nuovo record europeo."] },
-      { x: 11, y: 1, lines: ["Registro visite:", "'Lobbista, lobbista, lobbista, idraulico, lobbista.'"] }
+      // Spostati da (0,1)/(11,1): erano fiancheggiati da macchine `k` e muri `A`
+      // (illeggibili). (3,0)/(8,0) hanno pavimento sotto → leggibili da (3,1)/(8,1).
+      { x: 3, y: 0, lines: ["Albo dei governi:", "68 in 80 anni. Nuovo record europeo."] },
+      { x: 8, y: 0, lines: ["Registro visite:", "'Lobbista, lobbista, lobbista, idraulico, lobbista.'"] }
     ],
     pickups: [],
     npcs: [
@@ -1437,7 +1452,9 @@ export const MAPS: Record<string, MapDef> = {
     }
   ], {
     variant: 2,
-    signs: [{ x: 9, y: 1, lines: ["Diploma di MAMMA POLITICA dell'anno.", "Conferito da: se stessa."] }],
+    // Spostato da (9,1): lì era sepolto nel blocco scaffali `b` (illeggibile).
+    // (5,0) è muro di fondo con pavimento sotto → leggibile da (5,1) in alto.
+    signs: [{ x: 5, y: 0, lines: ["Diploma di MAMMA POLITICA dell'anno.", "Conferito da: se stessa."] }],
     pickups: [{ id: "home-pk", x: 4, y: 1, itemId: "caffe", qty: 1 }]
   }),
 

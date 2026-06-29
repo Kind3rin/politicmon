@@ -130,8 +130,8 @@ export class TitleScene implements Scene {
       // Splash AI a tutto schermo + velo per far risaltare logo e menu.
       screen.image(bgImage);
       // Velo in alto (dietro al logo) e in basso (dietro al menu) per leggibilità.
-      screen.rect(0, 0, VIEW_W, 46, "rgba(10,14,28,0.42)");
-      screen.rect(0, VIEW_H - this.menu.measureHeight(12) - 22, VIEW_W, this.menu.measureHeight(12) + 22, "rgba(10,14,28,0.5)");
+      screen.rect(0, 0, VIEW_W, 40, "rgba(10,14,28,0.42)");
+      screen.rect(0, VIEW_H - this.menu.measureHeight(11) - 20, VIEW_W, this.menu.measureHeight(11) + 20, "rgba(10,14,28,0.5)");
       this.drawLogo(screen);
       this.drawMenu(screen);
       return;
@@ -200,20 +200,20 @@ export class TitleScene implements Scene {
   // ---- Logo con ombra netta e bandiera tricolore sotto. ----
   private drawLogo(screen: Screen): void {
     // Banda tricolore dietro al titolo.
-    screen.rect(0, 8, VIEW_W, 22, "rgba(16,20,31,0.18)");
-    screen.textCenter("POLITICMON", VIEW_W / 2 + 2, 13, "#0a1a3a", 3);
-    screen.textCenter("POLITICMON", VIEW_W / 2, 11, "#f4d34a", 3);
+    screen.rect(0, 8, VIEW_W, 18, "rgba(16,20,31,0.18)");
+    screen.textCenter("POLITICMON", VIEW_W / 2 + 1, 13, "#0a1a3a", 2);
+    screen.textCenter("POLITICMON", VIEW_W / 2, 12, "#f4d34a", 2);
     // Filetto tricolore sotto il titolo.
-    const tw = 132;
+    const tw = 112;
     const tx = VIEW_W / 2 - tw / 2;
-    screen.rect(tx, 34, tw / 3, 3, "#2f9a4c");
-    screen.rect(tx + tw / 3, 34, tw / 3, 3, "#f0f0e8");
-    screen.rect(tx + (tw / 3) * 2, 34, tw / 3, 3, "#d23c3c");
+    screen.rect(tx, 30, tw / 3, 2, "#2f9a4c");
+    screen.rect(tx + tw / 3, 30, tw / 3, 2, "#f0f0e8");
+    screen.rect(tx + (tw / 3) * 2, 30, tw / 3, 2, "#d23c3c");
     // Slogan rotante (indice sempre valido, anche se this.time è NaN/negativo).
     const t = Number.isFinite(this.time) ? this.time : 0;
     const slogan = SLOGANS[Math.abs(Math.floor(t / 3)) % SLOGANS.length] ?? SLOGANS[0];
     // Clamp a 232px: nessuno slogan deve toccare i bordi dello schermo.
-    screen.textCenter(clipToWidth(slogan, 232), VIEW_W / 2, 42, PAPER);
+    screen.textCenter(clipToWidth(slogan, 232), VIEW_W / 2, 35, PAPER);
   }
 
   // ---- Podio con i tre starter, ben staccati e con etichetta VOTA. ----
@@ -238,11 +238,11 @@ export class TitleScene implements Scene {
 
   // ---- Menu in basso, riquadrato e con i comandi. ----
   private drawMenu(screen: Screen): void {
-    const w = 150;
-    const menuH = this.menu.measureHeight(12);
+    const w = 138;
+    const menuH = this.menu.measureHeight(11);
     const x = VIEW_W / 2 - w / 2;
-    const y = VIEW_H - menuH - 12;
-    this.menu.draw(screen, x, y, w, 12);
+    const y = VIEW_H - menuH - 13;
+    this.menu.draw(screen, x, y, w, 11);
     // Disclaimer satira: opera di parodia, personaggi caricaturali di fantasia.
     // Best practice di settore (parodia + continenza) per tono bonario e copertura.
     screen.textCenter("SATIRA - PERSONAGGI DI FANTASIA", VIEW_W / 2, y - 8, GREY);

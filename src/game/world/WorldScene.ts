@@ -135,6 +135,23 @@ const DIR_DELTA: Record<Facing, { dx: number; dy: number }> = {
 
 const FACINGS: Facing[] = ["up", "down", "left", "right"];
 
+const WORLD_OBJECT_TARGET_PX: Record<string, number> = {
+  T: 30,
+  s: 16,
+  f: 16,
+  "~": 16,
+  ",": 16,
+  L: 16,
+  t: 16,
+  b: 16,
+  P: 16,
+  h: 16,
+  k: 16,
+  J: 18,
+  K: 20,
+  g: 16
+};
+
 const TRANSPORT_DESTINATIONS: TransportDestination[] = [
   { label: "BORGO URNE", mapId: "borgo", x: 24, y: 22, facing: "right" },
   { label: "MEDIOPOLI", mapId: "mediopoli", x: 23, y: 19, facing: "right", requires: (s) => Boolean(s.flags["dex-received"]) },
@@ -146,6 +163,14 @@ const TRANSPORT_DESTINATIONS: TransportDestination[] = [
 
 function clipHud(value: string, max: number): string {
   return value.length > max ? `${value.slice(0, max - 3)}...` : value;
+}
+
+function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, dx: number, dy: number): void {
+  const target = WORLD_OBJECT_TARGET_PX[ch] ?? TILE;
+  const scale = target / Math.max(img.width, img.height);
+  const dw = img.width * scale;
+  const dh = img.height * scale;
+  screen.imageSprite(img, dx + TILE / 2 - dw / 2, dy + TILE - dh, { scaleX: scale, scaleY: scale });
 }
 
 // Avvicina `current` a `target` di al più `delta` (lerp clampato per le barre).
@@ -1361,8 +1386,8 @@ export class WorldScene implements Scene {
     const cx = playerPx - camX + TILE / 2;
     const cy = playerPy - camY + TILE / 2 - 18; // sopra la testa
     // Pulsazione: la freccia "spinge" verso l'obiettivo.
-    const pulse = 2 + Math.sin(this.time * 6) * 1.5;
-    const r = 12 + pulse;
+    const pulse = 1 + Math.sin(this.time * 6) * 0.75;
+    const r = 9 + pulse;
     const tipX = cx + Math.cos(ang) * r;
     const tipY = cy + Math.sin(ang) * r;
     // Triangolo pieno orientato verso l'obiettivo.
@@ -1372,9 +1397,9 @@ export class WorldScene implements Scene {
     ctx.rotate(ang);
     ctx.fillStyle = "#f4d34a";
     ctx.beginPath();
-    ctx.moveTo(6, 0);
-    ctx.lineTo(-5, -5);
-    ctx.lineTo(-5, 5);
+    ctx.moveTo(4, 0);
+    ctx.lineTo(-4, -3);
+    ctx.lineTo(-4, 3);
     ctx.closePath();
     ctx.fill();
     ctx.strokeStyle = "#10141f";
@@ -1926,7 +1951,7 @@ export class WorldScene implements Scene {
           // tile (la chioma sborda verso l'alto), o pixmap di fallback.
           const obj = objectImage(ch);
           if (obj) {
-            screen.imageSprite(obj, dx + (TILE - obj.width) / 2, dy + TILE - obj.height);
+            drawWorldObjectPng(screen, ch, obj, dx, dy);
           } else {
             screen.sprite(`tile:${ch}`, def.pix, dx, dy);
           }
@@ -1942,7 +1967,7 @@ export class WorldScene implements Scene {
             } else {
               screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
             }
-            screen.imageSprite(objImg, dx + (TILE - objImg.width) / 2, dy + TILE - objImg.height);
+            drawWorldObjectPng(screen, ch, objImg, dx, dy);
           } else if (this.drawWangTerrain(screen, ch, tx, ty, dx, dy)) {
             // disegnato dall'autotiling Wang (erba/sentiero, acqua/sabbia)
           } else {
@@ -2309,7 +2334,14 @@ export class WorldScene implements Scene {
       }
     }
 
-    if (!this.msg.isOpen && !this.askMenu && this.state.party.length === 0 && this.map.id === "borgo") {
+    if (
+      !quest &&
+      !this.msg.isOpen &&
+      !this.askMenu &&
+      !this.transportMenu &&
+      this.state.party.length === 0 &&
+      this.map.id === "borgo"
+    ) {
       screen.text("Vai al laboratorio col tetto BLU!", 8, VIEW_H - 26, GREY);
     }
 
@@ -2392,25 +2424,26 @@ export class WorldScene implements Scene {
       ctx.fillStyle = `rgba(255,240,180,${0.5 * (this.bannerFlash / 0.4)})`;
       ctx.fillRect(0, 0, VIEW_W, VIEW_H);
     }
-    // Entrata a molla: scende dall'alto con un piccolo rimbalzo, resta, poi sale.
+    // Entrata a molla: toast compatto sotto l'HUD, non un cartellone sopra la mappa.
     const dur = 2.4;
     const t = b.t;
     let y: number;
     if (t < 0.3) {
       const p = t / 0.3;
-      y = -28 + (28 + 4) * p; // entra fino a y=4 con leggero overshoot
+      y = -22 + 50 * p; // entra fino a y=28 con leggero overshoot
     } else if (t > dur - 0.3) {
       const p = (t - (dur - 0.3)) / 0.3;
-      y = 8 - (8 + 28) * p; // esce verso l'alto
+      y = 26 - 48 * p; // esce verso l'alto
     } else {
-      y = 8 - Math.sin((t - 0.3) * 6) * 2; // oscilla appena
+      y = 26 - Math.sin((t - 0.3) * 6) * 1; // oscilla appena
     }
-    const w = VIEW_W - 24;
-    screen.rect(12, Math.round(y), w, 22, "rgba(16,20,31,0.95)");
-    screen.rect(12, Math.round(y), w, 2, b.color);
-    screen.rect(12, Math.round(y) + 20, w, 2, b.color);
-    screen.textCenter(b.text, VIEW_W / 2, Math.round(y) + 4, b.color);
-    screen.textCenter(clipHud(b.sub, 36), VIEW_W / 2, Math.round(y) + 13, "#cfe6ff");
+    const w = 156;
+    const x = Math.round((VIEW_W - w) / 2);
+    screen.rect(x, Math.round(y), w, 18, "rgba(16,20,31,0.94)");
+    screen.rect(x, Math.round(y), w, 2, b.color);
+    screen.rect(x, Math.round(y) + 16, w, 2, b.color);
+    screen.textCenter(clipHud(b.text, 24), VIEW_W / 2, Math.round(y) + 3, b.color);
+    screen.textCenter(clipHud(b.sub, 22), VIEW_W / 2, Math.round(y) + 10, "#cfe6ff");
     if (t > dur) {
       this.banner = null;
     }

@@ -1,7 +1,7 @@
 import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, wangSet, wangSrc, cornerMask } from "../../art/tiles";
+import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
@@ -437,7 +437,7 @@ export class WorldScene implements Scene {
   }
 
   private tileAt(x: number, y: number): string {
-    const ch = this.map.tiles[y]?.[x] ?? "T";
+    const ch = this.map.tiles[y]?.[x] ?? (this.map.outdoor ? "T" : "A");
     // Un albero abbattuto dalla RUSPA diventa erba calpestabile.
     if (ch === "T" && isBulldozed(this.state, this.map.id, x, y)) {
       return this.map.outdoor ? "." : "p";
@@ -455,29 +455,6 @@ export class WorldScene implements Scene {
       return getSpriteImage(`tile:ov:${this.map.id}:${ch}`, ov);
     }
     return tileImage(ch);
-  }
-
-  private drawWangTerrain(
-    screen: Screen, ch: string, tx: number, ty: number, dx: number, dy: number
-  ): boolean {
-    // (lowerChar, upperChars, wangKey)
-    let key: string | null = null;
-    let isUpper: ((c: string) => boolean) | null = null;
-    if (ch === "w" || ch === "z") {
-      key = "water_sand";
-      isUpper = (c) => c === "z" || c === "." || c === "=" || c === "~"; // terra = upper
-    }
-    if (!key || !isUpper) {
-      return false;
-    }
-    const set = wangSet(key);
-    if (!set) {
-      return false;
-    }
-    const mask = cornerMask(tx, ty, (x, y) => this.tileAt(x, y), isUpper);
-    const { sx, sy } = wangSrc(mask);
-    screen.imageRegion(set.img, sx, sy, TILE, TILE, dx, dy, TILE, TILE);
-    return true;
   }
 
   // Footprint di un EDIFICIO a partire dall'angolo alto-sx (atx,aty) di un blocco
@@ -1934,12 +1911,9 @@ export class WorldScene implements Scene {
           // tetto così la base resta coerente col contorno.
           const baseCh2 = this.map.outdoor ? "." : "p";
           if (this.map.outdoor) {
-            // sotto l'edificio il terreno è erba: lascia che il Wang lo gestisca
-            if (!this.drawWangTerrain(screen, ".", tx, ty, dx, dy)) {
-              const bImg = this.tilePng(baseCh2);
-              if (bImg) screen.imageSprite(bImg, dx, dy);
-              else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
-            }
+            const bImg = this.tilePng(baseCh2);
+            if (bImg) screen.imageSprite(bImg, dx, dy);
+            else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
           } else {
             const bImg = this.tilePng(baseCh2);
             if (bImg) screen.imageSprite(bImg, dx, dy);
@@ -1986,8 +1960,6 @@ export class WorldScene implements Scene {
               screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
             }
             drawWorldObjectPng(screen, ch, objImg, dx, dy);
-          } else if (this.drawWangTerrain(screen, ch, tx, ty, dx, dy)) {
-            // disegnato dall'autotiling Wang (erba/sentiero, acqua/sabbia)
           } else {
             // Texture PNG PixelLab del terreno (override mappa o default), con
             // fallback alla pixmap testuale.

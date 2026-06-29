@@ -47,6 +47,12 @@ for (const file of ["src/main.ts", "scripts/shot-buildings.mjs", "scripts/shot-z
     }
   }
 }
+{
+  const text = readFileSync("src/game/world/WorldScene.ts", "utf8");
+  if (text.includes('this.map.tiles[y]?.[x] ?? "T"')) {
+    staticProblems.push("WorldScene.tileAt: fallback fuori mappa usa sempre alberi outdoor anche negli interni");
+  }
+}
 
 const runtimeProblems = await page.evaluate(async () => {
   const { MAPS } = await import("/src/data/maps.ts");

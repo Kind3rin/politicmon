@@ -28,7 +28,7 @@ import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import { Menu, MessageBox, drawHpBar, GREY, INK, PAPER } from "../../ui/widgets";
+import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
@@ -2397,20 +2397,37 @@ export class WorldScene implements Scene {
     }
     ctx.globalAlpha = 1;
 
-    // 4) Mini-pannello party: ritratti + barre HP che si riempiono a vista.
+    // 4) Pannello party: ritratti + barre HP dedicate. Non usa drawHpBar:
+    // quella utility stampa "PV" a sinistra e qui finiva sopra i ritratti.
     const rows = this.healSnapshot.length;
     if (rows > 0) {
-      const panelH = 14 + rows * 12;
+      const panelX = 8;
+      const panelW = 224;
+      const rowH = 15;
+      const panelH = 18 + rows * rowH;
       const py = VIEW_H - panelH - 4;
-      screen.panel(6, py, 150, panelH);
-      screen.text("CONSENSO RECUPERATO", 12, py + 5, INK);
+      screen.panel(panelX, py, panelW, panelH);
+      screen.text("PV RECUPERATI", panelX + 8, py + 5, INK);
       for (let i = 0; i < rows; i += 1) {
         const s = this.healSnapshot[i];
-        const ry = py + 14 + i * 12;
-        drawMonsterSprite(screen, s.mon.speciesId, MONSTER_ART[s.mon.speciesId], 11, ry - 2, 13, 12);
-        drawHpBar(screen, 26, ry + 3, 100, s.disp, s.to);
+        const ry = py + 17 + i * rowH;
+        drawMonsterSprite(screen, s.mon.speciesId, MONSTER_ART[s.mon.speciesId], panelX + 8, ry - 1, 14, 13);
+        this.drawHealHpRow(screen, panelX + 27, ry + 3, 122, s.disp, s.to);
+        screen.textRight(`${Math.round(s.disp)}/${s.to}`, panelX + panelW - 24, ry + 2, INK);
       }
     }
+  }
+
+  private drawHealHpRow(screen: Screen, x: number, y: number, width: number, current: number, max: number): void {
+    const ratio = Math.max(0, Math.min(1, current / Math.max(1, max)));
+    const fillW = Math.round((width - 4) * ratio);
+    const color = ratio > 0.5 ? "#48b848" : ratio > 0.2 ? "#d8b838" : "#d04848";
+    screen.frame(x, y, width, 8, INK);
+    screen.rect(x + 2, y + 2, width - 4, 4, "#d8d8c8");
+    if (fillW > 0) {
+      screen.rect(x + 2, y + 2, fillW, 4, color);
+    }
+    screen.rect(x + 2, y + 6, width - 4, 1, "rgba(0,0,0,0.22)");
   }
 
   private drawBanner(screen: Screen): void {

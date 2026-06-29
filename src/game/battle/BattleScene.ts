@@ -12,7 +12,7 @@ import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
 import { zoneProgress } from "../../data/dexzones";
 import {
-  evolve, expForLevel, expYield, gainExp, healMonster, speciesOf, statsOf, type Monster
+  evolve, expForLevel, expYield, gainExp, healMonster, levelEvolution, speciesOf, statsOf, type Monster
 } from "../monster";
 import { typeMultiplier } from "../../data/poltypes";
 import {
@@ -524,17 +524,31 @@ export class BattleScene implements Scene {
             if (ev.length > 0) {
               followUp.push({ text: `${speciesOf(mon).name} cresce in panchina: ora è L${mon.level}!` });
             }
+            const target = ev.find((event) => event.evolvesTo)?.evolvesTo ?? levelEvolution(mon, this.state.sondaggi);
+            if (target) {
+              followUp.push({ text: `${speciesOf(mon).name} è pronto per il salto di carriera!` });
+              followUp.push(...this.evolveStepsFor(mon, target));
+            }
           }
         }
         const events = gainExp(this.player.mon, gained, this.state.sondaggi);
+        let queuedEvolution = false;
         for (const event of events) {
           followUp.push({ run: () => { audio.levelUp(); this.levelFlash = 0.6; } });
           followUp.push({ text: `${this.playerName()} sale al livello ${event.newLevel}!`, waitHp: true });
           for (const moveId of event.learnableMoves) {
             followUp.push(...this.learnMoveSteps(moveId));
           }
-          if (event.evolvesTo) {
-            followUp.push(...this.evolveSteps(event.evolvesTo));
+          if (event.evolvesTo && !queuedEvolution) {
+            queuedEvolution = true;
+            followUp.push(...this.evolveStepsFor(this.player.mon, event.evolvesTo));
+          }
+        }
+        if (!queuedEvolution) {
+          const target = levelEvolution(this.player.mon, this.state.sondaggi);
+          if (target) {
+            followUp.push({ text: `${this.playerName()} ha abbastanza consenso per evolversi!` });
+            followUp.push(...this.evolveStepsFor(this.player.mon, target));
           }
         }
         followUp.push({ run: () => this.afterFoeDown() });
@@ -586,18 +600,18 @@ export class BattleScene implements Scene {
     ];
   }
 
-  private evolveSteps(targetId: string): Step[] {
+  private evolveStepsFor(mon: Monster, targetId: string): Step[] {
     return [
       {
         // Apre la scena dedicata con l'animazione. La coda resta ferma finché la
         // scena è in cima allo stack; al termine l'evoluzione è già applicata.
         run: () => {
-          const fromId = this.player.mon.speciesId;
+          const fromId = mon.speciesId;
           this.stack.push(
             new EvolutionScene(this.stack, this.input, fromId, targetId, () => {
-              evolve(this.player.mon, targetId);
-              markSeen(this.state, this.player.mon.speciesId);
-              markCaught(this.state, this.player.mon.speciesId);
+              evolve(mon, targetId);
+              markSeen(this.state, mon.speciesId);
+              markCaught(this.state, mon.speciesId);
             })
           );
         }

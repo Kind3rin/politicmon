@@ -127,6 +127,17 @@ const report = await page.evaluate(async () => {
         if (!returnsToFront) {
           problems.push(`${mapId}->${warp.toMap}: uscita interna non torna davanti alla porta (${frontX},${frontY})`);
         }
+        const entersAboveExit = (target.warps ?? []).some(
+          (back) =>
+            back.toMap === mapId &&
+            back.toX === frontX &&
+            back.toY === frontY &&
+            warp.toX === back.x &&
+            warp.toY === back.y - 1
+        );
+        if (!entersAboveExit) {
+          problems.push(`${mapId}->${warp.toMap}: ingresso interno non arriva sopra lo zerbino di uscita (${warp.toX},${warp.toY})`);
+        }
       }
     }
 

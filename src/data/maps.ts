@@ -439,6 +439,13 @@ const HOUSE_TILES_C = [
 
 const HOUSE_LAYOUTS = [HOUSE_TILES_A, HOUSE_TILES_B, HOUSE_TILES_C];
 
+function insideEntry(tiles: string[]): { x: number; y: number } {
+  const exitY = tiles.length - 2;
+  const row = tiles[exitY];
+  const cx = Math.max(0, row.indexOf("c"));
+  return { x: cx, y: Math.max(1, exitY - 1) };
+}
+
 // Genera l'interno di una casa. `variant` sceglie la piantina; `door` è la
 // cella della città su cui si riemerge uscendo.
 function houseMap(
@@ -489,6 +496,15 @@ const BAR_TILES = [
   "AAAAAAAAAAAA"
 ];
 
+const LAB_ENTRY = insideEntry(LAB_TILES);
+const GROTTA1_ENTRY = insideEntry(GROTTA1_TILES);
+const GYM_ENTRY = insideEntry(GYM_TILES);
+const MARKET_ENTRY = insideEntry(MARKET_TILES);
+const HOUSE_ENTRY_A = insideEntry(HOUSE_TILES_A);
+const HOUSE_ENTRY_B = insideEntry(HOUSE_TILES_B);
+const HOUSE_ENTRY_C = insideEntry(HOUSE_TILES_C);
+const BAR_ENTRY = insideEntry(BAR_TILES);
+
 // Genera l'interno di un BAR SPORT con il barista che cura al bancone.
 function barMap(id: string, name: string, city: string, doorX: number, doorY: number): MapDef {
   const exitY = BAR_TILES.length - 2;
@@ -527,10 +543,10 @@ export const MAPS: Record<string, MapDef> = {
     music: "borgo",
     edges: { north: { toMap: "route1", offsetX: 0 } },
     warps: [
-      { x: 7, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
-      { x: 23, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
-      { x: 6, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
-      { x: 21, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
+      { x: 7, y: 12, toMap: "lab", toX: LAB_ENTRY.x, toY: LAB_ENTRY.y, facing: "up" },
+      { x: 23, y: 12, toMap: "home", toX: HOUSE_ENTRY_C.x, toY: HOUSE_ENTRY_C.y, facing: "up" },
+      { x: 6, y: 18, toMap: "circolo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 21, y: 17, toMap: "bar-borgo", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.18,
     // BORGO = politica italiana di base. Zona-casa di salvinott e grillix.
@@ -627,7 +643,7 @@ export const MAPS: Record<string, MapDef> = {
       south: { toMap: "borgo", offsetX: 0 }
     },
     warps: [
-      { x: 22, y: 3, toMap: "grotta1", toX: 5, toY: 7, facing: "up" }
+      { x: 22, y: 3, toMap: "grotta1", toX: GROTTA1_ENTRY.x, toY: GROTTA1_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.16,
     // Mix delle due città a livello intermedio: chi attraversa allena la squadra.
@@ -709,11 +725,11 @@ export const MAPS: Record<string, MapDef> = {
       south: { toMap: "route1", offsetX: 0 }
     },
     warps: [
-      { x: 6, y: 10, toMap: "gymtv", toX: 4, toY: 6, facing: "up" },
-      { x: 22, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" },
-      { x: 6, y: 18, toMap: "attico", toX: 4, toY: 5, facing: "up" },
-      { x: 23, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" },
-      { x: 7, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
+      { x: 6, y: 10, toMap: "gymtv", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
+      { x: 22, y: 10, toMap: "market1", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
+      { x: 6, y: 18, toMap: "attico", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
+      { x: 23, y: 16, toMap: "redazione", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 7, y: 15, toMap: "bar-medio", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.18,
     // MEDIOPOLI = media/talk-show + destra italiana. Zona-casa di vannaccix e
@@ -809,11 +825,11 @@ export const MAPS: Record<string, MapDef> = {
       south: { toMap: "mediopoli", offsetX: 0 }
     },
     warps: [
-      { x: 6, y: 5, toMap: "gymue", toX: 4, toY: 6, facing: "up" },
-      { x: 22, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
-      { x: 6, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
-      { x: 22, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
-      { x: 8, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
+      { x: 6, y: 5, toMap: "gymue", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
+      { x: 22, y: 5, toMap: "market2", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
+      { x: 6, y: 9, toMap: "lobbystudio", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
+      { x: 22, y: 9, toMap: "bistrot", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 8, y: 12, toMap: "bar-euro", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.18,
     // EUROTOWN = leader europei/esteri. Zona-casa di macronfox, zelenskir,
@@ -883,11 +899,11 @@ export const MAPS: Record<string, MapDef> = {
     music: "capitale",
     edges: { south: { toMap: "eurotown", offsetX: 0 } },
     warps: [
-      { x: 6, y: 11, toMap: "gymglobal", toX: 4, toY: 6, facing: "up" },
-      { x: 21, y: 11, toMap: "casino", toX: 4, toY: 4, facing: "up" },
-      { x: 24, y: 7, toMap: "bar-cap", toX: 5, toY: 5, facing: "up" },
-      { x: 5, y: 18, toMap: "salotto", toX: 4, toY: 5, facing: "up" },
-      { x: 25, y: 18, toMap: "retroscena", toX: 4, toY: 5, facing: "up" },
+      { x: 6, y: 11, toMap: "gymglobal", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
+      { x: 21, y: 11, toMap: "casino", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
+      { x: 24, y: 7, toMap: "bar-cap", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
+      { x: 5, y: 18, toMap: "salotto", toX: HOUSE_ENTRY_C.x, toY: HOUSE_ENTRY_C.y, facing: "up" },
+      { x: 25, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       {
         // IMBARCO per la SICILIA: traversata via MN TRAGHETTO. Senza la MN il
         // molo è sbarrato (vedi NPC marinaio accanto, che la regala a 3 medaglie).
@@ -896,12 +912,12 @@ export const MAPS: Record<string, MapDef> = {
         lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza il TRAGHETTO."]
       },
       {
-        x: 14, y: 5, toMap: "palazzo", toX: 5, toY: 7, facing: "up",
+        x: 14, y: 5, toMap: "palazzo", toX: 5, toY: 6, facing: "up",
         requiresBadges: 3,
         lockedLines: ["Il portone è sbarrato.", "Un cartello: 'SI RICEVE SOLO CON 3 MEDAGLIE.'"]
       },
       {
-        x: 15, y: 5, toMap: "palazzo", toX: 6, toY: 7, facing: "up",
+        x: 15, y: 5, toMap: "palazzo", toX: 6, toY: 6, facing: "up",
         requiresBadges: 3,
         lockedLines: ["Il portone è sbarrato.", "Un cartello: 'SI RICEVE SOLO CON 3 MEDAGLIE.'"]
       }
@@ -1209,9 +1225,9 @@ export const MAPS: Record<string, MapDef> = {
       // di entrare). Si salpa col TRAGHETTO/AUTO BLU che si possiede già qui.
       { x: 13, y: 6, toMap: "mare", toX: 8, toY: 12, facing: "up" },
       { x: 14, y: 6, toMap: "mare", toX: 9, toY: 12, facing: "up" },
-      { x: 11, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
-      { x: 21, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
-      { x: 14, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
+      { x: 11, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
+      { x: 21, y: 2, toMap: "covo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 14, y: 4, toMap: "bar-stretto", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.20,
     // STRETTO = endgame meme italiano. L'UNICO posto dove pescare salvinator

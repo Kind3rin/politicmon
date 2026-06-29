@@ -123,6 +123,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 62, atk: 50, def: 72, spc: 76, spd: 45 },
     catchRate: 100, expYield: 130,
     learnset: [[1, "comizio"], [6, "pochette"], [10, "inciucio"], [15, "telepromessa"], [21, "conferenza"]],
+    evolutions: [{ id: "conteblob", level: 18 }],
     dexLine: "BLOB ELEGANTISSIMO. CAMBIA FORMA, ALLEATI E CONVINZIONI SENZA PERDERE MAI LA POCHETTE."
   }),
   calendauro: S({
@@ -131,6 +132,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 58, atk: 55, def: 76, spc: 78, spd: 42 },
     catchRate: 100, expYield: 130,
     learnset: [[1, "grafico"], [6, "giravolta"], [11, "dossier"], [16, "spread"], [22, "terzopolo"]],
+    evolutions: [{ id: "calendrone", level: 18 }],
     dexLine: "SAURO TECNICO. TI MOSTRA UN GRAFICO A TORTA ANCHE SE GLI HAI CHIESTO SOLO CHE ORE SONO."
   }),
   vannaccix: S({
@@ -139,6 +141,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 66, atk: 86, def: 60, spc: 40, spd: 56 },
     catchRate: 75, expYield: 140,
     learnset: [[1, "comizio"], [7, "radici"], [12, "mondocontrario"], [18, "blocconavale"]],
+    evolutions: [{ id: "generorso", level: 20 }],
     dexLine: "VIVE A TESTA IN GIÙ E SOSTIENE CHE SONO TUTTI GLI ALTRI A STARE AL CONTRARIO."
   }),
   tajanide: S({
@@ -147,6 +150,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 56, atk: 45, def: 66, spc: 66, spd: 58 },
     catchRate: 120, expYield: 110,
     learnset: [[1, "comizio"], [5, "promessa"], [10, "conferenza"], [16, "moralsuasion"], [22, "inciucio"]],
+    evolutions: [{ id: "tajacolomba", level: 18 }],
     dexLine: "COLOMBA MITISSIMA. NESSUNO L'HA MAI VISTA ARRABBIATA. QUALCUNO DUBITA L'ABBIA MAI VISTA SVEGLIA."
   }),
   berlusconix: S({
@@ -278,6 +282,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 68, atk: 52, def: 64, spc: 84, spd: 70 },
     catchRate: 70, expYield: 145,
     learnset: [[1, "tweet"], [1, "giravolta"], [8, "conferenza"], [13, "telepromessa"], [18, "editoriale"], [24, "inciucio"]],
+    evolutions: [{ id: "telecrate", level: 20 }],
     dexLine: "OSPITE FISSO DI OGNI TALK SHOW. HA UN'OPINIONE FORTISSIMA SU TUTTO E NESSUNA SU NIENTE. SE CAMBI CANALE, È GIÀ LÌ."
   }),
   // FIRMA dello STRETTO: il mostro-cantiere del ponte mai finito.
@@ -287,7 +292,56 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 90, atk: 88, def: 92, spc: 56, spd: 38 },
     catchRate: 35, expYield: 200,
     learnset: [[1, "ruspa"], [1, "grafico"], [10, "comizio"], [16, "spread"], [22, "slogan"], [28, "vaffa"]],
+    evolutions: [{ id: "pontimax", level: 28 }],
     dexLine: "ENORME E INCOMPIUTO DA CINQUANT'ANNI. OGNI GOVERNO LO ANNUNCIA, NESSUNO LO FINISCE. CRESCE SOLO IN CAMPAGNA ELETTORALE."
+  }),
+  conteblob: S({
+    id: "conteblob", dexNum: 31, name: "CONTEBLOB", category: "AVVOCATO MUTEVOLE",
+    types: ["SINISTRA", "POPULISMO"],
+    base: { hp: 82, atk: 58, def: 92, spc: 100, spd: 52 },
+    catchRate: 35, expYield: 205,
+    learnset: [[1, "pochette"], [1, "telepromessa"], [18, "conferenza"], [24, "fiducia"], [30, "decreto"]],
+    dexLine: "SI ADATTA A QUALSIASI MAGGIORANZA. PRIMA DI ATTACCARE CHIEDE UN PARERE PRO VERITATE A SE STESSO."
+  }),
+  calendrone: S({
+    id: "calendrone", dexNum: 32, name: "CALENDRONE", category: "SAURO DEI DOSSIER",
+    types: ["TECNO", "CENTRO"],
+    base: { hp: 76, atk: 68, def: 94, spc: 102, spd: 48 },
+    catchRate: 35, expYield: 205,
+    learnset: [[1, "grafico"], [1, "dossier"], [18, "spread"], [24, "terzopolo"], [30, "editoriale"]],
+    dexLine: "QUANDO SI ARRABBIA, PROIETTA SLIDE SUI NEMICI. ALCUNI SI ARRENDONO ALLA QUARTA APPENDICE."
+  }),
+  generorso: S({
+    id: "generorso", dexNum: 33, name: "GENERORSO", category: "ORSO DA CASERMA",
+    types: ["DESTRA"],
+    base: { hp: 88, atk: 108, def: 82, spc: 48, spd: 62 },
+    catchRate: 30, expYield: 210,
+    learnset: [[1, "mondocontrario"], [1, "blocconavale"], [20, "radici"], [25, "dazilampo"], [31, "decreto"]],
+    dexLine: "HA UNA MAPPA AL CONTRARIO E LA DIFENDE CON FERMEZZA. SE GLIELA GIRI, DICE CHE È PROPAGANDA."
+  }),
+  tajacolomba: S({
+    id: "tajacolomba", dexNum: 34, name: "TAJACOLOMBA", category: "DIPLOMATICO ALATO",
+    types: ["CENTRO", "DESTRA"],
+    base: { hp: 78, atk: 56, def: 84, spc: 86, spd: 74 },
+    catchRate: 40, expYield: 195,
+    learnset: [[1, "moralsuasion"], [1, "conferenza"], [18, "inciucio"], [24, "fiducia"], [30, "multaue"]],
+    dexLine: "PARLA PIANISSIMO MA FIRMA COMUNICATI DURISSIMI. SI POSA DOVE CONVIENE E RIPARTE CON GARBO."
+  }),
+  telecrate: S({
+    id: "telecrate", dexNum: 35, name: "TELECRATE", category: "VAMPIRO DA STUDIO",
+    types: ["MEDIA", "CENTRO"],
+    base: { hp: 82, atk: 60, def: 76, spc: 104, spd: 82 },
+    catchRate: 30, expYield: 210,
+    learnset: [[1, "tweet"], [1, "editoriale"], [20, "telepromessa"], [26, "bunga"], [32, "conferenza"]],
+    dexLine: "NON DORME: ASPETTA IL PROSSIMO TALK. SI NUTRE DI LUCI ROSSE, SONDAGGI E MICROFONI ACCESI."
+  }),
+  pontimax: S({
+    id: "pontimax", dexNum: 36, name: "PONTIMAX", category: "CANTIERE DEFINITIVO",
+    types: ["POPULISMO", "TECNO"],
+    base: { hp: 112, atk: 106, def: 110, spc: 64, spd: 42 },
+    catchRate: 15, expYield: 230,
+    learnset: [[1, "ruspa"], [1, "grafico"], [28, "spread"], [32, "pienipoteri"], [36, "vaffa"]],
+    dexLine: "EVOLVE SOLO QUANDO IL CANTIERE SEMBRA FINITO. POI ARRIVA UNA NUOVA PERIZIA E RICOMINCIA A CRESCERE."
   })
 };
 

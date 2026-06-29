@@ -604,6 +604,72 @@
           "reason": "Grass/path transition sheet looked like a raised ledge/cliff while gameplay treated it as flat passable terrain."
         }
       ]
+    },
+    {
+      "id": "front-buildings-and-evolution-wave-2026-06-29",
+      "tool": "create_map_object + code integration",
+      "state": "downloaded",
+      "styleReference": "orthographic front-facing RPG buildings aligned to the existing grid; evolved Politicmon battle sprites with stronger real-person satire cues",
+      "outputs": [
+        {
+          "file": "tiles/build_house_front_red.png",
+          "objectId": "d23f16bf-7d5f-4e12-8caf-4c2170588fce"
+        },
+        {
+          "file": "tiles/build_house_front_blue.png",
+          "objectId": "1fdc7319-26bd-473b-a6c8-294fb7255b36"
+        },
+        {
+          "file": "tiles/build_house_front_green.png",
+          "objectId": "9de659cc-f386-4d95-bae7-f2fabec4f6ae"
+        },
+        {
+          "file": "tiles/build_lab_front.png",
+          "objectId": "9e7015b8-c962-4b24-96f5-b87f7c64696d"
+        },
+        {
+          "file": "tiles/build_bar_front.png",
+          "objectId": "3cd0ac3e-1678-4058-8514-11984fa79a5a"
+        },
+        {
+          "file": "tiles/build_gym_front.png",
+          "objectId": "052cc788-70ef-430e-9da5-46358d8a2000"
+        },
+        {
+          "file": "tiles/build_casino_front.png",
+          "objectId": "81c2e725-660e-47ed-9a7f-8c2f92b8063d"
+        },
+        {
+          "file": "monsters/conteblob.png",
+          "objectId": "b73818cf-6e3c-4307-a1e9-83d37d4e2ac4"
+        },
+        {
+          "file": "monsters/calendrone.png",
+          "objectId": "03c377b9-178f-4501-a058-e7b9e4fe6d97"
+        },
+        {
+          "file": "monsters/generorso.png",
+          "objectId": "e632a4d3-0fb3-4c87-b3da-8c0c2d91d112"
+        },
+        {
+          "file": "monsters/tajacolomba.png",
+          "objectId": "7fe24212-2318-4b5a-9b1a-5a9cc63279e7"
+        },
+        {
+          "file": "monsters/telecrate.png",
+          "objectId": "36f740d3-706f-41fc-86dc-8e2437e96adf"
+        },
+        {
+          "file": "monsters/pontimax.png",
+          "objectId": "102fe5ae-efd0-4cda-9541-05e7abb11261"
+        }
+      ],
+      "rejected": [
+        {
+          "file": "tiles/build_house.png / build_lab.png / build_bar.png / build_gym.png / build_casino.png",
+          "reason": "Older 3/4 building assets read as perspective objects and made door collision feel misaligned; kept in files but no longer loaded by roof chars."
+        }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -740,10 +806,17 @@
       "tool": "create_map_object",
       "output": [
         "tiles/build_house.png",
+        "tiles/build_house_front_red.png",
+        "tiles/build_house_front_blue.png",
+        "tiles/build_house_front_green.png",
         "tiles/build_lab.png",
+        "tiles/build_lab_front.png",
         "tiles/build_bar.png",
+        "tiles/build_bar_front.png",
         "tiles/build_gym.png",
+        "tiles/build_gym_front.png",
         "tiles/build_casino.png",
+        "tiles/build_casino_front.png",
         "tiles/build_palace.png"
       ],
       "state": "regenerate-from-zero"

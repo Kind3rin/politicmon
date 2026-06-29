@@ -12,6 +12,7 @@
     "pixellab:coverage": "node scripts/check-pixellab-coverage.mjs",
     "pixellab:coverage:strict": "node scripts/check-pixellab-coverage.mjs --strict",
     "check:map-consistency": "node scripts/check-map-consistency.mjs",
+    "check:evolutions": "node scripts/check-evolutions.mjs",
     "check:sprite-bounds": "node scripts/check-sprite-bounds.mjs",
     "check:world-layout": "node scripts/check-world-layout.mjs",
     "package:portable": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-portable.ps1"

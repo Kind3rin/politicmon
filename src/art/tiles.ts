@@ -60,10 +60,21 @@ export function objectImage(ch: string): HTMLImageElement | null {
   return getSpriteImage(`obj:${ch}`, path);
 }
 
-// EDIFICI PNG: usati solo per asset frontali coerenti col grid. Le case/lab/bar/
-// palestre/casinò restano sui tile ortogonali: i PNG 3/4 rompevano la coerenza
-// visiva della mappa e facevano sembrare alcune porte/sentieri fuori scala.
+// EDIFICI PNG: asset frontali coerenti col grid. I vecchi PNG 3/4 erano stati
+// scartati perche rompevano porte e sentieri; questi nuovi sono ortografici e
+// agganciati alla footprint reale dell'edificio.
 const BUILDING_PNG: Record<string, string> = {
+  r: "tiles/build_house_front_red.png",
+  H: "tiles/build_house_front_red.png",
+  v: "tiles/build_house_front_blue.png",
+  o: "tiles/build_house_front_green.png",
+  u: "tiles/build_lab_front.png",
+  e: "tiles/build_bar_front.png",
+  Q: "tiles/build_bar_front.png",
+  y: "tiles/build_gym_front.png",
+  B: "tiles/build_gym_front.png",
+  x: "tiles/build_gym_front.png",
+  $: "tiles/build_casino_front.png",
   M: "tiles/build_palace.png", // 160x64 (10x4) — palazzo della capitale
 };
 

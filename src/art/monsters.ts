@@ -11,7 +11,8 @@ export const MONSTERS_WITH_PNG = new Set<string>([
   "renzilla", "contemorfo", "calendauro", "vannaccix", "tajanide", "berlusconix",
   "draghimon", "trumpon", "xipanda", "macronfox", "mattarellux", "putingrad",
   "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
-  "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor"
+  "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor", "conteblob",
+  "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax"
 ]);
 
 export function monsterImage(speciesId: string): HTMLImageElement | null {
@@ -404,6 +405,30 @@ export const MONSTER_ART: Record<string, Pixmap> = {
   pontigor: caricature({
     hair: "#caa030", hairStyle: "buzz", suit: "#c87a1a", suitStyle: "military",
     glasses: "sun", beard: "#6a5a3a", mouth: "shout", brows: true, pin: "#e8c84a"
+  }),
+  conteblob: caricature({
+    hair: "#8a8a96", hairStyle: "slick", suit: "#24385f", shirt: "#f8f8f0",
+    tie: "#3a4a8a", mouth: "smile", pochette: true
+  }),
+  calendrone: caricature({
+    hair: "#5a4632", hairStyle: "bald", suit: "#3a4258", shirt: "#f8f8f0",
+    tie: "#6a3a3a", glasses: "round", beard: "#4a3a2a", mouth: "shout", brows: true
+  }),
+  generorso: caricature({
+    hair: "#2e2a24", hairStyle: "buzz", suit: "#3f5f34", suitStyle: "military",
+    mustache: true, brows: true, mouth: "shout", pin: "#e8c030"
+  }),
+  tajacolomba: caricature({
+    hair: "#c8c8c8", hairStyle: "short", suit: "#3e5a78", shirt: "#f8f8f0",
+    tie: "#345ca8", glasses: "round", mouth: "smile", pin: "#e8c030"
+  }),
+  telecrate: caricature({
+    hair: "#2a2630", hairStyle: "slick", suit: "#22385e", shirt: "#f8f8f0",
+    tie: "#a8323a", glasses: "round", mouth: "grin", brows: true
+  }),
+  pontimax: caricature({
+    hair: "#d8a830", hairStyle: "short", suit: "#d87820", suitStyle: "vest",
+    beard: "#5a3a28", glasses: "sun", mouth: "shout", pin: "#9aa4b8"
   })
 };
 

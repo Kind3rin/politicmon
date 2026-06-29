@@ -121,6 +121,17 @@ const runtimeProblems = await page.evaluate(async () => {
       if (!returnsToFront) {
         out.push(`${mapId}->${warp.toMap}: uscita interna non torna al fronte (${warp.x},${warp.y + 1})`);
       }
+      const entersAboveExit = (target.warps ?? []).some(
+        (back) =>
+          back.toMap === mapId &&
+          back.toX === warp.x &&
+          back.toY === warp.y + 1 &&
+          warp.toX === back.x &&
+          warp.toY === back.y - 1
+      );
+      if (!entersAboveExit) {
+        out.push(`${mapId}->${warp.toMap}: ingresso interno non arriva sopra lo zerbino (${warp.toX},${warp.toY})`);
+      }
 
       for (const side of [
         { fromX: warp.x - 1, fromY: warp.y, facing: "right" },

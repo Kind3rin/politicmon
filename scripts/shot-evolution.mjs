@@ -20,20 +20,26 @@ const shots = await page.evaluate(async () => {
   const screen = new Screen(canvas);
   const input = new Input();
   const stack = new SceneStack();
-  stack.push(new EvolutionScene(stack, input, "giorgetta", "giorgiagon", () => {}));
+  stack.push(new EvolutionScene(stack, input, "contemorfo", "conteblob", () => {}));
 
   // Avanza fino a un tempo target (s) e cattura.
   const out = {};
   let elapsed = 0;
-  const stepTo = (t, name) => {
-    while (elapsed < t) { stack.update(1 / 30); elapsed += 1 / 30; }
+  const stepTo = async (t, name) => {
+    while (elapsed < t) {
+      stack.update(1 / 30);
+      stack.draw(screen);
+      input.endFrame();
+      elapsed += 1 / 30;
+      await new Promise((resolve) => setTimeout(resolve, 17));
+    }
     stack.draw(screen);
     out[name] = canvas.toDataURL("image/png");
   };
-  stepTo(0.8, "intro");   // fase 0
-  stepTo(3.0, "morph");   // fase 1 (alterna forme)
-  stepTo(4.55, "flash");  // fase 2 (flash bianco)
-  stepTo(5.6, "reveal");  // fase 3 (nuova forma)
+  await stepTo(0.8, "intro");   // fase 0
+  await stepTo(3.0, "morph");   // fase 1 (alterna forme)
+  await stepTo(4.55, "flash");  // fase 2 (flash bianco)
+  await stepTo(5.6, "reveal");  // fase 3 (nuova forma)
   return out;
 });
 

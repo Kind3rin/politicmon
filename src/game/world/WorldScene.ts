@@ -9,8 +9,9 @@ import { sceneImage, getSpriteImage } from "../../engine/assets";
 function drawBallot(screen: Screen, dx: number, dy: number): void {
   const img = sceneImage("item:scheda", "items/scheda.png");
   if (img) {
-    const s = 14 / Math.max(img.width, img.height);
-    screen.imageSprite(img, dx + (TILE - img.width * s) / 2, dy + (TILE - img.height * s) / 2, { scaleX: s, scaleY: s });
+    const b = screen.imageBounds(img);
+    const s = 14 / Math.max(b.w, b.h);
+    screen.imageSpriteCropped(img, dx + (TILE - b.w * s) / 2, dy + (TILE - b.h * s) / 2, { scaleX: s, scaleY: s });
   } else {
     screen.sprite("ballot", BALLOT_ART, dx + 3, dy + 3);
   }
@@ -167,10 +168,11 @@ function clipHud(value: string, max: number): string {
 
 function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, dx: number, dy: number): void {
   const target = WORLD_OBJECT_TARGET_PX[ch] ?? TILE;
-  const scale = target / Math.max(img.width, img.height);
-  const dw = img.width * scale;
-  const dh = img.height * scale;
-  screen.imageSprite(img, dx + TILE / 2 - dw / 2, dy + TILE - dh, { scaleX: scale, scaleY: scale });
+  const b = screen.imageBounds(img);
+  const scale = target / Math.max(b.w, b.h);
+  const dw = b.w * scale;
+  const dh = b.h * scale;
+  screen.imageSpriteCropped(img, dx + TILE / 2 - dw / 2, dy + TILE - dh, { scaleX: scale, scaleY: scale });
 }
 
 // Avvicina `current` a `target` di al più `delta` (lerp clampato per le barre).
@@ -462,12 +464,7 @@ export class WorldScene implements Scene {
     // (lowerChar, upperChars, wangKey)
     let key: string | null = null;
     let isUpper: ((c: string) => boolean) | null = null;
-    if (ch === "." || ch === "=") {
-      // Erba/sentiero: foglio Wang FLAT. Il sentiero `=` è "upper", tutto il resto
-      // (erba, alberi, edifici, erba alta, fiori, recinti...) conta come erba.
-      key = "grass_path";
-      isUpper = (c) => c === "=";
-    } else if (ch === "w" || ch === "z") {
+    if (ch === "w" || ch === "z") {
       key = "water_sand";
       isUpper = (c) => c === "z" || c === "." || c === "=" || c === "~"; // terra = upper
     }
@@ -2037,13 +2034,14 @@ export class WorldScene implements Scene {
         const dw = fp.w * TILE;
         const dh = fp.h * TILE;
         const bImg = build;
-        const bScaleX = dw / build.width;
-        const bScaleY = dh / build.height;
+        const bBounds = screen.imageBounds(build);
+        const bScaleX = dw / bBounds.w;
+        const bScaleY = dh / bBounds.h;
         // baseY = bordo inferiore dell'edificio in px-mondo.
         const baseYb = (ty + fp.h) * TILE;
         tall.push({
           baseY: baseYb,
-          draw: () => screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
+          draw: () => screen.imageSpriteCropped(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
         });
       }
     }
@@ -2078,9 +2076,10 @@ export class WorldScene implements Scene {
         baseY: npc.dispY + TILE,
         draw: () => {
           if (npcImg) {
-            const ns = 22 / npcImg.height;
-            const dw = npcImg.width * ns;
-            screen.imageSprite(npcImg, nx + 8 - dw / 2, ny + 16 - npcImg.height * ns, { scaleX: ns, scaleY: ns });
+            const nb = screen.imageBounds(npcImg);
+            const ns = 22 / nb.h;
+            const dw = nb.w * ns;
+            screen.imageSpriteCropped(npcImg, nx + 8 - dw / 2, ny + 16 - nb.h * ns, { scaleX: ns, scaleY: ns });
           } else {
             screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
           }
@@ -2114,9 +2113,10 @@ export class WorldScene implements Scene {
         baseY: r.dispY + TILE,
         draw: () => {
           if (rImg) {
-            const rs = 22 / rImg.height;
-            const rdw = rImg.width * rs;
-            screen.imageSprite(rImg, sx + 8 - rdw / 2, sy + 15 - rImg.height * rs, { scaleX: rs, scaleY: rs });
+            const rb = screen.imageBounds(rImg);
+            const rs = 22 / rb.h;
+            const rdw = rb.w * rs;
+            screen.imageSpriteCropped(rImg, sx + 8 - rdw / 2, sy + 15 - rb.h * rs, { scaleX: rs, scaleY: rs });
           } else {
             screen.sprite(sprite.key, sprite.pix, sx, sy, { flipX: sprite.flip });
           }
@@ -2148,10 +2148,11 @@ export class WorldScene implements Scene {
     const playerImg = playerImage(pos.facing, walkCycle, this.moving);
     const drawPlayer = (px: number, py: number): void => {
       if (playerImg) {
-        const ps = 22 / playerImg.height; // altezza target ~22px
-        const dw = playerImg.width * ps;
+        const pb = screen.imageBounds(playerImg);
+        const ps = 22 / pb.h; // altezza visibile target ~22px
+        const dw = pb.w * ps;
         // Centra sul riquadro 16px e ancora i piedi a py+16.
-        screen.imageSprite(playerImg, px + 8 - dw / 2, py + 16 - playerImg.height * ps, { scaleX: ps, scaleY: ps });
+        screen.imageSpriteCropped(playerImg, px + 8 - dw / 2, py + 16 - pb.h * ps, { scaleX: ps, scaleY: ps });
       } else {
         screen.sprite(playerSprite.key, playerSprite.pix, px, py, { flipX: playerSprite.flip });
       }
@@ -2163,15 +2164,17 @@ export class WorldScene implements Scene {
         const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
         const ferryImg = ferryImage();
         if (ferryImg) {
-          screen.imageSprite(ferryImg, baseX + 8 - ferryImg.width / 2, baseY + 12 + bob - ferryImg.height / 2);
+          const fb = screen.imageBounds(ferryImg);
+          screen.imageSpriteCropped(ferryImg, baseX + 8 - fb.w / 2, baseY + 12 + bob - fb.h / 2);
         } else {
           screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
         }
         // Schettino al timone (PNG PixelLab se pronto, altrimenti pixmap).
         const schImg = sceneImage("char:schettino", "chars/schettino.png");
         if (schImg) {
-          const ss = 18 / schImg.height;
-          screen.imageSprite(schImg, baseX + 10 - (schImg.width * ss) / 2, baseY - 2 + bob, { scaleX: ss, scaleY: ss });
+          const sb = screen.imageBounds(schImg);
+          const ss = 18 / sb.h;
+          screen.imageSpriteCropped(schImg, baseX + 10 - (sb.w * ss) / 2, baseY - 2 + bob, { scaleX: ss, scaleY: ss });
         } else {
           screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
         }
@@ -2191,15 +2194,16 @@ export class WorldScene implements Scene {
           // precedenti: il mezzo deve "riempire" la cella ed essere chiaramente
           // più grosso di un pedone (l'utente lo voleva ben visibile).
           const target = enclosed ? 30 : 24;
-          const vs = target / Math.max(vehImg.width, vehImg.height);
-          const vw = vehImg.width * vs;
-          const vh = vehImg.height * vs;
+          const vb = screen.imageBounds(vehImg);
+          const vs = target / Math.max(vb.w, vb.h);
+          const vw = vb.w * vs;
+          const vh = vb.h * vs;
           if (enclosed) {
             // Solo l'auto/ruspa, centrata sulla cella, ancorata in basso.
-            screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+            screen.imageSpriteCropped(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
           } else {
             // Monopattino sotto, player in sella sopra.
-            screen.imageSprite(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
+            screen.imageSpriteCropped(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
             drawPlayer(baseX, baseY - 5 + jitter);
           }
         } else {

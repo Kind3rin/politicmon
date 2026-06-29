@@ -24,6 +24,12 @@ const problems = await page.evaluate(async () => {
       if (!belowDef || belowDef.solid || belowDef.water) {
         out.push(`${mapId}->${w.toMap} porta (${w.x},${w.y}) senza fronte libero sotto: '${below}'`);
       }
+      const returnsToFront = (target.warps ?? []).some(
+        (back) => back.toMap === mapId && back.toX === w.x && back.toY === w.y + 1
+      );
+      if (!returnsToFront) {
+        out.push(`${mapId}->${w.toMap} porta (${w.x},${w.y}) non torna al fronte (${w.x},${w.y + 1})`);
+      }
     }
   }
   return out;

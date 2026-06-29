@@ -16,7 +16,6 @@ const shots = await page.evaluate(async () => {
   const { registerWangSet } = await import("/src/art/tiles.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
-  loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
   loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
   await new Promise((r) => setTimeout(r, 3500));
   const canvas = document.createElement("canvas");
@@ -38,7 +37,7 @@ const shots = await page.evaluate(async () => {
     }, 3000));
   }
   return {
-    euro_gym: await shotMap("borgo", 6, 11),
+    euro_gym: await shotMap("borgo", 7, 13),
     euro_top: await shotMap("mediopoli", 6, 9),
     medio_gym: await shotMap("eurotown", 6, 5)
   };

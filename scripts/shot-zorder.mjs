@@ -16,7 +16,6 @@ const shots = await page.evaluate(async () => {
   const { registerWangSet } = await import("/src/art/tiles.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
-  loadWangSet(registerWangSet, "grass_path", "tiles/wang_grass_path.png", ["="]);
   loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
   await new Promise((r) => setTimeout(r, 3500));
   const canvas = document.createElement("canvas");
@@ -24,8 +23,8 @@ const shots = await page.evaluate(async () => {
   const screen = new Screen(canvas);
   const input = new Input();
   // Posiziona il player SOPRA il blocco-casa di borgo per testare lo z-order:
-  // borgo riga 9-11 ha "rrrr" (casa) a col 21-24. Mettiamo il player a col 22,
-  // riga 9 (sul tetto) e riga 11 (davanti alla porta).
+  // borgo riga 10-12 ha "rrrr" (casa) a col 21-24. Mettiamo il player a col 23,
+  // riga 10 (sul tetto) e riga 13 (davanti alla porta).
   function shotAt(x, y) {
     const state = newGameState();
     state.flags["intro-done"] = true;
@@ -40,8 +39,8 @@ const shots = await page.evaluate(async () => {
     }, 2500));
   }
   return {
-    behind: await shotAt(22, 9),   // player sul tetto -> deve sparire DIETRO
-    front: await shotAt(22, 12)    // player davanti -> deve stare DAVANTI
+    behind: await shotAt(23, 10),  // player sul tetto -> deve sparire DIETRO
+    front: await shotAt(23, 13)    // player davanti -> deve stare DAVANTI
   };
 });
 function save(n, d){ writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length),"base64")); }

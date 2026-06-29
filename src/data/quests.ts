@@ -19,7 +19,7 @@ export const QUESTS: QuestDef[] = [
     hint: "Il laboratorio è l'edificio col tetto blu a BORGO URNE.",
     step: "Entra nel laboratorio col tetto blu.",
     isDone: (s) => Boolean(s.flags["starter-chosen"]),
-    target: { mapId: "borgo", x: 6, y: 12 }
+    target: { mapId: "borgo", x: 7, y: 12 }
   },
   {
     id: "rival1",

@@ -113,13 +113,13 @@ const BORGO_TILES = [
   "TT...........====...........TT",
   "TT...uuuu....====....rrrr...TT",
   "TT...uuuu....====....rrrr...TT",
-  "TT...mdnm....====....mdnm...TT",
+  "TT...mndm....====....mndm...TT",
   "TT....=......====......=....TT",
   "TT....=......====......=....TT",
   "TT....==================....TT",
   "TT.s.........====..eQQe.....TT",
-  "TT..eeee.....====..mdnm.....TT",
-  "TT..mdnm.....====...........TT",
+  "TT..eeee.....====..mndm.....TT",
+  "TT..mndm.....====...........TT",
   "TT...........====...........TT",
   "TT..wwww.....====.....wwww..TT",
   "TT..wwww.....====.....wwww..TT",
@@ -179,15 +179,15 @@ const MEDIOPOLI_TILES = [
   "TT...........====...........TT",
   "TT..yyyyyy...====...rrrr....TT",
   "TT..yyyyyy...====...rrrr....TT",
-  "TT..mmdnmm...====...mdnm....TT",
+  "TT..mmdnmm...====...mndm....TT",
   "TT....=......====....=......TT",
   "TT....=......====....=......TT",
   "TT....=================.....TT",
   "TT...eQQe....====....rrrr...TT",
-  "TT...mdnm....====....rrrr...TT",
-  "TT...........====....mdnm...TT",
+  "TT...mndm....====....rrrr...TT",
+  "TT...........====....mndm...TT",
   "TT..eeee.....====.....=.....TT",
-  "TT..mdnm.....====.......s...TT",
+  "TT..mndm.....====.......s...TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
@@ -200,14 +200,14 @@ const EUROTOWN_TILES = [
   "TT..,,.......====.......,,..TT",
   "TT..BBBBBB...====...rrrr....TT",
   "TT..BBBBBB...====...rrrr....TT",
-  "TT..mmdnmm...====...mdnm....TT",
+  "TT..mmdnmm...====...mndm....TT",
   "TT....=......====....=......TT",
   "TT....=================.....TT",
   "TT..xxxx.....====...yyyy....TT",
-  "TT..mdnm.....====...mdnm....TT",
-  "TT....ww.....====...........TT",
+  "TT..mndm.....====...mndm....TT",
+  "TT.....w.....====...........TT",
   "TT....eQQe...====...........TT",
-  "TT....mdnm...====....~~~~~..TT",
+  "TT....mndm...====....~~~~~..TT",
   "TT...........====....~~~~~..TT",
   "TT...........====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
@@ -223,7 +223,7 @@ const CAPITALE_TILES = [
   "TT........MMMMMMMMMM........TT",
   "TT........CMMMDDMMMC........TT",
   "TT..,,....==========..eQQe..TT",
-  "TT..,,......======....mdnm..TT",
+  "TT..,,......======....mndm..TT",
   "TT...........====...........TT",
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..xxxxxx...====..$$$$$$...TT",
@@ -234,7 +234,7 @@ const CAPITALE_TILES = [
   "TT..~~~~~....====....~~~~~..TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT.rrrr~~....====....~~yyyy.TT",
-  "TT.mdnm......====......mdnm.TT",
+  "TT.mndm......====......mndm.TT",
   "TT.....s.....====...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
@@ -273,9 +273,9 @@ const MARE_TILES = [
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......eeee......xxxx.....TT",
-  "TT..~~~~.mdnm.s....mdnm.....TT",
+  "TT..~~~~.mndm.s....mndm.....TT",
   "TT..~~~~....eQQe......~~~~..TT",
-  "TT..~~~~....mdnm......~~~~..TT",
+  "TT..~~~~....mndm......~~~~..TT",
   "TT...s.zzzzz=zz=zzzzz.~~~~..TT",
   "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
   "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
@@ -527,10 +527,10 @@ export const MAPS: Record<string, MapDef> = {
     music: "borgo",
     edges: { north: { toMap: "route1", offsetX: 0 } },
     warps: [
-      { x: 6, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
-      { x: 22, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
-      { x: 5, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
-      { x: 20, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
+      { x: 7, y: 12, toMap: "lab", toX: 5, toY: 6, facing: "up" },
+      { x: 23, y: 12, toMap: "home", toX: 4, toY: 5, facing: "up" },
+      { x: 6, y: 18, toMap: "circolo", toX: 5, toY: 5, facing: "up" },
+      { x: 21, y: 17, toMap: "bar-borgo", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.18,
     // BORGO = politica italiana di base. Zona-casa di salvinott e grillix.
@@ -550,7 +550,7 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["CAMPAGNA ELETTORALE NORD", "Attenti ai candidati selvatici nell'erba alta.", "Dicono che nei vicoli più sperduti qualcuno nasconda 'fondi neri'... esplora gli angoli!", "A nord: MEDIOPOLI, la città che decide cosa pensi."]
       },
       {
-        x: 23, y: 12,
+        x: 24, y: 12,
         lines: ["CASA TUA.", "Mamma non c'è: è a un talk show a difendere il tuo operato."]
       }
     ],
@@ -710,10 +710,10 @@ export const MAPS: Record<string, MapDef> = {
     },
     warps: [
       { x: 6, y: 10, toMap: "gymtv", toX: 4, toY: 6, facing: "up" },
-      { x: 21, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" },
-      { x: 5, y: 18, toMap: "attico", toX: 4, toY: 5, facing: "up" },
-      { x: 22, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" },
-      { x: 6, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
+      { x: 22, y: 10, toMap: "market1", toX: 4, toY: 4, facing: "up" },
+      { x: 6, y: 18, toMap: "attico", toX: 4, toY: 5, facing: "up" },
+      { x: 23, y: 16, toMap: "redazione", toX: 4, toY: 5, facing: "up" },
+      { x: 7, y: 15, toMap: "bar-medio", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.18,
     // MEDIOPOLI = media/talk-show + destra italiana. Zona-casa di vannaccix e
@@ -810,10 +810,10 @@ export const MAPS: Record<string, MapDef> = {
     },
     warps: [
       { x: 6, y: 5, toMap: "gymue", toX: 4, toY: 6, facing: "up" },
-      { x: 21, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
-      { x: 5, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
-      { x: 21, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
-      { x: 7, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
+      { x: 22, y: 5, toMap: "market2", toX: 4, toY: 4, facing: "up" },
+      { x: 6, y: 9, toMap: "lobbystudio", toX: 4, toY: 5, facing: "up" },
+      { x: 22, y: 9, toMap: "bistrot", toX: 4, toY: 5, facing: "up" },
+      { x: 8, y: 12, toMap: "bar-euro", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.18,
     // EUROTOWN = leader europei/esteri. Zona-casa di macronfox, zelenskir,
@@ -885,9 +885,9 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 6, y: 11, toMap: "gymglobal", toX: 4, toY: 6, facing: "up" },
       { x: 21, y: 11, toMap: "casino", toX: 4, toY: 4, facing: "up" },
-      { x: 23, y: 7, toMap: "bar-cap", toX: 5, toY: 5, facing: "up" },
-      { x: 4, y: 18, toMap: "salotto", toX: 4, toY: 5, facing: "up" },
-      { x: 24, y: 18, toMap: "retroscena", toX: 4, toY: 5, facing: "up" },
+      { x: 24, y: 7, toMap: "bar-cap", toX: 5, toY: 5, facing: "up" },
+      { x: 5, y: 18, toMap: "salotto", toX: 4, toY: 5, facing: "up" },
+      { x: 25, y: 18, toMap: "retroscena", toX: 4, toY: 5, facing: "up" },
       {
         // IMBARCO per la SICILIA: traversata via MN TRAGHETTO. Senza la MN il
         // molo è sbarrato (vedi NPC marinaio accanto, che la regala a 3 medaglie).
@@ -942,7 +942,7 @@ export const MAPS: Record<string, MapDef> = {
     pickups: [
       { id: "pk-c1", x: 25, y: 8, itemId: "schedona", qty: 2 },
       // Spostato da (4,18): era sulla stessa cella del warp SALOTTO (porta) → conflitto.
-      { id: "pk-c2", x: 5, y: 19, itemId: "spritz", qty: 1 },
+      { id: "pk-c2", x: 3, y: 19, itemId: "spritz", qty: 1 },
       { id: "pk-c3", x: 4, y: 2, itemId: "dirWhatever", qty: 1 },
       // Tesoro grosso nella capitale: la TESSERA DORATA per evolvere.
       { id: "pk-c-hide1", x: 2, y: 8, itemId: "tessera", qty: 1, hidden: true },
@@ -1032,8 +1032,8 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: false,
     music: "interior",
     warps: [
-      { x: 5, y: 7, toMap: "borgo", toX: 6, toY: 13, facing: "down" },
-      { x: 6, y: 7, toMap: "borgo", toX: 6, toY: 13, facing: "down" }
+      { x: 5, y: 7, toMap: "borgo", toX: 7, toY: 13, facing: "down" },
+      { x: 6, y: 7, toMap: "borgo", toX: 7, toY: 13, facing: "down" }
     ],
     signs: [
       {
@@ -1138,8 +1138,8 @@ export const MAPS: Record<string, MapDef> = {
     ["GLOBAL TOWER:", "il piano terra è gratis, l'attico è in svendita a un miliardo."]
   ),
 
-  market1: marketMap("market1", "mediopoli", 21, 11),
-  market2: marketMap("market2", "eurotown", 21, 6),
+  market1: marketMap("market1", "mediopoli", 22, 11),
+  market2: marketMap("market2", "eurotown", 22, 6),
 
   casino: {
     id: "casino",
@@ -1209,9 +1209,9 @@ export const MAPS: Record<string, MapDef> = {
       // di entrare). Si salpa col TRAGHETTO/AUTO BLU che si possiede già qui.
       { x: 13, y: 6, toMap: "mare", toX: 8, toY: 12, facing: "up" },
       { x: 14, y: 6, toMap: "mare", toX: 9, toY: 12, facing: "up" },
-      { x: 10, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
-      { x: 20, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
-      { x: 13, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
+      { x: 11, y: 2, toMap: "chiosco", toX: 5, toY: 4, facing: "down" },
+      { x: 21, y: 2, toMap: "covo", toX: 5, toY: 5, facing: "up" },
+      { x: 14, y: 4, toMap: "bar-stretto", toX: 5, toY: 5, facing: "up" }
     ],
     encounterRate: 0.20,
     // STRETTO = endgame meme italiano. L'UNICO posto dove pescare salvinator
@@ -1459,7 +1459,7 @@ export const MAPS: Record<string, MapDef> = {
   }),
 
   // BORGO — circolo del paese.
-  circolo: houseMap("circolo", "CIRCOLO DEL BORGO", "borgo", 5, 19, [
+  circolo: houseMap("circolo", "CIRCOLO DEL BORGO", "borgo", 6, 19, [
     {
       id: "circolo-anziano", pal: "granny", x: 1, y: 3, facing: "right",
       lines: [
@@ -1481,7 +1481,7 @@ export const MAPS: Record<string, MapDef> = {
   ], { variant: 1 }),
 
   // MEDIOPOLI — appartamento influencer.
-  attico: houseMap("attico", "ATTICO INFLUENCER", "mediopoli", 5, 19, [
+  attico: houseMap("attico", "ATTICO INFLUENCER", "mediopoli", 6, 19, [
     {
       id: "attico-influencer", pal: "influencer", x: 5, y: 2, facing: "down", setFlag: "talked-influencer",
       lines: [
@@ -1495,7 +1495,7 @@ export const MAPS: Record<string, MapDef> = {
   }),
 
   // MEDIOPOLI — redazione del TG.
-  redazione: houseMap("redazione", "REDAZIONE DEL TG", "mediopoli", 22, 17, [
+  redazione: houseMap("redazione", "REDAZIONE DEL TG", "mediopoli", 23, 17, [
     {
       id: "redaz-direttore", pal: "journalist", x: 1, y: 2, facing: "right",
       lines: [
@@ -1510,7 +1510,7 @@ export const MAPS: Record<string, MapDef> = {
   ], { variant: 1 }),
 
   // EUROTOWN — ufficio del lobbista.
-  lobbystudio: houseMap("lobbystudio", "STUDIO DI LOBBYING", "eurotown", 5, 10, [
+  lobbystudio: houseMap("lobbystudio", "STUDIO DI LOBBYING", "eurotown", 6, 10, [
     {
       id: "lobby-capo", pal: "boss", x: 6, y: 2, facing: "down",
       lines: [
@@ -1521,7 +1521,7 @@ export const MAPS: Record<string, MapDef> = {
   ], { variant: 0 }),
 
   // EUROTOWN — bistrot della burocrazia.
-  bistrot: houseMap("bistrot", "BISTROT DELLE DIRETTIVE", "eurotown", 21, 10, [
+  bistrot: houseMap("bistrot", "BISTROT DELLE DIRETTIVE", "eurotown", 22, 10, [
     {
       id: "bistrot-funz", pal: "professor", x: 4, y: 2, facing: "left",
       lines: [
@@ -1535,7 +1535,7 @@ export const MAPS: Record<string, MapDef> = {
   }),
 
   // CAPUT MUNDI — salotto romano.
-  salotto: houseMap("salotto", "SALOTTO ROMANO", "capitale", 4, 19, [
+  salotto: houseMap("salotto", "SALOTTO ROMANO", "capitale", 5, 19, [
     {
       id: "salotto-vip", pal: "influencer", x: 7, y: 2, facing: "down",
       lines: [
@@ -1550,7 +1550,7 @@ export const MAPS: Record<string, MapDef> = {
   ], { variant: 2 }),
 
   // CAPUT MUNDI — covo dei retroscenisti.
-  retroscena: houseMap("retroscena", "COVO DEI RETROSCENISTI", "capitale", 24, 19, [
+  retroscena: houseMap("retroscena", "COVO DEI RETROSCENISTI", "capitale", 25, 19, [
     {
       id: "retro-cronista", pal: "journalist", x: 5, y: 2, facing: "down",
       lines: [
@@ -1564,7 +1564,7 @@ export const MAPS: Record<string, MapDef> = {
   }),
 
   // STRETTO — covo della "famiglia": fazione satirica del clientelismo.
-  covo: houseMap("covo", "RETROBOTTEGA DEL PADRINO", "stretto", 20, 3, [
+  covo: houseMap("covo", "RETROBOTTEGA DEL PADRINO", "stretto", 21, 3, [
     {
       id: "covo-padrino", pal: "boss", x: 5, y: 3, facing: "down", mafia: true,
       lines: [
@@ -1583,7 +1583,7 @@ export const MAPS: Record<string, MapDef> = {
   }),
 
   // STRETTO — chiosco del ponte.
-  chiosco: houseMap("chiosco", "CHIOSCO DEL PONTE", "stretto", 10, 3, [
+  chiosco: houseMap("chiosco", "CHIOSCO DEL PONTE", "stretto", 11, 3, [
     {
       id: "chiosco-oste", pal: "barista", x: 4, y: 2, facing: "left",
       lines: [
@@ -1599,22 +1599,22 @@ export const MAPS: Record<string, MapDef> = {
   // ------------------------------------------------ BAR SPORT (centri cura) ---
   // Un "Pokémon Center" tematico per città: entri, il barista dietro al bancone
   // ti rimette in sesto la squadra. Sostituiscono i vecchi barista-in-piazza.
-  "bar-borgo": barMap("bar-borgo", "BAR SPORT BORGO", "borgo", 20, 18),
-  "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 6, 16),
-  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 7, 13),
-  "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 23, 8),
-  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 13, 5)
+  "bar-borgo": barMap("bar-borgo", "BAR SPORT BORGO", "borgo", 21, 18),
+  "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 7, 16),
+  "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 13),
+  "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 24, 8),
+  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 14, 5)
 };
 
 // Punto di risveglio dopo un KO totale: la cella calpestabile davanti al BAR
 // SPORT di ogni città (coincide col warp d'uscita del bar). Si respawna al bar
 // dell'ultima città visitata (state.lastBar), non sempre a BORGO.
 export const BAR_RESPAWN: Record<string, { x: number; y: number }> = {
-  borgo: { x: 20, y: 18 },
-  mediopoli: { x: 6, y: 16 },
-  eurotown: { x: 7, y: 13 },
-  capitale: { x: 23, y: 8 },
-  stretto: { x: 13, y: 5 }
+  borgo: { x: 21, y: 18 },
+  mediopoli: { x: 7, y: 16 },
+  eurotown: { x: 8, y: 13 },
+  capitale: { x: 24, y: 8 },
+  stretto: { x: 14, y: 5 }
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

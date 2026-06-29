@@ -1,5 +1,3 @@
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
-import { STARTERS } from "../data/species";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -43,6 +41,7 @@ export class TitleScene implements Scene {
   private menu: Menu;
   private time = 0;
   private confirmDelete = false;
+  private menuTapGeom: { x: number; y: number; w: number; rowH: number } | null = null;
 
   constructor(private stack: SceneStack, private input: Input) {
     this.menu = this.buildMenu();
@@ -63,9 +62,10 @@ export class TitleScene implements Scene {
 
   update(dt: number): void {
     this.time += dt;
+    const tapAction = this.handleMenuTap();
     // Nota: NON chiediamo più il nome all'avvio. Prima si vede la schermata del
     // titolo; il nome si imposta dal menu o, se manca, alla prima campagna.
-    const action = this.menu.update(this.input);
+    const action = tapAction ?? this.menu.update(this.input);
     if (action !== "select") {
       return;
     }
@@ -125,76 +125,56 @@ export class TitleScene implements Scene {
     this.stack.replace(new WorldScene(this.stack, this.input, state));
   }
 
+  private handleMenuTap(): "select" | null | undefined {
+    const geom = this.menuTapGeom;
+    const tap = this.input.consumeTap();
+    if (!geom || !tap) {
+      return undefined;
+    }
+    const h = this.menu.items.length * geom.rowH;
+    if (tap.x < geom.x || tap.x >= geom.x + geom.w || tap.y < geom.y || tap.y >= geom.y + h) {
+      return undefined;
+    }
+    this.input.clearTap();
+    const row = Math.floor((tap.y - geom.y) / geom.rowH);
+    if (row < 0 || row >= this.menu.items.length) {
+      return null;
+    }
+    if (row === this.menu.index) {
+      audio.confirm();
+      return "select";
+    }
+    this.menu.index = row;
+    audio.cursor();
+    return null;
+  }
+
   draw(screen: Screen): void {
     if (bgReady && bgImage) {
-      // Splash AI a tutto schermo + veli graduali per far risaltare logo e menu.
       screen.image(bgImage);
-      // Velo in alto (dietro al logo): due fasce per una sfumatura morbida.
-      screen.rect(0, 0, VIEW_W, 30, "rgba(10,14,28,0.52)");
-      screen.rect(0, 30, VIEW_W, 12, "rgba(10,14,28,0.28)");
-      this.drawLogo(screen);
-      this.drawMenu(screen);
-      return;
+    } else {
+      this.drawTitleFallback(screen);
     }
-    // Fallback procedurale (se lo splash non è ancora caricato o manca).
-    this.drawSky(screen);
-    this.drawPalace(screen);
+    screen.rect(0, 0, VIEW_W, 46, "rgba(6,8,16,0.58)");
+    screen.rect(0, 46, VIEW_W, 16, "rgba(6,8,16,0.24)");
     this.drawLogo(screen);
-    this.drawPodium(screen);
     this.drawMenu(screen);
   }
 
-  // ---- Sfondo: cielo sereno a fasce, sole, nuvole nella fascia bassa. ----
-  private drawSky(screen: Screen): void {
-    screen.clear("#7fb2e8");
-    screen.rect(0, 0, VIEW_W, 30, "#6fa3df");
-    screen.rect(0, 30, VIEW_W, 26, "#8cc0ee");
-    // Sole (in alto a sinistra, lontano dal logo).
-    screen.rect(14, 50, 16, 16, "#ffe98a");
-    screen.rect(12, 54, 20, 8, "#ffe98a");
-    screen.rect(16, 48, 12, 20, "#ffe98a");
-    // Nuvole che scorrono piano, sopra il prato (sotto il logo e lo slogan).
-    const drift = Math.floor(this.time * 6);
-    this.drawCloud(screen, ((40 + drift) % (VIEW_W + 60)) - 40, 60);
-    this.drawCloud(screen, ((170 + drift) % (VIEW_W + 60)) - 40, 72);
-  }
-
-  private drawCloud(screen: Screen, x: number, y: number): void {
-    screen.rect(x, y + 4, 30, 6, "#f4f8ff");
-    screen.rect(x + 6, y, 18, 8, "#f4f8ff");
-    screen.rect(x + 2, y + 2, 10, 6, "#ffffff");
-  }
-
-  // ---- Skyline del Palazzo, netto e simmetrico. ----
-  private drawPalace(screen: Screen): void {
-    const baseY = 84;
-    // Prato.
-    screen.rect(0, baseY + 22, VIEW_W, VIEW_H - baseY - 22, "#3f7d3a");
-    screen.rect(0, baseY + 22, VIEW_W, 3, "#4e9444");
-    // Corpo del Palazzo.
-    screen.rect(40, baseY - 6, VIEW_W - 80, 28, "#d8d2c0");
-    screen.rect(40, baseY - 6, VIEW_W - 80, 3, "#eee8d8");
-    // Colonne.
-    for (let x = 52; x < VIEW_W - 52; x += 22) {
-      screen.rect(x, baseY - 2, 6, 24, "#c7c0aa");
-      screen.rect(x + 1, baseY - 2, 2, 24, "#e6e0cc");
+  private drawTitleFallback(screen: Screen): void {
+    screen.clear("#10141f");
+    screen.rect(0, 0, VIEW_W, VIEW_H, "#141c2f");
+    screen.rect(0, 116, VIEW_W, 64, "#2f6f3c");
+    screen.rect(18, 112, 204, 4, "#f0d068");
+    screen.rect(42, 82, 156, 34, "#d8d2c0");
+    screen.rect(42, 78, 156, 4, "#f4ead0");
+    for (let x = 55; x <= 179; x += 24) {
+      screen.rect(x, 86, 7, 30, "#b9af92");
+      screen.rect(x + 2, 86, 2, 30, "#eee6d0");
     }
-    // Timpano (tetto triangolare).
-    for (let i = 0; i < 14; i += 1) {
-      screen.rect(VIEW_W / 2 - 70 + i * 5, baseY - 6 - i, (70 - i * 5) * 2, 1, "#b7ad8e");
-    }
-    screen.rect(VIEW_W / 2 - 2, baseY - 22, 4, 6, "#7a8a4a"); // pennone
-    screen.rect(VIEW_W / 2 + 2, baseY - 22, 10, 5, "#2f9a4c");
-    // Cupole laterali.
-    this.drawDome(screen, 26, baseY - 4);
-    this.drawDome(screen, VIEW_W - 34, baseY - 4);
-  }
-
-  private drawDome(screen: Screen, x: number, y: number): void {
-    screen.rect(x, y, 8, 18, "#c7c0aa");
-    screen.rect(x + 1, y - 4, 6, 6, "#9fb6c8");
-    screen.rect(x + 2, y - 7, 4, 4, "#9fb6c8");
-    screen.rect(x + 3, y - 10, 2, 4, "#e8c84a");
+    screen.rect(84, 72, 24, 44, "#2f9a4c");
+    screen.rect(108, 72, 24, 44, "#f4f4ec");
+    screen.rect(132, 72, 24, 44, "#d23c3c");
   }
 
   // ---- Logo con ombra netta e bandiera tricolore sotto. ----
@@ -215,38 +195,34 @@ export class TitleScene implements Scene {
     screen.textCenter(clipToWidth(slogan, 220), VIEW_W / 2, 30, PAPER);
   }
 
-  // ---- Podio con i tre starter, ben staccati e con etichetta VOTA. ----
-  private drawPodium(screen: Screen): void {
-    const stageY = 106;
-    // Pedana.
-    screen.rect(24, stageY + 16, VIEW_W - 48, 10, "#5a4632");
-    screen.rect(24, stageY + 16, VIEW_W - 48, 3, "#6e573e");
-
-    const ids = [...STARTERS];
-    const spots = [46, VIEW_W / 2, VIEW_W - 46];
-    for (let i = 0; i < ids.length && i < spots.length; i += 1) {
-      const art = MONSTER_ART[ids[i]];
-      const bob = Math.round(Math.sin(this.time * 3 + i * 2.1) * 2);
-      const cx = spots[i] - 12;
-      // Ombra a terra.
-      screen.rect(cx - 2, stageY + 14, 28, 4, "rgba(0,0,0,0.25)");
-      // PNG PixelLab (o pixmap) ancorato in basso sul podio, con bob.
-      drawMonsterSprite(screen, ids[i], art, cx - 6, stageY - 28 + bob, 40, 40);
-    }
-  }
-
   // ---- Menu in basso, centrato e riquadrato, con comandi e disclaimer. ----
   private drawMenu(screen: Screen): void {
-    const rowH = 12;
-    const w = Math.min(VIEW_W - 16, Math.max(120, this.menu.measureWidth()));
-    const menuH = this.menu.measureHeight(rowH);
-    const footerH = 9;
+    const rowH = 14;
+    const menuH = this.menu.items.length * rowH;
+    const w = Math.min(VIEW_W - 20, Math.max(154, this.menu.measureWidth() + 8));
+    const footerH = 10;
     const x = Math.round((VIEW_W - w) / 2);
-    const y = VIEW_H - menuH - footerH - 6;
-    // Velo morbido dietro il menu (sotto il pannello) per leggibilità.
-    screen.rect(0, y - 4, VIEW_W, menuH + footerH + 10, "rgba(10,14,28,0.5)");
-    this.menu.draw(screen, x, y, w, rowH);
-    // Riga comandi + disclaimer satira, centrata sotto il pannello.
-    screen.textCenter("A SCEGLI   B INDIETRO   ·   SATIRA", VIEW_W / 2, VIEW_H - 8, GREY);
+    const y = VIEW_H - menuH - footerH - 8;
+    this.menuTapGeom = { x, y, w, rowH };
+
+    screen.rect(0, y - 8, VIEW_W, menuH + footerH + 16, "rgba(6,8,16,0.68)");
+    screen.rect(x - 4, y - 4, w + 8, menuH + 8, "rgba(16,20,31,0.94)");
+    screen.frame(x - 4, y - 4, w + 8, menuH + 8, "#f4d34a");
+    for (let i = 0; i < this.menu.items.length; i += 1) {
+      const item = this.menu.items[i];
+      const rowY = y + i * rowH;
+      const selected = i === this.menu.index;
+      if (selected) {
+        screen.rect(x, rowY + 1, w, rowH - 2, "#f4d34a");
+        screen.rect(x + 2, rowY + 3, 3, rowH - 6, "#10141f");
+      }
+      const color = selected ? "#10141f" : PAPER;
+      const rightW = item.rightLabel ? item.rightLabel.length * 6 + 6 : 0;
+      screen.text(clipToWidth(item.label, w - 20 - rightW), x + 10, rowY + 4, color);
+      if (item.rightLabel) {
+        screen.textRight(item.rightLabel, x + w - 8, rowY + 4, selected ? "#10141f" : "#cfe6ff");
+      }
+    }
+    screen.textCenter("A SCEGLI   B INDIETRO   SATIRA", VIEW_W / 2, VIEW_H - 8, GREY);
   }
 }

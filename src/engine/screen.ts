@@ -8,10 +8,18 @@ export interface Pixmap {
   pal: Record<string, string>;
 }
 
+export interface ImageBounds {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 // Renderer pixel-perfect su canvas 240x180, con cache degli sprite.
 export class Screen {
   readonly ctx: CanvasRenderingContext2D;
   private spriteCache = new Map<string, HTMLCanvasElement>();
+  private imageBoundsCache = new WeakMap<HTMLImageElement, ImageBounds>();
 
   constructor(private canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d");
@@ -226,6 +234,73 @@ export class Screen {
       this.ctx.restore();
     } else {
       this.ctx.drawImage(img, dx, dy, w, h);
+    }
+  }
+
+  imageBounds(img: HTMLImageElement): ImageBounds {
+    const cached = this.imageBoundsCache.get(img);
+    if (cached) {
+      return cached;
+    }
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    const fallback = { x: 0, y: 0, w, h };
+    if (w <= 0 || h <= 0) {
+      return fallback;
+    }
+    const off = document.createElement("canvas");
+    off.width = w;
+    off.height = h;
+    const octx = off.getContext("2d", { willReadFrequently: true });
+    if (!octx) {
+      return fallback;
+    }
+    octx.drawImage(img, 0, 0);
+    const data = octx.getImageData(0, 0, w, h).data;
+    let minX = w;
+    let minY = h;
+    let maxX = -1;
+    let maxY = -1;
+    for (let py = 0; py < h; py += 1) {
+      for (let px = 0; px < w; px += 1) {
+        if (data[(py * w + px) * 4 + 3] <= 8) {
+          continue;
+        }
+        if (px < minX) minX = px;
+        if (py < minY) minY = py;
+        if (px > maxX) maxX = px;
+        if (py > maxY) maxY = py;
+      }
+    }
+    const bounds = maxX >= minX && maxY >= minY
+      ? { x: minX, y: minY, w: maxX - minX + 1, h: maxY - minY + 1 }
+      : fallback;
+    this.imageBoundsCache.set(img, bounds);
+    return bounds;
+  }
+
+  imageSpriteCropped(
+    img: HTMLImageElement,
+    x: number,
+    y: number,
+    opts?: { flipX?: boolean; scale?: number; scaleX?: number; scaleY?: number }
+  ): void {
+    const b = this.imageBounds(img);
+    const s = opts?.scale ?? 1;
+    const sx = (opts?.scaleX ?? 1) * s;
+    const sy = (opts?.scaleY ?? 1) * s;
+    const w = b.w * sx;
+    const h = b.h * sy;
+    const dx = Math.round(x);
+    const dy = Math.round(y);
+    if (opts?.flipX) {
+      this.ctx.save();
+      this.ctx.translate(dx + w, dy);
+      this.ctx.scale(-1, 1);
+      this.ctx.drawImage(img, b.x, b.y, b.w, b.h, 0, 0, w, h);
+      this.ctx.restore();
+    } else {
+      this.ctx.drawImage(img, b.x, b.y, b.w, b.h, dx, dy, w, h);
     }
   }
 

@@ -40,7 +40,7 @@ export class Screen {
     const viewportW = viewport?.width ?? window.innerWidth;
     const viewportH = viewport?.height ?? window.innerHeight;
     const reservedH = touch ? 150 : 30;
-    const availW = Math.max(240, viewportW - (touch ? 16 : 28));
+    const availW = Math.max(240, viewportW - (touch ? 32 : 28));
     const availH = Math.max(160, viewportH - reservedH);
     const rawScale = Math.min(availW / VIEW_W, availH / VIEW_H);
 

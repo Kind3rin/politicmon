@@ -4,6 +4,18 @@
   box-sizing: border-box;
 }
 
+:root {
+  --shell-night: #0b1020;
+  --shell-ink: #121a31;
+  --shell-panel: #202b4f;
+  --shell-rim: #4c5b86;
+  --shell-gold: #f4d34a;
+  --shell-green: #42b86a;
+  --shell-red: #e85858;
+  --shell-blue: #6aa8ff;
+  --shell-plum: #5b2d4b;
+}
+
 /* ---- Splash video iniziale ---- */
 #intro-overlay {
   position: fixed;
@@ -200,8 +212,9 @@ body.touch #app {
   gap: 0;
   padding: max(6px, env(safe-area-inset-top)) 6px max(6px, env(safe-area-inset-bottom));
   background:
-    radial-gradient(circle at 50% 8%, rgba(255, 232, 168, 0.08), transparent 28%),
-    linear-gradient(180deg, #171d31 0%, #0c1020 100%);
+    radial-gradient(circle at 28% 4%, rgba(244, 211, 74, 0.16), transparent 26%),
+    radial-gradient(circle at 76% 22%, rgba(106, 168, 255, 0.14), transparent 28%),
+    linear-gradient(180deg, #18213a 0%, #090d1a 100%);
 }
 
 body.touch #console-shell {
@@ -209,43 +222,63 @@ body.touch #console-shell {
   min-height: 0;
   max-width: 640px;
   justify-content: flex-start;
-  gap: 10px;
-  padding: 12px 10px 16px;
-  border: 2px solid rgba(255, 255, 255, 0.08);
-  border-radius: 26px 26px 42px 42px;
+  gap: clamp(9px, 1.6vh, 14px);
+  padding: 12px 10px 18px;
+  border: 2px solid rgba(198, 211, 255, 0.2);
+  border-radius: 30px 30px 46px 46px;
   background:
-    linear-gradient(145deg, rgba(59, 68, 108, 0.95), rgba(22, 27, 48, 0.98) 48%, rgba(12, 15, 28, 0.98)),
-    repeating-linear-gradient(135deg, transparent 0 18px, rgba(255, 255, 255, 0.025) 18px 20px);
+    radial-gradient(circle at 18% 10%, rgba(255, 255, 255, 0.18), transparent 15%),
+    radial-gradient(circle at 86% 76%, rgba(232, 88, 88, 0.18), transparent 22%),
+    linear-gradient(145deg, #3b4772 0%, var(--shell-panel) 28%, var(--shell-ink) 58%, #0a0e1c 100%),
+    repeating-linear-gradient(135deg, transparent 0 18px, rgba(255, 255, 255, 0.035) 18px 20px);
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.14),
-    inset 0 -12px 24px rgba(0, 0, 0, 0.28),
-    0 22px 60px rgba(0, 0, 0, 0.5);
+    inset 0 2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -18px 28px rgba(0, 0, 0, 0.34),
+    0 0 0 2px rgba(4, 7, 15, 0.8),
+    0 24px 66px rgba(0, 0, 0, 0.58);
   overflow: hidden;
+}
+
+body.touch #console-shell::before {
+  content: "";
+  position: absolute;
+  inset: 7px 8px auto;
+  height: 64px;
+  border-radius: 22px 22px 14px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(90deg, rgba(66, 184, 106, 0.26), transparent 18% 82%, rgba(232, 88, 88, 0.2)),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(8, 12, 24, 0.26));
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.42);
+  pointer-events: none;
 }
 
 body.touch #console-shell::after {
   content: "";
   position: absolute;
-  right: 18px;
-  bottom: 16px;
-  width: 92px;
-  height: 42px;
-  opacity: 0.32;
+  right: 20px;
+  bottom: 18px;
+  width: 104px;
+  height: 46px;
+  opacity: 0.42;
   background:
-    repeating-linear-gradient(135deg, transparent 0 8px, rgba(200, 210, 238, 0.45) 8px 10px);
+    repeating-linear-gradient(135deg, transparent 0 8px, rgba(202, 214, 245, 0.54) 8px 10px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent);
   transform: skewX(-14deg);
   pointer-events: none;
 }
 
 body.touch #console-top {
+  position: relative;
+  z-index: 1;
   width: min(100%, 570px);
-  min-height: 26px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 0 8px;
-  color: #e8c84a;
+  padding: 2px 10px 0;
+  color: var(--shell-gold);
   font-size: 13px;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -254,39 +287,74 @@ body.touch #console-top {
 }
 
 .console-brand {
-  font-style: italic;
+  position: relative;
+  min-height: 38px;
+  min-width: min(66vw, 276px);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-style: normal;
   /* Reset del button: deve sembrare la scritta serigrafata, ma è toccabile
      e apre il menu di gioco (START) su mobile. */
   appearance: none;
-  background: none;
-  border: 0;
+  background:
+    url("/sprites/ui/console_badge.png") center / 100% 100% no-repeat,
+    linear-gradient(135deg, rgba(12, 18, 34, 0.92), rgba(36, 47, 84, 0.9));
+  border: 1px solid rgba(244, 211, 74, 0.32);
   margin: 0;
-  padding: 4px 6px;
+  padding: 7px 16px 8px 18px;
   font: inherit;
-  font-style: italic;
   color: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
-  text-shadow: inherit;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.72);
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 16px 12px 16px 12px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 4px 14px rgba(0, 0, 0, 0.3);
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   transition: transform 0.05s ease, background 0.1s ease;
 }
 
+.console-brand-main {
+  color: #ffe36a;
+  font-style: italic;
+}
+
+.console-brand-color {
+  padding: 1px 5px 2px;
+  border-radius: 6px;
+  color: #10141f;
+  background:
+    linear-gradient(90deg, var(--shell-green) 0 33%, #f4f4ec 33% 66%, var(--shell-red) 66% 100%);
+  text-shadow: none;
+  box-shadow: 0 0 0 1px rgba(8, 10, 18, 0.68);
+}
+
 .console-brand:active {
   transform: scale(0.94);
-  background: rgba(232, 200, 74, 0.18);
+  filter: brightness(1.12);
+}
+
+body.touch #game-canvas {
+  border-radius: 10px;
 }
 
 .console-power {
+  min-height: 28px;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  color: #aeb8d8;
+  gap: 6px;
+  padding: 5px 9px;
+  border: 1px solid rgba(174, 184, 216, 0.18);
+  border-radius: 999px;
+  color: #d4dcff;
+  background: rgba(8, 12, 24, 0.38);
   font-size: 10px;
   letter-spacing: 0.12em;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .console-power i {
@@ -299,21 +367,37 @@ body.touch #console-top {
 }
 
 body.touch #screen-frame {
-  border: 8px solid #171b2b;
-  border-bottom-width: 14px;
-  border-radius: 16px 16px 24px 24px;
+  position: relative;
+  z-index: 1;
+  padding: 7px;
+  border: 1px solid rgba(232, 236, 255, 0.18);
+  border-bottom-width: 2px;
+  border-radius: 20px 20px 28px 28px;
+  background:
+    linear-gradient(#080b14, #080b14) padding-box,
+    linear-gradient(135deg, var(--shell-gold), var(--shell-green) 38%, var(--shell-blue) 68%, var(--shell-red)) border-box;
   box-shadow:
-    0 0 0 2px rgba(222, 230, 255, 0.16),
-    0 10px 28px rgba(0, 0, 0, 0.48),
-    inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+    0 0 0 3px rgba(6, 9, 18, 0.9),
+    0 12px 30px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body.touch #screen-frame::before {
+  content: "";
+  position: absolute;
+  inset: 7px 7px auto;
+  height: 28%;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent);
+  pointer-events: none;
 }
 
 body.touch #screen-frame::after {
-  content: "Politicmon";
+  content: "POLITICMON COLOR";
   position: absolute;
-  left: 14px;
-  bottom: -13px;
-  color: rgba(232, 200, 74, 0.8);
+  left: 16px;
+  bottom: -16px;
+  color: rgba(244, 211, 74, 0.86);
   font-size: 8px;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -352,11 +436,13 @@ body.touch #touch-ui {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 2px solid #39415a;
+  border: 2px solid #53618d;
   background:
-    radial-gradient(circle at 50% 36%, rgba(255, 255, 255, 0.07), transparent 62%),
-    #1c2333;
-  box-shadow: inset 0 3px 9px rgba(0, 0, 0, 0.55);
+    radial-gradient(circle at 50% 38%, rgba(244, 211, 74, 0.11), transparent 56%),
+    radial-gradient(circle, #263150 0 58%, #11182b 60% 100%);
+  box-shadow:
+    inset 0 3px 10px rgba(0, 0, 0, 0.62),
+    0 2px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Crocetta-guida sulla base, per suggerire le 4 direzioni. */
@@ -386,10 +472,12 @@ body.touch #touch-ui {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  border: 2px solid #5a3946;
+  border: 2px solid #82425b;
   background:
-    radial-gradient(circle at 50% 34%, #6a5868, #2e2330 72%);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.55);
+    radial-gradient(circle at 45% 34%, #7f6674, #3a2636 70%, #1b1420 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.09),
+    0 5px 9px rgba(0, 0, 0, 0.56);
   pointer-events: none;
   transition: transform 0.06s linear;
 }
@@ -409,16 +497,21 @@ body.ctrl-stick #touch-stick {
   position: absolute;
   width: 46px;
   height: 46px;
-  border: 2px solid #39415a;
-  border-radius: 8px;
-  background: #232a3d;
-  color: #aeb8d8;
+  border: 2px solid #4e5c86;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #303b5c, #171e33);
+  color: #d4dcff;
   font-size: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 3px 0 #080b14;
   touch-action: none;
 }
 
 .dpad-btn:active {
-  background: #39415a;
+  background: linear-gradient(180deg, #1a2138, #303b5c);
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .dpad-up { top: 0; left: 43px; }
@@ -436,53 +529,82 @@ body.ctrl-stick #touch-stick {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  border: 2px solid #5a3946;
-  background: #3d2330;
-  color: #e8aebe;
+  border: 2px solid #8a4661;
+  background:
+    radial-gradient(circle at 42% 30%, rgba(255, 255, 255, 0.18), transparent 28%),
+    linear-gradient(180deg, #74405a, #381f32);
+  color: #ffd8e2;
   font-size: 20px;
   font-weight: 700;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.1),
+    0 5px 0 #17101b,
+    0 8px 14px rgba(0, 0, 0, 0.34);
   touch-action: none;
 }
 
 .a-btn { margin-bottom: 26px; }
 
 .ab-btn:active {
-  background: #5a3946;
+  transform: translateY(3px);
+  background:
+    radial-gradient(circle at 42% 30%, rgba(255, 255, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, #3a2134, #74405a);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.06),
+    0 2px 0 #17101b;
 }
 
 .start-btn {
   height: 26px;
   padding: 0 14px;
   border-radius: 13px;
-  border: 2px solid #39415a;
-  background: #232a3d;
-  color: #aeb8d8;
+  border: 2px solid #4e5c86;
+  background: linear-gradient(180deg, #303b5c, #171e33);
+  color: #d4dcff;
   font-size: 10px;
   letter-spacing: 1px;
   align-self: center;
   margin-left: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 3px 0 #080b14;
   touch-action: none;
 }
 
 .start-btn:active {
-  background: #39415a;
+  transform: translateY(2px);
+  background: linear-gradient(180deg, #171e33, #303b5c);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 @media (max-width: 480px) {
   body.touch #console-shell {
     gap: 8px;
-    padding: 10px 7px 12px;
-    border-radius: 20px 20px 34px 34px;
+    padding: 10px 7px 13px;
+    border-radius: 22px 22px 36px 36px;
   }
 
   body.touch #console-top {
-    min-height: 22px;
+    min-height: 38px;
     font-size: 11px;
+    padding-inline: 4px;
+  }
+
+  .console-brand {
+    min-height: 34px;
+    min-width: min(67vw, 236px);
+    gap: 5px;
+    padding: 6px 11px;
+  }
+
+  .console-power {
+    padding: 4px 7px;
+    font-size: 9px;
   }
 
   body.touch #screen-frame {
-    border-width: 6px;
-    border-bottom-width: 12px;
+    padding: 5px;
     border-radius: 13px 13px 20px 20px;
   }
 

@@ -670,6 +670,19 @@
           "reason": "Older 3/4 building assets read as perspective objects and made door collision feel misaligned; kept in files but no longer loaded by roof chars."
         }
       ]
+    },
+    {
+      "id": "console-shell-polish-2026-06-29",
+      "tool": "create_map_object + css integration",
+      "state": "downloaded",
+      "styleReference": "premium retro handheld console UI, Italian tricolor accents, dark navy enamel, gold trim, PixelLab 16-bit badge polish",
+      "outputs": [
+        {
+          "file": "ui/console_badge.png",
+          "objectId": "14049468-cb8d-438a-9c67-523b76b06b68",
+          "postprocess": "alpha-cropped from 256x256 and normalized to 256x72 transparent badge"
+        }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -854,6 +867,7 @@
         "ui/battle_bg.png",
         "ui/hpbar.png",
         "ui/badge.png",
+        "ui/console_badge.png",
         "ui/slot_cabinet.png",
         "ui/type_populismo.png",
         "ui/type_tecno.png",

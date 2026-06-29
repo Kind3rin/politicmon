@@ -12,12 +12,8 @@ const shots = await page.evaluate(async () => {
   const { newGameState } = await import("/src/game/state.ts");
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
   const { createMonster } = await import("/src/game/monster.ts");
-  const { loadWangSet } = await import("/src/engine/assets.ts");
-  const { registerWangSet } = await import("/src/art/tiles.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
-  loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
-  await new Promise((r) => setTimeout(r, 3500));
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);

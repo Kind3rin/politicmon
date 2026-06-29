@@ -12,28 +12,24 @@ const shots = await page.evaluate(async () => {
   const { newGameState } = await import("/src/game/state.ts");
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
   const { createMonster } = await import("/src/game/monster.ts");
-  const { preloadSprites, loadWangSet } = await import("/src/engine/assets.ts");
-  const { registerWangSet } = await import("/src/art/tiles.ts");
+  const { preloadSprites } = await import("/src/engine/assets.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
-  loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
   preloadSprites({
     "tile:.": "tiles/grass_flat.png", "tile:=": "tiles/path_flat.png",
+    "tile:z": "tiles/sand.png", "tile:w": "tiles/water.png",
     "tile:p": "tiles/floor_wood.png", "tile:A": "tiles/wall_interior.png", "tile:j": "tiles/deck_asphalt.png",
     "obj:L": "tiles/obj_bed.png", "obj:t": "tiles/obj_table.png", "obj:b": "tiles/obj_shelf.png",
     "obj:P": "tiles/obj_plant.png", "obj:h": "tiles/obj_counter.png", "obj:k": "tiles/obj_machine.png",
     "obj:~": "tiles/obj_tallgrass.png", "obj:,": "tiles/obj_flowers.png",
     "obj:J": "tiles/obj_girder.png", "obj:K": "tiles/obj_crane.png",
     "obj:g": "tiles/obj_golddoor.png", "char:schettino": "chars/schettino.png",
-    "build:M": "tiles/build_palace.png", "build:$": "tiles/build_casino.png",
+    "build:M": "tiles/build_palace.png",
     "npc:guard:south": "chars/npc_guard_south.png"
   });
   preloadSprites({
     "obj:T": "tiles/tree.png", "obj:s": "tiles/sign.png", "obj:f": "tiles/fence.png",
-    "build:r": "tiles/build_house.png", "build:u": "tiles/build_lab.png",
-    "build:e": "tiles/build_bar.png", "build:Q": "tiles/build_bar.png",
-    "build:y": "tiles/build_gym.png", "build:B": "tiles/build_gym.png", "build:x": "tiles/build_gym.png",
-    "build:$": "tiles/build_casino.png", "build:M": "tiles/build_palace.png",
+    "build:M": "tiles/build_palace.png",
     "player:south": "chars/player_south.png", "veh:ferry": "chars/ferry.png",
     "npc:granny:south": "chars/npc_granny_south.png",
     "npc:aide:south": "chars/npc_aide_south.png",

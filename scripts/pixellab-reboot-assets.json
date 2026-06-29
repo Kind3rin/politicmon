@@ -7,7 +7,7 @@
     "viewRules": [
       "Moving directional actors use 4 cardinal views plus walking frames.",
       "Static objects use one transparent view unless they are entered, boarded, or direction-sensitive.",
-      "Terrain transitions use PixelLab Wang tilesets, not one-off noisy tile swaps.",
+      "Outdoor terrain uses PixelLab top-down tiles; terrain transitions are only enabled when they do not read as cliffs or raised ledges.",
       "Text remains bitmap font; all frames, chips, icons, panels, props, terrain, actors, monsters, and battle backdrops come from PixelLab."
     ]
   },
@@ -566,6 +566,44 @@
           "reason": "Transition tiles still looked like cliffs/raised ledges; only pure flat tile crops were accepted."
         }
       ]
+    },
+    {
+      "id": "outdoor-cartoon-terrain-2026-06-29",
+      "tool": "create_tiles_pro + code integration",
+      "state": "downloaded",
+      "styleReference": "cartoon top-down RPG terrain matching the newer character sprites, readable at 16px world scale",
+      "outputs": [
+        {
+          "file": "tiles/grass_flat.png",
+          "tilesetId": "2bfe7c11-fbce-4c7a-ab1a-ac71ff831009",
+          "sourceTileIndex": 0,
+          "postprocess": "selected 16x16 cartoon grass tile, used as default outdoor ground"
+        },
+        {
+          "file": "tiles/path_flat.png",
+          "tilesetId": "2bfe7c11-fbce-4c7a-ab1a-ac71ff831009",
+          "sourceTileIndex": 3,
+          "postprocess": "selected 16x16 cartoon dirt path tile, kept flat/top-down to avoid raised ledge ambiguity"
+        },
+        {
+          "file": "tiles/sand.png",
+          "tilesetId": "2bfe7c11-fbce-4c7a-ab1a-ac71ff831009",
+          "sourceTileIndex": 10,
+          "postprocess": "selected 16x16 beach sand tile"
+        },
+        {
+          "file": "tiles/water.png",
+          "tilesetId": "2bfe7c11-fbce-4c7a-ab1a-ac71ff831009",
+          "sourceTileIndex": 11,
+          "postprocess": "selected 16x16 water tile; replaces procedural water in outdoor maps"
+        }
+      ],
+      "rejected": [
+        {
+          "tilesetId": "8a63f469-acb0-49e4-95fe-0bd75e700f25",
+          "reason": "Grass/path transition sheet looked like a raised ledge/cliff while gameplay treated it as flat passable terrain."
+        }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -648,15 +686,16 @@
       "state": "regenerate-from-zero"
     },
     {
-      "id": "world-terrain-wang",
+      "id": "world-terrain",
       "domain": "tiles",
-      "tool": "create_topdown_tileset",
+      "tool": "create_tiles_pro",
       "output": [
         "tiles/grass_flat.png",
         "tiles/path_flat.png",
-        "tiles/wang_water_sand.png"
+        "tiles/sand.png",
+        "tiles/water.png"
       ],
-      "note": "Grass/path Wang first pass was disabled because it read as traversable cliffs. Current outdoor ground uses flat PixelLab tiles; water/sand still uses Wang.",
+      "note": "Current outdoor ground/sand/water uses flat top-down PixelLab tiles. Wang transition assets are historical and not loaded because they read as raised/cliff edges in passable areas.",
       "state": "regenerate-from-zero"
     },
     {

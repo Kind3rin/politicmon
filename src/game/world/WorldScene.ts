@@ -445,9 +445,8 @@ export class WorldScene implements Scene {
     return ch;
   }
 
-  // Autotiling Wang del terreno: acqua `w`<->sabbia `z` usa bordi morbidi.
-  // Erba/sentiero restano tile flat PixelLab: il Wang precedente sembrava una
-  // scarpata ma il gameplay lo trattava come piano calpestabile.
+  // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
+  // pieni. I Wang grass/path provati sembravano rilievi attraversabili.
   // Texture PNG di un tile per la mappa corrente: prima l'override di mappa
   // (es. roccia in grotta), poi il PNG di default (`tileImage`). null = pixmap.
   private tilePng(ch: string): HTMLImageElement | null {
@@ -1959,7 +1958,12 @@ export class WorldScene implements Scene {
           }
         }
         if (def.water) {
-          screen.sprite(`tile:w:${waterFrame}`, waterFrames[waterFrame], dx, dy);
+          const waterImg = this.tilePng(ch);
+          if (waterImg) {
+            screen.imageSprite(waterImg, dx, dy);
+          } else {
+            screen.sprite(`tile:w:${waterFrame}`, waterFrames[waterFrame], dx, dy);
+          }
         } else if (def.overlay) {
           // Oggetto overlay (albero/segnale/...): PNG 32px ancorato in basso al
           // tile (la chioma sborda verso l'alto), o pixmap di fallback.

@@ -5,7 +5,7 @@
 // - porte outdoor->interni solo dal fronte, con ritorno davanti alla porta
 // - nessun ingresso laterale attiva un warp
 import { chromium } from "playwright";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 const BASE = process.env.BASE_URL ?? "http://127.0.0.1:5179";
 const browser = await chromium.launch();
@@ -13,10 +13,13 @@ const page = await browser.newPage();
 await page.goto(BASE, { waitUntil: "networkidle" });
 
 const staticProblems = [];
-for (const file of ["src/main.ts", "scripts/shot-buildings.mjs", "scripts/shot-zorder.mjs"]) {
+for (const file of ["src/main.ts", "scripts/shot-buildings.mjs", "scripts/shot-zorder.mjs", "scripts/shot-terrain.mjs"]) {
   const text = readFileSync(file, "utf8");
   if (text.includes('loadWangSet(registerWangSet, "grass_path"')) {
     staticProblems.push(`${file}: riattiva il Wang grass_path`);
+  }
+  if (text.includes('loadWangSet(registerWangSet, "water_sand"')) {
+    staticProblems.push(`${file}: riattiva il Wang water_sand invece dei tile PixelLab cartoon`);
   }
 }
 {
@@ -33,6 +36,14 @@ for (const file of ["src/main.ts", "scripts/shot-buildings.mjs", "scripts/shot-z
   ]) {
     if (text.includes(`"${forbidden}"`) || text.includes(`"tiles/${forbidden}"`)) {
       staticProblems.push(`src/art/tiles.ts: PNG 3/4 ancora mappato (${forbidden})`);
+    }
+  }
+  for (const terrain of ["grass_flat.png", "path_flat.png", "sand.png", "water.png"]) {
+    if (!text.includes(`"tiles/${terrain}"`)) {
+      staticProblems.push(`src/art/tiles.ts: terrain PixelLab mancante (${terrain})`);
+    }
+    if (!existsSync(`public/sprites/tiles/${terrain}`)) {
+      staticProblems.push(`public/sprites/tiles/${terrain}: PNG PixelLab mancante`);
     }
   }
 }
@@ -129,7 +140,7 @@ const runtimeProblems = await page.evaluate(async () => {
 
 const problems = [...staticProblems, ...runtimeProblems];
 if (problems.length === 0) {
-  console.log("OK — layout world: terreno piatto, edifici ortogonali, sentieri davanti alle porte, ingressi laterali respinti, scoglio solo dal gradino.");
+  console.log("OK - layout world: terreno PixelLab cartoon, edifici ortogonali, sentieri davanti alle porte, ingressi laterali respinti, scoglio solo dal gradino.");
 } else {
   console.log(`TROVATI ${problems.length} problemi world layout:`);
   for (const p of problems) console.log("  " + p);

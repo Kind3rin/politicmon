@@ -8,8 +8,7 @@ import { flushActiveState } from "./game/state";
 import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
-import { loadPanelImage, loadWangSet, getSpriteImage } from "./engine/assets";
-import { registerWangSet } from "./art/tiles";
+import { loadPanelImage, getSpriteImage } from "./engine/assets";
 import { setTypeIconLoader } from "./data/poltypes";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
@@ -91,10 +90,6 @@ const stack = new SceneStack();
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
 loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 8);
-
-// Autotiling Wang solo per acqua/sabbia. Erba e sentiero restano tile flat:
-// il vecchio Wang grass/path sembrava una scarpata ma era calpestabile.
-loadWangSet(registerWangSet, "water_sand", "tiles/wang_water_sand.png", ["z", ".", "=", "~"]);
 
 // Icone-tipo (type-badge): collega il loader async di assets.ts a poltypes.ts.
 setTypeIconLoader(getSpriteImage);

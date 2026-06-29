@@ -693,17 +693,17 @@
         {
           "file": "tiles/build_house_front_red.png",
           "objectId": "addb7eff-369c-47c0-a1f7-b76c647fc453",
-          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+          "postprocess": "redesigned as richer residential storefront/house; normalized to 64x48; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_house_front_blue.png",
           "objectId": "26d1c536-1e3e-4490-a005-44480c9fcd60",
-          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+          "postprocess": "redesigned as richer civic market/house; normalized to 64x48; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_house_front_green.png",
           "objectId": "371d2c3b-f4ae-45f4-9f1b-cae98b7a01a1",
-          "postprocess": "normalized to 64x48; visible entrance locked to tile x 32-47"
+          "postprocess": "redesigned as richer villa/house; normalized to 64x48; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_lab_front.png",
@@ -718,12 +718,12 @@
         {
           "file": "tiles/build_studio_front.png",
           "objectId": "c2ea2431-29a3-4e73-a736-f1f65b7cc0f7",
-          "postprocess": "normalized to 64x32 for 4x2 studio/covo buildings; visible entrance locked to tile x 32-47"
+          "postprocess": "redesigned as compact studio/covo building; normalized to 64x32; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_bistro_front.png",
           "objectId": "58b41c5f-d4f8-4f03-ae8e-bb796d4bdf0e",
-          "postprocess": "normalized to 64x32 for 4x2 bistro buildings; visible entrance locked to tile x 32-47"
+          "postprocess": "redesigned as compact non-BAR bistro/house; normalized to 64x32; visible entrance locked to tile x 32-47"
         },
         {
           "file": "tiles/build_gym_front.png",

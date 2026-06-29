@@ -61,3 +61,7 @@ Docs: https://api.pixellab.ai/mcp/docs
   statici 4-dir e walk 4-frame.
 - `vehicles-wave-2026-06-28`: auto, ruspa, monopattino 4-dir; ferry e
   Schettino statici.
+- `monster-politicmon-wave1-2026-06-29`: Giorgetta, Giorgiagon, Ellyna,
+  Schleinix, Renzino, Renzilla rigenerati come caricature-mostro dei politici
+  italiani, con review frame selezionati a mano. Scartato il primo tentativo
+  fantasy generico.

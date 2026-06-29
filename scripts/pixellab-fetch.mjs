@@ -19,8 +19,20 @@ const only = (() => {
 
 mkdirSync(OUT, { recursive: true });
 
+function completedUrl(objectId) {
+  return `https://backblaze.pixellab.ai/file/pixellab-characters/objects/${WORKSPACE}/${objectId}/rotations/unknown.png`;
+}
+
 function frameUrl(objectId, frame) {
   return `https://backblaze.pixellab.ai/file/pixellab-characters/objects/${WORKSPACE}/${objectId}/rotations/frame_${frame}.png`;
+}
+
+async function fetchSprite(objectId, frame) {
+  const completed = await fetch(completedUrl(objectId));
+  if (completed.ok) {
+    return completed;
+  }
+  return fetch(frameUrl(objectId, frame));
 }
 
 let ok = 0, skip = 0, fail = 0;
@@ -28,9 +40,8 @@ for (const m of manifest.monsters) {
   if (only && !only.includes(m.id)) { continue; }
   if (!m.objectId || m.objectId === "DONE") { skip++; continue; }
   const dest = `${OUT}/${m.id}.png`;
-  const url = frameUrl(m.objectId, argFrame);
   try {
-    const res = await fetch(url);
+    const res = await fetchSprite(m.objectId, argFrame);
     if (!res.ok) { console.log(`FAIL ${m.id} (${res.status}) — forse ancora in lavorazione`); fail++; continue; }
     const buf = Buffer.from(await res.arrayBuffer());
     if (buf.length < 200) { console.log(`FAIL ${m.id} (vuoto)`); fail++; continue; }

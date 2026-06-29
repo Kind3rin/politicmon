@@ -5,33 +5,62 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 24 — PixelLab vehicle wave + handoff domani**, 2026-06-28.
+Ultimo aggiornamento: **Round 26 — PixelLab Politicmon italiani wave 1**, 2026-06-29.
 
 ## Handoff domani
 
 Stato repo:
 - Branch: `master`.
 - Tutti i blocchi completati sono stati pushati a fine blocco.
-- Ultimo blocco in corso da pushare: `vehicles-wave-2026-06-28` dopo verifica.
+- Ultimo blocco completato: primi 6 mostri starter/evoluzioni rifatti come
+  caricature-mostriciattoli dei politici italiani, non fantasy generico.
+- Nota importante: il primo tentativo fantasy e stato scartato e sovrascritto.
+  Non riprenderlo.
 
 Verifiche gia fatte nella sessione:
 - `npm run pixellab:coverage`
 - `npm run typecheck`
 - `npm run build`
-- Screenshot/playtest mirati su mondo, terrain, battle, walk frame.
+- Contact sheet: `artifacts/screens/monster-wave1-contact.png`
+- Screenshot/playtest mirati su titolo, mondo, terrain, battle, starter preview.
 
 Da testare su device:
-- Apri la build aggiornata e controlla mondo iniziale, Stretto, veicoli e dialoghi.
-- In particolare guarda auto/ruspa/monopattino in movimento: sono nuovi asset
-  PixelLab direzionali, senza animazione dedicata.
-- Il monopattino e volutamente sottile; se su telefono risulta poco leggibile,
-  rigenerarlo piu largo o scalarlo leggermente nel renderer.
+- Apri la build aggiornata e controlla title, scelta starter, battle, Dex/Party.
+- I mostri da giudicare: `giorgetta`, `giorgiagon`, `ellyna`, `schleinix`,
+  `renzino`, `renzilla`.
+- Criterio: devono ricordare i politici italiani tramite volto/capelli/pose/meme,
+  restando mostri satirici leggibili.
 
 Prossima wave consigliata:
-- Mostri/battle sprites da rigenerare in batch PixelLab mantenendo nomi specie.
-- Subito dopo: UI battle/menu (`battle_bg`, badge/type icons, slot cabinet).
+- Continuare con gli altri Politicmon italiani: Salvinott/Salvinator, Grillix,
+  Contemorfo, Calendauro, Vannaccix, Tajanide, Berlusconix, Draghimon,
+  Mattarellux.
+- Subito dopo: UI battle/menu (`battle_bg`, badge/type icons, slot cabinet) se i
+  mostri sono approvati.
 - Rimane da rifare bene `floor_wood.png`: una generazione era quasi vuota, non
   e stata usata.
+
+### 🎨 Round 26 — PixelLab Politicmon italiani wave 1
+FATTO R26:
+- Scartati i 6 sprite fantasy generici non convincenti.
+- Rigenerati da review pack PixelLab e integrati: Giorgetta, Giorgiagon, Ellyna,
+  Schleinix, Renzino, Renzilla.
+- Direzione corretta: facce/attributi dei politici italiani + corpo da
+  mostriciattolo satirico.
+- Fixato overflow del menu battaglia: `CAMPAGNA` non esce piu dal box azioni.
+- Starter preview ora usa i PNG PixelLab dei mostri e tronca/wrappa la dexline
+  dentro il pannello.
+- Aggiornati `scripts/pixellab-monsters.json`,
+  `scripts/pixellab-reboot-assets.json`, `scripts/pixellab-fetch.mjs` e questa
+  handoff.
+
+### 🎨 Round 25 — proporzioni PixelLab mondo/title
+FATTO R25:
+- Commit pushato: `474ac14` (`Tighten PixelLab world proportions`).
+- Ridotte title UI/logo/menu e sistemate proporzioni mondo.
+- Oggetti PixelLab 32px ora scalati a tile 16px: niente case/props giganti.
+- Ridotta freccia guida, compatta notifica traguardi, rimosso doppio hint
+  inferiore quando e gia presente il quest strip.
 
 ### 🎨 Round 24 — PixelLab vehicle wave
 FATTO R24:

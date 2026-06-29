@@ -290,6 +290,56 @@
           "objectId": "c37045fa-24ca-475b-995e-763765e1256a"
         }
       ]
+    },
+    {
+      "id": "monster-politicmon-wave1-2026-06-29",
+      "tool": "create_1_direction_object + select_object_frames",
+      "state": "downloaded",
+      "styleReference": "satirical Italian politician face attributes as chibi monster mascots, transparent battle sprites, no text/scenery",
+      "outputs": [
+        {
+          "file": "monsters/giorgetta.png",
+          "sourceReviewId": "fa8bdc5d-e283-4bc7-946f-4b80ee327806",
+          "selectedFrame": 8,
+          "objectId": "dbe20b73-3c35-4dd8-a5cd-33d82809e4db"
+        },
+        {
+          "file": "monsters/giorgiagon.png",
+          "sourceReviewId": "b8843220-07f3-453e-a51b-0779faa43359",
+          "selectedFrame": 3,
+          "objectId": "2eeb0c6c-5e86-46ef-855d-ed24422d3664"
+        },
+        {
+          "file": "monsters/ellyna.png",
+          "sourceReviewId": "4a0084fb-5111-4f67-b261-e998ffc49449",
+          "selectedFrame": 15,
+          "objectId": "700aaf68-4d10-4872-b0e3-001c2f4714a0"
+        },
+        {
+          "file": "monsters/schleinix.png",
+          "sourceReviewId": "7451e33e-3d26-48b9-99f9-5a9e0a8551dd",
+          "selectedFrame": 15,
+          "objectId": "98696347-de16-4277-b7fe-5d6ccfa6bf62"
+        },
+        {
+          "file": "monsters/renzino.png",
+          "sourceReviewId": "650565e1-f08b-4efa-beed-0536012ff24d",
+          "selectedFrame": 13,
+          "objectId": "473706c8-f160-488b-963b-7115537b7fc3"
+        },
+        {
+          "file": "monsters/renzilla.png",
+          "sourceReviewId": "caa82f64-f4c7-485a-ac2b-c5c8630284a1",
+          "selectedFrame": 12,
+          "objectId": "7251c182-be59-4096-a5b6-accabdcb15be"
+        }
+      ],
+      "rejected": [
+        {
+          "batch": "generic-fantasy-map-object-attempt",
+          "reason": "Scartato: sembrava fantasy generico invece che Politicmon italiani riconoscibili."
+        }
+      ]
     }
   ],
   "delegatedManifests": [

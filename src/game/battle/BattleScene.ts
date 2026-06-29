@@ -1956,11 +1956,12 @@ export class BattleScene implements Scene {
     const labels = ["LOTTA", "BORSA", "SQUADRA", "CAMPAGNA", "FUGA"];
     const rows = Math.ceil(labels.length / 2); // 3
     const h = 12 + rows * 16;
-    const x = VIEW_W - 116;
+    const w = 142;
+    const x = VIEW_W - w;
     const y = VIEW_H - h;
-    screen.panel(x, y, 116, h);
+    screen.panel(x, y, w, h);
     for (let i = 0; i < labels.length; i += 1) {
-      const cx = x + 10 + (i % 2) * 56;
+      const cx = x + 10 + (i % 2) * 62;
       const cy = y + 8 + Math.floor(i / 2) * 16;
       if (this.mainMenu.index === i) {
         screen.text("►", cx - 2, cy, INK);

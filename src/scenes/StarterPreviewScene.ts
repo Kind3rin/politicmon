@@ -1,11 +1,11 @@
-import { MONSTER_ACTION_ART, MONSTER_ART } from "../art/monsters";
+import { MONSTER_ACTION_ART, MONSTER_ART, monsterImage } from "../art/monsters";
 import { SPECIES } from "../data/species";
 import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { Menu, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { Menu, clipToWidth, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
 // Anteprima dello starter prima della scelta: sprite grande animato (respiro +
 // urlo periodico), tipo, statistiche base e descrizione del Dex. Conferma SÌ/NO.
@@ -48,23 +48,36 @@ export class StarterPreviewScene implements Scene {
     // Sprite grande, animato: respiro + urlo periodico (frame d'azione se c'è).
     const breath = Math.sin(this.time * 3) * 0.04;
     const shout = Math.sin(this.time * 1.2) > 0.7; // ogni tanto "parla"
-    const action = MONSTER_ACTION_ART[this.speciesId];
-    const art = shout && action ? action : MONSTER_ART[this.speciesId];
-    if (art) {
-      const w = art.art[0].length;
-      const h = art.art.length;
-      const scale = 3;
+    const png = monsterImage(this.speciesId);
+    if (png) {
+      const scale = Math.min(78 / png.width, 84 / png.height);
       const sx = 1 - breath;
       const sy = 1 + breath;
       const cx = 56;
       const by = 118;
-      const drawW = w * scale * sx;
-      const drawH = h * scale * sy;
-      // Piedistallo + ombra.
+      const drawW = png.width * scale * sx;
+      const drawH = png.height * scale * sy;
       screen.rect(cx - 24, by - 2, 48, 6, "rgba(0,0,0,0.3)");
-      screen.sprite(`preview:${this.speciesId}${shout && action ? ":a" : ""}`, art, cx - drawW / 2, by - drawH, {
-        scale, scaleX: sx, scaleY: sy
-      });
+      screen.imageSprite(png, cx - drawW / 2, by - drawH, { scaleX: scale * sx, scaleY: scale * sy });
+    } else {
+      const action = MONSTER_ACTION_ART[this.speciesId];
+      const art = shout && action ? action : MONSTER_ART[this.speciesId];
+      if (art) {
+        const w = art.art[0].length;
+        const h = art.art.length;
+        const scale = 3;
+        const sx = 1 - breath;
+        const sy = 1 + breath;
+        const cx = 56;
+        const by = 118;
+        const drawW = w * scale * sx;
+        const drawH = h * scale * sy;
+        // Piedistallo + ombra.
+        screen.rect(cx - 24, by - 2, 48, 6, "rgba(0,0,0,0.3)");
+        screen.sprite(`preview:${this.speciesId}${shout && action ? ":a" : ""}`, art, cx - drawW / 2, by - drawH, {
+          scale, scaleX: sx, scaleY: sy
+        });
+      }
     }
 
     // Scheda informativa a destra.
@@ -99,9 +112,10 @@ export class StarterPreviewScene implements Scene {
 
     // Dexline in basso, su due righe.
     screen.panel(4, 112, VIEW_W - 8, 40);
-    const lines = wrapText(species.dexLine, 38);
+    const dexMaxWidth = VIEW_W - 24;
+    const lines = wrapText(species.dexLine, 26);
     for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-      screen.text(lines[i], 12, 120 + i * 10, INK);
+      screen.text(clipToWidth(lines[i], dexMaxWidth), 12, 120 + i * 10, INK);
     }
 
     this.menu.draw(screen, VIEW_W - 130, VIEW_H - 30, 126, 11);

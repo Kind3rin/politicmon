@@ -1,4 +1,6 @@
 import { audio } from "../engine/audio";
+import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
@@ -155,9 +157,10 @@ export class TitleScene implements Scene {
     } else {
       this.drawTitleFallback(screen);
     }
-    screen.rect(0, 0, VIEW_W, 46, "rgba(6,8,16,0.58)");
-    screen.rect(0, 46, VIEW_W, 16, "rgba(6,8,16,0.24)");
+    screen.rect(0, 0, VIEW_W, 43, "rgba(6,8,16,0.58)");
+    screen.rect(0, 43, VIEW_W, 12, "rgba(6,8,16,0.24)");
     this.drawLogo(screen);
+    this.drawStarterShowcase(screen);
     this.drawMenu(screen);
   }
 
@@ -195,19 +198,91 @@ export class TitleScene implements Scene {
     screen.textCenter(clipToWidth(slogan, 220), VIEW_W / 2, 30, PAPER);
   }
 
-  // ---- Menu in basso, centrato e riquadrato, con comandi e disclaimer. ----
+  private drawStarterShowcase(screen: Screen): void {
+    const slots = [
+      { x: 20, color: "#d23c3c", flip: false },
+      { x: 94, color: "#3f9a5c", flip: false },
+      { x: 168, color: "#d8a830", flip: true }
+    ];
+    screen.rect(0, 50, VIEW_W, 54, "rgba(6,8,16,0.22)");
+    for (let i = 0; i < STARTERS.length; i += 1) {
+      const id = STARTERS[i];
+      const slot = slots[i];
+      const bob = Math.round(Math.sin(this.time * 2 + i * 1.7) * 2);
+      const cx = slot.x + 26;
+      screen.rect(cx - 22, 94, 44, 4, "rgba(0,0,0,0.34)");
+      screen.rect(cx - 18, 90, 36, 4, slot.color);
+      screen.rect(cx - 18, 94, 12, 2, "#2f9a4c");
+      screen.rect(cx - 6, 94, 12, 2, "#f4f4ec");
+      screen.rect(cx + 6, 94, 12, 2, "#d23c3c");
+      screen.frame(cx - 19, 89, 38, 8, "#10141f");
+      drawMonsterSprite(screen, id, MONSTER_ART[id], slot.x + 5, 52 + bob, 42, 40, { flipX: slot.flip });
+    }
+  }
+
+  private drawMenuPreview(screen: Screen, x: number, y: number, w: number, h: number): void {
+    const label = this.menu.items[this.menu.index]?.label ?? "";
+    const cx = x + Math.floor(w / 2);
+    const cy = y + Math.floor(h / 2);
+    screen.rect(x, y, w, h, "rgba(16,20,31,0.86)");
+    screen.frame(x, y, w, h, "#5f6d8a");
+
+    if (label.startsWith("NUOVA") || label.startsWith("CONTINUA")) {
+      screen.rect(x + 10, y + 8, 22, 30, "#f4f4ec");
+      screen.frame(x + 10, y + 8, 22, 30, "#10141f");
+      screen.rect(x + 14, y + 13, 14, 2, "#d23c3c");
+      screen.rect(x + 14, y + 18, 14, 2, "#3f9a5c");
+      screen.rect(x + 14, y + 23, 14, 2, "#4868c8");
+      screen.rect(x + 42, y + 30, 30, 3, "#d8bc7c");
+      screen.rect(x + 49, y + 20, 3, 13, "#d8bc7c");
+      screen.rect(x + 56, y + 16, 3, 17, "#d8bc7c");
+      const starterId = STARTERS[Math.floor(this.time * 1.2) % STARTERS.length];
+      drawMonsterSprite(screen, starterId, MONSTER_ART[starterId], x + 49, y + 7, 28, 26);
+      return;
+    }
+
+    if (label.startsWith("NOME")) {
+      screen.rect(cx - 10, cy - 16, 20, 20, "#f0c8a0");
+      screen.frame(cx - 10, cy - 16, 20, 20, "#10141f");
+      screen.rect(cx - 5, cy - 7, 3, 3, "#10141f");
+      screen.rect(cx + 4, cy - 7, 3, 3, "#10141f");
+      screen.rect(cx - 4, cy + 1, 10, 2, "#a84040");
+      screen.rect(cx - 16, cy + 8, 32, 12, "#4868c8");
+      screen.frame(cx - 16, cy + 8, 32, 12, "#10141f");
+      return;
+    }
+
+    if (label.startsWith("AUDIO")) {
+      const on = audio.enabled;
+      screen.rect(cx - 24, cy - 8, 10, 16, on ? "#f4d34a" : "#5f6d8a");
+      screen.rect(cx - 14, cy - 13, 8, 26, on ? "#f4d34a" : "#5f6d8a");
+      for (let i = 0; i < 3; i += 1) {
+        const hh = on ? 8 + i * 6 : 3;
+        screen.rect(cx + i * 9, cy - Math.floor(hh / 2), 5, hh, on ? "#6aa8ff" : "#5f6d8a");
+      }
+      return;
+    }
+
+    screen.rect(cx - 16, cy - 10, 32, 22, "#6b1f2a");
+    screen.frame(cx - 16, cy - 10, 32, 22, "#f06060");
+    screen.rect(cx - 12, cy - 16, 24, 4, "#f06060");
+    screen.rect(cx - 8, cy - 4, 16, 2, "#f4f4ec");
+    screen.rect(cx - 8, cy + 2, 16, 2, "#f4f4ec");
+  }
+
+  // ---- Menu compatto: comandi a sinistra, anteprima visuale a destra. ----
   private drawMenu(screen: Screen): void {
-    const rowH = 14;
+    const rowH = 12;
     const menuH = this.menu.items.length * rowH;
-    const w = Math.min(VIEW_W - 20, Math.max(154, this.menu.measureWidth() + 8));
-    const footerH = 10;
-    const x = Math.round((VIEW_W - w) / 2);
-    const y = VIEW_H - menuH - footerH - 8;
+    const w = Math.min(128, Math.max(116, this.menu.measureWidth() + 10));
+    const footerH = 12;
+    const x = 8;
+    const y = VIEW_H - menuH - footerH - 6;
     this.menuTapGeom = { x, y, w, rowH };
 
-    screen.rect(0, y - 8, VIEW_W, menuH + footerH + 16, "rgba(6,8,16,0.68)");
-    screen.rect(x - 4, y - 4, w + 8, menuH + 8, "rgba(16,20,31,0.94)");
-    screen.frame(x - 4, y - 4, w + 8, menuH + 8, "#f4d34a");
+    screen.rect(0, y - 6, VIEW_W, menuH + footerH + 12, "rgba(6,8,16,0.58)");
+    screen.rect(x - 3, y - 3, w + 6, menuH + 6, "rgba(16,20,31,0.92)");
+    screen.frame(x - 3, y - 3, w + 6, menuH + 6, "#f4d34a");
     for (let i = 0; i < this.menu.items.length; i += 1) {
       const item = this.menu.items[i];
       const rowY = y + i * rowH;
@@ -218,11 +293,12 @@ export class TitleScene implements Scene {
       }
       const color = selected ? "#10141f" : PAPER;
       const rightW = item.rightLabel ? item.rightLabel.length * 6 + 6 : 0;
-      screen.text(clipToWidth(item.label, w - 20 - rightW), x + 10, rowY + 4, color);
+      screen.text(clipToWidth(item.label, w - 20 - rightW), x + 10, rowY + 3, color);
       if (item.rightLabel) {
-        screen.textRight(item.rightLabel, x + w - 8, rowY + 4, selected ? "#10141f" : "#cfe6ff");
+        screen.textRight(item.rightLabel, x + w - 8, rowY + 3, selected ? "#10141f" : "#cfe6ff");
       }
     }
+    this.drawMenuPreview(screen, x + w + 10, y, VIEW_W - x - w - 18, menuH);
     screen.textCenter("A SCEGLI   B INDIETRO   SATIRA", VIEW_W / 2, VIEW_H - 8, GREY);
   }
 }

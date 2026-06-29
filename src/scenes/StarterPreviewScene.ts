@@ -50,15 +50,16 @@ export class StarterPreviewScene implements Scene {
     const shout = Math.sin(this.time * 1.2) > 0.7; // ogni tanto "parla"
     const png = monsterImage(this.speciesId);
     if (png) {
-      const scale = Math.min(78 / png.width, 84 / png.height);
+      const b = screen.imageBounds(png);
+      const scale = Math.min(78 / b.w, 84 / b.h);
       const sx = 1 - breath;
       const sy = 1 + breath;
       const cx = 56;
       const by = 118;
-      const drawW = png.width * scale * sx;
-      const drawH = png.height * scale * sy;
+      const drawW = b.w * scale * sx;
+      const drawH = b.h * scale * sy;
       screen.rect(cx - 24, by - 2, 48, 6, "rgba(0,0,0,0.3)");
-      screen.imageSprite(png, cx - drawW / 2, by - drawH, { scaleX: scale * sx, scaleY: scale * sy });
+      screen.imageSpriteCropped(png, cx - drawW / 2, by - drawH, { scaleX: scale * sx, scaleY: scale * sy });
     } else {
       const action = MONSTER_ACTION_ART[this.speciesId];
       const art = shout && action ? action : MONSTER_ART[this.speciesId];

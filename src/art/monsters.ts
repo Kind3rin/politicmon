@@ -38,10 +38,11 @@ export function drawMonsterSprite(
 ): void {
   const png = monsterImage(speciesId);
   if (png) {
-    const scale = Math.min(boxW / png.width, boxH / png.height);
-    const dw = png.width * scale;
-    const dh = png.height * scale;
-    screen.imageSprite(png, x + (boxW - dw) / 2, y + boxH - dh, { scaleX: scale, scaleY: scale, flipX: opts?.flipX });
+    const b = screen.imageBounds(png);
+    const scale = Math.min(boxW / b.w, boxH / b.h);
+    const dw = b.w * scale;
+    const dh = b.h * scale;
+    screen.imageSpriteCropped(png, x + (boxW - dw) / 2, y + boxH - dh, { scaleX: scale, scaleY: scale, flipX: opts?.flipX });
     return;
   }
   if (!pix) {

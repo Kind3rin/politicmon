@@ -135,8 +135,8 @@ export function objectImage(ch: string): HTMLImageElement | null {
 }
 
 // EDIFICI come building-PNG: ogni tipo di tetto mappa a un PNG 64x48 (4x3 tile)
-// che copre tetto + facciata. I char tetto coinvolti (case `r`, lab `u`, bar
-// `e`/`Q`, palestre `y`/`B`/`x`). Il renderer rileva l'angolo alto-sx del blocco
+// che copre tetto + facciata. I char tetto coinvolti (case `r`/`v`/`o`/`H`, lab
+// `u`, bar `e`/`Q`, palestre `y`/`B`/`x`). Il renderer rileva l'angolo alto-sx del blocco
 // tetto e disegna il building una volta. Le celle facciata (`m`/`d`/`n`) NON si
 // disegnano separatamente sotto un edificio coperto dal PNG.
 // Building-PNG per char-tetto. La dimensione del PNG (64x48 = 4x3 tile, oppure
@@ -145,6 +145,9 @@ export function objectImage(ch: string): HTMLImageElement | null {
 // tile di larghezza → PNG 96px.
 const BUILDING_PNG: Record<string, string> = {
   r: "tiles/build_house.png",  // 64x48 (4x3)
+  v: "tiles/build_house_blue.png",
+  o: "tiles/build_house_green.png",
+  H: "tiles/build_house_brick.png",
   u: "tiles/build_lab.png",    // 64x48
   e: "tiles/build_bar.png",    // 64x48
   Q: "tiles/build_bar.png",
@@ -528,6 +531,44 @@ const sandArt = flatTile("z", [
   [5, 13, "Z"], [10, 14, "Z"], [14, 1, "Z"]
 ]);
 
+const cliffArt = rows(
+  "zzzzzzzzzzzzzzzz",
+  "zZZzzZZzzZZzzZZz",
+  "RRRRRRRRRRRRRRRR",
+  "RrrRrrRrrRrrRrrR",
+  "rrrrrrrrrrrrrrrr",
+  "rddrddrddrddrddr",
+  "dddddddddddddddd",
+  "dssddssddssddssd",
+  "dddddddddddddddd",
+  "rddrddrddrddrddr",
+  "rrrrrrrrrrrrrrrr",
+  "RrrRrrRrrRrrRrrR",
+  "RRRRRRRRRRRRRRRR",
+  "zzZZzzZZzzZZzzZZ",
+  "zzzzzzzzzzzzzzzz",
+  "zZzzZzzZzzZzzZzz"
+);
+
+const stairArt = rows(
+  "zzzzzzzzzzzzzzzz",
+  "zzzzzzzzzzzzzzzz",
+  "zzzzRRRRRRzzzzzz",
+  "zzzRrrrrrrRzzzzz",
+  "zzRrrllllrrRzzzz",
+  "zzrrllllllllrzzz",
+  "zrrllllssllllrzz",
+  "zrrlllsssslllrzz",
+  "zrrllllssllllrzz",
+  "zzrrllllllllrzzz",
+  "zzRrrllllrrRzzzz",
+  "zzzRrrrrrrRzzzzz",
+  "zzzzRRRRRRzzzzzz",
+  "zzzzzzzzzzzzzzzz",
+  "zzzzzzzzzzzzzzzz",
+  "zzzzzzzzzzzzzzzz"
+);
+
 // Impalcato del ponte: asfalto nuovo di zecca con striscia di mezzeria.
 // (L'asfalto c'è. Il resto del ponte, meno.)
 const deckArt = rows(
@@ -793,8 +834,11 @@ export const TILES: Record<string, TileDef> = {
   T: { pix: pix(treeArt), solid: true, overlay: true },
   f: { pix: pix(fenceArt, { b: "#b8884a" }), solid: true, overlay: true },
   s: { pix: pix(signArt, { b: "#c8a05a", w: "#7a5a28" }), solid: true, overlay: true },
-  // Edifici (tetti rossi case, blu lab, verde bar, palestre)
+  // Edifici (case variate, lab, bar, palestre)
   r: { pix: pix(roofArt("r", "R")), solid: true },
+  v: { pix: pix(roofArt("b", "B"), { b: "#3472b8", B: "#244e88" }), solid: true },
+  o: { pix: pix(roofArt("g", "G"), { g: "#4f9d6a", G: "#2f724b" }), solid: true },
+  H: { pix: pix(roofArt("c", "C"), { c: "#b85838", C: "#7a3028" }), solid: true },
   u: { pix: pix(roofArt("B", "v"), { v: "#3450a0" }), solid: true },
   e: { pix: pix(roofArt("e", "E"), { e: "#3f9a5c", E: "#2f7a46" }), solid: true },
   // Tetto-insegna del BAR SPORT (centro cura): verde + cartello riconoscibile.
@@ -839,6 +883,8 @@ export const TILES: Record<string, TileDef> = {
   P: { pix: pix(plantArt, { g: "#4ca84c", G: "#2f8a3c", t: "#3a7a2a", b: "#b06838" }), solid: true, overlay: true },
   // Stretto di Messina
   z: { pix: pix(sandArt, { z: "#eed9a6", Z: "#d8bc7c" }), solid: false },
+  "^": { pix: pix(cliffArt, { z: "#eed9a6", Z: "#d8bc7c", R: "#9a7b55", r: "#73543c", d: "#4c392d", s: "#2f2a24" }), solid: true },
+  l: { pix: pix(stairArt, { z: "#eed9a6", Z: "#d8bc7c", R: "#9a7b55", r: "#73543c", l: "#c8a66a", s: "#7a5a38" }), solid: false },
   j: { pix: pix(deckArt, { n: "#8a8a96", N: "#74747f" }), solid: false },
   J: { pix: pix(girderArt, { S: "#9aa4b8" }), solid: true },
   K: { pix: pix(craneArt, { C: "#8a929c", c: "#b8bec6", b: "#3a3a44", O: "#10141f" }), solid: true }

@@ -11,16 +11,21 @@ viste, dove cablare. Spuntare quando FATTO+verificato in-game.
 - Anti-regressione: fallback al Pixmap finché il PNG non c'è.
 
 ## 1. TERRENO (priorità MAX — "mappa tutto vecchio")
-TILE_PNG è VUOTO. Erba/sentiero/erba-alta/fiori/acqua/sabbia girano su pixmap.
-- [x] **Autotiling Wang FATTO E VERIFICATO**: erba `.`/sentiero `=` (wang_grass_path.png)
-  e acqua `w`/sabbia `z` (wang_water_sand.png) con bordi morbidi. `WANG_INDEX`
-  calibrato dalla metadata = `[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]` (vale per
-  ENTRAMBI i fogli, layout identico). Verificato borgo + mare.
+Erba/sentiero/acqua/sabbia ora hanno PNG PixelLab agganciati; erba alta/fiori
+restano overlay pixmap.
+- [x] **Terreno base FATTO E VERIFICATO (R30)**: erba `.`/sentiero `=` usano un
+  Wang FLAT PixelLab rigenerato (`wang_grass_path.png`, `transition_size:0`,
+  lineless, low top-down) → il sentiero si fonde nell'erba allo STESSO livello,
+  niente più mesa/scarpata. Riattivato in `drawWangTerrain`. I tile flat
+  (`grass_flat.png`/`path_flat.png`) restano come fallback se il foglio non carica.
+- [x] **Autotiling Wang acqua/sabbia FATTO E VERIFICATO**: acqua `w`/sabbia `z`
+  (`wang_water_sand.png`) con bordi morbidi. `WANG_INDEX` calibrato dalla
+  metadata = `[6,5,2,3,7,14,11,0,10,1,4,13,9,8,15,12]`.
 - [ ] Erba alta `~`, fiori `,` come overlay trasparenti (ancora pixmap).
 - [ ] Tile pieni roccia-grotta / marmo (tileset 6f6cd97e era FAILED; rigenerare).
   Il pavimento interno `p` ora usa `tiles/floor_wood.png` PixelLab-derived 16x16.
-- [ ] Tileset Wang: erba→sentiero, erba→acqua, sabbia→acqua, erba→sabbia
-  (create_topdown_tileset, 16px). Esistono già `grass_path_wang.png` (non agganciato).
+- [ ] Tileset Wang: rigenerare solo se resta piatto top-down. Il primo
+  `wang_grass_path.png` è tenuto come asset storico ma NON agganciato.
 - [ ] Tile pieni seamless (tileset 6f6cd97e: erba/sentiero/sabbia/roccia/pavimento/marmo).
 - [ ] Acqua `w` animata 2 frame (water tileset).
 - [ ] Erba alta `~` (overlay trasparente ciuffi) + fiori `,` (overlay).

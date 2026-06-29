@@ -76,3 +76,7 @@ Docs: https://api.pixellab.ai/mcp/docs
 - `ui-terrain-polish-2026-06-29`: nuova barra HP PixelLab croppata e cablata,
   `floor_wood.png` sostituito con frame PixelLab selezionato e normalizzato a
   16x16, fix extra per overflow/prompt nel menu battaglia.
+- `menu-map-hud-polish-2026-06-29`: menu titolo compattato, helper dialoghi e
+  badge `EXP+` riallineati; erba/sentiero passati a tile flat PixelLab
+  (`grass_flat.png`, `path_flat.png`) perché il Wang sembrava una scarpata
+  calpestabile; porte esterne verso interni entrano solo frontali dal basso.

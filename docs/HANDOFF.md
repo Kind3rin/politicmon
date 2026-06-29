@@ -5,7 +5,55 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 29 — PixelLab UI/terrain polish + battle overflow**, 2026-06-29.
+Ultimo aggiornamento: **Round 30 — terreno Wang flat + menu titolo + interazioni mappa**, 2026-06-29.
+
+### 🗺️ Round 30 — terreno Wang flat, menu titolo, fix interazioni (porte/cartelli)
+Feedback utente: "menu ancora vecchio; mappa fatta male — pezzo sovraelevato
+attraversabile senza scale, case enterabili non dritti alla porta, incoerenze di
+layout; revisione mappa/oggetti/interazioni col PG incompleta (lavoro Codex)."
+
+FATTO R30 (pushato, 2 commit):
+- **TERRENO "sovraelevato" RISOLTO**: il vero problema era il terreno. Codex aveva
+  disattivato il Wang erba/sentiero (sembrava una scarpata: il vecchio
+  `wang_grass_path.png` aveva un CONTORNO NERO da dirupo) e messo tile flat tan a
+  bordi netti → la zona-sentiero sembrava una MESA rialzata. **Rigenerato in
+  PixelLab un Wang FLAT** (`create_topdown_tileset` mode=pro, `transition_size:0`
+  = niente dislivello, `view:low top-down`, `shading:flat`, `outline:lineless`,
+  `spread_x:0.7`, `raggedness:0.15`), che fonde sentiero→erba allo STESSO livello,
+  bordi morbidi e organici (stile Stardew). Sovrascritto `wang_grass_path.png`,
+  riattivato in `WorldScene.drawWangTerrain` (`.`/`=` → key `grass_path`, upper=`=`)
+  e registrato in `main.ts`. WANG_INDEX invariato (ricalcolato da metadata bbox =
+  identico). I tile flat restano come fallback se il foglio non è caricato.
+  Verificato su borgo/mediopoli/eurotown/capitale/route1; water/sand intatto.
+- **MENU TITOLO ridisegnato** (`TitleScene`): pannello menu CENTRATO in basso
+  (non più box stretto nell'angolo), `NOME`/`AUDIO` con rightLabel, slogan clampato
+  a 220px (niente overflow a sinistra), tricolore+logo centrati con doppia ombra,
+  footer "A SCEGLI · B INDIETRO · SATIRA". Matcher update() aggiornati
+  (NUOVA CAMPAGNA / CANCELLA DOSSIER).
+- **RIGHE MAPPA disallineate**: BORGO/MEDIOPOLI/EUROTOWN/CAPITALE avevano righe
+  bordo a 29 char invece di 30 → colonna-muro fantasma / bordo sfasato. Pad a 30.
+- **INTERAZIONI OGGETTI/PG (audit cella-per-cella, verifica avversariale)** — 6 fix:
+  - **STRETTO (alto)**: la porta del bar CHIRINGUITO PAPEETE (13,4) aveva come unico
+    fronte (13,5), che era ANCHE il warp d'imbarco verso `mare` → calpestandolo ti
+    spediva in mare invece di entrare. **Bar irraggiungibile a piedi.** Spostati i
+    2 warp mare sulle celle d'acqua d'approdo (13-14,6).
+  - **EUROTOWN**: NPC `pensionato-euro` e un cartello sulla STESSA cella (21,11);
+    interact() vede prima l'NPC → cartello illeggibile. Cartello → (22,11).
+  - **GYM (template), PALAZZO, HOME (casa), CASINO**: cartelli incassati tra
+    macchine `k`/scaffali `b`/muri `A` su tutti i lati → illeggibili. Spostati su
+    muro di fondo con pavimento davanti.
+  - **Guardrail nuovo** `scripts/check-interactables.mjs` (importa le VERE MAPS via
+    Playwright, copre anche le mappe da template gym/bar/house/market): cartelli
+    leggibili, niente NPC su cartelli, niente warp sul fronte porta. + ripristinato
+    `scripts/check-door-warps.mjs` (porte outdoor solo dal fronte). Entrambi PASS.
+- Verifiche: `npm run typecheck` + `npm run build` puliti; screenshot di audit in
+  `artifacts/screens/audit_*.png` (title, città, route1, stretto bar).
+
+❌ RESTA (non bloccante): gli edifici PixelLab sono 3/4 isometrici su griglia
+top-down → la porta visiva può sembrare leggermente disallineata col tile-porta
+calpestabile (footprint scalata, documentato). I tile-erba Wang mostrano una lieve
+costura di griglia in alcune zone. Valutare un Wang `~`/`,` (erba alta/fiori)
+coerente e un eventuale Wang sabbia→molo per lo Stretto se si vuole rifinire.
 
 ## Handoff domani
 
@@ -869,3 +917,19 @@ Vedi `docs/ROADMAP` nel README se serve più dettaglio.
 - **Mobile/PWA:** levetta analogica, prompt installazione.
 - **Contenuti:** Stretto di Messina, casinò, direttive, side quest, veicoli, musica dinamica.
 - **Base:** Atto 1+2, sondaggi, governo ombra, evoluzioni ramificate, 4 specie nuove.
+
+## Handoff 2026-06-29 — wave menu/mappa/HUD
+
+- **Non spegnere il PC:** richiesta utente esplicita.
+- **HUD battaglia:** `EXP+` non sta più sul numero PV; se c'è uno status si sposta
+  dopo il badge status. Helper `A: OK`/`A: AVANTI` nei dialoghi rialzato dentro
+  il box.
+- **Menu titolo:** box compattato in basso a destra, label accorciate per non
+  coprire logo/slogan PixelLab.
+- **Mappa:** erba/sentiero Wang disattivato perché sembrava una scarpata
+  attraversabile. Ora `.` e `=` usano `grass_flat.png`/`path_flat.png` PixelLab.
+- **Porte:** i warp outdoor->interno su porta entrano solo frontali dal tile sotto
+  la porta; niente ingresso laterale alle case.
+- **Domani:** rigenerare un vero Wang erba/sentiero piatto, oppure ridisegnare le
+  mappe con dislivelli reali + scale/collisioni se vuoi mantenere la lettura da
+  altura.

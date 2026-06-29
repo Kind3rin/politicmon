@@ -340,6 +340,80 @@
           "reason": "Scartato: sembrava fantasy generico invece che Politicmon italiani riconoscibili."
         }
       ]
+    },
+    {
+      "id": "monster-politicmon-wave2-2026-06-29",
+      "tool": "create_1_direction_object + select_object_frames",
+      "state": "downloaded",
+      "styleReference": "Italian politician caricature faces plus in-game monster categories: beaver, cricket, phoenix, blob, dinosaur, bear, dove, serpent, dragon, guardian",
+      "outputs": [
+        {
+          "file": "monsters/salvinott.png",
+          "sourceReviewId": "99a48a80-3f3b-4341-8aff-ec048b8fdd18",
+          "selectedFrame": 0,
+          "objectId": "eaab04ef-b0ef-492d-8610-f7b8703dbf91"
+        },
+        {
+          "file": "monsters/salvinator.png",
+          "sourceReviewId": "f3753e5e-5219-44b7-9073-58d852ca9ec4",
+          "selectedFrame": 4,
+          "objectId": "5e78757e-f44c-4b0c-8b2e-fe3136fc3786"
+        },
+        {
+          "file": "monsters/grillix.png",
+          "sourceReviewId": "93f3b95a-266d-4991-b4c9-ef38cb2e8fdb",
+          "selectedFrame": 4,
+          "objectId": "0c848e86-6475-4c84-8ce3-9e0892fcf497"
+        },
+        {
+          "file": "monsters/vaffenix.png",
+          "sourceReviewId": "e9ee1632-cc8d-4240-8d04-a0eee7621391",
+          "selectedFrame": 0,
+          "objectId": "1a12b27c-a931-46c5-aeb7-47def5786b32"
+        },
+        {
+          "file": "monsters/contemorfo.png",
+          "sourceReviewId": "f328a93b-38d7-465d-b255-a5fb986ca1c3",
+          "selectedFrame": 7,
+          "objectId": "7ca517b0-d1da-427b-bcce-113bf562311b"
+        },
+        {
+          "file": "monsters/calendauro.png",
+          "sourceReviewId": "3448f1d0-1367-4d21-bb7c-116cc62a3f19",
+          "selectedFrame": 0,
+          "objectId": "be8e3d2f-4aaa-43fb-acff-4446b2d8398c"
+        },
+        {
+          "file": "monsters/vannaccix.png",
+          "sourceReviewId": "4ab0df7c-5bf0-4da5-a754-5151e8952d95",
+          "selectedFrame": 0,
+          "objectId": "801937be-fe71-4ded-8930-96a9ab777310"
+        },
+        {
+          "file": "monsters/tajanide.png",
+          "sourceReviewId": "2a492f9a-172c-4a5c-a7b2-b2a9715371d2",
+          "selectedFrame": 0,
+          "objectId": "acc9281f-caa5-477a-b39f-2c83fefe1eb8"
+        },
+        {
+          "file": "monsters/berlusconix.png",
+          "sourceReviewId": "381f0651-6cb7-47f3-96d6-ff97660c9c42",
+          "selectedFrame": 14,
+          "objectId": "e52a625e-0075-4c7f-aebf-b982d2d5a1db"
+        },
+        {
+          "file": "monsters/draghimon.png",
+          "sourceReviewId": "edfc6706-d3a8-43ea-a891-659364030cf3",
+          "selectedFrame": 0,
+          "objectId": "3b223c74-ec0b-4028-ab44-a1284d2c6952"
+        },
+        {
+          "file": "monsters/mattarellux.png",
+          "sourceReviewId": "944e2f7d-7c77-48c5-ab02-b5a0b328a632",
+          "selectedFrame": 1,
+          "objectId": "90096d84-85ca-49a7-afd8-2937cf35659d"
+        }
+      ]
     }
   ],
   "delegatedManifests": [

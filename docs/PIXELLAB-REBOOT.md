@@ -65,3 +65,7 @@ Docs: https://api.pixellab.ai/mcp/docs
   Schleinix, Renzino, Renzilla rigenerati come caricature-mostro dei politici
   italiani, con review frame selezionati a mano. Scartato il primo tentativo
   fantasy generico.
+- `monster-politicmon-wave2-2026-06-29`: Salvinott, Salvinator, Grillix,
+  Vaffenix, Contemorfo, Calendauro, Vannaccix, Tajanide, Berlusconix,
+  Draghimon, Mattarellux rigenerati come caricature-mostro italiane aderenti
+  alle categorie in `species.ts`.

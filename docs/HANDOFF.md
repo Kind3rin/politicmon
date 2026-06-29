@@ -5,14 +5,14 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 26 — PixelLab Politicmon italiani wave 1**, 2026-06-29.
+Ultimo aggiornamento: **Round 27 — PixelLab Politicmon italiani wave 2**, 2026-06-29.
 
 ## Handoff domani
 
 Stato repo:
 - Branch: `master`.
 - Tutti i blocchi completati sono stati pushati a fine blocco.
-- Ultimo blocco completato: primi 6 mostri starter/evoluzioni rifatti come
+- Ultimo blocco completato: altri 11 Politicmon italiani rifatti come
   caricature-mostriciattoli dei politici italiani, non fantasy generico.
 - Nota importante: il primo tentativo fantasy e stato scartato e sovrascritto.
   Non riprenderlo.
@@ -22,23 +22,39 @@ Verifiche gia fatte nella sessione:
 - `npm run typecheck`
 - `npm run build`
 - Contact sheet: `artifacts/screens/monster-wave1-contact.png`
+- Contact sheet: `artifacts/screens/monster-wave2-contact.png`
 - Screenshot/playtest mirati su titolo, mondo, terrain, battle, starter preview.
 
 Da testare su device:
 - Apri la build aggiornata e controlla title, scelta starter, battle, Dex/Party.
-- I mostri da giudicare: `giorgetta`, `giorgiagon`, `ellyna`, `schleinix`,
+- Mostri wave 1 da giudicare: `giorgetta`, `giorgiagon`, `ellyna`, `schleinix`,
   `renzino`, `renzilla`.
+- Mostri wave 2 da giudicare: `salvinott`, `salvinator`, `grillix`, `vaffenix`,
+  `contemorfo`, `calendauro`, `vannaccix`, `tajanide`, `berlusconix`,
+  `draghimon`, `mattarellux`.
 - Criterio: devono ricordare i politici italiani tramite volto/capelli/pose/meme,
   restando mostri satirici leggibili.
 
 Prossima wave consigliata:
-- Continuare con gli altri Politicmon italiani: Salvinott/Salvinator, Grillix,
-  Contemorfo, Calendauro, Vannaccix, Tajanide, Berlusconix, Draghimon,
-  Mattarellux.
+- Continuare con i rimanenti Politicmon esteri/mondo e meme: Trumpon, Putingrad,
+  Xipanda, Macronfox, Ursulax, Bojoon, Zelenskir, Muskrat/Marsrat, Movimenton,
+  Capitanone, Mediocrate, Pontigor.
 - Subito dopo: UI battle/menu (`battle_bg`, badge/type icons, slot cabinet) se i
   mostri sono approvati.
 - Rimane da rifare bene `floor_wood.png`: una generazione era quasi vuota, non
   e stata usata.
+
+### 🎨 Round 27 — PixelLab Politicmon italiani wave 2
+FATTO R27:
+- Rigenerati da review pack PixelLab e integrati: Salvinott, Salvinator,
+  Grillix, Vaffenix, Contemorfo, Calendauro, Vannaccix, Tajanide,
+  Berlusconix, Draghimon, Mattarellux.
+- Criterio usato: volto/attributi riconoscibili del politico + categoria mostro
+  gia definita in `src/data/species.ts` (castorino, grillo, fenice, blob, sauro,
+  orso, colomba, biscione, drago, garante).
+- Aggiornati `scripts/pixellab-monsters.json`,
+  `scripts/pixellab-reboot-assets.json`, `docs/PIXELLAB-REBOOT.md` e questa
+  handoff.
 
 ### 🎨 Round 26 — PixelLab Politicmon italiani wave 1
 FATTO R26:

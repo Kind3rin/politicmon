@@ -5,7 +5,32 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 35 — edifici TOP-DOWN 2D + insegne + piazze interattive**, 2026-06-30.
+Ultimo aggiornamento: **Round 36 — tutti gli edifici top-down coerenti (no piu 3/4)**, 2026-06-30.
+
+### 🎯 Round 36 — loop edifici fino a top-down coerente (ingresso da sentiero)
+Feedback utente: "ritenta finche TUTTO e coerente con l'ingresso da sentiero". Diversi
+edifici (lab/palace/bar/apartment/casino/gym) erano ancora 3/4 (base a rombo → porta
+che pareva in diagonale).
+
+FATTO R36:
+- **Rigenerati i 6 edifici 3/4 finche top-down puri**, ispezionati a vista uno per uno.
+  Prompt vincente (dopo vari tentativi): per i piccoli "simple symmetric triangular
+  gable / flat rectangle roof seen straight from ABOVE, door at the very bottom"; per i
+  LARGHI (palace/gym) la chiave e stata "**a wide building roof seen PERFECTLY FROM
+  ABOVE like from a HELICOPTER, the image is almost ENTIRELY the flat rooftop, the door
+  is just a small NOTCH at the bottom edge, ZERO depth**". Quest'ultima ha finalmente
+  reso flat anche palazzo e palestra (i piu ostici).
+- Ora TUTTI i 14 edifici sono top-down con porta in basso al centro verso il sentiero.
+  Niente piu rombi/ingresso da vertice.
+- **REGOLA CHIAVE PixelLab** (aggiorna la trappola): `view:"high top-down"` da solo NON
+  basta; serve descrivere l'immagine come "quasi interamente il TETTO visto dall'alto,
+  porta = tacca in basso". I building LARGHI scivolano al 3/4 piu dei piccoli → per
+  quelli insistere sul "helicopter view, zero depth". Generare a canvas quadrato/largo
+  e resize NN alla footprint (`scratchpad/fetch-*.ps1`). Ispezionare OGNI sprite.
+- Verifiche: door-alignment + sprite-bounds + tutti i guardrail mappa PASS; build pulito;
+  coverage 159/159; render full-map di tutte le 4 citta conferma coerenza.
+
+### 🏙️ Round 35 — edifici TOP-DOWN 2D + insegne + piazze interattive
 
 ### 🏙️ Round 35 — edifici top-down 2D, insegne, fontane/statue esaminabili
 Feedback utente: "edifici rifalli tutti TOP-DOWN 2D (alcuni non lo sono), il bar e gli

@@ -972,8 +972,7 @@
         "tiles/build_bistro_front.png",
         "tiles/build_gym_front.png",
         "tiles/build_casino_front.png",
-        "tiles/build_palace.png",
-        "tiles/door_step.png"
+        "tiles/build_palace.png"
       ],
       "state": "regenerate-from-zero"
     },

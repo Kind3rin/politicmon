@@ -1923,20 +1923,6 @@ export class WorldScene implements Scene {
             }
           }
         }
-
-        // SOGLIA DI CASA: se la cella sopra è una porta (d/D), questo è il tile
-        // su cui il giocatore sta davanti per entrare. Ci disegniamo uno zerbino
-        // PixelLab per rendere visivamente chiara la soglia (puramente decorativo,
-        // niente collisioni). Sotto gli edifici/z-order, sopra il terreno.
-        if (this.map.outdoor) {
-          const above = this.tileAt(tx, ty - 1);
-          if (above === "d" || above === "D") {
-            const step = getSpriteImage("obj:doorstep", "tiles/door_step.png");
-            if (step) {
-              drawWorldObjectPng(screen, "doorstep", step, dx, dy);
-            }
-          }
-        }
       }
     }
 

@@ -1,1 +1,1 @@
-export const APP_BUILD_ID = "2026-06-30-building-set-polish-pixellab";
+export const APP_BUILD_ID = "2026-06-30-building-entry-playtest";

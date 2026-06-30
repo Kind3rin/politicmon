@@ -61,11 +61,39 @@ const runtimeProblems = await page.evaluate(async () => {
   const { Input } = await import("/src/engine/input.ts");
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
   const { newGameState } = await import("/src/game/state.ts");
+  const { ACHIEVEMENTS } = await import("/src/game/achievements.ts");
 
   const out = [];
   const input = new Input();
   const stack = new SceneStack();
   const tileAt = (map, x, y) => map.tiles[y]?.[x] ?? "T";
+  const primeState = (mapId, x, y, facing) => {
+    const state = newGameState();
+    state.flags["intro-done"] = true;
+    state.flags["veh-traghetto"] = true;
+    state.flags["hint-casino"] = true;
+    for (const achievement of ACHIEVEMENTS) {
+      state.flags[`ach:${achievement.id}`] = true;
+    }
+    state.badges = ["auditel", "spread", "dazio"];
+    state.pos = { mapId, x, y, facing };
+    return state;
+  };
+  const makeStepInput = (dir) => ({
+    heldDirection: () => dir,
+    wasPressed: () => false,
+    isHeld: () => false,
+    consumeTap: () => null,
+    tapInRect: () => false,
+    clearTap: () => {},
+    endFrame: () => {}
+  });
+  const runStep = (state, dir) => {
+    const scene = new WorldScene(stack, makeStepInput(dir), state);
+    scene.update(1 / 60);
+    scene.update(1);
+    return scene;
+  };
 
   const stretto = MAPS.stretto;
   if (stretto) {
@@ -134,11 +162,7 @@ const runtimeProblems = await page.evaluate(async () => {
       }
 
       {
-        const state = newGameState();
-        state.flags["intro-done"] = true;
-        state.flags["veh-traghetto"] = true;
-        state.badges = ["auditel", "spread", "dazio"];
-        state.pos = { mapId, x: warp.x, y: warp.y, facing: "up" };
+        const state = primeState(mapId, warp.x, warp.y, "up");
         const scene = new WorldScene(stack, input, state);
         scene.fromX = warp.x;
         scene.fromY = warp.y + 1;
@@ -149,11 +173,7 @@ const runtimeProblems = await page.evaluate(async () => {
       }
 
       {
-        const state = newGameState();
-        state.flags["intro-done"] = true;
-        state.flags["veh-traghetto"] = true;
-        state.badges = ["auditel", "spread", "dazio"];
-        state.pos = { mapId, x: warp.x, y: warp.y, facing: "down" };
+        const state = primeState(mapId, warp.x, warp.y, "down");
         const scene = new WorldScene(stack, input, state);
         scene.fromX = warp.x;
         scene.fromY = warp.y + 1;
@@ -167,17 +187,41 @@ const runtimeProblems = await page.evaluate(async () => {
         { fromX: warp.x - 1, fromY: warp.y, facing: "right" },
         { fromX: warp.x + 1, fromY: warp.y, facing: "left" }
       ]) {
-        const state = newGameState();
-        state.flags["intro-done"] = true;
-        state.flags["veh-traghetto"] = true;
-        state.badges = ["auditel", "spread", "dazio"];
-        state.pos = { mapId, x: warp.x, y: warp.y, facing: side.facing };
+        const state = primeState(mapId, warp.x, warp.y, side.facing);
         const scene = new WorldScene(stack, input, state);
         scene.fromX = side.fromX;
         scene.fromY = side.fromY;
         scene.onStepComplete();
         if (scene.fadeOut > 0 || scene.pendingWarp || state.pos.x !== side.fromX || state.pos.y !== side.fromY) {
           out.push(`${mapId}->${warp.toMap}: ingresso laterale da (${side.fromX},${side.fromY}) non respinto`);
+        }
+      }
+
+      {
+        const state = primeState(mapId, warp.x, warp.y + 1, "up");
+        const scene = runStep(state, "up");
+        if (!(scene.fadeOut > 0 || scene.pendingWarp)) {
+          out.push(`${mapId}->${warp.toMap}: passo reale dal centro porta (${warp.x},${warp.y + 1}) non entra`);
+        }
+      }
+
+      {
+        const state = primeState(mapId, warp.x, warp.y + 1, "down");
+        const scene = new WorldScene(stack, makeStepInput("up"), state);
+        scene.update(1 / 60);
+        if (scene.fadeOut > 0 || scene.pendingWarp || state.pos.x !== warp.x || state.pos.y !== warp.y + 1 || state.pos.facing !== "up") {
+          out.push(`${mapId}->${warp.toMap}: primo input da girato male deve solo voltarsi verso la porta`);
+        }
+      }
+
+      for (const side of [
+        { x: warp.x - 1, y: warp.y, facing: "right", dir: "right" },
+        { x: warp.x + 1, y: warp.y, facing: "left", dir: "left" }
+      ]) {
+        const state = primeState(mapId, side.x, side.y, side.facing);
+        const scene = runStep(state, side.dir);
+        if (scene.fadeOut > 0 || scene.pendingWarp || state.pos.x !== side.x || state.pos.y !== side.y) {
+          out.push(`${mapId}->${warp.toMap}: passo reale laterale da (${side.x},${side.y}) non respinto`);
         }
       }
     }

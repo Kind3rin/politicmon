@@ -24,10 +24,17 @@ export function bumpSondaggi(
   const value = addSondaggi(state, delta);
   let milestone: string | null = null;
   if (delta > 0) {
+    // Se in un colpo si attraversano più soglie (es. 20%→80% dopo una palestra),
+    // si annuncia la PIÙ ALTA raggiunta: una sola notifica, ma quella giusta.
+    // SONDAGGI_MILESTONES è crescente, quindi l'ultima soddisfatta è la massima.
+    let topSoglia: number | null = null;
     for (const soglia of SONDAGGI_MILESTONES) {
       if (prev < soglia && value >= soglia) {
-        milestone = `BREAKING NEWS! SONDAGGI AL ${soglia}%: ${sondaggiLabel(soglia)}!`;
+        topSoglia = soglia;
       }
+    }
+    if (topSoglia !== null) {
+      milestone = `BREAKING NEWS! SONDAGGI AL ${topSoglia}%: ${sondaggiLabel(topSoglia)}!`;
     }
   }
   return { value, milestone };
@@ -56,8 +63,8 @@ export function sondaggiLabel(value: number): string {
   return "FUORI DAL PARLAMENTO";
 }
 
-// Versione corta per l'HUD (max ~11 caratteri): la barra in alto a destra non
-// ha spazio per "FUORI DAL PARLAMENTO".
+// Versione corta per l'HUD (max 12 caratteri, vedi clip in WorldScene): la barra
+// in alto a destra non ha spazio per "FUORI DAL PARLAMENTO".
 export function sondaggiLabelShort(value: number): string {
   if (value >= 85) {
     return "PLEBISCITO";
@@ -69,7 +76,7 @@ export function sondaggiLabelShort(value: number): string {
     return "MAGGIORANZA";
   }
   if (value >= 40) {
-    return "TESTA A TESTA";
+    return "IN BILICO";
   }
   if (value >= 25) {
     return "OPPOSIZIONE";

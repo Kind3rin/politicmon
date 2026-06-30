@@ -5,7 +5,41 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 30 — terreno Wang flat + menu titolo + interazioni mappa**, 2026-06-29.
+Ultimo aggiornamento: **Round 31 — audit gameplay + pixelmap (fix difesa speciale, HUD, soglie casa)**, 2026-06-30.
+
+### 🔎 Round 31 — audit gameplay + design pixelmap
+Richiesta utente: audit di gameplay + design pixelmap (PixelLab), focus su "soglie casa"
+e gameplay che non matcha il design. 3 Explore agent in parallelo + verifica diretta +
+6 guardrail (tutti PASS) + screenshot.
+
+FATTO R31:
+- **P0 DIFESA SPECIALE (`sim.ts:39`)**: le mosse speciali usavano `spc` anche in difesa
+  → FACCIA TOSTA (`def`) non proteggeva MAI dalle speciali. Ora `defKey = "def"`. La
+  difesa speciale legge la stat giusta. (Matematicamente può solo allungare i turni,
+  non accorciarli → nessuna regressione; harness AI-vs-AI invariato perché lo starter
+  ha def≈spc. Target turni resta ~5-8 player-perfect, divisore 58 tarato per gioco umano.)
+- **P1 `vaffa`** power 90→75 (era over-tuned, speciale POPULISMO early).
+- **P1 `bumpSondaggi` (`governo.ts`)**: reso esplicito che si annuncia la milestone PIÙ
+  ALTA attraversata in un colpo (prima dipendeva dall'ordine del loop, di fatto già la
+  più alta; ora chiaro e non accidentale).
+- **P1 OVERFLOW HUD sondaggi**: l'etichetta "TESTA A TESTA" (13 char) sforava i 240px.
+  Rinominata in "IN BILICO" (`sondaggiLabelShort`) + clip ridotto 13→12 in `WorldScene`
+  (interno panel 72px = max 12 char). Verificato a schermo (borgo/capitale).
+- **P2 guard `exp` in `parseState`**: stessa rete di sicurezza dell'HP (NaN→`expForLevel`).
+- **P2 nuovo guardrail `scripts/check-map-exit.mjs`** (+ `npm run check:map-exit`): ogni
+  mappa ha un'uscita, ogni interno torna all'aperto (BFS) → previene autosave-trap. PASS.
+- **SOGLIE CASA**: i tile-porta sono LOGICAMENTE ok (tutti i guardrail PASS); lo scarto
+  era solo visivo (edifici 3/4 su griglia top-down). Aggiunto **zerbino/soglia** PixelLab
+  (`tiles/door_step.png`, `create_map_object` 32px scalato a 16) disegnato come overlay
+  decorativo sulla cella davanti alle porte `d`/`D` outdoor (`WorldScene.draw`, key
+  `obj:doorstep`). Niente collisioni toccate. Verificato a schermo.
+- **PULIZIA**: rimossi 12 orphan PNG in `public/sprites/tiles/` (vecchi build_*/grass/
+  flowers/tallgrass superati da `*_front.png`/`obj_*.png`). Manifest sincronizzato,
+  `pixellab:coverage` 157/157.
+- Verifiche: `typecheck` + `build` puliti; 6 guardrail mappa PASS + il nuovo; coverage
+  verde; shot HUD/soglie; turni battaglia ri-misurati.
+
+Report completo dell'audit: piano in `~/.claude/plans/goofy-prancing-bird.md`.
 
 ### 🗺️ Round 30 — terreno Wang flat, menu titolo, fix interazioni (porte/cartelli)
 Feedback utente: "menu ancora vecchio; mappa fatta male — pezzo sovraelevato

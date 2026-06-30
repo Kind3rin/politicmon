@@ -1,6 +1,6 @@
 import type { Facing } from "../art/characters";
 import type { Monster } from "./monster";
-import { statsOf } from "./monster";
+import { expForLevel, statsOf } from "./monster";
 
 export interface PlayerPos {
   mapId: string;
@@ -153,6 +153,11 @@ function parseState(raw: string | null): GameState | null {
           mon.hp = max;
         }
         mon.hp = Math.max(0, Math.min(max, mon.hp));
+        // Stessa rete di sicurezza sull'EXP: un valore non-numerico/NaN bloccherebbe
+        // silenziosamente il leveling. Lo riportiamo al minimo del livello corrente.
+        if (typeof mon.exp !== "number" || Number.isNaN(mon.exp)) {
+          mon.exp = expForLevel(mon.level);
+        }
       }
       if (parsed.party.every((m) => m.hp <= 0)) {
         for (const mon of parsed.party) {

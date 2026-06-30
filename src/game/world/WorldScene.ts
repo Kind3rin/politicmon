@@ -1921,6 +1921,20 @@ export class WorldScene implements Scene {
             }
           }
         }
+
+        // SOGLIA DI CASA: se la cella sopra è una porta (d/D), questo è il tile
+        // su cui il giocatore sta davanti per entrare. Ci disegniamo uno zerbino
+        // PixelLab per rendere visivamente chiara la soglia (puramente decorativo,
+        // niente collisioni). Sotto gli edifici/z-order, sopra il terreno.
+        if (this.map.outdoor) {
+          const above = this.tileAt(tx, ty - 1);
+          if (above === "d" || above === "D") {
+            const step = getSpriteImage("obj:doorstep", "tiles/door_step.png");
+            if (step) {
+              drawWorldObjectPng(screen, "doorstep", step, dx, dy);
+            }
+          }
+        }
       }
     }
 
@@ -2194,7 +2208,8 @@ export class WorldScene implements Scene {
       screen.rect(px + 4, 12, barW, 4, "rgba(255,255,255,0.15)");
       screen.rect(px + 4, 12, Math.max(1, Math.round((barW * shown) / 100)), 4, col);
       // Etichetta del momento (PLEBISCITO, OPPOSIZIONE, ...): troncata se serve.
-      screen.text(clipHud(sondaggiLabelShort(sond), 13), px + 4, 17, "#cfe6ff");
+      // Larghezza interna panelW-8=72px → max 12 char a 6px l'uno (niente overflow a 240px).
+      screen.text(clipHud(sondaggiLabelShort(sond), 12), px + 4, 17, "#cfe6ff");
       // Delta flottante (+8 / -2) che sale e svanisce accanto alla barra.
       if (this.sondDelta) {
         const dy = Math.round(6 - (1.4 - this.sondDelta.t) * 8);

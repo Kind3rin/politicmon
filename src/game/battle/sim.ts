@@ -36,7 +36,9 @@ export function calcDamage(attacker: Combatant, defender: Combatant, move: Move)
     return { damage: 0, crit: false, typeMult: 1 };
   }
   const atkKey: StatKey = move.category === "fisico" ? "atk" : "spc";
-  const defKey: StatKey = move.category === "fisico" ? "def" : "spc";
+  // L'attacco speciale usa RETORICA (spc), ma la DIFESA è sempre FACCIA TOSTA (def):
+  // prima le speciali leggevano spc anche in difesa e FACCIA TOSTA non proteggeva mai.
+  const defKey: StatKey = "def";
   const critChance = move.effect?.highCrit ? 0.25 : 1 / 16;
   const crit = Math.random() < critChance;
   // In caso di critico si ignorano gli stage (come nei vecchi giochi).

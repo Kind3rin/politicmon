@@ -45,6 +45,7 @@ function coreSpriteEntries(): Record<string, string> {
     "obj:J": "tiles/obj_girder.png",
     "obj:K": "tiles/obj_crane.png",
     "obj:g": "tiles/obj_golddoor.png",
+    "obj:doorstep": "tiles/door_step.png",
     "build:r:tiles/build_house_front_red.png": "tiles/build_house_front_red.png",
     "build:H:tiles/build_house_front_brick.png": "tiles/build_house_front_brick.png",
     "build:v:tiles/build_house_front_blue.png": "tiles/build_house_front_blue.png",

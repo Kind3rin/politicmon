@@ -65,7 +65,7 @@ export const MOVES: Record<string, Move> = {
   }),
   vaffa: M({
     id: "vaffa", name: "VAFFA SONORO", type: "POPULISMO", category: "speciale",
-    power: 90, accuracy: 85, pp: 10,
+    power: 75, accuracy: 85, pp: 10,
     flavor: "Urlo primordiale nato in piazza. Devastante ma impreciso."
   }),
   tweet: M({

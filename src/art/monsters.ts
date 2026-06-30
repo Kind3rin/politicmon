@@ -10,7 +10,7 @@ export const MONSTERS_WITH_PNG = new Set<string>([
   "salvinator", "giorgiagon", "ellyna", "schleinix", "renzino", "grillix",
   "renzilla", "contemorfo", "calendauro", "vannaccix", "tajanide", "berlusconix",
   "draghimon", "trumpon", "xipanda", "macronfox", "mattarellux", "putingrad",
-  "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
+  "bunkerput", "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
   "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor", "conteblob",
   "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax"
 ]);
@@ -354,6 +354,10 @@ export const MONSTER_ART: Record<string, Pixmap> = {
   putingrad: caricature({
     skin: "#f4d8c0", hair: "#c8bca8", hairStyle: "bald", suit: "#26262e",
     shirt: "#f8f8f0", tie: "#3a3a46", brows: true, mouth: "flat"
+  }),
+  bunkerput: caricature({
+    skin: "#f4d8c0", hair: "#c8bca8", hairStyle: "bald", suit: "#242936",
+    shirt: "#f8f8f0", tie: "#7a1f2a", brows: true, mouth: "flat", pin: "#e8c030"
   }),
   xipanda: caricature({
     hair: "#22222e", hairStyle: "short", suit: "#4a4e58", suitStyle: "mao",

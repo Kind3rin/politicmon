@@ -2,14 +2,11 @@
 // Gli asset buildati hanno hash nel nome -> cache-first sicura.
 // index.html e manifest -> network-first per ricevere gli aggiornamenti.
 //
-// Auto-update: la versione del nome cache va bumpata a ogni release (o cambia
-// comunque perché il file sw.js viene rigenerato). All'attivazione le cache
-// vecchie vengono cancellate. Lo skipWaiting NON è automatico all'install: la
-// pagina chiede l'attivazione via messaggio SKIP_WAITING così il reload avviene
-// solo quando c'è davvero una versione nuova (vedi main.ts). Il salvataggio è
-// in localStorage, mai toccato da questa cache.
+// Auto-update: la versione del nome cache va bumpata a ogni release. Il service
+// worker nuovo prende subito il controllo: i progressi stanno in localStorage,
+// separati dalle cache statiche.
 
-const CACHE = "politicmon-v3";
+const CACHE = "politicmon-v4-cave-oblast";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -22,9 +19,7 @@ const PRECACHE = [
 ];
 
 self.addEventListener("install", (event) => {
-  // NON chiamare skipWaiting qui: il nuovo SW resta "waiting" finché la pagina
-  // non conferma (messaggio SKIP_WAITING). Così il reload scatta solo su un vero
-  // aggiornamento, non alla primissima installazione.
+  self.skipWaiting();
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));
 });
 
@@ -32,6 +27,13 @@ self.addEventListener("install", (event) => {
 self.addEventListener("message", (event) => {
   if (event.data && event.data.type === "SKIP_WAITING") {
     self.skipWaiting();
+  }
+  if (event.data && event.data.type === "CLEAR_RUNTIME_CACHES") {
+    event.waitUntil(
+      caches
+        .keys()
+        .then((keys) => Promise.all(keys.filter((k) => k.startsWith("politicmon-")).map((k) => caches.delete(k))))
+    );
   }
 });
 
@@ -54,7 +56,7 @@ self.addEventListener("fetch", (event) => {
   // Navigazioni e manifest: prova la rete, ripiega sulla cache (offline).
   if (request.mode === "navigate" || request.url.includes("manifest.webmanifest")) {
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: "reload" })
         .then((response) => {
           const copy = response.clone();
           caches.open(CACHE).then((cache) => cache.put(request, copy));
@@ -69,7 +71,7 @@ self.addEventListener("fetch", (event) => {
   // case/personaggi vecchi presi dalla cache PWA dopo una rigenerazione asset.
   if (url.pathname.includes("/sprites/")) {
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: "reload" })
         .then((response) => {
           if (response.ok) {
             const copy = response.clone();

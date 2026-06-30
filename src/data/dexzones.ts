@@ -38,6 +38,11 @@ export const DEX_ZONES: DexZone[] = [
     id: "stretto", name: "STRETTO",
     species: ["salvinator", "pontigor", "capitanone"],
     reward: { itemId: "tessera", qty: 1, money: 1000 }
+  },
+  {
+    id: "oblast", name: "OBLAST",
+    species: ["bunkerput"],
+    reward: { itemId: "caffe", qty: 3, money: 1200 }
   }
 ];
 

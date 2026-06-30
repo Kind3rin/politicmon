@@ -130,13 +130,13 @@ const BORGO_TILES = [
 // ----------------------------------------------- PERCORSO 1 (BORGO-MEDIOPOLI)
 // Route pilota stile Pokémon: corridoio verticale tra le due città, con erba
 // alta (~ incontri), un LAGHETTO (w) navigabile col TRAGHETTO che nasconde
-// un'isoletta col tesoro, e l'ingresso di una GROTTA (porta d → grotta1).
+// un'isoletta col tesoro, e l'ingresso di una GROTTA (bocca O → grotta1).
 // 28 colonne come le città, strada ==== a idx13-16 per allinearsi agli edge.
 const ROUTE1_TILES = [
   "TTTTTTTTTTTTT====TTTTTTTTTTTT",
   "TT..~~~~,...====...~~~~~...TT",
-  "TT...~~~~...====..~~~~~~...TT",
-  "TT..~~~~~...====...~~~dT...TT",
+  "TT...~~~~...====..~~~ROR...TT",
+  "TT..~~~~~...====...~~ROR...TT",
   "TT..wwww....====.======~...TT",
   "TT..wwww....====....~~~....TT",
   "TT..ww.w....====...........TT",
@@ -152,18 +152,45 @@ const ROUTE1_TILES = [
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
 
-// La GROTTA 1: piccola caverna con un paio di incontri (erba/ombra ~) e un
-// tesoro. Bordi in roccia (A = muro interno), pavimento p, uscita cc in basso.
+// La GROTTA 1: tunnel opzionale con percorso a serpentina, incontri nelle
+// ombre (~), boulders/stalagmiti solide e due uscite: sud verso PERCORSO 1,
+// nord-est verso l'OBLAST DEL MEME.
 const GROTTA1_TILES = [
-  "AAAAAAAAAAAA",
-  "AppppppppppA",
-  "Appp~~~ppppA",
-  "Appp~~~ppppA",
-  "Apppppppp~pA",
-  "Appppppp~~pA",
-  "App~~ppppppA",
-  "ApppppccpppA",
-  "AAAAAAAAAAAA"
+  "AAAAAAAAAAAAAAAAAAAA",
+  "AppppppppAAAAppppOpA",
+  "ApSRRAp~pAAAASSRpppA",
+  "Ap~pppp~ppppppsppppA",
+  "ApppAAAASRRRRAAApppA",
+  "AAp~AppppppppAAApppA",
+  "ApppAppSRRRppA~ppppA",
+  "ApAAAAppp~pppAAAAppA",
+  "ApppppSSRAAAAppppppA",
+  "AAAApApppppppp~pRRpA",
+  "AppppAppRSSAAAAppppA",
+  "Ap~ppApppppppppppppA",
+  "ASRRAAApRSSRAAApSRpA",
+  "AAAAAppccppppppppppA",
+  "AAAAAAAAAAAAAAAAAAAA"
+];
+
+// Mini-zona satirica oltre la grotta: neve, taiga, cumuli-encounter e un varco
+// di rientro. Non è una città nuova: è un avamposto-meme opzionale.
+const OBLAST_MEME_TILES = [
+  "NNNNNNNNNNNNNNNNNNNNNNNN",
+  "NNNNNRO==iiiiiiiiisiNNNN",
+  "NNNiiiii=iiiIIIiiiiiiNNN",
+  "NNNiiiii===iiiiiiRRiiiNN",
+  "NNRRiiiiii=iiiiiiRRiiiNN",
+  "NNiiiiiiii=iiiiiiiiIIiNN",
+  "NNiiiRRiiii==iiiRiiiiiNN",
+  "NNiiiRRiiiii=iiiRiiiiiNN",
+  "NNiIIIiiiiii=iiiiiiiiiNN",
+  "NNiiiiiiiiiii==iiiiiiiNN",
+  "NNiiiiiiiRRiii==iiiiiiNN",
+  "NNiiiiiiiRRiiii=iRiiiiNN",
+  "NNiiiiiiiiiiiii=iRIINNNN",
+  "NNNNiiiiiiiIIiiiiiiNNNNN",
+  "NNNNNNNNNNNNNNNNNNNNNNNN"
 ];
 
 // ---------------------------------------------------------------- MEDIOPOLI
@@ -675,7 +702,8 @@ export const MAPS: Record<string, MapDef> = {
     ]
   },
 
-  // GROTTA 1: caverna opzionale sul PERCORSO 1, con incontri e un tesoro.
+  // GROTTA 1: caverna opzionale sul PERCORSO 1, con percorso vero e uscita
+  // secondaria verso l'OBLAST DEL MEME.
   grotta1: {
     id: "grotta1",
     name: "GROTTA DEL CONSENSO",
@@ -689,23 +717,76 @@ export const MAPS: Record<string, MapDef> = {
       p: "tiles/cave_floor.png", A: "tiles/cave_rock.png", c: "tiles/cave_floor.png"
     },
     warps: [
-      { x: 5, y: 7, toMap: "route1", toX: 22, toY: 4, facing: "down" },
-      { x: 6, y: 7, toMap: "route1", toX: 22, toY: 4, facing: "down" }
+      { x: 7, y: 13, toMap: "route1", toX: 22, toY: 4, facing: "down" },
+      { x: 8, y: 13, toMap: "route1", toX: 22, toY: 4, facing: "down" },
+      { x: 17, y: 1, toMap: "oblast-meme", toX: 7, toY: 1, facing: "right" }
     ],
     encounterRate: 0.22,
     encounters: [
-      { speciesId: "muskrat", weight: 30, minLv: 5, maxLv: 7 },
-      { speciesId: "grillix", weight: 24, minLv: 5, maxLv: 7 },
-      { speciesId: "contemorfo", weight: 20, minLv: 6, maxLv: 8 }
+      { speciesId: "muskrat", weight: 28, minLv: 5, maxLv: 7 },
+      { speciesId: "grillix", weight: 22, minLv: 5, maxLv: 7 },
+      { speciesId: "contemorfo", weight: 18, minLv: 6, maxLv: 8 },
+      { speciesId: "bunkerput", weight: 10, minLv: 7, maxLv: 9 }
     ],
     signs: [
-      { x: 8, y: 1, lines: ["GROTTA DEL CONSENSO", "Buio, umido e pieno di voti dimenticati."] }
+      { x: 14, y: 3, lines: ["BUNKER DEL CONSENSO", "Il corridoio gira, rigira e poi sbuca in un posto freddissimo.", "Se senti un tavolo troppo lungo, non è eco."] }
     ],
     pickups: [
-      { id: "pk-grotta1", x: 9, y: 1, itemId: "tessera", qty: 1 },
-      { id: "pk-grotta1b", x: 2, y: 6, itemId: "spritz", qty: 1, hidden: true }
+      { id: "pk-grotta1", x: 18, y: 2, itemId: "tessera", qty: 1 },
+      { id: "pk-grotta1b", x: 2, y: 11, itemId: "spritz", qty: 1, hidden: true }
     ],
-    npcs: []
+    npcs: [
+      {
+        id: "tr-bunkerista", pal: "aide", x: 12, y: 6, facing: "down",
+        trainerId: "bunkerista", sightRange: 3,
+        lines: ["Hai trovato il corridoio riservato ai meme geopolitici.", "Qui il consenso si misura in metri di tavolo."]
+      }
+    ]
+  },
+
+  "oblast-meme": {
+    id: "oblast-meme",
+    name: "OBLAST DEL MEME",
+    tiles: OBLAST_MEME_TILES,
+    outdoor: true,
+    music: "interior",
+    tileOverrides: {
+      "=": "tiles/snow_path.png"
+    },
+    warps: [
+      { x: 6, y: 1, toMap: "grotta1", toX: 16, toY: 1, facing: "left" }
+    ],
+    encounterRate: 0.18,
+    encounters: [
+      { speciesId: "putingrad", weight: 26, minLv: 9, maxLv: 11 },
+      { speciesId: "bunkerput", weight: 22, minLv: 8, maxLv: 11 },
+      { speciesId: "bojoon", weight: 16, minLv: 8, maxLv: 10 },
+      { speciesId: "muskrat", weight: 14, minLv: 8, maxLv: 10 }
+    ],
+    signs: [
+      { x: 18, y: 1, lines: ["OBLAST DEL MEME", "Gemellato con ogni chat dove qualcuno scrive 'fonte: fidati'."] }
+    ],
+    pickups: [
+      { id: "pk-oblast-1", x: 4, y: 13, itemId: "schedona", qty: 1 },
+      { id: "pk-oblast-hide", x: 20, y: 5, itemId: "caffe", qty: 2, hidden: true }
+    ],
+    npcs: [
+      {
+        id: "legend-bunkerput", pal: "boss", x: 18, y: 10, facing: "left",
+        legendary: {
+          speciesId: "bunkerput",
+          level: 10,
+          flag: "legend-bunkerput-gone",
+          lines: [
+            "Dal fondo della taiga arriva un tavolo lunghissimo.",
+            "BUNKERPUT emerge dal meme e pretende distanza di sicurezza."
+          ],
+          afterRunLines: ["BUNKERPUT si richiude nel bunker. Il tavolo resta apparecchiato."],
+          afterGoneLines: ["Il bunker si svuota. Resta solo un eco: 'riunione da remoto'."]
+        },
+        lines: ["Il bunker è chiuso. Dentro qualcuno misura la stanza col righello."]
+      }
+    ]
   },
 
   mediopoli: {

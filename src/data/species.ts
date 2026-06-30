@@ -193,6 +193,14 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "comizio"], [1, "tavololungo"], [16, "gasdotto"], [24, "dossier"], [30, "blocconavale"]],
     dexLine: "TIENE IL DITO SUL RUBINETTO DEL GAS. D'INVERNO L'EUROPA RICEVE LA BOLLETTA E TREMA."
   }),
+  bunkerput: S({
+    id: "bunkerput", dexNum: 37, name: "BUNKERPUT", category: "MEME DA BUNKER",
+    types: ["ISTITUZIONE", "MEDIA"],
+    base: { hp: 78, atk: 76, def: 100, spc: 82, spd: 38 },
+    catchRate: 35, expYield: 190,
+    learnset: [[1, "comizio"], [1, "tavololungo"], [10, "oscuramento"], [16, "gasdotto"], [22, "dossier"], [28, "fiducia"]],
+    dexLine: "VIVE IN UN BUNKER E ATTACCA DA UN TAVOLO LUNGHISSIMO. PIÙ LO AVVICINI, PIÙ ALLUNGA LA RIUNIONE."
+  }),
   xipanda: S({
     id: "xipanda", dexNum: 19, name: "XIPANDA", category: "PANDA PIANIFICATORE",
     types: ["ISTITUZIONE", "TECNO"],

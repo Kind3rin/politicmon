@@ -32,6 +32,13 @@ const fullTileTerrain = new Set([
   "tiles/wall_interior.png",
   "tiles/cave_floor.png",
   "tiles/cave_rock.png",
+  "tiles/snow_floor.png",
+  "tiles/snow_drift.png",
+  "tiles/snow_path.png",
+  "tiles/cave_mouth.png",
+  "tiles/cave_boulder.png",
+  "tiles/cave_stalagmite.png",
+  "tiles/snow_pine.png",
   "tiles/deck_asphalt.png"
 ]);
 const gridBuildings = new Map([

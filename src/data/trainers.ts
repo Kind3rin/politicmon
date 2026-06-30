@@ -88,6 +88,16 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Niente panico. Ho altri tre yacht."],
     money: 900
   },
+  bunkerista: {
+    id: "bunkerista", name: "MEMELOGO DEL BUNKER", pal: "aide",
+    team: [["bunkerput", 9], ["putingrad", 10]],
+    intro: [
+      "Benvenuto nel corridoio dove i meme diventano geopolitica.",
+      "Ho studiato ogni frame del tavolo lungo. Ora ti interrogo."
+    ],
+    defeat: ["Il meme mi ha voltato le spalle. O forse era solo troppo lontano."],
+    money: 620, reward: { itemId: "caffe", qty: 1 }
+  },
   tycoon: {
     id: "tycoon", name: "MR. TYCOON", pal: "boss",
     team: [["bojoon", 20], ["muskrat", 21], ["trumpon", 23]],

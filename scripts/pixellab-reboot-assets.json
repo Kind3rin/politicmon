@@ -736,6 +736,22 @@
           "postprocess": "normalized to 96x48; visible entrance locked to tile x 32-47"
         }
       ]
+    },
+    {
+      "id": "cave-oblast-tiles-2026-06-30",
+      "tool": "create_tiles_pro",
+      "tileId": "76e42749-868c-41cd-9ea9-75245caa2c0b",
+      "state": "downloaded",
+      "styleReference": "16x16 square top-down PixelLab RPG tiles for cave entrance, cave obstacles, snow floor/path/drifts, and snow pine obstacles",
+      "outputs": [
+        { "file": "tiles/cave_mouth.png", "sourceTile": "tile_0.png" },
+        { "file": "tiles/cave_boulder.png", "sourceTile": "tile_1.png" },
+        { "file": "tiles/cave_stalagmite.png", "sourceTile": "tile_9.png" },
+        { "file": "tiles/snow_floor.png", "sourceTile": "tile_12.png" },
+        { "file": "tiles/snow_drift.png", "sourceTile": "tile_11.png" },
+        { "file": "tiles/snow_path.png", "sourceTile": "tile_5.png" },
+        { "file": "tiles/snow_pine.png", "sourceTile": "tile_6.png" }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -824,6 +840,9 @@
       "output": [
         "tiles/grass_flat.png",
         "tiles/path_flat.png",
+        "tiles/snow_floor.png",
+        "tiles/snow_path.png",
+        "tiles/snow_drift.png",
         "tiles/sand.png",
         "tiles/water.png"
       ],
@@ -839,6 +858,10 @@
         "tiles/wall_interior.png",
         "tiles/cave_floor.png",
         "tiles/cave_rock.png",
+        "tiles/cave_mouth.png",
+        "tiles/cave_boulder.png",
+        "tiles/cave_stalagmite.png",
+        "tiles/snow_pine.png",
         "tiles/deck_asphalt.png",
         "tiles/sand.png"
       ],

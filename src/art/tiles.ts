@@ -16,9 +16,15 @@ const TILE_PNG: Record<string, string> = {
   "=": "tiles/path_flat.png",
   z: "tiles/sand.png",
   w: "tiles/water.png",
+  i: "tiles/snow_floor.png",
+  I: "tiles/snow_drift.png",
   p: "tiles/floor_wood.png",   // pavimento interno (case/negozi)
   A: "tiles/wall_interior.png", // muro interno in pietra
-  j: "tiles/deck_asphalt.png"   // impalcato ponte (asfalto+mezzeria)
+  j: "tiles/deck_asphalt.png",  // impalcato ponte (asfalto+mezzeria)
+  O: "tiles/cave_mouth.png",
+  R: "tiles/cave_boulder.png",
+  S: "tiles/cave_stalagmite.png",
+  N: "tiles/snow_pine.png"
 };
 
 export function tileImage(ch: string): HTMLImageElement | null {
@@ -184,6 +190,29 @@ const grassArt = flatTile("g", [
   [13, 9, "G"], [14, 9, "G"], [3, 12, "G"], [4, 12, "G"], [9, 13, "G"], [10, 13, "G"]
 ]);
 
+const snowArt = flatTile("i", [
+  [2, 2, "I"], [7, 3, "I"], [12, 4, "I"], [4, 8, "I"], [14, 9, "I"], [8, 13, "I"]
+]);
+
+const snowDriftArt = rows(
+  "iiiiiiiiiiiiiiii",
+  "iiIIIIiiiiIIIiii",
+  "iIIssIIiiIIsIIii",
+  "iIsSsIiiIsSSsIii",
+  "iiIsIIiiiIIsIIii",
+  "iiiiiiiiiiiiiiii",
+  "iiiiIIiiiiIIIIii",
+  "iiiIsIIiiIIsSIIi",
+  "iiIsSsIiiIsSsIIi",
+  "iiiIIsIiiiIIsIii",
+  "iiiiiiiiiiiiiiii",
+  "iiIIIiiiiIIiiiii",
+  "iIIsIIiiIsIIiiii",
+  "iiIIsIiiiIIiiiii",
+  "iiiiiiiiiiiiiiii",
+  "iiiiiiiiiiiiiiii"
+);
+
 const pathArt = flatTile("p", [
   [4, 2, "q"], [12, 5, "q"], [7, 9, "q"], [2, 12, "q"], [13, 13, "q"], [9, 3, "q"]
 ]);
@@ -297,6 +326,82 @@ const signArt = rows(
   "................",
   "................",
   "................"
+);
+
+const caveMouthArt = rows(
+  "rrrrrrrrrrrrrrrr",
+  "rRRRRRRRRRRRRRRr",
+  "rRRRRRRRRRRRRRRr",
+  "rRRRooooooooRRRr",
+  "rRRoBBBBBBBBoRRr",
+  "rRoBBBBBBBBBBoRr",
+  "rRoBBBbbbbBBBBoR",
+  "rRoBBbbbbbbBBBoR",
+  "rRoBbbbbbbbbBBoR",
+  "rRoBbbbbbbbbBBoR",
+  "rRoBbbbbbbbbBBoR",
+  "rRoBbbbbbbbbBBoR",
+  "rRoBbbbbbbbbBBoR",
+  "rRooooooooooooRr",
+  "rRRRRRRRRRRRRRRr",
+  "rrrrrrrrrrrrrrrr"
+);
+
+const caveBoulderArt = rows(
+  "rrrrrrrrrrrrrrrr",
+  "rrRRRRRrrRRRRrrr",
+  "rRRRRRRRRRRRRRrr",
+  "rRRllRRRRllRRRrr",
+  "rRRRRRRRRRRRRRRr",
+  "rrRRRRllRRRRRRRr",
+  "rRRRRRRRRRRllRRr",
+  "rRRllRRRRRRRRRRr",
+  "rRRRRRRllRRRRRRr",
+  "rrRRRRRRRRRRllRr",
+  "rRRRRllRRRRRRRRr",
+  "rRRRRRRRRllRRRRr",
+  "rrRRRRRRRRRRRRrr",
+  "rrrRRRRRRRRRRrrr",
+  "rrrrrrrrrrrrrrrr",
+  "rrrrrrrrrrrrrrrr"
+);
+
+const stalagmiteArt = rows(
+  "rrrrrrrrrrrrrrrr",
+  "rrrrrrrlrrrrrrrr",
+  "rrrrrrlllrrrrrrr",
+  "rrrrrllLllrrrrrr",
+  "rrrrrllLllrrrrrr",
+  "rrrrlllLlllrrrrr",
+  "rrrlllLLLlllrrrr",
+  "rrrlllLLLlllrrrr",
+  "rrllllLLLllllrrr",
+  "rrlllLLLLLlllrrr",
+  "rllllLLLLLllllrr",
+  "rlllLLLLLLLlllrr",
+  "rlllLLLLLLLlllrr",
+  "rrlllllllllllrrr",
+  "rrrrrrrrrrrrrrrr",
+  "rrrrrrrrrrrrrrrr"
+);
+
+const snowPineArt = rows(
+  "NNNNNNNNNNNNNNNN",
+  "NNNNNNwwNNNNNNNN",
+  "NNNNNwggwNNNNNNN",
+  "NNNNwggggwNNNNNN",
+  "NNNwggwwggwNNNNN",
+  "NNwgggwwgggwNNNN",
+  "NwggggwwggggwNNN",
+  "NNwwggggggwwNNNN",
+  "NNNwggwwggwNNNNN",
+  "NNwgggwwgggwNNNN",
+  "NwggggwwggggwNNN",
+  "NNNwwbbbbwwNNNNN",
+  "NNNNNbbbbNNNNNNN",
+  "NNNNNbbbbNNNNNNN",
+  "NNNNwwbbwwNNNNNN",
+  "NNNNNNNNNNNNNNNN"
 );
 
 // Edifici: tetto, muro, porta, finestra, insegna.
@@ -789,10 +894,16 @@ export const TILES: Record<string, TileDef> = {
   ",": { pix: pix(flowersArt), solid: false },
   "~": { pix: pix(tallGrassArt, { t: "#3f8a2a", d: "#2c6a1a", g: "#5aa53c" }), solid: false, encounter: true },
   "=": { pix: pix(pathArt), solid: false },
+  i: { pix: pix(snowArt, { i: "#dcecff", I: "#f7fbff" }), solid: false },
+  I: { pix: pix(snowDriftArt, { i: "#dcecff", I: "#f8fbff", s: "#b8d0e8", S: "#95b6d3" }), solid: false, encounter: true },
   w: { pix: pix(waterArt(0)), solid: true, water: true },
   T: { pix: pix(treeArt), solid: true, overlay: true },
+  N: { pix: pix(snowPineArt, { N: "#dcecff", w: "#f8fbff", g: "#3f7d5a", b: "#7a5638" }), solid: true },
   f: { pix: pix(fenceArt, { b: "#b8884a" }), solid: true, overlay: true },
   s: { pix: pix(signArt, { b: "#c8a05a", w: "#7a5a28" }), solid: true, overlay: true },
+  O: { pix: pix(caveMouthArt, { r: "#5b6170", R: "#7c8390", o: "#1c2333", B: "#273041", b: "#090c12" }), solid: false },
+  R: { pix: pix(caveBoulderArt, { r: "#4d5360", R: "#707783", l: "#9aa1aa" }), solid: true },
+  S: { pix: pix(stalagmiteArt, { r: "#4d5360", l: "#707783", L: "#a8afb8" }), solid: true },
   // Edifici (case variate, lab, bar, palestre)
   r: { pix: pix(roofArt("r", "R")), solid: true },
   v: { pix: pix(roofArt("b", "B"), { b: "#3472b8", B: "#244e88" }), solid: true },

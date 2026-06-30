@@ -13,6 +13,9 @@ import { setTypeIconLoader } from "./data/poltypes";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
 
+const APP_BUILD_ID = "2026-06-30-cave-oblast-bunkerput";
+const APP_BUILD_KEY = "politicmon-app-build";
+
 // Mostra i controlli touch sui dispositivi senza mouse.
 if (window.matchMedia("(pointer: coarse)").matches) {
   document.body.classList.add("touch");
@@ -20,6 +23,26 @@ if (window.matchMedia("(pointer: coarse)").matches) {
 
 // Applica la preferenza dei controlli di movimento (levetta vs d-pad).
 applyControlMode(loadControlMode());
+
+async function clearStaticCachesForNewBuild(): Promise<boolean> {
+  if (!("caches" in window)) {
+    return false;
+  }
+  try {
+    const previous = localStorage.getItem(APP_BUILD_KEY);
+    if (previous === APP_BUILD_ID) {
+      return false;
+    }
+    localStorage.setItem(APP_BUILD_KEY, APP_BUILD_ID);
+    const keys = await caches.keys();
+    const appCaches = keys.filter((key) => key.startsWith("politicmon-"));
+    await Promise.all(appCaches.map((key) => caches.delete(key)));
+    navigator.serviceWorker.controller?.postMessage({ type: "CLEAR_RUNTIME_CACHES" });
+    return appCaches.length > 0 || previous !== null;
+  } catch {
+    return false;
+  }
+}
 
 // PWA: offline e installazione su telefono (solo in produzione,
 // in dev il service worker intralcerebbe l'HMR di Vite).
@@ -34,8 +57,13 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
   // dobbiamo ricaricare (eviteremmo un reload inutile al primo avvio).
   const hadController = Boolean(navigator.serviceWorker.controller);
   window.addEventListener("load", () => {
+    clearStaticCachesForNewBuild().then((cleared) => {
+      if (cleared) {
+        window.location.reload();
+      }
+    });
     navigator.serviceWorker
-      .register("./sw.js")
+      .register("./sw.js", { updateViaCache: "none" })
       .then((reg) => {
         // Controlla subito se c'è una versione nuova, e poi ogni 60s mentre giochi.
         reg.update().catch(() => undefined);

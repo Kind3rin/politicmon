@@ -9,11 +9,12 @@ import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
 import { loadPanelImage, getSpriteImage } from "./engine/assets";
+import { APP_BUILD_ID } from "./engine/build";
+import { preloadCoreSprites } from "./engine/preload";
 import { setTypeIconLoader } from "./data/poltypes";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
 
-const APP_BUILD_ID = "2026-06-30-cave-oblast-bunkerput";
 const APP_BUILD_KEY = "politicmon-app-build";
 
 // Mostra i controlli touch sui dispositivi senza mouse.
@@ -35,13 +36,33 @@ async function clearStaticCachesForNewBuild(): Promise<boolean> {
     }
     localStorage.setItem(APP_BUILD_KEY, APP_BUILD_ID);
     const keys = await caches.keys();
-    const appCaches = keys.filter((key) => key.startsWith("politicmon-"));
-    await Promise.all(appCaches.map((key) => caches.delete(key)));
-    navigator.serviceWorker.controller?.postMessage({ type: "CLEAR_RUNTIME_CACHES" });
-    return appCaches.length > 0 || previous !== null;
+    await Promise.all(keys.map((key) => caches.delete(key)));
+    navigator.serviceWorker?.controller?.postMessage({ type: "CLEAR_RUNTIME_CACHES" });
+    return keys.length > 0 || previous !== null;
   } catch {
     return false;
   }
+}
+
+function reloadOnce(reason: string): void {
+  try {
+    const key = `${APP_BUILD_KEY}:${reason}`;
+    if (sessionStorage.getItem(key) === APP_BUILD_ID) {
+      return;
+    }
+    sessionStorage.setItem(key, APP_BUILD_ID);
+  } catch {
+    // localStorage APP_BUILD_KEY evita gia il loop per il refresh statico.
+  }
+  window.location.reload();
+}
+
+if (import.meta.env.PROD) {
+  void clearStaticCachesForNewBuild().then((cleared) => {
+    if (cleared) {
+      reloadOnce("static-cache");
+    }
+  });
 }
 
 // PWA: offline e installazione su telefono (solo in produzione,
@@ -57,13 +78,9 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
   // dobbiamo ricaricare (eviteremmo un reload inutile al primo avvio).
   const hadController = Boolean(navigator.serviceWorker.controller);
   window.addEventListener("load", () => {
-    clearStaticCachesForNewBuild().then((cleared) => {
-      if (cleared) {
-        window.location.reload();
-      }
-    });
+    const swUrl = `./sw.js?v=${encodeURIComponent(APP_BUILD_ID)}`;
     navigator.serviceWorker
-      .register("./sw.js", { updateViaCache: "none" })
+      .register(swUrl, { updateViaCache: "none" })
       .then((reg) => {
         // Controlla subito se c'è una versione nuova, e poi ogni 60s mentre giochi.
         reg.update().catch(() => undefined);
@@ -95,7 +112,7 @@ if (import.meta.env.PROD && "serviceWorker" in navigator) {
         return;
       }
       reloaded = true;
-      window.location.reload();
+      reloadOnce("sw-controller");
     });
   });
 }
@@ -114,6 +131,10 @@ if (!canvas) {
 const screen = new Screen(canvas);
 const input = new Input();
 const stack = new SceneStack();
+let bootReady = false;
+void preloadCoreSprites().finally(() => {
+  bootReady = true;
+});
 
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
@@ -173,10 +194,23 @@ window.addEventListener("beforeunload", () => {
 
 let last = performance.now();
 
+function drawBootScreen(now: number): void {
+  screen.clear("#10141f");
+  screen.rect(20, 78, 200, 20, "#20283a");
+  screen.frame(20, 78, 200, 20, "#6f7da8");
+  const dots = ".".repeat((Math.floor(now / 240) % 3) + 1);
+  screen.textCenter(`CARICAMENTO${dots}`, 120, 85, "#f4dd62");
+}
+
 function frame(now: number): void {
   const raw = (now - last) / 1000;
   const dt = Number.isFinite(raw) ? Math.min(0.1, Math.max(0, raw)) : 0;
   last = now;
+  if (!bootReady) {
+    drawBootScreen(now);
+    requestAnimationFrame(frame);
+    return;
+  }
   stack.update(dt);
   stack.draw(screen);
   input.endFrame();

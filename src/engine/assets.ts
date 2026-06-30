@@ -1,3 +1,5 @@
+import { APP_BUILD_ID } from "./build";
+
 // Registry degli sprite PNG (redesign PixelLab). Gli asset di gioco non sono più
 // solo pixel-map testuali: i mostri, i tile, il personaggio e gli NPC possono
 // essere PNG generati con PixelLab e serviti da `public/sprites/...`.
@@ -15,7 +17,7 @@ interface Entry {
 }
 
 const registry = new Map<string, Entry>();
-const SPRITE_VERSION = "cave-oblast-bunkerput-4970058";
+const SPRITE_VERSION = APP_BUILD_ID;
 
 // Base path degli sprite serviti staticamente. In Vite tutto ciò che sta in
 // `public/` è servito dalla radice; con base relativa (PWA) `import.meta.env.BASE_URL`
@@ -63,6 +65,24 @@ export function preloadSprites(entries: Record<string, string>): void {
 
 export function spriteStatus(id: string): SpriteStatus {
   return registry.get(id)?.status ?? "idle";
+}
+
+export function waitForSprites(ids: string[], timeoutMs = 2000): Promise<void> {
+  const started = performance.now();
+  return new Promise((resolve) => {
+    const tick = () => {
+      const done = ids.every((id) => {
+        const status = spriteStatus(id);
+        return status === "ready" || status === "missing";
+      });
+      if (done || performance.now() - started >= timeoutMs) {
+        resolve();
+        return;
+      }
+      window.setTimeout(tick, 40);
+    };
+    tick();
+  });
 }
 
 // Immagine generica per id+path (sfondi scena, ecc.): ritorna l'HTMLImageElement

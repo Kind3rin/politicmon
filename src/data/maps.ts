@@ -118,7 +118,7 @@ const BORGO_TILES = [
   "TT....==.....====......=....TT",
   "TT....==================....TT",
   "TT.s.........====..eQQe.....TT",
-  "TT..eeee.....====..mndm.....TT",
+  "TT..!!!!.....====..mndm.....TT",
   "TT..mndm.....=========......TT",
   "TT....===========...........TT",
   "TT..wwww.....====.....wwww..TT",
@@ -213,7 +213,7 @@ const MEDIOPOLI_TILES = [
   "TT...eQQe....====....oooo...TT",
   "TT...mndm....====....oooo...TT",
   "TT.....==========....mndm...TT",
-  "TT..eeee.....===========....TT",
+  "TT..????.....===========....TT",
   "TT..mndm.....====.......s...TT",
   "TT....===========...........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
@@ -299,7 +299,7 @@ const MARE_TILES = [
 // (col 13-14) l'acqua scende ininterrotta fino al cantiere del ponte.
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
-  "TT.......eeee......xxxx.....TT",
+  "TT.......@@@@......xxxx.....TT",
   "TT..~~~~.mndm.s....mnd^^^^^.TT",
   "TT..~~~~...=eQQe.....=^...^.TT",
   "TT..~~~~...=mndm.....=^...^.TT",

@@ -6,7 +6,7 @@
 // worker nuovo prende subito il controllo: i progressi stanno in localStorage,
 // separati dalle cache statiche.
 
-const CACHE = "politicmon-v4-cave-oblast";
+const CACHE = "politicmon-v7-small-buildings-kiosk-refresh";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -32,7 +32,7 @@ self.addEventListener("message", (event) => {
     event.waitUntil(
       caches
         .keys()
-        .then((keys) => Promise.all(keys.filter((k) => k.startsWith("politicmon-")).map((k) => caches.delete(k))))
+        .then((keys) => Promise.all(keys.map((k) => caches.delete(k))))
     );
   }
 });
@@ -54,7 +54,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
 
   // Navigazioni e manifest: prova la rete, ripiega sulla cache (offline).
-  if (request.mode === "navigate" || request.url.includes("manifest.webmanifest")) {
+  if (request.mode === "navigate" || request.url.includes("manifest.webmanifest") || url.pathname.endsWith("/sw.js")) {
     event.respondWith(
       fetch(request, { cache: "reload" })
         .then((response) => {

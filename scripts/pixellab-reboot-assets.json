@@ -752,6 +752,71 @@
         { "file": "tiles/snow_path.png", "sourceTile": "tile_5.png" },
         { "file": "tiles/snow_pine.png", "sourceTile": "tile_6.png" }
       ]
+    },
+    {
+      "id": "residential-house-variants-2026-06-30",
+      "tool": "create_map_object style-match inpaint + direct object generation",
+      "state": "downloaded",
+      "styleReference": "front-facing PixelLab RPG residential buildings, 64x48 transparent canvases, non-BAR silhouettes, visible entrances aligned to gameplay door tile x 32-47",
+      "outputs": [
+        {
+          "file": "tiles/build_house_front_red.png",
+          "objectId": "e5fe0103-f0c8-4522-98d4-421cfe55d2de",
+          "postprocess": "downloaded PixelLab 64x48 transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x48 footprint; selected because silhouette reads as townhouse, not bar"
+        },
+        {
+          "file": "tiles/build_house_front_blue.png",
+          "objectId": "a1f8ed86-5c0d-49f9-8fd8-4bc32f834d77",
+          "postprocess": "downloaded PixelLab 64x48 transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x48 footprint; selected because roof/facade differ clearly from red and bar"
+        },
+        {
+          "file": "tiles/build_house_front_green.png",
+          "objectId": "daed98df-20e9-4326-92fa-001ae6912bcd",
+          "postprocess": "downloaded PixelLab 64x48 transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x48 footprint; selected second green attempt because it is front-facing, not isometric"
+        },
+        {
+          "file": "tiles/build_house_front_brick.png",
+          "objectId": "0a9c123a-cdcd-4109-8b95-62c124f39c86",
+          "postprocess": "downloaded PixelLab 64x48 transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x48 footprint; new H-roof residential variant"
+        }
+      ],
+      "rejected": [
+        {
+          "objectIds": ["a4b90015-d3ae-4620-b4f8-79c2227a6098", "1df3cb75-d1fc-40b1-a820-b520501da60c", "9461f04b-aec0-417b-8178-834581bd6cf3", "736a9246-ee64-4cde-9d07-229d3e80ba14"],
+          "reason": "Basic low top-down objects produced 64x64 object-style/isometric results; not used for gameplay grid houses."
+        },
+        {
+          "tileId": "13eb24f0-e8f1-4272-a7a7-8cef4f15adb9",
+          "reason": "create_tiles_pro returned 32x32 variations instead of 64x48 building facades."
+        },
+        {
+          "objectId": "3df890f5-4ae2-49f9-8ebc-3fbf89146cb4",
+          "reason": "Green inpaint was still too isometric; replaced by daed98df-20e9-4326-92fa-001ae6912bcd."
+        }
+      ]
+    },
+    {
+      "id": "small-civic-building-variants-2026-06-30",
+      "tool": "create_map_object",
+      "state": "downloaded",
+      "styleReference": "front-facing PixelLab RPG 4x2 civic/residential buildings, 64x32 transparent canvases, not BAR SPORT, visible entrances aligned to gameplay door tile x 32-47",
+      "outputs": [
+        {
+          "file": "tiles/build_circolo_front.png",
+          "objectId": "45ed7933-384e-418b-86c2-9d9656c5a4ff",
+          "postprocess": "downloaded PixelLab transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x32 footprint; replaces circolo map tile that previously reused BAR SPORT art"
+        },
+        {
+          "file": "tiles/build_apartment_front.png",
+          "objectId": "edc46c81-655c-4c80-9de2-e6ea749287c3",
+          "postprocess": "downloaded PixelLab transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x32 footprint; replaces attico map tile that previously reused BAR SPORT art"
+        },
+        {
+          "file": "tiles/build_kiosk_front.png",
+          "objectId": "43bae341-ed8f-4e2f-9a4c-81a903a2a46b",
+          "postprocess": "downloaded PixelLab transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x32 footprint; replaces chiosco map tile that previously reused BAR SPORT art"
+        }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -898,6 +963,10 @@
         "tiles/build_house_front_red.png",
         "tiles/build_house_front_blue.png",
         "tiles/build_house_front_green.png",
+        "tiles/build_house_front_brick.png",
+        "tiles/build_circolo_front.png",
+        "tiles/build_apartment_front.png",
+        "tiles/build_kiosk_front.png",
         "tiles/build_lab.png",
         "tiles/build_lab_front.png",
         "tiles/build_bar.png",

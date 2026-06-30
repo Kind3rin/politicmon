@@ -71,9 +71,12 @@ export function objectImage(ch: string): HTMLImageElement | null {
 // agganciati alla footprint reale dell'edificio.
 const BUILDING_PNG: Record<string, string> = {
   r: "tiles/build_house_front_red.png",
-  H: "tiles/build_house_front_red.png",
+  H: "tiles/build_house_front_brick.png",
   v: "tiles/build_house_front_blue.png",
   o: "tiles/build_house_front_green.png",
+  "!": "tiles/build_circolo_front.png",
+  "?": "tiles/build_apartment_front.png",
+  "@": "tiles/build_kiosk_front.png",
   u: "tiles/build_lab_front.png",
   e: "tiles/build_bar_front.png",
   Q: "tiles/build_bar_front.png",
@@ -100,6 +103,9 @@ const BUILDING_DOOR_OFFSET: Record<string, number> = {
   H: 2,
   v: 2,
   o: 2,
+  "!": 2,
+  "?": 2,
+  "@": 2,
   u: 2,
   e: 2,
   Q: 2,
@@ -909,6 +915,9 @@ export const TILES: Record<string, TileDef> = {
   v: { pix: pix(roofArt("b", "B"), { b: "#3472b8", B: "#244e88" }), solid: true },
   o: { pix: pix(roofArt("g", "G"), { g: "#4f9d6a", G: "#2f724b" }), solid: true },
   H: { pix: pix(roofArt("c", "C"), { c: "#b85838", C: "#7a3028" }), solid: true },
+  "!": { pix: pix(roofArt("r", "R"), { r: "#b85838", R: "#7a3028" }), solid: true },
+  "?": { pix: pix(roofArt("b", "B"), { b: "#435b82", B: "#2b3b57" }), solid: true },
+  "@": { pix: pix(roofArt("g", "G"), { g: "#4f9d86", G: "#2f725e" }), solid: true },
   u: { pix: pix(roofArt("B", "v"), { v: "#3450a0" }), solid: true },
   e: { pix: pix(roofArt("e", "E"), { e: "#3f9a5c", E: "#2f7a46" }), solid: true },
   // Tetto-insegna del BAR SPORT (centro cura): verde + cartello riconoscibile.

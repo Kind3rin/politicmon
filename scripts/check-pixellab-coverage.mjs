@@ -36,7 +36,8 @@ function assetOutputs() {
       outputs.push({
         id: mon.id,
         domain: delegated.domain,
-        output: delegated.outputTemplate.replace("{id}", mon.id)
+        output: delegated.outputTemplate.replace("{id}", mon.id),
+        objectId: mon.objectId ?? ""
       });
     }
   }
@@ -45,6 +46,7 @@ function assetOutputs() {
 
 const required = assetOutputs();
 const missing = required.filter((asset) => !existsSync(join(root, "public", "sprites", asset.output)));
+const untracked = required.filter((asset) => asset.objectId === "");
 const present = required.length - missing.length;
 
 console.log(`PixelLab coverage: ${present}/${required.length} required files present.`);
@@ -52,6 +54,13 @@ if (missing.length > 0) {
   console.log("\nMissing assets:");
   for (const asset of missing) {
     console.log(`- [${asset.domain}] ${asset.id}: public/sprites/${asset.output}`);
+  }
+}
+
+if (untracked.length > 0) {
+  console.log("\nUntracked PixelLab provenance:");
+  for (const asset of untracked) {
+    console.log(`- [${asset.domain}] ${asset.id}: objectId missing for public/sprites/${asset.output}`);
   }
 }
 
@@ -78,6 +87,6 @@ for (const debt of manifest.codeDebtPatterns ?? []) {
   }
 }
 
-if (strict && missing.length > 0) {
+if (strict && (missing.length > 0 || untracked.length > 0)) {
   process.exitCode = 1;
 }

@@ -106,6 +106,8 @@ const problems = await page.evaluate(async () => {
         });
         if (!targetWarp) {
           out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza warp interno sulla porta (${doorX},${doorY})`);
+        } else if (!targetWarp.toMap.startsWith("bar-") && path === "tiles/build_bar_front.png") {
+          out.push(`${mapId}->${targetWarp.toMap}: edificio non BAR usa ancora build_bar_front.png a (${x},${y})`);
         }
 
         const front = tileAt(map, doorX, doorY + 1);

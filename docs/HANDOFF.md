@@ -5,7 +5,37 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 34 — REDESIGN LAYOUT CITTÀ (strade fino alle porte)**, 2026-06-30.
+Ultimo aggiornamento: **Round 35 — edifici TOP-DOWN 2D + insegne + piazze interattive**, 2026-06-30.
+
+### 🏙️ Round 35 — edifici top-down 2D, insegne, fontane/statue esaminabili
+Feedback utente: "edifici rifalli tutti TOP-DOWN 2D (alcuni non lo sono), il bar e gli
+altri devono avere un'INSEGNA, le piazze devono avere FONTANE e oggetti interattivi".
+
+FATTO R35:
+- **TUTTI i 14 edifici rigenerati TOP-DOWN 2D** (PixelLab `view:"high top-down"` — il
+  vero fix: si vede il TETTO dall'alto + striscia di facciata con porta in basso, stile
+  Pokémon GBA overworld). I round precedenti usavano `view:"side"` = facciata frontale
+  piatta (ancora con labbro prospettico). Ora niente più 3/4 (eccetto il PALAZZO 160px,
+  che resta semi-3/4 ma monumentale — i building larghi resistono al top-down).
+- **INSEGNE leggibili** nei prompt: BAR, PALESTRA, CASINO, LAB, CIRCOLO, EDICOLA,
+  STUDIO TV, TRATTORIA, PALAZZO. (PixelLab rende il testo in modo approssimativo ma
+  riconoscibile.)
+- **OGGETTI PIAZZA interattivi**: nuovi asset PixelLab `obj_fountain.png` (W),
+  `obj_statue.png` (Y), `obj_bench.png` (U). Cablati come tile overlay solidi
+  (OBJECT_PNG + TILES + preload + WORLD_OBJECT_TARGET_PX) + nuovo sistema
+  **`DecorativeDef`** (`maps.ts`): char nella mappa + array `decoratives:[{x,y,lines}]`
+  → testo satirico premendo A. Handler in `WorldScene.interact` dopo il check cartelli.
+  Fontana+statua/panchina piazzate in borgo/mediopoli/eurotown/capitale con battute.
+- **TRAPPOLA PixelLab confermata**: `high top-down` funziona su canvas QUADRATO (64x64,
+  96x96); su canvas largo (64x48/96x48) scivola al 3/4. Soluzione: generare a 64x64
+  quadrato e poi resize NN alla footprint reale (`scratchpad/fetch-td.ps1`). Verifica
+  ogni sprite A VISTA (l'agente non vede le immagini nel batch cieco).
+- **Helper validazione**: `scratchpad/checkdeco.mjs` verifica che ogni coord in
+  `decoratives` cada su un tile W/Y/U (le coord a mano sbagliano spesso di ±1).
+- Verifiche: typecheck+build puliti; tutti i guardrail mappa PASS; coverage 159/159
+  (3 oggetti nuovi tracciati); render full-map di tutte le città.
+
+### 🛣️ Round 34 — layout città: rete di strade fino a ogni porta
 
 ### 🛣️ Round 34 — layout città: rete di strade fino a ogni porta
 Feedback utente: "non è vero che sono messi bene rispetto al sentiero". Visto le

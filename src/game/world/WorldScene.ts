@@ -112,7 +112,11 @@ const WORLD_OBJECT_TARGET_PX: Record<string, number> = {
   k: 16,
   J: 18,
   K: 20,
-  g: 16
+  g: 16,
+  // Arredo urbano piazze: fontana grande, statua più alta, panchina larga bassa.
+  W: 22,
+  Y: 20,
+  U: 16
 };
 
 const TRANSPORT_DESTINATIONS: TransportDestination[] = [
@@ -784,6 +788,13 @@ export class WorldScene implements Scene {
     const sign = this.map.signs.find((s) => s.x === tx && s.y === ty);
     if (sign) {
       this.say(sign.lines);
+      return;
+    }
+
+    // Arredo urbano esaminabile (fontane/statue/panchine): testo satirico.
+    const deco = this.map.decoratives?.find((d) => d.x === tx && d.y === ty);
+    if (deco) {
+      this.say(deco.lines);
       return;
     }
 

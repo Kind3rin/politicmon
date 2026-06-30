@@ -950,7 +950,10 @@
         "tiles/obj_machine.png",
         "tiles/obj_girder.png",
         "tiles/obj_crane.png",
-        "tiles/obj_golddoor.png"
+        "tiles/obj_golddoor.png",
+        "tiles/obj_fountain.png",
+        "tiles/obj_statue.png",
+        "tiles/obj_bench.png"
       ],
       "state": "regenerate-from-zero"
     },

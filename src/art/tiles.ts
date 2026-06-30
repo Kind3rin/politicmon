@@ -56,6 +56,10 @@ const OBJECT_PNG: Record<string, string> = {
   J: "tiles/obj_girder.png",
   K: "tiles/obj_crane.png",
   g: "tiles/obj_golddoor.png", // porta dorata (varco Atto 2 palazzo->colle)
+  // Arredo urbano delle piazze (esaminabili, vedi `decoratives` in maps.ts).
+  W: "tiles/obj_fountain.png",
+  Y: "tiles/obj_statue.png",
+  U: "tiles/obj_bench.png",
 };
 
 export function objectImage(ch: string): HTMLImageElement | null {
@@ -907,6 +911,11 @@ export const TILES: Record<string, TileDef> = {
   N: { pix: pix(snowPineArt, { N: "#dcecff", w: "#f8fbff", g: "#3f7d5a", b: "#7a5638" }), solid: true },
   f: { pix: pix(fenceArt, { b: "#b8884a" }), solid: true, overlay: true },
   s: { pix: pix(signArt, { b: "#c8a05a", w: "#7a5a28" }), solid: true, overlay: true },
+  // Arredo urbano piazze (PNG PixelLab; il pix è solo fallback). Solidi+overlay:
+  // il giocatore ci gira intorno e li esamina (testo in `decoratives` di maps.ts).
+  W: { pix: pix(signArt, { b: "#4a90d9", w: "#2c5d8a" }), solid: true, overlay: true },
+  Y: { pix: pix(signArt, { b: "#9a6a3a", w: "#5a3f20" }), solid: true, overlay: true },
+  U: { pix: pix(signArt, { b: "#b8884a", w: "#7a5628" }), solid: true, overlay: true },
   O: { pix: pix(caveMouthArt, { r: "#5b6170", R: "#7c8390", o: "#1c2333", B: "#273041", b: "#090c12" }), solid: false },
   R: { pix: pix(caveBoulderArt, { r: "#4d5360", R: "#707783", l: "#9aa1aa" }), solid: true },
   S: { pix: pix(stalagmiteArt, { r: "#4d5360", l: "#707783", L: "#a8afb8" }), solid: true },

@@ -55,6 +55,15 @@ export interface SignDef {
   lines: string[];
 }
 
+// Arredo urbano esaminabile (fontana W, statua Y, panchina U, ...): il char è già
+// nei tile della mappa (solido), questo aggiunge SOLO il testo satirico mostrato
+// premendo A davanti. Decorativo: nessun effetto di gioco, niente collisioni nuove.
+export interface DecorativeDef {
+  x: number;
+  y: number;
+  lines: string[];
+}
+
 export interface PickupDef {
   id: string;
   x: number;
@@ -87,6 +96,7 @@ export interface MapDef {
   npcs: NpcDef[];
   signs: SignDef[];
   pickups: PickupDef[];
+  decoratives?: DecorativeDef[]; // arredo urbano esaminabile (fontane/statue/...)
   edges?: { north?: EdgeDef; south?: EdgeDef };
   encounters?: EncounterEntry[];
   encounterRate?: number;
@@ -115,7 +125,7 @@ const BORGO_TILES = [
   "TT...uuuu....====....rrrr...TT",
   "TT...mndm....====....mndm...TT",
   "TT....======================TT",
-  "TT....=......====..........=TT",
+  "TT....=....U.====...W......=TT",
   "TT....======================TT",
   "TT.s..=.....=====..eQQe....=TT",
   "TT..!!!!....=====..mndm....=TT",
@@ -208,7 +218,7 @@ const MEDIOPOLI_TILES = [
   "TT..yyyyyy...====...HHHH....TT",
   "TT..mmdnmm...====...mndm....TT",
   "TT....======================TT",
-  "TT....=......====....==.....TT",
+  "TT....=..W...====...Y==.....TT",
   "TT....======================TT",
   "TT...eQQe....====....oooo...TT",
   "TT...mndm....====....oooo...TT",
@@ -236,7 +246,7 @@ const EUROTOWN_TILES = [
   "TT....eQQe...====....~~~~~..TT",
   "TT....mndm...====....~~~~~..TT",
   "TT......====================TT",
-  "TT...........====...........TT",
+  "TT....W......====......Y....TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
@@ -256,7 +266,7 @@ const CAPITALE_TILES = [
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..mmdnmm...====..mmdnmm...TT",
   "TT....======================TT",
-  "TT....=......====....==.....TT",
+  "TT....=..W...====...Y==.....TT",
   "TT....======================TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT.HHHH~~....====....~~vvvv.TT",
@@ -606,6 +616,20 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-b-hide1", x: 26, y: 1, itemId: "schedona", qty: 1, hidden: true },
       { id: "pk-b-hide2", x: 2, y: 16, itemId: "caffe", qty: 2, hidden: true }
     ],
+    decoratives: [
+      {
+        x: 20, y: 14,
+        lines: [
+          "FONTANA DEL CONSENSO.",
+          "L'acqua sgorga solo in campagna elettorale.",
+          "Negli altri mesi: «guasto tecnico, fondi in arrivo»."
+        ]
+      },
+      {
+        x: 11, y: 14,
+        lines: ["PANCHINA DEI SAGGI.", "Qui si decideva tutto. Ora c'è solo il wifi del bar."]
+      }
+    ],
     npcs: [
       {
         id: "granny", pal: "granny", x: 10, y: 17, facing: "down",
@@ -850,6 +874,16 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-m-hide1", x: 26, y: 1, itemId: "spritz", qty: 2, hidden: true },
       { id: "pk-m-hide2", x: 2, y: 19, itemId: "maalox", qty: 1, hidden: true }
     ],
+    decoratives: [
+      {
+        x: 9, y: 12,
+        lines: ["FONTANA DELLO SHARE.", "Più ascolti fai, più zampilla. Stasera: replica."]
+      },
+      {
+        x: 20, y: 12,
+        lines: ["STATUA DEL GRANDE COMUNICATORE.", "Dito puntato verso il futuro. O verso la telecamera."]
+      }
+    ],
     npcs: [
       {
         id: "scorta-medio", pal: "guard", x: 24, y: 19, facing: "left", transport: true,
@@ -948,6 +982,16 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-e2", x: 2, y: 2, itemId: "dirGreen", qty: 1 },
       { id: "pk-e-hide1", x: 26, y: 14, itemId: "dirBunga", qty: 1, hidden: true },
       { id: "pk-e-hide2", x: 2, y: 14, itemId: "mojito", qty: 1, hidden: true }
+    ],
+    decoratives: [
+      {
+        x: 6, y: 14,
+        lines: ["FONTANA DELL'EURO.", "Getta una monetina: viene subito ridistribuita a Bruxelles."]
+      },
+      {
+        x: 23, y: 14,
+        lines: ["STATUA DEL PADRE FONDATORE.", "Nessuno ricorda di cosa. Ma la targa è in tre lingue."]
+      }
     ],
     npcs: [
       {
@@ -1055,6 +1099,16 @@ export const MAPS: Record<string, MapDef> = {
       // Tesoro grosso nella capitale: la TESSERA DORATA per evolvere.
       { id: "pk-c-hide1", x: 2, y: 8, itemId: "tessera", qty: 1, hidden: true },
       { id: "pk-c-hide2", x: 26, y: 14, itemId: "mojito", qty: 1, hidden: true }
+    ],
+    decoratives: [
+      {
+        x: 9, y: 13,
+        lines: ["FONTANA MONUMENTALE.", "Acqua benedetta dai sondaggi. Bevi a tuo rischio dal 1994."]
+      },
+      {
+        x: 20, y: 13,
+        lines: ["STATUA EQUESTRE DEL LEADER.", "Il cavallo guarda a sinistra. Il leader, dipende dal giorno."]
+      }
     ],
     npcs: [
       {

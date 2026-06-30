@@ -54,7 +54,8 @@ const gridBuildings = new Map([
   ["tiles/build_studio_front.png", [64, 32]],
   ["tiles/build_bistro_front.png", [64, 32]],
   ["tiles/build_gym_front.png", [96, 48]],
-  ["tiles/build_casino_front.png", [96, 48]]
+  ["tiles/build_casino_front.png", [96, 48]],
+  ["tiles/build_palace.png", [160, 64]]
 ]);
 
 const browser = await chromium.launch();

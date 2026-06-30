@@ -15,6 +15,7 @@ const shots = await page.evaluate(async () => {
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
   const { TitleScene } = await import("/src/scenes/TitleScene.ts");
   const { createMonster } = await import("/src/game/monster.ts");
+  const { ACHIEVEMENTS } = await import("/src/game/achievements.ts");
   const { audio } = await import("/src/engine/audio.ts");
   const { mp } = await import("/src/net/mp.ts");
   audio.enabled = false;
@@ -29,6 +30,9 @@ const shots = await page.evaluate(async () => {
     const state = newGameState();
     state.flags["intro-done"] = true;
     state.flags["hint-casino"] = true;
+    for (const achievement of ACHIEVEMENTS) {
+      state.flags[`ach:${achievement.id}`] = true;
+    }
     state.party = [createMonster("giorgetta", 18)];
     state.badges = ["auditel", "spread", "dazio"];
     state.pos = { mapId, x, y, facing: "down" };

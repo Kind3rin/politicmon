@@ -1974,10 +1974,8 @@ export class WorldScene implements Scene {
         const dh = fp.h * TILE;
         const bImg = build;
         const doorOffset = buildingDoorOffset(ch);
-        const rawCanvas = doorOffset != null;
-        const bBounds = rawCanvas ? null : screen.imageBounds(build);
-        const bScaleX = dw / (rawCanvas ? bImg.width : bBounds!.w);
-        const bScaleY = dh / (rawCanvas ? bImg.height : bBounds!.h);
+        const bScaleX = dw / bImg.width;
+        const bScaleY = dh / bImg.height;
         // baseY = bordo inferiore dell'edificio in px-mondo.
         const baseYb = (ty + fp.h) * TILE;
         const drawThreshold = (): void => {
@@ -1997,11 +1995,7 @@ export class WorldScene implements Scene {
         tall.push({
           baseY: baseYb,
           draw: () => {
-            if (rawCanvas) {
-              screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY });
-            } else {
-              screen.imageSpriteCropped(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY });
-            }
+            screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY });
             drawThreshold();
           }
         });

@@ -124,13 +124,13 @@ const BORGO_TILES = [
   "TT...uuuu....====....rrrr...TT",
   "TT...uuuu....====....rrrr...TT",
   "TT...mndm....====....mndm...TT",
-  "TT....======================TT",
+  "TT...=======================TT",
   "TT....=....U.====...W......=TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TT.s..=.....=====..eQQe....=TT",
   "TT..!!!!....=====..mndm....=TT",
   "TT..mndm....=====..====....=TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TT..wwww....=====....wwww...TT",
   "TT..wwww....=====....wwww...TT",
   "TT.........=====............TT",
@@ -217,15 +217,15 @@ const MEDIOPOLI_TILES = [
   "TT..yyyyyy...====...HHHH....TT",
   "TT..yyyyyy...====...HHHH....TT",
   "TT..mmdnmm...====...mndm....TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TT....=..W...====...Y==.....TT",
   "TT....======================TT",
   "TT...eQQe....====....oooo...TT",
   "TT...mndm....====....oooo...TT",
-  "TT....==========.....mndm...TT",
-  "TT..????.....========.==....TT",
+  "TT...===========.....mndm...TT",
+  "TT..????.....============...TT",
   "TT..mndm.....====.....==....TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
@@ -238,14 +238,14 @@ const EUROTOWN_TILES = [
   "TT..BBBBBB...====...HHHH....TT",
   "TT..BBBBBB...====...HHHH....TT",
   "TT..mmdnmm...====...mndm....TT",
-  "TT....======================TT",
-  "TT....======================TT",
+  "TT..========================TT",
+  "TT..========================TT",
   "TT..xxxx.....====...yyyy....TT",
   "TT..mndm.....====...mndm....TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TT....eQQe...====....~~~~~..TT",
   "TT....mndm...====....~~~~~..TT",
-  "TT......====================TT",
+  "TT..========================TT",
   "TT....W......====......Y....TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
@@ -261,18 +261,18 @@ const CAPITALE_TILES = [
   "TT........CMMMDDMMMC........TT",
   "TT..,,....==========..eQQe..TT",
   "TT..,,......======....mndm..TT",
-  "TT...====================...TT",
+  "TT...=====================..TT",
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..mmdnmm...====..mmdnmm...TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TT....=..W...====...Y==.....TT",
-  "TT....======================TT",
+  "TT..========================TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.mndm......====......mndm.TT",
-  "TT...======================.TT",
+  "TT.========================.TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
@@ -311,8 +311,8 @@ const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......@@@@......xxxx.....TT",
   "TT..~~~~.mndm.s....mnd^^^^^.TT",
-  "TT..~~~~...=eQQe.....=^...^.TT",
-  "TT..~~~~...=mndm.....=^...^.TT",
+  "TT..~~~~.====eQQe..===^...^.TT",
+  "TT..~~~~...==mndm..===^...^.TT",
   "TT...s.zzzz===========^^l^^.TT",
   "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
   "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
@@ -1383,7 +1383,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 14, y: 6, toMap: "mare", toX: 9, toY: 12, facing: "up" },
       { x: 11, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 21, y: 2, toMap: "covo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
-      { x: 14, y: 4, toMap: "bar-stretto", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
+      { x: 15, y: 4, toMap: "bar-stretto", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.20,
     // STRETTO = endgame meme italiano. L'UNICO posto dove pescare salvinator
@@ -1775,7 +1775,7 @@ export const MAPS: Record<string, MapDef> = {
   "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 7, 16),
   "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 13),
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 24, 8),
-  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 14, 5)
+  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 15, 5)
 };
 
 // Punto di risveglio dopo un KO totale: la cella calpestabile davanti al BAR

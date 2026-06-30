@@ -2,8 +2,8 @@
 // - niente Wang grass/path che sembra scarpata attraversabile
 // - niente PNG edificio 3/4 nelle mappe città/location
 // - ogni porta outdoor->interno deve avere un sentiero `=` davanti
-// - porte outdoor->interni solo dal fronte, con ritorno davanti alla porta
-// - nessun ingresso laterale attiva un warp
+// - porte outdoor->interni solo dal centro sotto la porta, guardando la porta
+// - nessun ingresso laterale o con facing sbagliato attiva un warp
 import { chromium } from "playwright";
 import { existsSync, readFileSync } from "node:fs";
 
@@ -133,6 +133,36 @@ const runtimeProblems = await page.evaluate(async () => {
         out.push(`${mapId}->${warp.toMap}: ingresso interno non arriva sopra lo zerbino (${warp.toX},${warp.toY})`);
       }
 
+      {
+        const state = newGameState();
+        state.flags["intro-done"] = true;
+        state.flags["veh-traghetto"] = true;
+        state.badges = ["auditel", "spread", "dazio"];
+        state.pos = { mapId, x: warp.x, y: warp.y, facing: "up" };
+        const scene = new WorldScene(stack, input, state);
+        scene.fromX = warp.x;
+        scene.fromY = warp.y + 1;
+        scene.onStepComplete();
+        if (!(scene.fadeOut > 0 || scene.pendingWarp)) {
+          out.push(`${mapId}->${warp.toMap}: ingresso dal centro sotto porta (${warp.x},${warp.y + 1}) non attiva il warp`);
+        }
+      }
+
+      {
+        const state = newGameState();
+        state.flags["intro-done"] = true;
+        state.flags["veh-traghetto"] = true;
+        state.badges = ["auditel", "spread", "dazio"];
+        state.pos = { mapId, x: warp.x, y: warp.y, facing: "down" };
+        const scene = new WorldScene(stack, input, state);
+        scene.fromX = warp.x;
+        scene.fromY = warp.y + 1;
+        scene.onStepComplete();
+        if (scene.fadeOut > 0 || scene.pendingWarp || state.pos.x !== warp.x || state.pos.y !== warp.y + 1) {
+          out.push(`${mapId}->${warp.toMap}: ingresso con porta non davanti non respinto`);
+        }
+      }
+
       for (const side of [
         { fromX: warp.x - 1, fromY: warp.y, facing: "right" },
         { fromX: warp.x + 1, fromY: warp.y, facing: "left" }
@@ -157,7 +187,7 @@ const runtimeProblems = await page.evaluate(async () => {
 
 const problems = [...staticProblems, ...runtimeProblems];
 if (problems.length === 0) {
-  console.log("OK - layout world: terreno PixelLab cartoon, edifici ortogonali, sentieri davanti alle porte, ingressi laterali respinti, scoglio solo dal gradino.");
+  console.log("OK - layout world: edifici ortogonali, ingressi solo dal centro porta, laterali/facing sbagliato respinti, scoglio solo dal gradino.");
 } else {
   console.log(`TROVATI ${problems.length} problemi world layout:`);
   for (const p of problems) console.log("  " + p);

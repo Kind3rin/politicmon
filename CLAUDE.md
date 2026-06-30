@@ -54,9 +54,11 @@ Risoluzione interna 240x180 scalata pixel-perfect.
   `quests.ts` con `side:true` (escluse dall'HUD da `currentQuest`); la `QuestScene`
   mostra la lista con finestra scorrevole.
 - Bilanciamento trigger casuali (tarati per non interrompere troppo su mobile):
-  `encounterRate` mappe ~0.10-0.11, PG vaganti prob 0.045/passo + cooldown 28+,
-  eventi morale prob 0.035/passo + cooldown 50+. In media un'interruzione ogni
-  ~10-12 passi. Cambiare questi numeri in `WorldScene`/`maps.ts` insieme.
+  `encounterRate` per zona — città-tutorial Borgo 0.10, route 0.14, grotta/oblast 0.16,
+  città mid/late 0.18-0.20 (curva: town < route ≈ grotta ≤ città). PG vaganti
+  prob 0.02/passo + cooldown (`checkWanderingChallenger`). **Eventi morale di strada
+  DISABILITATI** (pool `STREET_EVENTS` resta in `streetevents.ts` ma non è più chiamato
+  in `onStepComplete`). Cambiare questi numeri in `WorldScene`/`maps.ts` insieme.
 - Retention/hook: cliffhanger post-medaglia (`BADGE_TEASER` in `trainers.ts`,
   mostrato in `BattleScene` dopo il badge), notifiche milestone SONDAGGI
   (`bumpSondaggi` in `governo.ts` segnala il superamento delle soglie 25/40/55/70/85

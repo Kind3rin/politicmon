@@ -12,7 +12,8 @@ const KEY_ROWS = [
   "JKLMNOPQR",
   "STUVWXYZ_",
   "0123456789",
-  " ?!.,"
+  // Ultima riga riempita (prima erano solo 5 tasti → 2/3 di riga "morta" al touch).
+  " ?!.,:-'"
 ];
 // Emote: una lettera/simbolo per ciascuna (il font ha solo questi glifi).
 const EMOTES: Array<{ ch: string; label: string }> = [
@@ -184,6 +185,6 @@ export class ChatScene implements Scene {
       screen.rect(VIEW_W - 64, VIEW_H - 12, 56, 11, "#f4d34a");
     }
     screen.text("► INVIA", VIEW_W - 60, VIEW_H - 11, selSend ? INK : "#7ad858");
-    screen.text("A: scegli  B: canc/esci", 8, VIEW_H - 11, GREY);
+    screen.text("A: scegli  B: cancella  START: esci", 8, VIEW_H - 11, GREY);
   }
 }

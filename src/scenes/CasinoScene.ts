@@ -270,7 +270,7 @@ export class CasinoScene implements Scene {
     let win = 0; // in FICHE
     let text: string[];
     if (a === b && b === c) {
-      const mult = REELS[a].ch === "★" ? 30 : REELS[a].ch === "V" ? 12 : 8;
+      const mult = REELS[a].ch === "★" ? 30 : REELS[a].ch === "V" ? 10 : 8;
       win = BET * mult;
       this.state.flags["casino-jackpot"] = true; // sblocca la side quest
       text = [`TRIS DI ${REELS[a].name}!`, `Il banco capitola: ${win} FICHE!`];
@@ -279,8 +279,10 @@ export class CasinoScene implements Scene {
         text.push("...ma tre MAZZETTE fanno notizia: -3 sondaggi.");
       }
     } else if (a === b || b === c || a === c) {
-      win = BET * 2;
-      text = ["Doppia coppia di consensi!", `Recuperi ${win} FICHE.`];
+      // La coppia RESTITUISCE la posta (1x), non la raddoppia: col 2x la slot
+      // aveva EV ~1.4 (stampa-soldi). Ora EV ~0.99, il banco vince di un soffio.
+      win = BET;
+      text = ["Doppia coppia di consensi!", `Recuperi la posta: ${win} FICHE.`];
     } else {
       text = ["Niente da fare.", "I sondaggi del banco erano truccati. Come sempre."];
     }

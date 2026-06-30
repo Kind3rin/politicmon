@@ -169,7 +169,10 @@ export function curaPassiva(state: GameState): boolean {
   for (const mon of state.party) {
     const max = statsOf(mon).hp;
     if (mon.hp > 0 && mon.hp < max) {
-      mon.hp = Math.min(max, mon.hp + 1);
+      // Cura proporzionale (~3% del max, min 1): a 1 PV flat il ministero era
+      // morto nel tardo gioco (HP 80-120). Così resta utile a ogni livello.
+      const tick = Math.max(1, Math.round(max * 0.03));
+      mon.hp = Math.min(max, mon.hp + tick);
       healed = true;
     }
   }

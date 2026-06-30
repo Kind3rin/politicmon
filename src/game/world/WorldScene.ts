@@ -722,9 +722,11 @@ export class WorldScene implements Scene {
         ]);
         return;
       }
-      // Sconfitta meno punitiva: perdi un quarto dei fondi (max 250€) invece
-      // della metà, così una sconfitta non azzera la campagna né demotiva.
-      const lost = Math.min(Math.floor(this.state.money / 4), 250);
+      // Sconfitta meno punitiva: perdi un quarto dei fondi (max 600€) invece
+      // della metà, così una sconfitta non azzera la campagna né demotiva. Il
+      // cap a 250 rendeva la sconfitta irrilevante a metà gioco (3-8% dei fondi);
+      // 600 mantiene una conseguenza reale senza essere devastante.
+      const lost = Math.min(Math.floor(this.state.money / 4), 600);
       this.state.money -= lost;
       const sondaggi = addSondaggi(this.state, -5);
       for (const mon of this.state.party) {
@@ -2211,8 +2213,10 @@ export class WorldScene implements Scene {
       // Larghezza interna panelW-8=72px → max 12 char a 6px l'uno (niente overflow a 240px).
       screen.text(clipHud(sondaggiLabelShort(sond), 12), px + 4, 17, "#cfe6ff");
       // Delta flottante (+8 / -2) che sale e svanisce accanto alla barra.
+      // Sale da y=17 (sotto l'etichetta) verso l'alto, ma clampato a ≥2 così non
+      // esce mai sopra il bordo schermo (prima dy arrivava a -5 = invisibile).
       if (this.sondDelta) {
-        const dy = Math.round(6 - (1.4 - this.sondDelta.t) * 8);
+        const dy = Math.max(2, Math.round(17 - (1.4 - this.sondDelta.t) * 10));
         screen.text(this.sondDelta.text, px - 18, dy, this.sondDelta.up ? "#7ad858" : "#d04848");
       }
       hudBottom = 26;
@@ -2256,7 +2260,10 @@ export class WorldScene implements Scene {
       // Pannello largo abbastanza da NON troncare "STRETTO DI MESSINA" (prima
       // era 96px → "STRETTO DI ..."); auto-largo sul label più lungo, clampato.
       const w = Math.min(VIEW_W - 8, Math.max(96, this.transportMenu.measureWidth() + 8));
-      this.transportMenu.draw(screen, VIEW_W - 4 - w, VIEW_H - 58 - this.transportMenu.measureHeight(), w);
+      // Clamp a ≥2: con molte destinazioni measureHeight() può spingere la y
+      // sopra il bordo schermo (y<0). Così resta sempre visibile.
+      const menuY = Math.max(2, VIEW_H - 58 - this.transportMenu.measureHeight());
+      this.transportMenu.draw(screen, VIEW_W - 4 - w, menuY, w);
     }
 
     if (this.askMenu) {

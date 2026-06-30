@@ -575,8 +575,9 @@ export const MAPS: Record<string, MapDef> = {
       { x: 6, y: 18, toMap: "circolo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
       { x: 21, y: 17, toMap: "bar-borgo", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
-    encounterRate: 0.18,
+    encounterRate: 0.10,
     // BORGO = politica italiana di base. Zona-casa di salvinott e grillix.
+    // Rate basso: è la città-tutorial, deve restare calma (più bassa della route).
     encounters: [
       { speciesId: "salvinott", weight: 38, minLv: 2, maxLv: 4 },
       { speciesId: "grillix", weight: 26, minLv: 3, maxLv: 5 },
@@ -672,7 +673,7 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 22, y: 3, toMap: "grotta1", toX: GROTTA1_ENTRY.x, toY: GROTTA1_ENTRY.y, facing: "up" }
     ],
-    encounterRate: 0.16,
+    encounterRate: 0.14,
     // Mix delle due città a livello intermedio: chi attraversa allena la squadra.
     encounters: [
       { speciesId: "salvinott", weight: 24, minLv: 4, maxLv: 6 },
@@ -721,7 +722,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 8, y: 13, toMap: "route1", toX: 22, toY: 4, facing: "down" },
       { x: 17, y: 1, toMap: "oblast-meme", toX: 7, toY: 1, facing: "right" }
     ],
-    encounterRate: 0.22,
+    encounterRate: 0.16,
     encounters: [
       { speciesId: "muskrat", weight: 28, minLv: 5, maxLv: 7 },
       { speciesId: "grillix", weight: 22, minLv: 5, maxLv: 7 },
@@ -756,7 +757,7 @@ export const MAPS: Record<string, MapDef> = {
     warps: [
       { x: 6, y: 1, toMap: "grotta1", toX: 16, toY: 1, facing: "left" }
     ],
-    encounterRate: 0.18,
+    encounterRate: 0.14,
     encounters: [
       { speciesId: "putingrad", weight: 26, minLv: 9, maxLv: 11 },
       { speciesId: "bunkerput", weight: 22, minLv: 8, maxLv: 11 },
@@ -771,6 +772,16 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-oblast-hide", x: 20, y: 5, itemId: "caffe", qty: 2, hidden: true }
     ],
     npcs: [
+      {
+        // MEDICO DA CAMPO: l'OBLAST era un vicolo cieco senza cura né respawn
+        // (rischio soft-lock: KO contro il leggendario lv10 e risveglio a Borgo).
+        // Una crocerossina meme cura la squadra prima/dopo BUNKERPUT.
+        id: "medico-oblast", pal: "granny", x: 5, y: 13, facing: "down", healer: true,
+        lines: [
+          "MEDICO DA CAMPO: questa è zona di guerre social, candidato.",
+          "Siediti: ti rimetto in sesto la squadra prima del BUNKER."
+        ]
+      },
       {
         id: "legend-bunkerput", pal: "boss", x: 18, y: 10, facing: "left",
         legendary: {
@@ -1110,6 +1121,16 @@ export const MAPS: Record<string, MapDef> = {
           "Sono venuto a Roma per la storia, la cultura, l'arte...",
           "...e invece sto facendo la fila per un selfie col PRESIDENTE OMBRA.",
           "Bravo eh, però spostati che non si vede il monumento."
+        ]
+      },
+      {
+        // Banchetto del venditore ambulante: Caput Mundi era l'unica città
+        // grande SENZA negozio (niente rifornimento prima di palazzo/colle).
+        // Un ambulante con shop:true vende le stesse cose del DISCOUNT.
+        id: "ambulante-cap", pal: "barista", x: 14, y: 14, facing: "down", shop: true,
+        lines: [
+          "BANCHETTO DELL'AMBULANTE:",
+          "Schede, caffè e DIRETTIVE prima del PALAZZO. Niente scontrino, niente domande."
         ]
       },
       {

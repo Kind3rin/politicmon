@@ -5,7 +5,42 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 31 — audit gameplay + pixelmap (fix difesa speciale, HUD, soglie casa)**, 2026-06-30.
+Ultimo aggiornamento: **Round 32 — audit multi-agente (economia, pacing, soft-lock, UX)**, 2026-06-30.
+
+### 🔬 Round 32 — audit multi-agente verificato avversarialmente
+Workflow ultracode: 6 reviewer specialisti (combat/economy/level/art/ux/narrative) →
+verifica avversariale 3-lenti (voto maggioranza) → sintesi. Combat/art/narrative = 0
+problemi (puliti). Economy 7, Level 12, UX 9. Verificati a mano i top per severità.
+
+FATTO R32:
+- **P0 GAMBLING +EV (money infinito)**: SLOT del consenso aveva EV ~1.49× (coppia
+  pagava 2×) e la SCOMMESSA MAFIA EV ~1.45× (40/25/35). Entrambi stampavano soldi
+  all'infinito. Ribilanciati a EV ~0.97-0.99 (banco vince di poco, verificato con
+  simulazione 2M giri): SLOT coppia 2×→1× e V-tris 12→10 (EV 0.994); MAFIA prob
+  25/22/53 (EV 0.970). `CasinoScene.ts`, `MafiaScene.ts`.
+- **P2 economia/soft-lock**:
+  - **Penalità sconfitta** cap 250€→600€ (a metà gioco 250 = 3-8% irrilevante). `WorldScene.ts`.
+  - **CAPUT MUNDI senza negozio**: aggiunto NPC AMBULANTE (`shop:true`, @14,14) — era
+    l'unica città grande senza rifornimento prima di palazzo/colle. `maps.ts`.
+  - **OBLAST DEL MEME soft-lock**: zona cieca senza cura né respawn (KO vs leggendario
+    lv10 → risveglio a Borgo). Aggiunto MEDICO DA CAMPO (`healer:true`, @5,13). `maps.ts`.
+  - **MIN. SALUTE** buff scalante (~3% max HP/tick invece di 1 PV flat): era morto nel
+    tardo gioco. `governo.ts`.
+  - **TESSERA DORATA** sovra-offerta: rimossa dal mercato nero mafia (1400€, duplicato
+    del negozio a 3000€). Restano negozio + loot raro 3% + quest. `MafiaScene.ts`.
+- **P2 pacing encounter**: curva sistemata (town < route ≈ grotta ≤ città): Borgo
+  0.18→0.10, route1 0.16→0.14, grotta1 0.22→0.16, oblast 0.18→0.14. Prima la città
+  tutorial interrompeva PIÙ della route (al contrario). `maps.ts` + doc CLAUDE.md
+  riallineata (era 0.10-0.11 / vaganti 0.045 / eventi morale attivi — tutto stale).
+- **P3 UX**: sondDelta float usciva sopra il bordo (clamp y≥2); TransportMenu poteva
+  renderizzare a y<0 (clamp); ChatScene B-key ambiguo (hint chiaro "B: cancella
+  START: esci") + ultima riga tastiera riempita (era 5 tasti = 2/3 zona morta al touch).
+  `WorldScene.ts`, `ChatScene.ts`.
+- Verifiche: `typecheck` + `build` puliti; tutti i guardrail mappa PASS (nuovi NPC
+  validati); coverage 157/157; EV simulati 2M giri.
+
+NB: il workflow ha colpito rate-limit a metà verifica (level/ux non verificati dal
+workflow); ho verificato io a mano i finding ad alta severità prima di applicare.
 
 ### 🔎 Round 31 — audit gameplay + design pixelmap
 Richiesta utente: audit di gameplay + design pixelmap (PixelLab), focus su "soglie casa"

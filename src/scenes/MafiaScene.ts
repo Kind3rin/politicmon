@@ -27,8 +27,10 @@ interface BlackItem {
 const BLACK_MARKET: BlackItem[] = [
   { itemId: "dirInciucio", price: 900, sondaggi: -3 },
   { itemId: "dirBunga", price: 1500, sondaggi: -4 },
-  { itemId: "dirVaffa", price: 1100, sondaggi: -3 },
-  { itemId: "tessera", price: 1400, sondaggi: -5 }
+  { itemId: "dirVaffa", price: 1100, sondaggi: -3 }
+  // TESSERA DORATA rimossa dal mercato nero: era un canale duplicato a metà
+  // prezzo (1400€) del negozio (3000€) e gonfiava l'offerta dell'item evolutivo.
+  // Resta: negozio, loot raro (3%), e ricompense quest (CAPITANO, zona STRETTO).
 ];
 
 const RACCOMANDAZIONE_COST = 400;
@@ -203,15 +205,16 @@ export class MafiaScene implements Scene {
       return;
     }
     this.state.money -= BET_MIN;
-    // 40% vinci 3x la posta, 25% pari (riprendi la posta), 35% perdi tutto.
+    // 25% vinci 3x lordo (=+2x netto), 22% pari, 53% perdi tutto → EV ~0.97
+    // (il banco vince di poco). Prima era 40/25/35 = EV 1.45, money infinito.
     const roll = Math.random();
     let text: string[];
-    if (roll < 0.4) {
+    if (roll < 0.25) {
       const win = BET_MIN * 3;
       this.state.money += win;
       audio.catchJingle();
       text = ["Il cavallo giusto! La corsa era... orientata.", `Incassi ${win}€. Non chiedere come.`];
-    } else if (roll < 0.65) {
+    } else if (roll < 0.47) {
       this.state.money += BET_MIN;
       audio.cursor();
       text = ["Fotofinish: ti ridanno la posta.", "Stavolta è andata in pari. Tira un sospiro."];

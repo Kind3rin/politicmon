@@ -5,7 +5,37 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 32 — audit multi-agente (economia, pacing, soft-lock, UX)**, 2026-06-30.
+Ultimo aggiornamento: **Round 33 — REDESIGN EDIFICI flat-front (no piu 3/4)**, 2026-06-30.
+
+### 🏠 Round 33 — edifici flat-front orto (fine del mismatch 3/4)
+Feedback utente: "zerbino orrendo sposizionato, gli edifici vanno rifatti".
+Problema radice (R17/R30): edifici PixelLab 3/4 isometrici su terreno top-down piatto
+→ basi che galleggiano, soglie staccate. Lo zerbino R31 peggiorava → RIMOSSO.
+
+FATTO R33:
+- **Rimosso overlay zerbino** (door_step) da WorldScene/preload/manifest + PNG.
+- **TUTTI i 14 edifici rigenerati flat-front** in PixelLab (facciata 2D dritta, base
+  appoggiata sulla griglia, porta in basso allineata al tile calpestabile): 4 case
+  (rosso/blu/verde/brick), lab, bar, gym, casino, palazzo, circolo, apartment, kiosk,
+  studio, bistro. Stessi filename, stesse dimensioni (la door-alignment guardrail le
+  vincola: 64x48 case/lab, 64x32 bar/minori, 96x48 gym/casino, 160x96 palazzo).
+- **TRAPPOLA PixelLab confermata**: anche con view:"side" scivola al 3/4 ~40% delle
+  volte. Prompt vincente: "FLAT 2D elevation, paper cutout standing upright, ONLY front
+  wall, NO side walls, NO roof top surface, roof = thin horizontal band, you do NOT see
+  the top". Loop genera→ispeziona→scarta i 3/4→rigenera. Ho ispezionato ogni sprite
+  visivamente prima di tenerlo (l'agente NON puo fidarsi del batch cieco).
+- **Pipeline integrazione**: download object → trim bordo trasparente → resize NN a
+  dimensione target esatta (`scratchpad/fetch-all.ps1`). NB il trim+stretch puo
+  distorcere leggermente gli aspect molto diversi (es. apartment): se un edificio
+  sembra schiacciato, rigenerare con aspect piu vicino al target.
+- Verificato in-game (borgo/mediopoli/eurotown/capitale): basi piatte, porte allineate,
+  player davanti corretto, z-order ok. Guardrail door-alignment/world-layout/sprite-bounds
+  PASS; typecheck+build puliti; coverage 156/156.
+
+❌ RESTA (rifinitura): lieve "labbro" prospettico sul bordo-tetto di alcuni edifici
+larghi (gym/casino); le case sono pulite. Se si vuole il flat perfetto, rigenerare i
+2-3 larghi con altri seed. Gli NPC/personaggi restano leggermente frontali (non 3/4
+puro) ma erano gia coerenti col nuovo look flat.
 
 ### 🔬 Round 32 — audit multi-agente verificato avversarialmente
 Workflow ultracode: 6 reviewer specialisti (combat/economy/level/art/ux/narrative) →

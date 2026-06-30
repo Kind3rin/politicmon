@@ -5,7 +5,30 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 33 — REDESIGN EDIFICI flat-front (no piu 3/4)**, 2026-06-30.
+Ultimo aggiornamento: **Round 34 — REDESIGN LAYOUT CITTÀ (strade fino alle porte)**, 2026-06-30.
+
+### 🛣️ Round 34 — layout città: rete di strade fino a ogni porta
+Feedback utente: "non è vero che sono messi bene rispetto al sentiero". Visto le
+MAPPE INTERE (`scratchpad/shot-buildingmaps.mjs` = render full-map senza HUD/player,
+fedele all'anchoring building): gli sprite flat-front R33 erano ok, ma il LAYOUT delle
+città era debole — sentiero a stub sottili, edifici negli angoli scollegati dalla strada.
+
+FATTO R34:
+- **Ridisegnato l'ASCII di borgo/mediopoli/eurotown/capitale**: rete di strade `=`
+  (spina centrale + avenue orizzontali) che porta DIRITTA davanti a OGNI porta, edifici
+  flush, niente buchi d'erba tra base e strada. Stile piazza Pokémon.
+- **VINCOLO RISPETTATO**: posizioni edifici/porte INVARIATE (i warp dipendono dalle
+  coord esatte). Cambiati SOLO i tile-terreno (`.`/`=`/`~`) attorno. Door-front sempre `=`.
+- **Trappola imparata**: editare l'ASCII a mano riga-per-riga è error-prone (drift di
+  riga/colonna, char invalidi, footprint edificio rotta). Workflow sicuro: NON toccare
+  le righe-edificio né il conteggio righe; validare DOPO OGNI edit con
+  `check-map-consistency` + `check-building-door-alignment` (controllano lunghezza riga
+  30, door-front `=`, warp sulla porta). Helper `scratchpad/doors.mjs` stampa
+  roof/footprint/door/front per ogni edificio = ground truth per il redesign.
+- Verificato: tutti gli 8 guardrail mappa PASS; render full-map di tutte e 4 le città
+  mostra ogni porta collegata; typecheck+build puliti.
+
+### 🏠 Round 33 — edifici flat-front orto (fine del mismatch 3/4)
 
 ### 🏠 Round 33 — edifici flat-front orto (fine del mismatch 3/4)
 Feedback utente: "zerbino orrendo sposizionato, gli edifici vanno rifatti".

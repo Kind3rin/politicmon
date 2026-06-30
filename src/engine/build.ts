@@ -1,1 +1,1 @@
-export const APP_BUILD_ID = "2026-06-30-small-buildings-kiosk-refresh";
+export const APP_BUILD_ID = "2026-06-30-item-icons-pixellab-only";

@@ -477,23 +477,6 @@ export const MONSTER_ACTION_ART: Record<string, Pixmap> = {
   })
 };
 
-// Scheda Elettorale: la "ball" del gioco (10x10).
-export const BALLOT_ART: Pixmap = {
-  art: [
-    "..oooooo..",
-    ".owwwwwwo.",
-    "owwrwwrwwo",
-    "owwwrrwwwo",
-    "owwwrrwwwo",
-    "owwrwwrwwo",
-    "owwwwwwwwo",
-    "owbbbbbbwo",
-    ".owwwwwwo.",
-    "..oooooo.."
-  ],
-  pal: { o: "#1c2333", w: "#f4f0e0", r: "#c84040", b: "#9098b0" }
-};
-
 // Medaglia (12x12) per la tessera del candidato.
 export const BADGE_ART: Pixmap = {
   art: [

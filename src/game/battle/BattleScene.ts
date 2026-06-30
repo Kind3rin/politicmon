@@ -1,4 +1,4 @@
-import { BALLOT_ART, MONSTER_ART, MONSTER_ACTION_ART, monsterImage } from "../../art/monsters";
+import { MONSTER_ART, MONSTER_ACTION_ART, monsterImage } from "../../art/monsters";
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_LABELS, STATUS_NAMES, moveSummary, moveKindLabel, type Move } from "../../data/moves";
 import { TYPE_COLORS } from "../../data/poltypes";
@@ -1915,14 +1915,13 @@ export class BattleScene implements Scene {
         }
       }
     }
-    // Scheda elettorale (cattura): PNG PixelLab se pronto, altrimenti pixmap.
+    // Scheda elettorale (cattura): PNG PixelLab.
     const ballotImg = sceneImage("item:scheda", "items/scheda.png");
-    if (ballotImg) {
-      const s = 14 / Math.max(ballotImg.width, ballotImg.height);
-      screen.imageSprite(ballotImg, x - (ballotImg.width * s) / 2, y - (ballotImg.height * s) / 2, { scaleX: s, scaleY: s });
-    } else {
-      screen.sprite("ballot", BALLOT_ART, x - 5, y - 5, { scale: 1 });
+    if (!ballotImg) {
+      return;
     }
+    const s = 14 / Math.max(ballotImg.width, ballotImg.height);
+    screen.imageSprite(ballotImg, x - (ballotImg.width * s) / 2, y - (ballotImg.height * s) / 2, { scaleX: s, scaleY: s });
   }
 
   private drawFoeBox(screen: Screen): void {

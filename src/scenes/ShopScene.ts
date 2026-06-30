@@ -1,5 +1,5 @@
 import { BAG_ORDER, ITEMS, SHOP_DIRECTIVES } from "../data/items";
-import { itemIcon, drawItemIcon } from "../art/items";
+import { drawItemIcon, itemIconKey, itemIconPath } from "../art/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -30,8 +30,8 @@ export class ShopScene implements Scene {
       this.itemIds.map((id) => ({
         label: ITEMS[id].name,
         rightLabel: `${shopPrice(this.state, ITEMS[id])}€`,
-        icon: itemIcon(id),
-        iconId: `shop-${id}`
+        iconPath: itemIconPath(id) ?? undefined,
+        iconId: itemIconKey(id)
       }))
     );
   }

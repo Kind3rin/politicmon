@@ -1,5 +1,5 @@
 import { BAG_ORDER, ITEMS } from "../data/items";
-import { itemIcon, drawItemIcon } from "../art/items";
+import { drawItemIcon, itemIconKey, itemIconPath } from "../art/items";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -33,8 +33,8 @@ export class BagScene implements Scene {
       this.itemIds.map((id) => ({
         label: ITEMS[id].name,
         rightLabel: `x${this.state.bag[id]}`,
-        icon: itemIcon(id),
-        iconId: `bag-${id}`
+        iconPath: itemIconPath(id) ?? undefined,
+        iconId: itemIconKey(id)
       }))
     );
   }
@@ -162,8 +162,8 @@ export class BagScene implements Scene {
       this.itemIds.map((id) => ({
         label: ITEMS[id].name,
         rightLabel: `x${this.state.bag[id]}`,
-        icon: itemIcon(id),
-        iconId: `bag-${id}`
+        iconPath: itemIconPath(id) ?? undefined,
+        iconId: itemIconKey(id)
       }))
     );
   }

@@ -6,7 +6,7 @@
 // worker nuovo prende subito il controllo: i progressi stanno in localStorage,
 // separati dalle cache statiche.
 
-const CACHE = "politicmon-v7-small-buildings-kiosk-refresh";
+const CACHE = "politicmon-v8-item-icons-pixellab-only";
 const PRECACHE = [
   "./",
   "./index.html",

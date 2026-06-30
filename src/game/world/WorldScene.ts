@@ -1,20 +1,18 @@
 import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
-import { BALLOT_ART, MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, pix, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingDoorOffset } from "../../art/tiles";
+import { MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
+import { TILE, TILES, waterFrames, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingDoorOffset } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 
-// Pickup "scheda elettorale": PNG PixelLab (items/scheda.png) se pronto,
-// altrimenti la pixmap BALLOT_ART. Disegnato 14px centrato nella cella.
+// Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
 function drawBallot(screen: Screen, dx: number, dy: number): void {
   const img = sceneImage("item:scheda", "items/scheda.png");
-  if (img) {
-    const b = screen.imageBounds(img);
-    const s = 14 / Math.max(b.w, b.h);
-    screen.imageSpriteCropped(img, dx + (TILE - b.w * s) / 2, dy + (TILE - b.h * s) / 2, { scaleX: s, scaleY: s });
-  } else {
-    screen.sprite("ballot", BALLOT_ART, dx + 3, dy + 3);
+  if (!img) {
+    return;
   }
+  const b = screen.imageBounds(img);
+  const s = 14 / Math.max(b.w, b.h);
+  screen.imageSpriteCropped(img, dx + (TILE - b.w * s) / 2, dy + (TILE - b.h * s) / 2, { scaleX: s, scaleY: s });
 }
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
@@ -60,42 +58,6 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
     ]
   }
 };
-
-// Scafo del TRAGHETTO: disegnato sotto il personaggio mentre naviga l'acqua.
-// Legno con bordo chiaro e scia, ~18x8.
-const FERRY_PIX = pix(
-  [
-    "...bbbbbbbbbbbb...",
-    "..bBBBBBBBBBBBBb..",
-    ".bBwwwwwwwwwwwwBb.",
-    "bBwwwwwwwwwwwwwwBb",
-    "bBwBBBBBBBBBBBBwBb",
-    ".bBBBBBBBBBBBBBBb.",
-    "..bbbbbbbbbbbbbb..",
-    ".~~..~~..~~..~~..~"
-  ],
-  { b: "#4a2e16", B: "#9a6a36", w: "#d8b070", "~": "#cfeeff" }
-);
-
-// CAPITANO SCHETTINO al timone (satira bonaria): divisa bianca, cappello da
-// comandante, una mano sul fianco. ~9x11. o outline, c cappello/divisa bianca,
-// v visiera nera, s pelle, g gradi dorati.
-const SCHETTINO_PIX = pix(
-  [
-    "..ooooo..",
-    ".ovvvvvo.",
-    ".ogggggo.",
-    "..ossso..",
-    "..ossso..",
-    ".occccco.",
-    "occccccco",
-    "occgcgcco",
-    "occccccco",
-    ".occ.cco.",
-    ".os...so."
-  ],
-  { o: "#1c2333", v: "#10141f", c: "#f2f2ec", g: "#e8c84a", s: "#e0a070" }
-);
 
 interface RuntimeNpc extends NpcDef {
   currentFacing: Facing;
@@ -2145,17 +2107,13 @@ export class WorldScene implements Scene {
         if (ferryImg) {
           const fb = screen.imageBounds(ferryImg);
           screen.imageSpriteCropped(ferryImg, baseX + 8 - fb.w / 2, baseY + 12 + bob - fb.h / 2);
-        } else {
-          screen.sprite("ferry", FERRY_PIX, baseX - 2, baseY + 7 + bob);
         }
-        // Schettino al timone (PNG PixelLab se pronto, altrimenti pixmap).
+        // Schettino al timone (PNG PixelLab).
         const schImg = sceneImage("char:schettino", "chars/schettino.png");
         if (schImg) {
           const sb = screen.imageBounds(schImg);
           const ss = 18 / sb.h;
           screen.imageSpriteCropped(schImg, baseX + 10 - (sb.w * ss) / 2, baseY - 2 + bob, { scaleX: ss, scaleY: ss });
-        } else {
-          screen.sprite("schettino", SCHETTINO_PIX, baseX + 6, baseY - 2 + bob);
         }
         drawPlayer(baseX - 4, baseY + bob);
       } else if (vehicle) {

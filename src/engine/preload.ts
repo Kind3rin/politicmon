@@ -1,4 +1,5 @@
 import { preloadSprites, waitForSprites } from "./assets";
+import { BAG_ORDER } from "../data/items";
 
 const DIRS = ["south", "north", "east", "west"] as const;
 const NPCS = [
@@ -79,6 +80,10 @@ function coreSpriteEntries(): Record<string, string> {
         entries[`npc:${npc}:${dir}:w${frame}`] = `chars/npc_${npc}_${dir}_w${frame}.png`;
       }
     }
+  }
+
+  for (const itemId of BAG_ORDER) {
+    entries[`item:${itemId}`] = `items/${itemId}.png`;
   }
 
   return entries;

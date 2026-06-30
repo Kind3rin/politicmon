@@ -1,6 +1,6 @@
 import type { Input } from "../engine/input";
 import { CHAR_W, LINE_H } from "../engine/font";
-import { Screen, VIEW_H, VIEW_W, type Pixmap } from "../engine/screen";
+import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { audio } from "../engine/audio";
 import { getSpriteImage } from "../engine/assets";
 
@@ -144,8 +144,8 @@ export interface MenuItem {
   label: string;
   rightLabel?: string;
   disabled?: boolean;
-  icon?: Pixmap; // icona 12x12 opzionale, disegnata a sinistra della voce
-  iconId?: string; // chiave di cache per lo sprite dell'icona
+  iconPath?: string;
+  iconId?: string;
 }
 
 // Menu verticale con cursore.
@@ -242,7 +242,7 @@ export class Menu {
   // (con frecce ▲▼). Evita che liste lunghe (borsa/shop) sforino lo schermo.
   draw(screen: Screen, x: number, y: number, w: number, rowH = 13, maxVisible = Infinity): void {
     this.maxVisible = maxVisible;
-    this.hasIcons = this.items.some((it) => it.icon);
+    this.hasIcons = this.items.some((it) => it.iconPath);
     const visible = Math.min(this.items.length, maxVisible);
     // Tieni il cursore nella finestra visibile.
     if (this.index < this.scroll) {
@@ -267,9 +267,14 @@ export class Menu {
       if (i === this.index) {
         screen.text("►", x + 7, rowY, INK);
       }
-      if (item.icon) {
-        // Icona 12x12 allineata alla riga (leggermente alzata per centrare).
-        screen.sprite(item.iconId ?? `mi-${i}`, item.icon, x + 15, rowY - 3);
+      if (item.iconPath) {
+        const icon = getSpriteImage(item.iconId ?? `mi-${i}`, item.iconPath);
+        if (icon) {
+          const s = Math.min(12 / icon.width, 12 / icon.height);
+          const dw = icon.width * s;
+          const dh = icon.height * s;
+          screen.imageSprite(icon, x + 15 + (12 - dw) / 2, rowY - 3 + (12 - dh) / 2, { scaleX: s, scaleY: s });
+        }
       }
       const rightW = item.rightLabel ? item.rightLabel.length * CHAR_W + 6 : 0;
       const labelX = x + 16 + iconPad;

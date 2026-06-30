@@ -54,8 +54,12 @@ const shots = await page.evaluate(async () => {
     mediopoli_house_brick: await world("mediopoli", 24, 11),
     mediopoli_house_green: await world("mediopoli", 24, 16),
     eurotown: await world("eurotown", 12, 9),
+    eurotown_houses: await world("eurotown", 23, 6),
+    eurotown_civic: await world("eurotown", 22, 11),
+    capitale_houses: await world("capitale", 24, 18),
     capitale_palace: await world("capitale", 14, 7),
     capitale_casino: await world("capitale", 20, 12),
+    stretto_buildings: await world("stretto", 16, 5),
   };
 });
 

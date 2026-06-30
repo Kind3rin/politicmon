@@ -135,8 +135,16 @@ const problems = await page.evaluate(async ({ files, fullTileTerrain, gridBuildi
       if (w !== ew || h !== eh) {
         out.push(`${path}: edificio grid deve essere ${ew}x${eh}, trovato ${w}x${h}`);
       }
-      if (minX !== 0 || maxX !== w - 1 || maxY !== h - 1) {
-        out.push(`${path}: edificio grid non copre footprint orizzontale/basso (bounds ${minX},${minY}-${maxX},${maxY})`);
+      if (maxY !== h - 1) {
+        out.push(`${path}: edificio grid non appoggia al bordo basso (bounds ${minX},${minY}-${maxX},${maxY})`);
+      }
+      const center = (minX + maxX) / 2;
+      if (Math.abs(center - (w - 1) / 2) > 8) {
+        out.push(`${path}: edificio grid non centrato nella footprint (bounds ${minX},${minY}-${maxX},${maxY})`);
+      }
+      const minVisibleWidth = w >= 96 ? 56 : 30;
+      if (bw < minVisibleWidth) {
+        out.push(`${path}: edificio grid troppo stretto per la footprint (bounds ${minX},${minY}-${maxX},${maxY})`);
       }
     }
   }

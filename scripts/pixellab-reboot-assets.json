@@ -817,6 +817,80 @@
           "postprocess": "downloaded PixelLab transparent sprite; alpha-cropped and nearest-neighbor normalized to full 64x32 footprint; replaces chiosco map tile that previously reused BAR SPORT art"
         }
       ]
+    },
+    {
+      "id": "front-only-building-corrections-2026-06-30",
+      "tool": "create_map_object side view + alpha crop + nearest-neighbor grid normalization",
+      "state": "downloaded",
+      "styleReference": "strict flat south/front elevation PixelLab RPG buildings; no visible side walls, no 3/4 perspective, no ground baked into the PNG; renderer owns the path threshold below each door",
+      "outputs": [
+        {
+          "file": "tiles/build_house_front_red.png",
+          "objectId": "9ba4138d-c388-4294-9a18-c1fbdb567518",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-aligned to the 4x3 building footprint"
+        },
+        {
+          "file": "tiles/build_house_front_blue.png",
+          "objectId": "c32df394-ffb6-4d30-a97d-a57e91b5615f",
+          "postprocess": "second strict-flat attempt selected; alpha-cropped, nearest-neighbor fit to 64x48, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_house_front_green.png",
+          "objectId": "521722ad-9532-44f8-8adb-ca80bee72c10",
+          "postprocess": "second strict-flat attempt selected; alpha-cropped, nearest-neighbor fit to 64x48, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_house_front_brick.png",
+          "objectId": "5f525e05-6e8a-4feb-b00a-61e65e8af892",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_lab_front.png",
+          "objectId": "317f66c5-967d-4931-8e2a-0457d09a6b49",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_bar_front.png",
+          "objectId": "052e30e3-5361-4752-ae76-2a1fb31c2617",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_circolo_front.png",
+          "objectId": "473a7ec2-8453-4486-af0d-f5e24b37babf",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_kiosk_front.png",
+          "objectId": "820f5196-60cd-4c10-ac63-b6e35063abbb",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_studio_front.png",
+          "objectId": "1842467d-339b-49c7-8401-0ffdcd25af63",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_bistro_front.png",
+          "objectId": "62222ab3-538e-4b92-867c-b6085bc5e390",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_apartment_front.png",
+          "objectId": "dc63ed34-49dd-46a0-927f-eec9972349cb",
+          "postprocess": "wide strict-flat attempt selected; alpha-cropped, nearest-neighbor fit to 64x32, bottom-aligned"
+        },
+        {
+          "file": "tiles/build_casino_front.png",
+          "objectId": "86d8e31e-8189-4732-b315-e60520aba495",
+          "postprocess": "replaces prior 3/4 casino with flat front facade; alpha-cropped, nearest-neighbor fit to 96x48, bottom-aligned"
+        }
+      ],
+      "rejected": [
+        {
+          "objectIds": ["03934f67-d04c-4b04-8009-bc0a5aad5f04", "4125bd50-8d61-49a8-8876-62909fa19627", "36302d44-8e0e-4f89-b8b1-c00867fa9e40"],
+          "reason": "First blue/green/apartment attempts were either still too 3/4 or too narrow for the grid footprint."
+        }
+      ]
     }
   ],
   "delegatedManifests": [

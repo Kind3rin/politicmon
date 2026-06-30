@@ -1973,17 +1973,37 @@ export class WorldScene implements Scene {
         const dw = fp.w * TILE;
         const dh = fp.h * TILE;
         const bImg = build;
-        const rawCanvas = buildingDoorOffset(ch) != null;
+        const doorOffset = buildingDoorOffset(ch);
+        const rawCanvas = doorOffset != null;
         const bBounds = rawCanvas ? null : screen.imageBounds(build);
         const bScaleX = dw / (rawCanvas ? bImg.width : bBounds!.w);
         const bScaleY = dh / (rawCanvas ? bImg.height : bBounds!.h);
         // baseY = bordo inferiore dell'edificio in px-mondo.
         const baseYb = (ty + fp.h) * TILE;
+        const drawThreshold = (): void => {
+          if (doorOffset == null) {
+            return;
+          }
+          const doorX = tx + doorOffset;
+          const stepY = ty + fp.h;
+          if (this.tileAt(doorX, stepY) !== "=") {
+            return;
+          }
+          const pathImg = this.tilePng("=");
+          if (pathImg) {
+            screen.imageSprite(pathImg, doorX * TILE - camX, stepY * TILE - camY);
+          }
+        };
         tall.push({
           baseY: baseYb,
-          draw: () => rawCanvas
-            ? screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
-            : screen.imageSpriteCropped(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY })
+          draw: () => {
+            if (rawCanvas) {
+              screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY });
+            } else {
+              screen.imageSpriteCropped(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY });
+            }
+            drawThreshold();
+          }
         });
       }
     }

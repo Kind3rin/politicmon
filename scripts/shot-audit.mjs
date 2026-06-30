@@ -16,7 +16,9 @@ const shots = await page.evaluate(async () => {
   const { TitleScene } = await import("/src/scenes/TitleScene.ts");
   const { createMonster } = await import("/src/game/monster.ts");
   const { audio } = await import("/src/engine/audio.ts");
+  const { mp } = await import("/src/net/mp.ts");
   audio.enabled = false;
+  mp.setEnabled(false);
 
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
@@ -46,8 +48,11 @@ const shots = await page.evaluate(async () => {
     title: await title(),
     borgo_top: await world("borgo", 14, 4),
     borgo_houses: await world("borgo", 6, 14),
+    borgo_house_red: await world("borgo", 24, 14),
     borgo_bar: await world("borgo", 20, 19),
     mediopoli: await world("mediopoli", 14, 10),
+    mediopoli_house_brick: await world("mediopoli", 24, 11),
+    mediopoli_house_green: await world("mediopoli", 24, 16),
     eurotown: await world("eurotown", 12, 9),
     capitale_palace: await world("capitale", 14, 7),
     capitale_casino: await world("capitale", 20, 12),

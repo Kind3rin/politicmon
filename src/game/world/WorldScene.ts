@@ -1,7 +1,7 @@
-import { charSprite, playerImage, ferryImage, npcImage, vehicleImage, remotePalId, vehicleSprite, type Facing } from "../../art/characters";
+import { playerImage, ferryImage, npcImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, waterFrames, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingDoorOffset } from "../../art/tiles";
+import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath, buildingDoorOffset } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
@@ -495,8 +495,8 @@ export class WorldScene implements Scene {
     while (buildingKey(this.tileAt(atx - 1, aty)) === groupKey) atx -= 1;
     while (buildingKey(this.tileAt(atx, aty - 1)) === groupKey) aty -= 1;
     const fp = this.buildingFootprint(atx, aty, roofCh);
-    if (!buildingImage(roofCh, fp)) {
-      return null; // PNG esatto per questa footprint non pronto: usa i pixmap.
+    if (!buildingPath(roofCh, fp)) {
+      return null;
     }
     // (tx,ty) dentro la footprint? La facciata può sbordare di 1 col per lato.
     if (tx >= atx - 1 && tx < atx + fp.w + 1 && ty >= aty && ty < aty + fp.h) {
@@ -1850,8 +1850,6 @@ export class WorldScene implements Scene {
 
     const x0 = Math.floor(camX / TILE);
     const y0 = Math.floor(camY / TILE);
-    const waterFrame = Math.floor(this.time * 2) % 2;
-
     for (let ty = y0; ty <= y0 + Math.ceil(VIEW_H / TILE); ty += 1) {
       for (let tx = x0; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
         const ch = this.tileAt(tx, ty);
@@ -1861,11 +1859,10 @@ export class WorldScene implements Scene {
         }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
-        // EDIFICI: se questo tile è un tetto/facciata di un edificio col
-        // building-PNG pronto, disegno solo il terreno base qui (l'edificio intero
+        // EDIFICI: se questo tile è un tetto/facciata di un edificio con asset
+        // PixelLab, disegno solo il terreno base qui (l'edificio intero
         // è disegnato in un secondo passo, scalato sulla footprint, così copre
-        // tetto+muro+porta senza overflow). Se il PNG non è pronto, ricade sui
-        // pixmap (tetto/muro/porta normali, rami sotto).
+        // tetto+muro+porta senza overflow).
         const coveringRoof = this.buildingCovering(tx, ty);
         if (coveringRoof) {
           // Terreno per ancorare l'edificio: erba/sentiero (esterno) o pavimento
@@ -1874,40 +1871,36 @@ export class WorldScene implements Scene {
           const baseCh2 = this.map.outdoor ? "." : "p";
           if (this.map.outdoor) {
             const bImg = this.tilePng(baseCh2);
-            if (bImg) screen.imageSprite(bImg, dx, dy);
-            else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
+            if (bImg) {
+              screen.imageSprite(bImg, dx, dy);
+            }
           } else {
             const bImg = this.tilePng(baseCh2);
-            if (bImg) screen.imageSprite(bImg, dx, dy);
-            else screen.sprite(`tile:${baseCh2}`, TILES[baseCh2].pix, dx, dy);
+            if (bImg) {
+              screen.imageSprite(bImg, dx, dy);
+            }
           }
           continue;
         }
         if (def.overlay) {
-          // Terreno di base sotto l'overlay (PNG se disponibile, altrimenti pixmap).
+          // Terreno di base sotto l'overlay.
           const baseCh = this.map.outdoor ? "." : "p";
           const baseImg = this.tilePng(baseCh);
           if (baseImg) {
             screen.imageSprite(baseImg, dx, dy);
-          } else {
-            screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
           }
         }
         if (def.water) {
           const waterImg = this.tilePng(ch);
           if (waterImg) {
             screen.imageSprite(waterImg, dx, dy);
-          } else {
-            screen.sprite(`tile:w:${waterFrame}`, waterFrames[waterFrame], dx, dy);
           }
         } else if (def.overlay) {
           // Oggetto overlay (albero/segnale/...): PNG 32px ancorato in basso al
-          // tile (la chioma sborda verso l'alto), o pixmap di fallback.
+          // tile (la chioma sborda verso l'alto).
           const obj = objectImage(ch);
           if (obj) {
             drawWorldObjectPng(screen, ch, obj, dx, dy);
-          } else {
-            screen.sprite(`tile:${ch}`, def.pix, dx, dy);
           }
         } else {
           const objImg = objectImage(ch);
@@ -1918,18 +1911,13 @@ export class WorldScene implements Scene {
             const baseImg2 = this.tilePng(baseCh);
             if (baseImg2) {
               screen.imageSprite(baseImg2, dx, dy);
-            } else {
-              screen.sprite(`tile:${baseCh}`, TILES[baseCh].pix, dx, dy);
             }
             drawWorldObjectPng(screen, ch, objImg, dx, dy);
           } else {
-            // Texture PNG PixelLab del terreno (override mappa o default), con
-            // fallback alla pixmap testuale.
+            // Texture PNG PixelLab del terreno (override mappa o default).
             const img = this.tilePng(ch);
             if (img) {
               screen.imageSprite(img, dx, dy);
-            } else {
-              screen.sprite(`tile:${ch}`, def.pix, dx, dy);
             }
           }
         }
@@ -1947,8 +1935,8 @@ export class WorldScene implements Scene {
     // una lista con la loro Y di base (bordo inferiore in px-mondo) e disegnati
     // ordinati per Y crescente. Così chi è più in ALTO (Y minore) finisce DIETRO
     // (es. il player dietro la casa quando è sopra di essa), risolvendo il
-    // "personaggio sopra il tetto". Gli edifici senza building-PNG restano gestiti
-    // dal 1° passo (pixmap) e quindi sotto, come prima.
+    // "personaggio sopra il tetto". Gli edifici di mappa ora passano solo dai PNG
+    // PixelLab caricati dal preload: niente vecchie pixmap di recupero in world.
     const tall: Array<{ baseY: number; draw: () => void }> = [];
 
     for (let ty = y0 - 4; ty <= y0 + Math.ceil(VIEW_H / TILE) + 1; ty += 1) {
@@ -2001,14 +1989,9 @@ export class WorldScene implements Scene {
     }
 
     for (const npc of this.visibleNpcs()) {
-      // Frame di camminata mentre l'NPC fa un passo (altrimenti fermo).
-      const walkFrame = npc.stepFrom ? (Math.floor(this.time * 6) % 2 === 0 ? 1 : 0) : 0;
-      const sprite = charSprite(npc.pal, npc.currentFacing, walkFrame);
       const nx = Math.round(npc.dispX) - camX;
       const ny = Math.round(npc.dispY) - camY - 1;
-      // PNG PixelLab dell'NPC (4 dir, scalato ai 16px, ancorato in basso) se
-      // l'archetipo è migrato, altrimenti il pixmap parametrico. Frame walk
-      // mentre l'NPC fa un passo (stepFrom), così non scivola.
+      // PNG PixelLab dell'NPC (4 dir, scalato ai 16px, ancorato in basso).
       const npcMoving = Boolean(npc.stepFrom);
       const npcWalkCycle = npcMoving ? Math.floor(this.time * 8) % 4 : 0;
       const npcImg = npcImage(npc.pal, npc.currentFacing, npcWalkCycle, npcMoving);
@@ -2021,8 +2004,6 @@ export class WorldScene implements Scene {
             const ns = 22 / nb.h;
             const dw = nb.w * ns;
             screen.imageSpriteCropped(npcImg, nx + 8 - dw / 2, ny + 16 - nb.h * ns, { scaleX: ns, scaleY: ns });
-          } else {
-            screen.sprite(sprite.key, sprite.pix, nx, ny, { flipX: sprite.flip });
           }
           if (exclaim) {
             screen.panel(nx + 2, ny - 13, 12, 13);
@@ -2034,18 +2015,14 @@ export class WorldScene implements Scene {
 
     // Altri giocatori online sulla mia stessa mappa (interpolati).
     for (const r of mp.remotePlayers()) {
-      const palId = remotePalId(r.id);
-      const rFrame = r.moving ? (Math.floor(this.time * 4) % 2 === 0 ? 1 : 0) : 0;
-      const sprite = charSprite(palId, r.facing, rFrame);
       const sx = Math.round(r.dispX) - camX;
       const sy = Math.round(r.dispY) - camY - 1;
       // Salta chi è troppo fuori schermo (perf + pulizia).
       if (sx < -20 || sx > VIEW_W + 20 || sy < -20 || sy > VIEW_H + 20) {
         continue;
       }
-      // Avatar remoto: stesso PNG del player (4 viste + walk) per coerenza con
-      // il resto del mondo; il nickname sopra la testa li distingue. Fallback al
-      // pixmap parametrico colorato se i PNG non sono pronti.
+      // Avatar remoto: stesso PNG del player (4 viste + walk); il nickname sopra
+      // la testa li distingue.
       const rWalk = r.moving ? Math.floor(this.time * 8) % 4 : 0;
       const rImg = playerImage(r.facing, rWalk, r.moving);
       const rEmote = r.emote;
@@ -2058,8 +2035,6 @@ export class WorldScene implements Scene {
             const rs = 22 / rb.h;
             const rdw = rb.w * rs;
             screen.imageSpriteCropped(rImg, sx + 8 - rdw / 2, sy + 15 - rb.h * rs, { scaleX: rs, scaleY: rs });
-          } else {
-            screen.sprite(sprite.key, sprite.pix, sx, sy, { flipX: sprite.flip });
           }
           // Targhetta col nickname sopra la testa.
           const w = rNick.length * 6 + 4;
@@ -2075,14 +2050,13 @@ export class WorldScene implements Scene {
     }
 
     const frame = this.moving ? (Math.floor(this.moveT * 2) % 2 === 0 ? 1 : 0) : 0;
-    const playerSprite = charSprite("player", pos.facing, frame);
     const baseX = Math.round(playerPx) - camX;
     const baseY = Math.round(playerPy) - camY - 2;
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.
     const vehicle = this.state.vehicle as VehicleId | null;
     // Disegna il player: PNG PixelLab (4 dir native, scalato ai 16px del mondo,
-    // ancorato in basso) se pronto, altrimenti il pixmap con flip.
+    // ancorato in basso).
     // Frame di camminata: alterna i fotogrammi walk mentre il player si muove,
     // così non "scivola". `walkCycle` è un indice 0..3 derivato dal tempo di passo.
     const walkCycle = this.moving ? Math.floor(this.moveT * 8) % 4 : 0;
@@ -2094,8 +2068,6 @@ export class WorldScene implements Scene {
         const dw = pb.w * ps;
         // Centra sul riquadro 16px e ancora i piedi a py+16.
         screen.imageSpriteCropped(playerImg, px + 8 - dw / 2, py + 16 - pb.h * ps, { scaleX: ps, scaleY: ps });
-      } else {
-        screen.sprite(playerSprite.key, playerSprite.pix, px, py, { flipX: playerSprite.flip });
       }
     };
     const drawPlayerAndVehicle = (): void => {
@@ -2143,11 +2115,6 @@ export class WorldScene implements Scene {
             screen.imageSpriteCropped(vehImg, baseX + 8 - vw / 2, baseY + 16 - vh + jitter, { scaleX: vs, scaleY: vs });
             drawPlayer(baseX, baseY - 5 + jitter);
           }
-        } else {
-          const veh = vehicleSprite(vehicle, pos.facing);
-          const lift = vehicle === "ruspa" ? 6 : vehicle === "auto" ? 7 : 4;
-          screen.sprite(veh.key, veh.pix, baseX, baseY + jitter, { flipX: veh.flip });
-          drawPlayer(baseX, baseY - lift + jitter);
         }
       } else {
         drawPlayer(baseX, baseY);

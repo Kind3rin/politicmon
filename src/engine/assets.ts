@@ -4,10 +4,9 @@ import { APP_BUILD_ID } from "./build";
 // solo pixel-map testuali: i mostri, i tile, il personaggio e gli NPC possono
 // essere PNG generati con PixelLab e serviti da `public/sprites/...`.
 //
-// Filosofia anti-regressione: il caricamento è ASYNC e non bloccante. Finché il
-// PNG non è pronto (o se manca del tutto), il renderer ricade sul vecchio
-// `Pixmap` testuale. Così il gioco non mostra mai un buco e i salvataggi non
-// sono toccati (la grafica è puramente di presentazione).
+// Filosofia anti-regressione: gli sprite critici vengono pre-caricati al boot e
+// versionati con APP_BUILD_ID, così PWA/browser non mostrano asset vecchi dopo
+// una release. I salvataggi non sono toccati: la grafica è solo presentazione.
 
 export type SpriteStatus = "idle" | "loading" | "ready" | "missing";
 

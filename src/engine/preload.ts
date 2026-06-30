@@ -93,5 +93,5 @@ const CORE_SPRITES = coreSpriteEntries();
 
 export function preloadCoreSprites(): Promise<void> {
   preloadSprites(CORE_SPRITES);
-  return waitForSprites(Object.keys(CORE_SPRITES), 2200);
+  return waitForSprites(Object.keys(CORE_SPRITES), 5000);
 }

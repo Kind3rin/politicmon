@@ -13,7 +13,9 @@ const shots = await page.evaluate(async () => {
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
   const { createMonster } = await import("/src/game/monster.ts");
   const { audio } = await import("/src/engine/audio.ts");
+  const { mp } = await import("/src/net/mp.ts");
   audio.enabled = false;
+  mp.setEnabled(false);
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);

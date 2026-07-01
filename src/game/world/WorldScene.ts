@@ -1993,8 +1993,12 @@ export class WorldScene implements Scene {
             }
           }
         };
+        // +0.5: a parità di baseY (player/NPC in piedi SUL tile-porta) l'edificio
+        // vince e copre lo sprite → entrando si viene "inghiottiti" dalla porta
+        // stile Pokémon invece di restare disegnati sopra la facciata. Chi sta
+        // sulla riga davanti (baseY +16) resta comunque davanti all'edificio.
         tall.push({
-          baseY: baseYb,
+          baseY: baseYb + 0.5,
           draw: () => {
             screen.imageSprite(bImg, dx, dy, { scaleX: bScaleX, scaleY: bScaleY });
             drawThreshold();

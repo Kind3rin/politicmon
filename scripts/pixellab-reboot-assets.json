@@ -218,17 +218,32 @@
         {
           "file": "chars/auto_*",
           "objectId": "a650d9ec-a8f4-489b-b760-774257291e2f",
-          "directions": ["south", "north", "east", "west"]
+          "directions": [
+            "south",
+            "north",
+            "east",
+            "west"
+          ]
         },
         {
           "file": "chars/ruspa_*",
           "objectId": "f2f7430d-888e-481f-b590-82aa06adeca8",
-          "directions": ["south", "north", "east", "west"]
+          "directions": [
+            "south",
+            "north",
+            "east",
+            "west"
+          ]
         },
         {
           "file": "chars/monopattino_*",
           "objectId": "29a8a56a-6528-432c-b898-2dd5a58f2c84",
-          "directions": ["south", "north", "east", "west"]
+          "directions": [
+            "south",
+            "north",
+            "east",
+            "west"
+          ]
         },
         {
           "file": "chars/ferry.png",
@@ -744,13 +759,34 @@
       "state": "downloaded",
       "styleReference": "16x16 square top-down PixelLab RPG tiles for cave entrance, cave obstacles, snow floor/path/drifts, and snow pine obstacles",
       "outputs": [
-        { "file": "tiles/cave_mouth.png", "sourceTile": "tile_0.png" },
-        { "file": "tiles/cave_boulder.png", "sourceTile": "tile_1.png" },
-        { "file": "tiles/cave_stalagmite.png", "sourceTile": "tile_9.png" },
-        { "file": "tiles/snow_floor.png", "sourceTile": "tile_12.png" },
-        { "file": "tiles/snow_drift.png", "sourceTile": "tile_11.png" },
-        { "file": "tiles/snow_path.png", "sourceTile": "tile_5.png" },
-        { "file": "tiles/snow_pine.png", "sourceTile": "tile_6.png" }
+        {
+          "file": "tiles/cave_mouth.png",
+          "sourceTile": "tile_0.png"
+        },
+        {
+          "file": "tiles/cave_boulder.png",
+          "sourceTile": "tile_1.png"
+        },
+        {
+          "file": "tiles/cave_stalagmite.png",
+          "sourceTile": "tile_9.png"
+        },
+        {
+          "file": "tiles/snow_floor.png",
+          "sourceTile": "tile_12.png"
+        },
+        {
+          "file": "tiles/snow_drift.png",
+          "sourceTile": "tile_11.png"
+        },
+        {
+          "file": "tiles/snow_path.png",
+          "sourceTile": "tile_5.png"
+        },
+        {
+          "file": "tiles/snow_pine.png",
+          "sourceTile": "tile_6.png"
+        }
       ]
     },
     {
@@ -782,7 +818,12 @@
       ],
       "rejected": [
         {
-          "objectIds": ["a4b90015-d3ae-4620-b4f8-79c2227a6098", "1df3cb75-d1fc-40b1-a820-b520501da60c", "9461f04b-aec0-417b-8178-834581bd6cf3", "736a9246-ee64-4cde-9d07-229d3e80ba14"],
+          "objectIds": [
+            "a4b90015-d3ae-4620-b4f8-79c2227a6098",
+            "1df3cb75-d1fc-40b1-a820-b520501da60c",
+            "9461f04b-aec0-417b-8178-834581bd6cf3",
+            "736a9246-ee64-4cde-9d07-229d3e80ba14"
+          ],
           "reason": "Basic low top-down objects produced 64x64 object-style/isometric results; not used for gameplay grid houses."
         },
         {
@@ -887,7 +928,11 @@
       ],
       "rejected": [
         {
-          "objectIds": ["03934f67-d04c-4b04-8009-bc0a5aad5f04", "4125bd50-8d61-49a8-8876-62909fa19627", "36302d44-8e0e-4f89-b8b1-c00867fa9e40"],
+          "objectIds": [
+            "03934f67-d04c-4b04-8009-bc0a5aad5f04",
+            "4125bd50-8d61-49a8-8876-62909fa19627",
+            "36302d44-8e0e-4f89-b8b1-c00867fa9e40"
+          ],
           "reason": "First blue/green/apartment attempts were either still too 3/4 or too narrow for the grid footprint."
         }
       ]
@@ -898,27 +943,92 @@
       "state": "downloaded",
       "styleReference": "pure 2D front elevation PixelLab RPG buildings; exact gameplay footprints, no visible side walls, no 3/4 perspective, centered entrances aligned to map door tiles",
       "outputs": [
-        { "file": "tiles/build_house_front_red.png", "objectId": "a30fe4c6-4b64-4400-bb9c-4c10d8c39abe", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored" },
-        { "file": "tiles/build_house_front_blue.png", "objectId": "7aae231f-af1e-4d2c-aa6b-796d00da67d2", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored" },
-        { "file": "tiles/build_house_front_brick.png", "objectId": "ee73138d-c59c-4bf5-bb0f-960ea2ec7350", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored" },
-        { "file": "tiles/build_house_front_green.png", "objectId": "23c7a3ee-babc-4e86-af67-140ab4ebea42", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored" },
-        { "file": "tiles/build_lab_front.png", "objectId": "1b7b9d3c-2232-4bb7-ad74-8f2611225609", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored" },
-        { "file": "tiles/build_circolo_front.png", "objectId": "b4b7d9a6-eb0a-4cf2-8277-0548b8bf9493", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored" },
-        { "file": "tiles/build_apartment_front.png", "objectId": "10fb142d-4897-4752-8db2-160613404f1c", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored" },
-        { "file": "tiles/build_kiosk_front.png", "objectId": "4aaab7cc-c333-47d0-8298-d391d4bacb55", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored" },
-        { "file": "tiles/build_bar_front.png", "objectId": "d01eade0-2d2d-47f6-a8a6-be78b48db129", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored" },
-        { "file": "tiles/build_bistro_front.png", "objectId": "81841394-ce5e-4145-a6f8-fd14a66977eb", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored" },
-        { "file": "tiles/build_studio_front.png", "objectId": "29f92467-0894-4820-a132-448b4d313de7", "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored" },
-        { "file": "tiles/build_gym_front.png", "objectId": "a08c0775-c1e6-45de-904d-faa33bd59545", "postprocess": "alpha-cropped, nearest-neighbor fit to 96x48, bottom-center anchored" },
-        { "file": "tiles/build_casino_front.png", "objectId": "1f248d53-7a83-424d-99ee-48b009c21564", "postprocess": "alpha-cropped, nearest-neighbor fit to 96x48, bottom-center anchored" },
-        { "file": "tiles/build_palace.png", "objectId": "14b08c17-13da-4a37-a0d1-29a9edc58b98", "postprocess": "alpha-cropped, nearest-neighbor fit to 160x64, bottom-center anchored; replaces oversized palace sprite" }
+        {
+          "file": "tiles/build_house_front_red.png",
+          "objectId": "a30fe4c6-4b64-4400-bb9c-4c10d8c39abe",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_house_front_blue.png",
+          "objectId": "7aae231f-af1e-4d2c-aa6b-796d00da67d2",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_house_front_brick.png",
+          "objectId": "ee73138d-c59c-4bf5-bb0f-960ea2ec7350",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_house_front_green.png",
+          "objectId": "23c7a3ee-babc-4e86-af67-140ab4ebea42",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_lab_front.png",
+          "objectId": "1b7b9d3c-2232-4bb7-ad74-8f2611225609",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_circolo_front.png",
+          "objectId": "b4b7d9a6-eb0a-4cf2-8277-0548b8bf9493",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_apartment_front.png",
+          "objectId": "10fb142d-4897-4752-8db2-160613404f1c",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_kiosk_front.png",
+          "objectId": "4aaab7cc-c333-47d0-8298-d391d4bacb55",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_bar_front.png",
+          "objectId": "d01eade0-2d2d-47f6-a8a6-be78b48db129",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_bistro_front.png",
+          "objectId": "81841394-ce5e-4145-a6f8-fd14a66977eb",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_studio_front.png",
+          "objectId": "29f92467-0894-4820-a132-448b4d313de7",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 64x32, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_gym_front.png",
+          "objectId": "a08c0775-c1e6-45de-904d-faa33bd59545",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 96x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_casino_front.png",
+          "objectId": "1f248d53-7a83-424d-99ee-48b009c21564",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 96x48, bottom-center anchored"
+        },
+        {
+          "file": "tiles/build_palace.png",
+          "objectId": "14b08c17-13da-4a37-a0d1-29a9edc58b98",
+          "postprocess": "alpha-cropped, nearest-neighbor fit to 160x64, bottom-center anchored; replaces oversized palace sprite"
+        }
       ],
       "removed": [
-        { "file": "tiles/build_palace2.png", "reason": "unused legacy building sprite, not referenced by renderer or preload" }
+        {
+          "file": "tiles/build_palace2.png",
+          "reason": "unused legacy building sprite, not referenced by renderer or preload"
+        }
       ],
       "rejected": [
         {
-          "objectIds": ["38271222-9766-4978-93d1-4bab40881518", "ba82b092-3a25-4138-b287-0ef98720220a", "5a20e83f-4999-43ef-ac9c-e18e9aa81159", "305860ff-1d75-45d0-939f-a97b9ff9d2ad", "f90d2828-a6c7-408e-8d67-70c7c2a5ac91"],
+          "objectIds": [
+            "38271222-9766-4978-93d1-4bab40881518",
+            "ba82b092-3a25-4138-b287-0ef98720220a",
+            "5a20e83f-4999-43ef-ac9c-e18e9aa81159",
+            "305860ff-1d75-45d0-939f-a97b9ff9d2ad",
+            "f90d2828-a6c7-408e-8d67-70c7c2a5ac91"
+          ],
           "reason": "first house/lab polish batch kept too much visible side/depth for the requested no-3/4 building standard"
         }
       ]
@@ -1033,7 +1143,10 @@
         "tiles/cave_stalagmite.png",
         "tiles/snow_pine.png",
         "tiles/deck_asphalt.png",
-        "tiles/sand.png"
+        "tiles/sand.png",
+        "tiles/doormat.png",
+        "tiles/cliff_sand.png",
+        "tiles/stairs_sand.png"
       ],
       "state": "regenerate-from-zero"
     },

@@ -1,7 +1,7 @@
 import { playerImage, ferryImage, npcImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
-import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath, buildingDoorOffset } from "../../art/tiles";
+import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 
 // Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
@@ -1973,23 +1973,24 @@ export class WorldScene implements Scene {
         const dw = fp.w * TILE;
         const dh = fp.h * TILE;
         const bImg = build;
-        const doorOffset = buildingDoorOffset(ch);
         const bScaleX = dw / bImg.width;
         const bScaleY = dh / bImg.height;
         // baseY = bordo inferiore dell'edificio in px-mondo.
         const baseYb = (ty + fp.h) * TILE;
+        // Soglia: ridisegna il sentiero davanti a OGNI tile-porta della facciata
+        // (le porte sono i 2 tile centrali della footprint, vedi maps.ts).
+        const doorRow = ty + fp.h - 1;
+        const stepY = ty + fp.h;
         const drawThreshold = (): void => {
-          if (doorOffset == null) {
-            return;
-          }
-          const doorX = tx + doorOffset;
-          const stepY = ty + fp.h;
-          if (this.tileAt(doorX, stepY) !== "=") {
-            return;
-          }
           const pathImg = this.tilePng("=");
-          if (pathImg) {
-            screen.imageSprite(pathImg, doorX * TILE - camX, stepY * TILE - camY);
+          if (!pathImg) {
+            return;
+          }
+          for (let xx = tx; xx < tx + fp.w; xx += 1) {
+            const fc = this.tileAt(xx, doorRow);
+            if ((fc === "d" || fc === "D" || fc === "g") && this.tileAt(xx, stepY) === "=") {
+              screen.imageSprite(pathImg, xx * TILE - camX, stepY * TILE - camY);
+            }
           }
         };
         tall.push({

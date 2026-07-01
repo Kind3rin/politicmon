@@ -5,7 +5,43 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 36 — tutti gli edifici top-down coerenti (no piu 3/4)**, 2026-06-30.
+Ultimo aggiornamento: **Round 37 — porte a 2 tile centrali + zerbini/scogliera PNG**, 2026-07-01.
+
+### 🚪 Round 37 — ingresso dritto sulla porta + fine rettangoli neri interni
+Feedback utente: "non entri camminando dritto sulla porta ma spostato a lato; dentro
+esci male e si vedono rettangoli neri".
+
+Cause radice trovate:
+1. **Porta visiva al CENTRO dello sprite, footprint a larghezza PARI** → la porta
+   disegnata cavalca i DUE tile centrali (w/2-1|w/2), ma il tile `d`+warp era solo
+   quello di destra (offset 2). Camminando dritti sulla porta visiva si finiva sul
+   tile sinistro = muro. (Il PALAZZO con porte `DD` su 4|5 funzionava già: era il
+   pattern giusto.)
+2. **Tile `c` (zerbino uscita) senza PNG** → il renderer world è solo-PNG (nessun
+   fallback pixmap): `c` restava NERO in tutti gli interni. Idem `^` (scogliera) e
+   `l` (scala) sullo Stretto.
+
+FATTO R37:
+- **Porta a 2 tile centrali su TUTTI gli edifici**: facciate `mndm`→`mddm`,
+  `mmdnmm`→`mmddmm`, `mnd^`→`mdd^` + 22 warp duplicati (uno per tile-porta, stesso
+  interno). Convenzione codificata in `centralDoorTiles(w)` (`src/art/tiles.ts`);
+  `BUILDING_DOOR_OFFSET` rimosso. La soglia `=` davanti alla porta è ridisegnata
+  sotto OGNI tile-porta (`WorldScene.drawThreshold` scansiona la riga-facciata).
+- **Nuovi PNG PixelLab**: `tiles/doormat.png` (zerbino rosso su parquet),
+  `tiles/cliff_sand.png` (masso arenaria), `tiles/stairs_sand.png` (scala) —
+  generati con `create_map_object` 32x32 → composito su base (floor_wood/sand) →
+  resize NN 16x16. Mappati in TILE_PNG (`c`/`^`/`l`) + preload + manifest (162/162).
+  NB grotta1 continua a sovrascrivere `c` con roccia via `tileOverrides`.
+- **Guardrail aggiornati** al pattern 2-tile: `check-building-door-alignment`
+  (porte = esattamente i 2 tile centrali, ognuna con warp + `=` davanti),
+  `check-door-warps`, `check-world-layout`, `check-map-consistency` (ritorno
+  dall'interno accettato davanti a UNO dei due tile-porta).
+- Verifiche: playtest Playwright (ingresso dritto dal tile sinistro → entra; interno
+  senza neri; uscita davanti alla porta), tutti i guardrail PASS, typecheck+build
+  puliti, coverage 162/162.
+- **TRAPPOLA**: `create_map_object` con prompt "texture che riempie il canvas" può
+  restituire un PNG VUOTO (83 byte). Descriverlo come OGGETTO ("massive square slab
+  of...") funziona. Controllare sempre la size del file scaricato.
 
 ### 🎯 Round 36 — loop edifici fino a top-down coerente (ingresso da sentiero)
 Feedback utente: "ritenta finche TUTTO e coerente con l'ingresso da sentiero". Diversi

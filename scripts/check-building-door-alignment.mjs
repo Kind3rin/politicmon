@@ -9,7 +9,7 @@ await page.goto(BASE, { waitUntil: "networkidle" });
 
 const problems = await page.evaluate(async () => {
   const { MAPS } = await import("/src/data/maps.ts");
-  const { TILES, isRoof, isFacade, buildingKey, buildingDoorOffset, buildingPath } = await import("/src/art/tiles.ts");
+  const { TILES, isRoof, isFacade, buildingKey, centralDoorTiles, buildingPath } = await import("/src/art/tiles.ts");
   const out = [];
   const doorChars = new Set(["d", "D", "g"]);
   const tileAt = (map, x, y) => map.tiles[y]?.[x] ?? "T";
@@ -82,65 +82,40 @@ const problems = await page.evaluate(async () => {
         } catch {
           out.push(`${mapId}: PNG edificio non caricabile ${path}`);
         }
-        const doorOffset = buildingDoorOffset(ch);
-        if (doorOffset == null) {
-          const doors = [];
-          for (let yy = y; yy < y + fp.h; yy += 1) {
-            for (let xx = x - 1; xx < x + fp.w + 1; xx += 1) {
-              if (doorChars.has(tileAt(map, xx, yy))) {
-                doors.push({ x: xx, y: yy });
-              }
-            }
-          }
-          if (doors.length === 0) {
-            out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza porte nella footprint`);
-          }
-          for (const door of doors) {
-            const targetWarp = (map.warps ?? []).find((warp) => {
-              const target = MAPS[warp.toMap];
-              return warp.x === door.x && warp.y === door.y && target && !target.outdoor;
-            });
-            if (!targetWarp) {
-              out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza warp interno sulla porta (${door.x},${door.y})`);
-            }
-            const front = tileAt(map, door.x, door.y + 1);
-            const frontDef = TILES[front];
-            if (front !== "=" || !frontDef || frontDef.solid || frontDef.water) {
-              out.push(`${mapId}: fronte porta non coerente a (${door.x},${door.y + 1}), trovato '${front}'`);
-            }
-          }
-          continue;
-        }
-        const doorX = x + doorOffset;
+        // I PNG hanno la porta al centro della facciata: le mappe devono avere
+        // `d` sui DUE tile centrali (w/2-1, w/2), ognuno col suo warp e `=` davanti.
         const doorY = y + fp.h - 1;
-        const expectedDoor = tileAt(map, doorX, doorY);
-        if (!doorChars.has(expectedDoor)) {
-          out.push(`${mapId}: edificio '${ch}' a (${x},${y}) porta attesa a (${doorX},${doorY}), trovato '${expectedDoor}'`);
+        const expectedXs = centralDoorTiles(fp.w).map((off) => x + off);
+        for (const doorX of expectedXs) {
+          const here = tileAt(map, doorX, doorY);
+          if (!doorChars.has(here)) {
+            out.push(`${mapId}: edificio '${ch}' a (${x},${y}) porta attesa a (${doorX},${doorY}), trovato '${here}'`);
+            continue;
+          }
+          const targetWarp = (map.warps ?? []).find((warp) => {
+            const target = MAPS[warp.toMap];
+            return warp.x === doorX && warp.y === doorY && target && !target.outdoor;
+          });
+          if (!targetWarp) {
+            out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza warp interno sulla porta (${doorX},${doorY})`);
+          } else if (!targetWarp.toMap.startsWith("bar-") && path === "tiles/build_bar_front.png") {
+            out.push(`${mapId}->${targetWarp.toMap}: edificio non BAR usa ancora build_bar_front.png a (${x},${y})`);
+          }
+          const front = tileAt(map, doorX, doorY + 1);
+          const frontDef = TILES[front];
+          if (front !== "=" || !frontDef || frontDef.solid || frontDef.water) {
+            out.push(`${mapId}: fronte porta non coerente a (${doorX},${doorY + 1}), trovato '${front}'`);
+          }
         }
 
+        // Nessuna porta FUORI dai tile centrali.
         for (let yy = y; yy < y + fp.h; yy += 1) {
           for (let xx = x - 1; xx < x + fp.w + 1; xx += 1) {
             const here = tileAt(map, xx, yy);
-            if (doorChars.has(here) && (xx !== doorX || yy !== doorY)) {
-              out.push(`${mapId}: edificio '${ch}' a (${x},${y}) ha porta fuori offset a (${xx},${yy})`);
+            if (doorChars.has(here) && !(yy === doorY && expectedXs.includes(xx))) {
+              out.push(`${mapId}: edificio '${ch}' a (${x},${y}) ha porta fuori dai tile centrali a (${xx},${yy})`);
             }
           }
-        }
-
-        const targetWarp = (map.warps ?? []).find((warp) => {
-          const target = MAPS[warp.toMap];
-          return warp.x === doorX && warp.y === doorY && target && !target.outdoor;
-        });
-        if (!targetWarp) {
-          out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza warp interno sulla porta (${doorX},${doorY})`);
-        } else if (!targetWarp.toMap.startsWith("bar-") && path === "tiles/build_bar_front.png") {
-          out.push(`${mapId}->${targetWarp.toMap}: edificio non BAR usa ancora build_bar_front.png a (${x},${y})`);
-        }
-
-        const front = tileAt(map, doorX, doorY + 1);
-        const frontDef = TILES[front];
-        if (front !== "=" || !frontDef || frontDef.solid || frontDef.water) {
-          out.push(`${mapId}: fronte porta non coerente a (${doorX},${doorY + 1}), trovato '${front}'`);
         }
       }
     }

@@ -20,6 +20,9 @@ const TILE_PNG: Record<string, string> = {
   I: "tiles/snow_drift.png",
   p: "tiles/floor_wood.png",   // pavimento interno (case/negozi)
   A: "tiles/wall_interior.png", // muro interno in pietra
+  c: "tiles/doormat.png",       // zerbino d'uscita interni (grotta: override roccia)
+  "^": "tiles/cliff_sand.png",  // scogliera sabbiosa (Stretto)
+  l: "tiles/stairs_sand.png",   // scala nella roccia (Stretto)
   j: "tiles/deck_asphalt.png",  // impalcato ponte (asfalto+mezzeria)
   O: "tiles/cave_mouth.png",
   R: "tiles/cave_boulder.png",
@@ -100,24 +103,13 @@ const BUILDING_FOOTPRINT_PNG: Record<string, Record<string, string>> = {
   }
 };
 
-// Offset orizzontale della porta visiva rispetto all'angolo sx del tetto.
-// Le mappe usano `mndm` e `mmdnmm`, quindi la porta sta nel terzo tile.
-const BUILDING_DOOR_OFFSET: Record<string, number> = {
-  r: 2,
-  H: 2,
-  v: 2,
-  o: 2,
-  "!": 2,
-  "?": 2,
-  "@": 2,
-  u: 2,
-  e: 2,
-  Q: 2,
-  y: 2,
-  B: 2,
-  x: 2,
-  $: 2
-};
+// I PNG PixelLab hanno la porta al CENTRO della facciata: con footprint a
+// larghezza PARI la porta visiva cavalca i DUE tile centrali (w/2-1 e w/2).
+// Le mappe quindi mettono `d` su entrambi (es. `mddm`, `mmddmm`) con un warp
+// per tile: si entra camminando dritti sulla porta, senza scarto laterale.
+export function centralDoorTiles(w: number): [number, number] {
+  return [w / 2 - 1, w / 2];
+}
 
 // I char che fanno parte del "tetto" (per il rilevamento del blocco).
 const ROOF_CHARS = new Set(Object.keys(BUILDING_PNG));
@@ -165,9 +157,6 @@ export function buildingKey(ch: string): string | null {
   return BUILDING_PNG[ch] ?? null;
 }
 
-export function buildingDoorOffset(ch: string): number | null {
-  return BUILDING_DOOR_OFFSET[ch] ?? null;
-}
 
 export interface TileDef {
   pix: Pixmap;

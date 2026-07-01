@@ -121,8 +121,14 @@ const report = await page.evaluate(async () => {
         if (!connected) {
           problems.push(`${mapId}->${warp.toMap}: sentiero porta isolato a (${frontX},${frontY})`);
         }
+        // Porte a 2 tile: l'interno può riportare davanti a UNO dei due
+        // tile-porta (colonna adiacente, purché resti una porta dell'edificio).
         const returnsToFront = (target.warps ?? []).some(
-          (back) => back.toMap === mapId && back.toX === frontX && back.toY === frontY
+          (back) =>
+            back.toMap === mapId &&
+            back.toY === frontY &&
+            Math.abs(back.toX - frontX) <= 1 &&
+            isDoor(tileAt(map, back.toX, warp.y))
         );
         if (!returnsToFront) {
           problems.push(`${mapId}->${warp.toMap}: uscita interna non torna davanti alla porta (${frontX},${frontY})`);
@@ -130,8 +136,8 @@ const report = await page.evaluate(async () => {
         const entersAboveExit = (target.warps ?? []).some(
           (back) =>
             back.toMap === mapId &&
-            back.toX === frontX &&
             back.toY === frontY &&
+            Math.abs(back.toX - frontX) <= 1 &&
             warp.toX === back.x &&
             warp.toY === back.y - 1
         );

@@ -24,8 +24,14 @@ const problems = await page.evaluate(async () => {
       if (!belowDef || belowDef.solid || belowDef.water) {
         out.push(`${mapId}->${w.toMap} porta (${w.x},${w.y}) senza fronte libero sotto: '${below}'`);
       }
+      // Le porte sono 2 tile affiancati: basta che l'interno riporti davanti a
+      // UNO dei tile-porta dello stesso edificio (colonna adiacente ammessa).
       const returnsToFront = (target.warps ?? []).some(
-        (back) => back.toMap === mapId && back.toX === w.x && back.toY === w.y + 1
+        (back) =>
+          back.toMap === mapId &&
+          back.toY === w.y + 1 &&
+          Math.abs(back.toX - w.x) <= 1 &&
+          ["d", "D", "g"].includes(tileAt(back.toX, w.y))
       );
       if (!returnsToFront) {
         out.push(`${mapId}->${w.toMap} porta (${w.x},${w.y}) non torna al fronte (${w.x},${w.y + 1})`);

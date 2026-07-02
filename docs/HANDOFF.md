@@ -5,7 +5,73 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 37 — porte a 2 tile centrali + zerbini/scogliera PNG**, 2026-07-01.
+Ultimo aggiornamento: **Round 38 — post-game, route 2/3, scambi e duelli PvP**, 2026-07-02.
+
+### 🏝️ Round 38 — longevità: route mancanti, rematch, post-game, daily, trade+PvP
+Feedback utente: "il gioco non è longevo" → fatti TUTTI e 4 i punti in un ciclo solo
+(design multi-agente → 3 lotti implementativi → review avversariale → 7 bug fixati).
+
+**Route vere tra le città** (prima edge diretti):
+- `route2` PERCORSO 2 (Mediopoli↔Eurotown, wild/trainer lv 12-15, LAGHETTO DELL'AUDITEL
+  con isoletta-tesoro solo-traghetto) e `route3` PERCORSO 3 (Eurotown↔Capitale, lv 16-19,
+  checkpoint) + `grotta2` ARCHIVIO DI STATO (pattern grotta1). Gate medaglie conservati
+  LATO CITTÀ (mediopoli.north requiresBadges:1, eurotown.north:2). 7 TrainerDef nuovi.
+  `northChain` della freccia GUIDA ora include le route.
+
+**Rematch allenatori** (`src/game/rematch.ts`): trainer normali ribattibili dopo 400
+passi (`stepsTotal`/`trainerRematch` nuovi in GameState), capipalestra SOLO post-garante
+con cooldown 1500 passi e team fissi lv 50-55. Payout rematch 60%, badge/reward SEMPRE
+strippati (niente medaglie/schedone duplicate). "!" dorato sui rematch pronti;
+`interactNpc` chiede RIVINCITA via `askYesNo`.
+
+**Post-game** (flag `garante-beaten`): mappa `offshore` PARADISO OFFSHORE (isola via
+traghetto dalle boe dello stretto, wild lv 38-45, bar LIDO CAYMAN + respawn), boss
+TESORIERE lv 46-50 (in `BOSS_TRAINER_IDS` → musica e IA boss), encore BERLUSCONIX
+catturabile al casinò se manca al dex, contabile-pentito che svela l'isola, 2 quest
+main + 1 side, dexzone offshore, wanderer cap post-garante 50.
+
+**Sfida giornaliera** (`src/game/daily.ts`): OPINIONISTA PERPETUA a Caput Mundi, team
+deterministico dal giorno (seed=data locale YYYY-MM-DD, mai toISOString) scalato a
+maxParty+2, 1 vittoria/giorno (`lastDailyDate`, solo su win), 500€ + item comune a
+rotazione; BREAKING NEWS all'ingresso in capitale se disponibile. TrainerId `daily:*`
+mai in `defeatedTrainers`.
+
+**Multiplayer trade + duello PvP** (P2P Trystero, actions "trade"/"duel" con send
+mirato al peer): menu SCAMBIA/SFIDA sull'avatar remoto adiacente + DUELLO PVP nel menu
+pausa. Scambio 1:1 con anti-cheat (sul filo solo {speciesId,level,moves}; ricostruzione
+locale con `createMonster`, mai stats dal filo) e commit a due fasi anti-dupe
+(done/done con seq). Duello host-autoritativo (l'host simula con `duelsim.ts`, il guest
+applica il log eventi SANITIZZATO — `sanitizeTurnlog`): no cattura/oggetti/fuga, resa,
+timeout 30s, **il duello non tocca MAI il save** (asserito da `check-duel.mjs`).
+Dex da scambio = caught ma flag `dex-trade:<id>` lo esclude dai premi di zona.
+
+**Save v9→v10**: `stepsTotal`, `trainerRematch`, `lastDailyDate` (migrazione in
+state.ts, v9 in LEGACY_KEYS).
+
+**Refactor**: presentazione battaglia estratta in `src/game/battle/view.ts` (~420
+righe, usata da BattleScene e PvpBattleScene).
+
+⚠️ TRAPPOLE NUOVE:
+- **`duelsim.ts` DUPLICA la semantica di `sim.ts`** (danno/crit/status): ogni ritocco
+  di bilanciamento PVE va replicato lì (sentinella in testa al file).
+- `legalMoveForSpecies` (duelproto/trade) accetta le mosse ereditate dalle
+  PRE-EVOLUZIONI risalendo `SPECIES[].evolutions` — non irrigidirlo o gli starter
+  evoluti tornano "SQUADRA NON VALIDA".
+- Negli script Playwright usare `window.__mp`, MAI `import("/src/net/mp.ts")` (l'HMR
+  di Vite crea una seconda istanza del singleton).
+- `askYesNo` di WorldScene condivide `askLabel` col transportMenu (stati mutuamente
+  esclusivi); `mp.duelBusy` copre PVE, TradeScene, DuelLobby e PvpBattleScene.
+- BOSS_TRAINER_IDS guida anche l'IA (whiff/heal/finisher), non solo la musica.
+
+Guardrail nuovi: `check-duel.mjs` (e2e 2 pagine, HP speculari, C9 save intatto,
+assert anti-cheat/pre-evo; SKIP se relay giù) e `shot-trade.mjs`.
+Verifiche: typecheck+build, 12 guardrail PASS, coverage 162/162, migrazione v9→v10
+testata, review avversariale (5 dimensioni × 3 lenti): 7 bug trovati e fixati.
+
+MANCANZE NOTE: rematch gym con musica/IA da trainer normale (badge strippato — la
+difficoltà è nei livelli); contatore `duelWins` e emote in duello rimandati; dupe da
+restore-backup di localStorage = limite P2P accettato; host del duello può barare
+(nessun premio in palio).
 
 ### 🚪 Round 37 — ingresso dritto sulla porta + fine rettangoli neri interni
 Feedback utente: "non entri camminando dritto sulla porta ma spostato a lato; dentro

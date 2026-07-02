@@ -115,6 +115,12 @@ export const ACHIEVEMENTS: Achievement[] = [
     desc: "Sblocca un veicolo (MONOPATTINO o RUSPA).",
     reward: 300,
     done: (s) => Boolean(s.flags["gift-mediopoli-vehicle"] || s.flags["gift-capitale-vehicle"])
+  },
+  {
+    id: "trader", name: "TRASFORMISTA",
+    desc: "Completa uno SCAMBIO online con un altro giocatore.",
+    reward: 300,
+    done: (s) => Boolean(s.flags["trade-done"])
   }
 ];
 

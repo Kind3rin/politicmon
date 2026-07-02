@@ -10,6 +10,7 @@
 
 import { joinRoom, selfId, type Room } from "trystero/nostr";
 import type { Facing } from "../art/characters";
+import { TradeSession, type TradeWire } from "./trade";
 
 export interface RemotePlayer {
   id: string;
@@ -83,11 +84,24 @@ class MultiplayerClient {
   private sendPos: ((p: PosMsg) => void) | null = null;
   private sendEmoteAction: ((e: string) => void) | null = null;
   private sendChatAction: ((m: string) => void) | null = null;
+  private sendTradeWire: ((m: TradeWire, target: string) => void) | null = null;
 
   readonly remotes = new Map<string, RemotePlayer>();
   readonly chat: ChatLine[] = [];
   onlineCount = 0;
   connected = false;
+
+  // Vero mentre il giocatore è impegnato (battaglia PVE/PvP, TradeScene, lobby
+  // duello): gli inviti trade/duello in arrivo ricevono auto-decline "OCCUPATO".
+  duelBusy = false;
+
+  // Sessione di scambio (unica, riusata): il send è no-op senza room, la
+  // sessione va comunque in timeout da sola.
+  readonly trade = new TradeSession(
+    selfId,
+    (m, target) => this.sendTradeWire?.(m, target),
+    () => this.duelBusy
+  );
 
   setEnabled(on: boolean): void {
     this.enabled = on;
@@ -192,10 +206,17 @@ class MultiplayerClient {
     const posAction = room.makeAction<PosMsg>("pos");
     const emoAction = room.makeAction<string>("emo");
     const msgAction = room.makeAction<string>("msg");
+    // SCAMBI: canale dedicato, send MIRATO al peer (SendOptions.target,
+    // verificato in @trystero-p2p/core/dist/types.d.mts:86-108). L'envelope
+    // porta comunque `to`, scartato in ricezione se non è per noi (difesa in
+    // profondità contro eventuali fallback broadcast).
+    const tradeAction = room.makeAction<TradeWire>("trade");
     this.sendProfile = (p) => void profAction.send(p);
     this.sendPos = (p) => void posAction.send(p);
     this.sendEmoteAction = (e) => void emoAction.send(e);
     this.sendChatAction = (m) => void msgAction.send(m);
+    this.sendTradeWire = (m, target) => void tradeAction.send(m, { target });
+    tradeAction.onMessage = (m, ctx) => this.trade.onWire(m, ctx.peerId);
 
     profAction.onMessage = (prof, ctx) => {
       this.upsert(ctx.peerId, {
@@ -227,7 +248,10 @@ class MultiplayerClient {
     room.onPeerJoin = () => {
       this.broadcastProfile();
     };
+    // UNICA assegnazione di onPeerLeave (è una property: una seconda
+    // assegnazione sovrascriverebbe la prima).
     room.onPeerLeave = (peerId) => {
+      this.trade.peerLeft(peerId);
       this.remotes.delete(peerId);
       this.onlineCount = this.remotes.size;
     };
@@ -238,6 +262,9 @@ class MultiplayerClient {
 
   private leave(): void {
     this.sendProfile = this.sendPos = this.sendEmoteAction = this.sendChatAction = null;
+    this.sendTradeWire = null;
+    // Cambio mappa/disable = la room muore: qualsiasi scambio in corso è morto.
+    this.trade.reset();
     this.remotes.clear();
     this.chat.length = 0;
     this.onlineCount = 0;

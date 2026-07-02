@@ -53,9 +53,13 @@ export interface ZoneProgress {
   done: boolean;
 }
 
-export function zoneProgress(dex: GameState["dex"]): ZoneProgress[] {
+// `flags` (opzionale): le specie ottenute SOLO via scambio online portano il
+// flag "dex-trade:<id>" e NON contano per i gate di zona (stesso spirito
+// dell'esclusione di mattarellux qui sopra: il 100% di zona premia la cattura
+// sul campo). Contano comunque nel Dex globale.
+export function zoneProgress(dex: GameState["dex"], flags?: GameState["flags"]): ZoneProgress[] {
   return DEX_ZONES.map((z) => {
-    const caught = z.species.filter((id) => dex[id] === "caught").length;
+    const caught = z.species.filter((id) => dex[id] === "caught" && !flags?.[`dex-trade:${id}`]).length;
     return { zone: z, caught, total: z.species.length, done: caught === z.species.length };
   });
 }

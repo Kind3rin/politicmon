@@ -93,7 +93,7 @@ export class DexScene implements Scene {
     }
     // Progresso ZONE: quante complete su 5 + dettaglio della zona corrente.
     // Spinge a completare il roster locale per la ricompensa.
-    const zp = zoneProgress(this.state.dex);
+    const zp = zoneProgress(this.state.dex, this.state.flags);
     const doneZones = zp.filter((p) => p.done).length;
     const here = zp.find((p) => p.zone.id === this.state.pos.mapId);
     const hereTxt = here ? `  -  QUI ${here.zone.name} ${here.caught}/${here.total}` : "";

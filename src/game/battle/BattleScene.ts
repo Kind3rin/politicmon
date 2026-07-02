@@ -932,6 +932,9 @@ export class BattleScene implements Scene {
       {
         run: () => {
           markCaught(this.state, this.foe.mon.speciesId);
+          // Catturato sul campo: se era arrivato solo via scambio, ora conta
+          // anche per i gate di zona (si toglie l'esclusione C10).
+          delete this.state.flags[`dex-trade:${this.foe.mon.speciesId}`];
           addSondaggi(this.state, 3);
           if (this.state.party.length < 6) {
             this.state.party.push(this.foe.mon);
@@ -945,7 +948,7 @@ export class BattleScene implements Scene {
           }
           // Ricompensa di completamento ZONA: se questa cattura riempie il
           // roster di una zona (e non l'hai già riscossa), premio + annuncio.
-          for (const p of zoneProgress(this.state.dex)) {
+          for (const p of zoneProgress(this.state.dex, this.state.flags)) {
             if (p.done && !this.state.zoneRewardsClaimed.includes(p.zone.id)) {
               this.state.zoneRewardsClaimed.push(p.zone.id);
               const r = p.zone.reward;

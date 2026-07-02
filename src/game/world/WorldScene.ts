@@ -35,6 +35,8 @@ import { checkAchievements } from "../achievements";
 import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } from "../vehicles";
 import { isGuideOn } from "../../engine/controls";
 import { PauseScene } from "../../scenes/PauseScene";
+import { TradeScene } from "../../scenes/TradeScene";
+import { loadNick } from "../../net/profile";
 import { ShopScene } from "../../scenes/ShopScene";
 import { CasinoScene } from "../../scenes/CasinoScene";
 import { BoxScene } from "../../scenes/BoxScene";
@@ -201,6 +203,11 @@ export class WorldScene implements Scene {
   private askLabel = "";
   private transportMenu: Menu | null = null;
   private transportDestinations: TransportDestination[] = [];
+  // Menu d'interazione su un giocatore remoto adiacente (SCAMBIA/SFIDA/ANNULLA).
+  // NOTA: askLabel è CONDIVISO con transportMenu/askMenu (stati mutuamente
+  // esclusivi: mai due menu aperti insieme).
+  private remoteMenu: Menu | null = null;
+  private remoteMenuPeerId = "";
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     // Registra lo stato come "attivo" per il salvataggio su chiusura/background
@@ -583,6 +590,16 @@ export class WorldScene implements Scene {
     });
   }
 
+  // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il
+  // plumbing askMenu/askYes/askNo/askLabel: il draw esiste già, e il tasto B
+  // chiama onNo (ramo cancel del blocco askMenu in update).
+  private askYesNo(label: string, onYes: () => void, onNo?: () => void): void {
+    this.askLabel = label;
+    this.askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
+    this.askYes = onYes;
+    this.askNo = onNo ?? null;
+  }
+
 
   // ---- Battles ----
 
@@ -591,6 +608,8 @@ export class WorldScene implements Scene {
     audio.encounterSting();
     this.encounterFlash = 0.55;
     this.pendingBattle = start;
+    // In lotta = occupato: inviti scambio/duello ricevono auto-decline.
+    mp.duelBusy = true;
   }
 
   // Sapore casuale dell'incontro selvatico: ~22% delle volte applica un
@@ -709,6 +728,7 @@ export class WorldScene implements Scene {
 
   private onBattleEnd(result: BattleResult): void {
     this.stack.pop();
+    mp.duelBusy = false;
     audio.playMusic(this.map.music ?? "borgo");
     saveGame(this.state);
     if (result === "loss") {
@@ -763,6 +783,15 @@ export class WorldScene implements Scene {
     const npc = this.visibleNpcs().find((n) => n.x === tx && n.y === ty);
     if (npc) {
       this.interactNpc(npc);
+      return;
+    }
+
+    // Giocatore ONLINE adiacente: menu unico SCAMBIA / SFIDA / ANNULLA.
+    const remote = mp.remotePlayers().find((r) => r.x === tx && r.y === ty);
+    if (remote) {
+      this.remoteMenu = new Menu([{ label: "SCAMBIA" }, { label: "SFIDA" }, { label: "ANNULLA" }]);
+      this.remoteMenuPeerId = remote.id;
+      this.askLabel = `${remote.nick.slice(0, 10)}: CHE FAI?`;
       return;
     }
 
@@ -941,6 +970,69 @@ export class WorldScene implements Scene {
     if (npc.lines && npc.lines.length > 0) {
       this.say(npc.lines);
     }
+  }
+
+  // ---- Multiplayer: scambio e duello con un giocatore remoto ----
+
+  // Il remoto è ancora abbastanza vicino? (Manhattan ≤2: tolleranza per il lag
+  // di posizione). Ritorna il RemotePlayer o null con messaggio già mostrato.
+  private remoteIfNearby(peerId: string) {
+    const r = mp.remotes.get(peerId);
+    const p = this.state.pos;
+    if (!r || Math.abs(r.x - p.x) + Math.abs(r.y - p.y) > 2) {
+      this.say(["SI È ALLONTANATO. IL MERCATO DELLE VACCHE NON ASPETTA."]);
+      return null;
+    }
+    return r;
+  }
+
+  private startTradeWithRemote(peerId: string): void {
+    const r = this.remoteIfNearby(peerId);
+    if (!r) {
+      return;
+    }
+    if (this.state.party.length === 0) {
+      this.say(["TI SERVE ALMENO UN POLITICMON DA OFFRIRE."]);
+      return;
+    }
+    mp.trade.invite(r.id, loadNick() || "ANONIMO");
+    this.stack.push(new TradeScene(this.stack, this.input, this.state, { peerId: r.id, peerNick: r.nick }));
+  }
+
+  private challengeRemote(peerId: string): void {
+    const r = this.remoteIfNearby(peerId);
+    if (!r) {
+      return;
+    }
+    this.say(["LA SFIDA IN DIRETTA ARRIVA A BREVE.", "LA COMMISSIONE DI VIGILANZA STA ANCORA DELIBERANDO."]);
+  }
+
+  // Poll dell'invito di scambio in arrivo: gira solo quando WorldScene è in
+  // cima e il giocatore è libero (fermo, niente dialoghi/menu). Se il
+  // destinatario è occupato altrove l'invito scade da solo (wall-clock).
+  private pollTradeInvite(): boolean {
+    const s = mp.trade;
+    const inv = s.pendingInvite;
+    if (!inv || s.phase !== "idle") {
+      return false;
+    }
+    if (this.state.party.length === 0 || mp.duelBusy) {
+      s.declineInvite();
+      return false;
+    }
+    this.askYesNo(
+      `${inv.nick} PROPONE UNO SCAMBIO. ACCETTI?`,
+      () => {
+        const peerId = inv.peerId;
+        const nick = inv.nick;
+        mp.trade.acceptInvite(loadNick() || "ANONIMO");
+        if (mp.trade.phase === "negotiating") {
+          this.stack.push(new TradeScene(this.stack, this.input, this.state, { peerId, peerNick: nick }));
+        }
+      },
+      () => mp.trade.declineInvite()
+    );
+    return true;
   }
 
   private openTransport(): void {
@@ -1598,6 +1690,7 @@ export class WorldScene implements Scene {
       }
     }
     mp.update(dt); // interpolazione avatar remoti + decadimento emote
+    mp.trade.tick(dt); // timeout inviti/negoziazioni scambio
     this.rustles = this.rustles.filter((r) => (r.t -= dt) > 0);
 
     // NPC vivi: i "vaganti" camminano attorno a casa, gli altri si guardano
@@ -1700,6 +1793,23 @@ export class WorldScene implements Scene {
       return;
     }
 
+    if (this.remoteMenu) {
+      const action = this.remoteMenu.update(this.input);
+      if (action === "select") {
+        const idx = this.remoteMenu.index;
+        this.remoteMenu = null;
+        if (idx === 0) {
+          this.startTradeWithRemote(this.remoteMenuPeerId);
+        } else if (idx === 1) {
+          this.challengeRemote(this.remoteMenuPeerId);
+        }
+        // idx 2 = ANNULLA: chiudi e basta.
+      } else if (action === "cancel") {
+        this.remoteMenu = null;
+      }
+      return;
+    }
+
     if (this.askMenu) {
       const action = this.askMenu.update(this.input);
       if (action === "select") {
@@ -1728,6 +1838,10 @@ export class WorldScene implements Scene {
     // scattano dopo battaglie, catture, sblocchi senza agganci sparsi). La
     // notifica appare come BREAKING NEWS dei traguardi.
     if (!this.moving) {
+      // Inviti online in arrivo (scambio): prompt SÌ/NO via askYesNo.
+      if (this.pollTradeInvite()) {
+        return;
+      }
       const fresh = checkAchievements(this.state);
       if (fresh.length > 0) {
         const lines: string[] = [];
@@ -2248,7 +2362,7 @@ export class WorldScene implements Scene {
 
     // Obiettivo corrente in basso (solo all'aperto e a schermo libero).
     const quest = currentQuest(this.state);
-    if (quest && !this.msg.isOpen && !this.askMenu && !this.transportMenu && this.map.outdoor) {
+    if (quest && !this.msg.isOpen && !this.askMenu && !this.transportMenu && !this.remoteMenu && this.map.outdoor) {
       const label = clipHud(`► ${quest.step}`, 35);
       screen.rect(2, VIEW_H - 16, VIEW_W - 4, 14, "rgba(16,20,31,0.92)");
       screen.text(label, 6, VIEW_H - 13, "#e8c84a");
@@ -2265,7 +2379,8 @@ export class WorldScene implements Scene {
       isGuideOn() &&
       !this.msg.isOpen &&
       !this.askMenu &&
-      !this.transportMenu
+      !this.transportMenu &&
+      !this.remoteMenu
     ) {
       this.drawGuideArrow(screen, quest.target, playerPx, playerPy, camX, camY);
     }
@@ -2286,6 +2401,13 @@ export class WorldScene implements Scene {
       screen.panel(0, VIEW_H - 44, VIEW_W, 44);
       screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 32, INK);
       this.askMenu.draw(screen, VIEW_W - 64, VIEW_H - 44 - this.askMenu.measureHeight(), 56);
+    }
+
+    if (this.remoteMenu) {
+      screen.panel(0, VIEW_H - 44, VIEW_W, 44);
+      screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 32, INK);
+      const rw = Math.min(VIEW_W - 8, Math.max(96, this.remoteMenu.measureWidth() + 8));
+      this.remoteMenu.draw(screen, VIEW_W - 4 - rw, VIEW_H - 44 - this.remoteMenu.measureHeight(), rw);
     }
 
     this.msg.draw(screen);

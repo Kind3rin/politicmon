@@ -15,6 +15,9 @@ export interface PartyOptions {
   title?: string; // intestazione personalizzata (es. nomina di un ministro)
   // Quando si sta usando una DIRETTIVA: marca chi può impararla (✓/✗ in lista).
   directiveMoveId?: string;
+  // Squadra alternativa (es. i MIRROR del DUELLO PvP): la scena opera su
+  // questa lista invece di state.party, che resta intoccato.
+  partyOverride?: Monster[];
   onChoose?: (mon: Monster) => void;
 }
 
@@ -31,7 +34,7 @@ export class PartyScene implements Scene {
   ) {}
 
   update(): void {
-    const party = this.state.party;
+    const party = this.opts.partyOverride ?? this.state.party;
     if (this.summary) {
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
         audio.cancel();
@@ -122,7 +125,7 @@ export class PartyScene implements Scene {
             : "LA TUA SQUADRA"),
       8, 5, PAPER
     );
-    const party = this.state.party;
+    const party = this.opts.partyOverride ?? this.state.party;
     for (let i = 0; i < party.length; i += 1) {
       const mon = party[i];
       const y = 16 + i * 23;

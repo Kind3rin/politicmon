@@ -11,6 +11,7 @@
 import { joinRoom, selfId, type Room } from "trystero/nostr";
 import type { Facing } from "../art/characters";
 import { TradeSession, type TradeWire } from "./trade";
+import type { DuelMsg } from "./duelproto";
 
 export interface RemotePlayer {
   id: string;
@@ -85,11 +86,19 @@ class MultiplayerClient {
   private sendEmoteAction: ((e: string) => void) | null = null;
   private sendChatAction: ((m: string) => void) | null = null;
   private sendTradeWire: ((m: TradeWire, target: string) => void) | null = null;
+  private sendDuelAction: ((m: DuelMsg, target: string) => void) | null = null;
 
   readonly remotes = new Map<string, RemotePlayer>();
   readonly chat: ChatLine[] = [];
   onlineCount = 0;
   connected = false;
+
+  // DUELLO PvP: callback registrato dalle scene (WorldScene di base; lobby e
+  // PvpBattleScene lo prendono in consegna e lo ripristinano all'uscita).
+  onDuel: ((msg: DuelMsg, peerId: string) => void) | null = null;
+  // Peer uscito dalla room: serve alla PvpBattleScene per la vittoria a
+  // tavolino su disconnessione.
+  onPeerGone: ((peerId: string) => void) | null = null;
 
   // Vero mentre il giocatore è impegnato (battaglia PVE/PvP, TradeScene, lobby
   // duello): gli inviti trade/duello in arrivo ricevono auto-decline "OCCUPATO".
@@ -179,6 +188,16 @@ class MultiplayerClient {
     return id === selfId;
   }
 
+  get myId(): string {
+    return selfId;
+  }
+
+  // Invia un messaggio duello MIRATO al peer (aggiunge `to` per il filtro in
+  // ricezione). No-op senza room: i timeout delle scene coprono il resto.
+  sendDuel(msg: DuelMsg, peerId: string): void {
+    this.sendDuelAction?.({ ...msg, to: peerId }, peerId);
+  }
+
   // ---- Interno ----
 
   private join(mapId: string): void {
@@ -211,12 +230,26 @@ class MultiplayerClient {
     // porta comunque `to`, scartato in ricezione se non è per noi (difesa in
     // profondità contro eventuali fallback broadcast).
     const tradeAction = room.makeAction<TradeWire>("trade");
+    const duelAction = room.makeAction<DuelMsg>("duel");
     this.sendProfile = (p) => void profAction.send(p);
     this.sendPos = (p) => void posAction.send(p);
     this.sendEmoteAction = (e) => void emoAction.send(e);
     this.sendChatAction = (m) => void msgAction.send(m);
     this.sendTradeWire = (m, target) => void tradeAction.send(m, { target });
     tradeAction.onMessage = (m, ctx) => this.trade.onWire(m, ctx.peerId);
+    this.sendDuelAction = (m, target) => void duelAction.send(m, { target });
+    duelAction.onMessage = (m, ctx) => {
+      if (!m || m.v !== 1 || (m.to && m.to !== selfId)) {
+        return; // difesa in profondità sul broadcast
+      }
+      // Occupato (battaglia/scambio/duello in corso) o nessuna scena in
+      // ascolto: gli inviti ricevono subito un decline motivato.
+      if (m.type === "invite" && (this.duelBusy || !this.onDuel)) {
+        this.sendDuel({ v: 1, duelId: m.duelId, type: "decline", reason: "OCCUPATO" }, ctx.peerId);
+        return;
+      }
+      this.onDuel?.(m, ctx.peerId);
+    };
 
     profAction.onMessage = (prof, ctx) => {
       this.upsert(ctx.peerId, {
@@ -252,6 +285,7 @@ class MultiplayerClient {
     // assegnazione sovrascriverebbe la prima).
     room.onPeerLeave = (peerId) => {
       this.trade.peerLeft(peerId);
+      this.onPeerGone?.(peerId);
       this.remotes.delete(peerId);
       this.onlineCount = this.remotes.size;
     };
@@ -263,7 +297,9 @@ class MultiplayerClient {
   private leave(): void {
     this.sendProfile = this.sendPos = this.sendEmoteAction = this.sendChatAction = null;
     this.sendTradeWire = null;
+    this.sendDuelAction = null;
     // Cambio mappa/disable = la room muore: qualsiasi scambio in corso è morto.
+    // (onDuel/onPeerGone restano: appartengono alle scene.)
     this.trade.reset();
     this.remotes.clear();
     this.chat.length = 0;

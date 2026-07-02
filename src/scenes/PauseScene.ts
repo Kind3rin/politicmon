@@ -12,9 +12,11 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
 import { sondaggiColor, sondaggiLabel, MINISTERO_ORDER, ministroDi, MINISTERI } from "../game/governo";
 import { speciesOf } from "../game/monster";
+import { mp } from "../net/mp";
 import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
+import { DuelLobbyScene } from "./DuelLobbyScene";
 import { DexScene } from "./DexScene";
 import { GovScene } from "./GovScene";
 import { PartyScene } from "./PartyScene";
@@ -49,6 +51,10 @@ export class PauseScene implements Scene {
       this.entries.push("GOVERNO");
     }
     this.entries.push("MISSIONI", "TRAGUARDI", "GUIDA TIPI", "TESSERA", "CHAT ONLINE");
+    // DUELLO PvP: ha senso solo con qualcuno online sulla stessa mappa.
+    if (mp.isEnabled() && mp.connected && mp.onlineCount > 0) {
+      this.entries.push("DUELLO PVP");
+    }
     // Veicoli: voce che cicla tra quelli posseduti (e "a piedi").
     if (ownedVehicles(this.state).length > 0) {
       const v = this.state.vehicle ? VEHICLES[this.state.vehicle as VehicleId].name : "A PIEDI";
@@ -140,6 +146,9 @@ export class PauseScene implements Scene {
         break;
       case "CHAT ONLINE":
         this.stack.push(new ChatScene(this.stack, this.input));
+        break;
+      case "DUELLO PVP":
+        this.stack.push(new DuelLobbyScene(this.stack, this.input, this.state));
         break;
       case "OPZIONI":
         audio.confirm();

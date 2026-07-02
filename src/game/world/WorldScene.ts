@@ -36,6 +36,11 @@ import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } fr
 import { isGuideOn } from "../../engine/controls";
 import { PauseScene } from "../../scenes/PauseScene";
 import { TradeScene } from "../../scenes/TradeScene";
+import { DuelLobbyScene } from "../../scenes/DuelLobbyScene";
+import { PvpBattleScene } from "../battle/PvpBattleScene";
+import {
+  DUEL_INVITE_TIMEOUT, serializeTeam, validateWireTeam, type DuelMsg, type WireMon
+} from "../../net/duelproto";
 import { loadNick } from "../../net/profile";
 import { ShopScene } from "../../scenes/ShopScene";
 import { CasinoScene } from "../../scenes/CasinoScene";
@@ -208,11 +213,23 @@ export class WorldScene implements Scene {
   // esclusivi: mai due menu aperti insieme).
   private remoteMenu: Menu | null = null;
   private remoteMenuPeerId = "";
+  // DUELLO PvP lato ricevente: mailbox riempite dal callback di rete (async),
+  // consumate SOLO nell'update quando il giocatore è libero (mai push di scene
+  // da dentro un callback di rete).
+  private pendingDuelInvite: {
+    peerId: string; duelId: string; nick: string; maxLevel: number; avg: number; at: number;
+  } | null = null;
+  private duelWait: { duelId: string; peerId: string; nick: string; deadline: number } | null = null;
+  private duelStartMsg: { duelId: string; peerId: string; nick: string; hostTeam: unknown } | null = null;
+  private duelDeclineMsg: string | null = null;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     // Registra lo stato come "attivo" per il salvataggio su chiusura/background
     // (gestito a livello globale in main.ts).
     setActiveState(this.state);
+    // Handler base dei messaggi duello (lobby e PvpBattleScene lo prendono in
+    // consegna quando sono in cima e lo ripristinano all'uscita).
+    mp.onDuel = (msg, peerId) => this.onDuelMsg(msg, peerId);
     this.loadMap(this.state.pos.mapId);
     if (!this.state.flags["intro-done"]) {
       this.state.flags["intro-done"] = true;
@@ -246,6 +263,14 @@ export class WorldScene implements Scene {
       }));
     }
     this.rustles = [];
+    // Cambio mappa = cambio room: qualunque handshake duello in corso muore.
+    if (this.duelWait) {
+      mp.duelBusy = false; // eravamo "occupati" in attesa dello start
+    }
+    this.pendingDuelInvite = null;
+    this.duelWait = null;
+    this.duelStartMsg = null;
+    this.duelDeclineMsg = null;
     audio.playMusic(this.map.music ?? "borgo");
     this.fadeT = 0.35; // breve dissolvenza d'ingresso nella nuova mappa
     // Memorizza l'ultima città-con-bar visitata: è lì che si respawna al KO.
@@ -999,12 +1024,124 @@ export class WorldScene implements Scene {
     this.stack.push(new TradeScene(this.stack, this.input, this.state, { peerId: r.id, peerNick: r.nick }));
   }
 
+  // SFIDA sul remoto adiacente: stesso code path della lobby (invito
+  // immediato via DuelLobbyScene con invitePeerId). Chi invita è HOST.
   private challengeRemote(peerId: string): void {
     const r = this.remoteIfNearby(peerId);
     if (!r) {
       return;
     }
-    this.say(["LA SFIDA IN DIRETTA ARRIVA A BREVE.", "LA COMMISSIONE DI VIGILANZA STA ANCORA DELIBERANDO."]);
+    if (this.state.party.length === 0) {
+      this.say(["TI SERVE ALMENO UN POLITICMON PER DUELLARE."]);
+      return;
+    }
+    this.stack.push(new DuelLobbyScene(this.stack, this.input, this.state, { invitePeerId: r.id }));
+  }
+
+  // Handler base dei DuelMsg: riempie SOLO mailbox (consumate nell'update).
+  private onDuelMsg(msg: DuelMsg, peerId: string): void {
+    if (msg.type === "invite") {
+      if (mp.duelBusy || this.duelWait || this.pendingDuelInvite) {
+        mp.sendDuel({ v: 1, duelId: msg.duelId, type: "decline", reason: "OCCUPATO" }, peerId);
+        return;
+      }
+      const nick = mp.remotes.get(peerId)?.nick ?? String(msg.nick ?? "ANONIMO");
+      this.pendingDuelInvite = {
+        peerId,
+        duelId: msg.duelId,
+        nick: nick.slice(0, 12),
+        maxLevel: Math.max(1, Math.floor(Number(msg.maxLevel)) || 1),
+        avg: Math.max(1, Math.floor(Number(msg.avg)) || 1),
+        at: Date.now()
+      };
+      return;
+    }
+    const wait = this.duelWait;
+    if (!wait || peerId !== wait.peerId || msg.duelId !== wait.duelId) {
+      return;
+    }
+    if (msg.type === "start") {
+      this.duelStartMsg = { duelId: wait.duelId, peerId, nick: wait.nick, hostTeam: msg.hostTeam };
+    } else if (msg.type === "decline") {
+      this.duelDeclineMsg = msg.reason ?? "";
+    }
+  }
+
+  // Poll degli eventi duello (invito in arrivo, start/decline atteso, timeout).
+  // Ritorna true se ha consumato il frame (prompt aperto o messaggio).
+  private pollDuel(): boolean {
+    // Esito dell'attesa post-accept.
+    if (this.duelDeclineMsg !== null) {
+      const reason = this.duelDeclineMsg;
+      this.duelDeclineMsg = null;
+      this.duelWait = null;
+      mp.duelBusy = false;
+      this.say([reason ? `DUELLO ANNULLATO: ${reason}.` : "DUELLO ANNULLATO DALL'ALTRO CANDIDATO."]);
+      return true;
+    }
+    if (this.duelStartMsg) {
+      const start = this.duelStartMsg;
+      this.duelStartMsg = null;
+      this.duelWait = null;
+      const hostTeam = validateWireTeam(start.hostTeam);
+      if (!hostTeam) {
+        mp.sendDuel({ v: 1, duelId: start.duelId, type: "decline", reason: "SQUADRA NON VALIDA" }, start.peerId);
+        mp.duelBusy = false;
+        this.say(["SQUADRA NON VALIDA: LA COMMISSIONE DI GARANZIA ANNULLA IL DUELLO."]);
+        return true;
+      }
+      const guestWire = serializeTeam(this.state.party);
+      this.queueBattle(() => {
+        this.stack.push(
+          new PvpBattleScene(this.stack, this.input, {
+            state: this.state,
+            role: "guest",
+            peerId: start.peerId,
+            opponentNick: start.nick,
+            hostWire: start.hostTeam as WireMon[], // già validato qui sopra
+            guestWire,
+            duelId: start.duelId,
+            onEnd: () => {
+              this.stack.pop();
+              mp.duelBusy = false;
+            }
+          })
+        );
+      });
+      return true;
+    }
+    if (this.duelWait && Date.now() > this.duelWait.deadline) {
+      this.duelWait = null;
+      mp.duelBusy = false;
+      this.say(["IL DUELLO NON PARTE. L'ALTRO SI È PERSO NEI CORRIDOI."]);
+      return true;
+    }
+    // Invito in arrivo: prompt SÌ/NO con il livello massimo dichiarato (C11).
+    const inv = this.pendingDuelInvite;
+    if (inv && !this.duelWait) {
+      this.pendingDuelInvite = null;
+      if (Date.now() - inv.at > DUEL_INVITE_TIMEOUT * 1000) {
+        return false; // scaduto mentre eravamo altrove: l'invitante è già in timeout
+      }
+      if (this.state.party.length === 0 || mp.duelBusy) {
+        mp.sendDuel({ v: 1, duelId: inv.duelId, type: "decline", reason: "OCCUPATO" }, inv.peerId);
+        return false;
+      }
+      this.askYesNo(
+        `${inv.nick} TI SFIDA! SQUADRA FINO AL LV.${inv.maxLevel}. ACCETTI?`,
+        () => {
+          mp.duelBusy = true; // in attesa dello start: altri inviti declinati
+          this.duelWait = { duelId: inv.duelId, peerId: inv.peerId, nick: inv.nick, deadline: Date.now() + 12000 };
+          mp.sendDuel(
+            { v: 1, duelId: inv.duelId, type: "accept", nick: loadNick() || "ANONIMO", team: serializeTeam(this.state.party) },
+            inv.peerId
+          );
+        },
+        () => mp.sendDuel({ v: 1, duelId: inv.duelId, type: "decline" }, inv.peerId)
+      );
+      return true;
+    }
+    return false;
   }
 
   // Poll dell'invito di scambio in arrivo: gira solo quando WorldScene è in
@@ -1838,7 +1975,10 @@ export class WorldScene implements Scene {
     // scattano dopo battaglie, catture, sblocchi senza agganci sparsi). La
     // notifica appare come BREAKING NEWS dei traguardi.
     if (!this.moving) {
-      // Inviti online in arrivo (scambio): prompt SÌ/NO via askYesNo.
+      // Eventi online in arrivo (duello/scambio): prompt SÌ/NO via askYesNo.
+      if (this.pollDuel()) {
+        return;
+      }
       if (this.pollTradeInvite()) {
         return;
       }

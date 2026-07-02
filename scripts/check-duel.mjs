@@ -1,0 +1,220 @@
+// Guardrail DUELLO PvP (dev server :5179 attivo). Due pagine Playwright in
+// CONTESTI separati (localStorage indipendenti) nello stesso browser:
+// 1) handshake invite -> accept -> start su rete P2P reale;
+// 2) un turno completo con HP dei MIRROR identici sulle due pagine;
+// 3) resa con banner corretti e ritorno al mondo su entrambe;
+// 4) INVARIANTE C9: localStorage (save) IDENTICO prima/dopo il duello;
+// 5) check statico di validateWireTeam (team illegali respinti).
+// Se i relay Nostr non connettono entro 60s -> SKIP dell'e2e (exit 0), non FAIL.
+import { chromium } from "playwright";
+import { mkdirSync, writeFileSync } from "node:fs";
+
+const BASE = process.env.BASE_URL ?? "http://127.0.0.1:5179";
+mkdirSync("artifacts/screens", { recursive: true });
+const browser = await chromium.launch();
+
+async function boot(nick, x, team) {
+  const ctx = await browser.newContext({ viewport: { width: 480, height: 720 } });
+  const page = await ctx.newPage();
+  await page.goto(BASE, { waitUntil: "networkidle" });
+  await page.waitForTimeout(400);
+  await page.evaluate(async ({ nk, px, tm }) => {
+    const { Screen } = await import("/src/engine/screen.ts");
+    const { Input } = await import("/src/engine/input.ts");
+    const { SceneStack } = await import("/src/engine/scene.ts");
+    const { newGameState } = await import("/src/game/state.ts");
+    const { createMonster } = await import("/src/game/monster.ts");
+    const { WorldScene } = await import("/src/game/world/WorldScene.ts");
+    const { DuelLobbyScene } = await import("/src/scenes/DuelLobbyScene.ts");
+    const { audio } = await import("/src/engine/audio.ts");
+    audio.enabled = false;
+    // Singleton del grafo delle scene (NON reimportare mp: con l'HMR di Vite
+    // si rischiano due istanze — vedi nota in shot-trade.mjs).
+    const mp = window.__mp;
+    mp.setIdentity(nk, "player");
+    const canvas = document.createElement("canvas");
+    canvas.width = 240; canvas.height = 180;
+    document.body.appendChild(canvas);
+    canvas.id = "shotcanvas";
+    canvas.style.cssText = "position:fixed;left:0;top:0;width:960px;height:720px;image-rendering:pixelated;z-index:9999";
+    const screen = new Screen(canvas);
+    const input = new Input();
+    const stack = new SceneStack();
+    const state = newGameState();
+    state.flags["intro-done"] = true; state.flags["dex-received"] = true;
+    for (const [sp, lv] of tm) state.party.push(createMonster(sp, lv));
+    state.pos = { mapId: "borgo", x: px, y: 10, facing: "down" };
+    stack.push(new WorldScene(stack, input, state));
+    window.__t = { stack, input, state, mp, DuelLobbyScene };
+    window.__tick = () => { stack.update(1 / 30); stack.draw(screen); input.endFrame(); };
+    // Avanza (A) SOLO quando è sicuro: messaggi del duello (coda) o banner
+    // finale. Mai nei menu (selezionerebbe voci a caso).
+    window.__advance = () => {
+      const d = window.__duel;
+      const press = d && !d.finished && (d.mode === "queue" || d.done);
+      if (press) {
+        document.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyZ", bubbles: true, cancelable: true }));
+        window.__tick();
+        document.dispatchEvent(new KeyboardEvent("keyup", { code: "KeyZ", bubbles: true, cancelable: true }));
+      }
+      for (let i = 0; i < 3; i++) window.__tick();
+    };
+    for (let i = 0; i < 8; i++) window.__tick();
+  }, { nk: nick, px: x, tm: team });
+  return page;
+}
+
+const A = await boot("ONOREVOLE", 14, [["giorgetta", 10], ["renzino", 10]]);
+const B = await boot("COMPAGNO", 15, [["ellyna", 10], ["salvinott", 10]]);
+
+async function tick(n, advance = false) {
+  for (let i = 0; i < n; i++) {
+    await A.evaluate((adv) => (adv ? window.__advance() : window.__tick()), advance);
+    await B.evaluate((adv) => (adv ? window.__advance() : window.__tick()), advance);
+    await new Promise((r) => setTimeout(r, 25));
+  }
+}
+
+// Preme A (KeyZ) incondizionatamente sulla pagina (per menu e conferme).
+async function pressA(page) {
+  await page.evaluate(() => {
+    document.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyZ", bubbles: true, cancelable: true }));
+    window.__tick();
+    document.dispatchEvent(new KeyboardEvent("keyup", { code: "KeyZ", bubbles: true, cancelable: true }));
+    for (let i = 0; i < 3; i++) window.__tick();
+  });
+}
+
+async function pressKey(page, code) {
+  await page.evaluate((c) => {
+    document.dispatchEvent(new KeyboardEvent("keydown", { code: c, bubbles: true, cancelable: true }));
+    window.__tick();
+    document.dispatchEvent(new KeyboardEvent("keyup", { code: c, bubbles: true, cancelable: true }));
+    for (let i = 0; i < 3; i++) window.__tick();
+  }, code);
+}
+
+async function waitFor(page, fn, timeoutMs, label, advance = false) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < timeoutMs) {
+    await tick(3, advance);
+    if (await page.evaluate(fn)) return true;
+  }
+  console.warn(`timeout: ${label}`);
+  return false;
+}
+
+let failures = 0;
+function check(ok, label) {
+  console.log(`${ok ? "PASS" : "FAIL"}  ${label}`);
+  if (!ok) failures += 1;
+}
+
+// ---- Check statico validazione team (gira anche offline) ----
+const staticChecks = await A.evaluate(async () => {
+  const { validateWireTeam } = await import("/src/net/duelproto.ts");
+  const { statsOf } = await import("/src/game/monster.ts");
+  const out = {};
+  out.badSpecies = validateWireTeam([{ s: "specie-inventata", l: 10, m: ["comizio"] }]) === null;
+  out.badLevel = validateWireTeam([{ s: "renzino", l: 99, m: ["giravolta"] }]) === null;
+  out.badMove = validateWireTeam([{ s: "renzino", l: 10, m: ["hackmove"] }]) === null;
+  out.illegalMove = validateWireTeam([{ s: "renzino", l: 10, m: ["spread"] }]) === null; // TECNO su CENTRO
+  out.tooMany = validateWireTeam(Array(7).fill({ s: "renzino", l: 10, m: ["giravolta"] })) === null;
+  out.dupes = validateWireTeam([{ s: "renzino", l: 10, m: ["giravolta", "giravolta"] }]) === null;
+  const ok = validateWireTeam([{ s: "renzino", l: 12, m: ["giravolta", "comizio"] }]);
+  out.rebuilt = ok !== null && ok[0].hp === statsOf(ok[0]).hp && ok[0].level === 12;
+  return out;
+});
+check(staticChecks.badSpecies, "validateWireTeam: specie inesistente respinta");
+check(staticChecks.badLevel, "validateWireTeam: livello 99 respinto");
+check(staticChecks.badMove && staticChecks.illegalMove, "validateWireTeam: mosse inventate/illegali respinte");
+check(staticChecks.tooMany && staticChecks.dupes, "validateWireTeam: 7+ mon / mosse duplicate respinti");
+check(staticChecks.rebuilt, "validateWireTeam: team legale ricostruito a HP pieni");
+
+// ---- Connessione P2P (SKIP dell'e2e se i relay sono giù) ----
+const connected = await waitFor(
+  A, () => window.__t.mp.connected && window.__t.mp.onlineCount === 1, 60000, "connessione P2P"
+);
+if (!connected) {
+  console.log("SKIP e2e duello: relay Nostr/WebRTC non raggiungibili (non bloccante).");
+  await browser.close();
+  process.exit(failures > 0 ? 1 : 0);
+}
+
+// Baseline localStorage (dopo i saveGame di boot, PRIMA del duello).
+const snap = (page) => page.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
+await tick(5);
+const lsA0 = await snap(A);
+const lsB0 = await snap(B);
+
+// ---- Handshake: A (host) invita via lobby, B accetta dal prompt mondo ----
+await A.evaluate(() => {
+  const { stack, input, state, mp, DuelLobbyScene } = window.__t;
+  const peerId = [...mp.remotes.keys()][0];
+  stack.push(new DuelLobbyScene(stack, input, state, { invitePeerId: peerId }));
+});
+const invited = await waitFor(
+  B,
+  () => Boolean(window.__t.stack.scenes?.[0]?.askMenu),
+  20000,
+  "prompt invito su B"
+);
+check(invited, "handshake: invito arriva e apre il prompt SÌ/NO su B");
+if (invited) {
+  await pressA(B); // SÌ -> accept
+}
+const inDuelA = await waitFor(A, () => Boolean(window.__duel), 20000, "PvpBattleScene su A");
+const inDuelB = await waitFor(B, () => Boolean(window.__duel), 20000, "PvpBattleScene su B");
+check(inDuelA && inDuelB, "handshake: entrambe le pagine entrano in PvpBattleScene");
+
+if (inDuelA && inDuelB) {
+  // Intro -> menu su entrambe (i messaggi avanzano via __advance).
+  const menuA = await waitFor(A, () => window.__duel?.mode === "menu", 30000, "menu su A", true);
+  const menuB = await waitFor(B, () => window.__duel?.mode === "menu", 30000, "menu su B", true);
+  check(menuA && menuB, "intro completata: menu azioni su entrambe");
+
+  // Turno 1: entrambe scelgono LOTTA -> prima mossa.
+  await pressA(A); // LOTTA
+  await pressA(A); // prima mossa
+  await pressA(B);
+  await pressA(B);
+  const turnA = await waitFor(A, () => window.__duel?.turn === 2 && window.__duel?.mode === "menu", 40000, "turno 1 su A", true);
+  const turnB = await waitFor(B, () => window.__duel?.turn === 2 && window.__duel?.mode === "menu", 40000, "turno 1 su B", true);
+  check(turnA && turnB, "turno 1 risolto su entrambe (host-autoritativo)");
+
+  const duelA = await A.evaluate(() => window.__duel);
+  const duelB = await B.evaluate(() => window.__duel);
+  const mirror =
+    JSON.stringify(duelA.host) === JSON.stringify(duelB.host) &&
+    JSON.stringify(duelA.guest) === JSON.stringify(duelB.guest);
+  check(mirror, `HP speculari sulle due pagine (host=${JSON.stringify(duelA.host)} guest=${JSON.stringify(duelA.guest)})`);
+  writeFileSync("artifacts/screens/duel.png", await A.locator("#shotcanvas").screenshot());
+  console.log("salvato duel.png");
+
+  // Resa da B: menu -> giù x2 -> RESA -> conferma SÌ.
+  await pressKey(B, "ArrowDown");
+  await pressKey(B, "ArrowDown");
+  await pressA(B); // RESA
+  await pressA(B); // conferma SÌ
+  const endedA = await waitFor(A, () => window.__duel?.finished === true, 30000, "fine duello su A", true);
+  const endedB = await waitFor(B, () => window.__duel?.finished === true, 30000, "fine duello su B", true);
+  check(endedA && endedB, "resa: il duello si chiude su entrambe");
+
+  // Ritorno al mondo: in cima allo stack deve restare la WorldScene.
+  const backA = await waitFor(A, () => window.__t.stack.top?.constructor?.name === "WorldScene", 15000, "mondo su A", true);
+  const backB = await waitFor(B, () => window.__t.stack.top?.constructor?.name === "WorldScene", 15000, "mondo su B", true);
+  check(backA && backB, "ritorno al mondo su entrambe (lobby e scene poppate)");
+
+  // INVARIANTE C9: il duello non tocca il save.
+  await tick(5);
+  check(lsA0 === (await snap(A)), "C9: localStorage di A IDENTICO prima/dopo il duello");
+  check(lsB0 === (await snap(B)), "C9: localStorage di B IDENTICO prima/dopo il duello");
+}
+
+await browser.close();
+if (failures > 0) {
+  console.error(`check-duel: ${failures} verifiche FALLITE`);
+  process.exit(1);
+}
+console.log("check-duel: OK");
+process.exit(0);

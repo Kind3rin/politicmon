@@ -112,7 +112,8 @@ function check(ok, label) {
 
 // ---- Check statico validazione team (gira anche offline) ----
 const staticChecks = await A.evaluate(async () => {
-  const { validateWireTeam } = await import("/src/net/duelproto.ts");
+  const { legalMoveForSpecies, sanitizeTurnlog, validateWireTeam } = await import("/src/net/duelproto.ts");
+  const { sanitizeTradeMon } = await import("/src/net/trade.ts");
   const { statsOf } = await import("/src/game/monster.ts");
   const out = {};
   out.badSpecies = validateWireTeam([{ s: "specie-inventata", l: 10, m: ["comizio"] }]) === null;
@@ -123,6 +124,32 @@ const staticChecks = await A.evaluate(async () => {
   out.dupes = validateWireTeam([{ s: "renzino", l: 10, m: ["giravolta", "giravolta"] }]) === null;
   const ok = validateWireTeam([{ s: "renzino", l: 12, m: ["giravolta", "comizio"] }]);
   out.rebuilt = ok !== null && ok[0].hp === statsOf(ok[0]).hp && ok[0].level === 12;
+  // Mosse pre-evoluzione conservate da evolve(): devono restare legali su
+  // TUTTA la catena (starter evoluti + tessere), per duello E scambio.
+  const preEvoCases = [
+    ["schleinix", "comizio"],
+    ["renzilla", "promessa"],
+    ["giorgiagon", "slogan"],
+    ["conteblob", "inciucio"],
+    ["marsrat", "memedoge"]
+  ];
+  out.preEvoLegal = preEvoCases.every(([s, m]) => legalMoveForSpecies(s, m));
+  out.preEvoTeam = validateWireTeam([{ s: "schleinix", l: 20, m: ["comizio", "sciopero"] }]) !== null;
+  const traded = sanitizeTradeMon({ speciesId: "renzilla", level: 20, moves: ["promessa", "comizio"] });
+  out.preEvoTrade = traded !== null && traded.moves.some((sl) => sl.id === "promessa");
+  // Mossa totalmente estranea alla catena: deve ancora FALLIRE.
+  out.foreignMove = legalMoveForSpecies("schleinix", "spread") === false;
+  // Turnlog dal filo: eventi malformati scartano l'INTERO log (niente crash).
+  out.tlBadSide = sanitizeTurnlog([{ e: "dmg", side: "x", hpAfter: 0, crit: false, typeMult: 1 }]) === null;
+  out.tlBadEvent = sanitizeTurnlog([{ e: "hackevent", side: "host" }]) === null;
+  out.tlBadHp = sanitizeTurnlog([{ e: "dmg", side: "host", hpAfter: "NaN?", crit: false, typeMult: 1 }]) === null;
+  out.tlNonArray = sanitizeTurnlog("non-un-array") === null;
+  const goodLog = sanitizeTurnlog([
+    { e: "move", side: "host", moveId: "comizio" },
+    { e: "dmg", side: "guest", hpAfter: 12, crit: false, typeMult: 1 },
+    { e: "end", winner: "host", reason: "ko" }
+  ]);
+  out.tlGood = goodLog !== null && goodLog.length === 3 && goodLog[1].hpAfter === 12;
   return out;
 });
 check(staticChecks.badSpecies, "validateWireTeam: specie inesistente respinta");
@@ -130,6 +157,15 @@ check(staticChecks.badLevel, "validateWireTeam: livello 99 respinto");
 check(staticChecks.badMove && staticChecks.illegalMove, "validateWireTeam: mosse inventate/illegali respinte");
 check(staticChecks.tooMany && staticChecks.dupes, "validateWireTeam: 7+ mon / mosse duplicate respinti");
 check(staticChecks.rebuilt, "validateWireTeam: team legale ricostruito a HP pieni");
+check(staticChecks.preEvoLegal, "legalMoveForSpecies: mosse pre-evoluzione accettate (starter evoluti e tessere)");
+check(staticChecks.preEvoTeam, "validateWireTeam: team con mosse pre-evoluzione VALIDO");
+check(staticChecks.preEvoTrade, "sanitizeTradeMon: mosse pre-evoluzione NON strippate nello scambio");
+check(staticChecks.foreignMove, "legalMoveForSpecies: mossa estranea alla catena ancora respinta");
+check(
+  staticChecks.tlBadSide && staticChecks.tlBadEvent && staticChecks.tlBadHp && staticChecks.tlNonArray,
+  "sanitizeTurnlog: turnlog malformato respinto in blocco (niente crash guest)"
+);
+check(staticChecks.tlGood, "sanitizeTurnlog: turnlog legale ricostruito intatto");
 
 // ---- Connessione P2P (SKIP dell'e2e se i relay sono giù) ----
 const connected = await waitFor(

@@ -26,7 +26,7 @@ import {
   applyEvent, applySwitch, aliveCount, makeDuelSim, otherSide, resolveTurn, usableMoves, type DuelSim
 } from "./duelsim";
 import {
-  DUEL_TURN_TIMEOUT, validateWireTeam,
+  DUEL_TURN_TIMEOUT, sanitizeDuelCmd, sanitizeTurnlog, validateWireTeam,
   type DuelCmd, type DuelEndReason, type DuelEvent, type DuelMsg, type DuelSide, type WireMon
 } from "../../net/duelproto";
 import { mp } from "../../net/mp";
@@ -170,12 +170,16 @@ export class PvpBattleScene implements Scene {
         if (this.mySide !== "host" || msg.turn !== this.turn) {
           return; // stale o ruolo sbagliato
         }
-        if (msg.cmd.kind === "switch" && (this.needsForced("guest") || this.peerForcedIdx !== null)) {
-          this.peerForcedIdx = msg.cmd.index;
+        const cmd = sanitizeDuelCmd(msg.cmd);
+        if (!cmd) {
+          return; // cmd malformato: ignorato, il timeout di turno fa il resto
+        }
+        if (cmd.kind === "switch" && (this.needsForced("guest") || this.peerForcedIdx !== null)) {
+          this.peerForcedIdx = cmd.index;
           this.tryResolveForced();
           return;
         }
-        this.peerCmd = msg.cmd;
+        this.peerCmd = cmd;
         this.tryResolveTurn();
         return;
       }
@@ -183,7 +187,15 @@ export class PvpBattleScene implements Scene {
         if (this.mySide !== "guest" || msg.turn !== this.turn) {
           return;
         }
-        this.enqueueTurnlog(msg.events);
+        // Log dal filo MAI fidato: un evento malformato scarterebbe in crash
+        // l'update loop (applyEvent per assegnazione). Protocollo rotto =
+        // fine a tavolino, senza applicare nulla.
+        const events = sanitizeTurnlog(msg.events);
+        if (!events) {
+          this.walkover("disconnect");
+          return;
+        }
+        this.enqueueTurnlog(events);
         return;
       }
       case "end": {

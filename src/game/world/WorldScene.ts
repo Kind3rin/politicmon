@@ -230,8 +230,12 @@ export class WorldScene implements Scene {
   private pendingDuelInvite: {
     peerId: string; duelId: string; nick: string; maxLevel: number; avg: number; at: number;
   } | null = null;
-  private duelWait: { duelId: string; peerId: string; nick: string; deadline: number } | null = null;
-  private duelStartMsg: { duelId: string; peerId: string; nick: string; hostTeam: unknown } | null = null;
+  // `team` = il wire team inviato nell'accept: la sim del guest DEVE usare
+  // quello (l'host simula su quello), non una ri-serializzazione del party.
+  private duelWait: { duelId: string; peerId: string; nick: string; deadline: number; team: WireMon[] } | null = null;
+  private duelStartMsg: {
+    duelId: string; peerId: string; nick: string; hostTeam: unknown; deadline: number; team: WireMon[];
+  } | null = null;
   private duelDeclineMsg: string | null = null;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
@@ -1172,7 +1176,16 @@ export class WorldScene implements Scene {
       return;
     }
     if (msg.type === "start") {
-      this.duelStartMsg = { duelId: wait.duelId, peerId, nick: wait.nick, hostTeam: msg.hostTeam };
+      // Start oltre la deadline dell'attesa: l'host è già andato in timeout,
+      // accodarlo creerebbe un duello fantasma (ri-check al consumo in pollDuel).
+      if (Date.now() > wait.deadline) {
+        mp.sendDuel({ v: 1, duelId: wait.duelId, type: "decline", reason: "TROPPO TARDI" }, peerId);
+        return;
+      }
+      this.duelStartMsg = {
+        duelId: wait.duelId, peerId, nick: wait.nick, hostTeam: msg.hostTeam,
+        deadline: wait.deadline, team: wait.team
+      };
     } else if (msg.type === "decline") {
       this.duelDeclineMsg = msg.reason ?? "";
     }
@@ -1194,6 +1207,14 @@ export class WorldScene implements Scene {
       const start = this.duelStartMsg;
       this.duelStartMsg = null;
       this.duelWait = null;
+      // Start stantio (consumato oltre la deadline: eravamo in lotta/menu):
+      // l'host è già in timeout, entrare ora sarebbe un duello fantasma.
+      if (Date.now() > start.deadline) {
+        mp.sendDuel({ v: 1, duelId: start.duelId, type: "decline", reason: "TROPPO TARDI" }, start.peerId);
+        mp.duelBusy = false;
+        this.say(["IL DUELLO NON PARTE. L'ALTRO SI È PERSO NEI CORRIDOI."]);
+        return true;
+      }
       const hostTeam = validateWireTeam(start.hostTeam);
       if (!hostTeam) {
         mp.sendDuel({ v: 1, duelId: start.duelId, type: "decline", reason: "SQUADRA NON VALIDA" }, start.peerId);
@@ -1201,7 +1222,10 @@ export class WorldScene implements Scene {
         this.say(["SQUADRA NON VALIDA: LA COMMISSIONE DI GARANZIA ANNULLA IL DUELLO."]);
         return true;
       }
-      const guestWire = serializeTeam(this.state.party);
+      // Il team del guest è QUELLO inviato nell'accept: l'host ha costruito la
+      // sim autoritativa su quello. Ri-serializzare il party corrente (magari
+      // cambiato da una lotta selvatica) farebbe divergere le due sim.
+      const guestWire = start.team;
       this.queueBattle(() => {
         this.stack.push(
           new PvpBattleScene(this.stack, this.input, {
@@ -1242,9 +1266,10 @@ export class WorldScene implements Scene {
         `${inv.nick} TI SFIDA! SQUADRA FINO AL LV.${inv.maxLevel}. ACCETTI?`,
         () => {
           mp.duelBusy = true; // in attesa dello start: altri inviti declinati
-          this.duelWait = { duelId: inv.duelId, peerId: inv.peerId, nick: inv.nick, deadline: Date.now() + 12000 };
+          const team = serializeTeam(this.state.party);
+          this.duelWait = { duelId: inv.duelId, peerId: inv.peerId, nick: inv.nick, deadline: Date.now() + 12000, team };
           mp.sendDuel(
-            { v: 1, duelId: inv.duelId, type: "accept", nick: loadNick() || "ANONIMO", team: serializeTeam(this.state.party) },
+            { v: 1, duelId: inv.duelId, type: "accept", nick: loadNick() || "ANONIMO", team },
             inv.peerId
           );
         },

@@ -78,15 +78,34 @@ export function maxLevel(wire: WireMon[]): number {
   return wire.reduce((max, w) => Math.max(max, w.l), 0);
 }
 
-// Stessa regola di canLearnMove (monster.ts) ma senza istanza Monster:
-// mossa nel learnset della specie oppure tipo condiviso.
+// Mappa inversa delle evoluzioni (id evoluto -> id della pre-evoluzione),
+// costruita una volta da SPECIES[].evolutions: serve a risalire la catena.
+const PRE_EVO: Record<string, string> = {};
+for (const sp of Object.values(SPECIES)) {
+  for (const rule of sp.evolutions ?? []) {
+    PRE_EVO[rule.id] = sp.id;
+  }
+}
+
+// Stessa regola di canLearnMove (monster.ts) ma senza istanza Monster: mossa
+// nel learnset oppure tipo condiviso. evolve() conserva mon.moves, quindi le
+// mosse legali per QUALSIASI pre-evoluzione della catena restano legittime
+// (es. SCHLEINIX con COMIZIO imparato da ELLYNA).
 export function legalMoveForSpecies(speciesId: string, moveId: string): boolean {
-  const species = SPECIES[speciesId];
   const move = MOVES[moveId];
-  if (!species || !move) {
+  if (!move) {
     return false;
   }
-  return species.learnset.some(([, id]) => id === moveId) || species.types.includes(move.type);
+  const seen = new Set<string>();
+  let species = SPECIES[speciesId];
+  while (species && !seen.has(species.id)) {
+    seen.add(species.id);
+    if (species.learnset.some(([, id]) => id === moveId) || species.types.includes(move.type)) {
+      return true;
+    }
+    species = SPECIES[PRE_EVO[species.id] ?? ""];
+  }
+  return false;
 }
 
 // Valida e RICOSTRUISCE il team remoto (o il proprio, per simmetria: entrambi
@@ -125,4 +144,146 @@ export function validateWireTeam(wire: unknown): Monster[] | null {
     team.push(mon);
   }
   return team;
+}
+
+const DUEL_SIDES = new Set<string>(["host", "guest"]);
+const STAT_KEYS = new Set<string>(["atk", "def", "spc", "spd"]);
+const STATUS_IDS = new Set<string>(["indagato", "scandalo", "gaffe"]);
+const END_REASONS = new Set<string>(["ko", "forfeit", "timeout", "disconnect", "draw"]);
+
+function clampInt(v: unknown, min: number, max: number): number | null {
+  const n = Number(v);
+  if (!Number.isFinite(n)) {
+    return null;
+  }
+  return Math.max(min, Math.min(max, Math.floor(n)));
+}
+
+// Valida e RICOSTRUISCE il comando del guest (host-side). null = malformato:
+// il chiamante lo ignora (il timeout di turno fa il resto).
+export function sanitizeDuelCmd(raw: unknown): DuelCmd | null {
+  const cmd = raw as { kind?: unknown; moveId?: unknown; index?: unknown } | null;
+  if (!cmd || typeof cmd !== "object") {
+    return null;
+  }
+  if (cmd.kind === "forfeit") {
+    return { kind: "forfeit" };
+  }
+  if (cmd.kind === "move" && typeof cmd.moveId === "string" && MOVES[cmd.moveId]) {
+    return { kind: "move", moveId: cmd.moveId };
+  }
+  if (cmd.kind === "switch") {
+    const index = clampInt(cmd.index, 0, DUEL_TEAM_MAX - 1);
+    return index === null ? null : { kind: "switch", index };
+  }
+  return null;
+}
+
+// Valida e RICOSTRUISCE il turnlog dal filo (guest-side): il log viene
+// applicato per assegnazione dentro l'update loop, quindi un evento malformato
+// (side inventato, hpAfter non numerico...) congelerebbe il client. Un solo
+// evento invalido scarta l'INTERO log: protocollo rotto, il chiamante chiude.
+export function sanitizeTurnlog(raw: unknown): DuelEvent[] | null {
+  if (!Array.isArray(raw) || raw.length > 200) {
+    return null;
+  }
+  const out: DuelEvent[] = [];
+  for (const item of raw) {
+    const ev = item as { [k: string]: unknown } | null;
+    if (!ev || typeof ev !== "object") {
+      return null;
+    }
+    const side = String(ev.side);
+    const hpAfter = clampInt(ev.hpAfter, 0, 9999);
+    switch (ev.e) {
+      case "move":
+        if (!DUEL_SIDES.has(side) || typeof ev.moveId !== "string" || !MOVES[ev.moveId]) {
+          return null;
+        }
+        out.push({ e: "move", side: side as DuelSide, moveId: ev.moveId });
+        break;
+      case "miss":
+      case "faint":
+      case "gaffeEnd":
+        if (!DUEL_SIDES.has(side)) {
+          return null;
+        }
+        out.push({ e: ev.e, side: side as DuelSide });
+        break;
+      case "blocked":
+        if (!DUEL_SIDES.has(side)) {
+          return null;
+        }
+        out.push({ e: "blocked", side: side as DuelSide, why: "indagato" });
+        break;
+      case "gaffeSelf":
+      case "drain":
+      case "recoil":
+      case "eot":
+        if (!DUEL_SIDES.has(side) || hpAfter === null) {
+          return null;
+        }
+        out.push({ e: ev.e, side: side as DuelSide, hpAfter });
+        break;
+      case "dmg": {
+        const typeMult = Number(ev.typeMult);
+        if (!DUEL_SIDES.has(side) || hpAfter === null || !Number.isFinite(typeMult)) {
+          return null;
+        }
+        out.push({
+          e: "dmg", side: side as DuelSide, hpAfter,
+          crit: Boolean(ev.crit), typeMult: Math.max(0, Math.min(4, typeMult))
+        });
+        break;
+      }
+      case "heal":
+        if (!DUEL_SIDES.has(side) || hpAfter === null) {
+          return null;
+        }
+        out.push({ e: "heal", side: side as DuelSide, hpAfter, cured: Boolean(ev.cured) });
+        break;
+      case "stat": {
+        const stages = clampInt(ev.stages, -6, 6);
+        const resulting = clampInt(ev.resulting, -6, 6);
+        if (!DUEL_SIDES.has(side) || !STAT_KEYS.has(String(ev.key)) || stages === null || resulting === null) {
+          return null;
+        }
+        out.push({ e: "stat", side: side as DuelSide, key: ev.key as StatKey, stages, resulting });
+        break;
+      }
+      case "status":
+        if (!DUEL_SIDES.has(side) || !STATUS_IDS.has(String(ev.id))) {
+          return null;
+        }
+        out.push({ e: "status", side: side as DuelSide, id: ev.id as StatusId });
+        break;
+      case "gaffeStart": {
+        const turns = clampInt(ev.turns, 1, 9);
+        if (!DUEL_SIDES.has(side) || turns === null) {
+          return null;
+        }
+        out.push({ e: "gaffeStart", side: side as DuelSide, turns });
+        break;
+      }
+      case "switch": {
+        const index = clampInt(ev.index, 0, DUEL_TEAM_MAX - 1);
+        if (!DUEL_SIDES.has(side) || index === null) {
+          return null;
+        }
+        out.push({ e: "switch", side: side as DuelSide, index });
+        break;
+      }
+      case "end": {
+        const winner = ev.winner === null ? null : String(ev.winner);
+        if ((winner !== null && !DUEL_SIDES.has(winner)) || !END_REASONS.has(String(ev.reason))) {
+          return null;
+        }
+        out.push({ e: "end", winner: winner as DuelSide | null, reason: ev.reason as DuelEndReason });
+        break;
+      }
+      default:
+        return null;
+    }
+  }
+  return out;
 }

@@ -134,7 +134,9 @@ export function wandererLevel(state: GameState): number {
   // player all'infinito: così sovra-livellando un'area la si può "spianare" e
   // si SENTE di essere diventati più forti (prima il mondo scalava con te).
   const floor = 4 + state.badges.length * 6;
-  const cap = 8 + state.badges.length * 9; // tetto per regione
+  // Post-game il tetto regionale si alza a 50 (= level cap del giocatore):
+  // senza, i vaganti resterebbero a lv<=35 contro party lv 45+ sull'OFFSHORE.
+  const cap = state.flags["garante-beaten"] ? 50 : 8 + state.badges.length * 9;
   return Math.max(floor, Math.min(cap, partyMax - 1));
 }
 

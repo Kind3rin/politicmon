@@ -30,7 +30,9 @@ import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
-import { addSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
+import { addSondaggi, bumpSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
+import { buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
+import { buildDailyTrainer, dailyRewardItem, localDateKey } from "../daily";
 import { checkAchievements } from "../achievements";
 import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } from "../vehicles";
 import { isGuideOn } from "../../engine/controls";
@@ -62,6 +64,15 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
       "Sei a CAPUT MUNDI, il cuore del potere.",
       "Dietro l'angolo c'è il CASINÒ DI PALAZZO: SLOT, FICHE e un certo CLUB...",
       "Si gioca consenso a soldi. Cerca la porta tra i palazzi, verso destra."
+    ]
+  },
+  // Il flag hint-offshore è anche l'isDone della quest ACQUE INTERNAZIONALI.
+  offshore: {
+    flag: "hint-offshore",
+    lines: [
+      "Sei nel PARADISO OFFSHORE: sabbia bianca e conti opachi.",
+      "Qui i POLITICMON sono fortissimi: lv 38+. Il BAR LIDO CAYMAN rimette in sesto, gratis.",
+      "Sull'altopiano a nord-est qualcuno custodisce un segreto contabile..."
     ]
   }
 };
@@ -247,6 +258,14 @@ export class WorldScene implements Scene {
 
   private loadMap(mapId: string): void {
     this.map = MAPS[mapId];
+    // ENCORE di BERLUSCONIX: il flag che mostra l'NPC magnate-encore va
+    // RICALCOLATO a ogni ingresso al casinò (se nel frattempo l'hai eletto
+    // altrove, l'encore sparisce; visibleNpcs è flag-driven).
+    if (mapId === "casino") {
+      this.state.flags["berlu-encore-ready"] = Boolean(
+        this.state.flags["garante-beaten"] && this.state.dex["berlusconix"] !== "caught"
+      );
+    }
     this.npcs = this.map.npcs.map((npc) => this.makeRuntimeNpc(npc));
     // Cambiando mappa la vecchia lista NPC viene sostituita: scarta il ref allo
     // sprite del PG vagante (altrimenti puntereebbe a un NPC non più disegnato).
@@ -284,7 +303,22 @@ export class WorldScene implements Scene {
     // chiamano loadMap, ma prima nessuno salvava — chiudendo l'app si tornava a
     // un punto vecchio, spesso su un'altra mappa. saveGame è try/catch: sicuro.
     saveGame(this.state);
+    // SFIDA DEL GIORNO disponibile: BREAKING NEWS all'arrivo a Caput Mundi
+    // (toast non bloccante, una volta al giorno per sessione).
+    const today = localDateKey();
+    if (
+      mapId === "capitale" &&
+      this.state.party.length > 0 &&
+      this.state.lastDailyDate !== today &&
+      this.dailyBannerDay !== today
+    ) {
+      this.dailyBannerDay = today;
+      this.showBanner("BREAKING NEWS!", "SFIDA DEL GIORNO IN PIAZZA", "#e8c84a");
+    }
   }
+
+  // Giorno (locale) in cui il toast della SFIDA DEL GIORNO è già stato mostrato.
+  private dailyBannerDay = "";
 
   // Crea lo stato runtime di un NPC. Decide se può vagare: esplicito via
   // `wander`, oppure di default per gli NPC "ambientali" (niente trainer, ruolo
@@ -293,7 +327,7 @@ export class WorldScene implements Scene {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
       !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift &&
-      !npc.legendary;
+      !npc.legendary && !npc.daily;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -702,10 +736,15 @@ export class WorldScene implements Scene {
           foeTeam: team,
           trainer: def,
           onEnd: (result) => {
-            // I PG vaganti (id "wander:*") restano ripetibili: non li
-            // registriamo tra i trainer sconfitti.
-            if (result === "win" && !def.id.startsWith("wander:")) {
-              this.state.defeatedTrainers.push(def.id);
+            // I PG vaganti ("wander:*") e la SFIDA DEL GIORNO ("daily:*")
+            // restano ripetibili: mai in defeatedTrainers. La guardia
+            // includes() evita duplicati alla vittoria di una RIVINCITA;
+            // markRematchClock riavvia il cooldown a OGNI vittoria reale.
+            if (result === "win" && !def.id.startsWith("wander:") && !def.id.startsWith("daily:")) {
+              if (!this.state.defeatedTrainers.includes(def.id)) {
+                this.state.defeatedTrainers.push(def.id);
+              }
+              markRematchClock(this.state, def.id);
             }
             // Rimuovi lo sprite temporaneo del PG vagante a fine lotta (qualsiasi
             // esito): la vittoria su un "wander:*" non ricarica la mappa, quindi
@@ -878,17 +917,43 @@ export class WorldScene implements Scene {
     npc.currentFacing =
       npc.x > pos.x ? "left" : npc.x < pos.x ? "right" : npc.y > pos.y ? "up" : "down";
 
-    if (npc.trainerId && !this.state.defeatedTrainers.includes(npc.trainerId)) {
-      if (this.state.party.length === 0) {
-        this.say(["Torna quando avrai un POLITICMON.", "Qui si combatte, mica si dialoga."]);
+    if (npc.trainerId) {
+      const avail = rematchAvailability(this.state, npc.trainerId);
+      if (avail === "first") {
+        // Primo scontro: flusso invariato bit-per-bit.
+        if (this.state.party.length === 0) {
+          this.say(["Torna quando avrai un POLITICMON.", "Qui si combatte, mica si dialoga."]);
+          return;
+        }
+        this.startTrainerFight(this.trainerForId(npc.trainerId));
         return;
       }
-      this.startTrainerFight(this.trainerForId(npc.trainerId));
-      return;
+      if (avail === "ready") {
+        // RIVINCITA pronta: prompt SÌ/NO, mai re-aggro a vista.
+        if (this.state.party.length === 0) {
+          this.say(["Torna quando avrai un POLITICMON.", "Qui si combatte, mica si dialoga."]);
+          return;
+        }
+        const def = this.trainerForId(npc.trainerId);
+        this.askYesNo(`${def.name}: RIVINCITA?`, () => {
+          this.startTrainerFight(buildRematchDef(this.state, def));
+        });
+        return;
+      }
+      if (avail === "cooldown") {
+        this.say([...(npc.lines ?? []), "Ripassa tra un po': la RIVINCITA si prepara camminando."]);
+        return;
+      }
+      // "never": fall-through al dialogo post-sconfitta esistente.
     }
 
     if (npc.transport) {
       this.openTransport();
+      return;
+    }
+
+    if (npc.daily) {
+      this.runDailyChallenge();
       return;
     }
 
@@ -995,6 +1060,52 @@ export class WorldScene implements Scene {
     if (npc.lines && npc.lines.length > 0) {
       this.say(npc.lines);
     }
+  }
+
+  // ---- SFIDA DEL GIORNO (OPINIONISTA PERPETUA a Caput Mundi) ----
+  // Una sfida al giorno reale: team deterministico dalla data (daily.ts),
+  // lastDailyDate scritta SOLO alla vittoria (data locale, mai UTC) — la
+  // sconfitta lascia il retry libero in giornata. Il dateKey è catturato
+  // ALL'AVVIO: la mezzanotte durante la battaglia non regala un secondo win.
+  private runDailyChallenge(): void {
+    const key = localDateKey();
+    if (this.state.lastDailyDate === key) {
+      this.say([
+        "OPINIONISTA PERPETUA: per oggi ho già chiuso la rassegna.",
+        "Domani nuovo giorno, nuovo panel, nuovo premio."
+      ]);
+      return;
+    }
+    if (this.state.party.length === 0) {
+      this.say(["Torna quando avrai un POLITICMON.", "Il panel non ammette sedie vuote."]);
+      return;
+    }
+    this.say(
+      [
+        "OPINIONISTA PERPETUA: ogni giorno un dibattito, ogni giorno un vincitore.",
+        "Oggi il tema è: TU. Panel di 3 ospiti, livello da prima serata."
+      ],
+      () => {
+        this.askYesNo("ACCETTI LA SFIDA DEL GIORNO?", () => {
+          const def = buildDailyTrainer(this.state, key);
+          this.startTrainerBattle(def, (result) => {
+            if (result !== "win") {
+              return;
+            }
+            this.state.lastDailyDate = key;
+            const reward = dailyRewardItem(key);
+            this.state.bag[reward.itemId] = (this.state.bag[reward.itemId] ?? 0) + reward.qty;
+            const { value, milestone } = bumpSondaggi(this.state, 4);
+            saveGame(this.state);
+            this.say([
+              `PREMIO DEL GIORNO: ${ITEMS[reward.itemId].name} x${reward.qty}!`,
+              `SONDAGGI al ${value}%.`,
+              ...(milestone ? [milestone] : [])
+            ]);
+          });
+        });
+      }
+    );
   }
 
   // ---- Multiplayer: scambio e duello con un giocatore remoto ----
@@ -1245,13 +1356,30 @@ export class WorldScene implements Scene {
           this.loadMap(this.state.pos.mapId); // rimuove l'NPC battuto dalla mappa
           return;
         }
-        if (def.id === "emittenza" && !this.state.flags["legend-berlusconix-gone"]) {
+        if (
+          def.id === "emittenza" &&
+          !this.state.flags["legend-berlusconix-gone"] &&
+          // La RIVINCITA non deve rideclamare l'evento leggendario già annunciato.
+          !this.state.flags["legend-berlusconix-ready"]
+        ) {
           this.state.flags["legend-berlusconix-ready"] = true;
           saveGame(this.state);
           this.say([
             "Le luci dello STUDIO 5 cambiano colore.",
             "Dal maxischermo arriva una sigla impossibile da mandare in pensione.",
             "Qualcosa di leggendario ti aspetta accanto alla regia."
+          ]);
+          return;
+        }
+        if (def.id === "tesoriere" && !this.state.flags["offshore-beaten"]) {
+          this.state.flags["offshore-beaten"] = true;
+          addSondaggi(this.state, 8);
+          saveGame(this.state);
+          this.say([
+            "IL TESORIERE si dissolve in una nuvola di ricevute non emesse.",
+            "'I conti tornano sempre... a qualcun altro.'",
+            "I fondi neri riemergono: i giornali parlano di MIRACOLO CONTABILE.",
+            `SONDAGGI al ${this.state.sondaggi}%.`
           ]);
           return;
         }
@@ -1530,8 +1658,9 @@ export class WorldScene implements Scene {
     if (targetMap === this.map.id) {
       return null;
     }
-    // Mappa città -> direzione cardinale verso la prossima tappa a nord.
-    const northChain = ["borgo", "mediopoli", "eurotown", "capitale"];
+    // Mappa città -> direzione cardinale verso la prossima tappa a nord
+    // (route incluse: senza, la freccia GUIDA spariva sui percorsi).
+    const northChain = ["borgo", "route1", "mediopoli", "route2", "eurotown", "route3", "capitale"];
     const here = northChain.indexOf(this.map.id);
     const there = northChain.indexOf(targetMap);
     if (here !== -1 && there !== -1) {
@@ -1633,6 +1762,10 @@ export class WorldScene implements Scene {
 
     // Multiplayer: comunica la nuova posizione agli altri sulla mappa.
     mp.sendMove(pos.x, pos.y, pos.facing);
+
+    // Contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA. NON
+    // sostituisce stepCount (privato, la cura del Min. Salute usa il suo %6).
+    this.state.stepsTotal += 1;
 
     // Sanità di prossimità: il Min. Salute fa recuperare 1 PV ogni 6 passi.
     this.stepCount += 1;
@@ -2282,6 +2415,11 @@ export class WorldScene implements Scene {
       const npcWalkCycle = npcMoving ? Math.floor(this.time * 8) % 4 : 0;
       const npcImg = npcImage(npc.pal, npc.currentFacing, npcWalkCycle, npcMoving);
       const exclaim = this.exclaimNpc === npc;
+      // RIVINCITA pronta: "!" dorato sopra il trainer (scopribilità, audit C12).
+      const rematchReady =
+        !exclaim &&
+        Boolean(npc.trainerId) &&
+        rematchAvailability(this.state, npc.trainerId!) === "ready";
       tall.push({
         baseY: npc.dispY + TILE,
         draw: () => {
@@ -2294,6 +2432,9 @@ export class WorldScene implements Scene {
           if (exclaim) {
             screen.panel(nx + 2, ny - 13, 12, 13);
             screen.text("!", nx + 5, ny - 10, INK);
+          } else if (rematchReady) {
+            screen.panel(nx + 2, ny - 13, 12, 13);
+            screen.text("!", nx + 5, ny - 10, "#c89a1a");
           }
         }
       });

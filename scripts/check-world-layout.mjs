@@ -72,6 +72,7 @@ const runtimeProblems = await page.evaluate(async () => {
     state.flags["intro-done"] = true;
     state.flags["veh-traghetto"] = true;
     state.flags["hint-casino"] = true;
+    state.flags["hint-offshore"] = true;
     for (const achievement of ACHIEVEMENTS) {
       state.flags[`ach:${achievement.id}`] = true;
     }

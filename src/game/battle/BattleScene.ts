@@ -44,8 +44,8 @@ export interface BattleOptions {
   onEnd: (result: BattleResult) => void;
 }
 
-// Boss narrativi: tema musicale dedicato.
-const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano"];
+// Boss narrativi: tema musicale dedicato (e IA boss-grade in computeAiProfile).
+const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano", "tesoriere"];
 
 function battleMusic(opts: BattleOptions): string {
   if (opts.music) {

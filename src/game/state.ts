@@ -29,10 +29,14 @@ export interface GameState {
   boxed: Monster[]; // CIRCOLO DI PARTITO: mostri catturati con la squadra piena (box PC)
   lastBar: string; // id dell'ultima città-con-bar visitata: respawn al KO totale
   zoneRewardsClaimed: string[]; // id zone Dex già ricompensate al 100% catture
+  stepsTotal: number; // contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA
+  trainerRematch: Record<string, number>; // trainerId -> stepsTotal all'ultima vittoria (cooldown rematch)
+  lastDailyDate: string; // data LOCALE YYYY-MM-DD dell'ultima SFIDA DEL GIORNO vinta ("" = mai)
 }
 
-export const SAVE_KEY = "politicmon-save-v9";
+export const SAVE_KEY = "politicmon-save-v10";
 const LEGACY_KEYS = [
+  "politicmon-save-v9",
   "politicmon-save-v8",
   "politicmon-save-v7",
   "politicmon-save-v6",
@@ -61,7 +65,10 @@ export function newGameState(): GameState {
     chips: 0,
     boxed: [],
     lastBar: "borgo",
-    zoneRewardsClaimed: []
+    zoneRewardsClaimed: [],
+    stepsTotal: 0,
+    trainerRematch: {},
+    lastDailyDate: ""
   };
 }
 
@@ -141,6 +148,13 @@ function parseState(raw: string | null): GameState | null {
     parsed.boxed = Array.isArray(parsed.boxed) ? parsed.boxed : [];
     parsed.lastBar = typeof parsed.lastBar === "string" ? parsed.lastBar : "borgo";
     parsed.zoneRewardsClaimed = Array.isArray(parsed.zoneRewardsClaimed) ? parsed.zoneRewardsClaimed : [];
+    parsed.stepsTotal =
+      typeof parsed.stepsTotal === "number" && !Number.isNaN(parsed.stepsTotal) ? parsed.stepsTotal : 0;
+    parsed.trainerRematch =
+      parsed.trainerRematch && typeof parsed.trainerRematch === "object" && !Array.isArray(parsed.trainerRematch)
+        ? parsed.trainerRematch
+        : {};
+    parsed.lastDailyDate = typeof parsed.lastDailyDate === "string" ? parsed.lastDailyDate : "";
 
     // Rete di sicurezza sugli HP: un mon caricato non deve avere hp invalido, e
     // il party non può essere interamente svenuto al load. Succede se l'app

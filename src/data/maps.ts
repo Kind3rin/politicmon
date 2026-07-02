@@ -35,6 +35,7 @@ export interface NpcDef {
   hideIfFlag?: string;
   setFlag?: string; // flag impostato quando ci parli (per le quest "hai parlato con...")
   wander?: boolean; // se true, l'NPC cammina attorno alla sua posizione iniziale
+  daily?: boolean; // SFIDA DEL GIORNO: apre la sfida quotidiana (e non vaga mai)
 }
 
 export interface WarpDef {
@@ -338,7 +339,7 @@ const CAPITALE_TILES = [
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..mmddmm...====..mmddmm...TT",
   "TT..========================TT",
-  "TT....=..W...====...Y==.....TT",
+  "TT....=..W..s====...Y==.....TT",
   "TT..========================TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT.HHHH~~....====....~~vvvv.TT",
@@ -396,6 +397,31 @@ const STRETTO_TILES = [
   "wwwwwwwwwwwwKJjjJKwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwjjjjwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+];
+
+// ---------------------------------------------------- PARADISO OFFSHORE
+// Isola post-game (flag garante-beaten) a est dello STRETTO: ci si arriva col
+// TRAGHETTO dalle boe. Molo a ovest (j), bar LIDO CAYMAN al centro-nord,
+// due campi d'erba alta e un ALTOPIANO di scogli (^) a nord-est con un'unica
+// scala (l): in cima custodisce i conti IL TESORIERE FANTASMA.
+const OFFSHORE_TILES = [
+  "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwzzzzzzzzzzzzzzzzzzzzzzzzzww",
+  "wwwz.........eQQe...^^^^^^^^ww",
+  "wwwz.~~~~~...mddm...^......^ww",
+  "wwwz.~~~~~...====...^......^ww",
+  "wwwz.~~~~~....==....^......^ww",
+  "wwwz.~~~~~....==....^^^l^^^^ww",
+  "wwwz=====================..zww",
+  "wwjjjzs....................zww",
+  "wwjjjz.....................zww",
+  "wwwz.....TT.......~~~~~....zww",
+  "wwwz..............~~~~~....zww",
+  "wwwz....TT........~~~~~....zww",
+  "wwwzzzzzzzzzzzzzzzzzzzzzzzzzww",
+  "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 ];
 
@@ -634,7 +660,12 @@ function barMap(id: string, name: string, city: string, doorX: number, doorY: nu
     npcs: [
       {
         id: `${id}-barista`, pal: "barista", x: 5, y: 3, facing: "down", healer: true,
-        lines: [`${name}: benvenuto. Il banco offre, la squadra si riprende.`]
+        lines: [
+          `${name}: benvenuto. Il banco offre, la squadra si riprende.`,
+          // Scopribilità RIVINCITE (audit C12): il barista spiega il "!" dorato.
+          "Voci dal bancone: gli sfidanti battuti si allenano per la RIVINCITA.",
+          "Quando vedi il '!' dorato sopra la testa di uno di loro, riparlaci."
+        ]
       },
       {
         id: `${id}-pc`, pal: "aide", x: 9, y: 3, facing: "down", box: true,
@@ -1345,6 +1376,11 @@ export const MAPS: Record<string, MapDef> = {
         // Cartello dell'IMBARCO (molo a 12,19): la via per la Sicilia/STRETTO.
         x: 10, y: 19,
         lines: ["IMBARCO PER LA SICILIA", "Col MOLO attraversi il mare fino allo STRETTO.", "Serve la MN TRAGHETTO: chiedi al MARINAIO."]
+      },
+      {
+        // Cartello della SFIDA DEL GIORNO, accanto all'OPINIONISTA in piazza.
+        x: 12, y: 13,
+        lines: ["SFIDA DEL GIORNO", "Un panel nuovo ogni 24 ore. Vince chi resta in onda.", "Premio quotidiano: fondi e rifornimenti. Una sola diretta al giorno."]
       }
     ],
     pickups: [
@@ -1449,6 +1485,12 @@ export const MAPS: Record<string, MapDef> = {
           "Story, reel, dirette: il consenso oggi si fa col telefono.",
           "Tu invece giri a piedi nell'erba alta come nel 2005. Tenero."
         ]
+      },
+      {
+        // SFIDA DEL GIORNO: 1 dibattito al giorno reale, team deterministico
+        // dalla data. daily:true la esclude dall'ambient movement (non vaga).
+        id: "opinionista-daily", pal: "journalist", x: 11, y: 13, facing: "down", daily: true,
+        lines: ["OPINIONISTA PERPETUA: il dibattito è il mio habitat naturale."]
       }
     ]
   },
@@ -1593,6 +1635,27 @@ export const MAPS: Record<string, MapDef> = {
       {
         id: "habitue", pal: "journalist", x: 7, y: 3, facing: "left",
         lines: ["Vengo qui da vent'anni.", "Ho perso una legislatura intera alla roulette. Rifarei tutto."]
+      },
+      {
+        // ENCORE di BERLUSCONIX: seconda chance post-game se non è mai stato
+        // eletto. Il flag berlu-encore-ready è RICALCOLATO a ogni ingresso al
+        // casinò (WorldScene.loadMap): garante-beaten E dex senza berlusconix.
+        id: "magnate-encore", pal: "boss", x: 2, y: 3, facing: "right",
+        showIfFlag: "berlu-encore-ready",
+        hideIfFlag: "legend-berlusconix-encore-gone",
+        legendary: {
+          speciesId: "berlusconix",
+          level: 50,
+          flag: "legend-berlusconix-encore-gone",
+          lines: [
+            "Nel privé, dietro il velluto rosso, una risata inconfondibile.",
+            "'Ah, il nuovo CAMPIONE! Le racconto una barzelletta... anzi no: gliela DIMOSTRO.'",
+            "BERLUSCONIX sale sul tavolo verde: ultimo giro, posta massima."
+          ],
+          afterRunLines: ["'Torni pure, il banco non chiude mai per gli amici.'"],
+          afterGoneLines: ["Il privé è vuoto. Resta solo un profumo di sigaro e share."]
+        },
+        lines: ["Il tavolo VIP è riservato. Torna quando conti qualcosa."]
       }
     ]
   },
@@ -1637,6 +1700,18 @@ export const MAPS: Record<string, MapDef> = {
       // di entrare). Si salpa col TRAGHETTO/AUTO BLU che si possiede già qui.
       { x: 13, y: 6, toMap: "mare", toX: 8, toY: 12, facing: "up" },
       { x: 14, y: 6, toMap: "mare", toX: 9, toY: 12, facing: "up" },
+      // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
+      // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
+      {
+        x: 28, y: 10, toMap: "offshore", toX: 3, toY: 9, facing: "right",
+        requiresFlag: "garante-beaten",
+        lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"]
+      },
+      {
+        x: 28, y: 11, toMap: "offshore", toX: 3, toY: 10, facing: "right",
+        requiresFlag: "garante-beaten",
+        lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"]
+      },
       { x: 10, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 11, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 20, y: 2, toMap: "covo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
@@ -1736,6 +1811,92 @@ export const MAPS: Record<string, MapDef> = {
           "IL CAPITANO: lo senti? Il profumo della SICILIA. Praticamente fatta.",
           "Il ponte si farà. Intanto ho fatto il selfie dal pilone: 49 milioni di like.",
           "Anzi no, 49 e basta. Ma torneranno. Tornano sempre."
+        ]
+      },
+      {
+        // CONTABILE PENTITO: post-game, svela la rotta per il PARADISO OFFSHORE.
+        id: "contabile-pentito", pal: "aide", x: 25, y: 7, facing: "left",
+        showIfFlag: "garante-beaten",
+        lines: [
+          "Shhh. Ero il CONTABILE di... tutti, in pratica.",
+          "A est, oltre le boe, c'è un'isola che non esiste su nessun catasto: il PARADISO OFFSHORE.",
+          "Col TRAGHETTO ci arrivi. Io non ti ho detto niente. Anzi, non ci siamo mai visti."
+        ]
+      }
+    ]
+  },
+
+  // PARADISO OFFSHORE: isola post-game a est dello STRETTO (boe con
+  // requiresFlag garante-beaten). Wild lv 38-45 con le prime catture selvatiche
+  // di telecrate/pontimax/conteblob, bar-healer LIDO CAYMAN e il mini-boss
+  // IL TESORIERE FANTASMA sull'altopiano (flag offshore-beaten).
+  offshore: {
+    id: "offshore",
+    name: "PARADISO OFFSHORE",
+    tiles: OFFSHORE_TILES,
+    outdoor: true,
+    music: "stretto",
+    warps: [
+      // Punta del molo: ritorno in TRAGHETTO allo STRETTO (approdo sul pilone
+      // del ponte, MAI su acqua).
+      { x: 2, y: 9, toMap: "stretto", toX: 14, toY: 8, facing: "up" },
+      { x: 2, y: 10, toMap: "stretto", toX: 14, toY: 8, facing: "up" },
+      // BAR "LIDO CAYMAN": porte sui 2 tile centrali dell'edificio.
+      { x: 14, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
+      { x: 15, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
+    ],
+    encounterRate: 0.18,
+    // Post-game lv 38-45 (mai oltre il level cap 50 del giocatore, audit C2).
+    // Prime catture selvatiche: telecrate, pontimax, conteblob (zona Dex).
+    encounters: [
+      { speciesId: "telecrate", weight: 26, minLv: 38, maxLv: 42 },
+      { speciesId: "trumpon", weight: 18, minLv: 39, maxLv: 44 },
+      { speciesId: "putingrad", weight: 14, minLv: 39, maxLv: 44 },
+      { speciesId: "xipanda", weight: 14, minLv: 39, maxLv: 44 },
+      { speciesId: "muskrat", weight: 12, minLv: 38, maxLv: 41 },
+      { speciesId: "pontimax", weight: 10, minLv: 42, maxLv: 45 },
+      { speciesId: "conteblob", weight: 5, minLv: 40, maxLv: 44 },
+      { speciesId: "mattarellux", weight: 1, minLv: 45, maxLv: 45 }
+    ],
+    signs: [
+      {
+        x: 6, y: 9,
+        lines: [
+          "PARADISO OFFSHORE",
+          "Capitali? Mai visti. Chiedere al mare.",
+          "Pressione fiscale: 0%. Pressione dei SONDAGGI: altissima."
+        ]
+      }
+    ],
+    pickups: [
+      { id: "pk-off-mojito", x: 10, y: 2, itemId: "mojito", qty: 1 },
+      { id: "pk-off-schedona", x: 21, y: 4, itemId: "schedona", qty: 2 },
+      { id: "pk-off-tessera", x: 26, y: 6, itemId: "tessera", qty: 1, hidden: true },
+      { id: "pk-off-dir", x: 7, y: 5, itemId: "dirWhatever", qty: 1, hidden: true }
+    ],
+    npcs: [
+      {
+        id: "tr-commercialista", pal: "aide", x: 8, y: 10, facing: "left",
+        trainerId: "commercialista", sightRange: 3,
+        lines: ["Qui ogni scontrino diventa una nota spese. Anche il tuo."]
+      },
+      {
+        id: "tr-prestanome", pal: "influencer", x: 24, y: 12, facing: "left",
+        trainerId: "prestanome", sightRange: 3,
+        lines: ["Firmo tutto io. Capire, invece, non è compito mio."]
+      },
+      {
+        // Il MINI-BOSS in cima all'altopiano: si dissolve dopo la sconfitta
+        // (flag offshore-beaten, coerente con l'epilogo in WorldScene).
+        id: "tr-tesoriere", pal: "boss", x: 24, y: 5, facing: "left",
+        trainerId: "tesoriere", sightRange: 3, hideIfFlag: "offshore-beaten",
+        lines: []
+      },
+      {
+        id: "evasore-offshore", pal: "influencer", x: 12, y: 12, facing: "down",
+        lines: [
+          "Io? In vacanza. Da undici anni fiscali consecutivi.",
+          "Il mio commercialista dice che tecnicamente non esisto. Che pace."
         ]
       }
     ]
@@ -2034,7 +2195,8 @@ export const MAPS: Record<string, MapDef> = {
   "bar-medio": barMap("bar-medio", "BAR SPORT MEDIOPOLI", "mediopoli", 7, 16),
   "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 13),
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 24, 8),
-  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 15, 5)
+  "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 15, 5),
+  "bar-offshore": barMap("bar-offshore", "LIDO CAYMAN", "offshore", 15, 5)
 };
 
 // Punto di risveglio dopo un KO totale: la cella calpestabile davanti al BAR
@@ -2045,7 +2207,8 @@ export const BAR_RESPAWN: Record<string, { x: number; y: number }> = {
   mediopoli: { x: 7, y: 16 },
   eurotown: { x: 8, y: 13 },
   capitale: { x: 24, y: 8 },
-  stretto: { x: 14, y: 5 }
+  stretto: { x: 14, y: 5 },
+  offshore: { x: 15, y: 5 }
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

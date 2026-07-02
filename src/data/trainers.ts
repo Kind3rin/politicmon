@@ -201,6 +201,33 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Ok, ok... rinviamo l'inaugurazione. DI NUOVO."],
     money: 3000, reward: { itemId: "tessera", qty: 1 }
   },
+  // ---- PARADISO OFFSHORE (post-game, dopo garante-beaten) ----
+  commercialista: {
+    id: "commercialista", name: "COMMERCIALISTA CREATIVO", pal: "aide",
+    team: [["contemorfo", 40], ["muskrat", 41]],
+    intro: ["Detraggo, deduco, delocalizzo.", "Il tuo consenso? Lo segno tra le passività."],
+    defeat: ["Metto la sconfitta in ammortamento. Decennale."],
+    money: 1800, reward: { itemId: "maalox", qty: 1 }
+  },
+  prestanome: {
+    id: "prestanome", name: "PRESTANOME DI FIDUCIA", pal: "influencer",
+    team: [["bojoon", 41], ["macronfox", 42], ["trumpon", 43]],
+    intro: ["Qui è tutto mio: il lido, gli yacht, i conti.", "Cioè, è intestato a me. Di chi sia davvero... non chiederlo."],
+    defeat: ["Questa sconfitta non è mia. È solo intestata a me."],
+    money: 2200
+  },
+  tesoriere: {
+    id: "tesoriere", name: "IL TESORIERE FANTASMA", pal: "boss",
+    team: [["telecrate", 46], ["conteblob", 48], ["berlusconix", 50]],
+    intro: [
+      "Benvenuto nel caveau a cielo aperto.",
+      "Custodisco i conti di TUTTI i partiti. Nessuno escluso, nessuno registrato.",
+      "Il segreto? Non esistere. Tu invece esisti: pessima mossa.",
+      "Vediamo se il tuo consenso vale in valuta estera."
+    ],
+    defeat: ["Congelato... come i miei conti alle Cayman."],
+    money: 4500, reward: { itemId: "tessera", qty: 1 }
+  },
   giudice1: {
     id: "giudice1", name: "GIUDICE ONORARIA", pal: "granny",
     team: [["ursulax", 24], ["calendauro", 25]],
@@ -246,6 +273,39 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Impossibile... convocherò un tavolo tecnico su questa sconfitta."],
     money: 5000, reward: { itemId: "schedona", qty: 3 }
   }
+};
+
+// ---- RIVINCITE (rematch) --------------------------------------------------
+
+// I 3 capipalestra: ribattibili SOLO post-game (flag garante-beaten), con team
+// fissi lv 50-55 e MAI badge/reward duplicati (strippati in buildRematchDef).
+export const GYM_LEADER_IDS = ["emittenza", "ladydirettiva", "tycoon"];
+
+// Allenatori normali di route/città che accettano la RIVINCITA dopo un cooldown
+// a passi. ESCLUSI (gating storia su defeatedTrainers/flag): boss, garante,
+// giudice1/2/3, ilcapitano, rival-*, wander:*, daily:*.
+export const REMATCHABLE_TRAINERS = new Set([
+  "aide", "journalist", "influencer", "lobbista", "stagista", "funzionario",
+  "diplomatico", "oligarca", "bunkerista", "djpapeete", "citofonista",
+  "noponte", "geometra",
+  // Percorsi 2/3 + grotta2
+  "opinionista", "claqueur", "telelobbista", "usciere", "protocollista",
+  "eminenza", "archivista",
+  // Paradiso offshore
+  "commercialista", "prestanome"
+]);
+
+// Squadre fisse dei capipalestra in RIVINCITA (post-game, lv 50-55).
+export const GYM_REMATCH_TEAMS: Record<string, Array<[string, number]>> = {
+  emittenza: [["tajanide", 50], ["telecrate", 52], ["berlusconix", 54]],
+  ladydirettiva: [["macronfox", 51], ["calendrone", 52], ["ursulax", 54]],
+  tycoon: [["bojoon", 51], ["generorso", 52], ["marsrat", 53], ["trumpon", 55]]
+};
+
+export const GYM_REMATCH_INTROS: Record<string, string[]> = {
+  emittenza: ["Rieccoti! Il pubblico chiede il RERUN in prima serata.", "Stavolta lo share lo decido io."],
+  ladydirettiva: ["Il regolamento prevede l'appello. Articolo 1: stavolta vinco io."],
+  tycoon: ["REMATCH! Il più grande della storia. Forse di sempre."]
 };
 
 export const BADGES: Record<string, { name: string; desc: string }> = {

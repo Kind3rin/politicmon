@@ -43,6 +43,13 @@ export const DEX_ZONES: DexZone[] = [
     id: "oblast", name: "OBLAST",
     species: ["bunkerput"],
     reward: { itemId: "caffe", qty: 3, money: 1200 }
+  },
+  {
+    id: "offshore", name: "OFFSHORE",
+    // Solo le 3 specie prima NON catturabili allo stato brado. mattarellux
+    // (1% sull'isola) e berlusconix restano fuori dal gate, come da convenzione.
+    species: ["telecrate", "pontimax", "conteblob"],
+    reward: { itemId: "tessera", qty: 1, money: 3000 }
   }
 ];
 

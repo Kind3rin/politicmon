@@ -107,6 +107,33 @@ export const QUESTS: QuestDef[] = [
     step: "Sconfiggi IL GARANTE SUPREMO.",
     isDone: (s) => Boolean(s.flags["garante-beaten"])
   },
+  // ---- Post-game: PARADISO OFFSHORE (dopo la CONTROFIRMA) ----
+  {
+    id: "offshore-rotta",
+    title: "ACQUE INTERNAZIONALI",
+    desc: "Si mormora di un'isola dove i FONDI vanno in vacanza. Salpa dalle boe a est dello STRETTO.",
+    hint: "Serve la MN TRAGHETTO del MARINAIO di Caput Mundi. Il CONTABILE PENTITO sulla spiaggia dello Stretto sa la rotta.",
+    step: "Raggiungi il PARADISO OFFSHORE.",
+    isDone: (s) => Boolean(s.flags["hint-offshore"]),
+    target: { mapId: "stretto", x: 28, y: 10 }
+  },
+  {
+    id: "offshore-tesoriere",
+    title: "IL TESORIERE FANTASMA",
+    desc: "Qualcuno custodisce i conti di TUTTI i partiti sull'isola. Stanalo sull'altopiano.",
+    hint: "In cima agli scogli a nord-est dell'isola: l'unica via è la scala. Porta una squadra da lv 45+.",
+    step: "Sconfiggi IL TESORIERE FANTASMA.",
+    isDone: (s) => Boolean(s.flags["offshore-beaten"]),
+    target: { mapId: "offshore", x: 23, y: 7 }
+  },
+  {
+    id: "side-encore", side: true,
+    title: "L'ULTIMO SHARE",
+    desc: "BERLUSCONIX concede un ultimo giro di giostra al CASINÒ, se non l'hai mai eletto.",
+    hint: "CASINÒ DI PALAZZO, dopo la CONTROFIRMA. Porta SCHEDE BLINDATE: al 2° KO non torna.",
+    step: "Cattura BERLUSCONIX.",
+    isDone: (s) => s.dex["berlusconix"] === "caught"
+  },
   {
     id: "direttiva",
     title: "LINEA DI PARTITO",

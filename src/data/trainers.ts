@@ -46,6 +46,28 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Ok, torno a reggere il gobbo..."],
     money: 440
   },
+  // ---- PERCORSO 2 (Mediopoli-Eurotown) ----
+  opinionista: {
+    id: "opinionista", name: "OPINIONISTA PERENNE", pal: "journalist",
+    team: [["mediocrate", 12], ["tajanide", 13]],
+    intro: ["Sono ospite fisso di sette salotti.", "Il mio parere? Contrario. A cosa? Vedremo in onda."],
+    defeat: ["Ne parlerò malissimo in prima serata."],
+    money: 520, reward: { itemId: "scheda", qty: 2 }
+  },
+  claqueur: {
+    id: "claqueur", name: "CAPO CLAQUE", pal: "influencer",
+    team: [["vannaccix", 12], ["bojoon", 13]],
+    intro: ["APPLAUSI! No, non per te.", "La mia claque applaude a cachet. Ora fischia te."],
+    defeat: ["Cala il sipario... e pure il gettone."],
+    money: 540, reward: { itemId: "spritz", qty: 1 }
+  },
+  telelobbista: {
+    id: "telelobbista", name: "LOBBISTA CATODICO", pal: "aide",
+    team: [["mediocrate", 13], ["calendauro", 14]],
+    intro: ["Piazzo emendamenti tra una pubblicità e l'altra.", "Il tuo consenso mi serve: lo compro o lo prendo."],
+    defeat: ["Segno la sconfitta a bilancio. Voce: investimenti."],
+    money: 560
+  },
   emittenza: {
     id: "emittenza", name: "SUA EMITTENZA", pal: "boss",
     team: [["tajanide", 12], ["berlusconix", 14]],
@@ -87,6 +109,35 @@ export const TRAINERS: Record<string, TrainerDef> = {
     intro: ["Il mio capo non perde mai. Io nemmeno.", "Lo yacht l'ho vinto così."],
     defeat: ["Niente panico. Ho altri tre yacht."],
     money: 900
+  },
+  // ---- PERCORSO 3 (Eurotown-Capitale) + GROTTA2 ----
+  usciere: {
+    id: "usciere", name: "USCIERE DEL POTERE", pal: "guard",
+    team: [["tajanide", 16], ["contemorfo", 16]],
+    intro: ["Alt. Lei ha l'appuntamento?", "No? Allora l'anticamera la fa qui. Con me."],
+    defeat: ["Si accomodi... ma non si abitui."],
+    money: 720
+  },
+  protocollista: {
+    id: "protocollista", name: "ISPETTRICE DEL PROTOCOLLO", pal: "granny",
+    team: [["ursulax", 17], ["macronfox", 16]],
+    intro: ["Il suo passaggio non risulta protocollato.", "Regolarizziamo: uno scontro, in triplice copia."],
+    defeat: ["Annoto: respinta. Con timbro storto."],
+    money: 780, reward: { itemId: "caffe", qty: 1 }
+  },
+  eminenza: {
+    id: "eminenza", name: "EMINENZA GRIGIA", pal: "aide",
+    team: [["zelenskir", 17], ["muskrat", 17], ["calendauro", 18]],
+    intro: ["Non mi hai mai visto. Non sono mai stato qui.", "Decido io chi passa verso CAPUT MUNDI. Da sempre."],
+    defeat: ["Interessante... ti terrò d'occhio. Da nessun luogo."],
+    money: 920, reward: { itemId: "schedona", qty: 1 }
+  },
+  archivista: {
+    id: "archivista", name: "ARCHIVISTA CAPO", pal: "aide",
+    team: [["muskrat", 16], ["contemorfo", 17]],
+    intro: ["Zitto! Qui i segreti di Stato dormono.", "E tu li stai calpestando. Multa e duello."],
+    defeat: ["Archivio la sconfitta sotto X. Di 'X file'."],
+    money: 800, reward: { itemId: "maalox", qty: 1 }
   },
   bunkerista: {
     id: "bunkerista", name: "MEMELOGO DEL BUNKER", pal: "aide",

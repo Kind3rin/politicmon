@@ -58,7 +58,7 @@ export const QUESTS: QuestDef[] = [
     id: "gym2",
     title: "MEDAGLIA SPREAD",
     desc: "Sconfiggi LADY DIRETTIVA nella PALESTRA UE di EUROTOWN.",
-    hint: "Eurotown è a nord di Mediopoli. Tetto blu con le stelle.",
+    hint: "Eurotown è a nord di Mediopoli, oltre il PERCORSO 2. Tetto blu con le stelle.",
     step: "Raggiungi Eurotown e sfida la Palestra UE.",
     isDone: (s) => s.badges.includes("spread"),
     target: { mapId: "eurotown", x: 6, y: 5 }
@@ -67,7 +67,7 @@ export const QUESTS: QuestDef[] = [
     id: "gym3",
     title: "MEDAGLIA DAZIO",
     desc: "Sconfiggi MR. TYCOON nella GLOBAL TOWER di CAPUT MUNDI.",
-    hint: "Caput Mundi è in cima al mondo, come piace a lui.",
+    hint: "Caput Mundi è in cima al mondo, oltre il PERCORSO 3. Come piace a lui.",
     step: "Sali a Caput Mundi e trova la Global Tower.",
     isDone: (s) => s.badges.includes("dazio"),
     target: { mapId: "capitale", x: 6, y: 11 }

@@ -150,7 +150,7 @@ const ROUTE1_TILES = [
   "TT..wwww....====.======~...TT",
   "TT..wwww....====....~~~....TT",
   "TT..ww.w....====...........TT",
-  "TT..wwww....====...,,,,....TT",
+  "TT..wwww....====.s.,,,,....TT",
   "TT..wwww....=====..,,,,....TT",
   "TT..~~~~....====...,,,,....TT",
   "TT..~~~~....====...........TT",
@@ -201,6 +201,78 @@ const OBLAST_MEME_TILES = [
   "NNiiiiiiiiiiiii=iRIINNNN",
   "NNNNiiiiiiiIIiiiiiiNNNNN",
   "NNNNNNNNNNNNNNNNNNNNNNNN"
+];
+
+// -------------------------------------------- PERCORSO 2 (MEDIOPOLI-EUROTOWN)
+// Route verticale a tema TALK SHOW/lobbying: il LAGHETTO DELL'AUDITEL a ovest
+// nasconde un'isoletta-tesoro (solo col TRAGHETTO), erba alta su entrambi i
+// lati e tre allenatori televisivi. Strada ==== a col 13-16 come le città.
+const ROUTE2_TILES = [
+  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
+  "TT...........====..........TT",
+  "TT.,,,,......====.~~~~~~...TT",
+  "TT.,,,,......====.~~~~~~...TT",
+  "TT.wwwwww....====..........TT",
+  "TT.wwwwww....====..........TT",
+  "TT.ww.www....====..........TT",
+  "TT.wwwwww....====..........TT",
+  "TT.wwwwww....====.s........TT",
+  "TT.~~~~~~~~..====..........TT",
+  "TT.~~~~~~~~..====..~~~~~~..TT",
+  "TT.~~~~~~~~..====..~~~~~~..TT",
+  "TT.~~~~~~~~..====..........TT",
+  "TT...........====..........TT",
+  "TT..,,,,.....====s.........TT",
+  "TT...........====..........TT",
+  "TT...........====.~~~~~~~..TT",
+  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+];
+
+// -------------------------------------------- PERCORSO 3 (EUROTOWN-CAPITALE)
+// Route verticale a tema POTERE/burocrazia: bocca della GROTTA2 "ARCHIVIO DI
+// STATO" a nord-est (pattern route1), checkpoint di recinzioni a metà strada
+// e campi d'erba alta con funzionari in agguato.
+const ROUTE3_TILES = [
+  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
+  "TT...........====..........TT",
+  "TT...........====s...ROR...TT",
+  "TT...........====....ROR...TT",
+  "TT...........==========....TT",
+  "TT.~~~~~~~~..====..........TT",
+  "TT.~~~~~~~~..====..........TT",
+  "TT.~~~~~~~~..====..........TT",
+  "TT.~RR~~~~~..====..........TT",
+  "TT...........====..........TT",
+  "TT.........f.====f.........TT",
+  "TT...........====..........TT",
+  "TT...........====.,,,,~~~~.TT",
+  "TT...........====.~~~~~~~~.TT",
+  "TT...........====.~.~~~~~~.TT",
+  "TT...........====.~~~~~~~~.TT",
+  "TT...........====..........TT",
+  "TT...........====..........TT",
+  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+];
+
+// GROTTA 2 "ARCHIVIO DI STATO": caverna opzionale sul PERCORSO 3, un'unica
+// uscita a sud, scaffali-dossier (S/R) a serpentina e la DIRETTIVA: DECRETO
+// in fondo all'archivio. Incontri nelle ombre (~) coerenti con la route.
+const GROTTA2_TILES = [
+  "AAAAAAAAAAAAAAAAAAAA",
+  "Appp~ppppppppppppppA",
+  "ApSSRp~ppppASRpppppA",
+  "Appp~pppppppppsppppA",
+  "AAASRRASRRAASRAppppA",
+  "Apppp~pppp~ppppppppA",
+  "AppSRRp~ppppppSRRppA",
+  "Apppppppppp~pppppppA",
+  "AppppASRRAASRRASRRAA",
+  "App~pppppppppppppppA",
+  "AppppSRRp~ppppSRpppA",
+  "Ap~ppppppppppppppppA",
+  "ApSRRppppppppppSRRpA",
+  "AAAAAAAAccAAAAAAAAAA",
+  "AAAAAAAAAAAAAAAAAAAA"
 ];
 
 // ---------------------------------------------------------------- MEDIOPOLI
@@ -535,6 +607,7 @@ const BAR_TILES = [
 
 const LAB_ENTRY = insideEntry(LAB_TILES);
 const GROTTA1_ENTRY = insideEntry(GROTTA1_TILES);
+const GROTTA2_ENTRY = insideEntry(GROTTA2_TILES);
 const GYM_ENTRY = insideEntry(GYM_TILES);
 const MARKET_ENTRY = insideEntry(MARKET_TILES);
 const HOUSE_ENTRY_A = insideEntry(HOUSE_TILES_A);
@@ -836,7 +909,7 @@ export const MAPS: Record<string, MapDef> = {
     music: "mediopoli",
     edges: {
       north: {
-        toMap: "eurotown", offsetX: 0, requiresBadges: 1,
+        toMap: "route2", offsetX: 0, requiresBadges: 1,
         lockedLines: [
           "La strada per EUROTOWN è presidiata dai gazebo.",
           "«Senza la MEDAGLIA AUDITEL non si passa: prima conquista la palestra di MEDIOPOLI.»"
@@ -943,6 +1016,70 @@ export const MAPS: Record<string, MapDef> = {
     ]
   },
 
+  // PERCORSO 2: route tra MEDIOPOLI (sud) e EUROTOWN (nord). Tema talk show:
+  // il LAGHETTO DELL'AUDITEL con isoletta-tesoro (solo TRAGHETTO), erba alta
+  // e tre professionisti del salotto televisivo. Il gate a 1 medaglia resta
+  // sull'edge nord di MEDIOPOLI (mai lato route: niente trappole).
+  route2: {
+    id: "route2",
+    name: "PERCORSO 2",
+    tiles: ROUTE2_TILES,
+    outdoor: true,
+    music: "mediopoli",
+    edges: {
+      north: { toMap: "eurotown", offsetX: 0 },
+      south: { toMap: "mediopoli", offsetX: 0 }
+    },
+    warps: [],
+    encounterRate: 0.14,
+    // Ponte tra MEDIOPOLI (8-12) ed EUROTOWN (12-15): media italiani in uscita,
+    // primi leader europei in anteprima.
+    encounters: [
+      { speciesId: "mediocrate", weight: 26, minLv: 12, maxLv: 14 },
+      { speciesId: "vannaccix", weight: 22, minLv: 12, maxLv: 14 },
+      { speciesId: "calendauro", weight: 18, minLv: 12, maxLv: 15 },
+      { speciesId: "macronfox", weight: 18, minLv: 13, maxLv: 15 },
+      { speciesId: "bojoon", weight: 16, minLv: 13, maxLv: 15 }
+    ],
+    signs: [
+      {
+        x: 18, y: 8,
+        lines: ["LAGHETTO DELL'AUDITEL", "Le carpe applaudono a comando.", "L'isoletta al centro? Diritti TV in esclusiva."]
+      },
+      {
+        x: 17, y: 14,
+        lines: ["PERCORSO 2", "Nord: EUROTOWN. Sud: MEDIOPOLI.", "Area di sosta opinionisti: massimo tre ospitate al giorno."]
+      }
+    ],
+    pickups: [
+      // Tesoro sull'isoletta del LAGHETTO: ci si arriva solo col TRAGHETTO.
+      { id: "pk-r2-isola", x: 5, y: 6, itemId: "schedona", qty: 2 },
+      { id: "pk-r2", x: 24, y: 10, itemId: "maalox", qty: 1 },
+      { id: "pk-r2-hide", x: 4, y: 15, itemId: "spritz", qty: 2, hidden: true }
+    ],
+    npcs: [
+      {
+        id: "tr-claqueur", pal: "influencer", x: 19, y: 5, facing: "left",
+        trainerId: "claqueur", sightRange: 3,
+        lines: ["La claque non dorme mai. Applaude a turni."]
+      },
+      {
+        id: "tr-telelobbista", pal: "aide", x: 10, y: 11, facing: "right",
+        trainerId: "telelobbista", sightRange: 3,
+        lines: ["Tra una pubblicità e l'altra passa di tutto. Anche tu."]
+      },
+      {
+        id: "tr-opinionista", pal: "journalist", x: 18, y: 12, facing: "left",
+        trainerId: "opinionista", sightRange: 3,
+        lines: ["Ho un parere su tutto. Soprattutto sul contrario."]
+      },
+      {
+        id: "spettatore-r2", pal: "granny", x: 20, y: 15, facing: "down",
+        lines: ["Faccio la spola tra due talk show.", "Stesso ospite, stessa lite, stesso stupore. Che tempi."]
+      }
+    ]
+  },
+
   eurotown: {
     id: "eurotown",
     name: "EUROTOWN",
@@ -951,13 +1088,13 @@ export const MAPS: Record<string, MapDef> = {
     music: "eurotown",
     edges: {
       north: {
-        toMap: "capitale", offsetX: 0, requiresBadges: 2,
+        toMap: "route3", offsetX: 0, requiresBadges: 2,
         lockedLines: [
           "Il confine di CAPUT MUNDI è blindato da transenne istituzionali.",
           "«Per accedere serve la MEDAGLIA SPREAD: torna quando avrai vinto a EUROTOWN.»"
         ]
       },
-      south: { toMap: "mediopoli", offsetX: 0 }
+      south: { toMap: "route2", offsetX: 0 }
     },
     warps: [
       { x: 7, y: 5, toMap: "gymue", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
@@ -1041,13 +1178,113 @@ export const MAPS: Record<string, MapDef> = {
     ]
   },
 
+  // PERCORSO 3: route tra EUROTOWN (sud) e CAPUT MUNDI (nord). Tema potere e
+  // burocrazia: checkpoint di recinzioni a metà strada, funzionari in agguato
+  // e la bocca della GROTTA2 "ARCHIVIO DI STATO" a nord-est (pattern route1).
+  // Il gate a 2 medaglie resta sull'edge nord di EUROTOWN.
+  route3: {
+    id: "route3",
+    name: "PERCORSO 3",
+    tiles: ROUTE3_TILES,
+    outdoor: true,
+    music: "eurotown",
+    edges: {
+      north: { toMap: "capitale", offsetX: 0 },
+      south: { toMap: "eurotown", offsetX: 0 }
+    },
+    warps: [
+      { x: 22, y: 3, toMap: "grotta2", toX: GROTTA2_ENTRY.x, toY: GROTTA2_ENTRY.y, facing: "up" }
+    ],
+    encounterRate: 0.14,
+    // Ponte tra EUROTOWN (12-15) e CAPUT MUNDI (15-18): istituzioni europee in
+    // uscita, potenze mondiali in anteprima.
+    encounters: [
+      { speciesId: "ursulax", weight: 24, minLv: 16, maxLv: 18 },
+      { speciesId: "muskrat", weight: 20, minLv: 17, maxLv: 19 },
+      { speciesId: "zelenskir", weight: 20, minLv: 16, maxLv: 18 },
+      { speciesId: "macronfox", weight: 18, minLv: 16, maxLv: 18 },
+      { speciesId: "mediocrate", weight: 18, minLv: 17, maxLv: 19 }
+    ],
+    signs: [
+      {
+        x: 17, y: 2,
+        lines: ["PERCORSO 3", "Nord: CAPUT MUNDI. Sud: EUROTOWN.", "Coda stimata per il potere: 47 anni. Munirsi di numeretto."]
+      }
+    ],
+    pickups: [
+      { id: "pk-r3", x: 4, y: 14, itemId: "schedona", qty: 2 },
+      { id: "pk-r3-hide", x: 25, y: 13, itemId: "caffe", qty: 2, hidden: true }
+    ],
+    npcs: [
+      {
+        id: "tr-usciere", pal: "guard", x: 11, y: 6, facing: "right",
+        trainerId: "usciere", sightRange: 3,
+        lines: ["Senza appuntamento non si passa. Nemmeno col numeretto."]
+      },
+      {
+        id: "tr-protocollista", pal: "granny", x: 12, y: 10, facing: "right",
+        trainerId: "protocollista", sightRange: 3,
+        lines: ["Il checkpoint è qui per il suo bene. Firmi qui, qui e qui."]
+      },
+      {
+        id: "tr-eminenza", pal: "aide", x: 19, y: 14, facing: "left",
+        trainerId: "eminenza", sightRange: 3,
+        lines: ["Questa conversazione non è mai avvenuta."]
+      },
+      {
+        id: "questuante-r3", pal: "aide", x: 9, y: 16, facing: "right",
+        lines: ["Aspetto una firma dal 1987.", "Il timbro c'è. Manca il funzionario. E il ministero. E la firma."]
+      }
+    ]
+  },
+
+  // GROTTA 2 "ARCHIVIO DI STATO": caverna opzionale sul PERCORSO 3, un'unica
+  // uscita a sud. Scaffali-dossier, un archivista permaloso e la DIRETTIVA:
+  // DECRETO sepolta in fondo all'archivio.
+  grotta2: {
+    id: "grotta2",
+    name: "ARCHIVIO DI STATO",
+    tiles: GROTTA2_TILES,
+    outdoor: false,
+    music: "interior",
+    // Look da caverna come grotta1: pavimento/uscita e muri diventano roccia.
+    tileOverrides: {
+      p: "tiles/cave_floor.png", A: "tiles/cave_rock.png", c: "tiles/cave_floor.png"
+    },
+    warps: [
+      { x: 8, y: 13, toMap: "route3", toX: 22, toY: 4, facing: "down" },
+      { x: 9, y: 13, toMap: "route3", toX: 22, toY: 4, facing: "down" }
+    ],
+    encounterRate: 0.16,
+    encounters: [
+      { speciesId: "muskrat", weight: 28, minLv: 16, maxLv: 18 },
+      { speciesId: "contemorfo", weight: 22, minLv: 16, maxLv: 18 },
+      { speciesId: "calendauro", weight: 18, minLv: 17, maxLv: 19 },
+      { speciesId: "putingrad", weight: 12, minLv: 18, maxLv: 19 }
+    ],
+    signs: [
+      { x: 14, y: 3, lines: ["ARCHIVIO DI STATO", "Dossier su tutti. Anche su di te.", "Consultazione libera. Uscirne, meno."] }
+    ],
+    pickups: [
+      { id: "pk-g2", x: 17, y: 2, itemId: "dirDecreto", qty: 1 },
+      { id: "pk-g2-hide", x: 2, y: 11, itemId: "mojito", qty: 1, hidden: true }
+    ],
+    npcs: [
+      {
+        id: "tr-archivista", pal: "aide", x: 10, y: 6, facing: "down",
+        trainerId: "archivista", sightRange: 3,
+        lines: ["Shhh. I faldoni dormono.", "Ogni scaffale è un governo caduto. Non toccare niente."]
+      }
+    ]
+  },
+
   capitale: {
     id: "capitale",
     name: "CAPUT MUNDI",
     tiles: CAPITALE_TILES,
     outdoor: true,
     music: "capitale",
-    edges: { south: { toMap: "eurotown", offsetX: 0 } },
+    edges: { south: { toMap: "route3", offsetX: 0 } },
     warps: [
       { x: 7, y: 11, toMap: "gymglobal", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
       { x: 6, y: 11, toMap: "gymglobal", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },

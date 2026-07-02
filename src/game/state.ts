@@ -32,10 +32,27 @@ export interface GameState {
   stepsTotal: number; // contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA
   trainerRematch: Record<string, number>; // trainerId -> stepsTotal all'ultima vittoria (cooldown rematch)
   lastDailyDate: string; // data LOCALE YYYY-MM-DD dell'ultima SFIDA DEL GIORNO vinta ("" = mai)
+  repellentSteps: number; // passi rimanenti di repellente attivo (SPRAY ANTI-COMIZIO)
+  dailyStreak: number; // giorni consecutivi di SFIDA DEL GIORNO vinte
+  duelWins: number; // duelli PvP vinti (scritti a duello CHIUSO, mai durante)
+  duelLosses: number; // duelli PvP persi
+  dailyQuestsDone: string[]; // id missioni giornaliere completate oggi ("YYYY-MM-DD:idx")
+  lastDailyQuestDate: string; // data locale YYYY-MM-DD del reset missioni giornaliere
+  browserSeed: number; // 0 = non inizializzato; intero 1..2^31-1, divide i giocatori in versione A/B
 }
 
-export const SAVE_KEY = "politicmon-save-v10";
+// Seed "di installazione": generato una volta e persistito nel save. Divide i
+// giocatori in versione GOVERNO/OPPOSIZIONE (pari/dispari).
+function rollBrowserSeed(): number {
+  return 1 + Math.floor(Math.random() * (2 ** 31 - 1));
+}
+
+export const SAVE_KEY = "politicmon-save-v11";
+// Copia dell'ULTIMO valore valido salvato: loadGame la prova se il primario
+// non parsa (localStorage troncato/corrotto).
+const BACKUP_KEY = "politicmon-save-v11.bak";
 const LEGACY_KEYS = [
+  "politicmon-save-v10",
   "politicmon-save-v9",
   "politicmon-save-v8",
   "politicmon-save-v7",
@@ -68,7 +85,14 @@ export function newGameState(): GameState {
     zoneRewardsClaimed: [],
     stepsTotal: 0,
     trainerRematch: {},
-    lastDailyDate: ""
+    lastDailyDate: "",
+    repellentSteps: 0,
+    dailyStreak: 0,
+    duelWins: 0,
+    duelLosses: 0,
+    dailyQuestsDone: [],
+    lastDailyQuestDate: "",
+    browserSeed: rollBrowserSeed()
   };
 }
 
@@ -106,6 +130,16 @@ export function flushActiveState(): void {
 
 export function saveGame(state: GameState): boolean {
   try {
+    // Prima di sovrascrivere, conserva il valore precedente (che era valido
+    // quando è stato scritto) come backup anti-corruzione.
+    const prev = localStorage.getItem(SAVE_KEY);
+    if (prev !== null) {
+      try {
+        localStorage.setItem(BACKUP_KEY, prev);
+      } catch {
+        // Quota piena per il backup: il salvataggio primario resta prioritario.
+      }
+    }
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
     return true;
   } catch (err) {
@@ -155,6 +189,27 @@ function parseState(raw: string | null): GameState | null {
         ? parsed.trainerRematch
         : {};
     parsed.lastDailyDate = typeof parsed.lastDailyDate === "string" ? parsed.lastDailyDate : "";
+    parsed.repellentSteps =
+      typeof parsed.repellentSteps === "number" && !Number.isNaN(parsed.repellentSteps)
+        ? Math.max(0, parsed.repellentSteps)
+        : 0;
+    parsed.dailyStreak = typeof parsed.dailyStreak === "number" && !Number.isNaN(parsed.dailyStreak) ? parsed.dailyStreak : 0;
+    parsed.duelWins = typeof parsed.duelWins === "number" && !Number.isNaN(parsed.duelWins) ? parsed.duelWins : 0;
+    parsed.duelLosses = typeof parsed.duelLosses === "number" && !Number.isNaN(parsed.duelLosses) ? parsed.duelLosses : 0;
+    parsed.dailyQuestsDone = Array.isArray(parsed.dailyQuestsDone)
+      ? parsed.dailyQuestsDone.filter((id): id is string => typeof id === "string")
+      : [];
+    parsed.lastDailyQuestDate = typeof parsed.lastDailyQuestDate === "string" ? parsed.lastDailyQuestDate : "";
+    parsed.browserSeed =
+      typeof parsed.browserSeed === "number" && Number.isInteger(parsed.browserSeed) && parsed.browserSeed > 0
+        ? parsed.browserSeed
+        : 0;
+    // heldItem (v11, opzionale): tutto ciò che non è una stringa viene rimosso.
+    for (const mon of [...parsed.party, ...parsed.boxed]) {
+      if (mon.heldItem !== undefined && typeof mon.heldItem !== "string") {
+        delete mon.heldItem;
+      }
+    }
 
     // Rete di sicurezza sugli HP: un mon caricato non deve avere hp invalido, e
     // il party non può essere interamente svenuto al load. Succede se l'app
@@ -186,10 +241,27 @@ function parseState(raw: string | null): GameState | null {
   }
 }
 
+// browserSeed=0 (save pre-v11 o campo assente): genera e persisti subito,
+// così il seed resta stabile per sempre.
+function ensureBrowserSeed(state: GameState): void {
+  if (state.browserSeed === 0) {
+    state.browserSeed = rollBrowserSeed();
+    saveGame(state);
+  }
+}
+
 export function loadGame(): GameState | null {
   const current = parseState(localStorage.getItem(SAVE_KEY));
   if (current) {
+    ensureBrowserSeed(current);
     return current;
+  }
+  // Primario corrotto/assente: prova il backup dell'ultima scrittura valida.
+  const backup = parseState(localStorage.getItem(BACKUP_KEY));
+  if (backup) {
+    saveGame(backup);
+    ensureBrowserSeed(backup);
+    return backup;
   }
   // Migrazione dai salvataggi precedenti: stessi dati, campi nuovi al default.
   for (const key of LEGACY_KEYS) {
@@ -199,10 +271,29 @@ export function loadGame(): GameState | null {
       // così la migrazione avviene una sola volta.
       saveGame(legacy);
       localStorage.removeItem(key);
+      ensureBrowserSeed(legacy);
       return legacy;
     }
   }
   return null;
+}
+
+// ---- Export/import del salvataggio come "CODICE SALVATAGGIO" ----
+// btoa richiede byte latin1: il JSON può contenere caratteri accentati, quindi
+// si passa per encodeURIComponent (schema classico, simmetrico in import).
+
+export function exportSaveCode(state: GameState): string {
+  return btoa(encodeURIComponent(JSON.stringify(state)));
+}
+
+// Valida e ritorna lo stato importato (null se il codice non è un save valido).
+// NON persiste: la conferma di sovrascrittura spetta alla UI.
+export function importSaveCode(code: string): GameState | null {
+  try {
+    return parseState(decodeURIComponent(atob(code.trim())));
+  } catch {
+    return null;
+  }
 }
 
 export function hasSave(): boolean {
@@ -214,6 +305,7 @@ export function hasSave(): boolean {
 
 export function clearSave(): void {
   localStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(BACKUP_KEY);
   for (const key of LEGACY_KEYS) {
     localStorage.removeItem(key);
   }

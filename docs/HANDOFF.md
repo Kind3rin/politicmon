@@ -5,7 +5,43 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 38 — post-game, route 2/3, scambi e duelli PvP**, 2026-07-02.
+Ultimo aggiornamento: **Round 39 lotto TECH — save v11, sim reale nel balance harness, CI**, 2026-07-02.
+
+### 🔧 Round 39 — LOTTO TECH (1/4: TECH → GAMEPLAY → RETENTION → UX/CONTENUTI)
+Spec: audit 4 dimensioni approvati dall'utente (r39-audits). Fatto in questo lotto:
+
+- **Save v11** (`politicmon-save-v11`, v10 in LEGACY_KEYS): campi nuovi con default
+  e parse difensivo — `repellentSteps`, `dailyStreak`, `duelWins/duelLosses`,
+  `dailyQuestsDone`, `lastDailyQuestDate`, `browserSeed` (0 = non inizializzato →
+  generato 1..2^31-1 e persistito al primo load/newGame; pari/dispari = versione A/B).
+  `Monster.heldItem?: string` opzionale (sanificato in parseState). I lotti successivi
+  USANO questi campi: qui sono solo introdotti.
+- **Save robustezza**: `saveGame` scrive prima `politicmon-save-v11.bak` (valore
+  precedente valido); `loadGame` recupera dal .bak se il primario non parsa.
+  Export/import: `exportSaveCode`/`importSaveCode` (btoa di encodeURIComponent(JSON));
+  UI in menu pausa → OPZIONI → **BACKUP** (`src/scenes/BackupScene.ts`, overlay HTML
+  per copia con fallback clipboard e incolla; import = conferma + reload).
+- **RNG unificata**: `sim.ts::calcDamage(..., rng = Math.random)` retro-compatibile;
+  `duelsim.ts` usa il VERO calcDamage (calcDamageRng CANCELLATO, sentinella aggiornata:
+  ora solo la semantica di TURNO va replicata a mano, il danno no).
+- **sim-balance.mjs riscritto**: importa il vero sim.ts via dev server+Playwright
+  (pattern check-duel), Math.random rimpiazzato da mulberry32 seed fisso (deterministico).
+  ⚠️ NUMERI VERI: **~3.3-3.4 turni** medi a parità di livello (lv10/20/30), win-rate
+  giocatore a pari livello 58.5%. FUORI dal target 5-8 della vecchia memoria, ma il
+  divisore /58 era una scelta deliberata ("le lotte sembravano lunghissime") e la
+  vecchia copia /70 misurava una formula morta. NESSUN ritocco applicato: decidere
+  nel lotto GAMEPLAY se ritoccare (che tanto rigira sim-balance dopo hold/abilità).
+- **check-sim.mjs nuovo** (guardrail runtime, dev server richiesto): danno con RNG
+  fissa in range, determinismo, catchChance 1HP+status ≥0.9, soglie bumpSondaggi.
+- **CI** (`.github/workflows/ci.yml`): push/PR master → node 22, npm ci, typecheck,
+  build, check-evolutions (unico check-* statico; tutti gli altri richiedono Playwright
+  + dev server e restano locali).
+- **Relay Nostr verificati** (P8): trystero 0.25 usa pool di ~46 relay di default con
+  redundancy 5 → ridondanza ok, mp.ts NON toccato (TURN env già supportate).
+
+Mancanze/note per i lotti successivi: heldItem non passa sul filo trade/duello (v1);
+duelWins/duelLosses vanno scritti SOLO a duello chiuso e check-duel C9 andrà raffinato
+quando il lotto RETENTION li popola; bilanciamento fuori target segnalato sopra.
 
 ### 🏝️ Round 38 — longevità: route mancanti, rematch, post-game, daily, trade+PvP
 Feedback utente: "il gioco non è longevo" → fatti TUTTI e 4 i punti in un ciclo solo

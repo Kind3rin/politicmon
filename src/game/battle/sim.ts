@@ -31,7 +31,14 @@ export interface DamageResult {
   typeMult: number;
 }
 
-export function calcDamage(attacker: Combatant, defender: Combatant, move: Move): DamageResult {
+// `rng` iniettabile (default Math.random): il duello PvP passa la sua RNG
+// host-side per il replay deterministico; il PVE usa il default.
+export function calcDamage(
+  attacker: Combatant,
+  defender: Combatant,
+  move: Move,
+  rng: () => number = Math.random
+): DamageResult {
   if (move.power <= 0) {
     return { damage: 0, crit: false, typeMult: 1 };
   }
@@ -40,7 +47,7 @@ export function calcDamage(attacker: Combatant, defender: Combatant, move: Move)
   // prima le speciali leggevano spc anche in difesa e FACCIA TOSTA non proteggeva mai.
   const defKey: StatKey = "def";
   const critChance = move.effect?.highCrit ? 0.25 : 1 / 16;
-  const crit = Math.random() < critChance;
+  const crit = rng() < critChance;
   // In caso di critico si ignorano gli stage (come nei vecchi giochi).
   const atk = crit ? statsOf(attacker.mon)[atkKey] : effectiveStat(attacker, atkKey);
   const def = crit ? statsOf(defender.mon)[defKey] : effectiveStat(defender, defKey);

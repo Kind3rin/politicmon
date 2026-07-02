@@ -14,6 +14,7 @@ import { sondaggiColor, sondaggiLabel, MINISTERO_ORDER, ministroDi, MINISTERI } 
 import { speciesOf } from "../game/monster";
 import { mp } from "../net/mp";
 import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
+import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
 import { DuelLobbyScene } from "./DuelLobbyScene";
@@ -77,7 +78,7 @@ export class PauseScene implements Scene {
     if (document.body.classList.contains("touch")) {
       this.optEntries.push(`TASTI: ${loadControlMode() === "stick" ? "LEVETTA" : "CROCE"}`);
     }
-    this.optEntries.push("INDIETRO");
+    this.optEntries.push("BACKUP", "INDIETRO");
     return new Menu(this.optEntries.map((label) => ({ label })));
   }
 
@@ -176,6 +177,12 @@ export class PauseScene implements Scene {
     if (label === "INDIETRO") {
       audio.cancel();
       this.optionsMenu = null;
+      return;
+    }
+    if (label === "BACKUP") {
+      audio.confirm();
+      this.optionsMenu = null;
+      this.stack.push(new BackupScene(this.stack, this.input, this.state));
       return;
     }
     if (label === "SALVA") {

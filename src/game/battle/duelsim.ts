@@ -4,16 +4,17 @@
 // - applyEvent/applyEvents: applicazione per ASSEGNAZIONE del log (guest, e
 //   presentazione passo-passo su entrambi i lati). Mai ricalcolo.
 //
-// SENTINELLA BILANCIAMENTO: la semantica dei turni replica moveSteps/startTurn
-// di BattleScene.ts e calcDamage di sim.ts (INDAGATO 25%, GAFFE 33% e danno
-// floor(lv*2/3)+2, accuracy con eccezione self-target, SCANDALO maxHp/8,
-// clamp stage ±6, crit/varianza di calcDamage). Ogni futura modifica di
-// bilanciamento PVE va replicata QUI (check-duel.mjs copre le divergenze).
+// SENTINELLA BILANCIAMENTO: la semantica dei TURNI replica moveSteps/startTurn
+// di BattleScene.ts (INDAGATO 25%, GAFFE 33% e danno floor(lv*2/3)+2, accuracy
+// con eccezione self-target, SCANDALO maxHp/8, clamp stage ±6). Il DANNO invece
+// NON è più una copia: si usa direttamente calcDamage di sim.ts con la RNG
+// iniettata, quindi il bilanciamento danno PVE vale automaticamente anche qui.
+// Ogni futura modifica alla semantica di turno di BattleScene va replicata QUI
+// (check-duel.mjs copre le divergenze).
 
-import { MOVES, type Move, type StatKey } from "../../data/moves";
-import { typeMultiplier } from "../../data/poltypes";
-import { speciesOf, statsOf, type Monster, type MoveSlot } from "../monster";
-import { effectiveStat, makeCombatant, type Combatant } from "./sim";
+import { MOVES, type Move } from "../../data/moves";
+import { statsOf, type Monster, type MoveSlot } from "../monster";
+import { calcDamage, effectiveStat, makeCombatant, type Combatant } from "./sim";
 import type { DuelCmd, DuelEvent, DuelSide } from "../../net/duelproto";
 
 export type Rng = () => number;
@@ -46,28 +47,6 @@ export function aliveCount(side: DuelSideState): number {
 
 export function usableMoves(mon: Monster): MoveSlot[] {
   return mon.moves.filter((slot) => slot.pp > 0);
-}
-
-// Copia di calcDamage (sim.ts) con RNG iniettabile: sim.ts usa Math.random
-// direttamente (righe crit/varianza) e non è parametrizzabile senza toccare
-// il PVE. Tenere ALLINEATA a sim.ts.
-function calcDamageRng(attacker: Combatant, defender: Combatant, move: Move, rng: Rng) {
-  if (move.power <= 0) {
-    return { damage: 0, crit: false, typeMult: 1 };
-  }
-  const atkKey: StatKey = move.category === "fisico" ? "atk" : "spc";
-  const defKey: StatKey = "def";
-  const critChance = move.effect?.highCrit ? 0.25 : 1 / 16;
-  const crit = rng() < critChance;
-  const atk = crit ? statsOf(attacker.mon)[atkKey] : effectiveStat(attacker, atkKey);
-  const def = crit ? statsOf(defender.mon)[defKey] : effectiveStat(defender, defKey);
-  const level = attacker.mon.level * (crit ? 2 : 1);
-  const stab = speciesOf(attacker.mon).types.includes(move.type) ? 1.5 : 1;
-  const tMult = typeMultiplier(move.type, speciesOf(defender.mon).types);
-  const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 58 + 2;
-  const random = 0.88 + rng() * 0.12;
-  const damage = Math.max(1, Math.floor(base * stab * tMult * random));
-  return { damage: tMult === 0 ? 0 : damage, crit, typeMult: tMult };
 }
 
 // Mossa effettiva per un cmd "move": slot con PP, altrimenti COMIZIO gratuito
@@ -120,7 +99,7 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
 
   const defSide = otherSide(side);
   if (move.power > 0) {
-    const result = calcDamageRng(attacker, defender, move, rng);
+    const result = calcDamage(attacker, defender, move, rng);
     defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
     events.push({ e: "dmg", side: defSide, hpAfter: defender.mon.hp, crit: result.crit, typeMult: result.typeMult });
     if (move.effect?.drainRatio) {

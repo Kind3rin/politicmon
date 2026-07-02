@@ -14,6 +14,7 @@ export interface Monster {
   hp: number;
   status: StatusId | null;
   moves: MoveSlot[];
+  heldItem?: string; // id item kind "hold" equipaggiato (save v11, opzionale)
 }
 
 export interface Stats {

@@ -1,0 +1,22 @@
+# CI leggera: typecheck + build + guardrail PURAMENTE statici.
+# I check basati su Playwright/dev server (check-map-*, check-duel, check-sim,
+# ecc.) restano locali per tenere la CI sotto i 2 minuti.
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - run: node scripts/check-evolutions.mjs

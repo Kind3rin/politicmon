@@ -1,16 +1,26 @@
 import { MOVES, type Move, type StatKey } from "../../data/moves";
-import { typeMultiplier } from "../../data/poltypes";
+import { typeMultiplier, type PolType } from "../../data/poltypes";
 import { ITEMS } from "../../data/items";
-import { speciesOf, statsOf, type Monster } from "../monster";
+import { abilityOf, heldItemOf, speciesOf, statsOf, type Monster } from "../monster";
 
 export interface Combatant {
   mon: Monster;
   stages: Record<StatKey, number>;
   gaffeTurns: number;
+  // Abilità LODO: il primo colpo subito in battaglia fa danno dimezzato.
+  // Stato per-combattente (come stages/gaffe), resettato a ogni ingresso.
+  firstHitTaken: boolean;
 }
 
 export function makeCombatant(mon: Monster): Combatant {
-  return { mon, stages: { atk: 0, def: 0, spc: 0, spd: 0 }, gaffeTurns: 0 };
+  const c: Combatant = { mon, stages: { atk: 0, def: 0, spc: 0, spd: 0 }, gaffeTurns: 0, firstHitTaken: false };
+  // VOLTAGABBANA: +1 OPPORTUNISMO a ogni ingresso in campo. Vive QUI perché
+  // ogni creazione di Combatant è un ingresso (PVE: lead/switch; duello:
+  // makeDuelSim/applySwitch/applyEvent "switch" — host e guest identici).
+  if (abilityOf(mon)?.id === "voltagabbana") {
+    c.stages.spd = 1;
+  }
+  return c;
 }
 
 function stageMult(stage: number): number {
@@ -29,15 +39,48 @@ export interface DamageResult {
   damage: number;
   crit: boolean;
   typeMult: number;
+  lodo?: boolean; // il colpo è stato dimezzato dall'abilità LODO del difensore
+}
+
+// SONDAGGI COME "METEO" (Round 39): la divisione establishment/anti.
+// Establishment = il "sistema" (palazzi, tecnici, moderati, grandi giornali);
+// anti-establishment = la piazza (populisti, ali dure e movimenti).
+// Gradimento >=70: il vento soffia per il GOVERNO (+15% ai tipi establishment);
+// <=40: soffia per l'OPPOSIZIONE (+15% agli anti-establishment).
+export const ESTABLISHMENT_TYPES: PolType[] = ["ISTITUZIONE", "TECNO", "CENTRO", "MEDIA"];
+export const ANTI_ESTABLISHMENT_TYPES: PolType[] = ["POPULISMO", "DESTRA", "SINISTRA", "VERDE"];
+
+// Contesto opzionale di battaglia: default NEUTRO. La BattleScene passa i
+// SONDAGGI reali; il duello PvP NON lo passa (duello sempre neutrale).
+export interface DamageContext {
+  sondaggi?: number;
+}
+
+// Moltiplicatore "meteo politico" per una mossa (esposto anche per la UI).
+export function sondaggiMoveMult(sondaggi: number | undefined, moveType: PolType): number {
+  if (sondaggi === undefined) {
+    return 1;
+  }
+  if (sondaggi >= 70 && ESTABLISHMENT_TYPES.includes(moveType)) {
+    return 1.15;
+  }
+  if (sondaggi <= 40 && ANTI_ESTABLISHMENT_TYPES.includes(moveType)) {
+    return 1.15;
+  }
+  return 1;
 }
 
 // `rng` iniettabile (default Math.random): il duello PvP passa la sua RNG
 // host-side per il replay deterministico; il PVE usa il default.
+// `ctx` opzionale: SONDAGGI (solo PVE). Held item e abilità vengono letti
+// direttamente dai Monster/Combatant (nel duello i mon non hanno heldItem:
+// il filo non lo trasporta, quindi gli hold restano un vantaggio solo PVE).
 export function calcDamage(
   attacker: Combatant,
   defender: Combatant,
   move: Move,
-  rng: () => number = Math.random
+  rng: () => number = Math.random,
+  ctx?: DamageContext
 ): DamageResult {
   if (move.power <= 0) {
     return { damage: 0, crit: false, typeMult: 1 };
@@ -46,7 +89,11 @@ export function calcDamage(
   // L'attacco speciale usa RETORICA (spc), ma la DIFESA è sempre FACCIA TOSTA (def):
   // prima le speciali leggevano spc anche in difesa e FACCIA TOSTA non proteggeva mai.
   const defKey: StatKey = "def";
-  const critChance = move.effect?.highCrit ? 0.25 : 1 / 16;
+  let critChance = move.effect?.highCrit ? 0.25 : 1 / 16;
+  // SONDAGGIO TRUCCATO (hold): critico 1/8 (non peggiora le mosse highCrit).
+  if (heldItemOf(attacker.mon)?.id === "sondtruccato") {
+    critChance = Math.max(critChance, 1 / 8);
+  }
   const crit = rng() < critChance;
   // In caso di critico si ignorano gli stage (come nei vecchi giochi).
   const atk = crit ? statsOf(attacker.mon)[atkKey] : effectiveStat(attacker, atkKey);
@@ -59,9 +106,46 @@ export function calcDamage(
   // danno sale ~20% e le lotte tornano corte anche per chi non gioca perfetto,
   // lasciando comunque spazio a status/buff (target ~5-7 turni player-perfetto).
   const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 58 + 2;
-  const random = 0.88 + Math.random() * 0.12;
-  const damage = Math.max(1, Math.floor(base * stab * tMult * random));
-  return { damage: tMult === 0 ? 0 : damage, crit, typeMult: tMult };
+  const random = 0.88 + rng() * 0.12;
+  let mult = stab * tMult * random;
+
+  // ---- HOLD ITEM (solo chi ha heldItem: nel duello v1 nessuno) ----
+  const atkHeld = heldItemOf(attacker.mon)?.id;
+  if (atkHeld === "santino" && move.category === "fisico") {
+    mult *= 1.1; // SANTINO ELETTORALE: +10% alle mosse fisiche
+  }
+  if (atkHeld === "agendarossa" && move.category === "speciale") {
+    mult *= 1.1; // AGENDA ROSSA: +10% alle mosse speciali
+  }
+  if (heldItemOf(defender.mon)?.id === "gilet") {
+    mult *= 0.85; // GILET ANTIPROIETTILE: -15% danno subito
+  }
+
+  // ---- ABILITÀ (derivate dalla specie: valgono anche nel duello) ----
+  const atkAbility = abilityOf(attacker.mon)?.id;
+  const atkMaxHp = statsOf(attacker.mon).hp;
+  if (atkAbility === "maggioranza" && attacker.mon.hp > atkMaxHp / 2) {
+    mult *= 1.1;
+  }
+  if (atkAbility === "opposizione" && attacker.mon.hp <= atkMaxHp / 2) {
+    mult *= 1.15;
+  }
+  if (atkAbility === "caimano" && defender.mon.status) {
+    mult *= 1.2;
+  }
+  // LODO: il primo colpo subito in battaglia è dimezzato.
+  let lodo = false;
+  if (abilityOf(defender.mon)?.id === "lodo" && !defender.firstHitTaken) {
+    mult *= 0.5;
+    lodo = true;
+  }
+  defender.firstHitTaken = true;
+
+  // ---- SONDAGGI COME METEO (solo PVE: il duello non passa ctx) ----
+  mult *= sondaggiMoveMult(ctx?.sondaggi, move.type);
+
+  const damage = Math.max(1, Math.floor(base * mult));
+  return { damage: tMult === 0 ? 0 : damage, crit, typeMult: tMult, lodo };
 }
 
 // Probabilità di cattura in stile prima generazione, semplificata.

@@ -1792,6 +1792,20 @@ export class WorldScene implements Scene {
     // sostituisce stepCount (privato, la cura del Min. Salute usa il suo %6).
     this.state.stepsTotal += 1;
 
+    // SPRAY ANTI-COMIZIO: scala a ogni passo; finché è attivo (anche in questo
+    // passo, l'ultimo compreso) gli incontri WILD sono soppressi più sotto.
+    // I PG VAGANTI e i trainer NON sono bloccati: lo spray respinge i selvatici,
+    // non i professionisti della politica.
+    const repellentActive = this.state.repellentSteps > 0;
+    if (repellentActive) {
+      this.state.repellentSteps -= 1;
+      if (this.state.repellentSteps === 0) {
+        saveGame(this.state);
+        this.say(["L'EFFETTO DELLO SPRAY È SVANITO.", "I comizi selvatici possono ricominciare."]);
+        return;
+      }
+    }
+
     // Sanità di prossimità: il Min. Salute fa recuperare 1 PV ogni 6 passi.
     this.stepCount += 1;
     if (this.stepCount % 6 === 0 && hasMinistro(this.state, "salute") && curaPassiva(this.state)) {
@@ -1878,6 +1892,9 @@ export class WorldScene implements Scene {
     const tile = TILES[this.tileAt(pos.x, pos.y)];
     if (tile?.encounter) {
       this.rustles.push({ x: pos.x, y: pos.y, t: 0.4 });
+      if (repellentActive) {
+        return; // SPRAY ANTI-COMIZIO: niente incontri wild finché dura
+      }
       const baseRate = this.map.encounterRate ?? 0.18;
       // Ministero dell'Interno e PROTEZIONE della famiglia diradano gli incontri.
       const rate =
@@ -1964,6 +1981,14 @@ export class WorldScene implements Scene {
   }
 
   update(dt: number): void {
+    // Riconciliazione mappa: se qualcuno ha spostato state.pos su un'altra
+    // mappa mentre eravamo sotto un menu (TESSERA RIMBORSO SPESE dalla BORSA),
+    // al ritorno in cima si ricarica la destinazione.
+    if (this.map.id !== this.state.pos.mapId && MAPS[this.state.pos.mapId]) {
+      this.loadMap(this.state.pos.mapId);
+      this.say(["TESSERA RIMBORSO SPESE: viaggio spesato dai contribuenti!", "Eccoti al BAR SPORT più vicino al cuore."]);
+      return;
+    }
     this.time += dt;
     this.shake = Math.max(0, this.shake - dt);
     this.fadeT = Math.max(0, this.fadeT - dt);

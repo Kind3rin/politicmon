@@ -1,6 +1,7 @@
 import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
 import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { DEX_ORDER, SPECIES, STARTERS } from "../data/species";
+import { ABILITIES } from "../data/abilities";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -125,12 +126,23 @@ export class DexScene implements Scene {
       screen.text(type, tx + 3 + iconW, 40, PAPER);
       tx += w + 4;
     }
+    // ABILITÀ passiva (se la specie ne ha una): nome + descrizione breve.
+    const ability = species.ability ? ABILITIES[species.ability] : undefined;
+    if (ability) {
+      screen.text(`ABILITÀ: ${ability.name}`, 76, 54, "#e8c84a");
+    }
     const lines = wrapText(species.dexLine, 35);
-    for (let i = 0; i < lines.length && i < 6; i += 1) {
+    for (let i = 0; i < lines.length && i < 4; i += 1) {
       screen.text(lines[i], 14, 80 + i * 11, INK);
     }
+    if (ability) {
+      const abLines = wrapText(ability.desc, 35);
+      for (let i = 0; i < Math.min(2, abLines.length); i += 1) {
+        screen.text(abLines[i], 14, 80 + 4 * 11 + i * 10, GREY);
+      }
+    }
     if (this.state.dex[id] !== "caught") {
-      screen.text("(Non ancora nella tua squadra)", 14, 138, GREY);
+      screen.text("(Non ancora nella tua squadra)", 14, 148, GREY);
     }
     screen.text("A/B: indietro", 14, VIEW_H - 16, GREY);
   }

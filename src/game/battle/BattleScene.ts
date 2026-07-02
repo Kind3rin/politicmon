@@ -11,7 +11,8 @@ import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
 import { zoneProgress } from "../../data/dexzones";
 import {
-  evolve, expForLevel, expYield, gainExp, healMonster, levelEvolution, speciesOf, statsOf, type Monster
+  abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, heldItemOf, levelEvolution, speciesOf,
+  statsOf, type Monster
 } from "../monster";
 import { typeMultiplier } from "../../data/poltypes";
 import {
@@ -153,6 +154,26 @@ export class BattleScene implements Scene {
       this.push({ text: `Un ${this.foeName()} selvatico sbuca dalla campagna elettorale!` });
     }
     this.push({ text: `Vai, ${this.playerName()}!` });
+    // SONDAGGI COME METEO: annuncio a inizio battaglia quando il gradimento
+    // attiva il modificatore (+15% ai tipi establishment o anti-establishment).
+    // Solo PVE: il duello PvP non passa mai dai SONDAGGI.
+    const sond = this.state.sondaggi;
+    if (sond >= 70) {
+      this.push({ text: "IL VENTO POLITICO SOFFIA A FAVORE DEL GOVERNO!" });
+      this.push({ text: "Mosse ISTITUZIONE/TECNO/CENTRO/MEDIA potenziate (+15%)." });
+    } else if (sond <= 40) {
+      this.push({ text: "IL VENTO POLITICO SOFFIA A FAVORE DELL'OPPOSIZIONE!" });
+      this.push({ text: "Mosse POPULISMO/DESTRA/SINISTRA/VERDE potenziate (+15%)." });
+    }
+    this.pushEntryAbility(this.player, this.playerName());
+  }
+
+  // VOLTAGABBANA: l'effetto (+1 OPPORTUNISMO) è applicato da makeCombatant;
+  // qui si annuncia soltanto, a ogni ingresso in campo.
+  private pushEntryAbility(c: Combatant, name: string): void {
+    if (abilityOf(c.mon)?.id === "voltagabbana") {
+      this.push({ text: `${name} cambia casacca al volo: OPPORTUNISMO sale!` });
+    }
   }
 
   // ---- Helpers ----
@@ -328,7 +349,8 @@ export class BattleScene implements Scene {
     }
 
     if (move.power > 0) {
-      const result = calcDamage(attacker, defender, move);
+      // Contesto SONDAGGI (meteo politico): SOLO qui nel PVE; il duello resta neutro.
+      const result = calcDamage(attacker, defender, move, Math.random, { sondaggi: this.state.sondaggi });
       steps.push({
         run: () => {
           defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
@@ -339,6 +361,9 @@ export class BattleScene implements Scene {
       });
       if (result.crit) {
         steps.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
+      }
+      if (result.lodo) {
+        steps.push({ text: `Il LODO protegge ${defenderName}: primo colpo dimezzato!` });
       }
       if (result.typeMult === 0) {
         steps.push({ text: "Non ha alcun effetto..." });
@@ -393,7 +418,15 @@ export class BattleScene implements Scene {
     if (effect?.stat) {
       const target = effect.stat.target === "self" ? attacker : defender;
       const targetName = effect.stat.target === "self" ? attackerName : defenderName;
-      if ((effect.stat.chance ?? 100) > Math.random() * 100) {
+      // POLTRONA SALDA: immune ai cali di statistica inflitti dal nemico
+      // (replicato in duelsim.ts, stesso punto).
+      if (
+        effect.stat.target === "foe" &&
+        effect.stat.stages < 0 &&
+        abilityOf(target.mon)?.id === "poltrona"
+      ) {
+        steps.push({ text: `POLTRONA SALDA! ${targetName} non si schioda di un millimetro.` });
+      } else if ((effect.stat.chance ?? 100) > Math.random() * 100) {
         steps.push({
           run: () => {
             target.stages[effect.stat!.key] = Math.max(
@@ -407,7 +440,19 @@ export class BattleScene implements Scene {
       }
     }
     if (effect?.status && defender.mon.hp > 0) {
-      if (Math.random() * 100 < effect.status.chance) {
+      // TEFLON: immune agli status (guard PRIMA del tiro di chance, come in
+      // duelsim). TELECAMERA (hold): previene solo la GAFFE.
+      const immuneTeflon = abilityOf(defender.mon)?.id === "teflon";
+      const immuneCamera = effect.status.id === "gaffe" && heldItemOf(defender.mon)?.id === "telecamera";
+      if (immuneTeflon || immuneCamera) {
+        if (effect.status.chance >= 100) {
+          steps.push({
+            text: immuneTeflon
+              ? `TEFLON! Le accuse scivolano via da ${defenderName}.`
+              : `La TELECAMERA riprende tutto: ${defenderName} evita la GAFFE!`
+          });
+        }
+      } else if (Math.random() * 100 < effect.status.chance) {
         const id = effect.status.id;
         if (defender.mon.status || (id === "gaffe" && defender.gaffeTurns > 0)) {
           if (effect.status.chance >= 100) {
@@ -592,9 +637,11 @@ export class BattleScene implements Scene {
       this.foe = makeCombatant(this.foeTeam[this.foeIndex]);
       this.displayHp.foe = this.foe.mon.hp;
       markSeen(this.state, this.foe.mon.speciesId);
-      this.pushFront([
-        { text: `${this.trainer.name} manda in campo ${this.foeName()}!` }
-      ]);
+      const entry: Step[] = [{ text: `${this.trainer.name} manda in campo ${this.foeName()}!` }];
+      if (abilityOf(this.foe.mon)?.id === "voltagabbana") {
+        entry.push({ text: `Il nemico ${this.foeName()} cambia casacca al volo: OPPORTUNISMO sale!` });
+      }
+      this.pushFront(entry);
       return;
     }
     const steps: Step[] = [];
@@ -751,6 +798,9 @@ export class BattleScene implements Scene {
     this.displayHp.player = mon.hp;
     this.displayExp = this.expRatio();
     const steps: Step[] = [{ text: `Tocca a te, ${this.playerName()}!` }];
+    if (abilityOf(mon)?.id === "voltagabbana") {
+      steps.push({ text: `${this.playerName()} cambia casacca al volo: OPPORTUNISMO sale!` });
+    }
     if (!afterFaint) {
       // Il cambio consuma il turno: il nemico attacca.
       steps.push({
@@ -774,20 +824,38 @@ export class BattleScene implements Scene {
 
   private endOfTurnSteps(): Step[] {
     const apply = (c: Combatant, name: string): Step[] => {
-      if (c.mon.hp <= 0 || c.mon.status !== "scandalo") {
-        return [];
-      }
-      return [
-        {
-          text: `${name} è logorato dallo SCANDALO!`,
-          run: () => {
-            c.mon.hp = Math.max(0, c.mon.hp - Math.max(1, Math.floor(statsOf(c.mon).hp / 8)));
-            audio.hit();
+      const steps: Step[] = [];
+      if (c.mon.hp > 0 && c.mon.status === "scandalo") {
+        steps.push(
+          {
+            text: `${name} è logorato dallo SCANDALO!`,
+            run: () => {
+              c.mon.hp = Math.max(0, c.mon.hp - Math.max(1, Math.floor(statsOf(c.mon).hp / 8)));
+              audio.hit();
+            },
+            waitHp: true
           },
-          waitHp: true
-        },
-        ...this.koCheckSteps(c === this.player ? "player" : "foe")
-      ];
+          ...this.koCheckSteps(c === this.player ? "player" : "foe")
+        );
+      }
+      // Cure di fine turno (dopo lo SCANDALO, come in duelsim):
+      // GALLEGGIAMENTO (abilità, 1/16) e CAFFETTIERA (hold, 1/16, solo PVE).
+      const healEot = (label: string, cond: () => boolean) => {
+        steps.push({
+          run: () => {
+            const max = statsOf(c.mon).hp;
+            if (c.mon.hp <= 0 || c.mon.hp >= max || !cond()) {
+              return;
+            }
+            c.mon.hp = Math.min(max, c.mon.hp + Math.max(1, Math.floor(max / 16)));
+            audio.heal();
+            this.pushFront([{ text: `${label} ${name} recupera un po' di consenso!`, waitHp: true }]);
+          }
+        });
+      };
+      healEot("GALLEGGIAMENTO!", () => abilityOf(c.mon)?.id === "galleggiamento");
+      healEot("La CAFFETTIERA fuma:", () => heldItemOf(c.mon)?.id === "caffettiera");
+      return steps;
     };
     return [...apply(this.player, this.playerName()), ...apply(this.foe, `Il nemico ${this.foeName()}`)];
   }
@@ -806,6 +874,20 @@ export class BattleScene implements Scene {
     if (item.kind === "evo") {
       this.pushFront([
         { text: "Le tessere si firmano in segreteria, non in diretta TV!" }
+      ]);
+      this.mode = "queue";
+      return;
+    }
+    if (item.kind === "hold" || item.kind === "tm" || item.kind === "key") {
+      this.pushFront([
+        { text: "Con calma: si equipaggia fuori dai riflettori, dalla BORSA." }
+      ]);
+      this.mode = "queue";
+      return;
+    }
+    if (item.kind === "field") {
+      this.pushFront([
+        { text: "Non ora! In diretta non si scappa a colpi di spray e rimborsi." }
       ]);
       this.mode = "queue";
       return;

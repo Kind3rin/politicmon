@@ -1,7 +1,9 @@
 export interface Item {
   id: string;
   name: string;
-  kind: "ball" | "heal" | "cure" | "evo" | "tm" | "key";
+  // "hold": equipaggiabile su un Monster (1 slot, Monster.heldItem).
+  // "field": usabile solo fuori battaglia con effetto sul mondo (repellente/teletrasporto).
+  kind: "ball" | "heal" | "cure" | "evo" | "tm" | "key" | "hold" | "field";
   amount?: number;
   percent?: number; // cura come % dei PV max (0-1); ha priorità su amount
   ballBonus?: number; // moltiplicatore di cattura
@@ -78,11 +80,51 @@ export const ITEMS: Record<string, Item> = {
   dirGreen: {
     id: "dirGreen", name: "DIRETTIVA: GREEN", kind: "tm", moveId: "greenwashing", reusable: true, price: 1600,
     desc: "Barattolo di vernice verde. Insegna GREENWASHING ai tipi VERDE."
+  },
+
+  // ---- OGGETTI DA TENERE (hold: 1 slot per POLITICMON) ----
+  // Gli effetti vivono in sim.ts (calcDamage) e BattleScene (per turno).
+  // v1: NON viaggiano mai sul filo (duello/scambio senza held item).
+  gilet: {
+    id: "gilet", name: "GILET ANTIPROIETTILE", kind: "hold", price: 1800,
+    desc: "Da tenere: chi lo indossa subisce il 15% di danni in meno. Collaudato in piazza."
+  },
+  telecamera: {
+    id: "telecamera", name: "TELECAMERA", kind: "hold", price: 1500,
+    desc: "Da tenere: con la diretta accesa nessuno osa fargli fare GAFFE."
+  },
+  sondtruccato: {
+    id: "sondtruccato", name: "SONDAGGIO TRUCCATO", kind: "hold", price: 2500,
+    desc: "Da tenere: numeri gonfiati ad arte. Colpo critico più frequente (1 su 8)."
+  },
+  caffettiera: {
+    id: "caffettiera", name: "CAFFETTIERA", kind: "hold", price: 2000,
+    desc: "Da tenere: una moka sempre calda. Recupera un po' di PV a ogni turno."
+  },
+  agendarossa: {
+    id: "agendarossa", name: "AGENDA ROSSA", kind: "hold", price: 2200,
+    desc: "Da tenere: appunti che scottano. RETORICA +10% (mosse speciali)."
+  },
+  santino: {
+    id: "santino", name: "SANTINO ELETTORALE", kind: "hold", price: 1200,
+    desc: "Da tenere: la propria faccia plastificata. GRINTA +10% (mosse fisiche)."
+  },
+
+  // ---- OGGETTI DA CAMPO (field: solo fuori battaglia) ----
+  spray: {
+    id: "spray", name: "SPRAY ANTI-COMIZIO", kind: "field", price: 400,
+    desc: "Allontana i candidati selvatici per 150 passi. Odora di par condicio."
+  },
+  rimborso: {
+    id: "rimborso", name: "TESSERA RIMBORSO SPESE", kind: "field", price: 600,
+    desc: "Viaggio istantaneo all'ultimo BAR SPORT visitato. Pagano i contribuenti."
   }
 };
 
 export const BAG_ORDER = [
-  "scheda", "schedona", "caffe", "spritz", "mojito", "maalox", "tessera", "divisa",
+  "scheda", "schedona", "caffe", "spritz", "mojito", "maalox", "spray", "rimborso",
+  "gilet", "telecamera", "sondtruccato", "caffettiera", "agendarossa", "santino",
+  "tessera", "divisa",
   "dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",
   "dirInciucio", "dirBunga", "dirGreen"
 ];

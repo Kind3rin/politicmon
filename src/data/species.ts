@@ -29,6 +29,7 @@ export interface Species {
   expYield: number;
   learnset: Array<[number, string]>; // [livello, moveId]
   evolutions?: EvolutionRule[];
+  ability?: string; // id in ABILITIES (abilities.ts): effetto passivo fisso della specie
   dexLine: string;
 }
 
@@ -50,6 +51,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 76, atk: 84, def: 76, spc: 95, spd: 75 },
     catchRate: 25, expYield: 180,
     learnset: [[1, "comizio"], [1, "radici"], [16, "fiammatricolore"], [19, "pacchiafinita"], [22, "blocconavale"], [28, "decreto"]],
+    ability: "maggioranza",
     dexLine: "DRAGO UNDERDOG. PIÙ LO CRITICANO A BRUXELLES, PIÙ LA SUA FIAMMA TRICOLORE DIVAMPA."
   }),
   ellyna: S({
@@ -67,6 +69,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 74, atk: 74, def: 78, spc: 98, spd: 74 },
     catchRate: 25, expYield: 180,
     learnset: [[1, "corteo"], [1, "ztl"], [16, "greenwashing"], [20, "sciopero"], [26, "scissione"]],
+    ability: "opposizione",
     dexLine: "SCEGLIE I COLORI CON L'ARMOCROMISTA. LA SUA MOSSA PIÙ FORTE COLPISCE ANCHE IL SUO PARTITO."
   }),
   renzino: S({
@@ -76,6 +79,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 45, expYield: 62,
     learnset: [[1, "giravolta"], [1, "comizio"], [1, "promessa"], [5, "terzopolo"], [11, "inciucio"], [13, "staisereno"]],
     evolutions: [{ id: "renzilla", level: 16 }],
+    ability: "voltagabbana",
     dexLine: "SORRIDE SEMPRE. SE GLI STRINGI LA ZAMPA, CONTA LE DITA E POI FONDA UN PARTITO NUOVO."
   }),
   renzilla: S({
@@ -84,6 +88,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 71, atk: 88, def: 72, spc: 80, spd: 90 },
     catchRate: 25, expYield: 180,
     learnset: [[1, "giravolta"], [1, "terzopolo"], [16, "staisereno"], [20, "rottamazione"], [22, "inciucio"], [28, "editoriale"]],
+    ability: "voltagabbana",
     dexLine: "DISTRUGGE GOVERNI CHE HA COSTRUITO LUI STESSO. DICE CHE LO FA PER IL BENE DEL PAESE."
   }),
   salvinott: S({
@@ -124,6 +129,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 100, expYield: 130,
     learnset: [[1, "comizio"], [6, "pochette"], [10, "inciucio"], [15, "telepromessa"], [21, "conferenza"]],
     evolutions: [{ id: "conteblob", level: 18 }],
+    ability: "teflon",
     dexLine: "BLOB ELEGANTISSIMO. CAMBIA FORMA, ALLEATI E CONVINZIONI SENZA PERDERE MAI LA POCHETTE."
   }),
   calendauro: S({
@@ -151,6 +157,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 120, expYield: 110,
     learnset: [[1, "comizio"], [5, "promessa"], [10, "conferenza"], [16, "moralsuasion"], [22, "inciucio"]],
     evolutions: [{ id: "tajacolomba", level: 18 }],
+    ability: "poltrona",
     dexLine: "COLOMBA MITISSIMA. NESSUNO L'HA MAI VISTA ARRABBIATA. QUALCUNO DUBITA L'ABBIA MAI VISTA SVEGLIA."
   }),
   berlusconix: S({
@@ -159,6 +166,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 80, atk: 70, def: 65, spc: 105, spd: 85 },
     catchRate: 8, expYield: 240,
     learnset: [[1, "tweet"], [1, "telepromessa"], [12, "conferenza"], [18, "editoriale"], [25, "bunga"]],
+    ability: "lodo",
     dexLine: "BISCIONE LEGGENDARIO. NON APPARE NELL'ERBA: ENTRA IN SCENA SOLO QUANDO LO SHARE È ABBASTANZA ALTO."
   }),
   draghimon: S({
@@ -191,6 +199,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 90, atk: 90, def: 88, spc: 70, spd: 58 },
     catchRate: 5, expYield: 245,
     learnset: [[1, "comizio"], [1, "tavololungo"], [16, "gasdotto"], [24, "dossier"], [30, "blocconavale"]],
+    ability: "caimano",
     dexLine: "TIENE IL DITO SUL RUBINETTO DEL GAS. D'INVERNO L'EUROPA RICEVE LA BOLLETTA E TREMA."
   }),
   bunkerput: S({
@@ -257,6 +266,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 72, atk: 92, def: 62, spc: 88, spd: 100 },
     catchRate: 15, expYield: 200,
     learnset: [[1, "vaffa"], [1, "monopattino"], [22, "tsunamitour"], [27, "sciopero"], [32, "brexit"]],
+    ability: "opposizione",
     dexLine: "FENICE DELL'OPPOSIZIONE. RINASCE DALLE CENERI DI OGNI SONDAGGIO SOTTO IL 50 PER CENTO."
   }),
   movimenton: S({
@@ -265,6 +275,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 82, atk: 68, def: 88, spc: 92, spd: 58 },
     catchRate: 15, expYield: 200,
     learnset: [[1, "comizio"], [1, "greenwashing"], [22, "redditone"], [26, "fiducia"], [31, "decreto"]],
+    ability: "maggioranza",
     dexLine: "DA URLATORE DI PIAZZA A PILASTRO ISTITUZIONALE. GIURA CHE NON È CAMBIATO NIENTE."
   }),
   capitanone: S({
@@ -273,6 +284,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 88, atk: 102, def: 74, spc: 62, spd: 72 },
     catchRate: 10, expYield: 210,
     learnset: [[1, "ruspa"], [1, "mojito"], [1, "pienipoteri"], [30, "blocconavale"], [34, "dazilampo"]],
+    ability: "caimano",
     dexLine: "GIURA DI AVER CHIESTO I PIENI POTERI SOLO PER ORDINARE MOJITO PIÙ IN FRETTA."
   }),
   marsrat: S({
@@ -291,6 +303,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 70, expYield: 145,
     learnset: [[1, "tweet"], [1, "giravolta"], [8, "conferenza"], [13, "telepromessa"], [18, "editoriale"], [24, "inciucio"]],
     evolutions: [{ id: "telecrate", level: 20 }],
+    ability: "galleggiamento",
     dexLine: "OSPITE FISSO DI OGNI TALK SHOW. HA UN'OPINIONE FORTISSIMA SU TUTTO E NESSUNA SU NIENTE. SE CAMBI CANALE, È GIÀ LÌ."
   }),
   // FIRMA dello STRETTO: il mostro-cantiere del ponte mai finito.
@@ -309,6 +322,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 82, atk: 58, def: 92, spc: 100, spd: 52 },
     catchRate: 35, expYield: 205,
     learnset: [[1, "pochette"], [1, "telepromessa"], [18, "conferenza"], [24, "fiducia"], [30, "decreto"]],
+    ability: "teflon",
     dexLine: "SI ADATTA A QUALSIASI MAGGIORANZA. PRIMA DI ATTACCARE CHIEDE UN PARERE PRO VERITATE A SE STESSO."
   }),
   calendrone: S({
@@ -333,6 +347,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 78, atk: 56, def: 84, spc: 86, spd: 74 },
     catchRate: 40, expYield: 195,
     learnset: [[1, "moralsuasion"], [1, "conferenza"], [18, "inciucio"], [24, "fiducia"], [30, "multaue"]],
+    ability: "poltrona",
     dexLine: "PARLA PIANISSIMO MA FIRMA COMUNICATI DURISSIMI. SI POSA DOVE CONVIENE E RIPARTE CON GARBO."
   }),
   telecrate: S({
@@ -341,6 +356,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 82, atk: 60, def: 76, spc: 104, spd: 82 },
     catchRate: 30, expYield: 210,
     learnset: [[1, "tweet"], [1, "editoriale"], [20, "telepromessa"], [26, "bunga"], [32, "conferenza"]],
+    ability: "galleggiamento",
     dexLine: "NON DORME: ASPETTA IL PROSSIMO TALK. SI NUTRE DI LUCI ROSSE, SONDAGGI E MICROFONI ACCESI."
   }),
   pontimax: S({

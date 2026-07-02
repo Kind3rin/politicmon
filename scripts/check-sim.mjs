@@ -97,6 +97,70 @@ const results = await page.evaluate(async () => {
     check(allOk, "bumpSondaggi: soglie 25/40/55/70/85 corrette", detail.trim());
   }
 
+  // 4) HOLD ITEM (Round 39): santino +10% fisico, gilet -15% subito.
+  {
+    const move = MOVES.comizio; // fisica, 100 acc
+    const base = () => {
+      const p = makeCombatant(createMonster("giorgetta", 20));
+      const f = makeCombatant(createMonster("salvinott", 20));
+      return { p, f };
+    };
+    // seed che NON produce crit al primo tiro (verificato: mulberry32(1) primo ~0.26)
+    const noCrit = () => mulberry32(1);
+    let a = base();
+    const plain = calcDamage(a.p, a.f, move, noCrit()).damage;
+    a = base();
+    a.p.mon.heldItem = "santino";
+    const withSantino = calcDamage(a.p, a.f, move, noCrit()).damage;
+    check(withSantino > plain, "hold: SANTINO aumenta il danno fisico", `${plain} -> ${withSantino}`);
+    a = base();
+    a.f.mon.heldItem = "gilet";
+    const withGilet = calcDamage(a.p, a.f, move, noCrit()).damage;
+    check(withGilet < plain, "hold: GILET riduce il danno subito", `${plain} -> ${withGilet}`);
+    // heldItem sconosciuto (item rimosso dal gioco): nessun crash, nessun effetto.
+    a = base();
+    a.p.mon.heldItem = "itemFantasma";
+    const withGhost = calcDamage(a.p, a.f, move, noCrit()).damage;
+    check(withGhost === plain && a.p.mon.heldItem === undefined, "hold: id sconosciuto ignorato e ripulito", `${withGhost}`);
+  }
+
+  // 5) ABILITÀ: LODO dimezza SOLO il primo colpo; MAGGIORANZA +10% se HP>50%.
+  {
+    const move = MOVES.comizio;
+    const atk = makeCombatant(createMonster("giorgetta", 20));
+    const lodoDef = makeCombatant(createMonster("berlusconix", 20)); // ability lodo
+    const first = calcDamage(atk, lodoDef, move, mulberry32(1));
+    const second = calcDamage(atk, lodoDef, move, mulberry32(1));
+    check(first.lodo === true && second.lodo !== true && first.damage < second.damage,
+      "abilità: LODO dimezza solo il primo colpo", `${first.damage} poi ${second.damage}`);
+    const magg = makeCombatant(createMonster("giorgiagon", 20)); // ability maggioranza
+    const plainDef = () => makeCombatant(createMonster("salvinott", 20));
+    const full = calcDamage(magg, plainDef(), move, mulberry32(1)).damage;
+    magg.mon.hp = 1; // sotto il 50%: niente bonus
+    const low = calcDamage(magg, plainDef(), move, mulberry32(1)).damage;
+    check(full > low, "abilità: MAGGIORANZA solo con HP>50%", `${full} vs ${low}`);
+    // VOLTAGABBANA: +1 OPPORTUNISMO all'ingresso (da makeCombatant).
+    const volta = makeCombatant(createMonster("renzino", 10));
+    check(volta.stages.spd === 1, "abilità: VOLTAGABBANA +1 SPD all'ingresso", `spd=${volta.stages.spd}`);
+  }
+
+  // 6) SONDAGGI COME METEO: ctx alza il danno dei tipi giusti, il default è neutro.
+  {
+    const { sondaggiMoveMult } = await import("/src/game/battle/sim.ts");
+    const move = MOVES.moralsuasion ?? MOVES.decreto ?? MOVES.comizio;
+    const atk = () => makeCombatant(createMonster("draghimon", 20)); // ISTITUZIONE/TECNO
+    const def = () => makeCombatant(createMonster("salvinott", 20));
+    const mvIst = Object.values(MOVES).find((m) => m.type === "ISTITUZIONE" && m.power > 0);
+    const neutral = calcDamage(atk(), def(), mvIst, mulberry32(1)).damage;
+    const boosted = calcDamage(atk(), def(), mvIst, mulberry32(1), { sondaggi: 80 }).damage;
+    const opposed = calcDamage(atk(), def(), mvIst, mulberry32(1), { sondaggi: 30 }).damage;
+    check(boosted > neutral && opposed === neutral,
+      "sondaggi-meteo: +15% establishment a >=70, neutro a <=40", `${neutral}/${boosted}/${opposed}`);
+    check(sondaggiMoveMult(undefined, "ISTITUZIONE") === 1 && sondaggiMoveMult(30, "POPULISMO") === 1.15,
+      "sondaggi-meteo: default neutro, anti-establishment a <=40", "");
+    void move;
+  }
+
   return out;
 });
 

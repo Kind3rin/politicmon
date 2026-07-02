@@ -1,3 +1,5 @@
+import { ABILITIES, type Ability } from "../data/abilities";
+import { ITEMS, type Item } from "../data/items";
 import { MOVES, type StatusId } from "../data/moves";
 import { SPECIES, type Species } from "../data/species";
 
@@ -29,6 +31,27 @@ let uidCounter = 0;
 
 export function speciesOf(mon: Monster): Species {
   return SPECIES[mon.speciesId];
+}
+
+// Oggetto tenuto (kind "hold"), con parse difensivo: se l'id non esiste più
+// in ITEMS o non è un hold (save vecchio/corrotto), viene ignorato E ripulito.
+export function heldItemOf(mon: Monster): Item | null {
+  if (!mon.heldItem) {
+    return null;
+  }
+  const item = ITEMS[mon.heldItem];
+  if (!item || item.kind !== "hold") {
+    delete mon.heldItem;
+    return null;
+  }
+  return item;
+}
+
+// Abilità passiva della specie (derivata, mai dal filo): null se assente o
+// se l'id non esiste nel registry.
+export function abilityOf(mon: Monster): Ability | null {
+  const id = speciesOf(mon).ability;
+  return id ? (ABILITIES[id] ?? null) : null;
 }
 
 export function statsOf(mon: Monster): Stats {

@@ -5,8 +5,9 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { canLearnMove, evolve, itemEvolution, speciesOf, statsOf } from "../game/monster";
+import { canLearnMove, evolve, heldItemOf, itemEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
+import { BAR_RESPAWN } from "../data/maps";
 import { Menu, MessageBox, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 import { PartyScene } from "./PartyScene";
 import { TeachScene } from "./TeachScene";
@@ -21,6 +22,9 @@ export class BagScene implements Scene {
   private menu: Menu;
   private itemIds: string[];
   private msg = new MessageBox();
+  // Conferma SÌ/NO per lo swap di un hold item già equipaggiato.
+  private ask: { text: string; yes: () => void } | null = null;
+  private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
 
   constructor(
     private stack: SceneStack,
@@ -42,6 +46,18 @@ export class BagScene implements Scene {
   update(dt: number): void {
     if (this.msg.isOpen) {
       this.msg.update(dt, this.input);
+      return;
+    }
+    if (this.ask) {
+      const a = this.askMenu.update(this.input);
+      if (a === "select") {
+        const yes = this.askMenu.index === 0 ? this.ask.yes : null;
+        this.ask = null;
+        yes?.();
+      } else if (a === "cancel") {
+        audio.cancel();
+        this.ask = null;
+      }
       return;
     }
     const action = this.menu.update(this.input);
@@ -70,6 +86,22 @@ export class BagScene implements Scene {
     // Oggetti chiave: passivi, non si "usano" — spiega l'effetto.
     if (item.kind === "key") {
       this.msg.show(["È sempre attivo, basta possederlo.", item.desc]);
+      return;
+    }
+    // HOLD ITEM: scegli il POLITICMON che lo terrà (1 slot; swap con conferma).
+    if (item.kind === "hold") {
+      this.stack.push(
+        new PartyScene(this.stack, this.input, this.state, {
+          mode: "use-item",
+          title: `A chi affidi ${item.name}?`,
+          onChoose: (mon) => this.equipHold(mon, itemId)
+        })
+      );
+      return;
+    }
+    // OGGETTI DA CAMPO: repellente e teletrasporto al bar.
+    if (item.kind === "field") {
+      this.useFieldItem(itemId);
       return;
     }
     // DIRETTIVE DI PARTITO: insegnano una mossa a chi è del tipo giusto.
@@ -155,6 +187,74 @@ export class BagScene implements Scene {
     );
   }
 
+  // Equipaggia un hold item: se il mostro ne tiene già uno, chiede lo swap
+  // (il vecchio torna nella borsa). Parse difensivo via heldItemOf.
+  private equipHold(mon: Monster, itemId: string): void {
+    const item = ITEMS[itemId];
+    const current = heldItemOf(mon);
+    if (current?.id === itemId) {
+      this.msg.show([`${speciesOf(mon).name} tiene già ${item.name}.`]);
+      return;
+    }
+    const doEquip = () => {
+      if (current) {
+        this.state.bag[current.id] = (this.state.bag[current.id] ?? 0) + 1;
+      }
+      mon.heldItem = itemId;
+      this.consume(itemId);
+      audio.confirm();
+      saveGame(this.state);
+      this.msg.show([
+        `${speciesOf(mon).name} ora tiene ${item.name}!`,
+        ...(current ? [`${current.name} torna nella borsa.`] : [])
+      ]);
+    };
+    if (current) {
+      this.askMenu.index = 0;
+      this.ask = {
+        text: `${speciesOf(mon).name} tiene già ${current.name}. Scambiare con ${item.name}?`,
+        yes: doEquip
+      };
+    } else {
+      doEquip();
+    }
+  }
+
+  // SPRAY ANTI-COMIZIO e TESSERA RIMBORSO SPESE (kind "field").
+  // Vietati solo in battaglia (gestito da BattleScene.useItem): qui siamo
+  // sempre fuori battaglia, quindi si usano e basta.
+  private useFieldItem(itemId: string): void {
+    if (itemId === "spray") {
+      if (this.state.repellentSteps > 0) {
+        this.msg.show(["Lo SPRAY è ancora attivo.", `Passi rimanenti: ${this.state.repellentSteps}.`]);
+        return;
+      }
+      this.consume(itemId);
+      this.state.repellentSteps = 150;
+      audio.confirm();
+      saveGame(this.state);
+      this.msg.show([
+        "PSSST! Una nube di par condicio ti avvolge.",
+        "Niente candidati selvatici per 150 passi."
+      ]);
+      return;
+    }
+    if (itemId === "rimborso") {
+      const city = this.state.lastBar && BAR_RESPAWN[this.state.lastBar] ? this.state.lastBar : "borgo";
+      const spot = BAR_RESPAWN[city];
+      this.consume(itemId);
+      this.state.pos = { mapId: city, x: spot.x, y: spot.y, facing: "down" };
+      audio.confirm();
+      saveGame(this.state);
+      // Chiude BORSA e MENU PAUSA: la WorldScene sottostante rileva il cambio
+      // di mappa (riconciliazione in update) e ricarica la destinazione.
+      this.stack.pop(); // BagScene
+      this.stack.pop(); // PauseScene
+      return;
+    }
+    this.msg.show(["Non succede niente. Sospetto."]);
+  }
+
   private consume(itemId: string): void {
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
     this.itemIds = BAG_ORDER.filter((id) => (this.state.bag[id] ?? 0) > 0);
@@ -191,6 +291,15 @@ export class BagScene implements Scene {
       }
     }
     screen.text("A: usa  B: chiudi", 8, VIEW_H - 10, GREY);
+    if (this.ask) {
+      // Pannello di conferma swap hold item.
+      screen.panel(14, 52, VIEW_W - 28, 66);
+      const lines = wrapText(this.ask.text, 32);
+      for (let i = 0; i < Math.min(3, lines.length); i += 1) {
+        screen.text(lines[i], 22, 60 + i * 10, INK);
+      }
+      this.askMenu.draw(screen, VIEW_W - 76, 92, 54, 11);
+    }
     this.msg.draw(screen);
   }
 }

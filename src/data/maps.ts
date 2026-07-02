@@ -1086,7 +1086,9 @@ export const MAPS: Record<string, MapDef> = {
       // Tesoro sull'isoletta del LAGHETTO: ci si arriva solo col TRAGHETTO.
       { id: "pk-r2-isola", x: 5, y: 6, itemId: "schedona", qty: 2 },
       { id: "pk-r2", x: 24, y: 10, itemId: "maalox", qty: 1 },
-      { id: "pk-r2-hide", x: 4, y: 15, itemId: "spritz", qty: 2, hidden: true }
+      { id: "pk-r2-hide", x: 4, y: 15, itemId: "spritz", qty: 2, hidden: true },
+      // Pickup raro Round 39: un hold item gratis per far scoprire la meccanica.
+      { id: "pk-r2-santino", x: 23, y: 10, itemId: "santino", qty: 1, hidden: true }
     ],
     npcs: [
       {
@@ -1244,7 +1246,9 @@ export const MAPS: Record<string, MapDef> = {
     ],
     pickups: [
       { id: "pk-r3", x: 4, y: 14, itemId: "schedona", qty: 2 },
-      { id: "pk-r3-hide", x: 25, y: 13, itemId: "caffe", qty: 2, hidden: true }
+      { id: "pk-r3-hide", x: 25, y: 13, itemId: "caffe", qty: 2, hidden: true },
+      // Pickup raro Round 39: hold item speciale nascosto sul percorso.
+      { id: "pk-r3-agenda", x: 5, y: 14, itemId: "agendarossa", qty: 1, hidden: true }
     ],
     npcs: [
       {

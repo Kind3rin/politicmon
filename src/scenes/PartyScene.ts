@@ -5,9 +5,10 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { canLearnMove, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
+import { abilityOf, canLearnMove, heldItemOf, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
+import { saveGame } from "../game/state";
 import type { GameState } from "../game/state";
-import { drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { drawHpBar, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -36,6 +37,19 @@ export class PartyScene implements Scene {
   update(): void {
     const party = this.opts.partyOverride ?? this.state.party;
     if (this.summary) {
+      // START nel dettaglio: togli l'oggetto tenuto (torna nella borsa).
+      if (this.input.wasPressed("start")) {
+        const held = heldItemOf(this.summary);
+        if (held) {
+          delete this.summary.heldItem;
+          this.state.bag[held.id] = (this.state.bag[held.id] ?? 0) + 1;
+          audio.confirm();
+          saveGame(this.state);
+        } else {
+          audio.cancel();
+        }
+        return;
+      }
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
         audio.cancel();
         this.summary = null;
@@ -208,10 +222,12 @@ export class PartyScene implements Scene {
       screen.text(move.name, 14, 84 + i * 10, INK);
       screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, 84 + i * 10, GREY);
     }
-    const dexLines = wrapText(species.dexLine, 36);
-    for (let i = 0; i < Math.min(2, dexLines.length); i += 1) {
-      screen.text(dexLines[i], 14, 128 + i * 10, GREY);
-    }
-    screen.text("A/B: indietro", 14, VIEW_H - 18, GREY);
+    // ABILITÀ passiva della specie + OGGETTO tenuto (al posto della dexLine,
+    // che resta leggibile nel POLITICDEX).
+    const ability = abilityOf(mon);
+    screen.text(`ABILITÀ: ${ability ? ability.name : "—"}`, 14, 128, ability ? "#e8c84a" : GREY);
+    const held = heldItemOf(mon);
+    screen.text(`OGGETTO: ${held ? held.name : "—"}`, 14, 138, held ? INK : GREY);
+    screen.text(held ? "A/B: indietro  START: togli oggetto" : "A/B: indietro", 14, VIEW_H - 18, GREY);
   }
 }

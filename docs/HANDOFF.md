@@ -5,7 +5,57 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 39 lotto TECH — save v11, sim reale nel balance harness, CI**, 2026-07-02.
+Ultimo aggiornamento: **Round 39 lotto GAMEPLAY — hold item, abilità, sondaggi-meteo, spray/tessera**, 2026-07-02.
+
+### 🎮 Round 39 — LOTTO GAMEPLAY (2/4)
+Spec: r39-audits sezione GAMEPLAY. Fatto in questo lotto:
+
+- **HOLD ITEM** (kind `"hold"`, 1 slot `Monster.heldItem`): GILET ANTIPROIETTILE
+  (-15% danno subito), TELECAMERA (previene GAFFE), SONDAGGIO TRUCCATO (crit 1/8),
+  CAFFETTIERA (cura 1/16 a fine turno), AGENDA ROSSA (+10% speciali), SANTINO
+  ELETTORALE (+10% fisiche). Equip da BagScene (swap con conferma SÌ/NO),
+  visibile/rimovibile nel dettaglio PartyScene (START toglie → torna in borsa).
+  Effetti danno in `sim.ts::calcDamage` (`heldItemOf` con parse difensivo: id
+  sconosciuto → rimosso), cura/prevenzione in BattleScene. In vendita al DISCOUNT
+  (1200-2500€) + 2 pickup nascosti (route2 santino, route3 agendarossa).
+  **v1: heldItem NON passa sul filo** (trade/duello: i mon ricostruiti da
+  {speciesId,level,moves} non lo hanno — verificato, nessun effetto nel PvP).
+- **SONDAGGI COME METEO**: `calcDamage(..., ctx?: {sondaggi})`, default NEUTRO.
+  Divisione (documentata in sim.ts): establishment = ISTITUZIONE/TECNO/CENTRO/MEDIA,
+  anti-establishment = POPULISMO/DESTRA/SINISTRA/VERDE. Sondaggi ≥70 → +15% alle
+  mosse establishment; ≤40 → +15% anti. Solo PVE (BattleScene passa il ctx; il
+  duello NO, dichiarato nella sentinella duelsim). Banner a inizio battaglia
+  ("IL VENTO POLITICO SOFFIA A FAVORE DEL GOVERNO/DELL'OPPOSIZIONE").
+- **ABILITÀ PASSIVE** (`Species.ability` + registry `src/data/abilities.ts`, 8):
+  POLTRONA SALDA (tajanide/tajacolomba), TEFLON (contemorfo/conteblob),
+  MAGGIORANZA (giorgiagon/movimenton), OPPOSIZIONE (schleinix/vaffenix),
+  GALLEGGIAMENTO (mediocrate/telecrate), VOLTAGABBANA (renzino/renzilla, +1 SPD
+  applicato in `makeCombatant` = ogni ingresso), LODO (berlusconix, flag
+  `Combatant.firstHitTaken`), CAIMANO (capitanone/putingrad). Danno in calcDamage
+  (vale AUTO nel duello); TEFLON/POLTRONA/GALLEGGIAMENTO replicate in duelsim
+  (sentinella aggiornata). Mostrate in PartyScene (riga ABILITÀ/OGGETTO al posto
+  della dexLine) e DexScene (nome+descrizione).
+- **SPRAY ANTI-COMIZIO + TESSERA RIMBORSO SPESE** (kind `"field"`, 400€/600€):
+  spray → `repellentSteps=150`, decrementato in `onStepComplete`, sopprime SOLO
+  i wild (vaganti/trainer passano), messaggio a esaurimento; tessera → teleport
+  a `BAR_RESPAWN[state.lastBar]` da BagScene (pop borsa+pausa; **WorldScene.update
+  ora riconcilia mappa** se `state.pos.mapId` cambia sotto i menu). In battaglia
+  entrambi rifiutati da `useItem` (che ora respinge anche hold/tm/key invece di
+  consumarli nel ramo cura — bug pre-esistente).
+- **Bilanciamento** (sim-balance, seed fisso): prima 3.3-3.4 turni / WR 58.5%;
+  dopo **3.19-3.38 turni (media 3.30) / WR 55.4%** — dentro il vincolo ~3-6,
+  /58 NON toccato (scelta deliberata). check-sim esteso (hold/abilità/meteo),
+  nuovo **check-r39-gameplay.mjs** (e2e: equip via UI, spray 150 passi senza
+  wild + contro-prova, tessera teleport). check-duel PASS invariato (C9 incluso).
+  DEV: `main.ts` espone anche `window.__input` (i test riusano l'input reale).
+- Nota RNG: il fattore random 0.88-1.0 del danno ora usa la `rng` iniettata
+  (prima Math.random fisso: nel duello il danno host non era deterministico al 100%).
+
+Mancanze/note per RETENTION e UX: hold item senza PNG (esclusi da ITEMS_WITH_PNG
+in art/items.ts: rigenerare icone PixelLab); abilità non mostrate nel duello
+(nessun messaggio lato guest, solo effetti via eventi); telecamera/caffettiera
+utili solo PVE finché heldItem non passa sul filo; possibile hint/NPC che spieghi
+hold item e vento politico (discoverability).
 
 ### 🔧 Round 39 — LOTTO TECH (1/4: TECH → GAMEPLAY → RETENTION → UX/CONTENUTI)
 Spec: audit 4 dimensioni approvati dall'utente (r39-audits). Fatto in questo lotto:

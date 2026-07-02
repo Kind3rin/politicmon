@@ -146,6 +146,9 @@ setTypeIconLoader(getSpriteImage);
 // In sviluppo esponiamo lo stack delle scene per ispezione/test manuali.
 if (import.meta.env.DEV) {
   (window as unknown as { stack: SceneStack }).stack = stack;
+  // Anche l'input globale: i test Playwright (playtest/check-r39-gameplay)
+  // costruiscono scene reali e devono riusare l'istanza tickata dal game loop.
+  (window as unknown as { __input: Input }).__input = input;
 }
 
 // La schermata del titolo viene creata SUBITO, così il game loop ha sempre una

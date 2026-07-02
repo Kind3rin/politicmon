@@ -11,9 +11,22 @@
 // iniettata, quindi il bilanciamento danno PVE vale automaticamente anche qui.
 // Ogni futura modifica alla semantica di turno di BattleScene va replicata QUI
 // (check-duel.mjs copre le divergenze).
+//
+// ROUND 39 — cosa vale e cosa NO nel duello:
+// - ABILITÀ passive: REPLICATE (derivano dalla specie, sicure sul filo).
+//   Danno (MAGGIORANZA/OPPOSIZIONE/CAIMANO/LODO) e VOLTAGABBANA arrivano
+//   automaticamente da calcDamage/makeCombatant di sim.ts; TEFLON (immune
+//   status), POLTRONA SALDA (immune stat-drop) e GALLEGGIAMENTO (cura 1/16 a
+//   fine turno) sono replicate QUI sotto, speculari a BattleScene.
+// - HOLD ITEM: ESCLUSI in v1. Il filo (duelproto/trade) trasporta solo
+//   {speciesId, level, moves}: i Monster ricostruiti non hanno heldItem,
+//   quindi calcDamage non applica alcun effetto hold. Non aggiungere heldItem
+//   al filo senza validazione anti-cheat.
+// - SONDAGGI (meteo politico): ESCLUSI. calcDamage viene chiamata SENZA ctx,
+//   quindi il duello è sempre neutro (nessun vantaggio dal gradimento locale).
 
 import { MOVES, type Move } from "../../data/moves";
-import { statsOf, type Monster, type MoveSlot } from "../monster";
+import { abilityOf, statsOf, type Monster, type MoveSlot } from "../monster";
 import { calcDamage, effectiveStat, makeCombatant, type Combatant } from "./sim";
 import type { DuelCmd, DuelEvent, DuelSide } from "../../net/duelproto";
 
@@ -126,13 +139,23 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
   if (effect?.stat) {
     const targetSide = effect.stat.target === "self" ? side : defSide;
     const target = sim[targetSide].active;
-    if ((effect.stat.chance ?? 100) > rng() * 100) {
+    // POLTRONA SALDA: immune ai cali di statistica inflitti dal nemico
+    // (replica di moveSteps; il buff su se stessi passa sempre).
+    if (
+      effect.stat.target === "foe" &&
+      effect.stat.stages < 0 &&
+      abilityOf(target.mon)?.id === "poltrona"
+    ) {
+      // niente evento: il colpo di stato fallisce in silenzio (come il miss di chance)
+    } else if ((effect.stat.chance ?? 100) > rng() * 100) {
       const resulting = Math.max(-6, Math.min(6, target.stages[effect.stat.key] + effect.stat.stages));
       target.stages[effect.stat.key] = resulting;
       events.push({ e: "stat", side: targetSide, key: effect.stat.key, stages: effect.stat.stages, resulting });
     }
   }
-  if (effect?.status && defender.mon.hp > 0) {
+  // TEFLON: immune agli status. Il guard sta PRIMA del tiro di chance
+  // (nessun rng consumato), stesso ordine del branch status di moveSteps.
+  if (effect?.status && defender.mon.hp > 0 && abilityOf(defender.mon)?.id !== "teflon") {
     if (rng() * 100 < effect.status.chance) {
       const id = effect.status.id;
       if (!(defender.mon.status || (id === "gaffe" && defender.gaffeTurns > 0))) {
@@ -250,13 +273,20 @@ export function resolveTurn(sim: DuelSim, hostCmd: DuelCmd, guestCmd: DuelCmd, r
   }
 
   // 3) Fine turno: SCANDALO logora entrambi (host poi guest, come PVE
-  // player->foe).
+  // player->foe), poi GALLEGGIAMENTO cura 1/16 (stesso ordine di
+  // endOfTurnSteps di BattleScene). NOTA: la cura della CAFFETTIERA (hold)
+  // NON esiste qui — gli hold item non passano sul filo in v1.
   for (const side of ["host", "guest"] as DuelSide[]) {
     const c = sim[side].active;
     if (c.mon.hp > 0 && c.mon.status === "scandalo") {
       c.mon.hp = Math.max(0, c.mon.hp - Math.max(1, Math.floor(statsOf(c.mon).hp / 8)));
       events.push({ e: "eot", side, hpAfter: c.mon.hp });
       faintCheck(sim, side, events);
+    }
+    const max = statsOf(c.mon).hp;
+    if (c.mon.hp > 0 && c.mon.hp < max && abilityOf(c.mon)?.id === "galleggiamento") {
+      c.mon.hp = Math.min(max, c.mon.hp + Math.max(1, Math.floor(max / 16)));
+      events.push({ e: "heal", side, hpAfter: c.mon.hp, cured: false });
     }
   }
   duelEndCheck(sim, events);

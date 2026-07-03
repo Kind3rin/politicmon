@@ -426,6 +426,46 @@ const OFFSHORE_TILES = [
   "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 ];
 
+// ---------------------------------------------------- BRUXELLES (ELEZIONI UE)
+// Capitale UE, contenuto end-game (post garante-beaten). Ci si arriva col
+// TRAGHETTO dall'OFFSHORE (warp d'acqua a sud, come le boe Stretto->Offshore).
+// Viale centrale che sale al PALAZZO DELLA COMMISSIONE (marmo M 10x4 con le
+// porte DD verso l'interno: LA COMMISSIONE presidia in fondo alla scalinata).
+// Cortili istituzionali (recinti f + aiuole ,), erba UE '~' col roster europeo,
+// bar CAFFÈ SCHUMAN (eQQe + porta) per il respawn. 29 di larghezza, molo a sud.
+const BRUXELLES_TILES = [
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TT......MMMMMMMMMM.........TT",
+  "TT......MGMMMMMMGM.........TT",
+  "TT......MMMMMMMMMM.........TT",
+  "TT......CMMMDDMMMC.........TT",
+  "TT...,,.....====.....,,....TT",
+  "TT...ff.....====.....ff....TT",
+  "TT...ff.....====.....ff....TT",
+  "TT.========================TT",
+  "TT..~~~~....====....~~~~...TT",
+  "TT..~~~~.eQQe==.....~~~~...TT",
+  "TT..~~~~.mddm==...s.~~~~...TT",
+  "TT.===========.===========.TT",
+  "TT......zzzzzzzzzzzzz......TT",
+  "TTTTTTTTTTzzzwwwwzzzTTTTTTTTT",
+  "TTTTTTTTTTTTTwwwwTTTTTTTTTTTT"
+];
+
+// Interno del Palazzo della Commissione: scalinata cerimoniale (come il PALAZZO),
+// LA COMMISSIONE in fondo. L'uscita (zerbino 'cc' in basso) riporta a BRUXELLES.
+const COMMISSIONE_TILES = [
+  "AAAAAAAAAAAA",
+  "AkpppccpppkA",
+  "AppppccppppA",
+  "AppppccppppA",
+  "AppppccppppA",
+  "AppppccppppA",
+  "AppppccppppA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+
 // ------------------------------------------------------------------ INTERNI
 
 const LAB_TILES = [
@@ -1861,7 +1901,20 @@ export const MAPS: Record<string, MapDef> = {
       { x: 2, y: 10, toMap: "stretto", toX: 14, toY: 8, facing: "up" },
       // BAR "LIDO CAYMAN": porte sui 2 tile centrali dell'edificio.
       { x: 14, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
-      { x: 15, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
+      { x: 15, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
+      // ROTTA PER BRUXELLES: dalle boe a est (acqua) parte il traghetto per la
+      // capitale UE. Contenuto end-game come l'offshore: stesso gate garante-beaten
+      // (chi è qui l'ha già), ma serve anche aver appreso la rotta (flag hint-ue).
+      {
+        x: 28, y: 9, toMap: "bruxelles", toX: 14, toY: 13, facing: "up",
+        requiresFlag: "garante-beaten",
+        lockedLines: ["Un motoscafo diplomatico attende oltre le boe.", "'Rotta per BRUXELLES: solo per chi ha già la CONTROFIRMA del COLLE.'"]
+      },
+      {
+        x: 28, y: 10, toMap: "bruxelles", toX: 15, toY: 13, facing: "up",
+        requiresFlag: "garante-beaten",
+        lockedLines: ["Un motoscafo diplomatico attende oltre le boe.", "'Rotta per BRUXELLES: solo per chi ha già la CONTROFIRMA del COLLE.'"]
+      }
     ],
     encounterRate: 0.18,
     // Post-game lv 38-45 (mai oltre il level cap 50 del giocatore, audit C2).
@@ -1924,6 +1977,135 @@ export const MAPS: Record<string, MapDef> = {
         id: "banditore-coppa", pal: "boss", x: 18, y: 10, facing: "down",
         coppa: true, showIfFlag: "garante-beaten",
         lines: []
+      },
+      {
+        // SHERPA UE: svela la rotta per BRUXELLES (elezioni europee). Solo
+        // post-garante; parlare imposta hint-ue (isDone della quest UE).
+        id: "sherpa-ue", pal: "journalist", x: 25, y: 10, facing: "left",
+        showIfFlag: "garante-beaten", setFlag: "hint-ue",
+        lines: [
+          "SHERPA UE: la vera partita non è a Roma. È a BRUXELLES.",
+          "Oltre quelle boe c'è un motoscafo diplomatico: rotta per la capitale UE.",
+          "Si vota per il PARLAMENTO. E LA COMMISSIONE non cede la poltrona a nessuno.",
+          "Prendi il traghetto a est. Porta una squadra da lv 45+: là fanno sul serio."
+        ]
+      }
+    ]
+  },
+
+  // BRUXELLES: capitale UE, gauntlet delle ELEZIONI EUROPEE (Round 41 narrativo).
+  // End-game post garante-beaten, raggiungibile in traghetto dall'OFFSHORE. Wild
+  // = roster UE (trumpon/putingrad/xipanda/macronfox/ursulax/zelenskir/bojoon) lv
+  // 42-50. 4 allenatori eu-* + boss LA COMMISSIONE (in BOSS_TRAINER_IDS). Vittoria
+  // sul boss = flag ue-beaten + TESSERA DORATA una-tantum.
+  bruxelles: {
+    id: "bruxelles",
+    name: "BRUXELLES",
+    tiles: BRUXELLES_TILES,
+    outdoor: true,
+    music: "bruxelles",
+    warps: [
+      // PALAZZO DELLA COMMISSIONE: porte DD centrali (12-13,4) -> interno.
+      { x: 12, y: 4, toMap: "commissione", toX: 5, toY: 6, facing: "up" },
+      { x: 13, y: 4, toMap: "commissione", toX: 6, toY: 6, facing: "up" },
+      // Bar CAFFÈ SCHUMAN (centro cura): porte sui 2 tile centrali.
+      { x: 10, y: 11, toMap: "bar-bruxelles", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
+      { x: 11, y: 11, toMap: "bar-bruxelles", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
+      // Traghetto di ritorno al PARADISO OFFSHORE: boe d'acqua a sud (approdo
+      // sull'attracco offshore, mai su acqua). Serve la MN TRAGHETTO (già posseduta).
+      { x: 14, y: 14, toMap: "offshore", toX: 27, toY: 9, facing: "left" },
+      { x: 15, y: 14, toMap: "offshore", toX: 27, toY: 10, facing: "left" }
+    ],
+    encounterRate: 0.16,
+    // Roster UE lv 42-50 (coerente con offshore 38-45 e col level cap 50). Qui le
+    // specie europee trovano finalmente casa allo stato brado.
+    encounters: [
+      { speciesId: "macronfox", weight: 22, minLv: 42, maxLv: 46 },
+      { speciesId: "bojoon", weight: 20, minLv: 42, maxLv: 45 },
+      { speciesId: "zelenskir", weight: 16, minLv: 43, maxLv: 47 },
+      { speciesId: "ursulax", weight: 14, minLv: 44, maxLv: 48 },
+      { speciesId: "xipanda", weight: 12, minLv: 45, maxLv: 49 },
+      { speciesId: "putingrad", weight: 10, minLv: 45, maxLv: 49 },
+      { speciesId: "trumpon", weight: 6, minLv: 46, maxLv: 50 }
+    ],
+    signs: [
+      {
+        x: 18, y: 11,
+        lines: [
+          "PARLAMENTO EUROPEO - AULA PLENARIA",
+          "Sessione a Bruxelles. Poi a Strasburgo. Poi di nuovo a Bruxelles.",
+          "Il trasloco mensile è previsto dai Trattati. Le poltrone viaggiano in camion."
+        ]
+      }
+    ],
+    pickups: [
+      { id: "pk-brux-schedona", x: 3, y: 9, itemId: "schedona", qty: 2 },
+      // Tesoro nascosto nell'erba UE: DIRETTIVA rara (MULTA UE, ramo istituzione).
+      { id: "pk-brux-dir", x: 24, y: 9, itemId: "dirMulta", qty: 1, hidden: true }
+    ],
+    npcs: [
+      // ---- GAUNTLET UE (4 allenatori sul viale) ----
+      {
+        id: "tr-eucommissario", pal: "guard", x: 7, y: 7, facing: "right",
+        trainerId: "eu-commissario", sightRange: 3,
+        lines: ["Ho un portafoglio: la CONCORRENZA. E tu mi fai concorrenza sleale."]
+      },
+      {
+        id: "tr-eulobby", pal: "influencer", x: 23, y: 7, facing: "left",
+        trainerId: "eu-lobby", sightRange: 3,
+        lines: ["Rue de la Loi è la mia seconda casa. La prima è il corridoio."]
+      },
+      {
+        id: "tr-eurelatore", pal: "aide", x: 7, y: 9, facing: "right",
+        trainerId: "eu-relatore", sightRange: 3,
+        lines: ["Il mio emendamento ha 400 pagine di allegati. Buona lettura."]
+      },
+      {
+        id: "tr-eurodeputato", pal: "journalist", x: 21, y: 9, facing: "left",
+        trainerId: "eu-eurodeputato", sightRange: 3,
+        lines: ["Presente in aula il 12% delle volte. Ma alle foto, sempre."]
+      },
+      // ---- NPC ambientale d'ingresso: bussola narrativa sull'attracco ----
+      {
+        id: "hostess-ue", pal: "granny", x: 16, y: 13, facing: "left",
+        lines: [
+          "HOSTESS DI PARTITO: benvenuto a BRUXELLES!",
+          "Il PARLAMENTO è a sinistra, la COMMISSIONE lassù in fondo al viale.",
+          "Vinci il gauntlet e prenditi la poltrona europea. In bocca al lupo."
+        ]
+      }
+    ]
+  },
+
+  // Interno del Palazzo della Commissione: LA COMMISSIONE presidia in fondo alla
+  // scalinata; l'uscita (zerbino) riporta a BRUXELLES davanti alle porte DD.
+  commissione: {
+    id: "commissione",
+    name: "PALAZZO DELLA COMMISSIONE",
+    tiles: COMMISSIONE_TILES,
+    outdoor: false,
+    music: "palazzo",
+    warps: [
+      { x: 5, y: 7, toMap: "bruxelles", toX: 12, toY: 5, facing: "down" },
+      { x: 6, y: 7, toMap: "bruxelles", toX: 13, toY: 5, facing: "down" }
+    ],
+    signs: [
+      { x: 3, y: 0, lines: ["Motto sopra la porta:", "'IN VARIETATE CONCORDIA.' Cioè: litighiamo, ma in 24 lingue."] }
+    ],
+    pickups: [],
+    npcs: [
+      {
+        id: "commissione", pal: "boss", x: 5, y: 1, facing: "down",
+        trainerId: "commissione", sightRange: 5, hideIfFlag: "ue-beaten",
+        lines: []
+      },
+      {
+        id: "commissione-after", pal: "boss", x: 2, y: 1, facing: "down", showIfFlag: "ue-beaten",
+        lines: [
+          "LA COMMISSIONE: complimenti, hai vinto le elezioni. Ora inizia il difficile.",
+          "Riunioni, trilogo, comitatologia. Rimpiangerai i comizi.",
+          "La poltrona è tua. Il REGOLAMENTO, però, resta mio. Come sempre."
+        ]
       }
     ]
   },
@@ -2248,7 +2430,8 @@ export const MAPS: Record<string, MapDef> = {
   "bar-euro": barMap("bar-euro", "CAFFÈ EUROPA", "eurotown", 8, 13),
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 24, 8),
   "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 15, 5),
-  "bar-offshore": barMap("bar-offshore", "LIDO CAYMAN", "offshore", 15, 5)
+  "bar-offshore": barMap("bar-offshore", "LIDO CAYMAN", "offshore", 15, 5),
+  "bar-bruxelles": barMap("bar-bruxelles", "CAFFÈ SCHUMAN", "bruxelles", 10, 12)
 };
 
 // Punto di risveglio dopo un KO totale: la cella calpestabile davanti al BAR
@@ -2260,7 +2443,8 @@ export const BAR_RESPAWN: Record<string, { x: number; y: number }> = {
   eurotown: { x: 8, y: 13 },
   capitale: { x: 24, y: 8 },
   stretto: { x: 14, y: 5 },
-  offshore: { x: 15, y: 5 }
+  offshore: { x: 15, y: 5 },
+  bruxelles: { x: 10, y: 12 }
 };
 
 // Posizioni delle tre schede starter sul tavolo del laboratorio.

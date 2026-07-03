@@ -83,6 +83,16 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
       "Qui i POLITICMON sono fortissimi: lv 38+. Il BAR LIDO CAYMAN rimette in sesto, gratis.",
       "Sull'altopiano a nord-est qualcuno custodisce un segreto contabile..."
     ]
+  },
+  // Primo sbarco a BRUXELLES: banner d'ingresso (flag hint-ue già impostato dallo
+  // SHERPA UE sull'offshore, quindi qui usiamo un flag dedicato per il banner).
+  bruxelles: {
+    flag: "hint-brux-arrivo",
+    lines: [
+      "Sei a BRUXELLES, la capitale d'Europa.",
+      "Wild da lv 42+: qui vive il roster UE. Il CAFFÈ SCHUMAN cura la squadra, gratis.",
+      "Risali il viale delle istituzioni: in fondo LA COMMISSIONE non molla la poltrona."
+    ]
   }
 };
 
@@ -1631,6 +1641,19 @@ export class WorldScene implements Scene {
             "'I conti tornano sempre... a qualcun altro.'",
             "I fondi neri riemergono: i giornali parlano di MIRACOLO CONTABILE.",
             `SONDAGGI al ${this.state.sondaggi}%.`
+          ]);
+          return;
+        }
+        if (def.id === "commissione" && !this.state.flags["ue-beaten"]) {
+          this.state.flags["ue-beaten"] = true;
+          addSondaggi(this.state, 10);
+          saveGame(this.state);
+          this.say([
+            "LA COMMISSIONE ripone il REGOLAMENTO e ti stringe la mano, formalmente.",
+            "COMMISSIONE: 'Recepito. Hai vinto le elezioni EUROPEE.'",
+            "Sei il nuovo PORTAVOCE D'EUROPA: 24 traduzioni simultanee del tuo trionfo.",
+            `I SONDAGGI schizzano al ${this.state.sondaggi}%: persino Strasburgo applaude.`,
+            "Ti spetta una TESSERA DORATA: 'Prassi consolidata. Non chiederne conto.'"
           ]);
           return;
         }

@@ -126,6 +126,25 @@ export const QUESTS: QuestDef[] = [
     isDone: (s) => Boolean(s.flags["offshore-beaten"]),
     target: { mapId: "offshore", x: 23, y: 7 }
   },
+  // ---- Post-game: ELEZIONI UE (BRUXELLES), dopo la CONTROFIRMA ----
+  {
+    id: "ue-rotta",
+    title: "ELEZIONI EUROPEE",
+    desc: "Si vota per il PARLAMENTO UE. Salpa per BRUXELLES: la vera partita si gioca lì.",
+    hint: "Lo SHERPA UE sull'OFFSHORE conosce la rotta. Il motoscafo diplomatico parte dalle boe a est dell'isola.",
+    step: "Raggiungi BRUXELLES.",
+    isDone: (s) => Boolean(s.flags["hint-ue"]),
+    target: { mapId: "offshore", x: 28, y: 9 }
+  },
+  {
+    id: "ue-commissione",
+    title: "LA POLTRONA DI BRUXELLES",
+    desc: "Vinci il gauntlet UE e strappa la poltrona europea a LA COMMISSIONE.",
+    hint: "In cima al viale di BRUXELLES, davanti al Palazzo della Commissione. Porta una squadra da lv 50+.",
+    step: "Sconfiggi LA COMMISSIONE a BRUXELLES.",
+    isDone: (s) => Boolean(s.flags["ue-beaten"]),
+    target: { mapId: "bruxelles", x: 12, y: 5 }
+  },
   {
     id: "side-encore", side: true,
     title: "L'ULTIMO SHARE",

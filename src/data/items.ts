@@ -85,6 +85,10 @@ export const ITEMS: Record<string, Item> = {
     id: "dirGreen", name: "DIRETTIVA: GREEN", kind: "tm", moveId: "greenwashing", reusable: true, price: 1600,
     desc: "Barattolo di vernice verde. Insegna GREENWASHING ai tipi VERDE."
   },
+  dirMulta: {
+    id: "dirMulta", name: "DIRETTIVA: MULTA UE", kind: "tm", moveId: "multaue", reusable: true, price: 3400,
+    desc: "Sanzione da Bruxelles, more incluse. Insegna MULTA UE ai tipi TECNO."
+  },
 
   // ---- OGGETTI DA TENERE (hold: 1 slot per POLITICMON) ----
   // Gli effetti vivono in sim.ts (calcDamage) e BattleScene (per turno).

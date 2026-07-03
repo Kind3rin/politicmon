@@ -53,6 +53,13 @@ export const DEX_ZONES: DexZone[] = [
     // (1% sull'isola) e berlusconix restano fuori dal gate, come da convenzione.
     species: ["telecrate", "pontimax", "conteblob"],
     reward: { itemId: "tessera", qty: 1, money: 3000 }
+  },
+  {
+    id: "bruxelles", name: "BRUXELLES",
+    // Roster UE (elezioni europee): tutte catturabili allo stato brado a BRUXELLES.
+    // trumpon è 6% (raro ma nel pool wild), quindi la zona resta completabile.
+    species: ["macronfox", "bojoon", "zelenskir", "ursulax", "xipanda", "putingrad", "trumpon"],
+    reward: { itemId: "schedona", qty: 3, money: 4000 }
   }
 ];
 

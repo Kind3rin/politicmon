@@ -239,6 +239,48 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Congelato... come i miei conti alle Cayman."],
     money: 4500, reward: { itemId: "tessera", qty: 1 }
   },
+  // ---- BRUXELLES: gauntlet ELEZIONI UE (post-game, dopo garante-beaten) ----
+  "eu-relatore": {
+    id: "eu-relatore", name: "RELATORE OMBRA", pal: "aide",
+    team: [["macronfox", 44], ["bojoon", 45]],
+    intro: ["Sono il RELATORE di un regolamento che nessuno leggerà.", "Ma l'emendamento 74-ter ti seppellirà."],
+    defeat: ["Ritiro l'emendamento. E anche la candidatura."],
+    money: 1800, reward: { itemId: "maalox", qty: 1 }
+  },
+  "eu-eurodeputato": {
+    id: "eu-eurodeputato", name: "EURODEPUTATO ASSENTE", pal: "journalist",
+    team: [["zelenskir", 45], ["ursulax", 46]],
+    intro: ["Presente! ...ah no, quello era il gettone.", "Voto quel che mi dicono. Ma combatto per conto mio."],
+    defeat: ["Metto la sconfitta a verbale. In seduta plenaria."],
+    money: 1950
+  },
+  "eu-commissario": {
+    id: "eu-commissario", name: "COMMISSARIO ALLA CONCORRENZA", pal: "guard",
+    team: [["xipanda", 47], ["putingrad", 48]],
+    intro: ["Sanziono i giganti del web prima di colazione.", "La tua campagna? Concorrenza sleale. Apro un'istruttoria."],
+    defeat: ["Archivio il caso. Con una multa simbolica a me stesso."],
+    money: 2100, reward: { itemId: "schedona", qty: 1 }
+  },
+  "eu-lobby": {
+    id: "eu-lobby", name: "LOBBISTA DI RUE DE LA LOI", pal: "influencer",
+    team: [["ursulax", 48], ["macronfox", 49], ["trumpon", 50]],
+    intro: ["Rappresento 300 aziende e nessun elettore.", "Il tuo consenso? Lo compro all'ingrosso. O te lo strappo."],
+    defeat: ["Rinegozio. Da posizioni più deboli, ammetto."],
+    money: 2300
+  },
+  commissione: {
+    id: "commissione", name: "LA COMMISSIONE", pal: "boss",
+    // Asso finale con il GILET (PVE): regge più a lungo, come il Garante.
+    team: [["macronfox", 52], ["putingrad", 53], ["xipanda", 53], ["ursulax", 55, undefined, "gilet"]],
+    intro: [
+      "Benvenuto a BRUXELLES. Io sono LA COMMISSIONE. Non mi vota nessuno, eppure decido tutto.",
+      "Ho un REGOLAMENTO per ogni cosa: la curvatura delle banane, il consenso, persino i sogni.",
+      "I governi nazionali vanno e vengono. Il TRILOGO, invece, è per sempre.",
+      "Dimostrami che il tuo mandato regge una DIRETTIVA. In 24 lingue."
+    ],
+    defeat: ["Prendo atto. Convoco un tavolo tecnico. Ci rivediamo alla prossima legislatura."],
+    money: 5000, reward: { itemId: "tessera", qty: 1 }
+  },
   giudice1: {
     id: "giudice1", name: "GIUDICE ONORARIA", pal: "granny",
     team: [["ursulax", 24], ["calendauro", 25]],

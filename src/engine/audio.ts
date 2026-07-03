@@ -261,6 +261,25 @@ const TRACKS: Record<string, Track> = {
     ).split(" ")
   },
 
+  // Bruxelles: marcia europea solenne e ottimista, "da inno delle istituzioni"
+  // (parente lontano dell'eurotown ma più ampio e cerimoniale, in maggiore).
+  bruxelles: {
+    stepSec: 0.16,
+    melodyType: "triangle",
+    melody: (
+      "G4 - C5 - E5 - G5 - E5 - C5 - D5 - - - " +
+      "F4 - A4 - C5 - F5 - E5 - D5 - C5 - - - " +
+      "E5 - G5 - C6 - B5 - A5 - G5 - E5 - D5 - " +
+      "C5 - D5 - E5 - G5 - C5 - - - - - - -"
+    ).split(" "),
+    bass: (
+      "C3 - - - E3 - - - G2 - - - G2 - - - " +
+      "F2 - - - C3 - - - G2 - - - G2 - - - " +
+      "C3 - - - E3 - - - F2 - - - C3 - - - " +
+      "F2 - - - G2 - - - C3 - - - C3 - - -"
+    ).split(" ")
+  },
+
   // Duello PvP in diretta: sfida serrata, adrenalinica, "da confronto televisivo".
   "battle-duel": {
     stepSec: 0.1,

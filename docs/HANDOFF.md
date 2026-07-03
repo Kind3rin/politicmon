@@ -5,7 +5,44 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 42 COMPLETO (tutti e 3 i lotti: FIX/COMBAT + ACCESSIBILITÀ + ECONOMIA), save v13**, 2026-07-03.
+Ultimo aggiornamento: **Round 42 COMPLETO + review + fix chat/clamp, save v13**, 2026-07-03.
+
+### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
+Round 42 chiuso e pushato (HEAD `f28ab57`). Tree pulito, tutto live su
+politicmon.vercel.app. Ultime cose fatte dopo il round:
+- **Chat UI rifatta** (`7ed3db2`): il layout di `ChatScene.ts` sforava i 240x180
+  (riga input illeggibile, emote sovrapposte, INVIA su START). Ora ripacchettato.
+- **Clamp livello trade/duello** (`f28ab57`): `sanitizeTradeMon` (trade.ts:41) e
+  `validateWireTeam` (duelproto.ts:126) clampavano a 50 mentre il cap è 55 (lotto 1
+  del R42) → un mostro lv51-55 veniva declassato/rifiutato. Ora usano `LEVEL_CAP`.
+
+**⚠️ REVIEW R42 INCOMPLETA — da rifinire a inizio sessione:** la review avversariale
+del diff R42 (workflow `wf_acd22422-d64`) ha trovato 4 finding nella fase Find ma
+TUTTI i verificatori a 3-lenti sono morti sul LIMITE SESSIONE → il `confirmed:[]` NON
+è affidabile. Ho triato i 4 a mano:
+  - trade.ts:41 e duelproto.ts:126 (clamp 50 vs cap 55) → **VERI, già fixati** in `f28ab57`.
+  - state.ts:287 (monumentLevel senza tetto) → **FALSO**: `MonumentScene.getCost`
+    ritorna null a lv3 e `commit` fa `Math.min(MONUMENT_MAX, ...)`; parseState clampa `>=0`.
+  - BattleScene.ts:267 (boost decrement) → **FALSO**: logica corretta (MANIFESTI/EXP su
+    ogni KO, SPOT solo trainer non-rematch, COMIZIO su trainer).
+  → Nessun finding reale residuo, ma **rilanciare la review** (i verify non hanno mai
+  girato) per sicurezza: `Workflow({scriptPath: ".../politicmon-r42-review-wf_acd22422-d64.js",
+  resumeFromRunId: "wf_acd22422-d64"})` — i finder sono in cache, rigirano solo i verify.
+
+**Prossimo giro possibile** (dal backlog audit R42, già fatti tutti i punti proposti):
+il gioco è maturo. Un audit fresco (onboarding/combat/accessibilità/economia sono stati
+appena chiusi) andrebbe fatto su angolazioni NUOVE: es. *contenuto narrativo/lore*
+(la storia regge dall'inizio alla fine?), *replay/social multiplayer* (cosa lega i
+giocatori oltre il singleplayer?), *performance mobile reale* (profiling su device),
+*localizzazione* (solo IT ora). Oppure feature nuove: NG+ vero, breeding/uova, altre
+route/regioni. Chiedere all'utente la direzione.
+
+Convenzioni operative confermate in questa sessione: commit+push autonomi (l'utente li
+vuole), review avversariale multi-agente dopo ogni round grande, verifica in-game con
+Playwright+screenshot, save migration bumpata dal PRIMO lotto che ne ha bisogno con
+TUTTI i campi del round insieme. TURN Metered configurato su Vercel (env VITE_TURN_*).
+
+---
 
 ### 🏁 Round 42 — RIEPILOGO CONSOLIDATO (3 lotti, tutti pushati)
 Audit a 4 dimensioni (spec `scratchpad/specs/r42-audits.md`), spezzato in 3 lotti

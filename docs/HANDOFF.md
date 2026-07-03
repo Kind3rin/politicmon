@@ -5,7 +5,43 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 39 lotto RETENTION — streak, missioni giornaliere, record duelli, trade-evo, versioni**, 2026-07-03.
+Ultimo aggiornamento: **Round 39-40 COMPLETO — audit + 4 lotti (tech/gameplay/retention/UX)**, 2026-07-03.
+
+### 🗺️ Round 40 — LOTTO UX/CONTENUTI (4/4, chiude il ciclo)
+Spec: r39-audits sezioni UX + CONTENUTI EXTRA. Nessuna nuova migrazione save.
+
+- **MINIMAPPA** (`src/scenes/WorldMapScene.ts`, voce MAPPA nel menu pausa):
+  grafo a nodi "MAPPA DELL'ITALIETTA", coordinate hardcoded a 240x180, nodo
+  corrente evidenziato/lampeggiante ("SEI QUI"), aree gated non ancora sbloccate
+  mostrate come "???" (derivate da badges/flag: stretto=3 badge, colle=boss-beaten,
+  offshore=garante-beaten — nessun nuovo campo save).
+- **HINT GOVERNO**: alla 1ª medaglia si spiega il GOVERNO OMBRA (menu→GOVERNO,
+  6 ministeri, bonus); riga guida alla prima apertura di GovScene. Pattern flag hint-*.
+- **MINISTERI CON DOWNSIDE**: ogni ministero ora ha un `malus` mostrato in GovScene
+  (netto positivo ma scelta reale su chi nominare). Testi in governo.ts/GovScene.
+- **CRISI DI GOVERNO** (`maybeGovernmentCrisis` in WorldScene, `governo.ts`):
+  una-tantum alla 2ª medaglia (flag `crisi-governo-1`), ripetibile raro post-game
+  a Caput Mundi (~1 giorno su 3, `hashDate`, flag `crisi-gov-day:<data>`). Scelta
+  SECCA senza stato nuovo: SOSTIENI (sondaggi -8) vs SCARICA il ministro
+  (sondaggi +5, libera un incarico riassegnabile).
+- **INDICATORE REMOTI + ISPEZIONA**: doppia freccia blu sopra l'avatar online
+  adiacente; menu remoto ora ISPEZIONA/SCAMBIA/SFIDA/ANNULLA; `partyPreview`
+  (max 6 speciesId, validati contro SPECIES in mp.ts upsert) nel Profile broadcast
+  → popup "SQUADRA DI <nick>" + record duelli.
+- **LINEA VERDE**: nuove specie VERDOLINO (dex 38) → ECOVERDON (dex 39, lv 18),
+  ability `galleggiamento`, satira attivismo climatico. Sprite PixelLab in
+  `public/sprites/monsters/` + fallback caricature in `art/monsters.ts` (richiesto
+  dalla pipeline evoluzioni). Negli encounter di route2/route3 + dexzone.
+- **MATTARELLUX catturabile**: encore leggendario al colle post-garante (NPC
+  `mattarellux-legend` lv 49, flag `legend-mattarellux-gone`, pattern berlusconix).
+  Prima era nel dex ma di fatto irraggiungibile.
+
+⚠️ TRAPPOLA (fix incluso): gli eventi "d'ingresso mappa" (hint one-shot + CRISI)
+scattano SOLO al primo frame idle dopo `loadMap` E con `input.heldDirection()===null`
+(flag `justEnteredMap`). Prima giravano a ogni frame fermo: stare sulla porta prima
+di un warp faceva scattare la crisi al posto del passo (guardrail world-layout).
+❌ RESTA: icone PNG per gli 8 item nuovi del lotto GAMEPLAY (fallback: fuori da
+ITEMS_WITH_PNG, non bloccante).
 
 ### 🔁 Round 39 — LOTTO RETENTION (3/4)
 Spec: r39-audits sezione RETENTION. Nessuna nuova migrazione save (usa i campi v11).

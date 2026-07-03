@@ -138,6 +138,12 @@ export function itemEvolution(mon: Monster, itemId: string): string | undefined 
   return (speciesOf(mon).evolutions ?? []).find((rule) => rule.item === itemId)?.id;
 }
 
+// Evoluzione innescata da uno SCAMBIO online: il "cambio di casacca" evolve il
+// mostro APPENA arrivato nella nuova squadra (TradeScene, dopo il commit).
+export function tradeEvolution(mon: Monster): string | undefined {
+  return (speciesOf(mon).evolutions ?? []).find((rule) => rule.trade)?.id;
+}
+
 // Prossima evoluzione per livello ancora da raggiungere (per anticiparla al
 // giocatore: "EVOLVE a Lv16"). Restituisce il livello soglia, o undefined se
 // non ci sono evoluzioni per livello in arrivo.

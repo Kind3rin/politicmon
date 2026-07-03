@@ -32,7 +32,10 @@ import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
 import { buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
-import { buildDailyTrainer, dailyRewardItem, localDateKey } from "../daily";
+import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
+import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
+import { recordDuelResult } from "../duelrecord";
+import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
 import { checkAchievements } from "../achievements";
 import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } from "../vehicles";
 import { isGuideOn } from "../../engine/controls";
@@ -301,6 +304,8 @@ export class WorldScene implements Scene {
       this.state.lastBar = mapId;
     }
     // Multiplayer: entra nella room di questa mappa (vedi solo chi è qui).
+    // Il record duelli va nel profilo broadcast (targhetta sopra l'avatar).
+    mp.setDuelWins(this.state.duelWins);
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
     // Autosave a ogni cambio mappa: warp e bordi nord/sud aggiornano state.pos e
@@ -319,10 +324,33 @@ export class WorldScene implements Scene {
       this.dailyBannerDay = today;
       this.showBanner("BREAKING NEWS!", "SFIDA DEL GIORNO IN PIAZZA", "#e8c84a");
     }
+    // MOSTRO DEL GIORNO: annuncio all'ingresso in una zona con incontri, la
+    // prima volta nel giorno (flag di SESSIONE, deterministico, zero save).
+    // Il toast della SFIDA DEL GIORNO (sopra) ha priorità.
+    if (this.map.encounters && this.state.party.length > 0 && !this.banner) {
+      const boost = this.todaysBoostId();
+      if (boost && this.spawnBannerShown.get(mapId) !== today) {
+        this.spawnBannerShown.set(mapId, today);
+        this.showBanner("AVVISTAMENTI!", `OGGI TANTI ${SPECIES[boost].name}!`, "#7ad858");
+      }
+    }
   }
 
   // Giorno (locale) in cui il toast della SFIDA DEL GIORNO è già stato mostrato.
   private dailyBannerDay = "";
+  // mapId -> giorno in cui l'annuncio del MOSTRO DEL GIORNO è già uscito (sessione).
+  private spawnBannerShown = new Map<string, string>();
+
+  // Tabella incontri effettiva: senza le specie ESCLUSIVE dell'altra versione
+  // (GOVERNO/OPPOSIZIONE via browserSeed pari/dispari).
+  private effectiveEncounters() {
+    return (this.map.encounters ?? []).filter((e) => speciesAvailable(e.speciesId, this.state.browserSeed));
+  }
+
+  // Specie "avvistata" oggi in questa zona (weight x4), null se non ci sono incontri.
+  private todaysBoostId(): string | null {
+    return dailyBoostSpeciesId(this.map.id, this.effectiveEncounters());
+  }
 
   // Crea lo stato runtime di un NPC. Decide se può vagare: esplicito via
   // `wander`, oppure di default per gli NPC "ambientali" (niente trainer, ruolo
@@ -798,6 +826,13 @@ export class WorldScene implements Scene {
     this.stack.pop();
     mp.duelBusy = false;
     audio.playMusic(this.map.music ?? "borgo");
+    // Missioni giornaliere: vittorie e catture avanzano i contatori del giorno
+    // (il toast di completamento esce nel mondo, drenato in update()).
+    if (result === "win") {
+      bumpDailyQuest(this.state, "win2");
+    } else if (result === "caught") {
+      bumpDailyQuest(this.state, "catch1");
+    }
     saveGame(this.state);
     if (result === "loss") {
       if (!this.state.flags["dex-received"]) {
@@ -920,6 +955,21 @@ export class WorldScene implements Scene {
     const pos = this.state.pos;
     npc.currentFacing =
       npc.x > pos.x ? "left" : npc.x < pos.x ? "right" : npc.y > pos.y ? "up" : "down";
+
+    // SONDAGGISTA delle versioni: spiega GOVERNO/OPPOSIZIONE con testo dinamico
+    // (dipende dal browserSeed, quindi non può stare nelle lines statiche).
+    if (npc.id === "sondaggista-versioni") {
+      const ver = gameVersion(this.state.browserSeed);
+      const mine = Object.keys(VERSION_EXCLUSIVES).filter((id) => VERSION_EXCLUSIVES[id] === ver);
+      const theirs = Object.keys(VERSION_EXCLUSIVES).filter((id) => VERSION_EXCLUSIVES[id] !== ver);
+      this.say([
+        `SONDAGGISTA: dati alla mano, questa è la VERSIONE ${ver}.`,
+        `Da queste parti circolano ${mine.map((id) => SPECIES[id].name).join(" e ")}.`,
+        `${theirs.map((id) => SPECIES[id].name).join(" e ")}? Mai visti da noi: girano solo nell'altra versione.`,
+        "Per completare il POLITICDEX serve uno SCAMBIO online. Il mercato delle vacche non dorme mai."
+      ]);
+      return;
+    }
 
     if (npc.trainerId) {
       const avail = rematchAvailability(this.state, npc.trainerId);
@@ -1076,6 +1126,7 @@ export class WorldScene implements Scene {
     if (this.state.lastDailyDate === key) {
       this.say([
         "OPINIONISTA PERPETUA: per oggi ho già chiuso la rassegna.",
+        `STREAK: ${Math.max(1, this.state.dailyStreak)} GIORNI. Torna domani per allungarla.`,
         "Domani nuovo giorno, nuovo panel, nuovo premio."
       ]);
       return;
@@ -1096,6 +1147,11 @@ export class WorldScene implements Scene {
             if (result !== "win") {
               return;
             }
+            // STREAK: +1 se ieri (data locale) avevi vinto, altrimenti riparte
+            // da 1. Bonus fondi +100€/giorno di streak, cap +500€.
+            this.state.dailyStreak = this.state.lastDailyDate === prevDateKey(key) ? this.state.dailyStreak + 1 : 1;
+            const streakBonus = Math.min(500, this.state.dailyStreak * 100);
+            this.state.money += streakBonus;
             this.state.lastDailyDate = key;
             const reward = dailyRewardItem(key);
             this.state.bag[reward.itemId] = (this.state.bag[reward.itemId] ?? 0) + reward.qty;
@@ -1103,6 +1159,7 @@ export class WorldScene implements Scene {
             saveGame(this.state);
             this.say([
               `PREMIO DEL GIORNO: ${ITEMS[reward.itemId].name} x${reward.qty}!`,
+              `STREAK: ${this.state.dailyStreak} GIORNI! BONUS FEDELTÀ AL PALINSESTO: +${streakBonus}€.`,
               `SONDAGGI al ${value}%.`,
               ...(milestone ? [milestone] : [])
             ]);
@@ -1236,9 +1293,11 @@ export class WorldScene implements Scene {
             hostWire: start.hostTeam as WireMon[], // già validato qui sopra
             guestWire,
             duelId: start.duelId,
-            onEnd: () => {
+            onEnd: (result) => {
               this.stack.pop();
               mp.duelBusy = false;
+              // Duello CHIUSO: record duelli scritto SOLO ora (invariante C9).
+              recordDuelResult(this.state, result);
             }
           })
         );
@@ -1791,6 +1850,9 @@ export class WorldScene implements Scene {
     // Contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA. NON
     // sostituisce stepCount (privato, la cura del Min. Salute usa il suo %6).
     this.state.stepsTotal += 1;
+    // Missione giornaliera "CAMMINA 300 PASSI": conteggio in dailyQuestsDone
+    // ("steps300:N"), niente save per passo (salvano warp/battaglie/completamento).
+    bumpDailyQuest(this.state, "steps300");
 
     // SPRAY ANTI-COMIZIO: scala a ogni passo; finché è attivo (anche in questo
     // passo, l'ultimo compreso) gli incontri WILD sono soppressi più sotto.
@@ -1906,11 +1968,15 @@ export class WorldScene implements Scene {
         this.state.party.some((m) => m.hp > 0) &&
         Math.random() < rate
       ) {
-        const table = this.map.encounters;
-        const total = table.reduce((sum, e) => sum + e.weight, 0);
+        // Tabella filtrata per versione + MOSTRO DEL GIORNO con weight x4.
+        const table = this.effectiveEncounters();
+        const boost = this.todaysBoostId();
+        const weightOf = (e: (typeof table)[number]) =>
+          e.speciesId === boost ? e.weight * DAILY_BOOST_MULT : e.weight;
+        const total = table.reduce((sum, e) => sum + weightOf(e), 0);
         let roll = Math.random() * total;
         for (const entry of table) {
-          roll -= entry.weight;
+          roll -= weightOf(entry);
           if (roll <= 0) {
             let level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
             // Modificatore d'incontro (~22%): rompe la monotonia dei selvatici.
@@ -2002,6 +2068,13 @@ export class WorldScene implements Scene {
     this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
     if (this.banner) {
       this.banner.t += dt;
+    } else {
+      // Toast MISSIONE COMPLETATA in coda (accumulati anche in battaglia/casinò).
+      const toast = consumeDailyToast();
+      if (toast) {
+        audio.catchJingle();
+        this.showBanner(toast.title, toast.sub, "#7ad858");
+      }
     }
     if (this.sondDelta) {
       this.sondDelta.t -= dt;
@@ -2513,14 +2586,23 @@ export class WorldScene implements Scene {
             const rdw = rb.w * rs;
             screen.imageSpriteCropped(rImg, sx + 8 - rdw / 2, sy + 15 - rb.h * rs, { scaleX: rs, scaleY: rs });
           }
-          // Targhetta col nickname sopra la testa.
+          // Targhetta col nickname sopra la testa (+ record duelli dichiarato).
           const w = rNick.length * 6 + 4;
           screen.rect(sx + 8 - w / 2, sy - 9, w, 8, "rgba(16,20,31,0.8)");
           screen.text(rNick, sx + 8 - w / 2 + 2, sy - 8, "#9cd8e8");
+          // Tag duelli: ★N (oro); a 10+ vittorie diventa "PORTAVOCE".
+          if (r.duelWins > 0 && !rEmote) {
+            const tag = r.duelWins >= 10 ? "PORTAVOCE" : `★${r.duelWins}`;
+            const tw = tag.length * 6 + 4;
+            screen.rect(sx + 8 - tw / 2, sy - 17, tw, 8, "rgba(16,20,31,0.8)");
+            screen.text(tag, sx + 8 - tw / 2 + 2, sy - 16, "#f0c040");
+          }
           // Bolla emote.
           if (rEmote) {
-            screen.panel(sx + 6, sy - 22, 16, 13);
-            screen.text(rEmote.slice(0, 1), sx + 10, sy - 19, INK);
+            // Bolla adattata a 1-2 caratteri (emote tipo "GG"/"OK").
+            const e = rEmote.slice(0, 2);
+            screen.panel(sx + 6, sy - 22, 10 + e.length * 6, 13);
+            screen.text(e, sx + 10, sy - 19, INK);
           }
         }
       });

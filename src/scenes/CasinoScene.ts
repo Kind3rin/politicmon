@@ -5,6 +5,7 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { sceneImage } from "../engine/assets";
 import { addSondaggi, sondaggiColor } from "../game/governo";
+import { bumpDailyQuest } from "../game/dailyquests";
 import { saveGame, type GameState } from "../game/state";
 import { Menu, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
 
@@ -290,6 +291,7 @@ export class CasinoScene implements Scene {
     if (win > 0) {
       this.state.chips += win;
       this.winFlash = 0.6;
+      bumpDailyQuest(this.state, "slot1"); // missione "VINCI ALLE SLOT"
       audio.catchJingle();
     } else {
       audio.cancel();

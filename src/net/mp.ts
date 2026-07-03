@@ -25,6 +25,13 @@ export interface RemotePlayer {
   moving: boolean;
   emote: string | null;
   emoteT: number;
+  duelWins: number; // duelli PvP vinti dichiarati nel profilo (validati 0..99999)
+}
+
+// Dato dal filo MAI fidato: intero clampato 0..99999 (tutto il resto → 0).
+function sanitizeDuelWins(value: unknown): number {
+  const n = Math.floor(Number(value));
+  return Number.isFinite(n) ? Math.max(0, Math.min(99999, n)) : 0;
 }
 
 export interface ChatLine {
@@ -34,8 +41,8 @@ export interface ChatLine {
   t: number;
 }
 
-type Identity = { nick: string; speciesId: string };
-type Profile = { nick: string; speciesId: string; x: number; y: number; facing: Facing };
+type Identity = { nick: string; speciesId: string; duelWins: number };
+type Profile = { nick: string; speciesId: string; x: number; y: number; facing: Facing; duelWins?: number };
 type PosMsg = { x: number; y: number; facing: Facing };
 
 // Namespace univoco dell'app (separa Politicmon da altre room sui relay).
@@ -75,7 +82,7 @@ const RTC_CONFIG: RTCConfiguration = { iceServers: ICE_SERVERS };
 class MultiplayerClient {
   private room: Room | null = null;
   private roomMap: string | null = null;
-  private identity: Identity = { nick: "ANONIMO", speciesId: "player" };
+  private identity: Identity = { nick: "ANONIMO", speciesId: "player", duelWins: 0 };
   private pos = { x: 0, y: 0, facing: "down" as Facing };
   private enabled = true;
   private chatCounter = 0;
@@ -126,8 +133,19 @@ class MultiplayerClient {
   }
 
   setIdentity(nick: string, speciesId: string): void {
-    this.identity = { nick: nick || "ANONIMO", speciesId: speciesId || "player" };
+    this.identity = { nick: nick || "ANONIMO", speciesId: speciesId || "player", duelWins: this.identity.duelWins };
     // Se già in una room, ripresenta il profilo aggiornato.
+    this.broadcastProfile();
+  }
+
+  // Aggiorna il record duelli mostrato agli altri (chiamata al ritorno al mondo
+  // dopo un duello e al load della mappa). Ri-broadcast se cambia.
+  setDuelWins(wins: number): void {
+    const clean = sanitizeDuelWins(wins);
+    if (clean === this.identity.duelWins) {
+      return;
+    }
+    this.identity.duelWins = clean;
     this.broadcastProfile();
   }
 
@@ -254,7 +272,8 @@ class MultiplayerClient {
     profAction.onMessage = (prof, ctx) => {
       this.upsert(ctx.peerId, {
         nick: prof.nick, speciesId: prof.speciesId,
-        x: prof.x, y: prof.y, facing: prof.facing
+        x: prof.x, y: prof.y, facing: prof.facing,
+        duelWins: sanitizeDuelWins(prof.duelWins)
       });
     };
     posAction.onMessage = (d, ctx) => {
@@ -322,11 +341,15 @@ class MultiplayerClient {
       speciesId: this.identity.speciesId,
       x: this.pos.x,
       y: this.pos.y,
-      facing: this.pos.facing
+      facing: this.pos.facing,
+      duelWins: this.identity.duelWins
     });
   }
 
-  private upsert(id: string, p: { nick: string; speciesId: string; x: number; y: number; facing: Facing }): void {
+  private upsert(
+    id: string,
+    p: { nick: string; speciesId: string; x: number; y: number; facing: Facing; duelWins: number }
+  ): void {
     const existing = this.remotes.get(id);
     if (existing) {
       existing.nick = p.nick;
@@ -334,11 +357,13 @@ class MultiplayerClient {
       existing.x = p.x;
       existing.y = p.y;
       existing.facing = p.facing;
+      existing.duelWins = p.duelWins;
     } else {
       this.remotes.set(id, {
         id, nick: p.nick || "ANONIMO", speciesId: p.speciesId || "player",
         x: p.x, y: p.y, dispX: p.x * 16, dispY: p.y * 16,
-        facing: p.facing, moving: false, emote: null, emoteT: 0
+        facing: p.facing, moving: false, emote: null, emoteT: 0,
+        duelWins: p.duelWins
       });
     }
     this.onlineCount = this.remotes.size;

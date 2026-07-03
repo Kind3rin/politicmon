@@ -15,14 +15,22 @@ const KEY_ROWS = [
   // Ultima riga riempita (prima erano solo 5 tasti → 2/3 di riga "morta" al touch).
   " ?!.,:-'"
 ];
-// Emote: una lettera/simbolo per ciascuna (il font ha solo questi glifi).
+// Emote: max 2 caratteri (mp.ts tronca a 2), solo glifi presenti nel font 5x7.
+// Due righe da EMOTE_COLS nella UI.
 const EMOTES: Array<{ ch: string; label: string }> = [
   { ch: "!", label: "CIAO" },
   { ch: "?", label: "BOH" },
   { ch: "★", label: "TOP" },
   { ch: "♪", label: "FESTA" },
-  { ch: "▲", label: "SU" }
+  { ch: "▲", label: "SU" },
+  { ch: "▼", label: "GIÙ" },
+  { ch: "GG", label: "GG" },
+  { ch: "OK", label: "OK" },
+  { ch: "NO", label: "NO" },
+  { ch: "€", label: "RICCO" },
+  { ch: "!!", label: "WOW" }
 ];
+const EMOTE_COLS = 6;
 const MAX = 60;
 
 type Section = "keys" | "emote" | "send";
@@ -85,12 +93,26 @@ export class ChatScene implements Scene {
       const len = KEY_ROWS[this.row].length;
       this.col = (this.col + len) % len;
     } else if (this.section === "emote") {
+      // Griglia 2 righe x EMOTE_COLS: su/giù cambiano riga, ai bordi si esce
+      // verso tastiera (su) o INVIA (giù).
       if (up) {
-        this.section = "keys";
-        this.col = 0;
+        if (this.col >= EMOTE_COLS) {
+          this.col -= EMOTE_COLS;
+        } else {
+          this.section = "keys";
+          this.col = 0;
+        }
         return;
       }
-      if (down || (right && this.col === EMOTES.length - 1)) {
+      if (down) {
+        if (this.col + EMOTE_COLS < EMOTES.length) {
+          this.col += EMOTE_COLS;
+        } else {
+          this.section = "send";
+        }
+        return;
+      }
+      if (right && this.col === EMOTES.length - 1) {
         this.section = "send";
         return;
       }
@@ -167,16 +189,17 @@ export class ChatScene implements Scene {
       }
     }
 
-    // Emote rapide.
+    // Emote rapide: griglia 2 righe x EMOTE_COLS.
     const ey = ky + KEY_ROWS.length * 11 + 2;
-    screen.text("EMOTE:", 10, ey, GREY);
     for (let i = 0; i < EMOTES.length; i += 1) {
-      const x = 52 + i * 34;
+      const x = 10 + (i % EMOTE_COLS) * 38;
+      const y = ey + Math.floor(i / EMOTE_COLS) * 10;
+      const label = `${EMOTES[i].ch}${EMOTES[i].label}`.slice(0, 6);
       const sel = this.section === "emote" && this.col === i;
       if (sel) {
-        screen.rect(x - 3, ey - 1, EMOTES[i].label.length * 6 + 6, 9, "#f4d34a");
+        screen.rect(x - 3, y - 1, label.length * 6 + 6, 9, "#f4d34a");
       }
-      screen.text(`${EMOTES[i].ch}${EMOTES[i].label}`.slice(0, 6), x, ey, sel ? INK : PAPER);
+      screen.text(label, x, y, sel ? INK : PAPER);
     }
 
     // Tasto invia.

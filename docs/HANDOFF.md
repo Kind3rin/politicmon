@@ -5,7 +5,53 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 39 lotto GAMEPLAY — hold item, abilità, sondaggi-meteo, spray/tessera**, 2026-07-02.
+Ultimo aggiornamento: **Round 39 lotto RETENTION — streak, missioni giornaliere, record duelli, trade-evo, versioni**, 2026-07-03.
+
+### 🔁 Round 39 — LOTTO RETENTION (3/4)
+Spec: r39-audits sezione RETENTION. Nessuna nuova migrazione save (usa i campi v11).
+
+- **STREAK DAILY**: alla vittoria della SFIDA DEL GIORNO `dailyStreak` +1 se
+  `lastDailyDate` era ieri (`prevDateKey` in daily.ts, componenti locali — mai
+  aritmetica in ms), altrimenti 1. Bonus +100€/giorno (cap 500€). Streak mostrata
+  nel dialogo OPINIONISTA (anche a premio già ritirato).
+- **MOSTRO DEL GIORNO**: `dailyBoostSpeciesId(mapId, entries)` in daily.ts
+  (hashDate su data+mappa, deterministico, zero stato salvato); weight x4
+  (`DAILY_BOOST_MULT`) nella tabella incontri di WorldScene; banner
+  "AVVISTAMENTI! OGGI TANTI X!" al primo ingresso zona del giorno (flag di sessione).
+- **MISSIONI GIORNALIERE** (`src/game/dailyquests.ts`): pool di 6, 3/giorno
+  deterministiche (hashDate + sonda lineare); progresso in `dailyQuestsDone`
+  con formato **"id:count"** in corso e **"id:done"** a completamento; reset se
+  `lastDailyQuestDate != oggi`. Reward 150-300€ + toast (coda `consumeDailyToast`
+  drenata in WorldScene.update). Hook: vittoria/cattura (onBattleEnd), passi
+  (onStepComplete), slot (CasinoScene), scambio (TradeScene), duello
+  (recordDuelResult), item in lotta (BattleScene). UI: sezione DEL GIORNO in QuestScene.
+- **RECORD DUELLI** (`src/game/duelrecord.ts`): `PvpBattleScene.onEnd(result)`
+  consegna l'esito locale a duello CHIUSO; `recordDuelResult` scrive
+  duelWins/duelLosses+save SOLO al ritorno al mondo (invariante C9 raffinato).
+  `mp.setDuelWins` nel Profile broadcast (validato 0..99999 in ricezione),
+  targhetta ★N sopra l'avatar remoto, "PORTAVOCE" a 10+ vittorie; record anche
+  in PauseScene. `check-duel.mjs`: snapshot normalizzato (ignora SOLO
+  duelWins/duelLosses/dailyQuestsDone/lastDailyQuestDate/money e chiavi .bak)
+  + assert 4b su record e broadcast — tutto PASS su rete P2P reale.
+- **EVOLUZIONE DA SCAMBIO**: `EvolutionRule.trade` + `tradeEvolution()` in
+  monster.ts. Coppie ("cambio di casacca"): contemorfo→conteblob,
+  calendauro→calendrone, tajanide→tajacolomba. TradeScene post-commit →
+  EvolutionScene; il target evoluto segue il pattern dex-trade C10 (dex globale
+  sì, gate di zona no).
+- **VERSIONE ESCLUSIVA** (`src/game/version.ts`): browserSeed pari=GOVERNO,
+  dispari=OPPOSIZIONE (etichetta in PauseScene). Split wild: tajanide+calendauro
+  solo GOVERNO, contemorfo+vannaccix solo OPPOSIZIONE (filtro
+  `effectiveEncounters` in WorldScene, `speciesAvailable`). `zoneProgress`
+  accetta browserSeed: il gate di zona esclude le specie dell'altra versione
+  (100% raggiungibile sul campo); dex globale completabile solo scambiando.
+  NPC SONDAGGISTA a Borgo (13,17) spiega le versioni con testo dinamico.
+- **EMOTE**: +6 in ChatScene (▼ GIÙ, GG, OK, NO, € RICCO, !! WOW), griglia
+  2 righe; bolla nel mondo adattata a 2 caratteri (mp.ts tronca già a 2).
+
+Verifiche: typecheck+build, 10 guardrail mappa, check-sim, check-duel (24 PASS
+incl. nuovi 4b), playtest mirato retention (34 assert PASS), playtest.mjs.
+Non coperto (per il lotto UX): hint/discoverability delle missioni fuori dalla
+QuestScene, ISPEZIONA/partyPreview, minimappa, indicatore remoti.
 
 ### 🎮 Round 39 — LOTTO GAMEPLAY (2/4)
 Spec: r39-audits sezione GAMEPLAY. Fatto in questo lotto:

@@ -3,7 +3,13 @@
 // 1) handshake invite -> accept -> start su rete P2P reale;
 // 2) un turno completo con HP dei MIRROR identici sulle due pagine;
 // 3) resa con banner corretti e ritorno al mondo su entrambe;
-// 4) INVARIANTE C9: localStorage (save) IDENTICO prima/dopo il duello;
+// 4) INVARIANTE C9 (raffinato R39): il duello NON tocca il save DURANTE.
+//    Al RITORNO AL MONDO il lotto retention scrive (per design) il record
+//    duelli e le missioni giornaliere: il confronto ignora quindi SOLO i campi
+//    duelWins/duelLosses/dailyQuestsDone/lastDailyQuestDate/money e la chiave
+//    di backup .bak — tutto il resto del save deve restare IDENTICO;
+// 4b) duelWins/duelLosses aggiornati (vincitore/perdente) e duelWins
+//     broadcastato nel profilo (visibile sul peer remoto);
 // 5) check statico di validateWireTeam (team illegali respinti).
 // Se i relay Nostr non connettono entro 60s -> SKIP dell'e2e (exit 0), non FAIL.
 import { chromium } from "playwright";
@@ -178,7 +184,32 @@ if (!connected) {
 }
 
 // Baseline localStorage (dopo i saveGame di boot, PRIMA del duello).
-const snap = (page) => page.evaluate(() => JSON.stringify(Object.entries(localStorage).sort()));
+// C9 raffinato R39: al ritorno al mondo il gioco scrive PER DESIGN il record
+// duelli e le missioni giornaliere → il confronto normalizza il save ignorando
+// SOLO duelWins/duelLosses/dailyQuestsDone/lastDailyQuestDate/money e le chiavi
+// di backup .bak. Tutto il resto deve restare IDENTICO byte-per-byte.
+const snap = (page) => page.evaluate(() => {
+  const VOLATILE = ["duelWins", "duelLosses", "dailyQuestsDone", "lastDailyQuestDate", "money"];
+  return JSON.stringify(
+    Object.entries(localStorage)
+      .filter(([k]) => !k.endsWith(".bak"))
+      .map(([k, v]) => {
+        try {
+          const o = JSON.parse(v);
+          if (o && typeof o === "object" && !Array.isArray(o)) {
+            for (const f of VOLATILE) {
+              delete o[f];
+            }
+            return [k, JSON.stringify(o)];
+          }
+        } catch {
+          // valore non-JSON: confrontato così com'è
+        }
+        return [k, v];
+      })
+      .sort()
+  );
+});
 await tick(5);
 const lsA0 = await snap(A);
 const lsB0 = await snap(B);
@@ -241,10 +272,23 @@ if (inDuelA && inDuelB) {
   const backB = await waitFor(B, () => window.__t.stack.top?.constructor?.name === "WorldScene", 15000, "mondo su B", true);
   check(backA && backB, "ritorno al mondo su entrambe (lobby e scene poppate)");
 
-  // INVARIANTE C9: il duello non tocca il save.
+  // INVARIANTE C9 (raffinato): il duello non tocca il save DURANTE; il record
+  // duelli/missioni scritto al ritorno è escluso dal confronto (snap normalizza).
   await tick(5);
-  check(lsA0 === (await snap(A)), "C9: localStorage di A IDENTICO prima/dopo il duello");
-  check(lsB0 === (await snap(B)), "C9: localStorage di B IDENTICO prima/dopo il duello");
+  check(lsA0 === (await snap(A)), "C9: save di A IDENTICO prima/dopo (al netto del record duelli/missioni)");
+  check(lsB0 === (await snap(B)), "C9: save di B IDENTICO prima/dopo (al netto del record duelli/missioni)");
+
+  // 4b: record duelli scritto SOLO al ritorno al mondo. B si è arreso → A vince.
+  const recA = await A.evaluate(() => ({ w: window.__t.state.duelWins, l: window.__t.state.duelLosses }));
+  const recB = await B.evaluate(() => ({ w: window.__t.state.duelWins, l: window.__t.state.duelLosses }));
+  check(recA.w === 1 && recA.l === 0, `4b: A (vincitore) duelWins=1/duelLosses=0 (visto ${recA.w}/${recA.l})`);
+  check(recB.w === 0 && recB.l === 1, `4b: B (perdente) duelWins=0/duelLosses=1 (visto ${recB.w}/${recB.l})`);
+
+  // 4b: duelWins ribroadcastato nel profilo → visibile sul peer remoto (B vede A).
+  const seen = await waitFor(
+    B, () => [...window.__t.mp.remotes.values()][0]?.duelWins === 1, 15000, "broadcast duelWins", true
+  );
+  check(seen, "4b: duelWins di A broadcastato nel profilo e visibile su B");
 }
 
 await browser.close();

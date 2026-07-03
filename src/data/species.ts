@@ -14,6 +14,7 @@ export interface EvolutionRule {
   id: string;
   level?: number; // si attiva al level-up una volta raggiunto questo livello
   item?: string; // si attiva usando l'oggetto indicato dalla borsa
+  trade?: boolean; // si attiva ricevendo il mostro in uno SCAMBIO online ("cambio di casacca")
   minSondaggi?: number; // richiede gradimento >= soglia (ramo "governista")
   maxSondaggi?: number; // richiede gradimento <= soglia (ramo "opposizione")
 }
@@ -128,7 +129,8 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 62, atk: 50, def: 72, spc: 76, spd: 45 },
     catchRate: 100, expYield: 130,
     learnset: [[1, "comizio"], [6, "pochette"], [10, "inciucio"], [15, "telepromessa"], [21, "conferenza"]],
-    evolutions: [{ id: "conteblob", level: 18 }],
+    // Cambiare padrone È il suo mestiere: lo scambio lo evolve all'istante.
+    evolutions: [{ id: "conteblob", level: 18 }, { id: "conteblob", trade: true }],
     ability: "teflon",
     dexLine: "BLOB ELEGANTISSIMO. CAMBIA FORMA, ALLEATI E CONVINZIONI SENZA PERDERE MAI LA POCHETTE."
   }),
@@ -138,7 +140,8 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 58, atk: 55, def: 76, spc: 78, spd: 42 },
     catchRate: 100, expYield: 130,
     learnset: [[1, "grafico"], [6, "giravolta"], [11, "dossier"], [16, "spread"], [22, "terzopolo"]],
-    evolutions: [{ id: "calendrone", level: 18 }],
+    // Consegnato a un nuovo staff, apre subito i dossier: evolve da scambio.
+    evolutions: [{ id: "calendrone", level: 18 }, { id: "calendrone", trade: true }],
     dexLine: "SAURO TECNICO. TI MOSTRA UN GRAFICO A TORTA ANCHE SE GLI HAI CHIESTO SOLO CHE ORE SONO."
   }),
   vannaccix: S({
@@ -156,7 +159,8 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 56, atk: 45, def: 66, spc: 66, spd: 58 },
     catchRate: 120, expYield: 110,
     learnset: [[1, "comizio"], [5, "promessa"], [10, "conferenza"], [16, "moralsuasion"], [22, "inciucio"]],
-    evolutions: [{ id: "tajacolomba", level: 18 }],
+    // La colomba si posa dove conviene: cambiare squadra la fa evolvere subito.
+    evolutions: [{ id: "tajacolomba", level: 18 }, { id: "tajacolomba", trade: true }],
     ability: "poltrona",
     dexLine: "COLOMBA MITISSIMA. NESSUNO L'HA MAI VISTA ARRABBIATA. QUALCUNO DUBITA L'ABBIA MAI VISTA SVEGLIA."
   }),

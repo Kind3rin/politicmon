@@ -10,6 +10,7 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
 import { PvpBattleScene } from "../game/battle/PvpBattleScene";
+import { recordDuelResult } from "../game/duelrecord";
 import {
   avgLevel, DUEL_INVITE_TIMEOUT, maxLevel, serializeTeam, validateWireTeam, type DuelMsg
 } from "../net/duelproto";
@@ -132,9 +133,12 @@ export class DuelLobbyScene implements Scene {
           hostWire,
           guestWire: msg.team,
           duelId: this.duelId,
-          onEnd: () => {
+          onEnd: (result) => {
             this.stack.pop(); // PvpBattleScene
             this.stack.pop(); // questa lobby
+            // Duello CHIUSO, siamo tornati al mondo: ora (e solo ora) si
+            // scrive il record duelli e si salva.
+            recordDuelResult(this.state, result);
           }
         })
       );

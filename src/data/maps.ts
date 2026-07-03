@@ -786,6 +786,12 @@ export const MAPS: Record<string, MapDef> = {
         id: "tr-journalist", pal: "journalist", x: 20, y: 3, facing: "left",
         trainerId: "journalist", sightRange: 3,
         lines: ["Il pezzo era già scritto, mancavano solo i fatti."]
+      },
+      {
+        // VERSIONE ESCLUSIVA: testo dinamico gestito in WorldScene.interactNpc
+        // (dipende dal browserSeed: GOVERNO/OPPOSIZIONE).
+        id: "sondaggista-versioni", pal: "aide", x: 13, y: 17, facing: "down",
+        lines: ["SONDAGGISTA: campiono l'erba alta, un comizio alla volta."]
       }
     ]
   },

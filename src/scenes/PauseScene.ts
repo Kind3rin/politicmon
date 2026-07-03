@@ -12,6 +12,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
 import { sondaggiColor, sondaggiLabel, MINISTERO_ORDER, ministroDi, MINISTERI } from "../game/governo";
 import { speciesOf } from "../game/monster";
+import { versionLabel } from "../game/version";
 import { mp } from "../net/mp";
 import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
@@ -302,6 +303,10 @@ export class PauseScene implements Scene {
         24, 131, GREY
       );
     }
+    // Record duelli PvP (titolo PORTAVOCE a 10+ vittorie) + versione del gioco.
+    const duelTag = this.state.duelWins >= 10 ? "  ★PORTAVOCE" : "";
+    screen.text(`DUELLI PVP: ${this.state.duelWins}V/${this.state.duelLosses}P${duelTag}`.slice(0, 33), 24, 141, INK);
+    screen.text(versionLabel(this.state), 24, 150, GREY);
     screen.text("A/B: chiudi", 24, VIEW_H - 22, GREY);
   }
 }

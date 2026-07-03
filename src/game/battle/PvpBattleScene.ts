@@ -51,7 +51,10 @@ export interface PvpOptions {
   hostWire: WireMon[];
   guestWire: WireMon[];
   duelId: string;
-  onEnd: () => void;
+  // Esito dal punto di vista LOCALE, consegnato a duello CHIUSO (banner
+  // confermato): chi lo riceve può aggiornare duelWins/duelLosses e salvare —
+  // qui dentro il save resta intoccato (invariante C9).
+  onEnd: (result: "win" | "loss" | "draw") => void;
 }
 
 type EndInfo = { winner: DuelSide | null; reason: DuelEndReason };
@@ -102,7 +105,7 @@ export class PvpBattleScene implements Scene {
     if (!viewHost || !viewGuest) {
       // Non dovrebbe accadere (validato a monte): chiusura pulita.
       this.finished = true;
-      queueMicrotask(() => opts.onEnd());
+      queueMicrotask(() => opts.onEnd("draw"));
       return;
     }
     this.view = makeDuelSim(viewHost, viewGuest);
@@ -455,12 +458,15 @@ export class PvpBattleScene implements Scene {
       );
     }
     lines.push("Nessun premio e nessuna penalità: era solo un'amichevole televisiva.");
-    // NIENTE saveGame, NIENTE exp/fondi/sondaggi/dex: invariante C9.
+    // NIENTE saveGame, NIENTE exp/fondi/sondaggi/dex: invariante C9. Il record
+    // duelli viene scritto DOPO, dal chiamante di onEnd (ritorno al mondo).
+    const result: "win" | "loss" | "draw" =
+      info.winner === null ? "draw" : info.winner === this.mySide ? "win" : "loss";
     this.msg.show(lines, () => {
       this.finished = true;
       this.exposeDebug(); // ultimo stato visibile a check-duel (finished=true)
       audio.playMusic(MAPS[this.opts.state.pos.mapId]?.music ?? "borgo");
-      this.opts.onEnd();
+      this.opts.onEnd(result);
     });
   }
 

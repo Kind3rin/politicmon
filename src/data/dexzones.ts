@@ -1,4 +1,5 @@
 import type { GameState } from "../game/state";
+import { speciesAvailable } from "../game/version";
 
 // Collezione per ZONA: ogni zona ha un roster di specie "native" (catturabili
 // proprio lì). Completare il roster di una zona dà una ricompensa una-tantum.
@@ -64,9 +65,18 @@ export interface ZoneProgress {
 // flag "dex-trade:<id>" e NON contano per i gate di zona (stesso spirito
 // dell'esclusione di mattarellux qui sopra: il 100% di zona premia la cattura
 // sul campo). Contano comunque nel Dex globale.
-export function zoneProgress(dex: GameState["dex"], flags?: GameState["flags"]): ZoneProgress[] {
+// `browserSeed` (opzionale): le specie ESCLUSIVE dell'altra versione
+// (GOVERNO/OPPOSIZIONE, game/version.ts) non spawnano mai in questo save e
+// sono escluse dal gate, così il 100% di zona resta raggiungibile sul campo.
+export function zoneProgress(
+  dex: GameState["dex"],
+  flags?: GameState["flags"],
+  browserSeed?: number
+): ZoneProgress[] {
   return DEX_ZONES.map((z) => {
-    const caught = z.species.filter((id) => dex[id] === "caught" && !flags?.[`dex-trade:${id}`]).length;
-    return { zone: z, caught, total: z.species.length, done: caught === z.species.length };
+    const species =
+      browserSeed !== undefined ? z.species.filter((id) => speciesAvailable(id, browserSeed)) : z.species;
+    const caught = species.filter((id) => dex[id] === "caught" && !flags?.[`dex-trade:${id}`]).length;
+    return { zone: z, caught, total: species.length, done: caught === species.length };
   });
 }

@@ -11,9 +11,11 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { speciesOf, statsOf, type Monster } from "../game/monster";
-import { markCaught, saveGame, type GameState } from "../game/state";
+import { evolve, speciesOf, statsOf, tradeEvolution, type Monster } from "../game/monster";
+import { bumpDailyQuest } from "../game/dailyquests";
+import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
 import { mp } from "../net/mp";
+import { EvolutionScene } from "./EvolutionScene";
 import { clipToWidth, drawHpBar, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface TradeOptions {
@@ -69,6 +71,9 @@ export class TradeScene implements Scene {
       const recv = s.peerOffer!;
       this.applyCommit(recv);
       audio.catchJingle();
+      // EVOLUZIONE DA SCAMBIO: se la specie ricevuta ha una regola trade,
+      // il "cambio di casacca" la evolve appena entrata in squadra.
+      const evoTarget = tradeEvolution(recv);
       this.msg.show(
         [
           `SCAMBIO COMPLETATO! ${speciesOf(recv).name} CAMBIA CASACCA ED ENTRA NELLA TUA SQUADRA.`,
@@ -76,6 +81,24 @@ export class TradeScene implements Scene {
         ],
         () => {
           s.reset();
+          if (evoTarget) {
+            const fromId = recv.speciesId;
+            this.stack.push(
+              new EvolutionScene(this.stack, this.input, fromId, evoTarget, () => {
+                evolve(recv, evoTarget);
+                // Come per applyCommit: dex globale sì, gate di zona no finché
+                // non lo catturi sul campo (pattern dex-trade C10).
+                if (this.state.dex[evoTarget] !== "caught") {
+                  this.state.flags[`dex-trade:${evoTarget}`] = true;
+                }
+                markSeen(this.state, evoTarget);
+                markCaught(this.state, evoTarget);
+                saveGame(this.state);
+                this.stack.pop(); // chiude anche la TradeScene
+              })
+            );
+            return;
+          }
           this.stack.pop();
         }
       );
@@ -155,6 +178,7 @@ export class TradeScene implements Scene {
     }
     markCaught(this.state, received.speciesId);
     this.state.flags["trade-done"] = true;
+    bumpDailyQuest(this.state, "social1"); // uno scambio completato conta
     saveGame(this.state);
   }
 

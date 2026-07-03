@@ -22,8 +22,15 @@ const DAILY_POOL = [
   "tajacolomba", "macronfox", "bojoon", "conteblob", "generorso"
 ];
 
+// Data locale del giorno PRIMA di una dateKey (YYYY-MM-DD): calcolata sui
+// componenti locali (mai -86400000 ms: il cambio ora legale sballerebbe).
+export function prevDateKey(key: string): string {
+  const [y, m, d] = key.split("-").map(Number);
+  return localDateKey(new Date(y || 2026, (m || 1) - 1, (d || 1) - 1));
+}
+
 // Hash deterministico della data: stessa sfida per tutti nello stesso giorno.
-function hashDate(key: string): number {
+export function hashDate(key: string): number {
   let h = 0;
   for (let i = 0; i < key.length; i += 1) {
     h = (h * 31 + key.charCodeAt(i)) >>> 0;
@@ -61,6 +68,23 @@ export function buildDailyTrainer(state: GameState, dateKey: string): TrainerDef
     defeat: ["E anche oggi il titolo lo scrivi tu."],
     money: 500 // premio fisso (audit C5); beneficia del Min. Economia come tutti
   };
+}
+
+// ---------------------------------------------------------- MOSTRO DEL GIORNO
+// Ogni giorno, in ogni zona con incontri, UNA specie del pool locale è "avvistata"
+// (weight x4 in WorldScene). Deterministico da data+mappa: stesso avvistamento
+// per tutti i giocatori, zero stato salvato.
+export const DAILY_BOOST_MULT = 4;
+
+export function dailyBoostSpeciesId(
+  mapId: string,
+  entries: Array<{ speciesId: string }>,
+  dateKey = localDateKey()
+): string | null {
+  if (entries.length === 0) {
+    return null;
+  }
+  return entries[hashDate(`${dateKey}:${mapId}`) % entries.length].speciesId;
 }
 
 // Item del giorno: rotazione deterministica sul giorno della settimana, SOLO

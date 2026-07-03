@@ -9,6 +9,7 @@ import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { sceneImage } from "../../engine/assets";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
+import { bumpDailyQuest } from "../dailyquests";
 import { zoneProgress } from "../../data/dexzones";
 import {
   abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, heldItemOf, levelEvolution, speciesOf,
@@ -893,6 +894,7 @@ export class BattleScene implements Scene {
       return;
     }
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
+    bumpDailyQuest(this.state, "item1"); // missione "USA 1 OGGETTO IN LOTTA"
     const steps: Step[] = [];
     if (item.kind === "heal") {
       steps.push({
@@ -939,6 +941,7 @@ export class BattleScene implements Scene {
       return;
     }
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
+    bumpDailyQuest(this.state, "item1"); // anche la SCHEDA lanciata è un oggetto usato
     const propaganda = hasMinistro(this.state, "propaganda");
     let chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1);
     // APPELLO AL VOTO (mossa da campagna): raddoppia la prossima cattura, una volta.
@@ -1030,7 +1033,7 @@ export class BattleScene implements Scene {
           }
           // Ricompensa di completamento ZONA: se questa cattura riempie il
           // roster di una zona (e non l'hai già riscossa), premio + annuncio.
-          for (const p of zoneProgress(this.state.dex, this.state.flags)) {
+          for (const p of zoneProgress(this.state.dex, this.state.flags, this.state.browserSeed)) {
             if (p.done && !this.state.zoneRewardsClaimed.includes(p.zone.id)) {
               this.state.zoneRewardsClaimed.push(p.zone.id);
               const r = p.zone.reward;

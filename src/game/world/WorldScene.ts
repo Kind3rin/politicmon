@@ -27,7 +27,7 @@ import { haptics } from "../../engine/haptics";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
+import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
@@ -268,6 +268,8 @@ export class WorldScene implements Scene {
     // Registra lo stato come "attivo" per il salvataggio su chiusura/background
     // (gestito a livello globale in main.ts).
     setActiveState(this.state);
+    // Accessibilità: allinea il flag globale del dialog-shake alla scelta salvata.
+    setReduceMotion(this.state.reduceEffects);
     // Handler base dei messaggi duello (lobby e PvpBattleScene lo prendono in
     // consegna quando sono in cima e lo ripristinano all'uscita).
     mp.onDuel = (msg, peerId) => this.onDuelMsg(msg, peerId);

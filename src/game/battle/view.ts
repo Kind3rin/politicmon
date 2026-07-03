@@ -64,6 +64,10 @@ export function drawEllipse(screen: Screen, cx: number, cy: number, rx: number, 
 export class BattleFx {
   time = 0;
   shake = 0;
+  // Accessibilità (RIDUCI EFFETTI): quando true azzera lo screen-shake. Le scene
+  // lo impostano dallo state al costruire la battaglia. L'informazione (barre,
+  // numeri di danno, banner d'efficacia) resta: sparisce solo il movimento.
+  reduceEffects = false;
   lungeT: Record<BattleSide, number> = { player: 0, foe: 0 };
   flashT: Record<BattleSide, number> = { player: 0, foe: 0 };
   knockback: Record<BattleSide, number> = { player: 0, foe: 0 };
@@ -200,7 +204,7 @@ export class BattleFx {
   // ampiezza piena; colpi normali = più contenuta). X e Y sfasati per un
   // tremolio credibile. La scena wrappa il disegno in questo offset.
   shakeOffset(): { x: number; y: number } {
-    if (this.shake <= 0) {
+    if (this.shake <= 0 || this.reduceEffects) {
       return { x: 0, y: 0 };
     }
     // 0.42 (super/crit) → amp ~3.2px; 0.22/0.16 (normale) → ~1.2/0.9px.
@@ -445,7 +449,7 @@ export interface CombatantBoxOpts {
   showHpText: boolean; // solo il box del "player" mostra i PV numerici
 }
 
-export const FOE_BOX: CombatantBoxOpts = { x: 6, y: 8, w: 104, h: 30, hpY: 17, hpW: 70, showHpText: false };
+export const FOE_BOX: CombatantBoxOpts = { x: 6, y: 8, w: 104, h: 30, hpY: 17, hpW: 52, showHpText: false };
 export const PLAYER_BOX: CombatantBoxOpts = { x: 126, y: 78, w: 110, h: 38, hpY: 16, hpW: 76, showHpText: true };
 
 // Box HP di un combattente (fusione di drawFoeBox/drawPlayerBox). La barra EXP
@@ -455,9 +459,17 @@ export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number
   screen.panel(x, y, w, h);
   screen.text(speciesOf(mon).name, x + 6, y + 6, INK);
   screen.textRight(`L${mon.level}`, x + w - 6, y + 6, INK);
-  drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, statsOf(mon).hp);
+  const maxHp = statsOf(mon).hp;
+  drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, maxHp);
   if (opts.showHpText) {
-    screen.textRight(`${Math.round(displayHp)}/${statsOf(mon).hp}`, x + 98, y + 25, INK);
+    // Box del giocatore: PV precisi n/max.
+    screen.textRight(`${Math.round(displayHp)}/${maxHp}`, x + 98, y + 25, INK);
+  } else {
+    // Box del nemico: percentuale PV a fianco della barra, così il colore non è
+    // l'UNICO segnale di "quasi KO" (accessibilità). Allineata al bordo del box,
+    // sulla stessa riga della barra HP.
+    const pct = maxHp > 0 ? Math.max(0, Math.min(100, Math.round((displayHp / maxHp) * 100))) : 0;
+    screen.textRight(`${pct}%`, x + w - 4, y + opts.hpY, INK);
   }
   if (mon.status) {
     const sy = opts.showHpText ? y + 25 : y + 16;

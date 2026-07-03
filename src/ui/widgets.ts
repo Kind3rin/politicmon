@@ -8,6 +8,15 @@ export const INK = "#10141f";
 export const PAPER = "#f8f8f0";
 export const GREY = "#9aa0b8";
 
+// Accessibilità (RIDUCI EFFETTI): quando true, le parole "urlate" nel box di
+// dialogo restano ROSSE e MAIUSCOLE (l'enfasi/informazione resta) ma NON tremano.
+// Flag di modulo perché MessageBox è istanziato in decine di scene senza stato:
+// lo si aggiorna una volta al load/toggle con setReduceMotion.
+let reduceMotion = false;
+export function setReduceMotion(on: boolean): void {
+  reduceMotion = on;
+}
+
 // Tronca una stringa perché stia in `maxWidth` px (font 5x7), aggiungendo "…"
 // se serve. Usato dai menu per non far sforare le voci lunghe oltre il box.
 export function clipToWidth(text: string, maxWidth: number): string {
@@ -158,8 +167,9 @@ export class MessageBox {
           const wordVisible = word.slice(0, Math.max(0, shown - idx));
           if (wordVisible.length > 0) {
             const shout = MessageBox.isShout(words[w]);
-            const jx = shout ? Math.round(Math.sin(this.blink * 0.9 + w) * 1) : 0;
-            const jy = shout ? Math.round(Math.cos(this.blink * 1.1 + w) * 1) : 0;
+            // RIDUCI EFFETTI: niente tremolio (testo statico), colore ed enfasi restano.
+            const jx = shout && !reduceMotion ? Math.round(Math.sin(this.blink * 0.9 + w) * 1) : 0;
+            const jy = shout && !reduceMotion ? Math.round(Math.cos(this.blink * 1.1 + w) * 1) : 0;
             screen.text(wordVisible, cx + jx, lineY + jy, shout ? "#d84848" : INK);
           }
           cx += word.length * CHAR_W;

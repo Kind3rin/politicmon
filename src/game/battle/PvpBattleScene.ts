@@ -114,6 +114,8 @@ export class PvpBattleScene implements Scene {
     }
     this.displayHp.player = this.mine.active.mon.hp;
     this.displayHp.foe = this.theirs.active.mon.hp;
+    // Accessibilità: RIDUCI EFFETTI azzera lo screen-shake anche in duello.
+    this.fx.reduceEffects = opts.state.reduceEffects;
     audio.playMusic("battle-duel");
     const nick = opts.opponentNick.slice(0, 12);
     this.push({ text: `DUELLO IN DIRETTA contro ${nick}!` });

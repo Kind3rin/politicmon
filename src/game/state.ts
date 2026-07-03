@@ -45,6 +45,10 @@ export interface GameState {
   boostExpBattles: number; // MANIFESTI OVUNQUE: battaglie rimanenti col bonus EXP campagna
   boostMoneyBattles: number; // SPOT IN PRIME TIME: battaglie rimanenti col bonus fondi dai trainer
   boostSondBattles: number; // COMIZIO OCEANICO: battaglie rimanenti col bonus SONDAGGI dalle vittorie
+  // ---- v13: ACCESSIBILITÀ + money-sink terminale (LOTTO 2/3 round 42) ----
+  reduceEffects: boolean; // RIDUCI EFFETTI: azzera shake/flash/urla-tremolo (l'informazione resta)
+  reduceEffectsSet: boolean; // l'utente ha scelto esplicitamente? (distingue default-di-sistema da scelta)
+  monumentLevel: number; // MONUMENTO AL CANDIDATO: money-sink cosmetico del LOTTO 3 (0..N, intero)
 }
 
 // Seed "di installazione": generato una volta e persistito nel save. Divide i
@@ -53,11 +57,12 @@ function rollBrowserSeed(): number {
   return 1 + Math.floor(Math.random() * (2 ** 31 - 1));
 }
 
-export const SAVE_KEY = "politicmon-save-v12";
+export const SAVE_KEY = "politicmon-save-v13";
 // Copia dell'ULTIMO valore valido salvato: loadGame la prova se il primario
 // non parsa (localStorage troncato/corrotto).
-const BACKUP_KEY = "politicmon-save-v12.bak";
+const BACKUP_KEY = "politicmon-save-v13.bak";
 const LEGACY_KEYS = [
+  "politicmon-save-v12",
   "politicmon-save-v11",
   "politicmon-save-v10",
   "politicmon-save-v9",
@@ -104,8 +109,24 @@ export function newGameState(): GameState {
     coppaWins: 0,
     boostExpBattles: 0,
     boostMoneyBattles: 0,
-    boostSondBattles: 0
+    boostSondBattles: 0,
+    // Default iniziale: se il sistema chiede meno animazioni, parti con RIDUCI
+    // EFFETTI attivo. reduceEffectsSet resta false: è un default, non una scelta,
+    // quindi il toggle in OPZIONI conta ancora come prima decisione esplicita.
+    reduceEffects: prefersReducedMotion(),
+    reduceEffectsSet: false,
+    monumentLevel: 0
   };
+}
+
+// Preferenza di sistema "meno animazioni possibili" (prefers-reduced-motion).
+// Difensiva fuori dal browser (SSR/test): torna false se matchMedia non c'è.
+export function prefersReducedMotion(): boolean {
+  try {
+    return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
 }
 
 // Ritorna true se la specie era SCONOSCIUTA (prima vista): serve a mostrare il
@@ -252,6 +273,21 @@ function parseState(raw: string | null): GameState | null {
     parsed.boostExpBattles = clampBoost(parsed.boostExpBattles);
     parsed.boostMoneyBattles = clampBoost(parsed.boostMoneyBattles);
     parsed.boostSondBattles = clampBoost(parsed.boostSondBattles);
+    // ---- v13: accessibilità + money-sink terminale (default difensivi) ----
+    // reduceEffectsSet=true SOLO se il save conteneva già una scelta esplicita.
+    // Un save v12 (campi assenti) migra a: reduceEffectsSet=false e reduceEffects
+    // = preferenza di sistema (prefers-reduced-motion), così onboarding accessibile
+    // senza sovrascrivere scelte future dell'utente.
+    parsed.reduceEffectsSet = parsed.reduceEffectsSet === true;
+    parsed.reduceEffects = parsed.reduceEffectsSet
+      ? parsed.reduceEffects === true
+      : typeof parsed.reduceEffects === "boolean"
+        ? parsed.reduceEffects
+        : prefersReducedMotion();
+    parsed.monumentLevel =
+      typeof parsed.monumentLevel === "number" && !Number.isNaN(parsed.monumentLevel)
+        ? Math.max(0, Math.floor(parsed.monumentLevel))
+        : 0;
     // heldItem (v11, opzionale): tutto ciò che non è una stringa viene rimosso.
     for (const mon of [...parsed.party, ...parsed.boxed]) {
       if (mon.heldItem !== undefined && typeof mon.heldItem !== "string") {

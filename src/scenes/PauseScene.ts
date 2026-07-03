@@ -14,7 +14,7 @@ import { sondaggiColor, sondaggiLabel, MINISTERO_ORDER, ministroDi, MINISTERI } 
 import { speciesOf } from "../game/monster";
 import { versionLabel } from "../game/version";
 import { mp } from "../net/mp";
-import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
+import { Menu, MessageBox, GREY, INK, setReduceMotion } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
@@ -72,7 +72,8 @@ export class PauseScene implements Scene {
     this.optEntries = [
       "SALVA",
       `GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`,
-      `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`
+      `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`,
+      `RIDUCI EFFETTI: ${this.state.reduceEffects ? "SÌ" : "NO"}`
     ];
     if (haptics.isSupported) {
       this.optEntries.push(`VIBRA: ${haptics.enabled ? "SÌ" : "NO"}`);
@@ -206,6 +207,14 @@ export class PauseScene implements Scene {
       toggleControlMode();
     } else if (label.startsWith("VIBRA")) {
       haptics.toggle();
+    } else if (label.startsWith("RIDUCI EFFETTI")) {
+      // Accessibilità: azzera/ripristina shake+flash+dialog-shake. Segna la
+      // scelta come esplicita (reduceEffectsSet) così non viene più sovrascritta
+      // dal default di sistema, aggiorna il flag globale del dialogo e salva.
+      this.state.reduceEffects = !this.state.reduceEffects;
+      this.state.reduceEffectsSet = true;
+      setReduceMotion(this.state.reduceEffects);
+      saveGame(this.state);
     } else if (label.startsWith("AUDIO")) {
       const enabled = audio.toggle();
       if (enabled) {

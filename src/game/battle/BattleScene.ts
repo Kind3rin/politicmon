@@ -117,6 +117,9 @@ export class BattleScene implements Scene {
     this.trainer = opts.trainer;
     this.isLegendary = opts.legendary ?? false;
     this.onEnd = opts.onEnd;
+    // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
+    // (screen-shake) e la usa la scena per i lampi (KO/level/cattura/leggendario).
+    this.fx.reduceEffects = this.state.reduceEffects;
 
     // Difesa: non mandare mai in campo un mon a 0 HP. Se l'intero party è
     // svenuto (save corrotto da kill in background mid-lotta) lo si cura, così
@@ -143,8 +146,9 @@ export class BattleScene implements Scene {
     audio.playMusic(battleMusic(opts));
     if (this.isLegendary) {
       // Messa in scena epica: lampo d'ingresso + banner "LEGGENDARIO!" + sting,
-      // così si capisce subito che NON è un incontro qualsiasi.
-      this.legendIntroFlash = 1.0;
+      // così si capisce subito che NON è un incontro qualsiasi. Con RIDUCI EFFETTI
+      // il lampo bianco è soppresso (il banner testuale resta: l'info non sparisce).
+      this.legendIntroFlash = this.state.reduceEffects ? 0 : 1.0;
       this.legendBanner = 2.4;
       audio.encounterSting();
       this.push({ text: `Un'aura dorata squarcia la campagna elettorale...` });
@@ -1594,8 +1598,9 @@ export class BattleScene implements Scene {
       for (let i = 0; i < items.length; i += 1) {
         const cx = 8 + (i % 2) * 114;
         const cy = y + 6 + Math.floor(i / 2) * 13;
-        // Colore: grigio se senza PP, altrimenti tinta d'efficacia (se nota dal
-        // Dex) — verde super, rosso ruggine poco efficace, grigio scuro immune.
+        // Colore: grigio se senza PP, altrimenti tinta d'efficacia — verde super,
+        // rosso ruggine poco efficace, grigio scuro immune. Il calcolo è
+        // INCONDIZIONATO (sempre noto, non serve aver visto il tipo nel Dex).
         const eff = this.fightEff[i];
         const color = items[i].disabled
           ? GREY
@@ -1609,9 +1614,16 @@ export class BattleScene implements Scene {
         if (this.fightMenu.index === i) {
           screen.text("►", cx, cy, INK);
         }
-        // Tronca con ellissi se la mossa è troppo lunga per la colonna (98px),
-        // così non si legge "APPELLO AGLI ALLE" tagliato a metà parola.
-        screen.text(clipToWidth(items[i].label, 98), cx + 8, cy, color);
+        // Marker d'efficacia PRIMA del nome (▲ super / ▼ poco eff. / X immune):
+        // il segnale non è più solo il colore (accessibilità daltonici).
+        const marker = eff === "super" ? "▲" : eff === "weak" ? "▼" : eff === "immune" ? "X" : "";
+        const nameX = marker ? cx + 8 + 7 : cx + 8;
+        if (marker) {
+          screen.text(marker, cx + 8, cy, color);
+        }
+        // Tronca con ellissi se la mossa è troppo lunga per la colonna (resta
+        // spazio per il marker), così non si legge un nome tagliato a metà parola.
+        screen.text(clipToWidth(items[i].label, marker ? 91 : 98), nameX, cy, color);
       }
       const slot = this.player.mon.moves[this.fightMenu.index];
       if (this.onFightSelect) {
@@ -1663,7 +1675,8 @@ export class BattleScene implements Scene {
     this.msg.draw(screen);
 
     // Bagliore dorato al level-up + raggi che pulsano dallo sprite del player.
-    if (this.fx.levelFlash > 0) {
+    // RIDUCI EFFETTI: soppresso (l'evento resta nel testo "sale al livello X").
+    if (this.fx.levelFlash > 0 && !this.state.reduceEffects) {
       const ctx = screen.ctx;
       const a = this.fx.levelFlash / 0.6;
       ctx.save();
@@ -1673,7 +1686,8 @@ export class BattleScene implements Scene {
     }
 
     // Lampo di celebrazione alla cattura: whiteout dorato che svanisce in fretta.
-    if (this.fx.catchFlash > 0) {
+    // RIDUCI EFFETTI: soppresso (la cattura resta annunciata nel testo).
+    if (this.fx.catchFlash > 0 && !this.state.reduceEffects) {
       const ctx = screen.ctx;
       const a = this.fx.catchFlash / 0.7;
       ctx.save();
@@ -1683,8 +1697,9 @@ export class BattleScene implements Scene {
     }
 
     // Lampo bianco di KO: freeze-frame accompagnato da un flash che sbianca
-    // brevemente lo schermo quando un mostro cade.
-    if (this.fx.koFlash > 0) {
+    // brevemente lo schermo quando un mostro cade. RIDUCI EFFETTI: niente
+    // whiteout (il KO resta ovvio: lo sprite svanisce e il testo lo annuncia).
+    if (this.fx.koFlash > 0 && !this.state.reduceEffects) {
       const ctx = screen.ctx;
       const a = this.fx.koFlash / 0.5;
       ctx.save();

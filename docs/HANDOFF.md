@@ -5,7 +5,60 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 42 LOTTO 1 (FIX+COMBAT+ONBOARDING) COMPLETO + verificato**, 2026-07-03.
+Ultimo aggiornamento: **Round 42 LOTTO 2 (ACCESSIBILITÀ, save v13) COMPLETO + verificato**, 2026-07-03.
+
+### ♿ Round 42 — LOTTO 2: ACCESSIBILITÀ (2° di 3 lotti) — **MIGRAZIONE UNICA v12→v13**
+Spec: `scratchpad/specs/r42-audits.md` sezione LOTTO 2 (+ campi del LOTTO 3 inclusi
+qui). Chiave `politicmon-save-v13`, v12 in testa a `LEGACY_KEYS`, `.bak` alla 2ª save.
+
+**Campi v13** (default difensivi in `parseState` + `newGameState`):
+- `reduceEffects:boolean` — accessibilità (questo lotto).
+- `reduceEffectsSet:boolean` — l'utente ha scelto esplicitamente? Distingue
+  default-di-sistema da scelta. Un save v12 (campo assente) migra a
+  `reduceEffectsSet=false` e `reduceEffects = prefers-reduced-motion` del browser
+  (onboarding accessibile senza sovrascrivere scelte future). Il toggle in OPZIONI
+  imposta `reduceEffectsSet=true`, così il default di sistema non lo riscrive mai più.
+- `monumentLevel:number=0` (clamp intero ≥0) — **money-sink terminale del LOTTO 3**
+  (MONUMENTO AL CANDIDATO). Incluso QUI così il LOTTO 3 lo usa e basta, niente
+  seconda migrazione.
+
+**3 feature accessibilità:**
+1. **TOGGLE RIDUCI EFFETTI** (`PauseScene` OPZIONI, stile delle altre voci toggle):
+   legge/scrive `state.reduceEffects` + `saveGame`. Quando ON azzera: screen-shake
+   (`BattleFx.shakeOffset()→(0,0)`, flag `fx.reduceEffects` propagato dallo state in
+   `BattleScene`/`PvpBattleScene`), flash KO bianco (`BattleScene` draw gated
+   `&& !state.reduceEffects`), flash level-up/cattura (idem), lampo intro leggendario
+   (`legendIntroFlash` non impostato se ON), dialog-shake urla (flag di modulo
+   `setReduceMotion` in `widgets.ts`, sincronizzato in `WorldScene` costruttore + al
+   toggle). L'INFORMAZIONE resta ovunque (KO/level/cattura restano nel testo; le urla
+   restano ROSSE+MAIUSCOLE, solo statiche).
+2. **MARKER EFFICACIA IN GRIGLIA MOSSE** (`BattleScene` griglia 2x2 ~1594): disegna
+   `▲`(super)/`▼`(poco eff.)/`X`(immune) PRIMA del nome mossa, dal già-calcolato
+   `fightEff[i]` (segnale non più solo-colore, daltonici). Nome accorciato per fare
+   spazio al marker. Rimosso commento stale "se nota dal Dex".
+3. **PV NEMICO LEGGIBILI** (`view.ts drawCombatantBox`): box nemico mostra la **%**
+   PV a fianco della barra (`FOE_BOX.hpW` 70→52 per far spazio). Il player resta con
+   `n/max`. Il colore della barra non è più l'unico segnale di "quasi KO".
+
+**Verifiche** (dev server :5179): typecheck+build puliti; **migrazione v12→v13**
+(save v12 → load → `reduceEffects=false`/`reduceEffectsSet=false`/`monumentLevel=0`,
+dati conservati, chiave v12 rimossa, `.bak` alla 2ª save, scelta esplicita conservata,
+`monumentLevel` clamp 2.9→2) 14/14; **12 guardrail statici** (map-consistency,
+building-doors, world-layout, map-exit, sprite-bounds, door-warps, placement,
+spawn-spots, interactables, npcs, evolutions, pixellab-coverage) PASS; check-sim/
+check-duel/check-daily PASS; **check-r42-lotto1** (regressione lotto 1) 6/6; playtest
+lotto 2 (matchup giorgetta vs schleinix: `fightEff=[null,null,weak,super]` → ▲/▼
+in griglia; `shakeOffset` ON=(0,0)/OFF≠0; `reduceEffects` propagato a `fx`; koFlash
+soppresso senza crash; toggle OPZIONI inverte lo state e marca `reduceEffectsSet`)
+7/7 + OPZIONI 4/4. Screenshot verificati a vista: `r42-lotto2-fight-markers.png`
+(box nemico "100%" + ▼GIRAVOLTA/▲BLOCCO NAVALE colorati), `r42-lotto2-reduce-effects.png`
+(nessun whiteout KO), `r42-lotto2-opzioni-on.png` (voce RIDUCI EFFETTI: SÌ).
+
+**NOTE per il LOTTO 3 (ECONOMIA)**: `monumentLevel` è GIÀ nel save v13 (default 0,
+clamp intero ≥0) — il MONUMENTO AL CANDIDATO lo usa e basta, **NESSUNA nuova
+migrazione**. Gli altri punti (rematch faucet, spot non-sink, torneo, manifesti,
+hard mode) non toccano il save.
+
 
 ### 🔧 Round 42 — LOTTO 1: FIX + COMBAT + ONBOARDING (1° di 3 lotti) — NESSUN nuovo save
 Spec: `scratchpad/specs/r42-audits.md` sezione LOTTO 1. **NESSUNA migrazione save**

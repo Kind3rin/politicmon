@@ -40,18 +40,17 @@ Prima di questo (ancora valido):
 - **Clamp livello trade/duello** (`f28ab57`): `sanitizeTradeMon` (trade.ts:41) e
   `validateWireTeam` (duelproto.ts:126) usano `LEVEL_CAP` (55), non più 50.
 
-**⚠️ REVIEW R42 INCOMPLETA — da rifinire a inizio sessione:** la review avversariale
-del diff R42 (workflow `wf_acd22422-d64`) ha trovato 4 finding nella fase Find ma
-TUTTI i verificatori a 3-lenti sono morti sul LIMITE SESSIONE → il `confirmed:[]` NON
-è affidabile. Ho triato i 4 a mano:
-  - trade.ts:41 e duelproto.ts:126 (clamp 50 vs cap 55) → **VERI, già fixati** in `f28ab57`.
-  - state.ts:287 (monumentLevel senza tetto) → **FALSO**: `MonumentScene.getCost`
-    ritorna null a lv3 e `commit` fa `Math.min(MONUMENT_MAX, ...)`; parseState clampa `>=0`.
-  - BattleScene.ts:267 (boost decrement) → **FALSO**: logica corretta (MANIFESTI/EXP su
-    ogni KO, SPOT solo trainer non-rematch, COMIZIO su trainer).
-  → Nessun finding reale residuo, ma **rilanciare la review** (i verify non hanno mai
-  girato) per sicurezza: `Workflow({scriptPath: ".../politicmon-r42-review-wf_acd22422-d64.js",
-  resumeFromRunId: "wf_acd22422-d64"})` — i finder sono in cache, rigirano solo i verify.
+**✅ REVIEW R42 COMPLETATA** (workflow `wf_acd22422-d64`, ripreso e finito, tutti i
+verify girati). 4 finding in fase Find, esito finale:
+  - trade.ts:41 e duelproto.ts:126 (clamp livello 50 vs cap 55) → VERI, fixati in `f28ab57`.
+  - state.ts:287 (monumentLevel senza tetto → un save importato/manomesso con lv>3
+    crashava MonumentScene.draw: `MONUMENT_STAGES[lv]` undefined → `.flatMap`) → **VERO**.
+    Fixato in `2f8fc38`: clamp 0..3 in parseState + fallback difensivo in MonumentScene.
+    (Nota: nel triage a mano l'avevo scartato per errore — guardavo getCost/commit, ma
+    il buco era in parseState. Non fidarsi del triage quando i verify non sono girati:
+    [[politicmon-workflow-limit-trap]].)
+  - BattleScene.ts:267 (boost decrement) → FALSO: logica corretta.
+  → Zero finding reali residui. Review chiusa.
 
 **Prossimo giro possibile** (dal backlog audit R42, già fatti tutti i punti proposti):
 il gioco è maturo. Un audit fresco (onboarding/combat/accessibilità/economia sono stati

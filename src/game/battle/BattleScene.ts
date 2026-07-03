@@ -8,7 +8,7 @@ import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { sceneImage } from "../../engine/assets";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
-import { addSondaggi, bumpSondaggi, hasMinistro } from "../governo";
+import { addSondaggi, bumpSondaggi, expMalus, hasMinistro, moneyMalus } from "../governo";
 import { bumpDailyQuest } from "../dailyquests";
 import { zoneProgress } from "../../data/dexzones";
 import {
@@ -507,7 +507,7 @@ export class BattleScene implements Scene {
     // Popolarità alta = i tuoi crescono in fretta; impopolarità = penalità.
     const sond = this.state.sondaggi;
     const wave = sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.92;
-    const gained = Math.max(1, Math.floor(base * (istruzione ? 1.15 : 1) * wave));
+    const gained = Math.max(1, Math.floor(base * (istruzione ? 1.15 : 1) * wave * expMalus(this.state)));
     steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
     if (wave > 1) {
       steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
@@ -649,7 +649,7 @@ export class BattleScene implements Scene {
     if (this.trainer) {
       const trainer = this.trainer;
       const economia = hasMinistro(this.state, "economia");
-      const payout = Math.round(trainer.money * (economia ? 1.25 : 1));
+      const payout = Math.round(trainer.money * (economia ? 1.25 : 1) * moneyMalus(this.state));
       steps.push({ run: () => audio.victory() });
       steps.push({ text: `Hai sconfitto ${trainer.name}!` });
       for (const line of trainer.defeat) {
@@ -688,8 +688,10 @@ export class BattleScene implements Scene {
             const lead: Step[] = [];
             if (this.state.badges.length === 1) {
               lead.push(
-                { text: "Con una medaglia in tasca puoi formare il GOVERNO OMBRA!" },
-                { text: "Assegna i ministeri dal menu (START): ogni incarico dà un bonus." }
+                { text: "BREAKING NEWS! Con la prima medaglia si apre il GOVERNO OMBRA!", run: () => audio.catchJingle() },
+                { text: "Dal menu (START) trovi la voce GOVERNO: 6 MINISTERI da assegnare." },
+                { text: "Ogni ministro dà un bonus passivo (soldi, cure, incontri, cattura...)." },
+                { text: "Attento: da oggi ogni incarico ha anche un piccolo costo. Scegli bene." }
               );
             }
             // Cliffhanger: anticipa la prossima tappa per invogliare a continuare.

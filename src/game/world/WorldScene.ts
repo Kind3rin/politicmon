@@ -30,9 +30,9 @@ import { Menu, MessageBox, GREY, INK, PAPER } from "../../ui/widgets";
 import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
-import { addSondaggi, bumpSondaggi, curaPassiva, hasMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
+import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
 import { buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
-import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
+import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordDuelResult } from "../duelrecord";
 import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
@@ -180,6 +180,11 @@ export class WorldScene implements Scene {
   private afterMsg: (() => void) | null = null;
 
   private moving = false;
+  // True subito dopo loadMap: gli eventi "d'ingresso mappa" (hint one-shot,
+  // CRISI DI GOVERNO) si valutano solo al primo frame idle dopo l'arrivo, non a
+  // ogni frame in cui sei fermo (così restare sulla porta prima di un warp non
+  // li innesca). Azzerato dopo la prima valutazione idle.
+  private justEnteredMap = false;
   private running = false;
   private moveT = 0;
   private shake = 0; // scossone camera (es. RUSPA che abbatte un albero)
@@ -265,6 +270,7 @@ export class WorldScene implements Scene {
 
   private loadMap(mapId: string): void {
     this.map = MAPS[mapId];
+    this.justEnteredMap = true;
     // ENCORE di BERLUSCONIX: il flag che mostra l'NPC magnate-encore va
     // RICALCOLATO a ogni ingresso al casinò (se nel frattempo l'hai eletto
     // altrove, l'encore sparisce; visibleNpcs è flag-driven).
@@ -306,6 +312,8 @@ export class WorldScene implements Scene {
     // Multiplayer: entra nella room di questa mappa (vedi solo chi è qui).
     // Il record duelli va nel profilo broadcast (targhetta sopra l'avatar).
     mp.setDuelWins(this.state.duelWins);
+    // ISPEZIONA: espongo agli altri l'anteprima della mia squadra (solo specie).
+    mp.setPartyPreview(this.state.party.map((mon) => mon.speciesId));
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
     // Autosave a ogni cambio mappa: warp e bordi nord/sud aggiornano state.pos e
@@ -889,10 +897,12 @@ export class WorldScene implements Scene {
       return;
     }
 
-    // Giocatore ONLINE adiacente: menu unico SCAMBIA / SFIDA / ANNULLA.
+    // Giocatore ONLINE adiacente: menu unico ISPEZIONA / SCAMBIA / SFIDA / ANNULLA.
     const remote = mp.remotePlayers().find((r) => r.x === tx && r.y === ty);
     if (remote) {
-      this.remoteMenu = new Menu([{ label: "SCAMBIA" }, { label: "SFIDA" }, { label: "ANNULLA" }]);
+      this.remoteMenu = new Menu([
+        { label: "ISPEZIONA" }, { label: "SCAMBIA" }, { label: "SFIDA" }, { label: "ANNULLA" }
+      ]);
       this.remoteMenuPeerId = remote.id;
       this.askLabel = `${remote.nick.slice(0, 10)}: CHE FAI?`;
       return;
@@ -1181,6 +1191,29 @@ export class WorldScene implements Scene {
       return null;
     }
     return r;
+  }
+
+  // ISPEZIONA: mostra l'anteprima squadra dichiarata dal remoto (specie + record
+  // duelli). partyPreview è già validato contro SPECIES in ricezione (mp.ts).
+  private inspectRemote(peerId: string): void {
+    const r = this.remoteIfNearby(peerId);
+    if (!r) {
+      return;
+    }
+    const nick = r.nick.slice(0, 12);
+    const lines: string[] = [`SQUADRA DI ${nick}:`];
+    if (r.partyPreview.length === 0) {
+      lines.push("Nessun POLITICMON dichiarato. Un mistero, o un bluff.");
+    } else {
+      const names = r.partyPreview.map((id) => SPECIES[id]?.name ?? "???");
+      // Due specie per riga: sta comodo nella finestra di dialogo.
+      for (let i = 0; i < names.length; i += 2) {
+        lines.push(names.slice(i, i + 2).join(", "));
+      }
+    }
+    const tag = r.duelWins >= 10 ? " (PORTAVOCE)" : "";
+    lines.push(`DUELLI PVP VINTI: ${r.duelWins}${tag}`);
+    this.say(lines);
   }
 
   private startTradeWithRemote(peerId: string): void {
@@ -1825,6 +1858,82 @@ export class WorldScene implements Scene {
   // scattarne un'altra. Evita la raffica di interruzioni ravvicinate.
   private interruptCooldown = 0;
 
+  // CRISI DI GOVERNO (Round 40): evento narrativo con scelta SECCA senza stato
+  // nuovo. Due inneschi:
+  //  - una-tantum alla 2ª medaglia (primo ingresso a EUROTOWN con 2 badge),
+  //    flag "crisi-governo-1";
+  //  - post-game (garante-beaten), ripetibile ma raro/deterministico: a ogni
+  //    ingresso a CAPUT MUNDI, ~1 volta ogni 3 giorni (hashDate del giorno),
+  //    al massimo una volta al giorno (flag "crisi-gov-day:<data>").
+  // Scelta: SOSTIENI il ministro (SONDAGGI -8) oppure SCARICALO (SONDAGGI +5 e
+  // si libera UN incarico, che il giocatore potrà riassegnare dal GOVERNO).
+  private maybeGovernmentCrisis(): boolean {
+    const oneShot =
+      this.map.id === "eurotown" &&
+      this.state.badges.length >= 2 &&
+      !this.state.flags["crisi-governo-1"];
+    let postGame = false;
+    let dayFlag = "";
+    if (!oneShot && this.map.id === "capitale" && this.state.flags["garante-beaten"]) {
+      const day = localDateKey();
+      dayFlag = `crisi-gov-day:${day}`;
+      // ~1 giorno su 3, deterministico: stessa risposta per tutti nello stesso giorno.
+      postGame = hashDate(`crisi:${day}`) % 3 === 0 && !this.state.flags[dayFlag];
+    }
+    if (!oneShot && !postGame) {
+      return false;
+    }
+    // Segna subito il flag anti-ripetizione (prima della scelta: l'evento è
+    // "consumato" all'apertura, non alla risposta).
+    if (oneShot) {
+      this.state.flags["crisi-governo-1"] = true;
+    } else if (dayFlag) {
+      this.state.flags[dayFlag] = true;
+    }
+    saveGame(this.state);
+
+    const assigned = assignedMinisteri(this.state);
+    const hasMinistro = assigned.length > 0;
+    const ministeroNome = hasMinistro ? MINISTERI[assigned[0]].name : "un tuo fedelissimo";
+    audio.catchJingle();
+    this.showBanner("BREAKING NEWS!", "CRISI DI GOVERNO", "#d04848");
+    this.say([
+      "BREAKING NEWS! Scoppia una CRISI DI GOVERNO!",
+      hasMinistro
+        ? `${ministeroNome} è finito nella bufera: i giornali chiedono la testa.`
+        : "La stampa reclama un colpevole, ma il tuo Governo Ombra è ancora vuoto.",
+      "Le agenzie battono la notizia. Tocca a te decidere la linea."
+    ], () => {
+      this.askYesNo(
+        "SOSTIENI IL MINISTRO? (NO = LO SCARICHI)",
+        () => {
+          // SOSTIENI: lealtà che costa consenso.
+          const { value } = bumpSondaggi(this.state, -8);
+          saveGame(this.state);
+          this.say([
+            "Fai quadrato attorno al tuo. La compattezza si paga.",
+            `I SONDAGGI scendono all' ${value}%. Ma la squadra ti resta fedele.`
+          ]);
+        },
+        () => {
+          // SCARICA: un incarico si libera, l'opinione pubblica applaude.
+          const removed = scaricaUnMinistro(this.state);
+          const { value } = bumpSondaggi(this.state, 5);
+          saveGame(this.state);
+          const lines = [
+            "Lo scarichi in diretta. La piazza applaude, i corridoi mormorano.",
+            `I SONDAGGI salgono al ${value}%.`
+          ];
+          if (removed) {
+            lines.push(`${MINISTERI[removed].name} resta vacante: riassegnalo dal GOVERNO.`);
+          }
+          this.say(lines);
+        }
+      );
+    });
+    return true;
+  }
+
   // Annunci one-shot all'arrivo in una mappa: segnalano feature che altrimenti
   // resterebbero invisibili a chi segue solo la storia. Flag per non ripetere.
   private showMapEntryHint(): boolean {
@@ -2190,13 +2299,16 @@ export class WorldScene implements Scene {
       const action = this.remoteMenu.update(this.input);
       if (action === "select") {
         const idx = this.remoteMenu.index;
+        const peerId = this.remoteMenuPeerId;
         this.remoteMenu = null;
         if (idx === 0) {
-          this.startTradeWithRemote(this.remoteMenuPeerId);
+          this.inspectRemote(peerId);
         } else if (idx === 1) {
-          this.challengeRemote(this.remoteMenuPeerId);
+          this.startTradeWithRemote(peerId);
+        } else if (idx === 2) {
+          this.challengeRemote(peerId);
         }
-        // idx 2 = ANNULLA: chiudi e basta.
+        // idx 3 = ANNULLA: chiudi e basta.
       } else if (action === "cancel") {
         this.remoteMenu = null;
       }
@@ -2252,9 +2364,18 @@ export class WorldScene implements Scene {
         this.say(lines);
         return;
       }
-      // Hint one-shot all'arrivo in certe mappe (segnala le feature nascoste).
-      if (this.showMapEntryHint()) {
-        return;
+      // Eventi d'ingresso mappa: valutati SOLO al primo frame idle dopo loadMap
+      // in cui il giocatore NON sta già premendo una direzione (chi arriva sulla
+      // porta e continua verso un warp non deve vederli scattare al posto del
+      // passo). Hint one-shot + CRISI DI GOVERNO.
+      if (this.justEnteredMap && this.input.heldDirection() === null) {
+        this.justEnteredMap = false;
+        if (this.showMapEntryHint()) {
+          return;
+        }
+        if (this.maybeGovernmentCrisis()) {
+          return;
+        }
       }
     }
 
@@ -2577,6 +2698,10 @@ export class WorldScene implements Scene {
       const rImg = playerImage(r.facing, rWalk, r.moving);
       const rEmote = r.emote;
       const rNick = r.nick.slice(0, 10);
+      // INDICATORE REMOTI (Round 40): se il remoto è ADIACENTE (a 1 tile) puoi
+      // premere A per aprire ISPEZIONA/SCAMBIA/SFIDA. Doppia freccia blu
+      // lampeggiante che invita all'interazione.
+      const adjacent = Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) === 1;
       tall.push({
         baseY: r.dispY + TILE,
         draw: () => {
@@ -2603,6 +2728,13 @@ export class WorldScene implements Scene {
             const e = rEmote.slice(0, 2);
             screen.panel(sx + 6, sy - 22, 10 + e.length * 6, 13);
             screen.text(e, sx + 10, sy - 19, INK);
+          } else if (adjacent) {
+            // Doppia freccia "!!" lampeggiante: premi A per interagire.
+            const blink = Math.floor(this.time * 2) % 2 === 0;
+            if (blink) {
+              screen.rect(sx + 3, sy - 22, 12, 10, "rgba(24,60,120,0.9)");
+              screen.text("!!", sx + 5, sy - 20, "#9cd8e8");
+            }
           }
         }
       });

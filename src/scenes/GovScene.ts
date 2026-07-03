@@ -8,17 +8,34 @@ import {
 } from "../game/governo";
 import { speciesOf } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { wrapText, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
 import { PartyScene } from "./PartyScene";
 
 // Il GOVERNO OMBRA: ogni Politicmon può ricoprire un ministero con bonus
 // passivo. Se il ministro va KO, l'incarico resta ma il bonus si sospende.
 export class GovScene implements Scene {
   private index = 0;
+  private msg = new MessageBox();
 
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {}
+  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
+    // Prima apertura in assoluto: riga guida che spiega la meccanica (hint UX).
+    if (!this.state.flags["hint-governo"]) {
+      this.state.flags["hint-governo"] = true;
+      saveGame(this.state);
+      this.msg.show([
+        "GOVERNO OMBRA: nomina un POLITICMON della squadra a ogni ministero.",
+        "Ogni incarico dà un BONUS passivo ma anche un piccolo COSTO: valuta il netto.",
+        "Se il ministro va KO l'effetto si sospende. Rinomina lo stesso = lo sfiduci."
+      ]);
+    }
+  }
 
-  update(): void {
+  update(dt = 0): void {
+    // Riga guida iniziale: fino a che è aperta, blocca il resto.
+    if (this.msg.isOpen) {
+      this.msg.update(dt, this.input);
+      return;
+    }
     if (this.input.wasPressed("up")) {
       this.index = (this.index + MINISTERO_ORDER.length - 1) % MINISTERO_ORDER.length;
       audio.cursor();
@@ -87,12 +104,21 @@ export class GovScene implements Scene {
 
     const selected = MINISTERI[MINISTERO_ORDER[this.index]];
     screen.panel(4, 119, VIEW_W - 8, 40);
-    const lines = wrapText(selected.desc, 36);
-    for (let i = 0; i < Math.min(3, lines.length); i += 1) {
-      screen.text(lines[i], 12, 127 + i * 10, INK);
+    // BONUS (verde) + MALUS (rosso): la scelta del ministero è un compromesso.
+    const bonus = wrapText(selected.desc, 36);
+    const malus = wrapText(selected.malus, 36);
+    let ly = 125;
+    for (let i = 0; i < Math.min(2, bonus.length); i += 1) {
+      screen.text(bonus[i], 12, ly, "#7ad858");
+      ly += 8;
+    }
+    for (let i = 0; i < Math.min(2, malus.length); i += 1) {
+      screen.text(malus[i], 12, ly, "#e08a6a");
+      ly += 8;
     }
 
-    screen.text(`LINEA DEL PARTITO: ${sondaggiLabel(sond)}`, 8, VIEW_H - 18, GREY);
+    screen.text(`LINEA: ${sondaggiLabel(sond)}`, 8, VIEW_H - 18, GREY);
     screen.text("A: nomina/sfiducia  B: chiudi", 8, VIEW_H - 9, GREY);
+    this.msg.draw(screen);
   }
 }

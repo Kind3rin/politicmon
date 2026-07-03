@@ -12,7 +12,8 @@ export const MONSTERS_WITH_PNG = new Set<string>([
   "draghimon", "trumpon", "xipanda", "macronfox", "mattarellux", "putingrad",
   "bunkerput", "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
   "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor", "conteblob",
-  "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax"
+  "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax",
+  "verdolino", "ecoverdon"
 ]);
 
 export function monsterImage(speciesId: string): HTMLImageElement | null {
@@ -433,6 +434,16 @@ export const MONSTER_ART: Record<string, Pixmap> = {
   pontimax: caricature({
     hair: "#d8a830", hairStyle: "short", suit: "#d87820", suitStyle: "vest",
     beard: "#5a3a28", glasses: "sun", mouth: "shout", pin: "#9aa4b8"
+  }),
+  // Linea VERDE (attivismo climatico, satira bonaria). Sprite reali in PNG; queste
+  // caricature restano come fallback pixmap richiesto dalla pipeline evoluzioni.
+  verdolino: caricature({
+    hair: "#4a8a3a", hairStyle: "curly", suit: "#7ad858", suitStyle: "tshirt",
+    mouth: "smile", kid: true, pin: "#e8c84a"
+  }),
+  ecoverdon: caricature({
+    hair: "#3a7a2a", hairStyle: "curly", suit: "#4a9a3a", suitStyle: "hoodie",
+    mouth: "shout", brows: true, pin: "#e8c84a"
   })
 };
 

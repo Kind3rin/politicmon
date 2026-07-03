@@ -25,7 +25,9 @@ export const DEX_ZONES: DexZone[] = [
   },
   {
     id: "eurotown", name: "EUROTOWN",
-    species: ["macronfox", "zelenskir", "bojoon", "ursulax"],
+    // verdolino/ecoverdon (LINEA VERDE) spuntano sui percorsi che circondano
+    // EUROTOWN: entrambi catturabili sul campo, quindi entrano nel gate di zona.
+    species: ["macronfox", "zelenskir", "bojoon", "ursulax", "verdolino", "ecoverdon"],
     reward: { itemId: "schedona", qty: 3, money: 2000 }
   },
   {

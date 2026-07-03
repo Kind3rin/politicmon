@@ -25,6 +25,7 @@ import { PartyScene } from "./PartyScene";
 import { QuestScene } from "./QuestScene";
 import { AchievementsScene } from "./AchievementsScene";
 import { TypesScene } from "./TypesScene";
+import { WorldMapScene } from "./WorldMapScene";
 
 export class PauseScene implements Scene {
   readonly transparent = true;
@@ -52,7 +53,7 @@ export class PauseScene implements Scene {
     if (this.state.badges.length > 0) {
       this.entries.push("GOVERNO");
     }
-    this.entries.push("MISSIONI", "TRAGUARDI", "GUIDA TIPI", "TESSERA", "CHAT ONLINE");
+    this.entries.push("MISSIONI", "MAPPA", "TRAGUARDI", "GUIDA TIPI", "TESSERA", "CHAT ONLINE");
     // DUELLO PvP: ha senso solo con qualcuno online sulla stessa mappa.
     if (mp.isEnabled() && mp.connected && mp.onlineCount > 0) {
       this.entries.push("DUELLO PVP");
@@ -136,6 +137,9 @@ export class PauseScene implements Scene {
         break;
       case "MISSIONI":
         this.stack.push(new QuestScene(this.stack, this.input, this.state));
+        break;
+      case "MAPPA":
+        this.stack.push(new WorldMapScene(this.stack, this.input, this.state));
         break;
       case "TRAGUARDI":
         this.stack.push(new AchievementsScene(this.stack, this.input, this.state));

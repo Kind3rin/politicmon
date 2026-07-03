@@ -370,6 +370,28 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 15, expYield: 230,
     learnset: [[1, "ruspa"], [1, "grafico"], [28, "spread"], [32, "pienipoteri"], [36, "vaffa"]],
     dexLine: "EVOLVE SOLO QUANDO IL CANTIERE SEMBRA FINITO. POI ARRIVA UNA NUOVA PERIZIA E RICOMINCIA A CRESCERE."
+  }),
+  // ------------------------------------------------- LINEA VERDE (Round 40)
+  // Satira bonaria dell'attivismo climatico (mai persone reali): un germoglio
+  // idealista che cresce fino a diventare guardiano verde da corteo.
+  verdolino: S({
+    id: "verdolino", dexNum: 38, name: "VERDOLINO", category: "GERMOGLIO ATTIVISTA",
+    types: ["VERDE"],
+    base: { hp: 48, atk: 50, def: 55, spc: 58, spd: 54 },
+    catchRate: 120, expYield: 66,
+    learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [8, "monopattino"], [12, "incollamano"], [16, "sciopreverde"]],
+    evolutions: [{ id: "ecoverdon", level: 18 }],
+    ability: "galleggiamento",
+    dexLine: "FIRMA PETIZIONI ANCORA PRIMA DI SBOCCIARE. SI INNAFFIA DA SOLO PER RIDURRE L'IMPRONTA IDRICA."
+  }),
+  ecoverdon: S({
+    id: "ecoverdon", dexNum: 39, name: "ECOVERDON", category: "GUARDIANO DEL CLIMA",
+    types: ["VERDE"],
+    base: { hp: 78, atk: 72, def: 84, spc: 92, spd: 70 },
+    catchRate: 45, expYield: 175,
+    learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [18, "incollamano"], [22, "sciopreverde"], [28, "corteo"]],
+    ability: "opposizione",
+    dexLine: "PIANTA UN ALBERO PER OGNI COMIZIO AVVERSARIO. IL SUO PANNELLO SOLARE FUNZIONA ANCHE DI NOTTE, DICE LUI."
   })
 };
 

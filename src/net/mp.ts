@@ -10,6 +10,7 @@
 
 import { joinRoom, selfId, type Room } from "trystero/nostr";
 import type { Facing } from "../art/characters";
+import { SPECIES } from "../data/species";
 import { TradeSession, type TradeWire } from "./trade";
 import type { DuelMsg } from "./duelproto";
 
@@ -26,12 +27,28 @@ export interface RemotePlayer {
   emote: string | null;
   emoteT: number;
   duelWins: number; // duelli PvP vinti dichiarati nel profilo (validati 0..99999)
+  partyPreview: string[]; // speciesId dichiarati (max 6, validati contro SPECIES)
 }
 
 // Dato dal filo MAI fidato: intero clampato 0..99999 (tutto il resto → 0).
 function sanitizeDuelWins(value: unknown): number {
   const n = Math.floor(Number(value));
   return Number.isFinite(n) ? Math.max(0, Math.min(99999, n)) : 0;
+}
+
+// Anteprima squadra dal filo MAI fidata: max 6 id, SOLO specie note (le altre
+// scartate), stringhe pure. Difesa in profondità contro payload arbitrari.
+function sanitizePartyPreview(value: unknown): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  const out: string[] = [];
+  for (const raw of value) {
+    if (typeof raw === "string" && SPECIES[raw] && out.length < 6) {
+      out.push(raw);
+    }
+  }
+  return out;
 }
 
 export interface ChatLine {
@@ -41,8 +58,8 @@ export interface ChatLine {
   t: number;
 }
 
-type Identity = { nick: string; speciesId: string; duelWins: number };
-type Profile = { nick: string; speciesId: string; x: number; y: number; facing: Facing; duelWins?: number };
+type Identity = { nick: string; speciesId: string; duelWins: number; partyPreview: string[] };
+type Profile = { nick: string; speciesId: string; x: number; y: number; facing: Facing; duelWins?: number; party?: string[] };
 type PosMsg = { x: number; y: number; facing: Facing };
 
 // Namespace univoco dell'app (separa Politicmon da altre room sui relay).
@@ -82,7 +99,7 @@ const RTC_CONFIG: RTCConfiguration = { iceServers: ICE_SERVERS };
 class MultiplayerClient {
   private room: Room | null = null;
   private roomMap: string | null = null;
-  private identity: Identity = { nick: "ANONIMO", speciesId: "player", duelWins: 0 };
+  private identity: Identity = { nick: "ANONIMO", speciesId: "player", duelWins: 0, partyPreview: [] };
   private pos = { x: 0, y: 0, facing: "down" as Facing };
   private enabled = true;
   private chatCounter = 0;
@@ -133,8 +150,22 @@ class MultiplayerClient {
   }
 
   setIdentity(nick: string, speciesId: string): void {
-    this.identity = { nick: nick || "ANONIMO", speciesId: speciesId || "player", duelWins: this.identity.duelWins };
+    this.identity = {
+      nick: nick || "ANONIMO", speciesId: speciesId || "player",
+      duelWins: this.identity.duelWins, partyPreview: this.identity.partyPreview
+    };
     // Se già in una room, ripresenta il profilo aggiornato.
+    this.broadcastProfile();
+  }
+
+  // Anteprima squadra da esporre agli altri (ISPEZIONA). Chiamata al ritorno al
+  // mondo e al load mappa; ri-broadcast solo se cambia (max 6 speciesId).
+  setPartyPreview(ids: string[]): void {
+    const clean = sanitizePartyPreview(ids);
+    if (clean.join(",") === this.identity.partyPreview.join(",")) {
+      return;
+    }
+    this.identity.partyPreview = clean;
     this.broadcastProfile();
   }
 
@@ -273,7 +304,8 @@ class MultiplayerClient {
       this.upsert(ctx.peerId, {
         nick: prof.nick, speciesId: prof.speciesId,
         x: prof.x, y: prof.y, facing: prof.facing,
-        duelWins: sanitizeDuelWins(prof.duelWins)
+        duelWins: sanitizeDuelWins(prof.duelWins),
+        partyPreview: sanitizePartyPreview(prof.party)
       });
     };
     posAction.onMessage = (d, ctx) => {
@@ -342,13 +374,14 @@ class MultiplayerClient {
       x: this.pos.x,
       y: this.pos.y,
       facing: this.pos.facing,
-      duelWins: this.identity.duelWins
+      duelWins: this.identity.duelWins,
+      party: this.identity.partyPreview
     });
   }
 
   private upsert(
     id: string,
-    p: { nick: string; speciesId: string; x: number; y: number; facing: Facing; duelWins: number }
+    p: { nick: string; speciesId: string; x: number; y: number; facing: Facing; duelWins: number; partyPreview: string[] }
   ): void {
     const existing = this.remotes.get(id);
     if (existing) {
@@ -358,12 +391,13 @@ class MultiplayerClient {
       existing.y = p.y;
       existing.facing = p.facing;
       existing.duelWins = p.duelWins;
+      existing.partyPreview = p.partyPreview;
     } else {
       this.remotes.set(id, {
         id, nick: p.nick || "ANONIMO", speciesId: p.speciesId || "player",
         x: p.x, y: p.y, dispX: p.x * 16, dispY: p.y * 16,
         facing: p.facing, moving: false, emote: null, emoteT: 0,
-        duelWins: p.duelWins
+        duelWins: p.duelWins, partyPreview: p.partyPreview
       });
     }
     this.onlineCount = this.remotes.size;

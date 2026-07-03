@@ -364,6 +364,26 @@ export const MOVES: Record<string, Move> = {
     power: 0, accuracy: 90, pp: 10,
     effect: { status: { id: "gaffe", chance: 100, target: "foe" } },
     flavor: "Un cane sorridente che muove i mercati. Molto wow."
+  }),
+  // ------------------------------------------------- LINEA VERDE (Round 40)
+  // Attivismo climatico bonario: mosse ambientaliste, mai persone reali.
+  raccoltadifferenziata: M({
+    id: "raccoltadifferenziata", name: "RACCOLTA DIFFERENZIATA", type: "VERDE", category: "status",
+    power: 0, accuracy: 100, pp: 20,
+    effect: { stat: { key: "def", stages: 1, target: "self" } },
+    flavor: "Separa e ricicla: la difesa migliora, un rifiuto alla volta."
+  }),
+  sciopreverde: M({
+    id: "sciopreverde", name: "SCIOPERO VERDE", type: "VERDE", category: "speciale",
+    power: 75, accuracy: 100, pp: 15,
+    effect: { stat: { key: "spc", stages: -1, target: "foe", chance: 30 } },
+    flavor: "Corteo per il clima: cartelli, slogan e un po' di caos ordinato."
+  }),
+  incollamano: M({
+    id: "incollamano", name: "INCOLLA-MANO", type: "VERDE", category: "fisico",
+    power: 60, accuracy: 95, pp: 15,
+    effect: { stat: { key: "spd", stages: -1, target: "foe", chance: 30 } },
+    flavor: "Si incolla all'asfalto in segno di protesta: il nemico rallenta."
   })
 };
 

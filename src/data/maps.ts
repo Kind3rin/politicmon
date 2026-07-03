@@ -1076,7 +1076,9 @@ export const MAPS: Record<string, MapDef> = {
       { speciesId: "vannaccix", weight: 22, minLv: 12, maxLv: 14 },
       { speciesId: "calendauro", weight: 18, minLv: 12, maxLv: 15 },
       { speciesId: "macronfox", weight: 18, minLv: 13, maxLv: 15 },
-      { speciesId: "bojoon", weight: 16, minLv: 13, maxLv: 15 }
+      { speciesId: "bojoon", weight: 16, minLv: 13, maxLv: 15 },
+      // LINEA VERDE (Round 40): il germoglio attivista spunta raro tra i cortei.
+      { speciesId: "verdolino", weight: 8, minLv: 11, maxLv: 13 }
     ],
     signs: [
       {
@@ -1242,7 +1244,10 @@ export const MAPS: Record<string, MapDef> = {
       { speciesId: "muskrat", weight: 20, minLv: 17, maxLv: 19 },
       { speciesId: "zelenskir", weight: 20, minLv: 16, maxLv: 18 },
       { speciesId: "macronfox", weight: 18, minLv: 16, maxLv: 18 },
-      { speciesId: "mediocrate", weight: 18, minLv: 17, maxLv: 19 }
+      { speciesId: "mediocrate", weight: 18, minLv: 17, maxLv: 19 },
+      // LINEA VERDE (Round 40): il germoglio già cresciuto pattuglia il Percorso 3.
+      { speciesId: "verdolino", weight: 8, minLv: 16, maxLv: 17 },
+      { speciesId: "ecoverdon", weight: 4, minLv: 18, maxLv: 19 }
     ],
     signs: [
       {
@@ -2028,6 +2033,32 @@ export const MAPS: Record<string, MapDef> = {
           ]
         },
         lines: ["La sala dei bilanci è sigillata. Si apre solo nelle crisi."]
+      },
+      {
+        // MATTARELLUX (Round 40): il GARANTE SUPREMO in persona, catturabile solo
+        // dopo aver superato il garante. Prima era nel dex ma di fatto irraggiungibile.
+        id: "mattarellux-legend", pal: "boss", x: 2, y: 4, facing: "down",
+        showIfFlag: "garante-beaten", hideIfFlag: "legend-mattarellux-gone",
+        legendary: {
+          speciesId: "mattarellux",
+          level: 49,
+          flag: "legend-mattarellux-gone",
+          lines: [
+            "USCIERE DEL COLLE: c'è ancora qualcuno che vuole conoscerti.",
+            "Le porte del Quirinale si socchiudono. Nessun clamore, solo garbo.",
+            "Un'aura istituzionale riempie la sala: MATTARELLUX ti osserva, paziente.",
+            "«Volevo andare in pensione. Ma prima, mettiamoci alla prova.»"
+          ],
+          afterRunLines: [
+            "MATTARELLUX annuisce e torna ai suoi doveri, senza rancore.",
+            "L'usciere sorride: 'Il GARANTE SUPREMO sa aspettare. Torna quando vuoi.'"
+          ],
+          afterGoneLines: [
+            "La sala presidenziale è di nuovo silenziosa e ordinata.",
+            "MATTARELLUX è registrato nel tuo POLITICDEX. Con tutti gli onori."
+          ]
+        },
+        lines: ["Questa sala si apre solo per chi ha già garantito la Costituzione."]
       }
     ]
   },

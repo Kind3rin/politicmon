@@ -101,32 +101,42 @@ export interface MinisteroDef {
   id: MinisteroId;
   name: string;
   desc: string;
+  // Round 40: ogni incarico ha ANCHE un costo (malus lieve, coerente col ruolo).
+  // Il netto resta positivo, ma assegnare un ministero è una scelta vera: la
+  // "coperta corta" del governo. Testo mostrato in GovScene.
+  malus: string;
 }
 
 export const MINISTERI: Record<MinisteroId, MinisteroDef> = {
   economia: {
     id: "economia", name: "MIN. ECONOMIA",
-    desc: "Rimborsi elettorali +25%. Trova sempre la copertura, nessuno sa dove."
+    desc: "Rimborsi elettorali +25%. Trova sempre la copertura, nessuno sa dove.",
+    malus: "Ma i tagli alla formazione costano: Punti Consenso -8%."
   },
   interno: {
     id: "interno", name: "MIN. INTERNO",
-    desc: "Meno candidati selvatici tra i piedi: incontri nell'erba -35%."
+    desc: "Meno candidati selvatici tra i piedi: incontri nell'erba -35%.",
+    malus: "Ma la sicurezza si paga: +10% sui prezzi del Discount."
   },
   esteri: {
     id: "esteri", name: "MIN. ESTERI",
-    desc: "Accordi commerciali: -20% sui prezzi del Discount Elettorale."
+    desc: "Accordi commerciali: -20% sui prezzi del Discount Elettorale.",
+    malus: "Ma i vertici all'estero pesano: rimborsi elettorali -8%."
   },
   istruzione: {
     id: "istruzione", name: "MIN. ISTRUZIONE",
-    desc: "Squadra più preparata: Punti Consenso guadagnati +15%."
+    desc: "Squadra più preparata: Punti Consenso guadagnati +15%.",
+    malus: "Ma le borse di studio svuotano le casse: rimborsi -6%."
   },
   salute: {
     id: "salute", name: "MIN. SALUTE",
-    desc: "Sanità di prossimità: la squadra recupera 1 PV ogni 6 passi."
+    desc: "Sanità di prossimità: la squadra recupera 1 PV ogni 6 passi.",
+    malus: "Ma la squadra si adagia nelle terme: Punti Consenso -5%."
   },
   propaganda: {
     id: "propaganda", name: "MIN. PROPAGANDA",
-    desc: "Manifesti ovunque: probabilità di reclutamento +25%."
+    desc: "Manifesti ovunque: probabilità di reclutamento +25%.",
+    malus: "Ma la carta e la colla costano: +12% sui prezzi del Discount."
   }
 };
 
@@ -194,5 +204,61 @@ export function shopPrice(state: GameState, item: Item): number {
   if (hasMinistro(state, "esteri")) {
     mult -= 0.2;
   }
+  // Round 40 — downside dei ministeri sui prezzi (rincari lievi, coerenti).
+  if (hasMinistro(state, "interno")) {
+    mult += 0.1; // la sicurezza si paga
+  }
+  if (hasMinistro(state, "propaganda")) {
+    mult += 0.12; // carta e colla dei manifesti
+  }
   return Math.max(10, Math.round((base * mult) / 10) * 10);
+}
+
+// ---------------------------------------------------------- MALUS MINISTERI
+// Moltiplicatori di downside applicati ai due punti chiave (rimborsi = money,
+// Punti Consenso = EXP). Sempre <= 1, netto positivo rispetto al bonus del
+// ministero. Nessun nuovo stato: derivano dai ministri attualmente attivi.
+
+// Malus sui rimborsi elettorali (money reward a fine battaglia).
+export function moneyMalus(state: GameState): number {
+  let mult = 1;
+  if (hasMinistro(state, "esteri")) {
+    mult -= 0.08; // vertici all'estero
+  }
+  if (hasMinistro(state, "istruzione")) {
+    mult -= 0.06; // borse di studio
+  }
+  return Math.max(0.7, mult);
+}
+
+// Malus sui Punti Consenso (EXP guadagnata a fine battaglia).
+export function expMalus(state: GameState): number {
+  let mult = 1;
+  if (hasMinistro(state, "economia")) {
+    mult -= 0.08; // tagli alla formazione
+  }
+  if (hasMinistro(state, "salute")) {
+    mult -= 0.05; // squadra alle terme
+  }
+  return Math.max(0.7, mult);
+}
+
+// ---------------------------------------------------------- CRISI DI GOVERNO
+// Uno o più ministeri sono attualmente assegnati? (serve per decidere se la
+// crisi ha un "ministro da scaricare" o è solo politica di palazzo.)
+export function assignedMinisteri(state: GameState): MinisteroId[] {
+  return MINISTERO_ORDER.filter((id) => Boolean(state.ministri[id]));
+}
+
+// "Scarica un ministro": rimuove l'assegnazione di UN ministero (il primo
+// assegnato) e restituisce l'id rimosso (o null se non c'era nessuno).
+// Nessun nuovo stato: si riusa la mappa ministri esistente.
+export function scaricaUnMinistro(state: GameState): MinisteroId | null {
+  const assigned = assignedMinisteri(state);
+  if (assigned.length === 0) {
+    return null;
+  }
+  const id = assigned[0];
+  rimuoviMinistro(state, id);
+  return id;
 }

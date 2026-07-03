@@ -114,7 +114,7 @@ export class PvpBattleScene implements Scene {
     }
     this.displayHp.player = this.mine.active.mon.hp;
     this.displayHp.foe = this.theirs.active.mon.hp;
-    audio.playMusic("battle-trainer");
+    audio.playMusic("battle-duel");
     const nick = opts.opponentNick.slice(0, 12);
     this.push({ text: `DUELLO IN DIRETTA contro ${nick}!` });
     this.push({ text: "Si duella a squadre fresche: HP e PP al massimo. Nessun premio, solo gloria." });
@@ -330,8 +330,13 @@ export class PvpBattleScene implements Scene {
           const attacker = otherSide(ev.side);
           this.push({
             run: () => {
+              // Danno cosmetico per il numero flottante: differenza di HP prima/dopo
+              // l'evento (il filo porta solo hpAfter assoluto). Zero impatto sulla
+              // logica: applyEvent resta l'unica fonte di verità.
+              const before = this.view[ev.side].active.mon.hp;
               apply();
-              this.fx.onHit(this.sideKey(attacker), ev.typeMult, ev.crit);
+              const dealt = Math.max(0, before - this.view[ev.side].active.mon.hp);
+              this.fx.onHit(this.sideKey(attacker), ev.typeMult, ev.crit, dealt);
             },
             waitHp: true,
             pause: 0.25
@@ -691,7 +696,12 @@ export class PvpBattleScene implements Scene {
     if (this.finished) {
       return;
     }
-    const shakeX = this.fx.shake > 0 ? Math.round(Math.sin(this.fx.shake * 60) * 2) : 0;
+    const ctx = screen.ctx;
+    // SCREEN-SHAKE PIENO anche nel duello (come in BattleScene): tutto il frame
+    // trasla su super-efficace/crit; il box azioni resta fermo (restore prima).
+    const shake = this.fx.shakeOffset();
+    ctx.save();
+    ctx.translate(shake.x, shake.y);
     screen.clear("#f0f0e0");
     const bg = sceneImage("battle:bg", "ui/battle_bg.png");
     if (bg) {
@@ -705,14 +715,14 @@ export class PvpBattleScene implements Scene {
     const foeSlide = Math.round((1 - slide) * 90);
     const playerSlide = Math.round((1 - slide) * -90);
 
-    drawEllipse(screen, 162 + shakeX + foeSlide, 64, 64, 14, "#c0cc9c");
+    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, "#c0cc9c");
     drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
 
     const foeC = this.theirs.active;
     const myC = this.mine.active;
     const foeBlink = this.fx.flashT.foe > 0 && Math.floor(this.fx.flashT.foe * 16) % 2 === 0;
     if (foeC.mon.hp > 0 && !foeBlink) {
-      drawBattleMonster(screen, this.fx, foeC, 162 + shakeX + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
+      drawBattleMonster(screen, this.fx, foeC, 162 + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
     }
     const playerBlink = this.fx.flashT.player > 0 && Math.floor(this.fx.flashT.player * 16) % 2 === 0;
     if (myC.mon.hp > 0 && !playerBlink) {
@@ -720,6 +730,7 @@ export class PvpBattleScene implements Scene {
     }
 
     this.fx.drawParticles(screen);
+    this.fx.drawDamageNumbers(screen);
     drawCombatantBox(screen, foeC.mon, this.displayHp.foe, FOE_BOX);
     drawCombatantBox(screen, myC.mon, this.displayHp.player, PLAYER_BOX);
     // Targhetta avversario + riserve (pallini squadra) sotto il suo box.
@@ -730,6 +741,9 @@ export class PvpBattleScene implements Scene {
     this.drawTeamDots(screen, this.mine.party, PLAYER_BOX.x + 2, PLAYER_BOX.y - 7);
 
     this.fx.drawEffFx(screen);
+
+    // Fine screen-shake: menu/box e cerchio d'apertura restano stabili.
+    ctx.restore();
 
     screen.panel(0, VIEW_H - 44, VIEW_W, 44);
     if (this.mode === "menu") {

@@ -23,6 +23,7 @@ import { buildRivalStageTeam, RIVAL_STAGES, rivalStageFor } from "../../data/riv
 import { TRAINERS, type TrainerDef } from "../../data/trainers";
 import { pickWanderer, wandererLevel, type WanderingDef } from "../../data/encounters";
 import { audio } from "../../engine/audio";
+import { haptics } from "../../engine/haptics";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
@@ -955,6 +956,7 @@ export class WorldScene implements Scene {
       if (pickup.hidden) {
         // Tesoro segreto: ricompensa la curiosità con una piccola celebrazione.
         audio.catchJingle();
+        haptics.event();
         this.say([
           "Ehi! Qui c'era qualcosa di nascosto...",
           `TESORO SEGRETO! ${ITEMS[pickup.itemId].name} x${pickup.qty}!`
@@ -1900,7 +1902,7 @@ export class WorldScene implements Scene {
     const assigned = assignedMinisteri(this.state);
     const hasMinistro = assigned.length > 0;
     const ministeroNome = hasMinistro ? MINISTERI[assigned[0]].name : "un tuo fedelissimo";
-    audio.catchJingle();
+    audio.crisis(); // sirena istituzionale, non il jingle di festa
     this.showBanner("BREAKING NEWS!", "CRISI DI GOVERNO", "#d04848");
     this.say([
       "BREAKING NEWS! Scoppia una CRISI DI GOVERNO!",
@@ -2021,6 +2023,7 @@ export class WorldScene implements Scene {
       // Transizione morbida: dissolvenza in uscita, poi carica la mappa nuova
       // (che fa il suo fade-in). Niente più stacco secco a ogni porta/scala.
       audio.confirm();
+      haptics.warp();
       this.fadeOut = 0.22;
       this.pendingWarp = () => {
         this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
@@ -2038,6 +2041,7 @@ export class WorldScene implements Scene {
       this.state.bag[buried.itemId] = (this.state.bag[buried.itemId] ?? 0) + buried.qty;
       saveGame(this.state);
       audio.catchJingle();
+      haptics.event();
       this.say([
         "Un attimo... il terreno qui suona strano.",
         `TESORO SEGRETO! ${ITEMS[buried.itemId].name} x${buried.qty}!`
@@ -2158,6 +2162,26 @@ export class WorldScene implements Scene {
   private showBanner(text: string, sub: string, color: string): void {
     this.banner = { text, sub, t: 0, color };
     this.bannerFlash = 0.4;
+    // Buzz breve sui banner rilevanti (BREAKING NEWS, traguardi, avvistamenti).
+    haptics.event();
+  }
+
+  // Ombra ellittica ai piedi di un attore del mondo (player/NPC/remoto): dà
+  // "peso" e ancoraggio a terra agli sprite. `fx` = coordinate schermo del
+  // centro-piedi. Semitrasparente, disegnata PRIMA dello sprite.
+  private drawShadow(screen: Screen, footX: number, footY: number, rx = 6): void {
+    const ctx = screen.ctx;
+    ctx.save();
+    ctx.globalAlpha = 0.4;
+    // Ellisse scura schiacciata: rx orizzontale, ry ~40% (prospettiva 3/4).
+    for (let dy = -3; dy <= 3; dy += 1) {
+      const span = Math.floor(rx * Math.sqrt(Math.max(0, 1 - (dy / 3) * (dy / 3))));
+      if (span > 0) {
+        ctx.fillStyle = "#101018";
+        ctx.fillRect(Math.round(footX - span), Math.round(footY + dy), span * 2, 1);
+      }
+    }
+    ctx.restore();
   }
 
   update(dt: number): void {
@@ -2672,6 +2696,8 @@ export class WorldScene implements Scene {
       tall.push({
         baseY: npc.dispY + TILE,
         draw: () => {
+          // Ombra ai piedi (prima dello sprite).
+          this.drawShadow(screen, nx + 8, ny + 15);
           if (npcImg) {
             const nb = screen.imageBounds(npcImg);
             const ns = 22 / nb.h;
@@ -2710,6 +2736,8 @@ export class WorldScene implements Scene {
       tall.push({
         baseY: r.dispY + TILE,
         draw: () => {
+          // Ombra ai piedi del remoto (prima dello sprite).
+          this.drawShadow(screen, sx + 8, sy + 14);
           if (rImg) {
             const rb = screen.imageBounds(rImg);
             const rs = 22 / rb.h;
@@ -2758,6 +2786,8 @@ export class WorldScene implements Scene {
     const walkCycle = this.moving ? Math.floor(this.moveT * 8) % 4 : 0;
     const playerImg = playerImage(pos.facing, walkCycle, this.moving);
     const drawPlayer = (px: number, py: number): void => {
+      // Ombra ai piedi del player (prima dello sprite).
+      this.drawShadow(screen, px + 8, py + 15);
       if (playerImg) {
         const pb = screen.imageBounds(playerImg);
         const ps = 22 / pb.h; // altezza visibile target ~22px

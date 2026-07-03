@@ -1852,7 +1852,7 @@ export const MAPS: Record<string, MapDef> = {
     name: "PARADISO OFFSHORE",
     tiles: OFFSHORE_TILES,
     outdoor: true,
-    music: "stretto",
+    music: "offshore",
     warps: [
       // Punta del molo: ritorno in TRAGHETTO allo STRETTO (approdo sul pilone
       // del ponte, MAI su acqua).

@@ -241,6 +241,41 @@ const TRACKS: Record<string, Track> = {
       "G#2 - - - A#2 - - - G2 - - - G2 - - - " +
       "C3 - - - G2 - - - C3 - - - C3 - - -"
     ).split(" ")
+  },
+
+  // Paradiso Offshore: bossa nova da spiaggia coi soldi al sole (isola post-game).
+  offshore: {
+    stepSec: 0.16,
+    melodyType: "triangle",
+    melody: (
+      "C5 - E5 - G5 - A5 - G5 - E5 - D5 - - - " +
+      "A4 - C5 - E5 - G5 - F5 - E5 - D5 - - - " +
+      "C5 - E5 - G5 - A5 - C6 - A5 - G5 - E5 - " +
+      "D5 - E5 - D5 - C5 - - - - - - - - -"
+    ).split(" "),
+    bass: (
+      "A2 - - - E3 - - - F2 - - - C3 - - - " +
+      "F2 - - - C3 - - - G2 - - - D3 - - - " +
+      "A2 - - - E3 - - - F2 - - - G2 - - - " +
+      "G2 - - - G2 - - - A2 - - - A2 - - -"
+    ).split(" ")
+  },
+
+  // Duello PvP in diretta: sfida serrata, adrenalinica, "da confronto televisivo".
+  "battle-duel": {
+    stepSec: 0.1,
+    melody: (
+      "E5 E5 B5 E5 A5 - G5 F#5 E5 - G5 - B5 - A5 G5 " +
+      "F#5 F#5 A5 F#5 D6 - C6 B5 A5 - B5 - A5 - G5 - " +
+      "E5 E5 B5 E5 A5 - G5 F#5 E5 - G5 - C6 - B5 A5 " +
+      "B5 - A5 - G5 - F#5 - E5 - - - - - - -"
+    ).split(" "),
+    bass: (
+      "E3 - E2 - E3 - E2 - A2 - A2 - A3 - A2 - " +
+      "D3 - D2 - D3 - D2 - B2 - B2 - B3 - B2 - " +
+      "E3 - E2 - E3 - E2 - A2 - A2 - C3 - C2 - " +
+      "B2 - B2 - A2 - A2 - E3 - E2 - E3 - E2 -"
+    ).split(" ")
   }
 };
 
@@ -371,6 +406,63 @@ class AudioEngine {
   encounterSting(): void {
     [880, 830, 880, 830, 880].forEach((f, i) => this.tone(f, 0.07, { delaySec: i * 0.07, vol: 0.1 }));
     haptics.alert();
+  }
+
+  // ---- Jingle distinti (prima usavano tutti catchJingle/victory) ----
+  // Evoluzione: arpeggio ascendente "magico" con code luccicanti (triangle).
+  evolveJingle(): void {
+    [523, 659, 784, 988, 1319].forEach((f, i) =>
+      this.tone(f, 0.22, { delaySec: i * 0.12, vol: 0.09, type: "triangle" })
+    );
+    this.tone(1047, 0.5, { delaySec: 0.62, vol: 0.08, type: "triangle" });
+    haptics.levelUp();
+  }
+  // Medaglia: fanfara trionfale a tre squilli, "da premiazione".
+  badgeFanfare(): void {
+    const seq = [392, 523, 659, 784, 659, 784, 1047];
+    seq.forEach((f, i) =>
+      this.tone(f, i === seq.length - 1 ? 0.55 : 0.13, { delaySec: i * 0.13, vol: 0.11 })
+    );
+    // Basso solenne sotto la fanfara.
+    [131, 165, 196].forEach((f, i) => this.tone(f, 0.4, { delaySec: i * 0.18, vol: 0.09, type: "triangle" }));
+    haptics.levelUp();
+  }
+  // Vincita alle slot: campanella "jackpot" veloce e brillante.
+  slotWin(): void {
+    [1047, 1319, 1047, 1319, 1568].forEach((f, i) =>
+      this.tone(f, 0.1, { delaySec: i * 0.08, vol: 0.1 })
+    );
+    haptics.catch();
+  }
+
+  // ---- SFX meccaniche (cue brevi per feedback di sistema) ----
+  // Abilità che "respinge" (TEFLON/LODO/POLTRONA/GARANZIA): sweep verso l'alto,
+  // sensazione di scudo/scivolamento.
+  abilityBlock(): void {
+    this.tone(520, 0.16, { sweepTo: 1040, vol: 0.09, type: "triangle" });
+  }
+  // Hold item difensivo (GILET PARA): tonfo secco protettivo.
+  holdGuard(): void {
+    this.tone(180, 0.14, { sweepTo: 120, vol: 0.11, type: "square" });
+  }
+  // Hold item di cura a fine turno (CAFFETTIERA): gorgoglio caldo salente.
+  holdBrew(): void {
+    [440, 554, 659].forEach((f, i) => this.tone(f, 0.1, { delaySec: i * 0.06, vol: 0.07, type: "triangle" }));
+  }
+  // Crisi di governo: sirena breve e cupa, "allarme istituzionale".
+  crisis(): void {
+    this.tone(300, 0.28, { sweepTo: 150, vol: 0.12 });
+    this.tone(220, 0.28, { sweepTo: 110, vol: 0.1, delaySec: 0.14 });
+    haptics.cancel();
+  }
+  // Stop di un rullo del casinò: clunk meccanico.
+  reelStop(): void {
+    this.tone(320, 0.05, { sweepTo: 180, vol: 0.1, type: "square" });
+  }
+  // Tick del typewriter dei dialoghi: cursore lievissimo, senza haptics
+  // (chiamato spesso, non deve vibrare a raffica).
+  textTick(): void {
+    this.tone(1500, 0.018, { vol: 0.025 });
   }
 
   // ---- Musica ----

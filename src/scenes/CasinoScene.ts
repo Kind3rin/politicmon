@@ -254,7 +254,7 @@ export class CasinoScene implements Scene {
       if (!this.locked[i] && this.spinT >= stops[i]) {
         this.locked[i] = true;
         this.reelIdx[i] = Math.floor(Math.random() * REELS.length);
-        audio.cursor();
+        audio.reelStop(); // clunk meccanico a ogni rullo che si ferma
       }
       if (!this.locked[i]) {
         this.reelIdx[i] = Math.floor(this.spinT * 24 + i) % REELS.length;
@@ -292,7 +292,7 @@ export class CasinoScene implements Scene {
       this.state.chips += win;
       this.winFlash = 0.6;
       bumpDailyQuest(this.state, "slot1"); // missione "VINCI ALLE SLOT"
-      audio.catchJingle();
+      audio.slotWin(); // campanella jackpot distinta dal jingle di cattura
     } else {
       audio.cancel();
     }

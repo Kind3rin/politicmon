@@ -355,7 +355,7 @@ export class BattleScene implements Scene {
       steps.push({
         run: () => {
           defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
-          this.fx.onHit(side, result.typeMult, result.crit);
+          this.fx.onHit(side, result.typeMult, result.crit, result.damage);
         },
         waitHp: true,
         pause: 0.25
@@ -364,7 +364,10 @@ export class BattleScene implements Scene {
         steps.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
       }
       if (result.lodo) {
-        steps.push({ text: `Il LODO protegge ${defenderName}: primo colpo dimezzato!` });
+        steps.push({
+          text: `Il LODO protegge ${defenderName}: primo colpo dimezzato!`,
+          run: () => audio.holdGuard()
+        });
       }
       if (result.typeMult === 0) {
         steps.push({ text: "Non ha alcun effetto..." });
@@ -430,7 +433,8 @@ export class BattleScene implements Scene {
         steps.push({
           text: abilityOf(target.mon)?.id === "garanzia"
             ? `GARANZIA COSTITUZIONALE! ${targetName} resta al di sopra delle parti.`
-            : `POLTRONA SALDA! ${targetName} non si schioda di un millimetro.`
+            : `POLTRONA SALDA! ${targetName} non si schioda di un millimetro.`,
+          run: () => audio.abilityBlock()
         });
       } else if ((effect.stat.chance ?? 100) > Math.random() * 100) {
         steps.push({
@@ -458,7 +462,8 @@ export class BattleScene implements Scene {
               ? (defAbility === "garanzia"
                   ? `GARANZIA COSTITUZIONALE! Le accuse non scalfiscono ${defenderName}.`
                   : `TEFLON! Le accuse scivolano via da ${defenderName}.`)
-              : `La TELECAMERA riprende tutto: ${defenderName} evita la GAFFE!`
+              : `La TELECAMERA riprende tutto: ${defenderName} evita la GAFFE!`,
+            run: () => audio.abilityBlock()
           });
         }
       } else if (Math.random() * 100 < effect.status.chance) {
@@ -506,7 +511,16 @@ export class BattleScene implements Scene {
 
   private foeFaintedSteps(): Step[] {
     const steps: Step[] = [
-      { run: () => audio.faint() },
+      {
+        // KO: freeze-frame (hit-stop lungo) + lampo bianco prima che lo sprite
+        // svanisca, per dare peso alla sconfitta. Puro effetto: nessuna logica.
+        run: () => {
+          audio.faint();
+          this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
+          this.fx.koFlash = 0.5;
+        },
+        pause: 0.15
+      },
       { text: `Il nemico ${this.foeName()} si ritira dalla corsa!` }
     ];
     const istruzione = hasMinistro(this.state, "istruzione");
@@ -685,7 +699,7 @@ export class BattleScene implements Scene {
       });
       if (trainer.badge) {
         const badgeName = trainer.badge.toUpperCase();
-        steps.push({ run: () => audio.catchJingle() });
+        steps.push({ run: () => audio.badgeFanfare() });
         steps.push({
           text: `Conquisti la MEDAGLIA ${badgeName}!`,
           run: () => {
@@ -783,7 +797,14 @@ export class BattleScene implements Scene {
 
   private playerFaintedSteps(): Step[] {
     return [
-      { run: () => audio.faint() },
+      {
+        run: () => {
+          audio.faint();
+          this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
+          this.fx.koFlash = 0.5;
+        },
+        pause: 0.15
+      },
       { text: `${this.playerName()} si ritira dalla corsa!` },
       {
         run: () => {
@@ -851,7 +872,7 @@ export class BattleScene implements Scene {
       }
       // Cure di fine turno (dopo lo SCANDALO, come in duelsim):
       // GALLEGGIAMENTO (abilità, 1/16) e CAFFETTIERA (hold, 1/16, solo PVE).
-      const healEot = (label: string, cond: () => boolean) => {
+      const healEot = (label: string, cond: () => boolean, sfx: () => void) => {
         steps.push({
           run: () => {
             const max = statsOf(c.mon).hp;
@@ -859,13 +880,13 @@ export class BattleScene implements Scene {
               return;
             }
             c.mon.hp = Math.min(max, c.mon.hp + Math.max(1, Math.floor(max / 16)));
-            audio.heal();
+            sfx();
             this.pushFront([{ text: `${label} ${name} recupera un po' di consenso!`, waitHp: true }]);
           }
         });
       };
-      healEot("GALLEGGIAMENTO!", () => abilityOf(c.mon)?.id === "galleggiamento");
-      healEot("La CAFFETTIERA fuma:", () => heldItemOf(c.mon)?.id === "caffettiera");
+      healEot("GALLEGGIAMENTO!", () => abilityOf(c.mon)?.id === "galleggiamento", () => audio.heal());
+      healEot("La CAFFETTIERA fuma:", () => heldItemOf(c.mon)?.id === "caffettiera", () => audio.holdBrew());
       return steps;
     };
     return [...apply(this.player, this.playerName()), ...apply(this.foe, `Il nemico ${this.foeName()}`)];
@@ -1452,7 +1473,12 @@ export class BattleScene implements Scene {
   // ---- Draw ----
 
   draw(screen: Screen): void {
-    const shakeX = this.fx.shake > 0 ? Math.round(Math.sin(this.fx.shake * 60) * 2) : 0;
+    const ctx = screen.ctx;
+    // SCREEN-SHAKE PIENO: tutto il frame (sfondo, sprite, box, banner) trasla
+    // insieme su super-efficace/crit. Prima solo il nemico tremava.
+    const shake = this.fx.shakeOffset();
+    ctx.save();
+    ctx.translate(shake.x, shake.y);
     screen.clear("#f0f0e0");
     // Sfondo battaglia PixelLab (se pronto) dietro tutto, fino al box azioni;
     // altrimenti le due fasce di colore (cielo/terra) di prima.
@@ -1464,31 +1490,38 @@ export class BattleScene implements Scene {
       screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, "#e8e0c8");
     }
 
+    // TINT SFONDO METEO (sondaggi-meteo): velo colorato leggero sullo sfondo
+    // quando il gradimento attiva il modificatore. Caldo/dorato col GOVERNO in
+    // luna di miele (>=70), freddo/rosso-piazza con l'OPPOSIZIONE al comando
+    // (<=40). Alpha basso: atmosfera, non disturbo. Solo PVE (i SONDAGGI
+    // esistono solo qui). Sotto gli sprite, sopra lo sfondo.
+    this.drawWeatherTint(screen);
+
     // Slide-in iniziale degli sprite.
     const slide = Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
     const foeSlide = Math.round((1 - slide) * 90);
     const playerSlide = Math.round((1 - slide) * -90);
 
     // Piattaforme.
-    drawEllipse(screen, 162 + shakeX + foeSlide, 64, 64, 14, "#c0cc9c");
+    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, "#c0cc9c");
     drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
 
     // Aura dorata pulsante attorno al leggendario: alone "sacro" che lo
     // distingue da un mostro qualsiasi per tutta la durata dello scontro.
     if (this.isLegendary && this.foe.mon.hp > 0 && !this.ballAnim) {
-      this.drawLegendaryAura(screen, 162 + shakeX + foeSlide, 52);
+      this.drawLegendaryAura(screen, 162 + foeSlide, 52);
     }
 
     // Telegrafia: aura pulsante dietro il nemico che sta per attaccare.
     if (this.fx.telegraph && this.fx.telegraph.side === "foe" && this.foe.mon.hp > 0 && !this.ballAnim) {
-      this.fx.drawTelegraph(screen, 162 + shakeX + foeSlide, 50);
+      this.fx.drawTelegraph(screen, 162 + foeSlide, 50);
     }
 
     // Nemico: animazione idle (respiro), affondo all'attacco, blink se colpito.
     // Se è stato reclutato (captured) non si disegna più: è dentro la tessera.
     const foeBlink = this.fx.flashT.foe > 0 && Math.floor(this.fx.flashT.foe * 16) % 2 === 0;
     if (this.foe.mon.hp > 0 && !this.ballAnim && !foeBlink && !this.captured) {
-      drawBattleMonster(screen, this.fx, this.foe, 162 + shakeX + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
+      drawBattleMonster(screen, this.fx, this.foe, 162 + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
     }
     if (this.ballAnim) {
       this.drawBall(screen);
@@ -1502,6 +1535,8 @@ export class BattleScene implements Scene {
 
     // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
     this.fx.drawParticles(screen);
+    // Numeri di danno flottanti (sopra le scintille, sotto le barre HP).
+    this.fx.drawDamageNumbers(screen);
 
     this.drawFoeBox(screen);
     this.drawPlayerBox(screen);
@@ -1511,6 +1546,10 @@ export class BattleScene implements Scene {
 
     // Lampo d'apertura + banner "LEGGENDARIO!" per l'incontro epico.
     this.drawLegendIntro(screen);
+
+    // Fine dello screen-shake: il box azioni/menu e gli overlay a schermo intero
+    // restano fermi (l'UI non deve "ballare" sotto le dita).
+    ctx.restore();
 
     // Riquadro testo.
     screen.panel(0, VIEW_H - 44, VIEW_W, 44);
@@ -1611,6 +1650,17 @@ export class BattleScene implements Scene {
       ctx.restore();
     }
 
+    // Lampo bianco di KO: freeze-frame accompagnato da un flash che sbianca
+    // brevemente lo schermo quando un mostro cade.
+    if (this.fx.koFlash > 0) {
+      const ctx = screen.ctx;
+      const a = this.fx.koFlash / 0.5;
+      ctx.save();
+      ctx.fillStyle = `rgba(255, 255, 255, ${0.6 * a})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.restore();
+    }
+
     // Apertura a cerchio in stile Game Boy.
     if (this.introT < 0.55) {
       const ctx = screen.ctx;
@@ -1624,6 +1674,34 @@ export class BattleScene implements Scene {
       ctx.fillRect(0, 0, VIEW_W, VIEW_H);
       ctx.restore();
     }
+  }
+
+  // Velo colorato del "meteo politico": tinge lievemente lo sfondo battaglia
+  // quando i SONDAGGI attivano il modificatore (>=70 governo / <=40 opposizione),
+  // così il banner testuale iniziale ha anche un riscontro visivo persistente.
+  private drawWeatherTint(screen: Screen): void {
+    const sond = this.state.sondaggi;
+    if (sond >= 70) {
+      // Luna di miele del GOVERNO: velo caldo/dorato, più intenso in alto.
+      this.drawTintGradient(screen, "255,214,120", 0.16 + (sond - 70) / 30 * 0.08);
+    } else if (sond <= 40) {
+      // Piazza in fermento: velo freddo/rosso-piazza, più intenso in basso.
+      this.drawTintGradient(screen, "216,72,72", 0.14 + (40 - sond) / 40 * 0.08, true);
+    }
+  }
+
+  private drawTintGradient(screen: Screen, rgb: string, alpha: number, fromBottom = false): void {
+    const ctx = screen.ctx;
+    const h = VIEW_H - 44; // solo sopra il box azioni
+    const grad = fromBottom
+      ? ctx.createLinearGradient(0, h, 0, 0)
+      : ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, `rgba(${rgb},${alpha})`);
+    grad.addColorStop(1, `rgba(${rgb},0)`);
+    ctx.save();
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, VIEW_W, h);
+    ctx.restore();
   }
 
   // Alone dorato dietro il leggendario: cerchio luminoso pulsante + raggi.

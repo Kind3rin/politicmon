@@ -90,9 +90,17 @@ export class MessageBox {
     const page = this.pages[this.pageIndex];
     const total = page.join("").length;
     if (this.chars < total) {
+      const before = Math.floor(this.chars);
       this.chars = Math.min(total, this.chars + dt * 60);
       if (advance) {
         this.chars = total;
+      } else {
+        // Tick sonoro leggero del "typewriter": un cue ogni ~3 caratteri
+        // rivelati (non a ogni frame), come le vecchie caselle di testo.
+        const after = Math.floor(this.chars);
+        if (after < total && Math.floor(after / 3) !== Math.floor(before / 3)) {
+          audio.textTick();
+        }
       }
       return;
     }
@@ -109,8 +117,21 @@ export class MessageBox {
     }
   }
 
-  // Tempo per far lampeggiare l'indicatore "continua".
+  // Tempo per far lampeggiare l'indicatore "continua" e agitare le urla.
   private blink = 0;
+
+  // Una parola "urlata" (BREAKING NEWS!, SUPER EFFICACE!): tutta MAIUSCOLA e
+  // seguita da "!". Riceve un micro-tremolio per dare enfasi.
+  private static isShout(word: string): boolean {
+    const bare = word.replace(/[!]+$/, "");
+    return word.endsWith("!") && bare.length >= 2 && /[A-ZÀÈÉÌÒÙ]/.test(bare) && bare === bare.toUpperCase();
+  }
+
+  // La riga contiene almeno una parola urlata? (evita il render token-per-token
+  // quando non serve).
+  private static hasShout(line: string): boolean {
+    return line.split(" ").some((w) => MessageBox.isShout(w));
+  }
 
   draw(screen: Screen): void {
     if (!this.isOpen) {
@@ -123,9 +144,31 @@ export class MessageBox {
     let remaining = Math.floor(this.chars);
     for (let i = 0; i < page.length; i += 1) {
       const line = page[i];
-      const visible = line.slice(0, Math.max(0, remaining));
+      const shown = Math.max(0, remaining);
+      const visible = line.slice(0, shown);
+      const lineY = boxY + 10 + i * (LINE_H + 4);
+      // Rende la riga token per token: le parole URLATE! tremano leggermente,
+      // il resto è testo normale (nessun costo se la riga non ha urla).
+      if (MessageBox.hasShout(line)) {
+        let cx = 10;
+        let idx = 0; // indice carattere nella riga completa
+        const words = line.split(" ");
+        for (let w = 0; w < words.length; w += 1) {
+          const word = words[w] + (w < words.length - 1 ? " " : "");
+          const wordVisible = word.slice(0, Math.max(0, shown - idx));
+          if (wordVisible.length > 0) {
+            const shout = MessageBox.isShout(words[w]);
+            const jx = shout ? Math.round(Math.sin(this.blink * 0.9 + w) * 1) : 0;
+            const jy = shout ? Math.round(Math.cos(this.blink * 1.1 + w) * 1) : 0;
+            screen.text(wordVisible, cx + jx, lineY + jy, shout ? "#d84848" : INK);
+          }
+          cx += word.length * CHAR_W;
+          idx += word.length;
+        }
+      } else {
+        screen.text(visible, 10, lineY, INK);
+      }
       remaining -= line.length;
-      screen.text(visible, 10, boxY + 10 + i * (LINE_H + 4), INK);
     }
     const total = page.join("").length;
     if (this.chars >= total) {

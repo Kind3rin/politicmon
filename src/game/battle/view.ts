@@ -24,6 +24,18 @@ export interface ImpactParticle {
   size: number;
 }
 
+// Numero di danno flottante: nasce nel punto colpito, sale e svanisce.
+// Colore/scala cambiano su critico (bianco/rosso, grande) e super-efficace (oro).
+export interface DamageNumber {
+  x: number;
+  y: number;
+  val: number;
+  life: number;
+  max: number;
+  crit: boolean;
+  super: boolean;
+}
+
 // Centro approssimativo dello sprite di un combattente (per le particelle).
 export function monsterCenter(who: BattleSide): { x: number; y: number } {
   return who === "foe" ? { x: 162, y: 50 } : { x: 56, y: 100 };
@@ -58,7 +70,11 @@ export class BattleFx {
   hitStop = 0;
   levelFlash = 0;
   catchFlash = 0;
+  // KO: freeze-frame + lampo bianco prima che lo sprite svanisca. La scena
+  // imposta koFlash a ~0.5 in foe/playerFaintedSteps; qui decade da solo.
+  koFlash = 0;
   particles: ImpactParticle[] = [];
+  damageNumbers: DamageNumber[] = [];
   effFx: { kind: "super" | "weak" | "crit"; t: number } | null = null;
   telegraph: { side: BattleSide; color: string; t: number; max: number } | null = null;
 
@@ -74,7 +90,9 @@ export class BattleFx {
     this.knockback.foe = Math.max(0, this.knockback.foe - dt * 4);
     this.levelFlash = Math.max(0, this.levelFlash - dt);
     this.catchFlash = Math.max(0, this.catchFlash - dt);
+    this.koFlash = Math.max(0, this.koFlash - dt);
     this.updateParticles(dt);
+    this.updateDamageNumbers(dt);
     if (this.effFx) {
       this.effFx.t -= dt;
       if (this.effFx.t <= 0) {
@@ -90,8 +108,9 @@ export class BattleFx {
   }
 
   // Effetti del colpo andato a segno: shake/hit-stop/knockback/scintille/banner
-  // d'efficacia + suono. `attacker` è chi ha colpito.
-  onHit(attacker: BattleSide, typeMult: number, crit: boolean): void {
+  // d'efficacia + suono. `attacker` è chi ha colpito. `damage` è puramente
+  // cosmetico (il numero flottante): NON entra in alcuna logica.
+  onHit(attacker: BattleSide, typeMult: number, crit: boolean, damage = 0): void {
     const defSide: BattleSide = attacker === "player" ? "foe" : "player";
     this.lungeT[attacker] = 0.3;
     this.flashT[defSide] = 0.45;
@@ -101,6 +120,9 @@ export class BattleFx {
     this.hitStop = superHit || crit ? 0.09 : 0.05;
     this.knockback[defSide] = superHit ? 1 : 0.55;
     this.spawnImpact(defSide, typeMult, crit);
+    if (damage > 0) {
+      this.spawnDamageNumber(defSide, damage, typeMult >= 2, crit);
+    }
     if (superHit) {
       this.effFx = { kind: "super", t: 0.9 };
       audio.hitSuper();
@@ -169,6 +191,66 @@ export class BattleFx {
       ctx.globalAlpha = Math.min(1, a * 1.4);
       ctx.fillStyle = p.color;
       ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size + 1, p.size + 1);
+      ctx.restore();
+    }
+  }
+
+  // Offset dello screen-shake da applicare a TUTTO il frame (ctx.translate):
+  // ampiezza scalata dal "peso" dell'ultimo colpo (super/crit = shake 0.42 →
+  // ampiezza piena; colpi normali = più contenuta). X e Y sfasati per un
+  // tremolio credibile. La scena wrappa il disegno in questo offset.
+  shakeOffset(): { x: number; y: number } {
+    if (this.shake <= 0) {
+      return { x: 0, y: 0 };
+    }
+    // 0.42 (super/crit) → amp ~3.2px; 0.22/0.16 (normale) → ~1.2/0.9px.
+    const amp = Math.min(3.4, this.shake * 8);
+    const x = Math.round(Math.sin(this.shake * 60) * amp);
+    const y = Math.round(Math.cos(this.shake * 47) * amp * 0.6);
+    return { x, y };
+  }
+
+  // Numero di danno flottante: parte dal punto colpito, sale, svanisce.
+  spawnDamageNumber(defSide: BattleSide, damage: number, superHit: boolean, crit: boolean): void {
+    const c = monsterCenter(defSide);
+    this.damageNumbers.push({
+      x: c.x + (Math.random() - 0.5) * 10,
+      y: c.y - 6,
+      val: Math.max(1, Math.round(damage)),
+      life: 0,
+      max: crit || superHit ? 1.0 : 0.85,
+      crit,
+      super: superHit
+    });
+    // Tetto di sicurezza: non accumulare mai troppi numeri (perf mobile).
+    if (this.damageNumbers.length > 6) {
+      this.damageNumbers.shift();
+    }
+  }
+
+  private updateDamageNumbers(dt: number): void {
+    for (const d of this.damageNumbers) {
+      d.life += dt;
+      // Sale rallentando (ease-out): rapido all'inizio, poi si posa.
+      d.y -= (26 - d.life * 14) * dt;
+    }
+    this.damageNumbers = this.damageNumbers.filter((d) => d.life < d.max);
+  }
+
+  drawDamageNumbers(screen: Screen): void {
+    for (const d of this.damageNumbers) {
+      const prog = d.life / d.max;
+      // Pop iniziale (0→1 in fretta) poi fade nell'ultimo terzo.
+      const fade = prog > 0.66 ? 1 - (prog - 0.66) / 0.34 : 1;
+      const size = d.crit || d.super ? 2 : 1;
+      const color = d.crit ? "#ff5a5a" : d.super ? "#ffd23c" : "#f4f4e8";
+      const ctx = screen.ctx;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, fade);
+      const label = `${d.val}`;
+      // Ombra scura per stacco su qualsiasi sfondo, poi il numero colorato.
+      screen.textCenter(label, Math.round(d.x) + 1, Math.round(d.y) + 1, "rgba(16,20,31,0.8)", size);
+      screen.textCenter(label, Math.round(d.x), Math.round(d.y), color, size);
       ctx.restore();
     }
   }

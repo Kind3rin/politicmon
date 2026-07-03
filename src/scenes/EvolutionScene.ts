@@ -46,11 +46,11 @@ export class EvolutionScene implements Scene {
     } else if (this.phase === 1 && this.phaseT >= EvolutionScene.MORPH) {
       this.phase = 2;
       this.phaseT = 0;
-      audio.catchJingle(); // momento del "PUF!"
+      audio.confirm(); // momento del "PUF!": stacco secco
     } else if (this.phase === 2 && this.phaseT >= EvolutionScene.FLASH) {
       this.phase = 3;
       this.phaseT = 0;
-      audio.levelUp(); // fanfara di rivelazione
+      audio.evolveJingle(); // arpeggio magico di rivelazione, distinto dal level-up
     }
     // Nella fase finale si conferma per uscire.
     if (this.phase === 3 && !this.done) {

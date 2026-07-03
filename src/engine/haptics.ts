@@ -86,6 +86,15 @@ class Haptics {
   alert(): void {
     this.buzz([0, 50, 40, 50]); // incontro/sfida: pre-allerta
   }
+  // Eventi di mondo notevoli (banner BREAKING NEWS, tesoro segreto, warp):
+  // doppio colpetto netto, diverso dai colpi di battaglia.
+  event(): void {
+    this.buzz([16, 40, 16]);
+  }
+  // Warp/cambio mappa: singolo colpetto morbido di transizione.
+  warp(): void {
+    this.buzz(12);
+  }
 }
 
 export const haptics = new Haptics();

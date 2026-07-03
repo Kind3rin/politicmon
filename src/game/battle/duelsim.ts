@@ -9,6 +9,8 @@
 // con eccezione self-target, SCANDALO maxHp/8, clamp stage ±6). Il DANNO invece
 // NON è più una copia: si usa direttamente calcDamage di sim.ts con la RNG
 // iniettata, quindi il bilanciamento danno PVE vale automaticamente anche qui.
+// R42: il SOFT-CAP del moltiplicatore danno (DAMAGE_MULT_CAP=3.5) vive dentro
+// calcDamage → è già replicato nel duello, nessun codice da duplicare qui.
 // Ogni futura modifica alla semantica di turno di BattleScene va replicata QUI
 // (check-duel.mjs copre le divergenze).
 //

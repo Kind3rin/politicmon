@@ -12,13 +12,13 @@ import { addSondaggi, bumpSondaggi, expMalus, hasMinistro, moneyMalus } from "..
 import { bumpDailyQuest } from "../dailyquests";
 import { zoneProgress } from "../../data/dexzones";
 import {
-  abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, heldItemOf, levelEvolution, speciesOf,
+  abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, heldItemOf, LEVEL_CAP, levelEvolution, speciesOf,
   statsOf, type Monster
 } from "../monster";
 import { typeMultiplier } from "../../data/poltypes";
 import {
   calcDamage, catchChance, chooseFoeMove, effectiveStat, makeCombatant, runChance, statName,
-  type AiProfile, type Combatant
+  type AiProfile, type Combatant, type OffensiveTrigger
 } from "./sim";
 import { Menu, MessageBox, clipToWidth, wrapText, GREY, INK } from "../../ui/widgets";
 import {
@@ -92,6 +92,10 @@ export class BattleScene implements Scene {
 
   private displayHp = { player: 0, foe: 0 };
   private displayExp = 0;
+  // Trigger offensivi già annunciati in QUESTA battaglia (chiave specie:effetto):
+  // ogni effetto (MAGGIORANZA/OPPOSIZIONE/WHATEVER/CAIMANO/SANTINO/AGENDA ROSSA)
+  // si annuncia una volta sola per specie, come i difensivi (LODO/GILET).
+  private announcedOffensive = new Set<string>();
   private runAttempts = 0;
   private finished = false;
   private ballAnim: { t: number; shakes: number; success: boolean } | null = null;
@@ -216,7 +220,7 @@ export class BattleScene implements Scene {
 
   private expRatio(): number {
     const mon = this.player.mon;
-    if (mon.level >= 50) {
+    if (mon.level >= LEVEL_CAP) {
       return 1;
     }
     const cur = expForLevel(mon.level);
@@ -228,11 +232,19 @@ export class BattleScene implements Scene {
     this.push({
       run: () => {
         this.finished = true;
-        // Boost campagna: una battaglia CONCLUSA (vinta/catturata) consuma una
-        // carica di ogni boost attivo. Fuga/sconfitta non scalano (non "usi" lo
-        // spot). Il contatore è già clampato >=0 dal parseState.
-        if (result === "win" || result === "caught") {
-          if (this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
+        // Boost campagna: una carica si consuma SOLO nelle battaglie dove il
+        // rispettivo bonus è davvero applicato (R42, audit: prima ogni win —
+        // wild inclusi — bruciava tutti e tre i contatori anche quando il bonus
+        // non c'era). Il contatore è già clampato >=0 dal parseState.
+        //  - MANIFESTI (EXP): l'EXP arriva da OGNI foe KO (foeFaintedSteps),
+        //    wild e trainer → consuma su qualunque vittoria per KO ("win").
+        //    Sulla cattura non c'è EXP, quindi non scala.
+        //  - SPOT (fondi) e COMIZIO (SONDAGGI ×2): il payout e il raddoppio
+        //    sondaggi vivono SOLO nel ramo trainer di afterFoeDown → consumano
+        //    solo battendo un TRAINER.
+        const won = result === "win";
+        if (won && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
+        if (won && this.trainer) {
           if (this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
           if (this.state.boostSondBattles > 0) this.state.boostSondBattles -= 1;
         }
@@ -319,6 +331,22 @@ export class BattleScene implements Scene {
     this.queue = [...steps, ...this.queue];
   }
 
+  // Contromossa del nemico dopo un'azione del giocatore che consuma il turno
+  // (cambio/oggetto/scheda/fuga fallita). UNICO punto che sceglie e fa partire
+  // la mossa del nemico "fuori dallo scambio normale": passa SEMPRE da
+  // pushMoveNow → pushMove, quindi eredita il blocco status (INDAGATO 25% /
+  // GAFFE autodanno) esattamente come lo scambio di startTurn. Prima ogni
+  // callsite duplicava questo giro: alcuni rischiavano di aggirare il check.
+  private foeCounterStep(): Step {
+    return {
+      run: () => {
+        if (this.foe.mon.hp > 0) {
+          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
+        }
+      }
+    };
+  }
+
   private moveSteps(
     side: "player" | "foe",
     attacker: Combatant,
@@ -368,6 +396,16 @@ export class BattleScene implements Scene {
         waitHp: true,
         pause: 0.25
       });
+      // Annuncio dei TRIGGER OFFENSIVI (R42): prima volta per specie in battaglia,
+      // simmetrico ai difensivi (LODO/GILET/TEFLON) già parlanti.
+      for (const trig of result.offensive ?? []) {
+        const key = `${attacker.mon.speciesId}:${trig}`;
+        if (this.announcedOffensive.has(key)) {
+          continue;
+        }
+        this.announcedOffensive.add(key);
+        steps.push({ text: OFFENSIVE_TRIGGER_TEXT[trig](attackerName) });
+      }
       if (result.crit) {
         steps.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
       }
@@ -858,14 +896,8 @@ export class BattleScene implements Scene {
       steps.push({ text: `${this.playerName()} cambia casacca al volo: OPPORTUNISMO sale!` });
     }
     if (!afterFaint) {
-      // Il cambio consuma il turno: il nemico attacca.
-      steps.push({
-        run: () => {
-          if (this.foe.mon.hp > 0) {
-            this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
-          }
-        }
-      });
+      // Il cambio consuma il turno: il nemico attacca (col blocco status).
+      steps.push(this.foeCounterStep());
       steps.push(...this.endOfTurnSteps());
     }
     this.pushFront(steps);
@@ -972,14 +1004,8 @@ export class BattleScene implements Scene {
         }
       });
     }
-    // Usare un oggetto consuma il turno.
-    steps.push({
-      run: () => {
-        if (this.foe.mon.hp > 0) {
-          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
-        }
-      }
-    });
+    // Usare un oggetto consuma il turno (il nemico risponde, blocco status incluso).
+    steps.push(this.foeCounterStep());
     steps.push(...this.endOfTurnSteps());
     this.pushFront(steps);
     this.mode = "queue";
@@ -1028,13 +1054,7 @@ export class BattleScene implements Scene {
           } else {
             this.pushFront([
               { text: `Maledizione! ${this.foeName()} si è astenuto!` },
-              {
-                run: () => {
-                  if (this.foe.mon.hp > 0) {
-                    this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
-                  }
-                }
-              },
+              this.foeCounterStep(),
               ...this.endOfTurnSteps()
             ]);
           }
@@ -1453,14 +1473,8 @@ export class BattleScene implements Scene {
       });
     }
 
-    // La CAMPAGNA consuma il turno: il nemico risponde (se ancora in piedi).
-    steps.push({
-      run: () => {
-        if (this.foe.mon.hp > 0) {
-          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
-        }
-      }
-    });
+    // La CAMPAGNA consuma il turno: il nemico risponde (blocco status incluso).
+    steps.push(this.foeCounterStep());
     steps.push(...this.endOfTurnSteps());
     this.pushFront(steps);
     this.mode = "queue";
@@ -1481,13 +1495,7 @@ export class BattleScene implements Scene {
     } else {
       this.pushFront([
         { text: "I cronisti ti bloccano! Niente fuga!" },
-        {
-          run: () => {
-            if (this.foe.mon.hp > 0) {
-              this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
-            }
-          }
-        },
+        this.foeCounterStep(),
         ...this.endOfTurnSteps()
       ]);
     }
@@ -1871,6 +1879,18 @@ export class BattleScene implements Scene {
     screen.text(`CONSENSO ${this.state.sondaggi}%`, 8, y + 21, "#7ad858");
   }
 }
+
+// Testo d'annuncio per ogni TRIGGER OFFENSIVO (R42): mostrato una volta per
+// specie in battaglia, alla prima volta che l'effetto alza il danno. Simmetrico
+// ai difensivi (LODO/GILET/TEFLON), che già parlavano.
+const OFFENSIVE_TRIGGER_TEXT: Record<OffensiveTrigger, (name: string) => string> = {
+  maggioranza: (n) => `MAGGIORANZA! ${n} ha i numeri e picchia più forte!`,
+  opposizione: (n) => `OPPOSIZIONE! ${n}, con le spalle al muro, raddoppia la foga!`,
+  whatever: (n) => `WHATEVER IT TAKES! ${n} fa qualunque cosa: colpo devastante!`,
+  caimano: (n) => `CAIMANO! ${n} azzanna il nemico già nei guai!`,
+  santino: (n) => `Il SANTINO ELETTORALE carica il colpo di ${n}!`,
+  agendarossa: (n) => `L'AGENDA ROSSA infiamma la retorica di ${n}!`
+};
 
 // MOSSE DA CAMPAGNA: spendi SONDAGGI per effetti una-tantum in battaglia. Sono
 // la risorsa che collega il consenso (prima solo passivo) al loop di lotta.

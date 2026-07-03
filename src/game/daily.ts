@@ -39,8 +39,8 @@ export function hashDate(key: string): number {
 }
 
 // Costruisce l'avversaria del giorno: 3 specie DISTINTE pescate dal pool con
-// l'hash della data, livelli scalati sul massimo del party +2 (clamp 10-50:
-// mai oltre il level cap del giocatore, audit C2).
+// l'hash della data, livelli scalati sul massimo del party +2 (clamp 10-55:
+// mai oltre il level cap del giocatore, audit C2/R42).
 export function buildDailyTrainer(state: GameState, dateKey: string): TrainerDef {
   const h = hashDate(dateKey);
   const picks: string[] = [];
@@ -52,7 +52,7 @@ export function buildDailyTrainer(state: GameState, dateKey: string): TrainerDef
     picks.push(DAILY_POOL[i]);
   }
   const maxParty = state.party.reduce((m, mon) => Math.max(m, mon.level), 5);
-  const top = Math.max(10, Math.min(50, maxParty + 2));
+  const top = Math.max(10, Math.min(55, maxParty + 2));
   const team: Array<[string, number]> = [
     [picks[0], Math.max(2, top - 2)],
     [picks[1], Math.max(2, top - 1)],

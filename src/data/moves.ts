@@ -82,7 +82,9 @@ export const MOVES: Record<string, Move> = {
   telepromessa: M({
     id: "telepromessa", name: "TELEPROMESSA", type: "MEDIA", category: "status",
     power: 0, accuracy: 90, pp: 15,
-    effect: { status: { id: "gaffe", chance: 100, target: "foe" } },
+    // R42: GAFFE 100%→65% (era lo status più forte al 100%; ora in linea con
+    // le altre mosse-status, che stanno al 20-30%). Vedi anche covfefe/memedoge.
+    effect: { status: { id: "gaffe", chance: 65, target: "foe" } },
     flavor: "Ipnosi catodica: il nemico va in GAFFE."
   }),
   editoriale: M({
@@ -260,7 +262,7 @@ export const MOVES: Record<string, Move> = {
   covfefe: M({
     id: "covfefe", name: "COVFEFE", type: "MEDIA", category: "status",
     power: 0, accuracy: 90, pp: 10,
-    effect: { status: { id: "gaffe", chance: 100, target: "foe" } },
+    effect: { status: { id: "gaffe", chance: 65, target: "foe" } }, // R42: 100→65 (vedi telepromessa)
     flavor: "Tweet delle 3 di notte. Il nemico impazzisce a decifrarlo."
   }),
   gasdotto: M({
@@ -362,7 +364,7 @@ export const MOVES: Record<string, Move> = {
   memedoge: M({
     id: "memedoge", name: "MEME DOGE", type: "MEDIA", category: "status",
     power: 0, accuracy: 90, pp: 10,
-    effect: { status: { id: "gaffe", chance: 100, target: "foe" } },
+    effect: { status: { id: "gaffe", chance: 65, target: "foe" } }, // R42: 100→65 (vedi telepromessa)
     flavor: "Un cane sorridente che muove i mercati. Molto wow."
   }),
   // ------------------------------------------------- LINEA VERDE (Round 40)

@@ -5,7 +5,65 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 41 COMPLETO (tutti e 4 i lotti) + verificato**, 2026-07-03.
+Ultimo aggiornamento: **Round 42 LOTTO 1 (FIX+COMBAT+ONBOARDING) COMPLETO + verificato**, 2026-07-03.
+
+### 🔧 Round 42 — LOTTO 1: FIX + COMBAT + ONBOARDING (1° di 3 lotti) — NESSUN nuovo save
+Spec: `scratchpad/specs/r42-audits.md` sezione LOTTO 1. **NESSUNA migrazione save**
+(il cap è runtime; i boost usano campi v12 esistenti). 9 punti, tutti fatti:
+
+1. **LEVEL CAP 50→55** (`monster.ts`): nuova costante `LEVEL_CAP=55` (export),
+   usata da `gainExp` e da `BattleScene.expRatio`. Aggiornati i commenti "cap 50"
+   in `maps.ts`/`daily.ts`/`rematch.ts`; il clamp rematch (`Math.min(50→55)`) e il
+   daily (`Math.min(50→55)`) salgono a 55. `expForLevel(55)=163350` finito e crescente.
+2. **IA STATUS FUORI DA LOTTA** (`BattleScene.ts`): estratto helper `foeCounterStep()`
+   (unico punto che sceglie+lancia la contromossa del nemico, SEMPRE via
+   `pushMoveNow→pushMove` → eredita il blocco INDAGATO/GAFFE). Usato in
+   `switchTo`/`useItem`/`throwBall`/`tryRun` **e** `useCampaign` (prima 5 blocchi
+   duplicati). Bug di coerenza regole chiuso.
+3. **BOOST DECREMENTO** (`BattleScene.endBattle`): la carica si consuma SOLO dove
+   il bonus si applica davvero (audit): **MANIFESTI/EXP** su ogni vittoria per KO
+   (`"win"`, l'EXP arriva da ogni foe faint, wild inclusi); **SPOT/fondi** e
+   **COMIZIO/SONDAGGI×2** solo su vittoria contro un **trainer** (il payout e il
+   raddoppio sondaggi vivono nel ramo trainer di `afterFoeDown`). Niente cariche
+   sprecate su tratti wild-heavy. NB: nel codice la mappatura reale è exp=tutte,
+   money/sond=solo-trainer (verificato, non come dice la spec alla lettera).
+4. **SOFT-CAP DANNO** (`sim.ts`): `DAMAGE_MULT_CAP=3.5` (export), clampa il `mult`
+   finale prima del danno. Replicato **automaticamente** nel duello (duelsim usa
+   `calcDamage`); sentinella aggiornata in `duelsim.ts`. Pacing invariato.
+5. **GAFFE 100%→65%** (`moves.ts`): telepromessa/covfefe/memedoge da `chance:100`
+   a `65` (in linea con citofonata/bunga 30 e con INDAGATO/SCANDALO 20-30).
+6. **TYPE CHART VERDE→TECNO 2×** (`poltypes.ts`): aggiunto `VERDE:{TECNO:2,...}`.
+   TECNO ora ha 2 attaccanti super (POPULISMO storico + VERDE); le altre relazioni
+   VERDE (DESTRA/MEDIA 2×, POPULISMO 0.5×) intatte. POPULISMO lasciato com'era.
+7. **TRIGGER OFFENSIVI ANNUNCIATI** (`sim.ts`+`BattleScene.ts`): `DamageResult`
+   ora porta `offensive?: OffensiveTrigger[]` (maggioranza/opposizione/whatever/
+   caimano/santino/agendarossa). BattleScene annuncia il primo trigger per specie
+   in battaglia (`announcedOffensive` Set + `OFFENSIVE_TRIGGER_TEXT`), simmetrico
+   ai difensivi (LODO/GILET/TEFLON) già parlanti.
+8. **DIFFICOLTÀ PRE-STARTER** (`TitleScene.ts`): label `NORMALE (CONSIGLIATA)` +
+   testo più chiaro sull'immutabilità ("NON si cambia dopo: e per tutta la
+   partita"). Flusso invariato. Screenshot `artifacts/screens/r42-diff-{normal,hard}.png`.
+9. **TIPI SPIEGATI** (`WorldScene.giveDex`): riga "I TIPI DECIDONO LE SFIDE: studia
+   la GUIDA TIPI nel menu prima di ogni lotta" (la voce GUIDA TIPI esiste in PauseScene).
+
+**Verifiche** (dev server :5179): typecheck+build puliti; sim-balance pacing
+**3.27 turni invariato** (soft-cap tocca solo la coda estrema, GAFFE non cambia il
+danno medio — before=after per costruzione dei pair alla pari); check-sim esteso
+(cap 55, soft-cap, VERDE>TECNO, GAFFE 65) 28/28; check-duel (soft-cap ereditato +
+e2e P2P completo, HP mirror OK) 24/24; check-daily 13/13; check-evolutions/
+pixellab-coverage OK; **10 guardrail mappa** PASS; playtest **`check-r42-lotto1.mjs`
+13/13** (cap 55 end-to-end, INDAGATO blocca su switch/item, boost money non
+consumato su wild ma consumato su trainer, GAFFE 65, VERDE>TECNO reale, WHATEVER
+annunciato, TitleScene CONSIGLIATA).
+
+**NOTE per il LOTTO 2 (ACCESSIBILITÀ)**: qui va la **MIGRAZIONE UNICA v12→v13**
+(chiave `politicmon-save-v13`, v12 in testa a `LEGACY_KEYS`, `reduceEffects:boolean=false`
++ eventuali campi money-sink del LOTTO 3 economia, tutti insieme, default difensivi
+in `parseState`). Il LOTTO 1 NON ha toccato la forma del save.
+**NOTE per il LOTTO 3 (ECONOMIA)**: col cap 55 MANIFESTI (+30% EXP) torna utile
+fino a lv55 → valutare di renderlo disponibile PRIMA del post-garante. Il soft-cap
+e il decremento boost corretto non toccano i rubinetti rematch/spot (quelli sono
+economia pura del LOTTO 3).
 
 ### 🇪🇺 Round 41 — COMPLETO: consolidato dei 4 lotti (save v12)
 Spec: `scratchpad/specs/r41-audits.md`. I 4 lotti sequenziali sono **tutti fatti e

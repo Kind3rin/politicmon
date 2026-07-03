@@ -1782,6 +1782,7 @@ export class WorldScene implements Scene {
         "PROF. QUIRINO: che energia, voi due.",
         "Tieni, questo è il POLITICDEX: registra ogni politico che vedi o elegga.",
         "E queste sono 5 SCHEDE ELETTORALI: indebolisci i candidati selvatici e lanciale!",
+        "I TIPI DECIDONO LE SFIDE: studia la GUIDA TIPI nel menu prima di ogni lotta.",
         "Conquista le 3 MEDAGLIE: AUDITEL a MEDIOPOLI, SPREAD a EUROTOWN, DAZIO a CAPUT MUNDI.",
         "Solo allora il PALAZZO ti aprirà il portone. In bocca al lupo!"
       ],

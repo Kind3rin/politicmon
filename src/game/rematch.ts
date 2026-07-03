@@ -66,7 +66,7 @@ export function rematchAvailability(state: GameState, trainerId: string): Rematc
 // Costruisce il TrainerDef della RIVINCITA: NUOVO oggetto (mai mutare TRAINERS),
 // SEMPRE senza badge né reward (audit C4: niente medaglie/item duplicati
 // farmabili). Capipalestra: team fisso lv 50-55; normali: team scalato sulle
-// medaglie (floor 6+5*badge, cap 50 = level cap del giocatore, audit C2).
+// medaglie (floor 6+5*badge, cap 55 = level cap del giocatore, audit C2/R42).
 export function buildRematchDef(state: GameState, def: TrainerDef): TrainerDef {
   if (GYM_LEADER_IDS.includes(def.id) && GYM_REMATCH_TEAMS[def.id]) {
     return {
@@ -89,7 +89,7 @@ export function buildRematchDef(state: GameState, def: TrainerDef): TrainerDef {
     pal: def.pal,
     // Preserva la tupla a 3 elementi [specie, lv, mosse] se presente.
     team: def.team.map((member) => {
-      const lv = Math.min(50, Math.max(member[1] + 2, floor));
+      const lv = Math.min(55, Math.max(member[1] + 2, floor));
       return member.length === 3
         ? ([member[0], lv, member[2]] as [string, number, string[]])
         : ([member[0], lv] as [string, number]);

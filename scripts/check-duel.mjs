@@ -156,6 +156,30 @@ const staticChecks = await A.evaluate(async () => {
     { e: "end", winner: "host", reason: "ko" }
   ]);
   out.tlGood = goodLog !== null && goodLog.length === 3 && goodLog[1].hpAfter === 12;
+
+  // R42: il SOFT-CAP del danno vive in calcDamage di sim.ts, che duelsim usa
+  // direttamente (executeMove → calcDamage). Verifichiamo che il duello erediti
+  // il cap: due colpi worst-case risolti da resolveTurn non superano base*3.5.
+  const { makeDuelSim, resolveTurn } = await import("/src/game/battle/duelsim.ts");
+  const { createMonster: mkMon, statsOf: sOf } = await import("/src/game/monster.ts");
+  const { DAMAGE_MULT_CAP } = await import("/src/game/battle/sim.ts");
+  const { MOVES: MV } = await import("/src/data/moves.ts");
+  function mb(seed) {
+    let a = seed >>> 0;
+    return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  }
+  // host = draghimon (TECNO) con SPREAD su guest CENTRO: super-efficace + STAB.
+  const host = mkMon("draghimon", 40); host.moves = [{ id: "spread", pp: 10 }];
+  const guest = mkMon("macronfox", 40); guest.moves = [{ id: "giravolta", pp: 10 }];
+  const guestMaxHp = sOf(guest).hp;
+  const sim = makeDuelSim([host], [guest]);
+  const evs = resolveTurn(sim, { kind: "move", moveId: "spread" }, { kind: "move", moveId: "giravolta" }, mb(9));
+  const dmgEv = evs.find((e) => e.e === "dmg" && e.side === "guest");
+  const dealt = dmgEv ? guestMaxHp - dmgEv.hpAfter : 0;
+  const a = sOf(host).spc, d = sOf(guest).def;
+  const base = ((2 * 40) / 5 + 2) * MV.spread.power * a / d / 58 + 2;
+  out.duelSoftCap = dealt > 0 && dealt <= Math.floor(base * DAMAGE_MULT_CAP) + 1;
+  out.duelSoftCapDetail = `dealt=${dealt} base=${base.toFixed(1)} cap=${DAMAGE_MULT_CAP}`;
   return out;
 });
 check(staticChecks.badSpecies, "validateWireTeam: specie inesistente respinta");
@@ -172,6 +196,7 @@ check(
   "sanitizeTurnlog: turnlog malformato respinto in blocco (niente crash guest)"
 );
 check(staticChecks.tlGood, "sanitizeTurnlog: turnlog legale ricostruito intatto");
+check(staticChecks.duelSoftCap, `duello: SOFT-CAP danno ereditato da calcDamage (${staticChecks.duelSoftCapDetail})`);
 
 // ---- Connessione P2P (SKIP dell'e2e se i relay sono giù) ----
 const connected = await waitFor(

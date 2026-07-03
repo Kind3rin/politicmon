@@ -101,8 +101,13 @@ export class TitleScene implements Scene {
       }
     } else if (label.startsWith("NUOVA")) {
       // Prima di creare la partita, scegli la DIFFICOLTÀ (immutabile dopo).
+      // NORMALE è il default (indice 0) e porta la label "(CONSIGLIATA)" per
+      // guidare la prima corsa; l'hardcore trova subito la MODALITÀ DIFFICILE.
       audio.confirm();
-      this.difficultyMenu = new Menu([{ label: "NORMALE" }, { label: "MODALITÀ DIFFICILE" }]);
+      this.difficultyMenu = new Menu([
+        { label: "NORMALE (CONSIGLIATA)" },
+        { label: "MODALITÀ DIFFICILE" }
+      ]);
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {
@@ -213,10 +218,10 @@ export class TitleScene implements Scene {
     this.difficultyMenu!.draw(screen, x + 8, y + 18, w - 16, 12);
     const hard = this.difficultyMenu!.index === 1;
     const lines = hard
-      ? ["Avversari +livelli, niente", "ONDA DEL CONSENSO,", "rivincite piu lente.", "Immutabile: scegli col cuore."]
-      : ["Il percorso classico verso", "il PALAZZO. Pacing equilibrato.", "Consigliata alla prima corsa."];
+      ? ["Avversari +livelli, niente", "ONDA DEL CONSENSO,", "rivincite piu lente.", "NON si cambia dopo: e per", "tutta la partita."]
+      : ["CONSIGLIATA alla prima corsa.", "Percorso classico al PALAZZO,", "pacing equilibrato.", "NON si cambia dopo: e per", "tutta la partita."];
     for (let i = 0; i < lines.length; i += 1) {
-      screen.textCenter(lines[i], VIEW_W / 2, y + 60 + i * 9, GREY);
+      screen.textCenter(lines[i], VIEW_W / 2, y + 54 + i * 9, GREY);
     }
     this.diffMsg.draw(screen);
   }

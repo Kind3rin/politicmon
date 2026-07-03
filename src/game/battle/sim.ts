@@ -35,12 +35,22 @@ export function effectiveStat(c: Combatant, key: StatKey): number {
   return Math.max(1, Math.floor(value));
 }
 
+// Effetto offensivo (abilità o hold dell'ATTACCANTE) che ha alzato il danno.
+// Serve alla BattleScene per annunciarli come già fa coi difensivi (LODO/GILET).
+export type OffensiveTrigger = "maggioranza" | "opposizione" | "whatever" | "caimano" | "santino" | "agendarossa";
+
 export interface DamageResult {
   damage: number;
   crit: boolean;
   typeMult: number;
   lodo?: boolean; // il colpo è stato dimezzato dall'abilità LODO del difensore
+  // Trigger offensivi scattati in questo colpo (per l'annuncio testuale R42).
+  offensive?: OffensiveTrigger[];
 }
+
+// Tetto al moltiplicatore di danno finale (soft-cap, Round 42): impedisce i
+// one-shot fuori scala quando STAB+tipo+abilità+meteo si sommano. Vedi calcDamage.
+export const DAMAGE_MULT_CAP = 3.5;
 
 // SONDAGGI COME "METEO" (Round 39): la divisione establishment/anti.
 // Establishment = il "sistema" (palazzi, tecnici, moderati, grandi giornali);
@@ -108,14 +118,17 @@ export function calcDamage(
   const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 58 + 2;
   const random = 0.88 + rng() * 0.12;
   let mult = stab * tMult * random;
+  const offensive: OffensiveTrigger[] = [];
 
   // ---- HOLD ITEM (solo chi ha heldItem: nel duello v1 nessuno) ----
   const atkHeld = heldItemOf(attacker.mon)?.id;
   if (atkHeld === "santino" && move.category === "fisico") {
     mult *= 1.1; // SANTINO ELETTORALE: +10% alle mosse fisiche
+    offensive.push("santino");
   }
   if (atkHeld === "agendarossa" && move.category === "speciale") {
     mult *= 1.1; // AGENDA ROSSA: +10% alle mosse speciali
+    offensive.push("agendarossa");
   }
   if (heldItemOf(defender.mon)?.id === "gilet") {
     mult *= 0.85; // GILET ANTIPROIETTILE: -15% danno subito
@@ -126,18 +139,22 @@ export function calcDamage(
   const atkMaxHp = statsOf(attacker.mon).hp;
   if (atkAbility === "maggioranza" && attacker.mon.hp > atkMaxHp / 2) {
     mult *= 1.1;
+    offensive.push("maggioranza");
   }
   if (atkAbility === "opposizione" && attacker.mon.hp <= atkMaxHp / 2) {
     mult *= 1.15;
+    offensive.push("opposizione");
   }
   // WHATEVER IT TAKES (draghimon): con lo spread alla gola (PV < 1/3) colpisce
   // devastante. Pura moltiplicazione di danno → arriva anche nel duello via
   // calcDamage (nessun dato dal filo).
   if (atkAbility === "whatever" && attacker.mon.hp <= atkMaxHp / 3) {
     mult *= 1.25;
+    offensive.push("whatever");
   }
   if (atkAbility === "caimano" && defender.mon.status) {
     mult *= 1.2;
+    offensive.push("caimano");
   }
   // LODO: il primo colpo subito in battaglia è dimezzato.
   let lodo = false;
@@ -150,8 +167,22 @@ export function calcDamage(
   // ---- SONDAGGI COME METEO (solo PVE: il duello non passa ctx) ----
   mult *= sondaggiMoveMult(ctx?.sondaggi, move.type);
 
+  // SOFT-CAP MOLTIPLICATORE (Round 42): il prodotto stab×type×random×hold×
+  // ability×lodo×meteo può accumularsi al peggio a ~4.2× (STAB 1.5 · type 2.2 ·
+  // random 1.0 · MAGGIORANZA/CAIMANO/WHATEVER · meteo 1.15), abbastanza da
+  // one-shottare fuori scala. Clampiamo il moltiplicatore FINALE a 3.5 (LODO
+  // resta sotto, è un halving difensivo). Non tocca i singoli numeri: taglia
+  // solo la coda estrema. Vale anche nel duello (duelsim usa questo calcDamage).
+  mult = Math.min(mult, DAMAGE_MULT_CAP);
+
   const damage = Math.max(1, Math.floor(base * mult));
-  return { damage: tMult === 0 ? 0 : damage, crit, typeMult: tMult, lodo };
+  return {
+    damage: tMult === 0 ? 0 : damage,
+    crit,
+    typeMult: tMult,
+    lodo,
+    offensive: offensive.length > 0 ? offensive : undefined
+  };
 }
 
 // Probabilità di cattura in stile prima generazione, semplificata.

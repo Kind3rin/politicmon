@@ -1917,7 +1917,7 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     encounterRate: 0.18,
-    // Post-game lv 38-45 (mai oltre il level cap 50 del giocatore, audit C2).
+    // Post-game lv 38-45 (mai oltre il level cap 55 del giocatore, audit C2/R42).
     // Prime catture selvatiche: telecrate, pontimax, conteblob (zona Dex).
     encounters: [
       { speciesId: "telecrate", weight: 26, minLv: 38, maxLv: 42 },
@@ -2017,7 +2017,7 @@ export const MAPS: Record<string, MapDef> = {
       { x: 15, y: 14, toMap: "offshore", toX: 27, toY: 10, facing: "left" }
     ],
     encounterRate: 0.16,
-    // Roster UE lv 42-50 (coerente con offshore 38-45 e col level cap 50). Qui le
+    // Roster UE lv 42-50 (coerente con offshore 38-45 e col level cap 55). Qui le
     // specie europee trovano finalmente casa allo stato brado.
     encounters: [
       { speciesId: "macronfox", weight: 22, minLv: 42, maxLv: 46 },

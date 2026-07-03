@@ -58,7 +58,11 @@ const CHART: Partial<Record<PolType, Partial<Record<PolType, number>>>> = {
   CENTRO: { DESTRA: 2, SINISTRA: 0.5, TECNO: 0.5 },
   MEDIA: { ISTITUZIONE: 2, CENTRO: 2, TECNO: 0.5 },
   ISTITUZIONE: { POPULISMO: 2, MEDIA: 0.5, ISTITUZIONE: 0.5 },
-  VERDE: { DESTRA: 2, MEDIA: 2, POPULISMO: 0.5 }
+  // R42: VERDE super-efficace anche contro TECNO (attivismo vs tecnocrazia).
+  // Dà a TECNO una seconda debolezza diretta (aveva solo POPULISMO), senza
+  // toccare le altre relazioni VERDE. POPULISMO resta senza aggiunte (SINISTRA→
+  // POPULISMO romperebbe il flavor).
+  VERDE: { TECNO: 2, DESTRA: 2, MEDIA: 2, POPULISMO: 0.5 }
 };
 
 // Ordine canonico degli 8 tipi (per la schermata GUIDA TIPI).

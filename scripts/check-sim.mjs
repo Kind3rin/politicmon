@@ -180,6 +180,67 @@ const results = await page.evaluate(async () => {
     void move;
   }
 
+  // 7) LEVEL CAP 55 (Round 42): gainExp non supera 55; expForLevel(55) è finito
+  // e maggiore di expForLevel(54) (la curva regge fino al nuovo cap).
+  {
+    const { gainExp, expForLevel, LEVEL_CAP } = await import("/src/game/monster.ts");
+    check(LEVEL_CAP === 55, "cap: LEVEL_CAP === 55", `cap=${LEVEL_CAP}`);
+    const mon = createMonster("giorgetta", 54);
+    gainExp(mon, expForLevel(56) * 4); // exp abbondante per superare 55
+    check(mon.level === 55, "cap: gainExp si ferma a 55 anche con exp in eccesso", `lv=${mon.level}`);
+    const capped = createMonster("giorgetta", 55);
+    const before = capped.exp;
+    const ev = gainExp(capped, 999999);
+    check(ev.length === 0 && capped.exp === before, "cap: al cap 55 nessun altro level-up e exp invariata", `ev=${ev.length}`);
+    const e54 = expForLevel(54), e55 = expForLevel(55);
+    check(Number.isFinite(e55) && e55 > e54, "cap: expForLevel(55) finito e crescente", `${e54} -> ${e55}`);
+  }
+
+  // 8) SOFT-CAP DANNO (Round 42): il moltiplicatore finale non supera 3.5. Si
+  // verifica sul caso peggiore (STAB + super-efficace + meteo + abilità offensiva
+  // sotto soglia): il mult effettivo (damage/base_teorico) resta <= 3.5.
+  {
+    const { DAMAGE_MULT_CAP } = await import("/src/game/battle/sim.ts");
+    check(DAMAGE_MULT_CAP === 3.5, "soft-cap: DAMAGE_MULT_CAP === 3.5", `cap=${DAMAGE_MULT_CAP}`);
+    // draghimon (TECNO) usa SPREAD (TECNO) super-efficace su un CENTRO, con
+    // WHATEVER (PV<1/3) e meteo establishment >=70: worst-case cumulativo.
+    const move = MOVES.spread; // TECNO, power 70
+    const atk = makeCombatant(createMonster("draghimon", 30));
+    atk.mon.hp = 1; // sotto 1/3: WHATEVER +25%
+    const def = makeCombatant(createMonster("macronfox", 30)); // CENTRO (TECNO super)
+    // Danno "base teorico" senza moltiplicatori: ricavato azzerando stab/type via
+    // confronto. Più semplice: verifichiamo che con soft-cap il danno non superi
+    // il danno che darebbe un mult di 3.5 sul base. Usiamo una sonda RNG fissa.
+    const res = calcDamage(atk, def, move, mulberry32(3), { sondaggi: 90 });
+    // base = ((2*lv/5+2)*power*atk/def/58 + 2). Ricalcolo con gli stessi stat.
+    const a = statsOf(atk.mon).spc, d = statsOf(def.mon).def;
+    const base = ((2 * 30) / 5 + 2) * move.power * a / d / 58 + 2;
+    check(res.damage <= Math.floor(base * DAMAGE_MULT_CAP) + 1,
+      "soft-cap: danno worst-case entro base*3.5", `dmg=${res.damage} base=${base.toFixed(1)}`);
+    check(Array.isArray(res.offensive) && res.offensive.includes("whatever"),
+      "soft-cap: WHATEVER segnalato tra i trigger offensivi", `${JSON.stringify(res.offensive)}`);
+  }
+
+  // 9) TYPE CHART: VERDE super-efficace su TECNO (Round 42), senza rompere le
+  // altre relazioni VERDE (DESTRA/MEDIA restano 2×, POPULISMO 0.5×).
+  {
+    const { typeMultiplier } = await import("/src/data/poltypes.ts");
+    // typeMultiplier comprime 2×→1.7; basta che sia > 1 (super) su TECNO.
+    check(typeMultiplier("VERDE", ["TECNO"]) > 1, "type-chart: VERDE super su TECNO", `${typeMultiplier("VERDE", ["TECNO"])}`);
+    check(typeMultiplier("VERDE", ["DESTRA"]) > 1 && typeMultiplier("VERDE", ["MEDIA"]) > 1,
+      "type-chart: VERDE resta super su DESTRA e MEDIA", "");
+    check(typeMultiplier("VERDE", ["POPULISMO"]) < 1, "type-chart: VERDE resta debole su POPULISMO", "");
+    // TECNO ora ha 2 attaccanti super (POPULISMO storico + VERDE nuovo).
+    check(typeMultiplier("POPULISMO", ["TECNO"]) > 1, "type-chart: POPULISMO resta super su TECNO", "");
+  }
+
+  // 10) GAFFE nerf (Round 42): telepromessa/covfefe/memedoge scendono da 100 a 65.
+  {
+    const gaffe100 = ["telepromessa", "covfefe", "memedoge"].filter((id) => MOVES[id]?.effect?.status?.chance === 100);
+    const gaffe65 = ["telepromessa", "covfefe", "memedoge"].every((id) => MOVES[id]?.effect?.status?.chance === 65);
+    check(gaffe100.length === 0 && gaffe65, "gaffe: le 3 mosse GAFFE ora al 65% (non più 100%)", `res100=${gaffe100.join(",")}`);
+  }
+
   return out;
 });
 

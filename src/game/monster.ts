@@ -72,8 +72,13 @@ export function statsOf(mon: Monster): Stats {
   };
 }
 
+// Level cap del giocatore (Round 42: 50→55, coerente coi boss UE/Coppa lv52-55).
+// Runtime, NON nel save: cappa solo la crescita in gainExp/expRatio.
+export const LEVEL_CAP = 55;
+
 // Curva "medio-veloce": più dolce della cubica pura (lv³) nella fascia 5-25,
 // dove il giocatore prima si stancava di salire. Resta crescente e mai banale.
+// Regge fino al cap 55 (0.8·55³+10·55²=163.075, ben dentro i Number sicuri).
 export function expForLevel(level: number): number {
   return Math.floor((4 * level * level * level) / 5 + 10 * level * level);
 }
@@ -163,11 +168,11 @@ export function nextEvolutionLevel(mon: Monster): number | undefined {
 // Applica exp; restituisce gli eventi di level-up uno per livello guadagnato.
 export function gainExp(mon: Monster, amount: number, sondaggi = 50): LevelUpResult[] {
   const results: LevelUpResult[] = [];
-  if (mon.level >= 50) {
+  if (mon.level >= LEVEL_CAP) {
     return results;
   }
   mon.exp += amount;
-  while (mon.level < 50 && mon.exp >= expForLevel(mon.level + 1)) {
+  while (mon.level < LEVEL_CAP && mon.exp >= expForLevel(mon.level + 1)) {
     const prevMax = statsOf(mon).hp;
     mon.level += 1;
     const newMax = statsOf(mon).hp;

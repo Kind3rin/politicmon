@@ -138,7 +138,9 @@ export class MonumentScene implements Scene {
     this.drawMonument(screen, VIEW_W / 2, 26, lv);
 
     // Descrizione dello stadio corrente (a capo pulito entro la larghezza schermo).
-    const desc = MONUMENT_STAGES[lv];
+    // Fallback all'ultimo stadio se lv è fuori range (save manomesso): parseState
+    // già clampa a 0..3, questa è difesa in profondità per non crashare mai.
+    const desc = MONUMENT_STAGES[lv] ?? MONUMENT_STAGES[MONUMENT_STAGES.length - 1];
     const wrapped = desc.flatMap((line) => wrapText(line, 36));
     let y = VIEW_H - 66;
     screen.text(`LIVELLO ${lv}/${MONUMENT_MAX}`, 10, y, PAPER);

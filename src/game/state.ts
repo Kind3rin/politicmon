@@ -284,9 +284,13 @@ function parseState(raw: string | null): GameState | null {
       : typeof parsed.reduceEffects === "boolean"
         ? parsed.reduceEffects
         : prefersReducedMotion();
+    // Clamp a 0..3 (MONUMENT_MAX): un save importato/manomesso con un valore
+    // fuori range farebbe crashare MonumentScene.draw (MONUMENT_STAGES[lv]
+    // undefined → .flatMap su undefined). La costante 3 è duplicata da
+    // MonumentScene per non far dipendere state.ts (basso livello) da una scena.
     parsed.monumentLevel =
       typeof parsed.monumentLevel === "number" && !Number.isNaN(parsed.monumentLevel)
-        ? Math.max(0, Math.floor(parsed.monumentLevel))
+        ? Math.max(0, Math.min(3, Math.floor(parsed.monumentLevel)))
         : 0;
     // heldItem (v11, opzionale): tutto ciò che non è una stringa viene rimosso.
     for (const mon of [...parsed.party, ...parsed.boxed]) {

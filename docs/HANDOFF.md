@@ -5,16 +5,40 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 42 COMPLETO + review + fix chat/clamp, save v13**, 2026-07-03.
+Ultimo aggiornamento: **Fix multiplayer/chat (audit netcode), save v13**, 2026-07-03.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Round 42 chiuso e pushato (HEAD `f28ab57`). Tree pulito, tutto live su
-politicmon.vercel.app. Ultime cose fatte dopo il round:
-- **Chat UI rifatta** (`7ed3db2`): il layout di `ChatScene.ts` sforava i 240x180
-  (riga input illeggibile, emote sovrapposte, INVIA su START). Ora ripacchettato.
+Fix netcode/chat chiuso e pushato (HEAD `2b5702a`). Tree pulito, live su
+politicmon.vercel.app.
+
+**🔧 FIX MULTIPLAYER/CHAT (`2b5702a`)** — l'utente segnalava "chat e multiplayer non
+funzionano bene: crasha con emote, non vedo giocatori, chat sparisce". Audit
+multi-agente avversariale (workflow `wf_8250ab25-c33`): 6 bug confermati + 1 plausible,
+tutti fixati e verificati in-game. In `src/net/mp.ts` (+ ChatScene.ts, WorldScene.ts):
+- **TURN single point of failure** (causa "non vedo giocatori" su 4G/CGNAT): c'era solo
+  il demo openrelay. Ora multi-provider via lo slot `turnConfig` di Trystero (CONCATENA
+  sui default STUN; passare i TURN in `rtcConfig.iceServers` li avrebbe SOVRASCRITTI).
+- **Chat azzerata al cambio mappa**: `chat.length=0` spostato da `leave()` a
+  `setEnabled(false)` → la chat sopravvive al cambio zona (decade col cap a 30).
+- **`connected=true` all'apertura room** (prima di ogni peer): mascherava il fallimento
+  TURN. Ora guidato da `remotes.size` in onPeerJoin/onPeerLeave.
+- **Nick "???"** (msg prima del profilo): risolto a draw-time via nuovo `mp.chatNick(line)`
+  (peerId→nick attuale), non più congelato.
+- **Offline: msg mostrato ma non inviato** → riga "MESSAGGIO NON INVIATO" + INVIA grigio.
+- **Storico chat** 3→4 righe, nick troncato a 8 char (prima tagliava il testo).
+- **`void send()` async = unhandled rejection** (il "crash emote": overlay Vite in dev su
+  disconnessione/backpressure) → `.catch(()=>{})` su tutti i send P2P.
+
+**⚠️ AZIONE UTENTE per chiudere davvero il MP su mobile:** il codice ora supporta un TURN
+dedicato, ma il default resta openrelay (inaffidabile). Registrare un TURN gratuito
+(Cloudflare Calls / Metered account / Twilio) e settare `VITE_TURN_URL` / `VITE_TURN_USER`
+/ `VITE_TURN_CRED` nelle env di Vercel (Production). Senza questo, "non vedo giocatori"
+su 4G può ripresentarsi quando openrelay è saturo. Vedi memory [[politicmon-multiplayer-turn]].
+
+Prima di questo (ancora valido):
+- **Chat UI rifatta** (`7ed3db2`): layout `ChatScene.ts` non sforava più i 240x180.
 - **Clamp livello trade/duello** (`f28ab57`): `sanitizeTradeMon` (trade.ts:41) e
-  `validateWireTeam` (duelproto.ts:126) clampavano a 50 mentre il cap è 55 (lotto 1
-  del R42) → un mostro lv51-55 veniva declassato/rifiutato. Ora usano `LEVEL_CAP`.
+  `validateWireTeam` (duelproto.ts:126) usano `LEVEL_CAP` (55), non più 50.
 
 **⚠️ REVIEW R42 INCOMPLETA — da rifinire a inizio sessione:** la review avversariale
 del diff R42 (workflow `wf_acd22422-d64`) ha trovato 4 finding nella fase Find ma

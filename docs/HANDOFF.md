@@ -5,7 +5,60 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 39-40 COMPLETO + verificato in-game end-to-end**, 2026-07-03.
+Ultimo aggiornamento: **Round 41 LOTTO 1 (QUALITÀ+TEST) COMPLETO + verificato**, 2026-07-03.
+
+### 🧪 Round 41 — LOTTO 1: QUALITÀ + TEST (1° di 4 lotti sequenziali)
+Spec: `scratchpad/specs/r41-audits.md` sezione LOTTO 1. NESSUNA migrazione save
+(solo campi v11 esistenti). 7 punti, tutti fatti:
+
+1. **DEX VERSION-MARKING** (`DexScene.ts`): importa `version.ts`; le esclusive
+   dell'ALTRA fazione (non ottenibili nella `gameVersion(browserSeed)` corrente)
+   hanno il tag azzurro **"SCAMBIO"** in lista + riga **"SOLO VIA SCAMBIO: N"** +
+   nota "SOLO VIA SCAMBIO ONLINE" nel dettaglio. Screenshot `artifacts/screens/
+   dex-scambio.png` (GOVERNO → contemorfo/vannaccix taggati; tajanide/calendauro no).
+2. **check-daily.mjs** NUOVO (dev server :5179, pattern check-sim): 13 assert su
+   dailyquests (bump→target paga 1 volta, reset, no-op fuori-pool, no doppio-pay
+   post-done, "id:count"→"id:done"), streak (`prevDateKey` attorno DST 2026-03-29 +
+   confini mese/anno), crisi (`hashDate("crisi:"+day)%3` ~33% su 90gg = 30/90, flag
+   blocca doppio), version (speciesAvailable pari vs dispari). **FUORI dalla CI**
+   (richiede dev server+localStorage, come check-sim/check-duel — CI resta statica).
+3. **VALIDAZIONE dailyQuestsDone** (`state.ts` `parseState` + helper
+   `isValidDailyQuestEntry`): scarta entry il cui suffisso dopo ":" non è "done" né
+   intero 0..99999 (count gigante/negativo/non-numerico/malformato). Coerente con
+   `parseEntry` in dailyquests.ts.
+4. **CLAMP pos MP** (`mp.ts` `clampCoord` su posAction.onMessage): x/y clampati
+   0..255 (difesa in profondità sul filo, NaN→0).
+5. **ABILITÀ LEGGENDARI** (`abilities.ts` + `species.ts`): 2 nuove abilità —
+   **WHATEVER IT TAKES** (draghimon: +25% danno sotto 1/3 PV, pura calcDamage →
+   arriva anche in duello) e **GARANZIA COSTITUZIONALE** (mattarellux: immune a
+   stat-drop E status, riusa gli hook poltrona+teflon). Riuso per gli altri: trumpon
+   =maggioranza, xipanda=poltrona, bunkerput=lodo, marsrat=opposizione (capitanone
+   aveva già caimano). Le nuove immunità replicate in `sim.ts` (whatever),
+   `BattleScene.ts` E `duelsim.ts` (garanzia, 2 punti ciascuno). **Sentinella
+   duelsim aggiornata**. +2 assert in check-sim.
+6. **HOLD ITEM NEI BOSS** (solo PVE): `TrainerDef.team` tuple estesa con 4° elem
+   `[id, lv, moveIds|undefined, heldItem]`; materializzato in
+   `WorldScene.startTrainerBattle` (`mon.heldItem = ...`). Assegnati: garante/
+   mattarellux→**gilet**, tycoon/trumpon→**sondtruccato**, ilcapitano/capitanone→
+   **caffettiera**. L'effetto passa via `heldItemOf(foe)` in calcDamage/per-turno
+   (endOfTurn gira per player E foe). Gli hold NON viaggiano sul filo PvP (invariato).
+7. **2 PICKUP HOLD ITEM nascosti**: **gilet** @offshore(5,12), **caffettiera**
+   @capitale/Caput Mundi(26,10). Su tile calpestabili (check-pickups PASS: 48 tot,
+   19 nascosti).
+
+**Verifiche** (dev server :5179): typecheck+build puliti; 10 guardrail mappa PASS;
+check-evolutions/pixellab-coverage/sim(esteso, 16 PASS)/duel(24 PASS)/daily(nuovo,
+13 PASS) PASS; playtest `check-r41-lotto1.mjs` 12/12 PASS (dex tag pari/dispari,
+parseState scarta malformati, gilet del boss riduce danno 23→19, leggendari con
+abilità). Screenshot dex-scambio.png + dex-detail-legend.png in artifacts/screens/.
+
+**NOTE per i lotti successivi**:
+- JUICE (audio/feel): dopo modifiche a sim/battaglia rigira sim-balance + check-duel;
+  NON toccare la logica di danno (solo presentazione).
+- END-GAME: la MIGRAZIONE v11→v12 (hardMode + campi torneo/campagna) va fatta QUI,
+  tutta insieme. La tuple `team` del boss ora ha un 4° elemento hold item già pronto.
+- NARRATIVO (UE): roster UE già esistente; abilità appena assegnate a trumpon/xipanda/
+  bunkerput/marsrat sono parte del roster UE/mondiale.
 
 ### ✅ Verifica in-game Round 39-40 (giro completo end-to-end)
 Playtest esaustivo su tutte le feature del ciclo (`scratchpad/verify-r3940.mjs`,

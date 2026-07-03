@@ -179,6 +179,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 85, atk: 75, def: 90, spc: 115, spd: 80 },
     catchRate: 10, expYield: 250,
     learnset: [[1, "spread"], [1, "moralsuasion"], [15, "dossier"], [20, "fiducia"], [26, "whatever"]],
+    ability: "whatever",
     dexLine: "VIENE EVOCATO SOLO NELLE CRISI. SUSSURRA 'WHATEVER IT TAKES' E LO SPREAD SCAPPA TERRORIZZATO."
   }),
   mattarellux: S({
@@ -187,6 +188,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 90, atk: 70, def: 95, spc: 100, spd: 70 },
     catchRate: 3, expYield: 255,
     learnset: [[1, "moralsuasion"], [1, "fiducia"], [18, "aureola"], [24, "decreto"], [30, "scioglimento"]],
+    ability: "garanzia",
     dexLine: "GARANTE SUPREMO. VOLEVA SOLO ANDARE IN PENSIONE: LO HANNO RIELETTO ALL'UNANIMITÀ."
   }),
   trumpon: S({
@@ -195,6 +197,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 85, atk: 95, def: 70, spc: 90, spd: 75 },
     catchRate: 8, expYield: 240,
     learnset: [[1, "comizio"], [1, "covfefe"], [16, "tweet"], [22, "dazilampo"], [28, "editoriale"]],
+    ability: "maggioranza",
     dexLine: "COSTRUISCE MURI E LI FA PAGARE AGLI ALTRI. IL SUO CIUFFO RESISTE AL VENTO E ALLE SMENTITE."
   }),
   putingrad: S({
@@ -212,6 +215,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 78, atk: 76, def: 100, spc: 82, spd: 38 },
     catchRate: 35, expYield: 190,
     learnset: [[1, "comizio"], [1, "tavololungo"], [10, "oscuramento"], [16, "gasdotto"], [22, "dossier"], [28, "fiducia"]],
+    ability: "lodo",
     dexLine: "VIVE IN UN BUNKER E ATTACCA DA UN TAVOLO LUNGHISSIMO. PIÙ LO AVVICINI, PIÙ ALLUNGA LA RIUNIONE."
   }),
   xipanda: S({
@@ -220,6 +224,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 88, atk: 75, def: 95, spc: 82, spd: 55 },
     catchRate: 5, expYield: 245,
     learnset: [[1, "comizio"], [1, "oscuramento"], [16, "viadellaseta"], [24, "spread"], [30, "fiducia"]],
+    ability: "poltrona",
     dexLine: "SORRIDE PLACIDO COME UN PANDA. HA UN PIANO QUINQUENNALE PERSINO PER LE FERIE."
   }),
   macronfox: S({
@@ -297,6 +302,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 72, atk: 74, def: 62, spc: 112, spd: 104 },
     catchRate: 10, expYield: 210,
     learnset: [[1, "tweet"], [1, "algoritmo"], [30, "razzox"], [34, "coloniamarte"]],
+    ability: "opposizione",
     dexLine: "HA COMPRATO UN PIANETA PER POSTARE MEME SENZA CONNESSIONE TERRESTRE."
   }),
   // FIRMA di MEDIOPOLI: l'opinionista onnipresente da talk show.

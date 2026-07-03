@@ -762,10 +762,15 @@ export class WorldScene implements Scene {
     this.queueBattle(() => {
       const team: Monster[] =
         def.team.length > 0
-          ? def.team.map(([id, lv, moveIds]) => {
+          ? def.team.map(([id, lv, moveIds, heldItem]) => {
               const mon = createMonster(id, lv);
               if (moveIds?.length) {
                 mon.moves = moveIds.map((moveId) => ({ id: moveId, pp: MOVES[moveId].pp }));
+              }
+              // Hold item del boss (solo PVE): l'effetto è letto da heldItemOf in
+              // calcDamage/per-turno. Un id non-hold viene ignorato da heldItemOf.
+              if (heldItem) {
+                mon.heldItem = heldItem;
               }
               return mon;
             })

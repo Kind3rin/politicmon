@@ -1405,7 +1405,9 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-c3", x: 4, y: 2, itemId: "dirWhatever", qty: 1 },
       // Tesoro grosso nella capitale: la TESSERA DORATA per evolvere.
       { id: "pk-c-hide1", x: 2, y: 8, itemId: "tessera", qty: 1, hidden: true },
-      { id: "pk-c-hide2", x: 26, y: 14, itemId: "mojito", qty: 1, hidden: true }
+      { id: "pk-c-hide2", x: 26, y: 14, itemId: "mojito", qty: 1, hidden: true },
+      // Hold item nascosto in città late: la CAFFETTIERA (cura a ogni turno).
+      { id: "pk-c-hide3", x: 26, y: 10, itemId: "caffettiera", qty: 1, hidden: true }
     ],
     decoratives: [
       {
@@ -1887,7 +1889,9 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-off-mojito", x: 10, y: 2, itemId: "mojito", qty: 1 },
       { id: "pk-off-schedona", x: 21, y: 4, itemId: "schedona", qty: 2 },
       { id: "pk-off-tessera", x: 26, y: 6, itemId: "tessera", qty: 1, hidden: true },
-      { id: "pk-off-dir", x: 7, y: 5, itemId: "dirWhatever", qty: 1, hidden: true }
+      { id: "pk-off-dir", x: 7, y: 5, itemId: "dirWhatever", qty: 1, hidden: true },
+      // Hold item nascosto: GILET ANTIPROIETTILE, "collaudato in piazza".
+      { id: "pk-off-gilet", x: 5, y: 12, itemId: "gilet", qty: 1, hidden: true }
     ],
     npcs: [
       {

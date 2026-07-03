@@ -154,6 +154,29 @@ export function saveGame(state: GameState): boolean {
 
 let saveFailedLogged = false;
 
+// Valida una entry di dailyQuestsDone ("id:count" o "id:done"). Deve essere una
+// stringa con almeno un "id" non vuoto e un suffisso "done" oppure un intero
+// 0..99999 (coerente con parseEntry in dailyquests.ts, che fa Number(val)||0).
+function isValidDailyQuestEntry(entry: unknown): entry is string {
+  if (typeof entry !== "string") {
+    return false;
+  }
+  const idx = entry.indexOf(":");
+  if (idx <= 0 || idx === entry.length - 1) {
+    return false; // manca ":", id vuoto, oppure suffisso vuoto
+  }
+  const suffix = entry.slice(idx + 1);
+  if (suffix === "done") {
+    return true;
+  }
+  // Solo cifre (niente segno/decimali/spazi), range 0..99999.
+  if (!/^\d+$/.test(suffix)) {
+    return false;
+  }
+  const n = Number(suffix);
+  return n >= 0 && n <= 99999;
+}
+
 function parseState(raw: string | null): GameState | null {
   if (!raw) {
     return null;
@@ -196,8 +219,11 @@ function parseState(raw: string | null): GameState | null {
     parsed.dailyStreak = typeof parsed.dailyStreak === "number" && !Number.isNaN(parsed.dailyStreak) ? parsed.dailyStreak : 0;
     parsed.duelWins = typeof parsed.duelWins === "number" && !Number.isNaN(parsed.duelWins) ? parsed.duelWins : 0;
     parsed.duelLosses = typeof parsed.duelLosses === "number" && !Number.isNaN(parsed.duelLosses) ? parsed.duelLosses : 0;
+    // Entry "id:count"/"id:done" (dailyquests.ts parseEntry): scarta le entry
+    // malformate. Il suffisso dopo ":" dev'essere "done" oppure un intero
+    // 0..99999 (un count gigante/negativo/NaN non deve sopravvivere al load).
     parsed.dailyQuestsDone = Array.isArray(parsed.dailyQuestsDone)
-      ? parsed.dailyQuestsDone.filter((id): id is string => typeof id === "string")
+      ? parsed.dailyQuestsDone.filter(isValidDailyQuestEntry)
       : [];
     parsed.lastDailyQuestDate = typeof parsed.lastDailyQuestDate === "string" ? parsed.lastDailyQuestDate : "";
     parsed.browserSeed =

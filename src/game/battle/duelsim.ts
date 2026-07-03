@@ -14,10 +14,13 @@
 //
 // ROUND 39 — cosa vale e cosa NO nel duello:
 // - ABILITÀ passive: REPLICATE (derivano dalla specie, sicure sul filo).
-//   Danno (MAGGIORANZA/OPPOSIZIONE/CAIMANO/LODO) e VOLTAGABBANA arrivano
+//   Danno (MAGGIORANZA/OPPOSIZIONE/CAIMANO/LODO/WHATEVER) e VOLTAGABBANA arrivano
 //   automaticamente da calcDamage/makeCombatant di sim.ts; TEFLON (immune
-//   status), POLTRONA SALDA (immune stat-drop) e GALLEGGIAMENTO (cura 1/16 a
-//   fine turno) sono replicate QUI sotto, speculari a BattleScene.
+//   status), POLTRONA SALDA (immune stat-drop), GARANZIA COSTITUZIONALE (immune
+//   a ENTRAMBI, leggendario mattarellux) e GALLEGGIAMENTO (cura 1/16 a fine
+//   turno) sono replicate QUI sotto, speculari a BattleScene.
+//   R41: aggiunte WHATEVER IT TAKES (draghimon, danno) e GARANZIA COSTITUZIONALE
+//   (mattarellux, doppia immunità) — nessun dato nuovo sul filo.
 // - HOLD ITEM: ESCLUSI in v1. Il filo (duelproto/trade) trasporta solo
 //   {speciesId, level, moves}: i Monster ricostruiti non hanno heldItem,
 //   quindi calcDamage non applica alcun effetto hold. Non aggiungere heldItem
@@ -139,12 +142,13 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
   if (effect?.stat) {
     const targetSide = effect.stat.target === "self" ? side : defSide;
     const target = sim[targetSide].active;
-    // POLTRONA SALDA: immune ai cali di statistica inflitti dal nemico
-    // (replica di moveSteps; il buff su se stessi passa sempre).
+    // POLTRONA SALDA / GARANZIA COSTITUZIONALE: immune ai cali di statistica
+    // inflitti dal nemico (replica di moveSteps; il buff su se stessi passa sempre).
+    const dropImmune = abilityOf(target.mon)?.id === "poltrona" || abilityOf(target.mon)?.id === "garanzia";
     if (
       effect.stat.target === "foe" &&
       effect.stat.stages < 0 &&
-      abilityOf(target.mon)?.id === "poltrona"
+      dropImmune
     ) {
       // niente evento: il colpo di stato fallisce in silenzio (come il miss di chance)
     } else if ((effect.stat.chance ?? 100) > rng() * 100) {
@@ -153,9 +157,10 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
       events.push({ e: "stat", side: targetSide, key: effect.stat.key, stages: effect.stat.stages, resulting });
     }
   }
-  // TEFLON: immune agli status. Il guard sta PRIMA del tiro di chance
-  // (nessun rng consumato), stesso ordine del branch status di moveSteps.
-  if (effect?.status && defender.mon.hp > 0 && abilityOf(defender.mon)?.id !== "teflon") {
+  // TEFLON / GARANZIA COSTITUZIONALE: immune agli status. Il guard sta PRIMA del
+  // tiro di chance (nessun rng consumato), stesso ordine del branch status di moveSteps.
+  const statusImmune = abilityOf(defender.mon)?.id === "teflon" || abilityOf(defender.mon)?.id === "garanzia";
+  if (effect?.status && defender.mon.hp > 0 && !statusImmune) {
     if (rng() * 100 < effect.status.chance) {
       const id = effect.status.id;
       if (!(defender.mon.status || (id === "gaffe" && defender.gaffeTurns > 0))) {

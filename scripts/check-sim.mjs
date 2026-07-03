@@ -144,6 +144,25 @@ const results = await page.evaluate(async () => {
     check(volta.stages.spd === 1, "abilità: VOLTAGABBANA +1 SPD all'ingresso", `spd=${volta.stages.spd}`);
   }
 
+  // 5b) ABILITÀ LEGGENDARI (Round 41): WHATEVER IT TAKES scala il danno sotto
+  // 1/3 PV; GARANZIA COSTITUZIONALE è immune a ENTRAMBI stat-drop e status.
+  {
+    const move = MOVES.comizio;
+    const plainDef = () => makeCombatant(createMonster("salvinott", 30));
+    const draghi = makeCombatant(createMonster("draghimon", 30)); // ability whatever
+    const highHp = calcDamage(draghi, plainDef(), move, mulberry32(1)).damage;
+    draghi.mon.hp = 1; // sotto 1/3: bonus +25%
+    const lowHp = calcDamage(draghi, plainDef(), move, mulberry32(1)).damage;
+    check(lowHp > highHp, "abilità: WHATEVER IT TAKES +danno sotto 1/3 PV", `${highHp} -> ${lowHp}`);
+
+    // GARANZIA COSTITUZIONALE: mattarellux immune a stat-drop e status. Lo
+    // verifichiamo a livello di flag abilità (la logica di turno vive in
+    // BattleScene/duelsim; qui basta che l'abilità sia agganciata alla specie).
+    const { abilityOf } = await import("/src/game/monster.ts");
+    const mat = createMonster("mattarellux", 40);
+    check(abilityOf(mat)?.id === "garanzia", "abilità: MATTARELLUX ha GARANZIA COSTITUZIONALE", `${abilityOf(mat)?.id}`);
+  }
+
   // 6) SONDAGGI COME METEO: ctx alza il danno dei tipi giusti, il default è neutro.
   {
     const { sondaggiMoveMult } = await import("/src/game/battle/sim.ts");

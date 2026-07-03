@@ -2,7 +2,14 @@ export interface TrainerDef {
   id: string;
   name: string;
   pal: string;
-  team: Array<[string, number] | [string, number, string[]]>; // [speciesId, livello, mosse opzionali]
+  // [speciesId, livello, mosse opzionali, hold item opzionale]. L'hold item vale
+  // SOLO in PVE (il filo PvP non trasporta held item, design v1): dà un oggetto
+  // da tenere al mostro-boss, il cui effetto si applica via calcDamage/per-turno.
+  team: Array<
+    | [string, number]
+    | [string, number, string[]]
+    | [string, number, string[] | undefined, string]
+  >;
   intro: string[];
   defeat: string[];
   money: number;
@@ -151,7 +158,9 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   tycoon: {
     id: "tycoon", name: "MR. TYCOON", pal: "boss",
-    team: [["bojoon", 20], ["muskrat", 21], ["trumpon", 23]],
+    // TRUMPON tiene il SONDAGGIO TRUCCATO (PVE): critico più frequente (1/8),
+    // "numeri gonfiati ad arte" perfetti per il tycoon (non passa in PvP).
+    team: [["bojoon", 20], ["muskrat", 21], ["trumpon", 23, undefined, "sondtruccato"]],
     intro: [
       "Questa palestra è la più bella mai costruita. Lo dicono tutti.",
       "Ho dazi bellissimi, enormi, e ora li provo su di te.",
@@ -191,7 +200,9 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   ilcapitano: {
     id: "ilcapitano", name: "IL CAPITANO", pal: "boss",
-    team: [["salvinator", 22], ["vannaccix", 22], ["capitanone", 24]],
+    // CAPITANONE tiene la CAFFETTIERA (PVE): recupera PV a ogni turno, "la moka
+    // sempre calda al Papeete" (l'held item non passa in PvP).
+    team: [["salvinator", 22], ["vannaccix", 22], ["capitanone", 24, undefined, "caffettiera"]],
     intro: [
       "Benvenuto nel cantiere più fotografato d'Italia.",
       "Da qui si vede la SICILIA. Avvicinarla è il mio mandato.",
@@ -251,7 +262,9 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   garante: {
     id: "garante", name: "IL GARANTE SUPREMO", pal: "boss",
-    team: [["zelenskir", 28], ["ursulax", 29], ["draghimon", 30], ["mattarellux", 32]],
+    // MATTARELLUX tiene il GILET ANTIPROIETTILE (PVE): -15% ai danni subiti,
+    // così l'asso del Garante regge più a lungo (l'held item non passa in PvP).
+    team: [["zelenskir", 28], ["ursulax", 29], ["draghimon", 30], ["mattarellux", 32, undefined, "gilet"]],
     intro: [
       "Benvenuto al COLLE. Qui non si vince: si viene controfirmati.",
       "Ho rispedito indietro leggi, governi e persino un paio di inni.",

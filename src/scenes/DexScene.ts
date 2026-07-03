@@ -9,6 +9,11 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
 import { clipToWidth, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 import { zoneProgress } from "../data/dexzones";
+import { VERSION_EXCLUSIVES, speciesAvailable } from "../game/version";
+
+// Specie di QUESTA versione non avvistabili sul campo (esclusive dell'altra
+// fazione): ottenibili solo scambiando online. Tag azzurro per distinguerle.
+const TRADE_ONLY = "#5aa0d8";
 
 export class DexScene implements Scene {
   private index = 0;
@@ -86,8 +91,13 @@ export class DexScene implements Scene {
       }
       screen.text(`N.${String(species.dexNum).padStart(2, "0")}`, 18, y, GREY);
       screen.text(status ? species.name : "??????????", 52, y, status ? INK : GREY);
+      // Specie esclusiva dell'ALTRA versione: si prende SOLO scambiando.
+      const tradeOnly = VERSION_EXCLUSIVES[id] && !speciesAvailable(id, this.state.browserSeed);
       if (status === "caught") {
         screen.text("★", VIEW_W - 22, y, "#b04848");
+      } else if (tradeOnly) {
+        // Etichetta a destra: non è "mancante per svogliatezza", serve un cambio.
+        screen.text("SCAMBIO", VIEW_W - 62, y, TRADE_ONLY);
       } else if (status === "seen") {
         screen.text("•", VIEW_W - 22, y, GREY);
       }
@@ -100,8 +110,16 @@ export class DexScene implements Scene {
     const hereTxt = here ? `  -  QUI ${here.zone.name} ${here.caught}/${here.total}` : "";
     const col = doneZones >= zp.length ? "#e8c84a" : GREY;
     screen.text(clipToWidth(`ZONE COMPLETE ${doneZones}/${zp.length}${hereTxt}`, 224), 8, VIEW_H - 11, col);
+    // Riepilogo versione: quante specie restano ottenibili SOLO scambiando
+    // (esclusive dell'altra fazione, non ancora catturate). Rende visibile il
+    // sistema versioni e spinge allo scambio online.
+    const tradeOnlyLeft = Object.keys(VERSION_EXCLUSIVES).filter(
+      (id) => !speciesAvailable(id, this.state.browserSeed) && this.state.dex[id] !== "caught"
+    ).length;
     if (caught >= target) {
       screen.text("DEX COMPLETO! ORA SEI IL PALAZZO!", 12, VIEW_H - 21, "#e8c84a");
+    } else if (tradeOnlyLeft > 0) {
+      screen.text(`SOLO VIA SCAMBIO: ${tradeOnlyLeft}`, 8, VIEW_H - 21, TRADE_ONLY);
     }
   }
 
@@ -140,6 +158,10 @@ export class DexScene implements Scene {
       for (let i = 0; i < Math.min(2, abLines.length); i += 1) {
         screen.text(abLines[i], 14, 80 + 4 * 11 + i * 10, GREY);
       }
+    }
+    // Esclusiva dell'altra versione: nel tuo mondo si ottiene SOLO scambiando.
+    if (VERSION_EXCLUSIVES[id] && !speciesAvailable(id, this.state.browserSeed)) {
+      screen.text("SOLO VIA SCAMBIO ONLINE", 14, 137, TRADE_ONLY);
     }
     if (this.state.dex[id] !== "caught") {
       screen.text("(Non ancora nella tua squadra)", 14, 148, GREY);

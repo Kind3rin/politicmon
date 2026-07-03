@@ -42,5 +42,14 @@ export const ABILITIES: Record<string, Ability> = {
   caimano: {
     id: "caimano", name: "CAIMANO",
     desc: "Azzanna chi è già nei guai: +20% di danno se il nemico ha uno status."
+  },
+  // ---- LEGGENDARI (Round 41) — sicure sul filo: derivano dalla specie ----
+  whatever: {
+    id: "whatever", name: "WHATEVER IT TAKES",
+    desc: "Con lo spread alla gola (PV sotto un terzo) fa qualunque cosa: +25% di danno."
+  },
+  garanzia: {
+    id: "garanzia", name: "GARANZIA COSTITUZIONALE",
+    desc: "Sopra le parti: immune sia ai cali di statistica sia agli status del nemico."
   }
 };

@@ -419,14 +419,19 @@ export class BattleScene implements Scene {
     if (effect?.stat) {
       const target = effect.stat.target === "self" ? attacker : defender;
       const targetName = effect.stat.target === "self" ? attackerName : defenderName;
-      // POLTRONA SALDA: immune ai cali di statistica inflitti dal nemico
-      // (replicato in duelsim.ts, stesso punto).
+      // POLTRONA SALDA (e GARANZIA COSTITUZIONALE): immune ai cali di statistica
+      // inflitti dal nemico (replicato in duelsim.ts, stesso punto).
+      const immuneStatDrop = abilityOf(target.mon)?.id === "poltrona" || abilityOf(target.mon)?.id === "garanzia";
       if (
         effect.stat.target === "foe" &&
         effect.stat.stages < 0 &&
-        abilityOf(target.mon)?.id === "poltrona"
+        immuneStatDrop
       ) {
-        steps.push({ text: `POLTRONA SALDA! ${targetName} non si schioda di un millimetro.` });
+        steps.push({
+          text: abilityOf(target.mon)?.id === "garanzia"
+            ? `GARANZIA COSTITUZIONALE! ${targetName} resta al di sopra delle parti.`
+            : `POLTRONA SALDA! ${targetName} non si schioda di un millimetro.`
+        });
       } else if ((effect.stat.chance ?? 100) > Math.random() * 100) {
         steps.push({
           run: () => {
@@ -441,15 +446,18 @@ export class BattleScene implements Scene {
       }
     }
     if (effect?.status && defender.mon.hp > 0) {
-      // TEFLON: immune agli status (guard PRIMA del tiro di chance, come in
-      // duelsim). TELECAMERA (hold): previene solo la GAFFE.
-      const immuneTeflon = abilityOf(defender.mon)?.id === "teflon";
+      // TEFLON (e GARANZIA COSTITUZIONALE): immune agli status (guard PRIMA del
+      // tiro di chance, come in duelsim). TELECAMERA (hold): previene solo la GAFFE.
+      const defAbility = abilityOf(defender.mon)?.id;
+      const immuneTeflon = defAbility === "teflon" || defAbility === "garanzia";
       const immuneCamera = effect.status.id === "gaffe" && heldItemOf(defender.mon)?.id === "telecamera";
       if (immuneTeflon || immuneCamera) {
         if (effect.status.chance >= 100) {
           steps.push({
             text: immuneTeflon
-              ? `TEFLON! Le accuse scivolano via da ${defenderName}.`
+              ? (defAbility === "garanzia"
+                  ? `GARANZIA COSTITUZIONALE! Le accuse non scalfiscono ${defenderName}.`
+                  : `TEFLON! Le accuse scivolano via da ${defenderName}.`)
               : `La TELECAMERA riprende tutto: ${defenderName} evita la GAFFE!`
           });
         }

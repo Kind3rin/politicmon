@@ -30,6 +30,12 @@ export interface RemotePlayer {
   partyPreview: string[]; // speciesId dichiarati (max 6, validati contro SPECIES)
 }
 
+// Coordinata di mappa dal filo MAI fidata: intero clampato 0..255 (NaN → 0).
+function clampCoord(value: unknown): number {
+  const n = Math.floor(Number(value));
+  return Number.isFinite(n) ? Math.max(0, Math.min(255, n)) : 0;
+}
+
 // Dato dal filo MAI fidato: intero clampato 0..99999 (tutto il resto → 0).
 function sanitizeDuelWins(value: unknown): number {
   const n = Math.floor(Number(value));
@@ -311,8 +317,10 @@ class MultiplayerClient {
     posAction.onMessage = (d, ctx) => {
       const r = this.remotes.get(ctx.peerId);
       if (r) {
-        r.x = Number(d.x) || 0;
-        r.y = Number(d.y) || 0;
+        // Dato dal filo MAI fidato: clamp 0..255 (difesa in profondità, nessuna
+        // mappa è più grande di così; NaN/valori assurdi cadono a 0).
+        r.x = clampCoord(d.x);
+        r.y = clampCoord(d.y);
         r.facing = d.facing ?? r.facing;
       }
     };

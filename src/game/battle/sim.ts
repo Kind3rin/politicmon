@@ -130,6 +130,12 @@ export function calcDamage(
   if (atkAbility === "opposizione" && attacker.mon.hp <= atkMaxHp / 2) {
     mult *= 1.15;
   }
+  // WHATEVER IT TAKES (draghimon): con lo spread alla gola (PV < 1/3) colpisce
+  // devastante. Pura moltiplicazione di danno → arriva anche nel duello via
+  // calcDamage (nessun dato dal filo).
+  if (atkAbility === "whatever" && attacker.mon.hp <= atkMaxHp / 3) {
+    mult *= 1.25;
+  }
   if (atkAbility === "caimano" && defender.mon.status) {
     mult *= 1.2;
   }

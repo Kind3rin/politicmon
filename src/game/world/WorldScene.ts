@@ -32,7 +32,7 @@ import { BattleScene, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
-import { buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
+import { buildRematchDef, hardModeLevelBonus, markRematchClock, rematchAvailability } from "../rematch";
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordDuelResult } from "../duelrecord";
@@ -53,6 +53,11 @@ import { CasinoScene } from "../../scenes/CasinoScene";
 import { BoxScene } from "../../scenes/BoxScene";
 import { MafiaScene } from "../../scenes/MafiaScene";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
+import { TournamentScene } from "../../scenes/TournamentScene";
+import {
+  advanceAfterPlayerWin, ghostTrainerDef, initTournament, playerOpponent, roundLabel,
+  COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_TITLE, type TournamentState
+} from "../tournament";
 
 const STEP_TIME = 0.18;
 const RUN_FACTOR = 1.85;
@@ -203,6 +208,8 @@ export class WorldScene implements Scene {
   private exclaimT = 0;
   private pendingTrainer: TrainerDef | null = null;
   private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
+  // COPPA DELLE POLTRONE: stato del torneo in corso (SESSIONE SINGOLA, mai salvato).
+  private coppa: TournamentState | null = null;
 
   // ---- Effetto di CURA (BAR SPORT, risveglio, raccomandazione mafia) ----
   private healFx = 0; // durata residua dell'animazione di cura
@@ -368,7 +375,7 @@ export class WorldScene implements Scene {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
       !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift &&
-      !npc.legendary && !npc.daily;
+      !npc.legendary && !npc.daily && !npc.coppa;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -761,10 +768,14 @@ export class WorldScene implements Scene {
 
   private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void): void {
     this.queueBattle(() => {
+      // MODALITÀ DIFFICILE: +livelli agli avversari (esclusa la SFIDA DEL GIORNO,
+      // che resta deterministica e uguale per tutti). Cap 60.
+      const noHard = def.id.startsWith("daily:");
       const team: Monster[] =
         def.team.length > 0
           ? def.team.map(([id, lv, moveIds, heldItem]) => {
-              const mon = createMonster(id, lv);
+              const bonus = noHard ? 0 : hardModeLevelBonus(this.state, lv);
+              const mon = createMonster(id, Math.min(60, lv + bonus));
               if (moveIds?.length) {
                 mon.moves = moveIds.map((moveId) => ({ id: moveId, pp: MOVES[moveId].pp }));
               }
@@ -782,11 +793,16 @@ export class WorldScene implements Scene {
           foeTeam: team,
           trainer: def,
           onEnd: (result) => {
-            // I PG vaganti ("wander:*") e la SFIDA DEL GIORNO ("daily:*")
-            // restano ripetibili: mai in defeatedTrainers. La guardia
-            // includes() evita duplicati alla vittoria di una RIVINCITA;
-            // markRematchClock riavvia il cooldown a OGNI vittoria reale.
-            if (result === "win" && !def.id.startsWith("wander:") && !def.id.startsWith("daily:")) {
+            // I PG vaganti ("wander:*"), la SFIDA DEL GIORNO ("daily:*") e i
+            // match della COPPA ("coppa:*") restano ripetibili: mai in
+            // defeatedTrainers. La guardia includes() evita duplicati alla
+            // vittoria di una RIVINCITA; markRematchClock riavvia il cooldown.
+            if (
+              result === "win" &&
+              !def.id.startsWith("wander:") &&
+              !def.id.startsWith("daily:") &&
+              !def.id.startsWith("coppa:")
+            ) {
               if (!this.state.defeatedTrainers.includes(def.id)) {
                 this.state.defeatedTrainers.push(def.id);
               }
@@ -1028,6 +1044,11 @@ export class WorldScene implements Scene {
       return;
     }
 
+    if (npc.coppa) {
+      this.openTournament();
+      return;
+    }
+
     if (npc.shop) {
       // Primo accesso a un negozio: spiega cosa sono le DIRETTIVE (le "MT").
       const lines = [...(npc.lines ?? [])];
@@ -1184,6 +1205,112 @@ export class WorldScene implements Scene {
         });
       }
     );
+  }
+
+  // ---- COPPA DELLE POLTRONE (torneo post-garante) ----
+
+  // Il BANDITORE apre il torneo: spiega, incassa la TASSA (money-SINK) e avvia
+  // il bracket del giorno. Il torneo è una sessione singola (non salvata).
+  private openTournament(): void {
+    if (!this.state.flags["garante-beaten"]) {
+      this.say(["Torneo riservato ai CAMPIONI COSTITUZIONALI.", "Torna quando avrai battuto il GARANTE SUPREMO."]);
+      return;
+    }
+    if (this.state.party.length === 0) {
+      this.say(["Servono POLITICMON per salire sul ring delle poltrone."]);
+      return;
+    }
+    const titled = this.state.coppaWins > 0
+      ? [`Bentornato, ${COPPA_TITLE}. Un altro giro di giostra?`]
+      : ["Otto sfidanti, sette FANTASMI di vecchie glorie e TU.", "Un tabellone, tre round, una sola poltrona in palio."];
+    this.say(
+      [
+        "BANDITORE: benvenuto alla COPPA DELLE POLTRONE!",
+        ...titled,
+        `Iscrizione: ${COPPA_FEE}€. Si vince o si torna a casa.`
+      ],
+      () => {
+        if (this.state.money < COPPA_FEE) {
+          this.say(["Fondi insufficienti per l'iscrizione.", `Servono ${COPPA_FEE}€. Il torneo dei ricchi non fa credito.`]);
+          return;
+        }
+        this.askYesNo(`PAGHI ${COPPA_FEE}€ E ENTRI?`, () => {
+          this.state.money -= COPPA_FEE;
+          saveGame(this.state); // la tassa è definitiva anche se poi esci
+          this.coppa = initTournament();
+          this.showBracketThen(() => this.runTournamentRound());
+        });
+      }
+    );
+  }
+
+  // Mostra il tabellone corrente (TournamentScene) e prosegue alla chiusura.
+  private showBracketThen(next: () => void): void {
+    if (!this.coppa) {
+      return;
+    }
+    this.stack.push(new TournamentScene(this.stack, this.input, this.state, this.coppa, next));
+  }
+
+  // Fa combattere il giocatore contro il suo avversario del round corrente.
+  // Se vince, risolve gli altri match (duelsim) e passa al round successivo o
+  // proclama il trionfo. Se perde, il torneo finisce (progresso perso).
+  private runTournamentRound(): void {
+    const t = this.coppa;
+    if (!t) {
+      return;
+    }
+    const opp = playerOpponent(t);
+    if (!opp) {
+      this.coppa = null;
+      return;
+    }
+    const ghostIndex = t.alive.findIndex((e, i) => i > 0 && e.ghost?.id === opp.id);
+    const def = ghostTrainerDef(opp, t.seed, ghostIndex >= 0 ? ghostIndex : 1);
+    this.say([`${roundLabel(t)}: contro ${opp.name}!`], () => {
+      this.startTrainerBattle(def, (result) => {
+        if (result !== "win") {
+          // Eliminato: fine torneo (nessun premio, tassa già persa). Il messaggio
+          // di sconfitta/respawn è già gestito da onBattleEnd: qui solo cleanup.
+          this.coppa = null;
+          return;
+        }
+        const { champion, results } = advanceAfterPlayerWin(t);
+        const lines = results.length > 0 ? ["Intanto negli altri match:", ...results] : [];
+        if (champion) {
+          this.awardTournament();
+          return;
+        }
+        this.say([...lines, "Passi il turno! Il tabellone si stringe."], () => {
+          this.showBracketThen(() => this.runTournamentRound());
+        });
+      });
+    });
+  }
+
+  // Trionfo: titolo permanente (coppaWins++), premio una-tantum al 1° trionfo.
+  private awardTournament(): void {
+    const first = this.state.coppaWins === 0;
+    this.state.coppaWins += 1;
+    this.state.flags["coppa-vinta"] = true;
+    const lines = [
+      "TRIONFO! Sollevi la COPPA DELLE POLTRONE!",
+      `Da oggi sei ${COPPA_TITLE} (titolo permanente sulla TESSERA).`
+    ];
+    if (first) {
+      this.state.money += COPPA_FIRST_PRIZE.money;
+      this.state.bag[COPPA_FIRST_PRIZE.itemId] =
+        (this.state.bag[COPPA_FIRST_PRIZE.itemId] ?? 0) + COPPA_FIRST_PRIZE.qty;
+      lines.push(
+        `PREMIO DEL PRIMO TRIONFO: ${ITEMS[COPPA_FIRST_PRIZE.itemId].name} x${COPPA_FIRST_PRIZE.qty} e ${COPPA_FIRST_PRIZE.money}€!`
+      );
+    } else {
+      lines.push(`Trionfi totali: ${this.state.coppaWins}. La leggenda continua.`);
+    }
+    this.coppa = null;
+    saveGame(this.state);
+    audio.badgeFanfare();
+    this.say(lines);
   }
 
   // ---- Multiplayer: scambio e duello con un giocatore remoto ----

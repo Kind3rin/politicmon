@@ -3,13 +3,17 @@ export interface Item {
   name: string;
   // "hold": equipaggiabile su un Monster (1 slot, Monster.heldItem).
   // "field": usabile solo fuori battaglia con effetto sul mondo (repellente/teletrasporto).
-  kind: "ball" | "heal" | "cure" | "evo" | "tm" | "key" | "hold" | "field";
+  // "boost": CAMPAGNA ELETTORALE — usato fuori battaglia, attiva un buff a tempo
+  //          (contatore di battaglie nel save); consumabile ripetibile, money-SINK.
+  kind: "ball" | "heal" | "cure" | "evo" | "tm" | "key" | "hold" | "field" | "boost";
   amount?: number;
   percent?: number; // cura come % dei PV max (0-1); ha priorità su amount
   ballBonus?: number; // moltiplicatore di cattura
   price?: number; // prezzo al Discount Elettorale
   moveId?: string; // mossa insegnata dalle DIRETTIVE DI PARTITO (kind "tm")
   reusable?: boolean; // le direttive non si consumano (come le MT moderne)
+  // Boost campagna: campo del save (contatore battaglie) e quante ne concede.
+  boost?: { field: "boostExpBattles" | "boostMoneyBattles" | "boostSondBattles"; battles: number };
   desc: string;
 }
 
@@ -110,6 +114,26 @@ export const ITEMS: Record<string, Item> = {
     desc: "Da tenere: la propria faccia plastificata. GRINTA +10% (mosse fisiche)."
   },
 
+  // ---- CAMPAGNA ELETTORALE (boost: buff a tempo, money-SINK) ----
+  // Si usano dalla BORSA fuori battaglia; il buff dura N battaglie (contatore nel
+  // save). Consumabili ripetibili: sono un RUBINETTO ROVESCIATO (spendi tanto per
+  // un vantaggio temporaneo), servono ad assorbire i fondi del late-game.
+  manifesti: {
+    id: "manifesti", name: "MANIFESTI OVUNQUE", kind: "boost", price: 2000,
+    boost: { field: "boostExpBattles", battles: 10 },
+    desc: "Attaccati su ogni muro: per 10 battaglie la squadra guadagna +30% CONSENSO (EXP)."
+  },
+  spotprimetime: {
+    id: "spotprimetime", name: "SPOT IN PRIME TIME", kind: "boost", price: 3000,
+    boost: { field: "boostMoneyBattles", battles: 10 },
+    desc: "Trenta secondi al telegiornale: per 10 battaglie i rimborsi dai rivali salgono del 50%."
+  },
+  comizio: {
+    id: "comizio", name: "COMIZIO OCEANICO", kind: "boost", price: 5000,
+    boost: { field: "boostSondBattles", battles: 8 },
+    desc: "Piazza gremita e bandiere: per 8 battaglie ogni vittoria fa il DOPPIO di SONDAGGI."
+  },
+
   // ---- OGGETTI DA CAMPO (field: solo fuori battaglia) ----
   spray: {
     id: "spray", name: "SPRAY ANTI-COMIZIO", kind: "field", price: 400,
@@ -123,6 +147,7 @@ export const ITEMS: Record<string, Item> = {
 
 export const BAG_ORDER = [
   "scheda", "schedona", "caffe", "spritz", "mojito", "maalox", "spray", "rimborso",
+  "manifesti", "spotprimetime", "comizio",
   "gilet", "telecamera", "sondtruccato", "caffettiera", "agendarossa", "santino",
   "tessera", "divisa",
   "dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",

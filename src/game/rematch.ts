@@ -15,6 +15,20 @@ export const REMATCH_COOLDOWN_STEPS = 400;
 // sink dell'economia) + payout tagliato al 60% per TUTTI i rematch (sotto).
 export const GYM_REMATCH_COOLDOWN_STEPS = 1500;
 
+// MODALITÀ DIFFICILE: cooldown rivincita RADDOPPIATI (il farming rallenta).
+function rematchCooldown(state: GameState, base: number): number {
+  return state.hardMode ? base * 2 : base;
+}
+
+// MODALITÀ DIFFICILE: +livelli agli avversari trainer. +3 di base, +5 sui boss
+// (team a partire da lv 45: gym rematch, garante, giudici, offshore).
+export function hardModeLevelBonus(state: GameState, level: number): number {
+  if (!state.hardMode) {
+    return 0;
+  }
+  return level >= 45 ? 5 : 3;
+}
+
 // Moltiplicatore payout dei rematch: 60% del valore scalato (audit C4).
 const REMATCH_PAYOUT = 0.6;
 
@@ -37,7 +51,7 @@ export function rematchAvailability(state: GameState, trainerId: string): Rematc
     if (last === undefined) {
       return "ready"; // save v9 migrato: trainer già battuti subito pronti
     }
-    return state.stepsTotal - last >= GYM_REMATCH_COOLDOWN_STEPS ? "ready" : "cooldown";
+    return state.stepsTotal - last >= rematchCooldown(state, GYM_REMATCH_COOLDOWN_STEPS) ? "ready" : "cooldown";
   }
   if (!REMATCHABLE_TRAINERS.has(trainerId)) {
     return "never"; // boss, garante, giudici, ilcapitano, rival-*, wander:*, daily:*
@@ -46,7 +60,7 @@ export function rematchAvailability(state: GameState, trainerId: string): Rematc
   if (last === undefined) {
     return "ready"; // save v9 migrato: trainer già battuti subito pronti
   }
-  return state.stepsTotal - last >= REMATCH_COOLDOWN_STEPS ? "ready" : "cooldown";
+  return state.stepsTotal - last >= rematchCooldown(state, REMATCH_COOLDOWN_STEPS) ? "ready" : "cooldown";
 }
 
 // Costruisce il TrainerDef della RIVINCITA: NUOVO oggetto (mai mutare TRAINERS),

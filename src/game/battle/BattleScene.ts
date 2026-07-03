@@ -228,6 +228,14 @@ export class BattleScene implements Scene {
     this.push({
       run: () => {
         this.finished = true;
+        // Boost campagna: una battaglia CONCLUSA (vinta/catturata) consuma una
+        // carica di ogni boost attivo. Fuga/sconfitta non scalano (non "usi" lo
+        // spot). Il contatore è già clampato >=0 dal parseState.
+        if (result === "win" || result === "caught") {
+          if (this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
+          if (this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
+          if (this.state.boostSondBattles > 0) this.state.boostSondBattles -= 1;
+        }
         audio.playMusic(null);
         this.onEnd(result);
       }
@@ -527,14 +535,23 @@ export class BattleScene implements Scene {
     const base = expYield(this.foe.mon, Boolean(this.trainer));
     // ONDA DEL CONSENSO (feature originale): l'EXP scala coi SONDAGGI.
     // Popolarità alta = i tuoi crescono in fretta; impopolarità = penalità.
+    // MODALITÀ DIFFICILE: l'onda è DISATTIVATA (wave neutro, nessun bonus EXP).
     const sond = this.state.sondaggi;
-    const wave = sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.92;
-    const gained = Math.max(1, Math.floor(base * (istruzione ? 1.15 : 1) * wave * expMalus(this.state)));
+    const wave = this.state.hardMode ? 1 : sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.92;
+    // MANIFESTI OVUNQUE (boost campagna): +30% EXP finché restano battaglie.
+    const manifestiBonus = this.state.boostExpBattles > 0 ? 1.3 : 1;
+    const gained = Math.max(
+      1,
+      Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state))
+    );
     steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
     if (wave > 1) {
       steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
     } else if (wave < 1) {
       steps.push({ text: `Sondaggi a terra (${sond}%): l'entusiasmo scarseggia (-8%).` });
+    }
+    if (manifestiBonus > 1) {
+      steps.push({ text: "I MANIFESTI OVUNQUE gonfiano l'entusiasmo: +30% CONSENSO!" });
     }
     if (istruzione) {
       steps.push({ text: "Il MIN. ISTRUZIONE ha preparato la squadra: bonus del 15%!" });
@@ -671,7 +688,9 @@ export class BattleScene implements Scene {
     if (this.trainer) {
       const trainer = this.trainer;
       const economia = hasMinistro(this.state, "economia");
-      const payout = Math.round(trainer.money * (economia ? 1.25 : 1) * moneyMalus(this.state));
+      // SPOT IN PRIME TIME (boost campagna): +50% fondi dai trainer finché attivo.
+      const spotBonus = this.state.boostMoneyBattles > 0 ? 1.5 : 1;
+      const payout = Math.round(trainer.money * (economia ? 1.25 : 1) * spotBonus * moneyMalus(this.state));
       steps.push({ run: () => audio.victory() });
       steps.push({ text: `Hai sconfitto ${trainer.name}!` });
       for (const line of trainer.defeat) {
@@ -686,9 +705,14 @@ export class BattleScene implements Scene {
       if (economia) {
         steps.push({ text: "Il MIN. ECONOMIA ha trovato la copertura: +25%!" });
       }
+      if (spotBonus > 1) {
+        steps.push({ text: "Lo SPOT IN PRIME TIME riempie le casse: +50% fondi!" });
+      }
       steps.push({
         run: () => {
-          const { value, milestone } = bumpSondaggi(this.state, 6);
+          // COMIZIO OCEANICO (boost campagna): guadagno SONDAGGI raddoppiato.
+          const sondGain = this.state.boostSondBattles > 0 ? 12 : 6;
+          const { value, milestone } = bumpSondaggi(this.state, sondGain);
           const lines: Step[] = [{ text: `I SONDAGGI ti premiano: gradimento al ${value}%!` }];
           if (milestone) {
             // Notifica gamificata quando superi una soglia chiave.

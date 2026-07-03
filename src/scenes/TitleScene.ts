@@ -7,7 +7,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { clearSave, hasSave, loadGame, newGameState, type GameState } from "../game/state";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
-import { Menu, clipToWidth, GREY, PAPER } from "../ui/widgets";
+import { Menu, MessageBox, clipToWidth, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { WorldScene } from "../game/world/WorldScene";
 
@@ -44,6 +44,9 @@ export class TitleScene implements Scene {
   private time = 0;
   private confirmDelete = false;
   private menuTapGeom: { x: number; y: number; w: number; rowH: number } | null = null;
+  // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
+  private difficultyMenu: Menu | null = null;
+  private diffMsg = new MessageBox();
 
   constructor(private stack: SceneStack, private input: Input) {
     this.menu = this.buildMenu();
@@ -64,6 +67,25 @@ export class TitleScene implements Scene {
 
   update(dt: number): void {
     this.time += dt;
+    // Selettore DIFFICOLTÀ in primo piano: gestiscilo prima di tutto il resto.
+    if (this.difficultyMenu) {
+      if (this.diffMsg.isOpen) {
+        this.diffMsg.update(dt, this.input);
+        return;
+      }
+      const a = this.difficultyMenu.update(this.input);
+      if (a === "cancel") {
+        audio.cancel();
+        this.difficultyMenu = null;
+        return;
+      }
+      if (a === "select") {
+        const hard = this.difficultyMenu.index === 1;
+        this.difficultyMenu = null;
+        this.beginNewCampaign(hard);
+      }
+      return;
+    }
     const tapAction = this.handleMenuTap();
     // Nota: NON chiediamo più il nome all'avvio. Prima si vede la schermata del
     // titolo; il nome si imposta dal menu o, se manca, alla prima campagna.
@@ -78,18 +100,9 @@ export class TitleScene implements Scene {
         this.start(state);
       }
     } else if (label.startsWith("NUOVA")) {
-      // Se non hai ancora un nome (per la chat online), te lo chiediamo ora —
-      // ma solo al momento di iniziare davvero, non all'apertura del gioco.
-      if (!hasNick()) {
-        this.stack.push(
-          new NicknameScene(this.stack, this.input, (nick) => {
-            mp.setIdentity(nick, "player");
-            this.start(newGameState());
-          }, true)
-        );
-      } else {
-        this.start(newGameState());
-      }
+      // Prima di creare la partita, scegli la DIFFICOLTÀ (immutabile dopo).
+      audio.confirm();
+      this.difficultyMenu = new Menu([{ label: "NORMALE" }, { label: "MODALITÀ DIFFICILE" }]);
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {
@@ -109,6 +122,25 @@ export class TitleScene implements Scene {
         this.confirmDelete = false;
         this.menu = this.buildMenu();
       }
+    }
+  }
+
+  // Crea lo stato con la difficoltà scelta e avvia (chiedendo il nome se manca).
+  private beginNewCampaign(hard: boolean): void {
+    const makeState = (): GameState => {
+      const state = newGameState();
+      state.hardMode = hard; // IMMUTABILE da qui in poi
+      return state;
+    };
+    if (!hasNick()) {
+      this.stack.push(
+        new NicknameScene(this.stack, this.input, (nick) => {
+          mp.setIdentity(nick, "player");
+          this.start(makeState());
+        }, true)
+      );
+    } else {
+      this.start(makeState());
     }
   }
 
@@ -161,7 +193,32 @@ export class TitleScene implements Scene {
     screen.rect(0, 43, VIEW_W, 12, "rgba(6,8,16,0.24)");
     this.drawLogo(screen);
     this.drawStarterShowcase(screen);
+    if (this.difficultyMenu) {
+      this.drawDifficulty(screen);
+      return;
+    }
     this.drawMenu(screen);
+  }
+
+  // Pannello DIFFICOLTÀ: due voci + spiegazione della modalità difficile.
+  private drawDifficulty(screen: Screen): void {
+    screen.rect(0, 44, VIEW_W, VIEW_H - 44, "rgba(6,8,16,0.82)");
+    const w = 188;
+    const h = 114;
+    const x = Math.round((VIEW_W - w) / 2);
+    const y = 46;
+    screen.rect(x, y, w, h, "rgba(16,20,31,0.96)");
+    screen.frame(x, y, w, h, "#f4d34a");
+    screen.textCenter("SCEGLI LA SFIDA", VIEW_W / 2, y + 6, "#f4d34a");
+    this.difficultyMenu!.draw(screen, x + 8, y + 18, w - 16, 12);
+    const hard = this.difficultyMenu!.index === 1;
+    const lines = hard
+      ? ["Avversari +livelli, niente", "ONDA DEL CONSENSO,", "rivincite piu lente.", "Immutabile: scegli col cuore."]
+      : ["Il percorso classico verso", "il PALAZZO. Pacing equilibrato.", "Consigliata alla prima corsa."];
+    for (let i = 0; i < lines.length; i += 1) {
+      screen.textCenter(lines[i], VIEW_W / 2, y + 60 + i * 9, GREY);
+    }
+    this.diffMsg.draw(screen);
   }
 
   private drawTitleFallback(screen: Screen): void {

@@ -2,9 +2,10 @@ import { BAG_ORDER } from "../data/items";
 import type { Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
 
-// Tutti gli item ora hanno un PNG PixelLab (Round 40). NO_PNG resta vuoto ma
-// disponibile per eventuali item futuri senza icona (evita path 404 in console).
-const NO_PNG = new Set<string>([]);
+// Tutti gli item ora hanno un PNG PixelLab (Round 40). NO_PNG elenca gli item
+// SENZA icona PNG (fallback pulito, evita path 404 in console). I boost CAMPAGNA
+// ELETTORALE (R41) non hanno ancora un PNG dedicato.
+const NO_PNG = new Set<string>(["manifesti", "spotprimetime", "comizio"]);
 export const ITEMS_WITH_PNG = new Set<string>(BAG_ORDER.filter((id) => !NO_PNG.has(id)));
 
 export const ITEM_ICON_SIZE = 12;

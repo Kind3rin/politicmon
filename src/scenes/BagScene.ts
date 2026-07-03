@@ -74,6 +74,11 @@ export class BagScene implements Scene {
     }
     const item = ITEMS[itemId];
     if (this.opts.inBattle) {
+      // I boost campagna si attivano dal mondo, non in battaglia: bloccali qui.
+      if (item.kind === "boost") {
+        this.msg.show(["Troppo tardi per fare campagna.", "I boost si attivano PRIMA della lotta, dalla BORSA."]);
+        return;
+      }
       this.stack.pop();
       this.opts.onUse?.(itemId);
       return;
@@ -102,6 +107,11 @@ export class BagScene implements Scene {
     // OGGETTI DA CAMPO: repellente e teletrasporto al bar.
     if (item.kind === "field") {
       this.useFieldItem(itemId);
+      return;
+    }
+    // CAMPAGNA ELETTORALE: attiva un buff a tempo (contatore battaglie nel save).
+    if (item.kind === "boost") {
+      this.useBoostItem(itemId);
       return;
     }
     // DIRETTIVE DI PARTITO: insegnano una mossa a chi è del tipo giusto.
@@ -253,6 +263,26 @@ export class BagScene implements Scene {
       return;
     }
     this.msg.show(["Non succede niente. Sospetto."]);
+  }
+
+  // CAMPAGNA ELETTORALE (kind "boost"): attiva il buff a tempo. Se è già attivo,
+  // RICARICA il contatore (non stacka indefinitamente: si somma ma è comunque un
+  // sink). Consuma l'item e salva.
+  private useBoostItem(itemId: string): void {
+    const item = ITEMS[itemId];
+    const boost = item.boost;
+    if (!boost) {
+      this.msg.show(["Non succede niente. Sospetto."]);
+      return;
+    }
+    this.state[boost.field] += boost.battles;
+    this.consume(itemId);
+    audio.confirm();
+    saveGame(this.state);
+    this.msg.show([
+      `${item.name} lanciato sul territorio!`,
+      `Effetto attivo per le prossime ${this.state[boost.field]} battaglie.`
+    ]);
   }
 
   private consume(itemId: string): void {

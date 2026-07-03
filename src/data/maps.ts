@@ -36,6 +36,7 @@ export interface NpcDef {
   setFlag?: string; // flag impostato quando ci parli (per le quest "hai parlato con...")
   wander?: boolean; // se true, l'NPC cammina attorno alla sua posizione iniziale
   daily?: boolean; // SFIDA DEL GIORNO: apre la sfida quotidiana (e non vaga mai)
+  coppa?: boolean; // BANDITORE della COPPA DELLE POLTRONE (torneo post-garante)
 }
 
 export interface WarpDef {
@@ -1917,6 +1918,12 @@ export const MAPS: Record<string, MapDef> = {
           "Io? In vacanza. Da undici anni fiscali consecutivi.",
           "Il mio commercialista dice che tecnicamente non esisto. Che pace."
         ]
+      },
+      {
+        // BANDITORE della COPPA DELLE POLTRONE: compare solo post-garante.
+        id: "banditore-coppa", pal: "boss", x: 18, y: 10, facing: "down",
+        coppa: true, showIfFlag: "garante-beaten",
+        lines: []
       }
     ]
   },

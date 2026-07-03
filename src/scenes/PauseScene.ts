@@ -310,7 +310,16 @@ export class PauseScene implements Scene {
     // Record duelli PvP (titolo PORTAVOCE a 10+ vittorie) + versione del gioco.
     const duelTag = this.state.duelWins >= 10 ? "  ★PORTAVOCE" : "";
     screen.text(`DUELLI PVP: ${this.state.duelWins}V/${this.state.duelLosses}P${duelTag}`.slice(0, 33), 24, 141, INK);
-    screen.text(versionLabel(this.state), 24, 150, GREY);
+    // Titolo COPPA DELLE POLTRONE + tag MODALITÀ DIFFICILE (immutabile).
+    const coppaTag = this.state.coppaWins > 0 ? `★PORTAVOCE DEL POPOLO (${this.state.coppaWins})` : "";
+    const hardTag = this.state.hardMode ? "☠ HARD" : "";
+    const extraLine = [coppaTag, hardTag].filter(Boolean).join("   ");
+    if (extraLine) {
+      screen.text(extraLine.slice(0, 33), 24, 150, "#e8c84a");
+      screen.text(versionLabel(this.state), 24, 159, GREY);
+    } else {
+      screen.text(versionLabel(this.state), 24, 150, GREY);
+    }
     screen.text("A/B: chiudi", 24, VIEW_H - 22, GREY);
   }
 }

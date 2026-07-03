@@ -5,7 +5,61 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 41 LOTTO 1 (QUALITÀ+TEST) COMPLETO + verificato**, 2026-07-03.
+Ultimo aggiornamento: **Round 41 LOTTO 3 (END-GAME) COMPLETO + verificato**, 2026-07-03.
+
+### 🏆 Round 41 — LOTTO 3: END-GAME (3° di 4 lotti sequenziali) — save v12
+Spec: `scratchpad/specs/r41-audits.md` sezione LOTTO 3. **MIGRAZIONE UNICA v11→v12**
+(tutti i campi nuovi insieme, default difensivi, dati conservati, chiave v11
+rimossa, `.bak` alla 2ª save). Chiave `politicmon-save-v12`, v11 in testa a
+`LEGACY_KEYS`. 3 feature:
+
+1. **MODALITÀ DIFFICILE** (`hardMode:boolean`, IMMUTABILE): scelta a inizio partita
+   nel selettore DIFFICOLTÀ del `TitleScene` (NUOVA CAMPAGNA → NORMALE / MODALITÀ
+   DIFFICILE, prima del nickname). Effetti: `hardModeLevelBonus` in `rematch.ts`
+   (+3 lv ai trainer, +5 sui boss lv≥45, cap 60) applicato in
+   `WorldScene.startTrainerBattle` (esclusa la SFIDA DEL GIORNO); **ONDA DEL
+   CONSENSO disattivata** (`wave=1` in `BattleScene.foeFaintedSteps`); cooldown
+   rivincita RADDOPPIATI (`rematchCooldown` in `rematch.ts`). Mostrato in PauseScene
+   (tag `☠ HARD` sulla TESSERA). NB: il **tint meteo JUICE è indipendente** (legge
+   `state.sondaggi`, non `wave`): verificato non si rompe.
+2. **COPPA DELLE POLTRONE** (`src/game/tournament.ts` + `src/scenes/TournamentScene.ts`):
+   torneo post-garante (BANDITORE @offshore 18,10, flag `garante-beaten`). Bracket
+   8 = giocatore + 7 FANTASMI (versioni lv 50-55 di trainer noti). **SESSIONE
+   SINGOLA, NON salvata** (se esci perdi il progresso del giorno — solo `coppaWins`
+   e flag `coppa-vinta` persistono). Bracket deterministico dal giorno
+   (`hashDate("coppa:"+day)` → shuffle seedato, ripetibile/stabile nel giorno).
+   Il giocatore combatte i suoi round come `BattleScene` normale (via
+   `startTrainerBattle`, id `coppa:*` mai in `defeatedTrainers`); gli **altri match
+   sono risolti con `duelsim`** (RNG seedato mulberry32, AI ghost deterministica —
+   il save NON è toccato). Flusso in `WorldScene.openTournament`/`runTournamentRound`/
+   `awardTournament`. Premio: titolo permanente **PORTAVOCE DEL POPOLO** (mostrato
+   in PauseScene) + una-tantum al 1° trionfo (TESSERA DORATA + 3000€). **TASSA
+   d'iscrizione 1500€** (money-SINK).
+3. **MONEY-SINK CAMPAGNA ELETTORALE** (nuovo `kind:"boost"` in `items.ts`): 3 item
+   consumabili ripetibili, buff a tempo (contatore battaglie nel save, scala su
+   vittoria in `BattleScene.endBattle`): **MANIFESTI OVUNQUE** 2000€ (+30% EXP, 10
+   batt., `boostExpBattles`), **SPOT IN PRIME TIME** 3000€ (+50% fondi trainer, 10
+   batt., `boostMoneyBattles`), **COMIZIO OCEANICO** 5000€ (×2 SONDAGGI su vittoria,
+   8 batt., `boostSondBattles`). Usati dalla BORSA fuori battaglia (`BagScene.useBoostItem`);
+   in vendita al DISCOUNT solo post-garante. Il NETTO è un SINK.
+
+**Campi v12** (in `GameState`+`newGameState`+`parseState`): `hardMode:boolean=false`,
+`coppaWins:number=0`, `boostExpBattles=0`, `boostMoneyBattles=0`, `boostSondBattles=0`.
+
+**Verifiche** (dev server :5179): typecheck+build puliti; 10 guardrail mappa PASS
+(banditore offshore valido); check-sim(16)/duel(24)/daily/evolutions/pixellab-coverage
+PASS; sim-balance pacing base invariato (3.27, non tocco il danno); playtest
+`check-r41-lotto3.mjs` 40/40 PASS (migrazione v11→v12, hardMode bonus, bracket
+deterministico, duelsim risolve i fantasmi, torneo a 3 round → campione, boost);
+integrazione `check-r41-coppa-flow.mjs` (banditore reale → tassa dedotta → bracket
+creato). Screenshot `artifacts/screens/r41-difficulty.png`, `r41-coppa-bracket.png`,
+`r41-campaign-boosts.png`.
+
+**NOTE per il LOTTO 4 (NARRATIVO ELEZIONI UE)**: nessuna nuova migrazione save (v12
+copre tutto). I FANTASMI del torneo riusano trainer esistenti — se aggiungi trainer
+UE puoi eventualmente ampliare il pool `GHOSTS` in `tournament.ts`. Il gate coerente
+per BRUXELLES può riusare `showIfFlag`/`requiresFlag` come il banditore. `duelsim`
+resta la via per risolvere incontri NPC-vs-NPC senza toccare il save.
 
 ### 🧪 Round 41 — LOTTO 1: QUALITÀ + TEST (1° di 4 lotti sequenziali)
 Spec: `scratchpad/specs/r41-audits.md` sezione LOTTO 1. NESSUNA migrazione save

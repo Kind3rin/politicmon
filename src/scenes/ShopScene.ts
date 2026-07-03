@@ -24,6 +24,11 @@ export class ShopScene implements Scene {
       if (item.kind === "tm") {
         return SHOP_DIRECTIVES.includes(id);
       }
+      // I boost CAMPAGNA ELETTORALE sono un money-sink di fine partita: compaiono
+      // al Discount solo dopo aver battuto il GARANTE SUPREMO (economia matura).
+      if (item.kind === "boost") {
+        return Boolean(this.state.flags["garante-beaten"]);
+      }
       return true;
     });
     this.menu = new Menu(

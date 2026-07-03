@@ -39,6 +39,12 @@ export interface GameState {
   dailyQuestsDone: string[]; // id missioni giornaliere completate oggi ("YYYY-MM-DD:idx")
   lastDailyQuestDate: string; // data locale YYYY-MM-DD del reset missioni giornaliere
   browserSeed: number; // 0 = non inizializzato; intero 1..2^31-1, divide i giocatori in versione A/B
+  // ---- v12: END-GAME (modalità difficile + torneo + boost campagna) ----
+  hardMode: boolean; // MODALITÀ DIFFICILE scelta a inizio partita: IMMUTABILE dopo la creazione
+  coppaWins: number; // trionfi alla COPPA DELLE POLTRONE (titolo permanente PORTAVOCE DEL POPOLO)
+  boostExpBattles: number; // MANIFESTI OVUNQUE: battaglie rimanenti col bonus EXP campagna
+  boostMoneyBattles: number; // SPOT IN PRIME TIME: battaglie rimanenti col bonus fondi dai trainer
+  boostSondBattles: number; // COMIZIO OCEANICO: battaglie rimanenti col bonus SONDAGGI dalle vittorie
 }
 
 // Seed "di installazione": generato una volta e persistito nel save. Divide i
@@ -47,11 +53,12 @@ function rollBrowserSeed(): number {
   return 1 + Math.floor(Math.random() * (2 ** 31 - 1));
 }
 
-export const SAVE_KEY = "politicmon-save-v11";
+export const SAVE_KEY = "politicmon-save-v12";
 // Copia dell'ULTIMO valore valido salvato: loadGame la prova se il primario
 // non parsa (localStorage troncato/corrotto).
-const BACKUP_KEY = "politicmon-save-v11.bak";
+const BACKUP_KEY = "politicmon-save-v12.bak";
 const LEGACY_KEYS = [
+  "politicmon-save-v11",
   "politicmon-save-v10",
   "politicmon-save-v9",
   "politicmon-save-v8",
@@ -92,7 +99,12 @@ export function newGameState(): GameState {
     duelLosses: 0,
     dailyQuestsDone: [],
     lastDailyQuestDate: "",
-    browserSeed: rollBrowserSeed()
+    browserSeed: rollBrowserSeed(),
+    hardMode: false,
+    coppaWins: 0,
+    boostExpBattles: 0,
+    boostMoneyBattles: 0,
+    boostSondBattles: 0
   };
 }
 
@@ -230,6 +242,16 @@ function parseState(raw: string | null): GameState | null {
       typeof parsed.browserSeed === "number" && Number.isInteger(parsed.browserSeed) && parsed.browserSeed > 0
         ? parsed.browserSeed
         : 0;
+    // ---- v12: campi END-GAME (default difensivi; un save v11 migra a false/0) ----
+    parsed.hardMode = parsed.hardMode === true; // solo true esplicito attiva la modalità
+    parsed.coppaWins =
+      typeof parsed.coppaWins === "number" && !Number.isNaN(parsed.coppaWins) ? Math.max(0, parsed.coppaWins) : 0;
+    // Contatori boost campagna: interi >=0. Un valore non-numerico/negativo → 0.
+    const clampBoost = (v: unknown): number =>
+      typeof v === "number" && !Number.isNaN(v) ? Math.max(0, Math.floor(v)) : 0;
+    parsed.boostExpBattles = clampBoost(parsed.boostExpBattles);
+    parsed.boostMoneyBattles = clampBoost(parsed.boostMoneyBattles);
+    parsed.boostSondBattles = clampBoost(parsed.boostSondBattles);
     // heldItem (v11, opzionale): tutto ciò che non è una stringa viene rimosso.
     for (const mon of [...parsed.party, ...parsed.boxed]) {
       if (mon.heldItem !== undefined && typeof mon.heldItem !== "string") {

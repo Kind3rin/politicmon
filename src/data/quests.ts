@@ -133,7 +133,10 @@ export const QUESTS: QuestDef[] = [
     desc: "Si vota per il PARLAMENTO UE. Salpa per BRUXELLES: la vera partita si gioca lì.",
     hint: "Lo SHERPA UE sull'OFFSHORE conosce la rotta. Il motoscafo diplomatico parte dalle boe a est dell'isola.",
     step: "Raggiungi BRUXELLES.",
-    isDone: (s) => Boolean(s.flags["hint-ue"]),
+    // Completa quando SEI ARRIVATO a Bruxelles (hint-brux-arrivo, settato allo
+    // sbarco) — non solo quando hai parlato allo SHERPA (hint-ue): chi salpa
+    // senza sherpa avrebbe la guida bloccata su questa quest anche dopo la vittoria.
+    isDone: (s) => Boolean(s.flags["hint-brux-arrivo"] || s.flags["hint-ue"] || s.flags["ue-beaten"]),
     target: { mapId: "offshore", x: 28, y: 9 }
   },
   {

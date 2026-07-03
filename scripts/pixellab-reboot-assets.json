@@ -1225,7 +1225,10 @@
         "items/agendarossa.png",
         "items/santino.png",
         "items/spray.png",
-        "items/rimborso.png"
+        "items/rimborso.png",
+        "items/manifesti.png",
+        "items/spotprimetime.png",
+        "items/comizio.png"
       ],
       "state": "regenerate-from-zero"
     },

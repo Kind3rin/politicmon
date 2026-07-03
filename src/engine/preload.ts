@@ -1,5 +1,7 @@
 import { preloadSprites, waitForSprites } from "./assets";
 import { BAG_ORDER } from "../data/items";
+import { MONSTERS_WITH_PNG } from "../art/monsters";
+import { ITEMS_WITH_PNG } from "../art/items";
 
 const DIRS = ["south", "north", "east", "west"] as const;
 const NPCS = [
@@ -88,8 +90,17 @@ function coreSpriteEntries(): Record<string, string> {
     }
   }
 
+  // Solo gli item con PNG (i nuovi item R39 senza icona userebbero un path 404).
   for (const itemId of BAG_ORDER) {
-    entries[`item:${itemId}`] = `items/${itemId}.png`;
+    if (ITEMS_WITH_PNG.has(itemId)) {
+      entries[`item:${itemId}`] = `items/${itemId}.png`;
+    }
+  }
+
+  // Mostri: precarica gli sprite PixelLab così la prima battaglia/Dex non mostra
+  // per un frame il fallback pixmap (il "design vecchio" che lampeggia).
+  for (const speciesId of MONSTERS_WITH_PNG) {
+    entries[`mon:${speciesId}`] = `monsters/${speciesId}.png`;
   }
 
   return entries;

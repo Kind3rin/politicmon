@@ -1217,7 +1217,15 @@
         "items/dirSciopero.png",
         "items/dirInciucio.png",
         "items/dirBunga.png",
-        "items/dirGreen.png"
+        "items/dirGreen.png",
+        "items/gilet.png",
+        "items/telecamera.png",
+        "items/sondtruccato.png",
+        "items/caffettiera.png",
+        "items/agendarossa.png",
+        "items/santino.png",
+        "items/spray.png",
+        "items/rimborso.png"
       ],
       "state": "regenerate-from-zero"
     },

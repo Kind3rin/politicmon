@@ -2,11 +2,10 @@ import { BAG_ORDER } from "../data/items";
 import type { Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
 
-// Item Round 39 senza PNG PixelLab (ancora): niente path = niente 404 in console.
-const NO_PNG = new Set<string>([
-  "gilet", "telecamera", "sondtruccato", "caffettiera", "agendarossa", "santino", "spray", "rimborso"
-]);
-const ITEMS_WITH_PNG = new Set<string>(BAG_ORDER.filter((id) => !NO_PNG.has(id)));
+// Tutti gli item ora hanno un PNG PixelLab (Round 40). NO_PNG resta vuoto ma
+// disponibile per eventuali item futuri senza icona (evita path 404 in console).
+const NO_PNG = new Set<string>([]);
+export const ITEMS_WITH_PNG = new Set<string>(BAG_ORDER.filter((id) => !NO_PNG.has(id)));
 
 export const ITEM_ICON_SIZE = 12;
 

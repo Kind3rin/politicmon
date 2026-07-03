@@ -5,7 +5,35 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 39-40 COMPLETO — audit + 4 lotti (tech/gameplay/retention/UX)**, 2026-07-03.
+Ultimo aggiornamento: **Round 39-40 COMPLETO + verificato in-game end-to-end**, 2026-07-03.
+
+### ✅ Verifica in-game Round 39-40 (giro completo end-to-end)
+Playtest esaustivo su tutte le feature del ciclo (`scratchpad/verify-r3940.mjs`,
+pattern guardrail via `window.stack`): **25/25 asserzioni PASS**. Dettaglio:
+- **TECH**: save key `politicmon-save-v11`; migrazione v10→v11 (money conservato,
+  chiave vecchia rimossa, campi a default); backup `.bak` scritto prima di ogni
+  save; export/import codice (`exportSaveCode`/`importSaveCode`, round-trip ok);
+  `browserSeed` inizializzato >0; `calcDamage` con RNG iniettabile (duelsim non
+  duplica più il calcolo del danno).
+- **GAMEPLAY**: 6 hold item + 2 field item (kind `hold`/`field`); 8 abilità su
+  17 specie; repellente attivo; **gilet riduce davvero il danno (30→25)**;
+  **sondaggi-meteo attivo** (mossa CENTRO: 24 con sondaggi≥85, 21 con ≤30).
+- **RETENTION**: 3 trade-evolution (contemorfo/calendauro/tajanide);
+  `dailyquests` (pool + bump + toast + status); streak via `prevDateKey` locale;
+  versione GOVERNO≠OPPOSIZIONE con 4 specie esclusive (`speciesAvailable`
+  filtra per `browserSeed`).
+- **UX/CONTENUTI**: minimappa "MAPPA DELL'ITALIETTA" render OK (nodi, "SEI QUI",
+  aree gated "???"); linea VERDE verdolino→ecoverdon (tipo VERDE); mattarellux
+  lv49 catturabile post-garante al colle; 6/6 ministeri con `malus`; icone item
+  in borsa (verifica visiva).
+- **FLASH FIX**: 39 sprite mostro PNG tutti `ready` dopo il preload → niente più
+  lampeggio del pixmap "vecchio design" alla prima battaglia/Dex.
+- **MULTIPLAYER (rete P2P reale)**: `check-duel.mjs` PASS — record duelWins/
+  duelLosses sincronizzato tra i due peer, save intatto durante il duello;
+  `shot-trade.mjs` PASS — scambio 1:1 end-to-end.
+Screenshot in `scratchpad/verify/` (minimap2.png, bag2.png). Unico rumore: un
+`undefined.draw` nel test isolato della minimappa (artefatto del test, zero
+errori con lo stack di gioco reale — confermato).
 
 ### 🗺️ Round 40 — LOTTO UX/CONTENUTI (4/4, chiude il ciclo)
 Spec: r39-audits sezioni UX + CONTENUTI EXTRA. Nessuna nuova migrazione save.

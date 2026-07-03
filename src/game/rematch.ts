@@ -10,7 +10,11 @@ import type { GameState } from "./state";
 // (flag garante-beaten) con cooldown più lungo. Nessun re-aggro a vista: la
 // RIVINCITA parte SOLO da interazione volontaria con prompt SÌ/NO.
 
-export const REMATCH_COOLDOWN_STEPS = 400;
+// R42 economia (LOTTO 3): rubinetto rematch dimezzato. Cooldown 400→600 (rematch
+// meno frequenti) + moltiplicatore post-game ×3→×2 (payout più basso, sotto).
+// Insieme portano il faucet per-1000-passi da ~4.5× a ~2.0× il money base del
+// trainer: circa -56%. I rematch restano un premio, non punitivi.
+export const REMATCH_COOLDOWN_STEPS = 600;
 // Capipalestra: cooldown lungo (audit C4: il payout gym a raffica azzerava i
 // sink dell'economia) + payout tagliato al 60% per TUTTI i rematch (sotto).
 export const GYM_REMATCH_COOLDOWN_STEPS = 1500;
@@ -82,7 +86,9 @@ export function buildRematchDef(state: GameState, def: TrainerDef): TrainerDef {
   }
   const postGame = Boolean(state.flags["garante-beaten"]);
   const floor = postGame ? 45 : 6 + 5 * state.badges.length;
-  const moneyMult = postGame ? 3 : 1 + 0.25 * state.badges.length;
+  // R42: post-game ×3→×2 (era il rubinetto dominante, ~38k€/ciclo). Vedi nota su
+  // REMATCH_COOLDOWN_STEPS: la coppia mult+cooldown dimezza il faucet.
+  const moneyMult = postGame ? 2 : 1 + 0.25 * state.badges.length;
   return {
     id: def.id,
     name: def.name,

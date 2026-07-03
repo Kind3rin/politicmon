@@ -24,6 +24,10 @@ import { MOVES } from "../data/moves";
 export const COPPA_FEE = 1500;
 // Ricompensa una-tantum al PRIMO trionfo (item + fondi simbolici).
 export const COPPA_FIRST_PRIZE = { itemId: "tessera", qty: 1, money: 3000 };
+// R42 economia: premio RIPETIBILE dal 2° trionfo in poi. Piccolo (700€ < 1500€
+// di tassa) → la COPPA resta un SINK netto (~-800€ a giro), ma dà una carota a
+// rigiocare invece del vecchio -1500€ cosmetico. Item comune di rifornimento.
+export const COPPA_REPEAT_PRIZE = { itemId: "schedona", qty: 2, money: 700 };
 export const COPPA_TITLE = "PORTAVOCE DEL POPOLO";
 
 // I 7 fantasmi: id trainer già affrontati nel gioco + un nome "da torneo" e la

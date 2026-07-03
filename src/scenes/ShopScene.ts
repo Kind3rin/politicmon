@@ -26,7 +26,13 @@ export class ShopScene implements Scene {
       }
       // I boost CAMPAGNA ELETTORALE sono un money-sink di fine partita: compaiono
       // al Discount solo dopo aver battuto il GARANTE SUPREMO (economia matura).
+      // ECCEZIONE (R42 economia): MANIFESTI OVUNQUE (+30% EXP) è utile fino al cap
+      // 55, ma serve DURANTE la campagna (party lv basso) → disponibile prima,
+      // dal 2° badge. SPOT/COMIZIO restano end-game (post-garante).
       if (item.kind === "boost") {
+        if (id === "manifesti") {
+          return this.state.badges.length >= 2 || Boolean(this.state.flags["garante-beaten"]);
+        }
         return Boolean(this.state.flags["garante-beaten"]);
       }
       return true;

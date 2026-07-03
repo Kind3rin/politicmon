@@ -43,11 +43,16 @@ export interface BattleOptions {
   trainer?: TrainerDef;
   music?: string; // override (es. leggendari)
   legendary?: boolean; // mette in scena l'incontro come "leggendario" (epico)
+  // RIVINCITA (R42 economia): true se è un rematch di un trainer già battuto. Lo
+  // SPOT IN PRIME TIME (+50% fondi) è ESCLUSO dai rematch: il bonus resta un
+  // acceleratore sui trainer di storia/nuovi, non un faucet sui ribattuti.
+  isRematch?: boolean;
   onEnd: (result: BattleResult) => void;
 }
 
 // Boss narrativi: tema musicale dedicato (e IA boss-grade in computeAiProfile).
-const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano", "tesoriere", "commissione"];
+// Esportato: la WorldScene lo usa per l'hold-item extra dei boss in HARD MODE.
+export const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano", "tesoriere", "commissione"];
 
 function battleMusic(opts: BattleOptions): string {
   if (opts.music) {
@@ -66,6 +71,7 @@ export class BattleScene implements Scene {
   private state: GameState;
   private foeTeam: Monster[];
   private trainer?: TrainerDef;
+  private isRematch = false; // rematch: nega lo SPOT bonus (R42 economia)
   private onEnd: (result: BattleResult) => void;
 
   private player!: Combatant;
@@ -115,6 +121,7 @@ export class BattleScene implements Scene {
     this.state = opts.state;
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
+    this.isRematch = opts.isRematch ?? false;
     this.isLegendary = opts.legendary ?? false;
     this.onEnd = opts.onEnd;
     // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
@@ -194,18 +201,28 @@ export class BattleScene implements Scene {
   private computeAiProfile(): AiProfile {
     const id = this.trainer?.id ?? "";
     const isBoss = BOSS_TRAINER_IDS.includes(id) || id.startsWith("rival");
+    // R42 economia (LOTTO 3): MODALITÀ DIFFICILE dà QUALITÀ, non solo +livelli.
+    // I boss diventano quasi infallibili (whiff 0.20→0.10); i capipalestra
+    // salgono a boss-grade; e persino gli allenatori COMUNI acquisiscono
+    // cura+finisher con un whiff-floor più basso. La modalità normale è INTATTA.
+    const hard = this.state.hardMode;
     if (isBoss) {
       // Boss narrativi e RIVALE: sempre competenti, è il loro momento.
-      return { whiff: 0.2, canHeal: true, finisher: true };
+      return { whiff: hard ? 0.1 : 0.2, canHeal: true, finisher: true };
     }
     if (this.trainer?.badge) {
-      // Capipalestra: tosti ma non perfetti.
-      return { whiff: 0.28, canHeal: true, finisher: true };
+      // Capipalestra: tosti ma non perfetti (in hard, boss-grade).
+      return { whiff: hard ? 0.15 : 0.28, canHeal: true, finisher: true };
     }
     // Wild e allenatori comuni: clemenza scalata sulle medaglie conquistate
-    // (più avanti sei, meno sbagliano), con un floor a 0.30 per non sembrare
-    // "rotti". Niente cure perfette né colpo di grazia automatico.
+    // (più avanti sei, meno sbagliano). In NORMALE floor 0.33, niente cura/
+    // finisher. In HARD i TRAINER comuni ottengono cura+finisher e un floor più
+    // basso (0.22); i selvatici (nessun trainer) restano clementi come prima.
     const badges = this.state.badges.length;
+    const isCommonTrainer = Boolean(this.trainer);
+    if (hard && isCommonTrainer) {
+      return { whiff: Math.max(0.22, 0.4 - badges * 0.05), canHeal: true, finisher: true };
+    }
     const whiff = Math.max(0.33, 0.48 - badges * 0.05);
     return { whiff, canHeal: false, finisher: false };
   }
@@ -249,7 +266,10 @@ export class BattleScene implements Scene {
         const won = result === "win";
         if (won && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
         if (won && this.trainer) {
-          if (this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
+          // R42: lo SPOT non si applica ai rematch → non bruciare la carica lì
+          // (altrimenti si sprecherebbe un uso senza bonus). Il COMIZIO
+          // (SONDAGGI ×2) vale anche sui rematch, quindi si consuma comunque.
+          if (!this.isRematch && this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
           if (this.state.boostSondBattles > 0) this.state.boostSondBattles -= 1;
         }
         audio.playMusic(null);
@@ -731,7 +751,10 @@ export class BattleScene implements Scene {
       const trainer = this.trainer;
       const economia = hasMinistro(this.state, "economia");
       // SPOT IN PRIME TIME (boost campagna): +50% fondi dai trainer finché attivo.
-      const spotBonus = this.state.boostMoneyBattles > 0 ? 1.5 : 1;
+      // R42 economia: ESCLUSO dai rematch (era un faucet netto +3.800€). Sui
+      // ribattuti il bonus non si applica (ma il contatore boost si consuma solo
+      // dove il bonus vale davvero — vedi endBattle: non consumato sui rematch).
+      const spotBonus = this.state.boostMoneyBattles > 0 && !this.isRematch ? 1.5 : 1;
       const payout = Math.round(trainer.money * (economia ? 1.25 : 1) * spotBonus * moneyMalus(this.state));
       steps.push({ run: () => audio.victory() });
       steps.push({ text: `Hai sconfitto ${trainer.name}!` });

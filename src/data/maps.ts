@@ -37,6 +37,7 @@ export interface NpcDef {
   wander?: boolean; // se true, l'NPC cammina attorno alla sua posizione iniziale
   daily?: boolean; // SFIDA DEL GIORNO: apre la sfida quotidiana (e non vaga mai)
   coppa?: boolean; // BANDITORE della COPPA DELLE POLTRONE (torneo post-garante)
+  monument?: boolean; // ARCHITETTO DI CORTE: money-sink MONUMENTO AL CANDIDATO (R42)
 }
 
 export interface WarpDef {
@@ -1549,6 +1550,15 @@ export const MAPS: Record<string, MapDef> = {
         // dalla data. daily:true la esclude dall'ambient movement (non vaga).
         id: "opinionista-daily", pal: "journalist", x: 11, y: 13, facing: "down", daily: true,
         lines: ["OPINIONISTA PERPETUA: il dibattito è il mio habitat naturale."]
+      },
+      {
+        // ARCHITETTO DI CORTE (R42): money-sink terminale MONUMENTO AL CANDIDATO,
+        // accanto alla STATUA EQUESTRE (20,13). Cella (19,13) = prato calpestabile.
+        id: "architetto-cap", pal: "aide", x: 19, y: 13, facing: "left", monument: true,
+        lines: [
+          "ARCHITETTO DI CORTE: un grande statista merita un grande MONUMENTO.",
+          "Coi TUOI soldi, s'intende. È tutto legale: te lo dedichi da solo."
+        ]
       }
     ]
   },

@@ -28,7 +28,7 @@ import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion } from "../../ui/widgets";
-import { BattleScene, type BattleResult } from "../battle/BattleScene";
+import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
@@ -52,11 +52,12 @@ import { ShopScene } from "../../scenes/ShopScene";
 import { CasinoScene } from "../../scenes/CasinoScene";
 import { BoxScene } from "../../scenes/BoxScene";
 import { MafiaScene } from "../../scenes/MafiaScene";
+import { MonumentScene, monumentDecoLines } from "../../scenes/MonumentScene";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 import { TournamentScene } from "../../scenes/TournamentScene";
 import {
   advanceAfterPlayerWin, ghostTrainerDef, initTournament, playerOpponent, roundLabel,
-  COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_TITLE, type TournamentState
+  COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE, type TournamentState
 } from "../tournament";
 
 const STEP_TIME = 0.18;
@@ -387,7 +388,7 @@ export class WorldScene implements Scene {
     const ambient =
       !npc.trainerId && !npc.sightRange && !npc.shop && !npc.healer && !npc.casino &&
       !npc.box && !npc.mafia && !npc.transport && !npc.gift && !npc.vehicleGift &&
-      !npc.legendary && !npc.daily && !npc.coppa;
+      !npc.legendary && !npc.daily && !npc.coppa && !npc.monument;
     const canWander = npc.wander ?? (ambient && this.map.outdoor);
     return {
       ...npc,
@@ -778,7 +779,7 @@ export class WorldScene implements Scene {
     });
   }
 
-  private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void): void {
+  private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void, isRematch = false): void {
     this.queueBattle(() => {
       // MODALITÀ DIFFICILE: +livelli agli avversari (esclusa la SFIDA DEL GIORNO,
       // che resta deterministica e uguale per tutti). Cap 60.
@@ -799,11 +800,22 @@ export class WorldScene implements Scene {
               return mon;
             })
           : this.buildRivalTeam();
+      // R42 economia (LOTTO 3): in MODALITÀ DIFFICILE i BOSS narrativi ricevono un
+      // hold item EXTRA sull'asso (il mostro più forte), solo se non ne ha già uno
+      // (riusa il 4° slot della tupla team). GILET (-15% danni) rende il boss più
+      // duro senza toccare la modalità normale. La IA boss-grade fa il resto.
+      if (this.state.hardMode && BOSS_TRAINER_IDS.includes(def.id) && team.length > 0) {
+        const ace = team.reduce((best, m) => (m.level > best.level ? m : best), team[0]);
+        if (!ace.heldItem) {
+          ace.heldItem = "gilet";
+        }
+      }
       this.stack.push(
         new BattleScene(this.stack, this.input, {
           state: this.state,
           foeTeam: team,
           trainer: def,
+          isRematch,
           onEnd: (result) => {
             // I PG vaganti ("wander:*"), la SFIDA DEL GIORNO ("daily:*") e i
             // match della COPPA ("coppa:*") restano ripetibili: mai in
@@ -970,6 +982,13 @@ export class WorldScene implements Scene {
     // Arredo urbano esaminabile (fontane/statue/panchine): testo satirico.
     const deco = this.map.decoratives?.find((d) => d.x === tx && d.y === ty);
     if (deco) {
+      // R42: la STATUA EQUESTRE della capitale (20,13) diventa il MONUMENTO AL
+      // CANDIDATO man mano che lo finanzi (state.monumentLevel). È il modo in cui
+      // il money-sink terminale è VISIBILE nel mondo, senza nuovi asset grafici.
+      if (this.map.id === "capitale" && tx === 20 && ty === 13 && this.state.monumentLevel > 0) {
+        this.say(monumentDecoLines(this.state.monumentLevel));
+        return;
+      }
       this.say(deco.lines);
       return;
     }
@@ -1035,7 +1054,8 @@ export class WorldScene implements Scene {
         }
         const def = this.trainerForId(npc.trainerId);
         this.askYesNo(`${def.name}: RIVINCITA?`, () => {
-          this.startTrainerFight(buildRematchDef(this.state, def));
+          // isRematch=true: lo SPOT bonus è escluso (R42 economia, faucet).
+          this.startTrainerFight(buildRematchDef(this.state, def), true);
         });
         return;
       }
@@ -1094,6 +1114,13 @@ export class WorldScene implements Scene {
     if (npc.mafia) {
       this.say(npc.lines ?? [], () => {
         this.stack.push(new MafiaScene(this.stack, this.input, this.state));
+      });
+      return;
+    }
+
+    if (npc.monument) {
+      this.say(npc.lines ?? [], () => {
+        this.stack.push(new MonumentScene(this.stack, this.input, this.state));
       });
       return;
     }
@@ -1317,7 +1344,16 @@ export class WorldScene implements Scene {
         `PREMIO DEL PRIMO TRIONFO: ${ITEMS[COPPA_FIRST_PRIZE.itemId].name} x${COPPA_FIRST_PRIZE.qty} e ${COPPA_FIRST_PRIZE.money}€!`
       );
     } else {
-      lines.push(`Trionfi totali: ${this.state.coppaWins}. La leggenda continua.`);
+      // R42: premio ripetibile dal 2° trionfo (700€ + 2 SCHEDE BLINDATE). La
+      // tassa (1500€) resta più alta: la COPPA è un SINK netto, ma non più
+      // cosmetica al 100%.
+      this.state.money += COPPA_REPEAT_PRIZE.money;
+      this.state.bag[COPPA_REPEAT_PRIZE.itemId] =
+        (this.state.bag[COPPA_REPEAT_PRIZE.itemId] ?? 0) + COPPA_REPEAT_PRIZE.qty;
+      lines.push(
+        `Trionfi totali: ${this.state.coppaWins}. La leggenda continua.`,
+        `GETTONE DI PRESENZA: ${ITEMS[COPPA_REPEAT_PRIZE.itemId].name} x${COPPA_REPEAT_PRIZE.qty} e ${COPPA_REPEAT_PRIZE.money}€.`
+      );
     }
     this.coppa = null;
     saveGame(this.state);
@@ -1605,7 +1641,7 @@ export class WorldScene implements Scene {
     });
   }
 
-  private startTrainerFight(def: TrainerDef): void {
+  private startTrainerFight(def: TrainerDef, isRematch = false): void {
     const isBoss = def.id === "boss";
     this.say(isBoss ? [`${def.name}: ti stavo aspettando.`] : [`${def.name} ti ha notato!`], () => {
       this.startTrainerBattle(def, (result) => {
@@ -1696,7 +1732,7 @@ export class WorldScene implements Scene {
             "Si dice che nella sala accanto un DRAGO DEI MERCATI attenda la prossima crisi..."
           ]);
         }
-      });
+      }, isRematch);
     });
   }
 

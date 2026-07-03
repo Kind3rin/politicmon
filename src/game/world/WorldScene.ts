@@ -3080,7 +3080,7 @@ export class WorldScene implements Scene {
       const recent = mp.chat.slice(-2);
       for (let i = 0; i < recent.length; i += 1) {
         const c = recent[i];
-        const line = `${c.nick}: ${c.text}`.slice(0, 34);
+        const line = `${mp.chatNick(c)}: ${c.text}`.slice(0, 34);
         const y = 28 + i * 11;
         screen.rect(2, y, line.length * 6 + 6, 10, "rgba(16,20,31,0.7)");
         screen.text(line, 5, y + 1, "#cfe6ff");

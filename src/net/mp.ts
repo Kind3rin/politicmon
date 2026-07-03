@@ -81,26 +81,44 @@ const APP_ID = "politicmon-v1";
 // Le credenziali di default sono il relay pubblico demo OpenRelay (quota bassa,
 // ok per sbloccare subito). Per la versione pubblica registrare un TURN gratuito
 // (Metered/Cloudflare/Twilio) e passarlo via env senza hardcodarlo.
+// STUN: passati in rtcConfig.iceServers. ATTENZIONE: Trystero costruisce la
+// config come `{ iceServers: defaultIceServers.concat(turnConfig ?? []), ...rtcConfig }`
+// (peer.mjs), quindi rtcConfig.iceServers SOSTITUISCE l'intera lista: i TURN
+// NON vanno qui (verrebbero scartati dai default), ma nello slot dedicato
+// `turnConfig`, che invece viene CONCATENATO ai default.
+const STUN_SERVERS: RTCIceServer[] = [
+  { urls: ["stun:stun.l.google.com:19302", "stun:stun.cloudflare.com:3478"] },
+];
+
+// TURN: PIÙ provider = niente single point of failure (prima c'era solo il
+// demo openrelay: se saturo/down su 4G/CGNAT nessun peer si collegava). Primo
+// slot da env (VITE_TURN_* = TURN dedicato Cloudflare/Metered account/Twilio),
+// poi il relay pubblico openrelay come fallback. `turns:443?transport=tcp`
+// salva le reti che bloccano l'UDP.
+type TurnEntry = { urls: string | string[]; username?: string; credential?: string };
+
 const TURN_URL = import.meta.env.VITE_TURN_URL as string | undefined;
 const TURN_USER = import.meta.env.VITE_TURN_USER as string | undefined;
 const TURN_CRED = import.meta.env.VITE_TURN_CRED as string | undefined;
 
-const ICE_SERVERS: RTCIceServer[] = [
-  { urls: ["stun:stun.l.google.com:19302", "stun:stun.cloudflare.com:3478"] },
-  TURN_URL && TURN_USER && TURN_CRED
-    ? { urls: TURN_URL, username: TURN_USER, credential: TURN_CRED }
-    : {
-        urls: [
-          "turn:openrelay.metered.ca:80",
-          "turn:openrelay.metered.ca:443",
-          "turns:openrelay.metered.ca:443?transport=tcp",
-        ],
-        username: "openrelayproject",
-        credential: "openrelayproject",
-      },
-];
+const TURN_SERVERS: TurnEntry[] = [];
+if (TURN_URL && TURN_USER && TURN_CRED) {
+  TURN_SERVERS.push({ urls: TURN_URL, username: TURN_USER, credential: TURN_CRED });
+}
+// Fallback pubblico: utile ma non unico. Con un TURN dedicato da env resta come
+// secondo relay; senza, evita di lasciare zero relay (STUN-only fallisce su NAT
+// simmetrico/CGNAT, la maggior parte delle reti mobili).
+TURN_SERVERS.push({
+  urls: [
+    "turn:openrelay.metered.ca:80",
+    "turn:openrelay.metered.ca:443",
+    "turns:openrelay.metered.ca:443?transport=tcp",
+  ],
+  username: "openrelayproject",
+  credential: "openrelayproject",
+});
 
-const RTC_CONFIG: RTCConfiguration = { iceServers: ICE_SERVERS };
+const RTC_CONFIG: RTCConfiguration = { iceServers: STUN_SERVERS };
 
 class MultiplayerClient {
   private room: Room | null = null;
@@ -146,6 +164,9 @@ class MultiplayerClient {
     this.enabled = on;
     if (!on) {
       this.leave();
+      // Multiplayer disattivato del tutto: ora ha senso svuotare lo storico
+      // chat (il cambio zona non lo fa più, vedi leave()).
+      this.chat.length = 0;
     } else if (this.roomMap) {
       this.join(this.roomMap);
     }
@@ -213,9 +234,15 @@ class MultiplayerClient {
     if (!m) {
       return;
     }
-    this.sendChatAction?.(m);
-    // P2P: i miei messaggi non mi tornano indietro, li aggiungo localmente.
-    this.pushChat(selfId, this.identity.nick, m);
+    if (this.sendChatAction) {
+      this.sendChatAction(m);
+      // P2P: i miei messaggi non mi tornano indietro, li aggiungo localmente.
+      this.pushChat(selfId, this.identity.nick, m);
+    } else {
+      // Nessuna room/relay: l'invio sarebbe un no-op silenzioso. Segnalo che il
+      // messaggio NON è partito, invece di far credere che sia stato inviato.
+      this.pushChat("system", "OFFLINE", "MESSAGGIO NON INVIATO");
+    }
   }
 
   update(dt: number): void {
@@ -239,6 +266,18 @@ class MultiplayerClient {
     return [...this.remotes.values()];
   }
 
+  // Nick da mostrare per una riga di chat. Il nick viene risolto AL DISEGNO dal
+  // peerId (ChatLine.id), non congelato all'arrivo: se un 'msg' arriva prima del
+  // 'prof' del peer, la riga non resta "???" per sempre — appena il profilo
+  // arriva, la riga mostra il nick giusto. Ricade sul nick salvato (mio nick per
+  // i miei messaggi, "system"/"???" per gli altri) se il peer non è (più) noto.
+  chatNick(line: ChatLine): string {
+    if (line.id === selfId) {
+      return this.identity.nick;
+    }
+    return this.remotes.get(line.id)?.nick ?? line.nick;
+  }
+
   isMe(id: string): boolean {
     return id === selfId;
   }
@@ -260,19 +299,26 @@ class MultiplayerClient {
     this.roomMap = mapId;
     let room: Room;
     try {
-      room = joinRoom({ appId: APP_ID, rtcConfig: RTC_CONFIG }, `map-${mapId}`, {
-        onJoinError: (details) => {
-          // Errore in fase di join alla room (relay irraggiungibile, ecc.).
-          console.warn("[mp] join error", details.error);
-        },
-      });
+      room = joinRoom(
+        { appId: APP_ID, rtcConfig: RTC_CONFIG, turnConfig: TURN_SERVERS },
+        `map-${mapId}`,
+        {
+          onJoinError: (details) => {
+            // Errore in fase di join alla room (relay irraggiungibile, ecc.).
+            console.warn("[mp] join error", details.error);
+          },
+        }
+      );
     } catch {
       // WebRTC/relay non disponibili: il gioco resta in singleplayer.
       this.connected = false;
       return;
     }
     this.room = room;
-    this.connected = true;
+    // La room (relay Nostr) è aperta, ma NESSUN peer WebRTC è ancora connesso:
+    // `connected` diventa true solo quando arriva/parte un peer reale (vedi
+    // onPeerJoin/onPeerLeave), così la UI distingue "in cerca di giocatori" da
+    // "connesso" e non maschera un fallimento TURN come se fosse online.
 
     // Canali tipizzati. In questa versione di Trystero makeAction restituisce
     // un oggetto { send, onMessage } e i callback ricevono (data, { peerId }).
@@ -286,13 +332,19 @@ class MultiplayerClient {
     // profondità contro eventuali fallback broadcast).
     const tradeAction = room.makeAction<TradeWire>("trade");
     const duelAction = room.makeAction<DuelMsg>("duel");
-    this.sendProfile = (p) => void profAction.send(p);
-    this.sendPos = (p) => void posAction.send(p);
-    this.sendEmoteAction = (e) => void emoAction.send(e);
-    this.sendChatAction = (m) => void msgAction.send(m);
-    this.sendTradeWire = (m, target) => void tradeAction.send(m, { target });
+    // send() di Trystero è async e PUÒ rigettare (peer sparito mid-send, data
+    // channel in teardown → InvalidStateError, backpressure in timeout). Con
+    // `void` la Promise veniva scartata → unhandled rejection: in dev l'overlay
+    // di Vite la mostra come un crash a schermo (tipico all'invio di un'emote,
+    // che chiude subito la scena). Uno swallow esplicito è corretto: un send
+    // P2P best-effort fallito non ha rimedio lato mittente.
+    this.sendProfile = (p) => void profAction.send(p).catch(() => {});
+    this.sendPos = (p) => void posAction.send(p).catch(() => {});
+    this.sendEmoteAction = (e) => void emoAction.send(e).catch(() => {});
+    this.sendChatAction = (m) => void msgAction.send(m).catch(() => {});
+    this.sendTradeWire = (m, target) => void tradeAction.send(m, { target }).catch(() => {});
     tradeAction.onMessage = (m, ctx) => this.trade.onWire(m, ctx.peerId);
-    this.sendDuelAction = (m, target) => void duelAction.send(m, { target });
+    this.sendDuelAction = (m, target) => void duelAction.send(m, { target }).catch(() => {});
     duelAction.onMessage = (m, ctx) => {
       if (!m || m.v !== 1 || (m.to && m.to !== selfId)) {
         return; // difesa in profondità sul broadcast
@@ -336,8 +388,10 @@ class MultiplayerClient {
       this.pushChat(ctx.peerId, r?.nick ?? "???", String(m).slice(0, 80));
     };
 
-    // Quando un peer entra, mi presento subito a lui (così mi vede).
+    // Quando un peer entra, mi presento subito a lui (così mi vede). Ora c'è un
+    // data channel WebRTC reale: siamo davvero connessi.
     room.onPeerJoin = () => {
+      this.connected = true;
       this.broadcastProfile();
     };
     // UNICA assegnazione di onPeerLeave (è una property: una seconda
@@ -347,6 +401,9 @@ class MultiplayerClient {
       this.onPeerGone?.(peerId);
       this.remotes.delete(peerId);
       this.onlineCount = this.remotes.size;
+      // Nessun peer rimasto = non più "connesso" (la room resta aperta, ma non
+      // c'è nessuno da vedere).
+      this.connected = this.remotes.size > 0;
     };
 
     // Annuncio iniziale del mio profilo a chi è già nella room.
@@ -361,7 +418,10 @@ class MultiplayerClient {
     // (onDuel/onPeerGone restano: appartengono alle scene.)
     this.trade.reset();
     this.remotes.clear();
-    this.chat.length = 0;
+    // NB: la chat NON viene azzerata qui. leave() scatta ad ogni cambio mappa
+    // (join() la richiama), e cancellare lo storico ad ogni zona faceva
+    // "sparire" la chat all'utente. Le righe decadono da sole col cap a 30 in
+    // pushChat; l'azzeramento vero avviene solo in setEnabled(false).
     this.onlineCount = 0;
     this.connected = false;
     const room = this.room;

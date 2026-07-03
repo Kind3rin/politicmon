@@ -160,11 +160,16 @@ export class ChatScene implements Scene {
 
     // Storico messaggi recenti (pannello compatto in alto).
     screen.panel(4, 13, VIEW_W - 8, 34);
-    const lines = mp.chat.slice(-3);
+    const lines = mp.chat.slice(-4);
     for (let i = 0; i < lines.length; i += 1) {
       const l = lines[i];
-      const text = `${l.nick}: ${l.text}`.slice(0, 37);
-      screen.text(text, 9, 18 + i * 9, INK);
+      // Nick risolto al disegno (non congelato): una riga arrivata prima del
+      // profilo del peer non resta "???". Troncato a 8 char per lasciare spazio
+      // al testo del messaggio nei 37 char che stanno nel pannello.
+      const rawNick = mp.chatNick(l);
+      const nick = rawNick.length > 8 ? rawNick.slice(0, 8) : rawNick;
+      const text = `${nick}: ${l.text}`.slice(0, 37);
+      screen.text(text, 9, 18 + i * 8, INK);
     }
     if (lines.length === 0) {
       screen.text("NESSUN MESSAGGIO. ROMPI IL GHIACCIO!", 9, 18, GREY);
@@ -215,7 +220,9 @@ export class ChatScene implements Scene {
     if (selSend) {
       screen.rect(VIEW_W - 58, sendY - 1, 52, 9, "#f4d34a");
     }
-    screen.text("▶ INVIA", VIEW_W - 54, sendY, selSend ? INK : "#7ad858");
+    // Offline (nessun peer connesso): INVIA in grigio — il messaggio non
+    // partirebbe (mp.sendChat mostra "MESSAGGIO NON INVIATO" in quel caso).
+    screen.text("▶ INVIA", VIEW_W - 54, sendY, selSend ? INK : (mp.connected ? "#7ad858" : GREY));
     screen.text("A:SCEGLI  B:CANC.  START:ESCI", 6, VIEW_H - 8, GREY);
   }
 }

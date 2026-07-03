@@ -154,60 +154,68 @@ export class ChatScene implements Scene {
 
   draw(screen: Screen): void {
     screen.clear("#16203a");
-    screen.text("CHAT DI ZONA", 8, 6, "#f4d34a");
-    screen.textRight(mp.connected ? `ONLINE ${mp.onlineCount + 1}` : "OFFLINE", VIEW_W - 8, 6,
+    screen.text("CHAT DI ZONA", 8, 5, "#f4d34a");
+    screen.textRight(mp.connected ? `ONLINE ${mp.onlineCount + 1}` : "OFFLINE", VIEW_W - 8, 5,
       mp.connected ? "#7ad858" : GREY);
 
-    // Storico messaggi recenti.
-    screen.panel(4, 16, VIEW_W - 8, 52);
-    const lines = mp.chat.slice(-4);
+    // Storico messaggi recenti (pannello compatto in alto).
+    screen.panel(4, 13, VIEW_W - 8, 34);
+    const lines = mp.chat.slice(-3);
     for (let i = 0; i < lines.length; i += 1) {
       const l = lines[i];
-      const text = `${l.nick}: ${l.text}`.slice(0, 36);
-      screen.text(text, 10, 24 + i * 10, INK);
+      const text = `${l.nick}: ${l.text}`.slice(0, 37);
+      screen.text(text, 9, 18 + i * 9, INK);
     }
     if (lines.length === 0) {
-      screen.text("Nessun messaggio. Rompi il ghiaccio!", 10, 24, GREY);
+      screen.text("NESSUN MESSAGGIO. ROMPI IL GHIACCIO!", 9, 18, GREY);
     }
 
-    // Riga di composizione.
+    // Riga di composizione (una sola riga, caret lampeggiante). Pannello alto
+    // 15px: la cornice 9-slice mangia ~4px per lato, il testo a y+6 resta dentro.
     const caret = Math.floor(this.time * 2) % 2 === 0 ? "_" : " ";
-    screen.panel(4, 70, VIEW_W - 8, 16);
-    screen.text((this.text + caret).slice(0, 36), 10, 76, INK);
+    screen.panel(4, 49, VIEW_W - 8, 15);
+    const composed = (this.text + caret).slice(0, 37);
+    screen.text(composed || " ", 10, 55, this.text ? INK : GREY);
 
-    // Tastiera.
-    const ky = 92;
+    // Tastiera: 9 colonne a passo 24 partono da x=6 → l'ultima (idx 8) sta a
+    // 6+8*24=198, i glifi restano dentro i 240px. Righe a passo 11 da y=68.
+    const KX = 6;
+    const ky = 68;
     for (let r = 0; r < KEY_ROWS.length; r += 1) {
       for (let c = 0; c < KEY_ROWS[r].length; c += 1) {
-        const x = 10 + c * 24;
+        const x = KX + c * 24;
         const y = ky + r * 11;
         const sel = this.section === "keys" && this.row === r && this.col === c;
         if (sel) {
-          screen.rect(x - 3, y - 1, 13, 10, "#f4d34a");
+          screen.rect(x - 2, y - 1, 11, 10, "#f4d34a");
         }
         screen.text(KEY_ROWS[r][c] === " " ? "_" : KEY_ROWS[r][c], x, y, sel ? INK : PAPER);
       }
     }
 
-    // Emote rapide: griglia 2 righe x EMOTE_COLS.
-    const ey = ky + KEY_ROWS.length * 11 + 2;
+    // Emote rapide: 2 righe da EMOTE_COLS a passo 39 (6*39=234, dentro i 240).
+    // Ogni cella ha larghezza fissa: nessuna sovrapposizione tra label vicine.
+    const ey = ky + KEY_ROWS.length * 11 + 3;
+    const ECW = 39;
     for (let i = 0; i < EMOTES.length; i += 1) {
-      const x = 10 + (i % EMOTE_COLS) * 38;
+      const x = KX + (i % EMOTE_COLS) * ECW;
       const y = ey + Math.floor(i / EMOTE_COLS) * 10;
       const label = `${EMOTES[i].ch}${EMOTES[i].label}`.slice(0, 6);
       const sel = this.section === "emote" && this.col === i;
       if (sel) {
-        screen.rect(x - 3, y - 1, label.length * 6 + 6, 9, "#f4d34a");
+        screen.rect(x - 2, y - 1, ECW - 3, 9, "#f4d34a");
       }
       screen.text(label, x, y, sel ? INK : PAPER);
     }
 
-    // Tasto invia.
+    // Tasto INVIA su riga propria (y=161), lontano dalla riga help (y=173):
+    // niente più collisione con START.
+    const sendY = ey + 2 * 10 + 3;
     const selSend = this.section === "send";
     if (selSend) {
-      screen.rect(VIEW_W - 64, VIEW_H - 12, 56, 11, "#f4d34a");
+      screen.rect(VIEW_W - 58, sendY - 1, 52, 9, "#f4d34a");
     }
-    screen.text("► INVIA", VIEW_W - 60, VIEW_H - 11, selSend ? INK : "#7ad858");
-    screen.text("A: scegli  B: cancella  START: esci", 8, VIEW_H - 11, GREY);
+    screen.text("▶ INVIA", VIEW_W - 54, sendY, selSend ? INK : "#7ad858");
+    screen.text("A:SCEGLI  B:CANC.  START:ESCI", 6, VIEW_H - 8, GREY);
   }
 }

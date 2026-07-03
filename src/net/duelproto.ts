@@ -8,7 +8,7 @@
 
 import { MOVES, type StatKey, type StatusId } from "../data/moves";
 import { SPECIES } from "../data/species";
-import { createMonster, type Monster } from "../game/monster";
+import { createMonster, LEVEL_CAP, type Monster } from "../game/monster";
 
 export type DuelSide = "host" | "guest";
 
@@ -123,7 +123,7 @@ export function validateWireTeam(wire: unknown): Monster[] | null {
       return null;
     }
     const level = Number(raw?.l);
-    if (!Number.isInteger(level) || level < 1 || level > 50) {
+    if (!Number.isInteger(level) || level < 1 || level > LEVEL_CAP) {
       return null;
     }
     const moves = raw?.m;

@@ -6,7 +6,7 @@
 
 import { MOVES } from "../data/moves";
 import { SPECIES } from "../data/species";
-import { createMonster, type Monster } from "../game/monster";
+import { createMonster, LEVEL_CAP, type Monster } from "../game/monster";
 import { legalMoveForSpecies } from "./duelproto";
 import { sanitizeNick } from "./profile";
 
@@ -38,7 +38,7 @@ export function sanitizeTradeMon(p: unknown): Monster | null {
   if (!species) {
     return null;
   }
-  const level = Math.max(1, Math.min(50, Math.floor(Number(raw?.level)) || 1));
+  const level = Math.max(1, Math.min(LEVEL_CAP, Math.floor(Number(raw?.level)) || 1));
   const mon = createMonster(species.id, level);
   const req = Array.isArray(raw?.moves) ? (raw.moves as unknown[]).slice(0, 8).map(String) : [];
   const valid = [...new Set<string>(req)]

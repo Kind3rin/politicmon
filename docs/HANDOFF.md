@@ -5,7 +5,82 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 42 LOTTO 2 (ACCESSIBILITÀ, save v13) COMPLETO + verificato**, 2026-07-03.
+Ultimo aggiornamento: **Round 42 COMPLETO (tutti e 3 i lotti: FIX/COMBAT + ACCESSIBILITÀ + ECONOMIA), save v13**, 2026-07-03.
+
+### 🏁 Round 42 — RIEPILOGO CONSOLIDATO (3 lotti, tutti pushati)
+Audit a 4 dimensioni (spec `scratchpad/specs/r42-audits.md`), spezzato in 3 lotti
+sequenziali. **Una sola migrazione save, v12→v13** (fatta nel LOTTO 2). Stato finale:
+
+- **LOTTO 1 — FIX + COMBAT + ONBOARDING** (commit `f82820e`): level cap 50→55,
+  IA rispetta lo status fuori da lotta, decremento boost corretto, soft-cap danno
+  3.5×, GAFFE 100→65%, VERDE>TECNO 2×, trigger offensivi annunciati, onboarding
+  (NORMALE consigliata, tipi spiegati). Nessun campo save nuovo. Guardrail
+  `check-r42-lotto1` 13/13.
+- **LOTTO 2 — ACCESSIBILITÀ** (commit `cc4425a`, **save v13**): toggle RIDUCI
+  EFFETTI, marker efficacia ▲▼X in griglia mosse, % PV nemico. Migrazione unica
+  v12→v13 con campi: `reduceEffects`, `reduceEffectsSet`, **`monumentLevel`** (già
+  pronto per il LOTTO 3). Dettaglio sotto.
+- **LOTTO 3 — ECONOMIA** (commit `ef0cda9`): 6 riequilibri, NESSUNA nuova
+  migrazione (usa `monumentLevel` già in v13). Dettaglio sotto.
+
+### 💰 Round 42 — LOTTO 3: ECONOMIA (3° di 3 lotti) — **NESSUNA nuova migrazione**
+Spec: `scratchpad/specs/r42-audits.md` sezione LOTTO 3. Usa `monumentLevel` (già
+nel save v13). 6 riequilibri:
+
+1. **REMATCH FAUCET dimezzato** (`rematch.ts`): moltiplicatore post-game rematch
+   **×3→×2** + `REMATCH_COOLDOWN_STEPS` **400→600**. Insieme portano il rubinetto
+   per-1000-passi da ~4.5× a ~2.0× il money base del trainer (**−56%**, ratio 0.444
+   verificato). I rematch restano un premio, non punitivi. Il payout gym resta
+   `×2.5×0.6` (invariato); il taglio tocca solo i trainer comuni post-garante.
+2. **SPOT NON-SINK** (`BattleScene.ts` + `WorldScene.ts`): lo SPOT IN PRIME TIME
+   (+50% fondi) è ora **escluso dai rematch** (nuovo flag `isRematch` in
+   `BattleOptions`, propagato da `startTrainerFight(def, true)` al solo call-site
+   RIVINCITA). Sui ribattuti il bonus non si applica **e** la carica boost NON si
+   consuma (niente uso sprecato). Il COMIZIO (SONDAGGI×2) vale anche sui rematch.
+3. **TORNEO PREMIO SCALANTE** (`tournament.ts` + `WorldScene.awardTournament`): dal
+   **2° trionfo** un premio ripetibile `COPPA_REPEAT_PRIZE` = 700€ + 2 SCHEDE
+   BLINDATE. La tassa (1500€) resta più alta → la COPPA è un **SINK netto**
+   (~−800€/giro) ma dà una carota invece del vecchio −1500€ cosmetico.
+4. **MANIFESTI UTILE PRIMA** (`ShopScene.ts`): MANIFESTI OVUNQUE (+30% EXP, utile
+   fino al cap 55) ora in vendita **dal 2° badge** (prima solo post-garante). SPOT/
+   COMIZIO restano end-game (post-garante). Gate: `id==="manifesti" && badges>=2`.
+5. **MONEY-SINK TERMINALE "MONUMENTO AL CANDIDATO"** (`MonumentScene.ts` nuovo +
+   NPC `architetto-cap` a (19,13) nella capitale, flag `monument` in `NpcDef` +
+   dispatch in `WorldScene`): 3 livelli **10k/25k/50k€** (`MONUMENT_COSTS`),
+   puramente cosmetico, deducono i fondi e alzano `state.monumentLevel` (0→3). Al
+   lv3 titolo `PADRE DELLA PATRIA (AUTOPROCLAMATO)`. Ogni livello ha una descrizione
+   satirica sempre più grottesca. La STATUA EQUESTRE della capitale (20,13) diventa
+   il MONUMENTO nel mondo: il testo di esame cambia con `monumentLevel`
+   (`monumentDecoLines`). Statua stilizzata che cresce nella scena (nessun asset).
+   Satira bonaria: il candidato si erige statue coi propri soldi, "qui è legale".
+6. **HARD MODE PIÙ INTERESSANTE** (`BattleScene.computeAiProfile` + `WorldScene`):
+   SOLO in `state.hardMode` (normale INTATTA): boss whiff **0.2→0.1**, capipalestra
+   **0.28→0.15** (boss-grade), e i **trainer comuni** ottengono cura+finisher con
+   whiff-floor **0.33→0.22**. Inoltre i BOSS narrativi (`BOSS_TRAINER_IDS`, ora
+   esportato) ricevono un **hold item extra (GILET, −15% danni)** sull'asso in hard,
+   se non ne ha già uno (riusa il 4° slot della tupla team).
+
+**Verifiche** (dev server :5179): typecheck + build puliti; **10 guardrail mappa**
+PASS (nuovo NPC monumento su cella valida); check-sim/check-duel/check-daily/
+check-evolutions/check-pixellab-coverage (173/173) PASS; **check-r42-lotto3 21/21**
+(rematch mult/cooldown/faucet-ratio 0.444; SPOT escluso dai rematch A=300>B=200 +
+carica non consumata; torneo premio<tassa; MANIFESTI dal 2° badge, SPOT no; monumento
+3 livelli deducono i soldi e salgono, titolo lv3, fondi insufficienti→niente addebito;
+hard AI whiff più basso + cura/finisher ai comuni + boss 0.2→0.1); **check-r42-lotto1
+13/13** (regressione, nessuna rottura). **sim-balance pacing 3.27 turni INVARIATO**
+(l'economia non tocca calcDamage né la IA normale). Monte Carlo hard boss UE
+(commissione lv57-60 + GILET, party lv55): win-rate ~11% con IA-giocatore ingenua
+(no cure/tipi/item) vs ~76% in normale → la modalità è più dura ma un giocatore reale
+(coperture tipo + hold + item campagna + switch) vince comodamente. Screenshot:
+`r42-lotto3-monument-0/2/3.png`, `r42-lotto3-hardmode-boss.png` (MACRONFOX L57 vs
+DRAGHIMON L55). Script: `scripts/check-r42-lotto3.mjs`, `scripts/shot-r42-lotto3.mjs`.
+
+**MANCANZE NOTE**: la statua nella `MonumentScene` cresce in modo sottile (il
+colosso lv3 non è nettamente più grande dei livelli 1-2 a colpo d'occhio); la
+crescita è comunicata soprattutto dal testo e dal titolo (accettabile per spec:
+"se troppo costoso graficamente, basta dialogo + titolo"). Nessun asset PixelLab
+per il monumento (rettangoli procedurali). Hard mode resta impegnativo: per un
+giocatore poco esperto i boss UE lv57-60 col GILET possono essere ostici (voluto).
 
 ### ♿ Round 42 — LOTTO 2: ACCESSIBILITÀ (2° di 3 lotti) — **MIGRAZIONE UNICA v12→v13**
 Spec: `scratchpad/specs/r42-audits.md` sezione LOTTO 2 (+ campi del LOTTO 3 inclusi

@@ -5,7 +5,52 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Round 41 LOTTO 3 (END-GAME) COMPLETO + verificato**, 2026-07-03.
+Ultimo aggiornamento: **Round 41 COMPLETO (tutti e 4 i lotti) + verificato**, 2026-07-03.
+
+### 🇪🇺 Round 41 — COMPLETO: consolidato dei 4 lotti (save v12)
+Spec: `scratchpad/specs/r41-audits.md`. I 4 lotti sequenziali sono **tutti fatti e
+pushati** su master (Vercel). Riepilogo:
+
+1. **LOTTO 1 — QUALITÀ/TEST**: dex version-marking, `check-daily.mjs`, validazione
+   `dailyQuestsDone`, clamp pos MP, abilità leggendari (WHATEVER IT TAKES /
+   GARANZIA COSTITUZIONALE), hold item nei boss (tupla team a 4 elem), 2 pickup hold.
+2. **LOTTO 2 — JUICE**: numeri di danno flottanti, ombre, screen-shake, freeze/flash
+   KO, tint meteo, musiche offshore/duel, jingle distinti, SFX meccaniche, dialoghi juice.
+3. **LOTTO 3 — END-GAME (save v12, MIGRAZIONE UNICA v11→v12)**: MODALITÀ DIFFICILE,
+   COPPA DELLE POLTRONE (torneo), CAMPAGNA ELETTORALE (money-sink `kind:"boost"`).
+4. **LOTTO 4 — NARRATIVO ELEZIONI UE** (commit `2fbf991`, questa sessione):
+   - **Mappa `bruxelles`** (29 wide, `src/data/maps.ts`) + interno **`commissione`**:
+     viale che sale al **Palazzo della Commissione** (marmo `M` 10x4, porte `DD`),
+     bar **CAFFÈ SCHUMAN** (`bar-bruxelles`), cortili istituzionali (`f`+`,`), erba UE `~`.
+   - **GATE**: traghetto dalle **boe est dell'OFFSHORE** (28,9)/(28,10) →
+     `bruxelles` (14/15,13), `requiresFlag:"garante-beaten"` (end-game come offshore).
+     **SHERPA UE** @offshore (25,10) annuncia la rotta (`setFlag:"hint-ue"`).
+     `BAR_RESPAWN.bruxelles` + `MAP_ENTRY_HINTS.bruxelles` aggiunti.
+   - **GAUNTLET** (`src/data/trainers.ts`): 4 trainer `eu-relatore`/`eu-eurodeputato`/
+     `eu-commissario`/`eu-lobby` (lv 44-52, 1800-2300€) + **boss `commissione`**
+     ("LA COMMISSIONE", lv 52-55, **5000€**, asso URSULAX col GILET PVE), **dentro
+     l'interno `commissione`** (come garante nel COLLE). `commissione` ∈
+     `BOSS_TRAINER_IDS` (musica `battle-boss` + IA boss). Vittoria → flag **`ue-beaten`**
+     (in `WorldScene.startTrainerFight` callback, +10 sondaggi) + **TESSERA DORATA**
+     una-tantum (`def.reward`, il boss si nasconde con `hideIfFlag:"ue-beaten"`).
+   - **Contenuti**: wild UE lv 42-50 (`encounterRate:0.16`, roster
+     macronfox/bojoon/zelenskir/ursulax/xipanda/putingrad/trumpon); **dexzone
+     `bruxelles`** (7 specie, reward schedona×3+4000€); **DIRETTIVA MULTA UE**
+     (`dirMulta`→`multaue`, TECNO) come pickup nascosto; **2 quest** `ue-rotta`
+     (target offshore boe) + `ue-commissione` (target bruxelles palazzo) con freccia
+     GUIDA; traccia musicale **`bruxelles`** in `audio.ts`. `wandererLevel` cappa già
+     a 50 post-garante (nessuna modifica a encounters.ts necessaria).
+   - **NESSUNA nuova migrazione save** (solo flag `garante-beaten`/`ue-beaten`/`hint-ue`).
+   - **Verifiche**: typecheck+build puliti; **10 guardrail mappa** PASS (incluso
+     `check-building-door-alignment` — il palazzo UE è un edificio reale 10x4 con
+     porte, non decor); evolutions/sim/duel/daily/pixellab-coverage PASS; playtest
+     **`check-r41-lotto4.mjs` 29/29** (gate pre/post garante, gauntlet+boss
+     battibili end-to-end con `endBattle("win")`→`ue-beaten`, wild UE, dexzone,
+     quest); screenshot `artifacts/screens/brux_{arrivo,viale,palazzo,boss}.png`.
+   - **TRAPPOLE evitate**: righe ASCII a mano (mai slice, R34); larghezza costante 29
+     `TT`+25+`TT` (EUROTOWN style, NON 30 come CAPITALE); ogni char-tetto (`M`/`x`)
+     è trattato come edificio reale dal guardrail door-alignment → usati SOLO edifici
+     con footprint PNG valido + porte (palazzo 10x4, bar), niente `x`/`M` decorativi.
 
 ### 🏆 Round 41 — LOTTO 3: END-GAME (3° di 4 lotti sequenziali) — save v12
 Spec: `scratchpad/specs/r41-audits.md` sezione LOTTO 3. **MIGRAZIONE UNICA v11→v12**

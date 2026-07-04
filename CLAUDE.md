@@ -102,9 +102,12 @@ Risoluzione interna 240x180 scalata pixel-perfect.
   L'NPC è aggiunto dinamicamente in `WorldScene.loadMap` via `rivalStageFor(rivalWins)`;
   `trainerForId` costruisce il TrainerDef "rival-*" al volo; la vittoria incrementa
   `rivalWins` e ricarica la mappa (rimuove l'NPC). `rivalWins` è in `GameState` (save v6).
-- Salvataggio: JSON in localStorage (`src/game/state.ts`, chiave `politicmon-save-v6`).
-  Se cambi la forma di `GameState`, bumpa la chiave e aggiungi la vecchia a
-  `LEGACY_KEYS` per la migrazione automatica.
+- Salvataggio: JSON in localStorage (`src/game/state.ts`). MULTI-SLOT (3 slot):
+  chiavi `politicmon-save-v13__sN` (+`.bak`), slot attivo in `politicmon-active-slot`.
+  `saveGame`/`loadGame`/`hasSave`/`clearSave` operano sullo slot attivo (i ~70 call
+  site non lo sanno). UI in `SlotScene` (da TitleScene: CONTINUA=load, NUOVA=new).
+  Se cambi la forma di `GameState`, bumpa `SAVE_KEY_BASE` e aggiungi la vecchia a
+  `LEGACY_KEYS` (migrano nello slot 0). Retrocompat mono-slot→s0 automatica.
 - Storia: Atto 1 = 3 medaglie + PALAZZO; Atto 2 = mappa `colle` (porta dorata nel
   Palazzo, gated da flag `boss-beaten`), gauntlet della CONSULTA e GARANTE SUPREMO,
   poi leggendario DRAGHIMON. I warp supportano `requiresBadges` e `requiresFlag`.

@@ -8,8 +8,17 @@
 Ultimo aggiornamento: **Audit lore/narrativa end-to-end (fix testo/coord)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Audit narrativo + fix leggendari + fix save-trap + SALVA scopribile, tutto pushato
-(HEAD `a369058`). Tree pulito, live su politicmon.vercel.app. Nessuna migrazione save.
+Audit narrativo + fix leggendari + fix save-trap + SALVA scopribile + SLOT MULTIPLI,
+tutto pushato (HEAD `3ae7a3a`). Tree pulito, live su politicmon.vercel.app.
+
+**💾 SLOT MULTIPLI DI SALVATAGGIO (`3ae7a3a`)** — save da mono-slot a 3 slot
+indipendenti SENZA toccare i ~70 call site di saveGame: concetto di "slot attivo"
+persistito in localStorage. Chiavi `politicmon-save-v13__sN` (+.bak). Retrocompat:
+vecchia chiave mono-slot → slot 0, legacy v3-v12 → solo slot 0. Nuova `SlotScene`
+(selettore 3 slot con riepilogo LV/medaglie/luogo, modalità load/new, START cancella).
+TitleScene: CONTINUA→SlotScene(load), NUOVA→difficoltà→SlotScene(new). Verificato
+`check-slots.mjs` 21/21 + screenshot. NON è migrazione di versione (stessa forma
+GameState, cambia solo il layout chiavi localStorage). Vedi [[politicmon-save-slots]].
 
 **💾 SALVA NEL MENU PAUSA PRINCIPALE (`a369058`)** — il salvataggio manuale ESISTEVA
 gia' (menu pausa → OPZIONI → SALVA) ma era sepolto e poco scopribile (classica

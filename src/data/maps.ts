@@ -351,29 +351,6 @@ const CAPITALE_TILES = [
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
-// ------------------------------------------------------- BRACCIO DI MARE
-// La "strada d'acqua" Calabria→Sicilia. Si attraversa SOLO con la MN TRAGHETTO
-// (l'acqua 'w' è invalicabile senza). Sbarchi a NORD (sponda Calabria, sabbia
-// 'z' col molo 'j'), attraversi il mare, approdi a SUD (edge → stretto/Sicilia).
-// Larghezza 20, il bordo 'T' (montagne/costa) chiude i lati.
-const MARE_TILES = [
-  "TTTTTTTTTTTTTTTTTTTT",
-  "TzzzzzzzzzzzzzzzzzzT",
-  "TzzzzzzzzjjzzzzzzzzT",
-  "TwwwwwwwwjjwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwwwwwwwwwwwT",
-  "TwwwwwwwwjjwwwwwwwwT",
-  "TzzzzzzzzjjzzzzzzzzT",
-  "TzzzzzzzzzzzzzzzzzzT",
-  "TTTTTTTTTTTTTTTTTTTT"
-];
-
 // ---------------------------------------------------- STRETTO DI MESSINA
 // Spiaggia stile Papeete + ponte eternamente incompiuto che finisce in mare.
 
@@ -1385,9 +1362,12 @@ export const MAPS: Record<string, MapDef> = {
       { x: 24, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 25, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       {
-        // IMBARCO per la SICILIA: traversata via MN TRAGHETTO. Senza la MN il
-        // molo è sbarrato (vedi NPC marinaio accanto, che la regala a 3 medaglie).
-        x: 12, y: 19, toMap: "mare", toX: 8, toY: 2, facing: "down",
+        // IMBARCO per la SICILIA: si salpa col TRAGHETTO e si approda DIRETTAMENTE
+        // sull'acqua a nord dello STRETTO (canale del molo, 13-14,6) — niente più
+        // mappa "mare" intermedia: la traversata è una continuazione, arrivi via
+        // acqua. Senza la MN il molo è sbarrato (vedi MARINAIO accanto, la regala a
+        // 3 medaglie).
+        x: 12, y: 19, toMap: "stretto", toX: 13, toY: 6, facing: "down",
         requiresFlag: "veh-traghetto",
         lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza il TRAGHETTO."]
       },
@@ -1478,8 +1458,9 @@ export const MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        // MARINAIO dell'IMBARCO: regala il VEICOLO TRAGHETTO a 3 medaglie. Da qui
-        // (molo a 12,19) si naviga il BRACCIO DI MARE fino alla SICILIA (STRETTO).
+        // MARINAIO dell'IMBARCO: regala il VEICOLO TRAGHETTO a 3 medaglie. Dal molo
+        // (12,19) si salpa e si approda DIRETTAMENTE allo STRETTO (nessuna mappa
+        // intermedia): la traversata è una continuazione, arrivi via acqua.
         id: "marinaio-cap", pal: "guard", x: 11, y: 19, facing: "right",
         vehicleGift: {
           vehicle: "traghetto", flag: "veh-traghetto", requiresBadges: 3,
@@ -1728,31 +1709,6 @@ export const MAPS: Record<string, MapDef> = {
     ]
   },
 
-  // BRACCIO DI MARE: la traversata Calabria→Sicilia. Si entra dall'IMBARCO di
-  // Caput Mundi (sbarco a NORD), si attraversa l'acqua con la MN TRAGHETTO e si
-  // approda a SUD nello STRETTO. Senza MN l'acqua è invalicabile.
-  mare: {
-    id: "mare",
-    name: "BRACCIO DI MARE",
-    tiles: MARE_TILES,
-    outdoor: true,
-    music: "stretto",
-    warps: [
-      // Ritorno alla terraferma: dal molo nord si rientra a Caput Mundi.
-      { x: 8, y: 1, toMap: "capitale", toX: 13, toY: 19, facing: "down" },
-      { x: 9, y: 1, toMap: "capitale", toX: 13, toY: 19, facing: "down" },
-      // Approdo a SUD: dal molo sud si entra nello STRETTO (Sicilia).
-      { x: 8, y: 13, toMap: "stretto", toX: 13, toY: 6, facing: "up" },
-      { x: 9, y: 13, toMap: "stretto", toX: 14, toY: 6, facing: "up" }
-    ],
-    encounterRate: 0,
-    encounters: [],
-    signs: [
-      { x: 10, y: 2, lines: ["IMBARCADERO", "A nord la CALABRIA, a sud la SICILIA.", "Usa la MN TRAGHETTO per attraversare l'acqua."] }
-    ],
-    pickups: [],
-    npcs: []
-  },
 
   stretto: {
     id: "stretto",
@@ -1761,13 +1717,13 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "stretto",
     warps: [
-      // Ritorno via mare verso la Calabria: l'imbarco è sulle celle d'acqua del
-      // molo sud (13-14,6), le STESSE su cui si approda dal BRACCIO DI MARE. Così
-      // NON coincidono più con il fronte della porta del bar (13,5): prima il bar
-      // CHIRINGUITO PAPEETE era irraggiungibile (si veniva spediti in mare invece
-      // di entrare). Si salpa col TRAGHETTO/AUTO BLU che si possiede già qui.
-      { x: 13, y: 6, toMap: "mare", toX: 8, toY: 12, facing: "up" },
-      { x: 14, y: 6, toMap: "mare", toX: 9, toY: 12, facing: "up" },
+      // Ritorno via mare verso CAPUT MUNDI: l'imbarco è sulle celle d'acqua del
+      // molo nord (13-14,6), le STESSE su cui si approda arrivando dalla capitale.
+      // Così NON coincidono col fronte della porta del bar (13,5): il bar
+      // CHIRINGUITO PAPEETE resta raggiungibile. Si salpa col TRAGHETTO/AUTO BLU.
+      // Approdo diretto all'IMBARCO di Caput Mundi (12,19): niente mappa "mare".
+      { x: 13, y: 6, toMap: "capitale", toX: 12, toY: 19, facing: "up" },
+      { x: 14, y: 6, toMap: "capitale", toX: 12, toY: 19, facing: "up" },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
       {

@@ -34,7 +34,7 @@ const NODES: MapNode[] = [
   { id: "grotta2", label: "ARCHIVIO", x: 158, y: 78, maps: ["grotta2"] },
   { id: "capitale", label: "CAPUT MUNDI", x: 200, y: 74, maps: ["capitale", "casino", "market3", "gymca", "palazzo"] },
   {
-    id: "stretto", label: "STRETTO", x: 200, y: 118, maps: ["stretto", "mare"],
+    id: "stretto", label: "STRETTO", x: 200, y: 118, maps: ["stretto"],
     unlocked: (s) => s.badges.length >= 3
   },
   {

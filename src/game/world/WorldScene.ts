@@ -540,6 +540,30 @@ export class WorldScene implements Scene {
 
   // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
   // pieni. I Wang grass/path provati sembravano rilievi attraversabili.
+  // Offset di disegno (px) per centrare il player sulla PORTA a 2 tile (`cc`)
+  // degli interni. Entrando, il player si ferma DAVANTI alla porta (una riga sopra
+  // il doormat), sulla colonna SINISTRA della coppia `cc` → appare spostato a lato.
+  // Da FERMO, se la cella sotto è la parte sinistra di una porta 2 tile, spostiamo
+  // SOLO lo sprite di mezzo tile verso il centro (la camera non si muove); se è la
+  // parte destra, verso sinistra. Appena cammina via l'offset sparisce da sé.
+  private doorCenteringOffset(): number {
+    if (this.moving || this.state.vehicle || this.map.outdoor) {
+      return 0;
+    }
+    const { x, y } = this.state.pos;
+    const below = this.tileAt(x, y + 1);
+    if (below !== "c") {
+      return 0; // non sei davanti a un doormat
+    }
+    if (this.tileAt(x + 1, y + 1) === "c") {
+      return 8; // colonna sinistra della porta → sposta verso destra (centro)
+    }
+    if (this.tileAt(x - 1, y + 1) === "c") {
+      return -8; // colonna destra della porta → sposta verso sinistra (centro)
+    }
+    return 0;
+  }
+
   // Texture PNG di un tile per la mappa corrente: prima l'override di mappa
   // (es. roccia in grotta), poi il PNG di default (`tileImage`). null = pixmap.
   private tilePng(ch: string): HTMLImageElement | null {
@@ -2976,7 +3000,13 @@ export class WorldScene implements Scene {
     }
 
     const frame = this.moving ? (Math.floor(this.moveT * 2) % 2 === 0 ? 1 : 0) : 0;
-    const baseX = Math.round(playerPx) - camX;
+    // Centratura sulla PORTA degli interni: la porta è un doormat largo 2 tile
+    // (`cc`), ma il player occupa 1 tile e vi atterra sulla cella di sinistra →
+    // appare spostato a lato. Quando è FERMO su una di quelle 2 celle, spostiamo
+    // SOLO il disegno di mezzo tile verso il centro della coppia (la camera non si
+    // muove). Appena cammina via, l'offset sparisce da sé (la cella non è più `c+c`).
+    const doorOffset = this.doorCenteringOffset();
+    const baseX = Math.round(playerPx) - camX + doorOffset;
     const baseY = Math.round(playerPy) - camY - 2;
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.

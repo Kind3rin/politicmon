@@ -8,8 +8,15 @@
 Ultimo aggiornamento: **Audit lore/narrativa end-to-end (fix testo/coord)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Audit narrativo + fix leggendari + fix save-trap, tutto pushato (HEAD `4cfee9f`).
-Tree pulito, live su politicmon.vercel.app. Nessuna migrazione save.
+Audit narrativo + fix leggendari + fix save-trap + SALVA scopribile, tutto pushato
+(HEAD `a369058`). Tree pulito, live su politicmon.vercel.app. Nessuna migrazione save.
+
+**💾 SALVA NEL MENU PAUSA PRINCIPALE (`a369058`)** — il salvataggio manuale ESISTEVA
+gia' (menu pausa → OPZIONI → SALVA) ma era sepolto e poco scopribile (classica
+[[politicmon-discoverability-trap]]). Portato come PRIMA voce del menu pausa,
+rimosso da OPZIONI. Logica invariata (msg.show(saveGame)). Verificato con screenshot
+Playwright (scripts/shot-pause-save.mjs). NB: resta un solo slot autosalvato — SALVA
+ora e' un checkpoint manuale visibile ma sovrascrive lo stesso slot (no multi-save).
 
 **💾 FIX TRAPPOLA AUTOSAVE + LEGGENDARI (`4cfee9f`)** — l'utente ha segnalato che il
 gioco autosalva sempre (nessun save manuale), quindi davanti a un leggendario si

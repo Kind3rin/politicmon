@@ -46,6 +46,9 @@ export class PauseScene implements Scene {
   // lista non è più un muro di 13 voci miste.
   private buildMenu(): Menu {
     this.entries = [];
+    // SALVA in cima al menu principale: il salvataggio manuale dev'essere la voce
+    // più scopribile (prima era sepolta in OPZIONI, poco visibile).
+    this.entries.push("SALVA");
     if (this.state.flags["dex-received"]) {
       this.entries.push("POLITICDEX");
     }
@@ -70,7 +73,6 @@ export class PauseScene implements Scene {
   // Sotto-menu OPZIONI: tutti i toggle/impostazioni in un posto solo.
   private buildOptionsMenu(): Menu {
     this.optEntries = [
-      "SALVA",
       `GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`,
       `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`,
       `RIDUCI EFFETTI: ${this.state.reduceEffects ? "SÌ" : "NO"}`
@@ -124,6 +126,14 @@ export class PauseScene implements Scene {
     }
     const label = this.entries[this.menu.index];
     switch (label) {
+      case "SALVA":
+        audio.confirm();
+        this.msg.show(
+          saveGame(this.state)
+            ? ["Partita salvata!", "A differenza delle riforme, questa resta."]
+            : ["Errore di salvataggio..."]
+        );
+        break;
       case "POLITICDEX":
         this.stack.push(new DexScene(this.stack, this.input, this.state));
         break;
@@ -189,15 +199,6 @@ export class PauseScene implements Scene {
       audio.confirm();
       this.optionsMenu = null;
       this.stack.push(new BackupScene(this.stack, this.input, this.state));
-      return;
-    }
-    if (label === "SALVA") {
-      this.msg.show(
-        saveGame(this.state)
-          ? ["Partita salvata!", "A differenza delle riforme, questa resta."]
-          : ["Errore di salvataggio..."]
-      );
-      this.optionsMenu = null;
       return;
     }
     const index = this.optionsMenu?.index ?? 0;

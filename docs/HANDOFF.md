@@ -5,11 +5,23 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Traversata Stretto diretta + satira più pungente**, 2026-07-04.
+Ultimo aggiornamento: **Rendering ponte sistemato (fix + asset PixelLab)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Traversata Stretto + satira pungente, tutto pushato (HEAD `5adf317`). Tree pulito,
-live su politicmon.vercel.app. Prima: slot multipli, fix leggendari, audit narrativo.
+Ponte Stretto sistemato, tutto pushato (HEAD `fe2cc28`). Tree pulito, live su
+politicmon.vercel.app. Prima: traversata Stretto, satira pungente, slot multipli.
+
+**🌉 RENDERING PONTE SISTEMATO (`b59cab2` fix + `fe2cc28` asset)** — il ponte rendeva
+come "strisce d'erba sull'acqua" (Capitano sospeso). DUE interventi:
+1. FIX LOGICO (`b59cab2`): il renderer metteva SEMPRE erba (".") come base sotto
+   overlay/oggetti, anche per le strutture del ponte in mezzo al mare. Aggiunto
+   `TileDef.overWater`: i tile ponte (impalcato `j`, traliccio `J`, gru `K`) ora hanno
+   ACQUA come base. Gameplay invariato (`j` calpestabile e non-water → traghetto non
+   si attiva sul ponte; `J`/`K` solid).
+2. ASSET PIXELLAB (`fe2cc28`): rigenerati deck_asphalt (asfalto+mezzeria gialla),
+   obj_girder (traliccio), obj_crane (gru gialla) via MCP pixellab (create_map_object,
+   32x32, high top-down). Ora il ponte-cantiere si legge bene sul mare. Balance PixelLab
+   OK (2372 gen rimaste). Verificato via screenshot (shot-stretto-flow.mjs).
 
 **🗺️ TRAVERSATA CAPUT MUNDI ⇄ STRETTO DIRETTA (`8485bec`)** — l'utente segnalava che
 l'accesso allo Stretto era "fatto malissimo" (cambio area con caricamenti secchi

@@ -4,11 +4,12 @@ import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { clearSave, hasSave, loadGame, newGameState, type GameState } from "../game/state";
+import { hasAnySave, newGameState, type GameState } from "../game/state";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
 import { Menu, MessageBox, clipToWidth, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
+import { SlotScene } from "./SlotScene";
 import { WorldScene } from "../game/world/WorldScene";
 
 // Slogan rotanti sotto il logo: uno alla volta, niente sovrapposizioni.
@@ -42,7 +43,6 @@ function loadTitleBg(): void {
 export class TitleScene implements Scene {
   private menu: Menu;
   private time = 0;
-  private confirmDelete = false;
   private menuTapGeom: { x: number; y: number; w: number; rowH: number } | null = null;
   // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
   private difficultyMenu: Menu | null = null;
@@ -56,9 +56,10 @@ export class TitleScene implements Scene {
 
   private buildMenu(): Menu {
     const items: Array<{ label: string; rightLabel?: string }> = [{ label: "NUOVA CAMPAGNA" }];
-    if (hasSave()) {
+    // Con almeno uno slot occupato mostra CONTINUA (la scelta e la cancellazione
+    // dei singoli slot avvengono nel selettore SLOT, non più qui).
+    if (hasAnySave()) {
       items.unshift({ label: "CONTINUA" });
-      items.push({ label: "CANCELLA DOSSIER" });
     }
     items.push({ label: "NOME", rightLabel: clipToWidth(loadNick() || "—", 60) });
     items.push({ label: "AUDIO", rightLabel: audio.enabled ? "SÌ" : "NO" });
@@ -95,10 +96,19 @@ export class TitleScene implements Scene {
     }
     const label = this.menu.items[this.menu.index].label;
     if (label.startsWith("CONTINUA")) {
-      const state = loadGame();
-      if (state) {
-        this.start(state);
-      }
+      audio.confirm();
+      // Selettore SLOT: apre lo slot scelto (o torna indietro senza caricare).
+      this.stack.push(
+        new SlotScene(this.stack, this.input, "load", (state) => {
+          if (state) {
+            this.start(state);
+          } else {
+            // Tornati dal selettore senza scelta: ricostruisci il menu (uno slot
+            // potrebbe essere stato cancellato lì dentro).
+            this.menu = this.buildMenu();
+          }
+        })
+      );
     } else if (label.startsWith("NUOVA")) {
       // Prima di creare la partita, scegli la DIFFICOLTÀ (immutabile dopo).
       // NORMALE è il default (indice 0) e porta la label "(CONSIGLIATA)" per
@@ -118,35 +128,37 @@ export class TitleScene implements Scene {
       const index = this.menu.index;
       this.menu = this.buildMenu();
       this.menu.index = Math.min(index, this.menu.items.length - 1);
-    } else if (label.startsWith("CANCELLA") || label.startsWith("SICURO")) {
-      if (!this.confirmDelete) {
-        this.confirmDelete = true;
-        this.menu.items[this.menu.index].label = "SICURO? PREMI A";
-      } else {
-        clearSave();
-        this.confirmDelete = false;
-        this.menu = this.buildMenu();
-      }
     }
   }
 
-  // Crea lo stato con la difficoltà scelta e avvia (chiedendo il nome se manca).
+  // Scelta la difficoltà, fai scegliere lo SLOT di destinazione, poi crea lo
+  // stato e avvia (chiedendo il nome se manca). Il selettore fissa lo slot attivo.
   private beginNewCampaign(hard: boolean): void {
     const makeState = (): GameState => {
       const state = newGameState();
       state.hardMode = hard; // IMMUTABILE da qui in poi
       return state;
     };
-    if (!hasNick()) {
-      this.stack.push(
-        new NicknameScene(this.stack, this.input, (nick) => {
-          mp.setIdentity(nick, "player");
-          this.start(makeState());
-        }, true)
-      );
-    } else {
-      this.start(makeState());
-    }
+    const launch = (): void => {
+      if (!hasNick()) {
+        this.stack.push(
+          new NicknameScene(this.stack, this.input, (nick) => {
+            mp.setIdentity(nick, "player");
+            this.start(makeState());
+          }, true)
+        );
+      } else {
+        this.start(makeState());
+      }
+    };
+    this.stack.push(
+      new SlotScene(this.stack, this.input, "new", (picked) => {
+        // picked === null ⇒ slot scelto e fissato: procedi. (SlotScene chiude da sé
+        // in caso di INDIETRO senza invocare il callback.)
+        void picked;
+        launch();
+      })
+    );
   }
 
   private openNickname(firstTime = false): void {

@@ -57,10 +57,78 @@ function rollBrowserSeed(): number {
   return 1 + Math.floor(Math.random() * (2 ** 31 - 1));
 }
 
-export const SAVE_KEY = "politicmon-save-v13";
-// Copia dell'ULTIMO valore valido salvato: loadGame la prova se il primario
-// non parsa (localStorage troncato/corrotto).
-const BACKUP_KEY = "politicmon-save-v13.bak";
+// ---- SLOT MULTIPLI DI SALVATAGGIO (3 slot) ----
+// Ogni slot ha la sua chiave `politicmon-save-v13__sN` (+ `.bak`). Lo slot ATTIVO
+// (0/1/2) è persistito a parte: saveGame/loadGame/hasSave/clearSave operano su di
+// esso, così i ~70 call site esistenti non cambiano. La vecchia chiave senza
+// suffisso (mono-slot) viene migrata nello slot 0 al primo accesso.
+export const SLOT_COUNT = 3;
+const SAVE_KEY_BASE = "politicmon-save-v13";
+const ACTIVE_SLOT_KEY = "politicmon-active-slot";
+// Chiave mono-slot storica (pre-multislot): migrata → slot 0.
+const LEGACY_SINGLE_KEY = "politicmon-save-v13";
+const LEGACY_SINGLE_BAK = "politicmon-save-v13.bak";
+
+function slotKey(slot: number): string {
+  return `${SAVE_KEY_BASE}__s${slot}`;
+}
+function slotBackupKey(slot: number): string {
+  return `${SAVE_KEY_BASE}__s${slot}.bak`;
+}
+
+function clampSlot(n: number): number {
+  return Number.isInteger(n) && n >= 0 && n < SLOT_COUNT ? n : 0;
+}
+
+let activeSlot = -1; // -1 = non ancora letto da localStorage
+
+export function getActiveSlot(): number {
+  if (activeSlot < 0) {
+    const raw = (() => {
+      try {
+        return localStorage.getItem(ACTIVE_SLOT_KEY);
+      } catch {
+        return null;
+      }
+    })();
+    activeSlot = clampSlot(raw !== null ? Number(raw) : 0);
+  }
+  return activeSlot;
+}
+
+export function setActiveSlot(slot: number): void {
+  activeSlot = clampSlot(slot);
+  try {
+    localStorage.setItem(ACTIVE_SLOT_KEY, String(activeSlot));
+  } catch {
+    // Quota/permessi: lo slot resta valido in memoria per questa sessione.
+  }
+}
+
+// Chiave dello slot ATTIVO (la usano save/load). Prima migra la vecchia chiave
+// mono-slot nello slot 0, così un salvataggio pre-multislot non si perde.
+function migrateSingleSlotOnce(): void {
+  try {
+    const old = localStorage.getItem(LEGACY_SINGLE_KEY);
+    // Migra solo se lo slot 0 è vuoto e la vecchia chiave esiste ed è "pura"
+    // (non è già una chiave slot: quelle hanno il suffisso "__sN").
+    if (old !== null && localStorage.getItem(slotKey(0)) === null) {
+      localStorage.setItem(slotKey(0), old);
+      const oldBak = localStorage.getItem(LEGACY_SINGLE_BAK);
+      if (oldBak !== null) {
+        localStorage.setItem(slotBackupKey(0), oldBak);
+      }
+    }
+    // Rimuovi le vecchie chiavi mono-slot (dopo la copia) per non migrare due volte.
+    if (old !== null) {
+      localStorage.removeItem(LEGACY_SINGLE_KEY);
+      localStorage.removeItem(LEGACY_SINGLE_BAK);
+    }
+  } catch {
+    // localStorage non disponibile: niente migrazione, load fallirà pulito.
+  }
+}
+
 const LEGACY_KEYS = [
   "politicmon-save-v12",
   "politicmon-save-v11",
@@ -162,18 +230,21 @@ export function flushActiveState(): void {
 }
 
 export function saveGame(state: GameState): boolean {
+  const slot = getActiveSlot();
+  const key = slotKey(slot);
+  const bak = slotBackupKey(slot);
   try {
     // Prima di sovrascrivere, conserva il valore precedente (che era valido
     // quando è stato scritto) come backup anti-corruzione.
-    const prev = localStorage.getItem(SAVE_KEY);
+    const prev = localStorage.getItem(key);
     if (prev !== null) {
       try {
-        localStorage.setItem(BACKUP_KEY, prev);
+        localStorage.setItem(bak, prev);
       } catch {
         // Quota piena per il backup: il salvataggio primario resta prioritario.
       }
     }
-    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    localStorage.setItem(key, JSON.stringify(state));
     return true;
   } catch (err) {
     // Quota piena o serializzazione fallita: logga una volta (non spammare).
@@ -339,28 +410,32 @@ function ensureBrowserSeed(state: GameState): void {
 }
 
 export function loadGame(): GameState | null {
-  const current = parseState(localStorage.getItem(SAVE_KEY));
+  migrateSingleSlotOnce();
+  const slot = getActiveSlot();
+  const current = parseState(localStorage.getItem(slotKey(slot)));
   if (current) {
     ensureBrowserSeed(current);
     return current;
   }
   // Primario corrotto/assente: prova il backup dell'ultima scrittura valida.
-  const backup = parseState(localStorage.getItem(BACKUP_KEY));
+  const backup = parseState(localStorage.getItem(slotBackupKey(slot)));
   if (backup) {
     saveGame(backup);
     ensureBrowserSeed(backup);
     return backup;
   }
-  // Migrazione dai salvataggi precedenti: stessi dati, campi nuovi al default.
-  for (const key of LEGACY_KEYS) {
-    const legacy = parseState(localStorage.getItem(key));
-    if (legacy) {
-      // Ri-persisti subito sotto la chiave corrente e rimuovi la vecchia,
-      // così la migrazione avviene una sola volta.
-      saveGame(legacy);
-      localStorage.removeItem(key);
-      ensureBrowserSeed(legacy);
-      return legacy;
+  // Migrazione dai salvataggi precedenti (v3-v12, mono-slot): confluiscono SOLO
+  // nello slot 0, come da comportamento storico. Chi ha selezionato uno slot
+  // vuoto diverso non deve vedersi apparire un vecchio save lì.
+  if (slot === 0) {
+    for (const key of LEGACY_KEYS) {
+      const legacy = parseState(localStorage.getItem(key));
+      if (legacy) {
+        saveGame(legacy);
+        localStorage.removeItem(key);
+        ensureBrowserSeed(legacy);
+        return legacy;
+      }
     }
   }
   return null;
@@ -384,17 +459,98 @@ export function importSaveCode(code: string): GameState | null {
   }
 }
 
+// C'è un salvataggio nello slot ATTIVO? (usata dal flusso "CONTINUA" storico).
 export function hasSave(): boolean {
-  if (localStorage.getItem(SAVE_KEY) !== null) {
+  migrateSingleSlotOnce();
+  const slot = getActiveSlot();
+  if (localStorage.getItem(slotKey(slot)) !== null) {
     return true;
   }
-  return LEGACY_KEYS.some((key) => localStorage.getItem(key) !== null);
+  if (localStorage.getItem(slotBackupKey(slot)) !== null) {
+    return true;
+  }
+  // Solo lo slot 0 eredita i vecchi save mono-slot (v3-v12).
+  return slot === 0 && LEGACY_KEYS.some((key) => localStorage.getItem(key) !== null);
 }
 
+// C'è un salvataggio in UNO SPECIFICO slot? (usata dal selettore slot in UI).
+export function hasSaveInSlot(slot: number): boolean {
+  migrateSingleSlotOnce();
+  const s = clampSlot(slot);
+  if (localStorage.getItem(slotKey(s)) !== null || localStorage.getItem(slotBackupKey(s)) !== null) {
+    return true;
+  }
+  return s === 0 && LEGACY_KEYS.some((key) => localStorage.getItem(key) !== null);
+}
+
+// Almeno uno slot ha un salvataggio? (per decidere se mostrare "CONTINUA").
+export function hasAnySave(): boolean {
+  for (let s = 0; s < SLOT_COUNT; s += 1) {
+    if (hasSaveInSlot(s)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export interface SlotSummary {
+  slot: number;
+  exists: boolean;
+  nick?: string;
+  level: number; // livello del capo-squadra (0 se party vuoto)
+  badges: number;
+  money: number;
+  sondaggi: number;
+  mapId: string;
+  hardMode: boolean;
+}
+
+// Riepilogo leggibile di uno slot per la UI (senza caricarlo come partita attiva).
+export function slotSummary(slot: number): SlotSummary {
+  const s = clampSlot(slot);
+  migrateSingleSlotOnce();
+  let raw = localStorage.getItem(slotKey(s));
+  if (raw === null && s === 0) {
+    // Slot 0 può ospitare un vecchio save legacy non ancora migrato: leggilo per il riepilogo.
+    for (const key of LEGACY_KEYS) {
+      const v = localStorage.getItem(key);
+      if (v !== null) {
+        raw = v;
+        break;
+      }
+    }
+  }
+  const st = parseState(raw ?? localStorage.getItem(slotBackupKey(s)));
+  if (!st) {
+    return { slot: s, exists: false, level: 0, badges: 0, money: 0, sondaggi: 0, mapId: "", hardMode: false };
+  }
+  const level = st.party.length > 0 ? Math.max(...st.party.map((m) => m.level)) : 0;
+  return {
+    slot: s,
+    exists: true,
+    level,
+    badges: st.badges.length,
+    money: st.money,
+    sondaggi: st.sondaggi,
+    mapId: st.pos.mapId,
+    hardMode: st.hardMode
+  };
+}
+
+// Cancella lo slot ATTIVO (usata dal "CANCELLA DOSSIER" storico).
 export function clearSave(): void {
-  localStorage.removeItem(SAVE_KEY);
-  localStorage.removeItem(BACKUP_KEY);
-  for (const key of LEGACY_KEYS) {
-    localStorage.removeItem(key);
+  clearSlot(getActiveSlot());
+}
+
+// Cancella uno SPECIFICO slot (usata dal selettore slot in UI).
+export function clearSlot(slot: number): void {
+  const s = clampSlot(slot);
+  localStorage.removeItem(slotKey(s));
+  localStorage.removeItem(slotBackupKey(s));
+  // Solo lo slot 0 poteva ereditare i vecchi save mono-slot: puliscili con lui.
+  if (s === 0) {
+    for (const key of LEGACY_KEYS) {
+      localStorage.removeItem(key);
+    }
   }
 }

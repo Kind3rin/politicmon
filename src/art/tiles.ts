@@ -24,6 +24,7 @@ const TILE_PNG: Record<string, string> = {
   "^": "tiles/cliff_sand.png",  // scogliera sabbiosa (Stretto)
   l: "tiles/stairs_sand.png",   // scala nella roccia (Stretto)
   j: "tiles/deck_asphalt.png",  // impalcato ponte (asfalto+mezzeria)
+  q: "tiles/deck_wood.png",     // molo di legno (porto di Caput Mundi)
   O: "tiles/cave_mouth.png",
   R: "tiles/cave_boulder.png",
   S: "tiles/cave_stalagmite.png",
@@ -968,7 +969,10 @@ export const TILES: Record<string, TileDef> = {
   l: { pix: pix(stairArt, { z: "#eed9a6", Z: "#d8bc7c", R: "#9a7b55", r: "#73543c", l: "#c8a66a", s: "#7a5a38" }), solid: false },
   j: { pix: pix(deckArt, { n: "#8a8a96", N: "#74747f" }), solid: false, overWater: true },
   J: { pix: pix(girderArt, { S: "#9aa4b8" }), solid: true, overlay: true, overWater: true },
-  K: { pix: pix(craneArt, { C: "#8a929c", c: "#b8bec6", b: "#3a3a44", O: "#10141f" }), solid: true, overlay: true, overWater: true }
+  K: { pix: pix(craneArt, { C: "#8a929c", c: "#b8bec6", b: "#3a3a44", O: "#10141f" }), solid: true, overlay: true, overWater: true },
+  // MOLO/PONTILE DI LEGNO del porto di Caput Mundi: assi di legno caldo (distinto
+  // dall'asfalto grigio del ponte `j`). Calpestabile sempre, disegnato sull'acqua.
+  q: { pix: pix(deckArt, { n: "#a6763e", N: "#7a5628", y: "#5c3f1e" }), solid: false, overWater: true }
 };
 
 export const waterFrames: Pixmap[] = [pix(waterArt(0)), pix(waterArt(1))];

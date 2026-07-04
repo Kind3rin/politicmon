@@ -42,7 +42,7 @@ await page.evaluate(() => {
   const st = {
     party: [{ id: "x", speciesId: "renzino", level: 40, exp: 999999, hp: 30, moves: [], status: null }],
     bag: {}, dex: {}, flags: { "dex-received": true, "starter-chosen": true, "intro-done": true, "veh-traghetto": true },
-    defeatedTrainers: ["ilcapitano"], pickedItems: [], pos: { mapId: "capitale", x: 12, y: 17, facing: "down" },
+    defeatedTrainers: ["ilcapitano"], pickedItems: [], pos: { mapId: "capitale", x: 6, y: 18, facing: "down" },
     starterId: "renzino", money: 5000, badges: ["auditel", "spread", "dazio"], sondaggi: 60,
     ministri: {}, bulldozed: [], vehicle: null, rivalWins: 5, chips: 0, boxed: [], lastBar: "capitale",
     zoneRewardsClaimed: [], stepsTotal: 0, trainerRematch: {}, lastDailyDate: "", repellentSteps: 99999,

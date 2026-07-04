@@ -327,6 +327,12 @@ const EUROTOWN_TILES = [
 
 // ------------------------------------------------------------- CAPUT MUNDI
 
+// Caput Mundi cresce di 3 righe in basso (r19-r23) per ospitare il PORTO: una
+// DARSENA d'acqua con MOLO di legro (`q`) che sporge, sabbia (`z`) e cartello.
+// Così l'imbarco per lo STRETTO è leggibile a colpo d'occhio (acqua+molo+barca
+// visibili nella città), non più un warp invisibile su un tile di pavimento.
+// Righe 0-18 IDENTICHE all'originale → zero regressioni su NPC/pickup/decor.
+// Il varco route3 (col 13-16) resta l'unico apertura del bordo sud (ora r23).
 const CAPITALE_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
@@ -347,7 +353,10 @@ const CAPITALE_TILES = [
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.mddm......====......mddm.TT",
-  "TT.========================.TT",
+  "TT.==s=q=========...........TT",
+  "TT.zzzqzzzz..====...........TT",
+  "TT.wwwqwwww..====TTTTTTTTTTTTT",
+  "TT.wwwwwwww..====TTTTTTTTTTTTT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
@@ -1362,12 +1371,13 @@ export const MAPS: Record<string, MapDef> = {
       { x: 24, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 25, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       {
-        // IMBARCO per la SICILIA: si salpa col TRAGHETTO e si approda DIRETTAMENTE
-        // sull'acqua a nord dello STRETTO (canale del molo, 13-14,6) — niente più
-        // mappa "mare" intermedia: la traversata è una continuazione, arrivi via
-        // acqua. Senza la MN il molo è sbarrato (vedi MARINAIO accanto, la regala a
-        // 3 medaglie).
-        x: 12, y: 19, toMap: "stretto", toX: 13, toY: 6, facing: "down",
+        // IMBARCO per la SICILIA: sulla PUNTA del MOLO di legno del PORTO (12,21),
+        // ultima cella calpestabile prima della darsena d'acqua. Ci arrivi a piedi
+        // camminando sul molo, quindi il gate "serve il TRAGHETTO" (lockedLines) si
+        // vede davvero; col TRAGHETTO scendi in acqua e approdi DIRETTAMENTE a nord
+        // dello STRETTO (13,6) — niente mappa "mare" intermedia. Il MARINAIO accanto
+        // regala la MN a 3 medaglie.
+        x: 6, y: 21, toMap: "stretto", toX: 13, toY: 6, facing: "down",
         requiresFlag: "veh-traghetto",
         lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza il TRAGHETTO."]
       },
@@ -1410,9 +1420,9 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["CASINÒ DI PALAZZO", "Cerca il TETTO ROSSO E ORO col simbolo $.", "Dentro: SLOT DEL CONSENSO e BUNGA BUNGA CLUB."]
       },
       {
-        // Cartello dell'IMBARCO (molo a 12,19): la via per la Sicilia/STRETTO.
-        x: 10, y: 19,
-        lines: ["IMBARCO PER LA SICILIA", "Col MOLO attraversi il mare fino allo STRETTO.", "Serve la MN TRAGHETTO: chiedi al MARINAIO."]
+        // Cartello del PORTO (accanto al molo di legno, tile `s` a 5,19).
+        x: 5, y: 19,
+        lines: ["PORTO DI CAPUT MUNDI — DARSENA DEL CONSENSO", "Traghetto per lo STRETTO: parte quando dice IL CAPITANO, non l'orario.", "Biglietto a carico dello Stato. L'inchino è compreso nel prezzo."]
       },
       {
         // Cartello della SFIDA DEL GIORNO, accanto all'OPINIONISTA in piazza.
@@ -1458,10 +1468,10 @@ export const MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        // MARINAIO dell'IMBARCO: regala il VEICOLO TRAGHETTO a 3 medaglie. Dal molo
-        // (12,19) si salpa e si approda DIRETTAMENTE allo STRETTO (nessuna mappa
-        // intermedia): la traversata è una continuazione, arrivi via acqua.
-        id: "marinaio-cap", pal: "guard", x: 11, y: 19, facing: "right",
+        // MARINAIO del PORTO: sta sulla strada del molo (4,19, guarda il molo/cartello
+        // a destra), regala il TRAGHETTO a 3 medaglie. Dalla punta del molo (6,21) si
+        // salpa e si approda DIRETTAMENTE allo STRETTO: la traversata è una continuazione.
+        id: "marinaio-cap", pal: "guard", x: 4, y: 19, facing: "right",
         vehicleGift: {
           vehicle: "traghetto", flag: "veh-traghetto", requiresBadges: 3,
           lines: [
@@ -1722,8 +1732,8 @@ export const MAPS: Record<string, MapDef> = {
       // Così NON coincidono col fronte della porta del bar (13,5): il bar
       // CHIRINGUITO PAPEETE resta raggiungibile. Si salpa col TRAGHETTO/AUTO BLU.
       // Approdo diretto all'IMBARCO di Caput Mundi (12,19): niente mappa "mare".
-      { x: 13, y: 6, toMap: "capitale", toX: 12, toY: 19, facing: "up" },
-      { x: 14, y: 6, toMap: "capitale", toX: 12, toY: 19, facing: "up" },
+      { x: 13, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      { x: 14, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
       {

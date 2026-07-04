@@ -540,26 +540,33 @@ export class WorldScene implements Scene {
 
   // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
   // pieni. I Wang grass/path provati sembravano rilievi attraversabili.
-  // Offset di disegno (px) per centrare il player sulla PORTA a 2 tile (`cc`)
-  // degli interni. Entrando, il player si ferma DAVANTI alla porta (una riga sopra
-  // il doormat), sulla colonna SINISTRA della coppia `cc` → appare spostato a lato.
-  // Da FERMO, se la cella sotto è la parte sinistra di una porta 2 tile, spostiamo
-  // SOLO lo sprite di mezzo tile verso il centro (la camera non si muove); se è la
-  // parte destra, verso sinistra. Appena cammina via l'offset sparisce da sé.
+  // Offset di disegno (px) per centrare il player DAVANTI a una PORTA larga 2 tile.
+  // Le porte (doormat interni `cc`, portoni edifici `dd`/`DD`, porta dorata `gg`)
+  // sono 2 celle, ma il player ne occupa 1 e si ferma sulla colonna SINISTRA o
+  // DESTRA → appare spostato a lato. Da FERMO, se la cella SOTTO di lui è metà di
+  // una porta 2 tile, spostiamo SOLO lo sprite di mezzo tile verso il centro della
+  // coppia (la camera non si muove). Vale sia dentro (davanti al doormat) sia fuori
+  // (davanti al portone). Appena cammina via, l'offset sparisce da sé.
   private doorCenteringOffset(): number {
-    if (this.moving || this.state.vehicle || this.map.outdoor) {
+    if (this.moving || this.state.vehicle) {
       return 0;
     }
     const { x, y } = this.state.pos;
-    const below = this.tileAt(x, y + 1);
-    if (below !== "c") {
-      return 0; // non sei davanti a un doormat
-    }
-    if (this.tileAt(x + 1, y + 1) === "c") {
-      return 8; // colonna sinistra della porta → sposta verso destra (centro)
-    }
-    if (this.tileAt(x - 1, y + 1) === "c") {
-      return -8; // colonna destra della porta → sposta verso sinistra (centro)
+    const isDoor = (ch: string): boolean =>
+      this.map.outdoor ? ch === "d" || ch === "D" || ch === "g" : ch === "c";
+    // La porta può stare SOTTO il player (interni: davanti al doormat d'uscita in
+    // basso) o SOPRA (esterni: davanti al portone in fondo all'edificio). Controlla
+    // entrambe le righe adiacenti e centra sulla coppia trovata.
+    for (const dy of [1, -1]) {
+      if (!isDoor(this.tileAt(x, y + dy))) {
+        continue;
+      }
+      if (isDoor(this.tileAt(x + 1, y + dy))) {
+        return 8; // colonna sinistra della porta → sposta verso destra (centro)
+      }
+      if (isDoor(this.tileAt(x - 1, y + dy))) {
+        return -8; // colonna destra della porta → sposta verso sinistra (centro)
+      }
     }
     return 0;
   }

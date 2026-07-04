@@ -364,11 +364,11 @@ const CAPITALE_TILES = [
 // ---------------------------------------------------- STRETTO DI MESSINA
 // Spiaggia stile Papeete + ponte eternamente incompiuto che finisce in mare.
 
-// Lo STRETTO: spiaggia Papeete a nord con i suoi edifici, poi il MOLO da cui
-// approda il traghetto si apre su un CANALE D'ACQUA CONTINUO (righe 6-7) che si
-// raccorda all'acqua aperta in basso e al ponte. Prima qui c'era una fascia di
-// sabbia che faceva da "isola di terra" e tagliava la traversata: ora dall'molo
-// (col 13-14) l'acqua scende ininterrotta fino al cantiere del ponte.
+// Lo STRETTO: spiaggia Papeete a nord col bar, poi un CANALE d'acqua (righe 6-7)
+// attraversato da un MOLO DI LEGNO (`q`, col 13-14) che collega la spiaggia al
+// PONTE: arrivando dalla capitale SBARCHI SUL MOLO (13,6), a piedi, non in mezzo
+// all'acqua. Per RIPARTIRE entri nell'acqua ai lati del molo (12,6 / 15,6) col
+// TRAGHETTO. Da lì il ponte scende fino al cantiere e al Capitano.
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......@@@@......xxxx.....TT",
@@ -376,8 +376,8 @@ const STRETTO_TILES = [
   "TT..~~~~.====eQQe..===^...^.TT",
   "TT..~~~~...==mddm..===^...^.TT",
   "TT...s.zzzz===========^^l^^.TT",
-  "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
-  "TTzzzzzzzzzwwwwwwzzzzzzzzzzzTT",
+  "TTzzzzzzzzzwwqqwwzzzzzzzzzzzTT",
+  "TTzzzzzzzzzwwqqwwzzzzzzzzzzzTT",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
@@ -1728,13 +1728,12 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "stretto",
     warps: [
-      // Ritorno via mare verso CAPUT MUNDI: l'imbarco è sulle celle d'acqua del
-      // molo nord (13-14,6), le STESSE su cui si approda arrivando dalla capitale.
-      // Così NON coincidono col fronte della porta del bar (13,5): il bar
-      // CHIRINGUITO PAPEETE resta raggiungibile. Si salpa col TRAGHETTO/AUTO BLU.
-      // Approdo diretto all'IMBARCO di Caput Mundi (12,19): niente mappa "mare".
-      { x: 13, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
-      { x: 14, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      // Ritorno via mare verso CAPUT MUNDI: l'imbarco è sulle celle d'ACQUA ai LATI
+      // del molo d'approdo (12,6 e 15,6). Così NON coincidono con lo SBARCO (il molo
+      // 13-14,6, dove arrivi a piedi): entri in acqua col TRAGHETTO e riparti, senza
+      // essere rispedito indietro appena sbarcato. Approdo a Caput Mundi (6,21).
+      { x: 12, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      { x: 15, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
       {

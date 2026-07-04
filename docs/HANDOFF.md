@@ -5,11 +5,19 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Porto ridisegnato a BAIA larga (banchina + barca)**, 2026-07-04.
+Ultimo aggiornamento: **Stretto: sbarco su molo (non in acqua)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Porto BAIA + fix UX + ponte, tutto pushato (HEAD `5d5e4b2`). Tree pulito, live su
-politicmon.vercel.app. Prima: centraggio porte, indicatore Dex, ponte, slot.
+Molo d'approdo Stretto + porto BAIA, tutto pushato (HEAD `eee6ed5`). Tree pulito,
+live su politicmon.vercel.app. Prima: porto baia, fix UX, ponte, slot.
+
+**🚢 SBARCO STRETTO SU MOLO (`eee6ed5`)** — arrivando allo Stretto si spawnava "in
+mezzo all'acqua" (warp atterrava a 13,6 = tile acqua nel canale). Aggiunto un MOLO
+di legno (`q`) nel canale (col 13-14, r6-7) che collega spiaggia↔ponte: ora sbarchi
+sul molo (13,6) a piedi. I warp di RITORNO stretto→capitale spostati da (13-14,6)
+[ora molo] alle celle d'acqua ai LATI (12,6 / 15,6): entri in acqua col traghetto e
+riparti senza essere rispedito indietro appena sbarcato. E2E traversata 2/2 +
+ritorno 2/2, typecheck ok.
 
 **⚓ PORTO A BAIA LARGA (`5d5e4b2`)** — il porto "non sembrava una banchina" (striscia
 d'acqua stretta, no barca). Ridisegnato (workflow multi-agente + verifica avversariale)

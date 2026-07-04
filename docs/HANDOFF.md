@@ -5,11 +5,21 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Indicatore Dex in lotta + player centrato sulle porte**, 2026-07-04.
+Ultimo aggiornamento: **Porto ridisegnato a BAIA larga (banchina + barca)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Fix UX (indicatore Dex wild + centraggio porte), tutto pushato (HEAD `f98af37`).
-Tree pulito, live su politicmon.vercel.app. Prima: porto Caput Mundi, ponte, slot.
+Porto BAIA + fix UX + ponte, tutto pushato (HEAD `5d5e4b2`). Tree pulito, live su
+politicmon.vercel.app. Prima: centraggio porte, indicatore Dex, ponte, slot.
+
+**⚓ PORTO A BAIA LARGA (`5d5e4b2`)** — il porto "non sembrava una banchina" (striscia
+d'acqua stretta, no barca). Ridisegnato (workflow multi-agente + verifica avversariale)
+a BAIA: bacino d'acqua ampio (22 celle `w` vs 8), banchina di sabbia + fascia di molo
+di legno orizzontale (`q`), pontile che sporge all'imbarco (6,21 invariato), BARCA
+ormeggiata (`X`, nuovo tile overlay+overWater, asset PixelLab boat_moored.png).
+Mappa +1 riga (r19-r24). Trappola risolta: `X` è overlay → il renderer legge SOLO da
+OBJECT_PNG (pix fallback IGNORATO), quindi l'asset PNG è obbligatorio. Cartello→(9,19).
+Validato: flood-fill (no intrappolamento, varco route3 intatto), E2E traversata 2/2,
+typecheck ok. Vedi [[politicmon-route-pattern]] (pattern porto/banchina).
 
 **🎯 FIX UX (`f98af37`) — 2 richieste utente:**
 - **Indicatore "già eletto" in lotta wild**: contro un selvatico, se la specie è

@@ -49,7 +49,7 @@ export const RIVAL_STAGES: RivalStage[] = [
     sightRange: 4, showAfterWins: 3, level: 22, size: 3,
     intro: [
       "GIANNI: il PALAZZO sarà mio. Ho già scelto le tende per lo studio ovale.",
-      "Quattro scontri persi? No no, sono 'quattro esperienze formative'.",
+      "Tre scontri persi? No no, sono 'tre esperienze formative'.",
       "Ma oggi è diverso. Oggi ho... beh, la stessa squadra, ma più convinta!"
     ],
     defeat: ["GIANNI: ok. OK. Forse il problema sono io. ...NO, è l'arbitro!"],
@@ -60,11 +60,11 @@ export const RIVAL_STAGES: RivalStage[] = [
     sightRange: 4, showAfterWins: 4, level: 26, size: 4,
     intro: [
       "GIANNI: ti ho seguito fino allo STRETTO. Romantico, eh?",
-      "Cinque a zero. A questo punto sei tu la mia nemesi, io la tua spalla comica.",
+      "Quattro a zero. A questo punto sei tu la mia nemesi, io la tua spalla comica.",
       "Però guarda: squadra al completo, quattro titolari. STAVOLTA TI FREGO!"
     ],
     defeat: [
-      "GIANNI: ...sei a ZERO punti contro di me. Cioè io sono a zero.",
+      "GIANNI: ...cinque a ZERO contro di me. Cioè io sono a zero.",
       "Sai che c'è? Vengo a fare campagna PER te. I traditori si chiamano 'responsabili'."
     ],
     reward: { itemId: "tessera", qty: 1 }

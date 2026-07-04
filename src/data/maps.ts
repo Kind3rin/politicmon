@@ -772,7 +772,7 @@ export const MAPS: Record<string, MapDef> = {
         lines: [
           "FONTANA DEL CONSENSO.",
           "L'acqua sgorga solo in campagna elettorale.",
-          "Negli altri mesi: «guasto tecnico, fondi in arrivo»."
+          "Negli altri mesi: \"guasto tecnico, fondi in arrivo\"."
         ]
       },
       {
@@ -991,7 +991,7 @@ export const MAPS: Record<string, MapDef> = {
         toMap: "route2", offsetX: 0, requiresBadges: 1,
         lockedLines: [
           "La strada per EUROTOWN è presidiata dai gazebo.",
-          "«Senza la MEDAGLIA AUDITEL non si passa: prima conquista la palestra di MEDIOPOLI.»"
+          "\"Senza la MEDAGLIA AUDITEL non si passa: prima conquista la palestra di MEDIOPOLI.\""
         ]
       },
       south: { toMap: "route1", offsetX: 0 }
@@ -1174,7 +1174,7 @@ export const MAPS: Record<string, MapDef> = {
         toMap: "route3", offsetX: 0, requiresBadges: 2,
         lockedLines: [
           "Il confine di CAPUT MUNDI è blindato da transenne istituzionali.",
-          "«Per accedere serve la MEDAGLIA SPREAD: torna quando avrai vinto a EUROTOWN.»"
+          "\"Per accedere serve la MEDAGLIA SPREAD: torna quando avrai vinto a EUROTOWN.\""
         ]
       },
       south: { toMap: "route2", offsetX: 0 }
@@ -1466,7 +1466,7 @@ export const MAPS: Record<string, MapDef> = {
         id: "scorta-cap", pal: "guard", x: 20, y: 18, facing: "right", transport: true,
         lines: [
           "SCORTA AUTO BLU:",
-          "Con 3 MEDAGLIE ti porto fino allo STRETTO DI MESSINA: ponte, meme e un mini-boss.",
+          "Ti porto tra le città che hai già visitato. Per lo STRETTO cerca l'IMBARCO a est: si va in TRAGHETTO.",
           "Davanti al Palazzo non si cammina: si arriva con lampeggiante istituzionale."
         ]
       },
@@ -2250,7 +2250,7 @@ export const MAPS: Record<string, MapDef> = {
             "USCIERE DEL COLLE: c'è ancora qualcuno che vuole conoscerti.",
             "Le porte del Quirinale si socchiudono. Nessun clamore, solo garbo.",
             "Un'aura istituzionale riempie la sala: MATTARELLUX ti osserva, paziente.",
-            "«Volevo andare in pensione. Ma prima, mettiamoci alla prova.»"
+            "\"Volevo andare in pensione. Ma prima, mettiamoci alla prova.\""
           ],
           afterRunLines: [
             "MATTARELLUX annuisce e torna ai suoi doveri, senza rancore.",

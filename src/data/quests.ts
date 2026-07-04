@@ -73,7 +73,7 @@ export const QUESTS: QuestDef[] = [
     target: { mapId: "capitale", x: 6, y: 11 }
   },
   {
-    id: "ponte",
+    id: "ponte", side: true, // area OPZIONALE: non deve deviare l'HUD dal PALAZZO
     title: "MEME SULLO STRETTO",
     desc: "L'AUTO BLU ora arriva allo STRETTO DI MESSINA. Sconfiggi IL CAPITANO in fondo al ponte incompiuto.",
     hint: "Parla con la scorta con 3 medaglie in tasca. Il ponte finisce a metà: lui è lì.",

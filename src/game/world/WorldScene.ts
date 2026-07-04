@@ -160,7 +160,7 @@ const WORLD_OBJECT_TARGET_PX: Record<string, number> = {
 const TRANSPORT_DESTINATIONS: TransportDestination[] = [
   { label: "BORGO URNE", mapId: "borgo", x: 24, y: 22, facing: "right" },
   { label: "MEDIOPOLI", mapId: "mediopoli", x: 23, y: 19, facing: "right", requires: (s) => Boolean(s.flags["dex-received"]) },
-  { label: "EUROTOWN", mapId: "eurotown", x: 23, y: 14, facing: "right", requires: (s) => s.badges.includes("auditel") },
+  { label: "EUROTOWN", mapId: "eurotown", x: 24, y: 14, facing: "right", requires: (s) => s.badges.includes("auditel") },
   { label: "CAPUT MUNDI", mapId: "capitale", x: 23, y: 19, facing: "right", requires: (s) => s.badges.includes("spread") }
   // STRETTO rimosso dal taxi: ora ci si arriva dall'IMBARCO a Caput Mundi e si
   // attraversa l'acqua con la MN TRAGHETTO (vedi warp "imbarco" + canFerry).

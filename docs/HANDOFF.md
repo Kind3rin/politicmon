@@ -5,11 +5,28 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Slot multipli di salvataggio + test E2E nel gioco vero**, 2026-07-04.
+Ultimo aggiornamento: **Traversata Stretto diretta + satira più pungente**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Audit narrativo + fix leggendari + fix save-trap + SALVA scopribile + SLOT MULTIPLI,
-tutto pushato (HEAD `0c89ace`). Tree pulito, live su politicmon.vercel.app.
+Traversata Stretto + satira pungente, tutto pushato (HEAD `5adf317`). Tree pulito,
+live su politicmon.vercel.app. Prima: slot multipli, fix leggendari, audit narrativo.
+
+**🗺️ TRAVERSATA CAPUT MUNDI ⇄ STRETTO DIRETTA (`8485bec`)** — l'utente segnalava che
+l'accesso allo Stretto era "fatto malissimo" (cambio area con caricamenti secchi
+capitale→mare→stretto, Capitano che sembrava sospeso). Ora è una continuazione: si
+salpa dall'IMBARCO di Caput Mundi (12,19) e si APPRODA DIRETTAMENTE sull'acqua a nord
+dello Stretto (13,6), traghetto auto-attivato. RIMOSSA la mappa intermedia "mare"
+(+MARE_TILES). Verificato `check-stretto-warps.mjs` 15/15. NB: il rendering del ponte
+`jjjj` (impalcato) resta com'è — l'utente ha scelto "molo d'acqua" non "sistema ponte";
+se in futuro il ponte sembra ancora "erba sull'acqua" è il tile deck/girder da rivedere.
+
+**🎭 SATIRA PIÙ PUNGENTE (`5adf317`)** — vincolo "bonario" SUPERATO su richiesta utente.
+14 dexLine + 6 intro boss riscritte più caustiche (trasformismo, poltrona, potere non
+eletto...). LIMITE che resta: NO fatti giudiziari/scandali reali specifici, NO
+diffamazione personale, restano caricature. Vedi [[politicmon-narrative-audit]] (sez.
+AGGIORNAMENTO TONO). Il subagent aveva proposto ~20 righe: applicate le più forti,
+scartata la #1 troppo esplicita e limata la #15 confusa. Si può continuare su NPC
+secondari/capipalestra minori se si vuole spingere oltre.
 
 **✅ TEST E2E SLOT NEL GIOCO VERO (`0c89ace`)** — `scripts/e2e-slots.mjs` pilota il
 gioco reale via keydown/keyup (tastiera come un giocatore): NUOVA CAMPAGNA →

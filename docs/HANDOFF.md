@@ -5,11 +5,18 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Rendering ponte sistemato (fix + asset PixelLab)**, 2026-07-04.
+Ultimo aggiornamento: **Ponte Stretto: rendering + asset + deck seamless**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Ponte Stretto sistemato, tutto pushato (HEAD `fe2cc28`). Tree pulito, live su
+Ponte Stretto completato, tutto pushato (HEAD `bba2f65`). Tree pulito, live su
 politicmon.vercel.app. Prima: traversata Stretto, satira pungente, slot multipli.
+
+**🛣️ DECK PONTE SEAMLESS (`bba2f65`)** — la doppia mezzeria dell'asfalto PixelLab
+sfasava tra tile. Ora UNA mezzeria gialla tratteggiata centrata (x=16/32) e continua.
+`scripts/deck-centerline.mjs` (encoder/decoder PNG minimale, zero dip): cancella le
+vecchie linee gialle del deck e ridisegna la mezzeria centrale (giallo UI #e8c84a,
+tratteggio periodo 8 = divisore di 32 → seamless in colonna). Se rigeneri il deck
+via PixelLab, ripassa da questo script per la mezzeria.
 
 **🌉 RENDERING PONTE SISTEMATO (`b59cab2` fix + `fe2cc28` asset)** — il ponte rendeva
 come "strisce d'erba sull'acqua" (Capitano sospeso). DUE interventi:

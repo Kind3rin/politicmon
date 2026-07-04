@@ -28,16 +28,18 @@ riferimento morto a species/move/item, nessun placeholder/TODO. 6 fix applicati
 - **Virgolette caporali `«»`** (4×, incl. intro leggendario MATTARELLUX) → `"`: il font
   5x7 non ha quei glyph, rendevano come buchi vuoti.
 
-**Findings NON fixati (decisioni editoriali/design, lasciati all'utente):**
+**✅ SECONDO GIRO (`f557a3f`) — chiusi 2 dei punti editoriali:**
+- **Boss leggendari**: PRESIDENTE OMBRA (Atto 1) non schiera piu' DRAGHIMON/MATTARELLUX
+  (reveal Atto 2). Sostituiti con TELECRATE (lv 24) + GENERORSO (lv 26), non-leggendari.
+  trainers.ts:321.
+- **Livello UE**: SHERPA UE ora consiglia "lv 50+" per BRUXELLES (boss COMMISSIONE lv 52-55),
+  non piu' "45+". Gli altri banner/consigli erano gia' corretti sui dati reali (wild offshore
+  38+, wild bruxelles 42+, boss tesoriere lv 45+).
+
+**Findings ANCORA NON fixati (decisioni editoriali/design, lasciati all'utente):**
 - **Tono `bunga`/BERLUSCONIX/`telecrate`**: la mossa BUNGA PARTY e il flavor alludono
   in modo trasparente a fatti giudiziari reali di persona identificabile. E' la voce piu'
   esposta rispetto al vincolo "satira BONARIA". Valutare se ammorbidire.
-- **Boss Atto 1 (PRESIDENTE OMBRA) schiera `mattarellux` (lv 26) e `draghimon` (lv 24)**,
-  entrambi leggendari: `mattarellux` e' l'asso del GARANTE SUPREMO (Atto 2) e `draghimon`
-  il leggendario finale. Usarli come gregari del boss di Atto 1 brucia i reveal. Valutare
-  sostituzione con specie non-leggendarie (es. conteblob/telecrate). trainers.ts:321.
-- **Livelli consigliati incoerenti per offshore/UE**: banner offshore "lv 38+", sherpa-ue
-  "lv 45+", quest ue-commissione "lv 50+". Uniformare i suggerimenti.
 - **dexNum fuori sequenza** (`bunkerput` = 37 in mezzo alla serie): cosmetico, il Dex ordina
   per dexNum. species.ts.
 - **Rami evoluzione `trade:true` ridondanti** (conteblob/calendauro/tajanide): il level 18

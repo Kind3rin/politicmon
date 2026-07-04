@@ -152,7 +152,7 @@ export const QUESTS: QuestDef[] = [
     id: "side-encore", side: true,
     title: "L'ULTIMO SHARE",
     desc: "BERLUSCONIX concede un ultimo giro di giostra al CASINÒ, se non l'hai mai eletto.",
-    hint: "CASINÒ DI PALAZZO, dopo la CONTROFIRMA. Porta SCHEDE BLINDATE: al 2° KO non torna.",
+    hint: "CASINÒ DI PALAZZO, dopo la CONTROFIRMA. Porta SCHEDE BLINDATE: va CATTURATO, non basta batterlo.",
     step: "Cattura BERLUSCONIX.",
     isDone: (s) => s.dex["berlusconix"] === "caught"
   },

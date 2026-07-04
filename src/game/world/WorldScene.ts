@@ -1628,13 +1628,17 @@ export class WorldScene implements Scene {
     markSeen(this.state, legendary.speciesId);
     this.say(legendary.lines, () => {
       this.startWildBattle(legendary.speciesId, legendary.level, (result) => {
-        if (result === "caught" || result === "win") {
+        // SOLO la CATTURA consuma il leggendario. Mandarlo KO ("win") NON lo
+        // brucia: come nei Pokémon classici, un leggendario sconfitto ricompare
+        // (evita di perderlo per sempre + autosave, se lo battevi senza catturarlo).
+        if (result === "caught") {
           this.state.flags[legendary.flag] = true;
           saveGame(this.state);
           this.say(legendary.afterGoneLines ?? [`${SPECIES[legendary.speciesId].name} entra nella leggenda.`]);
           return;
         }
-        if (result === "run") {
+        // KO ("win") o fuga ("run"): il leggendario resta disponibile.
+        if (result === "win" || result === "run") {
           this.say(legendary.afterRunLines ?? [`${SPECIES[legendary.speciesId].name} resta nei paraggi.`]);
         }
       }, "battle-legend", true);

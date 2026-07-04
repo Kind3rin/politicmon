@@ -8,8 +8,21 @@
 Ultimo aggiornamento: **Audit lore/narrativa end-to-end (fix testo/coord)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Audit narrativo chiuso e pushato (HEAD `0f49019`). Tree pulito, live su
-politicmon.vercel.app. Nessuna migrazione save (solo testo + 1 coordinata).
+Audit narrativo + fix leggendari + fix save-trap, tutto pushato (HEAD `4cfee9f`).
+Tree pulito, live su politicmon.vercel.app. Nessuna migrazione save.
+
+**💾 FIX TRAPPOLA AUTOSAVE + LEGGENDARI (`4cfee9f`)** — l'utente ha segnalato che il
+gioco autosalva sempre (nessun save manuale), quindi davanti a un leggendario si
+rischiava di perderlo andando avanti. Confermato il bug in `interactLegendary`
+(WorldScene): l'esito "win" (KO del leggendario) era trattato come "caught" →
+settava il flag `-gone` + saveGame → l'NPC spariva PER SEMPRE, cementato
+dall'autosave. I flavor `afterRunLines` ("puoi ritentare quando vuoi") mostravano
+che il design lo voleva ricontattabile. Fix (come Pokémon classico): SOLO "caught"
+consuma il leggendario; "win"/"run" lo lasciano disponibile. 5 leggendari coinvolti
+(bunkerput, berlusconix base+encore, draghimon, mattarellux), zero soft-lock (i
+flag `-gone` sono solo `hideIfFlag`). Aggiornato il hint side-encore. Vedi memory
+[[politicmon-legendary-ko-trap]]. NB: il save resta un solo slot autosalvato
+(~70 call site) — le scelte rischiose vanno rese non distruttive lato codice.
 
 **🎭 AUDIT LORE/NARRATIVA (`0f49019`)** — audit a 4 dimensioni con subagent paralleli
 (storia/quest, species/dex, trainer/rivale, mappe/mondo). Il mondo e' risultato

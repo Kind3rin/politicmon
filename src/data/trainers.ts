@@ -318,7 +318,10 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   boss: {
     id: "boss", name: "PRESIDENTE OMBRA", pal: "boss",
-    team: [["contemorfo", 20], ["xipanda", 22], ["draghimon", 24], ["mattarellux", 26]],
+    // NIENTE leggendari qui: MATTARELLUX e DRAGHIMON sono i reveal dell'Atto 2
+    // (GARANTE SUPREMO / leggendario finale) e non vanno bruciati nel boss di Atto 1.
+    // Asso mediatico TELECRATE + forza istituzionale GENERORSO, a tema "potere occulto".
+    team: [["contemorfo", 20], ["xipanda", 22], ["telecrate", 24], ["generorso", 26]],
     intro: [
       "Benvenuto al Palazzo. Io non esisto, ufficialmente.",
       "Governo da trent'anni senza essere mai stato eletto.",

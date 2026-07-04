@@ -1997,7 +1997,7 @@ export const MAPS: Record<string, MapDef> = {
           "SHERPA UE: la vera partita non è a Roma. È a BRUXELLES.",
           "Oltre quelle boe c'è un motoscafo diplomatico: rotta per la capitale UE.",
           "Si vota per il PARLAMENTO. E LA COMMISSIONE non cede la poltrona a nessuno.",
-          "Prendi il traghetto a est. Porta una squadra da lv 45+: là fanno sul serio."
+          "Prendi il traghetto a est. Porta una squadra da lv 50+: LA COMMISSIONE non perdona."
         ]
       }
     ]

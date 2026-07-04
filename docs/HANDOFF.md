@@ -5,11 +5,23 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Ponte Stretto: rendering + asset + deck seamless**, 2026-07-04.
+Ultimo aggiornamento: **Porto di Caput Mundi (imbarco leggibile)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Ponte Stretto completato, tutto pushato (HEAD `bba2f65`). Tree pulito, live su
-politicmon.vercel.app. Prima: traversata Stretto, satira pungente, slot multipli.
+Porto di Caput Mundi + ponte Stretto completati, tutto pushato (HEAD `757a8c9`).
+Tree pulito, live su politicmon.vercel.app. Prima: ponte rendering, satira, slot.
+
+**⚓ PORTO DI CAPUT MUNDI (`757a8c9`)** — l'utente: "da Caput Mundi entri nell'isola
+del ponte per aria, non si capisce che lì ci dovresti andare". L'imbarco era un warp
+INVISIBILE su un tile di pavimento anonimo. FIX (design da workflow multi-agente +
+verifica avversariale): Caput Mundi cresce di 3 righe (r19-r23) con un PORTO vero —
+DARSENA d'acqua + MOLO di legno (`q`, nuovo tile + asset PixelLab deck_wood.png) che
+sporge nell'acqua, punta = imbarco (6,21), sabbia, cartello "DARSENA DEL CONSENSO",
+marinaio a lato. Ora acqua+molo+marinaio+cartello si leggono a colpo d'occhio.
+Righe 0-18 IDENTICHE all'originale → zero regressioni. Trappole evitate (dalla
+verifica avversariale): NON riusato `P` (era pianta solida) → char libero `q`;
+imbarco su molo CALPESTABILE (non acqua) così il gate "serve TRAGHETTO" si vede.
+Validato: flood-fill (no leak, varco route3 intatto), E2E gioco vero 3/3, screenshot.
 
 **🛣️ DECK PONTE SEAMLESS (`bba2f65`)** — la doppia mezzeria dell'asfalto PixelLab
 sfasava tra tile. Ora UNA mezzeria gialla tratteggiata centrata (x=16/32) e continua.

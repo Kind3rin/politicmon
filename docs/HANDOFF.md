@@ -5,11 +5,18 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Audit lore/narrativa end-to-end (fix testo/coord)**, 2026-07-04.
+Ultimo aggiornamento: **Slot multipli di salvataggio + test E2E nel gioco vero**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
 Audit narrativo + fix leggendari + fix save-trap + SALVA scopribile + SLOT MULTIPLI,
-tutto pushato (HEAD `3ae7a3a`). Tree pulito, live su politicmon.vercel.app.
+tutto pushato (HEAD `0c89ace`). Tree pulito, live su politicmon.vercel.app.
+
+**✅ TEST E2E SLOT NEL GIOCO VERO (`0c89ace`)** — `scripts/e2e-slots.mjs` pilota il
+gioco reale via keydown/keyup (tastiera come un giocatore): NUOVA CAMPAGNA →
+difficoltà → SLOT 2 → PAUSA/SALVA → reload → CONTINUA → SLOT 2. Verifica lo stato in
+localStorage (slot attivo, isolamento slot, sopravvivenza al reload) + screenshot.
+**11/11 check, 0 errori console**, confermato visivamente (SlotScene load/new, mondo
+caricato dallo slot). Il ciclo crea-su-slot → salva → riavvia → riprendi funziona.
 
 **💾 SLOT MULTIPLI DI SALVATAGGIO (`3ae7a3a`)** — save da mono-slot a 3 slot
 indipendenti SENZA toccare i ~70 call site di saveGame: concetto di "slot attivo"

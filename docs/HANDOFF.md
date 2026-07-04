@@ -5,11 +5,21 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Porto di Caput Mundi (imbarco leggibile)**, 2026-07-04.
+Ultimo aggiornamento: **Indicatore Dex in lotta + player centrato sulle porte**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Porto di Caput Mundi + ponte Stretto completati, tutto pushato (HEAD `757a8c9`).
-Tree pulito, live su politicmon.vercel.app. Prima: ponte rendering, satira, slot.
+Fix UX (indicatore Dex wild + centraggio porte), tutto pushato (HEAD `f98af37`).
+Tree pulito, live su politicmon.vercel.app. Prima: porto Caput Mundi, ponte, slot.
+
+**🎯 FIX UX (`f98af37`) — 2 richieste utente:**
+- **Indicatore "già eletto" in lotta wild**: contro un selvatico, se la specie è
+  già `dex==="caught"`, mostro la SCHEDA nel box nemico (drawFoeBox, BattleScene).
+  Solo wild (`!this.trainer`). Nei trainer non appare.
+- **Player centrato sulla PORTA degli interni**: entrando, il player atterrava
+  sulla colonna sinistra della porta a 2 tile (`cc`) → scentrato. `doorCenteringOffset()`
+  in WorldScene: da FERMO, se la cella sotto è parte sx/dx di un doormat 2 tile,
+  sposta SOLO il disegno del player di ±8px verso il centro (camera ferma, offset
+  sparisce al primo passo). Vale per tutti gli interni. Verificato con screenshot.
 
 **⚓ PORTO DI CAPUT MUNDI (`757a8c9`)** — l'utente: "da Caput Mundi entri nell'isola
 del ponte per aria, non si capisce che lì ci dovresti andare". L'imbarco era un warp

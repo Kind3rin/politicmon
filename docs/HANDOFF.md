@@ -15,11 +15,13 @@ Tree pulito, live su politicmon.vercel.app. Prima: porto Caput Mundi, ponte, slo
 - **Indicatore "già eletto" in lotta wild**: contro un selvatico, se la specie è
   già `dex==="caught"`, mostro la SCHEDA nel box nemico (drawFoeBox, BattleScene).
   Solo wild (`!this.trainer`). Nei trainer non appare.
-- **Player centrato sulla PORTA degli interni**: entrando, il player atterrava
-  sulla colonna sinistra della porta a 2 tile (`cc`) → scentrato. `doorCenteringOffset()`
-  in WorldScene: da FERMO, se la cella sotto è parte sx/dx di un doormat 2 tile,
-  sposta SOLO il disegno del player di ±8px verso il centro (camera ferma, offset
-  sparisce al primo passo). Vale per tutti gli interni. Verificato con screenshot.
+- **Player centrato sulla PORTA (interni + esterni, `f98af37`+`7bd2882`)**: entrando
+  il player si fermava sulla colonna sx/dx della porta a 2 tile → scentrato.
+  `doorCenteringOffset()` in WorldScene: da FERMO, se una cella adiacente (SOTTO per
+  gli interni/doormat `cc`, SOPRA per gli esterni/portoni `dd`/`DD`/`gg`) è metà di
+  una porta 2 tile, sposta SOLO il disegno del player di ±8px verso il centro (camera
+  ferma, offset via al primo passo). Il metodo controlla sia y+1 sia y-1. Verificato
+  con screenshot (interni + portone palestra da entrambi i lati).
 
 **⚓ PORTO DI CAPUT MUNDI (`757a8c9`)** — l'utente: "da Caput Mundi entri nell'isola
 del ponte per aria, non si capisce che lì ci dovresti andare". L'imbarco era un warp

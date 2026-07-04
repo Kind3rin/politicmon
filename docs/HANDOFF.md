@@ -5,11 +5,47 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Fix multiplayer/chat (audit netcode), save v13**, 2026-07-03.
+Ultimo aggiornamento: **Audit lore/narrativa end-to-end (fix testo/coord)**, 2026-07-04.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Fix netcode/chat chiuso e pushato (HEAD `2b5702a`). Tree pulito, live su
-politicmon.vercel.app.
+Audit narrativo chiuso e pushato (HEAD `0f49019`). Tree pulito, live su
+politicmon.vercel.app. Nessuna migrazione save (solo testo + 1 coordinata).
+
+**🎭 AUDIT LORE/NARRATIVA (`0f49019`)** — audit a 4 dimensioni con subagent paralleli
+(storia/quest, species/dex, trainer/rivale, mappe/mondo). Il mondo e' risultato
+strutturalmente MOLTO solido: 0 BLOCKER, tutti i warp/gate/flag integri, nessun
+riferimento morto a species/move/item, nessun placeholder/TODO. 6 fix applicati
+(tutti a basso rischio, no save):
+- **`ponte` era MAIN ma e' area OPZIONALE**: deviava l'HUD dallo Stretto invece che
+  verso il PALAZZO dopo il 3o badge, e non aveva `target` (freccia guida spenta).
+  Ora `side:true` → `boss` resta il prossimo obiettivo principale.
+- **Rivale GIANNI, conteggi off-by-one**: capitale "quattro persi"→"tre", stretto
+  "cinque a zero"→"quattro", defeat "sei a zero"→"cinque" (rivalWins parte da 1 dopo
+  il lab; le battute descrivono lo stato PRIMA dello scontro).
+- **Taxi EUROTOWN atterrava sulla statua** (tile solido `Y` col 23): x 23→24.
+- **`scorta-cap`** prometteva il taxi per lo Stretto (rimosso da TRANSPORT_DESTINATIONS):
+  testo riallineato a IMBARCO+TRAGHETTO.
+- **Virgolette caporali `«»`** (4×, incl. intro leggendario MATTARELLUX) → `"`: il font
+  5x7 non ha quei glyph, rendevano come buchi vuoti.
+
+**Findings NON fixati (decisioni editoriali/design, lasciati all'utente):**
+- **Tono `bunga`/BERLUSCONIX/`telecrate`**: la mossa BUNGA PARTY e il flavor alludono
+  in modo trasparente a fatti giudiziari reali di persona identificabile. E' la voce piu'
+  esposta rispetto al vincolo "satira BONARIA". Valutare se ammorbidire.
+- **Boss Atto 1 (PRESIDENTE OMBRA) schiera `mattarellux` (lv 26) e `draghimon` (lv 24)**,
+  entrambi leggendari: `mattarellux` e' l'asso del GARANTE SUPREMO (Atto 2) e `draghimon`
+  il leggendario finale. Usarli come gregari del boss di Atto 1 brucia i reveal. Valutare
+  sostituzione con specie non-leggendarie (es. conteblob/telecrate). trainers.ts:321.
+- **Livelli consigliati incoerenti per offshore/UE**: banner offshore "lv 38+", sherpa-ue
+  "lv 45+", quest ue-commissione "lv 50+". Uniformare i suggerimenti.
+- **dexNum fuori sequenza** (`bunkerput` = 37 in mezzo alla serie): cosmetico, il Dex ordina
+  per dexNum. species.ts.
+- **Rami evoluzione `trade:true` ridondanti** (conteblob/calendauro/tajanide): il level 18
+  scatta prima, lo scambio e' quasi sempre flavor morto. Alzare il level o documentare.
+- **STREET_EVENTS** e' codice morto (disabilitato in onStepComplete): pool sano ma inerte.
+
+Prima di questo (ancora valido):
+Fix netcode/chat chiuso e pushato (`2b5702a`).
 
 **🔧 FIX MULTIPLAYER/CHAT (`2b5702a`)** — l'utente segnalava "chat e multiplayer non
 funzionano bene: crasha con emote, non vedo giocatori, chat sparisce". Audit

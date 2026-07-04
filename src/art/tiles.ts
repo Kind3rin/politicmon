@@ -165,6 +165,10 @@ export interface TileDef {
   overlay?: boolean;
   encounter?: boolean;
   water?: boolean;
+  // Il terreno SOTTO questo tile è ACQUA, non erba: usato dalle strutture del
+  // ponte (impalcato/traliccio/gru) che stanno in mezzo allo Stretto. Senza,
+  // il renderer metterebbe erba sotto e sembrerebbero "sospese sull'acqua".
+  overWater?: boolean;
 }
 
 function rows(...lines: string[]): string[] {
@@ -962,9 +966,9 @@ export const TILES: Record<string, TileDef> = {
   z: { pix: pix(sandArt, { z: "#eed9a6", Z: "#d8bc7c" }), solid: false },
   "^": { pix: pix(cliffArt, { z: "#eed9a6", Z: "#d8bc7c", R: "#9a7b55", r: "#73543c", d: "#4c392d", s: "#2f2a24" }), solid: true },
   l: { pix: pix(stairArt, { z: "#eed9a6", Z: "#d8bc7c", R: "#9a7b55", r: "#73543c", l: "#c8a66a", s: "#7a5a38" }), solid: false },
-  j: { pix: pix(deckArt, { n: "#8a8a96", N: "#74747f" }), solid: false },
-  J: { pix: pix(girderArt, { S: "#9aa4b8" }), solid: true },
-  K: { pix: pix(craneArt, { C: "#8a929c", c: "#b8bec6", b: "#3a3a44", O: "#10141f" }), solid: true }
+  j: { pix: pix(deckArt, { n: "#8a8a96", N: "#74747f" }), solid: false, overWater: true },
+  J: { pix: pix(girderArt, { S: "#9aa4b8" }), solid: true, overlay: true, overWater: true },
+  K: { pix: pix(craneArt, { C: "#8a929c", c: "#b8bec6", b: "#3a3a44", O: "#10141f" }), solid: true, overlay: true, overWater: true }
 };
 
 export const waterFrames: Pixmap[] = [pix(waterArt(0)), pix(waterArt(1))];

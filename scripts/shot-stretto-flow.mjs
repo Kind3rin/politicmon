@@ -10,7 +10,6 @@ await page.goto(BASE, { waitUntil: "networkidle" });
 
 for (const [mapId, px, py, name] of [
   ["capitale", 13, 18, "flow_capitale_imbarco"],
-  ["mare", 9, 6, "flow_mare"],
   ["stretto", 14, 8, "flow_stretto_approdo"],
   ["stretto", 15, 14, "flow_stretto_capitano"]
 ]) {

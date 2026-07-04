@@ -2749,8 +2749,9 @@ export class WorldScene implements Scene {
           continue;
         }
         if (def.overlay) {
-          // Terreno di base sotto l'overlay.
-          const baseCh = this.map.outdoor ? "." : "p";
+          // Terreno di base sotto l'overlay. Le strutture del ponte (overWater)
+          // stanno sull'acqua: base ACQUA, non erba (altrimenti "sospese sul mare").
+          const baseCh = def.overWater ? "w" : this.map.outdoor ? "." : "p";
           const baseImg = this.tilePng(baseCh);
           if (baseImg) {
             screen.imageSprite(baseImg, dx, dy);
@@ -2780,6 +2781,14 @@ export class WorldScene implements Scene {
             }
             drawWorldObjectPng(screen, ch, objImg, dx, dy);
           } else {
+            // Terreno del ponte (impalcato `j`) sopra l'acqua: prima l'acqua,
+            // poi l'impalcato — così i bordi trasparenti del deck mostrano il mare.
+            if (def.overWater) {
+              const waterBase = this.tilePng("w");
+              if (waterBase) {
+                screen.imageSprite(waterBase, dx, dy);
+              }
+            }
             // Texture PNG PixelLab del terreno (override mappa o default).
             const img = this.tilePng(ch);
             if (img) {

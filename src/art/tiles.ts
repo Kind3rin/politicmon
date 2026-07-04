@@ -59,6 +59,7 @@ const OBJECT_PNG: Record<string, string> = {
   ",": "tiles/obj_flowers.png",
   J: "tiles/obj_girder.png",
   K: "tiles/obj_crane.png",
+  X: "tiles/boat_moored.png", // barca ormeggiata nel porto di Caput Mundi
   g: "tiles/obj_golddoor.png", // porta dorata (varco Atto 2 palazzo->colle)
   // Arredo urbano delle piazze (esaminabili, vedi `decoratives` in maps.ts).
   W: "tiles/obj_fountain.png",
@@ -678,6 +679,27 @@ const girderArt = rows(
   "SSSSSSSSSSSSSSSS"
 );
 
+// Barca ormeggiata del porto (fallback se manca il PNG): scafo di legno con
+// ponte chiaro e piccola cabina, su fondo trasparente (`.`) — l'acqua sta sotto.
+const boatArt = rows(
+  "................",
+  "....bbbbbbbb....",
+  "...bDDDDDDDDb...",
+  "..bDyyyyyyyyDb..",
+  "..bDyYYYYYYyDb..",
+  "..bDyYcCCcYyDb..",
+  "..bDyYcCCcYyDb..",
+  "..bDyYcCCcYyDb..",
+  "..bDyYYYYYYyDb..",
+  "..bDyyyyyyyyDb..",
+  "...bDDDDDDDDb...",
+  "....bbbbbbbb....",
+  "................",
+  "................",
+  "................",
+  "................"
+);
+
 // Piattaforma di cantiere con gru: ferma lì dal primo appalto.
 const craneArt = rows(
   "wwwwwwwwwwwwwwww",
@@ -972,7 +994,11 @@ export const TILES: Record<string, TileDef> = {
   K: { pix: pix(craneArt, { C: "#8a929c", c: "#b8bec6", b: "#3a3a44", O: "#10141f" }), solid: true, overlay: true, overWater: true },
   // MOLO/PONTILE DI LEGNO del porto di Caput Mundi: assi di legno caldo (distinto
   // dall'asfalto grigio del ponte `j`). Calpestabile sempre, disegnato sull'acqua.
-  q: { pix: pix(deckArt, { n: "#a6763e", N: "#7a5628", y: "#5c3f1e" }), solid: false, overWater: true }
+  q: { pix: pix(deckArt, { n: "#a6763e", N: "#7a5628", y: "#5c3f1e" }), solid: false, overWater: true },
+  // BARCA ormeggiata del porto: overlay decorativo sull'acqua, solido (ci giri
+  // intorno, l'imbarco è dal molo `q`). Il PNG (OBJECT_PNG "X") disegna la barca;
+  // il pix è solo fallback. overWater = acqua sotto, non erba.
+  X: { pix: pix(boatArt, { b: "#5a3f1e", D: "#7a5628", y: "#a6763e", Y: "#8a6230", c: "#e8d8b0", C: "#c8b088" }), solid: true, overlay: true, overWater: true }
 };
 
 export const waterFrames: Pixmap[] = [pix(waterArt(0)), pix(waterArt(1))];

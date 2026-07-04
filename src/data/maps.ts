@@ -327,12 +327,12 @@ const EUROTOWN_TILES = [
 
 // ------------------------------------------------------------- CAPUT MUNDI
 
-// Caput Mundi cresce di 3 righe in basso (r19-r23) per ospitare il PORTO: una
-// DARSENA d'acqua con MOLO di legro (`q`) che sporge, sabbia (`z`) e cartello.
-// Così l'imbarco per lo STRETTO è leggibile a colpo d'occhio (acqua+molo+barca
-// visibili nella città), non più un warp invisibile su un tile di pavimento.
-// Righe 0-18 IDENTICHE all'originale → zero regressioni su NPC/pickup/decor.
-// Il varco route3 (col 13-16) resta l'unico apertura del bordo sud (ora r23).
+// Caput Mundi cresce in basso (r19-r24) per ospitare il PORTO come una vera BAIA:
+// banchina di sabbia larga (`z`), una fascia di MOLO di legno orizzontale (`q`) su
+// tutto il fronte, un BACINO d'acqua ampio (22 celle `w`, non più un rigagnolo),
+// un pontile che sporge fino alla punta d'imbarco e una BARCA ormeggiata (`X`).
+// Così si legge a colpo d'occhio come porto/banchina. Righe 0-18 IDENTICHE
+// all'originale → zero regressioni. Varco route3 (col 13-16) unica apertura sud (r24).
 const CAPITALE_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
@@ -353,10 +353,11 @@ const CAPITALE_TILES = [
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.mddm......====......mddm.TT",
-  "TT.==s=q=========...........TT",
-  "TT.zzzqzzzz..====...........TT",
-  "TT.wwwqwwww..====TTTTTTTTTTTTT",
-  "TT.wwwwwwww..====TTTTTTTTTTTTT",
+  "TT.zzzzzzszz.====...........TT",
+  "TT.zqqqqqqqz.====...........TT",
+  "TT.wwXqwwwwz.====TTTTTTTTTTTTT",
+  "TT.wwwwwwwwz.====TTTTTTTTTTTTT",
+  "TT.wwwwwwwwz.====TTTTTTTTTTTTT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
 ];
 
@@ -1421,8 +1422,8 @@ export const MAPS: Record<string, MapDef> = {
       },
       {
         // Cartello del PORTO (accanto al molo di legno, tile `s` a 5,19).
-        x: 5, y: 19,
-        lines: ["PORTO DI CAPUT MUNDI — DARSENA DEL CONSENSO", "Traghetto per lo STRETTO: parte quando dice IL CAPITANO, non l'orario.", "Biglietto a carico dello Stato. L'inchino è compreso nel prezzo."]
+        x: 9, y: 19,
+        lines: ["PORTO DI CAPUT MUNDI — DARSENA DEL CONSENSO", "Traghetto per lo STRETTO: parte quando dice IL CAPITANO, non l'orario.", "Barca ormeggiata dal 1994. Il molo è pubblico, l'attracco è una raccomandazione."]
       },
       {
         // Cartello della SFIDA DEL GIORNO, accanto all'OPINIONISTA in piazza.

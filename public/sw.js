@@ -67,19 +67,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Gli sprite in public/ mantengono spesso lo stesso nome: network-first evita
-  // case/personaggi vecchi presi dalla cache PWA dopo una rigenerazione asset.
+  // Sprite in public/sprites/: cache-first. Gli URL portano ?v=APP_BUILD_ID
+  // (assets.ts spriteUrl), quindi ogni versione è un URL DIVERSO e immutabile:
+  // una rigenerazione asset cambia APP_BUILD_ID (build.ts) → nuovo URL → nessuno
+  // stale servito. Il vecchio network-first ({cache:"reload"}) ri-scaricava ~330
+  // sprite a OGNI avvio (rompeva la promessa PWA/offline e sprecava dati su mobile);
+  // il cache-busting rende quel ri-scarico inutile.
   if (url.pathname.includes("/sprites/")) {
     event.respondWith(
-      fetch(request, { cache: "reload" })
-        .then((response) => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
+      caches.match(request).then(
+        (hit) =>
+          hit ??
+          fetch(request).then((response) => {
+            if (response.ok) {
+              const copy = response.clone();
+              caches.open(CACHE).then((cache) => cache.put(request, copy));
+            }
+            return response;
+          })
+      )
     );
     return;
   }

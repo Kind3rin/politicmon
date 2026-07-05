@@ -13,6 +13,7 @@ import type { Facing } from "../art/characters";
 import { SPECIES } from "../data/species";
 import { TradeSession, type TradeWire } from "./trade";
 import type { DuelMsg } from "./duelproto";
+import { sanitizeNick } from "./profile";
 
 export interface RemotePlayer {
   id: string;
@@ -360,7 +361,10 @@ class MultiplayerClient {
 
     profAction.onMessage = (prof, ctx) => {
       this.upsert(ctx.peerId, {
-        nick: prof.nick, speciesId: prof.speciesId,
+        // nick dal filo MAI fidato: un peer patchato può inviare un non-stringa
+        // → i draw site chiamerebbero .slice/.length su non-stringa e crasherebbero
+        // il canvas altrui. String() + sanitizeNick coerce e limita la lunghezza.
+        nick: sanitizeNick(String(prof.nick ?? "")) || "ANONIMO", speciesId: prof.speciesId,
         x: prof.x, y: prof.y, facing: prof.facing,
         duelWins: sanitizeDuelWins(prof.duelWins),
         partyPreview: sanitizePartyPreview(prof.party)

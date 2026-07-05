@@ -290,6 +290,14 @@ export class WorldScene implements Scene {
   // ---- Setup ----
 
   private loadMap(mapId: string): void {
+    // Hardening: un save importato/manomesso con un mapId inesistente farebbe
+    // crashare qui (this.map.npcs su undefined). Ricadi su "borgo" (mappa iniziale,
+    // sempre presente) invece di brickare lo slot.
+    if (!MAPS[mapId]) {
+      console.warn(`[loadMap] mapId sconosciuto "${mapId}", ricado su borgo`);
+      mapId = "borgo";
+      this.state.pos.mapId = "borgo";
+    }
     this.map = MAPS[mapId];
     this.justEnteredMap = true;
     // ENCORE di BERLUSCONIX: il flag che mostra l'NPC magnate-encore va

@@ -1,6 +1,6 @@
 import type { Facing } from "../art/characters";
 import type { Monster } from "./monster";
-import { expForLevel, statsOf } from "./monster";
+import { expForLevel, sanitizeMon, statsOf } from "./monster";
 
 export interface PlayerPos {
   mapId: string;
@@ -78,6 +78,28 @@ function slotBackupKey(slot: number): string {
 
 function clampSlot(n: number): number {
   return Number.isInteger(n) && n >= 0 && n < SLOT_COUNT ? n : 0;
+}
+
+// localStorage può LANCIARE, non solo su setItem (quota): anche getItem/removeItem
+// tirano SecurityError su Firefox "Non ricordare cronologia", cookie di terze parti
+// bloccati, webview in lockdown o contesti sandboxed. Se un'eccezione qui sfugge dal
+// costruttore di TitleScene (creato prima del game loop in main.ts), il canvas resta
+// nero per sempre. Questi wrapper degradano a "nessun salvataggio" invece di crashare:
+// il gioco parte come sessione in-memory (il progresso semplicemente non persiste).
+function lsGet(key: string): string | null {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function lsRemove(key: string): void {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // Storage non disponibile: niente da rimuovere, nessun crash.
+  }
 }
 
 let activeSlot = -1; // -1 = non ancora letto da localStorage
@@ -363,6 +385,13 @@ function parseState(raw: string | null): GameState | null {
       typeof parsed.monumentLevel === "number" && !Number.isNaN(parsed.monumentLevel)
         ? Math.max(0, Math.min(3, Math.floor(parsed.monumentLevel)))
         : 0;
+    // Rete di sicurezza su OGNI mostro (party E box) PRIMA di toccare hp/exp:
+    // uno speciesId o una mossa inesistente (save importato via CODICE o cross-version)
+    // farebbe crashare statsOf/healMonster/move-menu. Va qui perché le reti hp/exp
+    // sotto chiamano statsOf, che richiede uno speciesId valido.
+    for (const mon of [...parsed.party, ...parsed.boxed]) {
+      sanitizeMon(mon);
+    }
     // heldItem (v11, opzionale): tutto ciò che non è una stringa viene rimosso.
     for (const mon of [...parsed.party, ...parsed.boxed]) {
       if (mon.heldItem !== undefined && typeof mon.heldItem !== "string") {
@@ -412,13 +441,13 @@ function ensureBrowserSeed(state: GameState): void {
 export function loadGame(): GameState | null {
   migrateSingleSlotOnce();
   const slot = getActiveSlot();
-  const current = parseState(localStorage.getItem(slotKey(slot)));
+  const current = parseState(lsGet(slotKey(slot)));
   if (current) {
     ensureBrowserSeed(current);
     return current;
   }
   // Primario corrotto/assente: prova il backup dell'ultima scrittura valida.
-  const backup = parseState(localStorage.getItem(slotBackupKey(slot)));
+  const backup = parseState(lsGet(slotBackupKey(slot)));
   if (backup) {
     saveGame(backup);
     ensureBrowserSeed(backup);
@@ -429,10 +458,10 @@ export function loadGame(): GameState | null {
   // vuoto diverso non deve vedersi apparire un vecchio save lì.
   if (slot === 0) {
     for (const key of LEGACY_KEYS) {
-      const legacy = parseState(localStorage.getItem(key));
+      const legacy = parseState(lsGet(key));
       if (legacy) {
         saveGame(legacy);
-        localStorage.removeItem(key);
+        lsRemove(key);
         ensureBrowserSeed(legacy);
         return legacy;
       }
@@ -463,24 +492,24 @@ export function importSaveCode(code: string): GameState | null {
 export function hasSave(): boolean {
   migrateSingleSlotOnce();
   const slot = getActiveSlot();
-  if (localStorage.getItem(slotKey(slot)) !== null) {
+  if (lsGet(slotKey(slot)) !== null) {
     return true;
   }
-  if (localStorage.getItem(slotBackupKey(slot)) !== null) {
+  if (lsGet(slotBackupKey(slot)) !== null) {
     return true;
   }
   // Solo lo slot 0 eredita i vecchi save mono-slot (v3-v12).
-  return slot === 0 && LEGACY_KEYS.some((key) => localStorage.getItem(key) !== null);
+  return slot === 0 && LEGACY_KEYS.some((key) => lsGet(key) !== null);
 }
 
 // C'è un salvataggio in UNO SPECIFICO slot? (usata dal selettore slot in UI).
 export function hasSaveInSlot(slot: number): boolean {
   migrateSingleSlotOnce();
   const s = clampSlot(slot);
-  if (localStorage.getItem(slotKey(s)) !== null || localStorage.getItem(slotBackupKey(s)) !== null) {
+  if (lsGet(slotKey(s)) !== null || lsGet(slotBackupKey(s)) !== null) {
     return true;
   }
-  return s === 0 && LEGACY_KEYS.some((key) => localStorage.getItem(key) !== null);
+  return s === 0 && LEGACY_KEYS.some((key) => lsGet(key) !== null);
 }
 
 // Almeno uno slot ha un salvataggio? (per decidere se mostrare "CONTINUA").
@@ -509,18 +538,18 @@ export interface SlotSummary {
 export function slotSummary(slot: number): SlotSummary {
   const s = clampSlot(slot);
   migrateSingleSlotOnce();
-  let raw = localStorage.getItem(slotKey(s));
+  let raw = lsGet(slotKey(s));
   if (raw === null && s === 0) {
     // Slot 0 può ospitare un vecchio save legacy non ancora migrato: leggilo per il riepilogo.
     for (const key of LEGACY_KEYS) {
-      const v = localStorage.getItem(key);
+      const v = lsGet(key);
       if (v !== null) {
         raw = v;
         break;
       }
     }
   }
-  const st = parseState(raw ?? localStorage.getItem(slotBackupKey(s)));
+  const st = parseState(raw ?? lsGet(slotBackupKey(s)));
   if (!st) {
     return { slot: s, exists: false, level: 0, badges: 0, money: 0, sondaggi: 0, mapId: "", hardMode: false };
   }
@@ -545,12 +574,12 @@ export function clearSave(): void {
 // Cancella uno SPECIFICO slot (usata dal selettore slot in UI).
 export function clearSlot(slot: number): void {
   const s = clampSlot(slot);
-  localStorage.removeItem(slotKey(s));
-  localStorage.removeItem(slotBackupKey(s));
+  lsRemove(slotKey(s));
+  lsRemove(slotBackupKey(s));
   // Solo lo slot 0 poteva ereditare i vecchi save mono-slot: puliscili con lui.
   if (s === 0) {
     for (const key of LEGACY_KEYS) {
-      localStorage.removeItem(key);
+      lsRemove(key);
     }
   }
 }

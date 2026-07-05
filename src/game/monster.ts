@@ -92,6 +92,47 @@ export function movesAtLevel(speciesId: string, level: number): MoveSlot[] {
   return unique.slice(-4).map((id) => ({ id, pp: MOVES[id].pp }));
 }
 
+// Prima specie del dex: fallback di sicurezza per un save manomesso/cross-version
+// con uno speciesId che non esiste più nel registry (rinominato o rimosso).
+function firstSpeciesId(): string {
+  return Object.keys(SPECIES)[0];
+}
+
+// Riporta in un range valido un mostro caricato dal salvataggio o importato via
+// "CODICE SALVATAGGIO" (feature pensata per condividere save tra estranei → input
+// non fidato). Chiude i crash da lookup non protetto:
+//   - speciesId inesistente → speciesOf/statsOf tornerebbero undefined (crash ovunque)
+//   - moves con id non più in MOVES → healMonster/move-menu crashano su MOVES[id].pp
+// Idempotente: un mostro già valido non viene toccato. NON valida hp/exp (già fatto
+// in parseState con statsOf, che richiede uno speciesId valido — perciò va chiamata PRIMA).
+export function sanitizeMon(mon: Monster): void {
+  if (typeof mon.speciesId !== "string" || !SPECIES[mon.speciesId]) {
+    mon.speciesId = firstSpeciesId();
+  }
+  const level = typeof mon.level === "number" && mon.level > 0 ? Math.floor(mon.level) : 1;
+  mon.level = level;
+  // Tieni solo gli slot con id valido e pp numerico; scarta i duplicati.
+  const seen = new Set<string>();
+  mon.moves = Array.isArray(mon.moves)
+    ? mon.moves.filter((slot): slot is MoveSlot => {
+        if (!slot || typeof slot.id !== "string" || !MOVES[slot.id] || seen.has(slot.id)) {
+          return false;
+        }
+        seen.add(slot.id);
+        if (typeof slot.pp !== "number" || Number.isNaN(slot.pp)) {
+          slot.pp = MOVES[slot.id].pp;
+        } else {
+          slot.pp = Math.max(0, Math.min(MOVES[slot.id].pp, Math.floor(slot.pp)));
+        }
+        return true;
+      })
+    : [];
+  // Un mostro senza NESSUNA mossa valida bloccherebbe la lotta: ripopola dal learnset.
+  if (mon.moves.length === 0) {
+    mon.moves = movesAtLevel(mon.speciesId, level);
+  }
+}
+
 export function createMonster(speciesId: string, level: number): Monster {
   const mon: Monster = {
     uid: `m${Date.now().toString(36)}${(uidCounter += 1)}`,

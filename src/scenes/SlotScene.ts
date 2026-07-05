@@ -59,7 +59,7 @@ export class SlotScene implements Scene {
   // Nota: niente glyph esotici (il font 5x7 non ha ☠); "*" segnala l'hard mode.
   private summaryTag(sum: SlotSummary): string {
     const hard = sum.hardMode ? "*" : "";
-    return `LV${sum.level} · ${sum.badges}M${hard}`;
+    return `LV${sum.level} - ${sum.badges}M${hard}`;
   }
 
   update(dt: number): void {
@@ -172,12 +172,12 @@ export class SlotScene implements Scene {
     let hint = "";
     if (sum?.exists) {
       const place = MAPS[sum.mapId]?.name ?? sum.mapId;
-      hint = `${place} · ${sum.money}€ · ${sum.sondaggi}%`;
+      hint = `${place} - ${sum.money}€ - ${sum.sondaggi}%`;
     } else if (idx < SLOT_COUNT) {
       hint = this.mode === "load" ? "Slot vuoto." : "Slot libero: inizia qui.";
     }
     screen.text(hint.slice(0, 30), x + 8, y + 104, GREY);
-    const keys = this.mode === "load" ? "A CARICA · START CANCELLA" : "A SCEGLI · START CANCELLA";
+    const keys = this.mode === "load" ? "A CARICA - START CANCELLA" : "A SCEGLI - START CANCELLA";
     screen.text(keys, x + 8, y + 116, GREY);
 
     // Overlay di conferma (sovrascrittura o cancellazione).
@@ -196,6 +196,6 @@ export class SlotScene implements Scene {
     const y = Math.round((VIEW_H - h) / 2);
     screen.panel(x, y, w, h);
     screen.text(question.slice(0, 27), x + 8, y + 6, INK);
-    screen.text("A CONFERMA · B ANNULLA", x + 8, y + 18, GREY);
+    screen.text("A CONFERMA - B ANNULLA", x + 8, y + 18, GREY);
   }
 }

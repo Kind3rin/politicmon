@@ -230,8 +230,8 @@ export class TitleScene implements Scene {
     this.difficultyMenu!.draw(screen, x + 8, y + 18, w - 16, 12);
     const hard = this.difficultyMenu!.index === 1;
     const lines = hard
-      ? ["Avversari +livelli, niente", "ONDA DEL CONSENSO,", "rivincite piu lente.", "NON si cambia dopo: e per", "tutta la partita."]
-      : ["CONSIGLIATA alla prima corsa.", "Percorso classico al PALAZZO,", "pacing equilibrato.", "NON si cambia dopo: e per", "tutta la partita."];
+      ? ["Avversari +livelli, niente", "ONDA DEL CONSENSO,", "rivincite piu lente.", "NON si cambia dopo: è per", "tutta la partita."]
+      : ["CONSIGLIATA alla prima corsa.", "Percorso classico al PALAZZO,", "pacing equilibrato.", "NON si cambia dopo: è per", "tutta la partita."];
     for (let i = 0; i < lines.length; i += 1) {
       screen.textCenter(lines[i], VIEW_W / 2, y + 54 + i * 9, GREY);
     }

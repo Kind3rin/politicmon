@@ -5,11 +5,35 @@
 > tutto il codice. Aggiornalo alla fine di ogni sessione che cambia qualcosa di
 > sostanziale.
 
-Ultimo aggiornamento: **Stretto: sbarco su molo (non in acqua)**, 2026-07-04.
+Ultimo aggiornamento: **Hardening pre-pubblicazione GitHub**, 2026-07-05.
 
 ### ⏭️ CONTINUA DA QUI (handoff per la prossima sessione)
-Molo d'approdo Stretto + porto BAIA, tutto pushato (HEAD `eee6ed5`). Tree pulito,
-live su politicmon.vercel.app. Prima: porto baia, fix UX, ponte, slot.
+Audit qualità completo + fix bloccanti pre-GitHub, tutto pushato. Tree pulito,
+live su politicmon.vercel.app. Repo pronto per pubblicazione pubblica.
+
+**🛡️ HARDENING PRE-PUBBLICAZIONE (audit multi-agente 33 agent + verify avversariale)** —
+verdetto GO-CON-RISERVE, riserve chiuse. Applicati e VERIFICATI (typecheck+build+browser):
+- **A1** `state.ts`: 5 helper localStorage senza try/catch → schermo nero su Firefox
+  "no cronologia"/webview lockdown. Wrapper `lsGet`/`lsRemove`. Verificato in browser
+  (SecurityError su tutte le op → fallback sicuri, no crash).
+- **B3** `main.ts`: `frame()` in try/catch + `window.onerror`/`unhandledrejection`. Un throw
+  non congela più il gioco (mostra "ERRORE IMPREVISTO — RICARICA", loop sopravvive).
+- **B2/C6/C3** `sanitizeMon()` in `monster.ts`, chiamato in `parseState` su party+boxed PRIMA
+  delle reti hp/exp. Coerce speciesId/moves fantasma (importSaveCode = input non fidato);
+  mapId ignoto → fallback borgo in `loadMap`. Verificato (moves fantasma → ripopolate da learnset).
+- **B1** sprite cache-first in `sw.js` (era network-first: ri-scaricava ~330 sprite a OGNI avvio);
+  `vercel.json` /sprites → immutable. Sicuro perché URL portano `?v=APP_BUILD_ID`.
+- **B4** `preload.ts` split: critico (mappa iniziale, atteso, timeout 4s) vs deferred
+  (walk-frame/mostri/item, requestIdleCallback dopo il primo frame).
+- **C1/C2** guard switch-index in `PvpBattleScene` (host malevolo) + nick remoto `String()`+sanitize in `mp.ts`.
+- **Nit**: README grafica "tutta da codice" (falso: 379 PNG PixelLab) riscritto; conteggi 28/57→40/63;
+  refuso "e per"→"è per"; glifi `·`→`-`/`☠`→`*` (font 5x7 non li ha); package.json metadata.
+
+Vedi [[politicmon-publish-hardening]]. NON coperti (post-lancio, backlog): C4 unit test in CI
+(sim.ts/governo.ts logica pura, zero test), C5 dedup semantica turno sim/duelsim, D4 HANDOFF/CLAUDE
+pubblici (136KB note interne, decisione editoriale), D8 CSP header (rischio regressione su trystero).
+
+Prima: molo d'approdo Stretto + porto BAIA (HEAD `eee6ed5`), fix UX, ponte, slot.
 
 **🚢 SBARCO STRETTO SU MOLO (`eee6ed5`)** — arrivando allo Stretto si spawnava "in
 mezzo all'acqua" (warp atterrava a 13,6 = tile acqua nel canale). Aggiunto un MOLO

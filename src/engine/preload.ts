@@ -18,7 +18,12 @@ const NPCS = [
 ] as const;
 const VEHICLES = ["auto", "ruspa", "monopattino"] as const;
 
-function coreSpriteEntries(): Record<string, string> {
+// Sprite che il PRIMO frame mostra davvero (mappa iniziale "borgo": terreno,
+// edifici, player fermo). Il boot ASPETTA solo questi → schermata CARICAMENTO
+// breve anche su rete lenta. Tutto il resto (frame di camminata NPC, mostri, item,
+// veicoli) parte in preload di SFONDO non bloccante: getSpriteImage è lazy, quindi
+// se un asset non è ancora pronto usa il fallback per un frame senza crashare.
+function criticalSpriteEntries(): Record<string, string> {
   const entries: Record<string, string> = {
     "tile:.": "tiles/grass_flat.png",
     "tile:=": "tiles/path_flat.png",
@@ -74,8 +79,25 @@ function coreSpriteEntries(): Record<string, string> {
     "char:schettino": "chars/schettino.png"
   };
 
+  // Player fermo nelle 4 direzioni: il primo frame lo disegna, è critico.
   for (const dir of DIRS) {
     entries[`player:${dir}`] = `chars/player_${dir}.png`;
+    // Frame di camminata NPC statici (fermi) delle 4 direzioni: leggeri e visibili
+    // già sulla mappa iniziale.
+    for (const npc of NPCS) {
+      entries[`npc:${npc}:${dir}`] = `chars/npc_${npc}_${dir}.png`;
+    }
+  }
+
+  return entries;
+}
+
+// Tutto ciò che NON serve al primo frame: frame di camminata (player+NPC),
+// veicoli, item, mostri. Precaricato in sfondo, mai atteso dal boot.
+function deferredSpriteEntries(): Record<string, string> {
+  const entries: Record<string, string> = {};
+
+  for (const dir of DIRS) {
     for (let frame = 0; frame < 4; frame += 1) {
       entries[`player:${dir}:w${frame}`] = `chars/player_${dir}_w${frame}.png`;
     }
@@ -83,7 +105,6 @@ function coreSpriteEntries(): Record<string, string> {
       entries[`veh:${vehicle}:${dir}`] = `chars/${vehicle}_${dir}.png`;
     }
     for (const npc of NPCS) {
-      entries[`npc:${npc}:${dir}`] = `chars/npc_${npc}_${dir}.png`;
       for (let frame = 0; frame < 4; frame += 1) {
         entries[`npc:${npc}:${dir}:w${frame}`] = `chars/npc_${npc}_${dir}_w${frame}.png`;
       }
@@ -106,9 +127,25 @@ function coreSpriteEntries(): Record<string, string> {
   return entries;
 }
 
-const CORE_SPRITES = coreSpriteEntries();
+const CRITICAL_SPRITES = criticalSpriteEntries();
+const DEFERRED_SPRITES = deferredSpriteEntries();
+
+// Avvia SUBITO il fetch dei deferred (non blocca), da chiamare dopo il primo frame.
+function startDeferredPreload(): void {
+  preloadSprites(DEFERRED_SPRITES);
+}
 
 export function preloadCoreSprites(): Promise<void> {
-  preloadSprites(CORE_SPRITES);
-  return waitForSprites(Object.keys(CORE_SPRITES), 5000);
+  preloadSprites(CRITICAL_SPRITES);
+  // Il boot aspetta solo il set critico (timeout più corto: è un decimo degli asset).
+  return waitForSprites(Object.keys(CRITICAL_SPRITES), 4000).finally(() => {
+    // Il resto parte in sfondo: se il browser ha requestIdleCallback lo usa,
+    // altrimenti un microtask dopo il primo frame.
+    const kick = () => startDeferredPreload();
+    if (typeof requestIdleCallback === "function") {
+      requestIdleCallback(kick, { timeout: 2000 });
+    } else {
+      setTimeout(kick, 0);
+    }
+  });
 }

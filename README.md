@@ -31,7 +31,7 @@ npm run dev      # poi apri http://localhost:5173
 ## Cosa c'è nel gioco
 
 - **3 starter** (GIORGETTA/Destra, ELLYNA/Sinistra, RENZINO/Centro) con anteprima animata.
-- **28 Politicmon** satirici, **57 mosse**, 8 tipi politici, status (INDAGATO/SCANDALO/GAFFE), battaglie a turni gen-1 con animazioni.
+- **40 Politicmon** satirici, **63 mosse**, 8 tipi politici, status (INDAGATO/SCANDALO/GAFFE), battaglie a turni gen-1 con animazioni.
 - **Evoluzioni** per livello, per oggetto (TESSERA DORATA) e **ramificate sui sondaggi**.
 - **SONDAGGI** (0-100%): stat narrativa che muove prezzi, esperienza ("onda del consenso") e rami evolutivi.
 - **GOVERNO OMBRA**: 6 ministeri assegnabili con bonus passivi.
@@ -63,8 +63,8 @@ node scripts/gen-icons.mjs   # rigenera le icone PNG della PWA
 
 ## Filosofia del progetto
 
-- **Satira bonaria**, niente diffamazione né contenuti espliciti.
-- **Tutta la grafica è generata da codice** (pixel-map testuali); nessun asset binario scolpito a mano.
+- **Satira pungente ma di fantasia**, niente diffamazione né contenuti espliciti.
+- **Grafica in pixel art** generata con [PixelLab](https://pixellab.ai) (sprite PNG in `public/sprites/`), con fallback a pixel-map testuali (`src/art/`) generate da codice per gli asset non ancora ridisegnati.
 - **Zero dipendenze runtime** tranne il P2P del multiplayer.
 - **Multiplayer gratis per sempre**: peer-to-peer, nessun account o server fatturabile.
 

@@ -205,6 +205,23 @@ function drawBootScreen(now: number): void {
   screen.textCenter(`CARICAMENTO${dots}`, 120, 85, "#f4dd62");
 }
 
+let loopCrashed = false;
+
+// Rete di sicurezza universale: un'eccezione non catturata in update/draw non
+// deve congelare il gioco per sempre (canvas fermo, nessuna diagnostica, recupero
+// solo con reload manuale). Su throw: logga, mostra un messaggio leggibile e
+// CONTINUA a chiamare requestAnimationFrame (il loop sopravvive). È il moltiplicatore
+// che rende recuperabili i crash latenti invece di trasformarli in freeze.
+function drawCrashScreen(): void {
+  try {
+    screen.clear("#10141f");
+    screen.textCenter("ERRORE IMPREVISTO", 120, 70, "#f4dd62");
+    screen.textCenter("RICARICA LA PAGINA", 120, 92, "#c8d0e8");
+  } catch {
+    // Anche il disegno del messaggio d'errore è fallito: non c'è altro da fare.
+  }
+}
+
 function frame(now: number): void {
   const raw = (now - last) / 1000;
   const dt = Number.isFinite(raw) ? Math.min(0.1, Math.max(0, raw)) : 0;
@@ -214,10 +231,23 @@ function frame(now: number): void {
     requestAnimationFrame(frame);
     return;
   }
-  stack.update(dt);
-  stack.draw(screen);
-  input.endFrame();
+  try {
+    stack.update(dt);
+    stack.draw(screen);
+    input.endFrame();
+  } catch (err) {
+    if (!loopCrashed) {
+      console.error("[loop] eccezione non gestita nel game loop", err);
+      loopCrashed = true;
+    }
+    drawCrashScreen();
+  }
   requestAnimationFrame(frame);
 }
+
+// Ultima linea di difesa: errori sincroni fuori dal loop e promise rifiutate
+// (es. caricamento asset, WebRTC) non devono restare invisibili in produzione.
+window.addEventListener("error", (e) => console.error("[window.error]", e.error ?? e.message));
+window.addEventListener("unhandledrejection", (e) => console.error("[unhandledrejection]", e.reason));
 
 requestAnimationFrame(frame);

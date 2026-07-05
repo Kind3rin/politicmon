@@ -322,7 +322,7 @@ export class PauseScene implements Scene {
     screen.text(`DUELLI PVP: ${this.state.duelWins}V/${this.state.duelLosses}P${duelTag}`.slice(0, 33), 24, 141, INK);
     // Titolo COPPA DELLE POLTRONE + tag MODALITÀ DIFFICILE (immutabile).
     const coppaTag = this.state.coppaWins > 0 ? `★PORTAVOCE DEL POPOLO (${this.state.coppaWins})` : "";
-    const hardTag = this.state.hardMode ? "☠ HARD" : "";
+    const hardTag = this.state.hardMode ? "* HARD" : "";
     const extraLine = [coppaTag, hardTag].filter(Boolean).join("   ");
     if (extraLine) {
       screen.text(extraLine.slice(0, 33), 24, 150, "#e8c84a");

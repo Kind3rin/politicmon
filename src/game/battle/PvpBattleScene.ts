@@ -287,6 +287,15 @@ export class PvpBattleScene implements Scene {
         case "switch": {
           const st = this.view[ev.side];
           const incoming = st.party[ev.index];
+          // Host malevolo su relay pubblico: sanitizeTurnlog clampa index a 0..5
+          // ma NON alla dimensione reale del party. Uno switch verso un indice
+          // oltre il team fa incoming=undefined → speciesOf(undefined) crasha e
+          // desincronizza il duello del guest. Interrompi con walkover invece
+          // di dereferenziare (applyEvent tollera già l'indice cattivo).
+          if (!incoming) {
+            this.walkover("disconnect");
+            return;
+          }
           const label =
             ev.side === this.mySide
               ? `Tocca a te, ${speciesOf(incoming).name}!`

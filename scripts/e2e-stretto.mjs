@@ -37,7 +37,7 @@ await page.evaluate(() => {
   const st = {
     party: [{ id: "x", speciesId: "renzino", level: 40, exp: 999999, hp: 30, moves: [], status: null }],
     bag: {}, dex: {}, flags: { "dex-received": true, "starter-chosen": true, "intro-done": true, "veh-traghetto": true },
-    defeatedTrainers: [], pickedItems: [], pos: { mapId: "capitale", x: 12, y: 17, facing: "down" },
+    defeatedTrainers: [], pickedItems: [], pos: { mapId: "capitale", x: 6, y: 19, facing: "down" },
     starterId: "renzino", money: 5000, badges: ["auditel", "spread", "dazio"], sondaggi: 60,
     ministri: {}, bulldozed: [], vehicle: null, rivalWins: 5, chips: 0, boxed: [], lastBar: "capitale",
     zoneRewardsClaimed: [], stepsTotal: 0, trainerRematch: {}, lastDailyDate: "", repellentSteps: 9999,
@@ -70,22 +70,25 @@ await shot("e2e_st_00b_ready");
 const p0 = await pos();
 check("boot in-world a CAPUT MUNDI", p0 && p0.map === "capitale");
 
-// Scendi verso il molo (12,19): 2-3 passi giù → warp diretto allo STRETTO.
+// Scendi verso l'IMBARCO (6,21): 2 passi giù → warp allo STRETTO, approdo NAVALE
+// sull'ACQUA del bordo sud (14,16) col TRAGHETTO attivo (non più spawn sul molo).
 await tap("ArrowDown", 700);
 await tap("ArrowDown", 700);
 await page.waitForTimeout(500);
 await shot("e2e_st_01_approdo");
 const p1 = await pos();
-check("approdo DIRETTO allo STRETTO (no mappa mare)", p1 && p1.map === "stretto");
-check("approdo su acqua → traghetto attivo", p1 && p1.veh === "traghetto");
+check("approdo allo STRETTO (no mappa mare intermedia)", p1 && p1.map === "stretto");
+check("approdo su ACQUA → traghetto attivo (arrivo navale)", p1 && p1.veh === "traghetto");
+check("spawn sul BORDO SUD in acqua (non a metà mappa)", p1 && p1.y >= 14);
 
-// Risali dal molo nord dello stretto → ritorno a CAPUT MUNDI.
+// Torna in acqua a nord (verso il ponte/molo) navigando: qui verifichiamo solo
+// che la navigazione parta (resta traghetto). La traversata completa fino al molo
+// richiede di battere IL CAPITANO (gate), fuori scope per questo E2E.
 await tap("ArrowUp", 700);
-await tap("ArrowUp", 700);
-await page.waitForTimeout(500);
-await shot("e2e_st_02_ritorno");
+await page.waitForTimeout(300);
+await shot("e2e_st_02_naviga");
 const p2 = await pos();
-check("ritorno DIRETTO a CAPUT MUNDI", p2 && p2.map === "capitale");
+check("navigazione attiva (traghetto mantenuto risalendo)", p2 && p2.map === "stretto" && p2.veh === "traghetto");
 
 await browser.close();
 let fail = 0;

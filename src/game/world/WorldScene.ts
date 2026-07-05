@@ -340,7 +340,13 @@ export class WorldScene implements Scene {
     audio.playMusic(this.map.music ?? "borgo");
     this.fadeT = 0.35; // breve dissolvenza d'ingresso nella nuova mappa
     // Memorizza l'ultima città-con-bar visitata: è lì che si respawna al KO.
-    if (this.map.outdoor && BAR_RESPAWN[mapId]) {
+    // ECCEZIONE Stretto: finché IL CAPITANO non è battuto (ponte-beaten), NON
+    // impostare qui il respawn — il bar dello Stretto (14,5) è a NORD del gate del
+    // ponte, quindi perdere contro il Capitano ti farebbe rinascere OLTRE di lui,
+    // saltando il boss. Restando su Caput Mundi come respawn, una sconfitta ti
+    // riporta prima del gate e devi riaffrontarlo.
+    const gatedStretto = mapId === "stretto" && !this.state.flags["ponte-beaten"];
+    if (this.map.outdoor && BAR_RESPAWN[mapId] && !gatedStretto) {
       this.state.lastBar = mapId;
     }
     // Multiplayer: entra nella room di questa mappa (vedi solo chi è qui).

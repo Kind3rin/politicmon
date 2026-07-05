@@ -369,23 +369,34 @@ const CAPITALE_TILES = [
 // PONTE: arrivando dalla capitale SBARCHI SUL MOLO (13,6), a piedi, non in mezzo
 // all'acqua. Per RIPARTIRE entri nell'acqua ai lati del molo (12,6 / 15,6) col
 // TRAGHETTO. Da lì il ponte scende fino al cantiere e al Capitano.
+// APPRODO NAVALE + CAPITANO CANCELLO OBBLIGATORIO (rework).
+// - Si arriva DALL'ACQUA: lo spawn è (14,16) = mare bordo sud, traghetto auto-attivo.
+// - La riga 8 (confine mare/terra) è murata di scogli '^' (solid, blocca la
+//   navigazione) tranne il VARCO del ponte (col 13-14 = 'jj'): i bacini laterali
+//   sono sigillati, l'unica rotta d'approdo passa dal ponte.
+// - Il ponte è ristretto a SINGLE-FILE (col 14 = 'j'; col 15 riempita di 'J'): non
+//   c'è corsia di sorpasso. IL CAPITANO (14,11) facing "down" copre col cono di
+//   vista (14,12..15): sbarcando su (14,15) il fight scatta al primo passo e finché
+//   il boss è lì (solido, pre ponte-beaten) il molo resta irraggiungibile a piedi.
+// - Il porto è un PONTILE largo (riga 7 = 'qqqqqq') + banchina, leggibile come porto.
+// - Ritorno: dal molo entri in acqua ai lati (12,6)/(15,6) → warp a Caput Mundi.
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......@@@@......xxxx.....TT",
   "TT..~~~~.mddm.s....mdd^^^^^.TT",
   "TT..~~~~.====eQQe..===^...^.TT",
   "TT..~~~~...==mddm..===^...^.TT",
-  "TT...s.zzzz===========^^l^^.TT",
-  "TTzzzzzzzzzwwqqwwzzzzzzzzzzzTT",
-  "TTzzzzzzzzzwwqqwwzzzzzzzzzzzTT",
+  "TT...s.zzzz==qq=======^^l^^.TT",
+  "TTzzzzzzzzzXwqqwwzzzzzzzzzzzTT",
+  "TTzzzzzzzzzqqqqqqzzzzzzzzzzzTT",
+  "^^^^^^^^^^^^JjjJ^^^^^^^^^^^^^^",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwKJjjJKwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwjjjjwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJJwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJJwwwwwwwwwwwww",
+  "wwwwwwwwwwwwKJjJJKwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJJwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwjjjJwwwwwwwwwwwww",
   "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 ];
 
@@ -1378,7 +1389,10 @@ export const MAPS: Record<string, MapDef> = {
         // vede davvero; col TRAGHETTO scendi in acqua e approdi DIRETTAMENTE a nord
         // dello STRETTO (13,6) — niente mappa "mare" intermedia. Il MARINAIO accanto
         // regala la MN a 3 medaglie.
-        x: 6, y: 21, toMap: "stretto", toX: 13, toY: 6, facing: "down",
+        // Arrivo NAVALE: si approda in ACQUA sul bordo sud dello Stretto (14,16) col
+        // TRAGHETTO già attivo (syncFerryVehicle: onWater + flag → vehicle=traghetto)
+        // e si NAVIGA a nord fino al porto — niente più spawn "in mezzo alla mappa".
+        x: 6, y: 21, toMap: "stretto", toX: 14, toY: 16, facing: "up",
         requiresFlag: "veh-traghetto",
         lockedLines: ["Il MOLO è chiuso.", "Il MARINAIO non ti fa salire senza il TRAGHETTO."]
       },
@@ -1787,7 +1801,7 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-s1", x: 3, y: 6, itemId: "schedona", qty: 1 },
       { id: "pk-s2", x: 26, y: 7, itemId: "spritz", qty: 1 },
       // Spostato da (13,15): coincideva con l'NPC capitano-after (post ponte-beaten).
-      { id: "pk-s3", x: 14, y: 9, itemId: "mojito", qty: 1 },
+      { id: "pk-s3", x: 25, y: 6, itemId: "mojito", qty: 1 },
       { id: "pk-s4", x: 3, y: 7, itemId: "dirVaffa", qty: 1 }
     ],
     npcs: [
@@ -1830,12 +1844,18 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["Protesto contro il ponte da prima che non esistesse."]
       },
       {
-        id: "tr-geometra", pal: "guard", x: 14, y: 10, facing: "up",
-        trainerId: "geometra", sightRange: 3,
+        // Spostato a (12,7) sul molo (era 14,10): la col 14 è ora il corridoio
+        // single-file del ponte, un NPC lì bloccherebbe l'uscita dopo il Capitano.
+        // hideIfFlag ponte-beaten: sparisce col boss (non serve più presidiare).
+        id: "tr-geometra", pal: "guard", x: 12, y: 7, facing: "down",
+        trainerId: "geometra", sightRange: 3, hideIfFlag: "ponte-beaten",
         lines: ["Il collaudo è ok: il ponte regge benissimo dove c'è."]
       },
       {
-        id: "tr-ilcapitano", pal: "boss", x: 15, y: 15, facing: "up",
+        // Cancello OBBLIGATORIO del ponte: a (14,11) guarda a SUD lungo il corridoio
+        // single-file (col 14). Sbarcando dal mare su (14,15) entri subito nel suo
+        // cono di vista → il fight scatta al primo passo, non è aggirabile.
+        id: "tr-ilcapitano", pal: "boss", x: 14, y: 11, facing: "down",
         trainerId: "ilcapitano", sightRange: 4, hideIfFlag: "ponte-beaten",
         lines: []
       },

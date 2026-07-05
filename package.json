@@ -8,10 +8,10 @@
   "homepage": "https://politicmon.vercel.app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lucatiengo/politicmon.git"
+    "url": "https://github.com/Kind3rin/politicmon.git"
   },
   "bugs": {
-    "url": "https://github.com/lucatiengo/politicmon/issues"
+    "url": "https://github.com/Kind3rin/politicmon/issues"
   },
   "engines": {
     "node": ">=20.19"

@@ -3,8 +3,20 @@
 Testi pronti da copiare per pubblicare il gioco. Tono: **gancio satirico + sostanza tech**.
 Link: gioco → https://politicmon.vercel.app · codice → https://github.com/Kind3rin/politicmon
 
-Asset visivi pronti: `docs/img/title.png`, `docs/img/battle.png`, `docs/img/world.png`,
-`docs/img/gameplay.gif` (GIF di battaglia, 480×360, ~290KB — perfetta per social).
+**Asset orizzontali** (README, X, feed): `docs/img/title.png`, `docs/img/battle.png`,
+`docs/img/world.png`, `docs/img/gameplay.gif` (battaglia animata 480×360, ~290KB).
+
+**Asset verticali 9:16** (Reels / TikTok / Shorts / Storie / FB):
+- `docs/img/social/reel-gameplay.mp4` — **video verticale 540×960, ~7s** pronto da caricare su TikTok / Reels / Shorts (nessuna conversione).
+- `docs/img/social/reel-gameplay.gif` — stessa cosa in GIF (per X / FB / anteprima).
+- `docs/img/social/poster-verticale.png` — locandina 1080×1920 (post singolo o cover).
+- `docs/img/social/gameplay.mp4` — versione orizzontale 480×360 (per X / feed).
+
+> ✅ Gli MP4 sono già pronti: caricali direttamente. Sono corti (~7s in loop) —
+> ottimi come clip d'aggancio. Per un video più lungo/narrato, registra lo schermo
+> mentre giochi (OBS / registrazione del telefono) e monta seguendo lo storyboard.
+> Per rigenerare gli asset: `node scripts/make-social-vertical.mjs` +
+> `node scripts/make-social-poster.mjs` (dev server attivo), poi `ffmpeg` per l'MP4.
 
 ---
 
@@ -55,17 +67,59 @@ Asset visivi pronti: `docs/img/title.png`, `docs/img/battle.png`, `docs/img/worl
 
 ---
 
-## 📸 Instagram / TikTok (caption)
+## 📸 Instagram (Reel + caption)
+
+**Asset:** posta `reel-gameplay.gif` (convertito in MP4) come Reel, oppure
+`poster-verticale.png` come post singolo / cover.
 
 > 🗳️ **POLITICMON** — il Pokémon della politica italiana
 >
-> Scegli il tuo starter (Destra 🔥 Sinistra 🐱 Centro 🦎), scala i sondaggi e cattura i 42 mostri più discussi del Paese.
+> Scegli il tuo starter (Destra 🔥 Sinistra 🐱 Centro 🦎), scala i SONDAGGI e cattura i 42 mostri più discussi del Paese.
 >
-> Popolare? Vai al governo. Impopolare? In piazza a urlare. I sondaggi decidono chi diventi.
+> 📊 Popolare? Vai al governo. Impopolare? In piazza a urlare. **I sondaggi decidono chi diventi.**
 >
-> Gratis, nel browser 👉 link in bio
+> 🎮 Gratis, nel browser — link in bio
 >
-> #politicmon #pokemon #satira #pixelart #indiegame #videogiochi #politica #gamedev
+> #politicmon #pokemon #satira #pixelart #indiegame #videogiochi #politicaitaliana #gamedev #retrogaming #memes
+
+**Prime 3 righe (l'hook che si vede senza "…altro"):** tienile forti — la battuta
+starter + "i sondaggi decidono chi diventi" è il gancio.
+
+---
+
+## 🎵 TikTok (caption breve + hook parlato)
+
+**Asset:** `reel-gameplay.gif` → MP4 verticale. Meglio ancora: uno screen-record di
+30s mentre giochi una battaglia vera, con l'hook nei primi 2 secondi.
+
+**Hook da dire/scrivere nei primi 2s** (scegline uno):
+> "Ho fatto un Pokémon con i politici italiani."
+> "In questo gioco i sondaggi decidono in cosa si evolvono i mostri."
+> "Nessuno ha chiesto un Pokémon della politica italiana. L'ho fatto lo stesso."
+
+**Caption:**
+> Catturali tutti prima che ti tassino 🗳️ Gioca gratis nel browser (link in bio)
+> #politicmon #pokemon #satira #italia #indiegame #pixelart #fyp #videogiochi
+
+---
+
+## 👍 Facebook
+
+FB premia i post con immagine grande e poco testo iniziale. Usa `poster-verticale.png`
+oppure `gameplay.gif`, e metti il link in fondo (non tagghi il primo commento).
+
+> 🗳️ **Politicmon** — ho fatto un clone di Pokémon a tema satira politica italiana.
+>
+> Scegli il tuo starter tra Destra, Sinistra e Centro, giri l'Italia caricaturale e
+> catturi 42 "Politicmon". La stat-firma sono i **SONDAGGI**: se sei popolare le tue
+> creature si evolvono "al governo", se sei impopolare finiscono "all'opposizione".
+>
+> Gira nel browser, si installa come app, ha pure un multiplayer gratuito. È tutto
+> gratis e open source.
+>
+> 👉 Gioca ora: https://politicmon.vercel.app
+>
+> (È satira di fantasia, caricature senza cattiveria 😄)
 
 ---
 

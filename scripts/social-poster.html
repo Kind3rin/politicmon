@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; }
+  body {
+    background:
+      radial-gradient(120% 60% at 50% 0%, #26325a 0%, #12151f 55%),
+      #12151f;
+    font-family: "Courier New", monospace;
+    color: #ece4cf;
+    position: relative;
+  }
+  /* scanlines */
+  body::after {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0 4px, rgba(0,0,0,0.18) 4px 6px);
+    pointer-events: none;
+  }
+  .flag { display: flex; justify-content: center; gap: 0; margin: 90px auto 20px; width: 240px; border: 4px solid rgba(255,255,255,0.15); }
+  .flag i { flex: 1; height: 22px; }
+  .eyebrow { text-align: center; letter-spacing: 14px; font-size: 26px; color: #e8c84a; text-transform: uppercase; font-weight: bold; }
+  h1 {
+    text-align: center; font-size: 150px; font-weight: 900; letter-spacing: 6px;
+    color: #e8c84a; text-shadow: 0 6px 0 #c79a2e, 0 10px 30px rgba(0,0,0,0.7);
+    margin: 14px 0 10px; text-transform: uppercase;
+  }
+  .tag { text-align: center; font-size: 44px; font-style: italic; color: #ece4cf; margin-bottom: 44px; }
+  .shot {
+    display: block; width: 900px; margin: 0 auto;
+    border: 6px solid #2b3350; border-radius: 14px;
+    image-rendering: pixelated; box-shadow: 0 40px 90px rgba(0,0,0,0.6);
+  }
+  .stats { display: flex; justify-content: center; gap: 0; margin: 54px auto 0; width: 960px; }
+  .stat { flex: 1; text-align: center; border-left: 2px solid #2a3046; }
+  .stat:first-child { border-left: 0; }
+  .stat b { display: block; font-size: 72px; font-weight: 900; color: #e8c84a; }
+  .stat span { font-size: 24px; letter-spacing: 4px; color: #8a94ad; text-transform: uppercase; }
+  .cta {
+    position: absolute; bottom: 90px; left: 0; right: 0; text-align: center;
+  }
+  .cta .big { font-size: 60px; font-weight: 900; color: #e8c84a; letter-spacing: 4px; text-transform: uppercase; }
+  .cta .url {
+    display: inline-block; margin-top: 24px; font-size: 40px; font-weight: bold;
+    background: #e8c84a; color: #12151f; padding: 18px 44px; border-radius: 6px; letter-spacing: 2px;
+  }
+</style></head><body>
+  <div class="flag"><i style="background:#3aa856"></i><i style="background:#f4f1e6"></i><i style="background:#d0453f"></i></div>
+  <div class="eyebrow">RPG satirico · browser · gratis</div>
+  <h1>Politicmon</h1>
+  <div class="tag">Catturali tutti, prima che ti tassino.</div>
+  <img class="shot" src="SHOT_SRC" alt="">
+  <div class="stats">
+    <div class="stat"><b>42</b><span>Mostri</span></div>
+    <div class="stat"><b>71</b><span>Mosse</span></div>
+    <div class="stat"><b>0€</b><span>Sempre</span></div>
+  </div>
+  <div class="cta">
+    <div class="big">Scendi in campo</div>
+    <div class="url">politicmon.vercel.app</div>
+  </div>
+</body></html>

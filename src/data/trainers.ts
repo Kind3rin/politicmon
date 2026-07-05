@@ -77,7 +77,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   emittenza: {
     id: "emittenza", name: "SUA EMITTENZA", pal: "boss",
-    team: [["tajanide", 12], ["berlusconix", 14]],
+    team: [["tajanide", 12], ["berlusconix", 12]],
     intro: [
       "Benvenuto nel mio studio, giovane!",
       "Le mie reti, i miei giornali, la tua opinione: indovina di chi è.",

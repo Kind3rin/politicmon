@@ -54,9 +54,15 @@ const CHART: Partial<Record<PolType, Partial<Record<PolType, number>>>> = {
   POPULISMO: { TECNO: 2, ISTITUZIONE: 2, CENTRO: 0.5 },
   TECNO: { CENTRO: 2, MEDIA: 2, POPULISMO: 0.5 },
   DESTRA: { SINISTRA: 2, VERDE: 2, ISTITUZIONE: 0.5, CENTRO: 0.5 },
-  SINISTRA: { DESTRA: 2, SINISTRA: 2, POPULISMO: 0.5 },
+  // SINISTRA→CENTRO: 2 chiude il triangolo degli starter (DESTRA>SINISTRA>CENTRO>
+  // DESTRA). Prima ellyna/SINISTRA non aveva vantaggio su renzino/CENTRO (che anzi
+  // la resisteva 0.6×): lo starter di sinistra era offensivamente il più debole.
+  SINISTRA: { DESTRA: 2, SINISTRA: 2, CENTRO: 2, POPULISMO: 0.5 },
   CENTRO: { DESTRA: 2, SINISTRA: 0.5, TECNO: 0.5 },
-  MEDIA: { ISTITUZIONE: 2, CENTRO: 2, TECNO: 0.5 },
+  // MEDIA→DESTRA: 0.5 dà a DESTRA la sua PRIMA resistenza (era debole a 3 tipi e
+  // resistito da 0, il peggior tipo difensivo pur essendo il più comune, 12/39).
+  // Flavor: la destra istituzionale incassa la gogna mediatica.
+  MEDIA: { ISTITUZIONE: 2, CENTRO: 2, DESTRA: 0.5, TECNO: 0.5 },
   ISTITUZIONE: { POPULISMO: 2, MEDIA: 0.5, ISTITUZIONE: 0.5 },
   // R42: VERDE super-efficace anche contro TECNO (attivismo vs tecnocrazia).
   // Dà a TECNO una seconda debolezza diretta (aveva solo POPULISMO), senza

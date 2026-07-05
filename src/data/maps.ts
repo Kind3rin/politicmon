@@ -1861,7 +1861,7 @@ export const MAPS: Record<string, MapDef> = {
   },
 
   // PARADISO OFFSHORE: isola post-game a est dello STRETTO (boe con
-  // requiresFlag garante-beaten). Wild lv 38-45 con le prime catture selvatiche
+  // requiresFlag garante-beaten). Wild lv 30-45 (curva post-storia) con le prime catture selvatiche
   // di telecrate/pontimax/conteblob, bar-healer LIDO CAYMAN e il mini-boss
   // IL TESORIERE FANTASMA sull'altopiano (flag offshore-beaten).
   offshore: {
@@ -1893,17 +1893,19 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     encounterRate: 0.18,
-    // Post-game lv 38-45 (mai oltre il level cap 55 del giocatore, audit C2/R42).
-    // Prime catture selvatiche: telecrate, pontimax, conteblob (zona Dex).
+    // Post-game: banda d'ingresso abbassata a lv 30-38 (raccordo con la fine storia
+    // ~lv28-32) e curva crescente verso i pezzi grossi lv 42-45. Prima l'intera zona
+    // partiva a lv38-45 → un muro di 8+ livelli subito dopo i titoli, dove serve
+    // retention non grinding (audit gameplay). Mai oltre il level cap 55.
     encounters: [
-      { speciesId: "telecrate", weight: 26, minLv: 38, maxLv: 42 },
-      { speciesId: "trumpon", weight: 18, minLv: 39, maxLv: 44 },
-      { speciesId: "putingrad", weight: 14, minLv: 39, maxLv: 44 },
-      { speciesId: "xipanda", weight: 14, minLv: 39, maxLv: 44 },
-      { speciesId: "muskrat", weight: 12, minLv: 38, maxLv: 41 },
-      { speciesId: "pontimax", weight: 10, minLv: 42, maxLv: 45 },
-      { speciesId: "conteblob", weight: 5, minLv: 40, maxLv: 44 },
-      { speciesId: "mattarellux", weight: 1, minLv: 45, maxLv: 45 }
+      { speciesId: "telecrate", weight: 26, minLv: 30, maxLv: 35 },
+      { speciesId: "trumpon", weight: 18, minLv: 32, maxLv: 38 },
+      { speciesId: "putingrad", weight: 14, minLv: 33, maxLv: 39 },
+      { speciesId: "xipanda", weight: 14, minLv: 33, maxLv: 39 },
+      { speciesId: "muskrat", weight: 12, minLv: 31, maxLv: 37 },
+      { speciesId: "pontimax", weight: 10, minLv: 40, maxLv: 44 },
+      { speciesId: "conteblob", weight: 5, minLv: 36, maxLv: 41 },
+      { speciesId: "mattarellux", weight: 1, minLv: 44, maxLv: 45 }
     ],
     signs: [
       {

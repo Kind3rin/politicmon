@@ -89,6 +89,12 @@ export const ITEMS: Record<string, Item> = {
     id: "dirMulta", name: "DIRETTIVA: MULTA UE", kind: "tm", moveId: "multaue", reusable: true, price: 3400,
     desc: "Sanzione da Bruxelles, more incluse. Insegna MULTA UE ai tipi TECNO."
   },
+  // Rimedio in-game al buco storico della SINISTRA (l'unica speciale STAB, SCISSIONE,
+  // si autoferisce): PIAZZA GREMITA è una speciale pulita per gli attaccanti SINISTRA.
+  dirPiazza: {
+    id: "dirPiazza", name: "DIRETTIVA: PIAZZA", kind: "tm", moveId: "piazza", reusable: true, price: 2100,
+    desc: "Permesso per il corteo in centro. Insegna PIAZZA GREMITA ai tipi SINISTRA."
+  },
 
   // ---- OGGETTI DA TENERE (hold: 1 slot per POLITICMON) ----
   // Gli effetti vivono in sim.ts (calcDamage) e BattleScene (per turno).
@@ -159,4 +165,4 @@ export const BAG_ORDER = [
 ];
 
 // Le DIRETTIVE in vendita al Discount (le altre si trovano/sono ricompense).
-export const SHOP_DIRECTIVES = ["dirDecreto", "dirFiamma", "dirSciopero", "dirInciucio"];
+export const SHOP_DIRECTIVES = ["dirDecreto", "dirFiamma", "dirSciopero", "dirPiazza", "dirInciucio"];

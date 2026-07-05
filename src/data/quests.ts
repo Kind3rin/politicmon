@@ -48,6 +48,10 @@ export const QUESTS: QuestDef[] = [
   },
   {
     id: "governo",
+    // side: la formazione del GOVERNO OMBRA è opzionale e senza target; se guidasse
+    // l'HUD, dopo la 1ª medaglia la freccia sparirebbe e il "prossimo passo" naggerebbe
+    // su una feature secondaria invece di puntare a gym2/EUROTOWN.
+    side: true,
     title: "TOTOMINISTRI",
     desc: "Forma il GOVERNO OMBRA: assegna almeno un ministero a un tuo POLITICMON.",
     hint: "Menu (START) -> GOVERNO. Ogni ministero dà un bonus passivo alla campagna.",
@@ -157,7 +161,9 @@ export const QUESTS: QuestDef[] = [
     isDone: (s) => s.dex["berlusconix"] === "caught"
   },
   {
-    id: "direttiva",
+    // side: sono tutorial-obiettivi opzionali; dopo il climax UE non devono
+    // diventare il "prossimo passo" dell'HUD (sarebbe anticlimatico).
+    id: "direttiva", side: true,
     title: "LINEA DI PARTITO",
     desc: "Usa una DIRETTIVA DI PARTITO per insegnare una nuova mossa a un POLITICMON compatibile.",
     hint: "Le DIRETTIVE si comprano al Discount o si trovano in giro. Funzionano solo sul tipo giusto e si riusano all'infinito.",
@@ -165,7 +171,7 @@ export const QUESTS: QuestDef[] = [
     isDone: (s) => Boolean(s.flags["used-directive"])
   },
   {
-    id: "tessera",
+    id: "tessera", side: true,
     title: "CARRIERE DORATE",
     desc: "Usa una TESSERA DORATA per far cambiare carriera a un POLITICMON.",
     hint: "In vendita al Discount Elettorale. SALVINATOR e MUSKRAT ne vanno matti.",

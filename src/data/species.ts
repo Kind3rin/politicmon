@@ -51,7 +51,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["DESTRA"],
     base: { hp: 76, atk: 84, def: 76, spc: 95, spd: 75 },
     catchRate: 25, expYield: 180,
-    learnset: [[1, "comizio"], [1, "radici"], [16, "fiammatricolore"], [19, "pacchiafinita"], [22, "blocconavale"], [28, "decreto"]],
+    learnset: [[1, "comizio"], [1, "radici"], [1, "iosonogiorgia"], [16, "fiammatricolore"], [19, "pacchiafinita"], [22, "blocconavale"], [26, "mondocontrario"], [30, "decreto"]],
     ability: "maggioranza",
     dexLine: "DRAGO UNDERDOG. PIÙ LO CRITICANO A BRUXELLES, PIÙ LA SUA FIAMMA TRICOLORE DIVAMPA."
   }),
@@ -60,7 +60,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["SINISTRA"],
     base: { hp: 49, atk: 54, def: 57, spc: 58, spd: 52 },
     catchRate: 45, expYield: 62,
-    learnset: [[1, "corteo"], [1, "comizio"], [1, "ztl"], [5, "greenwashing"], [11, "sciopero"], [13, "scissione"]],
+    learnset: [[1, "corteo"], [1, "comizio"], [1, "ztl"], [5, "greenwashing"], [9, "piazza"], [11, "sciopero"], [13, "articolouno"], [15, "scissione"]],
     evolutions: [{ id: "schleinix", level: 16 }],
     dexLine: "GATTINA GENTILE. PASSA PIÙ TEMPO A DISCUTERE CON LE ALTRE ELLYNA CHE COL NEMICO."
   }),
@@ -69,7 +69,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["SINISTRA", "VERDE"],
     base: { hp: 74, atk: 74, def: 78, spc: 98, spd: 74 },
     catchRate: 25, expYield: 180,
-    learnset: [[1, "corteo"], [1, "ztl"], [16, "greenwashing"], [20, "sciopero"], [26, "scissione"]],
+    learnset: [[1, "corteo"], [1, "piazza"], [1, "ztl"], [16, "articolouno"], [20, "pistaciclabile"], [24, "sciopero"], [28, "transizione"], [32, "scissione"]],
     ability: "opposizione",
     dexLine: "PIÙ BRAVA A SCEGLIERE LA PALETTE CHE LA CORRENTE. LA SUA MOSSA MIGLIORE FA MALE SOLO AI SUOI."
   }),
@@ -88,7 +88,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["CENTRO"],
     base: { hp: 71, atk: 88, def: 72, spc: 80, spd: 90 },
     catchRate: 25, expYield: 180,
-    learnset: [[1, "giravolta"], [1, "terzopolo"], [16, "staisereno"], [20, "rottamazione"], [22, "inciucio"], [28, "editoriale"]],
+    learnset: [[1, "giravolta"], [1, "terzopolo"], [1, "promessa"], [16, "staisereno"], [20, "rottamazione"], [22, "inciucio"], [26, "enmarche"], [28, "editoriale"]],
     ability: "voltagabbana",
     dexLine: "ROTTAMA I GOVERNI CHE HA FONDATO LUI, POI SI STUPISCE CHE NESSUNO SI FIDI PIÙ."
   }),
@@ -169,7 +169,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["MEDIA", "DESTRA"],
     base: { hp: 80, atk: 70, def: 65, spc: 105, spd: 85 },
     catchRate: 8, expYield: 240,
-    learnset: [[1, "tweet"], [1, "telepromessa"], [12, "conferenza"], [18, "editoriale"], [25, "bunga"]],
+    learnset: [[1, "tweet"], [1, "telepromessa"], [1, "conferenza"], [12, "editoriale"], [18, "bunga"], [22, "appelloalleati"], [28, "covfefe"], [34, "memedoge"]],
     ability: "lodo",
     dexLine: "BISCIONE LEGGENDARIO. NON COMPRA I VOTI: COMPRA IL CANALE CHE TI SPIEGA PER CHI VOTARE."
   }),
@@ -178,7 +178,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["TECNO", "ISTITUZIONE"],
     base: { hp: 85, atk: 75, def: 90, spc: 115, spd: 80 },
     catchRate: 10, expYield: 250,
-    learnset: [[1, "spread"], [1, "moralsuasion"], [15, "dossier"], [20, "fiducia"], [26, "whatever"]],
+    learnset: [[1, "spread"], [1, "moralsuasion"], [1, "gazzetta"], [15, "dossier"], [20, "fiducia"], [24, "quorum"], [26, "whatever"], [30, "scioglimento"]],
     ability: "whatever",
     dexLine: "VIENE EVOCATO SOLO NELLE CRISI. NON LO ELEGGE NESSUNO, MA COMANDA A CHI LO HA ELETTO."
   }),
@@ -187,7 +187,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["ISTITUZIONE"],
     base: { hp: 90, atk: 70, def: 95, spc: 100, spd: 70 },
     catchRate: 3, expYield: 255,
-    learnset: [[1, "moralsuasion"], [1, "fiducia"], [18, "aureola"], [24, "decreto"], [30, "scioglimento"]],
+    learnset: [[1, "moralsuasion"], [1, "fiducia"], [1, "gazzetta"], [14, "decreto"], [18, "aureola"], [22, "quorum"], [26, "oscuramento"], [30, "scioglimento"]],
     ability: "garanzia",
     dexLine: "GARANTE SUPREMO. L'UNICO CHE NON HA MAI FATTO UNA PROMESSA ELETTORALE: PER QUESTO L'HANNO RIELETTO."
   }),
@@ -283,7 +283,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["POPULISMO", "SINISTRA"],
     base: { hp: 82, atk: 68, def: 88, spc: 92, spd: 58 },
     catchRate: 15, expYield: 200,
-    learnset: [[1, "comizio"], [1, "greenwashing"], [22, "redditone"], [26, "fiducia"], [31, "decreto"]],
+    learnset: [[1, "comizio"], [1, "greenwashing"], [1, "piazza"], [22, "redditone"], [26, "fiducia"], [29, "articolouno"], [31, "decreto"], [35, "gazzetta"]],
     ability: "maggioranza",
     dexLine: "URLAVA 'TUTTI A CASA', ORA HA UN UFFICIO A PALAZZO CON VISTA. GIURA CHE NON È CAMBIATO NIENTE."
   }),
@@ -292,7 +292,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["POPULISMO", "DESTRA"],
     base: { hp: 88, atk: 102, def: 74, spc: 62, spd: 72 },
     catchRate: 10, expYield: 210,
-    learnset: [[1, "ruspa"], [1, "mojito"], [1, "pienipoteri"], [30, "blocconavale"], [34, "dazilampo"]],
+    learnset: [[1, "ruspa"], [1, "mojito"], [1, "pienipoteri"], [1, "citofonata"], [30, "blocconavale"], [34, "dazilampo"], [38, "vaffa"]],
     ability: "caimano",
     dexLine: "HA CHIESTO I PIENI POTERI IN SPIAGGIA E LI HA PERSI IN SPIAGGIA. IL MOJITO È RIMASTO."
   }),
@@ -331,7 +331,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["SINISTRA", "POPULISMO"],
     base: { hp: 82, atk: 58, def: 92, spc: 100, spd: 52 },
     catchRate: 35, expYield: 205,
-    learnset: [[1, "pochette"], [1, "telepromessa"], [18, "conferenza"], [24, "fiducia"], [30, "decreto"]],
+    learnset: [[1, "pochette"], [1, "telepromessa"], [1, "piazza"], [18, "conferenza"], [24, "fiducia"], [28, "concertone"], [30, "decreto"], [34, "gazzetta"]],
     ability: "teflon",
     dexLine: "HA GOVERNATO CON I SUOI PEGGIORI NEMICI, POI DI NUOVO, POI CON QUELLI DI PRIMA. NON RICORDA PIÙ CHI ODIA."
   }),
@@ -348,7 +348,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["DESTRA"],
     base: { hp: 88, atk: 108, def: 82, spc: 48, spd: 62 },
     catchRate: 30, expYield: 210,
-    learnset: [[1, "mondocontrario"], [1, "blocconavale"], [20, "radici"], [25, "dazilampo"], [31, "decreto"]],
+    learnset: [[1, "mondocontrario"], [1, "blocconavale"], [1, "iosonogiorgia"], [20, "radici"], [25, "dazilampo"], [28, "pienipoteri"], [31, "decreto"], [35, "fiammatricolore"]],
     dexLine: "HA UNA MAPPA AL CONTRARIO E LA DIFENDE CON FERMEZZA. SE GLIELA GIRI, DICE CHE È PROPAGANDA."
   }),
   tajacolomba: S({
@@ -385,7 +385,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["VERDE"],
     base: { hp: 48, atk: 50, def: 55, spc: 58, spd: 54 },
     catchRate: 120, expYield: 66,
-    learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [8, "monopattino"], [12, "incollamano"], [16, "sciopreverde"]],
+    learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [8, "monopattino"], [11, "pistaciclabile"], [14, "incollamano"], [16, "sciopreverde"]],
     evolutions: [{ id: "ecoverdon", level: 18 }],
     ability: "galleggiamento",
     dexLine: "FIRMA PETIZIONI ANCORA PRIMA DI SBOCCIARE. SI INNAFFIA DA SOLO PER RIDURRE L'IMPRONTA IDRICA."
@@ -395,7 +395,7 @@ export const SPECIES: Record<string, Species> = {
     types: ["VERDE"],
     base: { hp: 78, atk: 72, def: 84, spc: 92, spd: 70 },
     catchRate: 45, expYield: 175,
-    learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [18, "incollamano"], [22, "sciopreverde"], [28, "corteo"]],
+    learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [1, "pistaciclabile"], [18, "incollamano"], [22, "sciopreverde"], [26, "corteo"], [30, "transizione"]],
     ability: "opposizione",
     dexLine: "PIANTA UN ALBERO PER OGNI COMIZIO AVVERSARIO. IL SUO PANNELLO SOLARE FUNZIONA ANCHE DI NOTTE, DICE LUI."
   })

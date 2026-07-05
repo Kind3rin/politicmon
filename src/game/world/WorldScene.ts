@@ -2022,6 +2022,17 @@ export class WorldScene implements Scene {
     if (here !== -1 && there !== -1) {
       return there > here ? { dx: 0, dy: -1 } : { dx: 0, dy: 1 };
     }
+    // Catena marittima post-game: stretto/offshore/bruxelles si raggiungono
+    // SALPANDO dalla capitale (hub degli imbarchi). Se il bersaglio è oltremare
+    // e non siamo ancora alla capitale, guida prima verso la capitale (che è la
+    // cima della northChain, quindi a nord). Dalla capitale il fallback warp-based
+    // sotto punta all'imbarco giusto.
+    const maritime = ["stretto", "offshore", "bruxelles"];
+    if (maritime.includes(targetMap) && this.map.id !== "capitale") {
+      if (here !== -1) {
+        return { dx: 0, dy: -1 }; // risali la northChain verso la capitale
+      }
+    }
     // Interni (lab/palazzo/colle): se sono il bersaglio e siamo nella città
     // giusta, punta verso il warp d'ingresso corrispondente sulla mappa.
     const warp = this.map.warps.find((w) => w.toMap === targetMap);

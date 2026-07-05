@@ -91,6 +91,8 @@ export class BattleScene implements Scene {
   // Efficacia per mossa (allineata a fightMenu.items): colora le label nel
   // menu LOTTA se la specie avversaria è già nel Dex.
   private fightEff: Array<"super" | "weak" | "immune" | null> = [];
+  // true quando il menu LOTTA mostra il solo COMIZIO di riserva (tutte le mosse a 0 PP).
+  private fightFallback = false;
   private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
   private askText = "";
   private askYes: (() => void) | null = null;
@@ -480,14 +482,30 @@ export class BattleScene implements Scene {
         run: () => {
           const max = statsOf(attacker.mon).hp;
           attacker.mon.hp = Math.min(max, attacker.mon.hp + Math.floor(max * effect.healRatio!));
-          if (effect.cureStatus) {
-            attacker.mon.status = null;
-          }
           audio.heal();
         },
         waitHp: true
       });
       steps.push({ text: `${attackerName} recupera consenso!` });
+    }
+    // Cura status: blocco INDIPENDENTE da healRatio. Prima era annidato dentro
+    // if(healRatio), quindi NON CE N'È (cureStatus senza healRatio) non curava mai
+    // nulla nonostante la UI promettesse "TOGLIE STATUS". Azzera anche gaffeTurns
+    // (la GAFFE è un contatore su Combatant, non un mon.status).
+    if (effect?.cureStatus) {
+      const hadStatus = attacker.mon.status !== null || attacker.gaffeTurns > 0;
+      steps.push({
+        run: () => {
+          attacker.mon.status = null;
+          attacker.gaffeTurns = 0;
+          if (hadStatus) {
+            audio.heal();
+          }
+        }
+      });
+      if (hadStatus) {
+        steps.push({ text: `${attackerName} si libera di ogni grana!` });
+      }
     }
     if (effect?.stat) {
       const target = effect.stat.target === "self" ? attacker : defender;
@@ -918,7 +936,15 @@ export class BattleScene implements Scene {
     this.player = makeCombatant(mon);
     this.displayHp.player = mon.hp;
     this.displayExp = this.expRatio();
-    const steps: Step[] = [{ text: `Tocca a te, ${this.playerName()}!` }];
+    const steps: Step[] = [];
+    // Avviso one-shot: al PRIMO cambio volontario (non forzato da KO) spiega che
+    // il cambio lascia campo libero all'avversario. Un neofita altrimenti cambia
+    // "per guardare" e si becca un colpo gratis senza capire perché.
+    if (!afterFaint && !this.state.flags["seen-switch-tip"]) {
+      this.state.flags["seen-switch-tip"] = true;
+      steps.push({ text: "Cambiare candidato lascia campo libero all'avversario: perdi il turno!" });
+    }
+    steps.push({ text: `Tocca a te, ${this.playerName()}!` });
     if (abilityOf(mon)?.id === "voltagabbana") {
       steps.push({ text: `${this.playerName()} cambia casacca al volo: OPPORTUNISMO sale!` });
     }
@@ -1305,6 +1331,13 @@ export class BattleScene implements Scene {
           handler(this.fightMenu.index);
           return;
         }
+        if (this.fightFallback) {
+          // COMIZIO di riserva a PP esauriti: non consuma PP (il mon non ha lo
+          // slot COMIZIO, quindi startTurn non decrementa nulla).
+          this.mode = "queue";
+          this.startTurn(MOVES.comizio);
+          return;
+        }
         const slot = this.player.mon.moves[this.fightMenu.index];
         if (!slot || slot.pp <= 0) {
           audio.cancel();
@@ -1410,6 +1443,19 @@ export class BattleScene implements Scene {
     // La GUIDA TIPI nel menu pausa è il riferimento completo.
     const foeTypes = speciesOf(this.foe.mon).types;
     this.fightEff = [];
+    // STRUGGLE/COMIZIO di riserva: se TUTTE le mosse sono a 0 PP, senza un
+    // fallback il giocatore non potrebbe agire (mosse disabled, fuga vietata vs
+    // trainer) → soft-lock. L'IA nemica ha già COMIZIO gratis (sim.ts chooseFoeMove);
+    // qui pareggiamo l'asimmetria. Compare SOLO quando serve.
+    this.fightFallback = this.player.mon.moves.every((s) => s.pp <= 0);
+    if (this.fightFallback) {
+      this.fightEff.push(null);
+      this.fightMenu = new Menu([
+        { label: "COMIZIO", rightLabel: "PP —", disabled: false }
+      ]);
+      this.mode = "fight";
+      return;
+    }
     this.fightMenu = new Menu(
       this.player.mon.moves.map((slot) => {
         const move = MOVES[slot.id];

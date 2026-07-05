@@ -83,13 +83,27 @@ export function expForLevel(level: number): number {
   return Math.floor((4 * level * level * level) / 5 + 10 * level * level);
 }
 
-// Le ultime 4 mosse del learnset fino al livello dato.
+// Le 4 mosse del moveset iniziale di un mon ottenuto a un dato livello.
+// Prende le 4 più recenti del learnset MA garantisce almeno una mossa STAB da
+// danno: prima lo `slice(-4)` posizionale scartava le STAB base (imparate a lv1)
+// per una cattura ad alto livello, lasciando moveset amputati o solo-status.
 export function movesAtLevel(speciesId: string, level: number): MoveSlot[] {
-  const learnable = SPECIES[speciesId].learnset
+  const species = SPECIES[speciesId];
+  const learnable = species.learnset
     .filter(([lv]) => lv <= level)
     .map(([, id]) => id);
   const unique = [...new Set(learnable)];
-  return unique.slice(-4).map((id) => ({ id, pp: MOVES[id].pp }));
+  const picked = unique.slice(-4);
+  // Nessuna mossa da danno del tipo della specie tra le scelte? Innesta la STAB
+  // da danno più recente disponibile al posto della mossa più vecchia.
+  const isStabDamage = (id: string) => MOVES[id].power > 0 && species.types.includes(MOVES[id].type);
+  if (unique.length > 0 && !picked.some(isStabDamage)) {
+    const stab = [...unique].reverse().find(isStabDamage);
+    if (stab && !picked.includes(stab)) {
+      picked[0] = stab;
+    }
+  }
+  return picked.map((id) => ({ id, pp: MOVES[id].pp }));
 }
 
 // Prima specie del dex: fallback di sicurezza per un save manomesso/cross-version

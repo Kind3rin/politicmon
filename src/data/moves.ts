@@ -386,6 +386,50 @@ export const MOVES: Record<string, Move> = {
     power: 60, accuracy: 95, pp: 15,
     effect: { stat: { key: "spd", stages: -1, target: "foe", chance: 30 } },
     flavor: "Si incolla all'asfalto in segno di protesta: il nemico rallenta."
+  }),
+  // ------------------------------------------------- RIEQUILIBRIO SINISTRA
+  // La SINISTRA aveva solo 4 mosse (l'unica speciale, SCISSIONE, si autoferiva):
+  // uno starter a RETORICA alta senza speciale STAB pulita. Aggiunte 3 mosse.
+  piazza: M({
+    id: "piazza", name: "PIAZZA GREMITA", type: "SINISTRA", category: "speciale",
+    power: 78, accuracy: 100, pp: 15,
+    flavor: "La piazza si riempie fino all'ultimo posto: onda di consenso pulita."
+  }),
+  articolouno: M({
+    id: "articolouno", name: "ARTICOLO 1", type: "SINISTRA", category: "status",
+    power: 0, accuracy: 100, pp: 15,
+    effect: { stat: { key: "spc", stages: 1, target: "self" } },
+    flavor: "«L'Italia è una Repubblica fondata sul lavoro»: la RETORICA sale."
+  }),
+  concertone: M({
+    id: "concertone", name: "CONCERTONE", type: "SINISTRA", category: "speciale",
+    power: 60, accuracy: 100, pp: 20,
+    effect: { status: { id: "gaffe", chance: 20, target: "foe" } },
+    flavor: "Primo maggio a tutto volume: il nemico si distrae e va in GAFFE."
+  }),
+  // ------------------------------------------------- RIEQUILIBRIO ISTITUZIONE
+  // Poche mosse da danno (era quasi tutta status/cura): +2 colpi utilizzabili.
+  gazzetta: M({
+    id: "gazzetta", name: "GAZZETTA UFFICIALE", type: "ISTITUZIONE", category: "speciale",
+    power: 75, accuracy: 100, pp: 15,
+    flavor: "Pubblicato in Gazzetta: da oggi fa legge, e fa male."
+  }),
+  quorum: M({
+    id: "quorum", name: "QUORUM", type: "ISTITUZIONE", category: "fisico",
+    power: 85, accuracy: 90, pp: 10,
+    flavor: "Il numero legale arriva all'improvviso e travolge l'aula."
+  }),
+  // ------------------------------------------------- RIEQUILIBRIO VERDE
+  // Da 4 a 6 mosse: una STAB da danno pulita e una speciale forte.
+  pistaciclabile: M({
+    id: "pistaciclabile", name: "PISTA CICLABILE", type: "VERDE", category: "fisico",
+    power: 70, accuracy: 100, pp: 15,
+    flavor: "Nuova corsia in vernice fresca: taglia dritto attraverso il traffico."
+  }),
+  transizione: M({
+    id: "transizione", name: "TRANSIZIONE ECOLOGICA", type: "VERDE", category: "speciale",
+    power: 85, accuracy: 90, pp: 10,
+    flavor: "Rivoluziona tutto in un colpo. Costosa ma inarrestabile."
   })
 };
 

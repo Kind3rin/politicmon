@@ -136,10 +136,20 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
   if (effect?.healRatio) {
     const max = statsOf(attacker.mon).hp;
     attacker.mon.hp = Math.min(max, attacker.mon.hp + Math.floor(max * effect.healRatio));
-    if (effect.cureStatus) {
+    // cureStatus qui vale SOLO se c'è anche healRatio (mosse cura+status come SPIN).
+    const cured = Boolean(effect.cureStatus);
+    if (cured) {
       attacker.mon.status = null;
+      attacker.gaffeTurns = 0;
     }
-    events.push({ e: "heal", side, hpAfter: attacker.mon.hp, cured: Boolean(effect.cureStatus) });
+    events.push({ e: "heal", side, hpAfter: attacker.mon.hp, cured });
+  }
+  // Cura status PURA (cureStatus senza healRatio, es. NON CE N'È): blocco separato,
+  // altrimenti — come prima del fix — non curava mai nulla.
+  if (effect?.cureStatus && !effect.healRatio) {
+    attacker.mon.status = null;
+    attacker.gaffeTurns = 0;
+    events.push({ e: "heal", side, hpAfter: attacker.mon.hp, cured: true });
   }
   if (effect?.stat) {
     const targetSide = effect.stat.target === "self" ? side : defSide;
@@ -343,6 +353,7 @@ export function applyEvent(sim: DuelSim, ev: DuelEvent): void {
       c.mon.hp = ev.hpAfter;
       if (ev.cured) {
         c.mon.status = null;
+        c.gaffeTurns = 0;
       }
       return;
     }

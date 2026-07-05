@@ -273,7 +273,16 @@ export class TitleScene implements Scene {
     const lines = wrapText(slogan, 36);
     const y0 = lines.length > 1 ? 27 : 30;
     for (let i = 0; i < lines.length; i += 1) {
-      screen.textCenter(lines[i], VIEW_W / 2, y0 + i * 9, PAPER);
+      const line = lines[i];
+      const y = y0 + i * 9;
+      // Backing scuro dietro ogni riga: lo slogan bianco finiva sopra la bandiera
+      // dello sfondo AI (tricolore chiaro) e diventava illeggibile. La striscia
+      // semitrasparente lo stacca dal fondo su qualunque splash.
+      const w = line.length * 6 - 1;
+      screen.rect(Math.round(VIEW_W / 2 - w / 2) - 3, y - 1, w + 6, 9, "rgba(12,15,25,0.62)");
+      // Ombra netta sotto il testo, poi il testo chiaro sopra.
+      screen.textCenter(line, VIEW_W / 2 + 1, y + 1, "#06080f");
+      screen.textCenter(line, VIEW_W / 2, y, PAPER);
     }
   }
 

@@ -22,3 +22,7 @@ ruvector.db
 .claude/
 problemitest/
 graphify-out/
+
+# Note di sviluppo interne (restano su disco per le sessioni locali, ma fuori dal repo pubblico)
+CLAUDE.md
+docs/HANDOFF.md

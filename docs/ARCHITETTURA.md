@@ -1,7 +1,6 @@
 # ARCHITETTURA — Politicmon
 
-Mappa dei moduli e dei flussi. Per dettagli operativi sintetici vedi `../CLAUDE.md`;
-per ripartire da zero vedi `HANDOFF.md`.
+Mappa dei moduli e dei flussi principali del progetto.
 
 ## Stack tecnico
 

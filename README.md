@@ -56,8 +56,6 @@ node scripts/gen-icons.mjs   # rigenera le icone PNG della PWA
 
 | File | Per cosa |
 |------|----------|
-| **[CLAUDE.md](CLAUDE.md)** | Guida operativa per lo sviluppo (comandi, architettura sintetica, convenzioni). |
-| **[docs/HANDOFF.md](docs/HANDOFF.md)** | **Da leggere per primo a ogni nuova sessione.** Stato, decisioni prese, trappole, storico. |
 | **[docs/ARCHITETTURA.md](docs/ARCHITETTURA.md)** | Mappa dei moduli e dei flussi principali. |
 | **[docs/GLOSSARIO.md](docs/GLOSSARIO.md)** | Lessico di gioco (satira) e termini tecnici. |
 

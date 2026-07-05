@@ -1,3 +1,8 @@
+// Politicmon — Copyright (C) 2026 Luca Tiengo
+// Rilasciato sotto GNU Affero General Public License v3.0 (vedi LICENSE).
+// Software libero SENZA GARANZIA. Le versioni modificate distribuite anche solo
+// come servizio di rete devono restare open source sotto la stessa licenza.
+
 import { audio } from "./engine/audio";
 import { applyControlMode, loadControlMode } from "./engine/controls";
 import { playIntro } from "./engine/intro";

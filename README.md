@@ -71,6 +71,10 @@ internazionale, senza intento diffamatorio.
 
 ## Licenza
 
-[MIT](LICENSE) — il codice è libero. La satira è di chi la fa.
+[AGPL-3.0](LICENSE) — © 2026 Luca Tiengo (vedi anche [NOTICE](NOTICE)). Il codice è
+**open source con copyleft forte**: puoi studiarlo, usarlo e modificarlo, ma qualsiasi
+versione modificata — anche se distribuita solo come servizio in rete (es. un sito web)
+— deve restare open source sotto la stessa licenza AGPL-3.0. In pratica: nessuno può
+prendere questo gioco, modificarlo e richiuderlo. La satira è di chi la fa.
 
 <!-- deploy git collegato -->

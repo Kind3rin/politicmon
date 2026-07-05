@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Clone di Pokémon a tema satira politica italiana (TypeScript + Vite, canvas 2D, multiplayer P2P).",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "author": "Luca Tiengo",
   "homepage": "https://politicmon.vercel.app",
   "repository": {

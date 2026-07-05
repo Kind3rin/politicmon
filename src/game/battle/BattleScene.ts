@@ -575,7 +575,13 @@ export class BattleScene implements Scene {
       }
     }
 
+    // KO del BERSAGLIO (colpito dalla mossa).
     steps.push(...this.koCheckSteps(side === "player" ? "foe" : "player"));
+    // KO dell'ATTACCANTE: recoil (SCISSIONE/BREXIT) o autodanno possono portarlo a
+    // 0 HP. Prima si controllava solo il bersaglio, quindi un auto-KO lasciava il
+    // POLITICMON a 0 HP "vivo" e bloccato. Il check va DOPO quello del bersaglio:
+    // se muoiono entrambi, il difensore sviene per primo (è caduto per il tuo colpo).
+    steps.push(...this.koCheckSteps(side));
     return steps;
   }
 

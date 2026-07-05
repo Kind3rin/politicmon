@@ -197,6 +197,11 @@ export class WorldScene implements Scene {
   private afterMsg: (() => void) | null = null;
 
   private moving = false;
+  // Offset di centratura sulla porta, INTERPOLATO. Prima l'offset saltava da ±8
+  // a 0 nell'istante in cui partivi (era gated su !moving), causando lo "scatto
+  // laterale" appena ti muovevi. Ora insegue il target con un lerp per-frame, così
+  // il player scivola dolcemente al/dal centro invece di teletrasportarsi.
+  private doorOffsetSmooth = 0;
   // True subito dopo loadMap: gli eventi "d'ingresso mappa" (hint one-shot,
   // CRISI DI GOVERNO) si valutano solo al primo frame idle dopo l'arrivo, non a
   // ogni frame in cui sei fermo (così restare sulla porta prima di un warp non
@@ -2437,6 +2442,17 @@ export class WorldScene implements Scene {
       return;
     }
     this.time += dt;
+    // Insegue l'offset di centratura porta con un lerp esponenziale (indipendente
+    // dal frame rate): da fermo tende a ±8, appena parti il target è 0 e lo smooth
+    // rientra dolcemente invece di scattare di lato. ~12/s = quasi completo in un passo.
+    {
+      const target = this.doorCenteringOffset();
+      const k = 1 - Math.exp(-16 * dt);
+      this.doorOffsetSmooth += (target - this.doorOffsetSmooth) * k;
+      if (Math.abs(this.doorOffsetSmooth - target) < 0.3) {
+        this.doorOffsetSmooth = target;
+      }
+    }
     this.shake = Math.max(0, this.shake - dt);
     this.fadeT = Math.max(0, this.fadeT - dt);
     this.bannerFlash = Math.max(0, this.bannerFlash - dt);
@@ -3031,8 +3047,10 @@ export class WorldScene implements Scene {
     // appare spostato a lato. Quando è FERMO su una di quelle 2 celle, spostiamo
     // SOLO il disegno di mezzo tile verso il centro della coppia (la camera non si
     // muove). Appena cammina via, l'offset sparisce da sé (la cella non è più `c+c`).
-    const doorOffset = this.doorCenteringOffset();
-    const baseX = Math.round(playerPx) - camX + doorOffset;
+    // Offset di centratura porta INTERPOLATO (vedi doorOffsetSmooth in update):
+    // niente più scatto laterale al primo passo, il player scivola dolce.
+    const doorOffset = this.doorOffsetSmooth;
+    const baseX = Math.round(playerPx - camX + doorOffset);
     const baseY = Math.round(playerPy) - camY - 2;
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.

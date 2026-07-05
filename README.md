@@ -10,7 +10,7 @@ installabile come app, con **multiplayer peer-to-peer** — zero server, zero co
 
 [![Gioca ora](https://img.shields.io/badge/▶_GIOCA_ORA-politicmon.vercel.app-e8c84a?style=for-the-badge)](https://politicmon.vercel.app)
 
-![TypeScript](https://img.shields.io/badge/TypeScript-100%25-3178c6?style=flat-square&logo=typescript&logoColor=white)
+![TypeScript](https://img.shields.io/badge/gioco-TypeScript-3178c6?style=flat-square&logo=typescript&logoColor=white)
 ![Zero runtime deps](https://img.shields.io/badge/runtime_deps-1_(P2P)-44cc44?style=flat-square)
 ![PWA](https://img.shields.io/badge/PWA-installabile-5a3fc0?style=flat-square)
 ![Canvas 2D](https://img.shields.io/badge/canvas_2D-puro-d88030?style=flat-square)

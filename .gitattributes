@@ -1,0 +1,13 @@
+# GitHub Linguist: escludi il tooling dal conteggio dei linguaggi.
+# scripts/ contiene solo utility di sviluppo (screenshot Playwright, generatori
+# di asset/icone, check di validazione) — NON è il codice del gioco, che è in
+# src/ ed è interamente TypeScript. Marcarli "vendored" fa sì che la barra
+# linguaggi rifletta il gioco vero (TypeScript) invece di gonfiare il JavaScript.
+scripts/** linguist-vendored
+
+# Normalizzazione fine-riga: testo con LF nel repo (evita rumore CRLF/LF su Windows).
+* text=auto eol=lf
+*.png binary
+*.gif binary
+*.mp4 binary
+*.mp3 binary

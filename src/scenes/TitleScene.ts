@@ -7,7 +7,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { hasAnySave, newGameState, type GameState } from "../game/state";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
-import { Menu, MessageBox, clipToWidth, GREY, PAPER } from "../ui/widgets";
+import { Menu, MessageBox, clipToWidth, wrapText, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
 import { WorldScene } from "../game/world/WorldScene";
@@ -268,8 +268,13 @@ export class TitleScene implements Scene {
     // Slogan rotante (indice sempre valido, anche se this.time è NaN/negativo).
     const t = Number.isFinite(this.time) ? this.time : 0;
     const slogan = SLOGANS[Math.abs(Math.floor(t / 3)) % SLOGANS.length] ?? SLOGANS[0];
-    // Clamp a 220px: lo slogan non tocca mai i bordi (margine 10px per lato).
-    screen.textCenter(clipToWidth(slogan, 220), VIEW_W / 2, 30, PAPER);
+    // Slogan INTERO su max 2 righe centrate (prima clipToWidth lo troncava con
+    // "...", es. "DAL BORGO AL PALAZZO A COLPI DI COM..."). 36 char/riga a 6px.
+    const lines = wrapText(slogan, 36);
+    const y0 = lines.length > 1 ? 27 : 30;
+    for (let i = 0; i < lines.length; i += 1) {
+      screen.textCenter(lines[i], VIEW_W / 2, y0 + i * 9, PAPER);
+    }
   }
 
   private drawStarterShowcase(screen: Screen): void {

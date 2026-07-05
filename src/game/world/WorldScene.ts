@@ -27,7 +27,7 @@ import { haptics } from "../../engine/haptics";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion } from "../../ui/widgets";
+import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion, wrapText } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
@@ -3219,9 +3219,14 @@ export class WorldScene implements Scene {
     // Obiettivo corrente in basso (solo all'aperto e a schermo libero).
     const quest = currentQuest(this.state);
     if (quest && !this.msg.isOpen && !this.askMenu && !this.transportMenu && !this.remoteMenu && this.map.outdoor) {
-      const label = clipHud(`► ${quest.step}`, 35);
-      screen.rect(2, VIEW_H - 16, VIEW_W - 4, 14, "rgba(16,20,31,0.92)");
-      screen.text(label, 6, VIEW_H - 13, "#e8c84a");
+      // Obiettivo: testo INTERO, mandato a capo su più righe invece di troncarlo
+      // con "..." (prima si perdeva la fine dello step). Il box cresce verso l'alto.
+      const lines = wrapText(`► ${quest.step}`, 38);
+      const boxH = lines.length * 9 + 5;
+      screen.rect(2, VIEW_H - boxH - 2, VIEW_W - 4, boxH, "rgba(16,20,31,0.92)");
+      for (let i = 0; i < lines.length; i += 1) {
+        screen.text(lines[i], 6, VIEW_H - boxH + 1 + i * 9, "#e8c84a");
+      }
     }
 
     // Modalità guidata: freccia gialla che punta verso l'obiettivo. La
@@ -3395,13 +3400,16 @@ export class WorldScene implements Scene {
     } else {
       y = 26 - Math.sin((t - 0.3) * 6) * 1; // oscilla appena
     }
-    const w = 156;
+    // Box auto-largo sul testo più lungo (prima era fisso 156px e il sub veniva
+    // troncato con "...", es. "SFIDA DEL GIORNO IN PIAZZA"). Clampato a VIEW_W.
+    const longest = Math.max(b.text.length, b.sub.length);
+    const w = Math.min(VIEW_W - 4, Math.max(156, longest * 6 + 12));
     const x = Math.round((VIEW_W - w) / 2);
     screen.rect(x, Math.round(y), w, 18, "rgba(16,20,31,0.94)");
     screen.rect(x, Math.round(y), w, 2, b.color);
     screen.rect(x, Math.round(y) + 16, w, 2, b.color);
-    screen.textCenter(clipHud(b.text, 24), VIEW_W / 2, Math.round(y) + 3, b.color);
-    screen.textCenter(clipHud(b.sub, 22), VIEW_W / 2, Math.round(y) + 10, "#cfe6ff");
+    screen.textCenter(b.text, VIEW_W / 2, Math.round(y) + 3, b.color);
+    screen.textCenter(b.sub, VIEW_W / 2, Math.round(y) + 10, "#cfe6ff");
     if (t > dur) {
       this.banner = null;
     }

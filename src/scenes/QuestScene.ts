@@ -41,9 +41,14 @@ export class QuestScene implements Scene {
     screen.text("PROSSIMO PASSO", 8, 5, "#e8c84a");
     screen.panel(4, 14, VIEW_W - 8, 32);
     if (current) {
-      screen.text(clip(current.title, 36), 12, 20, INK);
-      const lines = wrapText(current.step, 34);
-      screen.text(lines[0] ?? "", 12, 32, INK);
+      screen.text(clip(current.title, 36), 12, 18, INK);
+      // Step INTERO su max 2 righe (prima mostrava solo lines[0]: la 2ª riga di
+      // uno step lungo spariva). 37 char/riga stanno nel pannello.
+      const lines = wrapText(current.step, 37);
+      screen.text(lines[0] ?? "", 12, 28, INK);
+      if (lines[1]) {
+        screen.text(lines[1], 12, 37, INK);
+      }
     } else {
       screen.text("CAMPAGNA COMPLETATA!", 12, 20, INK);
       screen.text("ORA RIEMPI IL POLITICDEX.", 12, 32, INK);

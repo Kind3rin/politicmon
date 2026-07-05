@@ -1,42 +1,205 @@
 {
   "_note": "Manifest prompt PixelLab per i 36 mostri. id = species id (combacia con src/data/species.ts). objectId = oggetto PixelLab in volo; DONE = gia scaricato; vuoto = da generare.",
   "monsters": [
-    { "id": "giorgetta", "objectId": "dbe20b73-3c35-4dd8-a5cd-33d82809e4db", "prompt": "satirical chibi Italian political monster mascot, blonde woman face, sharp eyebrows, navy blazer, tiny tricolor pin, flame horns and small fire tail, confident rally shouting expression, front-facing battle sprite, transparent background" },
-    { "id": "giorgiagon", "objectId": "2eeb0c6c-5e86-46ef-855d-ed24422d3664", "prompt": "satirical chibi Italian political dragon monster mascot, blonde woman face, sharp eyebrows, navy blazer armor, tricolor pin, dragon horns, small wings, flame aura, determined open-mouth rally expression, front-facing battle sprite, transparent background" },
-    { "id": "ellyna", "objectId": "700aaf68-4d10-4872-b0e3-001c2f4714a0", "prompt": "satirical chibi Italian progressive politician monster mascot, curly brown hair, round glasses, red scarf, green eco accent, small cat ears and tail, front-facing battle sprite, transparent background" },
-    { "id": "schleinix", "objectId": "98696347-de16-4277-b7fe-5d6ccfa6bf62", "prompt": "satirical chibi Italian progressive politician monster mascot, curly brown hair, round glasses, red scarf, green eco accent, fox ears and fox tail, smart calm expression, front-facing battle sprite, transparent background" },
-    { "id": "renzino", "objectId": "473706c8-f160-488b-963b-7115537b7fc3", "prompt": "satirical chibi Italian centrist politician lizard monster mascot, slick brown hair, broad cheeky grin, white shirt, blue vest suit, lizard tail, handshake pose, front-facing battle sprite, transparent background" },
-    { "id": "renzilla", "objectId": "7251c182-be59-4096-a5b6-accabdcb15be", "prompt": "satirical chibi Italian centrist kaiju lizard politician monster mascot, slick brown hair, cheeky salesman grin, blue suit vest, white shirt, big lizard tail, tiny demolition hammer, front-facing battle sprite, transparent background" },
-    { "id": "salvinott", "objectId": "eaab04ef-b0ef-492d-8610-f7b8703dbf91", "prompt": "satirical chibi Italian populist politician monster mascot, stocky man with short brown hair and stubble beard, green hoodie, small beaver teeth and flat tail, holding tiny livestream phone, friendly smug rally smile, front-facing battle sprite, transparent background" },
-    { "id": "salvinator", "objectId": "5e78757e-f44c-4b0c-8b2e-fe3136fc3786", "prompt": "satirical chibi Italian beach captain populist monster mascot, stocky man with short brown hair, stubble beard, dark sunglasses, navy hoodie, green accent, beaver tail, tiny mojito cup, commanding open-mouth pose, front-facing battle sprite, transparent background" },
-    { "id": "grillix", "objectId": "0c848e86-6475-4c84-8ce3-9e0892fcf497", "prompt": "satirical chibi Italian comedian politician monster mascot, older man with wild grey curly hair and grey beard, dark shirt, cricket antennae and small insect wings, huge shouting mouth, angry funny eyebrows, front-facing battle sprite, transparent background" },
-    { "id": "contemorfo", "objectId": "7ca517b0-d1da-427b-bcce-113bf562311b", "prompt": "satirical chibi Italian elegant statesman blob monster mascot, slick grey hair, dark blue suit, white shirt, blue tie and pocket square, polite smile, soft shapeshifting blue slime body, front-facing battle sprite, transparent background" },
-    { "id": "calendauro", "objectId": "be8e3d2f-4aaa-43fb-acff-4446b2d8398c", "prompt": "satirical chibi Italian technocrat centrist dinosaur monster mascot, bald man with round glasses and short dark beard, grey blue suit, red tie, small dinosaur tail, holding a tiny chart tablet, front-facing battle sprite, transparent background" },
-    { "id": "vannaccix", "objectId": "801937be-fe71-4ded-8930-96a9ab777310", "prompt": "satirical chibi Italian general politician bear monster mascot, buzz cut dark hair, thick mustache, olive green military uniform, stern frown, bear ears and clawed paws, front-facing battle sprite, transparent background" },
-    { "id": "tajanide", "objectId": "acc9281f-caa5-477a-b39f-2c83fefe1eb8", "prompt": "satirical chibi Italian moderate politician dove monster mascot, silver hair, round glasses, grey blue suit, white shirt, blue tie, gold pin, gentle sleepy smile, small dove wings, front-facing battle sprite, transparent background" },
-    { "id": "berlusconix", "objectId": "e52a625e-0075-4c7f-aebf-b982d2d5a1db", "prompt": "satirical chibi Italian media tycoon serpent monster mascot, tanned older businessman face, dark slicked hair, huge salesman grin, dark blue double-breasted suit, red TV sparkle, serpent tail and small snake crest, front-facing battle sprite, transparent background" },
-    { "id": "draghimon", "objectId": "3b223c74-ec0b-4028-ab44-a1284d2c6952", "prompt": "satirical chibi Italian banker statesman dragon monster mascot, dignified silver hair, thick eyebrows, grey suit, white shirt, navy tie, calm authoritative expression, small dragon horns and wings, front-facing battle sprite, transparent background" },
-    { "id": "mattarellux", "objectId": "90096d84-85ca-49a7-afd8-2937cf35659d", "prompt": "satirical chibi Italian elderly president guardian monster mascot, gentle white hair, round glasses, dark suit, grey tie, ceremonial sash, warm patient smile, tiny golden halo and soft institutional aura, front-facing battle sprite, transparent background" },
-    { "id": "trumpon", "objectId": "f2bc318d-7137-420b-bca1-0b9646a73c24", "prompt": "satirical chibi political monster mascot inspired by a populist tycoon leader, orange-tanned face, exaggerated blonde swept hair, dark blue suit, long red tie, clawed hands, tiny brick-wall shoulder armor, stubby monster tail, shouting rally expression, front-facing battle sprite, transparent background" },
-    { "id": "putingrad", "objectId": "35affebc-6cbc-45af-ba9f-c4630d107005", "prompt": "satirical chibi political monster mascot inspired by a cold authoritarian leader, pale bald stern face, dark grey suit, icy blue undertone, vampire-czar fangs, frost claws, long table-shaped tail/cape, unblinking flat expression, front-facing battle sprite, transparent background" },
-    { "id": "bunkerput", "objectId": "d4f2dcf9-a14e-4840-910d-d493271c174d", "prompt": "satirical chibi political monster mascot inspired by an isolated bunker meme, pale bald stern face, dark suit, tiny bunker hatch, absurdly long conference table tail, cold deadpan expression, front-facing battle sprite, transparent background" },
-    { "id": "xipanda", "objectId": "19adcd4a-bf23-43df-ae2b-0d39c04478ca", "prompt": "satirical chibi political monster mascot inspired by an authoritarian planner, calm round face, black neatly combed hair, grey Mao-collar suit, red pin, panda ears and panda claws, tiny scroll belt, composed smile, front-facing battle sprite, transparent background" },
-    { "id": "macronfox", "objectId": "d7fc3e20-6ccd-44d7-ac42-f4d0b86db630", "prompt": "satirical chibi political monster mascot inspired by a young centrist European leader, neat brown slicked hair, dark blue suit, fox ears, sharp fox tail, slim clawed hands, confident foxy smile, front-facing battle sprite, transparent background" },
-    { "id": "ursulax", "objectId": "f11796c5-cea7-46fa-bf94-3e16a1470ab7", "prompt": "satirical chibi political monster mascot inspired by a European regulator woman leader, blonde bob haircut, blue blazer, gold star pin, owl-like star wings, bureaucratic scroll claws, calm strict face, front-facing battle sprite, transparent background" },
-    { "id": "bojoon", "objectId": "ff72c6db-e247-4231-b9ad-421efbf52ec6", "prompt": "satirical chibi political monster mascot inspired by a messy blond British politician, chaotic straw-blonde hair, rumpled grey suit, dark red tie, goofy grin, whirlwind monster body, little horns hidden in hair, clawed hands, front-facing battle sprite, transparent background" },
-    { "id": "zelenskir", "objectId": "011f6616-b0ff-45ec-9152-3f50c556dc17", "prompt": "satirical chibi political monster mascot inspired by a brave wartime leader, dark buzz cut, short beard, olive green military shirt, determined eyebrows, shield-shaped monster carapace, tiny claws, compact guardian stance, front-facing battle sprite, transparent background" },
-    { "id": "muskrat", "objectId": "bd6cca91-f97b-45fe-b0f9-327dceb75051", "prompt": "satirical chibi political monster mascot inspired by an eccentric tech billionaire, short brown hair, black t-shirt, smug smile, mouse-rat ears, long cable tail, tiny rocket backpack, clawed hands holding a phone without letters, front-facing battle sprite, transparent background" },
-    { "id": "vaffenix", "objectId": "d6b07932-3fbf-4f67-aae6-59c051bbc7f3", "prompt": "satirical caricature monster: fiery older protest leader, wild white curly hair, white beard, dark red t-shirt, shouting furiously with raised eyebrows, front-facing, pixel art, transparent background" },
-    { "id": "movimenton", "objectId": "d804615c-723c-49dd-b383-c13230b897ab", "prompt": "satirical chibi Italian political monster mascot, polished movement politician with slicked grey hair, dark blue suit, gold yellow tie, gold star pin, stone pillar shoulders, five-star golem hands, institutional confident smile, front-facing battle sprite, transparent background" },
-    { "id": "capitanone", "objectId": "79bac032-c054-4ace-9583-c0f3492c6861", "prompt": "satirical chibi Italian political monster mascot, imposing beach captain populist with short brown hair, stubble beard, dark sunglasses, navy captain jacket, ceremonial sash, giant flat beaver tail, little sea-monster fins, shouting command pose, front-facing battle sprite, transparent background" },
-    { "id": "marsrat", "objectId": "964b8c6f-20e0-4aa3-96bb-df6d77dadb9c", "prompt": "satirical chibi political monster mascot inspired by a futuristic tech mogul, short brown hair, dark sunglasses, grey futuristic jacket, red pin, evolved mouse-rat ears, long rocket tail, tiny planet accessory, smug grin, front-facing battle sprite, transparent background" },
-    { "id": "mediocrate", "objectId": "ed42e762-a19a-456e-b16d-30457f8a6cb8", "prompt": "satirical chibi Italian political monster mascot, smooth TV pundit with pomaded dark hair, round glasses, navy suit, red tie, smug grin, greenish vampire-TV face, microphone tail, tiny screen-shaped wings, front-facing battle sprite, transparent background" },
-    { "id": "pontigor", "objectId": "91964fd6-e9e6-43e9-aac8-bcee0c961093", "prompt": "satirical chibi Italian political monster mascot, rugged bridge-construction kaiju politician, yellow hard-hat hair, dark sunglasses, brown beard, orange hi-vis safety jacket, steel girder tail, concrete claw feet, shouting, front-facing battle sprite, transparent background" },
-    { "id": "conteblob", "objectId": "b73818cf-6e3c-4307-a1e9-83d37d4e2ac4", "prompt": "satirical chibi Italian political monster mascot, evolved elegant statesman blob inspired by an Italian premier archetype, larger blue shapeshifting slime body, slick grey hair, dark blue suit, white shirt, blue tie and pocket square, professor-lawyer smile, floating government papers, front-facing battle sprite, transparent background" },
-    { "id": "calendrone", "objectId": "03c377b9-178f-4501-a058-e7b9e4fe6d97", "prompt": "satirical chibi Italian political monster mascot, evolved technocrat centrist dinosaur inspired by slide-show politician archetype, bald man with round glasses and short beard, grey blue suit, red tie, bigger dinosaur body, stacks of charts and tablet, stubborn serious expression, front-facing battle sprite, transparent background" },
-    { "id": "generorso", "objectId": "e632a4d3-0fb3-4c87-b3da-8c0c2d91d112", "prompt": "satirical chibi Italian political monster mascot, evolved general bear inspired by a controversial military pundit archetype, buzz cut, thick mustache, olive uniform, bigger bear ears and claws, upside-down compass emblem, stern shouting expression, front-facing battle sprite, transparent background" },
-    { "id": "tajacolomba", "objectId": "7fe24212-2318-4b5a-9b1a-5a9cc63279e7", "prompt": "satirical chibi Italian political monster mascot, evolved moderate dove statesman inspired by old-school party secretary archetype, silver hair, round glasses, grey blue suit, white shirt, blue tie, larger dove wings, sleepy diplomatic smile, European pin, front-facing battle sprite, transparent background" },
-    { "id": "telecrate", "objectId": "36f740d3-706f-41fc-86dc-8e2437e96adf", "prompt": "satirical chibi Italian political monster mascot, evolved TV pundit vampire creature, pomaded dark hair, round glasses, navy suit, red tie, microphone tail, two tiny TV-screen wings, smug grin, glowing studio lights, front-facing battle sprite, transparent background" },
-    { "id": "pontimax", "objectId": "102fe5ae-efd0-4cda-9541-05e7abb11261", "prompt": "satirical chibi Italian political monster mascot, evolved bridge-construction kaiju, yellow hard-hat hair, sunglasses, brown beard, orange hi-vis jacket, steel girder tail, concrete claw feet, huge unfinished bridge arch on back, front-facing battle sprite, transparent background" }
+    {
+      "id": "giorgetta",
+      "objectId": "dbe20b73-3c35-4dd8-a5cd-33d82809e4db",
+      "prompt": "satirical chibi Italian political monster mascot, blonde woman face, sharp eyebrows, navy blazer, tiny tricolor pin, flame horns and small fire tail, confident rally shouting expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "giorgiagon",
+      "objectId": "2eeb0c6c-5e86-46ef-855d-ed24422d3664",
+      "prompt": "satirical chibi Italian political dragon monster mascot, blonde woman face, sharp eyebrows, navy blazer armor, tricolor pin, dragon horns, small wings, flame aura, determined open-mouth rally expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "ellyna",
+      "objectId": "700aaf68-4d10-4872-b0e3-001c2f4714a0",
+      "prompt": "satirical chibi Italian progressive politician monster mascot, curly brown hair, round glasses, red scarf, green eco accent, small cat ears and tail, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "schleinix",
+      "objectId": "98696347-de16-4277-b7fe-5d6ccfa6bf62",
+      "prompt": "satirical chibi Italian progressive politician monster mascot, curly brown hair, round glasses, red scarf, green eco accent, fox ears and fox tail, smart calm expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "renzino",
+      "objectId": "473706c8-f160-488b-963b-7115537b7fc3",
+      "prompt": "satirical chibi Italian centrist politician lizard monster mascot, slick brown hair, broad cheeky grin, white shirt, blue vest suit, lizard tail, handshake pose, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "renzilla",
+      "objectId": "7251c182-be59-4096-a5b6-accabdcb15be",
+      "prompt": "satirical chibi Italian centrist kaiju lizard politician monster mascot, slick brown hair, cheeky salesman grin, blue suit vest, white shirt, big lizard tail, tiny demolition hammer, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "salvinott",
+      "objectId": "eaab04ef-b0ef-492d-8610-f7b8703dbf91",
+      "prompt": "satirical chibi Italian populist politician monster mascot, stocky man with short brown hair and stubble beard, green hoodie, small beaver teeth and flat tail, holding tiny livestream phone, friendly smug rally smile, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "salvinator",
+      "objectId": "5e78757e-f44c-4b0c-8b2e-fe3136fc3786",
+      "prompt": "satirical chibi Italian beach captain populist monster mascot, stocky man with short brown hair, stubble beard, dark sunglasses, navy hoodie, green accent, beaver tail, tiny mojito cup, commanding open-mouth pose, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "grillix",
+      "objectId": "0c848e86-6475-4c84-8ce3-9e0892fcf497",
+      "prompt": "satirical chibi Italian comedian politician monster mascot, older man with wild grey curly hair and grey beard, dark shirt, cricket antennae and small insect wings, huge shouting mouth, angry funny eyebrows, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "contemorfo",
+      "objectId": "7ca517b0-d1da-427b-bcce-113bf562311b",
+      "prompt": "satirical chibi Italian elegant statesman blob monster mascot, slick grey hair, dark blue suit, white shirt, blue tie and pocket square, polite smile, soft shapeshifting blue slime body, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "calendauro",
+      "objectId": "be8e3d2f-4aaa-43fb-acff-4446b2d8398c",
+      "prompt": "satirical chibi Italian technocrat centrist dinosaur monster mascot, bald man with round glasses and short dark beard, grey blue suit, red tie, small dinosaur tail, holding a tiny chart tablet, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "vannaccix",
+      "objectId": "801937be-fe71-4ded-8930-96a9ab777310",
+      "prompt": "satirical chibi Italian general politician bear monster mascot, buzz cut dark hair, thick mustache, olive green military uniform, stern frown, bear ears and clawed paws, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "tajanide",
+      "objectId": "acc9281f-caa5-477a-b39f-2c83fefe1eb8",
+      "prompt": "satirical chibi Italian moderate politician dove monster mascot, silver hair, round glasses, grey blue suit, white shirt, blue tie, gold pin, gentle sleepy smile, small dove wings, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "berlusconix",
+      "objectId": "e52a625e-0075-4c7f-aebf-b982d2d5a1db",
+      "prompt": "satirical chibi Italian media tycoon serpent monster mascot, tanned older businessman face, dark slicked hair, huge salesman grin, dark blue double-breasted suit, red TV sparkle, serpent tail and small snake crest, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "draghimon",
+      "objectId": "3b223c74-ec0b-4028-ab44-a1284d2c6952",
+      "prompt": "satirical chibi Italian banker statesman dragon monster mascot, dignified silver hair, thick eyebrows, grey suit, white shirt, navy tie, calm authoritative expression, small dragon horns and wings, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "mattarellux",
+      "objectId": "90096d84-85ca-49a7-afd8-2937cf35659d",
+      "prompt": "satirical chibi Italian elderly president guardian monster mascot, gentle white hair, round glasses, dark suit, grey tie, ceremonial sash, warm patient smile, tiny golden halo and soft institutional aura, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "trumpon",
+      "objectId": "f2bc318d-7137-420b-bca1-0b9646a73c24",
+      "prompt": "satirical chibi political monster mascot inspired by a populist tycoon leader, orange-tanned face, exaggerated blonde swept hair, dark blue suit, long red tie, clawed hands, tiny brick-wall shoulder armor, stubby monster tail, shouting rally expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "putingrad",
+      "objectId": "35affebc-6cbc-45af-ba9f-c4630d107005",
+      "prompt": "satirical chibi political monster mascot inspired by a cold authoritarian leader, pale bald stern face, dark grey suit, icy blue undertone, vampire-czar fangs, frost claws, long table-shaped tail/cape, unblinking flat expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "bunkerput",
+      "objectId": "d4f2dcf9-a14e-4840-910d-d493271c174d",
+      "prompt": "satirical chibi political monster mascot inspired by an isolated bunker meme, pale bald stern face, dark suit, tiny bunker hatch, absurdly long conference table tail, cold deadpan expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "xipanda",
+      "objectId": "19adcd4a-bf23-43df-ae2b-0d39c04478ca",
+      "prompt": "satirical chibi political monster mascot inspired by an authoritarian planner, calm round face, black neatly combed hair, grey Mao-collar suit, red pin, panda ears and panda claws, tiny scroll belt, composed smile, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "macronfox",
+      "objectId": "d7fc3e20-6ccd-44d7-ac42-f4d0b86db630",
+      "prompt": "satirical chibi political monster mascot inspired by a young centrist European leader, neat brown slicked hair, dark blue suit, fox ears, sharp fox tail, slim clawed hands, confident foxy smile, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "ursulax",
+      "objectId": "f11796c5-cea7-46fa-bf94-3e16a1470ab7",
+      "prompt": "satirical chibi political monster mascot inspired by a European regulator woman leader, blonde bob haircut, blue blazer, gold star pin, owl-like star wings, bureaucratic scroll claws, calm strict face, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "bojoon",
+      "objectId": "ff72c6db-e247-4231-b9ad-421efbf52ec6",
+      "prompt": "satirical chibi political monster mascot inspired by a messy blond British politician, chaotic straw-blonde hair, rumpled grey suit, dark red tie, goofy grin, whirlwind monster body, little horns hidden in hair, clawed hands, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "zelenskir",
+      "objectId": "011f6616-b0ff-45ec-9152-3f50c556dc17",
+      "prompt": "satirical chibi political monster mascot inspired by a brave wartime leader, dark buzz cut, short beard, olive green military shirt, determined eyebrows, shield-shaped monster carapace, tiny claws, compact guardian stance, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "muskrat",
+      "objectId": "bd6cca91-f97b-45fe-b0f9-327dceb75051",
+      "prompt": "satirical chibi political monster mascot inspired by an eccentric tech billionaire, short brown hair, black t-shirt, smug smile, mouse-rat ears, long cable tail, tiny rocket backpack, clawed hands holding a phone without letters, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "vaffenix",
+      "objectId": "d6b07932-3fbf-4f67-aae6-59c051bbc7f3",
+      "prompt": "satirical caricature monster: fiery older protest leader, wild white curly hair, white beard, dark red t-shirt, shouting furiously with raised eyebrows, front-facing, pixel art, transparent background"
+    },
+    {
+      "id": "movimenton",
+      "objectId": "d804615c-723c-49dd-b383-c13230b897ab",
+      "prompt": "satirical chibi Italian political monster mascot, polished movement politician with slicked grey hair, dark blue suit, gold yellow tie, gold star pin, stone pillar shoulders, five-star golem hands, institutional confident smile, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "capitanone",
+      "objectId": "79bac032-c054-4ace-9583-c0f3492c6861",
+      "prompt": "satirical chibi Italian political monster mascot, imposing beach captain populist with short brown hair, stubble beard, dark sunglasses, navy captain jacket, ceremonial sash, giant flat beaver tail, little sea-monster fins, shouting command pose, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "marsrat",
+      "objectId": "964b8c6f-20e0-4aa3-96bb-df6d77dadb9c",
+      "prompt": "satirical chibi political monster mascot inspired by a futuristic tech mogul, short brown hair, dark sunglasses, grey futuristic jacket, red pin, evolved mouse-rat ears, long rocket tail, tiny planet accessory, smug grin, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "mediocrate",
+      "objectId": "ed42e762-a19a-456e-b16d-30457f8a6cb8",
+      "prompt": "satirical chibi Italian political monster mascot, smooth TV pundit with pomaded dark hair, round glasses, navy suit, red tie, smug grin, greenish vampire-TV face, microphone tail, tiny screen-shaped wings, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "pontigor",
+      "objectId": "91964fd6-e9e6-43e9-aac8-bcee0c961093",
+      "prompt": "satirical chibi Italian political monster mascot, rugged bridge-construction kaiju politician, yellow hard-hat hair, dark sunglasses, brown beard, orange hi-vis safety jacket, steel girder tail, concrete claw feet, shouting, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "conteblob",
+      "objectId": "b73818cf-6e3c-4307-a1e9-83d37d4e2ac4",
+      "prompt": "satirical chibi Italian political monster mascot, evolved elegant statesman blob inspired by an Italian premier archetype, larger blue shapeshifting slime body, slick grey hair, dark blue suit, white shirt, blue tie and pocket square, professor-lawyer smile, floating government papers, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "calendrone",
+      "objectId": "03c377b9-178f-4501-a058-e7b9e4fe6d97",
+      "prompt": "satirical chibi Italian political monster mascot, evolved technocrat centrist dinosaur inspired by slide-show politician archetype, bald man with round glasses and short beard, grey blue suit, red tie, bigger dinosaur body, stacks of charts and tablet, stubborn serious expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "generorso",
+      "objectId": "e632a4d3-0fb3-4c87-b3da-8c0c2d91d112",
+      "prompt": "satirical chibi Italian political monster mascot, evolved general bear inspired by a controversial military pundit archetype, buzz cut, thick mustache, olive uniform, bigger bear ears and claws, upside-down compass emblem, stern shouting expression, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "tajacolomba",
+      "objectId": "7fe24212-2318-4b5a-9b1a-5a9cc63279e7",
+      "prompt": "satirical chibi Italian political monster mascot, evolved moderate dove statesman inspired by old-school party secretary archetype, silver hair, round glasses, grey blue suit, white shirt, blue tie, larger dove wings, sleepy diplomatic smile, European pin, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "telecrate",
+      "objectId": "36f740d3-706f-41fc-86dc-8e2437e96adf",
+      "prompt": "satirical chibi Italian political monster mascot, evolved TV pundit vampire creature, pomaded dark hair, round glasses, navy suit, red tie, microphone tail, two tiny TV-screen wings, smug grin, glowing studio lights, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "pontimax",
+      "objectId": "102fe5ae-efd0-4cda-9541-05e7abb11261",
+      "prompt": "satirical chibi Italian political monster mascot, evolved bridge-construction kaiju, yellow hard-hat hair, sunglasses, brown beard, orange hi-vis jacket, steel girder tail, concrete claw feet, huge unfinished bridge arch on back, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "contepop",
+      "objectId": "DONE",
+      "prompt": "satirical chibi Italian political monster mascot, evolved shapeshifting blob lawyer turned street populist, rumpled dark suit with loosened tie, megaphone in hand, angry rally-shouting expression, orange populist aura, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "salvinurlo",
+      "objectId": "DONE",
+      "prompt": "satirical chibi Italian political monster mascot, evolved beaver-like opposition ranter, blue populist scarf, mouth wide open mid-shout, raised fist, veins of pure protest energy, front-facing battle sprite, transparent background"
+    },
+    {
+      "id": "verdoribelle",
+      "objectId": "DONE",
+      "prompt": "satirical chibi Italian green activist monster mascot, radical eco rebel sprout creature, leafy hair with a red protest bandana, holding a small green flag, defiant climate-strike pose, vibrant green energy, front-facing battle sprite, transparent background"
+    }
   ]
 }

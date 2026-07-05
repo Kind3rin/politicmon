@@ -98,7 +98,12 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 50, atk: 56, def: 42, spc: 40, spd: 46 },
     catchRate: 190, expYield: 55,
     learnset: [[1, "comizio"], [3, "slogan"], [7, "citofonata"], [12, "ruspa"]],
-    evolutions: [{ id: "salvinator", level: 18 }],
+    // Ramo sui SONDAGGI: al governo -> CASTORONE balneare (salvinator), all'opposizione
+    // -> CASTORO che urla (salvinurlo). salvinator (alto) va prima di salvinurlo.
+    evolutions: [
+      { id: "salvinator", level: 18, minSondaggi: 50 },
+      { id: "salvinurlo", level: 18 }
+    ],
     dexLine: "CUCCIOLO DA COMIZIO. FA UNA DIRETTA SOCIAL ANCHE QUANDO DORME."
   }),
   salvinator: S({
@@ -129,8 +134,14 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 62, atk: 50, def: 72, spc: 76, spd: 45 },
     catchRate: 100, expYield: 130,
     learnset: [[1, "comizio"], [6, "pochette"], [10, "inciucio"], [15, "telepromessa"], [21, "conferenza"]],
-    // Cambiare padrone È il suo mestiere: lo scambio lo evolve all'istante.
-    evolutions: [{ id: "conteblob", level: 18 }, { id: "conteblob", trade: true }],
+    // Ramo sui SONDAGGI: popolare -> avvocato di governo (conteblob), impopolare ->
+    // avvocato di piazza (contepop). Lo scambio evolve sempre alla forma di governo.
+    // La prima regola soddisfatta vince: conteblob (governo) va PRIMA di contepop.
+    evolutions: [
+      { id: "conteblob", level: 18, minSondaggi: 50 },
+      { id: "contepop", level: 18 },
+      { id: "conteblob", trade: true }
+    ],
     ability: "teflon",
     dexLine: "BLOB ELEGANTISSIMO. HA GOVERNATO CON TUTTI, CONTRO TUTTI E ANCHE CON SE STESSO CONTRARIO."
   }),
@@ -386,7 +397,12 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 48, atk: 50, def: 55, spc: 58, spd: 54 },
     catchRate: 120, expYield: 66,
     learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [8, "monopattino"], [11, "pistaciclabile"], [14, "incollamano"], [16, "sciopreverde"]],
-    evolutions: [{ id: "ecoverdon", level: 18 }],
+    // Ramo sui SONDAGGI: consenso alto -> guardiano istituzionale (ecoverdon),
+    // consenso basso -> attivista radicale (verdoribelle). ecoverdon (alto) prima.
+    evolutions: [
+      { id: "ecoverdon", level: 18, minSondaggi: 50 },
+      { id: "verdoribelle", level: 18 }
+    ],
     ability: "galleggiamento",
     dexLine: "FIRMA PETIZIONI ANCORA PRIMA DI SBOCCIARE. SI INNAFFIA DA SOLO PER RIDURRE L'IMPRONTA IDRICA."
   }),
@@ -398,6 +414,36 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "greenwashing"], [1, "raccoltadifferenziata"], [1, "pistaciclabile"], [18, "incollamano"], [22, "sciopreverde"], [26, "corteo"], [30, "transizione"]],
     ability: "opposizione",
     dexLine: "PIANTA UN ALBERO PER OGNI COMIZIO AVVERSARIO. IL SUO PANNELLO SOLARE FUNZIONA ANCHE DI NOTTE, DICE LUI."
+  }),
+  // ---- Rami evolutivi sui SONDAGGI (la feature-firma: il gradimento decide chi
+  // diventi). Ogni genitore biforca: sondaggi ALTI -> forma "di governo" (già
+  // esistente), sondaggi BASSI -> forma "di opposizione" (queste 3 nuove). ----
+  contepop: S({
+    id: "contepop", dexNum: 40, name: "CONTEPOP", category: "AVVOCATO DI PIAZZA",
+    types: ["SINISTRA", "POPULISMO"],
+    base: { hp: 80, atk: 84, def: 74, spc: 88, spd: 70 },
+    catchRate: 35, expYield: 205,
+    learnset: [[1, "piazza"], [1, "telepromessa"], [1, "vaffa"], [18, "concertone"], [24, "tsunamitour"], [30, "brexit"]],
+    ability: "opposizione",
+    dexLine: "STESSO AVVOCATO, ALTRO COPIONE: SCESO SOTTO IL 50% HA SCOPERTO LA PIAZZA E IL MEGAFONO."
+  }),
+  salvinurlo: S({
+    id: "salvinurlo", dexNum: 41, name: "SALVINURLO", category: "CASTORO D'OPPOSIZIONE",
+    types: ["POPULISMO"],
+    base: { hp: 78, atk: 92, def: 58, spc: 54, spd: 82 },
+    catchRate: 60, expYield: 160,
+    learnset: [[1, "vaffa"], [1, "citofonata"], [1, "ruspa"], [18, "dazilampo"], [23, "blocconavale"], [28, "tsunamitour"]],
+    ability: "opposizione",
+    dexLine: "SENZA POLTRONA URLA IL DOPPIO. LIVE SOCIAL DALLA SPIAGGIA, RIGOROSAMENTE ALL'OPPOSIZIONE DI TUTTO."
+  }),
+  verdoribelle: S({
+    id: "verdoribelle", dexNum: 42, name: "VERDORIBELLE", category: "ATTIVISTA RADICALE",
+    types: ["VERDE"],
+    base: { hp: 74, atk: 84, def: 70, spc: 90, spd: 82 },
+    catchRate: 45, expYield: 175,
+    learnset: [[1, "incollamano"], [1, "pistaciclabile"], [1, "sciopreverde"], [18, "transizione"], [24, "corteo"], [30, "scissione"]],
+    ability: "opposizione",
+    dexLine: "SI INCOLLA A OGNI QUADRO E OGNI DIBATTITO. NON CHIEDE IL PERMESSO: BLOCCA IL TRAFFICO E POI SPIEGA."
   })
 };
 

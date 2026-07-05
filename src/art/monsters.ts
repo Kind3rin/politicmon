@@ -13,7 +13,7 @@ export const MONSTERS_WITH_PNG = new Set<string>([
   "bunkerput", "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
   "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor", "conteblob",
   "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax",
-  "verdolino", "ecoverdon"
+  "verdolino", "ecoverdon", "contepop", "salvinurlo", "verdoribelle"
 ]);
 
 export function monsterImage(speciesId: string): HTMLImageElement | null {
@@ -444,6 +444,20 @@ export const MONSTER_ART: Record<string, Pixmap> = {
   ecoverdon: caricature({
     hair: "#3a7a2a", hairStyle: "curly", suit: "#4a9a3a", suitStyle: "hoodie",
     mouth: "shout", brows: true, pin: "#e8c84a"
+  }),
+  // ---- Forme "opposizione" dei rami sui SONDAGGI (fallback pixmap; lo sprite
+  // primario è il PNG PixelLab). Derivano dai genitori con look più urlante. ----
+  contepop: caricature({
+    hair: "#8a8a96", hairStyle: "slick", suit: "#2e3650", shirt: "#f8f8f0",
+    tie: "#d86030", mouth: "shout", brows: true
+  }),
+  salvinurlo: caricature({
+    hair: "#6a5238", hairStyle: "short", suit: "#2e4470", suitStyle: "hoodie",
+    beard: "#7a6044", mouth: "shout", brows: true, pin: "#3868c8"
+  }),
+  verdoribelle: caricature({
+    hair: "#4a8a3a", hairStyle: "curly", suit: "#3a7a2a", suitStyle: "tshirt",
+    mouth: "shout", brows: true, pin: "#d23c3c"
   })
 };
 

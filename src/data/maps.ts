@@ -1748,6 +1748,14 @@ export const MAPS: Record<string, MapDef> = {
       // essere rispedito indietro appena sbarcato. Approdo a Caput Mundi (6,21).
       { x: 12, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
       { x: 15, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      // RITORNO DAL MARE SUD: senza queste celle, chi arriva dall'acqua e NON
+      // batte IL CAPITANO resterebbe INTRAPPOLATO (i warp del molo qui sopra
+      // stanno nella sacca nord, oltre il muro di scogli). Basta virare a lato
+      // dello spawn (14,16) per riprendere il largo verso Caput Mundi.
+      { x: 12, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      { x: 13, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      { x: 15, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      { x: 16, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
       {
@@ -1852,15 +1860,18 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["Il collaudo è ok: il ponte regge benissimo dove c'è."]
       },
       {
-        // Cancello OBBLIGATORIO del ponte: a (14,11) guarda a SUD lungo il corridoio
-        // single-file (col 14). Sbarcando dal mare su (14,15) entri subito nel suo
-        // cono di vista → il fight scatta al primo passo, non è aggirabile.
-        id: "tr-ilcapitano", pal: "boss", x: 14, y: 11, facing: "down",
+        // Cancello OBBLIGATORIO del ponte: a (14,12) guarda a SUD lungo il corridoio
+        // single-file (col 14). Il cono di vista (sightRange 4) copre (14,13..15)
+        // con margine: sbarcando dal mare su (14,15) il fight scatta SUBITO,
+        // non è aggirabile (col 15 è tutta tralicci 'J' solidi).
+        id: "tr-ilcapitano", pal: "boss", x: 14, y: 12, facing: "down",
         trainerId: "ilcapitano", sightRange: 4, hideIfFlag: "ponte-beaten",
         lines: []
       },
       {
-        id: "capitano-after", pal: "boss", x: 13, y: 15, facing: "right", showIfFlag: "ponte-beaten",
+        // Post-vittoria: si gode il ponte DALLA SPIAGGIA (17,6), NON dal deck —
+        // qualsiasi NPC sul corridoio single-file (col 14) murerebbe il passaggio.
+        id: "capitano-after", pal: "boss", x: 17, y: 6, facing: "left", showIfFlag: "ponte-beaten",
         lines: [
           "IL CAPITANO: lo senti? Il profumo della SICILIA. Praticamente fatta.",
           "Il ponte si farà. Intanto ho fatto il selfie dal pilone: 49 milioni di like.",

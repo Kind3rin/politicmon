@@ -356,6 +356,10 @@ export class WorldScene implements Scene {
     mp.setPartyPreview(this.state.party.map((mon) => mon.speciesId));
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
+    // Se lo spawn è su ACQUA (arrivo navale allo Stretto), attiva subito il
+    // TRAGHETTO: prima syncFerryVehicle girava solo in onStepComplete, quindi
+    // il player appariva "a piedi sull'acqua" finché non muoveva il primo passo.
+    this.syncFerryVehicle();
     // Autosave a ogni cambio mappa: warp e bordi nord/sud aggiornano state.pos e
     // chiamano loadMap, ma prima nessuno salvava — chiudendo l'app si tornava a
     // un punto vecchio, spesso su un'altra mappa. saveGame è try/catch: sicuro.

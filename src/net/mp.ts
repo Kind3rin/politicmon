@@ -104,7 +104,10 @@ const TURN_CRED = import.meta.env.VITE_TURN_CRED as string | undefined;
 
 const TURN_SERVERS: TurnEntry[] = [];
 if (TURN_URL && TURN_USER && TURN_CRED) {
-  TURN_SERVERS.push({ urls: TURN_URL, username: TURN_USER, credential: TURN_CRED });
+  // VITE_TURN_URL accetta PIÙ URL separati da virgola (Metered ne fornisce 3-4:
+  // porta 80, 443, e turns:443?transport=tcp per le reti che bloccano l'UDP).
+  const urls = TURN_URL.split(",").map((u) => u.trim()).filter(Boolean);
+  TURN_SERVERS.push({ urls, username: TURN_USER, credential: TURN_CRED });
 }
 // NIENTE fallback pubblico: il demo OpenRelay (openrelay.metered.ca /
 // "openrelayproject") è DISMESSO — verificato: zero candidate relay, le
@@ -113,7 +116,7 @@ if (TURN_URL && TURN_USER && TURN_CRED) {
 // funziona SOLO tra reti con NAT facili (stessa LAN, NAT cone): su CGNAT/4G
 // la connessione P2P fallisce. Per il multiplayer su internet reale serve un
 // TURN vero via env (gratis: account su metered.ca, 0.5GB/mese):
-//   VITE_TURN_URL  = turn:<subdomain>.metered.ca:80  (o l'URL fornito)
+//   VITE_TURN_URL  = turn:<sub>.metered.ca:80,turn:<sub>.metered.ca:443,turns:<sub>.metered.ca:443?transport=tcp
 //   VITE_TURN_USER = <username fornito>
 //   VITE_TURN_CRED = <credential fornita>
 // Su Vercel: Settings → Environment Variables, poi redeploy.

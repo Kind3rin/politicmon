@@ -89,10 +89,13 @@ const APP_ID = "politicmon-v1";
 // ok per sbloccare subito). Per la versione pubblica registrare un TURN gratuito
 // (Metered/Cloudflare/Twilio) e passarlo via env senza hardcodarlo.
 // STUN: passati in rtcConfig.iceServers. ATTENZIONE: Trystero costruisce la
+// ATTENZIONE (bug d'integrazione trovato 2026-07-08): trystero costruisce la
 // config come `{ iceServers: defaultIceServers.concat(turnConfig ?? []), ...rtcConfig }`
-// (peer.mjs), quindi rtcConfig.iceServers SOSTITUISCE l'intera lista: i TURN
-// NON vanno qui (verrebbero scartati dai default), ma nello slot dedicato
-// `turnConfig`, che invece viene CONCATENATO ai default.
+// (peer.mjs) — lo spread di rtcConfig viene DOPO, quindi se rtcConfig contiene
+// iceServers questo SOVRASCRIVE l'intera lista, TURN di turnConfig INCLUSO.
+// Risultato: peer con solo STUN → multiplayer solo su stessa LAN/NAT facili.
+// Per questo STUN e TURN vanno TUTTI in rtcConfig.iceServers (unica lista che
+// sopravvive); turnConfig non va usato insieme a rtcConfig.iceServers.
 const STUN_SERVERS: RTCIceServer[] = [
   { urls: ["stun:stun.l.google.com:19302", "stun:stun.cloudflare.com:3478"] },
 ];
@@ -127,7 +130,9 @@ if (TURN_URL && TURN_USER && TURN_CRED) {
 //   VITE_TURN_CRED = <credential fornita>
 // Su Vercel: Settings → Environment Variables, poi redeploy.
 
-const RTC_CONFIG: RTCConfiguration = { iceServers: STUN_SERVERS };
+// STUN + TURN in un'unica lista: vedi il commento sopra su come trystero
+// tratta rtcConfig.iceServers (sovrascrive tutto, turnConfig incluso).
+const RTC_CONFIG: RTCConfiguration = { iceServers: [...STUN_SERVERS, ...TURN_SERVERS] };
 
 class MultiplayerClient {
   private room: Room | null = null;
@@ -309,7 +314,9 @@ class MultiplayerClient {
     let room: Room;
     try {
       room = joinRoom(
-        { appId: APP_ID, rtcConfig: RTC_CONFIG, turnConfig: TURN_SERVERS },
+        // NIENTE turnConfig: verrebbe sovrascritto dallo spread di rtcConfig
+        // (vedi commento su RTC_CONFIG); i TURN sono già in RTC_CONFIG.iceServers.
+        { appId: APP_ID, rtcConfig: RTC_CONFIG },
         `map-${mapId}`,
         {
           onJoinError: (details) => {

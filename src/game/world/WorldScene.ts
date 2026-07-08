@@ -2278,15 +2278,34 @@ export class WorldScene implements Scene {
         this.say(warp.lockedLines ?? ["È chiuso."]);
         return;
       }
-      // Transizione morbida: dissolvenza in uscita, poi carica la mappa nuova
-      // (che fa il suo fade-in). Niente più stacco secco a ogni porta/scala.
-      audio.confirm();
-      haptics.warp();
-      this.fadeOut = 0.22;
-      this.pendingWarp = () => {
-        this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
-        this.loadMap(warp.toMap);
+      const doWarp = () => {
+        // Transizione morbida: dissolvenza in uscita, poi carica la mappa nuova
+        // (che fa il suo fade-in). Niente più stacco secco a ogni porta/scala.
+        audio.confirm();
+        haptics.warp();
+        this.fadeOut = 0.22;
+        this.pendingWarp = () => {
+          this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
+          this.loadMap(warp.toMap);
+        };
       };
+      // Warp con conferma (es. la DARSENA di ritorno dallo Stretto): chiedi SÌ/NO
+      // così non riparti per sbaglio e capisci dove porta. Se dici NO, torni sulla
+      // cella da cui venivi senza cambiare mappa.
+      if (warp.confirm) {
+        const backX = this.fromX;
+        const backY = this.fromY;
+        this.askYesNo(
+          warp.confirm,
+          doWarp,
+          () => {
+            pos.x = backX;
+            pos.y = backY;
+          }
+        );
+        return;
+      }
+      doWarp();
       return;
     }
 

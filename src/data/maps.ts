@@ -50,6 +50,9 @@ export interface WarpDef {
   requiresBadges?: number;
   requiresFlag?: string;
   lockedLines?: string[];
+  // Prompt SÌ/NO prima di partire (es. la darsena di ritorno dallo Stretto):
+  // evita warp accidentali e rende ESPLICITO che stai lasciando la mappa.
+  confirm?: string;
 }
 
 export interface SignDef {
@@ -1744,8 +1747,11 @@ export const MAPS: Record<string, MapDef> = {
       // RITORNO A CAPUT MUNDI: UN SOLO imbarco, la DARSENA segnalata dal cartello
       // blu 'W' a (11,13). Si riparte dall'acqua a (11,14) — mare aperto, sempre
       // raggiungibile (anche senza battere IL CAPITANO: niente intrappolamento).
-      // Un solo mare, un solo punto di ritorno: nessun warp sparso.
-      { x: 11, y: 14, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      // confirm: prompt SÌ/NO così non riparti per sbaglio e sai dove porta.
+      {
+        x: 11, y: 14, toMap: "capitale", toX: 6, toY: 21, facing: "up",
+        confirm: "DARSENA: rientrare a CAPUT MUNDI?"
+      },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
       {
@@ -1792,6 +1798,16 @@ export const MAPS: Record<string, MapDef> = {
           "SPIAGGIA PAPEETE BEACH",
           "Vietato disturbare il Ministro durante la consolle.",
           "Mojito sì, mozioni no."
+        ]
+      },
+      {
+        // Cartello blu 'W' della DARSENA di ritorno: rende esplicito che da qui
+        // (acqua a fianco, 11,14) si riparte per Caput Mundi.
+        x: 11, y: 13,
+        lines: [
+          "DARSENA DELLO STRETTO",
+          "Traghetto per CAPUT MUNDI: sali in acqua qui a fianco.",
+          "Il CAPITANO SCHETTINO ti riporta a casa... si spera."
         ]
       }
     ],

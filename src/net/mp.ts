@@ -1,14 +1,20 @@
 // Client multiplayer P2P (presence + chat) per Politicmon.
-// 100% peer-to-peer via WebRTC (libreria Trystero, scoperta peer su relay Nostr
-// pubblici e gratuiti): NESSUN server proprio, nessun account, nessun costo,
-// nessun rischio di addebito anche superando qualunque limite. I dati di gioco
-// passano direttamente tra i browser.
+// 100% peer-to-peer via WebRTC (libreria Trystero): NESSUN server proprio,
+// nessun account, nessun costo. I dati di gioco passano direttamente tra i
+// browser.
+//
+// Signaling: strategia MQTT (broker pubblici emqx/hivemq/mosquitto/shiftr).
+// La strategia Nostr è stata abbandonata (2026-07-08): i relay pubblici ormai
+// rifiutano gli eventi effimeri di trystero da pubkey sconosciute
+// (damus: "rate-limited: you are noting too much", offchain.pub: "not in our
+// web of trust", altri droppano in silenzio) → i peer non si scoprivano MAI.
+// I broker MQTT pubblici non hanno web-of-trust né rate limit sul topic test.
 //
 // Una "room" per ogni mappa (room id = `politicmon-<mapId>`): vedi solo i
 // giocatori presenti sulla tua stessa mappa. L'interfaccia pubblica (mp.*) è
 // identica alla versione precedente, così il resto del gioco non cambia.
 
-import { joinRoom, selfId, type Room } from "trystero/nostr";
+import { joinRoom, selfId, type Room } from "@trystero-p2p/mqtt";
 import type { Facing } from "../art/characters";
 import { SPECIES } from "../data/species";
 import { TradeSession, type TradeWire } from "./trade";

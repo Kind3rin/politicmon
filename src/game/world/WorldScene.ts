@@ -45,8 +45,9 @@ import { TradeScene } from "../../scenes/TradeScene";
 import { DuelLobbyScene } from "../../scenes/DuelLobbyScene";
 import { PvpBattleScene } from "../battle/PvpBattleScene";
 import {
-  DUEL_INVITE_TIMEOUT, serializeTeam, validateWireTeam, type DuelMsg, type WireMon
+  DUEL_INVITE_TIMEOUT, TALK_INVITE_TIMEOUT, serializeTeam, validateWireTeam, type DuelMsg, type WireMon
 } from "../../net/duelproto";
+import { TalkScene } from "../../scenes/TalkScene";
 import { loadNick } from "../../net/profile";
 import { ShopScene } from "../../scenes/ShopScene";
 import { CasinoScene } from "../../scenes/CasinoScene";
@@ -269,6 +270,8 @@ export class WorldScene implements Scene {
     duelId: string; peerId: string; nick: string; hostTeam: unknown; deadline: number; team: WireMon[];
   } | null = null;
   private duelDeclineMsg: string | null = null;
+  // DIALOGO 1:1 lato ricevente: stessa disciplina mailbox del duello.
+  private pendingTalkInvite: { peerId: string; talkId: string; nick: string; at: number } | null = null;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     // Registra lo stato come "attivo" per il salvataggio su chiusura/background
@@ -1001,7 +1004,7 @@ export class WorldScene implements Scene {
     const remote = mp.remotePlayers().find((r) => r.x === tx && r.y === ty);
     if (remote) {
       this.remoteMenu = new Menu([
-        { label: "ISPEZIONA" }, { label: "SCAMBIA" }, { label: "SFIDA" }, { label: "ANNULLA" }
+        { label: "PARLA" }, { label: "ISPEZIONA" }, { label: "SCAMBIA" }, { label: "SFIDA" }, { label: "ANNULLA" }
       ]);
       this.remoteMenuPeerId = remote.id;
       this.askLabel = `${remote.nick.slice(0, 10)}: CHE FAI?`;
@@ -1465,6 +1468,20 @@ export class WorldScene implements Scene {
     this.stack.push(new TradeScene(this.stack, this.input, this.state, { peerId: r.id, peerNick: r.nick }));
   }
 
+  // PARLA sul remoto adiacente: apre subito la TalkScene (host) che invia
+  // l'invito e attende talk-accept. Il dialogo blocca entrambi i giocatori
+  // (la scena copre il mondo: niente movimento finché uno non chiude).
+  private talkWithRemote(peerId: string): void {
+    const r = this.remoteIfNearby(peerId);
+    if (!r) {
+      return;
+    }
+    const talkId = `talk-${Date.now().toString(36)}-${Math.floor(Math.random() * 1e9).toString(36)}`;
+    this.stack.push(new TalkScene(this.stack, this.input, {
+      peerId: r.id, peerNick: r.nick, talkId, role: "host"
+    }));
+  }
+
   // SFIDA sul remoto adiacente: stesso code path della lobby (invito
   // immediato via DuelLobbyScene con invitePeerId). Chi invita è HOST.
   private challengeRemote(peerId: string): void {
@@ -1481,6 +1498,28 @@ export class WorldScene implements Scene {
 
   // Handler base dei DuelMsg: riempie SOLO mailbox (consumate nell'update).
   private onDuelMsg(msg: DuelMsg, peerId: string): void {
+    // DIALOGO 1:1: l'invito va in mailbox; end/decline ritirano un invito non
+    // ancora consumato (l'invitante è andato in timeout o ha annullato). Gli
+    // altri talk-* appartengono alla TalkScene (che prende in consegna onDuel):
+    // se arrivano qui la conversazione è già chiusa, si ignorano.
+    if (msg.type === "talk-invite") {
+      if (mp.duelBusy || this.pendingTalkInvite) {
+        mp.sendDuel({ v: 1, duelId: msg.duelId, type: "talk-decline", reason: "OCCUPATO" }, peerId);
+        return;
+      }
+      const nick = mp.remotes.get(peerId)?.nick ?? String(msg.nick ?? "ANONIMO");
+      this.pendingTalkInvite = { peerId, talkId: msg.duelId, nick: nick.slice(0, 12), at: Date.now() };
+      return;
+    }
+    if (msg.type === "talk-end" || msg.type === "talk-decline") {
+      if (this.pendingTalkInvite?.talkId === msg.duelId) {
+        this.pendingTalkInvite = null;
+      }
+      return;
+    }
+    if (msg.type === "talk-accept" || msg.type === "talk-line") {
+      return;
+    }
     if (msg.type === "invite") {
       if (mp.duelBusy || this.duelWait || this.pendingDuelInvite) {
         mp.sendDuel({ v: 1, duelId: msg.duelId, type: "decline", reason: "OCCUPATO" }, peerId);
@@ -1606,6 +1645,34 @@ export class WorldScene implements Scene {
       return true;
     }
     return false;
+  }
+
+  // Poll dell'invito a parlare in arrivo: prompt SÌ/NO. L'invitante attende
+  // TALK_INVITE_TIMEOUT: un invito più vecchio è stantio (l'altro ha già
+  // chiuso), si scarta senza prompt.
+  private pollTalkInvite(): boolean {
+    const inv = this.pendingTalkInvite;
+    if (!inv) {
+      return false;
+    }
+    this.pendingTalkInvite = null;
+    if (Date.now() - inv.at > TALK_INVITE_TIMEOUT * 1000) {
+      return false;
+    }
+    if (mp.duelBusy) {
+      mp.sendDuel({ v: 1, duelId: inv.talkId, type: "talk-decline", reason: "OCCUPATO" }, inv.peerId);
+      return false;
+    }
+    this.askYesNo(
+      `${inv.nick} VUOLE PARLARTI. ACCETTI?`,
+      () => {
+        this.stack.push(new TalkScene(this.stack, this.input, {
+          peerId: inv.peerId, peerNick: inv.nick, talkId: inv.talkId, role: "guest"
+        }));
+      },
+      () => mp.sendDuel({ v: 1, duelId: inv.talkId, type: "talk-decline" }, inv.peerId)
+    );
+    return true;
   }
 
   // Poll dell'invito di scambio in arrivo: gira solo quando WorldScene è in
@@ -2619,13 +2686,15 @@ export class WorldScene implements Scene {
         const peerId = this.remoteMenuPeerId;
         this.remoteMenu = null;
         if (idx === 0) {
-          this.inspectRemote(peerId);
+          this.talkWithRemote(peerId);
         } else if (idx === 1) {
-          this.startTradeWithRemote(peerId);
+          this.inspectRemote(peerId);
         } else if (idx === 2) {
+          this.startTradeWithRemote(peerId);
+        } else if (idx === 3) {
           this.challengeRemote(peerId);
         }
-        // idx 3 = ANNULLA: chiudi e basta.
+        // idx 4 = ANNULLA: chiudi e basta.
       } else if (action === "cancel") {
         this.remoteMenu = null;
       }
@@ -2662,6 +2731,9 @@ export class WorldScene implements Scene {
     if (!this.moving) {
       // Eventi online in arrivo (duello/scambio): prompt SÌ/NO via askYesNo.
       if (this.pollDuel()) {
+        return;
+      }
+      if (this.pollTalkInvite()) {
         return;
       }
       if (this.pollTradeInvite()) {

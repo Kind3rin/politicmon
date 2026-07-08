@@ -53,9 +53,19 @@ export type DuelMsg = { v: 1; to?: string; duelId: string } & (
   | { type: "cmd"; turn: number; cmd: DuelCmd }
   | { type: "turnlog"; turn: number; events: DuelEvent[] }
   | { type: "end"; winner: DuelSide | null; reason: DuelEndReason }
+  // DIALOGO 1:1 (TalkScene): viaggia sul canale duello per non toccare mp.ts
+  // (nessun nuovo makeAction). `duelId` fa da talkId. Le scene duello ignorano
+  // questi tipi per costruzione (filtrano su un duelId che non combacia mai);
+  // i client vecchi li scartano nel fall-through di onDuelMsg.
+  | { type: "talk-invite"; nick: string }
+  | { type: "talk-accept" }
+  | { type: "talk-decline"; reason?: string }
+  | { type: "talk-line"; text: string }
+  | { type: "talk-end" }
 );
 
 export const DUEL_INVITE_TIMEOUT = 30; // s: attesa risposta all'invito
+export const TALK_INVITE_TIMEOUT = 20; // s: attesa risposta a "vuole parlarti"
 export const DUEL_TURN_TIMEOUT = 30; // s: attesa cmd/turnlog -> tavolino
 export const DUEL_TEAM_MAX = 6;
 

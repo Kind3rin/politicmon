@@ -68,7 +68,8 @@ export interface ChatLine {
   id: string;
   nick: string;
   text: string;
-  t: number;
+  t: number;    // timestamp reale (performance.now, ms) per il decadimento overlay
+  seq: number;  // sequenza monotona (ordine di arrivo)
 }
 
 type Identity = { nick: string; speciesId: string; duelWins: number; partyPreview: string[] };
@@ -492,7 +493,9 @@ class MultiplayerClient {
 
   private pushChat(id: string, nick: string, text: string): void {
     this.chatCounter += 1;
-    this.chat.push({ id, nick, text, t: this.chatCounter });
+    // t = timestamp reale (ms): serve all'overlay del mondo per far decadere le
+    // righe dopo qualche secondo. Il seq monotono resta in chatCounter.
+    this.chat.push({ id, nick, text, t: performance.now(), seq: this.chatCounter });
     if (this.chat.length > 30) {
       this.chat.shift();
     }

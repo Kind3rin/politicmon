@@ -62,6 +62,7 @@ import {
 } from "../tournament";
 
 const STEP_TIME = 0.18;
+const CHAT_OVERLAY_TTL = 6000; // ms di vita di una riga chat nell'overlay del mondo
 const RUN_FACTOR = 1.85;
 const SCOOTER_FACTOR = 2.5; // il MONOPATTINO deve battere la corsa, non pareggiarla
 const AUTO_FACTOR = 3.0; // l'AUTO BLU è il mezzo più rapido all'aperto
@@ -3263,9 +3264,12 @@ export class WorldScene implements Scene {
       screen.text(label, 6, 17, "#7ad858");
     }
 
-    // Overlay chat: ultime 2 righe sotto il nome zona (se ci sono messaggi).
+    // Overlay chat: ultime 2 righe sotto il nome zona, ma solo se RECENTI —
+    // decadono dopo CHAT_OVERLAY_TTL, così un "Luca: Ciao!" non resta in alto
+    // a sinistra a tempo indefinito. Lo storico completo vive nella ChatScene.
     if (!this.msg.isOpen && !this.askMenu && !this.transportMenu && mp.chat.length > 0) {
-      const recent = mp.chat.slice(-2);
+      const now = performance.now();
+      const recent = mp.chat.filter((c) => now - c.t < CHAT_OVERLAY_TTL).slice(-2);
       for (let i = 0; i < recent.length; i += 1) {
         const c = recent[i];
         const line = `${mp.chatNick(c)}: ${c.text}`.slice(0, 34);

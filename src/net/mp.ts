@@ -106,18 +106,17 @@ const TURN_SERVERS: TurnEntry[] = [];
 if (TURN_URL && TURN_USER && TURN_CRED) {
   TURN_SERVERS.push({ urls: TURN_URL, username: TURN_USER, credential: TURN_CRED });
 }
-// Fallback pubblico: utile ma non unico. Con un TURN dedicato da env resta come
-// secondo relay; senza, evita di lasciare zero relay (STUN-only fallisce su NAT
-// simmetrico/CGNAT, la maggior parte delle reti mobili).
-TURN_SERVERS.push({
-  urls: [
-    "turn:openrelay.metered.ca:80",
-    "turn:openrelay.metered.ca:443",
-    "turns:openrelay.metered.ca:443?transport=tcp",
-  ],
-  username: "openrelayproject",
-  credential: "openrelayproject",
-});
+// NIENTE fallback pubblico: il demo OpenRelay (openrelay.metered.ca /
+// "openrelayproject") è DISMESSO — verificato: zero candidate relay, le
+// credenziali non allocano più. Tenerlo in lista aggiungeva solo latenza al
+// gathering ICE senza mai funzionare. SENZA un TURN configurato il multiplayer
+// funziona SOLO tra reti con NAT facili (stessa LAN, NAT cone): su CGNAT/4G
+// la connessione P2P fallisce. Per il multiplayer su internet reale serve un
+// TURN vero via env (gratis: account su metered.ca, 0.5GB/mese):
+//   VITE_TURN_URL  = turn:<subdomain>.metered.ca:80  (o l'URL fornito)
+//   VITE_TURN_USER = <username fornito>
+//   VITE_TURN_CRED = <credential fornita>
+// Su Vercel: Settings → Environment Variables, poi redeploy.
 
 const RTC_CONFIG: RTCConfiguration = { iceServers: STUN_SERVERS };
 

@@ -52,6 +52,11 @@ export function playIntro(): Promise<void> {
     // Sicurezza: se in 8s non è finito (video lungo o evento perso), chiudi.
     window.setTimeout(finish, 8000);
 
+    // Il video ha preload="none" (non ruba banda al bundle su mobile): il
+    // download parte solo ora, per chi lo deve davvero vedere.
+    video.preload = "auto";
+    video.load();
+
     // Autoplay: parte muto per rispettare le policy, poi alza il volume appena
     // possibile (molti browser bloccano l'audio finché non c'è un gesto utente,
     // ma il video parte comunque).

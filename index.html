@@ -18,10 +18,32 @@
     <title>Politicmon</title>
   </head>
   <body>
+    <!-- Pre-layout SINCRONO prima del primo paint: classe touch + dimensione
+         canvas con la STESSA formula di Screen.fitToWindow. Senza questo, il
+         bundle (grande) applica il layout touch secondi dopo il primo paint e
+         l'intera shell salta (CLS ~0.3 misurato). Qui il primo paint nasce già
+         nel layout definitivo; fitToWindow poi riapplica valori identici. -->
+    <script>
+      (function () {
+        var touch = matchMedia("(pointer: coarse)").matches;
+        if (touch) document.body.classList.add("touch");
+        var vp = window.visualViewport;
+        var vw = (vp && vp.width) || innerWidth;
+        var vh = (vp && vp.height) || innerHeight;
+        var availW = Math.max(240, vw - (touch ? 32 : 28));
+        var availH = Math.max(160, vh - (touch ? 150 : 30));
+        var s = Math.min(availW / 240, availH / 180);
+        document.write(
+          '<style>#game-canvas{width:' + 240 * s + 'px;height:' + 180 * s + 'px}</style>'
+        );
+      })();
+    </script>
     <!-- Intro video: splash satirico (Ponte sullo Stretto + marcetta). Si chiude
-         da solo a fine video o al tocco. Gestito da src/engine/intro.ts. -->
+         da solo a fine video o al tocco. Gestito da src/engine/intro.ts.
+         preload="none": lo scarica solo chi lo deve vedere (intro.ts chiama
+         load() prima di play), non compete col bundle sulla banda mobile. -->
     <div id="intro-overlay" hidden>
-      <video id="intro-video" playsinline preload="auto" src="./intro.mp4"></video>
+      <video id="intro-video" playsinline preload="none" src="./intro.mp4"></video>
       <button id="intro-skip" type="button">SALTA ▶</button>
     </div>
     <div id="app">

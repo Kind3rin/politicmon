@@ -52,15 +52,15 @@ piazza a urlare.
 
 | | |
 |---|---|
-| 🐾 **42 Politicmon, 71 mosse** | 8 tipi politici, status (INDAGATO / SCANDALO / GAFFE), battaglie a turni gen-1 con animazioni |
+| 🐾 **42 Politicmon, 70 mosse** | 8 tipi politici, status (INDAGATO / SCANDALO / GAFFE), battaglie a turni gen-1 con animazioni |
 | 📊 **SONDAGGI (0-100%)** | La stat-firma: muove prezzi, EXP (*onda del consenso*) e **rami evolutivi** governo↔opposizione |
 | 🧬 **Evoluzioni ramificate** | Per livello, per oggetto (TESSERA DORATA) e **decise dal tuo gradimento** |
 | 🏛️ **GOVERNO OMBRA** | 6 ministeri assegnabili ai tuoi mostri, ognuno con un bonus passivo |
 | 📜 **DIRETTIVE DI PARTITO** | Le "MT": insegnano mosse per tipo, riutilizzabili all'infinito |
 | 🗺️ **Storia in 2 atti** | 3 medaglie → il PALAZZO → IL COLLE (Consulta + Garante) → il leggendario DRAGHIMON |
 | 🎰 **Contenuti extra** | Ponte sullo Stretto, CASINÒ DI PALAZZO, veicoli (MONOPATTINO / RUSPA), rivale ricorrente |
-| 📱 **Mobile & PWA** | Levetta analogica, modalità guidata, installabile e giocabile offline |
-| 🌐 **Multiplayer P2P** | Vedi gli altri giocatori sulla tua mappa, chat di zona ed emote — **senza server** |
+| 📱 **Mobile & PWA** | Levetta analogica, modalità guidata, **3 slot di salvataggio**, installabile e giocabile offline |
+| 🌐 **Multiplayer P2P** | Vedi gli altri giocatori sulla tua mappa, **duelli PvP**, **scambi di mostri**, chat di zona, dialogo 1:1 ed emote — **senza server** |
 
 ---
 

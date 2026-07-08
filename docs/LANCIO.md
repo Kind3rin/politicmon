@@ -54,7 +54,8 @@ Link: gioco → https://politicmon.vercel.app · codice → https://github.com/K
 >
 > **Cosa lo rende diverso da un clone qualsiasi:**
 > - I **SONDAGGI** (0-100%) sono la stat-firma: muovono prezzi, esperienza e persino i rami evolutivi. La stessa creatura si evolve in modo diverso se sei popolare o impopolare.
-> - 42 mostri, 71 mosse, 8 tipi, Governo Ombra con ministeri, storia in due atti.
+> - 42 mostri, 70 mosse, 8 tipi, Governo Ombra con ministeri, storia in due atti.
+> - Multiplayer P2P: duelli PvP, scambi di mostri, chat di zona e dialogo 1:1 — tutto senza server.
 >
 > **Lato tecnico** (per chi è del mestiere): TypeScript + canvas 2D puro, zero engine, **una sola dipendenza runtime** (Trystero per il P2P). Multiplayer WebRTC senza server. Logica di battaglia testata in CI. Grafica pixel art.
 >
@@ -148,7 +149,7 @@ Musica: chiptune/8-bit allegra (es. da freesound o un generatore royalty-free). 
 | 1 | 0-3s | Logo POLITICMON su sfondo scanline, i 3 starter che entrano (usa `title.png`) | **"Catturali tutti…"** |
 | 2 | 3-5s | Cut alla tagline | **"…prima che ti tassino."** |
 | 3 | 5-12s | GIF di gameplay: camminata nel mondo (Mediopoli, `world.png` → clip), banner AVVISTAMENTI | VO: *"Un clone di Pokémon a tema satira politica italiana."* |
-| 4 | 12-20s | Battaglia: menu LOTTA, animazione mossa, barra HP che cala (`gameplay.gif`) | Testo: **42 mostri · 71 mosse · 8 tipi** |
+| 4 | 12-20s | Battaglia: menu LOTTA, animazione mossa, barra HP che cala (`gameplay.gif`) | Testo: **42 mostri · 70 mosse · 8 tipi** |
 | 5 | 20-27s | Zoom sulla barra SONDAGGI, split: freccia su → forma "governo", freccia giù → forma "opposizione" | VO: *"I sondaggi decidono chi diventi."* |
 | 6 | 27-33s | Montaggio rapido: casinò, ponte, multiplayer (altri avatar sulla mappa) | Testo: **Mobile · PWA · Multiplayer P2P gratis** |
 | 7 | 33-40s | Schermata finale: logo + URL grande | **politicmon.vercel.app** · *"Scendi in campo."* |

@@ -369,34 +369,33 @@ const CAPITALE_TILES = [
 // PONTE: arrivando dalla capitale SBARCHI SUL MOLO (13,6), a piedi, non in mezzo
 // all'acqua. Per RIPARTIRE entri nell'acqua ai lati del molo (12,6 / 15,6) col
 // TRAGHETTO. Da lì il ponte scende fino al cantiere e al Capitano.
-// APPRODO NAVALE + CAPITANO CANCELLO OBBLIGATORIO (rework).
-// - Si arriva DALL'ACQUA: lo spawn è (14,16) = mare bordo sud, traghetto auto-attivo.
-// - La riga 8 (confine mare/terra) è murata di scogli '^' (solid, blocca la
-//   navigazione) tranne il VARCO del ponte (col 13-14 = 'jj'): i bacini laterali
-//   sono sigillati, l'unica rotta d'approdo passa dal ponte.
-// - Il ponte è ristretto a SINGLE-FILE (col 14 = 'j'; col 15 riempita di 'J'): non
-//   c'è corsia di sorpasso. IL CAPITANO (14,11) facing "down" copre col cono di
-//   vista (14,12..15): sbarcando su (14,15) il fight scatta al primo passo e finché
-//   il boss è lì (solido, pre ponte-beaten) il molo resta irraggiungibile a piedi.
-// - Il porto è un PONTILE largo (riga 7 = 'qqqqqq') + banchina, leggibile come porto.
-// - Ritorno: dal molo entri in acqua ai lati (12,6)/(15,6) → warp a Caput Mundi.
+// APPRODO NAVALE + CAPITANO CANCELLO OBBLIGATORIO (layout pulito).
+// Lettura a colonna unica, tutto in verticale sulla col 14:
+// - ARRIVO in mare aperto in basso (14,16), traghetto auto-attivo.
+// - PONTE single-file 'j' su col 14, fiancheggiato da tralicci 'J' (col 13 e 15) e
+//   chiuso a nord dal muro di scogli '^' su tutta la riga 8 tranne la bocca (col 13-14).
+// - IL CAPITANO a (14,12) facing "down" chiude il varco: sbarcando dal mare entri
+//   subito nel suo cono di vista → fight inevitabile, non aggirabile.
+// - PORTO = pontile 'qqq' (col 12-14, righe 6-7) oltre il ponte, poi spiaggia/bar/edifici.
+// - RITORNO: UNA sola darsena segnalata da un cartello blu 'W' a (11,13); si riparte
+//   dall'acqua a (11,14). Niente più warp di ritorno sparsi: UN solo mare, UN solo imbarco.
 const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......@@@@......xxxx.....TT",
   "TT..~~~~.mddm.s....mdd^^^^^.TT",
   "TT..~~~~.====eQQe..===^...^.TT",
   "TT..~~~~...==mddm..===^...^.TT",
-  "TT...s.zzzz==qq=======^^l^^.TT",
-  "TTzzzzzzzzzXwqqwwzzzzzzzzzzzTT",
-  "TTzzzzzzzzzqqqqqqzzzzzzzzzzzTT",
-  "^^^^^^^^^^^^JjjJ^^^^^^^^^^^^^^",
-  "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjjJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjJJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjJJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwKJjJJKwwwwwwwwwwww",
-  "wwwwwwwwwwwwwJjJJwwwwwwwwwwwww",
-  "wwwwwwwwwwwwwjjjJwwwwwwwwwwwww",
+  "TT...s.zzzz===q=======^^l^^.TT",
+  "TTzzzzzzzzzzzzqzzzzzzzzzzzzzTT",
+  "TTzzzzzzzzzzzzqzzzzzzzzzzzzzTT",
+  "^^^^^^^^^^^^^JjJ^^^^^^^^^^^^^^",
+  "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwWwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwjwwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 ];
 
@@ -1742,20 +1741,11 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "stretto",
     warps: [
-      // Ritorno via mare verso CAPUT MUNDI: l'imbarco è sulle celle d'ACQUA ai LATI
-      // del molo d'approdo (12,6 e 15,6). Così NON coincidono con lo SBARCO (il molo
-      // 13-14,6, dove arrivi a piedi): entri in acqua col TRAGHETTO e riparti, senza
-      // essere rispedito indietro appena sbarcato. Approdo a Caput Mundi (6,21).
-      { x: 12, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
-      { x: 15, y: 6, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
-      // RITORNO DAL MARE SUD: senza queste celle, chi arriva dall'acqua e NON
-      // batte IL CAPITANO resterebbe INTRAPPOLATO (i warp del molo qui sopra
-      // stanno nella sacca nord, oltre il muro di scogli). Basta virare a lato
-      // dello spawn (14,16) per riprendere il largo verso Caput Mundi.
-      { x: 12, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
-      { x: 13, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
-      { x: 15, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
-      { x: 16, y: 16, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
+      // RITORNO A CAPUT MUNDI: UN SOLO imbarco, la DARSENA segnalata dal cartello
+      // blu 'W' a (11,13). Si riparte dall'acqua a (11,14) — mare aperto, sempre
+      // raggiungibile (anche senza battere IL CAPITANO: niente intrappolamento).
+      // Un solo mare, un solo punto di ritorno: nessun warp sparso.
+      { x: 11, y: 14, toMap: "capitale", toX: 6, toY: 21, facing: "up" },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
       {
@@ -1852,10 +1842,10 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["Protesto contro il ponte da prima che non esistesse."]
       },
       {
-        // Spostato a (12,7) sul molo (era 14,10): la col 14 è ora il corridoio
-        // single-file del ponte, un NPC lì bloccherebbe l'uscita dopo il Capitano.
-        // hideIfFlag ponte-beaten: sparisce col boss (non serve più presidiare).
-        id: "tr-geometra", pal: "guard", x: 12, y: 7, facing: "down",
+        // Presidia la banchina a (12,7), fuori dal corridoio single-file (col 14).
+        // facing "up": il cono guarda la spiaggia (12,6)=z, (12,5)== (libere) e
+        // sfida chi sbarca dal ponte. hideIfFlag ponte-beaten: sparisce col boss.
+        id: "tr-geometra", pal: "guard", x: 12, y: 7, facing: "up",
         trainerId: "geometra", sightRange: 3, hideIfFlag: "ponte-beaten",
         lines: ["Il collaudo è ok: il ponte regge benissimo dove c'è."]
       },

@@ -9,14 +9,27 @@ Link: gioco → https://politicmon.vercel.app · codice → https://github.com/K
 **Asset verticali 9:16** (Reels / TikTok / Shorts / Storie / FB):
 - `docs/img/social/reel-gameplay.mp4` — **video verticale 540×960, ~7s** pronto da caricare su TikTok / Reels / Shorts (nessuna conversione).
 - `docs/img/social/reel-gameplay.gif` — stessa cosa in GIF (per X / FB / anteprima).
+- `docs/img/social/story-mondo.mp4` — **esplorazione del mondo** verticale 540×960 (banda "ESPLORA L'ITALIA"). Variante per una seconda storia / carosello.
+- `docs/img/social/story-mondo.gif` — stessa cosa in GIF.
 - `docs/img/social/poster-verticale.png` — locandina 1080×1920 (post singolo o cover).
 - `docs/img/social/gameplay.mp4` — versione orizzontale 480×360 (per X / feed).
 
 > ✅ Gli MP4 sono già pronti: caricali direttamente. Sono corti (~7s in loop) —
 > ottimi come clip d'aggancio. Per un video più lungo/narrato, registra lo schermo
 > mentre giochi (OBS / registrazione del telefono) e monta seguendo lo storyboard.
-> Per rigenerare gli asset: `node scripts/make-social-vertical.mjs` +
+> Per rigenerare gli asset: `node scripts/make-social-vertical.mjs` (battaglia) +
+> `node scripts/make-social-world.mjs` (esplorazione) +
 > `node scripts/make-social-poster.mjs` (dev server attivo), poi `ffmpeg` per l'MP4.
+
+### 📲 Instagram Stories — sequenza consigliata (3 storie)
+
+1. **`poster-verticale.png`** — hook statico, si vede tutto subito (logo + tagline + stat).
+2. **`reel-gameplay.mp4`** — la battaglia in movimento (trattiene lo sguardo).
+3. **`story-mondo.mp4`** — l'esplorazione del mondo, chiude con "GIOCA GRATIS".
+
+Su ognuna aggiungi lo **sticker link** a `politicmon.vercel.app`. Sono già
+formato 9:16: nessun ritaglio, nessuna cornice. NON usare gli asset orizzontali
+(`gameplay.gif`, `battle.png`, `world.png`) nelle storie — vengono tagliati male.
 
 ---
 

@@ -19,8 +19,12 @@ import { preloadCoreSprites } from "./engine/preload";
 import { setTypeIconLoader } from "./data/poltypes";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
+import { inject } from "@vercel/analytics";
 
 const APP_BUILD_KEY = "politicmon-app-build";
+
+// Inizializza Vercel Web Analytics
+inject();
 
 // Mostra i controlli touch sui dispositivi senza mouse.
 if (window.matchMedia("(pointer: coarse)").matches) {

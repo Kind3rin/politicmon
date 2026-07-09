@@ -94,13 +94,15 @@ export class ShopScene implements Scene {
       screen.text(`Hai: ${this.state.bag[item.id] ?? 0}`, 8, 14, GREY);
       const y = 24 + this.menu.measureHeight(13, MAX_VIS);
       // Icona oggetto (24x24) a sinistra; descrizione a destra dell'icona.
-      const lines = wrapText(item.desc, 28);
-      const shown = Math.min(3, lines.length);
-      const panelH = Math.max(30, 10 + shown * 10);
+      // Wrap a 30 char (larghezza reale dello spazio a destra dell'icona) e fino
+      // a 4 righe: le desc lunghe (es. TESSERA) non vengono più troncate.
+      const lines = wrapText(item.desc, 30);
+      const shown = Math.min(4, lines.length);
+      const panelH = Math.max(30, 8 + shown * 9);
       screen.panel(10, y, VIEW_W - 20, panelH);
       drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
       for (let i = 0; i < shown; i += 1) {
-        screen.text(lines[i], 44, y + 6 + i * 10, INK);
+        screen.text(lines[i], 44, y + 5 + i * 9, INK);
       }
     }
     const note =

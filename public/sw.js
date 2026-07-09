@@ -6,7 +6,10 @@
 // worker nuovo prende subito il controllo: i progressi stanno in localStorage,
 // separati dalle cache statiche.
 
-const CACHE = "politicmon-v13-nostr-relays-fix";
+// Il placeholder è stampato con l'ID di build da vite.config.ts (plugin
+// stamp-service-worker): ogni deploy = nome cache nuovo, l'activate cancella
+// le cache delle build precedenti. Niente più bump manuali.
+const CACHE = "politicmon-__APP_BUILD_ID__";
 const PRECACHE = [
   "./",
   "./index.html",

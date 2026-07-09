@@ -800,7 +800,7 @@ export class BattleScene implements Scene {
         entry.push({
           run: () => {
             this.ask(
-              `Vuoi cambiare ${this.playerName()}?`,
+              `Rimpasto di squadra? ${this.playerName()} lascia la poltrona?`,
               () => {
                 this.mode = "queue";
                 this.stack.push(

@@ -723,6 +723,52 @@ function barMap(id: string, name: string, city: string, doorX: number, doorY: nu
   };
 }
 
+// LUCA — la GUIDA ricorrente. Un Luca per città, al centro, con menù di domande
+// contestuali. `cityLines` = risposta specifica sulla città; gli altri topic
+// (come si gioca, online) sono condivisi. Riusa nameplate+guide (vedi NpcDef).
+function lucaGuide(
+  cityName: string,
+  x: number,
+  y: number,
+  cityLines: string[],
+  hint: string[]
+): NpcDef {
+  return {
+    id: "luca-guida",
+    pal: "professor",
+    x,
+    y,
+    facing: "down",
+    nameplate: "LUCA - GUIDA",
+    guide: {
+      intro: [
+        `Ciao, sono LUCA! Ci becchiamo di nuovo, stavolta a ${cityName}.`,
+        "Sono la guida ufficiale: chiedimi pure quello che ti serve."
+      ],
+      prompt: "SU COSA TI SERVE UNA MANO?",
+      topics: [
+        { label: `INFO SU ${cityName}`, lines: cityLines },
+        { label: "COSA FACCIO QUI", lines: hint },
+        {
+          label: "COME SI GIOCA",
+          lines: [
+            "Indebolisci i CANDIDATI in lotta, poi lancia una SCHEDA ELETTORALE per catturarli.",
+            "Tieni d'occhio i SONDAGGI (barra in alto): salgono con le vittorie e sbloccano evoluzioni.",
+            "Attiva la GUIDA nel menu (freccia gialla) se non sai dove andare."
+          ]
+        },
+        {
+          label: "GIOCARE ONLINE",
+          lines: [
+            "Menu PAUSA -> ONLINE: vedi gli altri giocatori nella tua zona.",
+            "Chat di zona, scambi e sfide con chi ti è accanto. Tutto peer-to-peer."
+          ]
+        }
+      ]
+    }
+  };
+}
+
 export const MAPS: Record<string, MapDef> = {
   borgo: {
     id: "borgo",
@@ -1099,6 +1145,18 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     npcs: [
+      lucaGuide(
+        "MEDIOPOLI", 15, 10,
+        [
+          "MEDIOPOLI: la città che decide cosa pensi, in onda dal 1980.",
+          "Media, talk-show e comizi h24. Occhio: qui i candidati selvatici sono più agguerriti.",
+          "La FONTANA DELLO SHARE zampilla solo se fai ascolti."
+        ],
+        [
+          "La PALESTRA TV STUDIO 5 ti aspetta: batti SUA EMITTENZA per la medaglia AUDITEL.",
+          "Serve la prima medaglia per proseguire a nord verso EUROTOWN."
+        ]
+      ),
       {
         id: "scorta-medio", pal: "guard", x: 24, y: 19, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "Destinazioni rapide, sirena inclusa, spiegazioni escluse."]
@@ -1281,6 +1339,18 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     npcs: [
+      lucaGuide(
+        "EUROTOWN", 15, 7,
+        [
+          "EUROTOWN: capitale europea gemellata... con se stessa, in 27 lingue.",
+          "Per attraversare la piazza serve il modulo 27/B in triplice copia. Burocrazia pura.",
+          "Qui girano i big dell'UE: candidati tosti, portafogli europei."
+        ],
+        [
+          "La PALESTRA locale mette in palio la medaglia SPREAD.",
+          "Da qui la strada prosegue verso CAPUT MUNDI, se hai le medaglie giuste."
+        ]
+      ),
       {
         id: "scorta-euro", pal: "guard", x: 24, y: 14, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "Abbiamo una corsia preferenziale approvata in 27 lingue."]
@@ -1522,6 +1592,18 @@ export const MAPS: Record<string, MapDef> = {
       }
     ],
     npcs: [
+      lucaGuide(
+        "CAPUT MUNDI", 15, 12,
+        [
+          "CAPUT MUNDI: qui i potenti del mondo vengono a farsi fotografare.",
+          "Palazzi, casinò, vertici internazionali. E candidati con squadre da capogiro.",
+          "C'è pure il porto per la Sicilia, se hai l'AUTO BLU e le medaglie."
+        ],
+        [
+          "La GLOBAL TOWER mette in palio la medaglia DAZIO: la palestra più dura finora.",
+          "Vinci qui e IL PALAZZO ti apre le porte: da lì parte l'endgame."
+        ]
+      ),
       {
         id: "scorta-cap", pal: "guard", x: 20, y: 18, facing: "right", transport: true,
         lines: [
@@ -1872,6 +1954,18 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-s4", x: 3, y: 7, itemId: "dirVaffa", qty: 1 }
     ],
     npcs: [
+      lucaGuide(
+        "LO STRETTO", 18, 5,
+        [
+          "STRETTO DI MESSINA: spiaggia, mojito e un ponte eternamente incompiuto.",
+          "Fine lavori prevista: 1972. Poi 2024. Poi... vabbè.",
+          "Al Papeete c'è il Ministro alla consolle: qui si fa campagna in costume."
+        ],
+        [
+          "Il boss IL CAPITANO ti aspetta: mojito sì, mozioni no.",
+          "Zona endgame-meme: torni indietro dalla darsena quando vuoi."
+        ]
+      ),
       {
         id: "scorta-stretto", pal: "guard", x: 8, y: 5, facing: "left", transport: true,
         lines: ["SCORTA AUTO BLU:", "L'AUTO BLU è qui pronta: ti riporto sulla terraferma quando vuoi."]
@@ -2016,6 +2110,18 @@ export const MAPS: Record<string, MapDef> = {
       { id: "pk-off-gilet", x: 5, y: 12, itemId: "gilet", qty: 1, hidden: true }
     ],
     npcs: [
+      lucaGuide(
+        "L'OFFSHORE", 15, 8,
+        [
+          "PARADISO OFFSHORE: un'isola che non risulta su nessun catasto.",
+          "Pressione fiscale 0%, pressione dei sondaggi altissima.",
+          "Evasori, prestanome e commercialisti creativi: candidati sfuggenti."
+        ],
+        [
+          "Il mini-boss è IL TESORIERE FANTASMA: da qualche parte, tra i conti cifrati.",
+          "Da qui si salpa per BRUXELLES e le elezioni europee."
+        ]
+      ),
       {
         id: "tr-commercialista", pal: "aide", x: 8, y: 10, facing: "left",
         trainerId: "commercialista", sightRange: 3,
@@ -2162,6 +2268,18 @@ export const MAPS: Record<string, MapDef> = {
     ],
     pickups: [],
     npcs: [
+      lucaGuide(
+        "BRUXELLES", 14, 8,
+        [
+          "BRUXELLES: la capitale UE delle elezioni europee.",
+          "Il Parlamento trasloca ogni mese: nessuno sa mai dove sia la seduta.",
+          "In varietate concordia: qui si litiga, ma in 24 lingue diverse."
+        ],
+        [
+          "Gauntlet finale: commissari, lobbisti ed eurodeputati fino a LA COMMISSIONE.",
+          "Batti il boss e ti prendi la TESSERA DORATA: sei arrivato in cima."
+        ]
+      ),
       {
         id: "commissione", pal: "boss", x: 5, y: 1, facing: "down",
         trainerId: "commissione", sightRange: 5, hideIfFlag: "ue-beaten",

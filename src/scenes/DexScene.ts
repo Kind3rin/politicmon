@@ -28,6 +28,13 @@ export class DexScene implements Scene {
         audio.cancel();
         this.detail = false;
       }
+      // Scorri tra le schede senza uscire: salta le specie mai viste (che non
+      // hanno una scheda da mostrare). Sinistra/destra E su/giù, come i Pokédex.
+      if (this.input.wasPressed("right") || this.input.wasPressed("down")) {
+        this.stepDetail(1);
+      } else if (this.input.wasPressed("left") || this.input.wasPressed("up")) {
+        this.stepDetail(-1);
+      }
       return;
     }
     if (this.input.wasPressed("up")) {
@@ -57,6 +64,23 @@ export class DexScene implements Scene {
         this.detail = true;
       } else {
         audio.cancel();
+      }
+    }
+  }
+
+  // Passa alla scheda vista/catturata successiva (dir=1) o precedente (dir=-1),
+  // saltando le specie sconosciute. Aggiorna anche index/scroll della lista,
+  // così all'uscita il cursore è sulla specie che stavi guardando.
+  private stepDetail(dir: 1 | -1): void {
+    const n = DEX_ORDER.length;
+    for (let step = 1; step < n; step += 1) {
+      const i = (this.index + dir * step + n * step) % n;
+      if (this.state.dex[DEX_ORDER[i]]) {
+        this.index = i;
+        const visibleRows = 10;
+        this.scroll = Math.min(Math.max(this.scroll, i - visibleRows + 1), i);
+        audio.cursor();
+        return;
       }
     }
   }
@@ -176,6 +200,6 @@ export class DexScene implements Scene {
     if (this.state.dex[id] !== "caught") {
       screen.text("(Non ancora nella tua squadra)", 14, cy, GREY);
     }
-    screen.text("A/B: indietro", 14, VIEW_H - 16, GREY);
+    screen.text("◄►: sfoglia   A/B: indietro", 14, VIEW_H - 16, GREY);
   }
 }

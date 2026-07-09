@@ -1797,6 +1797,25 @@ export class WorldScene implements Scene {
     }
 
     markSeen(this.state, legendary.speciesId);
+    // Conferma esplicita: un leggendario è un'occasione UNICA (se scappa o lo
+    // metti KO senza catturarlo lo lasci lì, ma è meglio non avviare lo scontro
+    // per sbaglio). Prompt WOW prima delle battute + battaglia.
+    const legendName = SPECIES[legendary.speciesId].name;
+    this.say(
+      [
+        `!!! POLITICMON LEGGENDARIO !!!`,
+        `Davanti a te c'è ${legendName}, una leggenda vivente.`,
+        "Preparati: un'occasione così non capita spesso."
+      ],
+      () => {
+        this.askYesNo(`Sfidi ${legendName}? (LEGGENDARIO)`, () => {
+          this.beginLegendaryBattle(legendary);
+        });
+      }
+    );
+  }
+
+  private beginLegendaryBattle(legendary: NonNullable<RuntimeNpc["legendary"]>): void {
     this.say(legendary.lines, () => {
       this.startWildBattle(legendary.speciesId, legendary.level, (result) => {
         // SOLO la CATTURA consuma il leggendario. Mandarlo KO ("win") NON lo
@@ -3153,16 +3172,44 @@ export class WorldScene implements Scene {
         !exclaim &&
         Boolean(npc.trainerId) &&
         rematchAvailability(this.state, npc.trainerId!) === "ready";
+      // LEGGENDARIO ancora disponibile: aura + cartello per renderlo SPECIALE e
+      // inconfondibile (evita di sfidarlo per sbaglio, vedi conferma SÌ/NO).
+      const legendaryReady = Boolean(npc.legendary) && !this.state.flags[npc.legendary!.flag];
       tall.push({
         baseY: npc.dispY + TILE,
         draw: () => {
           // Ombra ai piedi (prima dello sprite).
           this.drawShadow(screen, nx + 8, ny + 15);
+          // Aura leggendaria: alone dorato pulsante (rect morbidi concentrici,
+          // Screen non ha primitive circolari) + scintille rotanti attorno.
+          if (legendaryReady) {
+            const pulse = 0.5 + 0.5 * Math.sin(this.time * 4);
+            const grow = Math.round(pulse * 3);
+            const a1 = (0.10 + pulse * 0.12).toFixed(2);
+            const a2 = (0.16 + pulse * 0.16).toFixed(2);
+            screen.rect(nx - 4 - grow, ny - grow, 24 + grow * 2, 24 + grow * 2, `rgba(240,200,64,${a1})`);
+            screen.rect(nx - grow, ny + 4 - grow, 16 + grow * 2, 16 + grow * 2, `rgba(240,200,64,${a2})`);
+            // Scintille rotanti (4 punti) attorno alla testa.
+            for (let k = 0; k < 4; k += 1) {
+              const a = this.time * 3 + (k * Math.PI) / 2;
+              const sxp = nx + 8 + Math.round(Math.cos(a) * 12);
+              const syp = ny + 6 + Math.round(Math.sin(a) * 8);
+              screen.text("*", sxp, syp, "#fff0a0");
+            }
+          }
           if (npcImg) {
             const nb = screen.imageBounds(npcImg);
             const ns = 22 / nb.h;
             const dw = nb.w * ns;
             screen.imageSpriteCropped(npcImg, nx + 8 - dw / 2, ny + 16 - nb.h * ns, { scaleX: ns, scaleY: ns });
+          }
+          // Cartello LEGGENDARIO sopra la testa (lampeggia per attirare l'occhio).
+          if (legendaryReady) {
+            const blink = Math.floor(this.time * 2) % 2 === 0;
+            const label = blink ? "* LEGGENDARIO *" : "LEGGENDARIO";
+            const w = label.length * 6 + 4;
+            screen.rect(nx + 8 - w / 2, ny - 11, w, 9, "rgba(40,20,60,0.9)");
+            screen.text(label, nx + 8 - w / 2 + 2, ny - 10, "#f0c040");
           }
           // Targhetta fluttuante col nome (NPC speciali, es. LUCA · GUIDA).
           // Sopra la testa, oro su fondo scuro per spiccare tra gli NPC normali.

@@ -38,6 +38,12 @@ export interface NpcDef {
   daily?: boolean; // SFIDA DEL GIORNO: apre la sfida quotidiana (e non vaga mai)
   coppa?: boolean; // BANDITORE della COPPA DELLE POLTRONE (torneo post-garante)
   monument?: boolean; // ARCHITETTO DI CORTE: money-sink MONUMENTO AL CANDIDATO (R42)
+  nameplate?: string; // targhetta fluttuante sopra la testa (es. GUIDA "LUCA")
+  guide?: { // NPC GUIDA: menù di domande a scelta invece del dialogo lineare
+    intro: string[]; // battute di apertura (mostrate una volta a interazione)
+    prompt: string; // etichetta del menù (es. "COSA VUOI SAPERE?")
+    topics: { label: string; lines: string[] }[]; // voci + risposte
+  };
 }
 
 export interface WarpDef {
@@ -836,16 +842,51 @@ export const MAPS: Record<string, MapDef> = {
         lines: ["SONDAGGISTA: campiono l'erba alta, un comizio alla volta."]
       },
       {
-        // LUCA — guida ufficiale del gioco. Accoglie i nuovi e dà info utili.
+        // LUCA — guida ufficiale del gioco. Targhetta sopra la testa + menù di
+        // domande a scelta (npc.guide, gestito in WorldScene.interactNpc).
         id: "luca-guida", pal: "professor", x: 17, y: 8, facing: "down",
-        lines: [
-          "Ciao, sono LUCA! Sempre qui per darti una mano.",
-          "Vuoi diventare PRESIDENTE OMBRA? Cattura candidati indebolendoli e lanciando SCHEDE ELETTORALI.",
-          "Punta a nord: MEDIOPOLI e la prima PALESTRA (medaglia).",
-          "Tieni d'occhio i SONDAGGI: salgono con le vittorie e sbloccano evoluzioni.",
-          "Menu PAUSA: squadra, borsa, GUIDA (freccia gialla) e ONLINE per la chat di zona.",
-          "Buona campagna elettorale! Passa a trovarmi quando vuoi."
-        ]
+        nameplate: "LUCA - GUIDA",
+        guide: {
+          intro: [
+            "Ciao, sono LUCA! La guida ufficiale di BORGO URNE.",
+            "Sono sempre qui: chiedimi quello che vuoi."
+          ],
+          prompt: "SU COSA TI SERVE UNA MANO?",
+          topics: [
+            {
+              label: "COME SI GIOCA",
+              lines: [
+                "Cammini nell'erba alta: sbucano CANDIDATI selvatici.",
+                "Indeboliscili in lotta, poi lancia una SCHEDA ELETTORALE per catturarli.",
+                "Metti insieme una squadra e diventa PRESIDENTE OMBRA."
+              ]
+            },
+            {
+              label: "DOVE VADO ORA",
+              lines: [
+                "Punta a NORD: attraversa il PERCORSO 1 fino a MEDIOPOLI.",
+                "Lì c'è la prima PALESTRA: battila per la tua prima MEDAGLIA.",
+                "Attiva la GUIDA nel menu (freccia gialla) se ti perdi."
+              ]
+            },
+            {
+              label: "I SONDAGGI",
+              lines: [
+                "I SONDAGGI (0-100) sono il tuo consenso: la barra in alto.",
+                "Salgono con vittorie e catture, scendono con sconfitte e fughe.",
+                "Alti sbloccano EVOLUZIONI speciali e più EXP. Tienili su!"
+              ]
+            },
+            {
+              label: "GIOCARE ONLINE",
+              lines: [
+                "Menu PAUSA -> ONLINE: vedi gli altri giocatori nella tua zona.",
+                "Puoi usare la CHAT DI ZONA, scambiare e sfidare chi ti è accanto.",
+                "Tutto peer-to-peer: niente account, niente attese."
+              ]
+            }
+          ]
+        }
       }
     ]
   },

@@ -251,6 +251,11 @@ export class WorldScene implements Scene {
   private askYes: (() => void) | null = null;
   private askNo: (() => void) | null = null;
   private askLabel = "";
+  // Menù a scelta multipla generico (NPC guida): onPick riceve l'indice scelto,
+  // askNo gestisce l'annullo (tasto B). Mutuamente esclusivo con askYes/askNo.
+  private askPick: ((index: number) => void) | null = null;
+  // NPC guida già salutati in questa sessione (l'intro non si ripete).
+  private guideGreeted = new Set<string>();
   private transportMenu: Menu | null = null;
   private transportDestinations: TransportDestination[] = [];
   // Menu d'interazione su un giocatore remoto adiacente (SCAMBIA/SFIDA/ANNULLA).
@@ -778,6 +783,45 @@ export class WorldScene implements Scene {
     this.askNo = onNo ?? null;
   }
 
+  // Menù a scelta multipla: onPick(index) sulla voce scelta, onCancel sul B.
+  private askChoice(
+    label: string,
+    options: string[],
+    onPick: (index: number) => void,
+    onCancel?: () => void
+  ): void {
+    this.askLabel = label;
+    this.askMenu = new Menu(options.map((label) => ({ label })));
+    this.askPick = onPick;
+    this.askNo = onCancel ?? null;
+  }
+
+  // NPC GUIDA (Luca): intro una tantum, poi menù di domande in loop finché non
+  // esci. Riapre il menù dopo ogni risposta per un'esperienza da "sportello".
+  private openGuide(npc: RuntimeNpc): void {
+    const guide = npc.guide;
+    if (!guide) {
+      return;
+    }
+    const showMenu = () => {
+      const options = [...guide.topics.map((t) => t.label), "NIENTE, GRAZIE"];
+      this.askChoice(guide.prompt, options, (index) => {
+        if (index >= guide.topics.length) {
+          this.say(["A presto! Torna quando vuoi."]);
+          return;
+        }
+        this.say(guide.topics[index].lines, showMenu);
+      });
+    };
+    // Intro solo al primo contatto della sessione; poi dritti al menù.
+    if (!this.guideGreeted.has(npc.id)) {
+      this.guideGreeted.add(npc.id);
+      this.say(guide.intro, showMenu);
+    } else {
+      showMenu();
+    }
+  }
+
 
   // ---- Battles ----
 
@@ -1122,6 +1166,11 @@ export class WorldScene implements Scene {
         return;
       }
       // "never": fall-through al dialogo post-sconfitta esistente.
+    }
+
+    if (npc.guide) {
+      this.openGuide(npc);
+      return;
     }
 
     if (npc.transport) {
@@ -2705,17 +2754,25 @@ export class WorldScene implements Scene {
     if (this.askMenu) {
       const action = this.askMenu.update(this.input);
       if (action === "select") {
-        const yes = this.askMenu.index === 0;
-        const handler = yes ? this.askYes : this.askNo;
+        const index = this.askMenu.index;
+        const pick = this.askPick;
+        const handler = index === 0 ? this.askYes : this.askNo;
         this.askMenu = null;
         this.askYes = null;
         this.askNo = null;
-        handler?.();
+        this.askPick = null;
+        // Menù a scelta multipla: onPick(index). Altrimenti fallback SÌ/NO.
+        if (pick) {
+          pick(index);
+        } else {
+          handler?.();
+        }
       } else if (action === "cancel") {
         const handler = this.askNo;
         this.askMenu = null;
         this.askYes = null;
         this.askNo = null;
+        this.askPick = null;
         handler?.();
       }
       return;
@@ -3073,6 +3130,14 @@ export class WorldScene implements Scene {
             const ns = 22 / nb.h;
             const dw = nb.w * ns;
             screen.imageSpriteCropped(npcImg, nx + 8 - dw / 2, ny + 16 - nb.h * ns, { scaleX: ns, scaleY: ns });
+          }
+          // Targhetta fluttuante col nome (NPC speciali, es. LUCA · GUIDA).
+          // Sopra la testa, oro su fondo scuro per spiccare tra gli NPC normali.
+          if (npc.nameplate) {
+            const label = npc.nameplate;
+            const w = label.length * 6 + 4;
+            screen.rect(nx + 8 - w / 2, ny - 9, w, 8, "rgba(16,20,31,0.85)");
+            screen.text(label, nx + 8 - w / 2 + 2, ny - 8, "#f0c040");
           }
           if (exclaim) {
             screen.panel(nx + 2, ny - 13, 12, 13);

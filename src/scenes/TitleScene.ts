@@ -4,7 +4,8 @@ import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { hasAnySave, newGameState, type GameState } from "../game/state";
+import { hasAnySave, loadGame, newGameState, type GameState } from "../game/state";
+import { BackupScene } from "./BackupScene";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
 import { Menu, MessageBox, clipToWidth, wrapText, GREY, PAPER } from "../ui/widgets";
@@ -63,6 +64,11 @@ export class TitleScene implements Scene {
     }
     items.push({ label: "NOME", rightLabel: clipToWidth(loadNick() || "—", 60) });
     items.push({ label: "AUDIO", rightLabel: audio.enabled ? "SÌ" : "NO" });
+    // SPOSTA SAVE: import/export del codice salvataggio. Qui (non solo in pausa)
+    // perché serve proprio a chi apre il gioco in un browser DIVERSO e non trova
+    // i salvataggi (localStorage è isolato per browser/webview: Instagram ≠ Chrome
+    // ≠ PWA). Da qui può incollare il codice esportato dall'altro browser.
+    items.push({ label: "SPOSTA SAVE" });
     return new Menu(items);
   }
 
@@ -118,6 +124,12 @@ export class TitleScene implements Scene {
         { label: "NORMALE (CONSIGLIATA)" },
         { label: "MODALITÀ DIFFICILE" }
       ]);
+    } else if (label.startsWith("SPOSTA SAVE")) {
+      audio.confirm();
+      // Se c'è un save nello slot attivo lo passiamo (così l'export ha senso);
+      // altrimenti uno stato nuovo: l'IMPORT (il caso d'uso qui) non usa lo stato.
+      const existing = hasAnySave() ? loadGame() : null;
+      this.stack.push(new BackupScene(this.stack, this.input, existing ?? newGameState()));
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {

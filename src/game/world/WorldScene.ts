@@ -3377,6 +3377,13 @@ export class WorldScene implements Scene {
 
     // Sondaggi in tempo reale: barra colorata + etichetta del momento politico,
     // così il giocatore "legge" il suo consenso a colpo d'occhio (non solo un numero).
+    // AUTO-FADE: l'HUD è OPACO (ben leggibile) di norma; sfuma solo quando il
+    // giocatore gli finisce dietro (angolo alto-destra), così non nasconde la
+    // mappa proprio dove sei. La semitrasparenza fissa rendeva SOND illeggibile.
+    const playerScreenX = Math.round(playerPx - camX);
+    const playerScreenY = Math.round(playerPy) - camY;
+    const behindHud = playerScreenX > VIEW_W - 90 && playerScreenY < 44;
+    const hudAlpha = behindHud ? 0.35 : 1;
     let hudBottom = 2;
     if (this.state.party.length > 0) {
       const sond = this.state.sondaggi;
@@ -3389,7 +3396,7 @@ export class WorldScene implements Scene {
       const pulse = this.sondPulse > 0 && Math.floor(this.sondPulse * 16) % 2 === 0;
       const bg = pulse
         ? (this.sondDelta?.up ? "rgba(122,216,88,0.85)" : "rgba(208,72,72,0.85)")
-        : "rgba(16,20,31,0.62)"; // semitrasparente: la mappa dietro l'HUD resta visibile
+        : `rgba(16,20,31,${0.92 * hudAlpha})`;
       screen.rect(px, 2, panelW, 22, bg);
       screen.text(`SOND ${shown}%`, px + 4, 4, col);
       // Barra di riempimento (segue il valore animato).
@@ -3413,7 +3420,7 @@ export class WorldScene implements Scene {
     if (this.state.vehicle) {
       const vlabel = VEHICLES[this.state.vehicle as VehicleId].name;
       const w = vlabel.length * 6 + 8;
-      screen.rect(VIEW_W - w - 2, hudBottom, w, 12, "rgba(16,20,31,0.62)");
+      screen.rect(VIEW_W - w - 2, hudBottom, w, 12, `rgba(16,20,31,${0.92 * hudAlpha})`);
       screen.text(vlabel, VIEW_W - w + 2, hudBottom + 2, "#9cc8e8");
     }
 

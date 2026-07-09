@@ -23,13 +23,16 @@ const shot = await page.evaluate(async () => {
   state.party = [createMonster("giorgetta", 18)];
   state.sondaggi = 100;
   state.vehicle = "monopattino";
-  state.pos = { mapId: "grotta1", x: 14, y: 3, facing: "down" };
-  const stack = new SceneStack();
-  stack.push(new WorldScene(stack, input, state));
-  // Avanza il tempo così la freccia lampeggiante è nella fase visibile.
-  for (let i = 0; i < 30; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
-  return canvas.toDataURL("image/png");
+  function shotAt(x, y) {
+    state.pos = { mapId: "grotta1", x, y, facing: "down" };
+    const stack = new SceneStack();
+    stack.push(new WorldScene(stack, input, state));
+    for (let i = 0; i < 30; i++) { stack.update(1/30); stack.draw(screen); input.endFrame(); }
+    return canvas.toDataURL("image/png");
+  }
+  return { far: shotAt(8, 8), behind: shotAt(17, 2) };
 });
-writeFileSync("artifacts/screens/grotta_exit.png", Buffer.from(shot.slice("data:image/png;base64,".length), "base64"));
-console.log("salvato artifacts/screens/grotta_exit.png");
+writeFileSync("artifacts/screens/hud_far.png", Buffer.from(shot.far.slice("data:image/png;base64,".length), "base64"));
+writeFileSync("artifacts/screens/hud_behind.png", Buffer.from(shot.behind.slice("data:image/png;base64,".length), "base64"));
+console.log("salvati hud_far, hud_behind");
 await browser.close();

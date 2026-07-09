@@ -1,5 +1,5 @@
 import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
-import { MOVES, STATUS_LABELS } from "../data/moves";
+import { MOVES, STATUS_LABELS, moveSummary } from "../data/moves";
 import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -8,7 +8,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
 import { saveGame } from "../game/state";
 import type { GameState } from "../game/state";
-import { drawHpBar, GREY, INK, PAPER } from "../ui/widgets";
+import { drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -26,6 +26,23 @@ export class PartyScene implements Scene {
   private index = 0;
   private summary: Monster | null = null;
   private moveFrom: number | null = null; // slot "preso" per lo scambio (mode view)
+  // Cursore nel DETTAGLIO: scorre le voci ispezionabili (mosse + abilità) per
+  // mostrarne la descrizione in basso. -1 = nessuna selezione (vista neutra).
+  private detailIndex = 0;
+
+  // Voci ispezionabili del dettaglio, nell'ordine di navigazione: prima le mosse
+  // poi l'abilità (se la specie ne ha una). Ognuna con label e descrizione.
+  private detailEntries(mon: Monster): Array<{ label: string; desc: string }> {
+    const entries = mon.moves.map((slot) => {
+      const move = MOVES[slot.id];
+      return { label: move.name, desc: moveSummary(move) };
+    });
+    const ability = abilityOf(mon);
+    if (ability) {
+      entries.push({ label: `ABILITÀ: ${ability.name}`, desc: ability.desc });
+    }
+    return entries;
+  }
 
   constructor(
     private stack: SceneStack,
@@ -49,6 +66,18 @@ export class PartyScene implements Scene {
           audio.cancel();
         }
         return;
+      }
+      // Su/giù: scorre mosse+abilità per leggerne la descrizione in basso.
+      const entries = this.detailEntries(this.summary);
+      if (entries.length > 0) {
+        if (this.input.wasPressed("up")) {
+          this.detailIndex = (this.detailIndex + entries.length - 1) % entries.length;
+          audio.cursor();
+        }
+        if (this.input.wasPressed("down")) {
+          this.detailIndex = (this.detailIndex + 1) % entries.length;
+          audio.cursor();
+        }
       }
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
         audio.cancel();
@@ -103,6 +132,7 @@ export class PartyScene implements Scene {
       if (this.opts.mode === "view") {
         audio.confirm();
         this.moveFrom = null;
+        this.detailIndex = 0;
         this.summary = mon;
         return;
       }
@@ -219,22 +249,57 @@ export class PartyScene implements Scene {
       screen.text(rows[i][0], 70, 48 + i * 9, INK);
       screen.textRight(String(rows[i][1]), 226, 48 + i * 9, INK);
     }
-    // MOSSE: sotto lo sprite e le stat, a piena larghezza. Nome mossa troncato
-    // così non finisce mai sotto la colonna PP a destra.
+    // MOSSE + ABILITÀ ispezionabili: la voce selezionata (detailIndex) è
+    // evidenziata e la sua descrizione appare nel box in basso. Le mosse
+    // occupano gli indici 0..n-1, l'abilità (se c'è) l'indice n.
+    const ability = abilityOf(mon);
     screen.text("MOSSE:", 14, 95, GREY);
     for (let i = 0; i < mon.moves.length; i += 1) {
       const slot = mon.moves[i];
       const move = MOVES[slot.id];
       const my = 105 + i * 9;
-      screen.text(move.name.slice(0, 22), 14, my, INK);
-      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, GREY);
+      const sel = this.detailIndex === i;
+      if (sel) {
+        // Barra d'evidenza + cursore sulla voce selezionata.
+        screen.rect(10, my - 1, VIEW_W - 20, 9, "#3a4c64");
+        screen.text("►", 10, my, "#e8c84a");
+      }
+      screen.text(move.name.slice(0, 20), 18, my, sel ? PAPER : INK);
+      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, sel ? PAPER : GREY);
     }
-    // ABILITÀ passiva della specie + OGGETTO tenuto (al posto della dexLine,
-    // che resta leggibile nel POLITICDEX). Sotto le mosse (max 4 → y105..132).
-    const ability = abilityOf(mon);
-    screen.text(`ABILITÀ: ${ability ? ability.name : "—"}`, 14, 145, ability ? "#e8c84a" : GREY);
+    // ABILITÀ passiva della specie (voce ispezionabile, indice = n. mosse) +
+    // OGGETTO tenuto sulla STESSA riga a destra: libera lo spazio in basso per
+    // il box descrizione. Cursore Y progressivo sotto l'ultima mossa.
+    const abilityY = 105 + mon.moves.length * 9 + 3;
+    const abilityIdx = mon.moves.length;
+    const abilitySel = ability !== null && this.detailIndex === abilityIdx;
+    if (abilitySel) {
+      screen.rect(10, abilityY - 1, VIEW_W - 20, 9, "#3a4c64");
+      screen.text("►", 10, abilityY, "#e8c84a");
+    }
+    // OGGETTO tenuto (raro): se presente riserva la metà destra della riga e
+    // l'abilità si clippa più corta; altrimenti l'abilità ha tutta la riga.
     const held = heldItemOf(mon);
-    screen.text(`OGGETTO: ${held ? held.name : "—"}`, 14, 155, held ? INK : GREY);
-    screen.text(held ? "A/B: indietro  START: togli oggetto" : "A/B: indietro", 14, VIEW_H - 10, GREY);
+    const abilityMax = held ? 8 : 22;
+    screen.text(
+      `ABILITÀ: ${ability ? ability.name.slice(0, abilityMax) : "—"}`,
+      18, abilityY, ability ? "#e8c84a" : (abilitySel ? PAPER : GREY)
+    );
+    if (held) {
+      screen.textRight(`OGG: ${held.name.slice(0, 10)}`, 226, abilityY, INK);
+    }
+    // Box descrizione della voce selezionata (mossa o abilità), ancorato in
+    // fondo. Max 2 righe (le desc stanno tutte in ~76 char): niente overflow.
+    const entries = this.detailEntries(mon);
+    const entry = entries[this.detailIndex];
+    if (entry) {
+      const descLines = wrapText(entry.desc, 38).slice(0, 2);
+      const boxH = 5 + descLines.length * 8;
+      const boxY = VIEW_H - 4 - boxH;
+      screen.rect(6, boxY, VIEW_W - 12, boxH, "#1a2432");
+      for (let i = 0; i < descLines.length; i += 1) {
+        screen.text(descLines[i], 10, boxY + 3 + i * 8, PAPER);
+      }
+    }
   }
 }

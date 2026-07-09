@@ -14,6 +14,7 @@ import { sondaggiColor, sondaggiLabel, MINISTERO_ORDER, ministroDi, MINISTERI } 
 import { speciesOf } from "../game/monster";
 import { versionLabel } from "../game/version";
 import { mp } from "../net/mp";
+import { canPromptInstall, installHint, isAppInstalled, promptInstall } from "../engine/pwa";
 import { Menu, MessageBox, GREY, INK, setReduceMotion } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
@@ -27,64 +28,101 @@ import { AchievementsScene } from "./AchievementsScene";
 import { TypesScene } from "./TypesScene";
 import { WorldMapScene } from "./WorldMapScene";
 
+// Sotto-menu del menu pausa (OPZIONI / ONLINE / EXTRA).
+type SubKind = "opzioni" | "online" | "extra";
+interface SubMenu {
+  kind: SubKind;
+  title: string;
+  menu: Menu;
+  entries: string[];
+}
+
 export class PauseScene implements Scene {
   readonly transparent = true;
   private menu: Menu;
   private entries: string[] = [];
   private msg = new MessageBox();
   private showCard = false;
-  // Sotto-menu OPZIONI (toggle raccolti, fuori dalla lista principale).
-  private optionsMenu: Menu | null = null;
-  private optEntries: string[] = [];
+  // Sotto-menu attivo (OPZIONI/ONLINE/EXTRA): un solo livello di profondità.
+  private sub: SubMenu | null = null;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     this.menu = this.buildMenu();
   }
 
-  // Menu principale: SOLO le azioni di gioco + VEICOLO + OPZIONI + CHIUDI.
-  // I toggle (audio/vibra/guida/salva/tasti) sono raccolti in OPZIONI così la
-  // lista non è più un muro di 13 voci miste.
+  // Menu principale: le azioni di gioco quotidiane in cima, poi i gruppi
+  // ONLINE (chat/duelli) ed EXTRA (tessera/traguardi/guida tipi), VEICOLO,
+  // OPZIONI, CHIUDI. Prima era un muro di 13-15 voci piatte.
   private buildMenu(): Menu {
     this.entries = [];
-    // SALVA in cima al menu principale: il salvataggio manuale dev'essere la voce
-    // più scopribile (prima era sepolta in OPZIONI, poco visibile).
-    this.entries.push("SALVA");
+    const items: Array<{ label: string; rightLabel?: string }> = [];
+    const push = (label: string, rightLabel?: string) => {
+      this.entries.push(label);
+      items.push({ label, rightLabel });
+    };
+    // SALVA in cima: il salvataggio manuale dev'essere la voce più scopribile.
+    push("SALVA");
+    push("SQUADRA");
+    push("BORSA");
     if (this.state.flags["dex-received"]) {
-      this.entries.push("POLITICDEX");
+      push("POLITICDEX");
     }
-    this.entries.push("SQUADRA", "BORSA");
     if (this.state.badges.length > 0) {
-      this.entries.push("GOVERNO");
+      push("GOVERNO");
     }
-    this.entries.push("MISSIONI", "MAPPA", "TRAGUARDI", "GUIDA TIPI", "TESSERA", "CHAT ONLINE");
-    // DUELLO PvP: ha senso solo con qualcuno online sulla stessa mappa.
-    if (mp.isEnabled() && mp.connected && mp.onlineCount > 0) {
-      this.entries.push("DUELLO PVP");
-    }
+    push("MISSIONI");
+    push("MAPPA");
+    // Badge "N ONLINE" sulla voce: rende visibile che c'è gente senza aprirla.
+    push("ONLINE", mp.isEnabled() && mp.connected ? `${mp.onlineCount + 1} ON` : undefined);
+    push("EXTRA");
     // Veicoli: voce che cicla tra quelli posseduti (e "a piedi").
     if (ownedVehicles(this.state).length > 0) {
       const v = this.state.vehicle ? VEHICLES[this.state.vehicle as VehicleId].name : "A PIEDI";
-      this.entries.push(`VEICOLO: ${v}`);
+      push(`VEICOLO: ${v}`);
     }
-    this.entries.push("OPZIONI", "CHIUDI");
-    return new Menu(this.entries.map((label) => ({ label })));
+    push("OPZIONI");
+    push("CHIUDI");
+    return new Menu(items);
   }
 
   // Sotto-menu OPZIONI: tutti i toggle/impostazioni in un posto solo.
-  private buildOptionsMenu(): Menu {
-    this.optEntries = [
+  private buildOptionsMenu(): SubMenu {
+    const entries = [
       `GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`,
       `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`,
       `RIDUCI EFFETTI: ${this.state.reduceEffects ? "SÌ" : "NO"}`
     ];
     if (haptics.isSupported) {
-      this.optEntries.push(`VIBRA: ${haptics.enabled ? "SÌ" : "NO"}`);
+      entries.push(`VIBRA: ${haptics.enabled ? "SÌ" : "NO"}`);
     }
     if (document.body.classList.contains("touch")) {
-      this.optEntries.push(`TASTI: ${loadControlMode() === "stick" ? "LEVETTA" : "CROCE"}`);
+      entries.push(`TASTI: ${loadControlMode() === "stick" ? "LEVETTA" : "CROCE"}`);
     }
-    this.optEntries.push("BACKUP", "INDIETRO");
-    return new Menu(this.optEntries.map((label) => ({ label })));
+    if (!isAppInstalled()) {
+      entries.push("INSTALLA APP");
+    }
+    entries.push("BACKUP", "INDIETRO");
+    return { kind: "opzioni", title: "OPZIONI", entries, menu: new Menu(entries.map((label) => ({ label }))) };
+  }
+
+  // Sotto-menu ONLINE: chat di zona e duelli PvP.
+  private buildOnlineMenu(): SubMenu {
+    const someone = mp.isEnabled() && mp.connected && mp.onlineCount > 0;
+    const entries = ["CHAT DI ZONA", "DUELLO PVP", "INDIETRO"];
+    const menu = new Menu([
+      { label: "CHAT DI ZONA" },
+      // Senza nessuno online il duello non può partire: voce grigia, non nascosta
+      // (così si sa che ESISTE — prima spariva del tutto e sembrava mancare).
+      { label: "DUELLO PVP", disabled: !someone, rightLabel: someone ? undefined : "OFFLINE" },
+      { label: "INDIETRO" }
+    ]);
+    return { kind: "online", title: "ONLINE", entries, menu };
+  }
+
+  // Sotto-menu EXTRA: consultazione (tessera, traguardi, guida tipi).
+  private buildExtraMenu(): SubMenu {
+    const entries = ["TESSERA", "TRAGUARDI", "GUIDA TIPI", "INDIETRO"];
+    return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
   update(dt: number): void {
@@ -99,16 +137,16 @@ export class PauseScene implements Scene {
       }
       return;
     }
-    // Sotto-menu OPZIONI attivo: gestisci i toggle, B/INDIETRO torna al menu.
-    if (this.optionsMenu) {
-      const a = this.optionsMenu.update(this.input);
+    // Sotto-menu attivo (OPZIONI/ONLINE/EXTRA): B/INDIETRO torna al menu.
+    if (this.sub) {
+      const a = this.sub.menu.update(this.input);
       if (a === "cancel") {
         audio.cancel();
-        this.optionsMenu = null;
+        this.sub = null;
         return;
       }
       if (a === "select") {
-        this.handleOption(this.optEntries[this.optionsMenu.index]);
+        this.handleSub(this.sub, this.sub.entries[this.sub.menu.index]);
       }
       return;
     }
@@ -152,24 +190,17 @@ export class PauseScene implements Scene {
       case "MAPPA":
         this.stack.push(new WorldMapScene(this.stack, this.input, this.state));
         break;
-      case "TRAGUARDI":
-        this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
+      case "ONLINE":
+        audio.confirm();
+        this.sub = this.buildOnlineMenu();
         break;
-      case "GUIDA TIPI":
-        this.stack.push(new TypesScene(this.stack, this.input));
-        break;
-      case "TESSERA":
-        this.showCard = true;
-        break;
-      case "CHAT ONLINE":
-        this.stack.push(new ChatScene(this.stack, this.input));
-        break;
-      case "DUELLO PVP":
-        this.stack.push(new DuelLobbyScene(this.stack, this.input, this.state));
+      case "EXTRA":
+        audio.confirm();
+        this.sub = this.buildExtraMenu();
         break;
       case "OPZIONI":
         audio.confirm();
-        this.optionsMenu = this.buildOptionsMenu();
+        this.sub = this.buildOptionsMenu();
         break;
       case "CHIUDI":
         this.stack.pop();
@@ -188,20 +219,54 @@ export class PauseScene implements Scene {
     }
   }
 
-  // Gestisce una voce del sotto-menu OPZIONI (toggle + salva).
-  private handleOption(label: string): void {
+  // Smista una voce dei sotto-menu ONLINE/EXTRA/OPZIONI.
+  private handleSub(sub: SubMenu, label: string): void {
     if (label === "INDIETRO") {
       audio.cancel();
-      this.optionsMenu = null;
+      this.sub = null;
       return;
     }
+    if (sub.kind === "online") {
+      audio.confirm();
+      if (label === "CHAT DI ZONA") {
+        this.stack.push(new ChatScene(this.stack, this.input));
+      } else if (label === "DUELLO PVP") {
+        this.stack.push(new DuelLobbyScene(this.stack, this.input, this.state));
+      }
+      return;
+    }
+    if (sub.kind === "extra") {
+      audio.confirm();
+      if (label === "TESSERA") {
+        this.showCard = true;
+      } else if (label === "TRAGUARDI") {
+        this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
+      } else if (label === "GUIDA TIPI") {
+        this.stack.push(new TypesScene(this.stack, this.input));
+      }
+      return;
+    }
+    this.handleOption(label);
+  }
+
+  // Gestisce una voce del sotto-menu OPZIONI (toggle + salva).
+  private handleOption(label: string): void {
     if (label === "BACKUP") {
       audio.confirm();
-      this.optionsMenu = null;
+      this.sub = null;
       this.stack.push(new BackupScene(this.stack, this.input, this.state));
       return;
     }
-    const index = this.optionsMenu?.index ?? 0;
+    if (label === "INSTALLA APP") {
+      audio.confirm();
+      if (canPromptInstall()) {
+        void promptInstall();
+      } else {
+        this.msg.show([installHint()]);
+      }
+      return;
+    }
+    const index = this.sub?.menu.index ?? 0;
     if (label.startsWith("GUIDA")) {
       toggleGuide();
     } else if (label.startsWith("TASTI")) {
@@ -223,8 +288,8 @@ export class PauseScene implements Scene {
       }
     }
     audio.confirm();
-    this.optionsMenu = this.buildOptionsMenu();
-    this.optionsMenu.index = index;
+    this.sub = this.buildOptionsMenu();
+    this.sub.menu.index = index;
   }
 
   // Cicla: a piedi -> primo veicolo -> ... -> a piedi. Il TRAGHETTO è escluso:
@@ -243,13 +308,13 @@ export class PauseScene implements Scene {
       this.drawCard(screen);
       return;
     }
-    // Sotto-menu OPZIONI: lista compatta dei toggle con intestazione.
-    if (this.optionsMenu) {
-      const ow = Math.max(120, Math.min(this.optionsMenu.measureWidth(), VIEW_W - 8));
+    // Sotto-menu attivo: lista compatta con intestazione.
+    if (this.sub) {
+      const ow = Math.max(120, Math.min(this.sub.menu.measureWidth(), VIEW_W - 8));
       const ox = VIEW_W - ow - 4;
       screen.rect(ox, 4, ow, 10, "rgba(16,20,31,0.92)");
-      screen.text("OPZIONI", ox + 4, 5, "#e8c84a");
-      this.optionsMenu.draw(screen, ox, 16, ow);
+      screen.text(this.sub.title, ox + 4, 5, "#e8c84a");
+      this.sub.menu.draw(screen, ox, 16, ow);
       this.msg.draw(screen);
       return;
     }

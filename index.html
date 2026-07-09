@@ -30,7 +30,7 @@
         var vp = window.visualViewport;
         var vw = (vp && vp.width) || innerWidth;
         var vh = (vp && vp.height) || innerHeight;
-        var availW = Math.max(240, vw - (touch ? 32 : 28));
+        var availW = Math.max(240, vw - (touch ? 18 : 20));
         var availH = Math.max(160, vh - (touch ? 150 : 30));
         var s = Math.min(availW / 240, availH / 180);
         document.write(

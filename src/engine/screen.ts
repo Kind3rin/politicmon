@@ -39,8 +39,10 @@ export class Screen {
     const viewport = window.visualViewport;
     const viewportW = viewport?.width ?? window.innerWidth;
     const viewportH = viewport?.height ?? window.innerHeight;
+    // NB: questi numeri sono duplicati nello script inline di index.html
+    // (pre-layout anti-CLS): cambiarli INSIEME.
     const reservedH = touch ? 150 : 30;
-    const availW = Math.max(240, viewportW - (touch ? 32 : 28));
+    const availW = Math.max(240, viewportW - (touch ? 18 : 20));
     const availH = Math.max(160, viewportH - reservedH);
     const rawScale = Math.min(availW / VIEW_W, availH / VIEW_H);
 

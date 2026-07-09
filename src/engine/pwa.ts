@@ -201,9 +201,23 @@ export function initPwaInstall(): void {
   }, FALLBACK_DELAY_MS);
 }
 
-// Espone se c'è un prompt pendente (utile per un eventuale pulsante nel menu).
+// Espone se c'è un prompt pendente (usato dalla voce INSTALLA APP nel menu).
 export function canPromptInstall(): boolean {
   return deferredPrompt !== null;
+}
+
+// Già installata / in esecuzione standalone (la voce di menu si nasconde).
+export function isAppInstalled(): boolean {
+  return isStandalone();
+}
+
+// Istruzioni manuali per la piattaforma (per la voce di menu quando il prompt
+// nativo non è disponibile).
+export function installHint(): string {
+  return (
+    fallbackMessage() ??
+    "Su computer: icona di installazione nella barra dell'indirizzo (Chrome/Edge)."
+  );
 }
 
 export async function promptInstall(): Promise<void> {

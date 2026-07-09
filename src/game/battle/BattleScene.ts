@@ -793,6 +793,34 @@ export class BattleScene implements Scene {
       if (abilityOf(this.foe.mon)?.id === "voltagabbana") {
         entry.push({ text: `Il nemico ${this.foeName()} cambia casacca al volo: OPPORTUNISMO sale!` });
       }
+      // Come in Pokémon: dopo che l'avversario schiera il prossimo, chiedi se
+      // vuoi cambiare il tuo (utile per adattarsi al nuovo tipo in campo). Solo
+      // se hai almeno un altro POLITICMON sano in panchina.
+      if (this.hasBenchAlive()) {
+        entry.push({
+          run: () => {
+            this.ask(
+              `Vuoi cambiare ${this.playerName()}?`,
+              () => {
+                this.mode = "queue";
+                this.stack.push(
+                  new PartyScene(this.stack, this.input, this.state, {
+                    mode: "battle-switch",
+                    currentUid: this.player.mon.uid,
+                    // afterFaint=false → il cambio è "gratis" qui (turno nuovo),
+                    // ma switchTo(false) fa contrattaccare: passiamo true così il
+                    // nemico appena schierato NON attacca subito (come nei Pokémon).
+                    onChoose: (mon) => this.switchTo(mon, true)
+                  })
+                );
+              },
+              () => {
+                this.mode = "queue";
+              }
+            );
+          }
+        });
+      }
       this.pushFront(entry);
       return;
     }
@@ -962,6 +990,11 @@ export class BattleScene implements Scene {
         }
       }
     ];
+  }
+
+  // C'è almeno un POLITICMON sano IN PANCHINA (diverso da quello in campo)?
+  private hasBenchAlive(): boolean {
+    return this.state.party.some((m) => m.hp > 0 && m.uid !== this.player.mon.uid);
   }
 
   private switchTo(mon: Monster, afterFaint: boolean): void {

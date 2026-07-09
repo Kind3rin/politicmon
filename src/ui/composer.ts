@@ -335,11 +335,14 @@ export class Composer {
 
   draw(screen: Screen, y: number, time: number): void {
     this.y0 = y;
-    // Riga di composizione (coda del testo, caret lampeggiante). In modalità TEL
-    // mostra ciò che stai scrivendo sulla tastiera del telefono: se vuoto, un
-    // placeholder chiaro (prima restava una riga vuota che sembrava un bug).
+    // Riga di composizione (coda del testo, caret lampeggiante). Box PIENO
+    // semplice (rect + bordo 1px), NON panel(): la cornice 9-slice PixelLab ha
+    // bordi decorati spessi (~6px) che su un box alto 13px lasciano ~1px utile,
+    // schiacciando il testo a una striscia illeggibile. Il rect dà tutta
+    // l'altezza al testo. In modalità TEL, se vuoto mostra un placeholder.
     const caret = Math.floor(time * 2) % 2 === 0 ? "_" : " ";
-    screen.panel(4, y, VIEW_W - 8, 13);
+    screen.rect(4, y, VIEW_W - 8, 13, "#f8f8f0");
+    screen.frame(4, y, VIEW_W - 8, 13, "#10141f");
     const composed = (this.text + caret).slice(-36);
     const placeholder = this.tab === "tel" ? "SCRIVI COL TELEFONO..." : " ";
     screen.text(this.text ? composed : placeholder, 10, y + 4, this.text ? INK : GREY);

@@ -1,5 +1,9 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
+import {
+  closeNativeKeyboard, nativeKeyboardAvailable,
+  openNativeKeyboard, refocusNativeKeyboard, setNativeKeyboardValue
+} from "../engine/nativeInput";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { loadNick, NICK_MAX, sanitizeNick, saveNick } from "../net/profile";
@@ -17,11 +21,18 @@ const ROWS = [
 ];
 const SPECIAL = ["CANC", "FINE"];
 
+// Pulsante FINE della modalità tastiera nativa (coord condivise update/draw).
+const NATIVE_FINE = { x: (VIEW_W - 84) / 2, y: 92, w: 84, h: 18 };
+
 export class NicknameScene implements Scene {
   private value: string;
   private row = 0;
   private col = 0;
   private time = 0;
+
+  // Su touch usiamo la tastiera NATIVA del telefono (scrivere col d-pad è
+  // lentissimo); la griglia a schermo resta il fallback desktop.
+  private native = nativeKeyboardAvailable();
 
   constructor(
     private stack: SceneStack,
@@ -32,6 +43,28 @@ export class NicknameScene implements Scene {
     this.value = loadNick();
   }
 
+  onEnter(): void {
+    if (!this.native) {
+      return;
+    }
+    // Apre la tastiera di sistema. È dentro il gesto che ha aperto la scena
+    // (tap/tasto), quindi iOS la mostra.
+    this.native = openNativeKeyboard({
+      initial: this.value,
+      maxLength: NICK_MAX,
+      sanitize: sanitizeNick,
+      autocapitalize: "characters",
+      onInput: (v) => {
+        this.value = v;
+      },
+      onSubmit: () => this.commit()
+    });
+  }
+
+  onExit(): void {
+    closeNativeKeyboard();
+  }
+
   private gridRows(): string[] {
     // Ultima "riga logica" sono i comandi speciali.
     return [...ROWS, SPECIAL.join("|")];
@@ -39,6 +72,32 @@ export class NicknameScene implements Scene {
 
   update(dt: number): void {
     this.time += dt;
+
+    // Modalità tastiera nativa: la griglia non serve. A/START conferma, B esce,
+    // il testo arriva via onInput. Un tap sullo schermo riapre la tastiera se
+    // il sistema l'aveva chiusa (senza chiudere la scena).
+    if (this.native) {
+      if (this.input.wasPressed("a") || this.input.wasPressed("start")) {
+        this.commit();
+        return;
+      }
+      if (this.input.wasPressed("b")) {
+        this.commit(); // niente "annulla" distruttivo: conferma il nome corrente
+        return;
+      }
+      // Tap sul grande pulsante FINE (stesse coord della draw) = conferma.
+      if (this.input.tapInRect(NATIVE_FINE.x, NATIVE_FINE.y, NATIVE_FINE.w, NATIVE_FINE.h)) {
+        this.commit();
+        return;
+      }
+      // Tap altrove sul canvas: il sistema aveva tolto il focus all'input
+      // (tastiera chiusa) — lo ripristiniamo per riaprirla.
+      if (this.input.tapInRect(0, 0, VIEW_W, VIEW_H)) {
+        refocusNativeKeyboard();
+      }
+      return;
+    }
+
     const rows = this.gridRows();
     if (this.input.wasPressed("up")) {
       this.row = (this.row + rows.length - 1) % rows.length;
@@ -80,6 +139,9 @@ export class NicknameScene implements Scene {
   private backspace(): void {
     if (this.value.length > 0) {
       this.value = this.value.slice(0, -1);
+      // Tieni allineato l'input nativo (se aperto), così la tastiera non
+      // "reintroduce" il carattere cancellato.
+      setNativeKeyboardValue(this.value);
       audio.cancel();
     }
   }
@@ -123,6 +185,18 @@ export class NicknameScene implements Scene {
     const caret = Math.floor(this.time * 2) % 2 === 0 ? "_" : " ";
     screen.text((this.value || "") + caret, 16, 28, INK);
     screen.text(`${this.value.length}/${NICK_MAX}`, VIEW_W - 46, 30, GREY);
+
+    // Modalità tastiera nativa: niente griglia, solo istruzioni + un grande
+    // pulsante FINE toccabile (il resto lo fa la tastiera di sistema).
+    if (this.native) {
+      screen.text("USA LA TASTIERA DEL TELEFONO.", 16, 54, PAPER);
+      screen.text("Non appare? Tocca lo schermo.", 16, 66, GREY);
+      const { x, y, w, h } = NATIVE_FINE;
+      screen.rect(x, y, w, h, "#f4d34a");
+      screen.text("FINE", x + w / 2 - 12, y + 6, INK);
+      screen.text("A/INVIO: conferma", 8, VIEW_H - 10, GREY);
+      return;
+    }
 
     // Griglia caratteri.
     const rows = this.gridRows();

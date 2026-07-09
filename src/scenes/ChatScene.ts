@@ -19,6 +19,10 @@ export class ChatScene implements Scene {
 
   constructor(private stack: SceneStack, private input: Input) {}
 
+  onExit(): void {
+    this.composer.dispose(); // chiude la tastiera di sistema se aperta
+  }
+
   update(dt: number): void {
     this.time += dt;
     if (this.toastT > 0) {

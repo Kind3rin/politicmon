@@ -63,6 +63,7 @@ export class TalkScene implements Scene {
     mp.duelBusy = false;
     mp.onDuel = this.prevOnDuel;
     mp.onPeerGone = this.prevOnPeerGone;
+    this.composer.dispose(); // chiude la tastiera di sistema se aperta
   }
 
   private onTalkMsg(msg: DuelMsg, peerId: string): void {

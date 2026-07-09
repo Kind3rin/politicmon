@@ -1,5 +1,9 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
+import {
+  closeNativeKeyboard, nativeKeyboardAvailable, openNativeKeyboard,
+  refocusNativeKeyboard, setNativeKeyboardValue
+} from "../engine/nativeInput";
 import { Screen, VIEW_W } from "../engine/screen";
 import { GREY, INK, PAPER } from "./widgets";
 
@@ -57,7 +61,7 @@ const PHRASE_STEP = 114;
 const EMOTE_STEP = 39;
 const ROW_H = 11;
 
-type Tab = "frasi" | "keys" | "emote";
+type Tab = "frasi" | "keys" | "emote" | "tel";
 
 export type ComposerEvent =
   | { kind: "phrase"; text: string }
@@ -77,12 +81,43 @@ export class Composer {
   // y dell'ultima draw(): serve per l'hit-test dei tap (prima draw = nessun tap
   // possibile, il tap dura un frame).
   private y0 = -1000;
+  // Tastiera nativa attiva (solo su touch, tab "TEL⌨"): il testo arriva dal
+  // vero <input> del telefono, non dalla griglia a schermo.
+  private hasNative = nativeKeyboardAvailable();
+  private nativeOn = false;
 
   constructor(private withEmotes: boolean) {}
 
-  // Etichette della riga tab (l'ultima è sempre INVIA).
+  // Etichette della riga tab. Su touch aggiunge "TEL⌨" (tastiera di sistema);
+  // l'ultima è sempre INVIA.
   private tabs(): string[] {
-    return this.withEmotes ? ["FRASI", "TASTIERA", "EMOTE", "INVIA"] : ["FRASI", "TASTIERA", "INVIA"];
+    const base = this.withEmotes ? ["FRASI", "TASTIERA", "EMOTE"] : ["FRASI", "TASTIERA"];
+    if (this.hasNative) {
+      base.push("TEL⌨");
+    }
+    base.push("INVIA");
+    return base;
+  }
+
+  // Da chiamare in onExit della scena: chiude la tastiera di sistema.
+  dispose(): void {
+    if (this.nativeOn) {
+      closeNativeKeyboard();
+      this.nativeOn = false;
+    }
+  }
+
+  private openNative(): void {
+    this.nativeOn = openNativeKeyboard({
+      initial: this.text,
+      maxLength: MAX,
+      onInput: (v) => {
+        this.text = v;
+      }
+      // onSubmit non chiude: l'INVIO della tastiera nativa lo gestisce la scena
+      // via l'evento "text" quando l'utente tocca INVIA. (Molte tastiere non
+      // hanno un vero submit in un input a riga singola.)
+    });
   }
 
   // B premuto: cancella un carattere. false = niente da cancellare (la scena
@@ -90,6 +125,9 @@ export class Composer {
   backspace(): boolean {
     if (this.text.length > 0) {
       this.text = this.text.slice(0, -1);
+      if (this.nativeOn) {
+        setNativeKeyboardValue(this.text);
+      }
       audio.cancel();
       return true;
     }
@@ -113,12 +151,14 @@ export class Composer {
   private gridRows(): number {
     if (this.tab === "frasi") return PHRASE_ROWS;
     if (this.tab === "keys") return KEY_ROWS.length;
+    if (this.tab === "tel") return 1; // riga fittizia (nessuna cella navigabile)
     return Math.ceil(EMOTES.length / EMOTE_COLS);
   }
 
   private gridCols(row: number): number {
     if (this.tab === "frasi") return PHRASE_COLS;
     if (this.tab === "keys") return KEY_ROWS[row]?.length ?? 0;
+    if (this.tab === "tel") return 1;
     return Math.min(EMOTE_COLS, EMOTES.length - row * EMOTE_COLS);
   }
 
@@ -170,7 +210,18 @@ export class Composer {
       if (label === "INVIA") {
         return this.emitText();
       }
-      this.tab = label === "FRASI" ? "frasi" : label === "TASTIERA" ? "keys" : "emote";
+      const prev = this.tab;
+      this.tab =
+        label === "FRASI" ? "frasi" :
+        label === "TASTIERA" ? "keys" :
+        label === "EMOTE" ? "emote" : "tel";
+      // Lasciando/entrando nella tab TEL apri/chiudi la tastiera di sistema.
+      if (this.tab === "tel" && !this.nativeOn) {
+        this.openNative();
+      } else if (prev === "tel" && this.tab !== "tel" && this.nativeOn) {
+        closeNativeKeyboard();
+        this.nativeOn = false;
+      }
       this.area = "grid";
       this.row = 0;
       this.col = 0;
@@ -191,6 +242,11 @@ export class Composer {
         this.text += ch;
         audio.cursor();
       }
+      return null;
+    }
+    if (this.tab === "tel") {
+      // Nessuna griglia: A/tap riapre la tastiera se il sistema l'ha chiusa.
+      refocusNativeKeyboard();
       return null;
     }
     const emote = EMOTES[this.row * EMOTE_COLS + this.col];
@@ -233,6 +289,14 @@ export class Composer {
         x += w + 6;
       }
     }
+    // Tab TEL: nessuna griglia, il tap sull'area di testo riapre la tastiera.
+    if (this.tab === "tel") {
+      if (input.tapInRect(4, gridY - 2, VIEW_W - 8, ROW_H * 3)) {
+        refocusNativeKeyboard();
+        return null;
+      }
+      return undefined;
+    }
     // Griglia della tab attiva.
     for (let r = 0; r < this.gridRows(); r += 1) {
       for (let c = 0; c < this.gridCols(r); c += 1) {
@@ -274,7 +338,8 @@ export class Composer {
       const active =
         (label === "FRASI" && this.tab === "frasi") ||
         (label === "TASTIERA" && this.tab === "keys") ||
-        (label === "EMOTE" && this.tab === "emote");
+        (label === "EMOTE" && this.tab === "emote") ||
+        (label === "TEL⌨" && this.tab === "tel");
       const color = sel ? INK : label === "INVIA" ? (this.text.trim() ? "#7ad858" : GREY) : active ? PAPER : GREY;
       screen.text(label, tx + 3, tabsY, color);
       if (active && !sel) {
@@ -311,6 +376,10 @@ export class Composer {
           screen.text(KEY_ROWS[r][c] === " " ? "_" : KEY_ROWS[r][c], cx, cy, sel ? INK : PAPER);
         }
       }
+    } else if (this.tab === "tel") {
+      screen.text("TASTIERA DEL TELEFONO ATTIVA.", KX, gridY, PAPER);
+      screen.text("Scrivi, poi tocca INVIA.", KX, gridY + ROW_H, GREY);
+      screen.text("Sparita? Tocca qui.", KX, gridY + ROW_H * 2, GREY);
     } else {
       for (let i = 0; i < EMOTES.length; i += 1) {
         const r = Math.floor(i / EMOTE_COLS);

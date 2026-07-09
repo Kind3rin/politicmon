@@ -834,6 +834,18 @@ export const MAPS: Record<string, MapDef> = {
         // (dipende dal browserSeed: GOVERNO/OPPOSIZIONE).
         id: "sondaggista-versioni", pal: "aide", x: 13, y: 17, facing: "down",
         lines: ["SONDAGGISTA: campiono l'erba alta, un comizio alla volta."]
+      },
+      {
+        // LUCA — guida ufficiale del gioco. Accoglie i nuovi e dà info utili.
+        id: "luca-guida", pal: "professor", x: 17, y: 8, facing: "down",
+        lines: [
+          "Ciao, sono LUCA! Sempre qui per darti una mano.",
+          "Vuoi diventare PRESIDENTE OMBRA? Cattura candidati indebolendoli e lanciando SCHEDE ELETTORALI.",
+          "Punta a nord: MEDIOPOLI e la prima PALESTRA (medaglia).",
+          "Tieni d'occhio i SONDAGGI: salgono con le vittorie e sbloccano evoluzioni.",
+          "Menu PAUSA: squadra, borsa, GUIDA (freccia gialla) e ONLINE per la chat di zona.",
+          "Buona campagna elettorale! Passa a trovarmi quando vuoi."
+        ]
       }
     ]
   },

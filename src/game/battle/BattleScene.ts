@@ -1781,14 +1781,15 @@ export class BattleScene implements Scene {
         const move = MOVES[slot.id];
         const item = items[this.fightMenu.index];
         // Striscia info sopra il pannello. In griglia 2x2 i nomi lunghi vengono
-        // troncati nelle celle: qui mostriamo il NOME INTERO della mossa
-        // selezionata (colonna sx), poi TIPO e PP a destra.
+        // troncati nelle celle: qui il NOME INTERO della mossa selezionata a
+        // sinistra + PP a destra. Il TIPO è già segnalato dal colore/marker
+        // delle celle, quindi qui si toglie: evita la collisione nome/tipo/PP.
         screen.panel(8, 117, 226, 17);
-        screen.text(clipToWidth(move.name, 132), 14, 122, INK);
-        const typeLabel = move.type.slice(0, 9);
-        screen.text(typeLabel, 150, 122, GREY);
-        screen.rect(150, 130, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
-        // rightLabel (PP) col margine interno della striscia.
+        // La barra colore del tipo resta sotto il nome (segnale visivo compatto).
+        const nameW = Math.min(move.name.length * 6, 150);
+        screen.text(clipToWidth(move.name, 150), 14, 122, INK);
+        screen.rect(14, 130, nameW, 1, TYPE_COLORS[move.type]);
+        // PP allineato a destra, staccato dal nome (che si ferma a ≤164).
         screen.textRight(item?.rightLabel ?? "", 226, 122, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
         screen.text(clipToWidth(moveSummary(move), 208), 10, y + 30, INK);

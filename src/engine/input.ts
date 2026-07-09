@@ -23,6 +23,17 @@ const KEY_MAP: Record<string, Button> = {
   Tab: "start"
 };
 
+// Il target di un evento tastiera è un campo di testo editabile? Se sì, i tasti
+// sono per lui (tastiera nativa del telefono), non per il gioco.
+function isTextInputTarget(target: EventTarget | null): boolean {
+  const el = target as HTMLElement | null;
+  if (!el || !el.tagName) {
+    return false;
+  }
+  const tag = el.tagName.toLowerCase();
+  return tag === "input" || tag === "textarea" || el.isContentEditable === true;
+}
+
 // Punto in coordinate interne dello schermo (240x180).
 export interface ScreenPoint {
   x: number;
@@ -39,6 +50,13 @@ export class Input {
 
   constructor() {
     document.addEventListener("keydown", (event) => {
+      // Se il focus è su un campo di testo (la tastiera NATIVA del telefono,
+      // vedi nativeInput.ts), i tasti appartengono a quel campo, NON al gioco:
+      // altrimenti Invio/Spazio venivano mappati su "A" e chiudevano la scena
+      // mentre l'utente scriveva. Il campo gestisce input/Enter da sé.
+      if (isTextInputTarget(event.target)) {
+        return;
+      }
       const button = KEY_MAP[event.code];
       if (!button) {
         return;
@@ -50,6 +68,9 @@ export class Input {
       this.held.add(button);
     });
     document.addEventListener("keyup", (event) => {
+      if (isTextInputTarget(event.target)) {
+        return;
+      }
       const button = KEY_MAP[event.code];
       if (button) {
         this.held.delete(button);

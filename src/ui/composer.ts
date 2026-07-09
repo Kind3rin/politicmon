@@ -85,6 +85,9 @@ export class Composer {
   // vero <input> del telefono, non dalla griglia a schermo.
   private hasNative = nativeKeyboardAvailable();
   private nativeOn = false;
+  // L'INVIO/GO della tastiera nativa arriva in un callback async: lo bufferizzo
+  // e lo consumo nel prossimo update() (invio del testo composto).
+  private nativeSubmit = false;
 
   constructor(private withEmotes: boolean) {}
 
@@ -113,10 +116,12 @@ export class Composer {
       maxLength: MAX,
       onInput: (v) => {
         this.text = v;
+      },
+      // INVIO/GO sulla tastiera nativa = invia il messaggio (atteso in chat).
+      // Bufferizzato e consumato nel prossimo update().
+      onSubmit: () => {
+        this.nativeSubmit = true;
       }
-      // onSubmit non chiude: l'INVIO della tastiera nativa lo gestisce la scena
-      // via l'evento "text" quando l'utente tocca INVIA. (Molte tastiere non
-      // hanno un vero submit in un input a riga singola.)
     });
   }
 
@@ -135,6 +140,14 @@ export class Composer {
   }
 
   update(input: Input): ComposerEvent | null {
+    // INVIO della tastiera nativa arrivato dall'ultimo frame.
+    if (this.nativeSubmit) {
+      this.nativeSubmit = false;
+      const ev = this.emitText();
+      if (ev) {
+        return ev;
+      }
+    }
     const tapped = this.handleTap(input);
     if (tapped !== undefined) {
       return tapped;
@@ -264,6 +277,11 @@ export class Composer {
       return null;
     }
     this.text = "";
+    // Svuota anche l'input nativo (se aperto): il campo non deve conservare il
+    // messaggio appena inviato.
+    if (this.nativeOn) {
+      setNativeKeyboardValue("");
+    }
     audio.confirm();
     return { kind: "text", text: t };
   }

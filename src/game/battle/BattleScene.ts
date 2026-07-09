@@ -1715,12 +1715,14 @@ export class BattleScene implements Scene {
         // Striscia info sopra il pannello: TIPO • CATEGORIA • PP.
         screen.panel(8, 117, 226, 17);
         const typeLabel = move.type.slice(0, 9);
-        screen.text(typeLabel, 14, 122, INK);
-        screen.rect(14, 130, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
-        screen.text(moveKindLabel(move), 14 + typeLabel.length * 6 + 10, 122, GREY);
-        screen.textRight(item?.rightLabel ?? "", 228, 122, INK);
+        screen.text(typeLabel, 16, 122, INK);
+        screen.rect(16, 130, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
+        screen.text(moveKindLabel(move), 16 + typeLabel.length * 6 + 10, 122, GREY);
+        // rightLabel (PP) col margine interno della striscia (panel fino a 234,
+        // cornice ~3px → 226 tiene il testo staccato dal bordo).
+        screen.textRight(item?.rightLabel ?? "", 226, 122, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.text(clipToWidth(moveSummary(move), 210), 8, y + 30, INK);
+        screen.text(clipToWidth(moveSummary(move), 208), 10, y + 30, INK);
       }
     } else if (this.mode === "campaign") {
       // Mosse da campagna in GRIGLIA 2x2 (come il menu LOTTA): libera spazio per

@@ -457,19 +457,23 @@ export const PLAYER_BOX: CombatantBoxOpts = { x: 126, y: 78, w: 110, h: 38, hpY:
 export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number, opts: CombatantBoxOpts): void {
   const { x, y, w, h } = opts;
   screen.panel(x, y, w, h);
-  screen.text(speciesOf(mon).name, x + 6, y + 6, INK);
-  screen.textRight(`L${mon.level}`, x + w - 6, y + 6, INK);
+  // Margine interno: la cornice del panel "mangia" ~3px, quindi 8px di margine
+  // dal bordo del box danno un'aria uniforme e niente testo attaccato (audit UI).
+  const pad = 8;
+  screen.text(speciesOf(mon).name, x + pad, y + 6, INK);
+  screen.textRight(`L${mon.level}`, x + w - pad, y + 6, INK);
   const maxHp = statsOf(mon).hp;
   drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, maxHp);
   if (opts.showHpText) {
-    // Box del giocatore: PV precisi n/max.
-    screen.textRight(`${Math.round(displayHp)}/${maxHp}`, x + 98, y + 25, INK);
+    // Box del giocatore: PV precisi n/max. Allineato al bordo destro (robusto
+    // alla larghezza del box, prima era un offset fisso x+98).
+    screen.textRight(`${Math.round(displayHp)}/${maxHp}`, x + w - pad, y + 25, INK);
   } else {
     // Box del nemico: percentuale PV a fianco della barra, così il colore non è
     // l'UNICO segnale di "quasi KO" (accessibilità). Allineata al bordo del box,
     // sulla stessa riga della barra HP.
     const pct = maxHp > 0 ? Math.max(0, Math.min(100, Math.round((displayHp / maxHp) * 100))) : 0;
-    screen.textRight(`${pct}%`, x + w - 4, y + opts.hpY, INK);
+    screen.textRight(`${pct}%`, x + w - pad, y + opts.hpY, INK);
   }
   if (mon.status) {
     const sy = opts.showHpText ? y + 25 : y + 16;

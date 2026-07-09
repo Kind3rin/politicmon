@@ -206,28 +206,35 @@ export class PartyScene implements Scene {
       screen.text(type, tx + 3 + iconW, 34, PAPER);
       tx += w + 4;
     }
+    // STAT: colonna destra accanto allo sprite (x 70..226), 5 righe y48..88.
+    // Occupa SOLO la metà destra: la lista MOSSE sta interamente SOTTO (da y98),
+    // così le due colonne non si sovrappongono più (prima le mosse lunghe a
+    // x=14 invadevano la fascia delle stat).
     const stats = statsOf(mon);
     const rows: Array<[string, number]> = [
       ["PV", stats.hp], ["GRINTA", stats.atk], ["FACCIA TOSTA", stats.def],
       ["RETORICA", stats.spc], ["OPPORTUN.", stats.spd]
     ];
     for (let i = 0; i < rows.length; i += 1) {
-      screen.text(rows[i][0], 70, 48 + i * 10, INK);
-      screen.textRight(String(rows[i][1]), 226, 48 + i * 10, INK);
+      screen.text(rows[i][0], 70, 48 + i * 9, INK);
+      screen.textRight(String(rows[i][1]), 226, 48 + i * 9, INK);
     }
-    screen.text("MOSSE:", 14, 72, GREY);
+    // MOSSE: sotto lo sprite e le stat, a piena larghezza. Nome mossa troncato
+    // così non finisce mai sotto la colonna PP a destra.
+    screen.text("MOSSE:", 14, 95, GREY);
     for (let i = 0; i < mon.moves.length; i += 1) {
       const slot = mon.moves[i];
       const move = MOVES[slot.id];
-      screen.text(move.name, 14, 84 + i * 10, INK);
-      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, 84 + i * 10, GREY);
+      const my = 105 + i * 9;
+      screen.text(move.name.slice(0, 22), 14, my, INK);
+      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, GREY);
     }
     // ABILITÀ passiva della specie + OGGETTO tenuto (al posto della dexLine,
-    // che resta leggibile nel POLITICDEX).
+    // che resta leggibile nel POLITICDEX). Sotto le mosse (max 4 → y105..132).
     const ability = abilityOf(mon);
-    screen.text(`ABILITÀ: ${ability ? ability.name : "—"}`, 14, 128, ability ? "#e8c84a" : GREY);
+    screen.text(`ABILITÀ: ${ability ? ability.name : "—"}`, 14, 145, ability ? "#e8c84a" : GREY);
     const held = heldItemOf(mon);
-    screen.text(`OGGETTO: ${held ? held.name : "—"}`, 14, 138, held ? INK : GREY);
-    screen.text(held ? "A/B: indietro  START: togli oggetto" : "A/B: indietro", 14, VIEW_H - 18, GREY);
+    screen.text(`OGGETTO: ${held ? held.name : "—"}`, 14, 155, held ? INK : GREY);
+    screen.text(held ? "A/B: indietro  START: togli oggetto" : "A/B: indietro", 14, VIEW_H - 10, GREY);
   }
 }

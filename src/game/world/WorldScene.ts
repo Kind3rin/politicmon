@@ -3203,13 +3203,16 @@ export class WorldScene implements Scene {
             const dw = nb.w * ns;
             screen.imageSpriteCropped(npcImg, nx + 8 - dw / 2, ny + 16 - nb.h * ns, { scaleX: ns, scaleY: ns });
           }
-          // Cartello LEGGENDARIO sopra la testa (lampeggia per attirare l'occhio).
+          // Cartello LEGGENDARIO sopra la testa. Colore lampeggiante (non testo
+          // variabile) per non cambiare larghezza, e X CLAMPATA ai bordi schermo
+          // così non sfora sull'HUD quando l'NPC è vicino al bordo destro.
           if (legendaryReady) {
             const blink = Math.floor(this.time * 2) % 2 === 0;
-            const label = blink ? "* LEGGENDARIO *" : "LEGGENDARIO";
+            const label = "LEGGENDARIO";
             const w = label.length * 6 + 4;
-            screen.rect(nx + 8 - w / 2, ny - 11, w, 9, "rgba(40,20,60,0.9)");
-            screen.text(label, nx + 8 - w / 2 + 2, ny - 10, "#f0c040");
+            const lx = Math.max(2, Math.min(VIEW_W - w - 2, nx + 8 - w / 2));
+            screen.rect(lx, ny - 11, w, 9, "rgba(40,20,60,0.92)");
+            screen.text(label, lx + 2, ny - 10, blink ? "#ffe870" : "#f0c040");
           }
           // Targhetta fluttuante col nome (NPC speciali, es. LUCA · GUIDA).
           // Sopra la testa, oro su fondo scuro per spiccare tra gli NPC normali.

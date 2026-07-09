@@ -21,7 +21,7 @@ const shot = await page.evaluate(async () => {
   const state = newGameState();
   state.flags["intro-done"] = true;
   state.party = [createMonster("giorgetta", 18)];
-  state.pos = { mapId: "oblast-meme", x: 16, y: 11, facing: "up" };
+  state.pos = { mapId: "oblast-meme", x: 13, y: 10, facing: "right" };
   const stack = new SceneStack();
   stack.push(new WorldScene(stack, input, state));
   // Avanza il tempo per catturare la fase visibile dell'aura pulsante/lampeggio.

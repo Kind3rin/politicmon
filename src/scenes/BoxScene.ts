@@ -14,6 +14,10 @@ export class BoxScene implements Scene {
   private side: "party" | "box" = "party";
   private index = 0;
   private msg = new MessageBox();
+  // Finestra scorrevole per colonna: il CIRCOLO può superare le righe visibili
+  // (prima le voci oltre la sesta erano fuori schermo e il cursore "spariva").
+  private scroll: Record<"party" | "box", number> = { party: 0, box: 0 };
+  private static readonly VISIBLE_ROWS = 6;
 
   constructor(
     private stack: SceneStack,
@@ -53,6 +57,17 @@ export class BoxScene implements Scene {
     if (this.input.wasPressed("a")) {
       this.move();
     }
+    // Tieni il cursore dentro la finestra visibile della colonna attiva.
+    const vis = BoxScene.VISIBLE_ROWS;
+    const sc = this.scroll[this.side];
+    if (this.index < sc) {
+      this.scroll[this.side] = this.index;
+    } else if (this.index >= sc + vis) {
+      this.scroll[this.side] = this.index - vis + 1;
+    }
+    // Clamp (dopo uno spostamento la lista può essersi accorciata).
+    const len = this.list(this.side).length;
+    this.scroll[this.side] = Math.max(0, Math.min(this.scroll[this.side], Math.max(0, len - vis)));
   }
 
   private move(): void {
@@ -113,9 +128,22 @@ export class BoxScene implements Scene {
       screen.text(side === "party" ? "VUOTA" : "VUOTO", x + 6, 30, GREY);
       return;
     }
-    for (let i = 0; i < list.length; i += 1) {
+    const vis = BoxScene.VISIBLE_ROWS;
+    const sc = Math.max(0, Math.min(this.scroll[side], Math.max(0, list.length - vis)));
+    // Frecce di overflow: segnalano che la lista continua sopra/sotto.
+    if (sc > 0) {
+      screen.text("▲", x + w - 10, 16, active ? "#f0c040" : GREY);
+    }
+    if (sc + vis < list.length) {
+      screen.text("▼", x + w - 10, VIEW_H - 22, active ? "#f0c040" : GREY);
+    }
+    for (let row = 0; row < vis; row += 1) {
+      const i = sc + row;
+      if (i >= list.length) {
+        break;
+      }
       const mon = list[i];
-      const y = 24 + i * 22;
+      const y = 24 + row * 22;
       const selected = active && i === this.index;
       screen.rect(x + 2, y, w - 4, 20, selected ? "#f8f8f0" : "#3a4c64");
       if (selected) {
@@ -125,7 +153,9 @@ export class BoxScene implements Scene {
       const ink = selected ? INK : PAPER;
       screen.text(speciesOf(mon).name.slice(0, 9), x + 24, y + 2, ink);
       screen.text(`L${mon.level}`, x + 24, y + 11, ink);
-      drawHpBar(screen, x + 50, y + 12, w - 56, mon.hp, statsOf(mon).hp);
+      // Barra a x+62: la label "PV" (disegnata da drawHpBar a x-14) cade a x+48,
+      // dopo la "L12" (che finisce a ~x+42) — prima si sovrapponevano.
+      drawHpBar(screen, x + 62, y + 12, w - 68, mon.hp, statsOf(mon).hp);
       if (mon.hp <= 0) {
         screen.text("KO", x + w - 20, y + 2, "#d04848");
       }

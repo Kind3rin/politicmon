@@ -800,7 +800,7 @@ export class BattleScene implements Scene {
         entry.push({
           run: () => {
             this.ask(
-              `Rimpasto di squadra? ${this.playerName()} lascia la poltrona?`,
+              `Rimpasto? ${this.playerName()} molla la poltrona?`,
               () => {
                 this.mode = "queue";
                 this.stack.push(
@@ -1780,14 +1780,15 @@ export class BattleScene implements Scene {
       } else if (slot) {
         const move = MOVES[slot.id];
         const item = items[this.fightMenu.index];
-        // Striscia info sopra il pannello: TIPO • CATEGORIA • PP.
+        // Striscia info sopra il pannello. In griglia 2x2 i nomi lunghi vengono
+        // troncati nelle celle: qui mostriamo il NOME INTERO della mossa
+        // selezionata (colonna sx), poi TIPO e PP a destra.
         screen.panel(8, 117, 226, 17);
+        screen.text(clipToWidth(move.name, 132), 14, 122, INK);
         const typeLabel = move.type.slice(0, 9);
-        screen.text(typeLabel, 16, 122, INK);
-        screen.rect(16, 130, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
-        screen.text(moveKindLabel(move), 16 + typeLabel.length * 6 + 10, 122, GREY);
-        // rightLabel (PP) col margine interno della striscia (panel fino a 234,
-        // cornice ~3px → 226 tiene il testo staccato dal bordo).
+        screen.text(typeLabel, 150, 122, GREY);
+        screen.rect(150, 130, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
+        // rightLabel (PP) col margine interno della striscia.
         screen.textRight(item?.rightLabel ?? "", 226, 122, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
         screen.text(clipToWidth(moveSummary(move), 208), 10, y + 30, INK);

@@ -27,11 +27,10 @@ const shots = await page.evaluate(async () => {
   };
   for (let i=0;i<10;i++) frame();
   const menu = canvas.toDataURL("image/png");
-  // Scendi fino a SPOSTA SAVE (ultima voce) e aprila.
-  for (let i=0;i<6;i++) press("ArrowDown");
-  // trova e apri: premi giù finche' l'ultima voce, poi A
+  // SPOSTA SAVE è l'ULTIMA voce: sali di 1 (wrap) per arrivarci, poi apri.
+  press("ArrowUp");
   press("KeyZ");
-  for (let i=0;i<6;i++) frame();
+  for (let i=0;i<8;i++) frame();
   const backup = canvas.toDataURL("image/png");
   return { menu, backup };
 });

@@ -12,7 +12,7 @@ import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
 export class BackupScene implements Scene {
   readonly transparent = true;
   private menu: Menu;
-  private entries = ["COPIA CODICE", "INCOLLA CODICE", "INDIETRO"];
+  private entries = ["COME FUNZIONA?", "COPIA CODICE", "INCOLLA CODICE", "INDIETRO"];
   private msg = new MessageBox();
   private overlay: HTMLDivElement | null = null;
   private pendingImport: GameState | null = null;
@@ -51,6 +51,16 @@ export class BackupScene implements Scene {
       return;
     }
     switch (this.entries[this.menu.index]) {
+      case "COME FUNZIONA?":
+        audio.confirm();
+        this.msg.show([
+          "I salvataggi restano nel BROWSER da cui giochi.",
+          "Instagram, Chrome e l'app installata sono separati: non si passano i dati.",
+          "Per spostare la partita: COPIA CODICE da un browser...",
+          "...poi apri l'altro browser e usa INCOLLA CODICE.",
+          "Copia SEMPRE tutto il codice, è lungo!"
+        ]);
+        break;
       case "COPIA CODICE":
         this.copyCode();
         break;
@@ -141,7 +151,9 @@ export class BackupScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.dim(0.5);
+    // Fondo quasi opaco: la scena è transparent (titolo dietro) e a 0.5 il
+    // logo/slogan traspariva sotto il pannello rendendolo poco leggibile.
+    screen.dim(0.82);
     screen.panel(24, 30, VIEW_W - 48, VIEW_H - 60);
     screen.text("BACKUP SALVATAGGIO", 34, 38, INK);
     if (this.pendingImport) {

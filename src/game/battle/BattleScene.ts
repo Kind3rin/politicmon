@@ -1725,28 +1725,40 @@ export class BattleScene implements Scene {
         screen.text(clipToWidth(moveSummary(move), 208), 10, y + 30, INK);
       }
     } else if (this.mode === "campaign") {
-      // Mosse da campagna in GRIGLIA 2x2 (come il menu LOTTA): libera spazio per
-      // la descrizione COMPLETA su 2 righe, che prima veniva tagliata.
+      // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)
+      // e hanno il costo % a fianco: colonna 118px, nome clippato con spazio
+      // riservato al costo, così non si sovrappongono più.
       const items = this.campaignMenu.items;
       const y = VIEW_H - 44;
+      // Striscia in alto: SOND a destra + COSTO in punti dell'azione selezionata
+      // a sinistra (il costo esce dalle celle così i NOMI hanno tutta la colonna
+      // e non vengono più troncati con "...").
+      screen.panel(8, 117, 226, 17);
+      screen.textRight(`SOND ${this.state.sondaggi}%`, 228, 122, "#7ad858");
+      const sel = CAMPAIGN_ACTIONS[this.campaignMenu.index];
+      if (sel) {
+        screen.text(`COSTO ${sel.cost}%`, 14, 122, "#d86868");
+      }
       for (let i = 0; i < items.length; i += 1) {
         const cx = 8 + (i % 2) * 116;
-        const cy = y + 4 + Math.floor(i / 2) * 11;
+        const cy = y + 3 + Math.floor(i / 2) * 10;
         const color = items[i].disabled ? GREY : INK;
         if (this.campaignMenu.index === i) {
           screen.text("►", cx, cy, INK);
         }
-        screen.text(clipToWidth(items[i].label, 86), cx + 8, cy, color);
-        screen.textRight(items[i].rightLabel ?? "", cx + 110, cy, items[i].disabled ? GREY : "#d86868");
+        // Nome a piena colonna (costo spostato nella striscia sopra): entra
+        // anche "SONDAGGIO FARLOCCO" senza ellissi.
+        screen.text(clipToWidth(items[i].label, 108), cx + 8, cy, color);
       }
-      const sel = CAMPAIGN_ACTIONS[this.campaignMenu.index];
-      screen.panel(154, 117, 80, 17);
-      screen.text(`SOND ${this.state.sondaggi}%`, 160, 122, "#7ad858");
       if (sel) {
-        // Descrizione completa su 2 righe: l'effetto della mossa si legge tutto.
-        const lines = wrapText(sel.desc, 38);
-        screen.text(lines[0] ?? "", 8, y + 28, GREY);
-        screen.text(lines[1] ?? "", 8, y + 37, GREY);
+        // Descrizione su 2 righe sotto la griglia. wrapText a 36 char (come il
+        // MessageBox) sta nella larghezza; y+24/+33 tiene la 2ª riga staccata
+        // dal bordo inferiore.
+        const lines = wrapText(sel.desc, 36).slice(0, 2);
+        screen.text(lines[0] ?? "", 10, y + 24, GREY);
+        if (lines[1]) {
+          screen.text(lines[1], 10, y + 33, GREY);
+        }
       }
     } else if (this.mode === "ask") {
       const lines = wrapText(this.askText, 28);

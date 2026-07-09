@@ -299,10 +299,16 @@ export class BattleScene implements Scene {
 
     const first = playerFirst ? "player" : "foe";
     const second = playerFirst ? "foe" : "player";
+    // Identità dei combattenti a inizio turno: un KO annulla l'azione rimasta.
+    // Il solo check sugli HP non basta: dopo il cambio post-KO this.player/
+    // this.foe puntano al RIMPIAZZO (vivo), e la mossa scelta dal caduto
+    // partiva eseguita dal nuovo entrato (magari senza nemmeno conoscerla).
+    const pC = this.player;
+    const fC = this.foe;
     this.pushMove(first, first === "player" ? playerMove : foeMove);
     this.push({
       run: () => {
-        if (this.player.mon.hp > 0 && this.foe.mon.hp > 0) {
+        if (this.player === pC && this.foe === fC && pC.mon.hp > 0 && fC.mon.hp > 0) {
           this.pushMoveNow(second, second === "player" ? playerMove : foeMove);
         }
       }

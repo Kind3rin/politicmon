@@ -3113,27 +3113,29 @@ export class WorldScene implements Scene {
       }
     }
 
-    // MARKER USCITA: negli interni/grotte la cella d'uscita (`c`, override roccia
-    // nelle grotte) è invisibile → il giocatore non trova la via d'uscita.
-    // Disegna "USCITA" + freccia lampeggiante sui warp che riportano all'aperto.
-    if (!this.map.outdoor) {
+    // MARKER USCITA: SOLO nelle grotte, dove la cella d'uscita (`c`) è mascherata
+    // da un tileOverride roccia e diventa INVISIBILE. Negli altri interni (case,
+    // bar, palestre) la porta è un doormat rosso ben visibile → niente marker,
+    // che lì risultava anche mal posizionato (a mezzo tile sopra la porta).
+    if (!this.map.outdoor && this.map.tileOverrides?.c) {
       const exits = this.map.warps.filter((w) => MAPS[w.toMap]?.outdoor);
       for (const w of exits) {
-        // Le uscite doppie (2 celle affiancate: es. porte larghe 2 tile) hanno
-        // UN solo cartello, su quella di sinistra: salta la cella a destra se
-        // esiste un'altra uscita adiacente sulla stessa riga.
+        // Uscite doppie (2 celle affiancate): un solo cartello, centrato tra le
+        // due. Salta la cella di destra se ce n'è una adiacente a sinistra.
         if (exits.some((o) => o.y === w.y && o.x === w.x - 1)) {
           continue;
         }
-        const ex = w.x * TILE - camX;
+        const doubleWide = exits.some((o) => o.y === w.y && o.x === w.x + 1);
+        // Centro X: metà tile se singola, tile intero se porta doppia.
+        const cxPx = w.x * TILE - camX + (doubleWide ? TILE : TILE / 2);
         const ey = w.y * TILE - camY;
         const blink = Math.floor(this.time * 2) % 2 === 0;
         const label = "USCITA";
         const lw = label.length * 6 + 4;
-        screen.rect(ex + 8 - lw / 2, ey - 10, lw, 8, "rgba(16,20,31,0.85)");
-        screen.text(label, ex + 8 - lw / 2 + 2, ey - 9, "#f0c040");
+        screen.rect(cxPx - lw / 2, ey - 9, lw, 8, "rgba(16,20,31,0.85)");
+        screen.text(label, cxPx - lw / 2 + 2, ey - 8, "#f0c040");
         if (blink) {
-          screen.text("▼", ex + 6, ey - 1, "#f0c040");
+          screen.text("▼", cxPx - 2, ey + 4, "#f0c040");
         }
       }
     }

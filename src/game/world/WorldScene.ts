@@ -3507,14 +3507,18 @@ export class WorldScene implements Scene {
     }
     // Box auto-largo sul testo più lungo (prima era fisso 156px e il sub veniva
     // troncato con "...", es. "SFIDA DEL GIORNO IN PIAZZA"). Clampato a VIEW_W.
-    const longest = Math.max(b.text.length, b.sub.length);
+    // Clip a 38 char: oltre, il box è già al max (VIEW_W-4) e il testo centrato
+    // sforerebbe i bordi (textCenter non clippa da sé).
+    const bText = b.text.slice(0, 38);
+    const bSub = b.sub.slice(0, 38);
+    const longest = Math.max(bText.length, bSub.length);
     const w = Math.min(VIEW_W - 4, Math.max(156, longest * 6 + 12));
     const x = Math.round((VIEW_W - w) / 2);
     screen.rect(x, Math.round(y), w, 18, "rgba(16,20,31,0.94)");
     screen.rect(x, Math.round(y), w, 2, b.color);
     screen.rect(x, Math.round(y) + 16, w, 2, b.color);
-    screen.textCenter(b.text, VIEW_W / 2, Math.round(y) + 3, b.color);
-    screen.textCenter(b.sub, VIEW_W / 2, Math.round(y) + 10, "#cfe6ff");
+    screen.textCenter(bText, VIEW_W / 2, Math.round(y) + 3, b.color);
+    screen.textCenter(bSub, VIEW_W / 2, Math.round(y) + 10, "#cfe6ff");
     if (t > dur) {
       this.banner = null;
     }

@@ -147,7 +147,8 @@ export class DexScene implements Scene {
     // ABILITÀ passiva (se la specie ne ha una): nome + descrizione breve.
     const ability = species.ability ? ABILITIES[species.ability] : undefined;
     if (ability) {
-      screen.text(`ABILITÀ: ${ability.name}`, 76, 54, "#e8c84a");
+      // Clip: "GARANZIA COSTITUZIONALE" (23) sforava il pannello/schermo a x=76.
+      screen.text(clipToWidth(`ABILITÀ: ${ability.name}`, VIEW_W - 76 - 8), 76, 54, "#e8c84a");
     }
     const lines = wrapText(species.dexLine, 35);
     for (let i = 0; i < lines.length && i < 4; i += 1) {

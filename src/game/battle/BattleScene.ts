@@ -1955,8 +1955,12 @@ export class BattleScene implements Scene {
     drawCombatantBox(screen, mon, this.displayHp.player, PLAYER_BOX);
     // Badge DIVISA EQUA: segnala a colpo d'occhio che l'EXP è condivisa con la
     // panchina (la feature prima era invisibile finché non finiva la lotta).
+    // Sulla riga PV (y+25), a SINISTRA del testo PV (bordo sx 182): sta dopo il
+    // badge stato se presente (che finisce a x+22=148), altrimenti a x+6.
+    // Range 148..173 (con stato) o 132..157: sempre < 182, niente collisione con
+    // i PV anche a 3 cifre (prima invadeva i PV di ~9px).
     if ((this.state.bag["divisa"] ?? 0) > 0) {
-      const bx = mon.status ? x + 40 : x + 6;
+      const bx = mon.status ? x + 22 : x + 6;
       screen.rect(bx, y + 25, 25, 8, "#b8901a");
       screen.text("EXP+", bx + 1, y + 26, "#fff0a0");
     }

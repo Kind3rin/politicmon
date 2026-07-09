@@ -35,7 +35,18 @@ export function clipToWidth(text: string, maxWidth: number): string {
 
 // Spezza il testo in righe che stanno nel box di dialogo.
 export function wrapText(text: string, maxChars: number): string[] {
-  const words = text.split(" ");
+  // Una singola parola più lunga di maxChars (URL, nome incollato) non ha spazi
+  // su cui spezzare: la si taglia a pezzi di maxChars, altrimenti sforerebbe il
+  // box a destra. Pre-passaggio prima del wrap sugli spazi.
+  const words: string[] = [];
+  for (const raw of text.split(" ")) {
+    let w = raw;
+    while (w.length > maxChars) {
+      words.push(w.slice(0, maxChars));
+      w = w.slice(maxChars);
+    }
+    words.push(w);
+  }
   const lines: string[] = [];
   let line = "";
   for (const word of words) {

@@ -84,18 +84,20 @@ export class TeachScene implements Scene {
     screen.text("DIRETTIVA DI PARTITO", 8, 6, PAPER);
     screen.text(`${speciesOf(this.mon).name} può imparare:`, 8, 20, PAPER);
 
-    // Scheda della mossa in arrivo.
-    screen.panel(8, 30, VIEW_W - 16, 34);
+    // Scheda della mossa in arrivo. Riepilogo su riga PROPRIA (y58): prima era
+    // su y48 right-aligned e collideva con la kind-label (SPECIALE/FISICO/...),
+    // il cui bordo destro superava il bordo sinistro del riepilogo.
+    screen.panel(8, 30, VIEW_W - 16, 40);
     screen.text(move.name, 16, 37, INK);
     const typeLabel = move.type.slice(0, 9);
     screen.text(typeLabel, 16, 48, INK);
     screen.rect(16, 56, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
     screen.text(moveKindLabel(move), 16 + typeLabel.length * 6 + 10, 48, GREY);
-    screen.textRight(moveSummary(move).slice(0, 22), VIEW_W - 16, 48, INK);
+    screen.text(moveSummary(move).slice(0, 36), 16, 60, GREY);
 
     if (this.mon.moves.length >= 4 && !this.done) {
-      screen.text("Quale linea abbandona?", 8, 70, PAPER);
-      this.menu.draw(screen, 8, 80, VIEW_W - 16);
+      screen.text("Quale linea abbandona?", 8, 74, PAPER);
+      this.menu.draw(screen, 8, 84, VIEW_W - 16);
       const sel = this.mon.moves[this.menu.index];
       if (sel) {
         const m = MOVES[sel.id];

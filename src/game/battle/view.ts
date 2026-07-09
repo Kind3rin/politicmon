@@ -447,6 +447,7 @@ export interface CombatantBoxOpts {
   hpY: number; // offset verticale della barra HP dentro il box
   hpW: number;
   showHpText: boolean; // solo il box del "player" mostra i PV numerici
+  nameInset?: number; // sposta il nome a destra per fare spazio a un badge
 }
 
 export const FOE_BOX: CombatantBoxOpts = { x: 6, y: 8, w: 104, h: 30, hpY: 17, hpW: 52, showHpText: false };
@@ -460,7 +461,10 @@ export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number
   // Margine interno: la cornice del panel "mangia" ~3px, quindi 8px di margine
   // dal bordo del box danno un'aria uniforme e niente testo attaccato (audit UI).
   const pad = 8;
-  screen.text(speciesOf(mon).name, x + pad, y + 6, INK);
+  // Il nome slitta a destra se il chiamante disegna un badge (es. la SCHEDA
+  // "già eletto" nel box nemico): evita che il badge copra nome/PV.
+  const nameX = x + pad + (opts.nameInset ?? 0);
+  screen.text(speciesOf(mon).name, nameX, y + 6, INK);
   screen.textRight(`L${mon.level}`, x + w - pad, y + 6, INK);
   const maxHp = statsOf(mon).hp;
   drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, maxHp);

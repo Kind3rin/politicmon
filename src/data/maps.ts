@@ -177,17 +177,21 @@ const ROUTE1_TILES = [
 // La GROTTA 1: tunnel opzionale con percorso a serpentina, incontri nelle
 // ombre (~), boulders/stalagmiti solide e due uscite: sud verso PERCORSO 1,
 // nord-est verso l'OBLAST DEL MEME.
+// NB: la metà sinistra era irraggiungibile dall'ingresso (muro continuo di
+// A/R/S che tagliava la grotta in due). Aperti 3 varchi — (4,4), (5,4) e (9,5)
+// da A→p — così TUTTE le celle calpestabili sono connesse (verificato con un
+// flood-fill dall'entry). Cambiando i tile qui, ri-verificare la connettività.
 const GROTTA1_TILES = [
   "AAAAAAAAAAAAAAAAAAAA",
   "AppppppppAAAAppppOpA",
   "ApSRRAp~pAAAASSRpppA",
   "Ap~pppp~ppppppsppppA",
-  "ApppAAAASRRRRAAApppA",
-  "AAp~AppppppppAAApppA",
+  "AppppAAASRRRRAAApppA",
+  "AAp~pppppppppAAApppA",
   "ApppAppSRRRppA~ppppA",
   "ApAAAAppp~pppAAAAppA",
   "ApppppSSRAAAAppppppA",
-  "AAAApApppppppp~pRRpA",
+  "AAAApppppppppp~pRRpA",
   "AppppAppRSSAAAAppppA",
   "Ap~ppApppppppppppppA",
   "ASRRAAApRSSRAAApSRpA",

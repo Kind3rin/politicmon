@@ -1935,19 +1935,22 @@ export class BattleScene implements Scene {
   }
 
   private drawFoeBox(screen: Screen): void {
-    drawCombatantBox(screen, this.foe.mon, this.displayHp.foe, FOE_BOX);
-    // Indicatore "GIÀ ELETTO": nei combattimenti SELVATICI (non contro allenatori),
-    // se la specie è già nel tuo Dex come catturata, mostra la SCHEDA nell'angolo
-    // basso-sx del box — così sai a colpo d'occhio se ti serve ancora o no.
-    if (!this.trainer && this.state.dex[this.foe.mon.speciesId] === "caught") {
-      const ballotImg = sceneImage("item:scheda", "items/scheda.png");
-      if (ballotImg) {
-        const size = 12;
-        const s = Math.min(size / ballotImg.width, size / ballotImg.height);
-        // Nello spazio libero a SINISTRA della barra HP (x+6..x+22, ~16px), sulla
-        // riga della barra: non collide col nome (riga sopra) né con la barra.
-        screen.imageSprite(ballotImg, FOE_BOX.x + 5, FOE_BOX.y + FOE_BOX.hpY - 2, { scaleX: s, scaleY: s });
-      }
+    // "GIÀ ELETTO": nei combattimenti SELVATICI, se la specie è già catturata nel
+    // Dex, mostra la SCHEDA come badge — così sai a colpo d'occhio se ti serve.
+    const owned = !this.trainer && this.state.dex[this.foe.mon.speciesId] === "caught";
+    const ballotImg = owned ? sceneImage("item:scheda", "items/scheda.png") : null;
+    // Se il badge c'è, il nome slitta a destra così la scheda non copre "PV"
+    // (prima la scheda finiva sulla riga della barra e mangiava la scritta PV).
+    drawCombatantBox(screen, this.foe.mon, this.displayHp.foe, {
+      ...FOE_BOX,
+      nameInset: ballotImg ? 14 : 0
+    });
+    if (ballotImg) {
+      const size = 11;
+      const s = Math.min(size / ballotImg.width, size / ballotImg.height);
+      // Angolo ALTO-sinistra, sulla riga del nome (non su quella della barra):
+      // occupa lo spazio liberato dall'inset del nome.
+      screen.imageSprite(ballotImg, FOE_BOX.x + 6, FOE_BOX.y + 4, { scaleX: s, scaleY: s });
     }
   }
 

@@ -335,11 +335,14 @@ export class Composer {
 
   draw(screen: Screen, y: number, time: number): void {
     this.y0 = y;
-    // Riga di composizione (coda del testo, caret lampeggiante).
+    // Riga di composizione (coda del testo, caret lampeggiante). In modalità TEL
+    // mostra ciò che stai scrivendo sulla tastiera del telefono: se vuoto, un
+    // placeholder chiaro (prima restava una riga vuota che sembrava un bug).
     const caret = Math.floor(time * 2) % 2 === 0 ? "_" : " ";
     screen.panel(4, y, VIEW_W - 8, 13);
     const composed = (this.text + caret).slice(-36);
-    screen.text(composed || " ", 10, y + 4, this.text ? INK : GREY);
+    const placeholder = this.tab === "tel" ? "SCRIVI COL TELEFONO..." : " ";
+    screen.text(this.text ? composed : placeholder, 10, y + 4, this.text ? INK : GREY);
 
     // Riga tab.
     const tabsY = y + 16;

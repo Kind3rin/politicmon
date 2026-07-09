@@ -65,9 +65,11 @@ export class ChatScene implements Scene {
         mp.connected ? "#7ad858" : GREY);
     }
 
-    // Storico messaggi recenti (6 righe).
-    screen.panel(4, 13, VIEW_W - 8, 50);
-    const lines = mp.chat.slice(-6);
+    // Storico messaggi recenti (4 righe). Chiuso a y=51 per lasciare un gap
+    // netto dalla riga di composizione del composer (prima le due cornici
+    // 9-slice si toccavano e la riga del testo digitato risultava illeggibile).
+    screen.panel(4, 13, VIEW_W - 8, 38);
+    const lines = mp.chat.slice(-4);
     for (let i = 0; i < lines.length; i += 1) {
       const l = lines[i];
       // Nick risolto al disegno (non congelato): una riga arrivata prima del
@@ -82,7 +84,7 @@ export class ChatScene implements Scene {
       screen.text("NESSUN MESSAGGIO. ROMPI IL GHIACCIO!", 9, 18, GREY);
     }
 
-    this.composer.draw(screen, 66, this.time);
+    this.composer.draw(screen, 60, this.time);
     screen.text("A:SCEGLI  B:CANC.  START:ESCI", 6, VIEW_H - 8, GREY);
   }
 }

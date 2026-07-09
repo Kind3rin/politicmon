@@ -150,22 +150,31 @@ export class DexScene implements Scene {
       // Clip: "GARANZIA COSTITUZIONALE" (23) sforava il pannello/schermo a x=76.
       screen.text(clipToWidth(`ABILITÀ: ${ability.name}`, VIEW_W - 76 - 8), 76, 54, "#e8c84a");
     }
-    const lines = wrapText(species.dexLine, 35);
-    for (let i = 0; i < lines.length && i < 4; i += 1) {
-      screen.text(lines[i], 14, 80 + i * 11, INK);
+    // Cursore Y progressivo: descrizione, poi abilità, poi footer si impilano
+    // senza offset fissi (prima la 2a riga dell'abilità cadeva sul footer con
+    // dexLine di 3 righe, es. TAJANIDE). Righe totali limitate per stare nel
+    // pannello (fondo utile ~y150 prima di "A/B: indietro").
+    let cy = 80;
+    const dexLines = wrapText(species.dexLine, 35);
+    for (let i = 0; i < dexLines.length && i < 3; i += 1) {
+      screen.text(dexLines[i], 14, cy, INK);
+      cy += 10;
     }
     if (ability) {
+      cy += 2; // stacco visivo tra dexLine e abilità
       const abLines = wrapText(ability.desc, 35);
       for (let i = 0; i < Math.min(2, abLines.length); i += 1) {
-        screen.text(abLines[i], 14, 80 + 4 * 11 + i * 10, GREY);
+        screen.text(abLines[i], 14, cy, GREY);
+        cy += 10;
       }
     }
     // Esclusiva dell'altra versione: nel tuo mondo si ottiene SOLO scambiando.
     if (VERSION_EXCLUSIVES[id] && !speciesAvailable(id, this.state.browserSeed)) {
-      screen.text("SOLO VIA SCAMBIO ONLINE", 14, 137, TRADE_ONLY);
+      screen.text("SOLO VIA SCAMBIO ONLINE", 14, cy, TRADE_ONLY);
+      cy += 10;
     }
     if (this.state.dex[id] !== "caught") {
-      screen.text("(Non ancora nella tua squadra)", 14, 148, GREY);
+      screen.text("(Non ancora nella tua squadra)", 14, cy, GREY);
     }
     screen.text("A/B: indietro", 14, VIEW_H - 16, GREY);
   }

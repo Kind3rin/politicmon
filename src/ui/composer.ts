@@ -81,7 +81,7 @@ export class Composer {
   // y dell'ultima draw(): serve per l'hit-test dei tap (prima draw = nessun tap
   // possibile, il tap dura un frame).
   private y0 = -1000;
-  // Tastiera nativa attiva (solo su touch, tab "TEL⌨"): il testo arriva dal
+  // Tastiera nativa attiva (solo su touch, tab "TEL"): il testo arriva dal
   // vero <input> del telefono, non dalla griglia a schermo.
   private hasNative = nativeKeyboardAvailable();
   private nativeOn = false;
@@ -91,13 +91,13 @@ export class Composer {
 
   constructor(private withEmotes: boolean) {}
 
-  // Etichette della riga tab. Su touch aggiunge "TEL⌨" (tastiera di sistema);
-  // l'ultima è sempre INVIA.
+  // Etichette della riga tab. Su touch la tastiera a schermo (griglia lenta) è
+  // sostituita da "TEL" (tastiera di sistema): niente due tastiere e la riga
+  // resta corta. Su desktop resta "TASTIERA" (nessuna tastiera nativa). Ultima
+  // sempre INVIA.
   private tabs(): string[] {
-    const base = this.withEmotes ? ["FRASI", "TASTIERA", "EMOTE"] : ["FRASI", "TASTIERA"];
-    if (this.hasNative) {
-      base.push("TEL⌨");
-    }
+    const kb = this.hasNative ? "TEL" : "TASTIERA";
+    const base = this.withEmotes ? ["FRASI", kb, "EMOTE"] : ["FRASI", kb];
     base.push("INVIA");
     return base;
   }
@@ -357,7 +357,7 @@ export class Composer {
         (label === "FRASI" && this.tab === "frasi") ||
         (label === "TASTIERA" && this.tab === "keys") ||
         (label === "EMOTE" && this.tab === "emote") ||
-        (label === "TEL⌨" && this.tab === "tel");
+        (label === "TEL" && this.tab === "tel");
       const color = sel ? INK : label === "INVIA" ? (this.text.trim() ? "#7ad858" : GREY) : active ? PAPER : GREY;
       screen.text(label, tx + 3, tabsY, color);
       if (active && !sel) {

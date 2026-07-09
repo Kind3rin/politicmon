@@ -2631,22 +2631,28 @@ export class WorldScene implements Scene {
 
     // NPC vivi: i "vaganti" camminano attorno a casa, gli altri si guardano
     // intorno girando la testa. (I trainer/healer restano immobili al loro posto.)
-    for (const npc of this.npcs) {
-      // Percorso scriptato (es. Gianni che entra nel lab): ha la precedenza.
-      if (npc.path && npc.path.length > 0) {
-        this.advanceScriptedWalk(npc, dt);
-        continue;
-      }
-      if (npc.trainerId || npc.healer) {
-        continue;
-      }
-      if (npc.canWander) {
-        this.updateNpcWalk(npc, dt);
-      } else {
-        npc.turnTimer -= dt;
-        if (npc.turnTimer <= 0) {
-          npc.turnTimer = 2 + Math.random() * 5;
-          npc.currentFacing = FACINGS[Math.floor(Math.random() * FACINGS.length)];
+    // Durante un DIALOGO (messaggio o menù aperto) gli NPC si CONGELANO: senza
+    // questo, l'NPC con cui parli si rigira random ogni 2-5s (turnTimer) o
+    // continua a vagare, "spostandosi" mentre gli parli. Freeze = mondo in pausa.
+    const talking = this.msg.isOpen || Boolean(this.askMenu) || Boolean(this.transportMenu) || Boolean(this.remoteMenu);
+    if (!talking) {
+      for (const npc of this.npcs) {
+        // Percorso scriptato (es. Gianni che entra nel lab): ha la precedenza.
+        if (npc.path && npc.path.length > 0) {
+          this.advanceScriptedWalk(npc, dt);
+          continue;
+        }
+        if (npc.trainerId || npc.healer) {
+          continue;
+        }
+        if (npc.canWander) {
+          this.updateNpcWalk(npc, dt);
+        } else {
+          npc.turnTimer -= dt;
+          if (npc.turnTimer <= 0) {
+            npc.turnTimer = 2 + Math.random() * 5;
+            npc.currentFacing = FACINGS[Math.floor(Math.random() * FACINGS.length)];
+          }
         }
       }
     }
@@ -3431,7 +3437,10 @@ export class WorldScene implements Scene {
     if (this.askMenu) {
       screen.panel(0, VIEW_H - 44, VIEW_W, 44);
       screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 32, INK);
-      this.askMenu.draw(screen, VIEW_W - 64, VIEW_H - 44 - this.askMenu.measureHeight(), 56);
+      // Larghezza auto sul label più lungo (min 56 = SÌ/NO), clampata al bordo.
+      // Prima era fissa a 56px → le voci lunghe del menù GUIDA venivano troncate.
+      const aw = Math.min(VIEW_W - 8, Math.max(56, this.askMenu.measureWidth() + 8));
+      this.askMenu.draw(screen, VIEW_W - 4 - aw, VIEW_H - 44 - this.askMenu.measureHeight(), aw);
     }
 
     if (this.remoteMenu) {

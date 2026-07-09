@@ -739,16 +739,21 @@ export class BattleScene implements Scene {
                 );
                 this.fightMenu = choice;
                 this.mode = "fight";
+                this.pendingLearnMoveId = moveId; // per il confronto in draw
                 this.onFightSelect = (index) => {
                   const old = MOVES[mon.moves[index].id];
                   mon.moves[index] = { id: moveId, pp: move.pp };
+                  this.pendingLearnMoveId = null;
                   this.mode = "queue";
                   this.pushFront([
                     { text: `1, 2, 3... PUF! ${this.playerName()} dimentica ${old.name}...` },
                     { text: `...e impara ${move.name}!` }
                   ]);
                 };
-                this.onFightCancel = confirmSkip;
+                this.onFightCancel = () => {
+                  this.pendingLearnMoveId = null;
+                  confirmSkip();
+                };
               },
               confirmSkip
             );
@@ -1225,6 +1230,9 @@ export class BattleScene implements Scene {
 
   private onFightSelect: ((index: number) => void) | null = null;
   private onFightCancel: (() => void) | null = null;
+  // Mossa in attesa di apprendimento (schermata "Quale dimentichi?"): serve a
+  // mostrare il CONFRONTO tra la nuova e quella evidenziata da scartare.
+  private pendingLearnMoveId: string | null = null;
 
   // ---- Update ----
 
@@ -1723,7 +1731,19 @@ export class BattleScene implements Scene {
       }
       const slot = this.player.mon.moves[this.fightMenu.index];
       if (this.onFightSelect) {
-        screen.text("Quale dimentichi? B: annulla", 8, y + 32, GREY);
+        // CONFRONTO: sopra il pannello la NUOVA mossa, sotto quella EVIDENZIATA da
+        // scartare — così si vede subito cosa si guadagna e cosa si perde.
+        const learn = this.pendingLearnMoveId ? MOVES[this.pendingLearnMoveId] : null;
+        const old = slot ? MOVES[slot.id] : null;
+        screen.panel(8, 107, 226, 28);
+        if (learn) {
+          screen.text(`NUOVA: ${learn.name}`, 14, 110, "#7ad858");
+          screen.text(clipToWidth(moveSummary(learn), 208), 14, 119, GREY);
+        }
+        if (old) {
+          screen.text(clipToWidth(`SCARTI: ${old.name} (${moveKindLabel(old)})`, 220), 14, 127, "#d86868");
+        }
+        screen.text("Scegli la mossa da scartare. B: annulla", 8, y + 34, GREY);
       } else if (slot) {
         const move = MOVES[slot.id];
         const item = items[this.fightMenu.index];

@@ -3389,7 +3389,7 @@ export class WorldScene implements Scene {
       const pulse = this.sondPulse > 0 && Math.floor(this.sondPulse * 16) % 2 === 0;
       const bg = pulse
         ? (this.sondDelta?.up ? "rgba(122,216,88,0.85)" : "rgba(208,72,72,0.85)")
-        : "rgba(16,20,31,0.92)";
+        : "rgba(16,20,31,0.62)"; // semitrasparente: la mappa dietro l'HUD resta visibile
       screen.rect(px, 2, panelW, 22, bg);
       screen.text(`SOND ${shown}%`, px + 4, 4, col);
       // Barra di riempimento (segue il valore animato).
@@ -3413,7 +3413,7 @@ export class WorldScene implements Scene {
     if (this.state.vehicle) {
       const vlabel = VEHICLES[this.state.vehicle as VehicleId].name;
       const w = vlabel.length * 6 + 8;
-      screen.rect(VIEW_W - w - 2, hudBottom, w, 12, "rgba(16,20,31,0.92)");
+      screen.rect(VIEW_W - w - 2, hudBottom, w, 12, "rgba(16,20,31,0.62)");
       screen.text(vlabel, VIEW_W - w + 2, hudBottom + 2, "#9cc8e8");
     }
 

@@ -21,7 +21,9 @@ const shot = await page.evaluate(async () => {
   const state = newGameState();
   state.flags["intro-done"] = true;
   state.party = [createMonster("giorgetta", 18)];
-  state.pos = { mapId: "grotta1", x: 8, y: 10, facing: "down" };
+  state.sondaggi = 100;
+  state.vehicle = "monopattino";
+  state.pos = { mapId: "grotta1", x: 14, y: 3, facing: "down" };
   const stack = new SceneStack();
   stack.push(new WorldScene(stack, input, state));
   // Avanza il tempo così la freccia lampeggiante è nella fase visibile.

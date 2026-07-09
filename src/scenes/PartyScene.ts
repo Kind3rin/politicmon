@@ -8,7 +8,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
 import { saveGame } from "../game/state";
 import type { GameState } from "../game/state";
-import { drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { clipToWidth, drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -77,6 +77,18 @@ export class PartyScene implements Scene {
         if (this.input.wasPressed("down")) {
           this.detailIndex = (this.detailIndex + 1) % entries.length;
           audio.cursor();
+        }
+      }
+      // Sinistra/destra: passa al mostro precedente/successivo senza uscire
+      // (come la sfoglia del Politicdex). Il cursore lista segue.
+      if (party.length > 1) {
+        const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
+        if (dir !== 0) {
+          this.index = (this.index + dir + party.length) % party.length;
+          this.summary = party[this.index];
+          this.detailIndex = 0;
+          audio.cursor();
+          return;
         }
       }
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
@@ -218,11 +230,20 @@ export class PartyScene implements Scene {
     screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8);
     drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 8, 8, 56, 54);
     screen.text(species.name, 70, 12, INK);
-    screen.text(`L${mon.level}  ${species.category}`, 70, 22, GREY);
+    // Sfoglia ◄►: indicatore posizione nella squadra (come nel Politicdex).
+    const party = this.opts.partyOverride ?? this.state.party;
+    if (party.length > 1) {
+      screen.textRight(`◄${this.index + 1}/${party.length}►`, 226, 12, GREY);
+    }
     // Anticipa la prossima evoluzione: dà il gancio "ancora un livello".
+    // La categoria si clippa per lasciare spazio all'etichetta EVOLVE a destra
+    // (prima "LUCERTOLA SVELTA" ci finiva sotto).
     const evoLv = nextEvolutionLevel(mon);
-    if (evoLv !== undefined) {
-      screen.textRight(`EVOLVE a L${evoLv}`, 226, 22, "#e8c84a");
+    const evoLabel = evoLv !== undefined ? `EVOLVE a L${evoLv}` : "";
+    const catMax = 226 - 70 - (evoLabel.length > 0 ? evoLabel.length * 6 + 8 : 0);
+    screen.text(clipToWidth(`L${mon.level}  ${species.category}`, catMax), 70, 22, GREY);
+    if (evoLabel) {
+      screen.textRight(evoLabel, 226, 22, "#e8c84a");
     }
     let tx = 70;
     for (const type of species.types) {

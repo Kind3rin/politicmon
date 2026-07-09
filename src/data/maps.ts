@@ -555,8 +555,10 @@ function gymMap(
     outdoor: false,
     music: "interior",
     warps: [
-      { x: 4, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" },
-      { x: 5, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" }
+      // Allineati ai tappeti `cc` della riga 7 ("AppppccppA" → x 5 e 6): prima
+      // erano a 4/5 e il tappeto destro non faceva uscire.
+      { x: 5, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" },
+      { x: 6, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" }
     ],
     // Cartelli sul muro di fondo, sopra una cella di pavimento: prima erano a
     // (0,1)/(9,1), fiancheggiati dalle macchine `k` e dai muri `A` su tutti i
@@ -576,8 +578,10 @@ function marketMap(id: string, city: string, doorX: number, doorY: number): MapD
     outdoor: false,
     music: "interior",
     warps: [
-      { x: 4, y: 5, toMap: city, toX: doorX, toY: doorY, facing: "down" },
-      { x: 5, y: 5, toMap: city, toX: doorX, toY: doorY, facing: "down" }
+      // Allineati ai tappeti `cc` ("AppppccppA" → x 5 e 6): prima erano a 4/5
+      // e il tappeto destro non faceva uscire.
+      { x: 5, y: 5, toMap: city, toX: doorX, toY: doorY, facing: "down" },
+      { x: 6, y: 5, toMap: city, toX: doorX, toY: doorY, facing: "down" }
     ],
     signs: [],
     pickups: [],
@@ -1833,8 +1837,9 @@ export const MAPS: Record<string, MapDef> = {
     outdoor: false,
     music: "interior",
     warps: [
-      { x: 4, y: 5, toMap: "capitale", toX: 21, toY: 12, facing: "down" },
-      { x: 5, y: 5, toMap: "capitale", toX: 21, toY: 12, facing: "down" }
+      // Allineati ai tappeti `cc` (x 5 e 6), come marketMap.
+      { x: 5, y: 5, toMap: "capitale", toX: 21, toY: 12, facing: "down" },
+      { x: 6, y: 5, toMap: "capitale", toX: 21, toY: 12, facing: "down" }
     ],
     signs: [
       // Spostato da (0,1): lì era circondato dagli scaffali `b` (illeggibile).

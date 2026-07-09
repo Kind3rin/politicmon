@@ -3113,6 +3113,31 @@ export class WorldScene implements Scene {
       }
     }
 
+    // MARKER USCITA: negli interni/grotte la cella d'uscita (`c`, override roccia
+    // nelle grotte) è invisibile → il giocatore non trova la via d'uscita.
+    // Disegna "USCITA" + freccia lampeggiante sui warp che riportano all'aperto.
+    if (!this.map.outdoor) {
+      const exits = this.map.warps.filter((w) => MAPS[w.toMap]?.outdoor);
+      for (const w of exits) {
+        // Le uscite doppie (2 celle affiancate: es. porte larghe 2 tile) hanno
+        // UN solo cartello, su quella di sinistra: salta la cella a destra se
+        // esiste un'altra uscita adiacente sulla stessa riga.
+        if (exits.some((o) => o.y === w.y && o.x === w.x - 1)) {
+          continue;
+        }
+        const ex = w.x * TILE - camX;
+        const ey = w.y * TILE - camY;
+        const blink = Math.floor(this.time * 2) % 2 === 0;
+        const label = "USCITA";
+        const lw = label.length * 6 + 4;
+        screen.rect(ex + 8 - lw / 2, ey - 10, lw, 8, "rgba(16,20,31,0.85)");
+        screen.text(label, ex + 8 - lw / 2 + 2, ey - 9, "#f0c040");
+        if (blink) {
+          screen.text("▼", ex + 6, ey - 1, "#f0c040");
+        }
+      }
+    }
+
     for (const npc of this.visibleNpcs()) {
       const nx = Math.round(npc.dispX) - camX;
       const ny = Math.round(npc.dispY) - camY - 1;

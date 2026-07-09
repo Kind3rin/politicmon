@@ -713,32 +713,47 @@ export class BattleScene implements Scene {
             this.pushFront([{ text: `${this.playerName()} impara ${move.name}!` }]);
             return;
           }
-          this.ask(
-            `Vuoi dimenticare una mossa per imparare ${move.name}?`,
-            () => {
-              const choice = new Menu(
-                mon.moves.map((slot) => ({ label: MOVES[slot.id].name }))
-              );
-              this.fightMenu = choice;
-              this.mode = "fight";
-              this.onFightSelect = (index) => {
-                const old = MOVES[mon.moves[index].id];
-                mon.moves[index] = { id: moveId, pp: move.pp };
-                this.mode = "queue";
-                this.pushFront([
-                  { text: `1, 2, 3... PUF! ${this.playerName()} dimentica ${old.name}...` },
-                  { text: `...e impara ${move.name}!` }
-                ]);
-              };
-              this.onFightCancel = () => {
-                this.mode = "queue";
+          // Conferma "sei sicuro di NON impararla?": evita di scartare per sbaglio
+          // una mossa nuova (spesso migliore). Prima il NO rinunciava all'istante.
+          const confirmSkip = () => {
+            this.ask(
+              `Sicuro di NON imparare ${move.name}?`,
+              () => {
+                // SÌ, non la imparo.
                 this.pushFront([{ text: `${this.playerName()} rinuncia a ${move.name}.` }]);
-              };
-            },
-            () => {
-              this.pushFront([{ text: `${this.playerName()} rinuncia a ${move.name}.` }]);
-            }
-          );
+              },
+              () => {
+                // NO, ci ripenso: riproponi la scelta.
+                offerLearn();
+              }
+            );
+          };
+          const offerLearn = () => {
+            // Prompt esplicito: chiede se imparare la mossa nuova (che sostituirà
+            // una vecchia). La descrizione è consultabile nel dettaglio squadra.
+            this.ask(
+              `Vuoi imparare la nuova mossa ${move.name}?`,
+              () => {
+                const choice = new Menu(
+                  mon.moves.map((slot) => ({ label: MOVES[slot.id].name }))
+                );
+                this.fightMenu = choice;
+                this.mode = "fight";
+                this.onFightSelect = (index) => {
+                  const old = MOVES[mon.moves[index].id];
+                  mon.moves[index] = { id: moveId, pp: move.pp };
+                  this.mode = "queue";
+                  this.pushFront([
+                    { text: `1, 2, 3... PUF! ${this.playerName()} dimentica ${old.name}...` },
+                    { text: `...e impara ${move.name}!` }
+                  ]);
+                };
+                this.onFightCancel = confirmSkip;
+              },
+              confirmSkip
+            );
+          };
+          offerLearn();
         }
       }
     ];

@@ -1,6 +1,9 @@
-// Gestione dell'installazione PWA: cattura beforeinstallprompt (Android/Chrome),
-// mostra un banner non invasivo "Installa Politicmon" e gestisce il caso iOS
-// (dove l'installazione è manuale: Condividi -> Aggiungi a Home).
+// Gestione dell'installazione PWA: cattura beforeinstallprompt (Chrome/Edge
+// Android), mostra un banner non invasivo "Installa Politicmon" e copre i casi
+// dove l'evento NON arriva mai: iOS/iPadOS (installazione manuale via
+// Condividi), browser Android senza supporto (Firefox/Samsung Internet, menu
+// del browser) e webview in-app (Instagram/FB/TikTok: installare è impossibile,
+// suggeriamo di aprire nel browser vero).
 // Il banner è HTML overlay fuori dal canvas, così non interferisce col gioco.
 
 interface BeforeInstallPromptEvent extends Event {
@@ -9,8 +12,16 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const DISMISS_KEY = "politicmon-pwa-dismissed";
+// Il "no" non è per sempre: il banner ricompare dopo 7 giorni. Prima il ✕ (o
+// un rifiuto del prompt nativo) scriveva un flag PERMANENTE: chi chiudeva una
+// volta non vedeva mai più il modo di installare l'app.
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000;
+// Fallback senza beforeinstallprompt: attesa prima di mostrare le istruzioni
+// manuali (l'evento di Chrome può arrivare qualche secondo dopo il load).
+const FALLBACK_DELAY_MS = 8000;
 
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
+let bipSeen = false;
 
 function isStandalone(): boolean {
   return (
@@ -21,22 +32,59 @@ function isStandalone(): boolean {
 }
 
 function isIos(): boolean {
-  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+  // iPadOS 13+ si spaccia per "Macintosh": lo si riconosce dal multi-touch
+  // (i Mac veri hanno maxTouchPoints 0). Senza questo check gli iPad non
+  // ricevevano MAI le istruzioni di installazione.
+  return (
+    /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+    (/macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints > 1)
+  );
 }
 
-function wasDismissed(): boolean {
+// Webview in-app (Instagram, Facebook, Messenger, TikTok, Telegram, X...):
+// niente installazione possibile, il consiglio giusto è "apri nel browser".
+function isInAppBrowser(): boolean {
+  return /instagram|fban|fbav|fb_iab|tiktok|musical_ly|telegram|twitter|; wv\)/i.test(
+    navigator.userAgent
+  );
+}
+
+function isMobile(): boolean {
+  return isIos() || /android|mobile/i.test(navigator.userAgent);
+}
+
+// true = banner da non mostrare ora (installata, snooze attivo o "mai più").
+function isSnoozed(): boolean {
   try {
-    return localStorage.getItem(DISMISS_KEY) === "1";
+    const raw = localStorage.getItem(DISMISS_KEY);
+    if (!raw) {
+      return false;
+    }
+    if (raw === "done") {
+      return true; // installata: mai più
+    }
+    // Valore legacy "1" (vecchio dismiss permanente): trattato come scaduto,
+    // così chi aveva chiuso per sbaglio rivede il banner.
+    const t = Number(raw);
+    return Number.isFinite(t) && t > 1 && Date.now() - t < SNOOZE_MS;
   } catch {
     return false;
   }
 }
 
-function markDismissed(): void {
+function snooze(): void {
   try {
-    localStorage.setItem(DISMISS_KEY, "1");
+    localStorage.setItem(DISMISS_KEY, String(Date.now()));
   } catch {
     // niente storage: il banner non riapparirà comunque nella sessione
+  }
+}
+
+function markInstalled(): void {
+  try {
+    localStorage.setItem(DISMISS_KEY, "done");
+  } catch {
+    // ignore
   }
 }
 
@@ -63,7 +111,7 @@ function buildBanner(message: string, actionLabel: string | null, onAction: (() 
   close.setAttribute("aria-label", "Chiudi");
   close.textContent = "✕";
   close.addEventListener("click", () => {
-    markDismissed();
+    snooze();
     bar.remove();
   });
   actions.appendChild(close);
@@ -77,17 +125,34 @@ function showBanner(bar: HTMLElement): void {
   requestAnimationFrame(() => bar.classList.add("pwa-banner-show"));
 }
 
+// Istruzioni manuali per la piattaforma corrente (quando beforeinstallprompt
+// non esiste o non è arrivato).
+function fallbackMessage(): string | null {
+  if (isInAppBrowser()) {
+    return "Per installare l'app apri politicmon.vercel.app nel browser (Chrome o Safari).";
+  }
+  if (isIos()) {
+    return "Per installare: tocca Condividi e poi 'Aggiungi a Home'.";
+  }
+  if (isMobile()) {
+    // Android senza beforeinstallprompt: Firefox, Samsung Internet, ecc.
+    return "Per installare: menu del browser (⋮) → 'Aggiungi a schermata Home' o 'Installa'.";
+  }
+  return null; // desktop: niente banner, l'icona di install sta nella barra URL
+}
+
 // Da chiamare una volta all'avvio.
 export function initPwaInstall(): void {
-  if (isStandalone() || wasDismissed()) {
-    return; // già installata o l'utente non vuole
+  if (isStandalone()) {
+    return; // già installata
   }
 
   // Android/Chrome: l'evento arriva quando l'app è installabile.
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
+    bipSeen = true;
     deferredPrompt = event as BeforeInstallPromptEvent;
-    if (wasDismissed()) {
+    if (isSnoozed()) {
       return;
     }
     const bar = buildBanner(
@@ -101,8 +166,11 @@ export function initPwaInstall(): void {
         bar.remove();
         await prompt.prompt();
         const choice = await prompt.userChoice;
-        if (choice.outcome === "accepted" || choice.outcome === "dismissed") {
-          markDismissed();
+        if (choice.outcome === "accepted") {
+          markInstalled();
+        } else {
+          // Rifiuto del prompt nativo: pausa, NON "mai più".
+          snooze();
         }
         deferredPrompt = null;
       }
@@ -112,25 +180,25 @@ export function initPwaInstall(): void {
 
   // Una volta installata, niente più banner.
   window.addEventListener("appinstalled", () => {
-    markDismissed();
+    markInstalled();
     document.getElementById("pwa-banner")?.remove();
   });
 
-  // iOS: nessun beforeinstallprompt. Se è Safari su iPhone e non standalone,
-  // mostra le istruzioni manuali dopo qualche secondo di gioco.
-  if (isIos() && !isStandalone()) {
-    window.setTimeout(() => {
-      if (wasDismissed() || isStandalone()) {
-        return;
-      }
-      const bar = buildBanner(
-        "Per installare: tocca Condividi e poi 'Aggiungi a Home'.",
-        null,
-        null
-      );
-      showBanner(bar);
-    }, 6000);
-  }
+  // Fallback universale: se dopo qualche secondo beforeinstallprompt non è
+  // arrivato (iOS, Firefox/Samsung su Android, webview in-app), mostra le
+  // istruzioni manuali della piattaforma. Prima esisteva solo per iOS via
+  // user-agent stretto: iPad "Macintosh" e Android non-Chrome restavano senza
+  // NESSUNA indicazione.
+  window.setTimeout(() => {
+    if (bipSeen || isStandalone() || isSnoozed()) {
+      return;
+    }
+    const message = fallbackMessage();
+    if (!message) {
+      return;
+    }
+    showBanner(buildBanner(message, null, null));
+  }, FALLBACK_DELAY_MS);
 }
 
 // Espone se c'è un prompt pendente (utile per un eventuale pulsante nel menu).
@@ -146,5 +214,5 @@ export async function promptInstall(): Promise<void> {
   await prompt.prompt();
   await prompt.userChoice;
   deferredPrompt = null;
-  markDismissed();
+  snooze();
 }

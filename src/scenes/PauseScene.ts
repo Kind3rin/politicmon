@@ -333,6 +333,9 @@ export class PauseScene implements Scene {
         ? "CAMPIONE DI PALAZZOPOLI"
         : "GIOVANE PROMESSA";
     screen.text("TESSERA DEL CANDIDATO", 24, 18, INK);
+    // Hint di chiusura in alto a destra: libera la coda della card (dove la
+    // versione + i tag COPPA/HARD si accavallavano col vecchio footer a fondo).
+    screen.textRight("A/B: CHIUDI", VIEW_W - 24, 18, GREY);
     screen.rect(22, 28, VIEW_W - 44, 1, GREY);
     screen.text(title, 24, 34, INK);
     screen.text(`FONDI: ${this.state.money}€`, 24, 47, INK);
@@ -383,18 +386,23 @@ export class PauseScene implements Scene {
       );
     }
     // Record duelli PvP (titolo PORTAVOCE a 10+ vittorie) + versione del gioco.
+    // Cursore Y progressivo per la coda della card: extraLine (COPPA/HARD) è
+    // condizionale, quindi la versione e il footer NON possono stare a y fisse
+    // (prima la versione a y159 finiva sopra "A/B: chiudi" a y158 quando
+    // extraLine era presente — comune con coppaWins>0 o hardMode).
     const duelTag = this.state.duelWins >= 10 ? "  ★PORTAVOCE" : "";
     screen.text(`DUELLI PVP: ${this.state.duelWins}V/${this.state.duelLosses}P${duelTag}`.slice(0, 33), 24, 141, INK);
+    let cy = 151;
     // Titolo COPPA DELLE POLTRONE + tag MODALITÀ DIFFICILE (immutabile).
     const coppaTag = this.state.coppaWins > 0 ? `★PORTAVOCE DEL POPOLO (${this.state.coppaWins})` : "";
     const hardTag = this.state.hardMode ? "* HARD" : "";
     const extraLine = [coppaTag, hardTag].filter(Boolean).join("   ");
     if (extraLine) {
-      screen.text(extraLine.slice(0, 33), 24, 150, "#e8c84a");
-      screen.text(versionLabel(this.state), 24, 159, GREY);
-    } else {
-      screen.text(versionLabel(this.state), 24, 150, GREY);
+      screen.text(extraLine.slice(0, 33), 24, cy, "#e8c84a");
+      cy += 9;
     }
-    screen.text("A/B: chiudi", 24, VIEW_H - 22, GREY);
+    // Versione: ultima riga della card (il footer di chiusura ora è in alto a
+    // destra, così la coda non trabocca oltre il pannello).
+    screen.text(versionLabel(this.state), 24, cy, GREY);
   }
 }

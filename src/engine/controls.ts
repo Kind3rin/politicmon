@@ -6,11 +6,14 @@ export type ControlMode = "stick" | "dpad";
 
 const KEY = "politicmon-control";
 
+// DEFAULT = d-pad a croce (le frecce si controllano meglio del joystick su
+// touch). Chi ha scelto esplicitamente in passato conserva la sua preferenza:
+// leggiamo il valore salvato, e SOLO in sua assenza cadiamo su "dpad".
 export function loadControlMode(): ControlMode {
   try {
-    return localStorage.getItem(KEY) === "dpad" ? "dpad" : "stick";
+    return localStorage.getItem(KEY) === "stick" ? "stick" : "dpad";
   } catch {
-    return "stick";
+    return "dpad";
   }
 }
 
@@ -29,7 +32,7 @@ export function setControlMode(mode: ControlMode): void {
 }
 
 export function toggleControlMode(): ControlMode {
-  const next: ControlMode = loadControlMode() === "stick" ? "dpad" : "stick";
+  const next: ControlMode = loadControlMode() === "dpad" ? "stick" : "dpad";
   setControlMode(next);
   return next;
 }

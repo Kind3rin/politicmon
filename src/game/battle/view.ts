@@ -450,7 +450,7 @@ export interface CombatantBoxOpts {
   nameInset?: number; // sposta il nome a destra per fare spazio a un badge
 }
 
-export const FOE_BOX: CombatantBoxOpts = { x: 6, y: 8, w: 104, h: 30, hpY: 17, hpW: 52, showHpText: false };
+export const FOE_BOX: CombatantBoxOpts = { x: 6, y: 8, w: 104, h: 30, hpY: 17, hpW: 46, showHpText: false };
 export const PLAYER_BOX: CombatantBoxOpts = { x: 126, y: 78, w: 110, h: 38, hpY: 16, hpW: 76, showHpText: true };
 
 // Box HP di un combattente (fusione di drawFoeBox/drawPlayerBox). La barra EXP

@@ -151,7 +151,7 @@ void preloadCoreSprites().finally(() => {
 
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
 // Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
-loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 8);
+loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 6);
 
 // Icone-tipo (type-badge): collega il loader async di assets.ts a poltypes.ts.
 setTypeIconLoader(getSpriteImage);

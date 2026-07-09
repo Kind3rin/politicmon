@@ -2075,8 +2075,11 @@ export class BattleScene implements Scene {
       screen.text(clipToWidth(labels[i], colW - 8), cx + 6, cy, INK);
     }
     // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
-    screen.text("AZIONE?", 16, y + 8, INK);
-    screen.text(`CONSENSO ${this.state.sondaggi}%`, 8, y + 21, "#7ad858");
+    // Ancorati al pannello testo (VIEW_H-44), non al box menu: con la cornice
+    // chiara il testo che sborda sopra il bordo si nota subito.
+    const panelY = VIEW_H - 44;
+    screen.text("AZIONE?", 12, panelY + 9, INK);
+    screen.text(`CONSENSO ${this.state.sondaggi}%`, 12, panelY + 22, "#7ad858");
   }
 }
 

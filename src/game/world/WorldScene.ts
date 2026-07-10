@@ -3219,8 +3219,12 @@ export class WorldScene implements Scene {
           if (npc.nameplate) {
             const label = npc.nameplate;
             const w = label.length * 6 + 4;
-            screen.rect(nx + 8 - w / 2, ny - 9, w, 8, "rgba(16,20,31,0.85)");
-            screen.text(label, nx + 8 - w / 2 + 2, ny - 8, "#f0c040");
+            // X clampata ai bordi schermo (come il cartello LEGGENDARIO): quando
+            // l'NPC è vicino al bordo, la targhetta non sfora né finisce sotto
+            // l'HUD SOND (angolo alto-destra).
+            const lx = Math.max(2, Math.min(VIEW_W - w - 2, nx + 8 - w / 2));
+            screen.rect(lx, ny - 9, w, 8, "rgba(16,20,31,0.85)");
+            screen.text(label, lx + 2, ny - 8, "#f0c040");
           }
           if (exclaim) {
             screen.panel(nx + 2, ny - 13, 12, 13);
@@ -3434,7 +3438,16 @@ export class WorldScene implements Scene {
     // mappa proprio dove sei. La semitrasparenza fissa rendeva SOND illeggibile.
     const playerScreenX = Math.round(playerPx - camX);
     const playerScreenY = Math.round(playerPy) - camY;
-    const behindHud = playerScreenX > VIEW_W - 90 && playerScreenY < 44;
+    const inHudArea = (sx: number, sy: number) => sx > VIEW_W - 90 && sy < 44;
+    // L'HUD sfuma se il player OPPURE un NPC con targhetta/aura (LUCA, un
+    // LEGGENDARIO) finisce nell'angolo alto-destra: la loro etichetta non resta
+    // mezza nascosta sotto SOND.
+    const npcUnderHud = this.npcs.some(
+      (n) =>
+        (n.nameplate || (n.legendary && !this.state.flags[n.legendary.flag])) &&
+        inHudArea(Math.round(n.dispX) - camX, Math.round(n.dispY) - camY)
+    );
+    const behindHud = inHudArea(playerScreenX, playerScreenY) || npcUnderHud;
     const hudAlpha = behindHud ? 0.35 : 1;
     let hudBottom = 2;
     if (this.state.party.length > 0) {

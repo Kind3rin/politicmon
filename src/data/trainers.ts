@@ -18,6 +18,90 @@ export interface TrainerDef {
 }
 
 export const TRAINERS: Record<string, TrainerDef> = {
+  "algoritmo-sovrano": {
+    id: "algoritmo-sovrano", name: "L'ALGORITMO SOVRANO", pal: "boss",
+    team: [
+      ["telecrate", 55, ["algoritmo", "editoriale", "smentita_flash", "exit_poll"]],
+      ["referendodo", 55, ["dossier", "voto_disgiunto", "quorum", "tsunamitour"]],
+      ["pontimax", 56, ["grafico", "spread", "pienipoteri", "ruspa"]],
+      ["salisound", 57, ["diretta_social", "festival", "editoriale", "scissione"]]
+    ],
+    intro: ["HO GIÀ CALCOLATO IL RISULTATO.", "ORA DEVO SOLTANTO CONVINCERE I DATI."],
+    defeat: ["ERRORE DI PREVISIONE.", "LO CHIAMEREMO RICONTEGGIO UMANO."],
+    money: 3500, reward: { itemId: "schedona", qty: 3 }
+  },
+  "campo-debate": {
+    id: "campo-debate", name: "MODERATORE DI PIAZZA", pal: "journalist",
+    team: [["mediocrate", 49], ["contemorfo", 50]],
+    intro: ["DUE MINUTI A TESTA.", "IO, PER SICUREZZA, PARLO PER TUTTI."],
+    defeat: ["IL TEMPO È FINITO. SOPRATTUTTO IL MIO."],
+    money: 1200, reward: { itemId: "schedona", qty: 1 }
+  },
+  "campo-claque": {
+    id: "campo-claque", name: "CAPO CLAQUE UNITARIA", pal: "influencer",
+    team: [["vannaccix", 48], ["bojoon", 49], ["tajanide", 49]],
+    intro: ["APPLAUDIAMO TUTTI INSIEME.", "SU CHI APPLAUDIRE, PERÒ, DECIDO IO."],
+    defeat: ["APPLAUSO FINALE. ERA NEL CONTRATTO."],
+    money: 1100, reward: { itemId: "caffe", qty: 3 }
+  },
+  "campo-photographer": {
+    id: "campo-photographer", name: "FOTOGRAFO UFFICIALE", pal: "journalist",
+    team: [
+      ["mediocrate", 50, ["diretta_social", "festival", "smentita_flash", "exit_poll"]],
+      ["gianimago", 51, ["exit_poll", "voto_disgiunto", "piazza_aperta", "fiducia"]],
+      ["salistrobo", 52, ["festival", "diretta_social", "giravolta", "smentita_flash"]]
+    ],
+    intro: ["STRINGETEVI. ANCORA. ANCORA UN PO'.", "SE RESTA FUORI QUALCUNO, LO AGGIUNGIAMO IN POST."],
+    defeat: ["PERFETTA.", "NESSUNO È D'ACCORDO, MA TUTTI SONO A FUOCO."],
+    money: 1800, reward: { itemId: "schedona", qty: 1 }
+  },
+  "futuro-anteriore": {
+    id: "futuro-anteriore", name: "SEGRETARIO DEL DOMANI", pal: "boss",
+    team: [
+      ["vannaccix", 50, ["radici", "mondocontrario", "giravolta", "fiducia"]],
+      ["futurorso", 52, ["radici", "mondocontrario", "staisereno", "quorum"]],
+      ["mediocrate", 50]
+    ],
+    intro: ["IL FUTURO NON ARRIVA.", "SI METTE IN FORMAZIONE. OGGI."],
+    defeat: ["IL DOMANI È RINVIATO.", "PROVVISORIAMENTE IN VIA DEFINITIVA."],
+    money: 2200, reward: { itemId: "tessera_futuro", qty: 1 }
+  },
+  "partner-perfetto": {
+    id: "partner-perfetto", name: "IL PARTNER PERFETTO", pal: "boss",
+    team: [
+      ["macronfox", 52, ["diretta_social", "voto_disgiunto", "exit_poll", "smentita_flash"]],
+      ["ursulax", 53, ["decreto", "autonomia", "fiducia", "quorum"], "gilet"],
+      ["trumpon", 54, ["festival", "comizio", "piazza_aperta", "mondocontrario"]]
+    ],
+    intro: ["UN SELFIE, TRE SOVRANITÀ.", "SORRIDI: LA CLAUSOLA DI RECESSO È GIÀ NEL FILTRO."],
+    defeat: ["LA DIPLOMAZIA RESISTE.", "LA CLIP, PURTROPPO, È GIÀ VIRALE."],
+    money: 2600, reward: { itemId: "schedona", qty: 2 }
+  },
+  "district-nord": {
+    id: "district-nord", name: "PRESIDENTE DI CATEGORIA", pal: "aide",
+    team: [["crosettank", 52], ["futurorso", 53], ["nordiodo", 54]],
+    intro: ["PRODUCIAMO TUTTO.", "SOPRATTUTTO TAVOLI PERMANENTI."], defeat: ["IL TAVOLO RESTA.", "CAMBIANO SOLO I COMMENSALI."], money: 1500
+  },
+  "district-centro": {
+    id: "district-centro", name: "OPINIONISTA DEFINITIVO", pal: "journalist",
+    team: [["gianimago", 52], ["mediocrate", 53], ["calendrone", 54]],
+    intro: ["NON HO DATI.", "MA HO GIÀ LA SINTESI DEFINITIVA."], defeat: ["CAMBIO OPINIONE.", "ERA GIÀ NELLA SCALETTA."], money: 1500
+  },
+  "district-sud": {
+    id: "district-sud", name: "COMMISSARIO ETERNO", pal: "boss",
+    team: [["campocorno", 52], ["salvinator", 53], ["crosettank", 54]],
+    intro: ["LA PRIMA PIETRA È PRONTA.", "IL PROGETTO ARRIVA NEL PROSSIMO MANDATO."], defeat: ["TAGLIO IL NASTRO DELLA SCONFITTA."], money: 1500
+  },
+  "district-isole": {
+    id: "district-isole", name: "L'INAUGURATORE", pal: "aide",
+    team: [["referendodo", 52], ["generorso", 53], ["salistrobo", 54]],
+    intro: ["IL PLASTICO FUNZIONA.", "IL TERRITORIO FA RITARDO."], defeat: ["INAUGURO IL RINVIO."], money: 1500
+  },
+  "district-feed": {
+    id: "district-feed", name: "L'ALGORITMO CANDIDATO", pal: "influencer",
+    team: [["salisound", 53], ["gianimago", 53], ["nordiodo", 54]],
+    intro: ["TI MOSTRO LA PROMESSA CHE TI PIACE GIÀ.", "SCORRI PER ACCETTARE."], defeat: ["RISULTATO NON CONSIGLIATO DAL FEED."], money: 1600
+  },
   aide: {
     id: "aide", name: "PORTABORSE PIERO", pal: "aide",
     team: [["salvinott", 4], ["salvinott", 5]],

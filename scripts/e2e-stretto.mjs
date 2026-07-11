@@ -22,7 +22,7 @@ const tap = async (code, holdMs = 500) => {
 // Legge la posizione dal SAVE (il gioco autosalva a ogni cambio mappa via
 // loadMap). Dopo un warp, il save riflette la mappa nuova.
 const pos = () => page.evaluate(() => {
-  const raw = localStorage.getItem("politicmon-save-v13__s0");
+  const raw = localStorage.getItem("politicmon-save-v14__s0");
   if (!raw) return null;
   const st = JSON.parse(raw);
   return { map: st.pos.mapId, x: st.pos.x, y: st.pos.y, veh: st.vehicle };
@@ -45,7 +45,7 @@ await page.evaluate(() => {
     hardMode: false, coppaWins: 0, boostExpBattles: 0, boostMoneyBattles: 0, boostSondBattles: 0,
     reduceEffects: false, reduceEffectsSet: true, monumentLevel: 0
   };
-  localStorage.setItem("politicmon-save-v13__s0", JSON.stringify(st));
+  localStorage.setItem("politicmon-save-v14__s0", JSON.stringify(st));
   localStorage.setItem("politicmon-active-slot", "0");
   localStorage.setItem("politicmon-nick", "TESTER");
 });

@@ -6,7 +6,7 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
 import { hasMinistro, shopPrice } from "../game/governo";
-import { Menu, MessageBox, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader, Menu, MessageBox, wrapText, GREY, INK } from "../ui/widgets";
 
 export class ShopScene implements Scene {
   private menu: Menu;
@@ -82,9 +82,8 @@ export class ShopScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e4434");
-    screen.text("DISCOUNT ELETTORALE", 8, 6, PAPER);
-    screen.textRight(`${this.state.money}€`, VIEW_W - 8, 6, "#e8c84a");
+    screen.clear("#e5eee2");
+    drawScreenHeader(screen, "DISCOUNT ELETTORALE", `${this.state.money}€`);
     const MAX_VIS = 6; // finestra scorrevole: lascia spazio al pannello descrizione
     this.menu.draw(screen, 10, 20, VIEW_W - 20, 13, MAX_VIS);
     const item = ITEMS[this.itemIds[this.menu.index]];
@@ -99,7 +98,7 @@ export class ShopScene implements Scene {
       const lines = wrapText(item.desc, 30);
       const shown = Math.min(4, lines.length);
       const panelH = Math.max(30, 8 + shown * 9);
-      screen.panel(10, y, VIEW_W - 20, panelH);
+      screen.panel(10, y, VIEW_W - 20, panelH, "card");
       drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
       for (let i = 0; i < shown; i += 1) {
         screen.text(lines[i], 44, y + 5 + i * 9, INK);

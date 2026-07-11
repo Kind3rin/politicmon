@@ -57,10 +57,13 @@ for (let i = 0; i < speciesStarts.length; i += 1) {
     if (!speciesIds.has(target)) {
       problems.push(`${id}: evolves to missing species '${target}'`);
     }
-    if (!artIds.has(target)) {
-      problems.push(`${id}: evolution target '${target}' has no MONSTER_ART fallback`);
+    const pngExists = pngIds.has(target) && existsSync(join(root, "public", "sprites", "monsters", `${target}.png`));
+    // PixelLab reboot: un PNG registrato e presente è una sorgente completa.
+    // Il fallback testuale è obbligatorio solo finché la migrazione non esiste.
+    if (!artIds.has(target) && !pngExists) {
+      problems.push(`${id}: evolution target '${target}' has neither MONSTER_ART nor PixelLab PNG`);
     }
-    if (pngIds.has(target) && !existsSync(join(root, "public", "sprites", "monsters", `${target}.png`))) {
+    if (pngIds.has(target) && !pngExists) {
       problems.push(`${id}: evolution target '${target}' is in MONSTERS_WITH_PNG but PNG is missing`);
     }
     if (/level:\s*\d+/.test(rule)) {

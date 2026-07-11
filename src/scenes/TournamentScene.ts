@@ -5,6 +5,7 @@ import type { GameState } from "../game/state";
 import {
   playerOpponent, roundLabel, COPPA_PLAYER_NAME, COPPA_TITLE, type TournamentState
 } from "../game/tournament";
+import type { CoppaRule } from "../game/tournament";
 import { audio } from "../engine/audio";
 import { GREY, INK, PAPER } from "../ui/widgets";
 
@@ -21,7 +22,9 @@ export class TournamentScene implements Scene {
     private input: Input,
     private state: GameState,
     private tourney: TournamentState,
-    private next: () => void
+    private next: () => void,
+    private abort: () => void,
+    private rule?: CoppaRule
   ) {}
 
   update(dt: number): void {
@@ -38,6 +41,7 @@ export class TournamentScene implements Scene {
       // lasciare uno stato ambiguo, trattiamo B come "esci dal torneo".
       audio.cancel();
       this.stack.pop();
+      this.abort();
       return;
     }
   }
@@ -47,12 +51,13 @@ export class TournamentScene implements Scene {
     screen.panel(10, 8, VIEW_W - 20, VIEW_H - 16);
     screen.textCenter("COPPA DELLE POLTRONE", VIEW_W / 2, 14, "#f4d34a");
     screen.textCenter(roundLabel(this.tourney), VIEW_W / 2, 24, PAPER);
-    screen.rect(18, 34, VIEW_W - 36, 1, GREY);
+    if (this.rule) screen.textCenter(`REGOLA: ${this.rule.name}`, VIEW_W / 2, 31, "#7ad858");
+    screen.rect(18, 38, VIEW_W - 36, 1, GREY);
 
     // Elenco dei partecipanti ancora in gara. Il giocatore è evidenziato.
     const entries = this.tourney.alive;
     const opp = playerOpponent(this.tourney);
-    let y = 40;
+    let y = 43;
     screen.text("IN GARA:", 18, y, INK);
     y += 12;
     const col2 = VIEW_W / 2 + 4;

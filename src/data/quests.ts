@@ -1,4 +1,5 @@
 import type { GameState } from "../game/state";
+import type { BranchingQuestDef } from "../game/questFlow";
 
 export interface QuestDef {
   id: string;
@@ -9,6 +10,7 @@ export interface QuestDef {
   isDone: (state: GameState) => boolean;
   side?: boolean; // missione secondaria: non guida l'HUD "prossimo passo"
   target?: { mapId: string; x: number; y: number }; // bersaglio per la modalità guidata
+  flow?: BranchingQuestDef; // opzionale: le quest storiche restano lineari e compatibili
 }
 
 export const QUESTS: QuestDef[] = [
@@ -151,6 +153,141 @@ export const QUESTS: QuestDef[] = [
     step: "Sconfiggi LA COMMISSIONE a BRUXELLES.",
     isDone: (s) => Boolean(s.flags["ue-beaten"]),
     target: { mapId: "bruxelles", x: 12, y: 5 }
+  },
+  {
+    id: "atto3-campo-arrivo",
+    title: "LA FOTO DEL CAMPO",
+    desc: "Dopo Bruxelles, una coalizione impossibile ti aspetta per la foto ufficiale.",
+    hint: "A sud-est di BRUXELLES trovi il passaggio per CAMPO LARGO.",
+    step: "Raggiungi CAMPO LARGO.",
+    isDone: (s) => Boolean(s.flags["atto3Started"]),
+    target: { mapId: "bruxelles", x: 19, y: 12 }
+  },
+  {
+    id: "atto3-foto-scelta",
+    title: "TUTTI NEL FRAME",
+    desc: "Conosci i tre candidati e scegli i due nomi della prima coalizione.",
+    hint: "Parla con tutti nel campo. Poi entra nel RETROPALCO a est e torna dal fotografo.",
+    step: "Componi la coalizione e decidi la foto.",
+    isDone: (s) => Boolean(s.flags["campo-photo-choice-complete"]),
+    target: { mapId: "campo_largo", x: 17, y: 12 }
+  },
+  {
+    id: "atto3-foto-finale",
+    title: "LO SCATTO UFFICIALE",
+    desc: "Supera il dibattito d'inquadratura e conquista la foto finale.",
+    hint: "Affronta il MODERATORE nel campo, poi torna dal FOTOGRAFO sul palco a nord.",
+    step: "Sconfiggi il FOTOGRAFO UFFICIALE.",
+    isDone: (s) => Boolean(s.flags["campo-photo-complete"]),
+    target: { mapId: "campo_largo", x: 10, y: 2 }
+  },
+  {
+    id: "atto3-futuro-arrivo",
+    title: "IL PARTITO CHE NON C'ERA",
+    desc: "FUTURO ANTERIORE inaugura oggi il partito definitivo di domani.",
+    hint: "Dal lato est di CAMPO LARGO raggiungi la nuova convention.",
+    step: "Raggiungi FUTURO ANTERIORE.",
+    isDone: (s) => Boolean(s.flags["future-badge-received"]),
+    target: { mapId: "campo_largo", x: 20, y: 8 }
+  },
+  {
+    id: "atto3-futuro-scelta",
+    title: "DUE MANIFESTI E UNA LINEA",
+    desc: "Ruota i manifesti e scegli ALLEANZA, DISTANZA o CONTRASTO.",
+    hint: "Aziona entrambe le leve nella SEDE DEL DOMANI; il tavolo centrale mostrerà conseguenze e rischi.",
+    step: "Apri il corridoio e registra la scelta.",
+    isDone: (s) => Boolean(s.flags["future-choice-complete"]),
+    target: { mapId: "futuro_sede", x: 8, y: 3 }
+  },
+  {
+    id: "atto3-futuro-boss",
+    title: "IL SEGRETARIO DEL DOMANI",
+    desc: "Affronta FUTURORSO e chiudi l'assemblea del partito che non c'era.",
+    hint: "Dopo la scelta, il palco in fondo alla SEDE DEL DOMANI è aperto.",
+    step: "Sconfiggi il SEGRETARIO DEL DOMANI.",
+    isDone: (s) => Boolean(s.flags.futureResolved),
+    target: { mapId: "futuro_sede", x: 8, y: 1 }
+  },
+  {
+    id: "atto3-diplomacy-arrivo",
+    title: "TEMPTATION DIPLOMACY",
+    desc: "Un vertice internazionale è diventato un reality diplomatico.",
+    hint: "Dalla piazza FUTURO ANTERIORE parte la navetta per l'HOTEL DIPLOMATICO.",
+    step: "Fai il check-in al vertice.",
+    isDone: (s) => Boolean(s.flags["diplomacy-checked-in"]),
+    target: { mapId: "futuro_piazza", x: 2, y: 8 }
+  },
+  {
+    id: "atto3-diplomacy-scelta",
+    title: "TRE PASS, UNA SCELTA",
+    desc: "Valuta FEDELTÀ, AUTONOMIA e CONSENSO prima della diretta.",
+    hint: "Le tre stanze dell'hotel mostrano fondi, SONDAGGI e LINEE ROSSE prima della conferma.",
+    step: "Registra la scelta diplomatica.",
+    isDone: (s) => Boolean(s.flags["diplomacy-choice-complete"]),
+    target: { mapId: "diplomacy_lobby", x: 9, y: 3 }
+  },
+  {
+    id: "atto3-diplomacy-boss",
+    title: "IL PARTNER PERFETTO",
+    desc: "La terrazza è in diretta. Chiudi il vertice senza farti ritagliare dal selfie.",
+    hint: "Dopo la scelta, entra nella TERRAZZA-STUDIO dall'ala destra dell'hotel.",
+    step: "Sconfiggi IL PARTNER PERFETTO.",
+    isDone: (s) => Boolean(s.flags.diplomacyComplete),
+    target: { mapId: "diplomacy_terrace", x: 10, y: 2 }
+  },
+  {
+    id: "side-genova-techno", side: true,
+    title: "GENOVA TECHNO",
+    desc: "Segui sei battute sul maxischermo. Sbagliare cambia il premio, non blocca nulla.",
+    hint: "Dopo Temptation Diplomacy, dall'ala est dell'hotel raggiungi il set. RIDUCI EFFETTI elimina il timer.",
+    step: "Completa il set GENOVA TECHNO.",
+    isDone: (s) => Boolean(s.flags["genova-techno-complete"]),
+    target: { mapId: "diplomacy_lobby", x: 18, y: 10 }
+  },
+  {
+    id: "atto3-tour-feed",
+    title: "IL TOUR DEI CINQUE COLLEGI",
+    desc: "Consegna cinque dossier completando due azioni in ogni collegio, nell'ordine che preferisci.",
+    hint: "Dall'ala ovest dell'HOTEL DIPLOMATICO raggiungi l'hub TOUR DEL FEED.",
+    step: "Completa NORD, CENTRO, SUD, ISOLE e FEED.",
+    isDone: (s) => s.election.phase === "ready" || s.election.phase === "locked" || s.election.phase === "resolved",
+    target: { mapId: "diplomacy_lobby", x: 1, y: 10 }
+  },
+  ...(["nord", "centro", "sud", "isole", "feed"] as const).map((id) => ({
+    id: `side-collegio-${id}`,
+    side: true as const,
+    title: `DOSSIER ${id.toUpperCase()}`,
+    desc: "Scegli due azioni: DIBATTITO, PROMESSA o SOSTEGNO. La terza resterà chiusa.",
+    hint: "Nel TOUR DEL FEED, entra nel collegio e parla al coordinatore locale.",
+    step: `Completa il collegio ${id.toUpperCase()}.`,
+    isDone: (s: GameState) => Boolean(s.flags[`district-complete:${id}`])
+  })),
+  {
+    id: "atto3-palazzo-feed",
+    title: "PALAZZO DEI FEED",
+    desc: "Archivia algoritmo, fact-check, talk show e silenzio stampa prima della diretta.",
+    hint: "Dal TOUR DEL FEED entra nel Palazzo. Ogni stanza ricorda due conseguenze già decise.",
+    step: "Completa i quattro archivi del Palazzo.",
+    isDone: (s) => Boolean(s.flags.palaceRoomsComplete),
+    target: { mapId: "tour_feed", x: 11, y: 1 }
+  },
+  {
+    id: "atto3-election-night",
+    title: "ELECTION NIGHT",
+    desc: "Affronta L'ALGORITMO SOVRANO e segui lo scrutinio dei cinque collegi.",
+    hint: "Con i quattro archivi completi, entra nello STUDIO ELETTORALE del Palazzo dei Feed.",
+    step: "Avvia la diretta e completa lo scrutinio.",
+    isDone: (s) => Boolean(s.flags["election-night-complete"]),
+    target: { mapId: "palazzo_feed", x: 9, y: 1 }
+  },
+  {
+    id: "atto3-epilogo",
+    title: "IL GIORNO DOPO",
+    desc: "Guarda l'epilogo della coalizione, i crediti e gli sblocchi post-game.",
+    hint: "Dopo lo scrutinio resta nello STUDIO ELETTORALE e continua fino alla terrazza.",
+    step: "Completa l'epilogo di Atto 3.",
+    isDone: (s) => Boolean(s.flags.atto3Complete),
+    target: { mapId: "palazzo_feed_studio", x: 7, y: 2 }
   },
   {
     id: "side-encore", side: true,

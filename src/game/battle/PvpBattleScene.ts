@@ -20,7 +20,7 @@ import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { sceneImage } from "../../engine/assets";
 import type { GameState } from "../state";
-import { speciesOf, type Monster } from "../monster";
+import { abilityOf, speciesOf, type Monster } from "../monster";
 import { statName } from "./sim";
 import {
   applyEvent, applySwitch, aliveCount, makeDuelSim, otherSide, resolveTurn, usableMoves, type DuelSim
@@ -122,6 +122,9 @@ export class PvpBattleScene implements Scene {
     this.push({ text: "Si duella a squadre fresche: HP e PP al massimo. Nessun premio, solo gloria." });
     this.push({ text: `${nick} manda in campo ${speciesOf(this.theirs.active.mon).name}!` });
     this.push({ text: `Vai, ${speciesOf(this.mine.active.mon).name}!` });
+    if (abilityOf(this.theirs.active.mon)?.id === "tabularasa" || abilityOf(this.mine.active.mon)?.id === "tabularasa") {
+      this.push({ text: "TABULA RASA azzera ogni modifica alle statistiche!" });
+    }
   }
 
   onEnter(): void {
@@ -315,6 +318,9 @@ export class PvpBattleScene implements Scene {
           }
           break;
         }
+        case "stageReset":
+          this.push({ text: `${nameOf(ev.side)} fa TABULA RASA: ogni modifica è azzerata!`, run: apply });
+          break;
         case "move":
           this.push({ text: `${nameOf(ev.side)} usa ${MOVES[ev.moveId]?.name ?? "???"}!`, run: apply });
           break;
@@ -354,6 +360,9 @@ export class PvpBattleScene implements Scene {
           });
           if (ev.crit) {
             this.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
+          }
+          if (ev.pollEstimate) {
+            this.push({ text: `FORCHETTA SONDAGGI: STIMA ${ev.pollEstimate === "high" ? "ALTA" : "BASSA"}!` });
           }
           if (ev.typeMult === 0) {
             this.push({ text: "Non ha alcun effetto..." });

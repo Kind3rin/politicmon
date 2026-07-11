@@ -3,10 +3,125 @@ import { CHAR_W, LINE_H } from "../engine/font";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { audio } from "../engine/audio";
 import { getSpriteImage } from "../engine/assets";
+import type { CoalitionChannel, MembershipStatus } from "../game/coalition";
+import type { DistrictId, DistrictState } from "../game/election";
 
 export const INK = "#10141f";
 export const PAPER = "#f8f8f0";
 export const GREY = "#9aa0b8";
+
+export interface AllyCardView {
+  readonly name: string;
+  readonly tag: string;
+  readonly bonusLabel: string;
+  readonly malusLabel: string;
+  readonly lineRedLabel: string;
+  readonly status: MembershipStatus | "candidate" | "broken";
+  readonly selected?: boolean;
+}
+
+export function drawLineRedChip(screen: Screen, x: number, y: number, label: string, active = false): void {
+  const w = Math.max(32, Math.min(112, 14 + clipToWidth(label, 96).length * CHAR_W));
+  const bg = active ? "#ffe0d5" : "#fff0bd";
+  const border = active ? "#bd3d35" : "#b77718";
+  screen.rect(x + 2, y, w - 4, 12, border);
+  screen.rect(x, y + 2, w, 8, border);
+  screen.rect(x + 2, y + 2, w - 4, 8, bg);
+  screen.text(`! ${clipToWidth(label, w - 18)}`, x + 6, y + 3, active ? "#8f251f" : "#70470e");
+}
+
+export function drawAllyCard(screen: Screen, x: number, y: number, w: number, view: AllyCardView): void {
+  const h = 42;
+  screen.panel(x, y, w, h, "card");
+  if (view.selected) {
+    screen.frame(x + 1, y + 1, w - 2, h - 2, "#e6b944");
+    screen.rect(x + 4, y + 4, 4, h - 8, "#e6b944");
+  }
+  const statusLabel = view.status === "candidate" ? "LIBERO" : view.status === "broken" ? "ROTTO" : view.status.toUpperCase();
+  screen.text(clipToWidth(view.name, w - 78), x + 9, y + 8, INK);
+  screen.textRight(clipToWidth(`${view.tag} ${statusLabel}`, 66), x + w - 8, y + 8, view.status === "broken" ? "#bd3d35" : "#497b65");
+  screen.text(clipToWidth(`+ ${view.bonusLabel}`, Math.floor((w - 22) / 2)), x + 9, y + 20, "#26745d");
+  screen.textRight(clipToWidth(`- ${view.malusLabel}`, Math.floor((w - 22) / 2)), x + w - 8, y + 20, "#a0443e");
+  drawLineRedChip(screen, x + 8, y + 28, view.lineRedLabel, view.status === "strained" || view.status === "broken");
+}
+
+export function drawConsensusBar(screen: Screen, x: number, y: number, w: number, value: number, label = "CONSENSO"): void {
+  const safe = Math.max(0, Math.min(100, Math.round(value)));
+  screen.text(clipToWidth(label, w - 48), x, y, INK);
+  screen.textRight(`${safe}%`, x + w, y, safe > 50 ? "#26745d" : safe === 50 ? "#9a6716" : "#a0443e");
+  screen.rect(x, y + 11, w, 7, "#17243d");
+  screen.rect(x + 1, y + 12, w - 2, 5, "#d5d8dd");
+  screen.rect(x + 1, y + 12, Math.round((w - 2) * safe / 100), 5, safe > 50 ? "#55a889" : safe === 50 ? "#e6b944" : "#d76458");
+  const thresholdX = x + 1 + Math.round((w - 2) * 0.5);
+  screen.rect(thresholdX, y + 10, 1, 9, "#10141f");
+}
+
+const DISTRICT_LABELS: Readonly<Record<DistrictId, string>> = {
+  nord: "NORD", centro: "CENTRO", sud: "SUD", isole: "ISOLE", feed: "FEED"
+};
+
+export function drawDistrictMap(screen: Screen, x: number, y: number, districts: readonly DistrictState[], selected: DistrictId | null = null): void {
+  for (let i = 0; i < 5; i += 1) {
+    const district = districts[i];
+    if (!district) continue;
+    const col = i % 3;
+    const row = Math.floor(i / 3);
+    const cx = x + col * 72;
+    const cy = y + row * 31;
+    screen.panel(cx, cy, 68, 27, "card");
+    if (district.id === selected) screen.frame(cx + 2, cy + 2, 64, 23, "#e0a92f");
+    screen.text(DISTRICT_LABELS[district.id], cx + 7, cy + 7, INK);
+    screen.textRight(String(district.localConsensus), cx + 60, cy + 7, district.localConsensus >= 50 ? "#26745d" : "#a0443e");
+    screen.text(`${district.outcomes.length}/2`, cx + 7, cy + 17, GREY);
+  }
+}
+
+export interface ChoicePreviewLine {
+  readonly label: string;
+  readonly value: string;
+  readonly tone?: "good" | "bad" | "neutral";
+}
+
+export function drawChoicePreview(screen: Screen, x: number, y: number, w: number, title: string, lines: readonly ChoicePreviewLine[], selected = false): void {
+  const visible = lines.slice(0, 3);
+  const h = 22 + visible.length * 11;
+  screen.panel(x, y, w, h, "menu");
+  if (selected) {
+    screen.frame(x + 1, y + 1, w - 2, h - 2, "#e6b944");
+    screen.rect(x + 4, y + 4, w - 8, 13, "#f4d34a");
+  }
+  screen.text(clipToWidth(`${selected ? "> " : "  "}${title}`, w - 70), x + 9, y + 8, INK);
+  if (selected) screen.textRight("SCELTA", x + w - 9, y + 8, "#70470e");
+  let cy = y + 20;
+  for (const line of visible) {
+    const color = line.tone === "good" ? "#26745d" : line.tone === "bad" ? "#a0443e" : GREY;
+    const labelWidth = Math.min(line.label.length * CHAR_W, Math.floor((w - 26) * 0.58));
+    const valueWidth = w - 26 - labelWidth;
+    screen.text(clipToWidth(line.label, labelWidth), x + 9, cy, color);
+    screen.textRight(clipToWidth(line.value, valueWidth), x + w - 9, cy, color);
+    cy += 11;
+  }
+}
+
+export function coalitionChannelLabel(channel: CoalitionChannel): string {
+  return ({ funds: "FONDI", sondaggiGain: "SONDAGGI", territoryGain: "TERRITORIO", shopPrice: "PREZZI" } as const)[channel];
+}
+
+// Intestazione condivisa delle schermate di gestione: fascia compatta ad alto
+// contrasto, bordo oro e contenuto chiaro. Evita cinque varianti quasi uguali.
+export function drawScreenHeader(
+  screen: Screen,
+  title: string,
+  right = "",
+  rightColor = "#ffe38a"
+): void {
+  screen.rect(0, 0, VIEW_W, 17, "#17243d");
+  screen.rect(0, 15, VIEW_W, 2, "#e6b944");
+  screen.text(clipToWidth(title, right ? 132 : VIEW_W - 16), 8, 5, "#fffaf0");
+  if (right) {
+    screen.textRight(right, VIEW_W - 8, 5, rightColor);
+  }
+}
 
 // Accessibilità (RIDUCI EFFETTI): quando true, le parole "urlate" nel box di
 // dialogo restano ROSSE e MAIUSCOLE (l'enfasi/informazione resta) ma NON tremano.
@@ -159,18 +274,18 @@ export class MessageBox {
     }
     this.blink += 1;
     const boxY = VIEW_H - 44;
-    screen.panel(0, boxY, VIEW_W, 44);
+    screen.panel(2, boxY, VIEW_W - 4, 42, "dialog");
     const page = this.pages[this.pageIndex];
     let remaining = Math.floor(this.chars);
     for (let i = 0; i < page.length; i += 1) {
       const line = page[i];
       const shown = Math.max(0, remaining);
       const visible = line.slice(0, shown);
-      const lineY = boxY + 10 + i * (LINE_H + 4);
+      const lineY = boxY + 9 + i * (LINE_H + 4);
       // Rende la riga token per token: le parole URLATE! tremano leggermente,
       // il resto è testo normale (nessun costo se la riga non ha urla).
       if (MessageBox.hasShout(line)) {
-        let cx = 10;
+        let cx = 12;
         let idx = 0; // indice carattere nella riga completa
         const words = line.split(" ");
         for (let w = 0; w < words.length; w += 1) {
@@ -187,7 +302,7 @@ export class MessageBox {
           idx += word.length;
         }
       } else {
-        screen.text(visible, 10, lineY, INK);
+        screen.text(visible, 12, lineY, INK);
       }
       remaining -= line.length;
     }
@@ -318,7 +433,7 @@ export class Menu {
     const first = this.scroll;
     this.geom = { x, y, w, rowH, first };
     const h = visible * rowH + 14;
-    screen.panel(x, y, w, h);
+    screen.panel(x, y, w, h, "menu");
     const iconPad = this.hasIcons ? 16 : 0;
     for (let row = 0; row < visible; row += 1) {
       const i = first + row;
@@ -329,7 +444,9 @@ export class Menu {
       const rowY = y + 8 + row * rowH;
       const color = item.disabled ? GREY : INK;
       if (i === this.index) {
-        screen.text("►", x + 7, rowY, INK);
+        screen.rect(x + 5, rowY - 3, w - 10, rowH, "#fff0bd");
+        screen.rect(x + 5, rowY - 3, 2, rowH, "#e0a92f");
+        screen.text("►", x + 8, rowY, "#8c5b12");
       }
       if (item.iconPath) {
         const icon = getSpriteImage(item.iconId ?? `mi-${i}`, item.iconPath);
@@ -341,7 +458,7 @@ export class Menu {
         }
       }
       const rightW = item.rightLabel ? item.rightLabel.length * CHAR_W + 6 : 0;
-      const labelX = x + 16 + iconPad;
+      const labelX = x + 18 + iconPad;
       const labelMaxW = w - 24 - iconPad - rightW;
       screen.text(clipToWidth(item.label, labelMaxW), labelX, rowY, color);
       if (item.rightLabel) {

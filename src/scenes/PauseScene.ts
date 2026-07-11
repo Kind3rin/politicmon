@@ -27,6 +27,8 @@ import { QuestScene } from "./QuestScene";
 import { AchievementsScene } from "./AchievementsScene";
 import { TypesScene } from "./TypesScene";
 import { WorldMapScene } from "./WorldMapScene";
+import { CoalitionScene } from "./CoalitionScene";
+import { SourcesScene } from "./SourcesScene";
 
 // Sotto-menu del menu pausa (OPZIONI / ONLINE / EXTRA).
 type SubKind = "opzioni" | "online" | "extra";
@@ -69,6 +71,9 @@ export class PauseScene implements Scene {
     }
     if (this.state.badges.length > 0) {
       push("GOVERNO");
+    }
+    if (this.state.flags["coalition-menu-unlocked"]) {
+      push("COALIZIONE", `${this.state.coalition.members.length}/2`);
     }
     push("MISSIONI");
     push("MAPPA");
@@ -121,7 +126,7 @@ export class PauseScene implements Scene {
 
   // Sotto-menu EXTRA: consultazione (tessera, traguardi, guida tipi).
   private buildExtraMenu(): SubMenu {
-    const entries = ["TESSERA", "TRAGUARDI", "GUIDA TIPI", "INDIETRO"];
+    const entries = ["TESSERA", "TRAGUARDI", "GUIDA TIPI", "FONTI SATIRA", "INDIETRO"];
     return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
@@ -184,6 +189,11 @@ export class PauseScene implements Scene {
       case "GOVERNO":
         this.stack.push(new GovScene(this.stack, this.input, this.state));
         break;
+      case "COALIZIONE": {
+        const focus = this.state.coalition.members[0]?.allyId ?? "campo_secretary";
+        this.stack.push(new CoalitionScene(this.stack, this.input, this.state, focus));
+        break;
+      }
       case "MISSIONI":
         this.stack.push(new QuestScene(this.stack, this.input, this.state));
         break;
@@ -243,6 +253,8 @@ export class PauseScene implements Scene {
         this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
       } else if (label === "GUIDA TIPI") {
         this.stack.push(new TypesScene(this.stack, this.input));
+      } else if (label === "FONTI SATIRA") {
+        this.stack.push(new SourcesScene(this.stack, this.input));
       }
       return;
     }
@@ -312,8 +324,9 @@ export class PauseScene implements Scene {
     if (this.sub) {
       const ow = Math.max(120, Math.min(this.sub.menu.measureWidth(), VIEW_W - 8));
       const ox = VIEW_W - ow - 4;
-      screen.rect(ox, 4, ow, 10, "rgba(16,20,31,0.92)");
-      screen.text(this.sub.title, ox + 4, 5, "#e8c84a");
+      screen.rect(ox + 4, 4, ow - 8, 11, "#17243d");
+      screen.rect(ox + 6, 14, ow - 12, 2, "#e6b944");
+      screen.text(this.sub.title, ox + 8, 6, "#fffaf0");
       this.sub.menu.draw(screen, ox, 16, ow);
       this.msg.draw(screen);
       return;
@@ -326,7 +339,7 @@ export class PauseScene implements Scene {
 
   private drawCard(screen: Screen): void {
     screen.dim(0.5);
-    screen.panel(14, 10, VIEW_W - 28, VIEW_H - 20);
+    screen.panel(14, 10, VIEW_W - 28, VIEW_H - 20, "card");
     const title = this.state.flags["garante-beaten"]
       ? "CAMPIONE COSTITUZIONALE"
       : this.state.flags["boss-beaten"]

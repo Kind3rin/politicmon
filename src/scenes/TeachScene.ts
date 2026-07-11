@@ -5,7 +5,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { speciesOf, type Monster } from "../game/monster";
-import { Menu, MessageBox, clipToWidth, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader, Menu, MessageBox, clipToWidth, GREY, INK } from "../ui/widgets";
 
 // Insegna una mossa (DIRETTIVA DI PARTITO) a un POLITICMON compatibile.
 // Se ha già 4 mosse, chiede quale sostituire. La direttiva è riutilizzabile,
@@ -79,15 +79,15 @@ export class TeachScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e3a4e");
+    screen.clear("#e7ebf2");
     const move = MOVES[this.moveId];
-    screen.text("DIRETTIVA DI PARTITO", 8, 6, PAPER);
-    screen.text(`${speciesOf(this.mon).name} può imparare:`, 8, 20, PAPER);
+    drawScreenHeader(screen, "DIRETTIVA DI PARTITO");
+    screen.text(`${speciesOf(this.mon).name} può imparare:`, 8, 21, INK);
 
     // Scheda della mossa in arrivo. Riepilogo su riga PROPRIA (y58): prima era
     // su y48 right-aligned e collideva con la kind-label (SPECIALE/FISICO/...),
     // il cui bordo destro superava il bordo sinistro del riepilogo.
-    screen.panel(8, 30, VIEW_W - 16, 40);
+    screen.panel(8, 30, VIEW_W - 16, 40, "card");
     screen.text(move.name, 16, 37, INK);
     const typeLabel = move.type.slice(0, 9);
     screen.text(typeLabel, 16, 48, INK);
@@ -96,7 +96,7 @@ export class TeachScene implements Scene {
     screen.text(moveSummary(move).slice(0, 36), 16, 60, GREY);
 
     if (this.mon.moves.length >= 4 && !this.done) {
-      screen.text("Quale linea abbandona?", 8, 74, PAPER);
+      screen.text("Quale linea abbandona?", 8, 74, INK);
       this.menu.draw(screen, 8, 84, VIEW_W - 16);
       const sel = this.mon.moves[this.menu.index];
       if (sel) {

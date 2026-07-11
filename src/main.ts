@@ -9,7 +9,8 @@ import { playIntro } from "./engine/intro";
 import { initPwaInstall } from "./engine/pwa";
 import { mp } from "./net/mp";
 import { loadNick } from "./net/profile";
-import { flushActiveState } from "./game/state";
+import { flushActiveState, getActiveState } from "./game/state";
+import { syncRunCheckpoints, tickRunStats } from "./game/runstats";
 import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
@@ -23,6 +24,7 @@ import { inject } from "@vercel/analytics";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
 const APP_BUILD_KEY = "politicmon-app-build";
+performance.mark("politicmon:boot-start");
 
 // Inizializza Vercel Web Analytics
 inject();
@@ -147,6 +149,8 @@ const stack = new SceneStack();
 let bootReady = false;
 void preloadCoreSprites().finally(() => {
   bootReady = true;
+  performance.mark("politicmon:assets-ready");
+  performance.measure("politicmon:boot-assets", "politicmon:boot-start", "politicmon:assets-ready");
 });
 
 // Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
@@ -219,6 +223,7 @@ function drawBootScreen(now: number): void {
 }
 
 let loopCrashed = false;
+let firstReadyFrame = true;
 
 // Rete di sicurezza universale: un'eccezione non catturata in update/draw non
 // deve congelare il gioco per sempre (canvas fermo, nessuna diagnostica, recupero
@@ -245,9 +250,19 @@ function frame(now: number): void {
     return;
   }
   try {
+    const active = getActiveState();
+    if (active) {
+      tickRunStats(active, dt, !document.hidden);
+      syncRunCheckpoints(active);
+    }
     stack.update(dt);
     stack.draw(screen);
     input.endFrame();
+    if (firstReadyFrame) {
+      firstReadyFrame = false;
+      performance.mark("politicmon:first-frame");
+      performance.measure("politicmon:boot-first-frame", "politicmon:boot-start", "politicmon:first-frame");
+    }
   } catch (err) {
     if (!loopCrashed) {
       console.error("[loop] eccezione non gestita nel game loop", err);

@@ -20,7 +20,7 @@ const report = await page.evaluate(async () => {
   const defAt = (map, x, y) => TILES[tileAt(map, x, y)];
   const standable = (map, x, y, allowWater = false) => {
     const d = defAt(map, x, y);
-    return Boolean(d && !d.solid && (allowWater || !d.water));
+    return Boolean(d && ((!d.solid && !d.water) || (allowWater && d.water)));
   };
 
   for (const [mapId, map] of Object.entries(MAPS)) {
@@ -178,7 +178,7 @@ const report = await page.evaluate(async () => {
         problems.push(`${mapId}: cartello coperto da NPC a (${sign.x},${sign.y})`);
       }
       const readable = dirs.some(([dx, dy]) =>
-        standable(map, sign.x + dx, sign.y + dy) && !npcCells.has(key(sign.x + dx, sign.y + dy))
+        standable(map, sign.x + dx, sign.y + dy, map.outdoor) && !npcCells.has(key(sign.x + dx, sign.y + dy))
       );
       if (!readable) {
         problems.push(`${mapId}: cartello illeggibile a (${sign.x},${sign.y})`);

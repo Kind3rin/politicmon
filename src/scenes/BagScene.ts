@@ -8,7 +8,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { canLearnMove, evolve, heldItemOf, itemEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
 import { BAR_RESPAWN } from "../data/maps";
-import { Menu, MessageBox, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader, Menu, MessageBox, wrapText, GREY, INK } from "../ui/widgets";
 import { PartyScene } from "./PartyScene";
 import { TeachScene } from "./TeachScene";
 import { EvolutionScene } from "./EvolutionScene";
@@ -299,10 +299,10 @@ export class BagScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#3a3050");
-    screen.text("BORSA DEL CANDIDATO", 8, 6, PAPER);
+    screen.clear("#eee8d9");
+    drawScreenHeader(screen, "BORSA DEL CANDIDATO");
     if (this.itemIds.length === 0) {
-      screen.panel(10, 24, VIEW_W - 20, 40);
+      screen.panel(10, 24, VIEW_W - 20, 40, "card");
       screen.text("La borsa è vuota.", 20, 36, INK);
       screen.text("Come le promesse mantenute.", 20, 48, GREY);
     } else {
@@ -312,7 +312,7 @@ export class BagScene implements Scene {
       if (item) {
         const y = 24 + this.menu.measureHeight(13, MAX_VIS);
         const panelH = 40;
-        screen.panel(10, y, VIEW_W - 20, panelH);
+        screen.panel(10, y, VIEW_W - 20, panelH, "card");
         drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
         const lines = wrapText(item.desc, 28);
         for (let i = 0; i < Math.min(3, lines.length); i += 1) {
@@ -323,7 +323,8 @@ export class BagScene implements Scene {
     screen.text("A: usa  B: chiudi", 8, VIEW_H - 10, GREY);
     if (this.ask) {
       // Pannello di conferma swap hold item.
-      screen.panel(14, 52, VIEW_W - 28, 66);
+      screen.dim(0.32);
+      screen.panel(14, 52, VIEW_W - 28, 66, "dialog");
       const lines = wrapText(this.ask.text, 32);
       for (let i = 0; i < Math.min(3, lines.length); i += 1) {
         screen.text(lines[i], 22, 60 + i * 10, INK);

@@ -5,7 +5,7 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { speciesOf, statsOf } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { drawHpBar, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
+import { drawHpBar, drawScreenHeader, MessageBox, GREY, INK } from "../ui/widgets";
 
 // CIRCOLO DI PARTITO (il "PC box" di Politicmon): sposta i mostri tra SQUADRA
 // (max 6, mai vuota) e CIRCOLO (riserva). Accessibile dal COMPUTER DI PARTITO
@@ -106,8 +106,8 @@ export class BoxScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e3e52");
-    screen.text("CIRCOLO DI PARTITO", 8, 5, PAPER);
+    screen.clear("#e3ebef");
+    drawScreenHeader(screen, "CIRCOLO DI PARTITO");
 
     this.drawColumn(screen, "party", "SQUADRA", 4);
     this.drawColumn(screen, "box", "CIRCOLO", VIEW_W / 2 + 2);
@@ -145,12 +145,13 @@ export class BoxScene implements Scene {
       const mon = list[i];
       const y = 24 + row * 22;
       const selected = active && i === this.index;
-      screen.rect(x + 2, y, w - 4, 20, selected ? "#f8f8f0" : "#3a4c64");
+      screen.rect(x + 2, y, w - 4, 20, selected ? "#fff0bd" : "#fffaf0");
+      screen.rect(x + 2, y, 2, 20, selected ? "#e0a92f" : "#7aa2b8");
       if (selected) {
         screen.frame(x + 2, y, w - 4, 20, INK);
       }
-      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], x + 3, y + 1, 20, 19);
-      const ink = selected ? INK : PAPER;
+      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], x + 3, y + 1, 20, 19, { memeFormId: mon.memeFormId });
+      const ink = INK;
       screen.text(speciesOf(mon).name.slice(0, 9), x + 24, y + 2, ink);
       screen.text(`L${mon.level}`, x + 24, y + 11, ink);
       // Barra a x+62: la label "PV" (disegnata da drawHpBar a x-14) cade a x+48,

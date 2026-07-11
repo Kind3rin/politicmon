@@ -1,0 +1,16 @@
+import { chromium } from "playwright";
+const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
+const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
+await page.goto(base, { waitUntil: "networkidle" });
+const installed = await page.evaluate(async () => { if (!("serviceWorker" in navigator)) return false; await navigator.serviceWorker.ready; return true; });
+if (!installed) throw new Error("service worker non installato");
+const sentinel = JSON.stringify({ rc: "1.0.0-rc.1", value: "save-preserved" });
+await page.evaluate((value) => localStorage.setItem("politicmon-rc-smoke-save", value), sentinel);
+await page.evaluate(async () => { const reg = await navigator.serviceWorker.ready; await reg.update(); });
+await page.reload({ waitUntil: "networkidle" });
+const preserved = await page.evaluate(() => localStorage.getItem("politicmon-rc-smoke-save"));
+if (preserved !== sentinel) throw new Error("update PWA ha alterato localStorage");
+await context.setOffline(true); await page.reload({ waitUntil: "domcontentloaded" });
+const offline = await page.locator("#game-canvas").count() === 1;
+if (!offline) throw new Error("PWA non riparte offline");
+console.log("PWA SMOKE OK: installazione pulita, update conserva save, avvio offline."); await browser.close();

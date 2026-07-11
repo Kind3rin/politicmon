@@ -46,6 +46,10 @@ export const ITEMS: Record<string, Item> = {
     id: "tessera", name: "TESSERA DORATA", kind: "evo", price: 3000,
     desc: "Tessera di partito placcata oro. Certi POLITICMON cambiano carriera all'istante."
   },
+  tessera_futuro: {
+    id: "tessera_futuro", name: "TESSERA FUTURO", kind: "evo",
+    desc: "Una tessera ancora da compilare. Fa imboccare a VANNACCIX il ramo del futuro."
+  },
   divisa: {
     id: "divisa", name: "DIVISA EQUA", kind: "key",
     desc: "Spartisce i PUNTI CONSENSO con tutta la squadra. Anche chi è in panchina porta a casa la pagnotta."
@@ -159,7 +163,7 @@ export const BAG_ORDER = [
   "scheda", "schedona", "caffe", "spritz", "mojito", "maalox", "spray", "rimborso",
   "manifesti", "spotprimetime", "comizio",
   "gilet", "telecamera", "sondtruccato", "caffettiera", "agendarossa", "santino",
-  "tessera", "divisa",
+  "tessera", "tessera_futuro", "divisa",
   "dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",
   "dirInciucio", "dirBunga", "dirGreen"
 ];

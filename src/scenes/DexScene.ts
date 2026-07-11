@@ -7,9 +7,10 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { clipToWidth, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { clipToWidth, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 import { zoneProgress } from "../data/dexzones";
 import { VERSION_EXCLUSIVES, speciesAvailable } from "../game/version";
+import { formsForSpecies } from "../game/memeForms";
 
 // Specie di QUESTA versione non avvistabili sul campo (esclusive dell'altra
 // fazione): ottenibili solo scambiando online. Tag azzurro per distinguerle.
@@ -19,14 +20,28 @@ export class DexScene implements Scene {
   private index = 0;
   private detail = false;
   private scroll = 0;
+  private formPage = false;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {}
 
   update(): void {
     if (this.detail) {
-      if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
+      if (this.input.wasPressed("b")) {
         audio.cancel();
         this.detail = false;
+        this.formPage = false;
+        return;
+      }
+      if (this.input.wasPressed("a")) {
+        const forms = formsForSpecies(DEX_ORDER[this.index], this.state.unlockedMemeForms);
+        if (forms.length > 0) {
+          this.formPage = !this.formPage;
+          audio.confirm();
+        } else {
+          audio.cancel();
+          this.detail = false;
+        }
+        return;
       }
       // Scorri tra le schede senza uscire: salta le specie mai viste (che non
       // hanno una scheda da mostrare). Sinistra/destra E su/giù, come i Pokédex.
@@ -77,6 +92,7 @@ export class DexScene implements Scene {
       const i = (this.index + dir * step + n * step) % n;
       if (this.state.dex[DEX_ORDER[i]]) {
         this.index = i;
+        this.formPage = false;
         const visibleRows = 10;
         this.scroll = Math.min(Math.max(this.scroll, i - visibleRows + 1), i);
         audio.cursor();
@@ -86,7 +102,7 @@ export class DexScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#7a2828");
+    screen.clear("#efe6da");
     if (this.detail) {
       this.drawDetail(screen);
       return;
@@ -97,9 +113,8 @@ export class DexScene implements Scene {
     // quindi escluderli rende il Dex davvero completabile (e quindi motivante).
     const skipped = STARTERS.filter((s) => s !== this.state.starterId).length;
     const target = DEX_ORDER.length - skipped;
-    screen.text("POLITICDEX", 8, 5, PAPER);
-    screen.textRight(`VISTI ${seen}  ELETTI ${caught}/${target}`, VIEW_W - 8, 5, PAPER);
-    screen.panel(4, 15, VIEW_W - 8, VIEW_H - 19);
+    drawScreenHeader(screen, "POLITICDEX", `VISTI ${seen}  ELETTI ${caught}/${target}`);
+    screen.panel(4, 18, VIEW_W - 8, VIEW_H - 22, "card");
     const visibleRows = 10;
     for (let row = 0; row < visibleRows; row += 1) {
       const i = this.scroll + row;
@@ -111,7 +126,9 @@ export class DexScene implements Scene {
       const status = this.state.dex[id];
       const y = 22 + row * 13;
       if (i === this.index) {
-        screen.text("►", 10, y, INK);
+        screen.rect(8, y - 3, VIEW_W - 16, 12, "#fff0bd");
+        screen.rect(8, y - 3, 2, 12, "#e0a92f");
+        screen.text("►", 10, y, "#8c5b12");
       }
       screen.text(`N.${String(species.dexNum).padStart(2, "0")}`, 18, y, GREY);
       screen.text(status ? species.name : "??????????", 52, y, status ? INK : GREY);
@@ -150,8 +167,13 @@ export class DexScene implements Scene {
   private drawDetail(screen: Screen): void {
     const id = DEX_ORDER[this.index];
     const species = SPECIES[id];
-    screen.clear("#7a2828");
-    screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8);
+    const forms = formsForSpecies(id, this.state.unlockedMemeForms);
+    if (this.formPage && forms[0]) {
+      this.drawFormPage(screen, id, forms[0]);
+      return;
+    }
+    screen.clear("#efe6da");
+    screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8, "card");
     // Box mostro: ancorato in basso a y=70, max 60x54 (PNG PixelLab o pixmap).
     drawMonsterSprite(screen, id, MONSTER_ART[id], 8, 16, 60, 54);
     screen.text(`N.${String(species.dexNum).padStart(2, "0")} ${species.name}`, 76, 14, INK);
@@ -187,7 +209,7 @@ export class DexScene implements Scene {
     if (ability) {
       cy += 2; // stacco visivo tra dexLine e abilità
       const abLines = wrapText(ability.desc, 35);
-      for (let i = 0; i < Math.min(2, abLines.length); i += 1) {
+      for (let i = 0; i < Math.min(3, abLines.length); i += 1) {
         screen.text(abLines[i], 14, cy, GREY);
         cy += 10;
       }
@@ -200,6 +222,25 @@ export class DexScene implements Scene {
     if (this.state.dex[id] !== "caught") {
       screen.text("(Non ancora nella tua squadra)", 14, cy, GREY);
     }
-    screen.text("◄►: sfoglia   A/B: indietro", 14, VIEW_H - 16, GREY);
+    screen.text(forms.length > 0 ? "A: FORMA MEME   B: INDIETRO" : "◄►: SFOGLIA   A/B: INDIETRO", 14, VIEW_H - 16, forms.length > 0 ? "#a46b12" : GREY);
+  }
+
+  private drawFormPage(screen: Screen, speciesId: string, form: ReturnType<typeof formsForSpecies>[number]): void {
+    screen.clear("#10141f");
+    screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8, "card");
+    drawMonsterSprite(screen, speciesId, MONSTER_ART[speciesId], 12, 17, 58, 54, { memeFormId: form.id });
+    screen.text("FORMA MEME", 80, 15, form.accent);
+    screen.text(clipToWidth(form.name, 150), 80, 29, INK);
+    screen.text(form.season, 80, 43, GREY);
+    screen.text(`BONUS ${form.stat.toUpperCase()} +${form.statPercent}%`, 80, 57, "#26745d");
+    screen.text("PROVENIENZA", 14, 84, "#a46b12");
+    let y = 98;
+    for (const line of wrapText(form.provenance, 34).slice(0, 3)) {
+      screen.text(line, 14, y, INK);
+      y += 10;
+    }
+    screen.text(`ARCHIVIO: ${form.sourceId.toUpperCase()}`, 14, 137, GREY);
+    screen.text("STESSO NUMERO DEX", 14, 149, form.accent);
+    screen.text("A: SCHEDA BASE   B: INDIETRO", 14, VIEW_H - 16, GREY);
   }
 }

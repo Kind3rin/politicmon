@@ -37,6 +37,42 @@ export function hardModeLevelBonus(state: GameState, level: number): number {
 const REMATCH_PAYOUT = 0.6;
 
 export type RematchAvailability = "first" | "ready" | "cooldown" | "never";
+export type GymRematchDoctrine = "government" | "opposition" | "coalition";
+
+const ADAPTIVE_GYM_TEAMS: Readonly<Record<string, Readonly<Record<GymRematchDoctrine, readonly [string, number][]>>>> = {
+  emittenza: {
+    government: [["tajanide", 50], ["telecrate", 52], ["berlusconix", 54]],
+    opposition: [["contepop", 50], ["salisound", 52], ["telecrate", 54]],
+    coalition: [["campocorno", 50], ["referendodo", 52], ["contemorfo", 54]]
+  },
+  ladydirettiva: {
+    government: [["macronfox", 51], ["calendrone", 52], ["ursulax", 54]],
+    opposition: [["verdoribelle", 51], ["contepop", 52], ["salisound", 54]],
+    coalition: [["campocorno", 51], ["futurorso", 52], ["referendodo", 54]]
+  },
+  tycoon: {
+    government: [["bojoon", 51], ["generorso", 52], ["marsrat", 53], ["trumpon", 55]],
+    opposition: [["salvinurlo", 51], ["pontimax", 52], ["muskrat", 53], ["trumpon", 55]],
+    coalition: [["campocorno", 51], ["crosettank", 52], ["referendodo", 53], ["trumpon", 55]]
+  }
+};
+
+export const GYM_DOCTRINE_LABEL: Readonly<Record<GymRematchDoctrine, string>> = {
+  government: "ROSTER DI GOVERNO", opposition: "ROSTER D'OPPOSIZIONE", coalition: "ROSTER DI COALIZIONE"
+};
+
+export function gymRematchDoctrine(state: GameState): GymRematchDoctrine {
+  const fractured = state.coalition.members.some((member) => member.status === "strained")
+    || Object.keys(state.flags).some((flag) => flag.startsWith("coalition-broken:") && state.flags[flag]);
+  if (fractured) return "coalition";
+  return state.election.result?.ending === "government" ? "government" : "opposition";
+}
+
+export function adaptiveGymRoster(state: GameState, trainerId: string): { doctrine: GymRematchDoctrine; label: string; team: readonly [string, number][] } | null {
+  const catalog = ADAPTIVE_GYM_TEAMS[trainerId]; if (!catalog) return null;
+  const doctrine = gymRematchDoctrine(state);
+  return { doctrine, label: GYM_DOCTRINE_LABEL[doctrine], team: catalog[doctrine] };
+}
 
 // Stato di sfidabilità di un trainer:
 // - "first": mai battuto → flusso normale (invariato).
@@ -73,12 +109,14 @@ export function rematchAvailability(state: GameState, trainerId: string): Rematc
 // medaglie (floor 6+5*badge, cap 55 = level cap del giocatore, audit C2/R42).
 export function buildRematchDef(state: GameState, def: TrainerDef): TrainerDef {
   if (GYM_LEADER_IDS.includes(def.id) && GYM_REMATCH_TEAMS[def.id]) {
+    const adaptive = adaptiveGymRoster(state, def.id);
+    const team = adaptive?.team ?? GYM_REMATCH_TEAMS[def.id];
     return {
       id: def.id,
       name: def.name,
       pal: def.pal,
-      team: GYM_REMATCH_TEAMS[def.id].map(([sp, lv]) => [sp, lv] as [string, number]),
-      intro: GYM_REMATCH_INTROS[def.id] ?? def.intro,
+      team: team.map(([sp, lv]) => [sp, lv] as [string, number]),
+      intro: [...(adaptive ? [`${adaptive.label}: la palestra ha studiato la tua run.`] : []), ...(GYM_REMATCH_INTROS[def.id] ?? def.intro)],
       defeat: def.defeat,
       money: Math.round(def.money * 2.5 * REMATCH_PAYOUT)
       // NIENTE badge, NIENTE reward: strippati per costruzione.

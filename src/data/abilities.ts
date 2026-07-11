@@ -1,8 +1,8 @@
 // ABILITÀ PASSIVE (Round 39): un effetto fisso per specie (Species.ability).
 // Derivano dalla SPECIE, quindi sono sicure sul filo del duello PvP: nessun
 // dato extra da validare, host e guest le ricavano dallo stesso speciesId.
-// Gli effetti sul danno vivono in sim.ts (calcDamage); quelli di turno in
-// BattleScene E duelsim.ts (sentinella sync).
+// Gli effetti sul danno vivono in sim.ts (calcDamage); pre-mossa, immunità e
+// fine turno condivisi vivono in battle/effectContract.ts.
 
 export interface Ability {
   id: string;
@@ -51,5 +51,25 @@ export const ABILITIES: Record<string, Ability> = {
   garanzia: {
     id: "garanzia", name: "GARANZIA COSTITUZIONALE",
     desc: "Sopra le parti: immune sia ai cali di statistica sia agli status del nemico."
+  },
+  tabularasa: {
+    id: "tabularasa", name: "TABULA RASA",
+    desc: "Quando entra azzera tutte le modifiche alle statistiche, proprie e avversarie."
+  },
+  forchettasondaggi: {
+    id: "forchettasondaggi", name: "FORCHETTA SONDAGGI",
+    desc: "Le mosse speciali dannose oscillano tra STIMA BASSA 0,85× e ALTA 1,15×."
+  },
+  primapagina: {
+    id: "primapagina", name: "PRIMA PAGINA",
+    desc: "Il primo attacco dopo ogni ingresso infligge +20% di danno."
+  },
+  contraddittorio: {
+    id: "contraddittorio", name: "CONTRADDITTORIO",
+    desc: "Al primo colpo subito dopo ogni ingresso, RETORICA +1. Una volta sola anche sui multi-hit."
+  },
+  staffetta: {
+    id: "staffetta", name: "STAFFETTA",
+    desc: "Quando manda KO un avversario, VELOCITÀ +1."
   }
 };

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "pilotFindings": [
+    {
+      "id": "P00",
+      "status": "ITERATE",
+      "finding": "Il tester non ha compreso cosa facessero i candidati o come sceglierli.",
+      "cause": "Quasi tutte le etichette decisive erano troncate con ellissi; bonus PREZZI aveva inoltre segno semanticamente ambiguo.",
+      "action": "Scheda unica riscritta con vantaggio, costo, linea rossa e rischio foto in righe complete.",
+      "followUp": "Dopo la correzione il tester ha scelto il Centrista Quantico casualmente: nessun bonus gli sembrava abbastanza desiderabile. Il fotografo risultava irraggiungibile per due cartelli disallineati; corridoio centrale riaperto. Riselezionando un membro non era evidente che A lo rimuovesse: aggiunti stato esplicito, comando dinamico e doppia conferma. Nella scelta foto la sola barra laterale non comunicava il focus: aggiunti riquadro, label SCELTA, comandi e conseguenza concreta."
+    }
+  ],
+  "sessions": [
+    { "id": "T01", "completed": false },
+    { "id": "T02", "completed": false },
+    { "id": "T03", "completed": false },
+    { "id": "T04", "completed": false },
+    { "id": "T05", "completed": false }
+  ],
+  "fieldGuide": {
+    "durationMinutes": "numero > 0",
+    "candidates": ["ID candidato 1", "ID candidato 2"],
+    "photoChoice": "STRINGETEVI | PANORAMICA",
+    "ending": "COESA | TESA",
+    "coalitionMenuOpens": "intero >= 0",
+    "bossDefeats": "intero >= 0",
+    "understoodBonus": "boolean",
+    "bonusExplanation": "frase testuale del tester",
+    "understoodRedLine": "boolean",
+    "redLineExplanation": "frase testuale del tester",
+    "motivatedByTradeoff": "boolean",
+    "wantsOtherBranch": "boolean",
+    "grindRequired": "boolean",
+    "bossDifficulty": "TROPPO_FACILE | GIUSTA | TROPPO_DIFFICILE",
+    "criticalIssues": ["solo soft-lock, perdita save o regressioni critiche"]
+  }
+}

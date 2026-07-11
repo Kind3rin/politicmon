@@ -16,7 +16,6 @@ function drawBallot(screen: Screen, dx: number, dy: number): void {
 }
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
-import { MOVES } from "../../data/moves";
 import { currentQuest } from "../../data/quests";
 import { RIVAL_COUNTER, SPECIES } from "../../data/species";
 import { buildRivalStageTeam, RIVAL_STAGES, rivalStageFor } from "../../data/rival";
@@ -32,9 +31,10 @@ import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/Batt
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
-import { buildRematchDef, hardModeLevelBonus, markRematchClock, rematchAvailability } from "../rematch";
+import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
+import { recordRunStep } from "../runstats";
 import { recordDuelResult } from "../duelrecord";
 import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
 import { checkAchievements } from "../achievements";
@@ -54,12 +54,36 @@ import { CasinoScene } from "../../scenes/CasinoScene";
 import { BoxScene } from "../../scenes/BoxScene";
 import { MafiaScene } from "../../scenes/MafiaScene";
 import { MonumentScene, monumentDecoLines } from "../../scenes/MonumentScene";
+import { CoalitionScene } from "../../scenes/CoalitionScene";
+import { PhotoChoiceScene } from "../../scenes/PhotoChoiceScene";
+import { FutureChoiceScene } from "../../scenes/FutureChoiceScene";
+import { DiplomacyChoiceScene } from "../../scenes/DiplomacyChoiceScene";
+import { GenovaTechnoScene } from "../../scenes/GenovaTechnoScene";
+import { DistrictScene } from "../../scenes/DistrictScene";
+import { ElectionResultsScene } from "../../scenes/ElectionResultsScene";
+import { Atto3EndingScene } from "../../scenes/Atto3EndingScene";
+import { WeeklyCampaignScene } from "../../scenes/WeeklyCampaignScene";
+import { SliceEndingScene } from "../../scenes/SliceEndingScene";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 import { TournamentScene } from "../../scenes/TournamentScene";
 import {
   advanceAfterPlayerWin, ghostTrainerDef, initTournament, playerOpponent, roundLabel,
-  COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE, type TournamentState
+  coppaRule, prepareCoppaParty, COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE,
+  type CoppaRule, type TournamentState
 } from "../tournament";
+import { buildTrainerTeam, shouldPersistTrainerVictory } from "./battleCoordinator";
+import { routeNpcInteraction } from "./npcInteraction";
+import { createAtto3Controller, type Atto3Controller } from "./atto3Controller";
+import { isFeatureEnabled } from "../features";
+import { photoChapterRewardPatch } from "../atto3Progress";
+import { futureRewardPatch } from "../futureChapter";
+import { diplomacyRewardPatch } from "../diplomacyChapter";
+import { createElectionSnapshot, newElectionState, resolveAction, resolveElection, startElection, type DistrictId } from "../election";
+import { coalitionBonuses } from "../coalition";
+import { DISTRICT_CONTENT, districtActionCount } from "../districtCampaign";
+import { electionDoctrine, type ElectionDoctrine } from "../electionDoctrine";
+import { resolveWeeklyStage } from "../weeklyCampaign";
+import type { WorldCommand } from "./worldContext";
 
 const STEP_TIME = 0.18;
 const CHAT_OVERLAY_TTL = 6000; // ms di vita di una riga chat nell'overlay del mondo
@@ -157,6 +181,14 @@ const WORLD_OBJECT_TARGET_PX: Record<string, number> = {
   W: 22,
   Y: 20,
   U: 16
+  ,"1": 64
+  ,"2": 40
+  ,"3": 16
+  ,"4": 32
+  ,"5": 16
+  ,"6": 48
+  ,"7": 48
+  ,"8": 96
 };
 
 const TRANSPORT_DESTINATIONS: TransportDestination[] = [
@@ -181,6 +213,10 @@ function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, d
   screen.imageSpriteCropped(img, dx + TILE / 2 - dw / 2, dy + TILE - dh, { scaleX: scale, scaleY: scale });
 }
 
+function drawWorldTilePng(screen: Screen, img: HTMLImageElement, dx: number, dy: number): void {
+  screen.imageSprite(img, dx, dy, { scaleX: TILE / img.width, scaleY: TILE / img.height });
+}
+
 // Avvicina `current` a `target` di al più `delta` (lerp clampato per le barre).
 function approachWorld(current: number, target: number, delta: number): number {
   if (current < target) {
@@ -193,6 +229,7 @@ function approachWorld(current: number, target: number, delta: number): number {
 }
 
 export class WorldScene implements Scene {
+  private readonly atto3Controller: Atto3Controller = createAtto3Controller();
   private map!: MapDef;
   private npcs: RuntimeNpc[] = [];
   private msg = new MessageBox();
@@ -228,6 +265,8 @@ export class WorldScene implements Scene {
   private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
   // COPPA DELLE POLTRONE: stato del torneo in corso (SESSIONE SINGOLA, mai salvato).
   private coppa: TournamentState | null = null;
+  private coppaRuleActive: CoppaRule | null = null;
+  private coppaOriginalParty: Monster[] | null = null;
 
   // ---- Effetto di CURA (BAR SPORT, risveglio, raccomandazione mafia) ----
   private healFx = 0; // durata residua dell'animazione di cura
@@ -347,6 +386,15 @@ export class WorldScene implements Scene {
     this.duelStartMsg = null;
     this.duelDeclineMsg = null;
     audio.playMusic(this.map.music ?? "borgo");
+    if (mapId === "campo_largo" && this.state.flags["ue-beaten"] && !this.state.flags["atto3Started"]) {
+      this.state.flags["atto3Started"] = true;
+      saveGame(this.state);
+      this.say([
+        "CAPO CAMPAGNA: benvenuto a CAMPO LARGO.",
+        "TRE CANDIDATI, DUE POSTI: parla con ciascuno e leggi VANTAGGIO, COSTO e LINEA ROSSA.",
+        "Quando hai deciso, entra nel RETROPALCO a est. Puoi cambiare idea prima della foto."
+      ]);
+    }
     this.fadeT = 0.35; // breve dissolvenza d'ingresso nella nuova mappa
     // Memorizza l'ultima città-con-bar visitata: è lì che si respawna al KO.
     // ECCEZIONE Stretto: finché IL CAPITANO non è battuto (ponte-beaten), NON
@@ -881,58 +929,71 @@ export class WorldScene implements Scene {
     });
   }
 
-  private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void, isRematch = false): void {
+  private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void, isRematch = false, doctrine?: ElectionDoctrine, maxHealingItems?: number | null): void {
     this.queueBattle(() => {
-      // MODALITÀ DIFFICILE: +livelli agli avversari (esclusa la SFIDA DEL GIORNO,
-      // che resta deterministica e uguale per tutti). Cap 60.
-      const noHard = def.id.startsWith("daily:");
-      const team: Monster[] =
-        def.team.length > 0
-          ? def.team.map(([id, lv, moveIds, heldItem]) => {
-              const bonus = noHard ? 0 : hardModeLevelBonus(this.state, lv);
-              const mon = createMonster(id, Math.min(60, lv + bonus));
-              if (moveIds?.length) {
-                mon.moves = moveIds.map((moveId) => ({ id: moveId, pp: MOVES[moveId].pp }));
-              }
-              // Hold item del boss (solo PVE): l'effetto è letto da heldItemOf in
-              // calcDamage/per-turno. Un id non-hold viene ignorato da heldItemOf.
-              if (heldItem) {
-                mon.heldItem = heldItem;
-              }
-              return mon;
-            })
-          : this.buildRivalTeam();
-      // R42 economia (LOTTO 3): in MODALITÀ DIFFICILE i BOSS narrativi ricevono un
-      // hold item EXTRA sull'asso (il mostro più forte), solo se non ne ha già uno
-      // (riusa il 4° slot della tupla team). GILET (-15% danni) rende il boss più
-      // duro senza toccare la modalità normale. La IA boss-grade fa il resto.
-      if (this.state.hardMode && BOSS_TRAINER_IDS.includes(def.id) && team.length > 0) {
-        const ace = team.reduce((best, m) => (m.level > best.level ? m : best), team[0]);
-        if (!ace.heldItem) {
-          ace.heldItem = "gilet";
-        }
-      }
+      const team = buildTrainerTeam(this.state, def, {
+        fallbackTeam: () => this.buildRivalTeam(),
+        bossTrainerIds: BOSS_TRAINER_IDS
+      });
       this.stack.push(
         new BattleScene(this.stack, this.input, {
           state: this.state,
           foeTeam: team,
           trainer: def,
           isRematch,
+          electionDoctrine: doctrine,
+          maxBattleHealingItems: maxHealingItems,
           onEnd: (result) => {
             // I PG vaganti ("wander:*"), la SFIDA DEL GIORNO ("daily:*") e i
             // match della COPPA ("coppa:*") restano ripetibili: mai in
             // defeatedTrainers. La guardia includes() evita duplicati alla
             // vittoria di una RIVINCITA; markRematchClock riavvia il cooldown.
-            if (
-              result === "win" &&
-              !def.id.startsWith("wander:") &&
-              !def.id.startsWith("daily:") &&
-              !def.id.startsWith("coppa:")
-            ) {
+            if (shouldPersistTrainerVictory(def.id, result)) {
               if (!this.state.defeatedTrainers.includes(def.id)) {
                 this.state.defeatedTrainers.push(def.id);
               }
               markRematchClock(this.state, def.id);
+            }
+            // Collegio sandbox R1: il primo dibattito produce un outcome one-shot
+            // anche se perso. Un retry successivo non duplica mai il consenso.
+            if (def.id === "campo-debate" && !this.state.flags["campo-debate-resolved"] && (result === "win" || result === "loss")) {
+              const districtResult = resolveAction(this.state.election, {
+                districtId: "centro",
+                action: "debate",
+                variant: result,
+                baseDelta: result === "win" ? 8 : -4
+              });
+              if (districtResult.ok) {
+                this.state.election = districtResult.state;
+                this.state.flags["campo-debate-resolved"] = true;
+                if (result === "win") audio.districtGain();
+                else audio.districtLoss();
+              }
+            }
+            if (def.id === "futuro-anteriore" && result === "win") {
+              const reward = futureRewardPatch(this.state.flags);
+              if (reward) {
+                Object.assign(this.state.flags, reward);
+                audio.catchJingle();
+                saveGame(this.state);
+              }
+            }
+            if (def.id === "partner-perfetto" && result === "win") {
+              const reward = diplomacyRewardPatch(this.state.flags);
+              if (reward) {
+                Object.assign(this.state.flags, reward);
+                this.state.election = newElectionState(true);
+                audio.catchJingle();
+                saveGame(this.state);
+              }
+            }
+            if (def.id === "campo-photographer" && result === "win") {
+              const reward = photoChapterRewardPatch(this.state.flags);
+              if (reward) {
+                Object.assign(this.state.flags, reward);
+                audio.catchJingle();
+                saveGame(this.state);
+              }
             }
             // Rimuovi lo sprite temporaneo del PG vagante a fine lotta (qualsiasi
             // esito): la vittoria su un "wander:*" non ricarica la mappa, quindi
@@ -1121,10 +1182,17 @@ export class WorldScene implements Scene {
     const pos = this.state.pos;
     npc.currentFacing =
       npc.x > pos.x ? "left" : npc.x < pos.x ? "right" : npc.y > pos.y ? "up" : "down";
+    if (this.atto3Controller.interactNpc(npc.id, {
+      state: this.state,
+      dispatch: (command) => this.dispatchWorldCommand(command)
+    })) {
+      return;
+    }
+    const route = routeNpcInteraction(this.state, npc);
 
     // SONDAGGISTA delle versioni: spiega GOVERNO/OPPOSIZIONE con testo dinamico
     // (dipende dal browserSeed, quindi non può stare nelle lines statiche).
-    if (npc.id === "sondaggista-versioni") {
+    if (route.kind === "versionSurvey") {
       const ver = gameVersion(this.state.browserSeed);
       const mine = Object.keys(VERSION_EXCLUSIVES).filter((id) => VERSION_EXCLUSIVES[id] === ver);
       const theirs = Object.keys(VERSION_EXCLUSIVES).filter((id) => VERSION_EXCLUSIVES[id] !== ver);
@@ -1137,15 +1205,16 @@ export class WorldScene implements Scene {
       return;
     }
 
-    if (npc.trainerId) {
-      const avail = rematchAvailability(this.state, npc.trainerId);
+    if (route.kind === "trainer") {
+      const trainerId = npc.trainerId!;
+      const avail = route.availability;
       if (avail === "first") {
         // Primo scontro: flusso invariato bit-per-bit.
         if (this.state.party.length === 0) {
           this.say(["Torna quando avrai un POLITICMON.", "Qui si combatte, mica si dialoga."]);
           return;
         }
-        this.startTrainerFight(this.trainerForId(npc.trainerId));
+        this.startTrainerFight(this.trainerForId(trainerId));
         return;
       }
       if (avail === "ready") {
@@ -1154,8 +1223,10 @@ export class WorldScene implements Scene {
           this.say(["Torna quando avrai un POLITICMON.", "Qui si combatte, mica si dialoga."]);
           return;
         }
-        const def = this.trainerForId(npc.trainerId);
-        this.askYesNo(`${def.name}: RIVINCITA?`, () => {
+        const def = this.trainerForId(trainerId);
+        const adaptive = adaptiveGymRoster(this.state, trainerId);
+        const prompt = adaptive ? `${adaptive.label}. ACCETTI?` : `${def.name}: RIVINCITA?`;
+        this.askYesNo(prompt, () => {
           // isRematch=true: lo SPOT bonus è escluso (R42 economia, faucet).
           this.startTrainerFight(buildRematchDef(this.state, def), true);
         });
@@ -1168,27 +1239,27 @@ export class WorldScene implements Scene {
       // "never": fall-through al dialogo post-sconfitta esistente.
     }
 
-    if (npc.guide) {
+    if (route.kind === "guide") {
       this.openGuide(npc);
       return;
     }
 
-    if (npc.transport) {
+    if (route.kind === "transport") {
       this.openTransport();
       return;
     }
 
-    if (npc.daily) {
+    if (route.kind === "daily") {
       this.runDailyChallenge();
       return;
     }
 
-    if (npc.coppa) {
+    if (route.kind === "tournament") {
       this.openTournament();
       return;
     }
 
-    if (npc.shop) {
+    if (route.kind === "openScene" && route.scene === "shop") {
       // Primo accesso a un negozio: spiega cosa sono le DIRETTIVE (le "MT").
       const lines = [...(npc.lines ?? [])];
       if (!this.state.flags["tm-hint"]) {
@@ -1204,35 +1275,35 @@ export class WorldScene implements Scene {
       return;
     }
 
-    if (npc.casino) {
+    if (route.kind === "openScene" && route.scene === "casino") {
       this.say(npc.lines ?? [], () => {
         this.stack.push(new CasinoScene(this.stack, this.input, this.state));
       });
       return;
     }
 
-    if (npc.box) {
+    if (route.kind === "openScene" && route.scene === "box") {
       this.say(npc.lines ?? [], () => {
         this.stack.push(new BoxScene(this.stack, this.input, this.state));
       });
       return;
     }
 
-    if (npc.mafia) {
+    if (route.kind === "openScene" && route.scene === "mafia") {
       this.say(npc.lines ?? [], () => {
         this.stack.push(new MafiaScene(this.stack, this.input, this.state));
       });
       return;
     }
 
-    if (npc.monument) {
+    if (route.kind === "openScene" && route.scene === "monument") {
       this.say(npc.lines ?? [], () => {
         this.stack.push(new MonumentScene(this.stack, this.input, this.state));
       });
       return;
     }
 
-    if (npc.healer) {
+    if (route.kind === "healer") {
       const lines = [...(npc.lines ?? [])];
       // Primo BAR SPORT: spiega che qui si cura GRATIS, quando serve.
       if (!this.state.flags["heal-hint"]) {
@@ -1251,13 +1322,13 @@ export class WorldScene implements Scene {
       return;
     }
 
-    if (npc.legendary) {
+    if (route.kind === "legendary") {
       this.interactLegendary(npc);
       return;
     }
 
-    if (npc.gift && !this.state.flags[npc.gift.flag]) {
-      const gift = npc.gift;
+    if (route.kind === "gift") {
+      const gift = npc.gift!;
       this.say(gift.lines, () => {
         this.state.flags[gift.flag] = true;
         this.state.bag[gift.itemId] = (this.state.bag[gift.itemId] ?? 0) + gift.qty;
@@ -1268,8 +1339,8 @@ export class WorldScene implements Scene {
       return;
     }
 
-    if (npc.vehicleGift && !this.state.flags[npc.vehicleGift.flag]) {
-      const vg = npc.vehicleGift;
+    if (route.kind === "vehicleGift") {
+      const vg = npc.vehicleGift!;
       // Gating opzionale (es. il TRAGHETTO serve 3 medaglie).
       if (vg.requiresBadges && this.state.badges.length < vg.requiresBadges) {
         this.say(vg.lockedLines ?? ["Non sei ancora pronto."]);
@@ -1290,14 +1361,189 @@ export class WorldScene implements Scene {
     }
 
     // Flag "hai parlato con..." per le quest secondarie (es. GIRO DI PORTE).
-    if (npc.setFlag && !this.state.flags[npc.setFlag]) {
-      this.state.flags[npc.setFlag] = true;
+    if (route.kind === "dialog" && route.setFlag) {
+      this.state.flags[route.setFlag] = true;
       saveGame(this.state);
     }
 
-    if (npc.lines && npc.lines.length > 0) {
+    if (route.kind === "dialog" && npc.lines && npc.lines.length > 0) {
       this.say(npc.lines);
     }
+  }
+
+  private dispatchWorldCommand(command: WorldCommand): void {
+    if (command.kind === "say") {
+      this.say(command.lines);
+      return;
+    }
+    if (command.kind === "setFlag") {
+      this.state.flags[command.flag] = true;
+      saveGame(this.state);
+      return;
+    }
+    if (command.kind === "startTrainer") {
+      const def = this.trainerForId(command.trainerId);
+      this.startTrainerFight(command.rematch ? buildRematchDef(this.state, def) : def, command.rematch);
+      return;
+    }
+    if (command.kind === "openCoalition") {
+      this.stack.push(new CoalitionScene(this.stack, this.input, this.state, command.focus));
+      return;
+    }
+    if (command.kind === "openPhotoChoice") {
+      this.stack.push(new PhotoChoiceScene(this.stack, this.input, this.state));
+      return;
+    }
+    if (command.kind === "openFutureChoice") {
+      this.stack.push(new FutureChoiceScene(this.stack, this.input, this.state));
+      return;
+    }
+    if (command.kind === "openDiplomacyChoice") {
+      this.stack.push(new DiplomacyChoiceScene(this.stack, this.input, this.state, command.initial));
+      return;
+    }
+    if (command.kind === "openGenovaTechno") {
+      this.stack.push(new GenovaTechnoScene(this.stack, this.input, this.state));
+      return;
+    }
+    if (command.kind === "openDistrict") {
+      this.openDistrict(command.districtId);
+      return;
+    }
+    if (command.kind === "openElectionNight") {
+      this.openElectionNight();
+      return;
+    }
+    if (command.kind === "openWeeklyCampaign") {
+      this.openWeeklyCampaign();
+      return;
+    }
+    if (command.kind === "openSliceEnding") {
+      this.stack.push(new SliceEndingScene(this.stack, this.input, this.state, () => {
+        this.state.pos = { mapId: "bruxelles", x: 19, y: 13, facing: "down" };
+        this.loadMap("bruxelles");
+      }));
+      return;
+    }
+    const scene = command.scene;
+    if (scene === "shop") this.stack.push(new ShopScene(this.stack, this.input, this.state));
+    else if (scene === "casino") this.stack.push(new CasinoScene(this.stack, this.input, this.state));
+    else if (scene === "box") this.stack.push(new BoxScene(this.stack, this.input, this.state));
+    else if (scene === "mafia") this.stack.push(new MafiaScene(this.stack, this.input, this.state));
+    else this.stack.push(new MonumentScene(this.stack, this.input, this.state));
+  }
+
+  private openDistrict(districtId: DistrictId): void {
+    if (this.state.election.phase === "inactive") this.state.election = newElectionState(true);
+    const beginDebate = () => {
+      const content = DISTRICT_CONTENT[districtId];
+      this.startTrainerBattle(this.trainerForId(content.trainerId), (result) => {
+        const bonuses = coalitionBonuses(this.state.coalition);
+        const action = resolveAction(this.state.election, {
+          districtId, action: "debate", variant: result,
+          baseDelta: result === "win" ? 8 : -4,
+          modifier: { bonusPercent: bonuses.bonus.territoryGain, malusPercent: bonuses.malus.territoryGain }
+        });
+        if (action.ok) {
+          this.state.election = action.state;
+          this.markDistrictProgress(districtId);
+          result === "win" ? audio.districtGain() : audio.districtLoss();
+          saveGame(this.state);
+        }
+      });
+    };
+    this.stack.push(new DistrictScene(this.stack, this.input, this.state, districtId, beginDebate));
+  }
+
+  private markDistrictProgress(districtId: DistrictId): void {
+    if (districtActionCount(this.state.election, districtId) >= 2) {
+      this.state.flags[`district-complete:${districtId}`] = true;
+      this.state.flags[`district-dossier:${districtId}`] = true;
+    }
+    if (this.state.election.phase === "ready") this.state.flags["tourComplete"] = true;
+  }
+
+  private openElectionNight(): void {
+    if (!this.state.flags.palaceRoomsComplete) {
+      this.say(["LO STUDIO NON È PRONTO.", "COMPLETA I QUATTRO ARCHIVI DEL PALAZZO."]);
+      return;
+    }
+    if (this.state.election.phase === "resolved" && this.state.election.result) {
+      this.stack.push(new ElectionResultsScene(this.stack, this.input, this.state.election.result, () => {
+        if (!this.state.flags.atto3Complete) this.openAtto3Ending();
+      }));
+      return;
+    }
+    if (this.state.election.phase !== "ready" && this.state.election.phase !== "locked") {
+      this.say(["I CINQUE DOSSIER NON SONO PRONTI.", "SERVONO ESATTAMENTE DUE AZIONI PER COLLEGIO."]);
+      return;
+    }
+    const begin = async () => {
+      if (this.state.election.phase === "ready") {
+        const runId = `atto3-${Date.now().toString(36)}-${this.state.election.revision}`;
+        const snapshot = await createElectionSnapshot(this.state.election, this.state.coalition, this.state.sondaggi, this.state.flags, runId);
+        const started = startElection(this.state.election, runId, snapshot);
+        if (!started.ok) return;
+        this.state.election = started.state;
+        this.state.coalition = { ...this.state.coalition, locked: true };
+        this.state.flags["election-snapshot-saved"] = true;
+        saveGame(this.state);
+      }
+      const runId = this.state.election.runId;
+      if (!runId) return;
+      const doctrine = this.state.election.snapshot?.doctrine ?? electionDoctrine(this.state.coalition, this.state.flags);
+      this.startTrainerBattle(this.trainerForId("algoritmo-sovrano"), (battleResult) => {
+        if (battleResult !== "win" && battleResult !== "loss") return;
+        const resolved = resolveElection(this.state.election, runId, battleResult === "win");
+        if (!resolved.ok || !resolved.state.result) return;
+        this.state.election = resolved.state;
+        this.state.coalition = { ...this.state.coalition, locked: false };
+        this.state.flags["election-night-complete"] = true;
+        this.state.flags[`election-ending:${resolved.state.result.ending}`] = true;
+        saveGame(this.state);
+        this.stack.push(new ElectionResultsScene(this.stack, this.input, resolved.state.result, () => this.openAtto3Ending()));
+      }, false, doctrine);
+    };
+    if (this.state.election.phase === "locked") begin();
+    else this.say([
+      "PUNTO DI NON RITORNO: INIZIA ELECTION NIGHT.",
+      "COALIZIONE E CINQUE COLLEGI VERRANNO CONGELATI.",
+      "IL GIOCO SALVA PRIMA DELLA DIRETTA. A PER CONTINUARE."
+    ], begin);
+  }
+
+  private openAtto3Ending(): void {
+    this.stack.push(new Atto3EndingScene(this.stack, this.input, this.state, () => {
+      this.state.pos = { mapId: "palazzo_feed_terrazza", x: 10, y: 10, facing: "up" };
+      this.loadMap("palazzo_feed_terrazza");
+    }));
+  }
+
+  private openWeeklyCampaign(): void {
+    const openScene = () => this.stack.push(new WeeklyCampaignScene(this.stack, this.input, this.state, startDebate));
+    const startDebate = (index: number) => {
+      const pools = [
+        ["mediocrate", "telecrate", "contemorfo"],
+        ["referendodo", "salisound", "campocorno"],
+        ["pontimax", "futurorso", "telecrate"]
+      ];
+      const top = Math.max(42, Math.min(55, this.state.party.reduce((value, mon) => Math.max(value, mon.level), 42) + 1));
+      const species = pools[Math.max(0, Math.min(2, index - 1))];
+      const def: TrainerDef = {
+        id: `weekly:${this.state.weeklyCampaign.weekKey}:${index}`,
+        name: `MODERATORE SETTIMANALE ${index}`,
+        pal: "journalist", team: species.map((id, slot) => [id, top - 2 + slot] as [string, number]),
+        intro: ["STESSA SETTIMANA, NUOVO PANEL.", "IL VERDETTO NON SI PUÒ FARMARE."],
+        defeat: ["DIBATTITO ARCHIVIATO."], money: 0
+      };
+      this.startTrainerBattle(def, (result) => {
+        if (result === "win" || result === "loss") {
+          this.state.weeklyCampaign = resolveWeeklyStage(this.state.weeklyCampaign, result, result === "win" ? 4 : -2);
+          saveGame(this.state); openScene();
+        }
+      });
+    };
+    openScene();
   }
 
   // ---- SFIDA DEL GIORNO (OPINIONISTA PERPETUA a Caput Mundi) ----
@@ -1366,6 +1612,8 @@ export class WorldScene implements Scene {
       this.say(["Servono POLITICMON per salire sul ring delle poltrone."]);
       return;
     }
+    const rule = coppaRule();
+    const prepared = prepareCoppaParty(this.state.party, rule);
     const titled = this.state.coppaWins > 0
       ? [`Bentornato, ${COPPA_TITLE}. Un altro giro di giostra?`]
       : ["Otto sfidanti, sette FANTASMI di vecchie glorie e TU.", "Un tabellone, tre round, una sola poltrona in palio."];
@@ -1373,9 +1621,15 @@ export class WorldScene implements Scene {
       [
         "BANDITORE: benvenuto alla COPPA DELLE POLTRONE!",
         ...titled,
+        `REGOLA DI OGGI: ${rule.name}.`,
+        rule.description,
         `Iscrizione: ${COPPA_FEE}€. Si vince o si torna a casa.`
       ],
       () => {
+        if (!prepared.ok) {
+          this.say(["SQUADRA NON IDONEA ALLA REGOLA DI OGGI.", prepared.reason, "CAMBIA SQUADRA PRIMA DI PAGARE."]);
+          return;
+        }
         if (this.state.money < COPPA_FEE) {
           this.say(["Fondi insufficienti per l'iscrizione.", `Servono ${COPPA_FEE}€. Il torneo dei ricchi non fa credito.`]);
           return;
@@ -1384,6 +1638,7 @@ export class WorldScene implements Scene {
           this.state.money -= COPPA_FEE;
           saveGame(this.state); // la tassa è definitiva anche se poi esci
           this.coppa = initTournament();
+          this.coppaRuleActive = rule;
           this.showBracketThen(() => this.runTournamentRound());
         });
       }
@@ -1395,7 +1650,9 @@ export class WorldScene implements Scene {
     if (!this.coppa) {
       return;
     }
-    this.stack.push(new TournamentScene(this.stack, this.input, this.state, this.coppa, next));
+    this.stack.push(new TournamentScene(this.stack, this.input, this.state, this.coppa, next, () => {
+      this.coppa = null; this.coppaRuleActive = null;
+    }, this.coppaRuleActive ?? undefined));
   }
 
   // Fa combattere il giocatore contro il suo avversario del round corrente.
@@ -1413,12 +1670,20 @@ export class WorldScene implements Scene {
     }
     const ghostIndex = t.alive.findIndex((e, i) => i > 0 && e.ghost?.id === opp.id);
     const def = ghostTrainerDef(opp, t.seed, ghostIndex >= 0 ? ghostIndex : 1);
-    this.say([`${roundLabel(t)}: contro ${opp.name}!`], () => {
+    const rule = this.coppaRuleActive ?? coppaRule(t.dateKey);
+    const prepared = prepareCoppaParty(this.state.party, rule);
+    if (!prepared.ok) { this.say([prepared.reason]); this.coppa = null; this.coppaRuleActive = null; return; }
+    this.say([`${roundLabel(t)}: contro ${opp.name}!`, `REGOLA ${rule.name}.`], () => {
+      this.coppaOriginalParty = this.state.party;
+      this.state.party = prepared.party;
       this.startTrainerBattle(def, (result) => {
+        if (this.coppaOriginalParty) this.state.party = this.coppaOriginalParty;
+        this.coppaOriginalParty = null;
         if (result !== "win") {
           // Eliminato: fine torneo (nessun premio, tassa già persa). Il messaggio
           // di sconfitta/respawn è già gestito da onBattleEnd: qui solo cleanup.
           this.coppa = null;
+          this.coppaRuleActive = null;
           return;
         }
         const { champion, results } = advanceAfterPlayerWin(t);
@@ -1430,7 +1695,7 @@ export class WorldScene implements Scene {
         this.say([...lines, "Passi il turno! Il tabellone si stringe."], () => {
           this.showBracketThen(() => this.runTournamentRound());
         });
-      });
+      }, false, undefined, rule.maxHealingItems);
     });
   }
 
@@ -1463,6 +1728,7 @@ export class WorldScene implements Scene {
       );
     }
     this.coppa = null;
+    this.coppaRuleActive = null;
     saveGame(this.state);
     audio.badgeFanfare();
     this.say(lines);
@@ -1878,6 +2144,7 @@ export class WorldScene implements Scene {
         }
         if (def.id === "commissione" && !this.state.flags["ue-beaten"]) {
           this.state.flags["ue-beaten"] = true;
+          this.state.flags["atto3-invited"] = true;
           addSondaggi(this.state, 10);
           saveGame(this.state);
           this.say([
@@ -1885,7 +2152,9 @@ export class WorldScene implements Scene {
             "COMMISSIONE: 'Recepito. Hai vinto le elezioni EUROPEE.'",
             "Sei il nuovo PORTAVOCE D'EUROPA: 24 traduzioni simultanee del tuo trionfo.",
             `I SONDAGGI schizzano al ${this.state.sondaggi}%: persino Strasburgo applaude.`,
-            "Ti spetta una TESSERA DORATA: 'Prassi consolidata. Non chiederne conto.'"
+            "Ti spetta una TESSERA DORATA: 'Prassi consolidata. Non chiederne conto.'",
+            "BREAKING NEWS: a sud-est di BRUXELLES ti aspettano al CAMPO LARGO.",
+            "Cercano qualcuno capace di far entrare una coalizione intera in una sola foto."
           ]);
           return;
         }
@@ -2068,7 +2337,7 @@ export class WorldScene implements Scene {
   private recentWanderers: string[] = []; // ultimi PG, per non ripeterli subito
 
   private checkWanderingChallenger(): boolean {
-    if (!this.map.outdoor || !this.state.flags["dex-received"]) {
+    if (!this.map.outdoor || this.map.allowWanderers === false || !this.state.flags["dex-received"]) {
       return false;
     }
     if (this.state.party.length === 0 || !this.state.party.some((m) => m.hp > 0)) {
@@ -2360,6 +2629,7 @@ export class WorldScene implements Scene {
     // Contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA. NON
     // sostituisce stepCount (privato, la cura del Min. Salute usa il suo %6).
     this.state.stepsTotal += 1;
+    recordRunStep(this.state);
     // Missione giornaliera "CAMMINA 300 PASSI": conteggio in dailyQuestsDone
     // ("steps300:N"), niente save per passo (salvano warp/battaglie/completamento).
     bumpDailyQuest(this.state, "steps300");
@@ -2412,6 +2682,12 @@ export class WorldScene implements Scene {
         pos.x = this.fromX;
         pos.y = this.fromY;
         this.say(warp.lockedLines ?? ["È chiuso."]);
+        return;
+      }
+      if (warp.requiresFeature && !isFeatureEnabled(warp.requiresFeature)) {
+        pos.x = this.fromX;
+        pos.y = this.fromY;
+        this.say(warp.lockedLines ?? ["CONTENUTO IN SVILUPPO."]);
         return;
       }
       const doWarp = () => {
@@ -2988,12 +3264,12 @@ export class WorldScene implements Scene {
           if (this.map.outdoor) {
             const bImg = this.tilePng(baseCh2);
             if (bImg) {
-              screen.imageSprite(bImg, dx, dy);
+              drawWorldTilePng(screen, bImg, dx, dy);
             }
           } else {
             const bImg = this.tilePng(baseCh2);
             if (bImg) {
-              screen.imageSprite(bImg, dx, dy);
+              drawWorldTilePng(screen, bImg, dx, dy);
             }
           }
           continue;
@@ -3004,13 +3280,13 @@ export class WorldScene implements Scene {
           const baseCh = def.overWater ? "w" : this.map.outdoor ? "." : "p";
           const baseImg = this.tilePng(baseCh);
           if (baseImg) {
-            screen.imageSprite(baseImg, dx, dy);
+            drawWorldTilePng(screen, baseImg, dx, dy);
           }
         }
         if (def.water) {
           const waterImg = this.tilePng(ch);
           if (waterImg) {
-            screen.imageSprite(waterImg, dx, dy);
+            drawWorldTilePng(screen, waterImg, dx, dy);
           }
         } else if (def.overlay) {
           // Oggetto overlay (albero/segnale/...): PNG 32px ancorato in basso al
@@ -3027,7 +3303,7 @@ export class WorldScene implements Scene {
             const baseCh = this.map.outdoor ? "." : "p";
             const baseImg2 = this.tilePng(baseCh);
             if (baseImg2) {
-              screen.imageSprite(baseImg2, dx, dy);
+              drawWorldTilePng(screen, baseImg2, dx, dy);
             }
             drawWorldObjectPng(screen, ch, objImg, dx, dy);
           } else {
@@ -3036,13 +3312,13 @@ export class WorldScene implements Scene {
             if (def.overWater) {
               const waterBase = this.tilePng("w");
               if (waterBase) {
-                screen.imageSprite(waterBase, dx, dy);
+                drawWorldTilePng(screen, waterBase, dx, dy);
               }
             }
             // Texture PNG PixelLab del terreno (override mappa o default).
             const img = this.tilePng(ch);
             if (img) {
-              screen.imageSprite(img, dx, dy);
+              drawWorldTilePng(screen, img, dx, dy);
             }
           }
         }
@@ -3101,7 +3377,7 @@ export class WorldScene implements Scene {
           for (let xx = tx; xx < tx + fp.w; xx += 1) {
             const fc = this.tileAt(xx, doorRow);
             if ((fc === "d" || fc === "D" || fc === "g") && this.tileAt(xx, stepY) === "=") {
-              screen.imageSprite(pathImg, xx * TILE - camX, stepY * TILE - camY);
+              drawWorldTilePng(screen, pathImg, xx * TILE - camX, stepY * TILE - camY);
             }
           }
         };
@@ -3479,6 +3755,20 @@ export class WorldScene implements Scene {
         screen.text(this.sondDelta.text, px - 18, dy, this.sondDelta.up ? "#7ad858" : "#d04848");
       }
       hudBottom = 26;
+    }
+
+    // Campo Largo: il consenso del collegio resta numerico e visibile mentre
+    // esplori. Non sostituisce SONDAGGI nazionale e non dipende solo dal colore.
+    if ((this.map.id === "campo_largo" || this.map.id === "retropalco_campo") && this.state.election.phase !== "inactive") {
+      const local = this.state.election.districts.find((district) => district.id === "centro")?.localConsensus ?? 38;
+      const label = `CENTRO ${local}%`;
+      const w = 76;
+      const x = VIEW_W - w - 2;
+      screen.rect(x, hudBottom, w, 19, `rgba(16,20,31,${0.92 * hudAlpha})`);
+      screen.text(label, x + 4, hudBottom + 3, local >= 50 ? "#e8c84a" : "#cfe6ff");
+      screen.rect(x + 4, hudBottom + 12, w - 8, 4, "rgba(255,255,255,0.15)");
+      screen.rect(x + 4, hudBottom + 12, Math.max(1, Math.round((w - 8) * local / 100)), 4, local > 50 ? "#55a889" : local === 50 ? "#e6b944" : "#d76458");
+      hudBottom += 21;
     }
 
     // Veicolo attivo: piccola targhetta sotto i sondaggi.

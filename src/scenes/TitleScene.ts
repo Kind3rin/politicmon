@@ -12,6 +12,8 @@ import { Menu, MessageBox, clipToWidth, wrapText, GREY, PAPER } from "../ui/widg
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
 import { WorldScene } from "../game/world/WorldScene";
+import { createMonster } from "../game/monster";
+import { FEATURE_OVERRIDE_KEY } from "../game/features";
 
 // Slogan rotanti sotto il logo: uno alla volta, niente sovrapposizioni.
 const SLOGANS = [
@@ -69,6 +71,7 @@ export class TitleScene implements Scene {
     // i salvataggi (localStorage è isolato per browser/webview: Instagram ≠ Chrome
     // ≠ PWA). Da qui può incollare il codice esportato dall'altro browser.
     items.push({ label: "SPOSTA SAVE" });
+    if (import.meta.env.DEV) items.push({ label: "PLAYTEST ATTO 3" });
     return new Menu(items);
   }
 
@@ -130,6 +133,9 @@ export class TitleScene implements Scene {
       // altrimenti uno stato nuovo: l'IMPORT (il caso d'uso qui) non usa lo stato.
       const existing = hasAnySave() ? loadGame() : null;
       this.stack.push(new BackupScene(this.stack, this.input, existing ?? newGameState()));
+    } else if (label.startsWith("PLAYTEST ATTO 3")) {
+      audio.confirm();
+      this.startAtto3Playtest();
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {
@@ -141,6 +147,46 @@ export class TitleScene implements Scene {
       this.menu = this.buildMenu();
       this.menu.index = Math.min(index, this.menu.items.length - 1);
     }
+  }
+
+  // Checkpoint esclusivamente DEV: evita di chiedere ai tester di completare
+  // l'intera campagna o manipolare localStorage dalla console. Non viene mai
+  // incluso nel menu della build di produzione.
+  private startAtto3Playtest(): void {
+    try {
+      localStorage.setItem(FEATURE_OVERRIDE_KEY, JSON.stringify({ atto3: true, coalition: true }));
+    } catch {
+      // Il WorldScene degrada comunque senza crash; in browser normali lo storage
+      // è disponibile e abilita la slice.
+    }
+    const state = newGameState();
+    state.party = [
+      createMonster("giorgiagon", 52),
+      createMonster("renzilla", 51),
+      createMonster("salvinator", 51),
+      createMonster("grillix", 50),
+      createMonster("conteblob", 50),
+      createMonster("draghimon", 50)
+    ];
+    state.starterId = "giorgetta";
+    state.money = 5000;
+    state.bag = { ...state.bag, caffe: 10, spritz: 6, maalox: 4, schedona: 3 };
+    state.badges = ["auditel", "spread", "dazio"];
+    state.flags["boss-beaten"] = true;
+    state.flags["garante-beaten"] = true;
+    state.flags["ue-beaten"] = true;
+    state.flags["starter-chosen"] = true;
+    state.flags["rival1-beaten"] = true;
+    state.flags["dex-received"] = true;
+    state.flags["hint-offshore"] = true;
+    state.flags["offshore-beaten"] = true;
+    state.flags["hint-brux-arrivo"] = true;
+    state.flags["dev-playtest-atto3"] = true;
+    state.defeatedTrainers = ["giudice1", "giudice2", "giudice3", "boss", "garante", "tesoriere", "commissione"];
+    for (const mon of state.party) state.dex[mon.speciesId] = "caught";
+    state.pos = { mapId: "campo_largo", x: 10, y: 16, facing: "up" };
+    state.lastBar = "bruxelles";
+    this.start(state);
   }
 
   // Scelta la difficoltà, fai scegliere lo SLOT di destinazione, poi crea lo

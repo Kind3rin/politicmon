@@ -13,7 +13,7 @@ const down = (c) => page.evaluate((k) => document.dispatchEvent(new KeyboardEven
 const up = (c) => page.evaluate((k) => document.dispatchEvent(new KeyboardEvent("keyup", { code: k, bubbles: true })), c);
 const hold = async (c, ms) => { await down(c); await page.waitForTimeout(ms); await up(c); await page.waitForTimeout(300); };
 const tap = async (c, ms=80) => { await down(c); await page.waitForTimeout(ms); await up(c); await page.waitForTimeout(110); };
-const pos = () => page.evaluate(() => { const r = localStorage.getItem("politicmon-save-v13__s0"); if (!r) return null; const s = JSON.parse(r); return { map: s.pos.mapId, x: s.pos.x, y: s.pos.y }; });
+const pos = () => page.evaluate(() => { const r = localStorage.getItem("politicmon-save-v14__s0"); if (!r) return null; const s = JSON.parse(r); return { map: s.pos.mapId, x: s.pos.x, y: s.pos.y }; });
 
 await page.evaluate(() => {
   const flags = { "dex-received": true, "starter-chosen": true, "intro-done": true, "veh-traghetto": true, "hint-casino": true, "ponte-beaten": true, "rival1-beaten": true, "boss-beaten": true };
@@ -28,7 +28,7 @@ await page.evaluate(() => {
     hardMode: false, coppaWins: 0, boostExpBattles: 0, boostMoneyBattles: 0, boostSondBattles: 0,
     reduceEffects: false, reduceEffectsSet: true, monumentLevel: 0
   };
-  localStorage.setItem("politicmon-save-v13__s0", JSON.stringify(st));
+  localStorage.setItem("politicmon-save-v14__s0", JSON.stringify(st));
   localStorage.setItem("politicmon-active-slot", "0");
   localStorage.setItem("politicmon-nick", "TESTER");
 });

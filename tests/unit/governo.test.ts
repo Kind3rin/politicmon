@@ -1,8 +1,8 @@
 // Test della stat SONDAGGI (governo.ts): clamp e notifiche milestone.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { addSondaggi, bumpSondaggi } from "../src/game/governo.ts";
-import { newGameState } from "../src/game/state.ts";
+import { addSondaggi, bumpSondaggi } from "../../src/game/governo.ts";
+import { newGameState } from "../../src/game/state.ts";
 
 test("addSondaggi: clamp entro 0..100", () => {
   const s = newGameState();

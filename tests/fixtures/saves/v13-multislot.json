@@ -1,0 +1,8 @@
+{
+  "activeSlot": 1,
+  "slots": [
+    { "slot": 0, "fixture": "v13-new.json" },
+    { "slot": 1, "fixture": "v13-post-medaglie.json" },
+    { "slot": 2, "fixture": "v13-post-ue.json" }
+  ]
+}

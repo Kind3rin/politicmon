@@ -1,0 +1,18 @@
+{
+  "extends": "v13-post-garante.json",
+  "patch": {
+    "flags": {
+      "starter-chosen": true,
+      "dex-received": true,
+      "boss-beaten": true,
+      "garante-beaten": true,
+      "offshore-beaten": true,
+      "hint-brux-arrivo": true,
+      "ue-beaten": true
+    },
+    "pos": { "mapId": "bruxelles", "x": 12, "y": 7, "facing": "down" },
+    "money": 7600,
+    "sondaggi": 84,
+    "stepsTotal": 11200
+  }
+}

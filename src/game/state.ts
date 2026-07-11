@@ -1,6 +1,10 @@
 import type { Facing } from "../art/characters";
 import type { Monster } from "./monster";
 import { expForLevel, sanitizeMon, statsOf } from "./monster";
+import { markHistoricalCheckpoints, newRunStats, normalizeRunStats, type RunStats } from "./runstats";
+import { newCoalitionState, normalizeCoalitionState, type CoalitionState } from "./coalition";
+import { newElectionState, normalizeElectionState, type ElectionState } from "./election";
+import { newWeeklyCampaignState, normalizeWeeklyCampaign, type WeeklyCampaignState } from "./weeklyCampaign";
 
 export interface PlayerPos {
   mapId: string;
@@ -49,6 +53,16 @@ export interface GameState {
   reduceEffects: boolean; // RIDUCI EFFETTI: azzera shake/flash/urla-tremolo (l'informazione resta)
   reduceEffectsSet: boolean; // l'utente ha scelto esplicitamente? (distingue default-di-sistema da scelta)
   monumentLevel: number; // MONUMENTO AL CANDIDATO: money-sink cosmetico del LOTTO 3 (0..N, intero)
+  // ---- v14: TELEMETRIA LOCALE DELLA RUN (mai inviata in rete) ----
+  runStats: RunStats;
+  // ---- v15: ATTO 3 / COALIZIONE (payload presente anche con feature flag off) ----
+  coalition: CoalitionState;
+  // ---- v16: TERRITORI / ELECTION NIGHT (inerte con feature flag off) ----
+  election: ElectionState;
+  // ---- v17: CAMPAGNA SETTIMANALE (stato separato dalla storia) ----
+  weeklyCampaign: WeeklyCampaignState;
+  // ---- v18: FORME MEME ottenute; la forma resta dopo la scadenza ----
+  unlockedMemeForms: string[];
 }
 
 // Seed "di installazione": generato una volta e persistito nel save. Divide i
@@ -58,12 +72,12 @@ function rollBrowserSeed(): number {
 }
 
 // ---- SLOT MULTIPLI DI SALVATAGGIO (3 slot) ----
-// Ogni slot ha la sua chiave `politicmon-save-v13__sN` (+ `.bak`). Lo slot ATTIVO
+// Ogni slot ha la sua chiave `politicmon-save-v18__sN` (+ `.bak`). Lo slot ATTIVO
 // (0/1/2) è persistito a parte: saveGame/loadGame/hasSave/clearSave operano su di
 // esso, così i ~70 call site esistenti non cambiano. La vecchia chiave senza
 // suffisso (mono-slot) viene migrata nello slot 0 al primo accesso.
 export const SLOT_COUNT = 3;
-const SAVE_KEY_BASE = "politicmon-save-v13";
+const SAVE_KEY_BASE = "politicmon-save-v18";
 const ACTIVE_SLOT_KEY = "politicmon-active-slot";
 // Chiave mono-slot storica (pre-multislot): migrata → slot 0.
 const LEGACY_SINGLE_KEY = "politicmon-save-v13";
@@ -75,6 +89,8 @@ function slotKey(slot: number): string {
 function slotBackupKey(slot: number): string {
   return `${SAVE_KEY_BASE}__s${slot}.bak`;
 }
+
+const PREVIOUS_SLOT_BASES = ["politicmon-save-v17", "politicmon-save-v16", "politicmon-save-v15", "politicmon-save-v14", "politicmon-save-v13"] as const;
 
 function clampSlot(n: number): number {
   return Number.isInteger(n) && n >= 0 && n < SLOT_COUNT ? n : 0;
@@ -205,7 +221,12 @@ export function newGameState(): GameState {
     // quindi il toggle in OPZIONI conta ancora come prima decisione esplicita.
     reduceEffects: prefersReducedMotion(),
     reduceEffectsSet: false,
-    monumentLevel: 0
+    monumentLevel: 0,
+    runStats: newRunStats(),
+    coalition: newCoalitionState(),
+    election: newElectionState(),
+    weeklyCampaign: newWeeklyCampaignState(),
+    unlockedMemeForms: []
   };
 }
 
@@ -242,6 +263,10 @@ export function setActiveState(state: GameState | null): void {
   activeState = state;
 }
 
+export function getActiveState(): GameState | null {
+  return activeState;
+}
+
 // Salva lo stato attivo se esiste una partita reale in corso. Chiamata dagli
 // handler di lifecycle (visibilitychange/pagehide). Non sovrascrive un save
 // valido quando si è ancora alla schermata del titolo (party vuoto).
@@ -266,7 +291,7 @@ export function saveGame(state: GameState): boolean {
         // Quota piena per il backup: il salvataggio primario resta prioritario.
       }
     }
-    localStorage.setItem(key, JSON.stringify(state));
+    localStorage.setItem(key, serializeGameState(state));
     return true;
   } catch (err) {
     // Quota piena o serializzazione fallita: logga una volta (non spammare).
@@ -279,6 +304,40 @@ export function saveGame(state: GameState): boolean {
 }
 
 let saveFailedLogged = false;
+
+// Ripristino da backup: il primario corrente è già noto come corrotto, quindi
+// NON va ruotato sopra il backup valido (saveGame lo farebbe per una save normale).
+function restorePrimaryFromBackup(slot: number, state: GameState): void {
+  try {
+    localStorage.setItem(slotKey(slot), serializeGameState(state));
+  } catch {
+    // Il caricamento in memoria resta valido anche con storage non scrivibile.
+  }
+}
+
+// v13/v14/v15 avevano già tre slot: migra ciascuno nello slot v16 omologo senza
+// mescolare campagne. La versione più recente vince; la copia precede la rimozione.
+function migratePreviousSlotOnce(slot: number): void {
+  try {
+    const currentKey = slotKey(slot);
+    for (const base of PREVIOUS_SLOT_BASES) {
+      const oldKey = `${base}__s${slot}`;
+      const oldBackupKey = `${oldKey}.bak`;
+      const old = localStorage.getItem(oldKey);
+      if (old !== null && localStorage.getItem(currentKey) === null) {
+        localStorage.setItem(currentKey, old);
+        const oldBak = localStorage.getItem(oldBackupKey);
+        if (oldBak !== null) localStorage.setItem(slotBackupKey(slot), oldBak);
+      }
+      if (old !== null) {
+        localStorage.removeItem(oldKey);
+        localStorage.removeItem(oldBackupKey);
+      }
+    }
+  } catch {
+    // Storage indisponibile: load degrada alla sessione in memoria.
+  }
+}
 
 // Valida una entry di dailyQuestsDone ("id:count" o "id:done"). Deve essere una
 // stringa con almeno un "id" non vuoto e un suffisso "done" oppure un intero
@@ -303,7 +362,18 @@ function isValidDailyQuestEntry(entry: unknown): entry is string {
   return n >= 0 && n <= 99999;
 }
 
-function parseState(raw: string | null): GameState | null {
+export interface ParseGameStateOptions {
+  // Il parser puro non consulta window/matchMedia. Il chiamante browser passa
+  // esplicitamente la preferenza di sistema; test e tool usano false di default.
+  reduceMotionDefault?: boolean;
+}
+
+// Parser/normalizzatore PURO: nessun accesso a localStorage, clock o RNG.
+// Il JSON in input non viene mutato (JSON.parse crea un nuovo oggetto).
+export function parseGameState(
+  raw: string | null,
+  options: ParseGameStateOptions = {}
+): GameState | null {
   if (!raw) {
     return null;
   }
@@ -376,7 +446,7 @@ function parseState(raw: string | null): GameState | null {
       ? parsed.reduceEffects === true
       : typeof parsed.reduceEffects === "boolean"
         ? parsed.reduceEffects
-        : prefersReducedMotion();
+        : (options.reduceMotionDefault ?? false);
     // Clamp a 0..3 (MONUMENT_MAX): un save importato/manomesso con un valore
     // fuori range farebbe crashare MonumentScene.draw (MONUMENT_STAGES[lv]
     // undefined → .flatMap su undefined). La costante 3 è duplicata da
@@ -385,6 +455,17 @@ function parseState(raw: string | null): GameState | null {
       typeof parsed.monumentLevel === "number" && !Number.isNaN(parsed.monumentLevel)
         ? Math.max(0, Math.min(3, Math.floor(parsed.monumentLevel)))
         : 0;
+    const hadRunStats = Boolean(parsed.runStats && typeof parsed.runStats === "object");
+    parsed.runStats = normalizeRunStats(parsed.runStats);
+    parsed.coalition = normalizeCoalitionState(parsed.coalition);
+    parsed.election = normalizeElectionState(parsed.election);
+    parsed.weeklyCampaign = normalizeWeeklyCampaign(parsed.weeklyCampaign);
+    parsed.unlockedMemeForms = Array.isArray(parsed.unlockedMemeForms)
+      ? [...new Set(parsed.unlockedMemeForms.filter((id): id is string => typeof id === "string"))].slice(0, 64)
+      : [];
+    if (!hadRunStats) {
+      markHistoricalCheckpoints(parsed);
+    }
     // Rete di sicurezza su OGNI mostro (party E box) PRIMA di toccare hp/exp:
     // uno speciesId o una mossa inesistente (save importato via CODICE o cross-version)
     // farebbe crashare statsOf/healMonster/move-menu. Va qui perché le reti hp/exp
@@ -429,6 +510,16 @@ function parseState(raw: string | null): GameState | null {
   }
 }
 
+// Adapter browser: mantiene il comportamento storico per save/import v12 senza
+// scelta accessibilità, ma lascia il parser esportato deterministico e testabile.
+function parseState(raw: string | null): GameState | null {
+  return parseGameState(raw, { reduceMotionDefault: prefersReducedMotion() });
+}
+
+export function serializeGameState(state: GameState): string {
+  return JSON.stringify(state);
+}
+
 // browserSeed=0 (save pre-v11 o campo assente): genera e persisti subito,
 // così il seed resta stabile per sempre.
 function ensureBrowserSeed(state: GameState): void {
@@ -439,6 +530,7 @@ function ensureBrowserSeed(state: GameState): void {
 }
 
 export function loadGame(): GameState | null {
+  migratePreviousSlotOnce(getActiveSlot());
   migrateSingleSlotOnce();
   const slot = getActiveSlot();
   const current = parseState(lsGet(slotKey(slot)));
@@ -449,7 +541,7 @@ export function loadGame(): GameState | null {
   // Primario corrotto/assente: prova il backup dell'ultima scrittura valida.
   const backup = parseState(lsGet(slotBackupKey(slot)));
   if (backup) {
-    saveGame(backup);
+    restorePrimaryFromBackup(slot, backup);
     ensureBrowserSeed(backup);
     return backup;
   }
@@ -475,7 +567,7 @@ export function loadGame(): GameState | null {
 // si passa per encodeURIComponent (schema classico, simmetrico in import).
 
 export function exportSaveCode(state: GameState): string {
-  return btoa(encodeURIComponent(JSON.stringify(state)));
+  return btoa(encodeURIComponent(serializeGameState(state)));
 }
 
 // Valida e ritorna lo stato importato (null se il codice non è un save valido).
@@ -490,6 +582,7 @@ export function importSaveCode(code: string): GameState | null {
 
 // C'è un salvataggio nello slot ATTIVO? (usata dal flusso "CONTINUA" storico).
 export function hasSave(): boolean {
+  migratePreviousSlotOnce(getActiveSlot());
   migrateSingleSlotOnce();
   const slot = getActiveSlot();
   if (lsGet(slotKey(slot)) !== null) {
@@ -504,8 +597,9 @@ export function hasSave(): boolean {
 
 // C'è un salvataggio in UNO SPECIFICO slot? (usata dal selettore slot in UI).
 export function hasSaveInSlot(slot: number): boolean {
-  migrateSingleSlotOnce();
   const s = clampSlot(slot);
+  migratePreviousSlotOnce(s);
+  migrateSingleSlotOnce();
   if (lsGet(slotKey(s)) !== null || lsGet(slotBackupKey(s)) !== null) {
     return true;
   }
@@ -537,6 +631,7 @@ export interface SlotSummary {
 // Riepilogo leggibile di uno slot per la UI (senza caricarlo come partita attiva).
 export function slotSummary(slot: number): SlotSummary {
   const s = clampSlot(slot);
+  migratePreviousSlotOnce(s);
   migrateSingleSlotOnce();
   let raw = lsGet(slotKey(s));
   if (raw === null && s === 0) {
@@ -576,6 +671,11 @@ export function clearSlot(slot: number): void {
   const s = clampSlot(slot);
   lsRemove(slotKey(s));
   lsRemove(slotBackupKey(s));
+  // Evita che uno slot legacy non ancora migrato "resusciti" al prossimo load.
+  for (const base of PREVIOUS_SLOT_BASES) {
+    lsRemove(`${base}__s${s}`);
+    lsRemove(`${base}__s${s}.bak`);
+  }
   // Solo lo slot 0 poteva ereditare i vecchi save mono-slot: puliscili con lui.
   if (s === 0) {
     for (const key of LEGACY_KEYS) {

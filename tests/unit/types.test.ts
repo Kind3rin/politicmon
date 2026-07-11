@@ -2,7 +2,7 @@
 // ritoccato: triangolo starter chiuso, resistenza DESTRA, immunità, compressione.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { typeMultiplier } from "../src/data/poltypes.ts";
+import { typeMultiplier } from "../../src/data/poltypes.ts";
 
 test("triangolo degli starter chiuso (DESTRA>SINISTRA>CENTRO>DESTRA)", () => {
   assert.ok(typeMultiplier("DESTRA", ["SINISTRA"]) > 1, "DESTRA batte SINISTRA");

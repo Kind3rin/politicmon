@@ -32,7 +32,8 @@ src/
 │   ├── moves.ts            # 57 mosse, moveSummary()/moveKindLabel(), STATUS_*
 │   ├── poltypes.ts         # 8 tipi + tabella efficacie (typeMultiplier)
 │   ├── items.ts            # oggetti (ball/heal/cure/evo/tm/key), BAG_ORDER, SHOP_DIRECTIVES
-│   ├── maps.ts             # MAPS (9), tile ASCII, warp, npc, pickup, encounter, music
+│   ├── maps.ts             # facade compatibile del registry mappe
+│   ├── maps/               # tipi, factory e cataloghi base/postgame/interiors/atto3
 │   ├── trainers.ts         # 21 allenatori fissi, BADGES, BADGE_TEASER
 │   ├── quests.ts           # 18 quest (principali + side), currentQuest(), target per la guida
 │   ├── encounters.ts       # WANDERERS (PG vaganti casuali) + scaling
@@ -46,7 +47,9 @@ src/
 │   ├── world/WorldScene.ts # IL CUORE: movimento, incontri, NPC, warp, HUD, rivale, multiplayer
 │   └── battle/
 │       ├── BattleScene.ts  # battaglia (coda di Step), animazioni, EXP, loot, milestone
-│       └── sim.ts          # matematica gen-1: danno, tipi, crit, cattura, scelta mossa nemico
+│       ├── sim.ts          # formula unica: danno, tipi, crit, cattura, IA
+│       ├── effectContract.ts # fasi, inventario/parità, regole turno condivise
+│       └── duelsim.ts      # risoluzione autoritativa pura del turno PvP
 ├── scenes/                 # scene UI (una per schermata)
 │   ├── TitleScene, PauseScene, PartyScene, BagScene, ShopScene, DexScene
 │   ├── GovScene            # assegnazione ministeri
@@ -61,6 +64,10 @@ src/
 │   └── profile.ts          # nickname persistente (localStorage)
 └── ui/widgets.ts           # Menu, MessageBox (wrapText 36), drawHpBar, colori INK/PAPER/GREY
 ```
+
+`Screen` mantiene cache bounded dei glifi bitmap colorati: evita migliaia di
+`fillRect` per frame e protegge il target 60 fps. Le statistiche cache sono
+esposte solo come lettura per `scripts/measure-performance.mjs`.
 
 ## Flussi principali
 
@@ -101,7 +108,9 @@ remoti. Se la rete non c'è, fallisce in silenzio (singleplayer regge).
 ## Convenzioni di estensione
 
 - **Nuova specie:** sprite in `art/monsters.ts` + scheda in `data/species.ts` (stesso id) + eventuali mosse in `data/moves.ts`. Il Dex si aggiorna da solo.
-- **Nuova mappa:** aggiungi i tile ASCII e l'entry in `MAPS`; ogni char deve esistere in `TILES`; le righe devono essere uniformi; npc/pickup/warp su tile non solidi.
+- **Nuova mappa:** aggiungi tile ed entry al catalogo corretto in `data/maps/`;
+  `index.ts` compone `MAPS` e rifiuta id duplicati o incoerenti. Ogni char deve
+  esistere in `TILES`; righe uniformi; npc/pickup/warp su tile validi.
 - **Nuovo oggetto:** entry in `ITEMS` + id in `BAG_ORDER`; gestisci il `kind` in `BagScene`.
 - **Nuova feature di stato:** campo in `GameState`, bumpa `SAVE_KEY`, aggiorna `parseState` e `LEGACY_KEYS`.
 

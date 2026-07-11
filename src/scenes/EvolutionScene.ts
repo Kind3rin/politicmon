@@ -1,4 +1,4 @@
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { MONSTER_ART, MONSTERS_WITH_PNG, drawMonsterSprite } from "../art/monsters";
 import { SPECIES } from "../data/species";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -71,11 +71,11 @@ export class EvolutionScene implements Scene {
 
   private drawMon(screen: Screen, speciesId: string, glow: number, scaleBoost = 0): void {
     const art = MONSTER_ART[speciesId];
-    if (!art) {
+    if (!art && !MONSTERS_WITH_PNG.has(speciesId)) {
       return;
     }
-    const w = art.art[0].length;
-    const h = art.art.length;
+    const w = art?.art[0]?.length ?? 32;
+    const h = art?.art.length ?? 32;
     const scale = 3 + scaleBoost;
     const cx = VIEW_W / 2;
     const by = 104;
@@ -133,7 +133,7 @@ export class EvolutionScene implements Scene {
       const bob = Math.sin(this.time * 4) * 0.05;
       this.drawMon(screen, this.toId, 0, bob);
       this.banner(screen, `Congratulazioni! ${SPECIES[this.fromId].name} è diventato ${SPECIES[this.toId].name}!`);
-      screen.textCenter("A: continua", VIEW_W / 2, VIEW_H - 12, "#9aa0b8");
+      screen.textCenter("A: CONTINUA", VIEW_W / 2, VIEW_H - 52, "#9aa0b8");
     }
   }
 

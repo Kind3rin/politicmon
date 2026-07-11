@@ -10,10 +10,15 @@ export interface Combatant {
   // Abilità LODO: il primo colpo subito in battaglia fa danno dimezzato.
   // Stato per-combattente (come stages/gaffe), resettato a ogni ingresso.
   firstHitTaken: boolean;
+  firstAttackUsed: boolean;
+  hitReactionUsed: boolean;
 }
 
 export function makeCombatant(mon: Monster): Combatant {
-  const c: Combatant = { mon, stages: { atk: 0, def: 0, spc: 0, spd: 0 }, gaffeTurns: 0, firstHitTaken: false };
+  const c: Combatant = {
+    mon, stages: { atk: 0, def: 0, spc: 0, spd: 0 }, gaffeTurns: 0,
+    firstHitTaken: false, firstAttackUsed: false, hitReactionUsed: false
+  };
   // VOLTAGABBANA: +1 OPPORTUNISMO a ogni ingresso in campo. Vive QUI perché
   // ogni creazione di Combatant è un ingresso (PVE: lead/switch; duello:
   // makeDuelSim/applySwitch/applyEvent "switch" — host e guest identici).
@@ -37,7 +42,7 @@ export function effectiveStat(c: Combatant, key: StatKey): number {
 
 // Effetto offensivo (abilità o hold dell'ATTACCANTE) che ha alzato il danno.
 // Serve alla BattleScene per annunciarli come già fa coi difensivi (LODO/GILET).
-export type OffensiveTrigger = "maggioranza" | "opposizione" | "whatever" | "caimano" | "santino" | "agendarossa";
+export type OffensiveTrigger = "maggioranza" | "opposizione" | "whatever" | "caimano" | "primapagina" | "santino" | "agendarossa";
 
 export interface DamageResult {
   damage: number;
@@ -46,6 +51,7 @@ export interface DamageResult {
   lodo?: boolean; // il colpo è stato dimezzato dall'abilità LODO del difensore
   // Trigger offensivi scattati in questo colpo (per l'annuncio testuale R42).
   offensive?: OffensiveTrigger[];
+  pollEstimate?: "low" | "high";
 }
 
 // Tetto al moltiplicatore di danno finale (soft-cap, Round 42): impedisce i
@@ -107,7 +113,10 @@ export function calcDamage(
   const crit = rng() < critChance;
   // In caso di critico si ignorano gli stage (come nei vecchi giochi).
   const atk = crit ? statsOf(attacker.mon)[atkKey] : effectiveStat(attacker, atkKey);
-  const def = crit ? statsOf(defender.mon)[defKey] : effectiveStat(defender, defKey);
+  const specialDefense = move.category === "speciale" ? speciesOf(defender.mon).specialDefense : undefined;
+  const def = specialDefense !== undefined
+    ? crit ? specialDefense : Math.max(1, Math.floor(specialDefense * stageMult(defender.stages.spc)))
+    : crit ? statsOf(defender.mon)[defKey] : effectiveStat(defender, defKey);
   const level = attacker.mon.level * (crit ? 2 : 1);
   const stab = speciesOf(attacker.mon).types.includes(move.type) ? 1.5 : 1;
   const tMult = typeMultiplier(move.type, speciesOf(defender.mon).types);
@@ -115,8 +124,12 @@ export function calcDamage(
   // ~40% del danno teorico, quindi le lotte gli sembravano lunghissime. Con 58 il
   // danno sale ~20% e le lotte tornano corte anche per chi non gioca perfetto,
   // lasciando comunque spazio a status/buff (target ~5-7 turni player-perfetto).
-  const base = (((2 * level) / 5 + 2) * move.power * atk) / def / 58 + 2;
-  const random = 0.88 + rng() * 0.12;
+  const power = dynamicMovePower(attacker, move);
+  const base = (((2 * level) / 5 + 2) * power * atk) / def / 58 + 2;
+  const pollFork = abilityOf(attacker.mon)?.id === "forchettasondaggi" && move.category === "speciale";
+  const pollEstimate = pollFork ? (rng() < 0.5 ? "low" : "high") : undefined;
+  // FORCHETTA SONDAGGI sostituisce il roll standard 0,88..1,00: non si somma.
+  const random = pollEstimate === "low" ? 0.85 : pollEstimate === "high" ? 1.15 : 0.88 + rng() * 0.12;
   let mult = stab * tMult * random;
   const offensive: OffensiveTrigger[] = [];
 
@@ -156,6 +169,11 @@ export function calcDamage(
     mult *= 1.2;
     offensive.push("caimano");
   }
+  if (atkAbility === "primapagina" && !attacker.firstAttackUsed) {
+    mult *= 1.2;
+    offensive.push("primapagina");
+  }
+  attacker.firstAttackUsed = true;
   // LODO: il primo colpo subito in battaglia è dimezzato.
   let lodo = false;
   if (abilityOf(defender.mon)?.id === "lodo" && !defender.firstHitTaken) {
@@ -181,8 +199,15 @@ export function calcDamage(
     crit,
     typeMult: tMult,
     lodo,
-    offensive: offensive.length > 0 ? offensive : undefined
+    offensive: offensive.length > 0 ? offensive : undefined,
+    pollEstimate
   };
+}
+
+// EXIT POLL legge i PV all'inizio del colpo: 50% esatto appartiene alla stima alta.
+export function dynamicMovePower(attacker: Combatant, move: Move): number {
+  if (move.id !== "exit_poll") return move.power;
+  return attacker.mon.hp * 2 >= statsOf(attacker.mon).hp ? 100 : 60;
 }
 
 // Probabilità di cattura in stile prima generazione, semplificata.

@@ -3,13 +3,16 @@
 // banner d'efficacia, telegrafia, disegno animato dei mostri e box HP.
 // NESSUNA logica di gioco qui: solo stato visivo e disegno.
 
-import { MONSTER_ART, MONSTER_ACTION_ART, monsterImage } from "../../art/monsters";
+import {
+  MONSTER_ART, MONSTER_ACTION_ART, MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG, monsterImage
+} from "../../art/monsters";
+import { memeForm } from "../memeForms";
 import { STATUS_LABELS } from "../../data/moves";
 import { audio } from "../../engine/audio";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { speciesOf, statsOf, type Monster } from "../monster";
 import type { Combatant } from "./sim";
-import { drawHpBar, INK, PAPER } from "../../ui/widgets";
+import { clipToWidth, drawHpBar, INK, PAPER } from "../../ui/widgets";
 
 export type BattleSide = "player" | "foe";
 
@@ -333,11 +336,11 @@ export function drawBattleMonster(
 ): void {
   const speciesId = comb.mon.speciesId;
   const baseArt = MONSTER_ART[speciesId];
-  if (!baseArt) {
+  if (!baseArt && !MONSTERS_WITH_PNG.has(speciesId)) {
     return;
   }
-  const w = baseArt.art[0]?.length ?? 24;
-  const h = baseArt.art.length;
+  const w = baseArt?.art[0]?.length ?? 24;
+  const h = baseArt?.art.length ?? 24;
   const scale = 2;
 
   // Affondo: 0 a riposo, ~1 al picco del colpo.
@@ -386,8 +389,8 @@ export function drawBattleMonster(
 
   // Frame d'azione (bocca urlante) per i mostri chiave durante l'affondo.
   const action = MONSTER_ACTION_ART[speciesId];
-  const useAction = action && lunge > 0.4;
-  const art = useAction ? action : baseArt;
+  const useAction = lunge > 0.4 && (Boolean(action) || MONSTERS_WITH_ACTION_PNG.has(speciesId));
+  const art = useAction && action ? action : baseArt;
   const key = `${who === "foe" ? "battle" : "battleback"}:${speciesId}${useAction ? ":a" : ""}`;
 
   // Redesign PixelLab: se c'è uno sprite PNG pronto per la specie, lo si disegna
@@ -396,7 +399,7 @@ export function drawBattleMonster(
   // identico (centro in basso fermo). Il PNG è 64px: lo si scala per stare in
   // linea con gli altri mostri (pixmap ~48px renderizzati). Gli effetti
   // post-draw (velo SCANDALO, simbolo status) restano condivisi sotto.
-  const png = monsterImage(speciesId);
+  const png = monsterImage(speciesId, Boolean(useAction));
   let drawW: number;
   let drawH: number;
   let x: number;
@@ -415,6 +418,14 @@ export function drawBattleMonster(
     x = cx - drawW / 2 + dx;
     y = by - drawH;
     screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
+  }
+
+  // Forma meme: aura sottile sopra lo sprite originale, mai un rimpiazzo del
+  // volto PixelLab. Anche il bonus tattico resta leggibile senza solo colore.
+  const form = memeForm(comb.mon.memeFormId);
+  if (form && form.speciesId === speciesId) {
+    screen.frame(Math.round(x - 2), Math.round(y - 2), Math.ceil(drawW + 4), Math.ceil(drawH + 4), form.accent);
+    screen.text("F", Math.round(x + drawW - 4), Math.round(y - 7), form.accent);
   }
 
   // Velo rosso pulsante sopra il mostro logorato dallo SCANDALO.
@@ -457,15 +468,20 @@ export const PLAYER_BOX: CombatantBoxOpts = { x: 126, y: 78, w: 110, h: 38, hpY:
 // resta fuori (solo PVE, disegnata dalla BattleScene).
 export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number, opts: CombatantBoxOpts): void {
   const { x, y, w, h } = opts;
-  screen.panel(x, y, w, h);
+  screen.panel(x, y, w, h, "combat");
   // Margine interno: la cornice del panel "mangia" ~3px, quindi 8px di margine
   // dal bordo del box danno un'aria uniforme e niente testo attaccato (audit UI).
   const pad = 8;
   // Il nome slitta a destra se il chiamante disegna un badge (es. la SCHEDA
   // "già eletto" nel box nemico): evita che il badge copra nome/PV.
   const nameX = x + pad + (opts.nameInset ?? 0);
-  screen.text(speciesOf(mon).name, nameX, y + 6, INK);
-  screen.textRight(`L${mon.level}`, x + w - pad, y + 6, INK);
+  const levelText = `L${mon.level}`;
+  // Il livello è compatto a destra: 2px di separazione bastano col font bitmap.
+  // Conserva per intero nomi da 12 caratteri come QUASIMAGIANI senza ellissi.
+  const rightPad = 4;
+  const maxNameW = x + w - rightPad - levelText.length * 6 - 1 - nameX;
+  screen.text(clipToWidth(speciesOf(mon).name, maxNameW), nameX, y + 6, INK);
+  screen.textRight(levelText, x + w - rightPad, y + 6, INK);
   const maxHp = statsOf(mon).hp;
   drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, maxHp);
   if (opts.showHpText) {

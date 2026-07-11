@@ -1,0 +1,10 @@
+{
+  "slot": 0,
+  "primary": "{json-corrotto",
+  "backupFixture": "v13-post-garante.json",
+  "expected": {
+    "mapId": "colle",
+    "garanteBeaten": true,
+    "money": 5100
+  }
+}

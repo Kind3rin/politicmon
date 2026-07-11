@@ -2,6 +2,7 @@ import { ABILITIES, type Ability } from "../data/abilities";
 import { ITEMS, type Item } from "../data/items";
 import { MOVES, type StatusId } from "../data/moves";
 import { SPECIES, type Species } from "../data/species";
+import { applyMemeFormStats, memeForm } from "./memeForms";
 
 export interface MoveSlot {
   id: string;
@@ -17,6 +18,7 @@ export interface Monster {
   status: StatusId | null;
   moves: MoveSlot[];
   heldItem?: string; // id item kind "hold" equipaggiato (save v11, opzionale)
+  memeFormId?: string; // forma stagionale dello stesso numero Dex (save v18)
 }
 
 export interface Stats {
@@ -61,7 +63,7 @@ export function statsOf(mon: Monster): Stats {
   // bersaglio regge più colpi e le battaglie durano ~5-8 turni invece di 2.
   // L'HP cresce più che linearmente (lv*2) per reggere le mosse evolute (power
   // 85-110) nel tardo gioco, dove prima gli scontri tornavano a 2 turni.
-  return {
+  return applyMemeFormStats(mon, {
     hp: Math.floor((base.hp * 3 * lv) / 100) + lv + 14,
     // atk scala con +lv come def/spc: prima era +5 flat e l'offesa restava
     // indietro rispetto alle difese gonfiate, affamando il danno early-game.
@@ -69,7 +71,7 @@ export function statsOf(mon: Monster): Stats {
     def: Math.floor((base.def * 2 * lv) / 100) + lv + 5,
     spc: Math.floor((base.spc * 2 * lv) / 100) + lv + 5,
     spd: Math.floor((base.spd * 2 * lv) / 100) + 5
-  };
+  });
 }
 
 // Level cap del giocatore (Round 42: 50→55, coerente coi boss UE/Coppa lv52-55).
@@ -125,6 +127,8 @@ export function sanitizeMon(mon: Monster): void {
   }
   const level = typeof mon.level === "number" && mon.level > 0 ? Math.floor(mon.level) : 1;
   mon.level = level;
+  const form = memeForm(mon.memeFormId);
+  if (!form || form.speciesId !== mon.speciesId) delete mon.memeFormId;
   // Tieni solo gli slot con id valido e pp numerico; scarta i duplicati.
   const seen = new Set<string>();
   mon.moves = Array.isArray(mon.moves)
@@ -265,6 +269,7 @@ export function evolve(mon: Monster, targetId: string): void {
   }
   const hpRatio = mon.hp / statsOf(mon).hp;
   mon.speciesId = targetId;
+  delete mon.memeFormId;
   mon.hp = Math.max(1, Math.round(statsOf(mon).hp * hpRatio));
 }
 

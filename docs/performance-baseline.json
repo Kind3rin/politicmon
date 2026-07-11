@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "profile": {
+    "viewport": "390x844",
+    "deviceScaleFactor": 2,
+    "cpuThrottle": 4,
+    "bootNetwork": "40ms/4Mbps"
+  },
+  "boot": {
+    "assetsReadyMs": 1108,
+    "firstFrameMs": 1136.699999999255,
+    "resourceRequestsAtFirstFrame": 99,
+    "resourceTransferBytesAtFirstFrame": 514528,
+    "wallMs": 2087.7
+  },
+  "scenes": {
+    "world": {
+      "work": {
+        "frames": 240,
+        "meanMs": 4.004,
+        "p50Ms": 3.4,
+        "p95Ms": 7.4,
+        "p99Ms": 9.6,
+        "maxMs": 22.9
+      },
+      "interval": {
+        "frames": 239,
+        "meanMs": 17.154,
+        "p50Ms": 16.7,
+        "p95Ms": 16.8,
+        "p99Ms": 33.3,
+        "maxMs": 33.4
+      },
+      "framesOver100ms": 0
+    },
+    "battle": {
+      "work": {
+        "frames": 240,
+        "meanMs": 2.019,
+        "p50Ms": 1.5,
+        "p95Ms": 4.5,
+        "p99Ms": 8.5,
+        "maxMs": 15.2
+      },
+      "interval": {
+        "frames": 239,
+        "meanMs": 16.667,
+        "p50Ms": 16.7,
+        "p95Ms": 16.7,
+        "p99Ms": 16.8,
+        "maxMs": 16.8
+      },
+      "framesOver100ms": 0
+    },
+    "dex": {
+      "work": {
+        "frames": 240,
+        "meanMs": 2.022,
+        "p50Ms": 1.8,
+        "p95Ms": 3.1,
+        "p99Ms": 4.2,
+        "maxMs": 5.9
+      },
+      "interval": {
+        "frames": 239,
+        "meanMs": 16.666,
+        "p50Ms": 16.7,
+        "p95Ms": 16.7,
+        "p99Ms": 16.8,
+        "maxMs": 16.8
+      },
+      "framesOver100ms": 0
+    },
+    "spriteRegistry": {
+      "entries": 29,
+      "ready": 29,
+      "loading": 0,
+      "missing": 0,
+      "decodedBytesEstimate": 671728
+    },
+    "rasterCache": {
+      "rasterizedSprites": 2,
+      "rasterizedPixels": 1032,
+      "cachedGlyphs": 178,
+      "glyphPixels": 8540
+    }
+  },
+  "sizes": {
+    "codeRawBytes": 913040,
+    "codeGzipBytes": 292485,
+    "spriteCompressedBytes": 956290,
+    "spriteDecodedBytesEstimate": 9388836,
+    "spriteFiles": 374
+  },
+  "save": {
+    "payloadBytes": 7761,
+    "parseMeanMs": 0.0548,
+    "serializeMeanMs": 0.0298
+  }
+}

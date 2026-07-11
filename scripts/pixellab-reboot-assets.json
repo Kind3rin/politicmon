@@ -1032,6 +1032,63 @@
           "reason": "first house/lab polish batch kept too much visible side/depth for the requested no-3/4 building standard"
         }
       ]
+    },
+    {
+      "id": "atto3-salistrobo-family-2026-07-10",
+      "tool": "create_1_direction_object + create_object_state",
+      "state": "downloaded",
+      "styleReference": "Art Bible monster battle 96x96: non-human cartoon political satire, crisp navy outline, flat navy/teal/coral/ivory/gold palette",
+      "outputs": [
+        { "file": "monsters/salistrobo.png", "objectId": "eb3b5d10-5791-4aad-a16a-6e6d49443181" },
+        { "file": "monsters/salistrobo_action.png", "objectId": "8308424c-9c81-40b2-98f5-922af38b732a" },
+        { "file": "monsters/salisound.png", "objectId": "df950242-bfe3-4f8a-a010-677574cb20a5" },
+        { "file": "monsters/salisound_action.png", "objectId": "b4d9e34a-919f-482d-95b6-2dd1d92c1b95" }
+      ]
+    },
+    {
+      "id": "atto3-futurorso-2026-07-10",
+      "tool": "create_1_direction_object + create_object_state",
+      "state": "downloaded",
+      "styleReference": "Art Bible monster battle 96x96 and inventory icon 32x32: cartoon political satire, crisp navy outline, navy/teal/coral/ivory/gold palette",
+      "outputs": [
+        { "file": "monsters/futurorso.png", "objectId": "3c22ffd5-ce18-4052-854b-6d578b386e03" },
+        { "file": "monsters/futurorso_action.png", "objectId": "eb504ca5-62d8-42de-8caa-887f1118d534" },
+        { "file": "items/tessera_futuro.png", "objectId": "5f7e47e1-efef-4ecd-a062-e611009c54a2" }
+      ]
+    },
+    {
+      "id": "atto3-gianimago-family-2026-07-11",
+      "tool": "create_1_direction_object + create_object_state",
+      "state": "downloaded",
+      "styleReference": "Art Bible monster battle 96x96: non-human cartoon television magic satire, crisp navy outline, violet/teal/ivory/gold/burgundy palette",
+      "outputs": [
+        { "file": "monsters/gianimago.png", "objectId": "1c4707bd-73ab-4ff4-83b2-e15f13dac4cc" },
+        { "file": "monsters/gianimago_action.png", "objectId": "1f5fac44-432b-41e3-80d1-7a2a4e0787a6" },
+        { "file": "monsters/quasimagiani.png", "objectId": "c4c58880-dee6-4eba-8536-bc3d728d4f41" },
+        { "file": "monsters/quasimagiani_action.png", "objectId": "3ae7d16f-5a8d-4c00-9326-75fbe3e3a728" }
+      ]
+    },
+    {
+      "id": "atto3-crosettank-2026-07-11",
+      "tool": "create_1_direction_object + create_object_state",
+      "state": "downloaded",
+      "styleReference": "Art Bible monster battle 96x96: non-human bureaucratic cartoon satire, dark steel/navy/ivory/gold/brick-red palette",
+      "outputs": [
+        { "file": "monsters/crosettank.png", "objectId": "d513d84c-8793-4b93-beae-c7c76aecf88c" },
+        { "file": "monsters/crosettank_action.png", "objectId": "e00e13f5-0642-44db-9974-5da201e7d23b" }
+      ]
+    },
+    {
+      "id": "atto3-fratocorno-family-2026-07-11",
+      "tool": "create_1_direction_object + create_object_state",
+      "state": "downloaded",
+      "styleReference": "Art Bible monster battle 96x96: non-human botanical support cartoon, green/sage/ivory/terracotta/gold/navy palette",
+      "outputs": [
+        { "file": "monsters/fratocorno.png", "objectId": "909e49b5-e61b-414c-a69d-5d68a015628f" },
+        { "file": "monsters/fratocorno_action.png", "objectId": "7bb6a944-1a74-4513-958f-50a099692f91" },
+        { "file": "monsters/campocorno.png", "objectId": "c7c78a42-de99-475c-9879-9d9ea884c0c5" },
+        { "file": "monsters/campocorno_action.png", "objectId": "b4202e87-a952-430a-8fff-da323a2153c9" }
+      ]
     }
   ],
   "delegatedManifests": [
@@ -1231,6 +1288,70 @@
         "items/comizio.png"
       ],
       "state": "regenerate-from-zero"
+    },
+    {
+      "id": "atto3-stage",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "a53e5b7b-44ce-4f5e-9617-72383617f517",
+      "output": ["tiles/atto3_stage.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-gazebo",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "9eadbfb1-a3a7-4f4a-a1ae-476985a9c2a6",
+      "output": ["tiles/atto3_gazebo.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-poster",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "be5f1272-b49f-4167-962a-2200c5c6343c",
+      "output": ["tiles/atto3_poster.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-voting-booth",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "26d5d9d0-aa05-4b09-a4e9-92ae83aa1799",
+      "output": ["tiles/atto3_voting_booth.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-ballot-box",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "0f2caa19-385c-41de-abb9-df5fe3fb0796",
+      "output": ["tiles/atto3_ballot_box.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-social-screen",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "5e04399c-989b-4fb5-bf64-e812351b2737",
+      "output": ["tiles/atto3_social_screen.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-press-van",
+      "domain": "world-prop",
+      "tool": "create_map_object",
+      "objectId": "d922fd70-36c7-4493-ab83-637fe5b60344",
+      "output": ["tiles/atto3_press_van.png"],
+      "state": "verified"
+    },
+    {
+      "id": "atto3-fortress",
+      "domain": "world-building",
+      "tool": "create_map_object",
+      "objectId": "1f0ac5fb-0be3-4c60-b04d-6481b2c0d9c9",
+      "output": ["tiles/atto3_fortress.png"],
+      "state": "verified"
     },
     {
       "id": "ui-core",

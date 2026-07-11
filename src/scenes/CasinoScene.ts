@@ -382,7 +382,7 @@ export class CasinoScene implements Scene {
 
   private drawSlot(screen: Screen): void {
     const y = 46;
-    screen.panel(40, y, VIEW_W - 80, 54);
+    screen.panel(40, y, VIEW_W - 80, 54, "card");
     for (let i = 0; i < 3; i += 1) {
       const rx = 56 + i * 50;
       screen.frame(rx - 4, y + 10, 34, 32, INK);

@@ -38,8 +38,7 @@ const fullTileTerrain = new Set([
   "tiles/cave_mouth.png",
   "tiles/cave_boulder.png",
   "tiles/cave_stalagmite.png",
-  "tiles/snow_pine.png",
-  "tiles/deck_asphalt.png"
+  "tiles/snow_pine.png"
 ]);
 const gridBuildings = new Map([
   ["tiles/build_house_front_red.png", [64, 48]],

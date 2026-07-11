@@ -113,6 +113,30 @@ const TRACKS: Record<string, Track> = {
     ).split(" ")
   },
 
+  // Atto 3: piazza elettorale aperta, vivace ma non trionfale.
+  campo_largo: {
+    stepSec: 0.15,
+    melody: "C5 - E5 G5 - A5 - G5 E5 - D5 - F5 A5 - G5 - E5 D5 - C5 - - -".split(" "),
+    bass: "C3 - - G2 - A2 - - E3 - F2 - - G2 - C3 - G2 - C3 - - -".split(" ")
+  },
+
+  // Atto 3: feed social, notifiche e pressione crescente.
+  social_tension: {
+    stepSec: 0.11,
+    melodyType: "square",
+    bassType: "sawtooth",
+    melody: "E5 - F5 - B4 E5 - G5 - F#5 - D5 - E5 B4 - C5 - B4 -".split(" "),
+    bass: "E2 - - E2 - C3 - - D3 - B2 - - B2 - E2 - - E2 -".split(" ")
+  },
+
+  // Atto 3: scrutinio finale, solenne e sospeso fino all'ultimo seggio.
+  election_night: {
+    stepSec: 0.18,
+    melodyType: "triangle",
+    melody: "A4 - C5 - E5 - D5 - B4 - C5 - A4 - - E5 - F5 E5 D5 - C5 B4 A4 -".split(" "),
+    bass: "A2 - - E3 - F2 - - C3 - D2 - - E2 - A2 - - E2 -".split(" ")
+  },
+
   // Interni (laboratorio, palestre, discount): carillon discreto.
   interior: {
     stepSec: 0.2,
@@ -482,6 +506,15 @@ class AudioEngine {
   // (chiamato spesso, non deve vibrare a raffica).
   textTick(): void {
     this.tone(1500, 0.018, { vol: 0.025 });
+  }
+
+  // Cue elettorali volutamente brevi e a volume basso: restano sotto i dialoghi.
+  districtGain(): void {
+    [659, 784, 988].forEach((f, i) => this.tone(f, 0.08, { delaySec: i * 0.055, vol: 0.035, type: "triangle" }));
+  }
+
+  districtLoss(): void {
+    [392, 330, 262].forEach((f, i) => this.tone(f, 0.09, { delaySec: i * 0.06, vol: 0.035, type: "triangle" }));
   }
 
   // ---- Musica ----

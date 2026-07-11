@@ -10,9 +10,10 @@ import { sceneImage } from "../../engine/assets";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, expMalus, hasMinistro, moneyMalus } from "../governo";
 import { bumpDailyQuest } from "../dailyquests";
+import { recordBattleResult, recordBattleStarted } from "../runstats";
 import { zoneProgress } from "../../data/dexzones";
 import {
-  abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, heldItemOf, LEVEL_CAP, levelEvolution, speciesOf,
+  abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, LEVEL_CAP, levelEvolution, speciesOf,
   statsOf, type Monster
 } from "../monster";
 import { typeMultiplier } from "../../data/poltypes";
@@ -20,6 +21,11 @@ import {
   calcDamage, catchChance, chooseFoeMove, effectiveStat, makeCombatant, runChance, statName,
   type AiProfile, type Combatant, type OffensiveTrigger
 } from "./sim";
+import {
+  resolveEndTurn, resolveEntryAbility, resolveFuturoPhase, resolveHitReactionAbility,
+  resolveKoAbility, resolvePreMove, statDropBlockReason, statusBlockReason
+} from "./effectContract";
+import { festivalScandaloChance } from "./atto3MoveEffects";
 import { Menu, MessageBox, clipToWidth, wrapText, GREY, INK } from "../../ui/widgets";
 import {
   approach, BattleFx, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, FOE_BOX, PLAYER_BOX
@@ -27,6 +33,7 @@ import {
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
 import { EvolutionScene } from "../../scenes/EvolutionScene";
+import { DOCTRINE_LABEL, type ElectionDoctrine } from "../electionDoctrine";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -47,12 +54,14 @@ export interface BattleOptions {
   // SPOT IN PRIME TIME (+50% fondi) è ESCLUSO dai rematch: il bonus resta un
   // acceleratore sui trainer di storia/nuovi, non un faucet sui ribattuti.
   isRematch?: boolean;
+  electionDoctrine?: ElectionDoctrine;
+  maxBattleHealingItems?: number | null;
   onEnd: (result: BattleResult) => void;
 }
 
 // Boss narrativi: tema musicale dedicato (e IA boss-grade in computeAiProfile).
 // Esportato: la WorldScene lo usa per l'hold-item extra dei boss in HARD MODE.
-export const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano", "tesoriere", "commissione"];
+export const BOSS_TRAINER_IDS = ["boss", "garante", "ilcapitano", "tesoriere", "commissione", "campo-photographer", "futuro-anteriore", "partner-perfetto", "algoritmo-sovrano"];
 
 function battleMusic(opts: BattleOptions): string {
   if (opts.music) {
@@ -104,6 +113,12 @@ export class BattleScene implements Scene {
   // ogni effetto (MAGGIORANZA/OPPOSIZIONE/WHATEVER/CAIMANO/SANTINO/AGENDA ROSSA)
   // si annuncia una volta sola per specie, come i difensivi (LODO/GILET).
   private announcedOffensive = new Set<string>();
+  private futuroPhaseTriggered = false;
+  private electionDoctrine: ElectionDoctrine = "none";
+  private electionDoctrineTriggered = false;
+  private electionTurn = 0;
+  private maxBattleHealingItems: number | null = null;
+  private battleHealingItemsUsed = 0;
   private runAttempts = 0;
   private finished = false;
   private ballAnim: { t: number; shakes: number; success: boolean } | null = null;
@@ -125,7 +140,10 @@ export class BattleScene implements Scene {
     this.trainer = opts.trainer;
     this.isRematch = opts.isRematch ?? false;
     this.isLegendary = opts.legendary ?? false;
+    this.electionDoctrine = opts.electionDoctrine ?? "none";
+    this.maxBattleHealingItems = opts.maxBattleHealingItems ?? null;
     this.onEnd = opts.onEnd;
+    recordBattleStarted(this.state);
     // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
     // (screen-shake) e la usa la scena per i lampi (KO/level/cattura/leggendario).
     this.fx.reduceEffects = this.state.reduceEffects;
@@ -168,9 +186,11 @@ export class BattleScene implements Scene {
         this.push({ text: line });
       }
       this.push({ text: `${this.trainer.name} manda in campo ${this.foeName()}!` });
+      if (this.trainer.id === "algoritmo-sovrano") this.push({ text: `DOTTRINA SNAPSHOT: ${DOCTRINE_LABEL[this.electionDoctrine]}!` });
     } else {
       this.push({ text: `Un ${this.foeName()} selvatico sbuca dalla campagna elettorale!` });
     }
+    this.pushEntryAbility(this.foe, this.player, `Il nemico ${this.foeName()}`);
     this.push({ text: `Vai, ${this.playerName()}!` });
     // SONDAGGI COME METEO: annuncio a inizio battaglia quando il gradimento
     // attiva il modificatore (+15% ai tipi establishment o anti-establishment).
@@ -183,14 +203,20 @@ export class BattleScene implements Scene {
       this.push({ text: "IL VENTO POLITICO SOFFIA A FAVORE DELL'OPPOSIZIONE!" });
       this.push({ text: "Mosse POPULISMO/DESTRA/SINISTRA/VERDE potenziate (+15%)." });
     }
-    this.pushEntryAbility(this.player, this.playerName());
+    this.pushEntryAbility(this.player, this.foe, this.playerName());
   }
 
   // VOLTAGABBANA: l'effetto (+1 OPPORTUNISMO) è applicato da makeCombatant;
   // qui si annuncia soltanto, a ogni ingresso in campo.
-  private pushEntryAbility(c: Combatant, name: string): void {
+  private pushEntryAbility(c: Combatant, opponent: Combatant, name: string): void {
     if (abilityOf(c.mon)?.id === "voltagabbana") {
       this.push({ text: `${name} cambia casacca al volo: OPPORTUNISMO sale!` });
+    }
+    const entry = resolveEntryAbility(c, opponent);
+    if (entry.triggered) {
+      c.stages = entry.entrantStages;
+      opponent.stages = entry.opponentStages;
+      this.push({ text: `${name} fa TABULA RASA: ogni modifica alle statistiche è azzerata!` });
     }
   }
 
@@ -266,6 +292,7 @@ export class BattleScene implements Scene {
         //    sondaggi vivono SOLO nel ramo trainer di afterFoeDown → consumano
         //    solo battendo un TRAINER.
         const won = result === "win";
+        recordBattleResult(this.state, result);
         if (won && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
         if (won && this.trainer) {
           // R42: lo SPOT non si applica ai rematch → non bruciare la carica lì
@@ -283,6 +310,21 @@ export class BattleScene implements Scene {
   // ---- Turn building ----
 
   private startTurn(playerMove: Move): void {
+    this.electionTurn += 1;
+    if (this.electionDoctrine === "destra_competitiva" && !this.electionDoctrineTriggered && this.electionTurn >= 7) {
+      this.electionDoctrineTriggered = true;
+      this.foe.stages.atk = Math.min(6, this.foe.stages.atk + 2);
+      this.foe.stages.def = Math.max(-6, this.foe.stages.def - 1);
+      this.push({ text: "DESTRA COMPETITIVA: ATTACCO +2, DIFESA -1!" });
+    }
+    if (this.trainer?.id === "futuro-anteriore") {
+      const phase = resolveFuturoPhase(this.foe, this.futuroPhaseTriggered);
+      if (phase.triggered) {
+        this.futuroPhaseTriggered = true;
+        this.foe.stages = phase.stages;
+        this.push({ text: "PARTITO NUOVO! Il boss azzera i malus e cerca un'ALLEANZA: VELOCITÀ +1!" });
+      }
+    }
     const slot = this.player.mon.moves.find((s) => s.id === playerMove.id);
     if (slot) {
       slot.pp = Math.max(0, slot.pp - 1);
@@ -305,26 +347,26 @@ export class BattleScene implements Scene {
     // partiva eseguita dal nuovo entrato (magari senza nemmeno conoscerla).
     const pC = this.player;
     const fC = this.foe;
-    this.pushMove(first, first === "player" ? playerMove : foeMove);
+    this.pushMove(first, first === "player" ? playerMove : foeMove, true);
     this.push({
       run: () => {
         if (this.player === pC && this.foe === fC && pC.mon.hp > 0 && fC.mon.hp > 0) {
-          this.pushMoveNow(second, second === "player" ? playerMove : foeMove);
+          this.pushMoveNow(second, second === "player" ? playerMove : foeMove, false);
         }
       }
     });
     this.pushEndOfTurn();
   }
 
-  private pushMoveNow(side: "player" | "foe", move: Move): void {
+  private pushMoveNow(side: "player" | "foe", move: Move, actedFirst = true): void {
     // Inserisce gli step della mossa in testa alla coda (dopo lo step corrente).
     const saved = this.queue;
     this.queue = [];
-    this.pushMove(side, move);
+    this.pushMove(side, move, actedFirst);
     this.queue = [...this.queue, ...saved];
   }
 
-  private pushMove(side: "player" | "foe", move: Move): void {
+  private pushMove(side: "player" | "foe", move: Move, actedFirst = true): void {
     const attacker = side === "player" ? this.player : this.foe;
     const defender = side === "player" ? this.foe : this.player;
     const attackerName = side === "player" ? this.playerName() : `Il nemico ${this.foeName()}`;
@@ -334,27 +376,23 @@ export class BattleScene implements Scene {
         if (attacker.mon.hp <= 0 || defender.mon.hp <= 0) {
           return;
         }
-        // Status: INDAGATO può bloccare il turno.
-        if (attacker.mon.status === "indagato" && Math.random() < 0.25) {
+        const preMove = resolvePreMove(attacker, Math.random);
+        attacker.gaffeTurns = preMove.gaffeTurns;
+        if (preMove.event === "indagato") {
           this.pushFront([{ text: `${attackerName} è trattenuto in audizione! Non può agire!` }]);
           return;
         }
-        // GAFFE: come la confusione.
-        if (attacker.gaffeTurns > 0) {
-          attacker.gaffeTurns -= 1;
-          if (attacker.gaffeTurns === 0) {
-            this.pushFront([{ text: `${attackerName} ha chiarito la GAFFE con una nota stampa!` }]);
-          } else if (Math.random() < 0.33) {
-            const self = Math.max(1, Math.floor((attacker.mon.level * 2) / 3) + 2);
-            attacker.mon.hp = Math.max(0, attacker.mon.hp - self);
-            this.pushFront([
-              { text: `${attackerName} riformula la GAFFE e peggiora tutto!`, waitHp: true, run: () => audio.hit() },
-              ...this.koCheckSteps(side === "player" ? "player" : "foe")
-            ]);
-            return;
-          }
+        if (preMove.event === "gaffeEnd") {
+          this.pushFront([{ text: `${attackerName} ha chiarito la GAFFE con una nota stampa!` }]);
+        } else if (preMove.event === "gaffeSelf") {
+          attacker.mon.hp = Math.max(0, attacker.mon.hp - preMove.selfDamage);
+          this.pushFront([
+            { text: `${attackerName} riformula la GAFFE e peggiora tutto!`, waitHp: true, run: () => audio.hit() },
+            ...this.koCheckSteps(side === "player" ? "player" : "foe")
+          ]);
+          return;
         }
-        this.pushFront(this.moveSteps(side, attacker, defender, move, attackerName));
+        this.pushFront(this.moveSteps(side, attacker, defender, move, attackerName, actedFirst));
       }
     });
   }
@@ -384,7 +422,8 @@ export class BattleScene implements Scene {
     attacker: Combatant,
     defender: Combatant,
     move: Move,
-    attackerName: string
+    attackerName: string,
+    actedFirst: boolean
   ): Step[] {
     const defenderName = side === "player" ? `Il nemico ${this.foeName()}` : this.playerName();
     const steps: Step[] = [];
@@ -420,14 +459,42 @@ export class BattleScene implements Scene {
     if (move.power > 0) {
       // Contesto SONDAGGI (meteo politico): SOLO qui nel PVE; il duello resta neutro.
       const result = calcDamage(attacker, defender, move, Math.random, { sondaggi: this.state.sondaggi });
+      const civicFavored = this.electionDoctrine === "lista_civica" && side === "foe"
+        && ((this.electionTurn % 2 === 1 && move.category === "fisico") || (this.electionTurn % 2 === 0 && move.category === "speciale"));
+      const appliedDamage = civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
       steps.push({
         run: () => {
-          defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
-          this.fx.onHit(side, result.typeMult, result.crit, result.damage);
+          defender.mon.hp = Math.max(0, defender.mon.hp - appliedDamage);
+          this.fx.onHit(side, result.typeMult, result.crit, appliedDamage);
         },
         waitHp: true,
         pause: 0.25
       });
+      steps.push({
+        run: () => {
+          if (side === "player" && !this.electionDoctrineTriggered && this.electionDoctrine === "campo_largo" && this.foe.mon.hp > 0 && this.foe.mon.hp <= statsOf(this.foe.mon).hp / 2) {
+            this.electionDoctrineTriggered = true;
+            this.foe.stages.def = Math.min(6, this.foe.stages.def + 1);
+            this.pushFront([{ text: "DIFESA COLLETTIVA: la squadra del boss alza la DIFESA!" }]);
+          } else if (side === "player" && !this.electionDoctrineTriggered && this.electionDoctrine === "centro_mobile" && result.typeMult > 1) {
+            this.electionDoctrineTriggered = true;
+            for (const key of ["atk", "def", "spc", "spd"] as const) this.foe.stages[key] = Math.max(0, this.foe.stages[key]);
+            this.foe.stages.spd = Math.min(6, this.foe.stages.spd + 1);
+            this.pushFront([{ text: "CENTRO MOBILE: malus azzerati, VELOCITÀ +1!" }]);
+          }
+          const reaction = resolveHitReactionAbility(defender);
+          if (reaction.triggered) {
+            defender.stages.spc = reaction.resulting;
+            this.pushFront([{ text: `CONTRADDITTORIO! RETORICA di ${defenderName} sale!` }]);
+          }
+          const ko = resolveKoAbility(attacker, defender);
+          if (ko.triggered) {
+            attacker.stages.spd = ko.resulting;
+            this.pushFront([{ text: `STAFFETTA! VELOCITÀ di ${attackerName} sale!` }]);
+          }
+        }
+      });
+      if (civicFavored) steps.push({ text: "LISTA CIVICA: formato favorito, POTENZA +15%!" });
       // Annuncio dei TRIGGER OFFENSIVI (R42): prima volta per specie in battaglia,
       // simmetrico ai difensivi (LODO/GILET/TEFLON) già parlanti.
       for (const trig of result.offensive ?? []) {
@@ -437,6 +504,9 @@ export class BattleScene implements Scene {
         }
         this.announcedOffensive.add(key);
         steps.push({ text: OFFENSIVE_TRIGGER_TEXT[trig](attackerName) });
+      }
+      if (result.pollEstimate) {
+        steps.push({ text: `FORCHETTA SONDAGGI: STIMA ${result.pollEstimate === "high" ? "ALTA" : "BASSA"}!` });
       }
       if (result.crit) {
         steps.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
@@ -518,14 +588,14 @@ export class BattleScene implements Scene {
       const targetName = effect.stat.target === "self" ? attackerName : defenderName;
       // POLTRONA SALDA (e GARANZIA COSTITUZIONALE): immune ai cali di statistica
       // inflitti dal nemico (replicato in duelsim.ts, stesso punto).
-      const immuneStatDrop = abilityOf(target.mon)?.id === "poltrona" || abilityOf(target.mon)?.id === "garanzia";
+      const statBlock = statDropBlockReason(target.mon);
       if (
         effect.stat.target === "foe" &&
         effect.stat.stages < 0 &&
-        immuneStatDrop
+        statBlock
       ) {
         steps.push({
-          text: abilityOf(target.mon)?.id === "garanzia"
+          text: statBlock === "garanzia"
             ? `GARANZIA COSTITUZIONALE! ${targetName} resta al di sopra delle parti.`
             : `POLTRONA SALDA! ${targetName} non si schioda di un millimetro.`,
           run: () => audio.abilityBlock()
@@ -543,27 +613,29 @@ export class BattleScene implements Scene {
         });
       }
     }
-    if (effect?.status && defender.mon.hp > 0) {
+    const conditionalStatus = effect?.statusIfFirst
+      ? { ...effect.statusIfFirst, chance: festivalScandaloChance(actedFirst) }
+      : undefined;
+    const statusEffect = effect?.status ?? conditionalStatus;
+    if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0) {
       // TEFLON (e GARANZIA COSTITUZIONALE): immune agli status (guard PRIMA del
       // tiro di chance, come in duelsim). TELECAMERA (hold): previene solo la GAFFE.
-      const defAbility = abilityOf(defender.mon)?.id;
-      const immuneTeflon = defAbility === "teflon" || defAbility === "garanzia";
-      const immuneCamera = effect.status.id === "gaffe" && heldItemOf(defender.mon)?.id === "telecamera";
-      if (immuneTeflon || immuneCamera) {
-        if (effect.status.chance >= 100) {
+      const statusBlock = statusBlockReason(defender.mon, statusEffect.id);
+      if (statusBlock) {
+        if (statusEffect.chance >= 100) {
           steps.push({
-            text: immuneTeflon
-              ? (defAbility === "garanzia"
+            text: statusBlock !== "telecamera"
+              ? (statusBlock === "garanzia"
                   ? `GARANZIA COSTITUZIONALE! Le accuse non scalfiscono ${defenderName}.`
                   : `TEFLON! Le accuse scivolano via da ${defenderName}.`)
               : `La TELECAMERA riprende tutto: ${defenderName} evita la GAFFE!`,
             run: () => audio.abilityBlock()
           });
         }
-      } else if (Math.random() * 100 < effect.status.chance) {
-        const id = effect.status.id;
+      } else if (Math.random() * 100 < statusEffect.chance) {
+        const id = statusEffect.id;
         if (defender.mon.status || (id === "gaffe" && defender.gaffeTurns > 0)) {
-          if (effect.status.chance >= 100) {
+          if (statusEffect.chance >= 100) {
             steps.push({ text: `${defenderName} è già nei guai fino al collo!` });
           }
         } else {
@@ -793,6 +865,21 @@ export class BattleScene implements Scene {
       if (abilityOf(this.foe.mon)?.id === "voltagabbana") {
         entry.push({ text: `Il nemico ${this.foeName()} cambia casacca al volo: OPPORTUNISMO sale!` });
       }
+      const entryAbility = resolveEntryAbility(this.foe, this.player);
+      if (entryAbility.triggered) {
+        this.foe.stages = entryAbility.entrantStages;
+        this.player.stages = entryAbility.opponentStages;
+        entry.push({ text: `Il nemico ${this.foeName()} fa TABULA RASA: ogni modifica è azzerata!` });
+      }
+      if (this.electionDoctrine === "campo_largo" && this.electionDoctrineTriggered) {
+        this.foe.stages.def = Math.min(6, this.foe.stages.def + 1);
+      }
+      if (this.electionDoctrine === "scissione" && !this.electionDoctrineTriggered) {
+        this.electionDoctrineTriggered = true;
+        this.foe.stages.atk = Math.min(6, this.foe.stages.atk + 1);
+        this.foe.stages.def = Math.max(-6, this.foe.stages.def - 1);
+        entry.push({ text: "SCISSIONE: riserva immediata, ATTACCO +1 e DIFESA -1!" });
+      }
       // Come in Pokémon: dopo che l'avversario schiera il prossimo, chiedi se
       // vuoi cambiare il tuo (utile per adattarsi al nuovo tipo in campo). Solo
       // se hai almeno un altro POLITICMON sano in panchina.
@@ -1013,6 +1100,12 @@ export class BattleScene implements Scene {
     if (abilityOf(mon)?.id === "voltagabbana") {
       steps.push({ text: `${this.playerName()} cambia casacca al volo: OPPORTUNISMO sale!` });
     }
+    const entryAbility = resolveEntryAbility(this.player, this.foe);
+    if (entryAbility.triggered) {
+      this.player.stages = entryAbility.entrantStages;
+      this.foe.stages = entryAbility.opponentStages;
+      steps.push({ text: `${this.playerName()} fa TABULA RASA: ogni modifica è azzerata!` });
+    }
     if (!afterFaint) {
       // Il cambio consuma il turno: il nemico attacca (col blocco status).
       steps.push(this.foeCounterStep());
@@ -1030,38 +1123,31 @@ export class BattleScene implements Scene {
 
   private endOfTurnSteps(): Step[] {
     const apply = (c: Combatant, name: string): Step[] => {
-      const steps: Step[] = [];
-      if (c.mon.hp > 0 && c.mon.status === "scandalo") {
-        steps.push(
-          {
-            text: `${name} è logorato dallo SCANDALO!`,
-            run: () => {
-              c.mon.hp = Math.max(0, c.mon.hp - Math.max(1, Math.floor(statsOf(c.mon).hp / 8)));
-              audio.hit();
-            },
-            waitHp: true
-          },
-          ...this.koCheckSteps(c === this.player ? "player" : "foe")
-        );
-      }
-      // Cure di fine turno (dopo lo SCANDALO, come in duelsim):
-      // GALLEGGIAMENTO (abilità, 1/16) e CAFFETTIERA (hold, 1/16, solo PVE).
-      const healEot = (label: string, cond: () => boolean, sfx: () => void) => {
-        steps.push({
-          run: () => {
-            const max = statsOf(c.mon).hp;
-            if (c.mon.hp <= 0 || c.mon.hp >= max || !cond()) {
-              return;
+      return [{
+        run: () => {
+          const steps: Step[] = [];
+          for (const effect of resolveEndTurn(c, true)) {
+            if (effect.kind === "damage") {
+              steps.push({
+                text: `${name} è logorato dallo SCANDALO!`,
+                run: () => { c.mon.hp = effect.hpAfter; audio.hit(); },
+                waitHp: true
+              }, ...this.koCheckSteps(c === this.player ? "player" : "foe"));
+            } else {
+              const label = effect.id === "caffettiera" ? "La CAFFETTIERA fuma:" : "GALLEGGIAMENTO!";
+              steps.push({
+                text: `${label} ${name} recupera un po' di consenso!`,
+                run: () => {
+                  c.mon.hp = effect.hpAfter;
+                  effect.id === "caffettiera" ? audio.holdBrew() : audio.heal();
+                },
+                waitHp: true
+              });
             }
-            c.mon.hp = Math.min(max, c.mon.hp + Math.max(1, Math.floor(max / 16)));
-            sfx();
-            this.pushFront([{ text: `${label} ${name} recupera un po' di consenso!`, waitHp: true }]);
           }
-        });
-      };
-      healEot("GALLEGGIAMENTO!", () => abilityOf(c.mon)?.id === "galleggiamento", () => audio.heal());
-      healEot("La CAFFETTIERA fuma:", () => heldItemOf(c.mon)?.id === "caffettiera", () => audio.holdBrew());
-      return steps;
+          this.pushFront(steps);
+        }
+      }];
     };
     return [...apply(this.player, this.playerName()), ...apply(this.foe, `Il nemico ${this.foeName()}`)];
   }
@@ -1098,6 +1184,12 @@ export class BattleScene implements Scene {
       this.mode = "queue";
       return;
     }
+    if ((item.kind === "heal" || item.kind === "cure") && this.maxBattleHealingItems !== null && this.battleHealingItemsUsed >= this.maxBattleHealingItems) {
+      this.pushFront([{ text: this.maxBattleHealingItems === 0 ? "REGOLA COPPA: BORSA CHIUSA!" : "REGOLA COPPA: HAI GIÀ USATO L'UNICA CURA!" }]);
+      this.mode = "queue";
+      return;
+    }
+    if (item.kind === "heal" || item.kind === "cure") this.battleHealingItemsUsed += 1;
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
     bumpDailyQuest(this.state, "item1"); // missione "USA 1 OGGETTO IN LOTTA"
     const steps: Step[] = [];
@@ -1725,7 +1817,7 @@ export class BattleScene implements Scene {
     ctx.restore();
 
     // Riquadro testo.
-    screen.panel(0, VIEW_H - 44, VIEW_W, 44);
+    screen.panel(2, VIEW_H - 44, VIEW_W - 4, 42, "dialog");
     if (this.mode === "menu") {
       this.drawMainMenu(screen);
     } else if (this.mode === "fight") {
@@ -1749,7 +1841,9 @@ export class BattleScene implements Scene {
                 ? "#8a8a98"
                 : INK;
         if (this.fightMenu.index === i) {
-          screen.text("►", cx, cy, INK);
+          screen.rect(cx - 2, cy - 3, 106, 12, "#fff0bd");
+          screen.rect(cx - 2, cy - 3, 2, 12, "#e0a92f");
+          screen.text("►", cx, cy, "#8c5b12");
         }
         // Marker d'efficacia PRIMA del nome (▲ super / ▼ poco eff. / X immune):
         // il segnale non è più solo il colore (accessibilità daltonici).
@@ -1768,7 +1862,7 @@ export class BattleScene implements Scene {
         // scartare — così si vede subito cosa si guadagna e cosa si perde.
         const learn = this.pendingLearnMoveId ? MOVES[this.pendingLearnMoveId] : null;
         const old = slot ? MOVES[slot.id] : null;
-        screen.panel(8, 107, 226, 28);
+        screen.panel(8, 107, 226, 28, "card");
         if (learn) {
           screen.text(`NUOVA: ${learn.name}`, 14, 110, "#7ad858");
           screen.text(clipToWidth(moveSummary(learn), 208), 14, 119, GREY);
@@ -1784,7 +1878,7 @@ export class BattleScene implements Scene {
         // troncati nelle celle: qui il NOME INTERO della mossa selezionata a
         // sinistra + PP a destra. Il TIPO è già segnalato dal colore/marker
         // delle celle, quindi qui si toglie: evita la collisione nome/tipo/PP.
-        screen.panel(8, 117, 226, 17);
+        screen.panel(8, 117, 226, 17, "card");
         // La barra colore del tipo resta sotto il nome (segnale visivo compatto).
         const nameW = Math.min(move.name.length * 6, 150);
         screen.text(clipToWidth(move.name, 150), 14, 122, INK);
@@ -2065,12 +2159,14 @@ export class BattleScene implements Scene {
     const y = VIEW_H - h;
     const padX = 10;
     const colW = Math.floor((w - padX * 2) / 2);
-    screen.panel(x, y, w, h);
+    screen.panel(x, y, w, h, "menu");
     for (let i = 0; i < labels.length; i += 1) {
       const cx = x + padX + (i % 2) * colW;
       const cy = y + 8 + Math.floor(i / 2) * 16;
       if (this.mainMenu.index === i) {
-        screen.text("►", cx - 2, cy, INK);
+        screen.rect(cx - 5, cy - 3, colW - 2, 13, "#fff0bd");
+        screen.rect(cx - 5, cy - 3, 2, 13, "#e0a92f");
+        screen.text("►", cx - 2, cy, "#8c5b12");
       }
       screen.text(clipToWidth(labels[i], colW - 8), cx + 6, cy, INK);
     }
@@ -2091,6 +2187,7 @@ const OFFENSIVE_TRIGGER_TEXT: Record<OffensiveTrigger, (name: string) => string>
   opposizione: (n) => `OPPOSIZIONE! ${n}, con le spalle al muro, raddoppia la foga!`,
   whatever: (n) => `WHATEVER IT TAKES! ${n} fa qualunque cosa: colpo devastante!`,
   caimano: (n) => `CAIMANO! ${n} azzanna il nemico già nei guai!`,
+  primapagina: (n) => `PRIMA PAGINA! Il primo attacco di ${n} fa notizia!`,
   santino: (n) => `Il SANTINO ELETTORALE carica il colpo di ${n}!`,
   agendarossa: (n) => `L'AGENDA ROSSA infiamma la retorica di ${n}!`
 };

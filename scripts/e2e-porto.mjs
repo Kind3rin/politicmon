@@ -18,7 +18,7 @@ const up = (c) => page.evaluate((k) => document.dispatchEvent(new KeyboardEvent(
 const hold = async (c, ms) => { await down(c); await page.waitForTimeout(ms); await up(c); await page.waitForTimeout(260); };
 const tap = async (c, ms = 90) => { await down(c); await page.waitForTimeout(ms); await up(c); await page.waitForTimeout(110); };
 const shot = async (n) => { const d = await page.evaluate(() => { const c = document.querySelector("canvas"); return c ? c.toDataURL("image/png") : null; }); if (d) writeFileSync(`artifacts/screens/${n}.png`, Buffer.from(d.slice("data:image/png;base64,".length), "base64")); };
-const pos = () => page.evaluate(() => { const r = localStorage.getItem("politicmon-save-v13__s0"); if (!r) return null; const s = JSON.parse(r); return { map: s.pos.mapId, x: s.pos.x, y: s.pos.y, veh: s.vehicle }; });
+const pos = () => page.evaluate(() => { const r = localStorage.getItem("politicmon-save-v14__s0"); if (!r) return null; const s = JSON.parse(r); return { map: s.pos.mapId, x: s.pos.x, y: s.pos.y, veh: s.vehicle }; });
 
 const ACH = ["first-blood","first-catch","collector","collector2","collector3","first-badge","three-badges","government","plebiscito","rock-bottom","rival-rematch","high-roller","tycoon","treasure-hunter","directive","mechanic","trader"];
 
@@ -44,7 +44,7 @@ await page.evaluate((ach) => {
     hardMode: false, coppaWins: 0, boostExpBattles: 0, boostMoneyBattles: 0, boostSondBattles: 0,
     reduceEffects: false, reduceEffectsSet: true, monumentLevel: 0
   };
-  localStorage.setItem("politicmon-save-v13__s0", JSON.stringify(st));
+  localStorage.setItem("politicmon-save-v14__s0", JSON.stringify(st));
   localStorage.setItem("politicmon-active-slot", "0");
   localStorage.setItem("politicmon-nick", "TESTER");
 }, ACH);

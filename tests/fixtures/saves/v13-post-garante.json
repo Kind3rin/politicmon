@@ -1,0 +1,16 @@
+{
+  "extends": "v13-post-medaglie.json",
+  "patch": {
+    "flags": {
+      "starter-chosen": true,
+      "dex-received": true,
+      "boss-beaten": true,
+      "garante-beaten": true
+    },
+    "pos": { "mapId": "colle", "x": 5, "y": 3, "facing": "down" },
+    "money": 5100,
+    "sondaggi": 77,
+    "coppaWins": 1,
+    "stepsTotal": 7800
+  }
+}

@@ -8,7 +8,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
 import { saveGame } from "../game/state";
 import type { GameState } from "../game/state";
-import { clipToWidth, drawHpBar, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { clipToWidth, drawHpBar, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -167,19 +167,18 @@ export class PartyScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e3e52");
+    screen.clear("#e3ebef");
     if (this.summary) {
       this.drawSummary(screen, this.summary);
       return;
     }
-    screen.text(
+    drawScreenHeader(screen,
       this.opts.title ??
         (this.opts.mode === "forced-switch"
           ? "Scegli il prossimo candidato!"
           : this.opts.mode === "use-item"
             ? "Su chi lo usi?"
-            : "LA TUA SQUADRA"),
-      8, 5, PAPER
+            : "LA TUA SQUADRA")
     );
     const party = this.opts.partyOverride ?? this.state.party;
     for (let i = 0; i < party.length; i += 1) {
@@ -187,7 +186,8 @@ export class PartyScene implements Scene {
       const y = 16 + i * 23;
       const selected = i === this.index;
       const picked = i === this.moveFrom;
-      screen.rect(4, y, VIEW_W - 8, 22, selected ? "#f8f8f0" : "#3a4c64");
+      screen.rect(4, y, VIEW_W - 8, 22, selected ? "#fff0bd" : "#fffaf0");
+      screen.rect(4, y, 3, 22, selected ? "#e0a92f" : "#7aa2b8");
       if (picked) {
         // Slot "preso" per lo scambio: cornice gialla evidente.
         screen.frame(4, y, VIEW_W - 8, 22, "#f0c040");
@@ -196,8 +196,8 @@ export class PartyScene implements Scene {
         screen.frame(4, y, VIEW_W - 8, 22, this.moveFrom !== null ? "#f0c040" : INK);
       }
       // Mini-sprite nello slot lista (box 26x21, ancorato in basso).
-      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 6, y + 1, 26, 21);
-      const ink = selected ? INK : PAPER;
+      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 6, y + 1, 26, 21, { memeFormId: mon.memeFormId });
+      const ink = INK;
       screen.text(speciesOf(mon).name, 36, y + 3, ink);
       screen.textRight(`L${mon.level}`, VIEW_W - 64, y + 3, ink);
       drawHpBar(screen, 50, y + 13, 70, mon.hp, statsOf(mon).hp);
@@ -226,9 +226,9 @@ export class PartyScene implements Scene {
 
   private drawSummary(screen: Screen, mon: Monster): void {
     const species = speciesOf(mon);
-    screen.clear("#2e3e52");
-    screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8);
-    drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 8, 8, 56, 54);
+    screen.clear("#e3ebef");
+    screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8, "card");
+    drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 8, 8, 56, 54, { memeFormId: mon.memeFormId });
     screen.text(species.name, 70, 12, INK);
     // Sfoglia ◄►: indicatore posizione nella squadra (come nel Politicdex).
     const party = this.opts.partyOverride ?? this.state.party;
@@ -282,11 +282,11 @@ export class PartyScene implements Scene {
       const sel = this.detailIndex === i;
       if (sel) {
         // Barra d'evidenza + cursore sulla voce selezionata.
-        screen.rect(10, my - 1, VIEW_W - 20, 9, "#3a4c64");
-        screen.text("►", 10, my, "#e8c84a");
+        screen.rect(10, my - 1, VIEW_W - 20, 9, "#fff0bd");
+        screen.text("►", 10, my, "#8c5b12");
       }
-      screen.text(move.name.slice(0, 20), 18, my, sel ? PAPER : INK);
-      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, sel ? PAPER : GREY);
+      screen.text(move.name.slice(0, 20), 18, my, INK);
+      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, sel ? INK : GREY);
     }
     // ABILITÀ passiva della specie (voce ispezionabile, indice = n. mosse) +
     // OGGETTO tenuto sulla STESSA riga a destra: libera lo spazio in basso per
@@ -295,8 +295,8 @@ export class PartyScene implements Scene {
     const abilityIdx = mon.moves.length;
     const abilitySel = ability !== null && this.detailIndex === abilityIdx;
     if (abilitySel) {
-      screen.rect(10, abilityY - 1, VIEW_W - 20, 9, "#3a4c64");
-      screen.text("►", 10, abilityY, "#e8c84a");
+      screen.rect(10, abilityY - 1, VIEW_W - 20, 9, "#fff0bd");
+      screen.text("►", 10, abilityY, "#8c5b12");
     }
     // OGGETTO tenuto (raro): se presente riserva la metà destra della riga e
     // l'abilità si clippa più corta; altrimenti l'abilità ha tutta la riga.
@@ -315,11 +315,13 @@ export class PartyScene implements Scene {
     const entry = entries[this.detailIndex];
     if (entry) {
       const descLines = wrapText(entry.desc, 38).slice(0, 2);
-      const boxH = 5 + descLines.length * 8;
+      // Altezza minima per evitare che una descrizione di una sola riga resti
+      // schiacciata contro il bordo inferiore del pannello moderno.
+      const boxH = Math.max(21, 7 + descLines.length * 8);
       const boxY = VIEW_H - 4 - boxH;
-      screen.rect(6, boxY, VIEW_W - 12, boxH, "#1a2432");
+      screen.panel(6, boxY, VIEW_W - 12, boxH, "dialog");
       for (let i = 0; i < descLines.length; i += 1) {
-        screen.text(descLines[i], 10, boxY + 3 + i * 8, PAPER);
+        screen.text(descLines[i], 12, boxY + 5 + i * 8, INK);
       }
     }
   }

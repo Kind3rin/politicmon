@@ -1,0 +1,6 @@
+{
+  "party": [],
+  "pos": { "mapId": "borgo", "x": 14, "y": 18, "facing": "down" },
+  "money": 321,
+  "flags": { "legacy-fixture": true }
+}

@@ -18,6 +18,8 @@ const png = await page.evaluate(async () => {
 
   // Prepara: slot 0 pieno (2 medaglie), slot 1 pieno hard, slot 2 vuoto.
   for (let i = 0; i < 3; i++) {
+    localStorage.removeItem(`politicmon-save-v14__s${i}`);
+    localStorage.removeItem(`politicmon-save-v14__s${i}.bak`);
     localStorage.removeItem(`politicmon-save-v13__s${i}`);
     localStorage.removeItem(`politicmon-save-v13__s${i}.bak`);
   }

@@ -65,6 +65,15 @@ const OBJECT_PNG: Record<string, string> = {
   W: "tiles/obj_fountain.png",
   Y: "tiles/obj_statue.png",
   U: "tiles/obj_bench.png",
+  // Atto 3: anchor su un tile; il renderer usa target dedicati e ancora in basso.
+  "1": "tiles/atto3_stage.png",
+  "2": "tiles/atto3_gazebo.png",
+  "3": "tiles/atto3_poster.png",
+  "4": "tiles/atto3_voting_booth.png",
+  "5": "tiles/atto3_ballot_box.png",
+  "6": "tiles/atto3_social_screen.png",
+  "7": "tiles/atto3_press_van.png",
+  "8": "tiles/atto3_fortress.png",
 };
 
 export function objectImage(ch: string): HTMLImageElement | null {
@@ -932,6 +941,14 @@ export const TILES: Record<string, TileDef> = {
   W: { pix: pix(signArt, { b: "#4a90d9", w: "#2c5d8a" }), solid: true, overlay: true },
   Y: { pix: pix(signArt, { b: "#9a6a3a", w: "#5a3f20" }), solid: true, overlay: true },
   U: { pix: pix(signArt, { b: "#b8884a", w: "#7a5628" }), solid: true, overlay: true },
+  "1": { pix: pix(signArt), solid: true, overlay: true },
+  "2": { pix: pix(signArt), solid: true, overlay: true },
+  "3": { pix: pix(signArt), solid: true, overlay: true },
+  "4": { pix: pix(signArt), solid: true, overlay: true },
+  "5": { pix: pix(signArt), solid: true, overlay: true },
+  "6": { pix: pix(signArt), solid: true, overlay: true },
+  "7": { pix: pix(signArt), solid: true, overlay: true },
+  "8": { pix: pix(signArt), solid: true, overlay: true },
   O: { pix: pix(caveMouthArt, { r: "#5b6170", R: "#7c8390", o: "#1c2333", B: "#273041", b: "#090c12" }), solid: false },
   R: { pix: pix(caveBoulderArt, { r: "#4d5360", R: "#707783", l: "#9aa1aa" }), solid: true },
   S: { pix: pix(stalagmiteArt, { r: "#4d5360", l: "#707783", L: "#a8afb8" }), solid: true },

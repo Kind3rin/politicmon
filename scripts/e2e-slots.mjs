@@ -38,6 +38,8 @@ const check = (name, cond) => { checks.push({ name, ok: !!cond }); };
 // --- Reset pulito: niente save, niente slot attivo, nick impostato (salta NicknameScene) ---
 await page.evaluate(() => {
   for (let i = 0; i < 3; i++) {
+    localStorage.removeItem(`politicmon-save-v14__s${i}`);
+    localStorage.removeItem(`politicmon-save-v14__s${i}.bak`);
     localStorage.removeItem(`politicmon-save-v13__s${i}`);
     localStorage.removeItem(`politicmon-save-v13__s${i}.bak`);
   }
@@ -67,10 +69,10 @@ await shot("e2e_04_world");
 // Verifica: slot attivo = 1 (SLOT 2), save presente in __s1, __s0/__s2 vuoti.
 const active1 = await ls("politicmon-active-slot");
 check("slot attivo = 1 (SLOT 2)", active1 === "1");
-const s0 = await ls("politicmon-save-v13__s1");
+const s0 = await ls("politicmon-save-v14__s1");
 check("save scritto in __s1", s0 !== null);
-check("__s0 vuoto", (await ls("politicmon-save-v13__s0")) === null);
-check("__s2 vuoto", (await ls("politicmon-save-v13__s2")) === null);
+check("__s0 vuoto", (await ls("politicmon-save-v14__s0")) === null);
+check("__s2 vuoto", (await ls("politicmon-save-v14__s2")) === null);
 
 // --- Muoviti un po' e apri PAUSA → SALVA (prima voce) ---
 await tap("ArrowDown"); await tap("ArrowDown");
@@ -82,7 +84,7 @@ await page.waitForTimeout(150);
 await shot("e2e_06_saved");
 await tap("Enter");                 // chiudi il messaggio "Partita salvata!"
 // snapshot del save dello slot 2 per confronto post-reload
-const saveBefore = await ls("politicmon-save-v13__s1");
+const saveBefore = await ls("politicmon-save-v14__s1");
 check("save slot2 non vuoto dopo SALVA", saveBefore !== null);
 
 // --- RELOAD: simula chiusura/riapertura app ---
@@ -93,7 +95,7 @@ await shot("e2e_07_title_after_reload");
 const active2 = await ls("politicmon-active-slot");
 check("slot attivo sopravvive al reload (=1)", active2 === "1");
 // Il save dello slot 2 deve essere intatto
-const saveAfter = await ls("politicmon-save-v13__s1");
+const saveAfter = await ls("politicmon-save-v14__s1");
 check("save slot2 intatto dopo reload", saveAfter === saveBefore);
 
 // --- TITLE dopo reload: con un save esiste CONTINUA (prima voce). A → SlotScene(load) ---
@@ -107,11 +109,11 @@ await page.waitForTimeout(500);
 await shot("e2e_09_world_loaded");
 // Ancora sullo slot 2, save intatto
 check("dopo CONTINUA slot attivo = 1", (await ls("politicmon-active-slot")) === "1");
-check("dopo CONTINUA save slot2 intatto", (await ls("politicmon-save-v13__s1")) === saveBefore);
+check("dopo CONTINUA save slot2 intatto", (await ls("politicmon-save-v14__s1")) === saveBefore);
 
 // --- Verifica isolamento: SLOT 1 e SLOT 3 restano vuoti per tutto il flusso ---
-check("SLOT 1 (__s0) mai scritto", (await ls("politicmon-save-v13__s0")) === null);
-check("SLOT 3 (__s2) mai scritto", (await ls("politicmon-save-v13__s2")) === null);
+check("SLOT 1 (__s0) mai scritto", (await ls("politicmon-save-v14__s0")) === null);
+check("SLOT 3 (__s2) mai scritto", (await ls("politicmon-save-v14__s2")) === null);
 
 await browser.close();
 

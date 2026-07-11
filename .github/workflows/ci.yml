@@ -1,6 +1,6 @@
-# CI leggera: typecheck + build + guardrail PURAMENTE statici.
-# I check basati su Playwright/dev server (check-map-*, check-duel, check-sim,
-# ecc.) restano locali per tenere la CI sotto i 2 minuti.
+# CI deterministica: logica, contratti dati, validator statici e build.
+# I check Playwright restano locali: richiedono browser/dev server e producono
+# evidenza visuale, non devono rendere instabile la pipeline base.
 name: CI
 on:
   push:
@@ -18,6 +18,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
-      - run: npm test
-      - run: npm run build
+      - run: npm run test:unit
+      - run: npm run test:integration
+      - run: npm run test:content
+      - run: npm run test:regression
+      - run: npm run validate:content
+      - run: npm run validate:meme-packs
       - run: node scripts/check-evolutions.mjs
+      - run: npm run build

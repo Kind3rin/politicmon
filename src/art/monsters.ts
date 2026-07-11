@@ -1,5 +1,6 @@
 import type { Pixmap, Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
+import { memeForm } from "../game/memeForms";
 
 // Redesign PixelLab: se esiste un PNG per la specie in `public/sprites/monsters/<id>.png`
 // lo si usa al posto della caricatura testuale. Finché il PNG non è caricato (o se
@@ -13,14 +14,24 @@ export const MONSTERS_WITH_PNG = new Set<string>([
   "bunkerput", "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
   "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor", "conteblob",
   "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax",
-  "verdolino", "ecoverdon", "contepop", "salvinurlo", "verdoribelle"
+  "futurorso",
+  "verdolino", "ecoverdon", "contepop", "salvinurlo", "verdoribelle",
+  "salistrobo", "salisound", "gianimago", "quasimagiani", "crosettank",
+  "fratocorno", "campocorno", "nordiodo", "referendodo"
 ]);
 
-export function monsterImage(speciesId: string): HTMLImageElement | null {
-  if (!MONSTERS_WITH_PNG.has(speciesId)) {
+export const MONSTERS_WITH_ACTION_PNG = new Set<string>([
+  "salistrobo", "salisound", "futurorso", "gianimago", "quasimagiani", "crosettank",
+  "fratocorno", "campocorno", "nordiodo", "referendodo"
+]);
+
+export function monsterImage(speciesId: string, action = false): HTMLImageElement | null {
+  const registry = action ? MONSTERS_WITH_ACTION_PNG : MONSTERS_WITH_PNG;
+  if (!registry.has(speciesId)) {
     return null;
   }
-  return getSpriteImage(`mon:${speciesId}`, `monsters/${speciesId}.png`);
+  const suffix = action ? "_action" : "";
+  return getSpriteImage(`mon:${speciesId}${suffix}`, `monsters/${speciesId}${suffix}.png`);
 }
 
 // Disegna lo sprite di una specie dentro una box (x, y, boxW, boxH), ancorato in
@@ -36,8 +47,13 @@ export function drawMonsterSprite(
   y: number,
   boxW: number,
   boxH: number,
-  opts?: { flipX?: boolean }
+  opts?: { flipX?: boolean; memeFormId?: string }
 ): void {
+  const form = memeForm(opts?.memeFormId);
+  if (form && form.speciesId === speciesId) {
+    screen.frame(x, y, boxW, boxH, form.accent);
+    screen.rect(x + boxW - 5, y + 2, 3, 3, form.accent);
+  }
   const png = monsterImage(speciesId);
   if (png) {
     const b = screen.imageBounds(png);

@@ -1,0 +1,31 @@
+{
+  "extends": "v13-new.json",
+  "patch": {
+    "party": [
+      {
+        "uid": "fixture-giorgetta",
+        "speciesId": "giorgetta",
+        "level": 34,
+        "exp": 42921,
+        "hp": 99,
+        "status": null,
+        "moves": [
+          { "id": "iosonogiorgia", "pp": 10 },
+          { "id": "giravolta", "pp": 25 },
+          { "id": "blocconavale", "pp": 10 },
+          { "id": "fiamma", "pp": 15 }
+        ]
+      }
+    ],
+    "dex": { "giorgetta": "caught", "renzino": "seen" },
+    "flags": { "starter-chosen": true, "dex-received": true },
+    "pos": { "mapId": "capitale", "x": 14, "y": 12, "facing": "up" },
+    "starterId": "giorgetta",
+    "money": 3200,
+    "badges": ["auditel", "spread", "dazio"],
+    "sondaggi": 68,
+    "rivalWins": 4,
+    "lastBar": "capitale",
+    "stepsTotal": 4200
+  }
+}

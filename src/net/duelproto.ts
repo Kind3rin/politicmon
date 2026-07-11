@@ -31,7 +31,7 @@ export type DuelEvent =
   | { e: "blocked"; side: DuelSide; why: "indagato" }
   | { e: "gaffeSelf"; side: DuelSide; hpAfter: number }
   | { e: "gaffeEnd"; side: DuelSide }
-  | { e: "dmg"; side: DuelSide; hpAfter: number; crit: boolean; typeMult: number }
+  | { e: "dmg"; side: DuelSide; hpAfter: number; crit: boolean; typeMult: number; pollEstimate?: "low" | "high" }
   | { e: "heal"; side: DuelSide; hpAfter: number; cured?: boolean }
   | { e: "drain"; side: DuelSide; hpAfter: number }
   | { e: "recoil"; side: DuelSide; hpAfter: number }
@@ -41,6 +41,7 @@ export type DuelEvent =
   | { e: "eot"; side: DuelSide; hpAfter: number }
   | { e: "faint"; side: DuelSide }
   | { e: "switch"; side: DuelSide; index: number }
+  | { e: "stageReset"; side: DuelSide }
   | { e: "end"; winner: DuelSide | null; reason: DuelEndReason };
 
 // Messaggi duello. `to` è la difesa in profondità sul broadcast (scartato in
@@ -215,6 +216,7 @@ export function sanitizeTurnlog(raw: unknown): DuelEvent[] | null {
       case "miss":
       case "faint":
       case "gaffeEnd":
+      case "stageReset":
         if (!DUEL_SIDES.has(side)) {
           return null;
         }
@@ -242,7 +244,8 @@ export function sanitizeTurnlog(raw: unknown): DuelEvent[] | null {
         }
         out.push({
           e: "dmg", side: side as DuelSide, hpAfter,
-          crit: Boolean(ev.crit), typeMult: Math.max(0, Math.min(4, typeMult))
+          crit: Boolean(ev.crit), typeMult: Math.max(0, Math.min(4, typeMult)),
+          pollEstimate: ev.pollEstimate === "low" || ev.pollEstimate === "high" ? ev.pollEstimate : undefined
         });
         break;
       }

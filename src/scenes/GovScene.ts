@@ -8,7 +8,7 @@ import {
 } from "../game/governo";
 import { speciesOf } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { wrapText, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader, wrapText, MessageBox, GREY, INK } from "../ui/widgets";
 import { PartyScene } from "./PartyScene";
 
 // Il GOVERNO OMBRA: ogni Politicmon può ricoprire un ministero con bonus
@@ -76,19 +76,20 @@ export class GovScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e3a2e");
-    screen.text("GOVERNO OMBRA", 8, 5, PAPER);
+    screen.clear("#e5eee2");
     const sond = this.state.sondaggi;
-    screen.textRight(`SONDAGGI ${sond}%`, VIEW_W - 8, 5, sondaggiColor(sond));
+    drawScreenHeader(screen, "GOVERNO OMBRA", `SONDAGGI ${sond}%`, sondaggiColor(sond));
 
-    screen.panel(4, 15, VIEW_W - 8, 102);
+    screen.panel(4, 18, VIEW_W - 8, 99, "card");
     for (let i = 0; i < MINISTERO_ORDER.length; i += 1) {
       const id = MINISTERO_ORDER[i];
       const def = MINISTERI[id];
       const mon = ministroDi(this.state, id);
       const y = 22 + i * 15;
       if (i === this.index) {
-        screen.text("►", 10, y, INK);
+        screen.rect(8, y - 3, VIEW_W - 16, 12, "#fff0bd");
+        screen.rect(8, y - 3, 2, 12, "#e0a92f");
+        screen.text("►", 10, y, "#8c5b12");
       }
       screen.text(def.name, 18, y, INK);
       if (mon) {
@@ -103,7 +104,7 @@ export class GovScene implements Scene {
     }
 
     const selected = MINISTERI[MINISTERO_ORDER[this.index]];
-    screen.panel(4, 119, VIEW_W - 8, 40);
+    screen.panel(4, 119, VIEW_W - 8, 40, "card");
     // BONUS (verde) + MALUS (rosso): la scelta del ministero è un compromesso.
     const bonus = wrapText(selected.desc, 36);
     const malus = wrapText(selected.malus, 36);

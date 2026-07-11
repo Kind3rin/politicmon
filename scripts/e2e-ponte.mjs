@@ -31,7 +31,7 @@ const shot = async (name) => {
   if (d) writeFileSync(`artifacts/screens/${name}.png`, Buffer.from(d.slice("data:image/png;base64,".length), "base64"));
 };
 const pos = () => page.evaluate(() => {
-  const raw = localStorage.getItem("politicmon-save-v13__s0");
+  const raw = localStorage.getItem("politicmon-save-v14__s0");
   if (!raw) return null;
   const st = JSON.parse(raw);
   return { map: st.pos.mapId, x: st.pos.x, y: st.pos.y, veh: st.vehicle };
@@ -53,7 +53,7 @@ await page.evaluate(() => {
     // (defeatedTrainers + flag) → si cammina liberi sul ponte per la verifica visiva.
   };
   st.flags["ponte-beaten"] = true;
-  localStorage.setItem("politicmon-save-v13__s0", JSON.stringify(st));
+  localStorage.setItem("politicmon-save-v14__s0", JSON.stringify(st));
   localStorage.setItem("politicmon-active-slot", "0");
   localStorage.setItem("politicmon-nick", "TESTER");
 });

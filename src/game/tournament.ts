@@ -15,7 +15,8 @@
 
 import type { TrainerDef } from "../data/trainers";
 import { hashDate, localDateKey } from "./daily";
-import { createMonster, type Monster } from "./monster";
+import { createMonster, expForLevel, healMonster, statsOf, type Monster } from "./monster";
+import { SPECIES } from "../data/species";
 import { makeDuelSim, resolveTurn, aliveCount, type DuelSim, type Rng } from "./battle/duelsim";
 import type { DuelCmd, DuelSide } from "../net/duelproto";
 import { MOVES } from "../data/moves";
@@ -29,6 +30,43 @@ export const COPPA_FIRST_PRIZE = { itemId: "tessera", qty: 1, money: 3000 };
 // rigiocare invece del vecchio -1500€ cosmetico. Item comune di rifornimento.
 export const COPPA_REPEAT_PRIZE = { itemId: "schedona", qty: 2, money: 700 };
 export const COPPA_TITLE = "PORTAVOCE DEL POPOLO";
+
+export type CoppaRuleId = "monotype" | "level50" | "team3" | "noitems" | "oneheal";
+export interface CoppaRule { readonly id: CoppaRuleId; readonly name: string; readonly description: string; readonly maxHealingItems: number | null; }
+export const COPPA_RULES: readonly CoppaRule[] = [
+  { id: "monotype", name: "MONOTIPO", description: "LA SQUADRA USA UN SOLO TIPO COMUNE. MINIMO 3 IDONEI.", maxHealingItems: null },
+  { id: "level50", name: "LIVELLO 50", description: "TUTTI I POLITICMON ENTRANO FRESCHI AL LIVELLO 50.", maxHealingItems: null },
+  { id: "team3", name: "SQUADRA 3", description: "SOLO I PRIMI 3 POLITICMON DELLA SQUADRA.", maxHealingItems: null },
+  { id: "noitems", name: "NIENTE OGGETTI", description: "LA BORSA È CHIUSA PER TUTTO IL TORNEO.", maxHealingItems: 0 },
+  { id: "oneheal", name: "UNA SOLA CURA", description: "UNA SOLA CURA DALLA BORSA PER OGNI MATCH.", maxHealingItems: 1 }
+];
+
+export function coppaRule(dateKey = localDateKey()): CoppaRule {
+  return COPPA_RULES[hashDate(`coppa-rule:${dateKey}`) % COPPA_RULES.length];
+}
+
+function cloneMonster(mon: Monster): Monster {
+  return { ...mon, moves: mon.moves.map((move) => ({ ...move })) };
+}
+
+export function prepareCoppaParty(party: readonly Monster[], rule: CoppaRule): { ok: true; party: Monster[]; type?: string } | { ok: false; reason: string } {
+  if (party.length === 0) return { ok: false, reason: "SERVE ALMENO UN POLITICMON." };
+  let selected = party.map(cloneMonster);
+  let type: string | undefined;
+  if (rule.id === "monotype") {
+    const counts = new Map<string, number>();
+    for (const mon of selected) for (const candidate of SPECIES[mon.speciesId].types) counts.set(candidate, (counts.get(candidate) ?? 0) + 1);
+    type = [...counts].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))[0]?.[0];
+    selected = type ? selected.filter((mon) => SPECIES[mon.speciesId].types.includes(type as never)) : [];
+    if (selected.length < 3) return { ok: false, reason: "MONOTIPO RICHIEDE 3 POLITICMON CON UN TIPO IN COMUNE." };
+  }
+  if (rule.id === "team3") selected = selected.slice(0, 3);
+  if (rule.id === "level50") {
+    for (const mon of selected) { mon.level = 50; mon.exp = expForLevel(50); mon.hp = statsOf(mon).hp; }
+  }
+  for (const mon of selected) healMonster(mon);
+  return { ok: true, party: selected, ...(type ? { type } : {}) };
+}
 
 // I 7 fantasmi: id trainer già affrontati nel gioco + un nome "da torneo" e la
 // squadra base (specie) che verrà scalata a lv 50-55. Sono avversari NOTI (li hai

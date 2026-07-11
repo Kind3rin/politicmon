@@ -3,9 +3,9 @@
 // del danno o la curva di cattura fa fallire la CI invece di passare in silenzio.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { makeCombatant, calcDamage, catchChance, sondaggiMoveMult, DAMAGE_MULT_CAP } from "../src/game/battle/sim.ts";
-import { createMonster } from "../src/game/monster.ts";
-import { MOVES } from "../src/data/moves.ts";
+import { makeCombatant, calcDamage, catchChance, sondaggiMoveMult, DAMAGE_MULT_CAP } from "../../src/game/battle/sim.ts";
+import { createMonster } from "../../src/game/monster.ts";
+import { MOVES } from "../../src/data/moves.ts";
 
 // RNG deterministica FISSA: ritorna sempre 0.5 → mai critico (0.5 > 1/16) e
 // random-roll costante (0.88 + 0.5*0.12 = 0.94) su OGNI chiamata, così due

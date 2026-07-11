@@ -26,6 +26,9 @@ export interface Species {
   category: string; // es. "POLITICMON FIAMMA"
   types: PolType[];
   base: BaseStats;
+  // Override raro per ruoli con counter speciale esplicito. Le specie legacy
+  // continuano a usare DEF contro entrambe le categorie.
+  specialDefense?: number;
   catchRate: number; // 0-255, più alto = più facile
   expYield: number;
   learnset: Array<[number, string]>; // [livello, moveId]
@@ -161,7 +164,10 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 66, atk: 86, def: 60, spc: 40, spd: 56 },
     catchRate: 75, expYield: 140,
     learnset: [[1, "comizio"], [7, "radici"], [12, "mondocontrario"], [18, "blocconavale"]],
-    evolutions: [{ id: "generorso", level: 20 }],
+    evolutions: [
+      { id: "futurorso", item: "tessera_futuro" },
+      { id: "generorso", level: 20 }
+    ],
     dexLine: "VIVE A TESTA IN GIÙ. HA SCRITTO UN LIBRO SUL MONDO GIUSTO E L'HA VENDUTO PIÙ DI OGNI LEGGE."
   }),
   tajanide: S({
@@ -362,6 +368,82 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "mondocontrario"], [1, "blocconavale"], [1, "iosonogiorgia"], [20, "radici"], [25, "dazilampo"], [28, "pienipoteri"], [31, "decreto"], [35, "fiammatricolore"]],
     dexLine: "HA UNA MAPPA AL CONTRARIO E LA DIFENDE CON FERMEZZA. SE GLIELA GIRI, DICE CHE È PROPAGANDA."
   }),
+  futurorso: S({
+    id: "futurorso", dexNum: 45, name: "FUTURORSO", category: "MOSTRO CORRENTE",
+    types: ["DESTRA", "CENTRO"],
+    base: { hp: 94, atk: 101, def: 89, spc: 48, spd: 58 },
+    catchRate: 30, expYield: 210,
+    learnset: [[1, "radici"], [1, "mondocontrario"], [1, "giravolta"], [32, "staisereno"], [36, "fiducia"], [40, "quorum"]],
+    ability: "tabularasa",
+    dexLine: "STRAPPA IL VECCHIO MANTELLO E RIPARTE DA ZERO. IL FUTURO È SEMPRE PRONTO, SPECIE DOPO UN RIMPASTO."
+  }),
+  gianimago: S({
+    id: "gianimago", dexNum: 46, name: "GIANIMAGO", category: "MOSTRO TELEMAGO",
+    types: ["MEDIA", "TECNO"],
+    base: { hp: 57, atk: 43, def: 55, spc: 88, spd: 61 },
+    catchRate: 90, expYield: 138,
+    learnset: [[1, "grafico"], [1, "tweet"], [24, "pochette"], [28, "conferenza"], [31, "exit_poll"]],
+    evolutions: [{ id: "quasimagiani", level: 32 }],
+    ability: "contraddittorio",
+    dexLine: "TRASFORMA OGNI SONDAGGIO IN UN NUMERO DI MAGIA. IL PUBBLICO APPLAUDE PRIMA DI CAPIRE LA DOMANDA."
+  }),
+  quasimagiani: S({
+    id: "quasimagiani", dexNum: 47, name: "QUASIMAGIANI", category: "MOSTRO QUASI MAGICO",
+    types: ["MEDIA", "TECNO"],
+    base: { hp: 74, atk: 55, def: 68, spc: 112, spd: 86 },
+    catchRate: 25, expYield: 205,
+    learnset: [[1, "grafico"], [1, "tweet"], [1, "pochette"], [1, "conferenza"], [32, "exit_poll"], [34, "smentita_flash"], [35, "algoritmo"], [38, "editoriale"], [42, "razzox"]],
+    ability: "forchettasondaggi",
+    dexLine: "APRE IL MANTELLO E MOSTRA TRE RISULTATI DIVERSI. SONO TUTTI ESATTI, ENTRO LA FORCHETTA."
+  }),
+  crosettank: S({
+    id: "crosettank", dexNum: 48, name: "CROSETTANK", category: "MOSTRO DICASTERO",
+    types: ["ISTITUZIONE", "DESTRA"],
+    base: { hp: 104, atk: 76, def: 108, spc: 58, spd: 42 },
+    specialDefense: 58,
+    catchRate: 35, expYield: 205,
+    learnset: [[1, "decreto"], [1, "direttiva"], [26, "blocconavale"], [30, "fiducia"], [34, "quorum"], [36, "voto_disgiunto"], [38, "tavololungo"]],
+    ability: "poltrona",
+    dexLine: "PESA OGNI PAROLA E ANCHE IL LEGGIO. I COLPI FISICI RIMBALZANO, MA LA RETORICA SPECIALE TROVA LE FESSURE."
+  }),
+  fratocorno: S({
+    id: "fratocorno", dexNum: 49, name: "FRATOCORNO", category: "MOSTRO ASSEMBLEA",
+    types: ["SINISTRA", "ISTITUZIONE"],
+    base: { hp: 66, atk: 52, def: 72, spc: 66, spd: 48 },
+    catchRate: 95, expYield: 135,
+    learnset: [[1, "corteo"], [1, "direttiva"], [24, "raccoltadifferenziata"], [28, "articolouno"], [31, "concertone"]],
+    evolutions: [{ id: "campocorno", level: 32 }],
+    ability: "poltrona",
+    dexLine: "ALLARGA IL CAMPO CON UN MEGAFONO IN FIORE. LE SUE CORNA TENGONO INSIEME ANCHE LE PARENTESI."
+  }),
+  campocorno: S({
+    id: "campocorno", dexNum: 50, name: "CAMPOCORNO", category: "MOSTRO CAMPO LARGO",
+    types: ["SINISTRA", "VERDE"],
+    base: { hp: 88, atk: 64, def: 94, spc: 94, spd: 50 },
+    catchRate: 30, expYield: 198,
+    learnset: [[1, "corteo"], [1, "direttiva"], [1, "raccoltadifferenziata"], [1, "articolouno"], [32, "piazza"], [34, "piazza_aperta"], [35, "aureola"], [38, "transizione"], [40, "patto_verde"], [42, "gazzetta"]],
+    ability: "galleggiamento",
+    dexLine: "LE CORNA FANNO DA TETTO ALLA COALIZIONE. RESTA A GALLA FINCHÉ NESSUNO CHIEDE CHI DEBBA STARE AL CENTRO."
+  }),
+  nordiodo: S({
+    id: "nordiodo", dexNum: 51, name: "NORDIODO", category: "MOSTRO CONSULTIVO",
+    types: ["POPULISMO", "VERDE"],
+    base: { hp: 61, atk: 54, def: 63, spc: 72, spd: 54 },
+    catchRate: 95, expYield: 135,
+    learnset: [[1, "slogan"], [1, "greenwashing"], [24, "ztl"], [28, "citofonata"], [31, "autonomia"]],
+    evolutions: [{ id: "referendodo", level: 32 }],
+    ability: "staffetta",
+    dexLine: "RISCRIVE IL QUESITO FINCHÉ ENTRA NELLA CASELLA. POI CHIEDE UN PARERE SULLA DIMENSIONE DELLA CASELLA."
+  }),
+  referendodo: S({
+    id: "referendodo", dexNum: 52, name: "REFERENDODO", category: "MOSTRO QUESITO",
+    types: ["POPULISMO", "ISTITUZIONE"],
+    base: { hp: 82, atk: 62, def: 84, spc: 94, spd: 68 },
+    catchRate: 30, expYield: 200,
+    learnset: [[1, "slogan"], [1, "greenwashing"], [1, "ztl"], [1, "citofonata"], [32, "autonomia"], [35, "dossier"], [36, "voto_disgiunto"], [38, "quorum"], [42, "tsunamitour"]],
+    ability: "caimano",
+    dexLine: "HA DUE PENNINI E TRE VERSIONI DELLA DOMANDA. QUALUNQUE RISPOSTA APRE UN NUOVO TAVOLO CONSULTIVO."
+  }),
   tajacolomba: S({
     id: "tajacolomba", dexNum: 22, name: "TAJACOLOMBA", category: "DIPLOMATICO ALATO",
     types: ["CENTRO", "DESTRA"],
@@ -444,6 +526,25 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "incollamano"], [1, "pistaciclabile"], [1, "sciopreverde"], [18, "transizione"], [24, "corteo"], [30, "scissione"]],
     ability: "opposizione",
     dexLine: "SI INCOLLA A OGNI QUADRO E OGNI DIBATTITO. NON CHIEDE IL PERMESSO: BLOCCA IL TRAFFICO E POI SPIEGA."
+  }),
+  salistrobo: S({
+    id: "salistrobo", dexNum: 43, name: "SALISTROBO", category: "MOSTRO PALCO",
+    types: ["SINISTRA", "MEDIA"],
+    base: { hp: 58, atk: 80, def: 50, spc: 44, spd: 72 },
+    catchRate: 90, expYield: 138,
+    learnset: [[1, "corteo"], [1, "comizio"], [24, "monopattino"], [28, "festival"], [31, "articolouno"]],
+    evolutions: [{ id: "salisound", level: 32, minSondaggi: 55 }],
+    ability: "primapagina",
+    dexLine: "CORRE DA UN PALCO ALL'ALTRO. IL CAVO-MICROFONO È PIÙ LUNGO DEL PROGRAMMA ELETTORALE."
+  }),
+  salisound: S({
+    id: "salisound", dexNum: 44, name: "SALISOUND", category: "MOSTRO AMPLIFICATORE",
+    types: ["SINISTRA", "MEDIA"],
+    base: { hp: 72, atk: 105, def: 62, spc: 55, spd: 98 },
+    catchRate: 30, expYield: 198,
+    learnset: [[1, "corteo"], [1, "comizio"], [24, "monopattino"], [31, "articolouno"], [32, "festival"], [35, "sciopero"], [38, "diretta_social"], [40, "editoriale"], [42, "scissione"]],
+    ability: "opposizione",
+    dexLine: "TRASFORMA OGNI COMIZIO IN UN CONCERTO. QUANDO ALZA IL VOLUME, ANCHE I SONDAGGI BALLANO."
   })
 };
 

@@ -15,11 +15,14 @@ export interface ImageBounds {
   h: number;
 }
 
+export type PanelStyle = "default" | "dialog" | "menu" | "combat" | "card";
+
 // Renderer pixel-perfect su canvas 240x180, con cache degli sprite.
 export class Screen {
   readonly ctx: CanvasRenderingContext2D;
   private spriteCache = new Map<string, HTMLCanvasElement>();
   private imageBoundsCache = new WeakMap<HTMLImageElement, ImageBounds>();
+  private glyphCache = new Map<string, HTMLCanvasElement>();
 
   constructor(private canvas: HTMLCanvasElement) {
     const ctx = canvas.getContext("2d");
@@ -103,7 +106,11 @@ export class Screen {
 
   // Riquadro di dialogo. Con cornice 9-slice PixelLab se disponibile, altrimenti
   // il doppio bordo in stile Game Boy (fallback, identico a prima).
-  panel(x: number, y: number, w: number, h: number): void {
+  panel(x: number, y: number, w: number, h: number, style: PanelStyle = "default"): void {
+    if (style !== "default") {
+      this.modernPanel(Math.round(x), Math.round(y), Math.round(w), Math.round(h), style);
+      return;
+    }
     if (this.panelImg) {
       this.nineSlice(this.panelImg, this.panelBorder, Math.round(x), Math.round(y), Math.round(w), Math.round(h));
       return;
@@ -113,6 +120,33 @@ export class Screen {
     this.frame(x + 2, y + 2, w - 4, h - 4, "#10141f");
     this.frame(x + 4, y + 4, w - 8, h - 8, "#9aa0b8");
     this.rect(x + 5, y + 5, w - 10, h - 10, "#f8f8f0");
+  }
+
+  cacheStats(): { rasterizedSprites: number; rasterizedPixels: number; cachedGlyphs: number; glyphPixels: number } {
+    let rasterizedPixels = 0;
+    for (const canvas of this.spriteCache.values()) rasterizedPixels += canvas.width * canvas.height;
+    let glyphPixels = 0;
+    for (const canvas of this.glyphCache.values()) glyphPixels += canvas.width * canvas.height;
+    return { rasterizedSprites: this.spriteCache.size, rasterizedPixels, cachedGlyphs: this.glyphCache.size, glyphPixels };
+  }
+
+  // Pannelli chiari cartoon-RPG. Gli angoli a gradino restano leggibili alla
+  // risoluzione interna 240x180 e differenziano i contesti senza sacrificare
+  // spazio al testo come una cornice decorativa unica.
+  private modernPanel(x: number, y: number, w: number, h: number, style: Exclude<PanelStyle, "default">): void {
+    const shadow = "rgba(16,20,31,0.35)";
+    const border = "#17243d";
+    const paper = style === "combat" ? "#fffdf2" : "#fffaf0";
+    const accent = style === "dialog" ? "#4f91c7" : style === "combat" ? "#55a889" : "#e6b944";
+    this.rect(x + 2, y + 3, w - 2, h - 2, shadow);
+    this.rect(x + 2, y, w - 4, h, border);
+    this.rect(x, y + 2, w, h - 4, border);
+    this.rect(x + 2, y + 2, w - 4, h - 4, paper);
+    this.rect(x + 4, y + 3, w - 8, 2, accent);
+    this.rect(x + 4, y + h - 4, w - 8, 1, "#d9d2bf");
+    // Riflessi sugli angoli: dettaglio cartoon, ma senza rumore dietro al testo.
+    this.rect(x + 2, y + 2, 2, 2, "#ffffff");
+    this.rect(x + w - 4, y + 2, 2, 2, "#ffffff");
   }
 
   // Disegna `img` come box 9-slice: i 4 angoli (b×b) restano fissi, i 4 bordi si
@@ -316,14 +350,28 @@ export class Screen {
     for (const raw of value) {
       const glyph = getGlyph(raw);
       if (glyph) {
-        for (let gy = 0; gy < GLYPH_H; gy += 1) {
-          const row = glyph[gy];
-          for (let gx = 0; gx < GLYPH_W; gx += 1) {
-            if (row[gx] === "#") {
-              this.ctx.fillRect(cx + gx * scale, cy + gy * scale, scale, scale);
+        const key = `${raw.toUpperCase()}|${color}|${scale}`;
+        let cached = this.glyphCache.get(key);
+        if (!cached) {
+          cached = document.createElement("canvas");
+          cached.width = GLYPH_W * scale;
+          cached.height = GLYPH_H * scale;
+          const glyphCtx = cached.getContext("2d");
+          if (glyphCtx) {
+            glyphCtx.fillStyle = color;
+            for (let gy = 0; gy < GLYPH_H; gy += 1) {
+              const row = glyph[gy];
+              for (let gx = 0; gx < GLYPH_W; gx += 1) {
+                if (row[gx] === "#") glyphCtx.fillRect(gx * scale, gy * scale, scale, scale);
+              }
             }
           }
+          // Colori alpha animati possono produrre molte varianti: limite duro
+          // per evitare crescita non vincolata durante sessioni lunghe.
+          if (this.glyphCache.size >= 1024) this.glyphCache.clear();
+          this.glyphCache.set(key, cached);
         }
+        this.ctx.drawImage(cached, cx, cy);
       }
       cx += CHAR_W * scale;
     }

@@ -18,6 +18,29 @@ interface Entry {
 const registry = new Map<string, Entry>();
 const SPRITE_VERSION = APP_BUILD_ID;
 
+export interface SpriteRegistryStats {
+  entries: number;
+  ready: number;
+  loading: number;
+  missing: number;
+  decodedBytesEstimate: number;
+}
+
+export function spriteRegistryStats(): SpriteRegistryStats {
+  let ready = 0;
+  let loading = 0;
+  let missing = 0;
+  let decodedBytesEstimate = 0;
+  for (const entry of registry.values()) {
+    if (entry.status === "ready") {
+      ready += 1;
+      if (entry.img) decodedBytesEstimate += (entry.img.naturalWidth || entry.img.width) * (entry.img.naturalHeight || entry.img.height) * 4;
+    } else if (entry.status === "loading") loading += 1;
+    else if (entry.status === "missing") missing += 1;
+  }
+  return { entries: registry.size, ready, loading, missing, decodedBytesEstimate };
+}
+
 // Base path degli sprite serviti staticamente. In Vite tutto ciò che sta in
 // `public/` è servito dalla radice; con base relativa (PWA) `import.meta.env.BASE_URL`
 // tiene conto di eventuali sottocartelle di deploy.

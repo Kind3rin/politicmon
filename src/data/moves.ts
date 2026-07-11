@@ -12,6 +12,8 @@ export interface MoveEffect {
   cureStatus?: boolean;
   highCrit?: boolean;
   priority?: number;
+  /** Proc offensivo applicato soltanto alla prima azione del turno. */
+  statusIfFirst?: { id: StatusId; chance: number; target: "foe" };
 }
 
 export interface Move {
@@ -407,6 +409,49 @@ export const MOVES: Record<string, Move> = {
     effect: { status: { id: "gaffe", chance: 20, target: "foe" } },
     flavor: "Primo maggio a tutto volume: il nemico si distrae e va in GAFFE."
   }),
+  festival: M({
+    id: "festival", name: "FESTIVAL", type: "SINISTRA", category: "fisico",
+    power: 75, accuracy: 100, pp: 15,
+    effect: { statusIfFirst: { id: "scandalo", chance: 20, target: "foe" } },
+    flavor: "Occupa il palco: se apre le danze può scatenare uno SCANDALO."
+  }),
+  exit_poll: M({
+    id: "exit_poll", name: "EXIT POLL", type: "MEDIA", category: "speciale",
+    power: 80, accuracy: 90, pp: 10,
+    flavor: "A urne ancora aperte vale tutto: sopra metà PV promette cento, sotto ne porta sessanta."
+  }),
+  autonomia: M({
+    id: "autonomia", name: "AUTONOMIA", type: "ISTITUZIONE", category: "status",
+    power: 0, accuracy: 85, pp: 10,
+    effect: { stat: { key: "spd", stages: -2, target: "foe" } },
+    flavor: "Trasferisce competenze, moduli e tre conferenze: l'avversario rallenta parecchio."
+  }),
+  diretta_social: M({
+    id: "diretta_social", name: "DIRETTA SOCIAL", type: "MEDIA", category: "speciale",
+    power: 55, accuracy: 100, pp: 15, effect: { priority: 1 },
+    flavor: "Parte prima che lo staff approvi: poca potenza, priorità assoluta."
+  }),
+  patto_verde: M({
+    id: "patto_verde", name: "PATTO VERDE", type: "VERDE", category: "speciale",
+    power: 65, accuracy: 100, pp: 10, effect: { drainRatio: 0.5 },
+    flavor: "Converte metà del consenso sottratto in energia sostenibile."
+  }),
+  voto_disgiunto: M({
+    id: "voto_disgiunto", name: "VOTO DISGIUNTO", type: "ISTITUZIONE", category: "fisico",
+    power: 70, accuracy: 95, pp: 15, effect: { highCrit: true },
+    flavor: "Divide scheda e preferenza: più facile trovare il punto critico."
+  }),
+  smentita_flash: M({
+    id: "smentita_flash", name: "SMENTITA FLASH", type: "MEDIA", category: "status",
+    power: 0, accuracy: 100, pp: 10, effect: { cureStatus: true, priority: 1 },
+    flavor: "Una nota urgente cancella la grana prima che diventi virale."
+  }),
+  piazza_aperta: M({
+    id: "piazza_aperta", name: "PIAZZA APERTA", type: "SINISTRA", category: "status",
+    power: 0, accuracy: 100, pp: 10,
+    effect: { stat: { key: "spc", stages: 2, target: "self" } },
+    flavor: "Dà il microfono alla piazza: la RETORICA sale di due livelli."
+  }),
   // ------------------------------------------------- RIEQUILIBRIO ISTITUZIONE
   // Poche mosse da danno (era quasi tutta status/cura): +2 colpi utilizzabili.
   gazzetta: M({
@@ -486,6 +531,9 @@ export function moveSummary(move: Move): string {
     if (fx.status) {
       const chance = fx.status.chance >= 100 ? "" : `${fx.status.chance}% `;
       parts.push(`${chance}${STATUS_SHORT[fx.status.id]}`);
+    }
+    if (fx.statusIfFirst) {
+      parts.push(`${fx.statusIfFirst.chance}% ${STATUS_SHORT[fx.statusIfFirst.id]} SE PRIMO`);
     }
     if (fx.highCrit) {
       parts.push("CRITICO FACILE");

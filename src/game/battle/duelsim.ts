@@ -31,9 +31,14 @@
 //   quindi il duello è sempre neutro (nessun vantaggio dal gradimento locale).
 
 import { MOVES, type Move } from "../../data/moves";
-import { abilityOf, statsOf, type Monster, type MoveSlot } from "../monster";
+import { statsOf, type Monster, type MoveSlot } from "../monster";
 import { calcDamage, effectiveStat, makeCombatant, type Combatant } from "./sim";
 import type { DuelCmd, DuelEvent, DuelSide } from "../../net/duelproto";
+import {
+  resolveEndTurn, resolveEntryAbility, resolveHitReactionAbility, resolveKoAbility,
+  resolvePreMove, statDropBlockReason, statusBlockReason
+} from "./effectContract";
+import { festivalScandaloChance } from "./atto3MoveEffects";
 
 export type Rng = () => number;
 
@@ -79,30 +84,22 @@ function resolveMoveChoice(active: Combatant, moveId: string): { move: Move; slo
 }
 
 // Esegue la mossa di `side` emettendo eventi (semantica di moveSteps).
-function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelEvent[], rng: Rng): void {
+function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelEvent[], rng: Rng, actedFirst: boolean): void {
   const attacker = sim[side].active;
   const defender = sim[otherSide(side)].active;
   if (attacker.mon.hp <= 0 || defender.mon.hp <= 0) {
     return;
   }
-  // INDAGATO: 25% di saltare il turno.
-  if (attacker.mon.status === "indagato" && rng() < 0.25) {
-    events.push({ e: "blocked", side, why: "indagato" });
-    return;
+  const preMove = resolvePreMove(attacker, rng);
+  attacker.gaffeTurns = preMove.gaffeTurns;
+  if (preMove.event === "indagato") events.push({ e: "blocked", side, why: "indagato" });
+  else if (preMove.event === "gaffeEnd") events.push({ e: "gaffeEnd", side });
+  else if (preMove.event === "gaffeSelf") {
+    attacker.mon.hp = Math.max(0, attacker.mon.hp - preMove.selfDamage);
+    events.push({ e: "gaffeSelf", side, hpAfter: attacker.mon.hp });
+    faintCheck(sim, side, events);
   }
-  // GAFFE: decremento, chiarimento o auto-danno (33%).
-  if (attacker.gaffeTurns > 0) {
-    attacker.gaffeTurns -= 1;
-    if (attacker.gaffeTurns === 0) {
-      events.push({ e: "gaffeEnd", side });
-    } else if (rng() < 0.33) {
-      const self = Math.max(1, Math.floor((attacker.mon.level * 2) / 3) + 2);
-      attacker.mon.hp = Math.max(0, attacker.mon.hp - self);
-      events.push({ e: "gaffeSelf", side, hpAfter: attacker.mon.hp });
-      faintCheck(sim, side, events);
-      return;
-    }
-  }
+  if (!preMove.canAct) return;
   const { move, slot } = resolveMoveChoice(attacker, moveId);
   if (slot) {
     slot.pp = Math.max(0, slot.pp - 1);
@@ -119,7 +116,17 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
   if (move.power > 0) {
     const result = calcDamage(attacker, defender, move, rng);
     defender.mon.hp = Math.max(0, defender.mon.hp - result.damage);
-    events.push({ e: "dmg", side: defSide, hpAfter: defender.mon.hp, crit: result.crit, typeMult: result.typeMult });
+    events.push({ e: "dmg", side: defSide, hpAfter: defender.mon.hp, crit: result.crit, typeMult: result.typeMult, pollEstimate: result.pollEstimate });
+    const reaction = resolveHitReactionAbility(defender);
+    if (reaction.triggered) {
+      defender.stages.spc = reaction.resulting;
+      events.push({ e: "stat", side: defSide, key: "spc", stages: 1, resulting: reaction.resulting });
+    }
+    const ko = resolveKoAbility(attacker, defender);
+    if (ko.triggered) {
+      attacker.stages.spd = ko.resulting;
+      events.push({ e: "stat", side, key: "spd", stages: 1, resulting: ko.resulting });
+    }
     if (move.effect?.drainRatio) {
       const healed = Math.max(1, Math.floor(result.damage * move.effect.drainRatio));
       attacker.mon.hp = Math.min(statsOf(attacker.mon).hp, attacker.mon.hp + healed);
@@ -156,7 +163,7 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
     const target = sim[targetSide].active;
     // POLTRONA SALDA / GARANZIA COSTITUZIONALE: immune ai cali di statistica
     // inflitti dal nemico (replica di moveSteps; il buff su se stessi passa sempre).
-    const dropImmune = abilityOf(target.mon)?.id === "poltrona" || abilityOf(target.mon)?.id === "garanzia";
+    const dropImmune = statDropBlockReason(target.mon) !== null;
     if (
       effect.stat.target === "foe" &&
       effect.stat.stages < 0 &&
@@ -171,10 +178,14 @@ function executeMove(sim: DuelSim, side: DuelSide, moveId: string, events: DuelE
   }
   // TEFLON / GARANZIA COSTITUZIONALE: immune agli status. Il guard sta PRIMA del
   // tiro di chance (nessun rng consumato), stesso ordine del branch status di moveSteps.
-  const statusImmune = abilityOf(defender.mon)?.id === "teflon" || abilityOf(defender.mon)?.id === "garanzia";
-  if (effect?.status && defender.mon.hp > 0 && !statusImmune) {
-    if (rng() * 100 < effect.status.chance) {
-      const id = effect.status.id;
+  const conditionalStatus = effect?.statusIfFirst
+    ? { ...effect.statusIfFirst, chance: festivalScandaloChance(actedFirst) }
+    : undefined;
+  const statusEffect = effect?.status ?? conditionalStatus;
+  const statusImmune = statusEffect ? statusBlockReason(defender.mon, statusEffect.id) !== null : false;
+  if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0 && !statusImmune) {
+    if (rng() * 100 < statusEffect.chance) {
+      const id = statusEffect.id;
       if (!(defender.mon.status || (id === "gaffe" && defender.gaffeTurns > 0))) {
         if (id === "gaffe") {
           const turns = 2 + Math.floor(rng() * 3);
@@ -228,6 +239,13 @@ export function applySwitch(sim: DuelSim, side: DuelSide, index: number, events:
   st.activeIdx = index;
   st.active = makeCombatant(target); // reset stage/gaffe come switchTo PVE
   events.push({ e: "switch", side, index });
+  const opponent = sim[otherSide(side)].active;
+  const entry = resolveEntryAbility(st.active, opponent);
+  if (entry.triggered) {
+    st.active.stages = entry.entrantStages;
+    opponent.stages = entry.opponentStages;
+    events.push({ e: "stageReset", side });
+  }
   return true;
 }
 
@@ -283,7 +301,7 @@ export function resolveTurn(sim: DuelSim, hostCmd: DuelCmd, guestCmd: DuelCmd, r
     if (sim.host.active.mon.hp <= 0 || sim.guest.active.mon.hp <= 0) {
       break;
     }
-    executeMove(sim, side, cmd.moveId, events, rng);
+    executeMove(sim, side, cmd.moveId, events, rng, i === 0);
     if (duelEndCheck(sim, events)) {
       return events;
     }
@@ -295,15 +313,14 @@ export function resolveTurn(sim: DuelSim, hostCmd: DuelCmd, guestCmd: DuelCmd, r
   // NON esiste qui — gli hold item non passano sul filo in v1.
   for (const side of ["host", "guest"] as DuelSide[]) {
     const c = sim[side].active;
-    if (c.mon.hp > 0 && c.mon.status === "scandalo") {
-      c.mon.hp = Math.max(0, c.mon.hp - Math.max(1, Math.floor(statsOf(c.mon).hp / 8)));
-      events.push({ e: "eot", side, hpAfter: c.mon.hp });
-      faintCheck(sim, side, events);
-    }
-    const max = statsOf(c.mon).hp;
-    if (c.mon.hp > 0 && c.mon.hp < max && abilityOf(c.mon)?.id === "galleggiamento") {
-      c.mon.hp = Math.min(max, c.mon.hp + Math.max(1, Math.floor(max / 16)));
-      events.push({ e: "heal", side, hpAfter: c.mon.hp, cured: false });
+    for (const effect of resolveEndTurn(c, false)) {
+      c.mon.hp = effect.hpAfter;
+      if (effect.kind === "damage") {
+        events.push({ e: "eot", side, hpAfter: c.mon.hp });
+        faintCheck(sim, side, events);
+      } else {
+        events.push({ e: "heal", side, hpAfter: c.mon.hp, cured: false });
+      }
     }
   }
   duelEndCheck(sim, events);
@@ -330,6 +347,10 @@ export function applyEvent(sim: DuelSim, ev: DuelEvent): void {
       }
       return;
     }
+    case "stageReset":
+      sim.host.active.stages = { atk: 0, def: 0, spc: 0, spd: 0 };
+      sim.guest.active.stages = { atk: 0, def: 0, spc: 0, spd: 0 };
+      return;
     case "dmg":
     case "eot":
     case "drain":

@@ -60,6 +60,11 @@ export const DEX_ZONES: DexZone[] = [
     // trumpon è 6% (raro ma nel pool wild), quindi la zona resta completabile.
     species: ["macronfox", "bojoon", "zelenskir", "ursulax", "xipanda", "putingrad", "trumpon"],
     reward: { itemId: "schedona", qty: 3, money: 4000 }
+  },
+  {
+    id: "campo-largo", name: "CAMPO LARGO",
+    species: ["salistrobo", "fratocorno"],
+    reward: { itemId: "schedona", qty: 2, money: 1800 }
   }
 ];
 

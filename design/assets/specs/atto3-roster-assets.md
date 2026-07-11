@@ -16,7 +16,7 @@
 
 ## ASSET-001 — SALISTROBO
 
-- **File**: `public/assets/monsters/salistrobo.png`, `salistrobo_action.png`.
+- **File**: `public/sprites/monsters/salistrobo.png`, `salistrobo_action.png`.
 - **Riferimento**: Ilaria Salis. Marker obbligatori: capelli biondi mossi,
   sopracciglia/espressione combattiva, occhiali tondi ovale e sciarpa rossa.
 - **Prompt front**: caricatura mostruosa atletica di Ilaria Salis da palco, volto
@@ -28,7 +28,7 @@
 
 ## ASSET-002 — SALISOUND
 
-- **File**: `public/assets/monsters/salisound.png`, `salisound_action.png`.
+- **File**: `public/sprites/monsters/salisound.png`, `salisound_action.png`.
 - **Prompt front**: evoluzione mostruosa di Ilaria Salis, stesso volto biondo e
   combattivo, torso-impianto audio, woofer-braccia, gambe da runner, cuffie ad
   aureola e coda-microfono; navy, teal, corallo, oro, crema, viola.
@@ -37,7 +37,7 @@
 
 ## ASSET-003 — FUTURORSO
 
-- **File**: `public/assets/monsters/futurorso.png`, `futurorso_action.png`.
+- **File**: `public/sprites/monsters/futurorso.png`, `futurorso_action.png`.
 - **Riferimento**: Roberto Vannacci; derivare visivamente dal VANNACCIX esistente.
   Marker: volto squadrato, capelli cortissimi grigi, sguardo severo, giacca formale.
 - **Prompt front**: orso massiccio con volto caricaturale riconoscibile di Roberto
@@ -48,7 +48,7 @@
 
 ## ASSET-004 — GIANIMAGO
 
-- **File**: `public/assets/monsters/gianimago.png`, `gianimago_action.png`.
+- **File**: `public/sprites/monsters/gianimago.png`, `gianimago_action.png`.
 - **Riferimento**: Eugenio Giani. Marker: capelli argento pettinati lateralmente,
   viso largo sorridente, occhiali sottili e fascia/giacca istituzionale astratta.
 - **Prompt front**: caricatura mostruosa anfibia di Eugenio Giani, volto largo e
@@ -58,14 +58,14 @@
 
 ## ASSET-005 — QUASIMAGIANI
 
-- **File**: `public/assets/monsters/quasimagiani.png`, `quasimagiani_action.png`.
+- **File**: `public/sprites/monsters/quasimagiani.png`, `quasimagiani_action.png`.
 - **Prompt front**: nucleo anfibio a goccia, grande parabola, tre maschere-lobo, mantello-tenda e antenna; viola profondo, magenta polvere, teal, oro, crema, navy.
 - **Action**: apre mantello e maschere, due illusioni semitrasparenti a pixel pieni.
 - **Continuità**: goccia, parabola e antenna di GIANIMAGO. **Avoid**: blur/alpha morbido.
 
 ## ASSET-006 — CROSETTANK
 
-- **File**: `public/assets/monsters/crosettank.png`, `crosettank_action.png`.
+- **File**: `public/sprites/monsters/crosettank.png`, `crosettank_action.png`.
 - **Riferimento**: Guido Crosetto. Marker: corporatura enorme, testa rasata/capelli
   cortissimi, barba e baffi scuri, sorriso deciso, completo blu.
 - **Prompt front**: rinoceronte ministeriale corazzato con volto caricaturale
@@ -76,7 +76,7 @@
 
 ## ASSET-007 — FRATOCORNO
 
-- **File**: `public/assets/monsters/fratocorno.png`, `fratocorno_action.png`.
+- **File**: `public/sprites/monsters/fratocorno.png`, `fratocorno_action.png`.
 - **Riferimento**: Nicola Fratoianni. Marker: capelli scuri ricci, barba corta,
   occhiali rettangolari e gesto da assemblea.
 - **Prompt front**: capra da piazza con volto caricaturale riconoscibile di Nicola
@@ -87,14 +87,14 @@
 
 ## ASSET-008 — CAMPOCORNO
 
-- **File**: `public/assets/monsters/campocorno.png`, `campocorno_action.png`.
+- **File**: `public/sprites/monsters/campocorno.png`, `campocorno_action.png`.
 - **Prompt front**: grande stambecco, corna ad arco protettivo, criniera di foglie e nastri, megafono-fiore evoluto; verde scuro, verde, crema, corallo, oro, navy.
 - **Action**: zoccolo a terra, arco di corna e anello di foglie.
 - **Continuità**: parentesi, fiore e lana vegetale di FRATOCORNO.
 
 ## ASSET-009 — NORDIODO
 
-- **File**: `public/assets/monsters/nordiodo.png`, `nordiodo_action.png`.
+- **File**: `public/sprites/monsters/nordiodo.png`, `nordiodo_action.png`.
 - **Riferimento**: Carlo Nordio. Marker: capelli argento compatti, sopracciglia
   scure, occhiali sottili e sorriso trattenuto da giurista.
 - **Prompt front**: dodo consultivo con volto caricaturale riconoscibile di Carlo
@@ -105,7 +105,7 @@
 
 ## ASSET-010 — REFERENDODO
 
-- **File**: `public/assets/monsters/referendodo.png`, `referendodo_action.png`.
+- **File**: `public/sprites/monsters/referendodo.png`, `referendodo_action.png`.
 - **Prompt front**: evoluzione dodo larga di Carlo Nordio, stesso volto argento e
   sopracciglia riconoscibili, becco a doppio pennino, toga stratificata, ali a
   parentesi, urna astratta, rotolo e sigillo.

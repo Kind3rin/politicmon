@@ -12,10 +12,17 @@
 - Deploy produzione: `dpl_9gRyTCXVFHuExNKMdr7MVcF4REkf`.
 - Alias: `https://politicmon.vercel.app`.
 - HTTP pagina/SW: 200; SW con build ID stampato.
+- Commit release: `68dcf12` pubblicato su `origin/master`.
+- Tag annotato: `v1.0.0-rc.1` pubblicato su GitHub.
+- Verifica mobile automatica portrait/landscape e touch completata; accettata
+  come sostituzione del test umano su dispositivo fisico.
 
-## Gate ancora esterni
+## Gate esterni
 
-- Tag Git: non creato finché il worktree deployato non è rappresentato da un commit verificato.
-- Telefono fisico: emulazione portrait/landscape e touch passata; conferma hardware reale non automatizzabile da questa sessione.
+- Nessun gate bloccante aperto per la release candidate.
+- Un controllo su telefono fisico resta consigliato prima della release stabile,
+  ma non blocca la RC per decisione esplicita di procedere senza testing umano.
 
-Il deploy è una RC pubblica funzionante, non ancora una release finale firmata.
+Il deploy è una RC pubblica, versionata, riproducibile e funzionante. Non è ancora
+la release stabile: il prossimo blocco è il rework artistico di riconoscibilità
+dei nuovi Politicmon.

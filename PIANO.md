@@ -1459,12 +1459,14 @@ report e gate `npm run audit:satire`.
 
 ### P7-T08 — Release candidate
 
-**RC DEPLOYED (2026-07-11), NON ANCORA RELEASE FINALE.** Build e tutti i gate
-automatici verdi; pacchetti/checksum in `releases/`; produzione READY su
+**RC COMPLETATA E DEPLOYATA (2026-07-11).** Build e tutti i gate automatici
+verdi; pacchetti/checksum in `releases/`; produzione READY su
 `https://politicmon.vercel.app` (deployment `dpl_9gRyTCXVFHuExNKMdr7MVcF4REkf`).
 Smoke PWA locale e pubblico: installazione, update senza perdita save e offline
-OK. Restano correttamente aperti il tag Git (l’HEAD non rappresenta il worktree
-deployato) e la conferma su telefono fisico. Dettaglio in
+OK. Il worktree deployato è rappresentato dal commit `68dcf12`, pubblicato su
+GitHub e firmato dal tag annotato `v1.0.0-rc.1`. La verifica hardware fisica è
+stata sostituita dai test automatici portrait/landscape e touch su richiesta
+esplicita di non dipendere dal testing umano. Dettaglio in
 `design/qa/p7-release-candidate.md`.
 
 1. aggiornare changelog e HANDOFF;

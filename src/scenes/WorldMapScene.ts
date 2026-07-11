@@ -4,7 +4,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { clipToWidth, drawScreenHeader, GREY, PAPER } from "../ui/widgets";
+import { clipToWidth, drawScreenHeader, GREY, INK } from "../ui/widgets";
 
 // Coordinate solo per i marker dinamici. La geografia, le coste e le rotte sono
 // nella cartina PixelLab; non si ridisegnano più come un grafo testuale.
@@ -89,10 +89,13 @@ export class WorldMapScene implements Scene {
       if (selected) screen.frame(node.x - 4, node.y - 4, 9, 9, "#62bdd4");
       return;
     }
-    // Posizione attuale: un anello, non un quadrato pieno sopra il landmark.
-    screen.frame(node.x - 7, node.y - 7, 15, 15, "#ffe98a");
-    screen.frame(node.x - 5, node.y - 5, 11, 11, "#e6b944");
-    screen.text("▼", node.x - 3, node.y - 14, "#ffe98a");
+    // Posizione attuale: cartellino navy + freccia, leggibile su qualunque
+    // landmark. Il solo anello oro si confondeva con edifici e strade.
+    screen.rect(node.x - 10, node.y - 20, 21, 11, "#17243d");
+    screen.frame(node.x - 10, node.y - 20, 21, 11, "#ffe98a");
+    screen.text("TU", node.x - 5, node.y - 17, "#ffe98a");
+    screen.text("▼", node.x - 3, node.y - 9, "#ffe98a");
+    screen.frame(node.x - 6, node.y - 6, 13, 13, "#ffe98a");
   }
 
   draw(screen: Screen): void {
@@ -106,10 +109,11 @@ export class WorldMapScene implements Scene {
     for (const node of NODES) this.drawMarker(screen, node, node.id === current?.id, node.id === this.selectedId);
 
     screen.panel(4, 145, VIEW_W - 8, 31, "dialog");
-    screen.text("SEI QUI", 12, 151, "#e6b944");
-    screen.text(clipToWidth(current?.label ?? "IN VIAGGIO", 132), 12, 162, PAPER);
+    screen.text("SEI QUI:", 12, 151, "#a46b12");
+    screen.text(clipToWidth(current?.label ?? "IN VIAGGIO", 120), 65, 151, INK);
     const selected = NODES.find((node) => node.id === this.selectedId);
-    screen.textRight(clipToWidth(`TAPPA: ${selected?.label ?? "-"}`, 104), VIEW_W - 12, 151, "#62bdd4");
-    screen.textRight("SU/GIU: TAPPE", VIEW_W - 12, 162, GREY);
+    screen.text("SFOGLIA:", 12, 162, GREY);
+    screen.text(clipToWidth(selected?.label ?? "-", 98), 65, 162, "#3f7f83");
+    screen.textRight("SU/GIU", VIEW_W - 12, 162, GREY);
   }
 }

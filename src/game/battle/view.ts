@@ -4,7 +4,7 @@
 // NESSUNA logica di gioco qui: solo stato visivo e disegno.
 
 import {
-  MONSTER_ART, MONSTER_ACTION_ART, MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG, monsterImage
+  MONSTER_ART, MONSTER_ACTION_ART, MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG, monsterImage, drawMonsterLoading
 } from "../../art/monsters";
 import { memeForm } from "../memeForms";
 import { STATUS_LABELS } from "../../data/moves";
@@ -411,6 +411,14 @@ export function drawBattleMonster(
     x = cx - drawW / 2 + dx;
     y = by - drawH;
     screen.imageSprite(png, x, y, { flipX, scaleX: sx * pngScale, scaleY: sy * pngScale });
+  } else if (MONSTERS_WITH_PNG.has(speciesId)) {
+    // Mai mostrare la pixmap legacy durante il decode o dopo una cache PWA
+    // incompleta: viene sostituita da un placeholder neutro per pochi frame.
+    drawW = 30;
+    drawH = 38;
+    x = cx - drawW / 2 + dx;
+    y = by - drawH;
+    drawMonsterLoading(screen, x, y, drawW, drawH);
   } else {
     drawW = w * scale * sx;
     drawH = h * scale * sy;

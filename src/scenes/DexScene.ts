@@ -60,7 +60,9 @@ export class DexScene implements Scene {
       this.index = (this.index + 1) % DEX_ORDER.length;
       audio.cursor();
     }
-    const visibleRows = 10;
+    // Nove righe: la decima schiacciava il messaggio che spiega davvero gli
+    // scambi online, lasciando il giocatore con il solo ambiguo "SCAMBIO".
+    const visibleRows = 8;
     if (this.index < this.scroll) {
       this.scroll = this.index;
     }
@@ -93,7 +95,7 @@ export class DexScene implements Scene {
       if (this.state.dex[DEX_ORDER[i]]) {
         this.index = i;
         this.formPage = false;
-        const visibleRows = 10;
+        const visibleRows = 8;
         this.scroll = Math.min(Math.max(this.scroll, i - visibleRows + 1), i);
         audio.cursor();
         return;
@@ -115,7 +117,7 @@ export class DexScene implements Scene {
     const target = DEX_ORDER.length - skipped;
     drawScreenHeader(screen, "POLITICDEX", `VISTI ${seen}  ELETTI ${caught}/${target}`);
     screen.panel(4, 18, VIEW_W - 8, VIEW_H - 22, "card");
-    const visibleRows = 10;
+    const visibleRows = 8;
     for (let row = 0; row < visibleRows; row += 1) {
       const i = this.scroll + row;
       if (i >= DEX_ORDER.length) {
@@ -136,9 +138,9 @@ export class DexScene implements Scene {
       const tradeOnly = VERSION_EXCLUSIVES[id] && !speciesAvailable(id, this.state.browserSeed);
       if (status === "caught") {
         screen.text("★", VIEW_W - 22, y, "#b04848");
-      } else if (tradeOnly) {
-        // Etichetta a destra: non è "mancante per svogliatezza", serve un cambio.
-        screen.text("SCAMBIO", VIEW_W - 62, y, TRADE_ONLY);
+      } else if (tradeOnly && status === "seen") {
+        // Sintesi per riga; il footer dice esattamente come ottenerla.
+        screen.text("ONLINE", VIEW_W - 54, y, TRADE_ONLY);
       } else if (status === "seen") {
         screen.text("•", VIEW_W - 22, y, GREY);
       }
@@ -150,17 +152,19 @@ export class DexScene implements Scene {
     const here = zp.find((p) => p.zone.id === this.state.pos.mapId);
     const hereTxt = here ? `  -  QUI ${here.zone.name} ${here.caught}/${here.total}` : "";
     const col = doneZones >= zp.length ? "#e8c84a" : GREY;
-    screen.text(clipToWidth(`ZONE COMPLETE ${doneZones}/${zp.length}${hereTxt}`, 224), 8, VIEW_H - 11, col);
     // Riepilogo versione: quante specie restano ottenibili SOLO scambiando
     // (esclusive dell'altra fazione, non ancora catturate). Rende visibile il
     // sistema versioni e spinge allo scambio online.
     const tradeOnlyLeft = Object.keys(VERSION_EXCLUSIVES).filter(
       (id) => !speciesAvailable(id, this.state.browserSeed) && this.state.dex[id] !== "caught"
     ).length;
+    const zoneY = tradeOnlyLeft > 0 ? VIEW_H - 49 : VIEW_H - 11;
+    screen.text(clipToWidth(`ZONE COMPLETE ${doneZones}/${zp.length}${hereTxt}`, 224), 8, zoneY, col);
     if (caught >= target) {
       screen.text("DEX COMPLETO! ORA SEI IL PALAZZO!", 12, VIEW_H - 21, "#e8c84a");
     } else if (tradeOnlyLeft > 0) {
-      screen.text(`SOLO VIA SCAMBIO: ${tradeOnlyLeft}`, 8, VIEW_H - 21, TRADE_ONLY);
+      screen.text(`SERVONO ${tradeOnlyLeft} SCAMBI ONLINE`, 8, VIEW_H - 34, TRADE_ONLY);
+      screen.text("VICINO: PARLA ► SCAMBIO", 8, VIEW_H - 23, TRADE_ONLY);
     }
   }
 
@@ -216,7 +220,12 @@ export class DexScene implements Scene {
     }
     // Esclusiva dell'altra versione: nel tuo mondo si ottiene SOLO scambiando.
     if (VERSION_EXCLUSIVES[id] && !speciesAvailable(id, this.state.browserSeed)) {
-      screen.text("SOLO VIA SCAMBIO ONLINE", 14, cy, TRADE_ONLY);
+      screen.text("OTTENIBILE SOLO DA UN ALTRO", 14, cy, TRADE_ONLY);
+      cy += 10;
+      screen.text("GIOCATORE ONLINE", 14, cy, TRADE_ONLY);
+      cy += 10;
+      screen.text("VICINO: PARLA ► SCAMBIO", 14, cy, TRADE_ONLY);
+      cy += 10;
       cy += 10;
     }
     if (this.state.dex[id] !== "caught") {

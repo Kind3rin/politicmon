@@ -76,7 +76,12 @@ function criticalSpriteEntries(): Record<string, string> {
     "build:x:tiles/build_studio_front.png": "tiles/build_studio_front.png",
     "build:y:tiles/build_bistro_front.png": "tiles/build_bistro_front.png",
     "veh:ferry": "chars/ferry.png",
-    "char:schettino": "chars/schettino.png"
+    "char:schettino": "chars/schettino.png",
+    // Superfici aperte spesso dal menu: evitare un primo frame con il fallback
+    // mentre PixelLab decodifica la cartina o la tessera.
+    "ui:world-campaign-map": "ui/world_campaign_map.png",
+    "ui:candidate-card": "ui/candidate_card.png",
+    "ui:candidate-avatar": "chars/player_south.png"
   };
 
   // Player fermo nelle 4 direzioni: il primo frame lo disegna, è critico.

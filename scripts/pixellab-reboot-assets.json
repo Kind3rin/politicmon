@@ -1354,6 +1354,24 @@
       "state": "verified"
     },
     {
+      "id": "world-campaign-map",
+      "domain": "ui-map",
+      "tool": "create_map_object",
+      "objectId": "0d6f5e97-88ec-486d-96e6-8bdb1557f5f2",
+      "output": ["ui/world_campaign_map.png"],
+      "note": "240x120 cartina PixelLab; rotte e landmark sono arte, marker e stato restano runtime.",
+      "state": "verified"
+    },
+    {
+      "id": "candidate-card",
+      "domain": "ui",
+      "tool": "create_ui_asset",
+      "objectId": "36580623-5686-49de-929d-72ec791c9fd5",
+      "output": ["ui/candidate_card.png"],
+      "note": "Credenziale candidato PixelLab; ritratto e statistiche sono runtime.",
+      "state": "verified"
+    },
+    {
       "id": "ui-core",
       "domain": "ui",
       "tool": "create_ui_asset + create_map_object",

@@ -34,6 +34,25 @@ export function monsterImage(speciesId: string, action = false): HTMLImageElemen
   return getSpriteImage(`mon:${speciesId}${suffix}`, `monsters/${speciesId}${suffix}.png`);
 }
 
+// Un PNG dichiarato PixelLab non deve mai mostrare per un frame la vecchia
+// caricatura testuale: su rete mobile quel flash sembra un asset corrotto. In
+// attesa del decode usiamo un placeholder neutro, piccolo e riconoscibile.
+export function drawMonsterLoading(
+  screen: Screen,
+  x: number,
+  y: number,
+  boxW: number,
+  boxH: number
+): void {
+  const w = Math.min(26, Math.max(14, boxW - 8));
+  const h = Math.min(30, Math.max(16, boxH - 6));
+  const px = Math.round(x + (boxW - w) / 2);
+  const py = Math.round(y + boxH - h);
+  screen.rect(px, py, w, h, "#1b2b42");
+  screen.frame(px, py, w, h, "#6d829c");
+  screen.text("…", px + Math.floor(w / 2) - 3, py + Math.floor(h / 2) - 3, "#e6b944");
+}
+
 // Disegna lo sprite di una specie dentro una box (x, y, boxW, boxH), ancorato in
 // BASSO e centrato orizzontalmente, scalando per riempire la box mantenendo le
 // proporzioni. Prova il PNG PixelLab; se manca ricade sulla pixmap testuale
@@ -61,6 +80,10 @@ export function drawMonsterSprite(
     const dw = b.w * scale;
     const dh = b.h * scale;
     screen.imageSpriteCropped(png, x + (boxW - dw) / 2, y + boxH - dh, { scaleX: scale, scaleY: scale, flipX: opts?.flipX });
+    return;
+  }
+  if (MONSTERS_WITH_PNG.has(speciesId)) {
+    drawMonsterLoading(screen, x, y, boxW, boxH);
     return;
   }
   if (!pix) {

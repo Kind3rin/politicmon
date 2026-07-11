@@ -8,10 +8,11 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
-import { sondaggiColor, sondaggiLabel } from "../game/governo";
+import { sondaggiColor } from "../game/governo";
 import { mp } from "../net/mp";
+import { loadNick } from "../net/profile";
 import { canPromptInstall, installHint, isAppInstalled, promptInstall } from "../engine/pwa";
-import { clipToWidth, Menu, MessageBox, GREY, PAPER, setReduceMotion } from "../ui/widgets";
+import { clipToWidth, Menu, MessageBox, PAPER, setReduceMotion } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
@@ -339,7 +340,6 @@ export class PauseScene implements Scene {
   }
 
   private drawCard(screen: Screen): void {
-    screen.dim(0.72);
     screen.rect(0, 0, VIEW_W, VIEW_H, "#101827");
     screen.rect(0, 0, VIEW_W, 17, "#17243d");
     screen.rect(0, 15, VIEW_W, 2, "#e6b944");
@@ -351,59 +351,45 @@ export class PauseScene implements Scene {
         ? "CAMPIONE DI PALAZZOPOLI"
         : "GIOVANE PROMESSA";
 
-    const card = sceneImage("ui:candidate-card", "ui/candidate_card.png");
-    const cardX = 14;
-    const cardY = 22;
-    if (card) {
-      const bounds = screen.imageBounds(card);
-      const scale = Math.min(132 / bounds.w, 150 / bounds.h);
-      screen.imageSpriteCropped(card, cardX, cardY, { scale });
-    } else {
-      // Solo per il primo decode della PNG PixelLab; non è mai la vecchia UI.
-      screen.rect(cardX, cardY, 132, 150, "#f4e6c1");
-      screen.frame(cardX, cardY, 132, 150, "#e6b944");
-    }
-    // Ritratto del candidato dentro il medaglione della tessera: non lasciare
-    // una foto vuota su una credenziale che dovrebbe sembrare personale.
+    // Documento unico, non un mockup affiancato a un pannello statistiche.
+    screen.rect(9, 23, 222, 146, "#f8f1dc");
+    screen.frame(9, 23, 222, 146, "#d6aa3d");
+    screen.frame(12, 26, 216, 140, "#203552");
+    screen.rect(13, 27, 214, 18, "#203552");
+    screen.text("REPUBBLICA DELL'ITALIETTA", 20, 32, "#fff5ce");
+    screen.rect(20, 47, 200, 2, "#d6aa3d");
+
+    // Foto tessera integrata nel documento.
+    screen.rect(20, 55, 55, 67, "#e8ddc2");
+    screen.frame(20, 55, 55, 67, "#203552");
+    screen.rect(23, 58, 49, 61, "#cdd9d2");
     const avatar = sceneImage("ui:candidate-avatar", "chars/player_south.png");
     if (avatar) {
       const avatarBounds = screen.imageBounds(avatar);
-      // Solo il volto nella foto rotonda, non il corpo intero che usciva dal
-      // medaglione e faceva sembrare la tessera un poster.
-      const portraitH = Math.max(1, Math.round(avatarBounds.h * 0.57));
-      screen.imageRegion(
-        avatar,
-        avatarBounds.x,
-        avatarBounds.y,
-        avatarBounds.w,
-        portraitH,
-        98,
-        37,
-        34,
-        39
-      );
+      screen.imageRegion(avatar, avatarBounds.x, avatarBounds.y, avatarBounds.w,
+        avatarBounds.h, 27, 65, 41, 49);
     }
 
-    // La tessera mostra identità e credenziali rapide; i dati estesi vivono
-    // nel DEX/GOVERNO, non vengono compressi in un foglio illeggibile.
-    screen.rect(151, 24, 82, 145, "#1b2b42");
-    screen.frame(151, 24, 82, 145, "#4d6585");
-    screen.text("PROFILO", 158, 31, "#ffe38a");
-    screen.text(clipToWidth(title, 68), 158, 43, PAPER);
-    screen.rect(158, 55, 67, 1, "#4d6585");
-    screen.text("FONDI", 158, 62, GREY);
-    screen.textRight(`${this.state.money}€`, 225, 72, PAPER);
+    screen.text("CANDIDATO", 84, 55, "#68758a");
+    screen.text(clipToWidth(loadNick() || "ONOREVOLE", 132), 84, 66, "#17243d");
+    screen.text("QUALIFICA", 84, 80, "#68758a");
+    screen.text(clipToWidth(title, 132), 84, 91, "#17243d");
+    screen.text("N. TESSERA", 84, 105, "#68758a");
+    const code = `IT-${String(this.state.stepsTotal).padStart(5, "0")}-${this.state.badges.length}`;
+    screen.text(code, 84, 116, "#17243d");
+
     const sond = this.state.sondaggi;
-    screen.text("SONDAGGI", 158, 84, GREY);
-    screen.frame(158, 94, 67, 7, "#10141f");
-    screen.rect(159, 95, Math.round(65 * (sond / 100)), 5, sondaggiColor(sond));
-    screen.textRight(`${sond}%`, 225, 105, sondaggiColor(sond));
     const caught = Object.values(this.state.dex).filter((v) => v === "caught").length;
-    const seen = Object.keys(this.state.dex).length;
-    screen.text("POLITICDEX", 158, 116, GREY);
-    screen.textRight(`${caught}/${seen} ELETTI`, 225, 126, PAPER);
-    screen.text("MEDAGLIE", 158, 138, GREY);
-    screen.textRight(`${this.state.badges.length}/3`, 225, 148, "#ffe38a");
-    screen.text(sondaggiLabel(sond), 158, 159, GREY);
+    screen.rect(20, 128, 200, 1, "#c7b991");
+    screen.text("CONSENSO", 20, 136, "#68758a");
+    screen.frame(69, 136, 58, 8, "#203552");
+    screen.rect(70, 137, Math.round(56 * sond / 100), 6, sondaggiColor(sond));
+    screen.textRight(`${sond}%`, 151, 137, sondaggiColor(sond));
+    screen.text("ELETTI", 161, 136, "#68758a");
+    screen.textRight(String(caught), 218, 137, "#17243d");
+    screen.text("FONDI", 20, 151, "#68758a");
+    screen.text(`${this.state.money}€`, 56, 151, "#17243d");
+    screen.text("MEDAGLIE", 116, 151, "#68758a");
+    screen.textRight(`${this.state.badges.length}/3`, 218, 151, "#17243d");
   }
 }

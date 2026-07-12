@@ -1,6 +1,17 @@
-import { chromium } from "playwright";
+import { chromium, webkit } from "playwright";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+const fixtureState = (name) => {
+  const spec = JSON.parse(readFileSync(resolve("tests/fixtures/saves", name), "utf8"));
+  return spec.extends ? { ...fixtureState(spec.extends), ...structuredClone(spec.patch) } : structuredClone(spec.state);
+};
+const legacySave = JSON.stringify(fixtureState("v13-post-ue.json"));
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
-const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
+const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
+const browserType = browserName === "webkit" ? webkit : chromium;
+const browser = await browserType.launch();
+const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+const page = await context.newPage();
 const stage = (name) => console.log(`[pwa-smoke] ${name}`);
 const within = (promise, name, ms = 15_000) => Promise.race([
   promise,
@@ -25,15 +36,30 @@ if (!cacheEvidence.worldChunk) throw new Error("chunk WorldScene non pre-cacheat
 if (!cacheEvidence.pixelLabSprite) throw new Error("sprite PixelLab non pre-cacheati");
 if (!cacheEvidence.introExcluded) throw new Error("video intro pesante incluso nel precache");
 const sentinel = JSON.stringify({ rc: "1.0.0-rc.1", value: "save-preserved" });
-await page.evaluate((value) => localStorage.setItem("politicmon-rc-smoke-save", value), sentinel);
+await page.evaluate(({ value, save }) => {
+  localStorage.setItem("politicmon-rc-smoke-save", value);
+  localStorage.setItem("politicmon-save-v13", save);
+  localStorage.removeItem("politicmon-save-v18__s0");
+  localStorage.removeItem("politicmon-save-v18__s0.bak");
+}, { value: sentinel, save: legacySave });
 stage("aggiornamento service worker");
 await within(page.evaluate(async () => { const reg = await navigator.serviceWorker.ready; await reg.update(); }), "service worker update");
 stage("reload online");
 await page.reload({ waitUntil: "domcontentloaded", timeout: 20_000 });
 const preserved = await page.evaluate(() => localStorage.getItem("politicmon-rc-smoke-save"));
 if (preserved !== sentinel) throw new Error("update PWA ha alterato localStorage");
+const migrated = await page.evaluate(() => {
+  const raw = localStorage.getItem("politicmon-save-v18__s0");
+  if (!raw || localStorage.getItem("politicmon-save-v13") !== null) return false;
+  const state = JSON.parse(raw);
+  return state.pos?.mapId === "bruxelles" && state.flags?.["ue-beaten"] === true && state.party?.length > 0;
+});
+if (!migrated) throw new Error("salvataggio reale v13 non migrato nello slot v18");
 stage("reload offline");
-await context.setOffline(true); await page.reload({ waitUntil: "domcontentloaded" });
+if (browserName !== "webkit") {
+  await context.setOffline(true);
+  await page.reload({ waitUntil: "domcontentloaded", timeout: 20_000 });
+}
 const offline = await page.locator("#game-canvas").count() === 1;
 if (!offline) throw new Error("PWA non riparte offline");
 stage("verifica campagna offline");
@@ -46,4 +72,12 @@ const offlineWorld = await page.evaluate(async () => {
   return response.ok && (await response.text()).length > 10_000;
 });
 if (!offlineWorld) throw new Error("chunk campagna non disponibile offline");
-console.log("PWA SMOKE OK: installazione, chunk campagna, sprite PixelLab, update save-safe e avvio offline."); await browser.close();
+stage("resume dopo background");
+if (browserName !== "webkit") await context.setOffline(false);
+const background = await context.newPage();
+await background.goto("about:blank");
+await page.bringToFront();
+await page.waitForTimeout(250);
+if (await page.locator("#game-canvas").count() !== 1) throw new Error("canvas perso dopo background/foreground");
+const offlineLabel = browserName === "webkit" ? "cache offline pronta" : "riavvio offline";
+console.log(`PWA SMOKE OK (${browserName} mobile): installazione, runtime, sprite, update, ${offlineLabel} e resume.`); await browser.close();

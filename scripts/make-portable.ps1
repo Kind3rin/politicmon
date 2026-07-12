@@ -10,63 +10,70 @@ $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 Set-Location $root
 npm run build
 
-New-Item -ItemType Directory -Force -Path $releaseDir | Out-Null
-New-Item -ItemType Directory -Force -Path $portableDir | Out-Null
-
+New-Item -ItemType Directory -Force -Path $releaseDir, $portableDir | Out-Null
 $portableResolved = Resolve-Path $portableDir
 if (-not $portableResolved.Path.StartsWith($root.Path)) {
   throw "Percorso portable-build non sicuro: $($portableResolved.Path)"
 }
 Get-ChildItem -LiteralPath $portableResolved.Path -Force | Remove-Item -Recurse -Force
+Copy-Item -Path (Join-Path $dist "*") -Destination $portableResolved.Path -Recurse -Force
 
-$indexPath = Join-Path $dist "index.html"
-$indexHtml = [System.IO.File]::ReadAllText($indexPath, [System.Text.Encoding]::UTF8)
-$cssMatch = [regex]::Match($indexHtml, '<link rel="stylesheet"[^>]*href="([^"]+)"[^>]*>')
-$jsMatch = [regex]::Match($indexHtml, '<script type="module"[^>]*src="([^"]+)"[^>]*></script>')
+$launcher = @'
+@echo off
+setlocal
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0server.ps1"
+'@
 
-if (-not $cssMatch.Success -or -not $jsMatch.Success) {
-  throw "Impossibile trovare asset CSS/JS nella build Vite."
+$server = @'
+$ErrorActionPreference = "Stop"
+$root = Split-Path -Parent $MyInvocation.MyCommand.Path
+$listener = [System.Net.HttpListener]::new()
+$port = 8765
+while ($port -lt 8785) {
+  try { $listener.Prefixes.Add("http://127.0.0.1:$port/"); $listener.Start(); break }
+  catch { $listener.Prefixes.Clear(); $port++ }
 }
+if (-not $listener.IsListening) { throw "Nessuna porta locale disponibile." }
+Start-Process "http://127.0.0.1:$port/"
+Write-Host "POLITICMON avviato. Lascia aperta questa finestra; CTRL+C per chiudere."
+$mime = @{ ".html"="text/html; charset=utf-8"; ".js"="text/javascript; charset=utf-8"; ".css"="text/css; charset=utf-8"; ".json"="application/json"; ".webmanifest"="application/manifest+json"; ".png"="image/png"; ".svg"="image/svg+xml"; ".mp4"="video/mp4" }
+try {
+  while ($listener.IsListening) {
+    $context = $listener.GetContext()
+    $relative = [Uri]::UnescapeDataString($context.Request.Url.AbsolutePath.TrimStart("/"))
+    if (-not $relative) { $relative = "index.html" }
+    $candidate = [IO.Path]::GetFullPath((Join-Path $root $relative))
+    if (-not $candidate.StartsWith([IO.Path]::GetFullPath($root)) -or -not (Test-Path -LiteralPath $candidate -PathType Leaf)) {
+      $context.Response.StatusCode = 404; $context.Response.Close(); continue
+    }
+    $bytes = [IO.File]::ReadAllBytes($candidate)
+    $ext = [IO.Path]::GetExtension($candidate).ToLowerInvariant()
+    $contentType = $mime[$ext]
+    if (-not $contentType) { $contentType = "application/octet-stream" }
+    $context.Response.ContentType = $contentType
+    $context.Response.ContentLength64 = $bytes.Length
+    $context.Response.OutputStream.Write($bytes, 0, $bytes.Length)
+    $context.Response.Close()
+  }
+} finally { $listener.Stop(); $listener.Close() }
+'@
 
-$cssRel = $cssMatch.Groups[1].Value.TrimStart(".", "/")
-$jsRel = $jsMatch.Groups[1].Value.TrimStart(".", "/")
-$css = [System.IO.File]::ReadAllText((Join-Path $dist $cssRel), [System.Text.Encoding]::UTF8)
-$js = [System.IO.File]::ReadAllText((Join-Path $dist $jsRel), [System.Text.Encoding]::UTF8)
+$readme = @'
+POLITICMON - VERSIONE PORTABLE WINDOWS
 
-$singleHtml = $indexHtml
-$singleHtml = [regex]::Replace($singleHtml, '\s*<link rel="manifest"[^>]*>\r?\n?', "`n")
-$singleHtml = [regex]::Replace($singleHtml, '\s*<link rel="icon"[^>]*>\r?\n?', "`n")
-$singleHtml = [regex]::Replace(
-  $singleHtml,
-  '<link rel="stylesheet"[^>]*href="[^"]+"[^>]*>',
-  { param($match) "<style>`n$css`n</style>" }
-)
-$singleHtml = [regex]::Replace(
-  $singleHtml,
-  '<script type="module"[^>]*src="[^"]+"[^>]*></script>',
-  { param($match) "<script type=`"module`">`n$js`n</script>" }
-)
+1. Estrai tutto lo ZIP in una cartella.
+2. Fai doppio clic su AVVIA_POLITICMON.bat.
+3. Lascia aperta la finestra nera mentre giochi.
 
-$readme = @"
-POLITICMON - VERSIONE PORTABLE
+Non servono Node.js, installazione o connessione Internet.
+Il piccolo server locale è necessario perché i browser bloccano i moduli di gioco
+aperti direttamente da file. I salvataggi restano nel browser del dispositivo.
+'@
 
-Come si avvia:
-1. Estrai tutto lo zip in una cartella.
-2. Apri Politicmon.html con Chrome, Edge o Firefox.
+[IO.File]::WriteAllText((Join-Path $portableDir "AVVIA_POLITICMON.bat"), $launcher, $utf8NoBom)
+[IO.File]::WriteAllText((Join-Path $portableDir "server.ps1"), $server, $utf8NoBom)
+[IO.File]::WriteAllText((Join-Path $portableDir "README.txt"), $readme, $utf8NoBom)
 
-Non serve installare Node.js e non serve avviare un server.
-
-Note:
-- I salvataggi restano nel browser e nel dispositivo usato.
-- Per giocare da telefono, invia il file al telefono oppure caricalo su un hosting statico.
-"@
-
-[System.IO.File]::WriteAllText((Join-Path $portableDir "Politicmon.html"), $singleHtml, $utf8NoBom)
-[System.IO.File]::WriteAllText((Join-Path $portableDir "README.txt"), $readme, $utf8NoBom)
-
-if (Test-Path -LiteralPath $zipPath) {
-  Remove-Item -LiteralPath $zipPath -Force
-}
-
+if (Test-Path -LiteralPath $zipPath) { Remove-Item -LiteralPath $zipPath -Force }
 Compress-Archive -Path (Join-Path $portableDir "*") -DestinationPath $zipPath -Force
 Write-Host "Creato: $zipPath"

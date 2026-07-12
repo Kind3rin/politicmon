@@ -1,14 +1,14 @@
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_NAMES, moveSummary, moveKindLabel, type Move } from "../../data/moves";
 import { TYPE_COLORS } from "../../data/poltypes";
-import { BADGE_TEASER, type TrainerDef } from "../../data/trainers";
+import type { TrainerDef } from "../../data/trainers";
 import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { sceneImage } from "../../engine/assets";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
-import { addSondaggi, bumpSondaggi, expMalus, hasMinistro, moneyMalus } from "../governo";
+import { addSondaggi, bumpSondaggi, expMalus, hasMinistro } from "../governo";
 import { bumpDailyQuest } from "../dailyquests";
 import { recordBattleResult, recordBattleStarted, recordHealingItemUsed, recordPartyKo } from "../runstats";
 import { zoneProgress } from "../../data/dexzones";
@@ -34,6 +34,7 @@ import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
 import { EvolutionScene } from "../../scenes/EvolutionScene";
 import { DOCTRINE_LABEL, type ElectionDoctrine } from "../electionDoctrine";
+import { buildTrainerVictoryPlan } from "./postBattle";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -915,35 +916,25 @@ export class BattleScene implements Scene {
     const steps: Step[] = [];
     if (this.trainer) {
       const trainer = this.trainer;
-      const economia = hasMinistro(this.state, "economia");
-      // SPOT IN PRIME TIME (boost campagna): +50% fondi dai trainer finché attivo.
-      // R42 economia: ESCLUSO dai rematch (era un faucet netto +3.800€). Sui
-      // ribattuti il bonus non si applica (ma il contatore boost si consuma solo
-      // dove il bonus vale davvero — vedi endBattle: non consumato sui rematch).
-      const spotBonus = this.state.boostMoneyBattles > 0 && !this.isRematch ? 1.5 : 1;
-      const payout = Math.round(trainer.money * (economia ? 1.25 : 1) * spotBonus * moneyMalus(this.state));
+      const plan = buildTrainerVictoryPlan(this.state, trainer, this.isRematch);
       steps.push({ run: () => audio.victory() });
-      steps.push({ text: `Hai sconfitto ${trainer.name}!` });
-      for (const line of trainer.defeat) {
-        steps.push({ text: line });
-      }
+      for (const line of plan.introLines.slice(0, -1 - Number(plan.economyBonus) - Number(plan.spotBonus))) steps.push({ text: line });
       steps.push({
-        text: `Ricevi ${payout}€ di rimborso elettorale!`,
+        text: `Ricevi ${plan.payout}€ di rimborso elettorale!`,
         run: () => {
-          this.state.money += payout;
+          this.state.money += plan.payout;
         }
       });
-      if (economia) {
+      if (plan.economyBonus) {
         steps.push({ text: "Il MIN. ECONOMIA ha trovato la copertura: +25%!" });
       }
-      if (spotBonus > 1) {
+      if (plan.spotBonus) {
         steps.push({ text: "Lo SPOT IN PRIME TIME riempie le casse: +50% fondi!" });
       }
       steps.push({
         run: () => {
           // COMIZIO OCEANICO (boost campagna): guadagno SONDAGGI raddoppiato.
-          const sondGain = this.state.boostSondBattles > 0 ? 12 : 6;
-          const { value, milestone } = bumpSondaggi(this.state, sondGain);
+          const { value, milestone } = bumpSondaggi(this.state, plan.sondaggiGain);
           const lines: Step[] = [{ text: `I SONDAGGI ti premiano: gradimento al ${value}%!` }];
           if (milestone) {
             // Notifica gamificata quando superi una soglia chiave.
@@ -962,22 +953,10 @@ export class BattleScene implements Scene {
               this.state.badges.push(trainer.badge!);
             }
             addSondaggi(this.state, 8);
-            const lead: Step[] = [];
-            if (this.state.badges.length === 1) {
-              lead.push(
-                { text: "BREAKING NEWS! Con la prima medaglia si apre il GOVERNO OMBRA!", run: () => audio.catchJingle() },
-                { text: "Dal menu (START) trovi la voce GOVERNO: 6 MINISTERI da assegnare." },
-                { text: "Ogni ministro dà un bonus passivo (soldi, cure, incontri, cattura...)." },
-                { text: "Attento: da oggi ogni incarico ha anche un piccolo costo. Scegli bene." }
-              );
-            }
-            // Cliffhanger: anticipa la prossima tappa per invogliare a continuare.
-            const teaser = BADGE_TEASER[trainer.badge!];
-            if (teaser) {
-              for (const line of teaser) {
-                lead.push({ text: line });
-              }
-            }
+            const lead = plan.badgeLead.map((text, index) => ({
+              text,
+              run: index === 0 && text.startsWith("BREAKING NEWS") ? () => audio.catchJingle() : undefined
+            }));
             if (lead.length > 0) {
               this.pushFront(lead);
             }
@@ -995,10 +974,9 @@ export class BattleScene implements Scene {
       }
       // BONUS A SORPRESA: ~30% di pescare un extra dalla "mazzetta elettorale".
       // Variabilità della ricompensa = quel "ancora una battaglia".
-      if (Math.random() < 0.3) {
-        const drop = rollLootDrop();
-        const isJackpot = drop.id === "tessera";
-        if (isJackpot) {
+      if (plan.loot) {
+        const drop = plan.loot;
+        if (drop.jackpot) {
           // JACKPOT: la rara TESSERA DORATA merita un trattamento speciale
           // (lampo dorato + scintille + fanfara di vittoria, come la cattura).
           steps.push({
@@ -2214,26 +2192,3 @@ const CAMPAIGN_ACTIONS: Array<{
     desc: "Raddoppia la probabilità della prossima cattura." }
 ];
 
-// Tabella di loot a sorpresa (pesata): oggetti comuni frequenti, rari saltuari.
-// Tutti gli id esistono in ITEMS. Il peso più alto = più probabile.
-const LOOT_TABLE: Array<{ id: string; qty: number; weight: number }> = [
-  { id: "scheda", qty: 2, weight: 30 },
-  { id: "caffe", qty: 1, weight: 24 },
-  { id: "spritz", qty: 1, weight: 16 },
-  { id: "schedona", qty: 1, weight: 14 },
-  { id: "maalox", qty: 1, weight: 8 },
-  { id: "mojito", qty: 1, weight: 5 },
-  { id: "tessera", qty: 1, weight: 3 } // jackpot: oggetto evolutivo raro
-];
-
-function rollLootDrop(): { id: string; qty: number } {
-  const total = LOOT_TABLE.reduce((s, e) => s + e.weight, 0);
-  let roll = Math.random() * total;
-  for (const entry of LOOT_TABLE) {
-    roll -= entry.weight;
-    if (roll <= 0) {
-      return { id: entry.id, qty: entry.qty };
-    }
-  }
-  return { id: "scheda", qty: 1 };
-}

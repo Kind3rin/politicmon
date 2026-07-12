@@ -89,7 +89,9 @@ screenshot in `artifacts/screens/professional/`.
 - [x] Estratti da `WorldScene` spawn/interruzioni (`explorationInterrupts.ts`),
       rendering NPC (`npcRenderer.ts`) e destinazioni/filtri trasporto
       (`transport.ts`), con 5 test puri e screenshot leggendario (2026-07-12).
-- [ ] Estrarre da `BattleScene` orchestrazione messaggi e reward post-battaglia.
+- [x] Estratti da `BattleScene` piano reward, payout, bonus, teaser e loot
+      post-battaglia in `postBattle.ts`; la scena conserva solo effetti audio/
+      particellari e applicazione atomica allo stato, con 3 test (2026-07-12).
 - [ ] Nessun nuovo modulo oltre 40 KB; contratti coperti da test.
 - [x] Code splitting: `WorldScene` e tutto il grafo campagna sono caricati solo
       dopo la scelta dello slot; bundle iniziale da 324,9 a 212,7 KiB gzip

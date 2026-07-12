@@ -92,11 +92,13 @@ screenshot in `artifacts/screens/professional/`.
 - [x] Estratti da `BattleScene` piano reward, payout, bonus, teaser e loot
       post-battaglia in `postBattle.ts`; la scena conserva solo effetti audio/
       particellari e applicazione atomica allo stato, con 3 test (2026-07-12).
-- [ ] Nessun nuovo modulo oltre 40 KB; contratti coperti da test.
+- [x] Nessun nuovo modulo oltre 40 KB; i contratti estratti sono coperti da
+      8 test puri e l'intera suite raggiunge 197 test verdi (2026-07-12).
 - [x] Code splitting: `WorldScene` e tutto il grafo campagna sono caricati solo
       dopo la scelta dello slot; bundle iniziale da 324,9 a 212,7 KiB gzip
       (-34,5%), totale 325,4 KiB, gate automatico 250/350 KiB (2026-07-12).
-- [ ] Frame mobile p95 entro 20 ms e zero long task >100 ms nel percorso critico.
+- [x] Frame mobile p95 16,7–16,8 ms su World/Battle/Dex con CPU ×4 e zero frame
+      oltre 100 ms; gate permanente in `npm run perf:check` (2026-07-12).
 
 ### HP7 — PWA e release 1.0 (P7)
 

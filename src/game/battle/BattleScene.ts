@@ -2191,4 +2191,3 @@ const CAMPAIGN_ACTIONS: Array<{
   { kind: "appello", label: "APPELLO AL VOTO", cost: 15, minSond: 12,
     desc: "Raddoppia la probabilità della prossima cattura." }
 ];
-

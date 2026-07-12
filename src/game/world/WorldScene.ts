@@ -3542,6 +3542,32 @@ export class WorldScene implements Scene {
       e.draw();
     }
 
+    // USCITE DI VIAGGIO: alcune rotte sono su acqua e non hanno una porta o un
+    // molo distinguibile. Il marker resta ancorato alla casella che attiva il
+    // warp, così destinazione e punto d'imbarco sono leggibili senza tentativi.
+    for (const warp of this.map.warps) {
+      if (!warp.markerLabel) {
+        continue;
+      }
+      const wx = warp.x * TILE - camX;
+      const wy = warp.y * TILE - camY;
+      if (wx < -TILE || wx > VIEW_W || wy < -TILE || wy > VIEW_H) {
+        continue;
+      }
+      const pulse = Math.floor(this.time * 3) % 2 === 0;
+      const color = pulse ? "#fff0a0" : "#e8c84a";
+      const labelW = Math.min(VIEW_W - 4, warp.markerLabel.length * 6 + 8);
+      const labelX = Math.max(2, Math.min(VIEW_W - labelW - 2, Math.round(wx + TILE / 2 - labelW / 2)));
+      const labelY = Math.max(15, wy - 14);
+      screen.rect(labelX, labelY, labelW, 11, "rgba(16,20,31,0.92)");
+      screen.textFit(warp.markerLabel, labelX + 4, labelY + 2, labelW - 8, color);
+      screen.text("▼", wx + 5, wy - 2, color);
+      screen.rect(wx + 1, wy + 1, TILE - 2, 1, color);
+      screen.rect(wx + 1, wy + TILE - 2, TILE - 2, 1, color);
+      screen.rect(wx + 1, wy + 1, 1, TILE - 2, color);
+      screen.rect(wx + TILE - 2, wy + 1, 1, TILE - 2, color);
+    }
+
     // Scintille della cura passiva (Min. Salute): in coordinate-mondo.
     for (const s of this.stepSparks) {
       const a = 1 - s.life / s.max;

@@ -10,13 +10,14 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "stretto",
     warps: [
-      // RITORNO A CAPUT MUNDI: UN SOLO imbarco, la DARSENA segnalata dal cartello
-      // blu 'W' a (11,13). Si riparte dall'acqua a (11,14) — mare aperto, sempre
+      // RITORNO A CAPUT MUNDI: UN SOLO imbarco, segnalato direttamente sulla
+      // casella d'acqua a (11,14) — mare aperto, sempre
       // raggiungibile (anche senza battere IL CAPITANO: niente intrappolamento).
       // confirm: prompt SÌ/NO così non riparti per sbaglio e sai dove porta.
       {
         x: 11, y: 14, toMap: "capitale", toX: 6, toY: 21, facing: "up",
-        confirm: "DARSENA: rientrare a CAPUT MUNDI?"
+        confirm: "DARSENA: rientrare a CAPUT MUNDI?",
+        markerLabel: "TRAGHETTO: CAPUT MUNDI"
       },
       // BOE del PARADISO OFFSHORE: acque aperte a est, solo post-game. Warp
       // d'acqua (pattern del molo 13-14,6): ci si arriva SOLO col TRAGHETTO.
@@ -67,8 +68,8 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        // Cartello blu 'W' della DARSENA di ritorno: rende esplicito che da qui
-        // (acqua a fianco, 11,14) si riparte per Caput Mundi.
+        // Segnale informativo della DARSENA; il punto esatto di partenza è
+        // evidenziato dal marker persistente sulla casella d'acqua (11,14).
         x: 11, y: 13,
         lines: [
           "DARSENA DELLO STRETTO",

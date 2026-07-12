@@ -32,9 +32,9 @@ const res = await page.evaluate(async () => {
   const allWarps = Object.values(MAPS).flatMap((m) => (m.warps ?? []).map((w) => ({ id: m.id, w })));
   A("nessun warp punta più a 'mare'", allWarps.every((e) => e.w.toMap !== "mare"));
 
-  // 3) Andata: capitale ha un warp all'IMBARCO (12,19) → stretto.
-  const imbarco = cap.warps.find((w) => w.x === 12 && w.y === 19);
-  A("imbarco capitale (12,19) esiste", !!imbarco);
+  // 3) Andata: capitale ha un warp alla punta del MOLO (6,21) → stretto.
+  const imbarco = cap.warps.find((w) => w.x === 6 && w.y === 21);
+  A("imbarco capitale (6,21) esiste", !!imbarco);
   A("imbarco → stretto", imbarco && imbarco.toMap === "stretto");
   A("imbarco gated da veh-traghetto", imbarco && imbarco.requiresFlag === "veh-traghetto");
   // Cella d'approdo nello stretto: valida (in mappa) e sull'acqua (arrivo in traghetto).
@@ -44,18 +44,22 @@ const res = await page.evaluate(async () => {
     A("approdo stretto è ACQUA (traghetto)", isWater(ch));
   }
 
-  // 4) Ritorno: stretto ha warp dal molo nord (13,6 / 14,6) → capitale.
+  // 4) Ritorno: una darsena visibile in acqua porta a capitale.
   const ritorni = str.warps.filter((w) => w.toMap === "capitale");
   A("stretto ha warp di ritorno → capitale", ritorni.length >= 1);
   for (const r of ritorni) {
+    const departure = tileAt(str, r.x, r.y);
+    A(`darsena stretto (${r.x},${r.y}) è ACQUA`, isWater(departure));
+    A("darsena stretto ha marker CAPUT MUNDI", /CAPUT MUNDI/.test(r.markerLabel ?? ""));
+    A("darsena stretto chiede conferma", /CAPUT MUNDI/.test(r.confirm ?? ""));
     const ch = tileAt(cap, r.toX, r.toY);
     A(`ritorno capitale (${r.toX},${r.toY}) dentro mappa`, ch !== undefined);
     A(`ritorno capitale (${r.toX},${r.toY}) NON su tile solido`, ch !== undefined && !isSolid(ch));
   }
 
-  // 5) La cella d'imbarco a capitale (12,19) non è solida (ci cammini sopra).
-  const chImb = tileAt(cap, 12, 19);
-  A("cella imbarco capitale (12,19) calpestabile", chImb !== undefined && !isSolid(chImb));
+  // 5) La cella d'imbarco a capitale (6,21) non è solida (ci cammini sopra).
+  const chImb = tileAt(cap, 6, 21);
+  A("cella imbarco capitale (6,21) calpestabile", chImb !== undefined && !isSolid(chImb));
 
   return out;
 });

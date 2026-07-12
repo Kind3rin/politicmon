@@ -270,8 +270,8 @@ export const CAPITALE_TILES = [
 // - IL CAPITANO a (14,12) facing "down" chiude il varco: sbarcando dal mare entri
 //   subito nel suo cono di vista → fight inevitabile, non aggirabile.
 // - PORTO = pontile 'qqq' (col 12-14, righe 6-7) oltre il ponte, poi spiaggia/bar/edifici.
-// - RITORNO: UNA sola darsena segnalata da un cartello blu 'W' a (11,13); si riparte
-//   dall'acqua a (11,14). Niente più warp di ritorno sparsi: UN solo mare, UN solo imbarco.
+// - RITORNO: UNA sola darsena con marker persistente sull'acqua a (11,14).
+//   Niente più warp di ritorno sparsi: UN solo mare, UN solo imbarco.
 export const STRETTO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT.......@@@@......xxxx.....TT",
@@ -286,7 +286,7 @@ export const STRETTO_TILES = [
   "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
-  "wwwwwwwwwwwWwJjJwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwJjJwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwwjwwwwwwwwwwwwwww",
   "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"

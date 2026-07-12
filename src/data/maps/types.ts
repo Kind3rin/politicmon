@@ -61,6 +61,8 @@ export interface WarpDef {
   // Prompt SÌ/NO prima di partire (es. la darsena di ritorno dallo Stretto):
   // evita warp accidentali e rende ESPLICITO che stai lasciando la mappa.
   confirm?: string;
+  // Etichetta persistente sopra un imbarco/uscita altrimenti invisibile.
+  markerLabel?: string;
 }
 
 export interface SignDef {

@@ -200,10 +200,6 @@ const TRANSPORT_DESTINATIONS: TransportDestination[] = [
   // attraversa l'acqua con la MN TRAGHETTO (vedi warp "imbarco" + canFerry).
 ];
 
-function clipHud(value: string, max: number): string {
-  return value.length > max ? `${value.slice(0, max - 3)}...` : value;
-}
-
 function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, dx: number, dy: number): void {
   const target = WORLD_OBJECT_TARGET_PX[ch] ?? TILE;
   const b = screen.imageBounds(img);
@@ -3760,7 +3756,7 @@ export class WorldScene implements Scene {
       screen.rect(px + 4, 12, Math.max(1, Math.round((barW * shown) / 100)), 4, col);
       // Etichetta del momento (PLEBISCITO, OPPOSIZIONE, ...): troncata se serve.
       // Larghezza interna panelW-8=72px → max 12 char a 6px l'uno (niente overflow a 240px).
-      screen.text(clipHud(sondaggiLabelShort(sond), 12), px + 4, 17, "#cfe6ff");
+      screen.textFit(sondaggiLabelShort(sond), px + 4, 17, 72, "#cfe6ff");
       // Delta flottante (+8 / -2) che sale e svanisce accanto alla barra.
       // Sale da y=17 (sotto l'etichetta) verso l'alto, ma clampato a ≥2 così non
       // esce mai sopra il bordo schermo (prima dy arrivava a -5 = invisibile).
@@ -3825,7 +3821,7 @@ export class WorldScene implements Scene {
 
     if (this.transportMenu) {
       screen.panel(0, VIEW_H - 58, VIEW_W, 58);
-      screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 46, INK);
+      screen.textFit(this.askLabel, 10, VIEW_H - 46, VIEW_W - 20, INK);
       // Pannello largo abbastanza da NON troncare "STRETTO DI MESSINA" (prima
       // era 96px → "STRETTO DI ..."); auto-largo sul label più lungo, clampato.
       const w = Math.min(VIEW_W - 8, Math.max(96, this.transportMenu.measureWidth() + 8));
@@ -3837,7 +3833,7 @@ export class WorldScene implements Scene {
 
     if (this.askMenu) {
       screen.panel(0, VIEW_H - 44, VIEW_W, 44);
-      screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 32, INK);
+      screen.textFit(this.askLabel, 10, VIEW_H - 32, VIEW_W - 20, INK);
       // Larghezza auto sul label più lungo (min 56 = SÌ/NO), clampata al bordo.
       // Prima era fissa a 56px → le voci lunghe del menù GUIDA venivano troncate.
       const aw = Math.min(VIEW_W - 8, Math.max(56, this.askMenu.measureWidth() + 8));
@@ -3846,7 +3842,7 @@ export class WorldScene implements Scene {
 
     if (this.remoteMenu) {
       screen.panel(0, VIEW_H - 44, VIEW_W, 44);
-      screen.text(clipHud(this.askLabel, 37), 10, VIEW_H - 32, INK);
+      screen.textFit(this.askLabel, 10, VIEW_H - 32, VIEW_W - 20, INK);
       const rw = Math.min(VIEW_W - 8, Math.max(96, this.remoteMenu.measureWidth() + 8));
       this.remoteMenu.draw(screen, VIEW_W - 4 - rw, VIEW_H - 44 - this.remoteMenu.measureHeight(), rw);
     }

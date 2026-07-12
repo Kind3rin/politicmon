@@ -38,6 +38,7 @@
     "audit:visual": "node scripts/visual-audit-p7.mjs",
     "audit:professional:visual": "node scripts/audit-professional-visual.mjs",
     "audit:professional:visual:strict": "node scripts/audit-professional-visual.mjs --strict",
+    "check:ui-ellipsis": "node scripts/check-ui-ellipsis.mjs",
     "audit:accessibility": "node scripts/audit-accessibility.mjs",
     "audit:satire": "node --import tsx scripts/audit-satire.mjs",
     "playtest:atto3:report": "node scripts/compile-atto3-playtests.mjs",

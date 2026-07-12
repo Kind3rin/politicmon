@@ -61,8 +61,8 @@ export class AchievementsScene implements Scene {
         screen.text("►", 9, y, "#8c5b12");
       }
       screen.text(ok ? "★" : "-", 18, y, ok ? "#e8c84a" : GREY);
-      const title = ok ? clip(a.name, 28) : "?????????";
-      screen.text(title, 28, y, ok ? INK : "#555068");
+      const title = ok ? a.name : "?????????";
+      screen.textFit(title, 28, y, VIEW_W - 40, ok ? INK : "#555068");
     }
     if (start + rows < ACHIEVEMENTS.length) {
       screen.text("▼", VIEW_W - 16, VIEW_H - 12, GREY);
@@ -71,8 +71,4 @@ export class AchievementsScene implements Scene {
       screen.text("▲", VIEW_W - 16, 76, GREY);
     }
   }
-}
-
-function clip(value: string, max: number): string {
-  return value.length > max ? `${value.slice(0, max - 3)}...` : value;
 }

@@ -9,9 +9,9 @@ export interface FeatureDefinition {
 export const FEATURE_DEFINITIONS: Readonly<Record<FeatureId, FeatureDefinition>> = Object.freeze({
   atto3: { defaultEnabled: true, dependencies: [], release: "R1" },
   coalition: { defaultEnabled: true, dependencies: ["atto3"], release: "R1" },
-  territories: { defaultEnabled: false, dependencies: ["atto3", "coalition"], release: "R3" },
-  memeEvents: { defaultEnabled: false, dependencies: ["atto3"], release: "R2" },
-  weeklyCampaign: { defaultEnabled: false, dependencies: ["atto3", "coalition", "territories"], release: "R4" }
+  territories: { defaultEnabled: true, dependencies: ["atto3", "coalition"], release: "R3" },
+  memeEvents: { defaultEnabled: true, dependencies: ["atto3"], release: "R2" },
+  weeklyCampaign: { defaultEnabled: true, dependencies: ["atto3", "coalition", "territories"], release: "R4" }
 });
 
 export const FEATURE_OVERRIDE_KEY = "politicmon:dev:feature-overrides";

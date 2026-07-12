@@ -26,6 +26,7 @@ import { TypesScene } from "./TypesScene";
 import { WorldMapScene } from "./WorldMapScene";
 import { CoalitionScene } from "./CoalitionScene";
 import { SourcesScene } from "./SourcesScene";
+import { ContentScene } from "./ContentScene";
 
 // Sotto-menu del menu pausa (OPZIONI / ONLINE / EXTRA).
 type SubKind = "opzioni" | "online" | "extra";
@@ -126,7 +127,7 @@ export class PauseScene implements Scene {
   // Sotto-menu EXTRA: consultazione non essenziale. La TESSERA è nel menu
   // principale perché il giocatore la deve ritrovare subito.
   private buildExtraMenu(): SubMenu {
-    const entries = ["TRAGUARDI", "GUIDA TIPI", "FONTI SATIRA", "INDIETRO"];
+    const entries = ["CONTENUTI", "TRAGUARDI", "GUIDA TIPI", "FONTI SATIRA", "INDIETRO"];
     return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
@@ -251,7 +252,9 @@ export class PauseScene implements Scene {
     }
     if (sub.kind === "extra") {
       audio.confirm();
-      if (label === "TRAGUARDI") {
+      if (label === "CONTENUTI") {
+        this.stack.push(new ContentScene(this.stack, this.input, this.state));
+      } else if (label === "TRAGUARDI") {
         this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
       } else if (label === "GUIDA TIPI") {
         this.stack.push(new TypesScene(this.stack, this.input));

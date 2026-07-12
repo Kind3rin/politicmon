@@ -2,6 +2,9 @@
 
 ## 1.0.0-rc.2 — 2026-07-12
 
+- Attivati in produzione tutti i moduli: Atto 3, Coalizione, Territori, Eventi Meme e Campagna Settimanale.
+- Eventi meme integrati nella campagna settimanale con effetti reali, costi verificati e almeno due eventi attuali per run.
+- Nuova schermata `EXTRA → CONTENUTI` con stato e requisito di sblocco per dieci sistemi, compatibile con i save esistenti.
 - Eliminati fallback e placeholder grafici in battaglia; contratto animazioni completo per tutte le specie.
 - Migliorate leggibilità, scelte, mappa, tessera candidato e ritmo esplorativo su mobile.
 - Sfide vaganti trasformate in proposte rifiutabili con 50 passi iniziali liberi.

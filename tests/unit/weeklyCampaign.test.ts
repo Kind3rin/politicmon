@@ -9,6 +9,7 @@ test("P6-T01: ISO week e schedule sono deterministici con 5 eventi, 3 dibattiti 
   const one = weeklySchedule(state); const two = weeklySchedule(state);
   assert.deepEqual(two, one);
   assert.equal(one.filter((stage) => stage.kind === "event").length, 5);
+  assert.ok(one.filter((stage) => stage.event?.id.startsWith("meme:")).length >= 2);
   assert.equal(one.filter((stage) => stage.kind === "debate").length, 3);
   assert.equal(one.at(-1)?.kind, "final");
 });

@@ -7,9 +7,9 @@ import {
   runtimeFeatures
 } from "../../src/game/features.ts";
 
-test("feature flags: produzione abilita la slice Atto 3 ma non le release successive", () => {
+test("feature flags: produzione abilita l'intera release", () => {
   const flags = resolveFeatures({ atto3: false, coalition: false, territories: true }, false);
-  assert.deepEqual(flags, { atto3: true, coalition: true, territories: false, memeEvents: false, weeklyCampaign: false });
+  assert.deepEqual(flags, { atto3: true, coalition: true, territories: true, memeEvents: true, weeklyCampaign: true });
 });
 
 test("feature flags: DEV applica override validi rispettando le dipendenze", () => {
@@ -17,7 +17,7 @@ test("feature flags: DEV applica override validi rispettando le dipendenze", () 
   assert.equal(flags.atto3, true);
   assert.equal(flags.coalition, true);
   assert.equal(flags.territories, true);
-  assert.equal(flags.memeEvents, false);
+  assert.equal(flags.memeEvents, true);
 });
 
 test("feature flags: una dipendenza spenta forza off il consumer", () => {

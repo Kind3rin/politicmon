@@ -1595,6 +1595,21 @@ esplicita di non dipendere dal testing umano. Dettaglio in
 8. deploy;
 9. verifica cache/versione da telefono reale.
 
+### P7-T09 — Release completa dei moduli
+
+**COMPLETATO (2026-07-12).** Rimossa la discrepanza tra contenuti integrati e
+feature flag di produzione: Atto 3, Coalizione, Territori, Eventi Meme e
+Campagna Settimanale sono tutti attivi. La campagna settimanale include almeno
+due eventi meme attivi e validati, con effetti reali su fondi, SONDAGGI, oggetti
+e territori; i costi non coperti vengono rifiutati senza mutare il salvataggio.
+Gli eventi restano volontari dentro la campagna e non interrompono
+l'esplorazione. Nuova schermata `EXTRA → CONTENUTI`: dieci schede mostrano ciò
+che è nella build, cosa è disponibile nel save corrente e il requisito preciso
+per sbloccare ogni area o sistema. Nessun reset o bump del save v18. Gate:
+212/212 test, 66 mappe, 52 specie, 78 mosse, 48 trainer, 46 quest, 4 eventi,
+PixelLab 194/194, validator, input, leggibilità, mappe, evoluzioni, sprite e
+build produzione verdi.
+
 ---
 
 ## Ordine storico superseded

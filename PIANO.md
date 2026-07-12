@@ -60,6 +60,8 @@ screenshot in `artifacts/screens/professional/`.
 - [x] Backtracking e tempi morti verificati su 22 obiettivi del percorso critico:
       tutti raggiungibili e massimo 2 transiti fra obiettivi consecutivi, imposto
       come gate da `npm run audit:critical-route` (2026-07-12).
+- [x] Continuità delle rotte marittime esplicita: varco oro, destinazione visibile,
+      conferma nominativa e test Stretto/Offshore/Bruxelles (2026-07-12).
 
 ### HP4 — Bilanciamento reale (P4)
 

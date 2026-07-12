@@ -118,7 +118,7 @@ export const QUESTS: QuestDef[] = [
     id: "offshore-rotta",
     title: "ACQUE INTERNAZIONALI",
     desc: "Si mormora di un'isola dove i FONDI vanno in vacanza. Salpa dalle boe a est dello STRETTO.",
-    hint: "Serve la MN TRAGHETTO del MARINAIO di Caput Mundi. Il CONTABILE PENTITO sulla spiaggia dello Stretto sa la rotta.",
+    hint: "Serve la MN TRAGHETTO del MARINAIO di Caput Mundi. Segui ROTTA: PARADISO OFFSHORE sul bordo est dello Stretto.",
     step: "Raggiungi il PARADISO OFFSHORE.",
     isDone: (s) => Boolean(s.flags["hint-offshore"]),
     target: { mapId: "stretto", x: 28, y: 10 }
@@ -137,7 +137,7 @@ export const QUESTS: QuestDef[] = [
     id: "ue-rotta",
     title: "ELEZIONI EUROPEE",
     desc: "Si vota per il PARLAMENTO UE. Salpa per BRUXELLES: la vera partita si gioca lì.",
-    hint: "Lo SHERPA UE sull'OFFSHORE conosce la rotta. Il motoscafo diplomatico parte dalle boe a est dell'isola.",
+    hint: "Lo SHERPA UE sull'OFFSHORE conosce la rotta. Segui ROTTA: BRUXELLES sul bordo est dell'isola.",
     step: "Raggiungi BRUXELLES.",
     // Completa quando SEI ARRIVATO a Bruxelles (hint-brux-arrivo, settato allo
     // sbarco) — non solo quando hai parlato allo SHERPA (hint-ue): chi salpa

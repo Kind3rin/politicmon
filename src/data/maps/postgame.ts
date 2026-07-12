@@ -24,12 +24,15 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       {
         x: 28, y: 10, toMap: "offshore", toX: 3, toY: 9, facing: "right",
         requiresFlag: "garante-beaten",
-        lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"]
+        lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"],
+        markerLabel: "ROTTA: PARADISO OFFSHORE",
+        confirm: "SALPARE PER IL PARADISO OFFSHORE?"
       },
       {
         x: 28, y: 11, toMap: "offshore", toX: 3, toY: 10, facing: "right",
         requiresFlag: "garante-beaten",
-        lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"]
+        lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"],
+        confirm: "SALPARE PER IL PARADISO OFFSHORE?"
       },
       { x: 10, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 11, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
@@ -189,8 +192,11 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
     warps: [
       // Punta del molo: ritorno in TRAGHETTO allo STRETTO (approdo sul pilone
       // del ponte, MAI su acqua).
-      { x: 2, y: 9, toMap: "stretto", toX: 14, toY: 8, facing: "up" },
-      { x: 2, y: 10, toMap: "stretto", toX: 14, toY: 8, facing: "up" },
+      {
+        x: 2, y: 9, toMap: "stretto", toX: 14, toY: 8, facing: "up",
+        markerLabel: "ROTTA: STRETTO", confirm: "TORNARE ALLO STRETTO?"
+      },
+      { x: 2, y: 10, toMap: "stretto", toX: 14, toY: 8, facing: "up", confirm: "TORNARE ALLO STRETTO?" },
       // BAR "LIDO CAYMAN": porte sui 2 tile centrali dell'edificio.
       { x: 14, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       { x: 15, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
@@ -200,12 +206,15 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       {
         x: 28, y: 9, toMap: "bruxelles", toX: 14, toY: 13, facing: "up",
         requiresFlag: "garante-beaten",
-        lockedLines: ["Un motoscafo diplomatico attende oltre le boe.", "'Rotta per BRUXELLES: solo per chi ha già la CONTROFIRMA del COLLE.'"]
+        lockedLines: ["Un motoscafo diplomatico attende oltre le boe.", "'Rotta per BRUXELLES: solo per chi ha già la CONTROFIRMA del COLLE.'"],
+        markerLabel: "ROTTA: BRUXELLES",
+        confirm: "SALPARE PER BRUXELLES?"
       },
       {
         x: 28, y: 10, toMap: "bruxelles", toX: 15, toY: 13, facing: "up",
         requiresFlag: "garante-beaten",
-        lockedLines: ["Un motoscafo diplomatico attende oltre le boe.", "'Rotta per BRUXELLES: solo per chi ha già la CONTROFIRMA del COLLE.'"]
+        lockedLines: ["Un motoscafo diplomatico attende oltre le boe.", "'Rotta per BRUXELLES: solo per chi ha già la CONTROFIRMA del COLLE.'"],
+        confirm: "SALPARE PER BRUXELLES?"
       }
     ],
     encounterRate: 0.18,
@@ -319,8 +328,11 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       { x: 11, y: 11, toMap: "bar-bruxelles", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       // Traghetto di ritorno al PARADISO OFFSHORE: boe d'acqua a sud (approdo
       // sull'attracco offshore, mai su acqua). Serve la MN TRAGHETTO (già posseduta).
-      { x: 14, y: 14, toMap: "offshore", toX: 27, toY: 9, facing: "left" },
-      { x: 15, y: 14, toMap: "offshore", toX: 27, toY: 10, facing: "left" },
+      {
+        x: 14, y: 14, toMap: "offshore", toX: 27, toY: 9, facing: "left",
+        markerLabel: "ROTTA: PARADISO OFFSHORE", confirm: "TORNARE AL PARADISO OFFSHORE?"
+      },
+      { x: 15, y: 14, toMap: "offshore", toX: 27, toY: 10, facing: "left", confirm: "TORNARE AL PARADISO OFFSHORE?" },
       // Invito Atto 3: destinazione narrativa, mai edge della world chain.
       {
         x: 19, y: 12, toMap: "campo_largo", toX: 10, toY: 16, facing: "up",

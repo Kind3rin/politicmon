@@ -12,7 +12,7 @@ import { sondaggiColor } from "../game/governo";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
 import { canPromptInstall, installHint, isAppInstalled, promptInstall } from "../engine/pwa";
-import { Menu, MessageBox, PAPER, setReduceMotion } from "../ui/widgets";
+import { drawScreenHeader, Menu, MessageBox, setReduceMotion } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
@@ -341,10 +341,7 @@ export class PauseScene implements Scene {
 
   private drawCard(screen: Screen): void {
     screen.rect(0, 0, VIEW_W, VIEW_H, "#101827");
-    screen.rect(0, 0, VIEW_W, 17, "#17243d");
-    screen.rect(0, 15, VIEW_W, 2, "#e6b944");
-    screen.text("TESSERA CANDIDATO", 8, 5, PAPER);
-    screen.textRight("A/B CHIUDI", VIEW_W - 8, 5, "#ffe38a");
+    drawScreenHeader(screen, "TESSERA CANDIDATO", "A/B CHIUDI");
     const title = this.state.flags["garante-beaten"]
       ? "CAMPIONE COSTITUZIONALE"
       : this.state.flags["boss-beaten"]

@@ -100,13 +100,17 @@ export class CoalitionScene implements Scene {
     const definition = ALLY_CATALOG[allyId];
     const member = this.state.coalition.members.find((candidate) => candidate.allyId === allyId);
     const seen = Boolean(this.state.flags[`coalition-candidate-seen:${allyId}`]);
-    const status = member ? "SELEZIONATA · NELLA FOTO" : "DISPONIBILE · FUORI FOTO";
+    const status = member ? "NELLA COALIZIONE" : "FUORI DALLA FOTO";
     screen.panel(8, 27, 224, 108, "card");
     if (member) {
       screen.frame(10, 29, 220, 104, "#e6b944");
       screen.rect(12, 31, 4, 100, "#e6b944");
     }
-    screen.text(seen ? LABELS[allyId].name : "CANDIDATO NON INCONTRATO", 18, 37, "#10141f");
+    // La barra piena identifica sempre la scheda attualmente sfogliata. Il
+    // vecchio filetto verticale era troppo simile a una decorazione del frame.
+    screen.rect(14, 32, 212, 18, seen ? "#f4d34a" : "#d7dbe5");
+    screen.textFit(seen ? LABELS[allyId].name : "CANDIDATO NON INCONTRATO", 18, 37, 145, "#10141f");
+    screen.textRight(member ? "SCELTA" : "IN ESAME", 220, 37, member ? "#26745d" : "#70470e");
     if (!seen) {
       screen.text("PARLACI NEL CAMPO", 18, 62, "#5f6d8a");
       screen.text("PER SCOPRIRE EFFETTI E RISCHI.", 18, 78, "#5f6d8a");
@@ -114,15 +118,15 @@ export class CoalitionScene implements Scene {
       screen.text(this.notice, 12, 156, "#ffe38a");
       return;
     }
-    screen.text(`${definition.tag.toUpperCase()} · ${status}`, 18, 51, member ? "#26745d" : "#5f6d8a");
-    screen.text("VANTAGGIO", 18, 69, "#26745d");
-    screen.text(EFFECT_TEXT[allyId].bonus, 96, 69, "#26745d");
-    screen.text("COSTO", 18, 84, "#a0443e");
-    screen.text(EFFECT_TEXT[allyId].cost, 96, 84, "#a0443e");
-    screen.text("LINEA ROSSA", 18, 99, "#70470e");
-    screen.text(LABELS[allyId].lineRed, 96, 99, "#70470e");
-    screen.text("RISCHIO FOTO", 18, 114, "#70470e");
-    screen.text(LABELS[allyId].photoRisk, 96, 114, LABELS[allyId].photoRisk === "NESSUNO" ? "#26745d" : "#a0443e");
+    screen.textFit(`${definition.tag.toUpperCase()} - ${status}`, 18, 55, 204, member ? "#26745d" : "#5f6d8a");
+    screen.text("VANTAGGIO", 18, 72, "#26745d");
+    screen.textFit(EFFECT_TEXT[allyId].bonus, 96, 72, 126, "#26745d");
+    screen.text("COSTO", 18, 87, "#a0443e");
+    screen.textFit(EFFECT_TEXT[allyId].cost, 96, 87, 126, "#a0443e");
+    screen.text("LINEA ROSSA", 18, 102, "#70470e");
+    screen.textFit(LABELS[allyId].lineRed, 96, 102, 126, "#70470e");
+    screen.text("RISCHIO FOTO", 18, 117, "#70470e");
+    screen.textFit(LABELS[allyId].photoRisk, 96, 117, 126, LABELS[allyId].photoRisk === "NESSUNO" ? "#26745d" : "#a0443e");
     screen.text("◄ ► CAMBIA", 12, 141, "#fffaf0");
     const footer = this.pendingRemove === allyId
       ? this.notice

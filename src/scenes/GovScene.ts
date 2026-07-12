@@ -94,10 +94,7 @@ export class GovScene implements Scene {
       screen.text(def.name, 18, y, INK);
       if (mon) {
         const ko = mon.hp <= 0;
-        screen.textRight(speciesOf(mon).name, VIEW_W - 14, y, ko ? "#d04848" : "#2a6a3a");
-        if (ko) {
-          screen.textRight("KO", VIEW_W - 14, y + 7, "#d04848");
-        }
+        screen.textRight(`${speciesOf(mon).name}${ko ? " KO" : ""}`, VIEW_W - 14, y, ko ? "#d04848" : "#2a6a3a");
       } else {
         screen.textRight("---", VIEW_W - 14, y, GREY);
       }
@@ -118,7 +115,12 @@ export class GovScene implements Scene {
       ly += 8;
     }
 
-    screen.text(`LINEA: ${sondaggiLabel(sond)}`, 8, VIEW_H - 18, GREY);
+    const selectedMinister = ministroDi(this.state, MINISTERO_ORDER[this.index]);
+    if (selectedMinister && selectedMinister.hp <= 0) {
+      screen.text("BONUS SOSPESO: MINISTRO KO", 8, VIEW_H - 18, "#d04848");
+    } else {
+      screen.text(`LINEA: ${sondaggiLabel(sond)}`, 8, VIEW_H - 18, GREY);
+    }
     screen.text("A: nomina/sfiducia  B: chiudi", 8, VIEW_H - 9, GREY);
     this.msg.draw(screen);
   }

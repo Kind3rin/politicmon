@@ -153,6 +153,7 @@ if (!connected) {
 const anti = await B.evaluate(async () => {
   const { mp, state } = window.__t;
   const { sanitizeTradeMon } = await import("/src/net/trade.ts");
+  const { LEVEL_CAP } = await import("/src/game/monster.ts");
   const { statsOf } = await import("/src/game/monster.ts");
   const out = {};
   const partyBefore = JSON.stringify(state.party.map((m) => m.speciesId));
@@ -164,13 +165,13 @@ const anti = await B.evaluate(async () => {
   s.onWire({ v: 1, t: "offer", seq: 1, mon: { speciesId: "specie-inesistente", level: 999, moves: ["hackmove"] } }, "EVIL");
   out.cancelled = s.phase === "idle" && s.peerOffer === null;
   out.partyIntact = JSON.stringify(state.party.map((m) => m.speciesId)) === partyBefore;
-  // Specie valida ma level 999 + mosse illegali -> clamp 50 e filtro mosse.
+  // Specie valida ma level 999 + mosse illegali -> clamp al cap corrente e filtro mosse.
   s.reset();
   s.phase = "negotiating";
   s.peerId = "EVIL";
   s.onWire({ v: 1, t: "offer", seq: 1, mon: { speciesId: "renzino", level: 999, moves: ["giravolta", "hackmove", "spread"] } }, "EVIL");
   const m = s.peerOffer;
-  out.clamped = m !== null && m.level === 50;
+  out.clamped = m !== null && m.level === LEVEL_CAP;
   out.movesFiltered = m !== null && m.moves.every((sl) => ["giravolta"].includes(sl.id));
   out.statsLocal = m !== null && m.hp === statsOf(m).hp;
   // Payload con stats/hp/uid contraffatti: ignorati (ricostruzione totale).
@@ -181,7 +182,7 @@ const anti = await B.evaluate(async () => {
 });
 check(anti.cancelled, "anti-cheat: specie inesistente -> scambio annullato");
 check(anti.partyIntact, "anti-cheat: party mai corrotto");
-check(anti.clamped, "anti-cheat: level 999 -> clamp 50");
+check(anti.clamped, "anti-cheat: level 999 -> clamp LEVEL_CAP");
 check(anti.movesFiltered, "anti-cheat: mosse illegali filtrate");
 check(anti.statsLocal && anti.rebuilt, "anti-cheat: stats/hp/uid rigenerati localmente");
 

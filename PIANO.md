@@ -36,8 +36,9 @@ screenshot in `artifacts/screens/professional/`.
 
 - [ ] Nessun testo sotto la soglia di leggibilità per compressione orizzontale.
 - [ ] Layout a due righe/card espandibili per stringhe variabili lunghe.
-- [ ] Flussi Tessera, Mappa, Scambio, Coalizione e Governo comprensibili senza
-      istruzioni esterne.
+- [x] Flussi Tessera, Mappa, Scambio, Coalizione e Governo comprensibili senza
+      istruzioni esterne; fixture visuali per stato normale/selezionato/KO e
+      test completo scambio/anti-cheat verdi (2026-07-12).
 - [ ] Touch target, focus, conferma/annulla e stato selezionato coerenti ovunque.
 
 ### HP3 — Ritmo dell'esplorazione (P3)

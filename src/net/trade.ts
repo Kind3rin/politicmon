@@ -28,7 +28,7 @@ export const DECLINE_MUTE = 10; // anti-spam: silenzia i re-inviti dopo un rifiu
 
 // ANTI-CHEAT (audit C7): sul filo passano SOLO {speciesId, level, moves[]}.
 // Qui si ricostruisce il mostro da zero: specie validata su SPECIES, livello
-// clampato 1-50 (cap di gainExp), mosse accettate solo se esistono in MOVES e
+// clampato 1-LEVEL_CAP (stesso cap di gainExp), mosse accettate solo se esistono in MOVES e
 // passano legalMoveForSpecies (stesso predicato del duello: learnset o tipo
 // condiviso lungo TUTTA la catena pre-evolutiva — evolve() conserva le mosse).
 // hp/exp/pp/uid/stats sono rigenerati localmente da createMonster.

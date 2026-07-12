@@ -30,7 +30,7 @@ import {
   type DuelCmd, type DuelEndReason, type DuelEvent, type DuelMsg, type DuelSide, type WireMon
 } from "../../net/duelproto";
 import { mp } from "../../net/mp";
-import { Menu, MessageBox, clipToWidth, wrapText, GREY, INK } from "../../ui/widgets";
+import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
 import {
   approach, BattleFx, drawBattleMonster, drawCombatantBox, drawEllipse, FOE_BOX, PLAYER_BOX
 } from "./view";
@@ -834,7 +834,7 @@ export class PvpBattleScene implements Scene {
       if (this.fightMenu.index === i) {
         screen.text("►", cx, cy, INK);
       }
-      screen.text(clipToWidth(items[i].label, 98), cx + 8, cy, color);
+      screen.textFit(items[i].label, cx + 8, cy, 98, color);
     }
     const item = items[this.fightMenu.index];
     if (item) {

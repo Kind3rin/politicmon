@@ -11,9 +11,9 @@ ai gate sotto.
 
 ### HP0 — Audit visuale e fallback (P0)
 
-- [ ] Inventario automatico di tutte le scene e relativi screenshot.
+- [x] Inventario automatico di tutte le 40 scene e relativi screenshot (2026-07-12).
 - [ ] Zero fallback legacy visibile per asset dichiarati PixelLab.
-- [ ] Zero testi UI troncati con `…`; testi lunghi su più righe, non illeggibili.
+- [x] Zero chiamate `clipToWidth` nelle scene; testi variabili completi (2026-07-12).
 - [ ] Matrice mobile/desktop per menu, battaglia, mondo, Dex e scene Atto 3.
 - [ ] Gate CI che fallisce su nuove superfici senza evidenza visuale.
 

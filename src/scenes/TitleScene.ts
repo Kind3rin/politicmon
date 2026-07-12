@@ -8,7 +8,7 @@ import { hasAnySave, loadGame, newGameState, type GameState } from "../game/stat
 import { BackupScene } from "./BackupScene";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
-import { Menu, MessageBox, clipToWidth, wrapText, GREY, PAPER } from "../ui/widgets";
+import { Menu, MessageBox, wrapText, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
 import { WorldScene } from "../game/world/WorldScene";
@@ -64,7 +64,7 @@ export class TitleScene implements Scene {
     if (hasAnySave()) {
       items.unshift({ label: "CONTINUA" });
     }
-    items.push({ label: "NOME", rightLabel: clipToWidth(loadNick() || "—", 60) });
+    items.push({ label: "NOME", rightLabel: loadNick() || "—" });
     items.push({ label: "AUDIO", rightLabel: audio.enabled ? "SÌ" : "NO" });
     // SPOSTA SAVE: import/export del codice salvataggio. Qui (non solo in pausa)
     // perché serve proprio a chi apre il gioco in un browser DIVERSO e non trova
@@ -472,7 +472,7 @@ export class TitleScene implements Scene {
       const color = selected ? "#10141f" : PAPER;
       const rightW = item.rightLabel ? item.rightLabel.length * 6 + 6 : 0;
       this.drawMenuIcon(screen, item.label, x + 7, rowY + 2, selected);
-      screen.text(clipToWidth(item.label, w - 30 - rightW), x + 20, rowY + 3, color);
+      screen.textFit(item.label, x + 20, rowY + 3, w - 30 - rightW, color);
       if (item.rightLabel) {
         screen.textRight(item.rightLabel, x + w - 8, rowY + 3, selected ? "#10141f" : "#cfe6ff");
       }

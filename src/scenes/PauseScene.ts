@@ -12,7 +12,7 @@ import { sondaggiColor } from "../game/governo";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
 import { canPromptInstall, installHint, isAppInstalled, promptInstall } from "../engine/pwa";
-import { clipToWidth, Menu, MessageBox, PAPER, setReduceMotion } from "../ui/widgets";
+import { Menu, MessageBox, PAPER, setReduceMotion } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
@@ -371,9 +371,9 @@ export class PauseScene implements Scene {
     }
 
     screen.text("CANDIDATO", 84, 55, "#68758a");
-    screen.text(clipToWidth(loadNick() || "ONOREVOLE", 132), 84, 66, "#17243d");
+    screen.textFit(loadNick() || "ONOREVOLE", 84, 66, 132, "#17243d");
     screen.text("QUALIFICA", 84, 80, "#68758a");
-    screen.text(clipToWidth(title, 132), 84, 91, "#17243d");
+    screen.textFit(title, 84, 91, 132, "#17243d");
     screen.text("N. TESSERA", 84, 105, "#68758a");
     const code = `IT-${String(this.state.stepsTotal).padStart(5, "0")}-${this.state.badges.length}`;
     screen.text(code, 84, 116, "#17243d");

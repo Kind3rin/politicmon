@@ -16,7 +16,7 @@ import {
 } from "../net/duelproto";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
-import { clipToWidth, MessageBox, GREY, PAPER } from "../ui/widgets";
+import { MessageBox, GREY, PAPER } from "../ui/widgets";
 
 export interface DuelLobbyOptions {
   // Invita subito questo peer (menu SFIDA sul giocatore adiacente).
@@ -215,7 +215,7 @@ export class DuelLobbyScene implements Scene {
           screen.rect(6, y - 2, VIEW_W - 12, 12, "#3a4c64");
           screen.text("►", 10, y, PAPER);
         }
-        screen.text(clipToWidth(players[i].nick, 140), 20, y, selected ? PAPER : GREY);
+        screen.textFit(players[i].nick, 20, y, 140, selected ? PAPER : GREY);
       }
       screen.text("A: SFIDA  B: CHIUDI", 8, VIEW_H - 12, GREY);
     }

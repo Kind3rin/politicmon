@@ -26,7 +26,7 @@ import {
   resolveKoAbility, resolvePreMove, statDropBlockReason, statusBlockReason
 } from "./effectContract";
 import { festivalScandaloChance } from "./atto3MoveEffects";
-import { Menu, MessageBox, clipToWidth, wrapText, GREY, INK } from "../../ui/widgets";
+import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
 import {
   approach, BattleFx, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, FOE_BOX, PLAYER_BOX
 } from "./view";
@@ -1854,7 +1854,7 @@ export class BattleScene implements Scene {
         }
         // Tronca con ellissi se la mossa è troppo lunga per la colonna (resta
         // spazio per il marker), così non si legge un nome tagliato a metà parola.
-        screen.text(clipToWidth(items[i].label, marker ? 91 : 98), nameX, cy, color);
+        screen.textFit(items[i].label, nameX, cy, marker ? 91 : 98, color);
       }
       const slot = this.player.mon.moves[this.fightMenu.index];
       if (this.onFightSelect) {
@@ -1865,10 +1865,10 @@ export class BattleScene implements Scene {
         screen.panel(8, 107, 226, 28, "card");
         if (learn) {
           screen.text(`NUOVA: ${learn.name}`, 14, 110, "#7ad858");
-          screen.text(clipToWidth(moveSummary(learn), 208), 14, 119, GREY);
+          screen.textFit(moveSummary(learn), 14, 119, 208, GREY);
         }
         if (old) {
-          screen.text(clipToWidth(`SCARTI: ${old.name} (${moveKindLabel(old)})`, 220), 14, 127, "#d86868");
+          screen.textFit(`SCARTI: ${old.name} (${moveKindLabel(old)})`, 14, 127, 220, "#d86868");
         }
         screen.text("Scegli la mossa da scartare. B: annulla", 8, y + 34, GREY);
       } else if (slot) {
@@ -1881,12 +1881,12 @@ export class BattleScene implements Scene {
         screen.panel(8, 117, 226, 17, "card");
         // La barra colore del tipo resta sotto il nome (segnale visivo compatto).
         const nameW = Math.min(move.name.length * 6, 150);
-        screen.text(clipToWidth(move.name, 150), 14, 122, INK);
+        screen.textFit(move.name, 14, 122, 150, INK);
         screen.rect(14, 130, nameW, 1, TYPE_COLORS[move.type]);
         // PP allineato a destra, staccato dal nome (che si ferma a ≤164).
         screen.textRight(item?.rightLabel ?? "", 226, 122, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.text(clipToWidth(moveSummary(move), 208), 10, y + 30, INK);
+        screen.textFit(moveSummary(move), 10, y + 30, 208, INK);
       }
     } else if (this.mode === "campaign") {
       // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)
@@ -1912,7 +1912,7 @@ export class BattleScene implements Scene {
         }
         // Nome a piena colonna (costo spostato nella striscia sopra): entra
         // anche "SONDAGGIO FARLOCCO" senza ellissi.
-        screen.text(clipToWidth(items[i].label, 108), cx + 8, cy, color);
+        screen.textFit(items[i].label, cx + 8, cy, 108, color);
       }
       if (sel) {
         // Descrizione su 2 righe sotto la griglia. wrapText a 36 char (come il
@@ -2168,7 +2168,7 @@ export class BattleScene implements Scene {
         screen.rect(cx - 5, cy - 3, 2, 13, "#e0a92f");
         screen.text("►", cx - 2, cy, "#8c5b12");
       }
-      screen.text(clipToWidth(labels[i], colW - 8), cx + 6, cy, INK);
+      screen.textFit(labels[i], cx + 6, cy, colW - 8, INK);
     }
     // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
     // Ancorati al pannello testo (VIEW_H-44), non al box menu: con la cornice

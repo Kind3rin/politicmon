@@ -6,7 +6,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { addSondaggi, sondaggiColor } from "../game/governo";
 import { healMonster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { Menu, MessageBox, GREY } from "../ui/widgets";
+import { Menu, MessageBox, wrapText, GREY } from "../ui/widgets";
 
 // RETROBOTTEGA DEL PADRINO — la "famiglia" come satira bonaria del clientelismo
 // e delle raccomandazioni. NIENTE violenza/apologia: qui si comprano favori
@@ -245,7 +245,8 @@ export class MafiaScene implements Scene {
       screen.text("A: compra  B: indietro", 8, VIEW_H - 10, GREY);
     } else {
       this.menu.draw(screen, 14, 34, VIEW_W - 28);
-      screen.text("Favori sottobanco: aiutano, ma sporcano.", 14, VIEW_H - 22, GREY);
+      const note = wrapText("Favori sottobanco: aiutano, ma sporcano.", 34);
+      note.forEach((line, i) => screen.text(line, 14, VIEW_H - 30 + i * 9, GREY));
       screen.text("A: scegli  B: esci", 8, VIEW_H - 10, GREY);
     }
     this.msg.draw(screen);

@@ -12,7 +12,7 @@ import { audio } from "../../engine/audio";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { speciesOf, statsOf, type Monster } from "../monster";
 import type { Combatant } from "./sim";
-import { clipToWidth, drawHpBar, INK, PAPER } from "../../ui/widgets";
+import { drawHpBar, INK, PAPER } from "../../ui/widgets";
 
 export type BattleSide = "player" | "foe";
 
@@ -493,7 +493,7 @@ export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number
   // Conserva per intero nomi da 12 caratteri come QUASIMAGIANI senza ellissi.
   const rightPad = 4;
   const maxNameW = x + w - rightPad - levelText.length * 6 - 1 - nameX;
-  screen.text(clipToWidth(speciesOf(mon).name, maxNameW), nameX, y + 6, INK);
+  screen.textFit(speciesOf(mon).name, nameX, y + 6, maxNameW, INK);
   screen.textRight(levelText, x + w - rightPad, y + 6, INK);
   const maxHp = statsOf(mon).hp;
   drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, maxHp);

@@ -23,10 +23,10 @@ screenshot in `artifacts/screens/professional/`.
 ### HP1 — Roster e animazioni (P1)
 
 - [ ] Ogni specie ha PNG front valido e identità politica/meme riconoscibile.
-- [ ] Ogni specie ha stati idle, attacco, danno e KO; `_action.png` dedicato o
-      contratto esplicito di animazione procedurale approvato.
+- [x] Ogni specie ha idle, attacco, danno e KO; frame dedicato o contratto
+      procedurale esplicito e KO non istantaneo (2026-07-12).
 - [ ] Evoluzioni e Forme Meme non mostrano frame legacy o placeholder.
-- [ ] Test visuale parametrico su tutte le 52 specie, PvE e PvP.
+- [x] Matrice visuale parametrica 52×4 con confronto pixel degli stati (2026-07-12).
 
 ### HP2 — UX mobile e onboarding (P2)
 

@@ -58,6 +58,7 @@
     "check:evolutions": "node scripts/check-evolutions.mjs",
     "check:sprite-bounds": "node scripts/check-sprite-bounds.mjs",
     "check:monster-runtime-assets": "node scripts/check-monster-runtime-assets.mjs",
+    "check:roster-animations": "node scripts/shot-roster-animation-matrix.mjs",
     "check:world-layout": "node scripts/check-world-layout.mjs",
     "check:map-exit": "node scripts/check-map-exit.mjs",
     "package:portable": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-portable.ps1"

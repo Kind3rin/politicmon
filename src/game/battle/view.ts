@@ -74,6 +74,7 @@ export class BattleFx {
   lungeT: Record<BattleSide, number> = { player: 0, foe: 0 };
   flashT: Record<BattleSide, number> = { player: 0, foe: 0 };
   knockback: Record<BattleSide, number> = { player: 0, foe: 0 };
+  faintT: Record<BattleSide, number> = { player: 0, foe: 0 };
   hitStop = 0;
   levelFlash = 0;
   catchFlash = 0;
@@ -95,6 +96,8 @@ export class BattleFx {
     // Contraccolpo: rientra in ~0.25s (1 -> 0).
     this.knockback.player = Math.max(0, this.knockback.player - dt * 4);
     this.knockback.foe = Math.max(0, this.knockback.foe - dt * 4);
+    this.faintT.player = Math.max(0, this.faintT.player - dt);
+    this.faintT.foe = Math.max(0, this.faintT.foe - dt);
     this.levelFlash = Math.max(0, this.levelFlash - dt);
     this.catchFlash = Math.max(0, this.catchFlash - dt);
     this.koFlash = Math.max(0, this.koFlash - dt);
@@ -367,6 +370,14 @@ export function drawBattleMonster(
     dx += Math.round(Math.sin(kb * Math.PI) * 9 * -dir);
   }
 
+  // KO leggibile: lo sprite affonda e si comprime invece di sparire nello
+  // stesso frame in cui i PV arrivano a zero.
+  const faintProgress = fx.faintT[who] > 0 ? 1 - fx.faintT[who] / 0.55 : 0;
+  if (faintProgress > 0) {
+    sy *= 1 - faintProgress * 0.62;
+    sx *= 1 + faintProgress * 0.12;
+  }
+
   // Status visivi: il movimento dello sprite "racconta" la condizione.
   const status = comb.mon.status;
   let scandaloFlicker = false;
@@ -409,12 +420,14 @@ export function drawBattleMonster(
   let drawH: number;
   let x: number;
   let y: number;
+  screen.ctx.save();
+  if (faintProgress > 0) screen.ctx.globalAlpha = Math.max(0.08, 1 - faintProgress);
   if (png) {
     const pngScale = 56 / png.height; // altezza target ~56px
     drawW = png.width * pngScale * sx;
     drawH = png.height * pngScale * sy;
     x = cx - drawW / 2 + dx;
-    y = by - drawH;
+    y = by - drawH + faintProgress * 13;
     screen.imageSprite(png, x, y, { flipX, scaleX: sx * pngScale, scaleY: sy * pngScale });
   } else if (MONSTERS_WITH_PNG.has(speciesId)) {
     // Mai mostrare la pixmap legacy durante il decode o dopo una cache PWA
@@ -422,16 +435,17 @@ export function drawBattleMonster(
     drawW = 30;
     drawH = 38;
     x = cx - drawW / 2 + dx;
-    y = by - drawH;
+    y = by - drawH + faintProgress * 13;
     drawMonsterLoading(screen, x, y, drawW, drawH);
   } else {
     drawW = w * scale * sx;
     drawH = h * scale * sy;
     // Ancoraggio: centro in basso resta fermo (lo scaling non fa "fluttuare").
     x = cx - drawW / 2 + dx;
-    y = by - drawH;
+    y = by - drawH + faintProgress * 13;
     screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
   }
+  screen.ctx.restore();
 
   // Forma meme: aura sottile sopra lo sprite originale, mai un rimpiazzo del
   // volto PixelLab. Anche il bonus tattico resta leggibile senza solo colore.

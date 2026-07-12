@@ -690,6 +690,7 @@ export class BattleScene implements Scene {
           audio.faint();
           this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
           this.fx.koFlash = 0.5;
+          this.fx.faintT.foe = 0.55;
         },
         pause: 0.15
       },
@@ -1056,6 +1057,7 @@ export class BattleScene implements Scene {
           audio.faint();
           this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
           this.fx.koFlash = 0.5;
+          this.fx.faintT.player = 0.55;
         },
         pause: 0.15
       },
@@ -1785,7 +1787,7 @@ export class BattleScene implements Scene {
     // Nemico: animazione idle (respiro), affondo all'attacco, blink se colpito.
     // Se è stato reclutato (captured) non si disegna più: è dentro la tessera.
     const foeBlink = this.fx.flashT.foe > 0 && Math.floor(this.fx.flashT.foe * 16) % 2 === 0;
-    if (this.foe.mon.hp > 0 && !this.ballAnim && !foeBlink && !this.captured) {
+    if ((this.foe.mon.hp > 0 || this.fx.faintT.foe > 0) && !this.ballAnim && !foeBlink && !this.captured) {
       drawBattleMonster(screen, this.fx, this.foe, 162 + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
     }
     if (this.ballAnim) {
@@ -1794,7 +1796,7 @@ export class BattleScene implements Scene {
 
     // Player (di spalle: specchiato e più grande).
     const playerBlink = this.fx.flashT.player > 0 && Math.floor(this.fx.flashT.player * 16) % 2 === 0;
-    if (this.player.mon.hp > 0 && !playerBlink) {
+    if ((this.player.mon.hp > 0 || this.fx.faintT.player > 0) && !playerBlink) {
       drawBattleMonster(screen, this.fx, this.player, 56 + playerSlide, 116, this.fx.lungeT.player, true, "player");
     }
 

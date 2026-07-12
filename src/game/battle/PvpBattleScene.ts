@@ -424,6 +424,7 @@ export class PvpBattleScene implements Scene {
             run: () => {
               apply();
               audio.faint();
+              this.fx.faintT[ev.side === this.mySide ? "player" : "foe"] = 0.55;
             },
             waitHp: true
           });
@@ -741,11 +742,11 @@ export class PvpBattleScene implements Scene {
     const foeC = this.theirs.active;
     const myC = this.mine.active;
     const foeBlink = this.fx.flashT.foe > 0 && Math.floor(this.fx.flashT.foe * 16) % 2 === 0;
-    if (foeC.mon.hp > 0 && !foeBlink) {
+    if ((foeC.mon.hp > 0 || this.fx.faintT.foe > 0) && !foeBlink) {
       drawBattleMonster(screen, this.fx, foeC, 162 + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
     }
     const playerBlink = this.fx.flashT.player > 0 && Math.floor(this.fx.flashT.player * 16) % 2 === 0;
-    if (myC.mon.hp > 0 && !playerBlink) {
+    if ((myC.mon.hp > 0 || this.fx.faintT.player > 0) && !playerBlink) {
       drawBattleMonster(screen, this.fx, myC, 56 + playerSlide, 116, this.fx.lungeT.player, true, "player");
     }
 

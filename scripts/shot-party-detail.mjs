@@ -13,6 +13,7 @@ const shots = await page.evaluate(async () => {
   const { SceneStack } = await import("/src/engine/scene.ts");
   const { newGameState } = await import("/src/game/state.ts");
   const { createMonster } = await import("/src/game/monster.ts");
+  const { MOVES } = await import("/src/data/moves.ts");
   const { PartyScene } = await import("/src/scenes/PartyScene.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
@@ -24,7 +25,10 @@ const shots = await page.evaluate(async () => {
   const stack = new SceneStack();
 
   const state = newGameState();
-  state.party.push(createMonster("giorgiagon", 30));
+  const mon = createMonster("mediocrate", 29);
+  mon.moves = ["raccoltadifferenziata", "transizione", "appelloalleati", "promessa"]
+    .map((id) => ({ id, pp: MOVES[id].pp }));
+  state.party.push(mon);
   stack.push(new PartyScene(stack, input, state, { mode: "view" }));
 
   const frame = () => { stack.update(1 / 30); stack.draw(screen); input.endFrame(); };

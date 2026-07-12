@@ -1823,12 +1823,13 @@ export class BattleScene implements Scene {
     if (this.mode === "menu") {
       this.drawMainMenu(screen);
     } else if (this.mode === "fight") {
-      // Mosse in griglia 2x2 dentro il pannello: niente sovrapposizioni.
+      // Quattro righe a larghezza piena: le mosse arrivano a 22 caratteri e
+      // nella vecchia griglia 2x2 venivano compresse fino al 69%.
       const items = this.fightMenu.items;
       const y = VIEW_H - 44;
       for (let i = 0; i < items.length; i += 1) {
-        const cx = 8 + (i % 2) * 114;
-        const cy = y + 6 + Math.floor(i / 2) * 13;
+        const cx = 8;
+        const cy = y + 4 + i * 9;
         // Colore: grigio se senza PP, altrimenti tinta d'efficacia — verde super,
         // rosso ruggine poco efficace, grigio scuro immune. Il calcolo è
         // INCONDIZIONATO (sempre noto, non serve aver visto il tipo nel Dex).
@@ -1843,20 +1844,19 @@ export class BattleScene implements Scene {
                 ? "#8a8a98"
                 : INK;
         if (this.fightMenu.index === i) {
-          screen.rect(cx - 2, cy - 3, 106, 12, "#fff0bd");
-          screen.rect(cx - 2, cy - 3, 2, 12, "#e0a92f");
+          screen.rect(cx - 2, cy - 2, 226, 9, "#fff0bd");
+          screen.rect(cx - 2, cy - 2, 2, 9, "#e0a92f");
           screen.text("►", cx, cy, "#8c5b12");
         }
         // Marker d'efficacia PRIMA del nome (▲ super / ▼ poco eff. / X immune):
         // il segnale non è più solo il colore (accessibilità daltonici).
         const marker = eff === "super" ? "▲" : eff === "weak" ? "▼" : eff === "immune" ? "X" : "";
-        const nameX = marker ? cx + 8 + 7 : cx + 8;
+        const nameX = marker ? cx + 15 : cx + 8;
         if (marker) {
           screen.text(marker, cx + 8, cy, color);
         }
-        // Tronca con ellissi se la mossa è troppo lunga per la colonna (resta
-        // spazio per il marker), così non si legge un nome tagliato a metà parola.
-        screen.textFit(items[i].label, nameX, cy, marker ? 91 : 98, color);
+        screen.textFit(items[i].label, nameX, cy, marker ? 166 : 173, color);
+        screen.textRight(items[i].rightLabel ?? "", 228, cy, items[i].disabled ? GREY : INK);
       }
       const slot = this.player.mon.moves[this.fightMenu.index];
       if (this.onFightSelect) {
@@ -1864,31 +1864,28 @@ export class BattleScene implements Scene {
         // scartare — così si vede subito cosa si guadagna e cosa si perde.
         const learn = this.pendingLearnMoveId ? MOVES[this.pendingLearnMoveId] : null;
         const old = slot ? MOVES[slot.id] : null;
-        screen.panel(8, 107, 226, 28, "card");
+        screen.panel(8, 104, 226, 30, "card");
         if (learn) {
-          screen.text(`NUOVA: ${learn.name}`, 14, 110, "#7ad858");
-          screen.textFit(moveSummary(learn), 14, 119, 208, GREY);
+          screen.textFit(`NUOVA: ${learn.name}`, 14, 108, 208, "#7ad858");
+          screen.textFit(moveSummary(learn), 14, 117, 208, GREY);
         }
         if (old) {
-          screen.textFit(`SCARTI: ${old.name} (${moveKindLabel(old)})`, 14, 127, 220, "#d86868");
+          screen.textFit(`SCARTI: ${old.name} (${moveKindLabel(old)})`, 14, 126, 208, "#d86868");
         }
-        screen.text("Scegli la mossa da scartare. B: annulla", 8, y + 34, GREY);
       } else if (slot) {
         const move = MOVES[slot.id];
         const item = items[this.fightMenu.index];
-        // Striscia info sopra il pannello. In griglia 2x2 i nomi lunghi vengono
-        // troncati nelle celle: qui il NOME INTERO della mossa selezionata a
-        // sinistra + PP a destra. Il TIPO è già segnalato dal colore/marker
-        // delle celle, quindi qui si toglie: evita la collisione nome/tipo/PP.
-        screen.panel(8, 117, 226, 17, "card");
+        // Striscia info sopra il pannello: nome, tipo e riepilogo meccanico
+        // restano separati dai PP mostrati a destra di ogni riga.
+        screen.panel(8, 113, 226, 21, "card");
         // La barra colore del tipo resta sotto il nome (segnale visivo compatto).
         const nameW = Math.min(move.name.length * 6, 150);
-        screen.textFit(move.name, 14, 122, 150, INK);
-        screen.rect(14, 130, nameW, 1, TYPE_COLORS[move.type]);
+        screen.textFit(move.name, 14, 117, 150, INK);
+        screen.rect(14, 125, nameW, 1, TYPE_COLORS[move.type]);
         // PP allineato a destra, staccato dal nome (che si ferma a ≤164).
-        screen.textRight(item?.rightLabel ?? "", 226, 122, INK);
+        screen.textRight(item?.rightLabel ?? "", 226, 117, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.textFit(moveSummary(move), 10, y + 30, 208, INK);
+        screen.textFit(moveSummary(move), 14, 126, 208, GREY);
       }
     } else if (this.mode === "campaign") {
       // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)

@@ -827,20 +827,18 @@ export class PvpBattleScene implements Scene {
     const items = this.fightMenu.items;
     const y = VIEW_H - 44;
     for (let i = 0; i < items.length; i += 1) {
-      const cx = 8 + (i % 2) * 114;
-      const cy = y + 6 + Math.floor(i / 2) * 13;
+      const cx = 8;
+      const cy = y + 4 + i * 9;
       const eff = this.fightEff[i];
       const color =
         eff === "super" ? "#2f9a4c" : eff === "weak" ? "#c06030" : eff === "immune" ? "#8a8a98" : INK;
       if (this.fightMenu.index === i) {
-        screen.text("►", cx, cy, INK);
+        screen.rect(cx - 2, cy - 2, 226, 9, "#fff0bd");
+        screen.rect(cx - 2, cy - 2, 2, 9, "#e0a92f");
+        screen.text("►", cx, cy, "#8c5b12");
       }
-      screen.textFit(items[i].label, cx + 8, cy, 98, color);
+      screen.textFit(items[i].label, cx + 8, cy, 173, color);
+      screen.textRight(items[i].rightLabel ?? "", 228, cy, INK);
     }
-    const item = items[this.fightMenu.index];
-    if (item) {
-      screen.textRight(item.rightLabel ?? "", 228, y + 32, INK);
-    }
-    screen.text("B: INDIETRO", 8, y + 32, GREY);
   }
 }

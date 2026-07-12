@@ -235,16 +235,11 @@ export class PartyScene implements Scene {
     if (party.length > 1) {
       screen.textRight(`◄${this.index + 1}/${party.length}►`, 226, 12, GREY);
     }
-    // Anticipa la prossima evoluzione: dà il gancio "ancora un livello".
-    // La categoria si clippa per lasciare spazio all'etichetta EVOLVE a destra
-    // (prima "LUCERTOLA SVELTA" ci finiva sotto).
+    // Anticipa la prossima evoluzione su una riga dedicata. Affiancarla alla
+    // categoria comprimeva i casi lunghi fino al 47% della larghezza naturale.
     const evoLv = nextEvolutionLevel(mon);
     const evoLabel = evoLv !== undefined ? `EVOLVE a L${evoLv}` : "";
-    const catMax = 226 - 70 - (evoLabel.length > 0 ? evoLabel.length * 6 + 8 : 0);
-    screen.textFit(`L${mon.level}  ${species.category}`, 70, 22, catMax, GREY);
-    if (evoLabel) {
-      screen.textRight(evoLabel, 226, 22, "#e8c84a");
-    }
+    screen.textFit(`L${mon.level}  ${species.category}`, 70, 22, 156, GREY);
     let tx = 70;
     for (const type of species.types) {
       const icon = typeIcon(type);
@@ -257,6 +252,7 @@ export class PartyScene implements Scene {
       screen.text(type, tx + 3 + iconW, 34, PAPER);
       tx += w + 4;
     }
+    if (evoLabel) screen.textRight(evoLabel, 226, 44, "#e8c84a");
     // STAT: colonna destra accanto allo sprite (x 70..226), 5 righe y48..88.
     // Occupa SOLO la metà destra: la lista MOSSE sta interamente SOTTO (da y98),
     // così le due colonne non si sovrappongono più (prima le mosse lunghe a
@@ -266,9 +262,10 @@ export class PartyScene implements Scene {
       ["PV", stats.hp], ["GRINTA", stats.atk], ["FACCIA TOSTA", stats.def],
       ["RETORICA", stats.spc], ["OPPORTUN.", stats.spd]
     ];
+    const statsY = evoLabel ? 53 : 48;
     for (let i = 0; i < rows.length; i += 1) {
-      screen.text(rows[i][0], 70, 48 + i * 9, INK);
-      screen.textRight(String(rows[i][1]), 226, 48 + i * 9, INK);
+      screen.text(rows[i][0], 70, statsY + i * 9, INK);
+      screen.textRight(String(rows[i][1]), 226, statsY + i * 9, INK);
     }
     // MOSSE + ABILITÀ ispezionabili: la voce selezionata (detailIndex) è
     // evidenziata e la sua descrizione appare nel box in basso. Le mosse
@@ -285,7 +282,7 @@ export class PartyScene implements Scene {
         screen.rect(10, my - 1, VIEW_W - 20, 9, "#fff0bd");
         screen.text("►", 10, my, "#8c5b12");
       }
-      screen.text(move.name.slice(0, 20), 18, my, INK);
+      screen.textFit(move.name, 18, my, 150, INK);
       screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, sel ? INK : GREY);
     }
     // ABILITÀ passiva della specie (voce ispezionabile, indice = n. mosse) +

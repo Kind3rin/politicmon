@@ -34,8 +34,12 @@ screenshot in `artifacts/screens/professional/`.
 
 ### HP2 — UX mobile e onboarding (P2)
 
-- [ ] Nessun testo sotto la soglia di leggibilità per compressione orizzontale.
-- [ ] Layout a due righe/card espandibili per stringhe variabili lunghe.
+- [x] Nessun testo sotto la soglia di leggibilità per compressione orizzontale:
+      gate dati-driven su 359 stringhe reali, minimo 90,3% contro soglia 80%
+      (2026-07-12).
+- [x] Layout a riga intera/card dedicata per stringhe variabili lunghe: menu
+      mosse PvE/PvP a quattro righe, categoria/evoluzione Squadra separate e
+      nomi mossa completi (2026-07-12).
 - [x] Flussi Tessera, Mappa, Scambio, Coalizione e Governo comprensibili senza
       istruzioni esterne; fixture visuali per stato normale/selezionato/KO e
       test completo scambio/anti-cheat verdi (2026-07-12).

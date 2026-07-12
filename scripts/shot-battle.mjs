@@ -1,4 +1,4 @@
-// Screenshot di verifica del nuovo layout battaglia (menu 2x2 + striscia info).
+// Screenshot di verifica del menu battaglia a righe intere + striscia info.
 import { chromium } from "playwright";
 import { writeFileSync } from "node:fs";
 
@@ -13,6 +13,7 @@ const shots = await page.evaluate(async () => {
   const { SceneStack } = await import("/src/engine/scene.ts");
   const { newGameState } = await import("/src/game/state.ts");
   const { createMonster } = await import("/src/game/monster.ts");
+  const { MOVES } = await import("/src/data/moves.ts");
   const { BattleScene } = await import("/src/game/battle/BattleScene.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false; // niente musica dalla scheda di test
@@ -24,7 +25,12 @@ const shots = await page.evaluate(async () => {
   const stack = new SceneStack();
 
   const state = newGameState();
-  state.party.push(createMonster("giorgetta", 20));
+  const player = createMonster("giorgetta", 20);
+  // Quattro nomi al limite reale del catalogo: nessuna fixture breve può
+  // dimostrare che la compressione 2x2 sia stata davvero rimossa.
+  player.moves = ["raccoltadifferenziata", "transizione", "appelloalleati", "promessa"]
+    .map((id) => ({ id, pp: MOVES[id].pp }));
+  state.party.push(player);
   state.dex["renzino"] = "caught"; // mostra i marker di efficacia
   const battle = new BattleScene(stack, input, {
     state,
@@ -49,7 +55,7 @@ const shots = await page.evaluate(async () => {
   for (let i = 0; i < 20; i++) frame();
   const menuShot = canvas.toDataURL("image/png");
 
-  // Apri LOTTA e scendi alla seconda riga di mosse.
+  // Apri LOTTA e scendi sulla seconda mossa.
   press("KeyZ");
   press("ArrowDown");
   for (let i = 0; i < 10; i++) frame();

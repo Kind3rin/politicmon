@@ -23,3 +23,11 @@ node scripts/shot-government.mjs
 
 Lo scambio ricostruisce sempre localmente il Politicmon ricevuto, limita il
 livello a `LEVEL_CAP`, filtra mosse illegali e richiede doppio commit simmetrico.
+
+## Leggibilità variabile
+
+`npm run audit:text-legibility` misura 359 stringhe provenienti dai cataloghi
+reali contro le larghezze più strette dei relativi componenti. Soglia minima:
+80%; caso peggiore corrente: 90,3%. Le mosse lunghe usano quattro righe a
+larghezza piena (`battle_fight_v2.png`); categoria ed evoluzione non condividono
+più la stessa riga (`party_detail_move.png`).

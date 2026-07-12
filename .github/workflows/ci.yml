@@ -25,5 +25,6 @@ jobs:
       - run: npm run validate:content
       - run: npm run validate:meme-packs
       - run: npm run audit:professional:visual:strict
+      - run: npm run audit:text-legibility
       - run: node scripts/check-evolutions.mjs
       - run: npm run build

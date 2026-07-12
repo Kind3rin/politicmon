@@ -40,6 +40,7 @@
     "audit:professional:visual:strict": "node scripts/audit-professional-visual.mjs --strict",
     "check:ui-ellipsis": "node scripts/check-ui-ellipsis.mjs",
     "audit:accessibility": "node scripts/audit-accessibility.mjs",
+    "audit:text-legibility": "node --import tsx scripts/audit-text-legibility.mjs",
     "audit:satire": "node --import tsx scripts/audit-satire.mjs",
     "playtest:atto3:report": "node scripts/compile-atto3-playtests.mjs",
     "shot:salistrobo": "node scripts/shot-salistrobo.mjs",

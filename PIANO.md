@@ -49,9 +49,14 @@ screenshot in `artifacts/screens/professional/`.
 
 ### HP3 — Ritmo dell'esplorazione (P3)
 
-- [ ] Sfide vaganti esclusivamente facoltative e visibili nel mondo.
-- [ ] Misura incontri/interruzioni per 1.000 passi in ogni fascia di campagna.
-- [ ] Nessuna sequenza di interruzioni prima di 8 passi liberi.
+- [x] Sfide vaganti esclusivamente facoltative e visibili nel mondo: compaiono
+      come NPC adiacenti e la lotta parte soltanto interagendo con A (2026-07-12).
+- [x] Misura incontri/interruzioni per 1.000 passi in ogni fascia di campagna:
+      audit deterministico su 100 semi, da 55,8 tutorial a 77,5 late-game
+      nello scenario peggiore di cammino continuo su terreno incontro (2026-07-12).
+- [x] Nessuna sequenza di interruzioni prima di 8 passi liberi: tregua condivisa
+      tra trainer, comparsa vagante e incontri selvatici, verificata dall'audit
+      `npm run audit:exploration-rhythm` (2026-07-12).
 - [ ] Backtracking e tempi morti verificati su percorso critico.
 
 ### HP4 — Bilanciamento reale (P4)

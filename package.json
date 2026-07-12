@@ -41,6 +41,7 @@
     "check:ui-ellipsis": "node scripts/check-ui-ellipsis.mjs",
     "audit:accessibility": "node scripts/audit-accessibility.mjs",
     "audit:text-legibility": "node --import tsx scripts/audit-text-legibility.mjs",
+    "audit:exploration-rhythm": "node scripts/audit-exploration-rhythm.mjs",
     "audit:input-contracts": "node scripts/audit-input-contracts.mjs",
     "audit:satire": "node --import tsx scripts/audit-satire.mjs",
     "playtest:atto3:report": "node scripts/compile-atto3-playtests.mjs",

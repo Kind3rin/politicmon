@@ -2536,7 +2536,11 @@ export class WorldScene implements Scene {
   // Cooldown globale fra interruzioni (incontri, PG vaganti, eventi morale):
   // dopo una qualsiasi, si concede una "tregua" di pochi passi prima che possa
   // scattarne un'altra. Evita la raffica di interruzioni ravvicinate.
+  // Passi liberi garantiti dopo una vera interruzione. Vale anche per gli
+  // incontri selvatici: il giocatore non deve uscire da una scena e ricadere
+  // immediatamente in un'altra.
   private interruptCooldown = 0;
+  private static readonly MIN_FREE_STEPS = 8;
 
   // CRISI DI GOVERNO (Round 40): evento narrativo con scelta SECCA senza stato
   // nuovo. Due inneschi:
@@ -2751,19 +2755,20 @@ export class WorldScene implements Scene {
     // Le sfide a vista degli allenatori NON passano dal cooldown: sono fisse,
     // non casuali, e vanno innescate sempre.
     if (this.checkTrainerSight()) {
-      this.interruptCooldown = 6;
+      this.interruptCooldown = WorldScene.MIN_FREE_STEPS;
       return;
     }
 
     // Tregua globale: dopo una qualsiasi interruzione si saltano i PG VAGANTI
-    // per qualche passo, così non si accavallano in raffica. Il cooldown frena
-    // SOLO trainer/vaganti: l'erba alta non ci passa (ha il suo rate come freno
-    // statistico), altrimenti 6 passi morti dopo ogni incontro la renderebbero
-    // quasi sterile.
+    // per qualche passo, così non si accavallano in raffica. Gli sfidanti
+    // vaganti restano proposte visibili e facoltative; i selvatici rispettano
+    // la stessa tregua quando il giocatore rientra dall'ultima scena.
     const onCooldown = this.interruptCooldown > 0;
     if (onCooldown) this.interruptCooldown -= 1;
     if (!onCooldown && this.checkWanderingChallenger()) {
-      this.interruptCooldown = 6;
+      // La comparsa non apre scene, ma lasciamo comunque respiro prima che
+      // l'erba possa interrompere l'esplorazione.
+      this.interruptCooldown = WorldScene.MIN_FREE_STEPS;
       return;
     }
 
@@ -2771,7 +2776,7 @@ export class WorldScene implements Scene {
     const tile = TILES[this.tileAt(pos.x, pos.y)];
     if (tile?.encounter) {
       this.rustles.push({ x: pos.x, y: pos.y, t: 0.4 });
-      if (repellentActive) {
+      if (repellentActive || onCooldown) {
         return; // SPRAY ANTI-COMIZIO: niente incontri wild finché dura
       }
       const baseRate = this.map.encounterRate ?? 0.18;
@@ -2795,6 +2800,7 @@ export class WorldScene implements Scene {
         for (const entry of table) {
           roll -= weightOf(entry);
           if (roll <= 0) {
+            this.interruptCooldown = WorldScene.MIN_FREE_STEPS;
             let level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
             // Modificatore d'incontro (~22%): rompe la monotonia dei selvatici.
             // A SONDAGGI alti compaiono più "VIP" (tosti); a SONDAGGI bassi più

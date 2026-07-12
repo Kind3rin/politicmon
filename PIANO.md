@@ -22,10 +22,14 @@ screenshot in `artifacts/screens/professional/`.
 
 ### HP1 — Roster e animazioni (P1)
 
-- [ ] Ogni specie ha PNG front valido e identità politica/meme riconoscibile.
+- [x] Ogni specie ha PNG front valido e identità politica/meme riconoscibile;
+      chiuso rework SALIS/FUTURORSO/DODO con review PixelLab e screenshot
+      front/action/evoluzione in-game (2026-07-12).
 - [x] Ogni specie ha idle, attacco, danno e KO; frame dedicato o contratto
       procedurale esplicito e KO non istantaneo (2026-07-12).
-- [ ] Evoluzioni e Forme Meme non mostrano frame legacy o placeholder.
+- [x] Evoluzioni e Forme Meme non mostrano frame legacy o placeholder: 62/62
+      asset runtime pronti al boot, forme applicate sul PNG base verificato e
+      matrice evoluzioni/action verde (2026-07-12).
 - [x] Matrice visuale parametrica 52×4 con confronto pixel degli stati (2026-07-12).
 
 ### HP2 — UX mobile e onboarding (P2)

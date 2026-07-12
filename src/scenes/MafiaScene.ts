@@ -39,6 +39,23 @@ const BET_MIN = 200;
 
 type Mode = "menu" | "market";
 
+export function mafiaOptionDetails(index: number, protectionActive: boolean): string[] {
+  switch (index) {
+    case 0:
+      return ["DIRETTIVE RARE A PREZZO RIDOTTO.", "OGNI ACQUISTO COSTA 3-4 SOND."];
+    case 1:
+      return ["CURA TUTTA LA SQUADRA.", "REGALO: 2 SCHEDE BLINDATE.", "COSTO: 400€ E -2 SOND."];
+    case 2:
+      return protectionActive
+        ? ["PROTEZIONE GIÀ ATTIVA.", "GLI INCONTRI RESTANO RIDOTTI."]
+        : ["RIDUCE GLI INCONTRI SELVATICI.", "EFFETTO PERMANENTE.", "COSTO: 1200€ E -5 SOND."];
+    case 3:
+      return ["PUNTATA FISSA: 200€.", "25% VINCI 600€; 22% PARI.", "53% PERDI TUTTO."];
+    default:
+      return ["TORNA AL CHIOSCO DEL PONTE."];
+  }
+}
+
 export class MafiaScene implements Scene {
   private menu: Menu;
   private marketMenu: Menu;
@@ -240,14 +257,19 @@ export class MafiaScene implements Scene {
       this.marketMenu.draw(screen, 14, 34, VIEW_W - 28);
       const deal = BLACK_MARKET[this.marketMenu.index];
       if (deal) {
-        screen.text(`Reputazione: ${deal.sondaggi} sondaggi`, 14, VIEW_H - 22, "#d04848");
+        const item = ITEMS[deal.itemId];
+        screen.panel(10, 103, VIEW_W - 20, 57, "card");
+        const details = wrapText((item?.desc ?? "DIRETTIVA RISERVATA.").toUpperCase(), 34).slice(0, 4);
+        details.forEach((line, i) => screen.text(line, 14, 107 + i * 9, i === 0 ? "#cfe6ff" : GREY));
+        screen.text(`COSTO ${deal.price}€  RISCHIO ${deal.sondaggi} SOND.`, 14, 148, "#d04848");
       }
-      screen.text("A: compra  B: indietro", 8, VIEW_H - 10, GREY);
+      screen.text("A: COMPRA  B: INDIETRO", 8, VIEW_H - 10, GREY);
     } else {
       this.menu.draw(screen, 14, 34, VIEW_W - 28);
-      const note = wrapText("Favori sottobanco: aiutano, ma sporcano.", 34);
-      note.forEach((line, i) => screen.text(line, 14, VIEW_H - 30 + i * 9, GREY));
-      screen.text("A: scegli  B: esci", 8, VIEW_H - 10, GREY);
+      screen.panel(10, 114, VIEW_W - 20, 46, "card");
+      const details = mafiaOptionDetails(this.menu.index, Boolean(this.state.flags["mafia-protezione"]));
+      details.forEach((line, i) => screen.text(line, 14, 118 + i * 9, i === details.length - 1 ? "#d8a850" : "#cfe6ff"));
+      screen.text("A: SCEGLI  B: ESCI", 8, VIEW_H - 10, GREY);
     }
     this.msg.draw(screen);
   }

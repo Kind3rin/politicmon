@@ -1,6 +1,6 @@
 import { npcImage, type Facing } from "../../art/characters";
 import type { NpcDef } from "../../data/maps";
-import { Screen, VIEW_W } from "../../engine/screen";
+import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { INK } from "../../ui/widgets";
 
 export interface RuntimeNpc extends NpcDef {
@@ -20,6 +20,22 @@ export interface RuntimeNpc extends NpcDef {
 export interface NpcDrawCommand {
   baseY: number;
   draw: () => void;
+}
+
+export function npcMarkerVisible(screenX: number, screenY: number): boolean {
+  const centerX = screenX + 8;
+  const centerY = screenY + 8;
+  return centerX >= 0 && centerX < VIEW_W && centerY >= 0 && centerY < VIEW_H;
+}
+
+export function npcNameplateLayout(nameplate: string, screenX: number, screenY: number): { x: number; y: number; width: number } | null {
+  if (!npcMarkerVisible(screenX, screenY)) return null;
+  const width = nameplate.length * 6 + 4;
+  return {
+    x: Math.max(2, Math.min(VIEW_W - width - 2, screenX + 8 - width / 2)),
+    y: Math.max(2, screenY - 17),
+    width
+  };
 }
 
 export function buildNpcDrawCommand(options: {
@@ -67,11 +83,10 @@ export function buildNpcDrawCommand(options: {
         screen.rect(x, ny - 11, width, 9, "rgba(40,20,60,0.92)");
         screen.text(label, x + 2, ny - 10, Math.floor(time * 2) % 2 === 0 ? "#ffe870" : "#f0c040");
       }
-      if (npc.nameplate) {
-        const width = npc.nameplate.length * 6 + 4;
-        const x = Math.max(2, Math.min(VIEW_W - width - 2, nx + 8 - width / 2));
-        screen.rect(x, ny - 9, width, 8, "rgba(16,20,31,0.85)");
-        screen.text(npc.nameplate, x + 2, ny - 8, "#f0c040");
+      const nameplate = npc.nameplate ? npcNameplateLayout(npc.nameplate, nx, ny) : null;
+      if (npc.nameplate && nameplate) {
+        screen.rect(nameplate.x, nameplate.y, nameplate.width, 8, "rgba(16,20,31,0.85)");
+        screen.text(npc.nameplate, nameplate.x + 2, nameplate.y + 1, "#f0c040");
       }
       if (exclaim || rematchReady) {
         screen.panel(nx + 2, ny - 13, 12, 13);

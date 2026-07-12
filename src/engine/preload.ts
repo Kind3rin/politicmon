@@ -1,6 +1,6 @@
 import { preloadSprites, waitForSprites } from "./assets";
 import { BAG_ORDER } from "../data/items";
-import { MONSTERS_WITH_PNG } from "../art/monsters";
+import { MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG } from "../art/monsters";
 import { ITEMS_WITH_PNG } from "../art/items";
 
 const DIRS = ["south", "north", "east", "west"] as const;
@@ -94,6 +94,16 @@ function criticalSpriteEntries(): Record<string, string> {
     }
   }
 
+  // Il roster è critico: nessuna scena deve arrivare al primo draw mentre un
+  // Politicmon è ancora in decode, altrimenti su mobile compare il placeholder
+  // o lo sprite sparisce durante un attacco/evoluzione.
+  for (const speciesId of MONSTERS_WITH_PNG) {
+    entries[`mon:${speciesId}`] = `monsters/${speciesId}.png`;
+  }
+  for (const speciesId of MONSTERS_WITH_ACTION_PNG) {
+    entries[`mon:${speciesId}_action`] = `monsters/${speciesId}_action.png`;
+  }
+
   return entries;
 }
 
@@ -123,12 +133,6 @@ function deferredSpriteEntries(): Record<string, string> {
     }
   }
 
-  // Mostri: precarica gli sprite PixelLab così la prima battaglia/Dex non mostra
-  // per un frame il fallback pixmap (il "design vecchio" che lampeggia).
-  for (const speciesId of MONSTERS_WITH_PNG) {
-    entries[`mon:${speciesId}`] = `monsters/${speciesId}.png`;
-  }
-
   return entries;
 }
 
@@ -143,7 +147,7 @@ function startDeferredPreload(): void {
 export function preloadCoreSprites(): Promise<void> {
   preloadSprites(CRITICAL_SPRITES);
   // Il boot aspetta solo il set critico (timeout più corto: è un decimo degli asset).
-  return waitForSprites(Object.keys(CRITICAL_SPRITES), 4000).finally(() => {
+  return waitForSprites(Object.keys(CRITICAL_SPRITES), 8000).finally(() => {
     // Il resto parte in sfondo: se il browser ha requestIdleCallback lo usa,
     // altrimenti un microtask dopo il primo frame.
     const kick = () => startDeferredPreload();

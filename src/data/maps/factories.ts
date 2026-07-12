@@ -246,7 +246,7 @@ export const CAPITALE_TILES = [
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.mddm......====......mddm.TT",
-  "TT..=========.============..TT",
+  "TT..======================..TT",
   "TT.zqqqqqqqz.====...........TT",
   "TT.wwXqwwwwz.====TTTTTTTTTTTTT",
   "TT.wwwwwwwwz.====TTTTTTTTTTTTT",

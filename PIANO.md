@@ -2,6 +2,84 @@
 
 Aggiornato: 2026-07-10
 
+## Programma hardening professionale — 2026-07-12
+
+Obiettivo: portare la RC da prodotto indie avanzato a release 1.0 coerente,
+misurata e verificabile. Fino al completamento di questo programma vige il
+**feature freeze**: nessuna nuova meccanica o area, salvo correzioni necessarie
+ai gate sotto.
+
+### HP0 — Audit visuale e fallback (P0)
+
+- [ ] Inventario automatico di tutte le scene e relativi screenshot.
+- [ ] Zero fallback legacy visibile per asset dichiarati PixelLab.
+- [ ] Zero testi UI troncati con `…`; testi lunghi su più righe, non illeggibili.
+- [ ] Matrice mobile/desktop per menu, battaglia, mondo, Dex e scene Atto 3.
+- [ ] Gate CI che fallisce su nuove superfici senza evidenza visuale.
+
+**Evidenza:** report `design/qa/professional-visual-audit.md`, manifest JSON e
+screenshot in `artifacts/screens/professional/`.
+
+### HP1 — Roster e animazioni (P1)
+
+- [ ] Ogni specie ha PNG front valido e identità politica/meme riconoscibile.
+- [ ] Ogni specie ha stati idle, attacco, danno e KO; `_action.png` dedicato o
+      contratto esplicito di animazione procedurale approvato.
+- [ ] Evoluzioni e Forme Meme non mostrano frame legacy o placeholder.
+- [ ] Test visuale parametrico su tutte le 52 specie, PvE e PvP.
+
+### HP2 — UX mobile e onboarding (P2)
+
+- [ ] Nessun testo sotto la soglia di leggibilità per compressione orizzontale.
+- [ ] Layout a due righe/card espandibili per stringhe variabili lunghe.
+- [ ] Flussi Tessera, Mappa, Scambio, Coalizione e Governo comprensibili senza
+      istruzioni esterne.
+- [ ] Touch target, focus, conferma/annulla e stato selezionato coerenti ovunque.
+
+### HP3 — Ritmo dell'esplorazione (P3)
+
+- [ ] Sfide vaganti esclusivamente facoltative e visibili nel mondo.
+- [ ] Misura incontri/interruzioni per 1.000 passi in ogni fascia di campagna.
+- [ ] Nessuna sequenza di interruzioni prima di 8 passi liberi.
+- [ ] Backtracking e tempi morti verificati su percorso critico.
+
+### HP4 — Bilanciamento reale (P4)
+
+- [ ] Telemetria locale anonima per durata, KO, cure, grind e abbandoni.
+- [ ] Almeno 10 run complete su fixture/device diversi.
+- [ ] Curva boss, economia, cattura ed EXP entro range dichiarati.
+- [ ] Nessun boss richiede grind obbligatorio o strategia unica.
+
+### HP5 — Playtest esterno (P5)
+
+- [ ] Minimo 5 tester esterni e almeno 2 run complete da nuovi giocatori.
+- [ ] Difetti classificati S1–S3, riproducibili e collegati a evidenza.
+- [ ] ≥80% comprende i sistemi chiave senza spiegazione verbale.
+- [ ] Nessun S1/S2 aperto al gate successivo.
+
+### HP6 — Debito tecnico e prestazioni (P6)
+
+- [ ] Estrarre da `WorldScene` spawn/interruzioni, rendering NPC e trasporti.
+- [ ] Estrarre da `BattleScene` orchestrazione messaggi e reward post-battaglia.
+- [ ] Nessun nuovo modulo oltre 40 KB; contratti coperti da test.
+- [ ] Code splitting: bundle iniziale gzip entro 250 KiB.
+- [ ] Frame mobile p95 entro 20 ms e zero long task >100 ms nel percorso critico.
+
+### HP7 — PWA e release 1.0 (P7)
+
+- [ ] Upgrade reale da RC precedente senza perdita save.
+- [ ] Installazione, offline, resume, background/foreground e cache asset testati
+      su Android e almeno un browser iOS/WebKit.
+- [ ] Pacchetto portable, backup release, changelog e rollback verificati.
+- [ ] Due build candidate consecutive senza nuovi blocker.
+- [ ] GO formale solo con tutti i gate HP0–HP7 verdi.
+
+### Ordine operativo
+
+Un task alla volta: diagnosi → fix minimo → test mirato → regressione completa →
+screenshot/report → commit → deploy. Ogni task deve chiudere un criterio sopra;
+non si considera completato soltanto perché typecheck o build sono verdi.
+
 ## Baseline di consegna v2 — sezione autorevole
 
 Questa sezione stabilisce **come** consegnare tutto il catalogo del piano. Le

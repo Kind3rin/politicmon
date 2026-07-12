@@ -377,6 +377,24 @@ export class Screen {
     }
   }
 
+  // Mantiene visibile l'intera stringa comprimendola solo in orizzontale.
+  // Utile per etichette UI variabili: evita il ricorso sistematico a "…"
+  // senza ridurre l'altezza/leggibilità del font bitmap.
+  textFit(value: string, x: number, y: number, maxWidth: number, color = "#10141f"): void {
+    const v = value ?? "";
+    const fullWidth = v.length * CHAR_W;
+    if (fullWidth <= maxWidth || fullWidth <= 0) {
+      this.text(v, x, y, color);
+      return;
+    }
+    const sx = maxWidth / fullWidth;
+    this.ctx.save();
+    this.ctx.translate(Math.round(x), Math.round(y));
+    this.ctx.scale(sx, 1);
+    this.text(v, 0, 0, color);
+    this.ctx.restore();
+  }
+
   textRight(value: string, rightX: number, y: number, color = "#10141f"): void {
     const v = value ?? "";
     this.text(v, rightX - v.length * CHAR_W + 1, y, color);

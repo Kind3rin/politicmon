@@ -7,7 +7,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { clipToWidth, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 import { zoneProgress } from "../data/dexzones";
 import { VERSION_EXCLUSIVES, speciesAvailable } from "../game/version";
 import { formsForSpecies } from "../game/memeForms";
@@ -159,7 +159,7 @@ export class DexScene implements Scene {
       (id) => !speciesAvailable(id, this.state.browserSeed) && this.state.dex[id] !== "caught"
     ).length;
     const zoneY = tradeOnlyLeft > 0 ? VIEW_H - 49 : VIEW_H - 11;
-    screen.text(clipToWidth(`ZONE COMPLETE ${doneZones}/${zp.length}${hereTxt}`, 224), 8, zoneY, col);
+    screen.textFit(`ZONE COMPLETE ${doneZones}/${zp.length}${hereTxt}`, 8, zoneY, 224, col);
     if (caught >= target) {
       screen.text("DEX COMPLETO! ORA SEI IL PALAZZO!", 12, VIEW_H - 21, "#e8c84a");
     } else if (tradeOnlyLeft > 0) {
@@ -198,7 +198,7 @@ export class DexScene implements Scene {
     const ability = species.ability ? ABILITIES[species.ability] : undefined;
     if (ability) {
       // Clip: "GARANZIA COSTITUZIONALE" (23) sforava il pannello/schermo a x=76.
-      screen.text(clipToWidth(`ABILITÀ: ${ability.name}`, VIEW_W - 76 - 8), 76, 54, "#e8c84a");
+      screen.textFit(`ABILITÀ: ${ability.name}`, 76, 54, VIEW_W - 76 - 8, "#e8c84a");
     }
     // Cursore Y progressivo: descrizione, poi abilità, poi footer si impilano
     // senza offset fissi (prima la 2a riga dell'abilità cadeva sul footer con
@@ -239,7 +239,7 @@ export class DexScene implements Scene {
     screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8, "card");
     drawMonsterSprite(screen, speciesId, MONSTER_ART[speciesId], 12, 17, 58, 54, { memeFormId: form.id });
     screen.text("FORMA MEME", 80, 15, form.accent);
-    screen.text(clipToWidth(form.name, 150), 80, 29, INK);
+    screen.textFit(form.name, 80, 29, 150, INK);
     screen.text(form.season, 80, 43, GREY);
     screen.text(`BONUS ${form.stat.toUpperCase()} +${form.statPercent}%`, 80, 57, "#26745d");
     screen.text("PROVENIENZA", 14, 84, "#a46b12");

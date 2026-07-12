@@ -8,7 +8,7 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
 import { saveGame } from "../game/state";
 import type { GameState } from "../game/state";
-import { clipToWidth, drawHpBar, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { drawHpBar, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -241,7 +241,7 @@ export class PartyScene implements Scene {
     const evoLv = nextEvolutionLevel(mon);
     const evoLabel = evoLv !== undefined ? `EVOLVE a L${evoLv}` : "";
     const catMax = 226 - 70 - (evoLabel.length > 0 ? evoLabel.length * 6 + 8 : 0);
-    screen.text(clipToWidth(`L${mon.level}  ${species.category}`, catMax), 70, 22, GREY);
+    screen.textFit(`L${mon.level}  ${species.category}`, 70, 22, catMax, GREY);
     if (evoLabel) {
       screen.textRight(evoLabel, 226, 22, "#e8c84a");
     }

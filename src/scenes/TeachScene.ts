@@ -5,7 +5,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { speciesOf, type Monster } from "../game/monster";
-import { drawScreenHeader, Menu, MessageBox, clipToWidth, GREY, INK } from "../ui/widgets";
+import { drawScreenHeader, Menu, MessageBox, GREY, INK } from "../ui/widgets";
 
 // Insegna una mossa (DIRETTIVA DI PARTITO) a un POLITICMON compatibile.
 // Se ha già 4 mosse, chiede quale sostituire. La direttiva è riutilizzabile,
@@ -102,7 +102,7 @@ export class TeachScene implements Scene {
       if (sel) {
         const m = MOVES[sel.id];
         // Tronca con ellissi invece di scartare muto la 2a riga del riepilogo.
-        screen.text(clipToWidth(moveSummary(m), 216), 12, VIEW_H - 22, GREY);
+        screen.textFit(moveSummary(m), 12, VIEW_H - 22, 216, GREY);
       }
       screen.text("A: sostituisci  B: lascia perdere", 8, VIEW_H - 10, GREY);
     }

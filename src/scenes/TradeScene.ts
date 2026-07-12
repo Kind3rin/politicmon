@@ -16,7 +16,7 @@ import { bumpDailyQuest } from "../game/dailyquests";
 import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
 import { mp } from "../net/mp";
 import { EvolutionScene } from "./EvolutionScene";
-import { clipToWidth, drawHpBar, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
+import { drawHpBar, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
 
 export interface TradeOptions {
   peerId: string;
@@ -203,7 +203,7 @@ export class TradeScene implements Scene {
     const tu = s.myConfirmed ? "OK" : "...";
     const lui = s.peerConfirmed ? "OK" : "...";
     screen.text(`TU: ${tu}  LUI: ${lui}`, VIEW_W / 2 + 6, VIEW_H - 30, s.myConfirmed && s.peerConfirmed ? "#7ad858" : PAPER);
-    screen.text(clipToWidth(this.footerHint(), VIEW_W - 12), 6, VIEW_H - 20, "#e8c84a");
+    screen.textFit(this.footerHint(), 6, VIEW_H - 20, VIEW_W - 12, "#e8c84a");
     screen.text("STESSA MAPPA - VICINI - 2 CONFERME", 6, VIEW_H - 10, GREY);
     this.msg.draw(screen);
   }
@@ -279,7 +279,7 @@ export class TradeScene implements Scene {
     }
     for (let i = 0; i < Math.min(4, offer.moves.length); i += 1) {
       const move = MOVES[offer.moves[i].id];
-      screen.text(clipToWidth(move.name, w - 12), x + 6, 78 + i * 9, PAPER);
+      screen.textFit(move.name, x + 6, 78 + i * 9, w - 12, PAPER);
     }
     screen.text("ARRIVA RIGENERATO:", x + 4, 115, "#7ad858");
     screen.text("HP E PP PIENI", x + 4, 123, "#7ad858");

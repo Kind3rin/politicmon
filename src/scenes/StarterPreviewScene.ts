@@ -5,7 +5,7 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { Menu, clipToWidth, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { Menu, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
 // Anteprima dello starter prima della scelta: sprite grande animato (respiro +
 // urlo periodico), tipo, statistiche base e descrizione del Dex. Conferma SÌ/NO.
@@ -116,7 +116,7 @@ export class StarterPreviewScene implements Scene {
     const dexMaxWidth = VIEW_W - 24;
     const lines = wrapText(species.dexLine, 26);
     for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-      screen.text(clipToWidth(lines[i], dexMaxWidth), 12, 120 + i * 10, INK);
+      screen.textFit(lines[i], 12, 120 + i * 10, dexMaxWidth, INK);
     }
 
     this.menu.draw(screen, VIEW_W - 130, VIEW_H - 30, 126, 11);

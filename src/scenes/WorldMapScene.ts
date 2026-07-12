@@ -4,7 +4,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { clipToWidth, drawScreenHeader, GREY, INK } from "../ui/widgets";
+import { drawScreenHeader, GREY, INK } from "../ui/widgets";
 
 // Coordinate solo per i marker dinamici. La geografia, le coste e le rotte sono
 // nella cartina PixelLab; non si ridisegnano più come un grafo testuale.
@@ -110,10 +110,10 @@ export class WorldMapScene implements Scene {
 
     screen.panel(4, 145, VIEW_W - 8, 31, "dialog");
     screen.text("SEI QUI:", 12, 151, "#a46b12");
-    screen.text(clipToWidth(current?.label ?? "IN VIAGGIO", 120), 65, 151, INK);
+    screen.textFit(current?.label ?? "IN VIAGGIO", 65, 151, 120, INK);
     const selected = NODES.find((node) => node.id === this.selectedId);
     screen.text("SFOGLIA:", 12, 162, GREY);
-    screen.text(clipToWidth(selected?.label ?? "-", 98), 65, 162, "#3f7f83");
+    screen.textFit(selected?.label ?? "-", 65, 162, 98, "#3f7f83");
     screen.textRight("SU/GIU", VIEW_W - 12, 162, GREY);
   }
 }

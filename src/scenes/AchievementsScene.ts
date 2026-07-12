@@ -4,7 +4,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { clipToWidth, drawScreenHeader, wrapText, GREY, INK } from "../ui/widgets";
+import { drawScreenHeader, wrapText, GREY, INK } from "../ui/widgets";
 
 // Schermata TRAGUARDI (menu pausa): elenco satirico degli obiettivi, con
 // dettaglio della voce selezionata e contatore di completamento.
@@ -39,7 +39,7 @@ export class AchievementsScene implements Scene {
     const unlocked = isUnlocked(this.state, sel.id);
     screen.panel(4, 19, VIEW_W - 8, 50, "card");
     // Clip del nome per non invadere la ricompensa a destra (bordo sx ~184).
-    screen.text(clipToWidth(unlocked ? sel.name : "???", 168), 12, 24, unlocked ? INK : GREY);
+    screen.textFit(unlocked ? sel.name : "???", 12, 24, 168, unlocked ? INK : GREY);
     screen.textRight(`+${sel.reward}€`, VIEW_W - 14, 24, unlocked ? "#3f9a5c" : GREY);
     const lines = wrapText(sel.desc, 34);
     for (let i = 0; i < Math.min(2, lines.length); i += 1) {

@@ -263,6 +263,7 @@ export class WorldScene implements Scene {
   private exclaimT = 0;
   private pendingTrainer: TrainerDef | null = null;
   private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
+  private wanderTrainer: TrainerDef | null = null; // sfida facoltativa associata
   // COPPA DELLE POLTRONE: stato del torneo in corso (SESSIONE SINGOLA, mai salvato).
   private coppa: TournamentState | null = null;
   private coppaRuleActive: CoppaRule | null = null;
@@ -365,6 +366,7 @@ export class WorldScene implements Scene {
     // Cambiando mappa la vecchia lista NPC viene sostituita: scarta il ref allo
     // sprite del PG vagante (altrimenti puntereebbe a un NPC non più disegnato).
     this.wanderNpc = null;
+    this.wanderTrainer = null;
     this.exclaimNpc = null;
     // RIVALE GIANNI ricorrente: se la tappa corrente è su questa mappa e non
     // l'hai ancora battuta, aggiungi il suo NPC (con linea di vista).
@@ -1002,6 +1004,7 @@ export class WorldScene implements Scene {
               const gone = this.wanderNpc;
               this.npcs = this.npcs.filter((n) => n !== gone);
               this.wanderNpc = null;
+              this.wanderTrainer = null;
             }
             this.onBattleEnd(result);
             after?.(result);
@@ -1182,6 +1185,13 @@ export class WorldScene implements Scene {
     const pos = this.state.pos;
     npc.currentFacing =
       npc.x > pos.x ? "left" : npc.x < pos.x ? "right" : npc.y > pos.y ? "up" : "down";
+    // I PG vaganti sono opportunità visibili, non agguati: il combattimento
+    // parte solo dopo interazione e conferma esplicita del giocatore.
+    if (npc === this.wanderNpc && this.wanderTrainer) {
+      const trainer = this.wanderTrainer;
+      this.askYesNo(`${trainer.name}: ACCETTI?`, () => this.startTrainerFight(trainer));
+      return;
+    }
     if (this.atto3Controller.interactNpc(npc.id, {
       state: this.state,
       dispatch: (command) => this.dispatchWorldCommand(command)
@@ -2343,6 +2353,9 @@ export class WorldScene implements Scene {
     if (this.state.party.length === 0 || !this.state.party.some((m) => m.hp > 0)) {
       return false;
     }
+    if (this.wanderNpc) {
+      return false; // una sola proposta facoltativa per mappa
+    }
     if (this.wanderCooldown > 0) {
       this.wanderCooldown -= 1;
       return false;
@@ -2368,20 +2381,21 @@ export class WorldScene implements Scene {
       this.recentWanderers.shift();
     }
     const trainer = this.buildWandererTrainer(def);
-    // Crea lo sprite del PG vagante rivolto verso il player e mostragli la "!".
+    // Crea uno sfidante visibile e fermo. Niente dialogo o lotta automatica:
+    // la targhetta invita a interagire quando il giocatore vuole.
     const npc = this.makeRuntimeNpc({
       id: `wanderer-${def.id}`,
       pal: def.pal,
       x: spot.x,
       y: spot.y,
-      facing: spot.facing
+      facing: spot.facing,
+      wander: false,
+      nameplate: "SFIDA A"
     });
     this.npcs.push(npc);
     this.wanderNpc = npc;
-    audio.encounterSting();
-    this.exclaimNpc = npc;
-    this.exclaimT = 0.7;
-    this.pendingTrainer = trainer;
+    this.wanderTrainer = trainer;
+    audio.confirm();
     return true;
   }
 

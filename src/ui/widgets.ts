@@ -3,6 +3,12 @@ import { CHAR_W, LINE_H } from "../engine/font";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { audio } from "../engine/audio";
 import { getSpriteImage } from "../engine/assets";
+
+function drawTextFit(screen: Screen, value: string, x: number, y: number, maxWidth: number, color: string): void {
+  // I test/widget host più vecchi possono fornire un mock Screen minimale.
+  if (typeof screen.textFit === "function") screen.textFit(value, x, y, maxWidth, color);
+  else screen.text(clipToWidth(value, maxWidth), x, y, color);
+}
 import type { CoalitionChannel, MembershipStatus } from "../game/coalition";
 import type { DistrictId, DistrictState } from "../game/election";
 
@@ -27,7 +33,7 @@ export function drawLineRedChip(screen: Screen, x: number, y: number, label: str
   screen.rect(x + 2, y, w - 4, 12, border);
   screen.rect(x, y + 2, w, 8, border);
   screen.rect(x + 2, y + 2, w - 4, 8, bg);
-  screen.text(`! ${clipToWidth(label, w - 18)}`, x + 6, y + 3, active ? "#8f251f" : "#70470e");
+  drawTextFit(screen, `! ${label}`, x + 6, y + 3, w - 12, active ? "#8f251f" : "#70470e");
 }
 
 export function drawAllyCard(screen: Screen, x: number, y: number, w: number, view: AllyCardView): void {
@@ -38,16 +44,16 @@ export function drawAllyCard(screen: Screen, x: number, y: number, w: number, vi
     screen.rect(x + 4, y + 4, 4, h - 8, "#e6b944");
   }
   const statusLabel = view.status === "candidate" ? "LIBERO" : view.status === "broken" ? "ROTTO" : view.status.toUpperCase();
-  screen.text(clipToWidth(view.name, w - 78), x + 9, y + 8, INK);
-  screen.textRight(clipToWidth(`${view.tag} ${statusLabel}`, 66), x + w - 8, y + 8, view.status === "broken" ? "#bd3d35" : "#497b65");
-  screen.text(clipToWidth(`+ ${view.bonusLabel}`, Math.floor((w - 22) / 2)), x + 9, y + 20, "#26745d");
-  screen.textRight(clipToWidth(`- ${view.malusLabel}`, Math.floor((w - 22) / 2)), x + w - 8, y + 20, "#a0443e");
+  drawTextFit(screen, view.name, x + 9, y + 8, w - 78, INK);
+  drawTextFit(screen, `${view.tag} ${statusLabel}`, x + w - 74, y + 8, 66, view.status === "broken" ? "#bd3d35" : "#497b65");
+  drawTextFit(screen, `+ ${view.bonusLabel}`, x + 9, y + 20, Math.floor((w - 22) / 2), "#26745d");
+  drawTextFit(screen, `- ${view.malusLabel}`, x + Math.floor(w / 2), y + 20, Math.floor((w - 22) / 2), "#a0443e");
   drawLineRedChip(screen, x + 8, y + 28, view.lineRedLabel, view.status === "strained" || view.status === "broken");
 }
 
 export function drawConsensusBar(screen: Screen, x: number, y: number, w: number, value: number, label = "CONSENSO"): void {
   const safe = Math.max(0, Math.min(100, Math.round(value)));
-  screen.text(clipToWidth(label, w - 48), x, y, INK);
+  drawTextFit(screen, label, x, y, w - 48, INK);
   screen.textRight(`${safe}%`, x + w, y, safe > 50 ? "#26745d" : safe === 50 ? "#9a6716" : "#a0443e");
   screen.rect(x, y + 11, w, 7, "#17243d");
   screen.rect(x + 1, y + 12, w - 2, 5, "#d5d8dd");
@@ -90,15 +96,15 @@ export function drawChoicePreview(screen: Screen, x: number, y: number, w: numbe
     screen.frame(x + 1, y + 1, w - 2, h - 2, "#e6b944");
     screen.rect(x + 4, y + 4, w - 8, 13, "#f4d34a");
   }
-  screen.text(clipToWidth(`${selected ? "> " : "  "}${title}`, w - 70), x + 9, y + 8, INK);
+  drawTextFit(screen, `${selected ? "> " : "  "}${title}`, x + 9, y + 8, w - 70, INK);
   if (selected) screen.textRight("SCELTA", x + w - 9, y + 8, "#70470e");
   let cy = y + 20;
   for (const line of visible) {
     const color = line.tone === "good" ? "#26745d" : line.tone === "bad" ? "#a0443e" : GREY;
     const labelWidth = Math.min(line.label.length * CHAR_W, Math.floor((w - 26) * 0.58));
     const valueWidth = w - 26 - labelWidth;
-    screen.text(clipToWidth(line.label, labelWidth), x + 9, cy, color);
-    screen.textRight(clipToWidth(line.value, valueWidth), x + w - 9, cy, color);
+    drawTextFit(screen, line.label, x + 9, cy, labelWidth, color);
+    drawTextFit(screen, line.value, x + w - 9 - valueWidth, cy, valueWidth, color);
     cy += 11;
   }
 }
@@ -117,7 +123,7 @@ export function drawScreenHeader(
 ): void {
   screen.rect(0, 0, VIEW_W, 17, "#17243d");
   screen.rect(0, 15, VIEW_W, 2, "#e6b944");
-  screen.text(clipToWidth(title, right ? 132 : VIEW_W - 16), 8, 5, "#fffaf0");
+  drawTextFit(screen, title, 8, 5, right ? 132 : VIEW_W - 16, "#fffaf0");
   if (right) {
     screen.textRight(right, VIEW_W - 8, 5, rightColor);
   }
@@ -460,7 +466,7 @@ export class Menu {
       const rightW = item.rightLabel ? item.rightLabel.length * CHAR_W + 6 : 0;
       const labelX = x + 18 + iconPad;
       const labelMaxW = w - 24 - iconPad - rightW;
-      screen.text(clipToWidth(item.label, labelMaxW), labelX, rowY, color);
+      drawTextFit(screen, item.label, labelX, rowY, labelMaxW, color);
       if (item.rightLabel) {
         screen.textRight(item.rightLabel, x + w - 8, rowY, color);
       }

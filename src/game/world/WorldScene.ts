@@ -20,7 +20,6 @@ import { currentQuest } from "../../data/quests";
 import { RIVAL_COUNTER, SPECIES } from "../../data/species";
 import { buildRivalStageTeam, RIVAL_STAGES, rivalStageFor } from "../../data/rival";
 import { TRAINERS, type TrainerDef } from "../../data/trainers";
-import { pickWanderer, wandererLevel, type WanderingDef } from "../../data/encounters";
 import { audio } from "../../engine/audio";
 import { haptics } from "../../engine/haptics";
 import type { Input } from "../../engine/input";
@@ -35,6 +34,7 @@ import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailabili
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordHealerVisit, recordRunStep } from "../runstats";
+import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge } from "./explorationInterrupts";
 import { recordDuelResult } from "../duelrecord";
 import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
 import { checkAchievements } from "../achievements";
@@ -2340,58 +2340,31 @@ export class WorldScene implements Scene {
 
   // ---- Incontri PG casuali su strada ----
 
-  private wanderCooldown = 50; // passi minimi prima del primo/prossimo incontro
-  private recentWanderers: string[] = []; // ultimi PG, per non ripeterli subito
+  private wanderCadence = newWandererCadence();
 
   private checkWanderingChallenger(): boolean {
-    if (!this.map.outdoor || this.map.allowWanderers === false || !this.state.flags["dex-received"]) {
-      return false;
-    }
-    if (this.state.party.length === 0 || !this.state.party.some((m) => m.hp > 0)) {
-      return false;
-    }
-    if (this.wanderNpc) {
-      return false; // una sola proposta facoltativa per mappa
-    }
-    if (this.wanderCooldown > 0) {
-      this.wanderCooldown -= 1;
-      return false;
-    }
-    // ~2% per passo una volta scaduto il cooldown (raro, non invadente).
-    if (Math.random() > 0.02) {
-      return false;
-    }
-    const def = pickWanderer(this.state, this.recentWanderers, Math.random());
-    if (!def) {
-      return false;
-    }
-    // Serve una cella libera ACCANTO al player dove far comparire il PG: senza
-    // sprite l'incontro sembrerebbe partire "dal nulla" (la nuvoletta "!" si
-    // disegna solo sopra un NPC reale). Se è tutto occupato, niente incontro.
-    const spot = this.freeAdjacentSpot();
-    if (!spot) {
-      return false;
-    }
-    this.wanderCooldown = 70 + Math.floor(Math.random() * 40);
-    this.recentWanderers.push(def.id);
-    if (this.recentWanderers.length > 3) {
-      this.recentWanderers.shift();
-    }
-    const trainer = this.buildWandererTrainer(def);
+    const plan = planWanderingChallenge(
+      this.state,
+      this.wanderCadence,
+      this.map.outdoor && this.map.allowWanderers !== false && Boolean(this.state.flags["dex-received"]),
+      Boolean(this.wanderNpc),
+      () => this.freeAdjacentSpot()
+    );
+    if (!plan) return false;
     // Crea uno sfidante visibile e fermo. Niente dialogo o lotta automatica:
     // la targhetta invita a interagire quando il giocatore vuole.
     const npc = this.makeRuntimeNpc({
-      id: `wanderer-${def.id}`,
-      pal: def.pal,
-      x: spot.x,
-      y: spot.y,
-      facing: spot.facing,
+      id: `wanderer-${plan.def.id}`,
+      pal: plan.def.pal,
+      x: plan.spot.x,
+      y: plan.spot.y,
+      facing: plan.spot.facing,
       wander: false,
       nameplate: "SFIDA A"
     });
     this.npcs.push(npc);
     this.wanderNpc = npc;
-    this.wanderTrainer = trainer;
+    this.wanderTrainer = plan.trainer;
     audio.confirm();
     return true;
   }
@@ -2416,26 +2389,6 @@ export class WorldScene implements Scene {
       return { x: nx, y: ny, facing: opp[dir] };
     }
     return null;
-  }
-
-  private buildWandererTrainer(def: WanderingDef): TrainerDef {
-    const level = wandererLevel(this.state);
-    const team: Array<[string, number]> = [];
-    for (let i = 0; i < def.size; i += 1) {
-      const sp = def.species[i % def.species.length];
-      // Piccola variazione di livello tra i membri.
-      team.push([sp, Math.max(2, level - (def.size - 1 - i))]);
-    }
-    return {
-      id: `wander:${def.id}`,
-      name: def.name,
-      pal: def.pal,
-      team,
-      intro: def.intro,
-      defeat: def.defeat,
-      money: Math.round(def.money * (1 + level / 30)),
-      reward: def.reward
-    };
   }
 
   // Direzione approssimata (in pixel mondo) verso un'altra mappa, per la guida
@@ -2541,7 +2494,6 @@ export class WorldScene implements Scene {
   // incontri selvatici: il giocatore non deve uscire da una scena e ricadere
   // immediatamente in un'altra.
   private interruptCooldown = 0;
-  private static readonly MIN_FREE_STEPS = 8;
 
   // CRISI DI GOVERNO (Round 40): evento narrativo con scelta SECCA senza stato
   // nuovo. Due inneschi:
@@ -2756,7 +2708,7 @@ export class WorldScene implements Scene {
     // Le sfide a vista degli allenatori NON passano dal cooldown: sono fisse,
     // non casuali, e vanno innescate sempre.
     if (this.checkTrainerSight()) {
-      this.interruptCooldown = WorldScene.MIN_FREE_STEPS;
+      this.interruptCooldown = MIN_FREE_STEPS;
       return;
     }
 
@@ -2769,7 +2721,7 @@ export class WorldScene implements Scene {
     if (!onCooldown && this.checkWanderingChallenger()) {
       // La comparsa non apre scene, ma lasciamo comunque respiro prima che
       // l'erba possa interrompere l'esplorazione.
-      this.interruptCooldown = WorldScene.MIN_FREE_STEPS;
+      this.interruptCooldown = MIN_FREE_STEPS;
       return;
     }
 
@@ -2801,7 +2753,7 @@ export class WorldScene implements Scene {
         for (const entry of table) {
           roll -= weightOf(entry);
           if (roll <= 0) {
-            this.interruptCooldown = WorldScene.MIN_FREE_STEPS;
+            this.interruptCooldown = MIN_FREE_STEPS;
             let level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
             // Modificatore d'incontro (~22%): rompe la monotonia dei selvatici.
             // A SONDAGGI alti compaiono più "VIP" (tosti); a SONDAGGI bassi più

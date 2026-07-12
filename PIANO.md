@@ -108,7 +108,8 @@ screenshot in `artifacts/screens/professional/`.
       su Android e almeno un browser iOS/WebKit.
 - [x] Portable Windows completo con server locale, backup ZIP, SHA-256, changelog
       e procedura rollback verificati (2026-07-12).
-- [ ] Due build candidate consecutive senza nuovi blocker.
+- [x] Due build candidate consecutive sul commit `1508c49`: entrambe con
+      197/197 test, build, Chromium mobile e WebKit mobile verdi (2026-07-12).
 - [ ] GO formale solo con tutti i gate HP0–HP7 verdi.
 
 ### Ordine operativo

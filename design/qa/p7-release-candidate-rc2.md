@@ -34,11 +34,23 @@
 - Riavvio offline su iPhone/iPad fisico.
 - Dieci run complete reali con telemetria esportata.
 - Playtest esterni richiesti dal piano qualità.
-- Due candidate build consecutive senza blocker (da registrare sotto).
+- Nessun altro gate automatico aperto.
 
 ## Candidate build
 
 | Candidato | Commit | Suite | Build | Chromium | WebKit | Esito |
 |---|---|---:|---:|---:|---:|---|
-| RC2-A | da compilare | 197/197 | OK | OK | cache OK | da eseguire |
-| RC2-B | da compilare | 197/197 | OK | OK | cache OK | da eseguire |
+| RC2-A | `1508c49` | 197/197 | OK | OK | cache OK | VERDE |
+| RC2-B | `1508c49` | 197/197 | OK | OK | cache OK | VERDE |
+
+Le due esecuzioni sono state consecutive, senza modifiche intermedie, e hanno
+completato con exit code 0. Bundle invariato: entry 212,90 KiB gzip, campagna
+114,85 KiB gzip.
+
+## Artefatti congelati
+
+- `politicmon-1.0.0-rc.2-portable.zip` — SHA-256
+  `E9003116771E11B4D47824DEB25AFA8EFCFE0B44CF190A7166EAA2B04B538684`.
+- `politicmon-1.0.0-rc.2-web.zip` — SHA-256
+  `D5819AB2F7D099BFA7F375A89CED6AC8F677A438B364AA40DA6ADE825EAD686E`.
+- Checksum machine-readable: `releases/SHA256SUMS-rc2.txt`.

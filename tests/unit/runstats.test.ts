@@ -7,6 +7,9 @@ import {
   recordBattleResult,
   recordBattleStarted,
   recordRunStep,
+  recordPartyKo,
+  recordHealingItemUsed,
+  recordHealerVisit,
   syncRunCheckpoints,
   tickRunStats
 } from "../../src/game/runstats.ts";
@@ -38,6 +41,22 @@ test("contatori run: passi, battaglie ed esiti sono separati", () => {
       runs: state.runStats.runs
     },
     { steps: 2, battles: 1, wins: 1, losses: 1, captures: 1, runs: 1 }
+  );
+});
+
+test("telemetria locale: KO, cure in lotta e visite al BAR restano separate", () => {
+  const state = newGameState();
+  recordPartyKo(state);
+  recordPartyKo(state);
+  recordHealingItemUsed(state);
+  recordHealerVisit(state);
+  assert.deepEqual(
+    {
+      partyKOs: state.runStats.partyKOs,
+      healingItemsUsed: state.runStats.healingItemsUsed,
+      healerVisits: state.runStats.healerVisits
+    },
+    { partyKOs: 2, healingItemsUsed: 1, healerVisits: 1 }
   );
 });
 

@@ -57,7 +57,9 @@ screenshot in `artifacts/screens/professional/`.
 - [x] Nessuna sequenza di interruzioni prima di 8 passi liberi: tregua condivisa
       tra trainer, comparsa vagante e incontri selvatici, verificata dall'audit
       `npm run audit:exploration-rhythm` (2026-07-12).
-- [ ] Backtracking e tempi morti verificati su percorso critico.
+- [x] Backtracking e tempi morti verificati su 22 obiettivi del percorso critico:
+      tutti raggiungibili e massimo 2 transiti fra obiettivi consecutivi, imposto
+      come gate da `npm run audit:critical-route` (2026-07-12).
 
 ### HP4 — Bilanciamento reale (P4)
 

@@ -68,7 +68,10 @@ screenshot in `artifacts/screens/professional/`.
       checkpoint con livello medio; grind e abbandono sono derivabili dai delta
       fra checkpoint senza inviare dati in rete (2026-07-12).
 - [ ] Almeno 10 run complete su fixture/device diversi.
-- [ ] Curva boss, economia, cattura ed EXP entro range dichiarati.
+- [x] Curva boss, economia, cattura ed EXP entro range dichiarati: doppio
+      profilo boss, invarianti economia e audit completo sulle 52 specie;
+      massimo 4,3 KO wild/livello e cattura peggiore 5,7 SCHEDONE per un
+      leggendario indebolito (`audit:progression`, 2026-07-12).
 - [x] Nessun boss richiede grind obbligatorio o strategia unica: doppio gate su
       9 boss, con primo tentativo senza consumabili al 55–75% e party preparato
       con cure all'85–100%; entrambi verdi e roster del giocatore ruotati

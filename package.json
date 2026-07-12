@@ -43,6 +43,7 @@
     "audit:text-legibility": "node --import tsx scripts/audit-text-legibility.mjs",
     "audit:exploration-rhythm": "node scripts/audit-exploration-rhythm.mjs",
     "audit:critical-route": "node --import tsx scripts/audit-critical-route.mjs",
+    "audit:progression": "node --import tsx scripts/audit-progression.mjs",
     "audit:input-contracts": "node scripts/audit-input-contracts.mjs",
     "audit:satire": "node --import tsx scripts/audit-satire.mjs",
     "playtest:atto3:report": "node scripts/compile-atto3-playtests.mjs",

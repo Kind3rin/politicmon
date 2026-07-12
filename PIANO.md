@@ -66,7 +66,10 @@ screenshot in `artifacts/screens/professional/`.
 - [ ] Telemetria locale anonima per durata, KO, cure, grind e abbandoni.
 - [ ] Almeno 10 run complete su fixture/device diversi.
 - [ ] Curva boss, economia, cattura ed EXP entro range dichiarati.
-- [ ] Nessun boss richiede grind obbligatorio o strategia unica.
+- [x] Nessun boss richiede grind obbligatorio o strategia unica: doppio gate su
+      9 boss, con primo tentativo senza consumabili al 55–75% e party preparato
+      con cure all'85–100%; entrambi verdi e roster del giocatore ruotati
+      (`balance:bosses`, `playtest:campaign`, 2026-07-12).
 
 ### HP5 — Playtest esterno (P5)
 

@@ -14,17 +14,17 @@ const MAX_TURNS = 180;
 const SCENARIOS = [
   { id: "badge-auditel", trainerId: "emittenza", target: [0.55, 0.85], turns: [3, 16], heals: 1,
     player: [["giorgetta", 12], ["renzino", 11], ["salvinott", 11]] },
-  { id: "badge-spread", trainerId: "ladydirettiva", target: [0.55, 0.80], turns: [4, 20], heals: 2,
+  { id: "badge-spread", trainerId: "ladydirettiva", target: [0.85, 1.00], turns: [4, 20], heals: 2,
     player: [["giorgiagon", 18], ["renzilla", 17], ["salvinott", 17]] },
-  { id: "badge-dazio", trainerId: "tycoon", target: [0.50, 0.75], turns: [7, 28], heals: 3,
+  { id: "badge-dazio", trainerId: "tycoon", target: [0.85, 1.00], turns: [7, 28], heals: 3,
     player: [["giorgiagon", 23], ["renzilla", 22], ["salvinator", 22], ["grillix", 21]] },
-  { id: "palazzo", trainerId: "boss", target: [0.45, 0.70], turns: [10, 36], heals: 4,
+  { id: "palazzo", trainerId: "boss", target: [0.85, 1.00], turns: [10, 36], heals: 4,
     player: [["giorgiagon", 27], ["renzilla", 26], ["salvinator", 26], ["grillix", 25], ["contemorfo", 25]] },
-  { id: "garante", trainerId: "garante", target: [0.40, 0.65], turns: [14, 48], heals: 5,
+  { id: "garante", trainerId: "garante", target: [0.85, 1.00], turns: [14, 48], heals: 5,
     player: [["giorgiagon", 33], ["renzilla", 32], ["salvinator", 32], ["grillix", 31], ["conteblob", 31], ["berlusconix", 30]] },
-  { id: "offshore", trainerId: "tesoriere", target: [0.45, 0.70], turns: [10, 42], heals: 5,
+  { id: "offshore", trainerId: "tesoriere", target: [0.85, 1.00], turns: [10, 42], heals: 5,
     player: [["giorgiagon", 50], ["renzilla", 49], ["salvinator", 49], ["conteblob", 48], ["berlusconix", 48], ["draghimon", 47]] },
-  { id: "bruxelles", trainerId: "commissione", target: [0.40, 0.65], turns: [14, 52], heals: 6,
+  { id: "bruxelles", trainerId: "commissione", target: [0.85, 1.00], turns: [14, 52], heals: 6,
     player: [["giorgiagon", 55], ["renzilla", 54], ["salvinator", 54], ["conteblob", 53], ["berlusconix", 53], ["draghimon", 52]] }
 ];
 
@@ -162,7 +162,7 @@ function markdown(report) {
 const scenarios = SCENARIOS.map(summarize);
 const report = {
   schemaVersion: 1, runsPerScenario: RUNS, maxTurns: MAX_TURNS, seedSchema: "0x51f15e + scenario*10000 + run",
-  model: "duelsim-v2-type-aware-greedy",
+  model: "duelsim-v2-type-aware-greedy", profile: "prepared-party-with-consumables",
   limitations: [
     "Usa calcDamage e resolveTurn reali, ma non l'intera BattleScene.",
     "SONDAGGI e IA contestuale PVE non sono simulati.",
@@ -170,7 +170,8 @@ const report = {
     "Il giocatore usa fino al budget indicato di SPRITZ al 28% PV; ogni cura consuma il turno.",
     "Entrambi i lati scelgono per potenza, STAB, efficacia dei tipi e precisione; non pianificano switch o setup.",
     "I boss sono simulati isolati e a squadra integra: il modello non riproduce l'attrito di route e gauntlet.",
-    "Le squadre checkpoint sono fixture plausibili, non telemetria di una partita umana."
+    "Le squadre checkpoint sono fixture plausibili, non telemetria di una partita umana.",
+    "Questo profilo misura la sicurezza anti-grind di un party preparato; balance:bosses copre separatamente il primo tentativo senza consumabili."
   ],
   scenarios
 };

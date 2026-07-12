@@ -35,6 +35,7 @@ import { BagScene } from "../../scenes/BagScene";
 import { EvolutionScene } from "../../scenes/EvolutionScene";
 import { DOCTRINE_LABEL, type ElectionDoctrine } from "../electionDoctrine";
 import { buildTrainerVictoryPlan } from "./postBattle";
+import { fightMenuTapIndex } from "./fightMenuInput";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -1545,7 +1546,9 @@ export class BattleScene implements Scene {
     return null;
   }
 
-  // Navigazione 2x2 del menu mosse (stesso schema del menu principale).
+  // Il menu mosse è una lista verticale a quattro righe: SU/GIÙ scorrono una
+  // mossa alla volta. SINISTRA/DESTRA restano alias per accessibilità, ma non
+  // saltano più righe come nella vecchia griglia 2x2.
   private fightGridUpdate(): "select" | "cancel" | null {
     const n = this.fightMenu.items.length;
     const move = (target: number) => {
@@ -1554,17 +1557,30 @@ export class BattleScene implements Scene {
         audio.cursor();
       }
     };
-    if (this.input.wasPressed("left")) {
+    if (this.input.wasPressed("left") || this.input.wasPressed("up")) {
       move(this.fightMenu.index - 1);
     }
-    if (this.input.wasPressed("right")) {
+    if (this.input.wasPressed("right") || this.input.wasPressed("down")) {
       move(this.fightMenu.index + 1);
     }
-    if (this.input.wasPressed("up")) {
-      move(this.fightMenu.index - 2);
-    }
-    if (this.input.wasPressed("down")) {
-      move(this.fightMenu.index + 2);
+
+    // Tap diretto: primo tap evidenzia, secondo tap sulla stessa riga conferma.
+    // Il Menu standard lo fa già, ma questa lista ha un renderer custom e quindi
+    // non possiede la geometria registrata da Menu.draw().
+    const tap = this.input.consumeTap();
+    const tapped = tap ? fightMenuTapIndex(tap, n) : null;
+    if (tapped !== null) {
+      this.input.clearTap();
+      if (tapped !== this.fightMenu.index) {
+        move(tapped);
+        return null;
+      }
+      if (this.fightMenu.items[tapped]?.disabled) {
+        audio.cancel();
+        return null;
+      }
+      audio.confirm();
+      return "select";
     }
     if (this.input.wasPressed("a")) {
       if (this.fightMenu.items[this.fightMenu.index]?.disabled) {

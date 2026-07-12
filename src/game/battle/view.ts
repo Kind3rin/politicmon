@@ -399,7 +399,12 @@ export function drawBattleMonster(
   // identico (centro in basso fermo). Il PNG è 64px: lo si scala per stare in
   // linea con gli altri mostri (pixmap ~48px renderizzati). Gli effetti
   // post-draw (velo SCANDALO, simbolo status) restano condivisi sotto.
-  const png = monsterImage(speciesId, Boolean(useAction));
+  // Una specie migrata può avere ancora MONSTER_ACTION_ART legacy ma non il
+  // corrispondente PNG `_action`. In quel caso l'affondo deve continuare a usare
+  // il PNG base: chiedere un action frame inesistente faceva sparire il mostro
+  // e mostrava il placeholder `…` per tutta l'animazione (es. GIORGIAGON).
+  const usePngAction = useAction && MONSTERS_WITH_ACTION_PNG.has(speciesId);
+  const png = monsterImage(speciesId, usePngAction);
   let drawW: number;
   let drawH: number;
   let x: number;

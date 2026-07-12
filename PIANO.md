@@ -86,7 +86,9 @@ screenshot in `artifacts/screens/professional/`.
 
 ### HP6 — Debito tecnico e prestazioni (P6)
 
-- [ ] Estrarre da `WorldScene` spawn/interruzioni, rendering NPC e trasporti.
+- [x] Estratti da `WorldScene` spawn/interruzioni (`explorationInterrupts.ts`),
+      rendering NPC (`npcRenderer.ts`) e destinazioni/filtri trasporto
+      (`transport.ts`), con 5 test puri e screenshot leggendario (2026-07-12).
 - [ ] Estrarre da `BattleScene` orchestrazione messaggi e reward post-battaglia.
 - [ ] Nessun nuovo modulo oltre 40 KB; contratti coperti da test.
 - [x] Code splitting: `WorldScene` e tutto il grafo campagna sono caricati solo

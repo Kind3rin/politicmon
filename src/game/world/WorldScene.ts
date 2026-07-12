@@ -1,4 +1,4 @@
-import { playerImage, ferryImage, npcImage, vehicleImage, type Facing } from "../../art/characters";
+import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
@@ -35,6 +35,8 @@ import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, loca
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordHealerVisit, recordRunStep } from "../runstats";
 import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge } from "./explorationInterrupts";
+import { availableTransportDestinations, type TransportDestination } from "./transport";
+import { buildNpcDrawCommand, type RuntimeNpc } from "./npcRenderer";
 import { recordDuelResult } from "../duelrecord";
 import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
 import { checkAchievements } from "../achievements";
@@ -123,34 +125,10 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
   }
 };
 
-interface RuntimeNpc extends NpcDef {
-  currentFacing: Facing;
-  turnTimer: number;
-  // Wander: gli NPC ambientali camminano un po' attorno al loro punto iniziale.
-  homeX: number;
-  homeY: number;
-  dispX: number; // posizione di disegno in px (interpolata durante il passo)
-  dispY: number;
-  walkTimer: number; // tempo al prossimo tentativo di passo
-  stepFrom: { x: number; y: number } | null; // cella di partenza del passo corrente
-  stepT: number; // 0..1 avanzamento del passo
-  canWander: boolean;
-  path?: Array<{ x: number; y: number }>; // percorso scriptato (es. entrata di Gianni)
-}
-
 interface Rustle {
   x: number;
   y: number;
   t: number;
-}
-
-interface TransportDestination {
-  label: string;
-  mapId: string;
-  x: number;
-  y: number;
-  facing: Facing;
-  requires?: (state: GameState) => boolean;
 }
 
 const DIR_DELTA: Record<Facing, { dx: number; dy: number }> = {
@@ -190,15 +168,6 @@ const WORLD_OBJECT_TARGET_PX: Record<string, number> = {
   ,"7": 48
   ,"8": 96
 };
-
-const TRANSPORT_DESTINATIONS: TransportDestination[] = [
-  { label: "BORGO URNE", mapId: "borgo", x: 24, y: 22, facing: "right" },
-  { label: "MEDIOPOLI", mapId: "mediopoli", x: 23, y: 19, facing: "right", requires: (s) => Boolean(s.flags["dex-received"]) },
-  { label: "EUROTOWN", mapId: "eurotown", x: 24, y: 14, facing: "right", requires: (s) => s.badges.includes("auditel") },
-  { label: "CAPUT MUNDI", mapId: "capitale", x: 23, y: 19, facing: "right", requires: (s) => s.badges.includes("spread") }
-  // STRETTO rimosso dal taxi: ora ci si arriva dall'IMBARCO a Caput Mundi e si
-  // attraversa l'acqua con la MN TRAGHETTO (vedi warp "imbarco" + canFerry).
-];
 
 function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, dx: number, dy: number): void {
   const target = WORLD_OBJECT_TARGET_PX[ch] ?? TILE;
@@ -2034,9 +2003,7 @@ export class WorldScene implements Scene {
       ]);
       return;
     }
-    this.transportDestinations = TRANSPORT_DESTINATIONS.filter(
-      (dest) => dest.mapId !== this.map.id && (!dest.requires || dest.requires(this.state))
-    );
+    this.transportDestinations = availableTransportDestinations(this.state, this.map.id);
     if (this.transportDestinations.length === 0) {
       this.say(["SCORTA AUTO BLU: per ora non hai tratte autorizzate.", "Conquista medaglie e sbloccheremo nuove destinazioni."]);
       return;
@@ -3405,12 +3372,6 @@ export class WorldScene implements Scene {
     }
 
     for (const npc of this.visibleNpcs()) {
-      const nx = Math.round(npc.dispX) - camX;
-      const ny = Math.round(npc.dispY) - camY - 1;
-      // PNG PixelLab dell'NPC (4 dir, scalato ai 16px, ancorato in basso).
-      const npcMoving = Boolean(npc.stepFrom);
-      const npcWalkCycle = npcMoving ? Math.floor(this.time * 8) % 4 : 0;
-      const npcImg = npcImage(npc.pal, npc.currentFacing, npcWalkCycle, npcMoving);
       const exclaim = this.exclaimNpc === npc;
       // RIVINCITA pronta: "!" dorato sopra il trainer (scopribilità, audit C12).
       const rematchReady =
@@ -3420,66 +3381,17 @@ export class WorldScene implements Scene {
       // LEGGENDARIO ancora disponibile: aura + cartello per renderlo SPECIALE e
       // inconfondibile (evita di sfidarlo per sbaglio, vedi conferma SÌ/NO).
       const legendaryReady = Boolean(npc.legendary) && !this.state.flags[npc.legendary!.flag];
-      tall.push({
-        baseY: npc.dispY + TILE,
-        draw: () => {
-          // Ombra ai piedi (prima dello sprite).
-          this.drawShadow(screen, nx + 8, ny + 15);
-          // Aura leggendaria: alone dorato pulsante (rect morbidi concentrici,
-          // Screen non ha primitive circolari) + scintille rotanti attorno.
-          if (legendaryReady) {
-            const pulse = 0.5 + 0.5 * Math.sin(this.time * 4);
-            const grow = Math.round(pulse * 3);
-            const a1 = (0.10 + pulse * 0.12).toFixed(2);
-            const a2 = (0.16 + pulse * 0.16).toFixed(2);
-            screen.rect(nx - 4 - grow, ny - grow, 24 + grow * 2, 24 + grow * 2, `rgba(240,200,64,${a1})`);
-            screen.rect(nx - grow, ny + 4 - grow, 16 + grow * 2, 16 + grow * 2, `rgba(240,200,64,${a2})`);
-            // Scintille rotanti (4 punti) attorno alla testa.
-            for (let k = 0; k < 4; k += 1) {
-              const a = this.time * 3 + (k * Math.PI) / 2;
-              const sxp = nx + 8 + Math.round(Math.cos(a) * 12);
-              const syp = ny + 6 + Math.round(Math.sin(a) * 8);
-              screen.text("*", sxp, syp, "#fff0a0");
-            }
-          }
-          if (npcImg) {
-            const nb = screen.imageBounds(npcImg);
-            const ns = 22 / nb.h;
-            const dw = nb.w * ns;
-            screen.imageSpriteCropped(npcImg, nx + 8 - dw / 2, ny + 16 - nb.h * ns, { scaleX: ns, scaleY: ns });
-          }
-          // Cartello LEGGENDARIO sopra la testa. Colore lampeggiante (non testo
-          // variabile) per non cambiare larghezza, e X CLAMPATA ai bordi schermo
-          // così non sfora sull'HUD quando l'NPC è vicino al bordo destro.
-          if (legendaryReady) {
-            const blink = Math.floor(this.time * 2) % 2 === 0;
-            const label = "LEGGENDARIO";
-            const w = label.length * 6 + 4;
-            const lx = Math.max(2, Math.min(VIEW_W - w - 2, nx + 8 - w / 2));
-            screen.rect(lx, ny - 11, w, 9, "rgba(40,20,60,0.92)");
-            screen.text(label, lx + 2, ny - 10, blink ? "#ffe870" : "#f0c040");
-          }
-          // Targhetta fluttuante col nome (NPC speciali, es. LUCA · GUIDA).
-          // Sopra la testa, oro su fondo scuro per spiccare tra gli NPC normali.
-          if (npc.nameplate) {
-            const label = npc.nameplate;
-            const w = label.length * 6 + 4;
-            // X clampata ai bordi schermo (come il cartello LEGGENDARIO): quando
-            // l'NPC è vicino al bordo, la targhetta non sfora né finisce sotto
-            // l'HUD SOND (angolo alto-destra).
-            const lx = Math.max(2, Math.min(VIEW_W - w - 2, nx + 8 - w / 2));
-            screen.rect(lx, ny - 9, w, 8, "rgba(16,20,31,0.85)");
-            screen.text(label, lx + 2, ny - 8, "#f0c040");
-          }
-          if (exclaim) {
-            screen.panel(nx + 2, ny - 13, 12, 13);
-            screen.text("!", nx + 5, ny - 10, INK);
-          } else if (rematchReady) {
-            screen.panel(nx + 2, ny - 13, 12, 13);
-            screen.text("!", nx + 5, ny - 10, "#c89a1a");
-          }
-        }
-      });
+      tall.push(buildNpcDrawCommand({
+        screen,
+        npc,
+        camX,
+        camY,
+        time: this.time,
+        exclaim,
+        rematchReady,
+        legendaryReady,
+        drawShadow: (x, y) => this.drawShadow(screen, x, y)
+      }));
     }
 
     // Altri giocatori online sulla mia stessa mappa (interpolati).

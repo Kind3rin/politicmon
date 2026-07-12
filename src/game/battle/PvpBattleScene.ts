@@ -826,6 +826,8 @@ export class PvpBattleScene implements Scene {
   private drawFightMenu(screen: Screen): void {
     const items = this.fightMenu.items;
     const y = VIEW_H - 44;
+    screen.rect(184, y - 11, 52, 9, "rgba(16,20,31,0.88)");
+    screen.text("B: ESCI", 190, y - 9, GREY);
     for (let i = 0; i < items.length; i += 1) {
       const cx = 8;
       const cy = y + 4 + i * 9;

@@ -70,5 +70,6 @@ export class AchievementsScene implements Scene {
     if (start > 0) {
       screen.text("▲", VIEW_W - 16, 76, GREY);
     }
+    screen.text("SU/GIU: SFOGLIA   A/B: CHIUDI", 10, VIEW_H - 20, GREY);
   }
 }

@@ -1866,7 +1866,8 @@ export class BattleScene implements Scene {
         const old = slot ? MOVES[slot.id] : null;
         screen.panel(8, 104, 226, 30, "card");
         if (learn) {
-          screen.textFit(`NUOVA: ${learn.name}`, 14, 108, 208, "#7ad858");
+          screen.textFit(`NUOVA: ${learn.name}`, 14, 108, 145, "#7ad858");
+          screen.textRight("B: ANNULLA", 226, 108, GREY);
           screen.textFit(moveSummary(learn), 14, 117, 208, GREY);
         }
         if (old) {
@@ -1885,7 +1886,8 @@ export class BattleScene implements Scene {
         // PP allineato a destra, staccato dal nome (che si ferma a ≤164).
         screen.textRight(item?.rightLabel ?? "", 226, 117, INK);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.textFit(moveSummary(move), 14, 126, 208, GREY);
+        screen.text("B: ESCI", 14, 126, GREY);
+        screen.textFit(moveSummary(move), 60, 126, 162, GREY);
       }
     } else if (this.mode === "campaign") {
       // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)

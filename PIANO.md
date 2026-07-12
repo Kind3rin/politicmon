@@ -43,7 +43,9 @@ screenshot in `artifacts/screens/professional/`.
 - [x] Flussi Tessera, Mappa, Scambio, Coalizione e Governo comprensibili senza
       istruzioni esterne; fixture visuali per stato normale/selezionato/KO e
       test completo scambio/anti-cheat verdi (2026-07-12).
-- [ ] Touch target, focus, conferma/annulla e stato selezionato coerenti ovunque.
+- [x] Touch target, focus, conferma/annulla e stato selezionato coerenti:
+      audit automatico su 31 scene interattive, 8 target touch portrait/landscape
+      e fixture dedicate TRAGUARDI/STARTER (2026-07-12).
 
 ### HP3 — Ritmo dell'esplorazione (P3)
 

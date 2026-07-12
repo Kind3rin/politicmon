@@ -31,3 +31,12 @@ reali contro le larghezze più strette dei relativi componenti. Soglia minima:
 80%; caso peggiore corrente: 90,3%. Le mosse lunghe usano quattro righe a
 larghezza piena (`battle_fight_v2.png`); categoria ed evoluzione non condividono
 più la stessa riga (`party_detail_move.png`).
+
+## Contratto input
+
+`npm run audit:input-contracts` inventaria tutte le scene con navigazione e
+conferma, incluse quelle guidate dal widget `Menu`: 31/31 dichiarano un focus
+visibile e i significati di A/B. L'audit ha corretto i footer mancanti di
+TRAGUARDI e STARTER (`hp2_achievements.png`, `hp2_starter-preview.png`). Il
+controllo browser accessibilità conferma inoltre 8 target touch nominati e di
+almeno 24 px sia portrait sia landscape.

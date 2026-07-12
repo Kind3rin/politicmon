@@ -119,6 +119,8 @@ export class StarterPreviewScene implements Scene {
       screen.textFit(lines[i], 12, 120 + i * 10, dexMaxWidth, INK);
     }
 
+    screen.text("A: CONFERMA", 8, VIEW_H - 24, GREY);
+    screen.text("B: INDIETRO", 8, VIEW_H - 13, GREY);
     this.menu.draw(screen, VIEW_W - 130, VIEW_H - 30, 126, 11);
   }
 }

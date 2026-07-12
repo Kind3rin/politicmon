@@ -408,7 +408,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
   // EUROTOWN — bistrot della burocrazia.
   bistrot: houseMap("bistrot", "BISTROT DELLE DIRETTIVE", "eurotown", 22, 10, [
     {
-      id: "bistrot-funz", pal: "professor", x: 4, y: 2, facing: "left",
+      id: "bistrot-funz", pal: "professor", x: 7, y: 2, facing: "down",
       lines: [
         "La DIRETTIVA 2024/banane stabilisce la curvatura massima del consenso.",
         "Allegato B, comma 12: ogni promessa va tradotta in 24 lingue prima di romperla."
@@ -416,7 +416,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     }
   ], {
     variant: 1,
-    pickups: [{ id: "bistrot-pk", x: 4, y: 1, itemId: "maalox", qty: 1 }]
+    pickups: [{ id: "bistrot-pk", x: 8, y: 4, itemId: "maalox", qty: 1 }]
   }),
 
   // CAPUT MUNDI — salotto romano.
@@ -470,7 +470,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
   // STRETTO — chiosco del ponte.
   chiosco: houseMap("chiosco", "CHIOSCO DEL PONTE", "stretto", 11, 3, [
     {
-      id: "chiosco-oste", pal: "barista", x: 4, y: 2, facing: "left",
+      id: "chiosco-oste", pal: "barista", x: 7, y: 2, facing: "down",
       lines: [
         "Vendo granite e plastici del PONTE da trent'anni. Il ponte non c'è, le granite sì.",
         "Tutti chiedono: 'quando lo finite?'. Io rispondo: 'quale, il ponte o la granita?'."
@@ -478,7 +478,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     }
   ], {
     variant: 1,
-    pickups: [{ id: "chiosco-pk", x: 4, y: 1, itemId: "mojito", qty: 1 }]
+    pickups: [{ id: "chiosco-pk", x: 8, y: 4, itemId: "mojito", qty: 1 }]
   }),
 
   // ------------------------------------------------ BAR SPORT (centri cura) ---

@@ -428,7 +428,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     signs: [{ x: 4, y: 5, lines: ["LIVE INTERNAZIONALE.", "IL FILTRO È SOBRIO. LA DIPLOMAZIA MENO."] }], pickups: [],
     npcs: [
       { id: "partner-perfetto", pal: "boss", x: 10, y: 2, facing: "down", trainerId: "partner-perfetto", sightRange: 5, hideIfFlag: "diplomacyComplete", lines: [] },
-      { id: "partner-after", pal: "boss", x: 12, y: 2, facing: "down", showIfFlag: "diplomacyComplete", lines: ["LA DIPLOMAZIA RESISTE.", "LA CLIP È GIÀ VIRALE. IL TOUR DEL FEED È APERTO."] }
+      { id: "partner-after", pal: "boss", x: 10, y: 4, facing: "down", showIfFlag: "diplomacyComplete", lines: ["LA DIPLOMAZIA RESISTE.", "LA CLIP È GIÀ VIRALE. IL TOUR DEL FEED È APERTO."] }
     ]
   },
   genova_techno: {
@@ -443,7 +443,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       { x: 16, y: 5, lines: ["MAXISCHERMO DEL BEAT.", "SE RIDUCI GLI EFFETTI, IL TEMPO ASPETTA."] }
     ], pickups: [],
     npcs: [
-      { id: "genova-dj", pal: "influencer", x: 9, y: 2, facing: "down", lines: [] },
+      { id: "genova-dj", pal: "influencer", x: 10, y: 4, facing: "down", lines: [] },
       { id: "genova-stagehand", pal: "aide", x: 5, y: 8, facing: "right", lines: ["SE SBAGLI, LO CHIAMIAMO REMIX.", "LA STORIA CONTINUA COMUNQUE."] }
     ]
   },

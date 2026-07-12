@@ -18,7 +18,8 @@ const PRECACHE = [
   "./icon-512.png",
   "./icon-maskable-512.png",
   "./apple-touch-icon.png",
-  "./politicmon-icon.svg"
+  "./politicmon-icon.svg",
+  ...__PRECACHE_RUNTIME_ASSETS__
 ];
 
 self.addEventListener("install", (event) => {

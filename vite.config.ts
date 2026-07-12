@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
 
@@ -18,7 +18,25 @@ function stampServiceWorker(): Plugin {
       const swPath = resolve(__dirname, "dist/sw.js");
       try {
         const src = readFileSync(swPath, "utf8");
-        writeFileSync(swPath, src.replaceAll("__APP_BUILD_ID__", BUILD_ID));
+        const distRoot = resolve(__dirname, "dist");
+        const collect = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+          const path = resolve(dir, entry.name);
+          return entry.isDirectory() ? collect(path) : [`./${path.slice(distRoot.length + 1).replaceAll("\\", "/")}`];
+        });
+        const coreAssets = new Set([
+          "./index.html", "./manifest.webmanifest", "./icon-192.png",
+          "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png",
+          "./politicmon-icon.svg"
+        ]);
+        const runtimeAssets = collect(distRoot).filter((path) =>
+          path !== "./sw.js" && path !== "./intro.mp4" && !coreAssets.has(path)
+        );
+        writeFileSync(
+          swPath,
+          src
+            .replaceAll("__APP_BUILD_ID__", BUILD_ID)
+            .replace("__PRECACHE_RUNTIME_ASSETS__", JSON.stringify(runtimeAssets))
+        );
       } catch {
         // dist/sw.js assente (build parziale): niente da stampare.
       }

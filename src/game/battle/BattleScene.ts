@@ -10,7 +10,7 @@ import { sceneImage } from "../../engine/assets";
 import { markCaught, markSeen, saveGame, type GameState } from "../state";
 import { addSondaggi, bumpSondaggi, expMalus, hasMinistro, moneyMalus } from "../governo";
 import { bumpDailyQuest } from "../dailyquests";
-import { recordBattleResult, recordBattleStarted } from "../runstats";
+import { recordBattleResult, recordBattleStarted, recordHealingItemUsed, recordPartyKo } from "../runstats";
 import { zoneProgress } from "../../data/dexzones";
 import {
   abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, LEVEL_CAP, levelEvolution, speciesOf,
@@ -1054,6 +1054,7 @@ export class BattleScene implements Scene {
     return [
       {
         run: () => {
+          recordPartyKo(this.state);
           audio.faint();
           this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
           this.fx.koFlash = 0.5;
@@ -1191,7 +1192,10 @@ export class BattleScene implements Scene {
       this.mode = "queue";
       return;
     }
-    if (item.kind === "heal" || item.kind === "cure") this.battleHealingItemsUsed += 1;
+    if (item.kind === "heal" || item.kind === "cure") {
+      this.battleHealingItemsUsed += 1;
+      recordHealingItemUsed(this.state);
+    }
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
     bumpDailyQuest(this.state, "item1"); // missione "USA 1 OGGETTO IN LOTTA"
     const steps: Step[] = [];

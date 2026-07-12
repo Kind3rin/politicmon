@@ -22,6 +22,9 @@ export interface RunStats {
   losses: number;
   captures: number;
   runs: number;
+  partyKOs: number;
+  healingItemsUsed: number;
+  healerVisits: number;
   // null = traguardo già raggiunto prima dell'introduzione delle statistiche v14;
   // non inventiamo tempo/livello retroattivi.
   checkpoints: Partial<Record<RunCheckpointId, RunCheckpoint | null>>;
@@ -38,6 +41,9 @@ export function newRunStats(): RunStats {
     losses: 0,
     captures: 0,
     runs: 0,
+    partyKOs: 0,
+    healingItemsUsed: 0,
+    healerVisits: 0,
     checkpoints: {}
   };
 }
@@ -81,6 +87,9 @@ export function normalizeRunStats(value: unknown): RunStats {
     losses: finiteNonNegative(raw.losses, true),
     captures: finiteNonNegative(raw.captures, true),
     runs: finiteNonNegative(raw.runs, true),
+    partyKOs: finiteNonNegative(raw.partyKOs, true),
+    healingItemsUsed: finiteNonNegative(raw.healingItemsUsed, true),
+    healerVisits: finiteNonNegative(raw.healerVisits, true),
     checkpoints
   };
 }
@@ -103,6 +112,18 @@ export function recordBattleResult(state: GameState, result: RecordedBattleResul
   else if (result === "loss") state.runStats.losses += 1;
   else if (result === "caught") state.runStats.captures += 1;
   else state.runStats.runs += 1;
+}
+
+export function recordPartyKo(state: GameState): void {
+  state.runStats.partyKOs += 1;
+}
+
+export function recordHealingItemUsed(state: GameState): void {
+  state.runStats.healingItemsUsed += 1;
+}
+
+export function recordHealerVisit(state: GameState): void {
+  state.runStats.healerVisits += 1;
 }
 
 function averagePartyLevel(state: GameState): number {

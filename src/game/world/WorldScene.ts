@@ -34,7 +34,7 @@ import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro,
 import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
-import { recordRunStep } from "../runstats";
+import { recordHealerVisit, recordRunStep } from "../runstats";
 import { recordDuelResult } from "../duelrecord";
 import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
 import { checkAchievements } from "../achievements";
@@ -1310,6 +1310,7 @@ export class WorldScene implements Scene {
     }
 
     if (route.kind === "healer") {
+      recordHealerVisit(this.state);
       const lines = [...(npc.lines ?? [])];
       // Primo BAR SPORT: spiega che qui si cura GRATIS, quando serve.
       if (!this.state.flags["heal-hint"]) {

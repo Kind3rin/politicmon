@@ -63,7 +63,10 @@ screenshot in `artifacts/screens/professional/`.
 
 ### HP4 — Bilanciamento reale (P4)
 
-- [ ] Telemetria locale anonima per durata, KO, cure, grind e abbandoni.
+- [x] Telemetria locale anonima nel save: durata attiva, passi, battaglie,
+      vittorie/sconfitte/fughe, KO del party, oggetti cura, visite al BAR e
+      checkpoint con livello medio; grind e abbandono sono derivabili dai delta
+      fra checkpoint senza inviare dati in rete (2026-07-12).
 - [ ] Almeno 10 run complete su fixture/device diversi.
 - [ ] Curva boss, economia, cattura ed EXP entro range dichiarati.
 - [x] Nessun boss richiede grind obbligatorio o strategia unica: doppio gate su

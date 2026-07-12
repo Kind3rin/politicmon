@@ -102,10 +102,12 @@ screenshot in `artifacts/screens/professional/`.
 
 ### HP7 — PWA e release 1.0 (P7)
 
-- [ ] Upgrade reale da RC precedente senza perdita save.
+- [x] Upgrade reale v13→v18 verificato su Chromium e WebKit: posizione Bruxelles,
+      party e flag finale conservati (2026-07-12).
 - [ ] Installazione, offline, resume, background/foreground e cache asset testati
       su Android e almeno un browser iOS/WebKit.
-- [ ] Pacchetto portable, backup release, changelog e rollback verificati.
+- [x] Portable Windows completo con server locale, backup ZIP, SHA-256, changelog
+      e procedura rollback verificati (2026-07-12).
 - [ ] Due build candidate consecutive senza nuovi blocker.
 - [ ] GO formale solo con tutti i gate HP0–HP7 verdi.
 

@@ -27,7 +27,7 @@
 | ASSET-W06 | MAXISCHERMO | world prop | 48x32 | Verified | Campo Largo | PixelLab `5e04399c-989b-4fb5-bf64-e812351b2737`; tile anchor `6` |
 | ASSET-W07 | VAN STAMPA | world prop | 48x32 | Verified | Genova Techno | PixelLab `d922fd70-36c7-4493-ab83-637fe5b60344`; tile anchor `7` |
 | ASSET-W08 | ROCCAFORTE | building prop | 96x48 | Verified | Futuro Anteriore | PixelLab `1f0ac5fb-0be3-4c60-b04d-6481b2c0d9c9`; tile anchor `8` |
-| ASSET-UI01 | CARTINA CAMPAGNA | world map | 240x120 | Verified | Menu mappa | PixelLab `0d6f5e97-88ec-486d-96e6-8bdb1557f5f2`; coste, rotte e landmark; marker runtime |
+| ASSET-UI01 | CARTINA CAMPAGNA | world map | 240x120 | Verified | Archivio, non runtime | PixelLab `0d6f5e97-88ec-486d-96e6-8bdb1557f5f2`; sostituita dalla cartina funzionale perché non copriva post-game e Atto 3 |
 | ASSET-UI02 | TESSERA CANDIDATO | credential UI | 256x384 | Verified | Menu pausa | PixelLab `36580623-5686-49de-929d-72ec791c9fd5`; ritratto e statistiche runtime |
 
 Campi `PixelLab version`, `seed`, `source output`, `reviewer` e `approved SHA-256` vanno compilati solo alla generazione, mai anticipati.

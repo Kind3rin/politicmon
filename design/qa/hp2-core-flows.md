@@ -5,7 +5,7 @@ Verifica del 2026-07-12 su canvas reale 240x180.
 | Flusso | Evidenza | Criterio chiuso |
 |---|---|---|
 | Tessera | `artifacts/screens/candidate-card.png` | voce nel menu principale, documento unico, foto, numero, qualifica e statistiche; A/B visibile |
-| Mappa | `artifacts/screens/world-map-capitale.png` | cartina PixelLab, cartellino TU sul landmark, località corrente e tappa sfogliata |
+| Mappa | `artifacts/screens/world-map-capitale.png`, `world-map-offshore.png`, `world-map-campo_largo.png` | tre tavole funzionali, apertura automatica sulla posizione, percorso/rotte/diramazioni e TU espliciti |
 | Scambio | `artifacts/screens/dex-trade-guide.png`, `trade-ui.png`, `trade-done.png` | provenienza spiegata nel Dex, requisito vicinanza, doppia conferma, esito esplicito |
 | Coalizione | `p5_coalition_card.png`, `p5_coalition_selected.png` | barra piena IN ESAME/SCELTA, stato fuori foto/nella coalizione, vantaggio/costo/rischi completi |
 | Governo | `government_active.png`, `government_ko.png` | ministero selezionato, bonus e costo, ministro KO e bonus sospeso espliciti |

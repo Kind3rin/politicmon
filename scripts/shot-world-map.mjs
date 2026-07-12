@@ -18,6 +18,15 @@ const png = await page.evaluate(async (mapId) => {
 
   const state = newGameState();
   state.badges = ["auditel", "spread", "comizio"];
+  Object.assign(state.flags, {
+    "boss-beaten": true,
+    "garante-beaten": true,
+    "ue-beaten": true,
+    "campo-photo-complete": true,
+    futureResolved: true,
+    diplomacyComplete: true,
+    tourComplete: true
+  });
   state.pos = { mapId, x: 12, y: 12, facing: "down" };
   const canvas = document.createElement("canvas");
   canvas.width = 240;

@@ -89,7 +89,9 @@ screenshot in `artifacts/screens/professional/`.
 - [ ] Estrarre da `WorldScene` spawn/interruzioni, rendering NPC e trasporti.
 - [ ] Estrarre da `BattleScene` orchestrazione messaggi e reward post-battaglia.
 - [ ] Nessun nuovo modulo oltre 40 KB; contratti coperti da test.
-- [ ] Code splitting: bundle iniziale gzip entro 250 KiB.
+- [x] Code splitting: `WorldScene` e tutto il grafo campagna sono caricati solo
+      dopo la scelta dello slot; bundle iniziale da 324,9 a 212,7 KiB gzip
+      (-34,5%), totale 325,4 KiB, gate automatico 250/350 KiB (2026-07-12).
 - [ ] Frame mobile p95 entro 20 ms e zero long task >100 ms nel percorso critico.
 
 ### HP7 — PWA e release 1.0 (P7)

@@ -11,7 +11,6 @@ import { hasNick, loadNick } from "../net/profile";
 import { Menu, MessageBox, wrapText, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
-import { WorldScene } from "../game/world/WorldScene";
 import { createMonster } from "../game/monster";
 import { FEATURE_OVERRIDE_KEY } from "../game/features";
 
@@ -50,6 +49,7 @@ export class TitleScene implements Scene {
   // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
   private difficultyMenu: Menu | null = null;
   private diffMsg = new MessageBox();
+  private starting = false;
 
   constructor(private stack: SceneStack, private input: Input) {
     this.menu = this.buildMenu();
@@ -77,6 +77,7 @@ export class TitleScene implements Scene {
 
   update(dt: number): void {
     this.time += dt;
+    if (this.starting) return;
     // Selettore DIFFICOLTÀ in primo piano: gestiscilo prima di tutto il resto.
     if (this.difficultyMenu) {
       if (this.diffMsg.isOpen) {
@@ -230,8 +231,19 @@ export class TitleScene implements Scene {
     );
   }
 
-  private start(state: GameState): void {
-    this.stack.replace(new WorldScene(this.stack, this.input, state));
+  private async start(state: GameState): Promise<void> {
+    if (this.starting) return;
+    this.starting = true;
+    try {
+      // Il mondo trascina battaglie, mappe, post-game e scene opzionali. Lo
+      // carichiamo soltanto quando il giocatore avvia davvero una campagna:
+      // titolo e gestione save restano un bootstrap piccolo e immediato.
+      const { WorldScene } = await import("../game/world/WorldScene");
+      this.stack.replace(new WorldScene(this.stack, this.input, state));
+    } catch (error) {
+      this.starting = false;
+      console.error("Impossibile caricare la campagna", error);
+    }
   }
 
   private handleMenuTap(): "select" | null | undefined {
@@ -268,6 +280,12 @@ export class TitleScene implements Scene {
     screen.rect(0, 43, VIEW_W, 12, "rgba(6,8,16,0.24)");
     this.drawLogo(screen);
     this.drawStarterShowcase(screen);
+    if (this.starting) {
+      screen.rect(24, 142, 192, 20, "rgba(6,8,16,0.92)");
+      screen.frame(24, 142, 192, 20, "#f4d34a");
+      screen.textCenter("APERTURA CAMPAGNA", VIEW_W / 2, 148, "#f4d34a");
+      return;
+    }
     if (this.difficultyMenu) {
       this.drawDifficulty(screen);
       return;

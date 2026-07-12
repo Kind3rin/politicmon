@@ -153,16 +153,23 @@ async function walkFiles(dir) {
 async function measureSizes() {
   const distFiles = await walkFiles(resolve(ROOT, "dist"));
   const codeFiles = distFiles.filter((path) => /\.(js|css|html)$/.test(path));
+  const indexPath = resolve(ROOT, "dist/index.html");
+  const indexHtml = await readFile(indexPath, "utf8");
+  const initialRefs = [...indexHtml.matchAll(/(?:src|href)=["']\.\/(assets\/[^"']+\.(?:js|css))["']/g)]
+    .map((match) => resolve(ROOT, "dist", match[1]));
+  const initialCodeFiles = [indexPath, ...initialRefs];
   const spriteFiles = await walkFiles(resolve(ROOT, "public/sprites"));
   async function total(files) { let sum = 0; for (const file of files) sum += (await stat(file)).size; return sum; }
   let gzipBytes = 0;
   for (const file of codeFiles) gzipBytes += gzipSync(await readFile(file)).length;
+  let initialGzipBytes = 0;
+  for (const file of initialCodeFiles) initialGzipBytes += gzipSync(await readFile(file)).length;
   let spriteDecodedBytesEstimate = 0;
   for (const file of spriteFiles.filter((path) => path.endsWith(".png"))) {
     const png = await readFile(file);
     if (png.length >= 24 && png.toString("hex", 1, 4) === "504e47") spriteDecodedBytesEstimate += png.readUInt32BE(16) * png.readUInt32BE(20) * 4;
   }
-  return { codeRawBytes: await total(codeFiles), codeGzipBytes: gzipBytes, spriteCompressedBytes: await total(spriteFiles), spriteDecodedBytesEstimate, spriteFiles: spriteFiles.length };
+  return { codeRawBytes: await total(codeFiles), codeGzipBytes: gzipBytes, initialCodeGzipBytes: initialGzipBytes, spriteCompressedBytes: await total(spriteFiles), spriteDecodedBytesEstimate, spriteFiles: spriteFiles.length };
 }
 
 function measureSave() {
@@ -179,7 +186,7 @@ function measureSave() {
 
 function markdown(report) {
   const mb = (bytes) => (bytes / 1024 / 1024).toFixed(2);
-  return `# Baseline prestazioni R0\n\nProfilo: Chromium mobile 390×844, DPR 2, CPU ×4; boot con latenza 40 ms e download 4 Mbps.\n\n| Metrica | Valore |\n|---|---:|\n| Boot asset critici | ${report.boot.assetsReadyMs.toFixed(1)} ms |\n| Primo frame pronto | ${report.boot.firstFrameMs.toFixed(1)} ms |\n| World intervallo p95 / max | ${report.scenes.world.interval.p95Ms} / ${report.scenes.world.interval.maxMs} ms |\n| Battle intervallo p95 / max | ${report.scenes.battle.interval.p95Ms} / ${report.scenes.battle.interval.maxMs} ms |\n| Dex intervallo p95 / max | ${report.scenes.dex.interval.p95Ms} / ${report.scenes.dex.interval.maxMs} ms |\n| World/Battle/Dex costo draw p95 | ${report.scenes.world.work.p95Ms} / ${report.scenes.battle.work.p95Ms} / ${report.scenes.dex.work.p95Ms} ms |\n| Working set sprite decoded | ${mb(report.scenes.spriteRegistry.decodedBytesEstimate)} MiB |\n| Tutti gli sprite decoded (worst-case) | ${mb(report.sizes.spriteDecodedBytesEstimate)} MiB |\n| Cache raster | ${report.scenes.rasterCache.rasterizedSprites} sprite / ${report.scenes.rasterCache.rasterizedPixels} px; ${report.scenes.rasterCache.cachedGlyphs} glifi |\n| Bundle code gzip | ${mb(report.sizes.codeGzipBytes)} MiB |\n| Sprite compressi | ${mb(report.sizes.spriteCompressedBytes)} MiB (${report.sizes.spriteFiles} file) |\n| Save parse / serialize | ${report.save.parseMeanMs} / ${report.save.serializeMeanMs} ms |\n\nBudget automatici locali: intervallo rAF p95 ≤33,4 ms, nessun frame >100 ms, parse/serialize ≤10 ms. La regressione bundle rispetto a questa baseline non può superare il 10%. Conferma finale FPS richiesta su device reale.\n`;
+  return `# Baseline prestazioni R0\n\nProfilo: Chromium mobile 390×844, DPR 2, CPU ×4; boot con latenza 40 ms e download 4 Mbps.\n\n| Metrica | Valore |\n|---|---:|\n| Boot asset critici | ${report.boot.assetsReadyMs.toFixed(1)} ms |\n| Primo frame pronto | ${report.boot.firstFrameMs.toFixed(1)} ms |\n| World intervallo p95 / max | ${report.scenes.world.interval.p95Ms} / ${report.scenes.world.interval.maxMs} ms |\n| Battle intervallo p95 / max | ${report.scenes.battle.interval.p95Ms} / ${report.scenes.battle.interval.maxMs} ms |\n| Dex intervallo p95 / max | ${report.scenes.dex.interval.p95Ms} / ${report.scenes.dex.interval.maxMs} ms |\n| World/Battle/Dex costo draw p95 | ${report.scenes.world.work.p95Ms} / ${report.scenes.battle.work.p95Ms} / ${report.scenes.dex.work.p95Ms} ms |\n| Working set sprite decoded | ${mb(report.scenes.spriteRegistry.decodedBytesEstimate)} MiB |\n| Tutti gli sprite decoded (worst-case) | ${mb(report.sizes.spriteDecodedBytesEstimate)} MiB |\n| Cache raster | ${report.scenes.rasterCache.rasterizedSprites} sprite / ${report.scenes.rasterCache.rasterizedPixels} px; ${report.scenes.rasterCache.cachedGlyphs} glifi |\n| Bundle iniziale gzip | ${mb(report.sizes.initialCodeGzipBytes)} MiB |\n| Bundle totale gzip | ${mb(report.sizes.codeGzipBytes)} MiB |\n| Sprite compressi | ${mb(report.sizes.spriteCompressedBytes)} MiB (${report.sizes.spriteFiles} file) |\n| Save parse / serialize | ${report.save.parseMeanMs} / ${report.save.serializeMeanMs} ms |\n\nBudget automatici locali: intervallo rAF p95 ≤33,4 ms, nessun frame >100 ms, parse/serialize ≤10 ms, bundle iniziale ≤250 KiB e totale ≤350 KiB. Conferma finale FPS richiesta su device reale.\n`;
 }
 
 function assertBudgets(report, baseline) {
@@ -189,7 +196,8 @@ function assertBudgets(report, baseline) {
     if (report.scenes[scene].interval.maxMs > 100 || report.scenes[scene].framesOver100ms > 0) failures.push(`${scene} ha frame >100ms`);
   }
   if (report.save.parseMeanMs > 10 || report.save.serializeMeanMs > 10) failures.push("save parse/serialize >10ms");
-  if (baseline && report.sizes.codeGzipBytes > baseline.sizes.codeGzipBytes * 1.1) failures.push("bundle code gzip cresciuto oltre 10%");
+  if (report.sizes.initialCodeGzipBytes > 250 * 1024) failures.push("bundle iniziale gzip oltre 250 KiB");
+  if (report.sizes.codeGzipBytes > 350 * 1024) failures.push("bundle totale gzip oltre 350 KiB");
   if (failures.length) throw new Error(`Performance budget fallito:\n- ${failures.join("\n- ")}`);
 }
 
@@ -197,7 +205,7 @@ const browser = await chromium.launch();
 let report;
 try {
   report = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     profile: { viewport: "390x844", deviceScaleFactor: 2, cpuThrottle: 4, bootNetwork: "40ms/4Mbps" },
     boot: await measureBoot(browser), scenes: await measureScenes(browser), sizes: await measureSizes(), save: measureSave()
   };
@@ -211,4 +219,4 @@ if (writeBaseline) {
   await writeFile(BASELINE_PATH, `${JSON.stringify(report, null, 2)}\n`);
   await writeFile(MARKDOWN_PATH, markdown(report));
 }
-console.log(`PERF OK — interval p95 world ${report.scenes.world.interval.p95Ms}ms, battle ${report.scenes.battle.interval.p95Ms}ms, dex ${report.scenes.dex.interval.p95Ms}ms, bundle gzip ${(report.sizes.codeGzipBytes / 1024).toFixed(1)}KiB.`);
+console.log(`PERF OK — interval p95 world ${report.scenes.world.interval.p95Ms}ms, battle ${report.scenes.battle.interval.p95Ms}ms, dex ${report.scenes.dex.interval.p95Ms}ms, bundle iniziale ${(report.sizes.initialCodeGzipBytes / 1024).toFixed(1)}KiB / totale ${(report.sizes.codeGzipBytes / 1024).toFixed(1)}KiB.`);

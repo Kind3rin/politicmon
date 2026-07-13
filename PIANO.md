@@ -109,8 +109,13 @@ screenshot in `artifacts/screens/professional/`.
 
 - [x] Upgrade reale v13→v18 verificato su Chromium e WebKit: posizione Bruxelles,
       party e flag finale conservati (2026-07-12).
-- [ ] Installazione, offline, resume, background/foreground e cache asset testati
-      su Android e almeno un browser iOS/WebKit.
+- [x] Matrice PWA automatica ripetibile: Chromium/Pixel 7 verifica installazione,
+      riavvio offline, resume, lifecycle e cache; WebKit/iPhone 13 verifica
+      installazione, precache, update, migrazione, lifecycle e conservazione della
+      cache corrente (`npm run smoke:pwa:matrix`, 2026-07-13).
+- [ ] Smoke fisico iPhone/iPad: installazione da Safari e riavvio realmente offline.
+      Playwright WebKit non supporta il reload offline e non viene contato come
+      evidenza fisica.
 - [x] Portable Windows completo con server locale, backup ZIP, SHA-256, changelog
       e procedura rollback verificati (2026-07-12).
 - [x] Due build candidate consecutive sul commit `1508c49`: entrambe con

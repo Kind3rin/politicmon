@@ -46,3 +46,10 @@ test("P7-T04 PvP usa simulatore condiviso e non duplica effetti PvE", () => {
 test("P7-T04 aggiornamento PWA non legge o cancella i salvataggi", () => {
   const sw = readFileSync("public/sw.js", "utf8"); assert.match(sw, /caches/); assert.doesNotMatch(sw, /localStorage\s*\.\s*(?:clear|removeItem)|indexedDB\.deleteDatabase/);
 });
+test("P7-T08 pulizia PWA conserva sempre la cache della build corrente", () => {
+  const sw = readFileSync("public/sw.js", "utf8");
+  const main = readFileSync("src/main.ts", "utf8");
+  assert.match(sw, /filter\(\(k\) => k !== CACHE\)/);
+  assert.match(main, /APP_CACHE_KEY = `politicmon-\$\{APP_BUILD_ID\}`/);
+  assert.match(main, /filter\(\(key\) => key !== APP_CACHE_KEY\)/);
+});

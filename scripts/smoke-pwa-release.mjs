@@ -1,4 +1,4 @@
-import { chromium, webkit } from "playwright";
+import { chromium, devices, webkit } from "playwright";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 const fixtureState = (name) => {
@@ -10,7 +10,11 @@ const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
 const browser = await browserType.launch();
-const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
+const deviceName = browserName === "webkit" ? "iPhone 13" : "Pixel 7";
+const context = await browser.newContext({
+  ...devices[deviceName],
+  serviceWorkers: "allow"
+});
 const page = await context.newPage();
 const stage = (name) => console.log(`[pwa-smoke] ${name}`);
 const within = (promise, name, ms = 15_000) => Promise.race([
@@ -35,6 +39,22 @@ const cacheEvidence = await page.evaluate(async () => {
 if (!cacheEvidence.worldChunk) throw new Error("chunk WorldScene non pre-cacheato");
 if (!cacheEvidence.pixelLabSprite) throw new Error("sprite PixelLab non pre-cacheati");
 if (!cacheEvidence.introExcluded) throw new Error("video intro pesante incluso nel precache");
+stage("pulizia cache obsoleta");
+const cacheCleanup = await page.evaluate(async () => {
+  const before = await caches.keys();
+  const current = before.find((key) => key.startsWith("politicmon-"));
+  if (!current) return { current: false, staleRemoved: false };
+  await caches.open("politicmon-stale-smoke");
+  navigator.serviceWorker.controller?.postMessage({ type: "CLEAR_RUNTIME_CACHES" });
+  const limit = Date.now() + 5_000;
+  while ((await caches.keys()).includes("politicmon-stale-smoke") && Date.now() < limit) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+  const after = await caches.keys();
+  return { current: after.includes(current), staleRemoved: !after.includes("politicmon-stale-smoke") };
+});
+if (!cacheCleanup.current) throw new Error("pulizia cache ha eliminato la build corrente");
+if (!cacheCleanup.staleRemoved) throw new Error("cache obsoleta non eliminata");
 const sentinel = JSON.stringify({ rc: "1.0.0-rc.1", value: "save-preserved" });
 await page.evaluate(({ value, save }) => {
   localStorage.setItem("politicmon-rc-smoke-save", value);
@@ -77,7 +97,13 @@ if (browserName !== "webkit") await context.setOffline(false);
 const background = await context.newPage();
 await background.goto("about:blank");
 await page.bringToFront();
+await page.evaluate(() => {
+  window.dispatchEvent(new Event("blur"));
+  window.dispatchEvent(new PageTransitionEvent("pagehide"));
+  window.dispatchEvent(new PageTransitionEvent("pageshow"));
+  window.dispatchEvent(new Event("focus"));
+});
 await page.waitForTimeout(250);
 if (await page.locator("#game-canvas").count() !== 1) throw new Error("canvas perso dopo background/foreground");
-const offlineLabel = browserName === "webkit" ? "cache offline pronta" : "riavvio offline";
-console.log(`PWA SMOKE OK (${browserName} mobile): installazione, runtime, sprite, update, ${offlineLabel} e resume.`); await browser.close();
+const offlineLabel = browserName === "webkit" ? "precache offline verificata (reload offline non supportato da Playwright WebKit)" : "riavvio offline";
+console.log(`PWA SMOKE OK (${browserName}/${deviceName}): installazione, runtime, sprite, cache, update, ${offlineLabel} e resume.`); await browser.close();

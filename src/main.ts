@@ -24,6 +24,7 @@ import { inject } from "@vercel/analytics";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
 const APP_BUILD_KEY = "politicmon-app-build";
+const APP_CACHE_KEY = `politicmon-${APP_BUILD_ID}`;
 performance.mark("politicmon:boot-start");
 
 // Inizializza Vercel Web Analytics
@@ -51,9 +52,10 @@ async function clearStaticCachesForNewBuild(): Promise<boolean> {
     }
     localStorage.setItem(APP_BUILD_KEY, APP_BUILD_ID);
     const keys = await caches.keys();
-    await Promise.all(keys.map((key) => caches.delete(key)));
+    const obsolete = keys.filter((key) => key !== APP_CACHE_KEY);
+    await Promise.all(obsolete.map((key) => caches.delete(key)));
     navigator.serviceWorker?.controller?.postMessage({ type: "CLEAR_RUNTIME_CACHES" });
-    return keys.length > 0 || previous !== null;
+    return obsolete.length > 0 || previous !== null;
   } catch {
     return false;
   }

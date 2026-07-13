@@ -57,6 +57,7 @@
     "shot:dex-trade": "node scripts/shot-dex-trade.mjs",
     "smoke:campaign": "node scripts/smoke-campaign.mjs",
     "smoke:pwa:release": "node scripts/smoke-pwa-release.mjs",
+    "smoke:pwa:matrix": "node scripts/smoke-pwa-matrix.mjs",
     "pixellab:coverage": "node scripts/check-pixellab-coverage.mjs",
     "pixellab:coverage:strict": "node scripts/check-pixellab-coverage.mjs --strict",
     "check:map-consistency": "node scripts/check-map-consistency.mjs",

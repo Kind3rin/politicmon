@@ -10,6 +10,7 @@ import { aliveCount, applySwitch, makeDuelSim, resolveTurn, usableMoves } from "
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RUNS = 400;
 const MAX_TURNS = 180;
+const MAX_JOURNEY_ATTEMPTS = 8;
 
 const SCENARIOS = [
   { id: "badge-auditel", trainerId: "emittenza", target: [0.55, 0.85], turns: [3, 16], heals: 1,
@@ -26,6 +27,19 @@ const SCENARIOS = [
     player: [["giorgiagon", 50], ["renzilla", 49], ["salvinator", 49], ["conteblob", 48], ["berlusconix", 48], ["draghimon", 47]] },
   { id: "bruxelles", trainerId: "commissione", target: [0.85, 1.00], turns: [14, 52], heals: 6,
     player: [["giorgiagon", 55], ["renzilla", 54], ["salvinator", 54], ["conteblob", 53], ["berlusconix", 53], ["draghimon", 52]] }
+];
+
+const JOURNEY_PROFILES = [
+  { id: "standard-a" },
+  { id: "standard-b" },
+  { id: "standard-c" },
+  { id: "starter-sinistra", rotate: 1 },
+  { id: "starter-centro", rotate: 2 },
+  { id: "ordine-inverso", reverse: true },
+  { id: "sinistra-parsimonioso", rotate: 1, healDelta: -1 },
+  { id: "sopra-livello", levelDelta: 1 },
+  { id: "parsimonioso", healDelta: -2 },
+  { id: "rifornito", healDelta: 1 }
 ];
 
 function rngFor(seed) {
@@ -145,6 +159,63 @@ function summarize(scenario, index) {
   };
 }
 
+function scenarioForProfile(scenario, profile) {
+  let player = scenario.player.map(([speciesId, level, moves, heldItem]) => [
+    speciesId,
+    Math.max(1, level + (profile.levelDelta ?? 0)),
+    moves,
+    heldItem
+  ]);
+  if (profile.rotate) {
+    const shift = profile.rotate % player.length;
+    player = [...player.slice(shift), ...player.slice(0, shift)];
+  }
+  if (profile.reverse) player.reverse();
+  return {
+    ...scenario,
+    player,
+    heals: Math.max(0, scenario.heals + (profile.healDelta ?? 0))
+  };
+}
+
+function runJourney(profile, profileIndex) {
+  const checkpoints = [];
+  let defeats = 0;
+  let totalTurns = 0;
+  let totalConsumables = 0;
+  for (let scenarioIndex = 0; scenarioIndex < SCENARIOS.length; scenarioIndex += 1) {
+    const scenario = scenarioForProfile(SCENARIOS[scenarioIndex], profile);
+    let result = null;
+    let attempts = 0;
+    while (attempts < MAX_JOURNEY_ATTEMPTS && !result?.won) {
+      attempts += 1;
+      const seed = 0x7a11ce + profileIndex * 100_000 + scenarioIndex * 1_000 + attempts;
+      result = runOnce(scenario, seed);
+      totalTurns += result.turns;
+      totalConsumables += result.consumables;
+      if (!result.won) defeats += 1;
+    }
+    checkpoints.push({
+      id: scenario.id,
+      won: Boolean(result?.won),
+      attempts,
+      turnsLastAttempt: result?.turns ?? 0,
+      playerKOsLastAttempt: result?.playerKOs ?? scenario.player.length
+    });
+    if (!result?.won) break;
+  }
+  return {
+    id: profile.id,
+    complete: checkpoints.length === SCENARIOS.length && checkpoints.every((checkpoint) => checkpoint.won),
+    checkpointsCompleted: checkpoints.filter((checkpoint) => checkpoint.won).length,
+    attempts: checkpoints.reduce((sum, checkpoint) => sum + checkpoint.attempts, 0),
+    defeats,
+    totalTurns,
+    totalConsumables,
+    checkpoints
+  };
+}
+
 function markdown(report) {
   const lines = [
     "# Baseline campagna automatizzata", "",
@@ -154,14 +225,21 @@ function markdown(report) {
   for (const row of report.scenarios) {
     lines.push(`| ${row.id} | ${row.trainer} | ${row.winRate}% | ${row.avgTurns} (${row.p90Turns}) | ${row.avgPlayerKOs} | ${row.avgConsumables} | ${row.status}${row.flags.length ? `: ${row.flags.join(", ")}` : ""} |`);
   }
+  lines.push("", "## Matrice di 10 campagne complete", "",
+    `Ogni profilo attraversa i ${SCENARIOS.length} checkpoint in ordine e può riprovare un boss fino a ${MAX_JOURNEY_ATTEMPTS} volte dopo il recupero della squadra.`, "",
+    "| Profilo | Checkpoint | Tentativi | Sconfitte | Turni | Cure | Esito |", "|---|---:|---:|---:|---:|---:|---|");
+  for (const journey of report.journeys) {
+    lines.push(`| ${journey.id} | ${journey.checkpointsCompleted}/${SCENARIOS.length} | ${journey.attempts} | ${journey.defeats} | ${journey.totalTurns} | ${journey.totalConsumables} | ${journey.complete ? "COMPLETA" : "INCOMPLETA"} |`);
+  }
   lines.push("", "## Limiti del modello", "", ...report.limitations.map((item) => `- ${item}`), "",
     "Le anomalie sono diagnostiche: lo script non modifica livelli, statistiche o mosse.", "");
   return lines.join("\n");
 }
 
 const scenarios = SCENARIOS.map(summarize);
+const journeys = JOURNEY_PROFILES.map(runJourney);
 const report = {
-  schemaVersion: 1, runsPerScenario: RUNS, maxTurns: MAX_TURNS, seedSchema: "0x51f15e + scenario*10000 + run",
+  schemaVersion: 2, runsPerScenario: RUNS, maxTurns: MAX_TURNS, seedSchema: "0x51f15e + scenario*10000 + run",
   model: "duelsim-v2-type-aware-greedy", profile: "prepared-party-with-consumables",
   limitations: [
     "Usa calcDamage e resolveTurn reali, ma non l'intera BattleScene.",
@@ -171,9 +249,11 @@ const report = {
     "Entrambi i lati scelgono per potenza, STAB, efficacia dei tipi e precisione; non pianificano switch o setup.",
     "I boss sono simulati isolati e a squadra integra: il modello non riproduce l'attrito di route e gauntlet.",
     "Le squadre checkpoint sono fixture plausibili, non telemetria di una partita umana.",
+    `Le campagne fixture consentono fino a ${MAX_JOURNEY_ATTEMPTS} tentativi per boss e ripartono a squadra integra dopo una sconfitta.`,
     "Questo profilo misura la sicurezza anti-grind di un party preparato; balance:bosses copre separatamente il primo tentativo senza consumabili."
   ],
-  scenarios
+  scenarios,
+  journeys
 };
 const jsonPath = resolve(ROOT, "artifacts/reports/campaign-playtest.json");
 const mdPath = resolve(ROOT, "docs/baseline-campaign-auto.md");
@@ -182,4 +262,7 @@ await writeFile(jsonPath, `${JSON.stringify(report, null, 2)}\n`);
 await writeFile(mdPath, markdown(report));
 console.log(`Campaign playtest: ${scenarios.filter((s) => s.status === "OK").length}/${scenarios.length} checkpoint nei range.`);
 for (const row of scenarios.filter((s) => s.status !== "OK")) console.log(`- ${row.id}: ${row.flags.join(", ")} (win ${row.winRate}%, turni ${row.avgTurns})`);
+console.log(`Journey matrix: ${journeys.filter((journey) => journey.complete).length}/${journeys.length} campagne fixture complete.`);
+for (const journey of journeys.filter((row) => !row.complete)) console.log(`- ${journey.id}: ${journey.checkpointsCompleted}/${SCENARIOS.length} checkpoint completati`);
 console.log(mdPath);
+if (journeys.some((journey) => !journey.complete)) process.exitCode = 1;

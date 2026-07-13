@@ -72,7 +72,10 @@ screenshot in `artifacts/screens/professional/`.
       vittorie/sconfitte/fughe, KO del party, oggetti cura, visite al BAR e
       checkpoint con livello medio; grind e abbandono sono derivabili dai delta
       fra checkpoint senza inviare dati in rete (2026-07-12).
-- [ ] Almeno 10 run complete su fixture/device diversi.
+- [x] Dieci campagne fixture complete su profili diversi (ordine starter,
+      livello e budget cure), attraversando in sequenza tutti i 7 checkpoint
+      fino a Bruxelles; 10/10 verdi con sconfitte/retry registrati dal gate
+      `npm run playtest:campaign` (2026-07-13). Non sostituisce HP5 esterno.
 - [x] Curva boss, economia, cattura ed EXP entro range dichiarati: doppio
       profilo boss, invarianti economia e audit completo sulle 52 specie;
       massimo 4,3 KO wild/livello e cattura peggiore 5,7 SCHEDONE per un

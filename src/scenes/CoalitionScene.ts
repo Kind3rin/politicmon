@@ -2,56 +2,59 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import { audio } from "../engine/audio";
-import { ALLY_CATALOG, addAlly, removeAlly, type AllyId } from "../game/coalition";
+import { ALLY_CATALOG, ALLY_NAMES, addAlly, coalitionBonuses, removeAlly, type AllyId } from "../game/coalition";
+import { redeemCoalitionRepair, signed } from "../game/campaignDecisions";
 import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader } from "../ui/widgets";
+import { coalitionChannelLabel, drawScreenHeader, wrapText } from "../ui/widgets";
+import { drawCampaignBackdrop } from "../ui/campaignArt";
 
 const R1_CANDIDATES: readonly AllyId[] = ["campo_secretary", "quantum_centrist", "civic_mayor"];
-const LABELS: Readonly<Record<AllyId, { name: string; lineRed: string; photoRisk: string }>> = {
-  campo_secretary: { name: "SEGRETARIA DEL CAMPO", lineRed: "AUTONOMIA", photoRisk: "NESSUNO" },
-  quantum_centrist: { name: "CENTRISTA QUANTICO", lineRed: "POLARIZZAZIONE", photoRisk: "PANORAMICA" },
-  steel_governor: { name: "GOVERNATRICE D'ACCIAIO", lineRed: "CAMPO LARGO", photoRisk: "PANORAMICA" },
-  civic_mayor: { name: "SINDACA CIVICA", lineRed: "PARTITI NAZIONALI", photoRisk: "NESSUNO" },
-  generorso: { name: "GENERORSO", lineRed: "RIASSORBIMENTO", photoRisk: "PANORAMICA" }
-};
-
-const EFFECT_TEXT: Readonly<Record<AllyId, { bonus: string; cost: string }>> = {
-  campo_secretary: { bonus: "CONSENSO LOCALE +10%", cost: "FONDI OTTENUTI -6%" },
-  quantum_centrist: { bonus: "PREZZI NEGOZI -10%", cost: "SONDAGGI -6%" },
-  steel_governor: { bonus: "FONDI OTTENUTI +10%", cost: "CONSENSO LOCALE -6%" },
-  civic_mayor: { bonus: "SONDAGGI +10%", cost: "PREZZI NEGOZI +6%" },
-  generorso: { bonus: "FONDI OTTENUTI +10%", cost: "PREZZI NEGOZI +6%" }
+const LABELS: Readonly<Record<AllyId, { lineRed: string }>> = {
+  campo_secretary: { lineRed: "AUTONOMIA" },
+  quantum_centrist: { lineRed: "POLARIZZAZIONE" },
+  steel_governor: { lineRed: "CAMPO LARGO" },
+  civic_mayor: { lineRed: "PARTITI NAZIONALI" },
+  generorso: { lineRed: "RIASSORBIMENTO" }
 };
 
 export class CoalitionScene implements Scene {
-  readonly transparent = true;
+  readonly transparent = false;
   private index: number;
+  private candidates: readonly AllyId[];
+  private totals = false;
   private notice = "A: SCEGLI  B: ESCI";
   private pendingRemove: AllyId | null = null;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState, focus: AllyId) {
-    this.index = Math.max(0, R1_CANDIDATES.indexOf(focus));
+    this.candidates = [...new Set([...R1_CANDIDATES, focus, ...state.coalition.members.map(m => m.allyId)])];
+    this.index = Math.max(0, this.candidates.indexOf(focus));
   }
 
   update(): void {
+    if (this.input.wasPressed("start")) { this.totals = !this.totals; audio.cursor(); return; }
+    if (this.totals) { if (this.input.wasPressed("a") || this.input.wasPressed("b")) this.totals = false; return; }
     if (this.input.wasPressed("left") || this.input.wasPressed("up")) {
-      this.index = (this.index + R1_CANDIDATES.length - 1) % R1_CANDIDATES.length;
+      this.index = (this.index + this.candidates.length - 1) % this.candidates.length;
       this.pendingRemove = null;
       audio.cursor();
     }
     if (this.input.wasPressed("right") || this.input.wasPressed("down")) {
-      this.index = (this.index + 1) % R1_CANDIDATES.length;
+      this.index = (this.index + 1) % this.candidates.length;
       this.pendingRemove = null;
       audio.cursor();
     }
     if (this.input.wasPressed("b")) {
       audio.cancel();
+      if (this.pendingRemove) { this.pendingRemove = null; this.notice = "RIMOZIONE ANNULLATA"; return; }
       this.stack.pop();
       return;
     }
     if (!this.input.wasPressed("a")) return;
-    const allyId = R1_CANDIDATES[this.index];
-    if (!this.state.flags[`coalition-candidate-seen:${allyId}`]) {
+    const allyId = this.candidates[this.index];
+    if (redeemCoalitionRepair(this.state, allyId)) {
+      saveGame(this.state); audio.confirm(); this.notice = "BUONO USATO: PATTO RIPARATO"; return;
+    }
+    if (!this.state.flags[`coalition-candidate-seen:${allyId}`] && !this.state.coalition.members.some(m => m.allyId === allyId)) {
       audio.cancel();
       this.notice = "PARLACI PRIMA NEL CAMPO";
       return;
@@ -92,45 +95,53 @@ export class CoalitionScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    // Overlay opaco: l'HUD missione del mondo non deve competere con testi e
-    // conferme della scelta coalizione.
-    screen.rect(0, 17, 240, 163, "#10141f");
-    drawScreenHeader(screen, "COALIZIONE R1", `SLOT ${this.state.coalition.members.length}/2`);
-    const allyId = R1_CANDIDATES[this.index];
-    const definition = ALLY_CATALOG[allyId];
-    const member = this.state.coalition.members.find((candidate) => candidate.allyId === allyId);
-    const seen = Boolean(this.state.flags[`coalition-candidate-seen:${allyId}`]);
-    const status = member ? "NELLA COALIZIONE" : "FUORI DALLA FOTO";
-    screen.panel(8, 27, 224, 108, "card");
-    if (member) {
-      screen.frame(10, 29, 220, 104, "#e6b944");
-      screen.rect(12, 31, 4, 100, "#e6b944");
-    }
-    // La barra piena identifica sempre la scheda attualmente sfogliata. Il
-    // vecchio filetto verticale era troppo simile a una decorazione del frame.
-    screen.rect(14, 32, 212, 18, seen ? "#f4d34a" : "#d7dbe5");
-    screen.textFit(seen ? LABELS[allyId].name : "CANDIDATO NON INCONTRATO", 18, 37, 145, "#10141f");
-    screen.textRight(member ? "SCELTA" : "IN ESAME", 220, 37, member ? "#26745d" : "#70470e");
-    if (!seen) {
-      screen.text("PARLACI NEL CAMPO", 18, 62, "#5f6d8a");
-      screen.text("PER SCOPRIRE EFFETTI E RISCHI.", 18, 78, "#5f6d8a");
-      screen.text("◄ ► CAMBIA", 12, 141, "#fffaf0");
-      screen.text(this.notice, 12, 156, "#ffe38a");
+    drawCampaignBackdrop(screen, "coalition");
+    drawScreenHeader(screen, "TAVOLO DELLE ALLEANZE", `${this.state.coalition.members.length} ALLEATI`);
+    if (this.totals) {
+      const values = coalitionBonuses(this.state.coalition);
+      screen.panel(8, 25, 224, 132, "card");
+      screen.text("EFFETTI NETTI DELLA COALIZIONE", 18, 36, "#17243d");
+      const channels = ["funds", "sondaggiGain", "territoryGain", "shopPrice"] as const;
+      channels.forEach((channel, i) => {
+        const net = values.bonus[channel] + values.malus[channel];
+        screen.text(coalitionChannelLabel(channel), 18, 56 + i * 16, "#17243d");
+        screen.textRight(`${signed(channel === "shopPrice" ? -net : net)}%`, 220, 56 + i * 16, "#26745d");
+      });
+      screen.text("INCLUSO IL BONUS DELL'ASSETTO.", 18, 124, "#17243d");
+      screen.text("COE: EXP +8% A 70, -8% SOTTO 30.", 18, 139, "#17243d");
+      screen.text("A/B TORNA · START CHIUDI", 8, 167, "#ffe38a");
       return;
     }
-    screen.textFit(`${definition.tag.toUpperCase()} - ${status}`, 18, 55, 204, member ? "#26745d" : "#5f6d8a");
-    screen.text("VANTAGGIO", 18, 72, "#26745d");
-    screen.textFit(EFFECT_TEXT[allyId].bonus, 96, 72, 126, "#26745d");
-    screen.text("COSTO", 18, 87, "#a0443e");
-    screen.textFit(EFFECT_TEXT[allyId].cost, 96, 87, 126, "#a0443e");
-    screen.text("LINEA ROSSA", 18, 102, "#70470e");
-    screen.textFit(LABELS[allyId].lineRed, 96, 102, 126, "#70470e");
-    screen.text("RISCHIO FOTO", 18, 117, "#70470e");
-    screen.textFit(LABELS[allyId].photoRisk, 96, 117, 126, LABELS[allyId].photoRisk === "NESSUNO" ? "#26745d" : "#a0443e");
-    screen.text("◄ ► CAMBIA", 12, 141, "#fffaf0");
-    const footer = this.pendingRemove === allyId
-      ? this.notice
-      : member ? "A: RIMUOVI  B: ESCI" : this.notice;
-    screen.text(footer, 12, 156, this.pendingRemove === allyId ? "#ffb0a8" : "#ffe38a");
+    const allyId = this.candidates[this.index], definition = ALLY_CATALOG[allyId];
+    const member = this.state.coalition.members.find(m => m.allyId === allyId);
+    const seen = Boolean(member || this.state.flags[`coalition-candidate-seen:${allyId}`]);
+    screen.panel(8, 25, 224, 20, "card");
+    screen.text(seen ? ALLY_NAMES[allyId] : "CANDIDATO NON INCONTRATO", 16, 32, "#17243d");
+    screen.panel(86, 51, 146, 106, "card");
+    const status = !seen ? "PARLACI NEL CAMPO" : !member ? "CANDIDATO LIBERO" : member.status === "strained"
+      ? "PATTO TESO" : member.status === "reconciled" ? "PATTO RIPARATO" : "PATTO ATTIVO";
+    screen.text(status, 94, 60, member?.status === "strained" ? "#a0443e" : "#26745d");
+    if (seen) {
+      const power = member?.status === "strained" ? 5 : member?.status === "reconciled" ? 7.5 : 10;
+      const bonus = `${coalitionChannelLabel(definition.bonus)} ${definition.bonus === "shopPrice" ? "-" : "+"}${power}%`;
+      const cost = `${coalitionChannelLabel(definition.malus)} ${definition.malus === "shopPrice" ? "+" : "-"}6%`;
+      screen.text("CONTRIBUTO PERSONALE", 94, 76, "#17243d");
+      screen.text(bonus, 94, 89, "#26745d");
+      screen.text(cost, 94, 102, "#a0443e");
+      screen.text("NON ACCETTA:", 94, 118, "#70470e");
+      wrapText(LABELS[allyId].lineRed, 21).forEach((line, i) => screen.text(line, 94, 131 + i * 10, "#70470e"));
+    }
+    screen.rect(8, 141, 73, 16, "#17243d");
+    screen.text(`${this.index + 1}/${this.candidates.length} ◄ ►`, 14, 145, "#fffaf0");
+    const pending = this.pendingRemove === allyId;
+    const m = member, key = m ? `${allyId}:v${m.violationCount}` : "";
+    const repair = m?.status === "strained" && !m.reconciliationSpent && this.state.flags[`reconcile-token:${key}`] && !this.state.flags[`reconcile-used:${key}`];
+    if (this.notice !== "A: SCEGLI  B: ESCI" && !pending) {
+      screen.panel(8, 137, 224, 20, "card");
+      screen.text(this.notice, 16, 144, "#17243d");
+    }
+    const footer = pending ? "A RIMUOVI · B ANNULLA" : repair ? "A USA BUONO · B ESCI"
+      : member ? "A RIMUOVI · B ESCI" : "A SCEGLI · B ESCI";
+    screen.text(`${footer} · START EFFETTI`, 8, 167, pending ? "#ffb0a8" : "#ffe38a");
   }
 }

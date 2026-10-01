@@ -19,7 +19,7 @@ test("P5-T03: FEDELTÀ applica fondi, PASS e linea 12", () => {
   assert.deepEqual(result.patch.strained.sort(), ["campo_secretary", "civic_mayor"]);
 });
 
-test("P5-T03: AUTONOMIA con TESO paga e crea token esatto senza bonus", () => {
+test("P5-T03: AUTONOMIA con TESO paga, ripara e registra il buono utilizzato", () => {
   const base = coalition("campo_secretary", "quantum_centrist");
   const strained = applyLineRedEvent(base, 10).state;
   const result = resolveDiplomacyChoice({ choice: "autonomy", coalition: strained, money: 700, sondaggi: 50, flags: {} });
@@ -28,6 +28,8 @@ test("P5-T03: AUTONOMIA con TESO paga e crea token esatto senza bonus", () => {
   assert.equal(result.patch.money, 200);
   assert.equal(result.patch.repairTarget, "campo_secretary");
   assert.equal(result.patch.flags["reconcile-token:campo_secretary:v1"], true);
+  assert.equal(result.patch.flags["reconcile-used:campo_secretary:v1"], true);
+  assert.equal(result.patch.coalition.members[0].status, "reconciled");
 });
 
 test("P5-T03: AUTONOMIA senza TESO dà solo fondi base modificati", () => {

@@ -61,7 +61,7 @@ export function resolvePhotoEvent(input: PhotoEventInput): PhotoEventResult {
         [`atto3-photo-choice:${input.choice}`]: true,
         "campo-photo-choice-complete": true
       },
-      localDelta: risky ? 12 : 4,
+      localDelta: action.state.districts.find(d => d.id === "centro")!.localConsensus - election.districts.find(d => d.id === "centro")!.localConsensus,
       strained: lineRed.strained,
       broken: lineRed.broken
     }

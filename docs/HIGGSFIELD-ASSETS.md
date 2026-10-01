@@ -1,5 +1,11 @@
 # Politicmon: risorse Higgsfield
 
+Decimo blocco: cinque ambienti per foto, convenzione, diplomazia, coalizione e
+scrutinio. Cinque job Nano Banana Pro, **10 crediti**, saldo **667,97 → 657,97**,
+cumulativo **228**. Prompt, job e checksum in `higgsfield-campaign-ui.json`;
+staging con `prepare-campaign-ui-assets.py` e revisione nativa prima dell'installazione.
+[PATTI-CONSEGUENZE.md](PATTI-CONSEGUENZE.md) descrive scelte, morale e verifiche.
+
 Nono blocco: otto emblemi, fondale dei percorsi, macchina del casinò e ambiente
 sociale. Sei job Nano Banana Pro compresa la correzione del prato, **12 crediti**;
 saldo **679,97 → 667,97**, cumulativo **218**. Undici PNG finali con checksum

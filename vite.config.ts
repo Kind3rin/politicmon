@@ -50,6 +50,10 @@ export default defineConfig({
     __APP_BUILD_ID__: JSON.stringify(BUILD_ID)
   },
   plugins: [stampServiceWorker()],
+  build: {
+    minify: "terser",
+    terserOptions: { compress: { passes: 2 } }
+  },
   server: {
     port: 5173,
     strictPort: false

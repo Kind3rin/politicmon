@@ -26,8 +26,9 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 47 missioni | `shot:hq`: 99 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
+| Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 142 viste, unit test e prove di rete |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
-| PWA | Precache e primo utilizzo offline dei 486 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| PWA | Precache e primo utilizzo offline dei 491 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
 verificato: 667,97; spesa cumulativa 218 crediti. Non sono stati attivati acquisti
@@ -79,6 +80,11 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[PATTI-CONSEGUENZE.md](PATTI-CONSEGUENZE.md): cinque ambienti, 261 test, 142 viste,
+anteprime annullabili, coesione e riparazione effettiva; bonus dichiarati collegati
+a prezzi e ricompense. Spesa: 10 crediti, saldo 657,97. PWA: 491 risorse;
+verificatore del deploy: 382 checksum. Bundle 206,6/340,5 KiB, budget invariati.
 
 [RETE-EMBLEMI.md](RETE-EMBLEMI.md): undici PNG, 83 viste sociali, storico completo,
 otto emblemi, duello e scambio reali; rimossi quattro PNG e il vecchio renderer

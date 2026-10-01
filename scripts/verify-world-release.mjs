@@ -4,6 +4,7 @@ import { readFileSync } from 'node:fs';
 import { worldAssetPaths } from './world-asset-paths.mjs';
 import { hqAssetPaths } from './hq-asset-paths.mjs';
 import { coreUiPaths } from './core-ui-paths.mjs';
+import { campaignUiPaths } from './campaign-ui-paths.mjs';
 import { nativeFallbackPaths } from './native-fallback-paths.mjs';
 
 const base = new URL(process.env.PREVIEW_URL ?? 'https://politicmon.vercel.app/');
@@ -14,7 +15,9 @@ const fallbackPaths = nativeFallbackPaths();
 assert.equal(fallbackPaths.length, 62);
 const corePaths = coreUiPaths();
 assert.equal(corePaths.length, 11);
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths];
+const campaignPaths = campaignUiPaths();
+assert.equal(campaignPaths.length, 5);
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -37,4 +40,6 @@ assert.ok(source.includes('QUARTA INAUGURAZIONE'), 'civic dialogue missing from 
 assert.ok(source.includes('cantiere:build'), 'bridge decision missing from deployed bundles');
 assert.ok(source.includes('DOSSIER MISSIONE'), 'mission dossier missing from deployed bundles');
 assert.ok(source.includes('STORICO DEL CONFRONTO'), 'complete chat history missing from deployed bundles');
+assert.ok(source.includes('EFFETTI REALI'), 'campaign decision previews missing from deployed bundles');
+assert.ok(source.includes('RIPARATO ORA'), 'diplomacy repair missing from deployed bundles');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

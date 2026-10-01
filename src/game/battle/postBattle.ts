@@ -1,6 +1,7 @@
 import { BADGE_TEASER, type TrainerDef } from "../../data/trainers";
 import { hasMinistro, moneyMalus } from "../governo";
 import type { GameState } from "../state";
+import { coalitionBonuses } from "../coalition";
 
 const LOOT_TABLE: ReadonlyArray<{ id: string; qty: number; weight: number }> = [
   { id: "scheda", qty: 2, weight: 30 },
@@ -40,7 +41,9 @@ export function buildTrainerVictoryPlan(
 ): TrainerVictoryPlan {
   const economyBonus = hasMinistro(state, "economia");
   const spotBonus = state.boostMoneyBattles > 0 && !isRematch;
-  const payout = Math.round(trainer.money * (economyBonus ? 1.25 : 1) * (spotBonus ? 1.5 : 1) * moneyMalus(state));
+  const coalition = coalitionBonuses(state.coalition);
+  const payout = Math.round(trainer.money * (economyBonus ? 1.25 : 1) * (spotBonus ? 1.5 : 1) * moneyMalus(state)
+    * (1 + (coalition.bonus.funds + coalition.malus.funds) / 100));
   const introLines = [`Hai sconfitto ${trainer.name}!`, ...trainer.defeat, `Ricevi ${payout}€ di rimborso elettorale!`];
   if (economyBonus) introLines.push("Il MIN. ECONOMIA ha trovato la copertura: +25%!");
   if (spotBonus) introLines.push("Lo SPOT IN PRIME TIME riempie le casse: +50% fondi!");
@@ -59,7 +62,7 @@ export function buildTrainerVictoryPlan(
   const drop = random() < 0.3 ? rollVictoryLoot(random) : null;
   return {
     payout,
-    sondaggiGain: state.boostSondBattles > 0 ? 12 : 6,
+    sondaggiGain: Math.round((state.boostSondBattles > 0 ? 12 : 6) * (1 + (coalition.bonus.sondaggiGain + coalition.malus.sondaggiGain) / 100)),
     economyBonus,
     spotBonus,
     introLines,

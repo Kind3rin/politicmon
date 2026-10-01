@@ -117,7 +117,7 @@ export function createAtto3Controller(): Atto3Controller {
       }
       if (npcId === "future-reception") {
         if (!context.state.flags["future-badge-received"]) context.dispatch({ kind: "setFlag", flag: "future-badge-received" });
-        context.dispatch({ kind: "say", lines: ["RECEPTION: ecco il BADGE PROVVISORIO DEFINITIVO.", "RUOTA ENTRAMBI I MANIFESTI. POI DICHIARA DA CHE PARTE STAI."] });
+        context.dispatch({ kind: "say", lines: ["RECEPTION: ecco il BADGE PROVVISORIO DEFINITIVO.", "IL TAVOLO SUL PROGRAMMA ASPETTA IL TAVOLO SUL NOME.", "INTANTO ABBIAMO APPROVATO IL CARATTERE TIPOGRAFICO.", "RUOTA ENTRAMBI I MANIFESTI. POI DICHIARA DA CHE PARTE STAI."] });
         return true;
       }
       if (npcId === "future-lever-a" || npcId === "future-lever-b") {
@@ -146,7 +146,7 @@ export function createAtto3Controller(): Atto3Controller {
         } else if (context.state.flags["campo-debate-resolved"]) {
           context.dispatch({ kind: "startTrainer", trainerId: "campo-photographer", rematch: false });
         } else if (context.state.flags["campo-photo-choice-complete"]) {
-          context.dispatch({ kind: "say", lines: ["LA FOTO È QUASI PRONTA.", "AFFRONTA IL MODERATORE, POI TORNA QUI PER LO SCATTO UFFICIALE."] });
+          context.dispatch({ kind: "say", lines: ["ABBIAMO NEGOZIATO IL MARGINE SINISTRO PER TRE ORE.", "IL PROGRAMMA NON ENTRAVA. LO ABBIAMO RITAGLIATO.", "AFFRONTA IL MODERATORE, POI TORNA QUI PER LO SCATTO UFFICIALE."] });
         } else {
           context.dispatch({ kind: "openPhotoChoice" });
         }

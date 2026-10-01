@@ -1,7 +1,9 @@
 # PIANO — Politicmon
 
 Piano attivo, 2 ottobre 2026: [redesign completo](docs/REDESIGN-PLAN.md).
-Ultimo round: [rete ed emblemi](docs/RETE-EMBLEMI.md), chat completa, scambi
+Ultimo round: [patti e conseguenze](docs/PATTI-CONSEGUENZE.md), cinque ambienti,
+dossier annullabili, riparazione effettiva e bonus di coalizione applicati.
+Precede [rete ed emblemi](docs/RETE-EMBLEMI.md), chat completa, scambi
 leggibili e duello/scambio verificati su rete reale. Precede la [coerenza grafica](docs/COERENZA-GRAFICA.md), 62 fallback nuovi,
 pannelli uniformi e guida ai tipi. Il [quartier generale](docs/QUARTIER-GENERALE.md) offre dossier completi,
 circolo e archivio rivisti; segue il [mondo e cantieri](docs/MONDO-CANTIERI.md)

@@ -1,6 +1,7 @@
 import type { Item } from "../data/items";
 import { statsOf, type Monster } from "./monster";
 import type { GameState } from "./state";
+import { coalitionBonuses } from "./coalition";
 import { trustPriceAdjustment } from "./morale";
 
 // ---------------------------------------------------------------- SONDAGGI
@@ -195,7 +196,9 @@ export function curaPassiva(state: GameState): boolean {
 // il sovrapprezzo "rischio insolvenza". Il Min. Esteri sconta sempre.
 
 export function shopAdjustments(state: GameState): { label: string; percent: number }[] {
+  const coalition = coalitionBonuses(state.coalition);
   return [
+    { label: "COALIZIONE", percent: -(coalition.bonus.shopPrice + coalition.malus.shopPrice) },
     { label: "FIDUCIA", percent: Math.round(trustPriceAdjustment(state.morale) * 100) },
     { label: "SONDAGGI", percent: state.sondaggi >= 70 ? -10 : state.sondaggi < 30 ? 15 : 0 },
     { label: "MIN. ESTERI", percent: hasMinistro(state, "esteri") ? -20 : 0 },

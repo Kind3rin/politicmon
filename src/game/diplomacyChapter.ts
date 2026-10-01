@@ -1,4 +1,4 @@
-import { applyLineRedEvent, coalitionBonuses, type AllyId, type CoalitionState } from "./coalition";
+import { applyLineRedEvent, coalitionBonuses, reconcileAlly, type AllyId, type CoalitionState } from "./coalition";
 
 export type DiplomacyChoice = "loyalty" | "autonomy" | "home";
 export type DiplomacyChoiceError = "already_resolved" | "insufficient_funds";
@@ -50,12 +50,14 @@ export function resolveDiplomacyChoice(input: DiplomacyChoiceInput): DiplomacyCh
     extraFlags["pass-vertice"] = true;
     outcome = "a3.diplomacy.loyalty";
   } else if (input.choice === "autonomy") {
-    const target = coalition.members.find((member) => member.status === "strained");
+    const target = coalition.members.find((member) => member.status === "strained" && !member.reconciliationSpent && !coalition.locked);
     if (target) {
       if (input.money < 500) return { ok: false, error: "insufficient_funds" };
       moneyDelta = -500;
       repairTarget = target.allyId;
       extraFlags[`reconcile-token:${target.allyId}:v${target.violationCount}`] = true;
+      extraFlags[`reconcile-used:${target.allyId}:v${target.violationCount}`] = true;
+      coalition = reconcileAlly(coalition, target.allyId)!;
     } else {
       moneyDelta = applyFundGain(500, coalition);
     }

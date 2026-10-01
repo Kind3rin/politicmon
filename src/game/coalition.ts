@@ -1,5 +1,9 @@
 export type CoalitionId = "campo_largo" | "centro_mobile" | "destra_competitiva" | "lista_civica" | "none";
 export type AllyId = "campo_secretary" | "quantum_centrist" | "steel_governor" | "civic_mayor" | "generorso";
+export const ALLY_NAMES: Readonly<Record<AllyId, string>> = {
+  campo_secretary: "SEGRETARIA DEL CAMPO", quantum_centrist: "CENTRISTA QUANTICO",
+  steel_governor: "GOVERNATRICE D'ACCIAIO", civic_mayor: "SINDACA CIVICA", generorso: "GENERORSO"
+};
 export type AllyTag = "campo" | "centro" | "destra" | "civica";
 export type CoalitionChannel = "funds" | "sondaggiGain" | "territoryGain" | "shopPrice";
 export type MembershipStatus = "allied" | "strained" | "reconciled";
@@ -137,6 +141,16 @@ export function applyLineRedEvent(state: CoalitionState, eventIndex: number): Li
     members.push({ ...member, status: "strained", violationCount });
   }
   return { state: { ...state, members }, strained, broken };
+}
+
+// Una riparazione recupera parte del bonus, senza cancellare il precedente.
+// Una seconda violazione dopo il patto riparato resta una rottura definitiva.
+export function reconcileAlly(state: CoalitionState, allyId: AllyId): CoalitionState | null {
+  if (state.locked) return null;
+  const member = state.members.find(m => m.allyId === allyId);
+  if (!member || member.status !== "strained" || member.reconciliationSpent) return null;
+  return { ...state, members: state.members.map(m => m === member
+    ? { ...m, status: "reconciled", reconciliationSpent: true } : m) };
 }
 
 const ASSET_MODIFIERS: Readonly<Record<Exclude<CoalitionId, "none">, { bonus: CoalitionChannel; malus: CoalitionChannel }>> = {

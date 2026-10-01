@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 667.97,
+  "estimatedCredits": 10,
+  "assets": [
+    {
+      "index": 0,
+      "id": "photo",
+      "kind": "background",
+      "path": "public/sprites/ui/campaign/photo.png",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON Italian political satire game environmental illustration. Sophisticated crisp pixel art, large readable silhouettes at 240x163 pixels, navy blue, warm cream, mint green, burgundy and restrained gold palette; cinematic lighting and playful bureaucratic objects. Full bleed scenery edge to edge, no HUD, no interface panels, no borders, no typography, no letters, no numbers, no logos. Main interesting objects in LEFT THIRD of image, right two thirds atmospheric negative space. Not photorealistic, no real people. An absurd coalition press-photo studio: a tripod camera and three incompatible empty ceremonial chairs squeezed together, one chair visibly outside the spotlight, oversized burgundy ribbon connecting chairs and tangled on floor. Cream backdrop and warm studio lights.",
+      "aspect_ratio": "16:9",
+      "jobId": "3955155e-57e4-4fcf-931f-a8362ab93668",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_3955155e-57e4-4fcf-931f-a8362ab93668.png",
+      "sourceSha256": "3e0a51844fbacb771b908ae35d66f7400c42dda16b180ca0b5680aab04a2dde3"
+    },
+    {
+      "index": 1,
+      "id": "future",
+      "kind": "background",
+      "path": "public/sprites/ui/campaign/future.png",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON Italian political satire game environmental illustration. Sophisticated crisp pixel art, large readable silhouettes at 240x163 pixels, navy blue, warm cream, mint green, burgundy and restrained gold palette; cinematic lighting and playful bureaucratic objects. Full bleed scenery edge to edge, no HUD, no interface panels, no borders, no typography, no letters, no numbers, no logos. Main interesting objects in LEFT THIRD of image, right two thirds atmospheric negative space. Not photorealistic, no real people. A political convention backstage: two huge blank manifestos pointing in opposite directions but sharing the same stand; a bear-shaped ceremonial uniform mannequin, gold medals, a tiny revolving door. Navy curtain, warm golden stage light.",
+      "aspect_ratio": "16:9",
+      "jobId": "75989f21-15ff-4a6b-a000-4a74e10d3991",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_75989f21-15ff-4a6b-a000-4a74e10d3991.png",
+      "sourceSha256": "b40a43723e8dedf2481a162be2a8c9db933cac400be7f40d367fc8d7666e5a5d"
+    },
+    {
+      "index": 2,
+      "id": "diplomacy",
+      "kind": "background",
+      "path": "public/sprites/ui/campaign/diplomacy.png",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON Italian political satire game environmental illustration. Sophisticated crisp pixel art, large readable silhouettes at 240x163 pixels, navy blue, warm cream, mint green, burgundy and restrained gold palette; cinematic lighting and playful bureaucratic objects. Full bleed scenery edge to edge, no HUD, no interface panels, no borders, no typography, no letters, no numbers, no logos. Main interesting objects in LEFT THIRD of image, right two thirds atmospheric negative space. Not photorealistic, no real people. A Mediterranean summit terrace with three empty gilt chairs, an absurdly long gold handshake trophy, a briefcase and a tiny ferry visible on sea horizon, divided blue and burgundy carpet. Calm dusk, sophisticated satirical postcard.",
+      "aspect_ratio": "16:9",
+      "jobId": "7a8a06b9-74ab-4e9f-886d-f9a6471e2078",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_7a8a06b9-74ab-4e9f-886d-f9a6471e2078.png",
+      "sourceSha256": "69451c7cf67d4aeac84c8a31b7bfeea2050d8dbcd994f91d68b11e13ece57645"
+    },
+    {
+      "index": 3,
+      "id": "coalition",
+      "kind": "background",
+      "path": "public/sprites/ui/campaign/coalition.png",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON Italian political satire game environmental illustration. Sophisticated crisp pixel art, large readable silhouettes at 240x163 pixels, navy blue, warm cream, mint green, burgundy and restrained gold palette; cinematic lighting and playful bureaucratic objects. Full bleed scenery edge to edge, no HUD, no interface panels, no borders, no typography, no letters, no numbers, no logos. Main interesting objects in LEFT THIRD of image, right two thirds atmospheric negative space. Not photorealistic, no real people. An Italian coalition negotiation office: a round table with three different mismatched empty chairs, blank cream programme papers buried under gold frame samples and an enormous knot of burgundy ribbon. A small whiteboard blank, warm office light.",
+      "aspect_ratio": "16:9",
+      "jobId": "3d3e79e6-7d36-4b0e-9215-8ede4f4bf399",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_3d3e79e6-7d36-4b0e-9215-8ede4f4bf399.png",
+      "sourceSha256": "8df89a9ef076138c0fc1278e29bc5361a6022f44da18c1bc9e0c1fcc3cd1f70a"
+    },
+    {
+      "index": 4,
+      "id": "election",
+      "kind": "background",
+      "path": "public/sprites/ui/campaign/election.png",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON Italian political satire game environmental illustration. Sophisticated crisp pixel art, large readable silhouettes at 240x163 pixels, navy blue, warm cream, mint green, burgundy and restrained gold palette; cinematic lighting and playful bureaucratic objects. Full bleed scenery edge to edge, no HUD, no interface panels, no borders, no typography, no letters, no numbers, no logos. Main interesting objects in LEFT THIRD of image, right two thirds atmospheric negative space. Not photorealistic, no real people. An Italian election night studio: five transparent ballot boxes on a mint-lit platform in left third, blank ballots piled on one desk, abandoned celebratory confetti still in sealed sacks. Navy set with warm gold spotlights. No charts or numeric displays.",
+      "aspect_ratio": "16:9",
+      "jobId": "1103b497-45ae-4adb-a8a9-97d03f7cbacc",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_1103b497-45ae-4adb-a8a9-97d03f7cbacc.png",
+      "sourceSha256": "9af50ad24d6696779a36f14a1fffc97a4a0fd689189e461ac2870bbdc6177412"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "public/sprites/ui/campaign/photo.png",
+      "sha256": "9f456a95a541ea21a2fece1ca5ed72c614dcd534c0010566dd1bc9a5215f3553",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "3955155e-57e4-4fcf-931f-a8362ab93668"
+    },
+    {
+      "path": "public/sprites/ui/campaign/future.png",
+      "sha256": "5ed8672042a71ba9717384b2cb566e8866c0bc49ce24076bc5c5a8c46faa656c",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "75989f21-15ff-4a6b-a000-4a74e10d3991"
+    },
+    {
+      "path": "public/sprites/ui/campaign/diplomacy.png",
+      "sha256": "980643227d5f8eea07a90ebbe278ec97260e3085fc2d5816198391a17b2e1110",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "7a8a06b9-74ab-4e9f-886d-f9a6471e2078"
+    },
+    {
+      "path": "public/sprites/ui/campaign/coalition.png",
+      "sha256": "43e2f5144a9084921f56488e1a2b1a6eeb51e6a39321d12e88ad169edccd929f",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "3d3e79e6-7d36-4b0e-9215-8ede4f4bf399"
+    },
+    {
+      "path": "public/sprites/ui/campaign/election.png",
+      "sha256": "d03a6c340c39b6bc49b7ff386397aa60aa9fc99706b5a80d491dbc44bd478338",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "1103b497-45ae-4adb-a8a9-97d03f7cbacc"
+    }
+  ],
+  "balanceAfter": 657.97,
+  "spentCredits": 10,
+  "cumulativeCredits": 228,
+  "review": "Five native backgrounds reviewed in staging before installation; no generated text or interface panels."
+}

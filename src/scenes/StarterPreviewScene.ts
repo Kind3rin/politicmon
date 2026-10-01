@@ -1,6 +1,6 @@
 import { drawMonsterSprite } from "../art/monsters";
 import { SPECIES } from "../data/species";
-import { TYPE_COLORS, typeIcon } from "../data/poltypes";
+import { TYPE_COLORS, typeLabelColor, typeIcon } from "../data/poltypes";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -61,7 +61,7 @@ export class StarterPreviewScene implements Scene {
       if (icon) {
         screen.imageSprite(icon, tx + 1, 37, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
       }
-      screen.text(type, tx + 3 + iconW, 38, PAPER);
+      screen.text(type, tx + 3 + iconW, 38, typeLabelColor(type));
       tx += w + 4;
     }
     screen.text(species.category, px, 50, GREY);

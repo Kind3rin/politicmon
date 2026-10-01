@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "credits": {
+    "before": 679.97,
+    "spent": 12,
+    "after": 667.97
+  },
+  "assets": [
+    {
+      "id": "type-a",
+      "kind": "icons",
+      "items": [
+        "type_populismo",
+        "type_tecno",
+        "type_destra",
+        "type_sinistra"
+      ],
+      "cols": 2,
+      "rows": 2,
+      "prompt": "Polished satirical Italian creature-collecting RPG UI asset, modern editorial cartoon rendered as crisp pixel art, navy ink outlines, limited cream / mint / burgundy / gold palette, clean readable silhouettes at tiny game resolution, no written text, no letters, no numbers, no real logos, no watermark. Exactly FOUR separate icons in a precise 2 by 2 evenly spaced grid on pure white background. Upper left orange-and-gold theatrical megaphone with exaggerated flared horn (populism). Upper right blue mechanical gear containing a tiny clock pointer (technocracy). Lower left navy medieval shield with a burgundy diagonal stripe (right). Lower right burgundy raised fist holding a tiny folded pamphlet (left). Each object centered in its own cell, isolated with large empty white margin; NO cell borders, NO shadows touching cell edges. Same optical size.",
+      "aspect_ratio": "1:1",
+      "jobId": "938b01f1-321d-43a4-8d23-edaf340371ce",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_215839_938b01f1-321d-43a4-8d23-edaf340371ce.png",
+      "model": "nano_banana_2",
+      "sourceSha256": "1a52e433db00d2d8cc422dc50642c33b9b26a217589cc651602b29dcd4443d75"
+    },
+    {
+      "id": "type-b",
+      "kind": "icons",
+      "items": [
+        "type_centro",
+        "type_media",
+        "type_istituzione",
+        "type_verde"
+      ],
+      "cols": 2,
+      "rows": 2,
+      "prompt": "Polished satirical Italian creature-collecting RPG UI asset, modern editorial cartoon rendered as crisp pixel art, navy ink outlines, limited cream / mint / burgundy / gold palette, clean readable silhouettes at tiny game resolution, no written text, no letters, no numbers, no real logos, no watermark. Exactly FOUR separate icons in a precise 2 by 2 evenly spaced grid on pure white background. Upper left purple compass with two equally emphatic opposing arrows, balanced both ways (centre). Upper right gold retro television with a large watchful eye in its screen (media). Lower left mint circular laurel wreath enclosing a tiny cream three-column parliament (institution). Lower right bright green sprouting leaf wrapping around a little solar panel (green politics). Each object centered in its own cell, isolated with large empty white margin; NO cell borders, NO shadows touching cell edges. Same optical size.",
+      "aspect_ratio": "1:1",
+      "jobId": "89f30bfd-cf30-4a26-9088-35dddac164a2",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_215839_89f30bfd-cf30-4a26-9088-35dddac164a2.png",
+      "model": "nano_banana_2",
+      "sourceSha256": "adab10ce3f0ff55ac5e5e99d91d6e30d73af9a5627315ef74e0b57a045b4a70d"
+    },
+    {
+      "id": "prato",
+      "kind": "background",
+      "path": "public/sprites/ui/battle_bg.png",
+      "width": 240,
+      "height": 136,
+      "prompt": "Edit this image into a FULL BLEED COUNTRYSIDE LANDSCAPE BACKGROUND ONLY. Remove completely ALL cream rectangular HUD panels along the left edge, upper right edge and lower right edge. Fill every removed rectangle seamlessly with the countryside: sky, distant hills, grassy ground and sandy lane appropriate to its area. Also remove all dark/gold elliptical rings in the foreground: make them simple irregular dirt clearings, no borders. Keep the cute distant bridge with burgundy ribbon, the tiny fuel pump, the cypress trees, the navy/cream/mint/gold pixel art style. No interface whatsoever, no boxes, no frames, no border lines, no outlined circles, no banners except the bridge ribbon. Entire canvas must be uninterrupted scenery edge to edge. No text, no numbers, no logos, no characters.",
+      "aspect_ratio": "16:9",
+      "jobId": "6772eb6d-246c-47cf-b537-78bdd6ea82e9",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_220301_6772eb6d-246c-47cf-b537-78bdd6ea82e9.png",
+      "model": "nano_banana_2",
+      "reviewAttempts": [
+        {
+          "jobId": "af9356f6-3984-4c1c-bac4-6e90e769e98b",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_215839_af9356f6-3984-4c1c-bac4-6e90e769e98b.png",
+          "sourceSha256": "b6e5e2e9c9163480680cb1ed9c2203a3d97bd16e55d8306b31d25c59ba755f00",
+          "prompt": "Polished satirical Italian creature-collecting RPG UI asset, modern editorial cartoon rendered as crisp pixel art, navy ink outlines, limited cream / mint / burgundy / gold palette, clean readable silhouettes at tiny game resolution, no written text, no letters, no numbers, no real logos, no watermark. A spacious Italian countryside combat arena for two creatures. Wide landscape, low horizon, pale turquoise sky, soft distant hills and cypress trees, foreground cream dusty country lane with irregular grassy patches. At far top right a crooked roadside fuel pump and blank price board too distant to read, a grand oversized ribbon on a tiny unfinished bridge in the horizon, gentle witty environmental satire. Two empty unobstructed circular patches for combatants: lower left and middle right. Calm warm afternoon, large quiet areas for HUD, absolutely no people, no characters, no text, no letters.",
+          "status": "completed",
+          "rejectedReason": "Riquadri HUD incorporati lungo i bordi e anelli dorati: richiesto fondale senza UI."
+        }
+      ],
+      "referenceJobId": "af9356f6-3984-4c1c-bac4-6e90e769e98b",
+      "processing": {
+        "revision": "Full bleed countryside without generated HUD or outlined rings."
+      },
+      "sourceSha256": "b6e55c1a77258935ea01a760a3fa09115deb05b943b2458e1c6d46c59b9e8bed"
+    },
+    {
+      "id": "casino-cabinet",
+      "kind": "object",
+      "path": "public/sprites/ui/slot_cabinet.png",
+      "width": 48,
+      "height": 64,
+      "prompt": "Polished satirical Italian creature-collecting RPG UI asset, modern editorial cartoon rendered as crisp pixel art, navy ink outlines, limited cream / mint / burgundy / gold palette, clean readable silhouettes at tiny game resolution, no written text, no letters, no numbers, no real logos, no watermark. ONE isolated whimsical casino slot machine, almost straight front view with a slight three-quarter side. Navy and burgundy lacquered body, gold trim, three cream reel windows showing blank ballots, green olives and tiny television symbols. Chunky golden side lever, blank gold top marquee, sturdy little legs. Satire of a campaign fundraising machine. Whole machine completely visible with generous pure white margin on all sides, no floor, no cast shadow, no pedestal, no text or letters.",
+      "aspect_ratio": "3:4",
+      "jobId": "5104a260-0eb4-47c5-9372-61c69e56b0f7",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_215839_5104a260-0eb4-47c5-9372-61c69e56b0f7.png",
+      "model": "nano_banana_2",
+      "sourceSha256": "5d1759e0c6e20d932f6c8c60ccb9e7be818555eecf99614a172f4f571b6391f9"
+    },
+    {
+      "id": "network-room",
+      "kind": "background",
+      "path": "public/sprites/ui/social/network.png",
+      "width": 240,
+      "height": 135,
+      "prompt": "Polished satirical Italian creature-collecting RPG UI asset, modern editorial cartoon rendered as crisp pixel art, navy ink outlines, limited cream / mint / burgundy / gold palette, clean readable silhouettes at tiny game resolution, no written text, no letters, no numbers, no real logos, no watermark. Wide horizontal welcoming contemporary Italian campaign clubhouse communications room. Dark navy teal evening interior, two chairs at opposite sides of a long light cream desk, each has a small cute terminal with blank mint screen, coiled cables, gold glowing connected nodes on a wall map, burgundy notice board with blank pinned papers, leafy plant at far edge. No people. Center and upper third especially uncluttered dark navy, low detail, to hold white readable UI text. Warm convivial satirical politics atmosphere, visually calm polished game menu background, no text anywhere.",
+      "aspect_ratio": "16:9",
+      "jobId": "6b3be81e-d33e-4c76-8e8c-2179ec3396f0",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_215839_6b3be81e-d33e-4c76-8e8c-2179ec3396f0.png",
+      "model": "nano_banana_2",
+      "sourceSha256": "0899b77a2bf9b6cfaf28c3f458c7cd6db4a6c2f715e26b936d9d8691a57da146"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "public/sprites/ui/type_populismo.png",
+      "sha256": "01e4810ebed91169a55fbaed1593b80b3aee56978b2b821fdef9686f4df603b4",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "938b01f1-321d-43a4-8d23-edaf340371ce"
+    },
+    {
+      "path": "public/sprites/ui/type_tecno.png",
+      "sha256": "d15a8f2a28c4e91916158cb759176c8ccbf529665afcc2eae5b9db85d62cc80f",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "938b01f1-321d-43a4-8d23-edaf340371ce"
+    },
+    {
+      "path": "public/sprites/ui/type_destra.png",
+      "sha256": "794bb2c6301b5710733543e883dc70a3cc9df1263e48c2694c7d66ac2f2a6db2",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "938b01f1-321d-43a4-8d23-edaf340371ce"
+    },
+    {
+      "path": "public/sprites/ui/type_sinistra.png",
+      "sha256": "7f64e6b4db2e03d46b298c6a58f69da71bab73209d60fa4e19b46f99a7528869",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "938b01f1-321d-43a4-8d23-edaf340371ce"
+    },
+    {
+      "path": "public/sprites/ui/type_centro.png",
+      "sha256": "f9fcdb3b706dad03e9c9e15875415084842df253f21f6c698d521bd1e2479ab0",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "89f30bfd-cf30-4a26-9088-35dddac164a2"
+    },
+    {
+      "path": "public/sprites/ui/type_media.png",
+      "sha256": "693acd5809a9547cd572a095b964189ec433644015c3aaee950ee49558af6712",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "89f30bfd-cf30-4a26-9088-35dddac164a2"
+    },
+    {
+      "path": "public/sprites/ui/type_istituzione.png",
+      "sha256": "a49d0528bb25e81d044d4918d1ef6f0792f1761de259390e5fb2d1acf497952e",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "89f30bfd-cf30-4a26-9088-35dddac164a2"
+    },
+    {
+      "path": "public/sprites/ui/type_verde.png",
+      "sha256": "932190471612db59ecbd3029101b73890659eacb8eb0ec2703c16fd09970d7f2",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "89f30bfd-cf30-4a26-9088-35dddac164a2"
+    },
+    {
+      "path": "public/sprites/ui/battle_bg.png",
+      "sha256": "4705bfd416fd957c542404cedfc3eba33cff34ccbd19b761884f88236d90eccb",
+      "size": [
+        240,
+        136
+      ],
+      "jobId": "6772eb6d-246c-47cf-b537-78bdd6ea82e9"
+    },
+    {
+      "path": "public/sprites/ui/slot_cabinet.png",
+      "sha256": "4653d98cda152547bfe6c9557e3328b453df99dd47d8340c3f15c4ebc96efaad",
+      "size": [
+        48,
+        64
+      ],
+      "jobId": "5104a260-0eb4-47c5-9372-61c69e56b0f7"
+    },
+    {
+      "path": "public/sprites/ui/social/network.png",
+      "sha256": "d84f6c4d950a6114ee97200b9dd4c45ad3e3c52fd9eeab48f8d69dde663771e2",
+      "size": [
+        240,
+        135
+      ],
+      "jobId": "6b3be81e-d33e-4c76-8e8c-2179ec3396f0"
+    }
+  ],
+  "createdOn": "2026-10-02",
+  "requestDefaults": {
+    "model": "nano_banana_pro",
+    "resolution": "2k",
+    "count": 1,
+    "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+    "use_unlim": false
+  }
+}

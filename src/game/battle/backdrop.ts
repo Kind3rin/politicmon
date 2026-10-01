@@ -10,7 +10,7 @@ export interface BattleBackdrop {
 }
 
 // Risorse native 240×136: il campo lascia liberi sprite, barre e menu.
-// Il prato originale resta disponibile per i percorsi e come fallback.
+// Anche il prato Higgsfield serve ai percorsi e al fallback degli altri ambienti.
 export const BATTLE_BACKDROPS = {
   prato: { spriteId: "battle:bg", path: "ui/battle_bg.png", sky: "#d8e8c8", ground: "#e8e0c8", foePlatform: "#c0cc9c", playerPlatform: "#cabf96" },
   piazza: { spriteId: "battle:bg:piazza", path: "ui/battle/piazza.png", sky: "#a5d8e0", ground: "#f0dbb4", foePlatform: "#deca9f", playerPlatform: "#d3bd93" },

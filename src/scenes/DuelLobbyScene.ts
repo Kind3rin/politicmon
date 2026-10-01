@@ -10,13 +10,14 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import type { GameState } from "../game/state";
 import { PvpBattleScene } from "../game/battle/PvpBattleScene";
+import { drawNetworkBackdrop } from "../ui/socialArt";
 import { recordDuelResult } from "../game/duelrecord";
 import {
   avgLevel, DUEL_INVITE_TIMEOUT, maxLevel, serializeTeam, validateWireTeam, type DuelMsg
 } from "../net/duelproto";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
-import { MessageBox, GREY, PAPER } from "../ui/widgets";
+import { drawScreenHeader, MessageBox, INK, PAPER } from "../ui/widgets";
 
 export interface DuelLobbyOptions {
   // Invita subito questo peer (menu SFIDA sul giocatore adiacente).
@@ -188,37 +189,29 @@ export class DuelLobbyScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e3e52");
-    screen.text("DUELLO PVP - SFIDA IN DIRETTA", 8, 5, PAPER);
-    const wire = serializeTeam(this.state.party);
-    screen.text(`LA TUA SQUADRA: LV MEDIO ${avgLevel(wire)} (MAX ${maxLevel(wire)})`, 8, 16, GREY);
-    screen.text("SI DUELLA A SQUADRE FRESCHE: HP E PP AL MASSIMO.", 8, 26, GREY);
-
-    if (this.waiting) {
-      screen.text(`SFIDA INVIATA A ${this.targetNick}.`, 12, 70, PAPER);
-      screen.text(`RISPOSTA ENTRO ${Math.max(0, Math.ceil(this.timer))}S...`, 12, 84, GREY);
-      screen.text("B: ANNULLA L'ATTESA", 12, VIEW_H - 12, GREY);
-      this.msg.draw(screen);
-      return;
-    }
-
+    drawNetworkBackdrop(screen);
     const players = mp.remotePlayers();
-    if (players.length === 0) {
-      screen.text("NESSUNO IN ZONA SU QUESTA MAPPA.", 12, 70, GREY);
-      screen.text("I DUELLI SI FANNO TRA PRESENTI.", 12, 80, GREY);
+    drawScreenHeader(screen, "DUELLO IN DIRETTA", `${players.length} ONLINE`);
+    const wire = serializeTeam(this.state.party);
+    screen.text(`SQUADRA: LV MEDIO ${avgLevel(wire)} / MAX ${maxLevel(wire)}`, 8, 24, PAPER);
+    screen.text("PV E PP RIPARTONO AL MASSIMO", 8, 35, "#a9b9ca");
+    if (this.waiting || !players.length) {
+      screen.panel(8, 57, VIEW_W - 16, 72, "card");
+      screen.text(this.waiting ? "INVITO INVIATO A" : "NESSUN AVVERSARIO QUI", 16, 68, INK);
+      screen.textFit(this.waiting ? this.targetNick : "I DUELLI SI FANNO TRA PRESENTI.", 16, 81, 208, INK);
+      screen.textFit(this.waiting ? `RISPOSTA ENTRO ${Math.max(0, Math.ceil(this.timer))} SECONDI` : "PROVA UNA MAPPA CON PIU PRESENZE", 16, 103, 208, "#526279");
     } else {
-      screen.text("SFIDANTI IN ZONA:", 8, 40, PAPER);
-      for (let i = 0; i < Math.min(8, players.length); i += 1) {
-        const y = 52 + i * 13;
+      const start = Math.max(0, this.index - 7);
+      for (let row = 0; row < Math.min(8, players.length); row += 1) {
+        const i = start + row, y = 49 + row * 14;
         const selected = i === this.index;
-        if (selected) {
-          screen.rect(6, y - 2, VIEW_W - 12, 12, "#3a4c64");
-          screen.text("►", 10, y, PAPER);
-        }
-        screen.textFit(players[i].nick, 20, y, 140, selected ? PAPER : GREY);
+        screen.rect(6, y, VIEW_W - 12, 13, selected ? "#fffaf0" : "#263a51");
+        if (selected) screen.frame(6, y, VIEW_W - 12, 13, "#e6b944");
+        screen.textFit(`${selected ? "► " : "  "}${players[i].nick}`, 12, y + 3, 210, selected ? INK : PAPER);
       }
-      screen.text("A: SFIDA  B: CHIUDI", 8, VIEW_H - 12, GREY);
+      screen.textRight(`${this.index + 1}/${players.length}`, VIEW_W - 8, 164, "#a9b9ca");
     }
+    screen.text(this.waiting ? "B: ANNULLA L'ATTESA" : "A: SFIDA  B: CHIUDI", 8, VIEW_H - 12, "#a9b9ca");
     this.msg.draw(screen);
   }
 }

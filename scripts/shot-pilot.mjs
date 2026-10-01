@@ -21,7 +21,7 @@ const shots = await page.evaluate(async () => {
   audio.enabled = false;
 
   // Preload mostro + sfondo battaglia + cornice 9-slice.
-  const { preloadSprites, loadPanelImage } = await import("/src/engine/assets.ts");
+  const { preloadSprites } = await import("/src/engine/assets.ts");
   monsterImage("giorgiagon");
   monsterImage("giorgetta");
   preloadSprites({ "battle:bg": "ui/battle_bg.png", "mon:giorgetta": "monsters/giorgetta.png", "mon:giorgiagon": "monsters/giorgiagon.png" });
@@ -30,7 +30,6 @@ const shots = await page.evaluate(async () => {
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
-  loadPanelImage((img, b) => screen.setPanelImage(img, b), "ui/dialog.png", 7);
   await new Promise((r) => setTimeout(r, 1000));
   const input = new Input();
   const stack = new SceneStack();

@@ -4,7 +4,7 @@
 // (b) anti-cheat: offer forgiata (specie inesistente / level 999 / mossa
 //     inventata) iniettata su TradeSession.onWire -> party mai corrotto.
 // (c) screenshot UI della TradeScene.
-// NB: (a) dipende dai relay Nostr pubblici -> se non si connette entro 60s
+// NB: (a) dipende dai relay MQTT pubblici -> se non si connette entro 60s
 // fa SKIP (exit 0), NON è un guardrail bloccante.
 import { chromium } from "playwright";
 import { writeFileSync, mkdirSync } from "node:fs";
@@ -15,7 +15,7 @@ const browser = await chromium.launch();
 
 async function boot(nick, x, species, level) {
   const page = await browser.newPage({ viewport: { width: 480, height: 720 } });
-  await page.goto(BASE, { waitUntil: "networkidle" });
+  await page.goto(`${BASE}/scripts/perf-harness.html`, { waitUntil: "networkidle" });
   await page.waitForTimeout(400);
   await page.evaluate(async ({ nk, px, sp, lv }) => {
     const { Screen } = await import("/src/engine/screen.ts");
@@ -88,7 +88,7 @@ const connected = await waitFor(
   A, () => window.__t.mp.connected && window.__t.mp.onlineCount === 1, 60000, "connessione P2P"
 );
 if (!connected) {
-  console.log("SKIP e2e: relay Nostr/WebRTC non raggiungibili (non bloccante).");
+  console.log("SKIP e2e: relay MQTT/WebRTC non raggiungibili (non bloccante).");
 } else {
   // A invita B e apre la TradeScene.
   await A.evaluate(() => {

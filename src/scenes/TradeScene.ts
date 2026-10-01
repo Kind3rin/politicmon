@@ -6,7 +6,7 @@
 
 import { drawMonsterSprite } from "../art/monsters";
 import { MOVES } from "../data/moves";
-import { TYPE_COLORS, typeIcon } from "../data/poltypes";
+import { TYPE_COLORS, typeLabelColor } from "../data/poltypes";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -14,9 +14,10 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { evolve, speciesOf, statsOf, tradeEvolution, type Monster } from "../game/monster";
 import { bumpDailyQuest } from "../game/dailyquests";
 import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
+import { drawNetworkBackdrop } from "../ui/socialArt";
 import { mp } from "../net/mp";
 import { EvolutionScene } from "./EvolutionScene";
-import { drawHpBar, MessageBox, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader, drawHpBar, MessageBox, INK, PAPER } from "../ui/widgets";
 
 export interface TradeOptions {
   peerId: string;
@@ -183,15 +184,15 @@ export class TradeScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#2e3e52");
+    drawNetworkBackdrop(screen);
     const s = mp.trade;
-    const nick = (s.peerNick || this.opts.peerNick || "ANONIMO").slice(0, 10);
-    screen.text(`SCAMBIO CON ${nick}`, 8, 5, PAPER);
+    const nick = s.peerNick || this.opts.peerNick || "ANONIMO";
+    drawScreenHeader(screen, "SCAMBIO", nick);
 
     if (s.phase === "inviting") {
-      screen.text(`PROPOSTA INVIATA A ${nick}.`, 12, 60, PAPER);
-      screen.text("IN ATTESA DI RISPOSTA...", 12, 74, GREY);
-      screen.text("B: ANNULLA", 12, VIEW_H - 12, GREY);
+      screen.textFit(`PROPOSTA INVIATA A ${nick}.`, 12, 60, 216, PAPER);
+      screen.text("IN ATTESA DI RISPOSTA...", 12, 74, "#a9b9ca");
+      screen.text("B: ANNULLA", 12, VIEW_H - 12, "#a9b9ca");
       this.msg.draw(screen);
       return;
     }
@@ -202,9 +203,10 @@ export class TradeScene implements Scene {
     // Badge conferme + footer contestuale.
     const tu = s.myConfirmed ? "OK" : "...";
     const lui = s.peerConfirmed ? "OK" : "...";
-    screen.text(`TU: ${tu}  LUI: ${lui}`, VIEW_W / 2 + 6, VIEW_H - 30, s.myConfirmed && s.peerConfirmed ? "#7ad858" : PAPER);
-    screen.textFit(this.footerHint(), 6, VIEW_H - 20, VIEW_W - 12, "#e8c84a");
-    screen.text("STESSA MAPPA - VICINI - 2 CONFERME", 6, VIEW_H - 10, GREY);
+    screen.text(`TU: ${tu}  LUI: ${lui}`, 8, 157, s.myConfirmed && s.peerConfirmed ? "#7ad858" : PAPER);
+    screen.textFit(this.footerHint(), 6, 166, VIEW_W - 12, "#e8c84a");
+    screen.text("B: ANNULLA  VICINI, DOPPIA CONFERMA", 6, 173, "#a9b9ca");
+
     this.msg.draw(screen);
   }
 
@@ -225,63 +227,52 @@ export class TradeScene implements Scene {
   private drawPartyColumn(screen: Screen, offeredUid: string): void {
     const x = 4;
     const w = VIEW_W / 2 - 6;
-    screen.text("LA TUA SQUADRA", x + 4, 16, GREY);
+    screen.text("LA TUA SQUADRA", x + 4, 24, "#a9b9ca");
     const party = this.state.party;
     for (let i = 0; i < party.length; i += 1) {
       const mon = party[i];
-      const y = 24 + i * 20;
+      const y = 34 + i * 20;
       const selected = i === this.index;
       const offered = mon.uid === offeredUid && mp.trade.mySeq > 0;
-      screen.rect(x + 2, y, w - 4, 19, selected ? "#f8f8f0" : "#3a4c64");
+      screen.rect(x + 2, y, w - 4, 19, selected ? "#fffaf0" : "#dce4e3");
       if (offered) {
         screen.frame(x + 2, y, w - 4, 19, "#f0c040");
       } else if (selected) {
         screen.frame(x + 2, y, w - 4, 19, INK);
       }
       drawMonsterSprite(screen, mon.speciesId, x + 3, y + 1, 18, 17);
-      const ink = selected ? INK : PAPER;
-      screen.text(speciesOf(mon).name.slice(0, 9), x + 22, y + 2, ink);
+      const ink = INK;
+      screen.textFit(speciesOf(mon).name, x + 22, y + 2, w - 28, ink);
       screen.text(`L${mon.level}`, x + 22, y + 11, ink);
       drawHpBar(screen, x + 62, y + 11, w - 68, mon.hp, statsOf(mon).hp);
       if (offered) {
-        screen.text("OFF", x + w - 24, y + 2, "#f0c040");
+        screen.rect(x + w - 6, y + 3, 3, 3, "#b88628");
       }
     }
   }
 
   private drawOfferColumn(screen: Screen): void {
-    const x = VIEW_W / 2 + 2;
-    const w = VIEW_W / 2 - 6;
+    const x = VIEW_W / 2 + 2, w = VIEW_W / 2 - 6;
     const offer = mp.trade.peerOffer;
-    screen.text("LA SUA OFFERTA", x + 4, 16, GREY);
-    screen.frame(x, 24, w, 108, offer ? "#f0c040" : "#5a6a84");
+    screen.text("OFFERTA REMOTA", x + 4, 24, "#a9b9ca");
+    screen.panel(x, 32, w, 122, "card");
     if (!offer) {
-      screen.text("IN ATTESA DELLA", x + 8, 60, GREY);
-      screen.text("SUA OFFERTA...", x + 8, 70, GREY);
+      screen.text("IN ATTESA DELLA", x + 6, 69, "#526279");
+      screen.text("SUA OFFERTA", x + 6, 80, "#526279");
       return;
     }
     const species = speciesOf(offer);
-    drawMonsterSprite(screen, offer.speciesId, x + 4, 27, 40, 36);
-    screen.text(species.name.slice(0, 10), x + 48, 30, PAPER);
-    screen.text(`L${offer.level}`, x + 48, 40, PAPER);
-    // Chip tipi (pattern PartyScene.drawSummary, compattato).
-    let tx = x + 4;
-    for (const type of species.types) {
-      const icon = typeIcon(type);
-      const iconW = icon ? 11 : 0;
-      const tw = type.length * 6 + 6 + iconW;
-      screen.rect(tx, 66, tw, 11, TYPE_COLORS[type]);
-      if (icon) {
-        screen.imageSprite(icon, tx + 1, 67, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
-      }
-      screen.text(type, tx + 3 + iconW, 68, PAPER);
-      tx += tw + 3;
-    }
+    screen.textFit(species.name, x + 6, 40, w - 12, INK);
+    drawMonsterSprite(screen, offer.speciesId, x + 6, 51, 34, 30);
+    screen.text(`LV ${offer.level}`, x + 45, 55, INK);
+    screen.textFit("PV/PP PIENI", x + 45, 71, w - 50, "#23654e");
+    species.types.forEach((type,i) => {
+      screen.rect(x + 6, 84 + i * 12, w - 12, 10, TYPE_COLORS[type]);
+      screen.text(type, x + 9, 86 + i * 12, typeLabelColor(type));
+    });
     for (let i = 0; i < Math.min(4, offer.moves.length); i += 1) {
       const move = MOVES[offer.moves[i].id];
-      screen.textFit(move.name, x + 6, 78 + i * 9, w - 12, PAPER);
+      screen.textFit(move.name, x + 6, 113 + i * 9, w - 12, INK);
     }
-    screen.text("ARRIVA RIGENERATO:", x + 4, 115, "#7ad858");
-    screen.text("HP E PP PIENI", x + 4, 123, "#7ad858");
   }
 }

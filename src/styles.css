@@ -298,7 +298,6 @@ body.touch #console-top {
      e apre il menu di gioco (START) su mobile. */
   appearance: none;
   background:
-    url("/sprites/ui/console_badge.png") center / 100% 100% no-repeat,
     linear-gradient(135deg, rgba(12, 18, 34, 0.92), rgba(36, 47, 84, 0.9));
   border: 1px solid rgba(244, 211, 74, 0.32);
   margin: 0;

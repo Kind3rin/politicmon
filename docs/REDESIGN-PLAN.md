@@ -1,6 +1,6 @@
 # Politicmon: piano del redesign completo
 
-Aggiornato il 1 ottobre 2026. Obiettivo attivo: rifare gameplay, scene, asset,
+Aggiornato il 2 ottobre 2026. Obiettivo attivo: rifare gameplay, scene, asset,
 dialoghi satirici, lotte, evoluzioni e schede, usando il credito Higgsfield dove
 migliora il gioco. I round pubblicati sono tappe; il progetto non è dichiarato
 completamente ridisegnato. Le vecchie rinunce per «basso ROI» del piano PixelLab
@@ -25,11 +25,12 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Evoluzioni | Confronto, rinvio, ripresa al cap, soglie aggiornate, tessera dopo conferma, presentazione accessibile | `shot:evolution-dossier`, unit test |
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 47 missioni | `shot:hq`: 99 viste e prove di trasferimento/tocco |
+| Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
-| PWA | Precache e primo utilizzo offline dei 475 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| PWA | Precache e primo utilizzo offline dei 486 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 679,97; spesa cumulativa 206 crediti. Non sono stati attivati acquisti
+verificato: 667,97; spesa cumulativa 218 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -57,8 +58,9 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    Ogni effetto deve rispettare RIDUCI EFFETTI e RITMO RAPIDO.
 6. **Verifica integrale.** Campagna reale dall'inizio al finale, postgame,
    evoluzioni e percorsi alternativi, import/export dei save, offline e
-   dispositivi. Ripetere duello e scambio su relay raggiungibili: i renderer
-   PVE/PVP e gli scambi locali già conclusi non provano la connettività di rete.
+   dispositivi. Duello e scambio su relay raggiungibili sono riusciti nel round rete.
+   Restano chat reale, dispositivi e reti diverse: due browser testati non
+   certificano ogni condizione di NAT o rete mobile.
 
 ## Regole di produzione
 
@@ -77,6 +79,11 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[RETE-EMBLEMI.md](RETE-EMBLEMI.md): undici PNG, 83 viste sociali, storico completo,
+otto emblemi, duello e scambio reali; rimossi quattro PNG e il vecchio renderer
+delle cornici. Spesa: 12 crediti. PWA: 486 risorse, deploy: 377 checksum.
+
 
 [COERENZA-GRAFICA.md](COERENZA-GRAFICA.md): 62 PNG di riserva nativi, pannelli
 uniformi e guida ai tipi; 52 ritratti e 62 pose in lotta con animazioni bloccate.

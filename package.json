@@ -2,7 +2,7 @@
   "name": "politicmon",
   "version": "1.0.0",
   "private": true,
-  "description": "Clone di Pokémon a tema satira politica italiana (TypeScript + Vite, canvas 2D, multiplayer P2P).",
+  "description": "Clone di Pok\u00e9mon a tema satira politica italiana (TypeScript + Vite, canvas 2D, multiplayer P2P).",
   "license": "AGPL-3.0-only",
   "author": "Luca Tiengo",
   "homepage": "https://politicmon.vercel.app",
@@ -83,7 +83,8 @@
     "check:map-exit": "node scripts/check-map-exit.mjs",
     "package:portable": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/make-portable.ps1",
     "check:native-fallbacks": "node scripts/check-native-fallbacks.mjs",
-    "shot:native-ui": "node scripts/shot-native-ui.mjs"
+    "shot:native-ui": "node scripts/shot-native-ui.mjs",
+    "shot:social-ui": "node scripts/shot-social-ui.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

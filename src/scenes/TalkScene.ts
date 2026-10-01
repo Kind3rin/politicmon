@@ -5,8 +5,9 @@ import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { mp } from "../net/mp";
 import { TALK_INVITE_TIMEOUT, type DuelMsg } from "../net/duelproto";
 import { loadNick } from "../net/profile";
+import { drawNetworkBackdrop } from "../ui/socialArt";
 import { Composer } from "../ui/composer";
-import { GREY, INK, MessageBox } from "../ui/widgets";
+import { drawScreenHeader, wrapText, INK, PAPER, MessageBox } from "../ui/widgets";
 
 // DIALOGO 1:1 con un giocatore remoto: entrambi restano fermi (la scena copre
 // il mondo, quindi niente movimento né sendMove) finché uno dei due non chiude.
@@ -34,6 +35,8 @@ export class TalkScene implements Scene {
   private waitT = TALK_INVITE_TIMEOUT;
   private closing = false;
   private time = 0;
+  private history = false;
+  private historyPage = 0;
 
   private prevOnDuel: typeof mp.onDuel = null;
   private prevOnPeerGone: typeof mp.onPeerGone = null;
@@ -152,8 +155,17 @@ export class TalkScene implements Scene {
       }
       return;
     }
+    if (this.history) {
+      if (this.input.wasPressed("start")) { this.leave(); return; }
+      if (this.input.wasPressed("a") || this.input.wasPressed("b")) { this.history = false; return; }
+      const pages = Math.max(1, Math.ceil(this.historyLines().length / 12));
+      if (this.input.wasPressed("left") || this.input.wasPressed("up")) this.historyPage = Math.max(0, this.historyPage - 1);
+      if (this.input.wasPressed("right") || this.input.wasPressed("down")) this.historyPage = Math.min(pages - 1, this.historyPage + 1);
+      return;
+    }
     if (this.input.wasPressed("start")) {
-      this.leave();
+      this.history = true;
+      this.historyPage = Math.max(0, Math.ceil(this.historyLines().length / 12) - 1);
       return;
     }
     if (this.input.wasPressed("b")) {
@@ -170,33 +182,38 @@ export class TalkScene implements Scene {
     }
   }
 
+  private historyLines(): {text: string; me: boolean}[] {
+    return this.lines.flatMap(line => wrapText(`${line.me ? "TU" : this.opts.peerNick}: ${line.text}`, 36).map(text => ({text, me: line.me})));
+  }
+
   draw(screen: Screen): void {
-    screen.clear("#1a2a1e");
-    const nick = this.opts.peerNick.slice(0, 12);
-    screen.text(`DIALOGO: ${nick}`, 8, 5, "#f4d34a");
-
-    // Storico del dialogo (6 righe, TU: / NICK:).
-    screen.panel(4, 13, VIEW_W - 8, 50);
-    if (this.waiting) {
-      const blink = Math.floor(this.time * 2) % 2 === 0;
-      screen.text(`IN ATTESA DI ${nick}...`, 9, 18, blink ? INK : GREY);
-      screen.text(`(${Math.ceil(this.waitT)}s)`, 9, 28, GREY);
+    drawNetworkBackdrop(screen);
+    drawScreenHeader(screen, this.history ? "STORICO DEL CONFRONTO" : "CONFRONTO", this.opts.peerNick);
+    const lines = this.historyLines();
+    if (this.history) {
+      const pages = Math.max(1, Math.ceil(lines.length / 12));
+      this.historyPage = Math.min(this.historyPage, pages - 1);
+      screen.panel(4, 22, VIEW_W - 8, 129, "card");
+      const page = lines.slice(this.historyPage * 12, (this.historyPage + 1) * 12);
+      page.forEach((line,i) => screen.text(line.text, 10, 31 + i * 9, line.me ? "#2a5a8a" : INK));
+      if (!page.length) screen.text("IL VERBALE ASPETTA LA PRIMA FRASE.", 10, 31, "#526279");
+      screen.textRight(`${this.historyPage + 1}/${pages}`, VIEW_W - 8, 156, PAPER);
+      screen.text("FRECCE: PAGINA  A/B: SCRIVI", 6, 156, PAPER);
+      screen.text("START: CHIUDI IL CONFRONTO", 6, 171, "#a9b9ca");
     } else {
-      const recent = this.lines.slice(-6);
-      for (let i = 0; i < recent.length; i += 1) {
-        const l = recent[i];
-        const who = l.me ? "TU" : nick.slice(0, 8);
-        screen.text(`${who}: ${l.text}`.slice(0, 37), 9, 18 + i * 8, l.me ? "#2a5a8a" : INK);
+      screen.panel(4, 19, VIEW_W - 8, 46, "card");
+      if (this.waiting) {
+        screen.textFit(`IN ATTESA DI ${this.opts.peerNick}`, 10, 28, 216, INK);
+        screen.text(`${Math.max(0,Math.ceil(this.waitT))} SECONDI`, 10, 43, "#526279");
+      } else {
+        lines.slice(-4).forEach((line,i) => screen.text(line.text, 10, 27 + i * 8, line.me ? "#2a5a8a" : INK));
+        if (!lines.length) screen.text("LA RIUNIONE HA FINALMENTE UN TU.", 10, 27, "#526279");
+        screen.rect(4, 69, VIEW_W - 8, 86, "#17243d");
+        this.composer.draw(screen, 69, this.time);
       }
-      if (recent.length === 0) {
-        screen.text("SIETE FACCIA A FACCIA. PARLA!", 9, 18, GREY);
-      }
+      screen.text(this.waiting ? "B/START: ANNULLA" : "A: SCEGLI  B: CANC./ESCI", 6, VIEW_H - 17, "#a9b9ca");
+      if (!this.waiting) screen.text("START: STORICO COMPLETO", 6, VIEW_H - 8, "#a9b9ca");
     }
-
-    if (!this.waiting) {
-      this.composer.draw(screen, 66, this.time);
-    }
-    screen.text(this.waiting ? "B:ANNULLA" : "A:SCEGLI  B:CANC.  START:CHIUDI", 6, VIEW_H - 8, GREY);
     this.msg.draw(screen);
   }
 }

@@ -1,5 +1,11 @@
 # Politicmon: risorse Higgsfield
 
+Nono blocco: otto emblemi, fondale dei percorsi, macchina del casinò e ambiente
+sociale. Sei job Nano Banana Pro compresa la correzione del prato, **12 crediti**;
+saldo **679,97 → 667,97**, cumulativo **218**. Undici PNG finali con checksum
+in `higgsfield-core-ui.json`. [RETE-EMBLEMI.md](RETE-EMBLEMI.md) documenta
+anche le rimozioni, lo storico e le prove reali di duello/scambio.
+
 Round di coerenza: 62 PNG statici ricavati dalle pose Higgsfield esistenti,
 **zero nuove generazioni e zero crediti**. Provenienza in
 `higgsfield-monster-fallbacks.json`; [COERENZA-GRAFICA.md](COERENZA-GRAFICA.md)

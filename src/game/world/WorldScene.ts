@@ -3269,7 +3269,14 @@ export class WorldScene implements Scene {
                 drawWorldTilePng(screen, waterBase, dx, dy);
               }
             }
-            // Texture PNG PixelLab del terreno (override mappa o default).
+            // I piccoli arredi trasparenti poggiano sul terreno della zona,
+            // mai sul nero del clear (neve per il pino, suolo/pavimento per la grotta).
+            if ("ORSN".includes(ch)) {
+              const snowy = ch === "N" || this.map.tileOverrides?.["="] === "tiles/snow_path.png";
+              const ground = this.tilePng(snowy ? "i" : this.map.outdoor ? "." : "p");
+              if (ground) drawWorldTilePng(screen, ground, dx, dy);
+            }
+            // Texture Higgsfield del terreno (override mappa o default).
             const img = this.tilePng(ch);
             if (img) {
               drawWorldTilePng(screen, img, dx, dy);

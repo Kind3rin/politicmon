@@ -366,7 +366,7 @@ export class CasinoScene implements Scene {
       screen.text("A: riscatta  B: indietro", 8, VIEW_H - 10, GREY);
     } else {
       this.menu.draw(screen, 14, 36, VIEW_W - 28);
-      // Mobile slot PixelLab come decoro della schermata menu (spazio libero in
+      // Mobile slot Higgsfield come decoro della schermata menu (spazio libero in
       // basso a destra): dà identità da casinò senza coprire testo/menu.
       const cab = sceneImage("ui:slot", "ui/slot_cabinet.png");
       if (cab) {

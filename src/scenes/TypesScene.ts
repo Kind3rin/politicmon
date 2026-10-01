@@ -2,8 +2,8 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
-import { TYPE_COLORS, TYPE_ORDER, typeRelations, typeIcon, type PolType } from "../data/poltypes";
-import { drawScreenHeader, INK, PAPER } from "../ui/widgets";
+import { TYPE_COLORS, typeLabelColor, TYPE_ORDER, typeRelations, typeIcon, type PolType } from "../data/poltypes";
+import { drawScreenHeader, PAPER } from "../ui/widgets";
 
 // GUIDA TIPI: spiega il sistema politico di efficacia (chi batte chi). Scegli
 // un tipo attaccante col d-pad; vedi contro chi è FORTE e contro chi è DEBOLE.
@@ -39,8 +39,7 @@ export class TypesScene implements Scene {
     if (icon) {
       screen.imageSprite(icon, x + 1, y + 1, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
     }
-    const lightText = label === "DESTRA" || label === "SINISTRA" || label === "TECNO";
-    screen.text(label, x + 3 + iconW, y + 2, lightText ? PAPER : INK);
+    screen.text(label, x + 3 + iconW, y + 2, typeLabelColor(label));
     return w;
   }
 

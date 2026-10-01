@@ -1425,11 +1425,7 @@
       "domain": "ui",
       "tool": "create_ui_asset + create_map_object",
       "output": [
-        "ui/dialog.png",
         "ui/battle_bg.png",
-        "ui/hpbar.png",
-        "ui/badge.png",
-        "ui/console_badge.png",
         "ui/slot_cabinet.png",
         "ui/type_populismo.png",
         "ui/type_tecno.png",
@@ -1485,6 +1481,42 @@
       "note": "Credenziale candidato PixelLab; ritratto e statistiche sono runtime.",
       "state": "retired",
       "retiredReason": "Nessun renderer runtime usa questo PNG: cartina e scheda candidato sono disegnate dalla UI moderna. Rimosso anche il preload."
+    },
+    {
+      "id": "ui/dialog.png",
+      "domain": "ui",
+      "output": [
+        "ui/dialog.png"
+      ],
+      "state": "retired",
+      "retiredReason": "UI moderna disegnata direttamente; rimossi renderer, override e immagini senza utilizzatori."
+    },
+    {
+      "id": "ui/hpbar.png",
+      "domain": "ui",
+      "output": [
+        "ui/hpbar.png"
+      ],
+      "state": "retired",
+      "retiredReason": "UI moderna disegnata direttamente; rimossi renderer, override e immagini senza utilizzatori."
+    },
+    {
+      "id": "ui/badge.png",
+      "domain": "ui",
+      "output": [
+        "ui/badge.png"
+      ],
+      "state": "retired",
+      "retiredReason": "UI moderna disegnata direttamente; rimossi renderer, override e immagini senza utilizzatori."
+    },
+    {
+      "id": "ui/console_badge.png",
+      "domain": "ui",
+      "output": [
+        "ui/console_badge.png"
+      ],
+      "state": "retired",
+      "retiredReason": "UI moderna disegnata direttamente; rimossi renderer, override e immagini senza utilizzatori."
     }
   ]
 }

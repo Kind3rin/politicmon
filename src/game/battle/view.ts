@@ -19,7 +19,7 @@ import { TYPE_COLORS, type PolType } from "../../data/poltypes";
 import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "../../art/monsterFrames";
 
 // Stesso renderer in PVE e PVP. Se il tema non è ancora pronto o manca,
-// il prato preesistente evita campi vuoti; senza immagini bastano due colori.
+// il prato Higgsfield evita campi vuoti; senza immagini bastano due colori.
 export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop): void {
   const themed = sceneImage(backdrop.spriteId, backdrop.path);
   const fallback = themed ?? sceneImage(BATTLE_BACKDROPS.prato.spriteId, BATTLE_BACKDROPS.prato.path);

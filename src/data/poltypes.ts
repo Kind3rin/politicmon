@@ -12,16 +12,21 @@ export type PolType =
 
 export const TYPE_COLORS: Record<PolType, string> = {
   POPULISMO: "#d88030",
-  TECNO: "#5878b8",
+  TECNO: "#315a91",
   DESTRA: "#384878",
-  SINISTRA: "#c84848",
+  SINISTRA: "#913548",
   CENTRO: "#9888b8",
   MEDIA: "#d8b838",
   ISTITUZIONE: "#48988a",
   VERDE: "#48a058"
 };
 
-// Icona-simbolo PixelLab per ogni ideologia (megafono/ingranaggio/...), disegnata
+// Il testo dei chip mantiene contrasto sia sui toni scuri sia su quelli chiari.
+export function typeLabelColor(type: PolType): string {
+  return type === "DESTRA" || type === "SINISTRA" || type === "TECNO" ? "#fffaf0" : "#17243d";
+}
+
+// Icona-simbolo Higgsfield per ogni ideologia (megafono/ingranaggio/...), disegnata
 // sul chip colorato accanto al nome del tipo. Null finché il PNG non c'è.
 const TYPE_ICON_FILE: Record<PolType, string> = {
   POPULISMO: "type_populismo",

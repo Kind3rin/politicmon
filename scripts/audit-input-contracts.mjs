@@ -6,7 +6,7 @@ const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclud
 
 const focusTokens = [
   "►", "drawChoicePreview", "new Menu(", ".menu.draw(",
-  "const sel =", "const selected =", "if (sel)", "if (selected)"
+  ".composer.draw(", "const sel =", "const selected =", "if (sel)", "if (selected)"
 ];
 const results = [];
 

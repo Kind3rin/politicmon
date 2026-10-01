@@ -14,14 +14,12 @@ const shots = await page.evaluate(async () => {
   const { newGameState } = await import("/src/game/state.ts");
   const { createMonster } = await import("/src/game/monster.ts");
   const { BattleScene } = await import("/src/game/battle/BattleScene.ts");
-  const { loadPanelImage } = await import("/src/engine/assets.ts");
   const { audio } = await import("/src/engine/audio.ts");
   audio.enabled = false;
 
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
-  await new Promise((res) => { loadPanelImage((img, b) => { screen.setPanelImage(img, b); res(); }, "ui/dialog.png", 6); setTimeout(res, 3000); });
   const input = new Input();
   const stack = new SceneStack();
 

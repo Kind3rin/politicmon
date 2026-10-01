@@ -11,7 +11,7 @@ const shot = await page.evaluate(async () => {
   const { SceneStack } = await import("/src/engine/scene.ts");
   const { newGameState } = await import("/src/game/state.ts");
   const { BagScene } = await import("/src/scenes/BagScene.ts");
-  const { preloadSprites, loadPanelImage } = await import("/src/engine/assets.ts");
+  const { preloadSprites } = await import("/src/engine/assets.ts");
   preloadSprites({
     "item:scheda": "items/scheda.png", "item:caffe": "items/caffe.png",
     "item:spritz": "items/spritz.png", "item:mojito": "items/mojito.png", "item:maalox": "items/maalox.png"
@@ -20,7 +20,6 @@ const shot = await page.evaluate(async () => {
   const canvas = document.createElement("canvas");
   canvas.width = 240; canvas.height = 180;
   const screen = new Screen(canvas);
-  loadPanelImage((img, b) => screen.setPanelImage(img, b), "ui/dialog.png", 22);
   await new Promise((r) => setTimeout(r, 1000));
   const state = newGameState();
   state.bag = { scheda: 5, caffe: 3, spritz: 2, mojito: 1, maalox: 4 };

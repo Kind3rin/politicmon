@@ -11,7 +11,7 @@
 // 4b) duelWins/duelLosses aggiornati (vincitore/perdente) e duelWins
 //     broadcastato nel profilo (visibile sul peer remoto);
 // 5) check statico di validateWireTeam (team illegali respinti).
-// Se i relay Nostr non connettono entro 60s -> SKIP dell'e2e (exit 0), non FAIL.
+// Se i relay MQTT non connettono entro 60s -> SKIP dell'e2e (exit 0), non FAIL.
 import { chromium } from "playwright";
 import { mkdirSync, writeFileSync } from "node:fs";
 
@@ -210,7 +210,7 @@ const connected = await waitFor(
   A, () => window.__t.mp.connected && window.__t.mp.onlineCount === 1, 60000, "connessione P2P"
 );
 if (!connected) {
-  console.log("SKIP e2e duello: relay Nostr/WebRTC non raggiungibili (non bloccante).");
+  console.log("SKIP e2e duello: relay MQTT/WebRTC non raggiungibili (non bloccante).");
   await browser.close();
   process.exit(failures > 0 ? 1 : 0);
 }

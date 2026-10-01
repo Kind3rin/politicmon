@@ -51,3 +51,11 @@ Il verificatore pubblico controlla ora 366 checksum di mondo, quartier generale
 e immagini di riserva. Restano da ridisegnare altri emblemi, superfici sociali e
 scene della campagna; queste verifiche non certificano il redesign completo né
 una partita percorsa interamente nell'interfaccia.
+
+Pubblicato nel commit `df8fb6d`: CI riuscita; verificati tutti i 366 PNG su
+[politicmon.vercel.app](https://politicmon.vercel.app/) e riavvio offline pubblico
+con primo utilizzo delle 475 risorse. Il redesign prosegue.
+
+Nel successivo [round rete](RETE-EMBLEMI.md) sono rimossi anche l'API di override
+e il file della cornice: il renderer moderno è ora unico, anche nei vecchi
+strumenti di screenshot.

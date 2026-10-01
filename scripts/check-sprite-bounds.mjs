@@ -1,5 +1,5 @@
 // Audit PNG: niente sprite vuoti e terrain core opachi/full-tile.
-// Nota: i character PixelLab possono avere canvas grande, ma Screen.imageBounds
+// Nota: i character del gioco possono avere canvas grande, ma Screen.imageBounds
 // croppa l'alpha in runtime; qui controlliamo il contenuto visibile, non il canvas.
 import { readdirSync } from "node:fs";
 import { join, relative, sep } from "node:path";
@@ -34,11 +34,7 @@ const fullTileTerrain = new Set([
   "tiles/cave_rock.png",
   "tiles/snow_floor.png",
   "tiles/snow_drift.png",
-  "tiles/snow_path.png",
-  "tiles/cave_mouth.png",
-  "tiles/cave_boulder.png",
-  "tiles/cave_stalagmite.png",
-  "tiles/snow_pine.png"
+  "tiles/snow_path.png"
 ]);
 const gridBuildings = new Map([
   ["tiles/build_house_front_red.png", [64, 48]],
@@ -118,14 +114,21 @@ const problems = await page.evaluate(async ({ files, fullTileTerrain, gridBuildi
     }
     const bw = maxX - minX + 1;
     const bh = maxY - minY + 1;
-    if (path.startsWith("chars/") && (bw > 64 || bh > 64)) {
+    const vehicle = /^chars\/(auto|ruspa|monopattino)_(north|south|east|west)\.png$/.test(path);
+    if (vehicle && (w !== 68 || h !== 68 || bw > 66 || bh > 66)) {
+      out.push(`${path}: veicolo deve essere 68x68 con margine, trovato ${w}x${h} / ${bw}x${bh}`);
+    }
+    if (path.startsWith("chars/") && !vehicle && (bw > 64 || bh > 64)) {
       out.push(`${path}: bounds character troppo grandi ${bw}x${bh}`);
+    }
+    if (/^tiles\/(cave_mouth|cave_boulder|cave_stalagmite|snow_pine)\.png$/.test(path) && (w !== 16 || h !== 16)) {
+      out.push(`${path}: arredo su terreno deve essere 16x16, trovato ${w}x${h}`);
     }
     if (fullTile.has(path)) {
       if (w !== 16 || h !== 16) {
         out.push(`${path}: terrain core deve essere 16x16, trovato ${w}x${h}`);
       }
-      if (minX !== 0 || minY !== 0 || maxX !== w - 1 || maxY !== h - 1) {
+      if (alphaPixels !== w * h || minX !== 0 || minY !== 0 || maxX !== w - 1 || maxY !== h - 1) {
         out.push(`${path}: terrain core non copre tutto il tile (bounds ${minX},${minY}-${maxX},${maxY})`);
       }
     }

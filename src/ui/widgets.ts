@@ -503,20 +503,14 @@ export function drawHpBar(
   max: number
 ): void {
   const ratio = Math.max(0, Math.min(1, current / max));
-  const hpFrame = getSpriteImage("ui:hpbar", "ui/hpbar.png");
-  const insetX = hpFrame ? Math.max(2, Math.round(width * 0.045)) : 1;
-  const insetY = hpFrame ? 2 : 1;
-  const innerH = hpFrame ? 3 : 5;
-  const fillW = Math.round((width - insetX * 2) * ratio);
-  const color = ratio > 0.5 ? "#48b848" : ratio > 0.2 ? "#d8b838" : "#d04848";
+  const innerW = Math.max(0, width - 2);
+  const color = ratio > 0.5 ? "#35816c" : ratio > 0.2 ? "#b88628" : "#ad4051";
   screen.text("PV", x - 14, y - 1, INK);
-  if (hpFrame) {
-    screen.imageSprite(hpFrame, x, y, { scaleX: width / hpFrame.width, scaleY: 7 / hpFrame.height });
-  } else {
-    screen.frame(x, y, width, 7, INK);
-  }
-  screen.rect(x + insetX, y + insetY, width - insetX * 2, innerH, "#c8c8c0");
+  screen.rect(x, y, width, 7, "#17243d");
+  screen.rect(x + 1, y + 1, innerW, 5, "#dedbcf");
+  const fillW = Math.round(innerW * ratio);
   if (fillW > 0) {
-    screen.rect(x + insetX, y + insetY, fillW, innerH, color);
+    screen.rect(x + 1, y + 1, fillW, 5, color);
+    screen.rect(x + 1, y + 1, fillW, 1, "rgba(255,255,255,0.25)");
   }
 }

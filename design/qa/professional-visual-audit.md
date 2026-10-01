@@ -1,13 +1,13 @@
 # Audit visuale professionale
 
-Generato: 2026-10-01T21:38:00.851Z
+Generato: 2026-10-01T22:18:41.757Z
 
 ## Sintesi
 
 - Scene: 45
 - Scene con evidenza screenshot: 45/45
 - Chiamate di clipping residue: 0
-- Ellissi esplicite nelle scene: 108
+- Ellissi esplicite nelle scene: 105
 - Politicmon PNG: 52
 - Frame action dedicati: 10/52
 
@@ -24,7 +24,6 @@ Nessuna.
 - `src/scenes/BossBriefingScene.ts`: clip 0, ellissi 3
 - `src/scenes/CasinoScene.ts`: clip 0, ellissi 4
 - `src/scenes/DexScene.ts`: clip 0, ellissi 2
-- `src/scenes/DuelLobbyScene.ts`: clip 0, ellissi 1
 - `src/scenes/ElectionResultsScene.ts`: clip 0, ellissi 1
 - `src/scenes/MafiaScene.ts`: clip 0, ellissi 1
 - `src/scenes/MonumentScene.ts`: clip 0, ellissi 2
@@ -32,10 +31,9 @@ Nessuna.
 - `src/scenes/PartyScene.ts`: clip 0, ellissi 2
 - `src/scenes/PauseScene.ts`: clip 0, ellissi 3
 - `src/scenes/QuestScene.ts`: clip 0, ellissi 3
-- `src/scenes/TalkScene.ts`: clip 0, ellissi 1
 - `src/scenes/TeachScene.ts`: clip 0, ellissi 3
 - `src/scenes/TitleScene.ts`: clip 0, ellissi 3
-- `src/scenes/TradeScene.ts`: clip 0, ellissi 6
+- `src/scenes/TradeScene.ts`: clip 0, ellissi 5
 - `src/scenes/WeeklyCampaignScene.ts`: clip 0, ellissi 1
 - `src/game/battle/BattleScene.ts`: clip 0, ellissi 30
 - `src/game/battle/PvpBattleScene.ts`: clip 0, ellissi 3

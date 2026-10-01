@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 
-const files = execFileSync("git", ["ls-files", "src/scenes/*.ts", "src/game/battle/*.ts"], { encoding: "utf8" })
+const files = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "src/scenes/*.ts", "src/game/battle/*.ts"], { encoding: "utf8" })
   .split(/\r?\n/).filter(Boolean);
 
 const focusTokens = [

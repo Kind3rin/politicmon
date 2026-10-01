@@ -47,7 +47,8 @@ export class MoraleScene implements Scene {
       const y = 88 + index * 20;
       const open = promise.status === "pending" || promise.status === "broken";
       screen.panel(6, y, 228, 19, "card");
-      if (this.index === index) screen.frame(7, y + 1, 226, 17, "#e6b944");
+      const selected = this.index === index;
+      if (selected) screen.frame(7, y + 1, 226, 17, "#e6b944");
       const suffix = promise.status === "pending" ? `${promise.dueAt - morale.progress} SF ${promiseCost(promise)}€`
         : promise.status === "broken" ? `RIPARA ${promiseCost(promise)}€`
           : promise.status === "kept" ? "MANTENUTA" : "RIPARATA";

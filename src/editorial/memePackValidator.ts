@@ -4,7 +4,7 @@ export interface EditorialReport { readonly errors: EditorialIssue[]; readonly w
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const ID = /^[a-z0-9]+(?:_[a-z0-9]+)*$/;
 const CONDITION_KINDS = new Set(["flag", "minBadges", "sondaggi"]);
-const EFFECT_KINDS = new Set(["sondaggi", "money", "flag", "item", "territory"]);
+const EFFECT_KINDS = new Set(["sondaggi", "money", "flag", "item", "territory", "trust", "cohesion"]);
 
 function add(target: EditorialIssue[], severity: EditorialIssue["severity"], scope: string, message: string): void {
   target.push({ severity, scope, message });
@@ -35,7 +35,14 @@ export function validateMemePack(value: unknown, now = new Date()): EditorialRep
       if (!choice || typeof choice.label !== "string" || !choice.label.trim()) add(errors, "error", eventScope, `scelta ${choiceIndex + 1} senza label`); else if (choice.label.length > 22) add(warnings, "warning", eventScope, `label scelta ${choiceIndex + 1} lunga ${choice.label.length}/22`);
       if (!Array.isArray(choice.lines) || choice.lines.length === 0) add(errors, "error", eventScope, `scelta ${choiceIndex + 1} senza testo`);
       if (!Array.isArray(choice.effects) || choice.effects.length === 0) add(errors, "error", eventScope, `scelta ${choiceIndex + 1} senza conseguenze`);
-      else for (const effect of choice.effects) { const kind = effect && typeof effect === "object" ? (effect as Record<string, unknown>).kind : undefined; if (typeof kind !== "string" || !EFFECT_KINDS.has(kind)) add(errors, "error", eventScope, `effetto sconosciuto ${String(kind)}`); }
+      else for (const effect of choice.effects) {
+        const kind = effect && typeof effect === "object" ? (effect as Record<string, unknown>).kind : undefined;
+        if (typeof kind !== "string" || !EFFECT_KINDS.has(kind)) add(errors, "error", eventScope, `effetto sconosciuto ${String(kind)}`);
+        if (kind === "trust" || kind === "cohesion") {
+          const delta = (effect as Record<string, unknown>).delta;
+          if (typeof delta !== "number" || !Number.isInteger(delta) || Math.abs(delta) > 100) add(errors, "error", eventScope, `delta ${kind} deve essere intero tra -100 e 100`);
+        }
+      }
     });
     const source = event.source as Record<string, unknown> | undefined;
     if (!source || typeof source.label !== "string" || !source.label.trim()) add(errors, "error", eventScope, "source.label obbligatoria");

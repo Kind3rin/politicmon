@@ -1,11 +1,12 @@
 import { MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG } from "../../art/monsters";
+import { ANIMATED_MONSTERS } from "../../art/monsterFrames";
 
 export type BattleAnimationState = "idle" | "attack" | "damage" | "ko";
 
 export interface BattleAnimationContract {
   speciesId: string;
   basePng: true;
-  attackMode: "dedicated-frame" | "procedural-lunge";
+  attackMode: "sprite-sequence" | "dedicated-frame" | "procedural-lunge";
   states: readonly BattleAnimationState[];
 }
 
@@ -16,7 +17,7 @@ export function battleAnimationContract(speciesId: string): BattleAnimationContr
   return {
     speciesId,
     basePng: true,
-    attackMode: MONSTERS_WITH_ACTION_PNG.has(speciesId) ? "dedicated-frame" : "procedural-lunge",
+    attackMode: ANIMATED_MONSTERS.has(speciesId) ? "sprite-sequence" : MONSTERS_WITH_ACTION_PNG.has(speciesId) ? "dedicated-frame" : "procedural-lunge",
     states: REQUIRED_STATES
   };
 }

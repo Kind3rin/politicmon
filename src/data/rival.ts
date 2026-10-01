@@ -27,45 +27,46 @@ export const RIVAL_STAGES: RivalStage[] = [
     id: "rival-mediopoli", mapId: "mediopoli", x: 22, y: 7, facing: "down",
     sightRange: 4, showAfterWins: 1, level: 12, size: 2,
     intro: [
-      "GIANNI: di nuovo tu! Ho passato il weekend ad allenarmi. E a fare sondaggi su me stesso.",
-      "Risultato: piaccio tantissimo. A me. Vediamo se reggi il secondo round!"
+      "GIANNI: ho chiesto ai miei follower chi ha vinto il nostro dibattito. Cento per cento per me.",
+      "Poi uno ha chiesto perché non avevo pubblicato il tuo nome. L'ho nominato moderatore. Ora non scrive più.",
+      "In studio mi danno per favorito. Verifichiamo fuori dal sondaggio."
     ],
-    defeat: ["GIANNI: due a zero per te?! Chiedo la VAR. Anzi, il riconteggio."],
+    defeat: ["GIANNI: il moderatore vuole pubblicare anche questo risultato.", "Forse dovevo pagarlo in euro, non in responsabilità."],
     reward: { itemId: "spritz", qty: 1 }
   },
   {
     id: "rival-eurotown", mapId: "eurotown", x: 10, y: 11, facing: "right",
     sightRange: 4, showAfterWins: 2, level: 17, size: 3,
     intro: [
-      "GIANNI: ci risiamo. Ammettilo, mi insegui tu, non io.",
-      "A BRUXELLES dicono che sono 'una promessa'. Una promessa NON mantenuta, ma promessa!",
-      "Stavolta ho tre titolari. Preparati al terzo dibattito!"
+      "GIANNI: a EUROTOWN mi hanno chiesto una tabella con le date. Ho portato quella degli ospiti TV.",
+      "Non ridevano. Ho pensato fosse un problema di traduzione.",
+      "Ho tre titolari. Almeno su quelli la tabella è corretta."
     ],
-    defeat: ["GIANNI: tre sconfitte di fila... le impacchetto come 'percorso di crescita'."],
+    defeat: ["GIANNI: perdo ancora. Ma stavolta so indicare il turno in cui ho sbagliato.", "Sul modulo non c'è una casella per dirlo. Lo scrivo a margine."],
     reward: { itemId: "schedona", qty: 1 }
   },
   {
     id: "rival-capitale", mapId: "capitale", x: 15, y: 13, facing: "down",
     sightRange: 4, showAfterWins: 3, level: 22, size: 3,
     intro: [
-      "GIANNI: il PALAZZO sarà mio. Ho già scelto le tende per lo studio ovale.",
-      "Tre scontri persi? No no, sono 'tre esperienze formative'.",
-      "Ma oggi è diverso. Oggi ho... beh, la stessa squadra, ma più convinta!"
+      "GIANNI: i volontari hanno smesso di rispondere. Il consulente dice di cambiare il logo.",
+      "Ho cambiato il logo. Sempre nessuna risposta. Ho scoperto che serviva rimborsare il treno.",
+      "Oggi sono tornati in tre. Vorrei dargli una ragione per restare."
     ],
-    defeat: ["GIANNI: ok. OK. Forse il problema sono io. ...NO, è l'arbitro!"],
+    defeat: ["GIANNI: niente conferenza. Devo restituire le sedie prima che chiuda il circolo.", "Se vuoi parlare della sfida, vieni ad aiutarmi. Ho due mani."],
     reward: { itemId: "dirInciucio", qty: 1 }
   },
   {
     id: "rival-stretto", mapId: "stretto", x: 6, y: 5, facing: "down",
     sightRange: 4, showAfterWins: 4, level: 26, size: 4,
     intro: [
-      "GIANNI: ti ho seguito fino allo STRETTO. Romantico, eh?",
-      "Quattro a zero. A questo punto sei tu la mia nemesi, io la tua spalla comica.",
-      "Però guarda: squadra al completo, quattro titolari. STAVOLTA TI FREGO!"
+      "GIANNI: stavolta non ti ho seguito. Sto aspettando il traghetto. Come gli altri.",
+      "Mi hanno offerto un posto sul palco dell'inaugurazione. Avevo già promesso di portare un passeggino.",
+      "Ho quattro titolari e una coincidenza da non perdere. Facciamolo bene."
     ],
     defeat: [
-      "GIANNI: ...cinque a ZERO contro di me. Cioè io sono a zero.",
-      "Sai che c'è? Vengo a fare campagna PER te. I traditori si chiamano 'responsabili'."
+      "GIANNI: vincevi anche quando io dicevo il contrario. Adesso almeno il verbale torna.",
+      "Se facciamo campagna insieme voglio le date scritte. Ho imparato a leggerle."
     ],
     reward: { itemId: "tessera", qty: 1 }
   }

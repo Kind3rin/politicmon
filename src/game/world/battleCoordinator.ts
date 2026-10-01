@@ -3,6 +3,7 @@ import type { TrainerDef } from "../../data/trainers";
 import { createMonster, type Monster } from "../monster";
 import { hardModeLevelBonus } from "../rematch";
 import type { GameState } from "../state";
+import { advanceMoraleProgress } from "../morale";
 
 export interface TrainerTeamOptions {
   fallbackTeam: () => Monster[];
@@ -30,4 +31,11 @@ export function buildTrainerTeam(state: GameState, def: TrainerDef, options: Tra
 
 export function shouldPersistTrainerVictory(trainerId: string, result: TrainerBattleResult): boolean {
   return result === "win" && !["wander:", "daily:", "coppa:"].some((prefix) => trainerId.startsWith(prefix));
+}
+
+export function recordNewTrainerVictory(state: GameState, trainerId: string, result: TrainerBattleResult): string[] {
+  if (!shouldPersistTrainerVictory(trainerId, result) || state.defeatedTrainers.includes(trainerId)) return [];
+  state.defeatedTrainers.push(trainerId);
+  if (trainerId.startsWith("weekly:")) return [];
+  return advanceMoraleProgress(state);
 }

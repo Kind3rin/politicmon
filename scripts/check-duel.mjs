@@ -22,7 +22,9 @@ const browser = await chromium.launch();
 async function boot(nick, x, team) {
   const ctx = await browser.newContext({ viewport: { width: 480, height: 720 } });
   const page = await ctx.newPage();
-  await page.goto(BASE, { waitUntil: "networkidle" });
+  // Harness isolato: nessun secondo loop del titolo riceve gli stessi tasti
+  // e scrive un salvataggio estraneo al duello durante le conferme.
+  await page.goto(`${BASE}/scripts/perf-harness.html`, { waitUntil: "networkidle" });
   await page.waitForTimeout(400);
   await page.evaluate(async ({ nk, px, tm }) => {
     const { Screen } = await import("/src/engine/screen.ts");
@@ -34,9 +36,8 @@ async function boot(nick, x, team) {
     const { DuelLobbyScene } = await import("/src/scenes/DuelLobbyScene.ts");
     const { audio } = await import("/src/engine/audio.ts");
     audio.enabled = false;
-    // Singleton del grafo delle scene (NON reimportare mp: con l'HMR di Vite
-    // si rischiano due istanze — vedi nota in shot-trade.mjs).
-    const mp = window.__mp;
+    // Unico grafo di moduli e unico loop, senza avviare main.ts.
+    const { mp } = await import("/src/net/mp.ts");
     mp.setIdentity(nk, "player");
     const canvas = document.createElement("canvas");
     canvas.width = 240; canvas.height = 180;
@@ -52,11 +53,17 @@ async function boot(nick, x, team) {
     state.pos = { mapId: "borgo", x: px, y: 10, facing: "down" };
     stack.push(new WorldScene(stack, input, state));
     window.__t = { stack, input, state, mp, DuelLobbyScene };
-    window.__tick = () => { stack.update(1 / 30); stack.draw(screen); input.endFrame(); };
+    window.__tick = () => {
+      stack.update(1 / 30); stack.draw(screen); input.endFrame();
+      // Il debug della scena viene emesso prima dell'update. Aggiorna il
+      // campione dopo il frame: una coda appena svuotata non deve far premere
+      // A nel menu successivo all'automazione.
+      stack.top?.exposeDebug?.();
+    };
     // Avanza (A) SOLO quando è sicuro: messaggi del duello (coda) o banner
     // finale. Mai nei menu (selezionerebbe voci a caso).
     window.__advance = () => {
-      const d = window.__duel;
+      const d = stack.top;
       const press = d && !d.finished && (d.mode === "queue" || d.done);
       if (press) {
         document.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyZ", bubbles: true, cancelable: true }));

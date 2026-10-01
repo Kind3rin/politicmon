@@ -6,6 +6,8 @@ const fixtureState = (name) => {
   return spec.extends ? { ...fixtureState(spec.extends), ...structuredClone(spec.patch) } : structuredClone(spec.state);
 };
 const legacySave = JSON.stringify(fixtureState("v13-post-ue.json"));
+const monsterFramePaths = JSON.parse(readFileSync("scripts/higgsfield-monster-frames.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
+const bossArtPaths = JSON.parse(readFileSync("scripts/higgsfield-premium-next.json", "utf8")).assets.filter((asset) => asset.kind === "boss").map((asset) => asset.path.replace(/^public\//, ""));
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
@@ -83,6 +85,32 @@ if (browserName !== "webkit") {
 const offline = await page.locator("#game-canvas").count() === 1;
 if (!offline) throw new Error("PWA non riparte offline");
 stage("verifica campagna offline");
+const backdropEvidence = await page.evaluate(async (monsterFrames) => {
+  const keys = await caches.keys();
+  const key = keys.find((name) => name.startsWith("politicmon-"));
+  const version = key.slice("politicmon-".length);
+  const cache = await caches.open(key);
+  const paths = ["piazza", "studio", "palazzo", "costa", "neve", "rete", "grotta"].map((id) => `sprites/ui/battle/${id}.png`);
+  paths.push("title-bg.png");
+  paths.push(...["sportello", "studio", "molo", "verbale"].map((id) => `sprites/ui/civic/${id}.png`));
+  paths.push(...monsterFrames);
+  const checked = [];
+  for (const path of paths) {
+    const canonical = new URL(path, location.href);
+    const versioned = new URL(canonical);
+    versioned.searchParams.set("v", version);
+    // Simula il primo utilizzo offline: rimuove la copia runtime versionata,
+    // conservando solo quella canonica creata dall'install del service worker.
+    await cache.delete(versioned.href);
+    if (!(await cache.match(canonical.href))) throw new Error(`Sfondo non precacheato: ${path}`);
+    const response = await fetch(versioned.href);
+    if (!response.ok || !(await response.blob()).size) throw new Error(`Primo utilizzo offline fallito: ${path}`);
+    checked.push(path);
+  }
+  return checked;
+}, [...monsterFramePaths,...bossArtPaths]);
+if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
+console.log(`Primo utilizzo offline: ${backdropEvidence.length} asset Higgsfield.`);
 const offlineWorld = await page.evaluate(async () => {
   const keys = await caches.keys();
   const requests = (await Promise.all(keys.map(async (key) => [...await (await caches.open(key)).keys()].map((request) => request.url)))).flat();

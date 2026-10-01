@@ -1,9 +1,11 @@
 import { EVERGREEN_MEME_EVENTS } from "./evergreen";
 import { SEASON_2026_MEME_EVENTS } from "./season-2026";
+import { CLASSIC_MEME_EVENTS } from "./classics";
 import type { MemeEventDef } from "./types";
 
 export const MEME_EVENTS: readonly MemeEventDef[] = Object.freeze([
   ...EVERGREEN_MEME_EVENTS,
+  ...CLASSIC_MEME_EVENTS,
   ...SEASON_2026_MEME_EVENTS
 ]);
 

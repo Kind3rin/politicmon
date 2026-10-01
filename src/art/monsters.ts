@@ -1,6 +1,7 @@
 import type { Pixmap, Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
 import { memeForm } from "../game/memeForms";
+import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "./monsterFrames";
 
 // Redesign PixelLab: se esiste un PNG per la specie in `public/sprites/monsters/<id>.png`
 // lo si usa al posto della caricatura testuale. Finché il PNG non è caricato (o se
@@ -66,12 +67,19 @@ export function drawMonsterSprite(
   y: number,
   boxW: number,
   boxH: number,
-  opts?: { flipX?: boolean; memeFormId?: string }
+  opts?: { flipX?: boolean; memeFormId?: string; animationTime?: number }
 ): void {
   const form = memeForm(opts?.memeFormId);
   if (form && form.speciesId === speciesId) {
     screen.frame(x, y, boxW, boxH, form.accent);
     screen.rect(x + boxW - 5, y + 2, 3, 3, form.accent);
+  }
+  const frames = monsterFramesImage(speciesId);
+  if (frames) {
+    const scale = Math.min(boxW / 64, boxH / 52);
+    const dw = 64 * scale; const dh = 52 * scale;
+    drawMonsterFrame(screen, frames, monsterPoseFrame(opts?.animationTime ?? 0), x + (boxW - dw) / 2, y + boxH - dh, dw, dh, opts?.flipX, true);
+    return;
   }
   const png = monsterImage(speciesId);
   if (png) {

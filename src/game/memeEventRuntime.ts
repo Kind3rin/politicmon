@@ -1,6 +1,7 @@
 import type { MemeEffect } from "../data/meme-events/types";
 import { addSondaggi } from "./governo";
 import type { GameState } from "./state";
+import { changeMorale } from "./morale";
 
 export function canApplyMemeEffects(state: GameState, effects: readonly MemeEffect[] | undefined): boolean {
   const moneyDelta = effects?.filter((effect) => effect.kind === "money").reduce((sum, effect) => sum + effect.delta, 0) ?? 0;
@@ -8,6 +9,9 @@ export function canApplyMemeEffects(state: GameState, effects: readonly MemeEffe
 }
 
 export function applyMemeEffects(state: GameState, effects: readonly MemeEffect[] | undefined): void {
+  const trust = effects?.filter((effect) => effect.kind === "trust").reduce((sum, effect) => sum + effect.delta, 0) ?? 0;
+  const cohesion = effects?.filter((effect) => effect.kind === "cohesion").reduce((sum, effect) => sum + effect.delta, 0) ?? 0;
+  if (trust || cohesion) changeMorale(state, "SCELTA SETTIMANALE", trust, cohesion);
   for (const effect of effects ?? []) {
     if (effect.kind === "sondaggi") addSondaggi(state, effect.delta);
     else if (effect.kind === "money") state.money = Math.max(0, state.money + effect.delta);

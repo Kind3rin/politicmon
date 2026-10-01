@@ -1,0 +1,1813 @@
+{
+  "version": 1,
+  "credits": {
+    "before": 867.97,
+    "after": 829.97,
+    "spent": 38
+  },
+  "assets": [
+    {
+      "id": "giorgetta",
+      "jobId": "d8b3713d-4ae0-426a-9fc5-d5310c907da4",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_142341_d8b3713d-4ae0-426a-9fc5-d5310c907da4.png",
+      "path": "public/sprites/monsters/animated/giorgetta.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "00d37e47-0feb-493e-bef9-dc3fd94e2094"
+          }
+        ],
+        "prompt": "Create a production game animation sprite sheet of the EXACT pixel-art monster in the reference. Preserve its creature identity, proportions, clothing, yellow hair, red colors, flame, face and black outline. It is a small satirical fantasy creature, not a realistic person. A precise 2 by 2 grid of FOUR equally sized cells, one full-body sprite in the center of each cell. Solid chroma key magenta #FF00FF background in all cells. No grid lines, no labels, no lettering, no shadows, no ground, no effects outside creature. Same camera, same scale, feet at same height inside every cell. Top-left: relaxed idle eyes open. Top-right: mouth wide open announcing a comical rally, small flame raised. Bottom-left: determined attack stance, leaning slightly forward with energetic arms. Bottom-right: eyes blink closed, relaxed idle same silhouette as top-left. Crisp clean square pixel art, hard edges, flat colors with 2-tone shading. Sprites do not touch cell boundaries. This is a usable videogame spritesheet, four near-identical frames with expressive facial changes, NOT illustrations."
+      }
+    },
+    {
+      "id": "ellyna",
+      "jobId": "171749f6-b82b-4440-a323-e28c3779fe2e",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150356_171749f6-b82b-4440-a323-e28c3779fe2e.png",
+      "path": "public/sprites/monsters/animated/ellyna.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/ellyna.png"
+          }
+        ],
+        "prompt": "Character: ELLYNA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "renzino",
+      "jobId": "f1a4a800-a110-4b7a-a0a6-99d00baf54b0",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_f1a4a800-a110-4b7a-a0a6-99d00baf54b0.png",
+      "path": "public/sprites/monsters/animated/renzino.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/renzino.png"
+          }
+        ],
+        "prompt": "Character: RENZINO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "giorgiagon",
+      "jobId": "ce2805b8-84cb-4cfc-9a04-81243885bd50",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150357_ce2805b8-84cb-4cfc-9a04-81243885bd50.png",
+      "path": "public/sprites/monsters/animated/giorgiagon.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/giorgiagon.png"
+          }
+        ],
+        "prompt": "Character: GIORGIAGON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "schleinix",
+      "jobId": "61e9fa1e-cf75-49fe-8726-6e87ea875229",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_61e9fa1e-cf75-49fe-8726-6e87ea875229.png",
+      "path": "public/sprites/monsters/animated/schleinix.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/schleinix.png"
+          }
+        ],
+        "prompt": "Character: SCHLEINIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "renzilla",
+      "jobId": "d48cb4bb-7b59-4958-9705-2d2a74b3658f",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_d48cb4bb-7b59-4958-9705-2d2a74b3658f.png",
+      "path": "public/sprites/monsters/animated/renzilla.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/renzilla.png"
+          }
+        ],
+        "prompt": "Character: RENZILLA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "salvinott",
+      "jobId": "ae404e7e-c3c0-4a91-a869-0e30963fdaa1",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_ae404e7e-c3c0-4a91-a869-0e30963fdaa1.png",
+      "path": "public/sprites/monsters/animated/salvinott.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/salvinott.png"
+          }
+        ],
+        "prompt": "Character: SALVINOTT. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "grillix",
+      "jobId": "534dc8e3-6ba9-414b-81bd-84efa1a3232a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150401_534dc8e3-6ba9-414b-81bd-84efa1a3232a.png",
+      "path": "public/sprites/monsters/animated/grillix.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/grillix.png"
+          }
+        ],
+        "prompt": "Character: GRILLIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "vannaccix",
+      "jobId": "0bff8e32-23f0-4a34-a0d1-05cd3882c122",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150400_0bff8e32-23f0-4a34-a0d1-05cd3882c122.png",
+      "path": "public/sprites/monsters/animated/vannaccix.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/vannaccix.png"
+          }
+        ],
+        "prompt": "Character: VANNACCIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "contemorfo",
+      "job_id": "a46bcfa2-56e3-4b80-9236-86af8a71dd80",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150803_a46bcfa2-56e3-4b80-9236-86af8a71dd80.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/contemorfo.png"
+          }
+        ],
+        "prompt": "Character: CONTEMORFO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/contemorfo.png"
+    },
+    {
+      "id": "calendauro",
+      "job_id": "79a4e08f-fd56-481b-9a68-dc553f0356f7",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150801_79a4e08f-fd56-481b-9a68-dc553f0356f7.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/calendauro.png"
+          }
+        ],
+        "prompt": "Character: CALENDAURO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/calendauro.png"
+    },
+    {
+      "id": "tajanide",
+      "job_id": "7aefc417-e53f-40cd-9735-7f52646f6d7c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150801_7aefc417-e53f-40cd-9735-7f52646f6d7c.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/tajanide.png"
+          }
+        ],
+        "prompt": "Character: TAJANIDE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/tajanide.png"
+    },
+    {
+      "id": "capitanone",
+      "job_id": "560ec7ad-50e6-47b3-b619-27ee46631e94",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150803_560ec7ad-50e6-47b3-b619-27ee46631e94.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/capitanone.png"
+          }
+        ],
+        "prompt": "Character: CAPITANONE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/capitanone.png"
+    },
+    {
+      "id": "mattarellux",
+      "job_id": "3ed0e347-3d9f-4a1e-8f80-e5a0d22d7325",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150801_3ed0e347-3d9f-4a1e-8f80-e5a0d22d7325.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/mattarellux.png"
+          }
+        ],
+        "prompt": "Character: MATTARELLUX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/mattarellux.png"
+    },
+    {
+      "id": "draghimon",
+      "job_id": "14c49aac-16f0-406f-94b9-1382f628b000",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150802_14c49aac-16f0-406f-94b9-1382f628b000.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/draghimon.png"
+          }
+        ],
+        "prompt": "Character: DRAGHIMON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/draghimon.png"
+    },
+    {
+      "id": "berlusconix",
+      "path": "public/sprites/monsters/animated/berlusconix.png",
+      "job_id": "616f71df-2a56-40d8-8066-eff791c6b96a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_616f71df-2a56-40d8-8066-eff791c6b96a.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/berlusconix.png"
+          }
+        ],
+        "prompt": "Character: BERLUSCONIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "trumpon",
+      "path": "public/sprites/monsters/animated/trumpon.png",
+      "job_id": "92cc93ba-3ca1-477c-bb0b-b2c74169fb00",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_92cc93ba-3ca1-477c-bb0b-b2c74169fb00.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/trumpon.png"
+          }
+        ],
+        "prompt": "Character: TRUMPON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "ursulax",
+      "path": "public/sprites/monsters/animated/ursulax.png",
+      "job_id": "d0594f94-77c1-43cf-bbee-568425ace5bf",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_d0594f94-77c1-43cf-bbee-568425ace5bf.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/ursulax.png"
+          }
+        ],
+        "prompt": "Character: URSULAX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "muskrat",
+      "path": "public/sprites/monsters/animated/muskrat.png",
+      "job_id": "6ddc706f-cae0-4fdf-aca7-24fb220f50b0",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_6ddc706f-cae0-4fdf-aca7-24fb220f50b0.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/muskrat.png"
+          }
+        ],
+        "prompt": "Character: MUSKRAT. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "putingrad",
+      "path": "public/sprites/monsters/animated/putingrad.png",
+      "job_id": "b6ad6f20-2b21-4f94-89f7-19e423a95d54",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_b6ad6f20-2b21-4f94-89f7-19e423a95d54.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/putingrad.png"
+          }
+        ],
+        "prompt": "Character: PUTINGRAD. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "macronfox",
+      "path": "public/sprites/monsters/animated/macronfox.png",
+      "job_id": "4d766ba1-ed83-4b14-b662-b739a172a544",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_4d766ba1-ed83-4b14-b662-b739a172a544.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/macronfox.png"
+          }
+        ],
+        "prompt": "Character: MACRONFOX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "zelenskir",
+      "path": "public/sprites/monsters/animated/zelenskir.png",
+      "job_id": "e51cda9b-50ba-4718-b449-f95edabf0bc6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151956_e51cda9b-50ba-4718-b449-f95edabf0bc6.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/zelenskir.png"
+          }
+        ],
+        "prompt": "Character: ZELENSKIR. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "xipanda",
+      "path": "public/sprites/monsters/animated/xipanda.png",
+      "job_id": "b8fa7b8e-f85e-4364-9ffb-4b7071d2bc4c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151957_b8fa7b8e-f85e-4364-9ffb-4b7071d2bc4c.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/xipanda.png"
+          }
+        ],
+        "prompt": "Character: XIPANDA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "bojoon",
+      "path": "public/sprites/monsters/animated/bojoon.png",
+      "job_id": "02fbde02-4eca-4b92-99db-1111ee28d65b",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151956_02fbde02-4eca-4b92-99db-1111ee28d65b.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/bojoon.png"
+          }
+        ],
+        "prompt": "Character: BOJOON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      }
+    },
+    {
+      "id": "salvinator",
+      "kind": "monster",
+      "jobId": "3b13958b-3afc-457f-ba39-a0afd3c8f39d",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_162743_3b13958b-3afc-457f-ba39-a0afd3c8f39d.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/salvinator.png"
+          }
+        ],
+        "prompt": "Character: SALVINATOR. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/salvinator.png"
+    },
+    {
+      "id": "bunkerput",
+      "kind": "monster",
+      "jobId": "bdf53fcf-66ed-4ebf-bb0b-dd0de6367571",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164950_bdf53fcf-66ed-4ebf-bb0b-dd0de6367571.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/bunkerput.png"
+          }
+        ],
+        "prompt": "Character: BUNKERPUT. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/bunkerput.png"
+    },
+    {
+      "id": "vaffenix",
+      "kind": "monster",
+      "jobId": "a554f61f-35cc-43e2-8821-54d081ed458d",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_162744_a554f61f-35cc-43e2-8821-54d081ed458d.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/vaffenix.png"
+          }
+        ],
+        "prompt": "Character: VAFFENIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/vaffenix.png"
+    },
+    {
+      "id": "movimenton",
+      "kind": "monster",
+      "jobId": "e7a01a69-d522-44d2-85f1-6fc1118181ff",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_162743_e7a01a69-d522-44d2-85f1-6fc1118181ff.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/movimenton.png"
+          }
+        ],
+        "prompt": "Character: MOVIMENTON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/movimenton.png"
+    },
+    {
+      "id": "marsrat",
+      "kind": "monster",
+      "jobId": "ab63a552-0817-43d6-a8b5-21b49dfb7980",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_162743_ab63a552-0817-43d6-a8b5-21b49dfb7980.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/marsrat.png"
+          }
+        ],
+        "prompt": "Character: MARSRAT. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/marsrat.png"
+    },
+    {
+      "id": "mediocrate",
+      "kind": "monster",
+      "jobId": "985ebe00-f7f4-4974-8fa1-8ce97e5baaa6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164950_985ebe00-f7f4-4974-8fa1-8ce97e5baaa6.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/mediocrate.png"
+          }
+        ],
+        "prompt": "Character: MEDIOCRATE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/mediocrate.png"
+    },
+    {
+      "id": "pontigor",
+      "kind": "monster",
+      "jobId": "8fd2f5a1-8af4-4a46-a050-6cc0f4801aa4",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164955_8fd2f5a1-8af4-4a46-a050-6cc0f4801aa4.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/pontigor.png"
+          }
+        ],
+        "prompt": "Character: PONTIGOR. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/pontigor.png"
+    },
+    {
+      "id": "conteblob",
+      "kind": "monster",
+      "jobId": "57e213b5-2e5e-4f5c-a4f1-b2791f8b1280",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_162744_57e213b5-2e5e-4f5c-a4f1-b2791f8b1280.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/conteblob.png"
+          }
+        ],
+        "prompt": "Character: CONTEBLOB. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/conteblob.png"
+    },
+    {
+      "id": "calendrone",
+      "kind": "monster",
+      "jobId": "6eee57ce-f542-43a2-88d5-f8ef7922f3f5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_162746_6eee57ce-f542-43a2-88d5-f8ef7922f3f5.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/calendrone.png"
+          }
+        ],
+        "prompt": "Character: CALENDRONE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/calendrone.png"
+    },
+    {
+      "id": "generorso",
+      "kind": "monster",
+      "jobId": "8bf6d9cf-9f79-4ffb-b582-847e68c45bff",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_163437_8bf6d9cf-9f79-4ffb-b582-847e68c45bff.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/generorso.png"
+          }
+        ],
+        "prompt": "Character: GENERORSO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/generorso.png"
+    },
+    {
+      "id": "futurorso",
+      "kind": "monster",
+      "jobId": "de7be154-3512-48ec-ba23-678c970ffaa7",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_163437_de7be154-3512-48ec-ba23-678c970ffaa7.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/futurorso.png"
+          }
+        ],
+        "prompt": "Character: FUTURORSO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/futurorso.png"
+    },
+    {
+      "id": "gianimago",
+      "kind": "monster",
+      "jobId": "e738e9a8-892a-48a0-a433-d33afad68156",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164950_e738e9a8-892a-48a0-a433-d33afad68156.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/gianimago.png"
+          }
+        ],
+        "prompt": "Character: GIANIMAGO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/gianimago.png"
+    },
+    {
+      "id": "quasimagiani",
+      "kind": "monster",
+      "jobId": "28e6c76b-6ce6-4604-a469-22590007e8f4",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_163437_28e6c76b-6ce6-4604-a469-22590007e8f4.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/quasimagiani.png"
+          }
+        ],
+        "prompt": "Character: QUASIMAGIANI. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/quasimagiani.png"
+    },
+    {
+      "id": "crosettank",
+      "kind": "monster",
+      "jobId": "86314d35-eb4d-4e24-b6aa-29e57fa75230",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164950_86314d35-eb4d-4e24-b6aa-29e57fa75230.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/crosettank.png"
+          }
+        ],
+        "prompt": "Character: CROSETTANK. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/crosettank.png"
+    },
+    {
+      "id": "fratocorno",
+      "kind": "monster",
+      "jobId": "5073b274-6776-4ca6-ab60-de36cbb96fe4",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_165241_5073b274-6776-4ca6-ab60-de36cbb96fe4.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/fratocorno.png"
+          }
+        ],
+        "prompt": "Character: FRATOCORNO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/fratocorno.png"
+    },
+    {
+      "id": "campocorno",
+      "kind": "monster",
+      "jobId": "bb3c6629-4c97-49e4-b05b-8a0c2ddf26b8",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_163437_bb3c6629-4c97-49e4-b05b-8a0c2ddf26b8.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/campocorno.png"
+          }
+        ],
+        "prompt": "Character: CAMPOCORNO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/campocorno.png"
+    },
+    {
+      "id": "nordiodo",
+      "kind": "monster",
+      "jobId": "df83016f-cd76-42e2-b50c-5997f7c19045",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_165240_df83016f-cd76-42e2-b50c-5997f7c19045.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/nordiodo.png"
+          }
+        ],
+        "prompt": "Character: NORDIODO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/nordiodo.png"
+    },
+    {
+      "id": "referendodo",
+      "kind": "monster",
+      "jobId": "f8a5a4ee-358c-4861-8e3b-c0a02acea22a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_163437_f8a5a4ee-358c-4861-8e3b-c0a02acea22a.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/referendodo.png"
+          }
+        ],
+        "prompt": "Character: REFERENDODO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/referendodo.png"
+    },
+    {
+      "id": "tajacolomba",
+      "kind": "monster",
+      "jobId": "5213d715-6a3b-4783-a732-a3a35c802830",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_163437_5213d715-6a3b-4783-a732-a3a35c802830.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/tajacolomba.png"
+          }
+        ],
+        "prompt": "Character: TAJACOLOMBA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/tajacolomba.png"
+    },
+    {
+      "id": "telecrate",
+      "kind": "monster",
+      "jobId": "a9f064bb-1f9b-4e07-82dc-e51981129006",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164009_a9f064bb-1f9b-4e07-82dc-e51981129006.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/telecrate.png"
+          }
+        ],
+        "prompt": "Character: TELECRATE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/telecrate.png"
+    },
+    {
+      "id": "pontimax",
+      "kind": "monster",
+      "jobId": "54061518-8459-461d-9864-b72d0eec8b7d",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164008_54061518-8459-461d-9864-b72d0eec8b7d.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/pontimax.png"
+          }
+        ],
+        "prompt": "Character: PONTIMAX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/pontimax.png"
+    },
+    {
+      "id": "verdolino",
+      "kind": "monster",
+      "jobId": "8a7a3b82-6715-432a-a466-2efa51ad2cb0",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_165239_8a7a3b82-6715-432a-a466-2efa51ad2cb0.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/verdolino.png"
+          }
+        ],
+        "prompt": "Character: VERDOLINO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/verdolino.png"
+    },
+    {
+      "id": "ecoverdon",
+      "kind": "monster",
+      "jobId": "c73dfd13-acdf-4c01-ad30-31ae7d7c23f6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164008_c73dfd13-acdf-4c01-ad30-31ae7d7c23f6.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/ecoverdon.png"
+          }
+        ],
+        "prompt": "Character: ECOVERDON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/ecoverdon.png"
+    },
+    {
+      "id": "contepop",
+      "kind": "monster",
+      "jobId": "7c165679-2d17-47a3-a54c-7ecbb802e291",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164013_7c165679-2d17-47a3-a54c-7ecbb802e291.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/contepop.png"
+          }
+        ],
+        "prompt": "Character: CONTEPOP. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/contepop.png"
+    },
+    {
+      "id": "salvinurlo",
+      "kind": "monster",
+      "jobId": "f8063a5e-8066-4233-b745-027d7cc0bb3c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164008_f8063a5e-8066-4233-b745-027d7cc0bb3c.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/salvinurlo.png"
+          }
+        ],
+        "prompt": "Character: SALVINURLO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/salvinurlo.png"
+    },
+    {
+      "id": "verdoribelle",
+      "kind": "monster",
+      "jobId": "70ab57a9-e2d9-47fc-b284-3a22ed5e4c18",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164008_70ab57a9-e2d9-47fc-b284-3a22ed5e4c18.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/verdoribelle.png"
+          }
+        ],
+        "prompt": "Character: VERDORIBELLE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/verdoribelle.png"
+    },
+    {
+      "id": "salistrobo",
+      "kind": "monster",
+      "jobId": "61fa4a6c-a746-4ef7-9c58-00cad43fffa1",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_165240_61fa4a6c-a746-4ef7-9c58-00cad43fffa1.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/salistrobo.png"
+          }
+        ],
+        "prompt": "Character: SALISTROBO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/salistrobo.png"
+    },
+    {
+      "id": "salisound",
+      "kind": "monster",
+      "jobId": "1261b249-5dc0-4565-b149-47ee39e43e8a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_164950_1261b249-5dc0-4565-b149-47ee39e43e8a.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/salisound.png"
+          }
+        ],
+        "prompt": "Character: SALISOUND. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "path": "public/sprites/monsters/animated/salisound.png"
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "giorgetta-grok",
+      "jobId": "c8806fa0-4260-4d95-ae69-2b4dee5f8b61",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_144026_c8806fa0-4260-4d95-ae69-2b4dee5f8b61.png",
+      "review": "rejected: loses reference horns; keep GPT Image poses",
+      "cost": 2
+    }
+  ],
+  "productionJobs": [
+    {
+      "index": 0,
+      "job_id": "171749f6-b82b-4440-a323-e28c3779fe2e",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "ellyna",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/ellyna.png"
+          }
+        ],
+        "prompt": "Character: ELLYNA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150356_171749f6-b82b-4440-a323-e28c3779fe2e.png"
+    },
+    {
+      "index": 1,
+      "job_id": "f1a4a800-a110-4b7a-a0a6-99d00baf54b0",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "renzino",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/renzino.png"
+          }
+        ],
+        "prompt": "Character: RENZINO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_f1a4a800-a110-4b7a-a0a6-99d00baf54b0.png"
+    },
+    {
+      "index": 2,
+      "job_id": "ce2805b8-84cb-4cfc-9a04-81243885bd50",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "giorgiagon",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/giorgiagon.png"
+          }
+        ],
+        "prompt": "Character: GIORGIAGON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150357_ce2805b8-84cb-4cfc-9a04-81243885bd50.png"
+    },
+    {
+      "index": 3,
+      "job_id": "61e9fa1e-cf75-49fe-8726-6e87ea875229",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "schleinix",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/schleinix.png"
+          }
+        ],
+        "prompt": "Character: SCHLEINIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_61e9fa1e-cf75-49fe-8726-6e87ea875229.png"
+    },
+    {
+      "index": 4,
+      "job_id": "d48cb4bb-7b59-4958-9705-2d2a74b3658f",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "renzilla",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/renzilla.png"
+          }
+        ],
+        "prompt": "Character: RENZILLA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_d48cb4bb-7b59-4958-9705-2d2a74b3658f.png"
+    },
+    {
+      "index": 5,
+      "job_id": "ae404e7e-c3c0-4a91-a869-0e30963fdaa1",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "salvinott",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/salvinott.png"
+          }
+        ],
+        "prompt": "Character: SALVINOTT. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150355_ae404e7e-c3c0-4a91-a869-0e30963fdaa1.png"
+    },
+    {
+      "index": 6,
+      "job_id": "534dc8e3-6ba9-414b-81bd-84efa1a3232a",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "grillix",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/grillix.png"
+          }
+        ],
+        "prompt": "Character: GRILLIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150401_534dc8e3-6ba9-414b-81bd-84efa1a3232a.png"
+    },
+    {
+      "index": 7,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "contemorfo",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/contemorfo.png"
+          }
+        ],
+        "prompt": "Character: CONTEMORFO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "a46bcfa2-56e3-4b80-9236-86af8a71dd80",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150803_a46bcfa2-56e3-4b80-9236-86af8a71dd80.png"
+    },
+    {
+      "index": 8,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "calendauro",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/calendauro.png"
+          }
+        ],
+        "prompt": "Character: CALENDAURO. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "79a4e08f-fd56-481b-9a68-dc553f0356f7",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150801_79a4e08f-fd56-481b-9a68-dc553f0356f7.png"
+    },
+    {
+      "index": 9,
+      "job_id": "0bff8e32-23f0-4a34-a0d1-05cd3882c122",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "vannaccix",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/vannaccix.png"
+          }
+        ],
+        "prompt": "Character: VANNACCIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150400_0bff8e32-23f0-4a34-a0d1-05cd3882c122.png"
+    },
+    {
+      "index": 10,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "tajanide",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/tajanide.png"
+          }
+        ],
+        "prompt": "Character: TAJANIDE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "7aefc417-e53f-40cd-9735-7f52646f6d7c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150801_7aefc417-e53f-40cd-9735-7f52646f6d7c.png"
+    },
+    {
+      "index": 11,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "capitanone",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/capitanone.png"
+          }
+        ],
+        "prompt": "Character: CAPITANONE. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "560ec7ad-50e6-47b3-b619-27ee46631e94",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150803_560ec7ad-50e6-47b3-b619-27ee46631e94.png"
+    },
+    {
+      "index": 12,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "mattarellux",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/mattarellux.png"
+          }
+        ],
+        "prompt": "Character: MATTARELLUX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "3ed0e347-3d9f-4a1e-8f80-e5a0d22d7325",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150801_3ed0e347-3d9f-4a1e-8f80-e5a0d22d7325.png"
+    },
+    {
+      "index": 13,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "draghimon",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/draghimon.png"
+          }
+        ],
+        "prompt": "Character: DRAGHIMON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "14c49aac-16f0-406f-94b9-1382f628b000",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_150802_14c49aac-16f0-406f-94b9-1382f628b000.png"
+    },
+    {
+      "index": 14,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "berlusconix",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/berlusconix.png"
+          }
+        ],
+        "prompt": "Character: BERLUSCONIX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "616f71df-2a56-40d8-8066-eff791c6b96a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_616f71df-2a56-40d8-8066-eff791c6b96a.png"
+    },
+    {
+      "index": 15,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "trumpon",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/trumpon.png"
+          }
+        ],
+        "prompt": "Character: TRUMPON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "92cc93ba-3ca1-477c-bb0b-b2c74169fb00",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_92cc93ba-3ca1-477c-bb0b-b2c74169fb00.png"
+    },
+    {
+      "index": 16,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "ursulax",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/ursulax.png"
+          }
+        ],
+        "prompt": "Character: URSULAX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "d0594f94-77c1-43cf-bbee-568425ace5bf",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_d0594f94-77c1-43cf-bbee-568425ace5bf.png"
+    },
+    {
+      "index": 17,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "muskrat",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/muskrat.png"
+          }
+        ],
+        "prompt": "Character: MUSKRAT. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "6ddc706f-cae0-4fdf-aca7-24fb220f50b0",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_6ddc706f-cae0-4fdf-aca7-24fb220f50b0.png"
+    },
+    {
+      "index": 18,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "putingrad",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/putingrad.png"
+          }
+        ],
+        "prompt": "Character: PUTINGRAD. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "b6ad6f20-2b21-4f94-89f7-19e423a95d54",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_b6ad6f20-2b21-4f94-89f7-19e423a95d54.png"
+    },
+    {
+      "index": 19,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "macronfox",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/macronfox.png"
+          }
+        ],
+        "prompt": "Character: MACRONFOX. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "4d766ba1-ed83-4b14-b662-b739a172a544",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151711_4d766ba1-ed83-4b14-b662-b739a172a544.png"
+    },
+    {
+      "index": 20,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "zelenskir",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/zelenskir.png"
+          }
+        ],
+        "prompt": "Character: ZELENSKIR. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "e51cda9b-50ba-4718-b449-f95edabf0bc6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151956_e51cda9b-50ba-4718-b449-f95edabf0bc6.png"
+    },
+    {
+      "index": 21,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "xipanda",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/xipanda.png"
+          }
+        ],
+        "prompt": "Character: XIPANDA. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "b8fa7b8e-f85e-4364-9ffb-4b7071d2bc4c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151957_b8fa7b8e-f85e-4364-9ffb-4b7071d2bc4c.png"
+    },
+    {
+      "index": 22,
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "id": "bojoon",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://politicmon.vercel.app/sprites/monsters/bojoon.png"
+          }
+        ],
+        "prompt": "Character: BOJOON. Production videogame spritesheet of the EXACT pixel-art fantasy creature in the reference. Preserve its species, creature anatomy, proportions, face, outfit, all accessories, tail, wings, horns and colors. Do NOT add or remove anatomical features, do not turn an animal into a human. Make a precise TWO BY TWO grid of FOUR equally sized square cells, each containing exactly one complete full-body sprite. Identical camera and scale in every cell, feet/paws anchored on same baseline. Solid flat chroma-key magenta #FF00FF background, including all cell corners. No shadow, no ground, no decorative effects, no grid lines, no lettering, no labels, no captions. Leave ample empty margin in each cell. Top-left: relaxed idle, eyes open. Top-right: expressive attack/rally cry, mouth open, lively gesture appropriate to this creature, preserving all props and limbs. Bottom-left: determined anticipation, small forward lean, preparing the attack, with exact same silhouette and design. Bottom-right: blink, eyes closed, relaxed idle, same stance as top-left. Four near-identical animation frames with expression changes, NOT four redesigned characters. Authentic crisp square pixel art, black outline, small limited palette with two-tone shading; no antialiasing, no smooth painting. The reference is from Politicmon, a satirical fantasy monster RPG."
+      },
+      "job_id": "02fbde02-4eca-4b92-99db-1111ee28d65b",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_151956_02fbde02-4eca-4b92-99db-1111ee28d65b.png"
+    }
+  ],
+  "additionalProduction": {
+    "manifest": "scripts/higgsfield-premium-next.json",
+    "sheets": 28,
+    "credits": 42
+  }
+}

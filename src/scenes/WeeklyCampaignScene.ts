@@ -4,7 +4,7 @@ import type { Screen } from "../engine/screen";
 import { audio } from "../engine/audio";
 import { claimWeeklyReward, resolveWeeklyStage, startWeeklyCampaign, weeklyReward, weeklySchedule } from "../game/weeklyCampaign";
 import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader, wrapText } from "../ui/widgets";
+import { drawScreenHeader, MessageBox, wrapText } from "../ui/widgets";
 import { grantSeasonalForm, memeForm } from "../game/memeForms";
 import { applyMemeEffects, canApplyMemeEffects } from "../game/memeEventRuntime";
 
@@ -13,13 +13,15 @@ export class WeeklyCampaignScene implements Scene {
   private choice = 0;
   private claimedFormId = "";
   private notice = "";
+  private msg = new MessageBox();
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState, private onDebate: (index: number) => void) {
     state.weeklyCampaign = startWeeklyCampaign(state.weeklyCampaign);
     saveGame(state);
   }
 
-  update(): void {
+  update(dt: number): void {
+    if (this.msg.isOpen) { this.msg.update(dt, this.input); return; }
     if (this.input.wasPressed("b")) { this.stack.pop(); return; }
     const weekly = this.state.weeklyCampaign;
     if (weekly.phase === "complete") { if (this.input.wasPressed("a")) this.claimAndExit(); return; }
@@ -36,6 +38,7 @@ export class WeeklyCampaignScene implements Scene {
       applyMemeEffects(this.state, selected.effects);
       this.state.weeklyCampaign = resolveWeeklyStage(weekly, selected.label, selected.delta); saveGame(this.state); audio.confirm(); this.choice = 0;
       this.notice = "";
+      this.msg.show([...(selected.lines ?? ["LA SCELTA ENTRA NEL VERBALE."]), selected.effectLabel ?? `CONSENSO RUN ${selected.delta >= 0 ? "+" : ""}${selected.delta}`]);
     } else if (stage.kind === "debate") {
       this.stack.pop(); this.onDebate(stage.debateIndex ?? 1);
     } else {
@@ -79,11 +82,11 @@ export class WeeklyCampaignScene implements Scene {
       screen.text(stage.event.title, 10, 43, "#ffe38a");
       let y = 58; for (const line of wrapText(stage.event.text, 35).slice(0, 4)) { screen.text(line, 10, y, "#e7ebf2"); y += 10; }
       stage.event.choices.forEach((item, index) => {
-        const cy = 96 + index * 25; screen.panel(8, cy, 224, 21, "card");
-        if (this.choice === index) screen.frame(9, cy + 1, 222, 19, "#e6b944");
-        screen.textFit(`${this.choice === index ? "► " : "  "}${item.label}`, 15, cy + 7, 112, "#10141f");
+        const cy = 98 + index * 28; screen.panel(8, cy, 224, 26, "card");
+        if (this.choice === index) screen.frame(9, cy + 1, 222, 24, "#e6b944");
+        screen.textFit(`${this.choice === index ? "► " : "  "}${item.label}`, 15, cy + 4, 210, "#10141f");
         const effect = item.effectLabel ?? `RUN ${item.delta >= 0 ? "+" : ""}${item.delta}`;
-        screen.textRight(effect, 222, cy + 7, item.delta >= 0 ? "#26745d" : "#a0443e");
+        screen.textFit(effect, 18, cy + 15, 208, "#476c69");
       });
     } else if (stage.kind === "debate") {
       screen.panel(8, 43, 224, 94, "dialog"); screen.text(`DIBATTITO ${stage.debateIndex}/3`, 18, 57, "#10141f");
@@ -95,5 +98,6 @@ export class WeeklyCampaignScene implements Scene {
       screen.text("A: CHIUDI LO SCRUTINIO", 18, 119, "#a46b12");
     }
     screen.text(this.notice || "B: SALVA ED ESCI", 10, 162, this.notice ? "#ff8a80" : "#ffe38a");
+    this.msg.draw(screen);
   }
 }

@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+import { MAPS } from "../../src/data/maps";
+import { BATTLE_BACKDROPS, battleBackdropForMap, battleBackdropId } from "../../src/game/battle/backdrop";
+
+test("gli incontri mantengono l'ambiente della mappa, inclusi interni e postgame", () => {
+  const cases = {
+    borgo: "piazza", route1: "prato", route2: "prato", route3: "prato",
+    grotta1: "grotta", grotta2: "grotta", "oblast-meme": "neve",
+    gymtv: "studio", gymue: "palazzo", gymglobal: "palazzo",
+    palazzo: "palazzo", colle: "palazzo", commissione: "palazzo",
+    stretto: "costa", offshore: "costa", "bar-stretto": "costa",
+    futuro_sede: "rete", district_isole: "costa", palazzo_feed: "rete",
+    palazzo_talkshow: "studio", palazzo_feed_terrazza: "piazza"
+  };
+  for (const [mapId, id] of Object.entries(cases)) {
+    assert.ok(MAPS[mapId], `mappa mancante: ${mapId}`);
+    assert.equal(battleBackdropId(mapId), id, mapId);
+  }
+  assert.equal(battleBackdropId("mappa-futura-sconosciuta"), "prato");
+  assert.equal(battleBackdropId("__proto__"), "prato");
+  for (const mapId of Object.keys(MAPS)) assert.ok(battleBackdropForMap(mapId));
+});
+
+test("gli sfondi hanno chiavi distinte, PNG nativi e un peso adatto all'offline mobile", () => {
+  const ids = new Set<string>();
+  let generatedBytes = 0;
+  for (const [id, backdrop] of Object.entries(BATTLE_BACKDROPS)) {
+    assert.ok(!ids.has(backdrop.spriteId), `chiave registry duplicata: ${id}`);
+    ids.add(backdrop.spriteId);
+    const png = readFileSync(new URL(`../../public/sprites/${backdrop.path}`, import.meta.url));
+    assert.equal(png.subarray(0, 8).toString("hex"), "89504e470d0a1a0a", id);
+    if (id === "prato") continue;
+    assert.equal(png.readUInt32BE(16), 240, id);
+    assert.equal(png.readUInt32BE(20), 136, id);
+    generatedBytes += png.length;
+  }
+  assert.ok(generatedBytes < 150_000, `${generatedBytes} byte di nuovi sfondi`);
+});

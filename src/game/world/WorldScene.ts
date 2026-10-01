@@ -3,6 +3,12 @@ import { mp } from "../../net/mp";
 import { MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
+import { CIVIC_EVENTS, CIVIC_NPCS } from "../../data/civicEvents";
+import { CivicScene } from "../../scenes/CivicScene";
+import { BossBriefingScene } from "../../scenes/BossBriefingScene";
+import { trainerStyle } from "../battle/trainerStyle";
+import { changeMorale } from "../morale";
+import { civicNpcReply } from "../civicChoices";
 
 // Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
 function drawBallot(screen: Screen, dx: number, dy: number): void {
@@ -73,7 +79,7 @@ import {
   coppaRule, prepareCoppaParty, COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE,
   type CoppaRule, type TournamentState
 } from "../tournament";
-import { buildTrainerTeam, shouldPersistTrainerVictory } from "./battleCoordinator";
+import { buildTrainerTeam, recordNewTrainerVictory, shouldPersistTrainerVictory } from "./battleCoordinator";
 import { routeNpcInteraction } from "./npcInteraction";
 import { createAtto3Controller, type Atto3Controller } from "./atto3Controller";
 import { isFeatureEnabled } from "../features";
@@ -902,7 +908,7 @@ export class WorldScene implements Scene {
         fallbackTeam: () => this.buildRivalTeam(),
         bossTrainerIds: BOSS_TRAINER_IDS
       });
-      this.stack.push(
+      const begin = () => this.stack.push(
         new BattleScene(this.stack, this.input, {
           state: this.state,
           foeTeam: team,
@@ -911,14 +917,13 @@ export class WorldScene implements Scene {
           electionDoctrine: doctrine,
           maxBattleHealingItems: maxHealingItems,
           onEnd: (result) => {
+            let promiseNotices: string[] = [];
             // I PG vaganti ("wander:*"), la SFIDA DEL GIORNO ("daily:*") e i
             // match della COPPA ("coppa:*") restano ripetibili: mai in
             // defeatedTrainers. La guardia includes() evita duplicati alla
             // vittoria di una RIVINCITA; markRematchClock riavvia il cooldown.
             if (shouldPersistTrainerVictory(def.id, result)) {
-              if (!this.state.defeatedTrainers.includes(def.id)) {
-                this.state.defeatedTrainers.push(def.id);
-              }
+              promiseNotices = recordNewTrainerVictory(this.state, def.id, result);
               markRematchClock(this.state, def.id);
             }
             // Collegio sandbox R1: il primo dibattito produce un outcome one-shot
@@ -972,10 +977,13 @@ export class WorldScene implements Scene {
               this.wanderTrainer = null;
             }
             this.onBattleEnd(result);
-            after?.(result);
+            if (promiseNotices.length) this.say(promiseNotices, () => after?.(result));
+            else after?.(result);
           }
         })
       );
+      if (trainerStyle(def.id).art) this.stack.push(new BossBriefingScene(this.stack, this.input, this.state, def, team, begin, () => { mp.duelBusy = false; audio.playMusic(this.map.music ?? "borgo"); }));
+      else begin();
     });
   }
 
@@ -1155,6 +1163,11 @@ export class WorldScene implements Scene {
     if (npc === this.wanderNpc && this.wanderTrainer) {
       const trainer = this.wanderTrainer;
       this.askYesNo(`${trainer.name}: ACCETTI?`, () => this.startTrainerFight(trainer));
+      return;
+    }
+    const civicId = CIVIC_NPCS[npc.id];
+    if (civicId && this.state.party.length > 0 && !this.state.morale.decisions.includes(civicId)) {
+      this.stack.push(new CivicScene(this.stack, this.input, this.state, CIVIC_EVENTS[civicId]));
       return;
     }
     if (this.atto3Controller.interactNpc(npc.id, {
@@ -1343,7 +1356,7 @@ export class WorldScene implements Scene {
     }
 
     if (route.kind === "dialog" && npc.lines && npc.lines.length > 0) {
-      this.say(npc.lines);
+      this.say(civicNpcReply(this.state, npc.id) ?? npc.lines);
     }
   }
 
@@ -2213,11 +2226,11 @@ export class WorldScene implements Scene {
     this.say(
       [
         `${SPECIES[speciesId].name} è il tuo primo POLITICMON!`,
-        "PROF. QUIRINO: ottima scelta. O pessima, lo dirà il televoto.",
+        "PROF. QUIRINO: il tipo conta in lotta. Quello che ci fai conta fuori.",
         "?!? Qualcuno entra di corsa nel laboratorio...",
-        "RIVALE GIANNI: in ritardo? Io? Era un ingresso A EFFETTO!",
+        "RIVALE GIANNI: aspettate, non ero nell'inquadratura. Adesso scegliamo!",
         `GIANNI afferra la scheda di ${rivalSpecies.name}.`,
-        "GIANNI: il mio batte il tuo per posizionamento strategico. Te lo dimostro SUBITO!"
+        "GIANNI: ho scelto il tuo contrario. Il consulente dice che così mi ricordano. Vediamo se basta."
       ],
       () => {
         const def: TrainerDef = {
@@ -2253,13 +2266,14 @@ export class WorldScene implements Scene {
   private giveDex(): void {
     this.say(
       [
-        "GIANNI: mi alleno e ci rivediamo a CAPUT MUNDI. Il PALAZZO sarà mio!",
-        "PROF. QUIRINO: che energia, voi due.",
+        "GIANNI: ho perso? Nel video taglio prima. Per il prossimo però mi alleno davvero.",
+        "PROF. QUIRINO: avete conquistato l'attenzione. È la parte facile da misurare.",
         "Tieni, questo è il POLITICDEX: registra ogni politico che vedi o elegga.",
         "E queste sono 5 SCHEDE ELETTORALI: indebolisci i candidati selvatici e lanciale!",
         "I TIPI DECIDONO LE SFIDE: studia la GUIDA TIPI nel menu prima di ogni lotta.",
         "Conquista le 3 MEDAGLIE: AUDITEL a MEDIOPOLI, SPREAD a EUROTOWN, DAZIO a CAPUT MUNDI.",
-        "Solo allora il PALAZZO ti aprirà il portone. In bocca al lupo!"
+        "Solo allora il PALAZZO ti aprirà il portone. Nel frattempo ascolta chi aspetta il bus a Borgo.",
+        "Menu MORALE: fiducia dei cittadini, coesione dei tuoi e scadenze. Una promessa scade dopo tre NUOVI dibattiti vinti; le rivincite non contano."
       ],
       () => {
         this.state.flags["dex-received"] = true;
@@ -2506,27 +2520,30 @@ export class WorldScene implements Scene {
       hasMinistro
         ? `${ministeroNome} è finito nella bufera: i giornali chiedono la testa.`
         : "La stampa reclama un colpevole, ma il tuo Governo Ombra è ancora vuoto.",
-      "Le agenzie battono la notizia. Tocca a te decidere la linea."
+      "Puoi chiedere documenti o offrire una testa al titolo. Una verifica non è un'assoluzione.",
+      "SÌ: verifica, SOND -8, FID +6, COE +8. NO: scarica, SOND +5, FID -6, COE -10."
     ], () => {
       this.askYesNo(
-        "SOSTIENI IL MINISTRO? (NO = LO SCARICHI)",
+        "CHIEDI UNA VERIFICA?",
         () => {
           // SOSTIENI: lealtà che costa consenso.
           const { value } = bumpSondaggi(this.state, -8);
+          changeMorale(this.state, "VERIFICA PUBBLICA", 6, 8);
           saveGame(this.state);
           this.say([
-            "Fai quadrato attorno al tuo. La compattezza si paga.",
-            `I SONDAGGI scendono all' ${value}%. Ma la squadra ti resta fedele.`
+            "Pubblichi i documenti, anche quelli che ti danno torto. La regia taglia: mancano urla.",
+            `SOND ${value}%. Fiducia +6, coesione +8: i tuoi sanno che esiste una procedura.`
           ]);
         },
         () => {
           // SCARICA: un incarico si libera, l'opinione pubblica applaude.
           const removed = scaricaUnMinistro(this.state);
           const { value } = bumpSondaggi(this.state, 5);
+          changeMorale(this.state, "CAPRO ESPIATORIO IN DIRETTA", -6, -10);
           saveGame(this.state);
           const lines = [
-            "Lo scarichi in diretta. La piazza applaude, i corridoi mormorano.",
-            `I SONDAGGI salgono al ${value}%.`
+            "Lo scarichi prima dei documenti. Il titolo è pronto, la verifica ancora no.",
+            `SOND ${value}%. Fiducia -6, coesione -10: la squadra sa chi sarà il prossimo.`
           ];
           if (removed) {
             lines.push(`${MINISTERI[removed].name} resta vacante: riassegnalo dal GOVERNO.`);

@@ -104,16 +104,13 @@ export class ShopScene implements Scene {
         screen.text(lines[i], 44, y + 5 + i * 9, INK);
       }
     }
-    const note =
-      this.state.sondaggi >= 70
-        ? "Sconto popolarità -10%!"
-        : this.state.sondaggi < 30
-          ? "Sovrapprezzo rischio flop +15%."
-          : "";
-    const esteri = hasMinistro(this.state, "esteri") ? " Min. Esteri -20%!" : "";
-    if (note || esteri) {
-      screen.text(`${note}${esteri}`.trim().slice(0, 34), 8, VIEW_H - 20, "#e8c84a");
-    }
+    const notes: string[] = [];
+    if (this.state.sondaggi >= 70) notes.push("SOND -10%");
+    else if (this.state.sondaggi < 30) notes.push("SOND +15%");
+    const trust = this.state.morale.trust;
+    if (trust >= 70 || trust < 30) notes.push(`FID ${trust >= 70 ? "-5%" : "+5%"}`);
+    if (hasMinistro(this.state, "esteri")) notes.push("EST -20%");
+    screen.textFit(notes.join("  "), 8, VIEW_H - 20, 224, "#476c69");
     screen.text("A: compra  B: esci", 8, VIEW_H - 10, GREY);
     this.msg.draw(screen);
   }

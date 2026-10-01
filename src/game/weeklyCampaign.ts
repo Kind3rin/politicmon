@@ -25,6 +25,7 @@ export interface WeeklyEventChoice {
   readonly delta: number;
   readonly effects?: readonly MemeEffect[];
   readonly effectLabel?: string;
+  readonly lines?: readonly string[];
 }
 export interface WeeklyStage { readonly id: string; readonly kind: WeeklyStageKind; readonly event?: WeeklyEventDef; readonly debateIndex?: number; }
 
@@ -66,6 +67,8 @@ function effectSummary(effects: readonly MemeEffect[]): string {
   return effects.map((effect) => {
     if (effect.kind === "sondaggi") return `SOND ${effect.delta >= 0 ? "+" : ""}${effect.delta}`;
     if (effect.kind === "money") return `${effect.delta >= 0 ? "+" : ""}${effect.delta}€`;
+    if (effect.kind === "trust") return `FID ${effect.delta >= 0 ? "+" : ""}${effect.delta}`;
+    if (effect.kind === "cohesion") return `COE ${effect.delta >= 0 ? "+" : ""}${effect.delta}`;
     if (effect.kind === "item") return `${effect.id.toUpperCase()} x${effect.qty}`;
     if (effect.kind === "territory") return `${effect.id.toUpperCase()} ${effect.delta >= 0 ? "+" : ""}${effect.delta}`;
     return "EFFETTO STORIA";
@@ -84,6 +87,7 @@ export function weeklyMemeEvent(event: MemeEventDef): WeeklyEventDef {
     label: choice.label,
     delta: memeScoreDelta(choice.effects),
     effects: choice.effects,
+    lines: choice.lines,
     effectLabel: effectSummary(choice.effects)
   });
   return {

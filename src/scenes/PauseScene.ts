@@ -27,6 +27,7 @@ import { WorldMapScene } from "./WorldMapScene";
 import { CoalitionScene } from "./CoalitionScene";
 import { SourcesScene } from "./SourcesScene";
 import { ContentScene } from "./ContentScene";
+import { MoraleScene } from "./MoraleScene";
 
 // Sotto-menu del menu pausa (OPZIONI / ONLINE / EXTRA).
 type SubKind = "opzioni" | "online" | "extra";
@@ -65,6 +66,7 @@ export class PauseScene implements Scene {
     // È un elemento identitario, non un extra da nascondere dietro un sotto-menu.
     push("TESSERA");
     push("SQUADRA");
+    push("MORALE", `${this.state.morale.trust}/${this.state.morale.cohesion}`);
     push("BORSA");
     if (this.state.flags["dex-received"]) {
       push("POLITICDEX");
@@ -95,6 +97,7 @@ export class PauseScene implements Scene {
     const entries = [
       `GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`,
       `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`,
+      `RITMO LOTTE: ${this.state.battleSpeed === 2 ? "RAPIDO" : "NORMALE"}`,
       `RIDUCI EFFETTI: ${this.state.reduceEffects ? "SÌ" : "NO"}`
     ];
     if (haptics.isSupported) {
@@ -187,6 +190,9 @@ export class PauseScene implements Scene {
         break;
       case "SQUADRA":
         this.stack.push(new PartyScene(this.stack, this.input, this.state, { mode: "view" }));
+        break;
+      case "MORALE":
+        this.stack.push(new MoraleScene(this.stack, this.input, this.state));
         break;
       case "BORSA":
         this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: false }));
@@ -290,6 +296,9 @@ export class PauseScene implements Scene {
       toggleControlMode();
     } else if (label.startsWith("VIBRA")) {
       haptics.toggle();
+    } else if (label.startsWith("RITMO LOTTE")) {
+      this.state.battleSpeed = this.state.battleSpeed === 2 ? 1 : 2;
+      saveGame(this.state);
     } else if (label.startsWith("RIDUCI EFFETTI")) {
       // Accessibilità: azzera/ripristina shake+flash+dialog-shake. Segna la
       // scelta come esplicita (reduceEffectsSet) così non viene più sovrascritta

@@ -7,6 +7,7 @@ import { addSondaggi, sondaggiColor } from "../game/governo";
 import { healMonster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
 import { Menu, MessageBox, wrapText, GREY } from "../ui/widgets";
+import { changeMorale } from "../game/morale";
 
 // RETROBOTTEGA DEL PADRINO — la "famiglia" come satira bonaria del clientelismo
 // e delle raccomandazioni. NIENTE violenza/apologia: qui si comprano favori
@@ -42,13 +43,13 @@ type Mode = "menu" | "market";
 export function mafiaOptionDetails(index: number, protectionActive: boolean): string[] {
   switch (index) {
     case 0:
-      return ["DIRETTIVE RARE A PREZZO RIDOTTO.", "OGNI ACQUISTO COSTA 3-4 SOND."];
+      return ["DIRETTIVE RARE A PREZZO RIDOTTO.", "OGNI ACQUISTO COSTA 3-4 SOND.", "FIDUCIA -5 / COESIONE -2."];
     case 1:
-      return ["CURA TUTTA LA SQUADRA.", "REGALO: 2 SCHEDE BLINDATE.", "COSTO: 400€ E -2 SOND."];
+      return ["CURA TUTTA LA SQUADRA.", "REGALO: 2 SCHEDE BLINDATE.", "COSTO: 400€ E -2 SOND.", "FIDUCIA -6 / COESIONE -3."];
     case 2:
       return protectionActive
         ? ["PROTEZIONE GIÀ ATTIVA.", "GLI INCONTRI RESTANO RIDOTTI."]
-        : ["RIDUCE GLI INCONTRI SELVATICI.", "EFFETTO PERMANENTE.", "COSTO: 1200€ E -5 SOND."];
+        : ["RIDUCE GLI INCONTRI SELVATICI.", "EFFETTO PERMANENTE.", "COSTO: 1200€ E -5 SOND.", "FIDUCIA -10 / COESIONE -5."];
     case 3:
       return ["PUNTATA FISSA: 200€.", "25% VINCI 600€; 22% PARI.", "53% PERDI TUTTO."];
     default:
@@ -156,11 +157,13 @@ export class MafiaScene implements Scene {
     this.state.money -= deal.price;
     this.state.bag[deal.itemId] = (this.state.bag[deal.itemId] ?? 0) + 1;
     const now = addSondaggi(this.state, deal.sondaggi);
+    changeMorale(this.state, "FAVORE SOTTOBANCO", -5, -2);
     audio.confirm();
     saveGame(this.state);
     this.msg.show([
       `Affare fatto: ${item?.name ?? deal.itemId}.`,
-      `Ma certi giri si pagano: ${deal.sondaggi} sondaggi (ora ${now}%).`
+      `Ma certi giri si pagano: ${deal.sondaggi} sondaggi (ora ${now}%).`,
+      "Fiducia -5, coesione -2. Chi aspetta in fila ha visto la porta laterale."
     ]);
   }
 
@@ -178,12 +181,14 @@ export class MafiaScene implements Scene {
     }
     this.state.bag.schedona = (this.state.bag.schedona ?? 0) + 2;
     const now = addSondaggi(this.state, -2);
+    changeMorale(this.state, "RACCOMANDAZIONE", -6, -3);
     audio.heal();
     saveGame(this.state);
     this.msg.show([
       "Una telefonata giusta e tutto si sistema.",
       "Squadra rimessa a nuovo e 2 SCHEDE BLINDATE in omaggio.",
-      `La rispettabilità però scende: -2 sondaggi (ora ${now}%).`
+      `La rispettabilità però scende: -2 sondaggi (ora ${now}%).`,
+      "Fiducia -6, coesione -3. La scorciatoia non era aperta a tutti."
     ]);
   }
 
@@ -203,13 +208,15 @@ export class MafiaScene implements Scene {
     this.state.money -= PROTEZIONE_COST;
     this.state.flags["mafia-protezione"] = true;
     const now = addSondaggi(this.state, -5);
+    changeMorale(this.state, "PROTEZIONE PRIVATA", -10, -5);
     audio.confirm();
     saveGame(this.state);
     this.menu = this.buildMenu();
     this.msg.show([
       "Da oggi sei sotto PROTEZIONE: meno seccatori per strada.",
       "I candidati selvatici ti danno tregua.",
-      `Ma la cosa si sa: -5 sondaggi (ora ${now}%).`
+      `Ma la cosa si sa: -5 sondaggi (ora ${now}%).`,
+      "Fiducia -10, coesione -5. Adesso devi rispondere anche a chi ti protegge."
     ]);
   }
 
@@ -259,16 +266,17 @@ export class MafiaScene implements Scene {
       if (deal) {
         const item = ITEMS[deal.itemId];
         screen.panel(10, 103, VIEW_W - 20, 57, "card");
-        const details = wrapText((item?.desc ?? "DIRETTIVA RISERVATA.").toUpperCase(), 34).slice(0, 4);
-        details.forEach((line, i) => screen.text(line, 14, 107 + i * 9, i === 0 ? "#cfe6ff" : GREY));
-        screen.text(`COSTO ${deal.price}€  RISCHIO ${deal.sondaggi} SOND.`, 14, 148, "#d04848");
+        const details = wrapText((item?.desc ?? "DIRETTIVA RISERVATA.").toUpperCase(), 34).slice(0, 3);
+        details.forEach((line, i) => screen.text(line, 14, 107 + i * 9, "#10141f"));
+        screen.text(`COSTO ${deal.price}€ / ${deal.sondaggi} SOND`, 14, 139, "#d04848");
+        screen.text("FIDUCIA -5 / COESIONE -2", 14, 150, "#d04848");
       }
       screen.text("A: COMPRA  B: INDIETRO", 8, VIEW_H - 10, GREY);
     } else {
       this.menu.draw(screen, 14, 34, VIEW_W - 28);
       screen.panel(10, 114, VIEW_W - 20, 46, "card");
       const details = mafiaOptionDetails(this.menu.index, Boolean(this.state.flags["mafia-protezione"]));
-      details.forEach((line, i) => screen.text(line, 14, 118 + i * 9, i === details.length - 1 ? "#d8a850" : "#cfe6ff"));
+      details.forEach((line, i) => screen.text(line, 14, 118 + i * 9, i === details.length - 1 ? "#99531e" : "#10141f"));
       screen.text("A: SCEGLI  B: ESCI", 8, VIEW_H - 10, GREY);
     }
     this.msg.draw(screen);

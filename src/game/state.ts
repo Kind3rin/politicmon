@@ -5,6 +5,7 @@ import { markHistoricalCheckpoints, newRunStats, normalizeRunStats, type RunStat
 import { newCoalitionState, normalizeCoalitionState, type CoalitionState } from "./coalition";
 import { newElectionState, normalizeElectionState, type ElectionState } from "./election";
 import { newWeeklyCampaignState, normalizeWeeklyCampaign, type WeeklyCampaignState } from "./weeklyCampaign";
+import { newMoraleState, normalizeMorale, type MoraleState } from "./morale";
 
 export interface PlayerPos {
   mapId: string;
@@ -25,6 +26,7 @@ export interface GameState {
   money: number;
   badges: string[];
   sondaggi: number; // gradimento 0-100: sale con le vittorie, crolla con le figuracce
+  morale: MoraleState;
   ministri: Record<string, string>; // ministeroId -> uid del Politicmon incaricato
   bulldozed: string[]; // alberi abbattuti dalla RUSPA, chiavi "mapId:x:y"
   vehicle: string | null; // veicolo attivo: "monopattino" | "ruspa" | null
@@ -52,6 +54,7 @@ export interface GameState {
   // ---- v13: ACCESSIBILITÀ + money-sink terminale (LOTTO 2/3 round 42) ----
   reduceEffects: boolean; // RIDUCI EFFETTI: azzera shake/flash/urla-tremolo (l'informazione resta)
   reduceEffectsSet: boolean; // l'utente ha scelto esplicitamente? (distingue default-di-sistema da scelta)
+  battleSpeed: 1 | 2; // presentation only; never changes turn order or PvP simulation
   monumentLevel: number; // MONUMENTO AL CANDIDATO: money-sink cosmetico del LOTTO 3 (0..N, intero)
   // ---- v14: TELEMETRIA LOCALE DELLA RUN (mai inviata in rete) ----
   runStats: RunStats;
@@ -193,6 +196,7 @@ export function newGameState(): GameState {
     money: 500,
     badges: [],
     sondaggi: 50,
+    morale: newMoraleState(),
     ministri: {},
     bulldozed: [],
     vehicle: null,
@@ -221,6 +225,7 @@ export function newGameState(): GameState {
     // quindi il toggle in OPZIONI conta ancora come prima decisione esplicita.
     reduceEffects: prefersReducedMotion(),
     reduceEffectsSet: false,
+    battleSpeed: 1,
     monumentLevel: 0,
     runStats: newRunStats(),
     coalition: newCoalitionState(),
@@ -393,6 +398,7 @@ export function parseGameState(
     parsed.money = parsed.money ?? 500;
     parsed.badges = Array.isArray(parsed.badges) ? parsed.badges : [];
     parsed.sondaggi = typeof parsed.sondaggi === "number" ? parsed.sondaggi : 50;
+    parsed.morale = normalizeMorale(parsed.morale);
     parsed.ministri = parsed.ministri ?? {};
     parsed.bulldozed = Array.isArray(parsed.bulldozed) ? parsed.bulldozed : [];
     parsed.vehicle = parsed.vehicle ?? null;
@@ -442,6 +448,7 @@ export function parseGameState(
     // = preferenza di sistema (prefers-reduced-motion), così onboarding accessibile
     // senza sovrascrivere scelte future dell'utente.
     parsed.reduceEffectsSet = parsed.reduceEffectsSet === true;
+    parsed.battleSpeed = parsed.battleSpeed === 2 ? 2 : 1;
     parsed.reduceEffects = parsed.reduceEffectsSet
       ? parsed.reduceEffects === true
       : typeof parsed.reduceEffects === "boolean"

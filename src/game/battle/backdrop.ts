@@ -1,0 +1,46 @@
+import { MAPS } from "../../data/maps";
+
+export interface BattleBackdrop {
+  spriteId: string;
+  path: string;
+  sky: string;
+  ground: string;
+  foePlatform: string;
+  playerPlatform: string;
+}
+
+// Risorse native 240×136: il campo lascia liberi sprite, barre e menu.
+// Il prato originale resta disponibile per i percorsi e come fallback.
+export const BATTLE_BACKDROPS = {
+  prato: { spriteId: "battle:bg", path: "ui/battle_bg.png", sky: "#d8e8c8", ground: "#e8e0c8", foePlatform: "#c0cc9c", playerPlatform: "#cabf96" },
+  piazza: { spriteId: "battle:bg:piazza", path: "ui/battle/piazza.png", sky: "#a5d8e0", ground: "#f0dbb4", foePlatform: "#deca9f", playerPlatform: "#d3bd93" },
+  studio: { spriteId: "battle:bg:studio", path: "ui/battle/studio.png", sky: "#427b94", ground: "#a3bdcc", foePlatform: "#85a9bd", playerPlatform: "#789bae" },
+  palazzo: { spriteId: "battle:bg:palazzo", path: "ui/battle/palazzo.png", sky: "#e0c6a0", ground: "#f0dfbe", foePlatform: "#d8c299", playerPlatform: "#cbb58d" },
+  costa: { spriteId: "battle:bg:costa", path: "ui/battle/costa.png", sky: "#9ad5df", ground: "#f0dcba", foePlatform: "#dcc89f", playerPlatform: "#d2bb8e" },
+  neve: { spriteId: "battle:bg:neve", path: "ui/battle/neve.png", sky: "#9bcee0", ground: "#dceef5", foePlatform: "#b6d5e4", playerPlatform: "#aacadb" },
+  rete: { spriteId: "battle:bg:rete", path: "ui/battle/rete.png", sky: "#a5b4d9", ground: "#bdc4e6", foePlatform: "#a4add4", playerPlatform: "#959ec6" },
+  grotta: { spriteId: "battle:bg:grotta", path: "ui/battle/grotta.png", sky: "#79768c", ground: "#bfb4a3", foePlatform: "#a49b8c", playerPlatform: "#938a7d" }
+} as const satisfies Record<string, BattleBackdrop>;
+
+export type BattleBackdropId = keyof typeof BATTLE_BACKDROPS;
+
+const MAP_BACKDROPS: Readonly<Record<string, BattleBackdropId>> = {
+  borgo: "piazza", mediopoli: "piazza", eurotown: "piazza", capitale: "piazza", bruxelles: "piazza",
+  grotta1: "grotta", grotta2: "grotta", "oblast-meme": "neve",
+  gymtv: "studio", redazione: "studio", retroscena: "studio", attico: "studio",
+  stretto: "costa", offshore: "costa", chiosco: "costa", "bar-stretto": "costa", "bar-offshore": "costa",
+  campo_largo: "piazza", retropalco_campo: "studio", diplomacy_terrace: "studio", genova_techno: "rete",
+  futuro_piazza: "rete", futuro_sede: "rete", futuro_scissione: "rete", futuro_rebrand: "rete", futuro_tesoreria: "rete",
+  tour_feed: "studio", district_nord: "piazza", district_centro: "piazza", district_sud: "costa", district_isole: "costa", district_feed: "rete",
+  palazzo_feed: "rete", palazzo_algoritmo: "rete", palazzo_factcheck: "rete", palazzo_talkshow: "studio",
+  palazzo_silenzio: "rete", palazzo_feed_studio: "studio", palazzo_feed_terrazza: "piazza"
+};
+
+export function battleBackdropId(mapId: string): BattleBackdropId {
+  if (Object.hasOwn(MAP_BACKDROPS, mapId)) return MAP_BACKDROPS[mapId];
+  return Object.hasOwn(MAPS, mapId) && MAPS[mapId].outdoor === false ? "palazzo" : "prato";
+}
+
+export function battleBackdropForMap(mapId: string): BattleBackdrop {
+  return BATTLE_BACKDROPS[battleBackdropId(mapId)];
+}

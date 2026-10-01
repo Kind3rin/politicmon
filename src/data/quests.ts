@@ -15,6 +15,13 @@ export interface QuestDef {
 
 export const QUESTS: QuestDef[] = [
   {
+    id: "civic-promises", side: true, title: "IL VERBALE NON SPARISCE",
+    desc: "Finanzia la corsa a Borgo, lo sportello a Eurotown e la rampa allo Stretto.",
+    hint: "Ascolta il pensionato di Borgo, quello di Eurotown e l'ingegnere allo Stretto. Le date sono nel menu MORALE.",
+    step: "Mantieni o ripara le tre promesse.",
+    isDone: (state) => ["bus", "sportello", "traghetto"].every((id) => state.morale.promises.some((promise) => promise.id === id && (promise.status === "kept" || promise.status === "repaired")))
+  },
+  {
     id: "starter",
     title: "UN CANDIDATO TUTTO TUO",
     desc: "Scegli il tuo primo POLITICMON nel Laboratorio del Consenso.",

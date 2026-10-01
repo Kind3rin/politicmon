@@ -38,7 +38,7 @@ installabile come app, con **multiplayer peer-to-peer** — zero server, zero co
 ## ⚡ In due righe
 
 Scegli il tuo **starter** (Destra, Sinistra o Centro), gira l'Italia caricaturale
-da Borgo Urne al Palazzo, cattura 42 **Politicmon**, sfida le palestre e scala i
+da Borgo Urne al Palazzo e oltre, cattura 52 **Politicmon**, sfida le palestre e scala i
 **SONDAGGI** — una barra 0-100% che decide prezzi, esperienza e persino **in cosa
 si evolvono** le tue creature: popolare finisci al governo, impopolare finisci in
 piazza a urlare.
@@ -52,12 +52,16 @@ piazza a urlare.
 
 | | |
 |---|---|
-| 🐾 **42 Politicmon, 70 mosse** | 8 tipi politici, status (INDAGATO / SCANDALO / GAFFE), battaglie a turni gen-1 con animazioni |
+| 🐾 **52 Politicmon, 78 mosse** | 8 tipi politici, status (INDAGATO / SCANDALO / GAFFE), battaglie a turni con effetti per tipo e quattro pose per tutte le creature |
+| 🔎 **Politicdex da campo** | Filtri, habitat accessibili, statistiche, difese, evoluzioni e mosse; cinque pagine per ogni creatura |
+| 🎯 **Dossier di battaglia** | START nel menu mosse: stima del danno, priorità, abilità, immunità e probabilità di reclutamento; ritmo normale o rapido |
+| ♟️ **Boss tattici** | Nove briefing illustrati con tipi, livelli e scelta del leader; IA che valuta danno effettivo, cure, priorità e immunità |
+| 🤝 **Morale con conseguenze** | Fiducia modifica i prezzi, coesione modifica l'EXP; promesse finanziabili, scadenze e memoria delle scelte |
 | 📊 **SONDAGGI (0-100%)** | La stat-firma: muove prezzi, EXP (*onda del consenso*) e **rami evolutivi** governo↔opposizione |
 | 🧬 **Evoluzioni ramificate** | Per livello, per oggetto (TESSERA DORATA) e **decise dal tuo gradimento** |
 | 🏛️ **GOVERNO OMBRA** | 6 ministeri assegnabili ai tuoi mostri, ognuno con un bonus passivo |
 | 📜 **DIRETTIVE DI PARTITO** | Le "MT": insegnano mosse per tipo, riutilizzabili all'infinito |
-| 🗺️ **Storia in 2 atti** | 3 medaglie → il PALAZZO → IL COLLE (Consulta + Garante) → il leggendario DRAGHIMON |
+| 🗺️ **Storia in 3 atti** | Borgo, palestre, Palazzo e Colle; poi campagna internazionale e finale che riflette anche le scelte civiche |
 | 🎰 **Contenuti extra** | Ponte sullo Stretto, CASINÒ DI PALAZZO, veicoli (MONOPATTINO / RUSPA), rivale ricorrente |
 | 📱 **Mobile & PWA** | Levetta analogica, modalità guidata, **3 slot di salvataggio**, installabile e giocabile offline |
 | 🌐 **Multiplayer P2P** | Vedi gli altri giocatori sulla tua mappa, **duelli PvP**, **scambi di mostri**, chat di zona, dialogo 1:1 ed emote — **senza server** |
@@ -69,12 +73,13 @@ piazza a urlare.
 Questo non è un gioco fatto con un engine. È **tutto a mano**:
 
 - **TypeScript + Vite**, `canvas` 2D puro, risoluzione interna 240×180 scalata pixel-perfect.
-- **Una sola dipendenza runtime** ([Trystero](https://github.com/dmotz/trystero), per il P2P). Il resto — rendering, audio, scene, battaglie, salvataggi — è codice del progetto.
+- **Trystero** per il P2P e strumenti Vercel per le metriche. Rendering, audio, scene, battaglie e salvataggi sono codice del progetto.
 - **Motore a stack di scene**, battaglia come coda di *step*, matematica del danno gen-1 separata e **testata** (`node:test` in CI).
 - **Multiplayer 100% peer-to-peer** via WebRTC su relay pubblici gratuiti: nessun server proprio, nessun account, **nessun costo che possa mai crescere**.
 - **PWA** con service worker cache-first e installazione offline.
 - **Audio** sintetizzato a runtime (Web Audio), nessun file audio.
-- Grafica in **pixel art** generata con [PixelLab](https://pixellab.ai), con fallback a pixel-map testuali generate da codice.
+- Grafica in **pixel art**: sprite PixelLab, titolo, sette ambienti di battaglia, quattro vignette narrative, nove scene dei boss e 208 pose Higgsfield, con supporto offline.
+- **Morale e satira**: fiducia dei cittadini, coesione della squadra, promesse con scadenza, dialoghi che ricordano le scelte e quattro nuovi eventi ispirati a meme documentati.
 
 ```bash
 npm install
@@ -98,6 +103,9 @@ npm run build        # typecheck + bundle di produzione
 |------|----------|
 | **[docs/ARCHITETTURA.md](docs/ARCHITETTURA.md)** | Mappa dei moduli e dei flussi principali |
 | **[docs/GLOSSARIO.md](docs/GLOSSARIO.md)** | Lessico di gioco (satira) e termini tecnici |
+| **[docs/HIGGSFIELD-ASSETS.md](docs/HIGGSFIELD-ASSETS.md)** | Ambienti di battaglia, provenienza degli asset e impiego del credito |
+| **[docs/SATIRA-MORALE.md](docs/SATIRA-MORALE.md)** | Nuova storia, incontri, conseguenze del morale e fonti dei meme |
+| **[docs/GAMEPLAY-DEX.md](docs/GAMEPLAY-DEX.md)** | Politicdex, dossier tattico, animazioni e verifiche del gameplay |
 
 ---
 

@@ -28,7 +28,7 @@ import {
 import { festivalScandaloChance } from "./atto3MoveEffects";
 import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, FOE_BOX, PLAYER_BOX
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, FOE_BOX, PLAYER_BOX
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
@@ -36,6 +36,10 @@ import { EvolutionScene } from "../../scenes/EvolutionScene";
 import { DOCTRINE_LABEL, type ElectionDoctrine } from "../electionDoctrine";
 import { buildTrainerVictoryPlan } from "./postBattle";
 import { fightMenuTapIndex } from "./fightMenuInput";
+import { battleBackdropForMap, type BattleBackdrop } from "./backdrop";
+import { moraleExpMultiplier } from "../morale";
+import { BattleIntelScene } from "../../scenes/BattleIntelScene";
+import { trainerAi, trainerStyle } from "./trainerStyle";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -79,6 +83,7 @@ function battleMusic(opts: BattleOptions): string {
 }
 
 export class BattleScene implements Scene {
+  private readonly backdrop: BattleBackdrop;
   private state: GameState;
   private foeTeam: Monster[];
   private trainer?: TrainerDef;
@@ -138,6 +143,7 @@ export class BattleScene implements Scene {
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
     this.state = opts.state;
+    this.backdrop = battleBackdropForMap(opts.state.pos.mapId);
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
     this.isRematch = opts.isRematch ?? false;
@@ -229,32 +235,7 @@ export class BattleScene implements Scene {
   // giocatore agli sgoccioli; palestre e boss restano competenti. Così la curva
   // di difficoltà sale con la partita invece di partire al massimo.
   private computeAiProfile(): AiProfile {
-    const id = this.trainer?.id ?? "";
-    const isBoss = BOSS_TRAINER_IDS.includes(id) || id.startsWith("rival");
-    // R42 economia (LOTTO 3): MODALITÀ DIFFICILE dà QUALITÀ, non solo +livelli.
-    // I boss diventano quasi infallibili (whiff 0.20→0.10); i capipalestra
-    // salgono a boss-grade; e persino gli allenatori COMUNI acquisiscono
-    // cura+finisher con un whiff-floor più basso. La modalità normale è INTATTA.
-    const hard = this.state.hardMode;
-    if (isBoss) {
-      // Boss narrativi e RIVALE: sempre competenti, è il loro momento.
-      return { whiff: hard ? 0.1 : 0.2, canHeal: true, finisher: true };
-    }
-    if (this.trainer?.badge) {
-      // Capipalestra: tosti ma non perfetti (in hard, boss-grade).
-      return { whiff: hard ? 0.15 : 0.28, canHeal: true, finisher: true };
-    }
-    // Wild e allenatori comuni: clemenza scalata sulle medaglie conquistate
-    // (più avanti sei, meno sbagliano). In NORMALE floor 0.33, niente cura/
-    // finisher. In HARD i TRAINER comuni ottengono cura+finisher e un floor più
-    // basso (0.22); i selvatici (nessun trainer) restano clementi come prima.
-    const badges = this.state.badges.length;
-    const isCommonTrainer = Boolean(this.trainer);
-    if (hard && isCommonTrainer) {
-      return { whiff: Math.max(0.22, 0.4 - badges * 0.05), canHeal: true, finisher: true };
-    }
-    const whiff = Math.max(0.33, 0.48 - badges * 0.05);
-    return { whiff, canHeal: false, finisher: false };
+    return trainerAi(this.trainer?.id ?? "", Boolean(this.trainer?.badge), this.state.hardMode, this.state.badges.length);
   }
 
   private playerName(): string {
@@ -331,7 +312,7 @@ export class BattleScene implements Scene {
     if (slot) {
       slot.pp = Math.max(0, slot.pp - 1);
     }
-    const foeMove = chooseFoeMove(this.foe, this.player, this.ai);
+    const foeMove = chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
     const pPriority = playerMove.effect?.priority ?? 0;
     const fPriority = foeMove.effect?.priority ?? 0;
     const playerFirst =
@@ -413,7 +394,7 @@ export class BattleScene implements Scene {
     return {
       run: () => {
         if (this.foe.mon.hp > 0) {
-          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai));
+          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi }));
         }
       }
     };
@@ -467,7 +448,7 @@ export class BattleScene implements Scene {
       steps.push({
         run: () => {
           defender.mon.hp = Math.max(0, defender.mon.hp - appliedDamage);
-          this.fx.onHit(side, result.typeMult, result.crit, appliedDamage);
+          this.fx.onHit(side, result.typeMult, result.crit, appliedDamage, move.type);
         },
         waitHp: true,
         pause: 0.25
@@ -709,9 +690,11 @@ export class BattleScene implements Scene {
     const manifestiBonus = this.state.boostExpBattles > 0 ? 1.3 : 1;
     const gained = Math.max(
       1,
-      Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state))
+      Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state) * moraleExpMultiplier(this.state.morale))
     );
     steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
+    const teamwork = moraleExpMultiplier(this.state.morale);
+    if (teamwork !== 1) steps.push({ text: teamwork > 1 ? "La squadra si fida di te: crescita +8%." : "La squadra non si sente ascoltata: crescita -8%." });
     if (wave > 1) {
       steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
     } else if (wave < 1) {
@@ -1219,7 +1202,7 @@ export class BattleScene implements Scene {
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
     bumpDailyQuest(this.state, "item1"); // anche la SCHEDA lanciata è un oggetto usato
     const propaganda = hasMinistro(this.state, "propaganda");
-    let chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1);
+    let chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1, this.foe.gaffeTurns > 0);
     // APPELLO AL VOTO (mossa da campagna): raddoppia la prossima cattura, una volta.
     if (this.catchBoost) {
       this.catchBoost = false;
@@ -1350,11 +1333,12 @@ export class BattleScene implements Scene {
     if (this.finished) {
       return;
     }
+    dt *= this.state.battleSpeed === 2 ? 2 : 1;
     this.legendBanner = Math.max(0, this.legendBanner - dt);
     this.firstSeenBanner = Math.max(0, this.firstSeenBanner - dt);
     this.legendIntroFlash = Math.max(0, this.legendIntroFlash - dt);
     // I leggendari spruzzano scintille dorate di continuo: aura "viva".
-    if (this.isLegendary && this.foe.mon.hp > 0 && Math.random() < 0.25) {
+    if (this.isLegendary && !this.state.reduceEffects && this.foe.mon.hp > 0 && Math.random() < 0.25) {
       const c = monsterCenter("foe");
       const ang = Math.random() * Math.PI * 2;
       this.fx.particles.push({
@@ -1467,6 +1451,16 @@ export class BattleScene implements Scene {
     }
 
     if (this.mode === "fight") {
+      if (!this.onFightSelect && !this.fightFallback && this.input.wasPressed("start")) {
+        const recruitment = this.trainer ? [] : ["RECLUTAMENTO NELLO STATO ATTUALE:", ...Object.entries(this.state.bag).filter(([id, qty]) => qty > 0 && ITEMS[id]?.kind === "ball").map(([id, qty]) => {
+          const base = catchChance(this.foe.mon, id, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0);
+          const chance = this.catchBoost ? Math.min(.95, base * 2) : base;
+          return `${ITEMS[id].name}: ${Math.round(chance * 100)}% (${qty} IN BORSA).`;
+        }), "INDEBOLIRE E APPLICARE UNO STATUS AIUTA. METTERLO KO IMPEDISCE LA CATTURA.", ...(this.catchBoost ? ["APPELLO AL VOTO ATTIVO: PROSSIMA SCHEDA x2."] : [])];
+        this.stack.push(new BattleIntelScene(this.stack, this.input, this.player, this.foe, this.fightMenu.index, { sondaggi: this.state.sondaggi }, (index) => { this.fightMenu.index = index; }, recruitment, this.trainer ? [`STILE: ${trainerStyle(this.trainer.id).label}.`, ...trainerStyle(this.trainer.id).hints] : []));
+        audio.confirm();
+        return;
+      }
       const action = this.fightGridUpdate();
       if (action === "select") {
         if (this.onFightSelect) {
@@ -1745,15 +1739,7 @@ export class BattleScene implements Scene {
     ctx.save();
     ctx.translate(shake.x, shake.y);
     screen.clear("#f0f0e0");
-    // Sfondo battaglia PixelLab (se pronto) dietro tutto, fino al box azioni;
-    // altrimenti le due fasce di colore (cielo/terra) di prima.
-    const bg = sceneImage("battle:bg", "ui/battle_bg.png");
-    if (bg) {
-      screen.image(bg, 0, 0, VIEW_W, VIEW_H - 44);
-    } else {
-      screen.rect(0, 0, VIEW_W, 76, "#d8e8c8");
-      screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, "#e8e0c8");
-    }
+    drawBattleBackdrop(screen, this.backdrop);
 
     // TINT SFONDO METEO (sondaggi-meteo): velo colorato leggero sullo sfondo
     // quando il gradimento attiva il modificatore. Caldo/dorato col GOVERNO in
@@ -1763,13 +1749,13 @@ export class BattleScene implements Scene {
     this.drawWeatherTint(screen);
 
     // Slide-in iniziale degli sprite.
-    const slide = Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
+    const slide = this.state.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
     const foeSlide = Math.round((1 - slide) * 90);
     const playerSlide = Math.round((1 - slide) * -90);
 
     // Piattaforme.
-    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, "#c0cc9c");
-    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
+    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, this.backdrop.foePlatform);
+    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, this.backdrop.playerPlatform);
 
     // Aura dorata pulsante attorno al leggendario: alone "sacro" che lo
     // distingue da un mostro qualsiasi per tutta la durata dello scontro.
@@ -1799,6 +1785,7 @@ export class BattleScene implements Scene {
     }
 
     // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
+    this.fx.drawMoveFx(screen);
     this.fx.drawParticles(screen);
     // Numeri di danno flottanti (sopra le scintille, sotto le barre HP).
     this.fx.drawDamageNumbers(screen);
@@ -1873,7 +1860,6 @@ export class BattleScene implements Scene {
         }
       } else if (slot) {
         const move = MOVES[slot.id];
-        const item = items[this.fightMenu.index];
         // Striscia info sopra il pannello: nome, tipo e riepilogo meccanico
         // restano separati dai PP mostrati a destra di ogni riga.
         screen.panel(8, 113, 226, 21, "card");
@@ -1881,11 +1867,10 @@ export class BattleScene implements Scene {
         const nameW = Math.min(move.name.length * 6, 150);
         screen.textFit(move.name, 14, 117, 150, INK);
         screen.rect(14, 125, nameW, 1, TYPE_COLORS[move.type]);
-        // PP allineato a destra, staccato dal nome (che si ferma a ≤164).
-        screen.textRight(item?.rightLabel ?? "", 226, 117, INK);
+        // PP restano nelle righe delle mosse; qui rendi scopribile il dossier.
+        screen.textRight("START:INFO", 226, 117, GREY);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.text("B: ESCI", 14, 126, GREY);
-        screen.textFit(moveSummary(move), 60, 126, 162, GREY);
+        screen.textFit(moveSummary(move), 14, 126, 208, GREY);
       }
     } else if (this.mode === "campaign") {
       // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)
@@ -2012,7 +1997,7 @@ export class BattleScene implements Scene {
   // Alone dorato dietro il leggendario: cerchio luminoso pulsante + raggi.
   private drawLegendaryAura(screen: Screen, cx: number, cy: number): void {
     const ctx = screen.ctx;
-    const t = this.fx.time;
+    const t = this.state.reduceEffects ? 0 : this.fx.time;
     const pulse = 0.5 + 0.5 * Math.sin(t * 3);
     ctx.save();
     // Bagliore radiale.
@@ -2050,14 +2035,14 @@ export class BattleScene implements Scene {
     }
     if (this.legendBanner > 0) {
       const prog = 1 - this.legendBanner / 2.4;
-      const pop = Math.min(1, prog / 0.2);
+      const pop = this.state.reduceEffects ? 1 : Math.min(1, prog / 0.2);
       const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
       const y = 34 + (1 - pop) * -10;
       const size = pop >= 1 ? 2 : 1;
       ctx.save();
       ctx.globalAlpha = Math.max(0, fade);
       // Pannello scuro dietro per stacco.
-      const label = "POLITICMON LEGGENDARIO!";
+      const label = "LEGGENDARIO!";
       screen.textCenter(label, VIEW_W / 2 + 1, y + 1, "rgba(16,20,31,0.8)", size);
       screen.textCenter(label, VIEW_W / 2, y, "#ffd23c", size);
       ctx.restore();
@@ -2065,7 +2050,7 @@ export class BattleScene implements Scene {
     // Banner "prima vista" (ciano, per distinguerlo dall'oro leggendario).
     if (this.firstSeenBanner > 0) {
       const prog = 1 - this.firstSeenBanner / 2.2;
-      const pop = Math.min(1, prog / 0.2);
+      const pop = this.state.reduceEffects ? 1 : Math.min(1, prog / 0.2);
       const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
       const y = 30 + (1 - pop) * -10;
       const size = pop >= 1 ? 2 : 1;
@@ -2085,14 +2070,14 @@ export class BattleScene implements Scene {
     const anim = this.ballAnim;
     let x = 168;
     let y = 44;
-    if (anim.t < 0.5) {
+    if (!this.state.reduceEffects && anim.t < 0.5) {
       // Parabola di lancio.
       const p = anim.t / 0.5;
       x = 40 + p * 128;
       y = 70 - Math.sin(p * Math.PI) * 52 - p * 26;
     } else {
       const shakePhase = Math.floor((anim.t - 0.7) / 0.55);
-      if (anim.t > 0.7 && shakePhase < anim.shakes) {
+      if (!this.state.reduceEffects && anim.t > 0.7 && shakePhase < anim.shakes) {
         const wobble = Math.sin((anim.t - 0.7) * 18) * 3;
         x += wobble;
         if (Math.abs(wobble) > 2.6) {

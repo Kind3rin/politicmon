@@ -27,6 +27,8 @@ const png = await page.evaluate(async () => {
   const scene = new DexScene(stack, input, state);
   scene.index = DEX_ORDER.indexOf("vannaccix");
   scene.scroll = Math.max(0, scene.index - 5);
+  scene.detail = true;
+  scene.page = 3; // DOVE: la guida agli scambi è ora nella scheda di acquisizione.
   stack.push(scene);
   stack.draw(screen);
   return canvas.toDataURL("image/png");

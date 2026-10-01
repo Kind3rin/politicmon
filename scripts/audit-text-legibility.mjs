@@ -20,7 +20,7 @@ for (const species of Object.values(SPECIES)) {
 for (const move of Object.values(MOVES)) {
   add("battle/move-row", move.name, 166); // marker efficacia presente
   add("battle/move-detail", move.name, 150);
-  add("battle/move-summary", moveSummary(move), 162); // spazio a B: ESCI
+  add("battle/move-summary", moveSummary(move), 208); // riga intera, START:INFO sopra
   add("battle/learn-new", `NUOVA: ${move.name}`, 145); // spazio a B: ANNULLA
 }
 for (const achievement of ACHIEVEMENTS) add("achievements/title", achievement.name, 168);

@@ -13,6 +13,7 @@ import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
 import { createMonster } from "../game/monster";
 import { FEATURE_OVERRIDE_KEY } from "../game/features";
+import { APP_BUILD_ID } from "../engine/build";
 
 // Slogan rotanti sotto il logo: uno alla volta, niente sovrapposizioni.
 const SLOGANS = [
@@ -38,7 +39,7 @@ function loadTitleBg(): void {
   img.onerror = () => {
     bgReady = false;
   };
-  img.src = "title-bg.png";
+  img.src = `${import.meta.env.BASE_URL}title-bg.png?v=${APP_BUILD_ID}`;
   bgImage = img;
 }
 

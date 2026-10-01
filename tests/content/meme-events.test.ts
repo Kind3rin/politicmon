@@ -14,7 +14,8 @@ test("meme events: id/fonti/fallback validi e unici", () => {
 
 test("meme events: scadenza filtra i pack fragili senza perdere evergreen", () => {
   const during = activeMemeEvents(new Date("2026-07-10T12:00:00Z"));
-  assert.equal(during.length, 4);
+  assert.equal(during.length, MEME_EVENTS.length);
   const later = activeMemeEvents(new Date("2028-01-01T00:00:00Z"));
-  assert.deepEqual(later.map((event) => event.id), ["photo_field_slots", "quasi_magic_office"]);
+  assert.deepEqual(later.map((event) => event.id), MEME_EVENTS.filter((event) => !event.active).map((event) => event.id));
+  assert.ok(!later.some((event) => event.id === "diplomatic_selfie_reality"));
 });

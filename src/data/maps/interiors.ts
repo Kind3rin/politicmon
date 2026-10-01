@@ -27,7 +27,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       {
         id: "professor", pal: "professor", x: 9, y: 4, facing: "left",
         lines: [
-          "Io sono il PROFESSOR QUIRINO, studioso del consenso.",
+          "QUIRINO: studio il consenso. Ho un grafico per ogni cosa, tranne chi torna dopo il comizio.",
           "Sul tavolo ci sono tre SCHEDE STARTER: avvicinati a una e premi A per esaminarla.",
           "Ne scegli SOLO una: sarà il tuo primo POLITICMON. Le altre? Le prenderà chi viene dopo di te..."
         ]
@@ -324,10 +324,10 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       gift: {
         itemId: "divisa", qty: 1, flag: "gift-divisa",
         lines: [
-          "MAMMA: torni a casa solo quando ti serve qualcosa, come i partiti a gennaio.",
+          "MAMMA: hai già una squadra? Allora hai già qualcuno che aspetta un rimborso.",
           "Tieni la DIVISA EQUA: spartisce i PUNTI CONSENSO con TUTTA la squadra.",
           "Anche chi resta in panchina cresce. Equità, almeno tra i tuoi POLITICMON!",
-          "Ora vai a prenderti quel PALAZZO. E mangia, che a digiuno non si vincono i ballottaggi."
+          "Al Palazzo chiedi una stanza. Qui fuori chiedono un orario. Cerca di ricordarti entrambi."
         ]
       },
       lines: [

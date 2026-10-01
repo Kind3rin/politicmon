@@ -13,6 +13,23 @@ import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { speciesOf, statsOf, type Monster } from "../monster";
 import type { Combatant } from "./sim";
 import { drawHpBar, INK, PAPER } from "../../ui/widgets";
+import { sceneImage } from "../../engine/assets";
+import { BATTLE_BACKDROPS, type BattleBackdrop } from "./backdrop";
+import { TYPE_COLORS, type PolType } from "../../data/poltypes";
+import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "../../art/monsterFrames";
+
+// Stesso renderer in PVE e PVP. Se il tema non è ancora pronto o manca,
+// il prato preesistente evita campi vuoti; senza immagini bastano due colori.
+export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop): void {
+  const themed = sceneImage(backdrop.spriteId, backdrop.path);
+  const fallback = themed ?? sceneImage(BATTLE_BACKDROPS.prato.spriteId, BATTLE_BACKDROPS.prato.path);
+  if (fallback) {
+    screen.image(fallback, 0, 0, VIEW_W, VIEW_H - 44);
+  } else {
+    screen.rect(0, 0, VIEW_W, 76, backdrop.sky);
+    screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, backdrop.ground);
+  }
+}
 
 export type BattleSide = "player" | "foe";
 
@@ -85,9 +102,14 @@ export class BattleFx {
   damageNumbers: DamageNumber[] = [];
   effFx: { kind: "super" | "weak" | "crit"; t: number } | null = null;
   telegraph: { side: BattleSide; color: string; t: number; max: number } | null = null;
+  moveFx: { side: BattleSide; type: PolType; t: number } | null = null;
 
   update(dt: number): void {
     this.time += dt;
+    if (this.moveFx) {
+      this.moveFx.t -= dt;
+      if (this.moveFx.t <= 0) this.moveFx = null;
+    }
     this.shake = Math.max(0, this.shake - dt);
     this.lungeT.player = Math.max(0, this.lungeT.player - dt);
     this.lungeT.foe = Math.max(0, this.lungeT.foe - dt);
@@ -120,16 +142,19 @@ export class BattleFx {
   // Effetti del colpo andato a segno: shake/hit-stop/knockback/scintille/banner
   // d'efficacia + suono. `attacker` è chi ha colpito. `damage` è puramente
   // cosmetico (il numero flottante): NON entra in alcuna logica.
-  onHit(attacker: BattleSide, typeMult: number, crit: boolean, damage = 0): void {
+  onHit(attacker: BattleSide, typeMult: number, crit: boolean, damage = 0, moveType?: PolType): void {
     const defSide: BattleSide = attacker === "player" ? "foe" : "player";
-    this.lungeT[attacker] = 0.3;
-    this.flashT[defSide] = 0.45;
+    this.lungeT[attacker] = this.reduceEffects ? 0 : 0.3;
+    this.flashT[defSide] = this.reduceEffects ? 0 : 0.45;
     const superHit = typeMult >= 2;
     // Lo shake e il contraccolpo scalano col "peso" del colpo.
     this.shake = superHit || crit ? 0.42 : attacker === "foe" ? 0.22 : 0.16;
-    this.hitStop = superHit || crit ? 0.09 : 0.05;
-    this.knockback[defSide] = superHit ? 1 : 0.55;
-    this.spawnImpact(defSide, typeMult, crit);
+    this.hitStop = this.reduceEffects ? 0 : superHit || crit ? 0.09 : 0.05;
+    this.knockback[defSide] = this.reduceEffects ? 0 : superHit ? 1 : 0.55;
+    if (!this.reduceEffects) {
+      this.spawnImpact(defSide, typeMult, crit);
+      if (moveType) this.moveFx = { side: attacker, type: moveType, t: .4 };
+    }
     if (damage > 0) {
       this.spawnDamageNumber(defSide, damage, typeMult >= 2, crit);
     }
@@ -191,6 +216,7 @@ export class BattleFx {
   }
 
   drawParticles(screen: Screen): void {
+    if (this.reduceEffects) return;
     for (const p of this.particles) {
       const a = 1 - p.life / p.max;
       if (a <= 0) {
@@ -203,6 +229,58 @@ export class BattleFx {
       ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size + 1, p.size + 1);
       ctx.restore();
     }
+  }
+
+  // Eight visual languages, shared by all damaging moves and by both modes.
+  // Bounded to three small shapes; no extra asset decode or simulation state.
+  drawMoveFx(screen: Screen): void {
+    const fx = this.moveFx;
+    if (!fx || this.reduceEffects) return;
+    const from = monsterCenter(fx.side);
+    const to = monsterCenter(fx.side === "player" ? "foe" : "player");
+    const progress = 1 - fx.t / .4;
+    const ctx = screen.ctx;
+    ctx.save();
+    ctx.fillStyle = TYPE_COLORS[fx.type];
+    ctx.strokeStyle = TYPE_COLORS[fx.type];
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i++) {
+      const t = Math.max(0, Math.min(1, progress * 1.35 - i * .13));
+      if (t <= 0 || t >= 1) continue;
+      const x = Math.round(from.x + (to.x - from.x) * t);
+      const y = Math.round(from.y + (to.y - from.y) * t - Math.sin(t * Math.PI) * 12);
+      ctx.globalAlpha = Math.min(1, (1 - t) * 4);
+      switch (fx.type) {
+        case "POPULISMO":
+          screen.rect(x - 5, y - 3, 6, 6, TYPE_COLORS[fx.type]);
+          screen.rect(x + 1, y - 6, 3, 12, TYPE_COLORS[fx.type]);
+          screen.rect(x - 4, y + 3, 2, 4, TYPE_COLORS[fx.type]);
+          break;
+        case "TECNO":
+          for (let bar = 0; bar < 3; bar++) screen.rect(x - 5 + bar * 4, y - bar * 3, 3, 4 + bar * 3, TYPE_COLORS[fx.type]);
+          break;
+        case "DESTRA":
+          ctx.beginPath(); ctx.moveTo(x - 5, y + 5); ctx.lineTo(x - 2, y - 3); ctx.lineTo(x, y); ctx.lineTo(x + 3, y - 7); ctx.lineTo(x + 5, y + 5); ctx.fill();
+          break;
+        case "SINISTRA":
+          screen.rect(x - 5, y - 5, 2, 14, TYPE_COLORS[fx.type]); screen.rect(x - 3, y - 5, 9, 6, TYPE_COLORS[fx.type]);
+          break;
+        case "CENTRO":
+          screen.frame(x - 7, y - 4, 9, 9, TYPE_COLORS[fx.type]); screen.frame(x - 1, y - 7, 9, 9, TYPE_COLORS[fx.type]);
+          break;
+        case "MEDIA":
+          for (let wave = 0; wave < 3; wave++) { screen.rect(x - 5 + wave * 4, y - 2 - wave * 2, 2, 4 + wave * 4, TYPE_COLORS[fx.type]); }
+          break;
+        case "ISTITUZIONE":
+          screen.rect(x - 6, y - 6, 10, 4, TYPE_COLORS[fx.type]); screen.rect(x - 1, y - 2, 2, 7, TYPE_COLORS[fx.type]); screen.rect(x - 6, y + 5, 13, 2, TYPE_COLORS[fx.type]);
+          break;
+        case "VERDE":
+          ctx.beginPath(); ctx.moveTo(x - 6, y + 5); ctx.lineTo(x - 4, y - 3); ctx.lineTo(x + 6, y - 6); ctx.lineTo(x + 3, y + 4); ctx.closePath(); ctx.fill();
+          screen.rect(x - 2, y, 2, 5, "#d7efd2");
+          break;
+      }
+    }
+    ctx.restore();
   }
 
   // Offset dello screen-shake da applicare a TUTTO il frame (ctx.translate):
@@ -242,7 +320,7 @@ export class BattleFx {
     for (const d of this.damageNumbers) {
       d.life += dt;
       // Sale rallentando (ease-out): rapido all'inizio, poi si posa.
-      d.y -= (26 - d.life * 14) * dt;
+      if (!this.reduceEffects) d.y -= (26 - d.life * 14) * dt;
     }
     this.damageNumbers = this.damageNumbers.filter((d) => d.life < d.max);
   }
@@ -276,14 +354,14 @@ export class BattleFx {
     // Entrata: il primo terzo del tempo ingrandisce; poi sta; ultimo terzo sfuma.
     const total = kind === "super" ? 0.9 : kind === "weak" ? 0.7 : 0.8;
     const prog = 1 - t / total;
-    const pop = Math.min(1, prog / 0.25);
+    const pop = this.reduceEffects ? 1 : Math.min(1, prog / 0.25);
     const fade = prog > 0.7 ? 1 - (prog - 0.7) / 0.3 : 1;
     const ctx = screen.ctx;
     ctx.save();
     ctx.globalAlpha = Math.max(0, fade);
     // Leggera oscillazione verticale per "vivacità". Posizionato sotto le
     // barre HP del nemico per non coprirle.
-    const wob = Math.sin(prog * 14) * (kind === "super" ? 2 : 1) * (1 - prog);
+    const wob = this.reduceEffects ? 0 : Math.sin(prog * 14) * (kind === "super" ? 2 : 1) * (1 - prog);
     const y = 40 + (1 - pop) * -8 + wob;
     const scale = kind === "weak" ? 1 : 1 + (1 - pop) * 0.6;
     // Ombra + testo centrato, scalato.
@@ -305,8 +383,8 @@ export class BattleFx {
       return;
     }
     const ctx = screen.ctx;
-    const prog = 1 - tg.t / tg.max; // 0 -> 1
-    const pulse = 0.5 + 0.5 * Math.sin(prog * Math.PI * 4);
+    const prog = this.reduceEffects ? .5 : 1 - tg.t / tg.max; // 0 -> 1
+    const pulse = this.reduceEffects ? .5 : 0.5 + 0.5 * Math.sin(prog * Math.PI * 4);
     ctx.save();
     // Due anelli che si stringono verso il mostro mentre carica.
     for (let i = 0; i < 2; i += 1) {
@@ -347,11 +425,11 @@ export function drawBattleMonster(
   const scale = 2;
 
   // Affondo: 0 a riposo, ~1 al picco del colpo.
-  const lunge = lungeT > 0 ? Math.sin((0.3 - lungeT) / 0.3 * Math.PI) : 0;
+  const lunge = !fx.reduceEffects && lungeT > 0 ? Math.sin((0.3 - lungeT) / 0.3 * Math.PI) : 0;
 
   // Respiro idle: ampiezza piccola, opposta su X/Y per conservare il volume.
   // Più marcato quando il giocatore è al menu (il mostro "aspetta").
-  const breath = Math.sin(fx.time * 2.4 + (who === "foe" ? 1.3 : 0)) * 0.03;
+  const breath = fx.reduceEffects ? 0 : Math.sin(fx.time * 2.4 + (who === "foe" ? 1.3 : 0)) * 0.03;
   let sx = 1 - breath;
   let sy = 1 + breath;
 
@@ -365,7 +443,7 @@ export function drawBattleMonster(
 
   // Contraccolpo: il colpito viene spinto indietro (più forte se super eff.).
   const kb = fx.knockback[who];
-  if (kb > 0) {
+  if (kb > 0 && !fx.reduceEffects) {
     // Oscillazione smorzata: scatta indietro e rientra.
     dx += Math.round(Math.sin(kb * Math.PI) * 9 * -dir);
   }
@@ -373,7 +451,7 @@ export function drawBattleMonster(
   // KO leggibile: lo sprite affonda e si comprime invece di sparire nello
   // stesso frame in cui i PV arrivano a zero.
   const faintProgress = fx.faintT[who] > 0 ? 1 - fx.faintT[who] / 0.55 : 0;
-  if (faintProgress > 0) {
+  if (faintProgress > 0 && !fx.reduceEffects) {
     sy *= 1 - faintProgress * 0.62;
     sx *= 1 + faintProgress * 0.12;
   }
@@ -381,7 +459,7 @@ export function drawBattleMonster(
   // Status visivi: il movimento dello sprite "racconta" la condizione.
   const status = comb.mon.status;
   let scandaloFlicker = false;
-  if (lunge < 0.1) {
+  if (lunge < 0.1 && !fx.reduceEffects) {
     // (gli effetti status non sovrascrivono l'affondo del proprio attacco)
     if (status === "indagato") {
       // Trattenuto: dondola lento da un lato all'altro.
@@ -416,18 +494,24 @@ export function drawBattleMonster(
   // e mostrava il placeholder `…` per tutta l'animazione (es. GIORGIAGON).
   const usePngAction = useAction && MONSTERS_WITH_ACTION_PNG.has(speciesId);
   const png = monsterImage(speciesId, usePngAction);
+  const frames = monsterFramesImage(speciesId);
   let drawW: number;
   let drawH: number;
   let x: number;
   let y: number;
   screen.ctx.save();
   if (faintProgress > 0) screen.ctx.globalAlpha = Math.max(0.08, 1 - faintProgress);
-  if (png) {
+  if (frames) {
+    drawW = 56 * sx; drawH = 56 * sy;
+    x = cx - drawW / 2 + dx;
+    y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
+    drawMonsterFrame(screen, frames, monsterPoseFrame(fx.time + (who === "foe" ? 1.3 : 0), lungeT, fx.reduceEffects), x, y, drawW, drawH, flipX);
+  } else if (png) {
     const pngScale = 56 / png.height; // altezza target ~56px
     drawW = png.width * pngScale * sx;
     drawH = png.height * pngScale * sy;
     x = cx - drawW / 2 + dx;
-    y = by - drawH + faintProgress * 13;
+    y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
     screen.imageSprite(png, x, y, { flipX, scaleX: sx * pngScale, scaleY: sy * pngScale });
   } else if (MONSTERS_WITH_PNG.has(speciesId)) {
     // Mai mostrare la pixmap legacy durante il decode o dopo una cache PWA
@@ -435,14 +519,14 @@ export function drawBattleMonster(
     drawW = 30;
     drawH = 38;
     x = cx - drawW / 2 + dx;
-    y = by - drawH + faintProgress * 13;
+    y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
     drawMonsterLoading(screen, x, y, drawW, drawH);
   } else {
     drawW = w * scale * sx;
     drawH = h * scale * sy;
     // Ancoraggio: centro in basso resta fermo (lo scaling non fa "fluttuare").
     x = cx - drawW / 2 + dx;
-    y = by - drawH + faintProgress * 13;
+    y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
     screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
   }
   screen.ctx.restore();
@@ -470,7 +554,7 @@ export function drawBattleMonster(
     const sym = status === "indagato" ? "!" : status === "scandalo" ? "$" : comb.gaffeTurns > 0 ? "?" : "";
     if (sym) {
       const symColor = status === "scandalo" ? "#ffd23c" : status === "indagato" ? "#e8e8e8" : "#b86ad8";
-      const floatY = y - 8 + Math.sin(fx.time * 3 + (who === "foe" ? 0 : 1.5)) * 2;
+      const floatY = y - 8 + (fx.reduceEffects ? 0 : Math.sin(fx.time * 3 + (who === "foe" ? 0 : 1.5)) * 2);
       screen.text(sym, Math.round(cx) - 2, Math.round(floatY), symColor);
     }
   }

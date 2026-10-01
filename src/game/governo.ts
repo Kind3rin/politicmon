@@ -1,6 +1,7 @@
 import type { Item } from "../data/items";
 import { statsOf, type Monster } from "./monster";
 import type { GameState } from "./state";
+import { trustPriceAdjustment } from "./morale";
 
 // ---------------------------------------------------------------- SONDAGGI
 // Gradimento 0-100: ogni scelta del giocatore sposta l'ago. Sblocca sconti,
@@ -196,6 +197,7 @@ export function curaPassiva(state: GameState): boolean {
 export function shopPrice(state: GameState, item: Item): number {
   const base = item.price ?? 0;
   let mult = 1;
+  mult += trustPriceAdjustment(state.morale);
   if (state.sondaggi >= 70) {
     mult -= 0.1;
   } else if (state.sondaggi < 30) {

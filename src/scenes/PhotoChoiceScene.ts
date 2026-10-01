@@ -5,7 +5,8 @@ import { audio } from "../engine/audio";
 import { resolvePhotoEvent, type PhotoChoice } from "../game/photoEvent";
 import { saveGame, type GameState } from "../game/state";
 import { drawChoicePreview, drawScreenHeader } from "../ui/widgets";
-import { ALLY_CATALOG } from "../game/coalition";
+import { applyLineRedEvent } from "../game/coalition";
+import { changeMorale } from "../game/morale";
 
 export class PhotoChoiceScene implements Scene {
   readonly transparent = true;
@@ -40,11 +41,13 @@ export class PhotoChoiceScene implements Scene {
     this.state.election = result.patch.election;
     this.state.money = result.patch.money;
     Object.assign(this.state.flags, result.patch.flags);
+    const cohesionCost = result.patch.strained.length * 8 + result.patch.broken.length * 16;
+    if (cohesionCost) changeMorale(this.state, "FOTO: IMPEGNO CON ALLEATO DISATTESO", 0, -cohesionCost);
     saveGame(this.state);
     audio.confirm();
     this.resolved = [
       `CONSENSO CENTRO +${result.patch.localDelta}.`,
-      result.patch.strained.length ? "UNA LINEA ROSSA È ORA TESA." : "LA COALIZIONE RESTA OPERATIVA.",
+      cohesionCost ? `LINEA ROSSA COLPITA. COE -${cohesionCost}.` : "LA COALIZIONE RESTA OPERATIVA.",
       "LA FOTO È PRONTA. IL COSTO PURE."
     ];
   }
@@ -63,9 +66,9 @@ export class PhotoChoiceScene implements Scene {
       { label: "COSTO", value: "0€", tone: "neutral" },
       { label: "LINEA ROSSA", value: "NESSUNA", tone: "neutral" }
     ], this.index === 0);
-    const photoRisk = this.state.coalition.members.some((member) =>
-      ALLY_CATALOG[member.allyId].lineRedEventIndexes.includes(13)
-    ) ? "1 ALLEATO SI TENDE" : "NESSUN ALLEATO";
+    const risk = applyLineRedEvent(this.state.coalition, 13);
+    const riskCost = risk.strained.length * 8 + risk.broken.length * 16;
+    const photoRisk = riskCost ? `COE -${riskCost} / ${risk.strained.length + risk.broken.length} LINEE` : "NESSUN ALLEATO";
     drawChoicePreview(screen, 8, 86, 224, "PANORAMICA", [
       { label: "CONSENSO CENTRO", value: "+12", tone: "good" },
       { label: "COSTO", value: "800€", tone: "bad" },

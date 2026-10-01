@@ -27,11 +27,14 @@ const APP_BUILD_KEY = "politicmon-app-build";
 const APP_CACHE_KEY = `politicmon-${APP_BUILD_ID}`;
 performance.mark("politicmon:boot-start");
 
-// Inizializza Vercel Web Analytics
-inject();
-
-// Inizializza Vercel Speed Insights
-injectSpeedInsights();
+// Gli endpoint delle metriche esistono sul deploy Vercel, non nell'anteprima
+// locale: Vite risponderebbe con index.html a una richiesta JavaScript.
+const localPreview = ["localhost", "127.0.0.1", "[::1]", ""].includes(window.location.hostname)
+  || window.location.hostname.endsWith(".localhost");
+if (import.meta.env.PROD && !localPreview) {
+  inject();
+  injectSpeedInsights();
+}
 
 // Mostra i controlli touch sui dispositivi senza mouse.
 if (window.matchMedia("(pointer: coarse)").matches) {

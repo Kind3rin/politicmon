@@ -112,6 +112,7 @@ export class PartyScene implements Scene {
         party[this.index] = tmp;
         this.moveFrom = null;
         audio.confirm();
+        saveGame(this.state);
       }
       return;
     }

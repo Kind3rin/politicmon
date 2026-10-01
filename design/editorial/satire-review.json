@@ -1,6 +1,94 @@
 [
-  { "id": "photo_field_slots", "sourceVerified": true, "publicEvent": true, "clearParody": true, "noUnprovenAccusation": true, "noProtectedTarget": true, "balancedTone": true, "evergreenReadable": true, "note": "La battuta riguarda composizione della foto e dinamica di coalizione, non condotte illecite." },
-  { "id": "quasi_magic_office", "sourceVerified": true, "publicEvent": true, "clearParody": true, "noUnprovenAccusation": true, "noProtectedTarget": true, "balancedTone": true, "evergreenReadable": true, "note": "Satira su comunicazione social e burocrazia; il fatto-base è l'ingresso pubblico nello staff." },
-  { "id": "future_provisional_final", "sourceVerified": true, "publicEvent": true, "clearParody": true, "noUnprovenAccusation": true, "noProtectedTarget": true, "balancedTone": true, "evergreenReadable": true, "note": "Parodia del rebranding politico, separata dal fatto verificabile dell'assemblea costituente." },
-  { "id": "diplomatic_selfie_reality", "sourceVerified": true, "publicEvent": true, "clearParody": true, "noUnprovenAccusation": true, "noProtectedTarget": true, "balancedTone": true, "evergreenReadable": true, "note": "La gag colpisce la comunicazione da selfie e il feed; non attribuisce intenzioni o reati." }
+  {
+    "id": "photo_field_slots",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "note": "La battuta riguarda composizione della foto e dinamica di coalizione, non condotte illecite."
+  },
+  {
+    "id": "quasi_magic_office",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "note": "Satira su comunicazione social e burocrazia; il fatto-base è l'ingresso pubblico nello staff."
+  },
+  {
+    "id": "future_provisional_final",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "note": "Parodia del rebranding politico, separata dal fatto verificabile dell'assemblea costituente."
+  },
+  {
+    "id": "diplomatic_selfie_reality",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "note": "La gag colpisce la comunicazione da selfie e il feed; non attribuisce intenzioni o reati."
+  },
+  {
+    "id": "ritornello_identitario",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "verifiedOn": "2026-10-01",
+    "note": "Il remix documentato ispira una scena fittizia sul lavoro invisibile dei tecnici e sul nome che copre il programma. Nessun testo della canzone riprodotto."
+  },
+  {
+    "id": "first_reaction_pratica",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "verifiedOn": "2026-10-01",
+    "note": "Il montaggio con i video originali degli esordi TikTok ispira il contrasto tra tempo della clip e tempo della procedura, senza accuse personali."
+  },
+  {
+    "id": "citofono_senza_consenso",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "verifiedOn": "2026-10-01",
+    "note": "Verificato il video originale nel servizio Sky TG24. Le accuse pronunciate nel video non vengono trattate come fatti; il residente del gioco è fittizio."
+  },
+  {
+    "id": "papeete_verbale",
+    "sourceVerified": true,
+    "publicEvent": true,
+    "clearParody": true,
+    "noUnprovenAccusation": true,
+    "noProtectedTarget": true,
+    "balancedTone": true,
+    "evergreenReadable": true,
+    "verifiedOn": "2026-10-01",
+    "note": "Il discorso originale al Senato documenta il riferimento al Papeete. La scena è una crisi fittizia vista dal ragioniere e dagli alleati."
+  }
 ]

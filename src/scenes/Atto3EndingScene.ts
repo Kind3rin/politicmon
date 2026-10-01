@@ -5,6 +5,7 @@ import { audio } from "../engine/audio";
 import { applyAtto3EndingReward, deriveAtto3Ending, type Atto3EndingDef } from "../game/atto3Ending";
 import { saveGame, type GameState } from "../game/state";
 import { drawScreenHeader, wrapText } from "../ui/widgets";
+import { moraleEpilogue } from "../game/morale";
 
 export class Atto3EndingScene implements Scene {
   readonly transparent = false;
@@ -19,15 +20,15 @@ export class Atto3EndingScene implements Scene {
 
   update(): void {
     if (!this.input.wasPressed("a") && !this.input.wasPressed("b")) return;
-    if (this.page < 3) { this.page += 1; audio.confirm(); return; }
+    if (this.page < 4) { this.page += 1; audio.confirm(); return; }
     if (applyAtto3EndingReward(this.state, this.ending)) audio.catchJingle();
     saveGame(this.state); this.stack.pop(); this.onFinish();
   }
 
   draw(screen: Screen): void {
     screen.clear(this.ending.id.includes("fractured") ? "#3d2939" : "#173e42");
-    const headings = [this.ending.title, "GOVERNO OMBRA", "CREDITI", "POST-GAME"];
-    drawScreenHeader(screen, headings[this.page], `${this.page + 1}/4`);
+    const headings = [this.ending.title, "GOVERNO OMBRA", "DOPO LE TELECAMERE", "CREDITI", "POST-GAME"];
+    drawScreenHeader(screen, headings[this.page], `${this.page + 1}/5`);
     screen.panel(8, 30, 224, 116, "dialog");
     const ministers = Object.keys(this.state.ministri);
     const paragraphs = this.page === 0
@@ -35,13 +36,15 @@ export class Atto3EndingScene implements Scene {
       : this.page === 1
         ? [ministers.length ? `${ministers.length} MINISTERI RESTANO ASSEGNATI.` : "NESSUN MINISTERO ERA ASSEGNATO.", "IL GOVERNO OMBRA CONTINUA A DARE I SUOI BONUS NEL POST-GAME."]
         : this.page === 2
-          ? ["POLITICMON", "IDEA, CODICE E SATIRA: LUCA TIENGO + CODEX", "PIXEL ART: PIXELLAB, DIREZIONE ARTISTICA COERENTE GBA", "GRAZIE PER AVER VOTATO. PIÙ O MENO."]
+          ? moraleEpilogue(this.state.morale)
+          : this.page === 3
+          ? ["POLITICMON", "IDEA, CODICE E SATIRA: LUCA TIENGO + CODEX", "PIXEL ART: PIXELLAB + HIGGSFIELD", "GRAZIE PER AVER VOTATO. ORA RESTANO LE SEDIE."]
           : ["PREMIO: 2500€ + 2 SCHEDE BLINDATE.", "SBLOCCATO UN COSMETICO DELL'EPILOGO.", "PUOI TORNARE OVUNQUE: QUEST, DEX, COPPA E ONLINE RESTANO ATTIVI."];
     let y = 42;
     for (const paragraph of paragraphs) {
       for (const line of wrapText(paragraph, 33)) { screen.text(line, 15, y, "#10141f"); y += 11; }
       y += 5;
     }
-    screen.text(this.page < 3 ? "A: CONTINUA   B: CONTINUA" : "A: TORNA AL POST-GAME", 12, 158, "#ffe38a");
+    screen.text(this.page < 4 ? "A: CONTINUA   B: CONTINUA" : "A: TORNA AL POST-GAME", 12, 158, "#ffe38a");
   }
 }

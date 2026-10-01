@@ -6,6 +6,8 @@ export type MemeCondition =
 export type MemeEffect =
   | { readonly kind: "sondaggi"; readonly delta: number }
   | { readonly kind: "money"; readonly delta: number }
+  | { readonly kind: "trust"; readonly delta: number }
+  | { readonly kind: "cohesion"; readonly delta: number }
   | { readonly kind: "flag"; readonly id: string; readonly value: boolean }
   | { readonly kind: "item"; readonly id: string; readonly qty: number }
   | { readonly kind: "territory"; readonly id: string; readonly delta: number };

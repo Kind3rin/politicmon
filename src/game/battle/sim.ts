@@ -2,6 +2,8 @@ import { MOVES, type Move, type StatKey } from "../../data/moves";
 import { typeMultiplier, type PolType } from "../../data/poltypes";
 import { ITEMS } from "../../data/items";
 import { abilityOf, heldItemOf, speciesOf, statsOf, type Monster } from "../monster";
+import { statDropBlockReason, statusBlockReason } from "./effectContract";
+import type { AiStyle } from "./trainerStyle";
 
 export interface Combatant {
   mon: Monster;
@@ -212,7 +214,7 @@ export function dynamicMovePower(attacker: Combatant, move: Move): number {
 
 // Probabilità di cattura in stile prima generazione, semplificata.
 // `extraBonus` arriva da fattori esterni (es. Ministero della Propaganda).
-export function catchChance(foe: Monster, ballId: string, extraBonus = 1): number {
+export function catchChance(foe: Monster, ballId: string, extraBonus = 1, temporaryGaffe = false): number {
   const species = speciesOf(foe);
   const maxHp = statsOf(foe).hp;
   // A HP pieno fattore 0.45, a HP quasi a zero fattore ~1.9: indebolire il
@@ -223,7 +225,9 @@ export function catchChance(foe: Monster, ballId: string, extraBonus = 1): numbe
   // a ~3.1, così "indebolito + status + scheda base" cattura un comune ~95%.
   // I rari/leggendari restano duri grazie al loro catchRate basso (3-15).
   const hpFactor = 0.55 + (1 - hpFrac) * 2.6;
-  const statusBonus = foe.status ? 2.0 : 1;
+  // GAFFE lives on Combatant.gaffeTurns, unlike persistent SCANDALO/INDAGATO.
+  // The live capture path passes it explicitly so all three statuses help.
+  const statusBonus = foe.status || temporaryGaffe ? 2.0 : 1;
   const ballBonus = ITEMS[ballId]?.ballBonus ?? 1;
   const rate = (species.catchRate / 255) * hpFactor * statusBonus * ballBonus * extraBonus;
   return Math.max(0.02, Math.min(0.95, rate));
@@ -246,68 +250,78 @@ export interface AiProfile {
   whiff: number; // probabilità di una mossa casuale (più alto = più facile)
   canHeal: boolean; // si auto-cura al timing ottimale
   finisher: boolean; // dà priorità a finire il bersaglio sotto soglia HP
+  style?: AiStyle;
 }
 export const AI_COMPETENT: AiProfile = { whiff: 0.25, canHeal: true, finisher: true };
 
 // L'IA legge la situazione: picchia super-efficace, cura quando è ferita, si
 // potenzia quando è in salute, infligge status/debuff quando conviene. Il
 // profilo `ai` decide quanto è dura (whiff alto + niente cura/finisher = facile).
-export function chooseFoeMove(foe: Combatant, target: Combatant, ai: AiProfile = AI_COMPETENT): Move {
+export function chooseFoeMove(foe: Combatant, target: Combatant, ai: AiProfile = AI_COMPETENT, rng: () => number = Math.random, ctx?: DamageContext): Move {
   const usable = foe.mon.moves.filter((slot) => slot.pp > 0).map((slot) => MOVES[slot.id]);
   if (usable.length === 0) {
     return MOVES.comizio;
   }
-  if (Math.random() < ai.whiff) {
-    return usable[Math.floor(Math.random() * usable.length)];
-  }
-  const maxHp = statsOf(foe.mon).hp;
-  const hpRatio = foe.mon.hp / maxHp;
-  const foeHurt = hpRatio < 0.45;
-  const foeHealthy = hpRatio > 0.6;
-  const targetMaxHp = statsOf(target.mon).hp;
-  const targetLow = target.mon.hp / targetMaxHp < 0.35;
+  const scored = usable.map((move) => ({ move, score: foeMoveScore(foe, target, move, ai, ctx) }));
+  // Errori credibili: una scelta subottimale, senza sprecare volontariamente
+  // una cura a PV pieni o uno status contro un'immunità già visibile.
+  const useful = scored.filter((entry) => entry.score > 0);
+  const candidates = useful.length ? useful : scored;
+  if (rng() < ai.whiff) return candidates[Math.min(candidates.length - 1, Math.floor(rng() * candidates.length))].move;
+  const best = Math.max(...candidates.map((entry) => entry.score));
+  const ties = candidates.filter((entry) => entry.score >= best - .001);
+  return ties[Math.min(ties.length - 1, Math.floor(rng() * ties.length))].move;
+}
 
-  let best = usable[0];
-  let bestScore = -1;
-  for (const move of usable) {
-    let score: number;
-    if (move.power > 0) {
-      const tMult = typeMultiplier(move.type, speciesOf(target.mon).types);
-      const stab = speciesOf(foe.mon).types.includes(move.type) ? 1.5 : 1;
-      score = move.power * tMult * stab * (move.accuracy / 100);
-      // Se il bersaglio è agli sgoccioli, finiscilo: priorità ai colpi.
-      // Solo gli avversari "competenti" infieriscono; i comuni lasciano scampo.
-      if (targetLow && ai.finisher) {
-        score *= 1.4;
-      }
-    } else if (move.effect?.healRatio) {
-      // Cura solo se serve davvero, e tanto più quanto è ferita. Gli avversari
-      // comuni (canHeal=false) non si curano al timing perfetto: la mossa cade
-      // nel punteggio neutro più sotto e viene usata solo ogni tanto.
-      score = ai.canHeal && foeHurt ? 120 + (0.45 - hpRatio) * 200 : 0;
-    } else if (move.effect?.stat) {
-      const buff = move.effect.stat.target === "self";
-      if (buff) {
-        // Potenziarsi conviene da sani e a inizio scontro (stage non già alti).
-        const current = foe.stages[move.effect.stat.key];
-        score = foeHealthy && current < 3 ? 70 + move.effect.stat.stages * 8 : 12;
-      } else {
-        // Debuffare il nemico: utile se non l'abbiamo già fatto.
-        const current = target.stages[move.effect.stat.key];
-        score = current > -3 ? 55 : 10;
-      }
-    } else if (move.effect?.status) {
-      // Status: ottimo se il bersaglio è ancora "pulito" e ha HP da logorare.
-      score = target.mon.status || targetLow ? 8 : 50 + move.effect.status.chance * 0.3;
-    } else {
-      score = 30;
-    }
-    if (score > bestScore) {
-      bestScore = score;
-      best = move;
+function combatantCopy(c: Combatant): Combatant {
+  return { ...c, stages: { ...c.stages }, mon: { ...c.mon, moves: c.mon.moves.map((s) => ({ ...s })) } };
+}
+
+// Usa la formula del danno su copie. Leggere il campo non consuma PRIMA
+// PAGINA/LODO, PP o RNG della simulazione. Non riceve il comando del giocatore.
+export function foeMoveScore(foe: Combatant, target: Combatant, move: Move, ai: AiProfile = AI_COMPETENT, ctx?: DamageContext): number {
+  foe = combatantCopy(foe); target = combatantCopy(target);
+  const maxHp = statsOf(foe.mon).hp, targetHp = statsOf(target.mon).hp;
+  const health = foe.mon.hp / maxHp, targetHealth = target.mon.hp / targetHp;
+  const self = move.power === 0 && !move.effect?.status && move.effect?.stat?.target !== "foe";
+  const accuracy = self ? 1 : move.accuracy / 100;
+  let n = 0;
+  const damage = calcDamage(foe, target, move, () => n++ === 0 ? .999999 : .5, ctx).damage;
+  let score = 100 * Math.min(damage, target.mon.hp) / targetHp * accuracy;
+  if (ai.style === "rush") score *= 1.15;
+  if (damage >= target.mon.hp && target.mon.hp > 0 && ai.finisher) score += 32 * accuracy;
+  if (move.effect?.priority && damage > 0 && effectiveStat(foe, "spd") <= effectiveStat(target, "spd")) score += 8 * move.effect.priority * accuracy;
+  const effect = move.effect;
+  if (effect?.healRatio && ai.canHeal && health < .45) {
+    const healed = Math.min(maxHp - foe.mon.hp, Math.floor(maxHp * effect.healRatio));
+    score += healed / maxHp * 95 * (ai.style === "fortress" ? 1.15 : 1);
+  }
+  if (effect?.cureStatus && ai.canHeal && (foe.mon.status || foe.gaffeTurns > 0)) score += 25;
+  if (effect?.drainRatio) score += Math.min(maxHp - foe.mon.hp, damage * effect.drainRatio) / maxHp * 65 * accuracy;
+  if (effect?.recoilRatio) {
+    const recoil = Math.max(1, Math.floor(damage * effect.recoilRatio));
+    score -= recoil / maxHp * 28;
+    if (recoil >= foe.mon.hp && damage < target.mon.hp) score -= 50;
+  }
+  for (const proc of [effect?.status, effect?.statusIfFirst]) {
+    if (!proc || target.mon.hp <= 0 || target.mon.status || (proc.id === "gaffe" && target.gaffeTurns > 0) || statusBlockReason(target.mon, proc.id)) continue;
+    if (proc === effect?.statusIfFirst && (effect?.priority ?? 0) <= 0 && effectiveStat(foe, "spd") < effectiveStat(target, "spd")) continue;
+    const value = proc.id === "scandalo" ? 34 : proc.id === "indagato" ? 30 : 23;
+    score += value * proc.chance / 100 * accuracy * Math.min(1, targetHealth * 2) * (ai.style === "pressure" || ai.style === "control" ? 1.3 : 1);
+  }
+  if (effect?.stat) {
+    const s = effect.stat, c = s.target === "self" ? foe : target;
+    const delta = Math.max(-6, Math.min(6, c.stages[s.key] + s.stages)) - c.stages[s.key];
+    const attackCategory = s.key === "atk" ? "fisico" : "speciale";
+    const irrelevant = (s.key === "atk" || s.key === "spc") && !c.mon.moves.some((slot) => slot.pp > 0 && MOVES[slot.id]?.power > 0 && MOVES[slot.id]?.category === attackCategory);
+    const blocked = s.target === "foe" && s.stages < 0 && statDropBlockReason(target.mon);
+    if (delta && !blocked && !irrelevant) {
+      const benefit = s.target === "self" ? delta : -delta;
+      const room = Math.max(0, 1 - Math.abs(c.stages[s.key]) / 4);
+      score += benefit * 13 * room * accuracy * (s.chance ?? 100) / 100 * Math.min(1, health * 2) * Math.min(1, targetHealth * 2) * (ai.style === "setup" || ai.style === "control" ? 1.3 : ai.style === "rush" ? .65 : 1);
     }
   }
-  return best;
+  return Math.max(0, score);
 }
 
 export function statName(key: StatKey): string {

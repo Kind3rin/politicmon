@@ -13,12 +13,12 @@
 
 import { MAPS } from "../../data/maps";
 import { MOVES, STATUS_NAMES } from "../../data/moves";
-import { typeMultiplier } from "../../data/poltypes";
+import { typeMultiplier, type PolType } from "../../data/poltypes";
 import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import { sceneImage } from "../../engine/assets";
+import { battleBackdropForMap, type BattleBackdrop } from "./backdrop";
 import type { GameState } from "../state";
 import { abilityOf, speciesOf, type Monster } from "../monster";
 import { statName } from "./sim";
@@ -32,7 +32,7 @@ import {
 import { mp } from "../../net/mp";
 import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleMonster, drawCombatantBox, drawEllipse, FOE_BOX, PLAYER_BOX
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawCombatantBox, drawEllipse, FOE_BOX, PLAYER_BOX
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 
@@ -60,6 +60,7 @@ export interface PvpOptions {
 type EndInfo = { winner: DuelSide | null; reason: DuelEndReason };
 
 export class PvpBattleScene implements Scene {
+  private readonly backdrop: BattleBackdrop;
   private readonly mySide: DuelSide;
   private readonly foeSide: DuelSide;
   private view!: DuelSim;
@@ -96,6 +97,7 @@ export class PvpBattleScene implements Scene {
   private prevOnPeerGone: typeof mp.onPeerGone = null;
 
   constructor(private stack: SceneStack, private input: Input, private opts: PvpOptions) {
+    this.backdrop = battleBackdropForMap(opts.state.pos.mapId);
     this.mySide = opts.role;
     this.foeSide = otherSide(opts.role);
     // Entrambi i lati ricostruiscono i team dallo STESSO code path di
@@ -284,6 +286,7 @@ export class PvpBattleScene implements Scene {
     let myName = speciesOf(this.mine.active.mon).name;
     let foeName = `Il nemico ${speciesOf(this.theirs.active.mon).name}`;
     const nameOf = (side: DuelSide) => (side === this.mySide ? myName : foeName);
+    const moveTypes: Partial<Record<DuelSide, PolType>> = {};
     for (const ev of events) {
       const apply = () => applyEvent(this.view, ev);
       switch (ev.e) {
@@ -322,6 +325,7 @@ export class PvpBattleScene implements Scene {
           this.push({ text: `${nameOf(ev.side)} fa TABULA RASA: ogni modifica è azzerata!`, run: apply });
           break;
         case "move":
+          moveTypes[ev.side] = MOVES[ev.moveId]?.type;
           this.push({ text: `${nameOf(ev.side)} usa ${MOVES[ev.moveId]?.name ?? "???"}!`, run: apply });
           break;
         case "miss":
@@ -345,6 +349,7 @@ export class PvpBattleScene implements Scene {
           break;
         case "dmg": {
           const attacker = otherSide(ev.side);
+          const moveType = moveTypes[attacker];
           this.push({
             run: () => {
               // Danno cosmetico per il numero flottante: differenza di HP prima/dopo
@@ -353,7 +358,7 @@ export class PvpBattleScene implements Scene {
               const before = this.view[ev.side].active.mon.hp;
               apply();
               const dealt = Math.max(0, before - this.view[ev.side].active.mon.hp);
-              this.fx.onHit(this.sideKey(attacker), ev.typeMult, ev.crit, dealt);
+              this.fx.onHit(this.sideKey(attacker), ev.typeMult, ev.crit, dealt, moveType);
             },
             waitHp: true,
             pause: 0.25
@@ -502,6 +507,8 @@ export class PvpBattleScene implements Scene {
     if (this.finished) {
       return;
     }
+    const realDt = dt;
+    dt *= this.opts.state.battleSpeed === 2 ? 2 : 1;
     this.exposeDebug();
     if (this.done) {
       this.msg.update(dt, this.input);
@@ -523,7 +530,7 @@ export class PvpBattleScene implements Scene {
     this.displayHp.foe = approach(this.displayHp.foe, this.theirs.active.mon.hp, speed * 0.8);
 
     if (this.mode === "wait") {
-      this.waitTimer -= dt;
+      this.waitTimer -= realDt;
       if (this.waitTimer <= 0) {
         this.walkover("timeout");
       }
@@ -724,20 +731,14 @@ export class PvpBattleScene implements Scene {
     ctx.save();
     ctx.translate(shake.x, shake.y);
     screen.clear("#f0f0e0");
-    const bg = sceneImage("battle:bg", "ui/battle_bg.png");
-    if (bg) {
-      screen.image(bg, 0, 0, VIEW_W, VIEW_H - 44);
-    } else {
-      screen.rect(0, 0, VIEW_W, 76, "#d8e8c8");
-      screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, "#e8e0c8");
-    }
+    drawBattleBackdrop(screen, this.backdrop);
 
-    const slide = Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
+    const slide = this.fx.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
     const foeSlide = Math.round((1 - slide) * 90);
     const playerSlide = Math.round((1 - slide) * -90);
 
-    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, "#c0cc9c");
-    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, "#cabf96");
+    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, this.backdrop.foePlatform);
+    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, this.backdrop.playerPlatform);
 
     const foeC = this.theirs.active;
     const myC = this.mine.active;
@@ -750,6 +751,7 @@ export class PvpBattleScene implements Scene {
       drawBattleMonster(screen, this.fx, myC, 56 + playerSlide, 116, this.fx.lungeT.player, true, "player");
     }
 
+    this.fx.drawMoveFx(screen);
     this.fx.drawParticles(screen);
     this.fx.drawDamageNumbers(screen);
     drawCombatantBox(screen, foeC.mon, this.displayHp.foe, FOE_BOX);

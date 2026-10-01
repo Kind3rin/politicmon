@@ -47,7 +47,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 45, expYield: 62,
     learnset: [[1, "radici"], [1, "comizio"], [1, "slogan"], [5, "iosonogiorgia"], [11, "giravolta"], [13, "blocconavale"]],
     evolutions: [{ id: "giorgiagon", level: 16 }],
-    dexLine: "URLA IL PROPRIO NOME OGNI MATTINA ALLO SPECCHIO. SE NESSUNO LA INTERROMPE, SI EVOLVE."
+    dexLine: "ORA IL LEGGIO È SUO. CONTINUA A PRESENTARSI COME OSPITE: COSÌ LE DOMANDE SUL CONTO VANNO ALLA REGIA."
   }),
   giorgiagon: S({
     id: "giorgiagon", dexNum: 2, name: "GIORGIAGON", category: "DRAGO UNDERDOG",
@@ -65,7 +65,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 45, expYield: 62,
     learnset: [[1, "corteo"], [1, "comizio"], [1, "ztl"], [5, "greenwashing"], [9, "piazza"], [11, "sciopero"], [13, "articolouno"], [15, "scissione"]],
     evolutions: [{ id: "schleinix", level: 16 }],
-    dexLine: "GATTINA GENTILE. PASSA PIÙ TEMPO A DISCUTERE CON LE ALTRE ELLYNA CHE COL NEMICO."
+    dexLine: "PORTA UNA PALETTE A OGNI RIUNIONE. L'UNICO COLORE SU CUI TUTTI CONCORDANO È QUELLO DELLA PROPRIA SEDIA."
   }),
   schleinix: S({
     id: "schleinix", dexNum: 4, name: "SCHLEINIX", category: "VOLPE ARMOCROMICA",
@@ -84,7 +84,7 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "giravolta"], [1, "comizio"], [1, "promessa"], [5, "terzopolo"], [11, "inciucio"], [13, "staisereno"]],
     evolutions: [{ id: "renzilla", level: 16 }],
     ability: "voltagabbana",
-    dexLine: "SORRIDE SEMPRE. SE GLI STRINGI LA ZAMPA, CONTA LE DITA E POI FONDA UN PARTITO NUOVO."
+    dexLine: "CHIAMA ROTTAMAZIONE IL TRASLOCO DEGLI ALTRI. IL SUO SCATOLONE È SEMPRE ETICHETTATO FRAGILE."
   }),
   renzilla: S({
     id: "renzilla", dexNum: 6, name: "RENZILLA", category: "KAIJU ROTTAMA",
@@ -107,7 +107,7 @@ export const SPECIES: Record<string, Species> = {
       { id: "salvinator", level: 18, minSondaggi: 50 },
       { id: "salvinurlo", level: 18 }
     ],
-    dexLine: "CUCCIOLO DA COMIZIO. FA UNA DIRETTA SOCIAL ANCHE QUANDO DORME."
+    dexLine: "DALL'OPPOSIZIONE VEDE OGNI ERRORE. QUANDO CAMBIA POSTO, IL SOCIAL MANAGER CHIEDE DI ARCHIVIARE QUELLA CARTELLA."
   }),
   salvinator: S({
     id: "salvinator", dexNum: 8, name: "SALVINATOR", category: "CASTORONE BALNEARE",
@@ -116,7 +116,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 60, expYield: 160,
     learnset: [[1, "ruspa"], [1, "citofonata"], [15, "noncene"], [18, "mojito"], [23, "blocconavale"], [28, "vaffa"]],
     evolutions: [{ id: "capitanone", item: "tessera" }],
-    dexLine: "SI INDEBOLISCE SE DEVE GOVERNARE DAVVERO. RECUPERA TUTTI I PV APPENA TORNA ALL'OPPOSIZIONE."
+    dexLine: "HA PORTATO IL MANDATO IN SPIAGGIA. IL BAGNINO GLI HA CHIESTO DI RIENTRARE DENTRO I CONFINI DELLA BOA."
   }),
   grillix: S({
     id: "grillix", dexNum: 11, name: "GRILLIX", category: "GRILLO URLANTE",
@@ -129,7 +129,7 @@ export const SPECIES: Record<string, Species> = {
       { id: "movimenton", level: 22, minSondaggi: 50 },
       { id: "vaffenix", level: 22 }
     ],
-    dexLine: "GRILLO PARLANTE MOLTO ARRABBIATO. UNA VOLTA GRIDAVA UNA PAROLA SOLA: ORA GRIDA E BASTA."
+    dexLine: "TUTTI A CASA È DIVENTATO IL NOME DEL GRUPPO CHAT. NESSUNO LO USA: SONO TUTTI IN RIUNIONE A PALAZZO."
   }),
   contemorfo: S({
     id: "contemorfo", dexNum: 14, name: "CONTEMORFO", category: "BLOB ELEGANTE",
@@ -146,7 +146,7 @@ export const SPECIES: Record<string, Species> = {
       { id: "conteblob", trade: true }
     ],
     ability: "teflon",
-    dexLine: "BLOB ELEGANTISSIMO. HA GOVERNATO CON TUTTI, CONTRO TUTTI E ANCHE CON SE STESSO CONTRARIO."
+    dexLine: "PORTA IN PIAZZA LO STESSO CONTRATTO DEL PALAZZO. HA CAMBIATO LA COPERTINA: ORA HA UNA MANIGLIA PER IL MEGAFONO."
   }),
   calendauro: S({
     id: "calendauro", dexNum: 17, name: "CALENDAURO", category: "SAURO SLIDE",
@@ -156,7 +156,7 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "grafico"], [6, "giravolta"], [11, "dossier"], [16, "spread"], [22, "terzopolo"]],
     // Consegnato a un nuovo staff, apre subito i dossier: evolve da scambio.
     evolutions: [{ id: "calendrone", level: 18 }, { id: "calendrone", trade: true }],
-    dexLine: "SAURO TECNICO. TI MOSTRA UN GRAFICO A TORTA ANCHE SE GLI HAI CHIESTO SOLO CHE ORE SONO."
+    dexLine: "PROIETTA L'ULTIMA SLIDE: PROSSIMI PASSI. I PRESENTI LI FANNO TUTTI VERSO L'USCITA."
   }),
   vannaccix: S({
     id: "vannaccix", dexNum: 19, name: "VANNACCIX", category: "ORSO CAPOVOLTO",
@@ -168,7 +168,7 @@ export const SPECIES: Record<string, Species> = {
       { id: "futurorso", item: "tessera_futuro" },
       { id: "generorso", level: 20 }
     ],
-    dexLine: "VIVE A TESTA IN GIÙ. HA SCRITTO UN LIBRO SUL MONDO GIUSTO E L'HA VENDUTO PIÙ DI OGNI LEGGE."
+    dexLine: "CONTROLLA CHE LE FILE SIANO DRITTE. QUANDO UNA PIEGA PER EVITARE UNA BUCHE, LA CONSIDERA UNA SCISSIONE."
   }),
   tajanide: S({
     id: "tajanide", dexNum: 21, name: "TAJANIDE", category: "COLOMBA PLACIDA",
@@ -179,7 +179,7 @@ export const SPECIES: Record<string, Species> = {
     // La colomba si posa dove conviene: cambiare squadra la fa evolvere subito.
     evolutions: [{ id: "tajacolomba", level: 18 }, { id: "tajacolomba", trade: true }],
     ability: "poltrona",
-    dexLine: "COLOMBA MITISSIMA. NON HA MAI PERSO UNA POLTRONA, NÉ VINTO UN'IDEA DA RICORDARE."
+    dexLine: "MEDIA TRA DUE POSIZIONI INCOMPATIBILI. IL COMUNICATO FINALE È PERFETTO: ENTRAMBI LO LEGGONO COME VOLEVANO."
   }),
   berlusconix: S({
     id: "berlusconix", dexNum: 23, name: "BERLUSCONIX", category: "BISCIONE LEGGENDARIO",
@@ -188,7 +188,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 8, expYield: 240,
     learnset: [[1, "tweet"], [1, "telepromessa"], [1, "conferenza"], [12, "editoriale"], [18, "bunga"], [22, "appelloalleati"], [28, "covfefe"], [34, "memedoge"]],
     ability: "lodo",
-    dexLine: "BISCIONE LEGGENDARIO. NON COMPRA I VOTI: COMPRA IL CANALE CHE TI SPIEGA PER CHI VOTARE."
+    dexLine: "IL TELECOMANDO HA MOLTI TASTI. CAMBI CANALE, CAMBI OSPITE: LA DOMANDA RESTA NELLO STESSO CAVO."
   }),
   draghimon: S({
     id: "draghimon", dexNum: 24, name: "DRAGHIMON", category: "DRAGO DEI MERCATI",
@@ -197,7 +197,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 10, expYield: 250,
     learnset: [[1, "spread"], [1, "moralsuasion"], [1, "gazzetta"], [15, "dossier"], [20, "fiducia"], [24, "quorum"], [26, "whatever"], [30, "scioglimento"]],
     ability: "whatever",
-    dexLine: "VIENE EVOCATO SOLO NELLE CRISI. NON LO ELEGGE NESSUNO, MA COMANDA A CHI LO HA ELETTO."
+    dexLine: "PRONUNCIA TRE PAROLE E CALA LO SPREAD. IL TESORIERE VORREBBE SAPERE SE FUNZIONANO ANCHE SULLA FATTURA."
   }),
   mattarellux: S({
     id: "mattarellux", dexNum: 25, name: "MATTARELLUX", category: "GARANTE SUPREMO",
@@ -206,7 +206,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 3, expYield: 255,
     learnset: [[1, "moralsuasion"], [1, "fiducia"], [1, "gazzetta"], [14, "decreto"], [18, "aureola"], [22, "quorum"], [26, "oscuramento"], [30, "scioglimento"]],
     ability: "garanzia",
-    dexLine: "GARANTE SUPREMO. L'UNICO CHE NON HA MAI FATTO UNA PROMESSA ELETTORALE: PER QUESTO L'HANNO RIELETTO."
+    dexLine: "AL TERZO GIRO DI CONSULTAZIONI SERVE IL CAFFÈ IN TAZZINE SENZA MANICO: NESSUNO PUÒ AGGRAPPARSI ALLA POLTRONA."
   }),
   trumpon: S({
     id: "trumpon", dexNum: 26, name: "TRUMPON", category: "TYCOON URLANTE",
@@ -215,7 +215,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 8, expYield: 240,
     learnset: [[1, "comizio"], [1, "covfefe"], [16, "tweet"], [22, "dazilampo"], [28, "editoriale"]],
     ability: "maggioranza",
-    dexLine: "COSTRUISCE MURI E LI FA PAGARE AGLI ALTRI. IL SUO CIUFFO RESISTE AL VENTO E ALLE SMENTITE."
+    dexLine: "CONTA I PRESENTI DAL RUMORE DEGLI APPLAUSI. SE IL MICROFONO FISCHIA, LO REGISTRA COME UN ALTRO SOSTENITORE."
   }),
   putingrad: S({
     id: "putingrad", dexNum: 27, name: "PUTINGRAD", category: "ZAR D'INVERNO",
@@ -224,7 +224,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 5, expYield: 245,
     learnset: [[1, "comizio"], [1, "tavololungo"], [16, "gasdotto"], [24, "dossier"], [30, "blocconavale"]],
     ability: "caimano",
-    dexLine: "TIENE IL DITO SUL RUBINETTO DEL GAS. D'INVERNO L'EUROPA RICEVE LA BOLLETTA E TREMA."
+    dexLine: "IL TAVOLO È COSÌ LUNGO CHE LA RISPOSTA ARRIVA ALLA RIUNIONE DOPO. LA REGIA LA CHIAMA CONSENSO STRATEGICO."
   }),
   bunkerput: S({
     id: "bunkerput", dexNum: 39, name: "BUNKERPUT", category: "MEME DA BUNKER",
@@ -233,7 +233,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 35, expYield: 190,
     learnset: [[1, "comizio"], [1, "tavololungo"], [10, "oscuramento"], [16, "gasdotto"], [22, "dossier"], [28, "fiducia"]],
     ability: "lodo",
-    dexLine: "VIVE IN UN BUNKER E ATTACCA DA UN TAVOLO LUNGHISSIMO. PIÙ LO AVVICINI, PIÙ ALLUNGA LA RIUNIONE."
+    dexLine: "INVITA GLI OSPITI A SEDERSI VICINO. IL PUNTO INDICATO È VICINO SOLO SULLA MAPPA IN SCALA UNO A UN MILIONE."
   }),
   xipanda: S({
     id: "xipanda", dexNum: 28, name: "XIPANDA", category: "PANDA PIANIFICATORE",
@@ -242,7 +242,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 5, expYield: 245,
     learnset: [[1, "comizio"], [1, "oscuramento"], [16, "viadellaseta"], [24, "spread"], [30, "fiducia"]],
     ability: "poltrona",
-    dexLine: "SORRIDE PLACIDO COME UN PANDA. È STATO ELETTO ALL'UNANIMITÀ: ERA L'UNICO CANDIDATO AMMESSO."
+    dexLine: "IL PIANO È QUINQUENNALE, IL SORRISO È PERMANENTE. LA CASELLA OSSERVAZIONI È STATA OTTIMIZZATA FINO A SPARIRE."
   }),
   macronfox: S({
     id: "macronfox", dexNum: 29, name: "MACRONFOX", category: "GALLETTO ELISEO",
@@ -250,7 +250,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 70, atk: 62, def: 70, spc: 88, spd: 86 },
     catchRate: 30, expYield: 175,
     learnset: [[1, "giravolta"], [1, "enmarche"], [14, "inciucio"], [20, "jupiter"], [26, "multaue"]],
-    dexLine: "NÉ DESTRA NÉ SINISTRA, SOPRATTUTTO SE STESSO. È CONVINTO CHE LA FRANCIA SIA L'EUROPA."
+    dexLine: "SI POSIZIONA AL CENTRO DELLA FOTO PRIMA CHE ARRIVINO GLI ALTRI. CHI LO SPOSTA HA APERTO UNA CRISI EUROPEA."
   }),
   ursulax: S({
     id: "ursulax", dexNum: 30, name: "URSULAX", category: "REGOLATRICE SUPREMA",
@@ -258,7 +258,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 75, atk: 60, def: 82, spc: 96, spd: 70 },
     catchRate: 15, expYield: 220,
     learnset: [[1, "grafico"], [1, "direttiva"], [16, "multaue"], [22, "moralsuasion"], [28, "scioglimento"]],
-    dexLine: "NORMATIVA AMBULANTE. SE LA SFIDI, RICEVI UNA DIRETTIVA TRADOTTA IN 24 LINGUE."
+    dexLine: "PER ACCORCIARE UNA PROCEDURA SCRIVE UNA DIRETTIVA. L'ALLEGATO SPIEGA COME TROVARE L'ALLEGATO BREVE."
   }),
   bojoon: S({
     id: "bojoon", dexNum: 31, name: "BOJOON", category: "CAOS BIONDO",
@@ -266,7 +266,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 75, atk: 82, def: 60, spc: 72, spd: 66 },
     catchRate: 40, expYield: 165,
     learnset: [[1, "comizio"], [1, "slogan"], [12, "citofonata"], [18, "conferenza"], [24, "brexit"]],
-    dexLine: "SI È DIMESSO PIÙ VOLTE DI QUANTE SI SIA PETTINATO. LA CHIOMA È UNA POSIZIONE POLITICA."
+    dexLine: "PROMETTE UN'USCITA SEMPLICE. HA PORTATO LE CHIAVI, MA LA PORTA SI APRE DALL'ALTRO LATO."
   }),
   zelenskir: S({
     id: "zelenskir", dexNum: 32, name: "ZELENSKIR", category: "COMICO CORAZZATO",
@@ -274,7 +274,7 @@ export const SPECIES: Record<string, Species> = {
     base: { hp: 72, atk: 76, def: 68, spc: 80, spd: 80 },
     catchRate: 25, expYield: 185,
     learnset: [[1, "comizio"], [1, "resilienza"], [14, "appelloalleati"], [20, "corteo"], [26, "editoriale"]],
-    dexLine: "FACEVA RIDERE DI MESTIERE, ORA FA CORAGGIO. NON SI TOGLIE LA FELPA NEMMENO AI VERTICI NATO."
+    dexLine: "GLI OFFRONO UN ALTRO APPLAUSO. CHIEDE QUANDO ARRIVA LA CONSEGNA: IL COMUNICATO NON HA UN NUMERO DI TRACKING."
   }),
   muskrat: S({
     id: "muskrat", dexNum: 33, name: "MUSKRAT", category: "TOPO RAZZO",
@@ -283,7 +283,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 20, expYield: 200,
     learnset: [[1, "tweet"], [1, "memedoge"], [14, "grafico"], [20, "razzox"], [26, "spread"]],
     evolutions: [{ id: "marsrat", item: "tessera" }],
-    dexLine: "ADDESTRA UNA IA A RISPONDERE AL POSTO SUO. POI LITIGA COL SUO STESSO ALGORITMO ALLE 3 DI NOTTE."
+    dexLine: "HA FONDATO UN PARTITO SU MARTE. IL PRIMO CONGRESSO È STATO RINVIATO PER MANCANZA DI ATMOSFERA."
   }),
   // ---- Evoluzioni avanzate (rami e tessere) ----
   vaffenix: S({
@@ -331,7 +331,7 @@ export const SPECIES: Record<string, Species> = {
     learnset: [[1, "tweet"], [1, "giravolta"], [8, "conferenza"], [13, "telepromessa"], [18, "editoriale"], [24, "inciucio"]],
     evolutions: [{ id: "telecrate", level: 20 }],
     ability: "galleggiamento",
-    dexLine: "OSPITE FISSO DI OGNI TALK SHOW. HA UN'OPINIONE FORTISSIMA SU TUTTO E NESSUNA SU NIENTE. SE CAMBI CANALE, È GIÀ LÌ."
+    dexLine: "PREPARA DUE OPINIONI OPPOSTE. LA TERZA DIPENDE DAL COLORE DELLA SPIA ACCESA SULLA TELECAMERA."
   }),
   // FIRMA dello STRETTO: il mostro-cantiere del ponte mai finito.
   pontigor: S({
@@ -341,7 +341,7 @@ export const SPECIES: Record<string, Species> = {
     catchRate: 35, expYield: 200,
     learnset: [[1, "ruspa"], [1, "grafico"], [10, "comizio"], [16, "spread"], [22, "slogan"], [28, "vaffa"]],
     evolutions: [{ id: "pontimax", level: 28 }],
-    dexLine: "ENORME E INCOMPIUTO DA CINQUANT'ANNI. OGNI GOVERNO LO ANNUNCIA, NESSUNO LO FINISCE. CRESCE SOLO IN CAMPAGNA ELETTORALE."
+    dexLine: "OGNI INAUGURAZIONE AGGIUNGE UN NASTRO. GLI INGEGNERI STANNO VERIFICANDO SE POSSONO REGGERE IL PONTE."
   }),
   conteblob: S({
     id: "conteblob", dexNum: 15, name: "CONTEBLOB", category: "AVVOCATO MUTEVOLE",
@@ -486,7 +486,7 @@ export const SPECIES: Record<string, Species> = {
       { id: "verdoribelle", level: 18 }
     ],
     ability: "galleggiamento",
-    dexLine: "FIRMA PETIZIONI ANCORA PRIMA DI SBOCCIARE. SI INNAFFIA DA SOLO PER RIDURRE L'IMPRONTA IDRICA."
+    dexLine: "BLOCCA IL TRAFFICO PER FARSI ASCOLTARE. IL COMITATO PROPONE UN TAVOLO, POSSIBILMENTE IN UN PARCHEGGIO."
   }),
   ecoverdon: S({
     id: "ecoverdon", dexNum: 41, name: "ECOVERDON", category: "GUARDIANO DEL CLIMA",

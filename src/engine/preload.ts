@@ -2,6 +2,9 @@ import { preloadSprites, waitForSprites } from "./assets";
 import { BAG_ORDER } from "../data/items";
 import { MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG } from "../art/monsters";
 import { ITEMS_WITH_PNG } from "../art/items";
+import { BATTLE_BACKDROPS } from "../game/battle/backdrop";
+import { ANIMATED_MONSTERS } from "../art/monsterFrames";
+import { BOSS_ART_IDS } from "../game/battle/trainerStyle";
 
 const DIRS = ["south", "north", "east", "west"] as const;
 const NPCS = [
@@ -112,6 +115,16 @@ function criticalSpriteEntries(): Record<string, string> {
 function deferredSpriteEntries(): Record<string, string> {
   const entries: Record<string, string> = {};
 
+  // Gli ambienti sono piccoli PNG nativi: partono in sfondo senza allungare
+  // il boot e riusano il versionamento/offline del registry degli sprite.
+  for (const backdrop of Object.values(BATTLE_BACKDROPS)) {
+    entries[backdrop.spriteId] = backdrop.path;
+  }
+  for (const art of ["sportello", "studio", "molo", "verbale"]) {
+    entries[`civic:${art}`] = `ui/civic/${art}.png`;
+  }
+  for (const id of BOSS_ART_IDS) entries[`boss:${id}`] = `ui/boss/${id}.png`;
+
   for (const dir of DIRS) {
     for (let frame = 0; frame < 4; frame += 1) {
       entries[`player:${dir}:w${frame}`] = `chars/player_${dir}_w${frame}.png`;
@@ -142,6 +155,7 @@ const DEFERRED_SPRITES = deferredSpriteEntries();
 // Avvia SUBITO il fetch dei deferred (non blocca), da chiamare dopo il primo frame.
 function startDeferredPreload(): void {
   preloadSprites(DEFERRED_SPRITES);
+  preloadSprites(Object.fromEntries([...ANIMATED_MONSTERS].map((id) => [`mon:frames:${id}`, `monsters/animated/${id}.png`])));
 }
 
 export function preloadCoreSprites(): Promise<void> {

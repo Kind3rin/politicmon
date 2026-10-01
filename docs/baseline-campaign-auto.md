@@ -5,9 +5,9 @@ Simulazioni deterministiche: **400 per checkpoint**. Seed schema: `0x51f15e + sc
 | Checkpoint | Avversario | Win | Turni avg (p90) | KO giocatore | Cure | Esito |
 |---|---|---:|---:|---:|---:|---|
 | badge-auditel | SUA EMITTENZA | 63.5% | 11.1 (12) | 2.1 | 1 | OK |
-| badge-spread | LADY DIRETTIVA | 99.8% | 10.9 (12) | 1.3 | 2 | OK |
+| badge-spread | LADY DIRETTIVA | 99.8% | 10 (11) | 0.3 | 1.9 | OK |
 | badge-dazio | MR. TYCOON | 95% | 12.5 (15) | 1.4 | 2.3 | OK |
-| palazzo | PRESIDENTE OMBRA | 100% | 25.8 (29) | 0.9 | 4 | OK |
+| palazzo | PRESIDENTE OMBRA | 100% | 20 (24) | 0.2 | 3.2 | OK |
 | garante | IL GARANTE SUPREMO | 100% | 28.6 (32) | 4.3 | 4.7 | OK |
 | offshore | IL TESORIERE FANTASMA | 100% | 29.9 (36) | 2.6 | 4.9 | OK |
 | bruxelles | LA COMMISSIONE | 99% | 27.5 (31) | 4.1 | 5.4 | OK |
@@ -18,16 +18,16 @@ Ogni profilo attraversa i 7 checkpoint in ordine e può riprovare un boss fino a
 
 | Profilo | Checkpoint | Tentativi | Sconfitte | Turni | Cure | Esito |
 |---|---:|---:|---:|---:|---:|---|
-| standard-a | 7/7 | 7 | 0 | 138 | 24 | COMPLETA |
-| standard-b | 7/7 | 8 | 1 | 155 | 25 | COMPLETA |
-| standard-c | 7/7 | 8 | 1 | 160 | 26 | COMPLETA |
-| starter-sinistra | 7/7 | 7 | 0 | 183 | 23 | COMPLETA |
-| starter-centro | 7/7 | 10 | 3 | 209 | 27 | COMPLETA |
-| ordine-inverso | 7/7 | 9 | 2 | 177 | 24 | COMPLETA |
-| sinistra-parsimonioso | 7/7 | 9 | 2 | 180 | 18 | COMPLETA |
-| sopra-livello | 7/7 | 7 | 0 | 143 | 23 | COMPLETA |
-| parsimonioso | 7/7 | 9 | 2 | 154 | 13 | COMPLETA |
-| rifornito | 7/7 | 8 | 1 | 178 | 33 | COMPLETA |
+| standard-a | 7/7 | 7 | 0 | 132 | 23 | COMPLETA |
+| standard-b | 7/7 | 8 | 1 | 144 | 22 | COMPLETA |
+| standard-c | 7/7 | 8 | 1 | 152 | 25 | COMPLETA |
+| starter-sinistra | 7/7 | 7 | 0 | 186 | 23 | COMPLETA |
+| starter-centro | 7/7 | 10 | 3 | 202 | 27 | COMPLETA |
+| ordine-inverso | 7/7 | 9 | 2 | 161 | 24 | COMPLETA |
+| sinistra-parsimonioso | 7/7 | 9 | 2 | 177 | 17 | COMPLETA |
+| sopra-livello | 7/7 | 7 | 0 | 141 | 24 | COMPLETA |
+| parsimonioso | 7/7 | 9 | 2 | 148 | 13 | COMPLETA |
+| rifornito | 7/7 | 8 | 1 | 180 | 34 | COMPLETA |
 
 ## Limiti del modello
 

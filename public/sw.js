@@ -22,6 +22,19 @@ const PRECACHE = [
   ...__PRECACHE_RUNTIME_ASSETS__
 ];
 
+// La precache salva i PNG canonici; il registry li richiede con ?v=BUILD_ID.
+// Riusa il canonico SOLO nella cache della stessa build e SOLO per la versione
+// corrente: anche il primo incontro offline trova lo sfondo prima mai aperto.
+async function matchCurrentBuild(request) {
+  const cache = await caches.open(CACHE);
+  const exact = await cache.match(request);
+  if (exact) return exact;
+  const url = new URL(request.url);
+  if (url.searchParams.get("v") !== "__APP_BUILD_ID__" || [...url.searchParams.keys()].some((key) => key !== "v")) return undefined;
+  url.search = "";
+  return cache.match(url.href);
+}
+
 self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));
@@ -79,7 +92,7 @@ self.addEventListener("fetch", (event) => {
   // il cache-busting rende quel ri-scarico inutile.
   if (url.pathname.includes("/sprites/")) {
     event.respondWith(
-      caches.match(request).then(
+      matchCurrentBuild(request).then(
         (hit) =>
           hit ??
           fetch(request).then((response) => {
@@ -96,7 +109,7 @@ self.addEventListener("fetch", (event) => {
 
   // Bundle con hash e icone: cache-first.
   event.respondWith(
-    caches.match(request).then(
+    matchCurrentBuild(request).then(
       (hit) =>
         hit ??
         fetch(request).then((response) => {

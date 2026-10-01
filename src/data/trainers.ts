@@ -26,8 +26,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
       ["pontimax", 56, ["grafico", "spread", "pienipoteri", "ruspa"]],
       ["salisound", 57, ["diretta_social", "festival", "editoriale", "scissione"]]
     ],
-    intro: ["HO GIÀ CALCOLATO IL RISULTATO.", "ORA DEVO SOLTANTO CONVINCERE I DATI."],
-    defeat: ["ERRORE DI PREVISIONE.", "LO CHIAMEREMO RICONTEGGIO UMANO."],
+    intro: ["TI HO MOSTRATO SOLTANTO CIÒ CHE TI FACEVA RESTARE.", "ORA CHIAMI OPINIONE IL TEMPO PASSATO QUI.", "LE PERSONE CHE HAI AIUTATO A CAMERE SPENTE NON ENTRANO NEL MIO CAMPIONE."],
+    defeat: ["IL CAMPIONE NON SPIEGA IL RISULTATO.", "QUALCUNO HA FATTO QUALCOSA CHE NON HO RIPRESO."],
     money: 3500, reward: { itemId: "schedona", qty: 3 }
   },
   "campo-debate": {
@@ -163,11 +163,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
     id: "emittenza", name: "SUA EMITTENZA", pal: "boss",
     team: [["tajanide", 12], ["berlusconix", 12]],
     intro: [
-      "Benvenuto nel mio studio, giovane!",
-      "Le mie reti, i miei giornali, la tua opinione: indovina di chi è.",
-      "Lo dico con affetto: qui il telecomando ce l'ho sempre io."
+      "Benvenuto. Hai novanta secondi per una risposta e tre minuti per litigare.",
+      "Non censuro nessuno: taglio soltanto i tempi morti. Il fonico e i fatti finiscono spesso lì.",
+      "Se parli piano dovrò alzare il volume del tuo avversario. È servizio pubblico, dice lo sponsor."
     ],
-    defeat: ["Incredibile! Ripeteremo lo scontro... dopo la pubblicità."],
+    defeat: ["Hai risposto alla domanda. Il pubblico non era preparato.", "La prossima volta metteremo la domanda dopo la pubblicità."],
     money: 1400, badge: "auditel", reward: { itemId: "dirBunga", qty: 1 }
   },
   funzionario: {
@@ -179,12 +179,13 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   ladydirettiva: {
     id: "ladydirettiva", name: "LADY DIRETTIVA", pal: "granny",
-    team: [["macronfox", 16], ["ursulax", 18]],
+    team: [["macronfox", 15], ["ursulax", 17]],
     intro: [
-      "Benvenuto. Questa sfida è conforme al regolamento UE 2026/1.",
-      "Nessuno mi ha votata. Il regolamento sì: quindi qui comando io."
+      "Ho letto la tua promessa. Manca chi la paga e chi può fare ricorso.",
+      "Le regole servono anche a chi perde. Peccato che per leggerle debba perdere una giornata.",
+      "Dimostrami che il tuo programma regge quando finisce il ritornello."
     ],
-    defeat: ["Inaudito... dovrò emendare l'articolo 1."],
+    defeat: ["Il risultato è valido. Anche quando mi dispiace.", "Ti mando il verbale: la versione leggibile costa una riunione in più."],
     money: 1800, badge: "spread", reward: { itemId: "schedona", qty: 2 }
   },
   diplomatico: {
@@ -246,11 +247,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
     // "numeri gonfiati ad arte" perfetti per il tycoon (non passa in PvP).
     team: [["bojoon", 20], ["muskrat", 21], ["trumpon", 23, undefined, "sondtruccato"]],
     intro: [
-      "Questa palestra è la più bella mai costruita. Lo dicono tutti.",
-      "Ho dazi bellissimi, enormi: li firmo la mattina e li smentisco a pranzo.",
-      "Sarà una vittoria tremendous. E se perdo, l'ho vinta lo stesso."
+      "Ho messo il mio nome sul palazzo. Così ogni riparazione sembra una donazione a me.",
+      "Il dazio lo paga chi compra. La conferenza la faccio io. È una divisione del lavoro perfetta.",
+      "Se vinci, ti offrirò il naming della vittoria. A rate."
     ],
-    defeat: ["FAKE BATTLE! Esigo il riconteggio dei PV!"],
+    defeat: ["La sconfitta non rientrava nel preventivo.", "La aggiungo come servizio opzionale. A tuo carico."],
     money: 2600, badge: "dazio", reward: { itemId: "schedona", qty: 3 }
   },
   // ---- Stretto di Messina ----
@@ -392,10 +393,10 @@ export const TRAINERS: Record<string, TrainerDef> = {
     // così l'asso del Garante regge più a lungo (l'held item non passa in PvP).
     team: [["zelenskir", 28], ["ursulax", 29], ["draghimon", 30], ["mattarellux", 32, undefined, "gilet"]],
     intro: [
-      "Benvenuto al COLLE. Qui non si vince: si viene controfirmati.",
-      "Ho rispedito indietro leggi, governi e persino un paio di inni.",
-      "Volevo andare in pensione. Invece eccoci qui. Di nuovo.",
-      "Ho controfirmato governi che non condividevo pur di salvare il Paese. Da te compreso."
+      "Il mandato ti permette di decidere. Non trasforma ogni tua decisione in una buona idea.",
+      "Qui controlliamo anche il diritto di chi non ti ha votato. È la parte che non applaude mai in studio.",
+      "Vorrei andare in pensione. Ma ogni volta che preparo la valigia qualcuno prepara una crisi.",
+      "Vediamo se sai reggere un limite senza chiamarlo complotto."
     ],
     defeat: ["Notevole. Prendo atto. La Repubblica, pure."],
     money: 8000, reward: { itemId: "schedona", qty: 3 }
@@ -405,14 +406,14 @@ export const TRAINERS: Record<string, TrainerDef> = {
     // NIENTE leggendari qui: MATTARELLUX e DRAGHIMON sono i reveal dell'Atto 2
     // (GARANTE SUPREMO / leggendario finale) e non vanno bruciati nel boss di Atto 1.
     // Asso mediatico TELECRATE + forza istituzionale GENERORSO, a tema "potere occulto".
-    team: [["contemorfo", 20], ["xipanda", 22], ["telecrate", 24], ["generorso", 26]],
+    team: [["contemorfo", 18], ["xipanda", 20], ["telecrate", 22], ["generorso", 24]],
     intro: [
-      "Benvenuto al Palazzo. Io non esisto, ufficialmente.",
-      "Ho visto nascere e cadere governi che non ricordano nemmeno il mio nome.",
-      "Tre medaglie? Carine. Io non mi voto: mi confermo da solo.",
-      "Vediamo se la tua campagna sopravvive al Palazzo vero."
+      "Benvenuto. Qui conserviamo tutte le promesse. Quasi tutte nella cartella BOZZE.",
+      "Non decido cosa direte. Decido quale pratica arriva prima che dobbiate dirlo di nuovo.",
+      "Tre medaglie ti hanno aperto il portone. Fuori c'è ancora chi aspetta una corsa del bus.",
+      "Battermi ti darà una stanza. Vediamo cosa ci farai dopo la foto."
     ],
-    defeat: ["Impossibile... convocherò un tavolo tecnico su questa sconfitta."],
+    defeat: ["La stanza è tua. Le pratiche, anche.", "Il fotografo se ne va alle sei. L'arretrato no."],
     money: 5000, reward: { itemId: "schedona", qty: 3 }
   }
 };

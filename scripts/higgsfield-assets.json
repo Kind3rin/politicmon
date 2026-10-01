@@ -1,0 +1,309 @@
+{
+  "version": 1,
+  "createdOn": "2026-10-01",
+  "provider": "Higgsfield",
+  "project": {
+    "project_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+    "default_folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+    "workspace_id": "39323ead-1405-4bd9-a5ea-83a2d2d1ceb6",
+    "name": "Politicmon — ambienti di battaglia"
+  },
+  "credits": {
+    "before": 885.97,
+    "after": 867.97,
+    "spent": 18,
+    "batches": [
+      {
+        "scope": "ambienti e titolo",
+        "spent": 12
+      },
+      {
+        "scope": "vignette civiche",
+        "spent": 6
+      }
+    ]
+  },
+  "processing": {
+    "dimensions": {
+      "battle": [
+        240,
+        136
+      ],
+      "title": [
+        240,
+        180
+      ],
+      "civic": [
+        240,
+        136
+      ]
+    },
+    "resampling": "nearest",
+    "paletteColors": 48,
+    "dither": false
+  },
+  "assets": [
+    {
+      "id": "piazza",
+      "jobId": "6941f038-f6a2-421f-9064-7c5cc11557e6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125349_6941f038-f6a2-421f-9064-7c5cc11557e6.png",
+      "path": "public/sprites/ui/battle/piazza.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Italian town piazza at sunny late afternoon. A distant row of terracotta-roofed pastel town houses with green shutters, a small clocktower far left, a modest Italian tricolor flag on one roof. Faint hills behind. Foreground is a spacious empty warm cream cobblestone square depicted as a flat surface with only a few tiny grout marks near bottom corners. Inviting, playful, readable. All detailed architecture kept far back and small."
+      }
+    },
+    {
+      "id": "studio",
+      "jobId": "3a25e65f-398a-4739-a312-2f15205a36e2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125514_3a25e65f-398a-4739-a312-2f15205a36e2.png",
+      "path": "public/sprites/ui/battle/studio.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: An empty Italian television debate studio, symmetric distant back wall with two blank small navy display panels, muted teal set walls, a few tiny overhead amber studio lamps, subtle red and blue accents. Wide EMPTY pale desaturated blue-gray stage floor. No desks in foreground, no cameras obstructing the battle space, no writing on displays. Cheerful televised political satire.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "palazzo",
+      "jobId": "5bbdb79c-a8a9-48ef-9c01-48baa3d65ce9",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125517_5bbdb79c-a8a9-48ef-9c01-48baa3d65ce9.png",
+      "path": "public/sprites/ui/battle/palazzo.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Interior of a grand Italian parliament chamber, distant cream classical columns and red upholstered benches only along the far back wall, tiny Italian tricolor flag, restrained brass ornaments. Huge EMPTY warm ivory marble floor covering lower 60 percent, restrained red carpet strip ONLY at extreme sides. Bright dignified warm light, calm cream background so colorful characters remain readable.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "costa",
+      "jobId": "fd45d434-2c88-49f8-9b64-35e47e0ea8c9",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125519_fd45d434-2c88-49f8-9b64-35e47e0ea8c9.png",
+      "path": "public/sprites/ui/battle/costa.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Mediterranean Strait coastline. Far background turquoise sea, pale Sicilian hills, a SMALL construction crane and unfinished absurd bridge far to the left, an orange-and-white beach parasol far right. Horizon in upper 35 percent. Lower 60 percent EMPTY sandy-beige promenade with sparse small tile marks at corners. Warm summer Italian satire atmosphere.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "neve",
+      "jobId": "5e6b3d08-03f8-4d77-be87-c4bdbd9081bd",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125522_5e6b3d08-03f8-4d77-be87-c4bdbd9081bd.png",
+      "path": "public/sprites/ui/battle/neve.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: A cold snowy northern district. Distant small snow-covered spruce trees and a few modest red-roof houses, blue-gray mountains far behind, pale ice-blue sky. Lower 60 percent EMPTY flat pale blue snow with very few subtle edge footprints, no falling particles. Cheerful winter daylight, soft cool palette.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rete",
+      "jobId": "c6ab8135-244b-4250-bf66-bb91571b6562",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125524_c6ab8135-244b-4250-bf66-bb91571b6562.png",
+      "path": "public/sprites/ui/battle/rete.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Futuristic Italian political media headquarters. Distant stylized muted violet and blue server racks, blank square digital panels, tiny cyan pixel indicator lights, small abstract red/blue broadcast antenna at the far left. Lower 60 percent EMPTY pale desaturated lavender-blue studio floor. Flat lighting with no bloom, no letters or numbers. Playful 16-bit cyberspace atmosphere, characters will be bright and must stand out.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "grotta",
+      "jobId": "3b748260-665f-43fa-b7df-71850b665e28",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125526_3b748260-665f-43fa-b7df-71850b665e28.png",
+      "path": "public/sprites/ui/battle/grotta.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: A subterranean archive cave. Distant gray-purple stone walls, a few geometric stalactites in upper third and small stacks of plain archive boxes far left, one tiny warm amber wall lantern far right. Lower 60 percent EMPTY flat desaturated beige-gray rock floor. Bright enough for colorful cartoon monster sprites. No black voids, no foreground rocks, no spooky creatures.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "title",
+      "jobId": "b1331731-faf7-48bd-bc74-88c47c7c5ea3",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_125934_b1331731-faf7-48bd-bc74-88c47c7c5ea3.png",
+      "path": "public/title-bg.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "4:3",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production TITLE SCREEN BACKGROUND ONLY for POLITICMON, an Italian political satire monster handheld RPG. Match the reference's warm welcoming 1990s 16-bit pixel art, chunky square pixels as if on a 240x180 canvas enlarged nearest-neighbor, restrained pastel 32-color palette, pale blue sky, sandstone, terracotta, olive, navy. A fictional neoclassical Italian parliament facade in the middle distance, sunny afternoon, small Italian tricolor flag, modest symmetrical trees at extreme sides. 4:3 composition. The top 25 percent is plain pale blue sky reserved for the game's logo. Architecture is visible in the middle band from 28 to 60 percent image height, medium sized. Lower 40 percent is a broad empty low contrast warm cream plaza reserved for the game's menu; very sparse cobblestone marks near corners only. A few distant terracotta rooftops. NO people, NO creatures, NO mascots, NO monsters, NO pedestals, NO podiums, NO interface, NO words, NO title, NO logos. The actual animated game creatures and text will be drawn by the game later. Crisp clean low resolution pixel art, no blur, no gradients, no antialiasing, no photographic texture.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "civic-sportello",
+      "kind": "civic",
+      "jobId": "d1a06827-fd99-4be1-810e-d4f580860b79",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_132317_d1a06827-fd99-4be1-810e-d4f580860b79.png",
+      "path": "public/sprites/ui/civic/sportello.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "A single clean production narrative vignette for POLITICMON, a fictional Italian political satire handheld RPG. Authentic crisp 16-bit pixel art designed for a 240 by 96 pixel logical canvas, coherent warm sandstone, terracotta, muted olive, pale cyan and navy palette. Wide 16:9 composition. Small cartoon ordinary citizens, expressive readable silhouettes, no identifiable real people, no legible writing, no logos, no game UI. Sparse composition with clear focal point, avoid tiny visual clutter, even square pixel grid, no blur or photographic texture. Fictional humorous situation where a publicity image contradicts the real task. SCENE: Italian town bus stop: three ordinary tiny cartoon citizens holding timetables wait beside a simple empty bus shelter; in the far right a campaign photographer is carefully photographing ONLY a shiny new ribbon and empty bus model on a pedestal while the actual road is empty. Afternoon, gentle ironic scene, nobody mocked for poverty, public service vs publicity.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "civic-studio",
+      "kind": "civic",
+      "jobId": "7ad1da05-0886-490a-8ffe-1762973c8ac6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_132319_7ad1da05-0886-490a-8ffe-1762973c8ac6.png",
+      "path": "public/sprites/ui/civic/studio.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "A single clean production narrative vignette for POLITICMON, a fictional Italian political satire handheld RPG. Authentic crisp 16-bit pixel art designed for a 240 by 96 pixel logical canvas, coherent warm sandstone, terracotta, muted olive, pale cyan and navy palette. Wide 16:9 composition. Small cartoon ordinary citizens, expressive readable silhouettes, no identifiable real people, no legible writing, no logos, no game UI. Sparse composition with clear focal point, avoid tiny visual clutter, even square pixel grid, no blur or photographic texture. Fictional humorous situation where a publicity image contradicts the real task. SCENE: TV debate studio: a huge abstract smiling face drawn on a plain display loops beside a smaller stack of ignored folders; a tired ordinary stage technician holding a unplugged cable looks toward two abandoned microphones. Everything fictional, no actual people or text. The funny contrast is a looping self-promotion screen and an unconnected microphone.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "civic-molo",
+      "kind": "civic",
+      "jobId": "d296204a-afc7-4107-9576-dde393b35e5b",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_132321_d296204a-afc7-4107-9576-dde393b35e5b.png",
+      "path": "public/sprites/ui/civic/molo.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "A single clean production narrative vignette for POLITICMON, a fictional Italian political satire handheld RPG. Authentic crisp 16-bit pixel art designed for a 240 by 96 pixel logical canvas, coherent warm sandstone, terracotta, muted olive, pale cyan and navy palette. Wide 16:9 composition. Small cartoon ordinary citizens, expressive readable silhouettes, no identifiable real people, no legible writing, no logos, no game UI. Sparse composition with clear focal point, avoid tiny visual clutter, even square pixel grid, no blur or photographic texture. Fictional humorous situation where a publicity image contradicts the real task. SCENE: Sunny Mediterranean harbor: a tiny working ferry far left and citizens waiting at a pier with luggage; a big beautiful toy bridge scale model sits far right beneath three ceremonial ribbons and a single tiny camera. Fictional Italian coastline, existing everyday ferry needs maintenance while an enormous bridge model gets the attention, warm playful pixel art.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "civic-verbale",
+      "kind": "civic",
+      "jobId": "34da5ab0-dafa-47e5-9b20-f2dc4da21b17",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_132323_34da5ab0-dafa-47e5-9b20-f2dc4da21b17.png",
+      "path": "public/sprites/ui/civic/verbale.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "A single clean production narrative vignette for POLITICMON, a fictional Italian political satire handheld RPG. Authentic crisp 16-bit pixel art designed for a 240 by 96 pixel logical canvas, coherent warm sandstone, terracotta, muted olive, pale cyan and navy palette. Wide 16:9 composition. Small cartoon ordinary citizens, expressive readable silhouettes, no identifiable real people, no legible writing, no logos, no game UI. Sparse composition with clear focal point, avoid tiny visual clutter, even square pixel grid, no blur or photographic texture. Fictional humorous situation where a publicity image contradicts the real task. SCENE: Italian government corridor after a press conference: folding chairs, an abandoned camera on tripod far right facing a perfectly neat podium; two tired campaign volunteers at far left share a coffee and check a plain file folder beside a mop bucket. Warm late afternoon window light. The real work starts after the live stream ends, tender political satire, simple readable scene.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "6941f038-f6a2-421f-9064-7c5cc11557e6"
+          }
+        ]
+      }
+    }
+  ]
+}

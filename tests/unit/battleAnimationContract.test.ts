@@ -14,6 +14,6 @@ test("HP1: ogni specie ha idle, attacco, danno e KO", () => {
 
 test("HP1: ogni attacco dichiara frame dedicato o affondo procedurale", () => {
   for (const contract of allBattleAnimationContracts()) {
-    assert.ok(contract.attackMode === "dedicated-frame" || contract.attackMode === "procedural-lunge");
+    assert.ok(["sprite-sequence", "dedicated-frame", "procedural-lunge"].includes(contract.attackMode));
   }
 });

@@ -93,8 +93,13 @@ con i PNG installati.
   `npm audit` restituisce zero vulnerabilità.
 - Verifica locale della build: **382 checksum**, nuovo codice delle anteprime
   e riparazione; PWA Chromium/Pixel 7 con **491 asset Higgsfield** al primo uso
-  offline, migrazione, aggiornamento e resume. La pubblicazione richiede la
-  stessa verifica sul dominio pubblico dopo il deploy.
+  offline, migrazione, aggiornamento e resume.
+
+Pubblicato nel commit `ce6f7c0`: [CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36938233439)
+e deploy Vercel completato. Sul dominio [politicmon.vercel.app](https://politicmon.vercel.app/)
+sono stati verificati i 382 checksum e il codice delle nuove anteprime e della
+riparazione. La prova pubblica Chromium/Pixel 7 conferma il primo uso offline
+delle 491 risorse, migrazione, aggiornamento e resume.
 
 Questo round non conclude il redesign. Restano partita completa nell'interfaccia,
 revisione degli altri archi e dialoghi, scene residue, audio, involucro esterno,

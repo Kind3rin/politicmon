@@ -13,7 +13,8 @@ import {
   type GameState,
   type SlotSummary
 } from "../game/state";
-import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
+import { drawScreenHeader, Menu, MessageBox, INK } from "../ui/widgets";
+import { drawHqBackdrop, drawHqIcon } from "../ui/hqArt";
 
 type SlotMode = "load" | "new";
 
@@ -23,7 +24,6 @@ type SlotMode = "load" | "new";
 //  - "load": onPick(state) con la partita caricata dallo slot.
 //  - "new":  onPick(null) dopo aver fissato lo slot attivo (ripulito se serviva).
 export class SlotScene implements Scene {
-  readonly transparent = true;
   private menu: Menu;
   private msg = new MessageBox();
   private summaries: SlotSummary[] = [];
@@ -102,7 +102,8 @@ export class SlotScene implements Scene {
       }
       return;
     }
-    const action = this.menu.update(this.input);
+    const tapAction = this.handleSlotTap();
+    const action = tapAction === undefined ? this.menu.update(this.input) : tapAction;
     if (action === "cancel") {
       audio.cancel();
       this.stack.pop();
@@ -144,6 +145,24 @@ export class SlotScene implements Scene {
     this.commitNew(idx);
   }
 
+  private handleSlotTap(): "select" | null | undefined {
+    const tap = this.input.consumeTap();
+    if (!tap || tap.x < 5 || tap.x >= VIEW_W - 5) return undefined;
+    const row = tap.y >= 50 && tap.y < 50 + SLOT_COUNT * 29
+      ? Math.floor((tap.y - 50) / 29) : tap.y >= 141 && tap.y < 154 ? SLOT_COUNT : -1;
+    if (row < 0) return undefined;
+    if (row !== this.menu.index) {
+      this.menu.index = row;
+      audio.cursor();
+      return null;
+    }
+    if (this.menu.items[row].disabled) {
+      audio.cancel();
+      return null;
+    }
+    return "select";
+  }
+
   // Fissa lo slot attivo per una nuova campagna (ripulendolo se era pieno) e
   // restituisce il controllo al chiamante, che creerà lo stato iniziale.
   private commitNew(slot: number): void {
@@ -157,30 +176,28 @@ export class SlotScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.dim(0.55);
-    const w = 180;
-    const x = Math.round((VIEW_W - w) / 2);
-    const y = 20;
-    screen.panel(x, y, w, 128);
-    const title = this.mode === "load" ? "CARICA PARTITA" : "NUOVA CAMPAGNA";
-    screen.text(title, x + 8, y + 6, "#e8c84a");
-    this.menu.draw(screen, x + 6, y + 18, w - 12, 16);
-
-    // Riga di dettaglio dello slot evidenziato + suggerimenti tasti.
-    const idx = this.menu.index;
-    const sum = idx < SLOT_COUNT ? this.summaries[idx] : undefined;
-    let hint = "";
-    if (sum?.exists) {
-      const place = MAPS[sum.mapId]?.name ?? sum.mapId;
-      hint = `${place} - ${sum.money}€ - ${sum.sondaggi}%`;
-    } else if (idx < SLOT_COUNT) {
-      hint = this.mode === "load" ? "Slot vuoto." : "Slot libero: inizia qui.";
+    drawHqBackdrop(screen, "saves");
+    drawScreenHeader(screen, this.mode === "load" ? "ARCHIVIO CAMPAGNE" : "NUOVA CAMPAGNA");
+    screen.rect(4, 34, VIEW_W - 8, 12, "rgba(16,20,31,0.82)");
+    screen.text("TRE SLOT. IL QUARTO MANDATO NON C'È.", 8, 37, "#fffaf0");
+    for (let i = 0; i < SLOT_COUNT; i++) {
+      const sum = this.summaries[i];
+      const selected = this.menu.index === i;
+      const y = 50 + i * 29;
+      screen.panel(5, y, VIEW_W - 10, 27, "card");
+      if (selected) screen.frame(6, y + 1, VIEW_W - 12, 25, "#e6b944");
+      drawHqIcon(screen, "backup", 10, y + 4, 20);
+      screen.text(`${selected ? ">" : " "} SLOT ${i + 1}`, 34, y + 6, INK);
+      screen.textRight(sum.exists ? this.summaryTag(sum) : "LIBERO", VIEW_W - 12, y + 6, sum.exists ? "#497b65" : "#526279");
+      screen.textFit(sum.exists ? MAPS[sum.mapId]?.name ?? sum.mapId
+        : this.mode === "load" ? "Nessuna campagna da riprendere" : "La prima promessa parte qui",
+        34, y + 16, VIEW_W - 47, INK);
     }
-    screen.text(hint.slice(0, 30), x + 8, y + 104, GREY);
-    const keys = this.mode === "load" ? "A CARICA - START CANCELLA" : "A SCEGLI - START CANCELLA";
-    screen.text(keys, x + 8, y + 116, GREY);
-
-    // Overlay di conferma (sovrascrittura o cancellazione).
+    const sum = this.summaries[this.menu.index];
+    screen.textFit(sum?.exists ? `FONDI ${sum.money}€ / SONDAGGI ${sum.sondaggi}%`
+      : this.menu.index === SLOT_COUNT ? "> INDIETRO" : "SLOT LIBERO", 8, 143, VIEW_W - 16, "#fffaf0");
+    screen.text(this.mode === "load" ? "A CARICA  B INDIETRO" : "A SCEGLI  B INDIETRO", 8, 158, "#ffe38a");
+    screen.text("START CANCELLA LO SLOT SELEZIONATO", 8, 170, "#fffaf0");
     if (this.pendingOverwrite >= 0) {
       this.drawConfirm(screen, `SOVRASCRIVERE SLOT ${this.pendingOverwrite + 1}?`);
     } else if (this.pendingDelete >= 0) {
@@ -194,8 +211,9 @@ export class SlotScene implements Scene {
     const h = 34;
     const x = Math.round((VIEW_W - w) / 2);
     const y = Math.round((VIEW_H - h) / 2);
-    screen.panel(x, y, w, h);
-    screen.text(question.slice(0, 27), x + 8, y + 6, INK);
-    screen.text("A CONFERMA - B ANNULLA", x + 8, y + 18, GREY);
+    screen.dim(0.7);
+    screen.panel(x, y, w, h, "dialog");
+    screen.textFit(question, x + 8, y + 6, w - 16, INK);
+    screen.text("A CONFERMA - B ANNULLA", x + 8, y + 18, "#526279");
   }
 }

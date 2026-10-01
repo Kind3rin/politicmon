@@ -2,6 +2,7 @@ import { chromium, devices, webkit } from "playwright";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { worldAssetPaths } from "./world-asset-paths.mjs";
+import { hqAssetPaths } from "./hq-asset-paths.mjs";
 const fixtureState = (name) => {
   const spec = JSON.parse(readFileSync(resolve("tests/fixtures/saves", name), "utf8"));
   return spec.extends ? { ...fixtureState(spec.extends), ...structuredClone(spec.patch) } : structuredClone(spec.state);
@@ -13,7 +14,7 @@ const dossierArtPaths = [
   ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
   ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
 ];
-const worldArtPaths = worldAssetPaths();
+const worldArtPaths = [...worldAssetPaths(), ...hqAssetPaths()];
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;

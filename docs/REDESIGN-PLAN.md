@@ -24,11 +24,12 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Schede squadra | Cinque pagine, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
 | Evoluzioni | Confronto, rinvio, ripresa al cap, soglie aggiornate, tessera dopo conferma, presentazione accessibile | `shot:evolution-dossier`, unit test |
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
+| Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 47 missioni | `shot:hq`: 99 viste e prove di trasferimento/tocco |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
-| PWA | Precache e primo utilizzo offline dei 404 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| PWA | Precache e primo utilizzo offline dei 413 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 689,97; spesa cumulativa 196 crediti. Non sono stati attivati acquisti
+verificato: 679,97; spesa cumulativa 206 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -43,7 +44,8 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
-3. **Interfaccia completa.** Titolo/onboarding, box, obiettivi, viaggi e schermate del postgame devono passare una revisione
+3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
+   revisione con dossier e prove delle azioni. Onboarding, pausa, viaggi e schermate del postgame devono passare una revisione
    coerente del contenuto e del design. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
@@ -76,9 +78,11 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round
 
-[MONDO-CANTIERI.md](MONDO-CANTIERI.md): 295 PNG, 254 test, 252 viste su 66 mappe,
-nuova scelta civica con passerella persistente e prova di cammino/raccolta.
-Spesa del round: 68 crediti. La PWA verifica 404 asset. I controlli di campagna
+[QUARTIER-GENERALE.md](QUARTIER-GENERALE.md): nove PNG, 254 test, 99 viste,
+47 dossier completi, circolo consultabile e archivio con caricamento tramite
+tocchi. Spesa del round: 10 crediti. La PWA verifica 413 asset.
+Il round precedente [MONDO-CANTIERI.md](MONDO-CANTIERI.md) pubblica 295 PNG,
+252 viste su 66 mappe e la passerella persistente. I controlli di campagna
 rimangono simulazioni di checkpoint, non una partita completa nell'interfaccia.
 [Asset e provenienza](HIGGSFIELD-ASSETS.md). Il mandato resta attivo finché tutte
 le superfici del gioco avranno un aspetto nuovo e coerente.

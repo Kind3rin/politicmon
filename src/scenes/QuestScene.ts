@@ -5,11 +5,13 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { dailyQuestStatus, type DailyQuestStatus } from "../game/dailyquests";
 import type { GameState } from "../game/state";
-import { drawScreenHeader, wrapText, GREY, INK } from "../ui/widgets";
+import { drawScreenHeader, wrapText, INK } from "../ui/widgets";
+import { drawHqBackdrop, drawHqIcon } from "../ui/hqArt";
 
 export class QuestScene implements Scene {
   private index = 0;
   private daily: DailyQuestStatus[];
+  private detailPage = -1;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     // Apri sempre sulla missione PRINCIPALE che guida davvero HUD e freccia.
@@ -24,9 +26,20 @@ export class QuestScene implements Scene {
   }
 
   update(): void {
-    if (this.input.wasPressed("b") || this.input.wasPressed("a")) {
+    if (this.input.wasPressed("b")) {
       audio.cancel();
       this.stack.pop();
+      return;
+    }
+    if (this.input.wasPressed("a")) {
+      this.detailPage = this.detailPage < 0 ? 0 : -1;
+      audio.confirm();
+      return;
+    }
+    if (this.detailPage >= 0) {
+      const pages = Math.ceil(this.detailLines().length / 10);
+      if (this.input.wasPressed("left")) this.detailPage = (this.detailPage + pages - 1) % pages;
+      if (this.input.wasPressed("right")) this.detailPage = (this.detailPage + 1) % pages;
       return;
     }
     if (this.input.wasPressed("up")) {
@@ -40,10 +53,15 @@ export class QuestScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#e7ebf2");
+    drawHqBackdrop(screen, "missions");
+    if (this.detailPage >= 0) {
+      this.drawDetail(screen);
+      return;
+    }
     const current = currentQuest(this.state);
     drawScreenHeader(screen, "MISSIONI");
-    screen.text("PROSSIMO PASSO", 8, 21, "#8c5b12");
+    screen.rect(4, 19, VIEW_W - 8, 10, "#18243a");
+    screen.text("PROSSIMO PASSO", 8, 21, "#ffe38a");
     screen.panel(4, 30, VIEW_W - 8, 36, "card");
     if (current) {
       screen.text(clip(current.title, 36), 12, 34, INK);
@@ -60,14 +78,15 @@ export class QuestScene implements Scene {
     }
 
     // MISSIONI DEL GIORNO: 3 micro-obiettivi con progresso e ricompensa.
-    screen.text("DEL GIORNO", 8, 70, "#3f7d50");
-    screen.textRight("RESET A MEZZANOTTE", VIEW_W - 8, 70, GREY);
+    screen.rect(4, 68, VIEW_W - 8, 10, "#18243a");
+    screen.text("DEL GIORNO", 8, 70, "#91d6b1");
+    screen.textRight("RESET A MEZZANOTTE", VIEW_W - 8, 70, "#fffaf0");
     screen.panel(4, 78, VIEW_W - 8, 37, "card");
     for (let i = 0; i < this.daily.length; i += 1) {
       const d = this.daily[i];
       const y = 83 + i * 10;
-      screen.text(d.done ? "★" : "•", 10, y, d.done ? "#3f9a5c" : GREY);
-      screen.text(clip(d.quest.title, 24), 19, y, d.done ? GREY : INK);
+      screen.text(d.done ? "★" : "•", 10, y, d.done ? "#3f9a5c" : "#526279");
+      screen.text(clip(d.quest.title, 24), 19, y, d.done ? "#526279" : INK);
       screen.textRight(
         d.done ? `+${d.quest.reward}€` : `${d.count}/${d.quest.target}`,
         VIEW_W - 12, y,
@@ -75,7 +94,8 @@ export class QuestScene implements Scene {
       );
     }
 
-    screen.text("PERCORSO CAMPAGNA", 8, 117, "#17243d");
+    screen.rect(4, 116, VIEW_W - 8, 9, "#18243a");
+    screen.text("PERCORSO CAMPAGNA", 8, 117, "#ffe38a");
     screen.panel(4, 125, VIEW_W - 8, 43, "card");
     // Finestra scorrevole: mostra fino a 5 voci attorno all'indice.
     const rows = 4;
@@ -91,18 +111,41 @@ export class QuestScene implements Scene {
       }
       const isCurrent = current?.id === quest.id;
       const marker = done ? "★" : isCurrent ? "!" : quest.side ? "+" : "•";
-      const mColor = done ? "#3f9a5c" : isCurrent ? "#b04848" : quest.side ? "#6aa8ff" : GREY;
+      const mColor = done ? "#3f9a5c" : isCurrent ? "#b04848" : quest.side ? "#2f6689" : "#526279";
       screen.text(marker, 18, y, mColor);
       const title = quest.side ? `${clip(quest.title, 21)}` : clip(quest.title, 22);
-      screen.text(title, 28, y, done ? GREY : isCurrent ? INK : "#485068");
+      screen.text(title, 28, y, done ? "#526279" : isCurrent ? INK : "#485068");
     }
     if (start + rows < QUESTS.length) {
-      screen.text("▼", VIEW_W - 16, VIEW_H - 20, GREY);
+      screen.text("▼", VIEW_W - 16, VIEW_H - 20, "#526279");
     }
     if (start > 0) {
-      screen.text("▲", VIEW_W - 16, 127, GREY);
+      screen.text("▲", VIEW_W - 16, 127, "#526279");
     }
-    screen.text("SU/GIU: LISTA   A/B: CHIUDI", 8, VIEW_H - 9, GREY);
+    screen.text("SU/GIU LISTA  A DOSSIER  B ESCI", 8, VIEW_H - 9, "#fffaf0");
+  }
+
+  private detailLines(): string[] {
+    const quest = QUESTS[this.index];
+    return ["OBIETTIVO", ...wrapText(quest.desc, 34), "", "INDIZIO",
+      ...wrapText(quest.hint, 34), "", "PROSSIMO PASSO", ...wrapText(quest.step, 34)];
+  }
+
+  private drawDetail(screen: Screen): void {
+    const quest = QUESTS[this.index];
+    const lines = this.detailLines();
+    drawScreenHeader(screen, "DOSSIER MISSIONE", `${this.detailPage + 1}/${Math.ceil(lines.length / 10)}`);
+    screen.rect(4, 20, VIEW_W - 8, 25, "#18243a");
+    drawHqIcon(screen, "mission", 215, 23, 17);
+    const title = wrapText(quest.title, 32);
+    title.forEach((line, i) => screen.text(line, 8, 24 + i * 9, "#ffe38a"));
+    screen.panel(4, 47, VIEW_W - 8, 120, "card");
+    const status = quest.isDone(this.state) ? "COMPLETATA" : currentQuest(this.state)?.id === quest.id ? "IN CORSO" : "DA SVOLGERE";
+    screen.text(`${quest.side ? "SECONDARIA" : "CAMPAGNA"} / ${status}`, 12, 54, "#497b65");
+    lines.slice(this.detailPage * 10, (this.detailPage + 1) * 10).forEach((line, i) => {
+      screen.text(line, 12, 69 + i * 9, ["OBIETTIVO", "INDIZIO", "PROSSIMO PASSO"].includes(line) ? "#8c5b12" : INK);
+    });
+    screen.text("< > PAGINE  A LISTA  B ESCI", 8, VIEW_H - 9, "#fffaf0");
   }
 }
 

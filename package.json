@@ -66,6 +66,7 @@
     "shot:supplies": "node scripts/shot-supplies.mjs",
     "shot:world-redesign": "node scripts/shot-world-redesign.mjs",
     "check:civic-bridge": "node scripts/check-civic-bridge.mjs",
+    "shot:hq": "node scripts/shot-hq.mjs",
     "check:duel": "node scripts/check-duel.mjs",
     "smoke:campaign": "node scripts/smoke-campaign.mjs",
     "smoke:pwa:release": "node scripts/smoke-pwa-release.mjs",

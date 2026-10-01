@@ -1,5 +1,11 @@
 # Politicmon: risorse Higgsfield
 
+Ottavo blocco: **sei icone e tre ambienti del quartier generale**. Cinque job
+Nano Banana Pro, compreso un rifacimento per rimuovere scritte generate.
+**10 crediti**, saldo **689,97 → 679,97**, cumulativo **206**. Provenienza e
+checksum: `scripts/higgsfield-hq.json`; preparazione: `prepare-hq-assets.py`.
+Integrazione e verifiche: [QUARTIER-GENERALE.md](QUARTIER-GENERALE.md).
+
 Settimo blocco: **295 PNG del mondo e del cantiere**, inclusi 220 frame di player
 e NPC, 12 viste di mezzi, traghetto e capitano, 60 terreni/edifici/oggetti e una
 scena civica. **68 crediti**, saldo **757,97 → 689,97**, cumulativo **196**.

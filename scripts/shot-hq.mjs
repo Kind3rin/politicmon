@@ -1,0 +1,101 @@
+import assert from 'node:assert/strict';
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { chromium } from 'playwright';
+
+const browser = await chromium.launch();
+try {
+ const page = await browser.newPage({ viewport: { width: 960, height: 720 } });
+ const errors = []; page.on('pageerror', error => errors.push(error.message));
+ await page.goto(`${process.env.BASE_URL ?? 'http://127.0.0.1:5179'}/scripts/perf-harness.html`, { waitUntil: 'networkidle' });
+ const results = await page.evaluate(async () => {
+  const { Screen } = await import('/src/engine/screen.ts');
+  const { Input } = await import('/src/engine/input.ts');
+  const { SceneStack } = await import('/src/engine/scene.ts');
+  const { newGameState, saveGame, setActiveSlot, slotSummary } = await import('/src/game/state.ts');
+  const { createMonster } = await import('/src/game/monster.ts');
+  const { SPECIES } = await import('/src/data/species.ts');
+  const { QUESTS } = await import('/src/data/quests.ts');
+  const { TitleScene } = await import('/src/scenes/TitleScene.ts');
+  const { BoxScene } = await import('/src/scenes/BoxScene.ts');
+  const { QuestScene } = await import('/src/scenes/QuestScene.ts');
+  const { SlotScene } = await import('/src/scenes/SlotScene.ts');
+  const { preloadCoreSprites } = await import('/src/engine/preload.ts');
+  const { preloadSprites, waitForSprites, spriteStatus } = await import('/src/engine/assets.ts');
+  const { audio } = await import('/src/engine/audio.ts'); audio.enabled = false;
+  await preloadCoreSprites();
+  const ids = ['campaign','identity','audio','backup','mission','warehouse','box','missions','saves'];
+  preloadSprites(Object.fromEntries(ids.map(id => [`hq:${id}`, `ui/hq/${id}.png`])));
+  await waitForSprites(ids.map(id => `hq:${id}`),10000);
+  if (ids.some(id => spriteStatus(`hq:${id}`) !== 'ready')) throw Error('Headquarters assets not decoded');
+  const canvas = document.createElement('canvas'), screen = new Screen(canvas), input = new Input();
+  const text = screen.text.bind(screen), bounds = [], shots = {}, drawnText = {}; let view = '';
+  screen.text = (value,x,y,color,scale=1) => {
+   (drawnText[view] ??= []).push({value,x,y});
+   if (value && (x < 0 || y < 0 || x + (value.length*6-1)*scale > 240.1 || y+7*scale > 180.1)) bounds.push({view,value,x,y,scale});
+   text(value,x,y,color,scale);
+  };
+  let key=''; input.wasPressed = button => key===button;
+  const press = (scene,button) => { key=button; scene.update(.02); key=''; };
+  const capture = (name,scene) => { view=name; scene.draw(screen); shots[name]=canvas.toDataURL('image/png'); };
+  const check = (condition,label) => { if (!condition) throw Error(label); };
+  const state=newGameState(); state.flags['intro-done']=true; state.flags['starter-chosen']=true;
+  state.party = [createMonster('giorgiagon',30),createMonster('renzilla',28)];
+  state.boxed = Object.keys(SPECIES).map(id=>createMonster(id,20)); state.money=2300;
+  const stack=new SceneStack(), box=new BoxScene(stack,input,state); stack.push(box);
+  const uids = state.party.concat(state.boxed).map(mon=>mon.uid).sort().join();
+  capture('box-team',box); press(box,'a'); box.msg.close();
+  check(state.party.length===1 && state.boxed.length===53,'deposit did not transfer exactly one');
+  const beforeLast=JSON.stringify(state); press(box,'a');
+  check(JSON.stringify(state)===beforeLast,'last party member deposited'); box.msg.close();
+  const withdrawn = state.boxed[0];
+  press(box,'right'); press(box,'a'); box.msg.close();
+  check(state.party.at(-1) === withdrawn,'withdrawn monster differs from selection');
+  check(state.party.length===2 && state.boxed.length===52,'withdraw did not transfer exactly one');
+  check(state.party.concat(state.boxed).map(mon=>mon.uid).sort().join()===uids,'reserve transfer duplicated or lost a monster');
+  for(let n=0;n<51;n++)press(box,'down'); capture('box-reserve-end',box);
+  check(box.index===51 && box.scroll.box>0,'reserve cursor lost at end');
+  state.party=Object.keys(SPECIES).slice(0,6).map(id=>createMonster(id,20));
+  const beforeFull=JSON.stringify(state); press(box,'a'); check(JSON.stringify(state)===beforeFull,'full squad accepted seventh member'); box.msg.close();
+  state.boxed=[]; box.index=0; capture('box-empty',box);
+  const quest=new QuestScene(new SceneStack(),input,state); capture('missions-overview',quest);
+  const questBefore=JSON.stringify(state); let pages=0;
+  for(let i=0;i<QUESTS.length;i++){
+   quest.index=i; quest.detailPage=-1; press(quest,'a');
+   check(quest.detailPage===0,'A did not open dossier');
+   const lines=quest.detailLines(); const count=Math.ceil(lines.length/10);
+   for(let p=0;p<count;p++){capture(`mission-${QUESTS[i].id}-${p}`,quest);pages++;press(quest,'right');}
+   const rendered = Array.from({length:count},(_,p)=>drawnText[`mission-${QUESTS[i].id}-${p}`].filter(text=>text.x===12 && text.y>=69 && text.y<=150).map(text=>text.value).join(' ')).join(' ').replace(/\s+/g,' ');
+   for(const field of ['desc','hint','step']) check(rendered.includes(QUESTS[i][field].replace(/\s+/g,' ')),`${QUESTS[i].id}: incomplete ${field}`);
+   check(quest.detailPage===0,'dossier pages did not wrap'); press(quest,'a');
+   check(quest.detailPage===-1,'A did not return to list');
+  }
+  check(JSON.stringify(state)===questBefore,'dossier consultation changed campaign');
+  const fresh=newGameState(); fresh.party=[createMonster('giorgetta',8)];
+  fresh.money=987654; fresh.pos.mapId='palazzo_feed_terrazza';
+  setActiveSlot(0); saveGame(fresh); setActiveSlot(2); saveGame(state); setActiveSlot(0);
+  const slots=new SlotScene(new SceneStack(),input,'load',()=>{}); capture('archive-load',slots);
+  press(slots,'start'); capture('archive-delete-confirm',slots); press(slots,'b');
+  check(slotSummary(0).exists,'B deletion cancellation erased slot');
+  const overwrite=new SlotScene(new SceneStack(),input,'new',()=>{});press(overwrite,'a');
+  capture('archive-overwrite-confirm',overwrite);press(overwrite,'b');
+  check(slotSummary(0).exists,'B overwrite cancellation erased slot');
+  let loaded = null;
+  const tapSlots=new SlotScene(new SceneStack(),input,'load',picked=>{loaded=picked;});
+  input.tapNow={x:100,y:90}; tapSlots.update(.02);
+  input.tapNow={x:100,y:90}; tapSlots.update(.02);
+  check(tapSlots.menu.index===1 && loaded===null,'empty slot tap loaded a campaign');
+  input.tapNow={x:100,y:115}; tapSlots.update(.02);
+  check(tapSlots.menu.index===2 && loaded===null,'first archive tap should only focus');
+  input.tapNow={x:100,y:115}; tapSlots.update(.02);
+  check(loaded?.money===state.money && loaded.party.length===state.party.length,'second archive tap failed to load selected campaign');
+  const title=new TitleScene(new SceneStack(),input);
+  await new Promise(resolve=>setTimeout(resolve,200));
+  for(let i=0;i<title.menu.items.length;i++){title.menu.index=i;capture(`title-${i}`,title);}
+  return { shots, bounds, questCount:QUESTS.length, pages };
+ });
+ mkdirSync('artifacts/screens/hq',{recursive:true});
+ for(const [name,data] of Object.entries(results.shots))writeFileSync(`artifacts/screens/hq/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
+ writeFileSync('artifacts/screens/hq/coverage.json',JSON.stringify({questCount:results.questCount,pages:results.pages,bounds:results.bounds,errors},null,2));
+ assert.deepEqual(errors,[]); assert.deepEqual(results.bounds,[]);
+ console.log(`PASS: reserve transfers/capacity/scroll, ${results.questCount} complete mission dossiers (${results.pages} pages), save cancellation and title; ${Object.keys(results.shots).length} views, zero text overflow.`);
+} finally { await browser.close(); }

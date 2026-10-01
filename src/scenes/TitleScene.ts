@@ -14,13 +14,14 @@ import { SlotScene } from "./SlotScene";
 import { createMonster } from "../game/monster";
 import { FEATURE_OVERRIDE_KEY } from "../game/features";
 import { APP_BUILD_ID } from "../engine/build";
+import { drawHqIcon, type HqIcon } from "../ui/hqArt";
 
 // Slogan rotanti sotto il logo: uno alla volta, niente sovrapposizioni.
 const SLOGANS = [
-  "CATTURALI TUTTI, PRIMA CHE TI TASSINO.",
-  "DAL BORGO AL PALAZZO A COLPI DI COMIZIO.",
-  "TRE STARTER, ZERO PROGRAMMI SCRITTI.",
-  "SATIRA PORTATILE, CONSENSO TASCABILE."
+  "IL PROGRAMMA È IN ALLEGATO. MANCA L'ALLEGATO.",
+  "OGNI PROMESSA HA UN COSTO. ANCHE IL NASTRO.",
+  "I SONDAGGI SALGONO. L'ASCENSORE È GUASTO.",
+  "RACCOGLI CANDIDATI. POI TROVA CHI LAVORA."
 ];
 
 // Splash AI di sfondo (generato con Higgsfield, in stile pixel coerente col
@@ -46,6 +47,8 @@ function loadTitleBg(): void {
 export class TitleScene implements Scene {
   private menu: Menu;
   private time = 0;
+  private reduceEffects = hasAnySave() ? Boolean(loadGame()?.reduceEffects)
+    : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   private menuTapGeom: { x: number; y: number; w: number; rowH: number } | null = null;
   // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
   private difficultyMenu: Menu | null = null;
@@ -77,7 +80,7 @@ export class TitleScene implements Scene {
   }
 
   update(dt: number): void {
-    this.time += dt;
+    this.time += this.reduceEffects ? 0 : dt;
     if (this.starting) return;
     // Selettore DIFFICOLTÀ in primo piano: gestiscilo prima di tutto il resto.
     if (this.difficultyMenu) {
@@ -385,86 +388,17 @@ export class TitleScene implements Scene {
     }
   }
 
-  private drawMenuPreview(screen: Screen, x: number, y: number, w: number, h: number): void {
-    const label = this.menu.items[this.menu.index]?.label ?? "";
-    const cx = x + Math.floor(w / 2);
-    const cy = y + Math.floor(h / 2);
-    screen.rect(x, y, w, h, "rgba(16,20,31,0.86)");
-    screen.frame(x, y, w, h, "#5f6d8a");
-
-    if (label.startsWith("NUOVA") || label.startsWith("CONTINUA")) {
-      screen.rect(x + 10, y + 8, 22, 30, "#f4f4ec");
-      screen.frame(x + 10, y + 8, 22, 30, "#10141f");
-      screen.rect(x + 14, y + 13, 14, 2, "#d23c3c");
-      screen.rect(x + 14, y + 18, 14, 2, "#3f9a5c");
-      screen.rect(x + 14, y + 23, 14, 2, "#4868c8");
-      screen.rect(x + 42, y + 30, 30, 3, "#d8bc7c");
-      screen.rect(x + 49, y + 20, 3, 13, "#d8bc7c");
-      screen.rect(x + 56, y + 16, 3, 17, "#d8bc7c");
-      const starterId = STARTERS[Math.floor(this.time * 1.2) % STARTERS.length];
-      drawMonsterSprite(screen, starterId, x + 49, y + 7, 28, 26);
-      return;
-    }
-
-    if (label.startsWith("NOME")) {
-      screen.rect(cx - 10, cy - 16, 20, 20, "#f0c8a0");
-      screen.frame(cx - 10, cy - 16, 20, 20, "#10141f");
-      screen.rect(cx - 5, cy - 7, 3, 3, "#10141f");
-      screen.rect(cx + 4, cy - 7, 3, 3, "#10141f");
-      screen.rect(cx - 4, cy + 1, 10, 2, "#a84040");
-      screen.rect(cx - 16, cy + 8, 32, 12, "#4868c8");
-      screen.frame(cx - 16, cy + 8, 32, 12, "#10141f");
-      return;
-    }
-
-    if (label.startsWith("AUDIO")) {
-      const on = audio.enabled;
-      screen.rect(cx - 24, cy - 8, 10, 16, on ? "#f4d34a" : "#5f6d8a");
-      screen.rect(cx - 14, cy - 13, 8, 26, on ? "#f4d34a" : "#5f6d8a");
-      for (let i = 0; i < 3; i += 1) {
-        const hh = on ? 8 + i * 6 : 3;
-        screen.rect(cx + i * 9, cy - Math.floor(hh / 2), 5, hh, on ? "#6aa8ff" : "#5f6d8a");
-      }
-      return;
-    }
-
-    screen.rect(cx - 16, cy - 10, 32, 22, "#6b1f2a");
-    screen.frame(cx - 16, cy - 10, 32, 22, "#f06060");
-    screen.rect(cx - 12, cy - 16, 24, 4, "#f06060");
-    screen.rect(cx - 8, cy - 4, 16, 2, "#f4f4ec");
-    screen.rect(cx - 8, cy + 2, 16, 2, "#f4f4ec");
+  private menuIcon(label: string): HqIcon {
+    return label.startsWith("NOME") ? "identity" : label.startsWith("AUDIO") ? "audio"
+      : label.startsWith("SPOSTA") ? "backup" : "campaign";
   }
 
-  private drawMenuIcon(screen: Screen, label: string, x: number, y: number, selected: boolean): void {
-    const dark = selected ? "#10141f" : "#f4d34a";
-    const light = selected ? "#4868c8" : "#f4f4ec";
-    if (label.startsWith("NUOVA") || label.startsWith("CONTINUA")) {
-      screen.rect(x, y, 8, 8, light);
-      screen.frame(x, y, 8, 8, dark);
-      screen.rect(x + 2, y + 2, 4, 1, "#d23c3c");
-      screen.rect(x + 2, y + 4, 4, 1, "#2f9a4c");
-      screen.rect(x + 2, y + 6, 4, 1, "#4868c8");
-      return;
-    }
-    if (label.startsWith("NOME")) {
-      screen.rect(x + 1, y, 6, 6, "#f0c8a0");
-      screen.frame(x + 1, y, 6, 6, dark);
-      screen.rect(x + 2, y + 2, 1, 1, dark);
-      screen.rect(x + 5, y + 2, 1, 1, dark);
-      screen.rect(x + 2, y + 7, 4, 1, light);
-      return;
-    }
-    if (label.startsWith("AUDIO")) {
-      screen.rect(x, y + 3, 3, 3, light);
-      screen.rect(x + 3, y + 1, 2, 7, light);
-      const on = audio.enabled;
-      screen.rect(x + 6, y + 2, 1, on ? 5 : 2, on ? "#6aa8ff" : "#5f6d8a");
-      screen.rect(x + 8, y + 1, 1, on ? 7 : 2, on ? "#6aa8ff" : "#5f6d8a");
-      return;
-    }
-    screen.rect(x + 1, y + 2, 7, 6, "#6b1f2a");
-    screen.frame(x + 1, y + 2, 7, 6, "#f06060");
-    screen.rect(x + 2, y, 5, 1, "#f06060");
+  private drawMenuPreview(screen: Screen, x: number, y: number, w: number, h: number): void {
+    screen.rect(x, y, w, h, "rgba(16,20,31,0.92)");
+    screen.frame(x, y, w, h, "#e6b944");
+    const size = Math.min(48, w - 8, h - 8);
+    drawHqIcon(screen, this.menuIcon(this.menu.items[this.menu.index]?.label ?? ""),
+      x + (w - size) / 2, y + (h - size) / 2, size);
   }
 
   // ---- Menu compatto: comandi a sinistra, anteprima visuale a destra. ----
@@ -490,7 +424,7 @@ export class TitleScene implements Scene {
       }
       const color = selected ? "#10141f" : PAPER;
       const rightW = item.rightLabel ? item.rightLabel.length * 6 + 6 : 0;
-      this.drawMenuIcon(screen, item.label, x + 7, rowY + 2, selected);
+      drawHqIcon(screen, this.menuIcon(item.label), x + 6, rowY + 1, 11);
       screen.textFit(item.label, x + 20, rowY + 3, w - 30 - rightW, color);
       if (item.rightLabel) {
         screen.textRight(item.rightLabel, x + w - 8, rowY + 3, selected ? "#10141f" : "#cfe6ff");

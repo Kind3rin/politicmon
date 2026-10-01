@@ -95,6 +95,11 @@ Schermate e report del round sono in `artifacts/screens/world-redesign/` e
 `artifacts/world-redesign/`. Le fixture azzerano la dissolvenza e il flash
 temporaneo del banner d'ingresso prima della cattura: non alterano il renderer.
 
+Pubblicazione verificata: commit `9aba179`, CI riuscita e deploy su
+[politicmon.vercel.app](https://politicmon.vercel.app/). I checksum dei 295 PNG
+pubblicati corrispondono ai file locali; la prova PWA su quel deploy verifica
+anche i 404 asset offline. Il redesign completo continua nel round successivo.
+
 ![Nuovo mondo](img/world-redesign.png)
 
 ![La scelta e il percorso aperto](img/civic-bridge.png)

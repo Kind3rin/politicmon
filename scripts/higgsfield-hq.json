@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "creditsBefore": 689.97,
+  "assets": [
+    {
+      "id": "hq-icons",
+      "index": 0,
+      "items": [
+        "campaign",
+        "identity",
+        "audio",
+        "backup",
+        "mission",
+        "warehouse"
+      ],
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "3:2",
+        "prompt": "Production UI ICON SPRITESHEET for POLITICMON, a satirical Italian monster strategy RPG. Exactly THREE columns and TWO rows, six equally spaced cells, pure uniform white background and generous white padding in every cell. ONE isolated simple chunky 16-bit pixel icon per cell, clearly recognizable after reducing to 16 pixels. Midnight navy outlines, warm cream, antique gold, burgundy and forest mint, crisp big pixel clusters, no gradients, no shadows, no labels, no text, no letters, no numbers, no grid lines or borders. Ordered left-to-right: TOP row 1: ballot paper with a bold burgundy checkmark and small gold pencil; 2: an identity pass showing a generic navy person silhouette with mint clip; 3: a gold megaphone with two mint sound arcs. BOTTOM row 4: a burgundy archive case with cream folder and mint circular restore arrow; 5: a folded cream roadmap with burgundy destination pin and a mint route; 6: a navy warehouse tray holding three distinct colorful campaign badges. All fully visible, no clipping, consistent clean chunky UI icon style.",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+      },
+      "job_id": "e2bf82bd-e110-4c53-a747-bea3fdda9b42",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_211706_e2bf82bd-e110-4c53-a747-bea3fdda9b42.png",
+      "generatedParams": {
+        "prompt": "Production UI ICON SPRITESHEET for POLITICMON, a satirical Italian monster strategy RPG. Exactly THREE columns and TWO rows, six equally spaced cells, pure uniform white background and generous white padding in every cell. ONE isolated simple chunky 16-bit pixel icon per cell, clearly recognizable after reducing to 16 pixels. Midnight navy outlines, warm cream, antique gold, burgundy and forest mint, crisp big pixel clusters, no gradients, no shadows, no labels, no text, no letters, no numbers, no grid lines or borders. Ordered left-to-right: TOP row 1: ballot paper with a bold burgundy checkmark and small gold pencil; 2: an identity pass showing a generic navy person silhouette with mint clip; 3: a gold megaphone with two mint sound arcs. BOTTOM row 4: a burgundy archive case with cream folder and mint circular restore arrow; 5: a folded cream roadmap with burgundy destination pin and a mint route; 6: a navy warehouse tray holding three distinct colorful campaign badges. All fully visible, no clipping, consistent clean chunky UI icon style.",
+        "aspect_ratio": "3:2",
+        "input_images": [],
+        "width": 2528,
+        "height": 1696,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "processing": {
+        "cellInsetFraction": 0.01
+      },
+      "sourceSha256": "b6418484d0de304dda20e51887a41e7f0ad0ebd5e7de2a4718ed381d4f73b1d5"
+    },
+    {
+      "id": "box",
+      "index": 1,
+      "path": "public/sprites/ui/hq/box.png",
+      "width": 240,
+      "height": 135,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "prompt": "Background illustration for a handheld satirical monster RPG, a fictional local campaign headquarters storing its reserve candidates. Wide 16:9 clean chunky 16-bit pixel art, midnight navy, warm cream, forest mint, burgundy and antique gold. A quiet empty backroom: wooden benches on far left, three colorful folded campaign sashes and blank ballot storage trays, a row of empty coat hooks along upper wall, a small potted plant at far right. Gentle satirical detail: many empty chairs and an absurdly large empty document tray. All main objects positioned in the upper quarter and the far left and right edges. CENTER and LOWER TWO THIRDS calm low-contrast dark navy empty wall and flat floor for overlay UI cards. No people, no monsters, no readable writing, no letters, no labels, no logo, no UI, no frames, no watermark. Crisp flat large pixel clusters, matching a navy cream mint burgundy Italian cartoon political RPG. A functional soft backdrop, not a game map.",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+      },
+      "job_id": "fb9f6a28-6026-49ba-be85-b589317d21fb",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_211706_fb9f6a28-6026-49ba-be85-b589317d21fb.png",
+      "generatedParams": {
+        "prompt": "Background illustration for a handheld satirical monster RPG, a fictional local campaign headquarters storing its reserve candidates. Wide 16:9 clean chunky 16-bit pixel art, midnight navy, warm cream, forest mint, burgundy and antique gold. A quiet empty backroom: wooden benches on far left, three colorful folded campaign sashes and blank ballot storage trays, a row of empty coat hooks along upper wall, a small potted plant at far right. Gentle satirical detail: many empty chairs and an absurdly large empty document tray. All main objects positioned in the upper quarter and the far left and right edges. CENTER and LOWER TWO THIRDS calm low-contrast dark navy empty wall and flat floor for overlay UI cards. No people, no monsters, no readable writing, no letters, no labels, no logo, no UI, no frames, no watermark. Crisp flat large pixel clusters, matching a navy cream mint burgundy Italian cartoon political RPG. A functional soft backdrop, not a game map.",
+        "aspect_ratio": "16:9",
+        "input_images": [],
+        "width": 2752,
+        "height": 1536,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "1c005b011dcd306e7b89e5edf7299d01b41db1c0e395dbf33c4f6be26814fa94"
+    },
+    {
+      "id": "missions-review",
+      "index": 4,
+      "path": "public/sprites/ui/hq/missions.png",
+      "width": 240,
+      "height": 135,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "use_unlim": false,
+        "medias": [
+          {
+            "role": "image",
+            "value": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_211706_942d9199-f16d-42c8-9fe2-e5109fc5bfab.png"
+          }
+        ],
+        "prompt": "Edit this game UI background while preserving the overall composition and navy cream burgundy gold chunky pixel art. Replace the mint ticket in the upper right with a completely SOLID BLANK mint rectangle of paper, containing ABSOLUTELY NO marks, symbols, lines, lettering or words. Remove EVERY letter or printed mark anywhere in the illustration. Keep the folded city map, burgundy pin, large blank cream paperwork stack and gold pencil. Center and lower two thirds remain a calm dark navy desk. No text or lettering at all. This is only a decorative background behind real UI text."
+      },
+      "generatedParams": {
+        "prompt": "Edit this game UI background while preserving the overall composition and navy cream burgundy gold chunky pixel art. Replace the mint ticket in the upper right with a completely SOLID BLANK mint rectangle of paper, containing ABSOLUTELY NO marks, symbols, lines, lettering or words. Remove EVERY letter or printed mark anywhere in the illustration. Keep the folded city map, burgundy pin, large blank cream paperwork stack and gold pencil. Center and lower two thirds remain a calm dark navy desk. No text or lettering at all. This is only a decorative background behind real UI text.",
+        "aspect_ratio": "16:9",
+        "input_images": [
+          {
+            "id": "7e4e357b-364c-4cc5-8386-9be99db7af09",
+            "type": "media_input",
+            "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/7e4e357b-364c-4cc5-8386-9be99db7af09_resize.jpg"
+          }
+        ],
+        "width": 2752,
+        "height": 1536,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "job_id": "31f96fd7-fe5d-485f-b6e8-becfefe80e15",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_212852_31f96fd7-fe5d-485f-b6e8-becfefe80e15.png",
+      "sourceSha256": "67217d9d2b36908959c27d711345ca9886c1702c0d458635d591f17962928a48"
+    },
+    {
+      "id": "saves",
+      "index": 3,
+      "path": "public/sprites/ui/hq/saves.png",
+      "width": 240,
+      "height": 135,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "prompt": "Background illustration for the campaign archive selector in a handheld satirical monster RPG. Wide 16:9 crisp chunky 16-bit pixel art. A fictional campaign archive at night: exactly three cream file folders neatly standing in a burgundy wooden rack at upper-center, each distinguished by a simple mint, gold or burgundy colored seal with NO symbols or text. Small reading lamp and large blank rubber stamp at upper-left, empty in-tray upper-right. All illustrated objects in TOP QUARTER; CENTER and LOWER TWO THIRDS calm midnight navy desk with low contrast for UI cards. Restrained midnight navy, warm cream, mint, burgundy and antique gold. No writing, no letters, no numbers, no labels, no logo, no borders, no watermark, no UI. Clean broad pixel clusters, satirical original political RPG visual identity.",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+      },
+      "job_id": "9e485702-3f22-46c6-98a8-fb9a9d82356d",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_211706_9e485702-3f22-46c6-98a8-fb9a9d82356d.png",
+      "generatedParams": {
+        "prompt": "Background illustration for the campaign archive selector in a handheld satirical monster RPG. Wide 16:9 crisp chunky 16-bit pixel art. A fictional campaign archive at night: exactly three cream file folders neatly standing in a burgundy wooden rack at upper-center, each distinguished by a simple mint, gold or burgundy colored seal with NO symbols or text. Small reading lamp and large blank rubber stamp at upper-left, empty in-tray upper-right. All illustrated objects in TOP QUARTER; CENTER and LOWER TWO THIRDS calm midnight navy desk with low contrast for UI cards. Restrained midnight navy, warm cream, mint, burgundy and antique gold. No writing, no letters, no numbers, no labels, no logo, no borders, no watermark, no UI. Clean broad pixel clusters, satirical original political RPG visual identity.",
+        "aspect_ratio": "16:9",
+        "input_images": [],
+        "width": 2752,
+        "height": 1536,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "f00b07446b8f77beef32c7c27d67013c49faf9060f192b17682c71a564e48812"
+    }
+  ],
+  "creditsAfter": 679.97,
+  "spent": 10,
+  "reviewAttempts": [
+    {
+      "request": {
+        "index": 4,
+        "params": {
+          "model": "nano_banana_pro",
+          "resolution": "2k",
+          "aspect_ratio": "16:9",
+          "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+          "use_unlim": false,
+          "medias": [
+            {
+              "role": "image",
+              "value": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_211706_942d9199-f16d-42c8-9fe2-e5109fc5bfab.png"
+            }
+          ],
+          "prompt": "Edit this game UI background while preserving the overall composition and navy cream burgundy gold chunky pixel art. Replace the mint ticket in the upper right with a completely SOLID BLANK mint rectangle of paper, containing ABSOLUTELY NO marks, symbols, lines, lettering or words. Remove EVERY letter or printed mark anywhere in the illustration. Keep the folded city map, burgundy pin, large blank cream paperwork stack and gold pencil. Center and lower two thirds remain a calm dark navy desk. No text or lettering at all. This is only a decorative background behind real UI text."
+        }
+      },
+      "submission": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Submitted 1/1 image generations.\n- index 4: 31f96fd7-fe5d-485f-b6e8-becfefe80e15 (pending)\nWait for the complete requested set with jobs_wait, then show it together with show_generation_by_ids using the collected indexed jobs. This includes jobs submitted across separate calls. job_display accepts only one id and cannot display a group; do not pass ids or call it once per job."
+          }
+        ],
+        "structuredContent": {
+          "jobs": [
+            {
+              "index": 4,
+              "job_id": "31f96fd7-fe5d-485f-b6e8-becfefe80e15",
+              "status": "pending",
+              "adjustments": {
+                "medias[0].role": {
+                  "requested": "image",
+                  "used": "image_references",
+                  "reason": "Nano Banana Pro backend expects schema-key media roles"
+                }
+              }
+            }
+          ],
+          "submitted_count": 1,
+          "failed_count": 0
+        },
+        "isError": false
+      },
+      "previousAsset": {
+        "id": "missions",
+        "index": 2,
+        "path": "public/sprites/ui/hq/missions.png",
+        "width": 240,
+        "height": 135,
+        "params": {
+          "model": "nano_banana_pro",
+          "resolution": "2k",
+          "aspect_ratio": "16:9",
+          "prompt": "Background illustration for a handheld satirical monster RPG campaign journal. Wide 16:9 crisp chunky 16-bit pixel art. A navy campaign desk viewed from above with a cream folded city map, a single burgundy destination pin, a gold pencil, a mint bus ticket with NO markings, an absurd tower of completely blank unfinished paperwork at upper-left. Main objects along TOP EDGE and OUTER CORNERS. CENTER and LOWER TWO THIRDS are quiet almost uniform midnight navy desk surface, low contrast and visually calm for overlaid journal UI cards. Warm cream, midnight navy, muted mint, burgundy and antique gold palette. No text, no readable writing, no letters, no numbers, no logo, no user interface, no borders, no watermark. Original playful satirical scene, not photorealistic, no gradients, big pixel clusters.",
+          "use_unlim": false,
+          "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+        },
+        "job_id": "942d9199-f16d-42c8-9fe2-e5109fc5bfab",
+        "status": "completed",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_211706_942d9199-f16d-42c8-9fe2-e5109fc5bfab.png",
+        "generatedParams": {
+          "prompt": "Background illustration for a handheld satirical monster RPG campaign journal. Wide 16:9 crisp chunky 16-bit pixel art. A navy campaign desk viewed from above with a cream folded city map, a single burgundy destination pin, a gold pencil, a mint bus ticket with NO markings, an absurd tower of completely blank unfinished paperwork at upper-left. Main objects along TOP EDGE and OUTER CORNERS. CENTER and LOWER TWO THIRDS are quiet almost uniform midnight navy desk surface, low contrast and visually calm for overlaid journal UI cards. Warm cream, midnight navy, muted mint, burgundy and antique gold palette. No text, no readable writing, no letters, no numbers, no logo, no user interface, no borders, no watermark. Original playful satirical scene, not photorealistic, no gradients, big pixel clusters.",
+          "aspect_ratio": "16:9",
+          "input_images": [],
+          "width": 2752,
+          "height": 1536,
+          "resolution": "2k",
+          "batch_size": 1,
+          "input_image": null,
+          "application": null,
+          "surface": null
+        }
+      },
+      "reason": "Generated ticket lettering rejected",
+      "result": {
+        "index": 4,
+        "job_id": "31f96fd7-fe5d-485f-b6e8-becfefe80e15",
+        "status": "completed",
+        "type": "image",
+        "model": "nano_banana_2",
+        "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_212852_31f96fd7-fe5d-485f-b6e8-becfefe80e15.png"
+      }
+    }
+  ]
+}

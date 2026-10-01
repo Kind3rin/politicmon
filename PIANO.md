@@ -1,8 +1,9 @@
 # PIANO — Politicmon
 
 Piano attivo, 1 ottobre 2026: [redesign completo](docs/REDESIGN-PLAN.md).
-Ultimo round: [mondo e cantieri](docs/MONDO-CANTIERI.md), 295 PNG e passerella
-costruibile. La richiesta attuale supera il feature freeze del programma
+Ultimo round: [quartier generale](docs/QUARTIER-GENERALE.md), dossier completi,
+circolo e archivio rivisti; segue il [mondo e cantieri](docs/MONDO-CANTIERI.md)
+con 295 PNG e passerella costruibile. La richiesta attuale supera il feature freeze del programma
 storico sotto. Il redesign prosegue fino a un aspetto nuovo e coerente in tutto
 il gioco; il completamento di un round non chiude il progetto.
 

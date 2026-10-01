@@ -5,7 +5,8 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { speciesOf, statsOf } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { drawHpBar, drawScreenHeader, MessageBox, GREY, INK } from "../ui/widgets";
+import { drawScreenHeader, MessageBox, GREY, INK } from "../ui/widgets";
+import { drawHqBackdrop, drawHqIcon } from "../ui/hqArt";
 
 // CIRCOLO DI PARTITO (il "PC box" di Politicmon): sposta i mostri tra SQUADRA
 // (max 6, mai vuota) e CIRCOLO (riserva). Accessibile dal COMPUTER DI PARTITO
@@ -106,13 +107,27 @@ export class BoxScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#e3ebef");
+    drawHqBackdrop(screen, "box");
     drawScreenHeader(screen, "CIRCOLO DI PARTITO");
+
+    const mon = this.list(this.side)[this.index];
+    screen.panel(4, 21, VIEW_W - 8, 38, "card");
+    if (mon) {
+      const species = speciesOf(mon);
+      drawMonsterSprite(screen, mon.speciesId, 8, 23, 32, 32, { memeFormId: mon.memeFormId });
+      screen.textFit(species.name, 45, 26, VIEW_W - 56, INK);
+      screen.text(`L${mon.level}  ${species.types.join(" / ")}`, 45, 37, "#497b65");
+      screen.text(`${mon.hp}/${statsOf(mon).hp} PV${mon.status ? `  ${mon.status}` : ""}`, 45, 48, mon.hp <= 0 ? "#a0443e" : INK);
+    } else {
+      drawHqIcon(screen, "warehouse", 9, 25, 28);
+      screen.text("IL CIRCOLO HA POSTI LIBERI.", 44, 28, INK);
+      screen.text("I VOLANTINI NON SI PIEGANO DA SOLI.", 12, 48, "#497b65");
+    }
 
     this.drawColumn(screen, "party", "SQUADRA", 4);
     this.drawColumn(screen, "box", "CIRCOLO", VIEW_W / 2 + 2);
 
-    screen.text("A: sposta  < > cambia  B: esci", 8, VIEW_H - 10, GREY);
+    screen.text("A SPOSTA  < > CAMBIA  B ESCI", 8, VIEW_H - 9, "#fffaf0");
     this.msg.draw(screen);
   }
 
@@ -120,22 +135,23 @@ export class BoxScene implements Scene {
     const w = VIEW_W / 2 - 6;
     const active = this.side === side;
     const list = this.list(side);
-    screen.text(title, x + 4, 16, active ? "#f0c040" : GREY);
-    if (active) {
-      screen.frame(x, 14, w, VIEW_H - 30, "#f0c040");
-    }
+    screen.rect(x, 63, w, 101, active ? "#e6b944" : "#526279");
+    screen.rect(x + 1, 64, w - 2, 99, "#18243a");
+    screen.text(title, x + 5, 67, active ? "#ffe38a" : "#fffaf0");
+    screen.textRight(`${list.length}${side === "party" ? "/6" : ""}`, x + w - 5, 67, "#fffaf0");
     if (list.length === 0) {
-      screen.text(side === "party" ? "VUOTA" : "VUOTO", x + 6, 30, GREY);
+      screen.text(side === "party" ? "VUOTA" : "VUOTO", x + 6, 86, GREY);
+      drawHqIcon(screen, "warehouse", x + 38, 109, 32);
       return;
     }
     const vis = BoxScene.VISIBLE_ROWS;
     const sc = Math.max(0, Math.min(this.scroll[side], Math.max(0, list.length - vis)));
     // Frecce di overflow: segnalano che la lista continua sopra/sotto.
     if (sc > 0) {
-      screen.text("▲", x + w - 10, 16, active ? "#f0c040" : GREY);
+      screen.text("▲", x + 65, 67, "#ffe38a");
     }
     if (sc + vis < list.length) {
-      screen.text("▼", x + w - 10, VIEW_H - 22, active ? "#f0c040" : GREY);
+      screen.text("▼", x + 77, 67, "#ffe38a");
     }
     for (let row = 0; row < vis; row += 1) {
       const i = sc + row;
@@ -143,23 +159,15 @@ export class BoxScene implements Scene {
         break;
       }
       const mon = list[i];
-      const y = 24 + row * 22;
+      const y = 78 + row * 14;
       const selected = active && i === this.index;
-      screen.rect(x + 2, y, w - 4, 20, selected ? "#fff0bd" : "#fffaf0");
-      screen.rect(x + 2, y, 2, 20, selected ? "#e0a92f" : "#7aa2b8");
+      screen.rect(x + 2, y, w - 4, 13, selected ? "#fff0bd" : "#fffaf0");
+      screen.rect(x + 2, y, 2, 13, selected ? "#e0a92f" : "#7aa2b8");
       if (selected) {
-        screen.frame(x + 2, y, w - 4, 20, INK);
+        screen.frame(x + 2, y, w - 4, 13, INK);
       }
-      drawMonsterSprite(screen, mon.speciesId, x + 3, y + 1, 20, 19, { memeFormId: mon.memeFormId });
-      const ink = INK;
-      screen.text(speciesOf(mon).name.slice(0, 9), x + 24, y + 2, ink);
-      screen.text(`L${mon.level}`, x + 24, y + 11, ink);
-      // Barra a x+62: la label "PV" (disegnata da drawHpBar a x-14) cade a x+48,
-      // dopo la "L12" (che finisce a ~x+42) — prima si sovrapponevano.
-      drawHpBar(screen, x + 62, y + 12, w - 68, mon.hp, statsOf(mon).hp);
-      if (mon.hp <= 0) {
-        screen.text("KO", x + w - 20, y + 2, "#d04848");
-      }
+      drawMonsterSprite(screen, mon.speciesId, x + 3, y, 14, 13, { memeFormId: mon.memeFormId });
+      screen.textFit(speciesOf(mon).name, x + 20, y + 3, w - 25, mon.hp <= 0 ? "#a0443e" : INK);
     }
   }
 }

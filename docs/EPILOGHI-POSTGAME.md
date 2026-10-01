@@ -87,3 +87,10 @@ necessaria. Tutti i 15 PNG sono integrati e hanno SHA-256 registrato.
 
 La revisione prosegue su altre scene, audio, ritmo delle lotte, casinò/coppa,
 interfaccia esterna e percorsi reali della campagna.
+
+Pubblicato nel commit `4340c40`: [CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36941084208)
+e deploy Vercel completato. Sul dominio [politicmon.vercel.app](https://politicmon.vercel.app/)
+sono stati verificati **397 checksum** e il nuovo codice degli epiloghi e del
+ritmo; la prova PWA Chromium/Pixel 7 ha confermato **506 risorse** al primo
+uso offline, migrazione, aggiornamento, reload e resume. Le evidenze native
+sono in `artifacts/screens/epilogue`; la selezione pubblicata è quella sopra.

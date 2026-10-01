@@ -48,8 +48,9 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
-   revisione con dossier e prove delle azioni. Onboarding, pausa, viaggi e schermate del postgame devono passare una revisione
-   coerente del contenuto e del design. Eliminare layout e asset residui vecchi;
+   revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
+   Genova e retrobottega sono ora rivisti. Restano onboarding, menu pausa,
+   viaggi, casinò/coppa e interfaccia esterna per una revisione coerente. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
    ricorrenze e risposte alle azioni. La ricerca web deve generare satira
@@ -113,3 +114,6 @@ e quattro statue, 265 test e 214 viste native. Finali con promesse e alleati
 nominati, premi visibili, monumenti annullabili, finestre ritmiche e pausa,
 favori con dossier e conferma. 18 crediti, saldo 639,97. Verifica PWA su 506
 risorse e 397 checksum nella build. Obiettivo generale ancora attivo.
+
+Il round epiloghi è pubblicato in `4340c40`, con CI riuscita e verifica sul
+dominio pubblico: 397 checksum, codice aggiornato e 506 risorse offline.

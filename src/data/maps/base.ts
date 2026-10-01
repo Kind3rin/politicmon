@@ -909,8 +909,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
         // Un ambulante con shop:true vende le stesse cose del DISCOUNT.
         id: "ambulante-cap", pal: "barista", x: 14, y: 14, facing: "down", shop: true,
         lines: [
-          "BANCHETTO DELL'AMBULANTE:",
-          "Schede, caffè e DIRETTIVE prima del PALAZZO. Niente scontrino, niente domande."
+          "Al palazzo vendono coperture. Io vendo gilet: almeno sai cosa proteggono.",
+          "Schede, caffè e direttive. Se lo scontrino è lungo, puoi istituire una commissione."
         ]
       },
       {

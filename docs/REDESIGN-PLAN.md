@@ -22,10 +22,12 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
 | Schede squadra | Cinque pagine, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
 | Evoluzioni | Confronto, rinvio, ripresa al cap, soglie aggiornate, tessera dopo conferma, presentazione accessibile | `shot:evolution-dossier`, unit test |
-| PWA | Precache e primo utilizzo offline dei 76 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
+| Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
+| PWA | Precache e primo utilizzo offline dei 109 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 769,97; spesa cumulativa 116 crediti. Non sono stati attivati acquisti
+verificato: 757,97; spesa cumulativa 128 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -35,12 +37,11 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    segnaletica leggibile, incontri e deviazioni che producano decisioni.
    Rivedere anche i PNG storici di player, NPC, terreni, edifici e veicoli:
    l'esistenza di un PNG non prova che il redesign sia concluso.
-2. **Lotte e crescita.** Rivedere ritmo delle lotte selvatiche, apprendimento delle
-   mosse, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
+2. **Lotte e crescita.** Rivedere ritmo delle lotte selvatiche, curva delle mosse
+   dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
-3. **Interfaccia completa.** Titolo/onboarding, borsa, negozio, box, insegnamento,
-   obiettivi, viaggi e schermate del postgame devono passare una revisione
+3. **Interfaccia completa.** Titolo/onboarding, box, obiettivi, viaggi e schermate del postgame devono passare una revisione
    coerente del contenuto e del design. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
@@ -73,7 +74,9 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round
 
-[EVOLUZIONI-SCHEDE.md](EVOLUZIONI-SCHEDE.md): 246 test, 2.137 layout, tre nuove
-immagini Higgsfield (4,5 crediti), caricature testuali eliminate e nuova scena
-sul caro carburante. Budget verificati: 216,7 KiB iniziali, 348,5 KiB totali;
-p95 18,4–18,5 ms nei tre scenari. [Asset e provenienza](HIGGSFIELD-ASSETS.md).
+[RISERVE-DIRETTIVE.md](RISERVE-DIRETTIVE.md): 250 test, 2.992 layout, zaino e
+negozio con informazioni tattiche e preventivi, insegnamento consultabile da
+livello/direttiva, due direttive ripristinate e trenta icone sostituite/aggiunte.
+Tre ambienti e cinque fogli Higgsfield: 12 crediti. Il catalogo di texture
+ASCII non utilizzato è eliminato. Build: 216,9/348,3 KiB iniziali/totali; p95 18,5 ms.
+La PWA verifica 109 asset. [Asset e provenienza](HIGGSFIELD-ASSETS.md).

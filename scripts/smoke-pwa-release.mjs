@@ -8,7 +8,10 @@ const fixtureState = (name) => {
 const legacySave = JSON.stringify(fixtureState("v13-post-ue.json"));
 const monsterFramePaths = JSON.parse(readFileSync("scripts/higgsfield-monster-frames.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
 const bossArtPaths = JSON.parse(readFileSync("scripts/higgsfield-premium-next.json", "utf8")).assets.filter((asset) => asset.kind === "boss").map((asset) => asset.path.replace(/^public\//, ""));
-const dossierArtPaths = JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
+const dossierArtPaths = [
+  ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
+  ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
+];
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;

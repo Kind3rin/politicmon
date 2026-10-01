@@ -63,6 +63,7 @@
     "shot:boss-briefing": "node scripts/shot-boss-briefing.mjs",
     "shot:switch-guide": "node scripts/shot-switch-guide.mjs",
     "shot:evolution-dossier": "node scripts/shot-evolution-dossier.mjs",
+    "shot:supplies": "node scripts/shot-supplies.mjs",
     "check:duel": "node scripts/check-duel.mjs",
     "smoke:campaign": "node scripts/smoke-campaign.mjs",
     "smoke:pwa:release": "node scripts/smoke-pwa-release.mjs",

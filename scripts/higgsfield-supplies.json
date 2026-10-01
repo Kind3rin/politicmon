@@ -1,0 +1,298 @@
+{
+  "version": 1,
+  "credits": {
+    "before": 769.97,
+    "after": 757.97,
+    "spent": 12
+  },
+  "assets": [
+    {
+      "id": "bag",
+      "path": "public/sprites/ui/bag.png",
+      "width": 240,
+      "height": 180,
+      "subject": "An open navy leather campaign satchel on a cluttered Italian election headquarters desk: stamped blank ballot papers, tiny moka coffee maker, orange cocktail glass, blank folders, gold membership cards. Side wings have detailed tangible objects; center is a quiet unobstructed parchment work surface. Warm brass desk lamp and burgundy canvas banners.",
+      "index": 0,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production scene art for POLITICMON, a satirical Italian monster RPG. An open navy leather campaign satchel on a cluttered Italian election headquarters desk: stamped blank ballot papers, tiny moka coffee maker, orange cocktail glass, blank folders, gold membership cards. Side wings have detailed tangible objects; center is a quiet unobstructed parchment work surface. Warm brass desk lamp and burgundy canvas banners. Straight-on horizontal composition, authentic carefully clustered crisp 16-bit pixel art with a limited navy, warm parchment, mint, burgundy and antique gold palette. Detailed corners and top 25 percent are visible behind opaque game-rendered panels. No text, letters, numbers, captions, logos, brands, watermarks or UI. Opaque background. Entire reusable scene backdrop, not a promotional poster."
+      },
+      "jobId": "d1062efe-9448-41a1-8517-c213c6f359b8",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193458_d1062efe-9448-41a1-8517-c213c6f359b8.png",
+      "generatedParams": {
+        "prompt": "Production scene art for POLITICMON, a satirical Italian monster RPG. An open navy leather campaign satchel on a cluttered Italian election headquarters desk: stamped blank ballot papers, tiny moka coffee maker, orange cocktail glass, blank folders, gold membership cards. Side wings have detailed tangible objects; center is a quiet unobstructed parchment work surface. Warm brass desk lamp and burgundy canvas banners. Straight-on horizontal composition, authentic carefully clustered crisp 16-bit pixel art with a limited navy, warm parchment, mint, burgundy and antique gold palette. Detailed corners and top 25 percent are visible behind opaque game-rendered panels. No text, letters, numbers, captions, logos, brands, watermarks or UI. Opaque background. Entire reusable scene backdrop, not a promotional poster.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1344,
+        "height": 752,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "shop",
+      "path": "public/sprites/ui/shop.png",
+      "width": 240,
+      "height": 180,
+      "subject": "An Italian corner discount store dressed as an election campaign supply depot, cash register at far right with comically long blank receipt, shrunk packages inside oversized boxes, jars of empty promises, moka pots, blank ballot stationery, golden membership cards. Midnight teal shelves at sides, inviting cream counter and dark quiet central area. Satirical, no real brands.",
+      "index": 1,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production scene art for POLITICMON, a satirical Italian monster RPG. An Italian corner discount store dressed as an election campaign supply depot, cash register at far right with comically long blank receipt, shrunk packages inside oversized boxes, jars of empty promises, moka pots, blank ballot stationery, golden membership cards. Midnight teal shelves at sides, inviting cream counter and dark quiet central area. Satirical, no real brands. Straight-on horizontal composition, authentic carefully clustered crisp 16-bit pixel art with a limited navy, warm parchment, mint, burgundy and antique gold palette. Detailed corners and top 25 percent are visible behind opaque game-rendered panels. No text, letters, numbers, captions, logos, brands, watermarks or UI. Opaque background. Entire reusable scene backdrop, not a promotional poster."
+      },
+      "jobId": "e1f91984-fed9-4ecf-b071-e785a8dd0c7b",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193458_e1f91984-fed9-4ecf-b071-e785a8dd0c7b.png",
+      "generatedParams": {
+        "prompt": "Production scene art for POLITICMON, a satirical Italian monster RPG. An Italian corner discount store dressed as an election campaign supply depot, cash register at far right with comically long blank receipt, shrunk packages inside oversized boxes, jars of empty promises, moka pots, blank ballot stationery, golden membership cards. Midnight teal shelves at sides, inviting cream counter and dark quiet central area. Satirical, no real brands. Straight-on horizontal composition, authentic carefully clustered crisp 16-bit pixel art with a limited navy, warm parchment, mint, burgundy and antique gold palette. Detailed corners and top 25 percent are visible behind opaque game-rendered panels. No text, letters, numbers, captions, logos, brands, watermarks or UI. Opaque background. Entire reusable scene backdrop, not a promotional poster.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1344,
+        "height": 752,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "teach",
+      "path": "public/sprites/ui/teach.png",
+      "width": 240,
+      "height": 180,
+      "subject": "A party directive training room resembling an old Italian reading club: two ornate lecterns facing one another at far edges, blank file folders and coffee cups, chalk board completely blank in background, low warm gold lighting and burgundy leather. A large unobstructed central blue desk for move comparison UI.",
+      "index": 2,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production scene art for POLITICMON, a satirical Italian monster RPG. A party directive training room resembling an old Italian reading club: two ornate lecterns facing one another at far edges, blank file folders and coffee cups, chalk board completely blank in background, low warm gold lighting and burgundy leather. A large unobstructed central blue desk for move comparison UI. Straight-on horizontal composition, authentic carefully clustered crisp 16-bit pixel art with a limited navy, warm parchment, mint, burgundy and antique gold palette. Detailed corners and top 25 percent are visible behind opaque game-rendered panels. No text, letters, numbers, captions, logos, brands, watermarks or UI. Opaque background. Entire reusable scene backdrop, not a promotional poster."
+      },
+      "jobId": "5ebec581-109e-40e3-8813-4f526447b93b",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193500_5ebec581-109e-40e3-8813-4f526447b93b.png",
+      "generatedParams": {
+        "prompt": "Production scene art for POLITICMON, a satirical Italian monster RPG. A party directive training room resembling an old Italian reading club: two ornate lecterns facing one another at far edges, blank file folders and coffee cups, chalk board completely blank in background, low warm gold lighting and burgundy leather. A large unobstructed central blue desk for move comparison UI. Straight-on horizontal composition, authentic carefully clustered crisp 16-bit pixel art with a limited navy, warm parchment, mint, burgundy and antique gold palette. Detailed corners and top 25 percent are visible behind opaque game-rendered panels. No text, letters, numbers, captions, logos, brands, watermarks or UI. Opaque background. Entire reusable scene backdrop, not a promotional poster.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1344,
+        "height": 752,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "items-0",
+      "index": 3,
+      "items": [
+        "scheda",
+        "schedona",
+        "caffe",
+        "spritz",
+        "mojito",
+        "maalox"
+      ],
+      "columns": 3,
+      "rows": 2,
+      "width": 32,
+      "height": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT a folded white voting ballot with graphite pencil; TOP CENTER an armored teal voting ballot inside a brass lock frame; TOP RIGHT tiny espresso in cream saucer; BOTTOM LEFT orange spritz cocktail with orange wedge; BOTTOM CENTER mint green mojito glass with crushed ice; BOTTOM RIGHT white antacid bottle with teal cap. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only."
+      },
+      "jobId": "496de214-fd19-4024-90c7-5a4eda67b810",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193458_496de214-fd19-4024-90c7-5a4eda67b810.png",
+      "generatedParams": {
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT a folded white voting ballot with graphite pencil; TOP CENTER an armored teal voting ballot inside a brass lock frame; TOP RIGHT tiny espresso in cream saucer; BOTTOM LEFT orange spritz cocktail with orange wedge; BOTTOM CENTER mint green mojito glass with crushed ice; BOTTOM RIGHT white antacid bottle with teal cap. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "items-1",
+      "index": 4,
+      "items": [
+        "spray",
+        "rimborso",
+        "manifesti",
+        "spotprimetime",
+        "comizio",
+        "gilet"
+      ],
+      "columns": 3,
+      "rows": 2,
+      "width": 32,
+      "height": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT navy aerosol spray can with gold cap; TOP CENTER round-trip train ticket and tiny brass compass; TOP RIGHT rolled burgundy campaign posters; BOTTOM LEFT tiny vintage navy television with brass antenna; BOTTOM CENTER mini gold megaphone and burgundy flags; BOTTOM RIGHT dark navy protective vest. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only."
+      },
+      "jobId": "b962f888-968e-4ec7-8e87-c58fe613f168",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193458_b962f888-968e-4ec7-8e87-c58fe613f168.png",
+      "generatedParams": {
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT navy aerosol spray can with gold cap; TOP CENTER round-trip train ticket and tiny brass compass; TOP RIGHT rolled burgundy campaign posters; BOTTOM LEFT tiny vintage navy television with brass antenna; BOTTOM CENTER mini gold megaphone and burgundy flags; BOTTOM RIGHT dark navy protective vest. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "items-2",
+      "index": 5,
+      "items": [
+        "telecamera",
+        "sondtruccato",
+        "caffettiera",
+        "agendarossa",
+        "santino",
+        "tessera"
+      ],
+      "columns": 3,
+      "rows": 2,
+      "width": 32,
+      "height": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT vintage television camera; TOP CENTER navy poll clipboard with obviously exaggerated tall gold bars; TOP RIGHT silver moka coffee pot; BOTTOM LEFT red leather agenda notebook; BOTTOM CENTER tiny oval candidate portrait badge; BOTTOM RIGHT gold party membership card with brass star. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only."
+      },
+      "jobId": "9a8533c4-8b8b-4dce-a106-32e995e118b5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193459_9a8533c4-8b8b-4dce-a106-32e995e118b5.png",
+      "generatedParams": {
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT vintage television camera; TOP CENTER navy poll clipboard with obviously exaggerated tall gold bars; TOP RIGHT silver moka coffee pot; BOTTOM LEFT red leather agenda notebook; BOTTOM CENTER tiny oval candidate portrait badge; BOTTOM RIGHT gold party membership card with brass star. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "items-3",
+      "index": 6,
+      "items": [
+        "tessera_futuro",
+        "divisa",
+        "dirVaffa",
+        "dirDecreto",
+        "dirWhatever",
+        "dirFiamma"
+      ],
+      "columns": 3,
+      "rows": 2,
+      "width": 32,
+      "height": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT blank mint future membership card with a folded corner; TOP CENTER two-tone navy and cream team waistcoat; TOP RIGHT burgundy manual and small gold angry megaphone; BOTTOM LEFT navy leather legal decree folder with gold seal; BOTTOM CENTER mint economics manual with tiny gold euro coin; BOTTOM RIGHT red-orange flame rising from a navy book. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only."
+      },
+      "jobId": "b60c0cda-178d-4c32-a6f4-10815832d159",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193501_b60c0cda-178d-4c32-a6f4-10815832d159.png",
+      "generatedParams": {
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT blank mint future membership card with a folded corner; TOP CENTER two-tone navy and cream team waistcoat; TOP RIGHT burgundy manual and small gold angry megaphone; BOTTOM LEFT navy leather legal decree folder with gold seal; BOTTOM CENTER mint economics manual with tiny gold euro coin; BOTTOM RIGHT red-orange flame rising from a navy book. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    },
+    {
+      "id": "items-4",
+      "index": 7,
+      "items": [
+        "dirSciopero",
+        "dirInciucio",
+        "dirBunga",
+        "dirGreen",
+        "dirMulta",
+        "dirPiazza"
+      ],
+      "columns": 3,
+      "rows": 2,
+      "width": 32,
+      "height": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT red strike manual with small raised fist symbol; TOP CENTER two overlapping secret agreement folders with a brass handshake; TOP RIGHT purple party invitation envelope and confetti; BOTTOM LEFT mint green ecology manual and leaf; BOTTOM CENTER navy EU sanction folder with golden ring of stars; BOTTOM RIGHT burgundy square-rally manual with many tiny gold flag poles. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only."
+      },
+      "jobId": "4dd8e1d7-1da4-4267-b583-6f599679ef99",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_193502_4dd8e1d7-1da4-4267-b583-6f599679ef99.png",
+      "generatedParams": {
+        "prompt": "Production ITEM ICON SPRITESHEET for POLITICMON satirical Italian monster RPG. Exactly SIX separate item icons in a STRICT 3 column by 2 row grid of SIX equal square cells, one centered icon per cell, with ample blank padding on all four sides. Cell positions: TOP LEFT red strike manual with small raised fist symbol; TOP CENTER two overlapping secret agreement folders with a brass handshake; TOP RIGHT purple party invitation envelope and confetti; BOTTOM LEFT mint green ecology manual and leaf; BOTTOM CENTER navy EU sanction folder with golden ring of stars; BOTTOM RIGHT burgundy square-rally manual with many tiny gold flag poles. Consistent handcrafted readable chunky 16-bit pixel art, each object with a very dark navy outer outline, two-tone shading, muted cream, gold, burgundy, mint palette. Icon silhouettes should occupy about 60 percent of each cell. Uniform PURE WHITE background across the entire sheet, no grid lines or frames or ground plane or shadows beneath objects. NO text, letters, numbers, brands, labels, captions, watermarks, interface. Actual collectible RPG inventory icons, not illustrative concept art. Six isolated equal sized objects only.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      }
+    }
+  ]
+}

@@ -1,14 +1,14 @@
 import { BAG_ORDER, ITEMS } from "../data/items";
-import { drawItemIcon, itemIconKey, itemIconPath } from "../art/items";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen } from "../engine/screen";
 import { canLearnMove, evolve, heldItemOf, itemEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
 import { BAR_RESPAWN } from "../data/maps";
-import { drawScreenHeader, Menu, MessageBox, wrapText, GREY, INK } from "../ui/widgets";
+import { Menu, MessageBox, wrapText, INK } from "../ui/widgets";
+import { SupplyView } from "../ui/SupplyView";
 import { PartyScene } from "./PartyScene";
 import { TeachScene } from "./TeachScene";
 import { EvolutionScene } from "./EvolutionScene";
@@ -19,8 +19,7 @@ export interface BagOptions {
 }
 
 export class BagScene implements Scene {
-  private menu: Menu;
-  private itemIds: string[];
+  private view: SupplyView;
   private msg = new MessageBox();
   // Conferma SÌ/NO per lo swap di un hold item già equipaggiato.
   private ask: { text: string; yes: () => void } | null = null;
@@ -32,15 +31,8 @@ export class BagScene implements Scene {
     private state: GameState,
     private opts: BagOptions
   ) {
-    this.itemIds = BAG_ORDER.filter((id) => (this.state.bag[id] ?? 0) > 0);
-    this.menu = new Menu(
-      this.itemIds.map((id) => ({
-        label: ITEMS[id].name,
-        rightLabel: `x${this.state.bag[id]}`,
-        iconPath: itemIconPath(id) ?? undefined,
-        iconId: itemIconKey(id)
-      }))
-    );
+    this.view = new SupplyView(state, false, opts.inBattle);
+    this.refresh();
   }
 
   update(dt: number): void {
@@ -60,7 +52,9 @@ export class BagScene implements Scene {
       }
       return;
     }
-    const action = this.menu.update(this.input);
+    this.refresh();
+    const action = this.view.update(this.input);
+    this.refresh();
     if (action === "cancel") {
       this.stack.pop();
       return;
@@ -68,15 +62,15 @@ export class BagScene implements Scene {
     if (action !== "select") {
       return;
     }
-    const itemId = this.itemIds[this.menu.index];
+    const itemId = this.view.selected;
     if (!itemId) {
       return;
     }
     const item = ITEMS[itemId];
     if (this.opts.inBattle) {
       // I boost campagna si attivano dal mondo, non in battaglia: bloccali qui.
-      if (item.kind === "boost") {
-        this.msg.show(["Troppo tardi per fare campagna.", "I boost si attivano PRIMA della lotta, dalla BORSA."]);
+      if (!["ball", "heal", "cure"].includes(item.kind)) {
+        this.msg.show(["Il kit si prepara prima dei riflettori.", "In lotta puoi usare solo cure e schede di reclutamento."]);
         return;
       }
       this.stack.pop();
@@ -181,6 +175,7 @@ export class BagScene implements Scene {
             mon.hp = Math.min(max, mon.hp + heal);
             audio.heal();
             this.consume(itemId);
+            saveGame(this.state);
             this.msg.show([`${item.name} ridà fiato alla campagna!`]);
           } else {
             if (!mon.status) {
@@ -190,6 +185,7 @@ export class BagScene implements Scene {
             mon.status = null;
             audio.heal();
             this.consume(itemId);
+            saveGame(this.state);
             this.msg.show(["Tutto archiviato. Non se ne parla più."]);
           }
         }
@@ -285,52 +281,26 @@ export class BagScene implements Scene {
     ]);
   }
 
+  private refresh(): void {
+    this.view.sync(BAG_ORDER.filter((id) => (this.state.bag[id] ?? 0) > 0), (id) => `x${this.state.bag[id]}`);
+  }
+
   private consume(itemId: string): void {
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
-    this.itemIds = BAG_ORDER.filter((id) => (this.state.bag[id] ?? 0) > 0);
-    this.menu = new Menu(
-      this.itemIds.map((id) => ({
-        label: ITEMS[id].name,
-        rightLabel: `x${this.state.bag[id]}`,
-        iconPath: itemIconPath(id) ?? undefined,
-        iconId: itemIconKey(id)
-      }))
-    );
+    this.refresh();
   }
 
   draw(screen: Screen): void {
-    screen.clear("#eee8d9");
-    drawScreenHeader(screen, "BORSA DEL CANDIDATO");
-    if (this.itemIds.length === 0) {
-      screen.panel(10, 24, VIEW_W - 20, 40, "card");
-      screen.text("La borsa è vuota.", 20, 36, INK);
-      screen.text("Come le promesse mantenute.", 20, 48, GREY);
-    } else {
-      const MAX_VIS = 7; // finestra scorrevole: lascia spazio al pannello descrizione
-      this.menu.draw(screen, 10, 20, VIEW_W - 20, 13, MAX_VIS);
-      const item = ITEMS[this.itemIds[this.menu.index]];
-      if (item) {
-        const y = 24 + this.menu.measureHeight(13, MAX_VIS);
-        const panelH = 40;
-        screen.panel(10, y, VIEW_W - 20, panelH, "card");
-        drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
-        const lines = wrapText(item.desc, 28);
-        for (let i = 0; i < Math.min(3, lines.length); i += 1) {
-          screen.text(lines[i], 44, y + 7 + i * 10, INK);
-        }
-      }
-    }
-    screen.text("A: usa  B: chiudi", 8, VIEW_H - 10, GREY);
+    this.refresh();
     if (this.ask) {
-      // Pannello di conferma swap hold item.
-      screen.dim(0.32);
-      screen.panel(14, 52, VIEW_W - 28, 66, "dialog");
-      const lines = wrapText(this.ask.text, 32);
-      for (let i = 0; i < Math.min(3, lines.length); i += 1) {
-        screen.text(lines[i], 22, 60 + i * 10, INK);
-      }
-      this.askMenu.draw(screen, VIEW_W - 76, 92, 54, 11);
+      screen.clear("#101b32");
+      screen.panel(6, 24, 228, 140, "dialog");
+      wrapText(this.ask.text, 35).forEach((line, i) => screen.text(line, 14, 32 + i * 10, INK));
+      this.askMenu.draw(screen, 142, 120, 84, 12);
+      screen.text("A:SCEGLI B:ANNULLA", 8, 169, "#fff3cc");
+      return;
     }
-    this.msg.draw(screen);
+    if (this.msg.isOpen) { screen.clear("#101b32"); this.msg.draw(screen); return; }
+    this.view.draw(screen);
   }
 }

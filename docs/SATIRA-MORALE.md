@@ -8,6 +8,10 @@ opzionali aggiungono decisioni con costi, vantaggi e conseguenze visibili.
 Il settimo incontro è il benzinaio del Percorso 3: cartello, annuncio o corse
 finanziate. La vignetta, le fonti e le conseguenze sono in
 [EVOLUZIONI-SCHEDE.md](EVOLUZIONI-SCHEDE.md).
+Il round successivo riscrive i tre venditori: confezioni del programma che si
+riducono, prezzi stabili solo nel font e coperture di palazzo confrontate con
+quelle del gilet. Fonti e conseguenze verificabili sono in
+[RISERVE-DIRETTIVE.md](RISERVE-DIRETTIVE.md).
 
 ![Scelte e conseguenze nel gioco](img/morale-satira.png)
 

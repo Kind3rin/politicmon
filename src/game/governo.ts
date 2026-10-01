@@ -194,26 +194,19 @@ export function curaPassiva(state: GameState): boolean {
 // Il Discount segue i sondaggi: chi è popolare paga meno, chi crolla paga
 // il sovrapprezzo "rischio insolvenza". Il Min. Esteri sconta sempre.
 
+export function shopAdjustments(state: GameState): { label: string; percent: number }[] {
+  return [
+    { label: "FIDUCIA", percent: Math.round(trustPriceAdjustment(state.morale) * 100) },
+    { label: "SONDAGGI", percent: state.sondaggi >= 70 ? -10 : state.sondaggi < 30 ? 15 : 0 },
+    { label: "MIN. ESTERI", percent: hasMinistro(state, "esteri") ? -20 : 0 },
+    { label: "MIN. INTERNO", percent: hasMinistro(state, "interno") ? 10 : 0 },
+    { label: "PROPAGANDA", percent: hasMinistro(state, "propaganda") ? 12 : 0 }
+  ].filter((entry) => entry.percent !== 0);
+}
+
 export function shopPrice(state: GameState, item: Item): number {
-  const base = item.price ?? 0;
-  let mult = 1;
-  mult += trustPriceAdjustment(state.morale);
-  if (state.sondaggi >= 70) {
-    mult -= 0.1;
-  } else if (state.sondaggi < 30) {
-    mult += 0.15;
-  }
-  if (hasMinistro(state, "esteri")) {
-    mult -= 0.2;
-  }
-  // Round 40 — downside dei ministeri sui prezzi (rincari lievi, coerenti).
-  if (hasMinistro(state, "interno")) {
-    mult += 0.1; // la sicurezza si paga
-  }
-  if (hasMinistro(state, "propaganda")) {
-    mult += 0.12; // carta e colla dei manifesti
-  }
-  return Math.max(10, Math.round((base * mult) / 10) * 10);
+  const mult = 1 + shopAdjustments(state).reduce((sum, entry) => sum + entry.percent / 100, 0);
+  return Math.max(10, Math.round(((item.price ?? 0) * mult) / 10) * 10);
 }
 
 // ---------------------------------------------------------- MALUS MINISTERI

@@ -1,5 +1,6 @@
+import { TeachScene } from "../../scenes/TeachScene";
 import { ITEMS } from "../../data/items";
-import { MOVES, STATUS_NAMES, moveSummary, moveKindLabel, type Move } from "../../data/moves";
+import { MOVES, STATUS_NAMES, moveSummary, type Move } from "../../data/moves";
 import { TYPE_COLORS } from "../../data/poltypes";
 import type { TrainerDef } from "../../data/trainers";
 import { audio } from "../../engine/audio";
@@ -762,65 +763,10 @@ export class BattleScene implements Scene {
   }
 
   private learnMoveSteps(moveId: string): Step[] {
-    const move = MOVES[moveId];
-    return [
-      {
-        run: () => {
-          const mon = this.player.mon;
-          if (mon.moves.length < 4) {
-            mon.moves.push({ id: moveId, pp: move.pp });
-            this.pushFront([{ text: `${this.playerName()} impara ${move.name}!` }]);
-            return;
-          }
-          // Conferma "sei sicuro di NON impararla?": evita di scartare per sbaglio
-          // una mossa nuova (spesso migliore). Prima il NO rinunciava all'istante.
-          const confirmSkip = () => {
-            this.ask(
-              `Sicuro di NON imparare ${move.name}?`,
-              () => {
-                // SÌ, non la imparo.
-                this.pushFront([{ text: `${this.playerName()} rinuncia a ${move.name}.` }]);
-              },
-              () => {
-                // NO, ci ripenso: riproponi la scelta.
-                offerLearn();
-              }
-            );
-          };
-          const offerLearn = () => {
-            // Prompt esplicito: chiede se imparare la mossa nuova (che sostituirà
-            // una vecchia). La descrizione è consultabile nel dettaglio squadra.
-            this.ask(
-              `Vuoi imparare la nuova mossa ${move.name}?`,
-              () => {
-                const choice = new Menu(
-                  mon.moves.map((slot) => ({ label: MOVES[slot.id].name }))
-                );
-                this.fightMenu = choice;
-                this.mode = "fight";
-                this.pendingLearnMoveId = moveId; // per il confronto in draw
-                this.onFightSelect = (index) => {
-                  const old = MOVES[mon.moves[index].id];
-                  mon.moves[index] = { id: moveId, pp: move.pp };
-                  this.pendingLearnMoveId = null;
-                  this.mode = "queue";
-                  this.pushFront([
-                    { text: `1, 2, 3... PUF! ${this.playerName()} dimentica ${old.name}...` },
-                    { text: `...e impara ${move.name}!` }
-                  ]);
-                };
-                this.onFightCancel = () => {
-                  this.pendingLearnMoveId = null;
-                  confirmSkip();
-                };
-              },
-              confirmSkip
-            );
-          };
-          offerLearn();
-        }
-      }
-    ];
+    return [{ run: () => {
+      this.stack.push(new TeachScene(this.stack, this.input, this.player.mon, moveId,
+        () => saveGame(this.state), { source: "level" }));
+    } }];
   }
 
   private evolveStepsFor(mon: Monster, targetId: string): Step[] {
@@ -1335,11 +1281,7 @@ export class BattleScene implements Scene {
     this.mode = "ask";
   }
 
-  private onFightSelect: ((index: number) => void) | null = null;
-  private onFightCancel: (() => void) | null = null;
-  // Mossa in attesa di apprendimento (schermata "Quale dimentichi?"): serve a
-  // mostrare il CONFRONTO tra la nuova e quella evidenziata da scartare.
-  private pendingLearnMoveId: string | null = null;
+
 
   // ---- Update ----
 
@@ -1466,7 +1408,7 @@ export class BattleScene implements Scene {
     }
 
     if (this.mode === "fight") {
-      if (!this.onFightSelect && !this.fightFallback && this.input.wasPressed("start")) {
+      if (!this.fightFallback && this.input.wasPressed("start")) {
         const recruitment = this.trainer ? [] : ["RECLUTAMENTO NELLO STATO ATTUALE:", ...Object.entries(this.state.bag).filter(([id, qty]) => qty > 0 && ITEMS[id]?.kind === "ball").map(([id, qty]) => {
           const base = catchChance(this.foe.mon, id, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0);
           const chance = this.catchBoost ? Math.min(.95, base * 2) : base;
@@ -1478,13 +1420,6 @@ export class BattleScene implements Scene {
       }
       const action = this.fightGridUpdate();
       if (action === "select") {
-        if (this.onFightSelect) {
-          const handler = this.onFightSelect;
-          this.onFightSelect = null;
-          this.onFightCancel = null;
-          handler(this.fightMenu.index);
-          return;
-        }
         if (this.fightFallback) {
           // COMIZIO di riserva a PP esauriti: non consuma PP (il mon non ha lo
           // slot COMIZIO, quindi startTurn non decrementa nulla).
@@ -1500,13 +1435,6 @@ export class BattleScene implements Scene {
         this.mode = "queue";
         this.startTurn(MOVES[slot.id]);
       } else if (action === "cancel") {
-        if (this.onFightCancel) {
-          const handler = this.onFightCancel;
-          this.onFightSelect = null;
-          this.onFightCancel = null;
-          handler();
-          return;
-        }
         this.mode = "menu";
       }
       return;
@@ -1823,6 +1751,8 @@ export class BattleScene implements Scene {
     if (this.mode === "menu") {
       this.drawMainMenu(screen);
     } else if (this.mode === "fight") {
+      screen.panel(6, 42, 104, 13, "card");
+      screen.text("A:USA B:MENU", 14, 45, INK);
       // Quattro righe a larghezza piena: le mosse arrivano a 22 caratteri e
       // nella vecchia griglia 2x2 venivano compresse fino al 69%.
       const items = this.fightMenu.items;
@@ -1859,21 +1789,7 @@ export class BattleScene implements Scene {
         screen.textRight(items[i].rightLabel ?? "", 228, cy, items[i].disabled ? GREY : INK);
       }
       const slot = this.player.mon.moves[this.fightMenu.index];
-      if (this.onFightSelect) {
-        // CONFRONTO: sopra il pannello la NUOVA mossa, sotto quella EVIDENZIATA da
-        // scartare — così si vede subito cosa si guadagna e cosa si perde.
-        const learn = this.pendingLearnMoveId ? MOVES[this.pendingLearnMoveId] : null;
-        const old = slot ? MOVES[slot.id] : null;
-        screen.panel(8, 104, 226, 30, "card");
-        if (learn) {
-          screen.textFit(`NUOVA: ${learn.name}`, 14, 108, 145, "#7ad858");
-          screen.textRight("B: ANNULLA", 226, 108, GREY);
-          screen.textFit(moveSummary(learn), 14, 117, 208, GREY);
-        }
-        if (old) {
-          screen.textFit(`SCARTI: ${old.name} (${moveKindLabel(old)})`, 14, 126, 208, "#d86868");
-        }
-      } else if (slot) {
+      if (slot) {
         const move = MOVES[slot.id];
         // Striscia info sopra il pannello: nome, tipo e riepilogo meccanico
         // restano separati dai PP mostrati a destra di ogni riga.

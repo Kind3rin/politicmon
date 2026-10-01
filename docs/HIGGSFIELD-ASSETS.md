@@ -26,6 +26,15 @@ Integrazione e controlli: [EVOLUZIONI-SCHEDE.md](EVOLUZIONI-SCHEDE.md).
 
 ![Pose dei tre starter e delle evoluzioni](img/monster-frames.png)
 
+Sesto blocco: **tre ambienti e trenta icone degli oggetti**, prodotte in cinque
+fogli da sei elementi. Otto job GPT Image 2.5, qualità high, 1k. Costo **12**,
+saldo **769,97 → 757,97**, cumulativo **128 crediti**. I 33 PNG nativi occupano
+**200.066 byte**. `scripts/higgsfield-supplies.json` conserva provenienza e
+parametri; `scripts/prepare-supplies.py --download` ricostruisce le risorse.
+Controlli, gameplay e prove: [RISERVE-DIRETTIVE.md](RISERVE-DIRETTIVE.md).
+
+![Preparazione delle lotte](img/supplies.png)
+
 ## Pose dei personaggi
 
 Il roster animato copre tutte le 52 specie, comprese evoluzioni ramificate,
@@ -149,7 +158,7 @@ npm run smoke:pwa:release
 
 Lo screenshot harness controlla otto campi PVE, un duello PVP, il titolo,
 caricamento PNG e fallback per un asset mancante. Il test PWA rimuove le copie
-versionate dalla cache e verifica che tutti i 76 asset siano recuperabili
+versionate dalla cache e verifica che tutti i 109 asset siano recuperabili
 dalla precache durante il reload offline Chromium/Pixel 7.
 
 Politicdex, dossier, ritmo delle lotte e controlli sono documentati in

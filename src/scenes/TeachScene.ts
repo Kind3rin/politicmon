@@ -1,111 +1,88 @@
-import { MOVES, moveSummary, moveKindLabel } from "../data/moves";
-import { TYPE_COLORS } from "../data/poltypes";
+import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
+import { sceneImage } from "../engine/assets";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import type { Screen } from "../engine/screen";
 import { speciesOf, type Monster } from "../game/monster";
-import { drawScreenHeader, Menu, MessageBox, GREY, INK } from "../ui/widgets";
+import { moveNotes } from "../game/supplyGuide";
+import { drawScreenHeader, Menu, MessageBox, wrapText, INK } from "../ui/widgets";
+const GREY = "#59657d";
 
-// Insegna una mossa (DIRETTIVA DI PARTITO) a un POLITICMON compatibile.
-// Se ha già 4 mosse, chiede quale sostituire. La direttiva è riutilizzabile,
-// quindi non viene consumata qui: lo decide il chiamante (BagScene).
 export class TeachScene implements Scene {
   private menu: Menu;
   private msg = new MessageBox();
   private done = false;
-
-  constructor(
-    private stack: SceneStack,
-    private input: Input,
-    private mon: Monster,
-    private moveId: string,
-    private onLearned: () => void
-  ) {
-    this.menu = new Menu(
-      this.mon.moves.map((slot) => ({
-        label: MOVES[slot.id].name,
-        rightLabel: `PP ${MOVES[slot.id].pp}`
-      }))
-    );
-    if (this.mon.moves.length < 4) {
-      // Spazio libero: impara subito.
-      this.learnInSlot(-1);
-    }
+  private inspect = false;
+  private page = 0;
+  private scroll = 0;
+  private confirm = false;
+  constructor(private stack: SceneStack, private input: Input, private mon: Monster, private moveId: string,
+    private onLearned: () => void, private options: { source?: "level" | "directive" } = {}) {
+    this.menu = new Menu(mon.moves.map((slot) => ({ label: MOVES[slot.id].name, rightLabel: `PP ${slot.pp}` })));
   }
-
-  private learnInSlot(replaceIndex: number): void {
-    const move = MOVES[this.moveId];
-    const name = speciesOf(this.mon).name;
-    if (replaceIndex < 0) {
-      this.mon.moves.push({ id: this.moveId, pp: move.pp });
-      this.msg.show([`${name} studia la direttiva...`, `Impara ${move.name}!`], () => {
-        this.finish();
-      });
-    } else {
-      const old = MOVES[this.mon.moves[replaceIndex].id];
-      this.mon.moves[replaceIndex] = { id: this.moveId, pp: move.pp };
-      this.msg.show(
-        [`${name} archivia ${old.name}...`, `...e adotta la linea: ${move.name}!`],
-        () => this.finish()
-      );
-    }
-    audio.levelUp();
-    this.onLearned();
+  private get old() { return this.mon.moves.length >= 4 ? this.mon.moves[this.menu.index] : undefined; }
+  private lines(): string[] {
+    const old = this.old, incoming = MOVES[this.moveId];
+    const notes = this.page === 0 ? moveNotes(this.mon, this.moveId) : this.page === 1 ? old ? moveNotes(this.mon, old.id, old.pp) : ["SLOT LIBERO: NESSUNA MOSSA CANCELLATA."] :
+      [`NUOVA: ${incoming.name}. PP ${incoming.pp}/${incoming.pp}.`, old ? `SCARTI: ${MOVES[old.id].name}, INCLUSI I SUOI ${old.pp} PP RESIDUI.` : "AGGIUNGI SENZA PERDERE ALTRE MOSSE.",
+        "GLI ALTRI PP, I PV, LO STATUS E L'OGGETTO RESTANO UGUALI.", this.options.source === "level" ? "APPRENDIMENTO DA LIVELLO. RINUNCIARE NON ANNULLA IL LIVELLO GUADAGNATO." : "LA DIRETTIVA NON SI CONSUMA: PUOI RIUSARLA SU ALTRI CANDIDATI.",
+        "POTENZA NON È DANNO FINALE: CONTANO STATISTICHE, TIPO E ABILITÀ."];
+    return notes.flatMap((line) => wrapText(line, 35));
   }
-
-  private finish(): void {
-    this.done = true;
-    this.stack.pop();
-  }
-
   update(dt: number): void {
-    if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
+    if (this.msg.isOpen) { this.msg.update(dt, this.input); return; }
+    if (this.done) return;
+    if (this.confirm) {
+      if (this.input.wasPressed("b")) { this.confirm = false; audio.cancel(); return; }
+      if (!this.input.wasPressed("a")) return;
+      const move = MOVES[this.moveId];
+      if (this.mon.moves.some((slot) => slot.id === this.moveId)) { this.done = true; this.stack.pop(); return; }
+      if (this.old) this.mon.moves[this.menu.index] = { id: this.moveId, pp: move.pp };
+      else this.mon.moves.push({ id: this.moveId, pp: move.pp });
+      this.done = true; this.onLearned(); audio.levelUp();
+      this.msg.show([`${speciesOf(this.mon).name} adotta ${move.name}.`, "Stavolta cambiare linea cambia davvero la lotta."], () => this.stack.pop());
       return;
     }
-    if (this.done || this.mon.moves.length < 4) {
-      return; // in attesa che il messaggio chiuda e si torni indietro
-    }
-    const action = this.menu.update(this.input);
-    if (action === "cancel") {
-      const name = speciesOf(this.mon).name;
-      this.msg.show([`${name} resta sulle sue posizioni.`], () => this.finish());
+    if (this.input.wasPressed("start")) { this.inspect = !this.inspect; this.scroll = 0; audio.cursor(); return; }
+    if (this.inspect) {
+      if (this.input.wasPressed("b")) { this.inspect = false; return; }
+      const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
+      if (dir) { this.page = (this.page + dir + 3) % 3; this.scroll = 0; audio.cursor(); return; }
+      const delta = this.input.wasPressed("down") ? 1 : this.input.wasPressed("up") ? -1 : 0;
+      if (delta) this.scroll = Math.max(0, Math.min(Math.max(0, this.lines().length - 9), this.scroll + delta));
+      if (this.input.wasPressed("a")) { this.confirm = true; audio.confirm(); }
       return;
     }
-    if (action === "select") {
-      this.learnInSlot(this.menu.index);
-    }
+    const action = this.mon.moves.length >= 4 ? this.menu.update(this.input) : this.input.wasPressed("a") ? "select" : this.input.wasPressed("b") ? "cancel" : null;
+    if (action === "cancel") { this.done = true; this.stack.pop(); audio.cancel(); }
+    if (action === "select") { this.confirm = true; audio.confirm(); }
   }
-
   draw(screen: Screen): void {
-    screen.clear("#e7ebf2");
+    screen.clear("#101b32"); const bg = sceneImage("ui:teach", "ui/teach.png"); if (bg) screen.image(bg);
+    drawScreenHeader(screen, this.options.source === "level" ? "NUOVA LINEA AL LIVELLO" : "DIRETTIVA DI PARTITO");
+    if (this.msg.isOpen) { screen.clear("#101b32"); this.msg.draw(screen); return; }
     const move = MOVES[this.moveId];
-    drawScreenHeader(screen, "DIRETTIVA DI PARTITO");
-    screen.text(`${speciesOf(this.mon).name} può imparare:`, 8, 21, INK);
-
-    // Scheda della mossa in arrivo. Riepilogo su riga PROPRIA (y58): prima era
-    // su y48 right-aligned e collideva con la kind-label (SPECIALE/FISICO/...),
-    // il cui bordo destro superava il bordo sinistro del riepilogo.
-    screen.panel(8, 30, VIEW_W - 16, 40, "card");
-    screen.text(move.name, 16, 37, INK);
-    const typeLabel = move.type.slice(0, 9);
-    screen.text(typeLabel, 16, 48, INK);
-    screen.rect(16, 56, typeLabel.length * 6, 1, TYPE_COLORS[move.type]);
-    screen.text(moveKindLabel(move), 16 + typeLabel.length * 6 + 10, 48, GREY);
-    screen.text(moveSummary(move).slice(0, 36), 16, 60, GREY);
-
-    if (this.mon.moves.length >= 4 && !this.done) {
-      screen.text("Quale linea abbandona?", 8, 74, INK);
-      this.menu.draw(screen, 8, 84, VIEW_W - 16);
-      const sel = this.mon.moves[this.menu.index];
-      if (sel) {
-        const m = MOVES[sel.id];
-        // Tronca con ellissi invece di scartare muto la 2a riga del riepilogo.
-        screen.textFit(moveSummary(m), 12, VIEW_H - 22, 216, GREY);
-      }
-      screen.text("A: sostituisci  B: lascia perdere", 8, VIEW_H - 10, GREY);
+    if (this.confirm || this.inspect) {
+      screen.panel(6, 24, 228, 141, "card");
+      screen.text(this.confirm ? "CONFERMI LA NUOVA LINEA?" : ["MOSSA NUOVA", "MOSSA ATTUALE", "COSA CAMBIA"][this.page], 14, 31, "#8c5b12");
+      const lines = this.confirm ? ["IMPARA:", ...wrapText(move.name, 35), ...(this.old ? ["CANCELLA:", ...wrapText(MOVES[this.old.id].name, 35)] : ["OCCUPA UNO SLOT LIBERO."]), "NUOVI PP AL MASSIMO.", "ALTRE MOSSE INVARIATE."] : this.lines();
+      lines.slice(this.confirm ? 0 : this.scroll, (this.confirm ? 0 : this.scroll) + 9).forEach((line, i) => screen.text(line, 14, 45 + i * 10, INK));
+      if (!this.confirm) screen.text(`SU/GIU: ${this.scroll + 1}/${Math.max(1, lines.length - 8)}`, 14, 151, GREY);
+      screen.text(this.confirm ? "A:CONFERMA B:RIPENSA" : "◄►:PAGINA A:SCEGLI B:LISTA", 8, 169, "#fff3cc");
+      return;
     }
-    this.msg.draw(screen);
+    screen.panel(6, 23, 228, 52, "card");
+    screen.text(`${speciesOf(this.mon).name} L${this.mon.level}`, 14, 29, GREY);
+    wrapText(`NUOVA: ${move.name}`, 35).forEach((line, i) => screen.text(line, 14, 42 + i * 9, INK));
+    if (this.mon.moves.length >= 4) {
+      screen.text("QUALE LINEA ARCHIVI?", 14, 80, "#fff3cc");
+      this.menu.draw(screen, 6, 92, 228, 14, 4);
+    } else {
+      screen.panel(6, 86, 228, 76, "card");
+      screen.text("SLOT LIBERO: NESSUNA PERDITA.", 14, 100, INK);
+      screen.text("START: LEGGI LA MOSSA PRIMA.", 14, 116, GREY);
+    }
+    screen.text("A:SCEGLI START:CONFRONTA B:RINUNCIA", 8, 169, "#fff3cc");
   }
 }

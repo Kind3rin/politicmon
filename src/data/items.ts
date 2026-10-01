@@ -165,7 +165,7 @@ export const BAG_ORDER = [
   "gilet", "telecamera", "sondtruccato", "caffettiera", "agendarossa", "santino",
   "tessera", "tessera_futuro", "divisa",
   "dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",
-  "dirInciucio", "dirBunga", "dirGreen"
+  "dirInciucio", "dirBunga", "dirGreen", "dirMulta", "dirPiazza"
 ];
 
 // Le DIRETTIVE in vendita al Discount (le altre si trovano/sono ricompense).

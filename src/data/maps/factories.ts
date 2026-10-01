@@ -468,7 +468,13 @@ export function marketMap(id: string, city: string, doorX: number, doorY: number
     npcs: [
       {
         id: `${id}-clerk`, pal: "kid", x: 2, y: 2, facing: "down", shop: true,
-        lines: ["Benvenuto al DISCOUNT ELETTORALE!", "Tutto in offerta, tranne le promesse."]
+        lines: city === "mediopoli" ? [
+          "Il programma ora ha meno contenuto nella stessa confezione. Lo chiamano formato famiglia.",
+          "Il caffè cura ancora il 30% dei PV: almeno i numeri non li abbiamo appaltati."
+        ] : [
+          "Il cartello dice PREZZI STABILI. Intendeva il carattere tipografico.",
+          "Qui i rincari compaiono nel preventivo. Più irritante di un comunicato, ma più utile."
+        ]
       }
     ]
   };

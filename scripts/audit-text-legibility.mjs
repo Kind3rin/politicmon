@@ -21,7 +21,8 @@ for (const move of Object.values(MOVES)) {
   add("battle/move-row", move.name, 166); // marker efficacia presente
   add("battle/move-detail", move.name, 150);
   add("battle/move-summary", moveSummary(move), 208); // riga intera, START:INFO sopra
-  add("battle/learn-new", `NUOVA: ${move.name}`, 145); // spazio a B: ANNULLA
+  // Teaching uses full-width wrapped rows; test the longest visible segment.
+  add("teach/new", `NUOVA: ${move.name}`.slice(0, 35), 210);
 }
 for (const achievement of ACHIEVEMENTS) add("achievements/title", achievement.name, 168);
 for (const event of MEME_EVENTS) add("sources/title", `► ${event.title}`, 204);

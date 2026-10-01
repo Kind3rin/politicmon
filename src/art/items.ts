@@ -2,7 +2,7 @@ import { BAG_ORDER } from "../data/items";
 import type { Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
 
-// Tutti gli item hanno un PNG PixelLab. NO_PNG resta disponibile per eventuali
+// Tutti i 30 oggetti hanno un PNG Higgsfield. NO_PNG resta disponibile per eventuali
 // item futuri senza icona (fallback pulito, evita path 404 in console).
 const NO_PNG = new Set<string>([]);
 export const ITEMS_WITH_PNG = new Set<string>(BAG_ORDER.filter((id) => !NO_PNG.has(id)));

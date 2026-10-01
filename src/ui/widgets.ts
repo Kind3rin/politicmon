@@ -473,10 +473,10 @@ export class Menu {
     }
     // Indicatori di scorrimento.
     if (first > 0) {
-      screen.text("▲", x + w - 12, y + 4, GREY);
+      screen.text("▲", x + w - 12, y + 1, GREY);
     }
     if (first + visible < this.items.length) {
-      screen.text("▼", x + w - 12, y + h - 10, GREY);
+      screen.text("▼", x + w - 12, y + h - 8, GREY);
     }
   }
 

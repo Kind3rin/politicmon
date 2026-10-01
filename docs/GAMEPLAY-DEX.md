@@ -78,6 +78,14 @@ avversario, PP, abilità una tantum, sequenza casuale e salvataggio.
 
 ![Scelta del candidato e dossier prima del cambio](img/switch-guide.png)
 
+## Preparazione e apprendimento
+
+Borsa e negozio ora condividono filtri e pagine EFFETTO, SQUADRA e PREZZI.
+Il negozio apre un preventivo prima di spendere; il confronto delle mosse
+si usa anche salendo di livello e permette di rinunciare con uno slot libero.
+Controlli, costi, compatibilità e verifiche sono in
+[RISERVE-DIRETTIVE.md](RISERVE-DIRETTIVE.md).
+
 ## Ritmo e presentazione
 
 In PAUSA > OPZIONI, RITMO LOTTE alterna NORMALE e RAPIDO. Il ritmo rapido accelera

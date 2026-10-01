@@ -1,117 +1,69 @@
-import { BAG_ORDER, ITEMS, SHOP_DIRECTIVES } from "../data/items";
-import { drawItemIcon, itemIconKey, itemIconPath } from "../art/items";
+import { ITEMS } from "../data/items";
+import { drawItemIcon } from "../art/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import type { Screen } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
-import { hasMinistro, shopPrice } from "../game/governo";
-import { drawScreenHeader, Menu, MessageBox, wrapText, GREY, INK } from "../ui/widgets";
+import { shopPrice } from "../game/governo";
+import { buySupplies, purchaseLimit, shopStock } from "../game/supplyGuide";
+import { SupplyView } from "../ui/SupplyView";
+import { drawScreenHeader, MessageBox, wrapText, INK } from "../ui/widgets";
+const GREY = "#59657d";
 
 export class ShopScene implements Scene {
-  private menu: Menu;
-  private itemIds: string[];
+  private view: SupplyView;
   private msg = new MessageBox();
-
+  private quote: { id: string; quantity: number } | null = null;
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
-    // I prezzi seguono i sondaggi e gli accordi del Min. Esteri.
-    // Solo alcune DIRETTIVE sono in vendita; le altre si trovano in giro.
-    this.itemIds = BAG_ORDER.filter((id) => {
-      const item = ITEMS[id];
-      if (item.price === undefined) {
-        return false;
-      }
-      if (item.kind === "tm") {
-        return SHOP_DIRECTIVES.includes(id);
-      }
-      // I boost CAMPAGNA ELETTORALE sono un money-sink di fine partita: compaiono
-      // al Discount solo dopo aver battuto il GARANTE SUPREMO (economia matura).
-      // ECCEZIONE (R42 economia): MANIFESTI OVUNQUE (+30% EXP) è utile fino al cap
-      // 55, ma serve DURANTE la campagna (party lv basso) → disponibile prima,
-      // dal 2° badge. SPOT/COMIZIO restano end-game (post-garante).
-      if (item.kind === "boost") {
-        if (id === "manifesti") {
-          return this.state.badges.length >= 2 || Boolean(this.state.flags["garante-beaten"]);
-        }
-        return Boolean(this.state.flags["garante-beaten"]);
-      }
-      return true;
-    });
-    this.menu = new Menu(
-      this.itemIds.map((id) => ({
-        label: ITEMS[id].name,
-        rightLabel: `${shopPrice(this.state, ITEMS[id])}€`,
-        iconPath: itemIconPath(id) ?? undefined,
-        iconId: itemIconKey(id)
-      }))
-    );
+    this.view = new SupplyView(state, true);
+    this.refresh();
   }
-
+  private refresh(): void {
+    this.view.sync(shopStock(this.state), (id) => ITEMS[id].reusable && (this.state.bag[id] ?? 0) > 0 ? "GIÀ TUA" : `${shopPrice(this.state, ITEMS[id])}€`);
+  }
   update(dt: number): void {
-    if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
-      return;
-    }
-    const action = this.menu.update(this.input);
-    if (action === "cancel") {
-      this.stack.pop();
-      return;
-    }
-    if (action !== "select") {
-      return;
-    }
-    const itemId = this.itemIds[this.menu.index];
-    const item = ITEMS[itemId];
-    // Le DIRETTIVE sono riutilizzabili: una sola copia in archivio basta.
-    if (item.reusable && (this.state.bag[itemId] ?? 0) > 0) {
-      audio.cancel();
-      this.msg.show(["Hai già questa DIRETTIVA in archivio.", "Riusala dalla BORSA quante volte vuoi."]);
-      return;
-    }
-    const price = shopPrice(this.state, item);
-    if (this.state.money < price) {
-      audio.cancel();
-      this.msg.show(["Fondi insufficienti.", "Hai provato a pagare in promesse: rifiutate."]);
-      return;
-    }
-    this.state.money -= price;
-    this.state.bag[itemId] = (this.state.bag[itemId] ?? 0) + 1;
-    audio.confirm();
-    saveGame(this.state);
-    this.msg.show([`Comprato: ${item.name}!`]);
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#e5eee2");
-    drawScreenHeader(screen, "DISCOUNT ELETTORALE", `${this.state.money}€`);
-    const MAX_VIS = 6; // finestra scorrevole: lascia spazio al pannello descrizione
-    this.menu.draw(screen, 10, 20, VIEW_W - 20, 13, MAX_VIS);
-    const item = ITEMS[this.itemIds[this.menu.index]];
-    if (item) {
-      // "Ne possiedi" va nell'header (accanto ai fondi): libera spazio nel
-      // pannello per mostrare la descrizione COMPLETA (prima troncata a 2 righe).
-      screen.text(`Hai: ${this.state.bag[item.id] ?? 0}`, 8, 14, GREY);
-      const y = 24 + this.menu.measureHeight(13, MAX_VIS);
-      // Icona oggetto (24x24) a sinistra; descrizione a destra dell'icona.
-      // Wrap a 30 char (larghezza reale dello spazio a destra dell'icona) e fino
-      // a 4 righe: le desc lunghe (es. TESSERA) non vengono più troncate.
-      const lines = wrapText(item.desc, 30);
-      const shown = Math.min(4, lines.length);
-      const panelH = Math.max(30, 8 + shown * 9);
-      screen.panel(10, y, VIEW_W - 20, panelH, "card");
-      drawItemIcon(screen, item.id, 16, y + Math.floor((panelH - 24) / 2), 24);
-      for (let i = 0; i < shown; i += 1) {
-        screen.text(lines[i], 44, y + 5 + i * 9, INK);
+    if (this.msg.isOpen) { this.msg.update(dt, this.input); return; }
+    if (this.quote) {
+      const quote = this.quote, item = ITEMS[quote.id], max = purchaseLimit(this.state, item);
+      if (this.input.wasPressed("b")) { this.quote = null; audio.cancel(); return; }
+      const delta = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : this.input.wasPressed("up") ? 10 : this.input.wasPressed("down") ? -10 : 0;
+      quote.quantity = Math.max(1, Math.min(Math.max(1, max), quote.quantity + delta));
+      if (delta) audio.cursor();
+      if (this.input.wasPressed("a")) {
+        this.quote = null;
+        if (!buySupplies(this.state, quote.id, quote.quantity)) { audio.cancel(); this.msg.show(["Preventivo scaduto: controlla fondi e disponibilità."]); return; }
+        saveGame(this.state); this.refresh(); audio.confirm();
+        this.msg.show([`${quote.quantity} x ${item.name} in borsa.`, "Lo scontrino è lungo. Almeno questa promessa è misurabile."]);
       }
+      return;
     }
-    const notes: string[] = [];
-    if (this.state.sondaggi >= 70) notes.push("SOND -10%");
-    else if (this.state.sondaggi < 30) notes.push("SOND +15%");
-    const trust = this.state.morale.trust;
-    if (trust >= 70 || trust < 30) notes.push(`FID ${trust >= 70 ? "-5%" : "+5%"}`);
-    if (hasMinistro(this.state, "esteri")) notes.push("EST -20%");
-    screen.textFit(notes.join("  "), 8, VIEW_H - 20, 224, "#476c69");
-    screen.text("A: compra  B: esci", 8, VIEW_H - 10, GREY);
-    this.msg.draw(screen);
+    this.refresh();
+    const action = this.view.update(this.input); this.refresh();
+    if (action === "cancel") { this.stack.pop(); return; }
+    const id = this.view.selected;
+    if (action !== "select" || !id) return;
+    const item = ITEMS[id];
+    if (!purchaseLimit(this.state, item)) {
+      audio.cancel();
+      this.msg.show([item.reusable && (this.state.bag[id] ?? 0) > 0 ? "Direttiva già in archivio: puoi riusarla dalla borsa." : "Fondi insufficienti. Il POS non legge i programmi elettorali."]);
+      return;
+    }
+    this.quote = { id, quantity: 1 };
+  }
+  draw(screen: Screen): void {
+    if (this.msg.isOpen) { screen.clear("#101b32"); this.msg.draw(screen); return; }
+    if (!this.quote) { this.refresh(); this.view.draw(screen); return; }
+    const { id, quantity } = this.quote, item = ITEMS[id], price = shopPrice(this.state, item), total = price * quantity;
+    screen.clear("#101b32"); drawScreenHeader(screen, "PREVENTIVO", `${this.state.money}€`);
+    screen.panel(6, 24, 228, 141, "card"); drawItemIcon(screen, id, 188, 28, 32);
+    wrapText(item.name, 27).forEach((line, i) => screen.text(line, 14, 32 + i * 9, INK));
+    screen.text(`QUANTITÀ: ${quantity}/${purchaseLimit(this.state, item)}`, 14, 65, INK);
+    screen.text(`UNITARIO: ${price} EURO`, 14, 78, GREY);
+    screen.text(`TOTALE: ${total} EURO`, 14, 94, "#8c5b12");
+    screen.text(`RESTANO: ${this.state.money - total} EURO`, 14, 107, INK);
+    screen.text(`GIÀ IN BORSA: ${this.state.bag[id] ?? 0}`, 14, 120, GREY);
+    screen.text(item.reusable ? "RIUSABILE: UNA COPIA BASTA." : "NESSUNO SCONTO PER QUANTITÀ.", 14, 140, GREY);
+    screen.text("◄►:1 SU/GIU:10 A:COMPRA B:INDIETRO", 8, 169, "#fff3cc");
   }
 }

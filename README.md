@@ -108,6 +108,7 @@ npm run build        # typecheck + bundle di produzione
 | **[docs/SATIRA-MORALE.md](docs/SATIRA-MORALE.md)** | Nuova storia, incontri, conseguenze del morale e fonti dei meme |
 | **[docs/GAMEPLAY-DEX.md](docs/GAMEPLAY-DEX.md)** | Politicdex, dossier tattico, animazioni e verifiche del gameplay |
 | **[docs/RISERVE-DIRETTIVE.md](docs/RISERVE-DIRETTIVE.md)** | Zaino tattico, acquisti per quantità, confronto delle mosse e trenta nuovi oggetti |
+| **[docs/MONDO-CANTIERI.md](docs/MONDO-CANTIERI.md)** | 295 nuove risorse del mondo, otto scelte civiche e passerella persistente |
 | **[docs/EVOLUZIONI-SCHEDE.md](docs/EVOLUZIONI-SCHEDE.md)** | Nuove schede, scelta dell'evoluzione e scena sul caro carburante |
 | **[docs/REDESIGN-PLAN.md](docs/REDESIGN-PLAN.md)** | Redesign completo: stato verificato e lavoro ancora aperto |
 

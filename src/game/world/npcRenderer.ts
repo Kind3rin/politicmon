@@ -44,12 +44,14 @@ export function buildNpcDrawCommand(options: {
   camX: number;
   camY: number;
   time: number;
+  reduceEffects?: boolean;
   exclaim: boolean;
   rematchReady: boolean;
   legendaryReady: boolean;
   drawShadow: (x: number, y: number) => void;
 }): NpcDrawCommand {
   const { screen, npc, camX, camY, time, exclaim, rematchReady, legendaryReady, drawShadow } = options;
+  const effectTime = options.reduceEffects ? 0 : time;
   const nx = Math.round(npc.dispX) - camX;
   const ny = Math.round(npc.dispY) - camY - 1;
   const moving = Boolean(npc.stepFrom);
@@ -61,12 +63,12 @@ export function buildNpcDrawCommand(options: {
     draw: () => {
       drawShadow(nx + 8, ny + 15);
       if (legendaryReady) {
-        const pulse = 0.5 + 0.5 * Math.sin(time * 4);
+        const pulse = 0.5 + 0.5 * Math.sin(effectTime * 4);
         const grow = Math.round(pulse * 3);
         screen.rect(nx - 4 - grow, ny - grow, 24 + grow * 2, 24 + grow * 2, `rgba(240,200,64,${(0.10 + pulse * 0.12).toFixed(2)})`);
         screen.rect(nx - grow, ny + 4 - grow, 16 + grow * 2, 16 + grow * 2, `rgba(240,200,64,${(0.16 + pulse * 0.16).toFixed(2)})`);
         for (let index = 0; index < 4; index += 1) {
-          const angle = time * 3 + (index * Math.PI) / 2;
+          const angle = effectTime * 3 + (index * Math.PI) / 2;
           screen.text("*", nx + 8 + Math.round(Math.cos(angle) * 12), ny + 6 + Math.round(Math.sin(angle) * 8), "#fff0a0");
         }
       }
@@ -81,7 +83,7 @@ export function buildNpcDrawCommand(options: {
         const width = label.length * 6 + 4;
         const x = Math.max(2, Math.min(VIEW_W - width - 2, nx + 8 - width / 2));
         screen.rect(x, ny - 11, width, 9, "rgba(40,20,60,0.92)");
-        screen.text(label, x + 2, ny - 10, Math.floor(time * 2) % 2 === 0 ? "#ffe870" : "#f0c040");
+        screen.text(label, x + 2, ny - 10, Math.floor(effectTime * 2) % 2 === 0 ? "#ffe870" : "#f0c040");
       }
       const nameplate = npc.nameplate ? npcNameplateLayout(npc.nameplate, nx, ny) : null;
       if (npc.nameplate && nameplate) {

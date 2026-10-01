@@ -1,0 +1,1150 @@
+{
+  "version": 1,
+  "credits": {
+    "before": 757.97,
+    "after": 689.97,
+    "roundSpent": 68
+  },
+  "assets": [
+    {
+      "id": "player",
+      "index": 0,
+      "kind": "character",
+      "subject": "An anonymous young adult Italian campaign organizer, dark short wavy hair, cream rolled-sleeve shirt, navy utility waistcoat, burgundy scarf, navy trousers, worn brown shoes, small mustard canvas satchel at hip. Approachable determined face, no resemblance to any real politician.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An anonymous young adult Italian campaign organizer, dark short wavy hair, cream rolled-sleeve shirt, navy utility waistcoat, burgundy scarf, navy trousers, worn brown shoes, small mustard canvas satchel at hip. Approachable determined face, no resemblance to any real politician. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures."
+      },
+      "jobId": "34ece627-4045-4dba-af92-1d28f598bcd0",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An anonymous young adult Italian campaign organizer, dark short wavy hair, cream rolled-sleeve shirt, navy utility waistcoat, burgundy scarf, navy trousers, worn brown shoes, small mustard canvas satchel at hip. Approachable determined face, no resemblance to any real politician. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures.",
+        "aspect_ratio": "4:5",
+        "medias": [],
+        "width": 896,
+        "height": 1120,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      },
+      "sourceSha256": "9c07cffccd723e0c6571038efb25f6d3384259984bb83b6cec5eb8e2f770928b"
+    },
+    {
+      "id": "professor",
+      "index": 1,
+      "kind": "character",
+      "subject": "An elderly eccentric Italian political science professor, silver swept hair, small spectacles, cream moustache, long burgundy academic coat over navy vest, mustard folder held close, brown shoes. Humane thoughtful face, no real politician.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An elderly eccentric Italian political science professor, silver swept hair, small spectacles, cream moustache, long burgundy academic coat over navy vest, mustard folder held close, brown shoes. Humane thoughtful face, no real politician. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures."
+      },
+      "jobId": "7bb98fac-a289-43c8-9e63-adfe0920230d",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_7bb98fac-a289-43c8-9e63-adfe0920230d.png",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An elderly eccentric Italian political science professor, silver swept hair, small spectacles, cream moustache, long burgundy academic coat over navy vest, mustard folder held close, brown shoes. Humane thoughtful face, no real politician. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures.",
+        "aspect_ratio": "4:5",
+        "medias": [],
+        "width": 896,
+        "height": 1120,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      },
+      "sourceSha256": "c98b92e8965a9c424ed060559afcd9717e739827f6b875ef56b7149754410e1a"
+    },
+    {
+      "id": "guard",
+      "index": 2,
+      "kind": "character",
+      "subject": "A stern municipal guard, navy cap with simple gold badge, navy uniform with cream belt, dark trousers and boots, folded burgundy clipboard. Compact, readable authority silhouette, no real uniforms or insignia.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A stern municipal guard, navy cap with simple gold badge, navy uniform with cream belt, dark trousers and boots, folded burgundy clipboard. Compact, readable authority silhouette, no real uniforms or insignia. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures."
+      },
+      "jobId": "823596cc-57d9-4d0a-a664-4fc57a474597",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_823596cc-57d9-4d0a-a664-4fc57a474597.png",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A stern municipal guard, navy cap with simple gold badge, navy uniform with cream belt, dark trousers and boots, folded burgundy clipboard. Compact, readable authority silhouette, no real uniforms or insignia. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures.",
+        "aspect_ratio": "4:5",
+        "medias": [],
+        "width": 896,
+        "height": 1120,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      },
+      "sourceSha256": "93a4a138db2ca764b90827094e9296cde2f7f89f2bb435505e048168619e5f0d"
+    },
+    {
+      "id": "kid",
+      "index": 3,
+      "kind": "character",
+      "subject": "An energetic teenage campaign volunteer, tousled brown hair, burgundy hoodie with cream drawstrings, navy shorts, mustard trainers, a little stack of blank pamphlets. Youthful and readable, not a real person.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An energetic teenage campaign volunteer, tousled brown hair, burgundy hoodie with cream drawstrings, navy shorts, mustard trainers, a little stack of blank pamphlets. Youthful and readable, not a real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout, never add a fifth column or extra figures. ONLY the four column directions on each row; keep all 20 grid positions unchanged.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "61c684a9-ee7b-4130-81cf-6a3571ffcb14",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An energetic teenage campaign volunteer, tousled brown hair, burgundy hoodie with cream drawstrings, navy shorts, mustard trainers, a little stack of blank pamphlets. Youthful and readable, not a real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout, never add a fifth column or extra figures. ONLY the four column directions on each row; keep all 20 grid positions unchanged.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "3fd20cef-aab6-4a84-866e-c3a564448d41",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An energetic teenage campaign volunteer, tousled brown hair, burgundy hoodie with cream drawstrings, navy shorts, mustard trainers, a little stack of blank pamphlets. Youthful and readable, not a real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "jobId": "b8b450b7-f269-4a82-93fb-bca330cf6a30",
+          "status": "completed",
+          "visualReview": "rejected: extra columns and wrong direction in walking rows",
+          "params": {
+            "model": "nano_banana_2",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An energetic teenage campaign volunteer, tousled brown hair, burgundy hoodie with cream drawstrings, navy shorts, mustard trainers, a little stack of blank pamphlets. Youthful and readable, not a real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures.",
+            "medias": []
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202843_61c684a9-ee7b-4130-81cf-6a3571ffcb14.png",
+      "sourceSha256": "df82a892b9a4f0783a17b679e7ba2abf7d077095378531125e67a75e2dc53e27"
+    },
+    {
+      "id": "journalist",
+      "index": 4,
+      "kind": "character",
+      "subject": "A sharp local reporter, black chin-length hair, round dark glasses, cream trench coat over mint blouse, navy trousers, small navy microphone and burgundy notepad. Gender-neutral, no branded equipment.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A sharp local reporter, black chin-length hair, round dark glasses, cream trench coat over mint blouse, navy trousers, small navy microphone and burgundy notepad. Gender-neutral, no branded equipment. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "35976efb-04b8-47e9-aadc-66ef0ed240cb",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A sharp local reporter, black chin-length hair, round dark glasses, cream trench coat over mint blouse, navy trousers, small navy microphone and burgundy notepad. Gender-neutral, no branded equipment. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "17eca780-d2e8-47e6-9706-1b166eda3290",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A sharp local reporter, black chin-length hair, round dark glasses, cream trench coat over mint blouse, navy trousers, small navy microphone and burgundy notepad. Gender-neutral, no branded equipment. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_35976efb-04b8-47e9-aadc-66ef0ed240cb.png",
+      "processing": {
+        "skipCells": [
+          0,
+          3,
+          4,
+          7,
+          8,
+          11,
+          12,
+          15,
+          16,
+          19
+        ],
+        "selection": "South and West supplied by verified dedicated strips; original rows face the wrong way."
+      },
+      "sourceSha256": "b134f0b6bae51ab4ea3ccc29b5aff4d4b757f7373cd06b401e0ae0edf57217b8"
+    },
+    {
+      "id": "boss",
+      "index": 5,
+      "kind": "character",
+      "subject": "An imposing fictional party leader, swept auburn hair, cream moustache, navy suit, burgundy tie, mustard pocket square, brown briefcase. Smug theatrical expression, no real politician likeness.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An imposing fictional party leader, swept auburn hair, cream moustache, navy suit, burgundy tie, mustard pocket square, brown briefcase. Smug theatrical expression, no real politician likeness. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "beb3ea08-7682-4b6e-ad75-5c85014196bd",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An imposing fictional party leader, swept auburn hair, cream moustache, navy suit, burgundy tie, mustard pocket square, brown briefcase. Smug theatrical expression, no real politician likeness. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "08930a59-0af4-4242-a1d6-92fc95452e39",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An imposing fictional party leader, swept auburn hair, cream moustache, navy suit, burgundy tie, mustard pocket square, brown briefcase. Smug theatrical expression, no real politician likeness. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203243_beb3ea08-7682-4b6e-ad75-5c85014196bd.png",
+      "sourceSha256": "a3ef78366c8d92e0ebbb4470906488370dd3685efeb0d67c718dc561cda549ab"
+    },
+    {
+      "id": "granny",
+      "index": 6,
+      "kind": "character",
+      "subject": "An elderly Italian neighborhood matriarch, silver hair in neat bun, burgundy cardigan over cream blouse, long mint skirt, brown practical shoes, mustard shopping tote. Expressive kindly skeptical face.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An elderly Italian neighborhood matriarch, silver hair in neat bun, burgundy cardigan over cream blouse, long mint skirt, brown practical shoes, mustard shopping tote. Expressive kindly skeptical face. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "a94cee2b-d455-4790-942a-03d2dad962e3",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An elderly Italian neighborhood matriarch, silver hair in neat bun, burgundy cardigan over cream blouse, long mint skirt, brown practical shoes, mustard shopping tote. Expressive kindly skeptical face. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "df930d00-6446-4344-ad25-1d563e04db80",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An elderly Italian neighborhood matriarch, silver hair in neat bun, burgundy cardigan over cream blouse, long mint skirt, brown practical shoes, mustard shopping tote. Expressive kindly skeptical face. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203243_a94cee2b-d455-4790-942a-03d2dad962e3.png",
+      "sourceSha256": "77651e98db2b6b3e1c2e6605a897c6897963172b0c1abd781a907042e76011f2"
+    },
+    {
+      "id": "rival",
+      "index": 7,
+      "kind": "character",
+      "subject": "A confident young Italian campaign rival, red-brown short spiky hair, mint cropped jacket with burgundy lapel pin, cream shirt, navy trousers, gold trainers, small folded strategy notebook. No real person.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A confident young Italian campaign rival, red-brown short spiky hair, mint cropped jacket with burgundy lapel pin, cream shirt, navy trousers, gold trainers, small folded strategy notebook. No real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "d9804825-f714-48cf-b835-54d32ddb6983",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A confident young Italian campaign rival, red-brown short spiky hair, mint cropped jacket with burgundy lapel pin, cream shirt, navy trousers, gold trainers, small folded strategy notebook. No real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "278670d9-406c-44dd-9370-884ec3d3a67c",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A confident young Italian campaign rival, red-brown short spiky hair, mint cropped jacket with burgundy lapel pin, cream shirt, navy trousers, gold trainers, small folded strategy notebook. No real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203243_d9804825-f714-48cf-b835-54d32ddb6983.png",
+      "sourceSha256": "3aed65c1af904f9b58ec52630fb4a50e46a819bc35f48bca867b0676f7540f7a"
+    },
+    {
+      "id": "influencer",
+      "index": 8,
+      "kind": "character",
+      "subject": "A flamboyant campaign influencer with purple bob hair, oversized mustard hoodie, navy leggings, burgundy sneakers, small smartphone held low, mint belt bag. Clearly readable silhouette, no logos.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A flamboyant campaign influencer with purple bob hair, oversized mustard hoodie, navy leggings, burgundy sneakers, small smartphone held low, mint belt bag. Clearly readable silhouette, no logos. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "7f7fa032-0fc8-469b-93d6-ac44ecf6af1b",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A flamboyant campaign influencer with purple bob hair, oversized mustard hoodie, navy leggings, burgundy sneakers, small smartphone held low, mint belt bag. Clearly readable silhouette, no logos. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "bc1b4e58-ab99-43e1-976a-19562eee7cfb",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A flamboyant campaign influencer with purple bob hair, oversized mustard hoodie, navy leggings, burgundy sneakers, small smartphone held low, mint belt bag. Clearly readable silhouette, no logos. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_7f7fa032-0fc8-469b-93d6-ac44ecf6af1b.png",
+      "sourceSha256": "a594eb5c48dc8328882c72bae3467ae4c7fbdc8a19052804958e7ba3407ed89a"
+    },
+    {
+      "id": "aide",
+      "index": 9,
+      "kind": "character",
+      "subject": "A harried middle-aged political aide, receding dark hair, small rectangular glasses, cream shirt, burgundy tie and navy vest, dark trousers, mustard clipboard stuffed with blank paper. Always organized-looking, no real person.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A harried middle-aged political aide, receding dark hair, small rectangular glasses, cream shirt, burgundy tie and navy vest, dark trousers, mustard clipboard stuffed with blank paper. Always organized-looking, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "2e82a50e-a96b-4a7e-8c84-5d48bc36721f",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A harried middle-aged political aide, receding dark hair, small rectangular glasses, cream shirt, burgundy tie and navy vest, dark trousers, mustard clipboard stuffed with blank paper. Always organized-looking, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "684779e4-e3a0-4e1b-8a93-611151d10eb9",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A harried middle-aged political aide, receding dark hair, small rectangular glasses, cream shirt, burgundy tie and navy vest, dark trousers, mustard clipboard stuffed with blank paper. Always organized-looking, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_2e82a50e-a96b-4a7e-8c84-5d48bc36721f.png",
+      "sourceSha256": "548ee904c58d41c273863448cb700412ce68365fcabfea919ed5815415f4ca13"
+    },
+    {
+      "id": "barista",
+      "index": 10,
+      "kind": "character",
+      "subject": "An Italian bar proprietor, curled dark moustache and short dark hair, cream shirt sleeves, mint apron over navy trousers, burgundy towel at hip, brown shoes. Warm skeptical expression, no real person.",
+      "columns": 4,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An Italian bar proprietor, curled dark moustache and short dark hair, cream shirt sleeves, mint apron over navy trousers, burgundy towel at hip, brown shoes. Warm skeptical expression, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "medias": [
+          {
+            "role": "image",
+            "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+          }
+        ]
+      },
+      "jobId": "a617ae54-25bd-4554-8c1d-b6c2b97c0873",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An Italian bar proprietor, curled dark moustache and short dark hair, cream shirt sleeves, mint apron over navy trousers, burgundy towel at hip, brown shoes. Warm skeptical expression, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+        "aspect_ratio": "4:5",
+        "input_images": [
+          {
+            "id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+          }
+        ],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "1ac56824-b72c-40e7-956d-da04aa193a49",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An Italian bar proprietor, curled dark moustache and short dark hair, cream shirt sleeves, mint apron over navy trousers, burgundy towel at hip, brown shoes. Warm skeptical expression, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203246_a617ae54-25bd-4554-8c1d-b6c2b97c0873.png",
+      "sourceSha256": "6ee631f98232c8875d8a1faaa1cec55a57f5142a7cbca5349b216e01a5735997"
+    },
+    {
+      "id": "auto",
+      "index": 11,
+      "kind": "vehicle",
+      "subject": "A navy official compact sedan with cream cabin roof, gold trim and burgundy pennant on short antenna, whimsical election campaign car, no logo or text.",
+      "columns": 2,
+      "rows": 2,
+      "cellWidth": 68,
+      "cellHeight": 68,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [],
+        "aspect_ratio": "1:1",
+        "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A navy official compact sedan with cream cabin roof, gold trim and burgundy pennant on short antenna, whimsical election campaign car, no logo or text. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+      },
+      "jobId": "a059d384-986b-4441-aa93-cf4793f2707a",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A navy official compact sedan with cream cabin roof, gold trim and burgundy pennant on short antenna, whimsical election campaign car, no logo or text. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character.",
+        "aspect_ratio": "1:1",
+        "input_images": [],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "81812cb2-a7fd-41cd-b90a-8c1893771776",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ],
+            "aspect_ratio": "1:1",
+            "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A navy official compact sedan with cream cabin roof, gold trim and burgundy pennant on short antenna, whimsical election campaign car, no logo or text. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203245_a059d384-986b-4441-aa93-cf4793f2707a.png",
+      "processing": {
+        "grid": "uniform",
+        "stripGridLines": true
+      },
+      "sourceSha256": "1f95ce01e1d4999dc084a0a70c2b2d5fdce62504388dd8f0891b067e5dcede52"
+    },
+    {
+      "id": "ruspa",
+      "index": 12,
+      "kind": "vehicle",
+      "subject": "A mustard yellow compact bulldozer with burgundy cab, dark navy caterpillar tracks, chunky front scoop, cream work light, satirical little political roadworks vehicle.",
+      "columns": 2,
+      "rows": 2,
+      "cellWidth": 68,
+      "cellHeight": 68,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [],
+        "aspect_ratio": "1:1",
+        "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mustard yellow compact bulldozer with burgundy cab, dark navy caterpillar tracks, chunky front scoop, cream work light, satirical little political roadworks vehicle. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+      },
+      "jobId": "d07d0ad7-ad0c-465e-8c24-5d379faa6b87",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mustard yellow compact bulldozer with burgundy cab, dark navy caterpillar tracks, chunky front scoop, cream work light, satirical little political roadworks vehicle. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character.",
+        "aspect_ratio": "1:1",
+        "input_images": [],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "9bf6126f-1919-4f6e-82df-298e5aa573f1",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ],
+            "aspect_ratio": "1:1",
+            "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mustard yellow compact bulldozer with burgundy cab, dark navy caterpillar tracks, chunky front scoop, cream work light, satirical little political roadworks vehicle. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203245_d07d0ad7-ad0c-465e-8c24-5d379faa6b87.png",
+      "processing": {
+        "grid": "uniform",
+        "stripGridLines": true,
+        "skipCells": [
+          0
+        ]
+      },
+      "sourceSha256": "f3a915465b72c3a59ee816e02fe11b8c919a43592ce868e0b415bc060839cfbb"
+    },
+    {
+      "id": "monopattino",
+      "index": 13,
+      "kind": "vehicle",
+      "subject": "A mint electric kick scooter with a mustard handlebar, dark navy wheels and platform, burgundy battery housing, no human rider, clear two-wheeled silhouette.",
+      "columns": 2,
+      "rows": 2,
+      "cellWidth": 68,
+      "cellHeight": 68,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [],
+        "aspect_ratio": "1:1",
+        "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mint electric kick scooter with a mustard handlebar, dark navy wheels and platform, burgundy battery housing, no human rider, clear two-wheeled silhouette. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+      },
+      "jobId": "e1f34ab1-413c-4126-a5b9-d3d90deb30e1",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mint electric kick scooter with a mustard handlebar, dark navy wheels and platform, burgundy battery housing, no human rider, clear two-wheeled silhouette. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character.",
+        "aspect_ratio": "1:1",
+        "input_images": [],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "3800a279-e37c-4522-b3ba-7a0239115f16",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ],
+            "aspect_ratio": "1:1",
+            "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mint electric kick scooter with a mustard handlebar, dark navy wheels and platform, burgundy battery housing, no human rider, clear two-wheeled silhouette. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203246_e1f34ab1-413c-4126-a5b9-d3d90deb30e1.png",
+      "processing": {
+        "grid": "uniform",
+        "stripGridLines": true
+      },
+      "sourceSha256": "927aa3d58b646c2fd571dfed32f9e2a905d4f18f4c6303fe190868c027827ef6"
+    },
+    {
+      "id": "ferry",
+      "index": 14,
+      "kind": "single",
+      "path": "public/sprites/chars/ferry.png",
+      "width": 64,
+      "height": 48,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:3",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "One standalone small cartoon PASSENGER FERRY game sprite, strict OVERHEAD top-down view, bow points to TOP, stern at BOTTOM. SHORT WIDE hull with width almost equal to its length, boxy passenger ferry shape, NOT a narrow canoe or rowboat. Midnight navy hull, cream open deck with wide space for two standing passengers, burgundy small rear funnel and mustard rail. Compact 16-bit RPG pixel art with strong chunky pixel clusters. Pure WHITE background, whole vessel visible with 20 percent empty white margin on every side, no water or shadow, no people, no text, no logo, no numbers, no grid. Orthographic, no side walls, no perspective angle."
+      },
+      "jobId": "43cf303f-cfca-4fb1-9463-b32b379dfa7d",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "One standalone small cartoon PASSENGER FERRY game sprite, strict OVERHEAD top-down view, bow points to TOP, stern at BOTTOM. SHORT WIDE hull with width almost equal to its length, boxy passenger ferry shape, NOT a narrow canoe or rowboat. Midnight navy hull, cream open deck with wide space for two standing passengers, burgundy small rear funnel and mustard rail. Compact 16-bit RPG pixel art with strong chunky pixel clusters. Pure WHITE background, whole vessel visible with 20 percent empty white margin on every side, no water or shadow, no people, no text, no logo, no numbers, no grid. Orthographic, no side walls, no perspective angle.",
+        "aspect_ratio": "4:3",
+        "input_images": [],
+        "width": 2400,
+        "height": 1792,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "947e0419-cf9d-44c1-bff7-f42caad63b2d",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ],
+            "aspect_ratio": "4:3",
+            "prompt": "Production game sprite for POLITICMON, crisp chunky 16-bit top-down RPG pixel art in navy, cream, muted burgundy, antique gold. One small old Italian passenger ferry from overhead, pointed bow at top, broad stern at bottom, cream deck, navy hull, burgundy smokestack, mustard railing, small lifebuoy. Entire ship isolated on pure WHITE background with generous margin, no sea, waves, shadow, frame, lettering, names, logos, number, no people. Use reference only for pixel palette."
+          }
+        },
+        {
+          "jobId": "c253b2f7-a4e9-4b13-a84f-fa6a51fd8506",
+          "status": "completed",
+          "visualReview": "replaced: deck too narrow for two passengers",
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "4:3",
+            "prompt": "Production game sprite for POLITICMON, crisp chunky 16-bit top-down RPG pixel art in navy, cream, muted burgundy, antique gold. One small old Italian passenger ferry from overhead, pointed bow at top, broad stern at bottom, cream deck, navy hull, burgundy smokestack, mustard railing, small lifebuoy. Entire ship isolated on pure WHITE background with generous margin, no sea, waves, shadow, frame, lettering, names, logos, number, no people. Use reference only for pixel palette."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204501_43cf303f-cfca-4fb1-9463-b32b379dfa7d.png",
+      "sourceSha256": "66b242ec9271094a8eda771019b381b26f2ddf87c38d1ca902c1b210e49cab9e"
+    },
+    {
+      "id": "schettino",
+      "index": 15,
+      "kind": "single",
+      "path": "public/sprites/chars/schettino.png",
+      "width": 32,
+      "height": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "4:5",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "One SINGLE FULL-BODY pixel-art sprite of a fictional middle-aged pompous Italian ferry captain: dark wavy hair, modest navy captain cap with gold plain badge, cream uniform shirt, burgundy scarf, navy trousers, brown shoes. Facing SOUTH directly towards viewer. Small compact 16-bit top-down RPG proportions. Entire cap top AND shoes fully visible, ABSOLUTELY NO CROPPING. Character occupies only the CENTRAL 55 percent of the canvas width and height, with at least 20 percent PURE WHITE empty margin on all four sides. No shadow, no scenery, no grid, no writing. Crisp pixel clusters, midnight navy cream burgundy antique gold palette. No real insignia or realistic portrait."
+      },
+      "jobId": "1348ccfe-908f-45c3-9441-aa2cffdfea2c",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "One SINGLE FULL-BODY pixel-art sprite of a fictional middle-aged pompous Italian ferry captain: dark wavy hair, modest navy captain cap with gold plain badge, cream uniform shirt, burgundy scarf, navy trousers, brown shoes. Facing SOUTH directly towards viewer. Small compact 16-bit top-down RPG proportions. Entire cap top AND shoes fully visible, ABSOLUTELY NO CROPPING. Character occupies only the CENTRAL 55 percent of the canvas width and height, with at least 20 percent PURE WHITE empty margin on all four sides. No shadow, no scenery, no grid, no writing. Crisp pixel clusters, midnight navy cream burgundy antique gold palette. No real insignia or realistic portrait.",
+        "aspect_ratio": "4:5",
+        "input_images": [],
+        "width": 1856,
+        "height": 2304,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "previousAttempts": [
+        {
+          "jobId": "ebcb3e81-f77e-488c-b681-9cd23a8cf826",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ],
+            "aspect_ratio": "1:1",
+            "prompt": "Production NPC sprite for POLITICMON, same chunky 16-bit top-down RPG proportions and pixel-art palette as reference. One fictional hapless ferry captain, navy cap with simple gold insignia, cream uniform with navy cuffs, burgundy neck scarf, dark trousers, brown shoes, curly dark hair, worried moustached face, hands behind his back. Full body standing facing SOUTH toward viewer, no real person likeness. Pure WHITE background with ample padding, no ground shadow, water, lettering, name, logo or extra objects."
+          }
+        },
+        {
+          "jobId": "23b8b72d-e6ca-47ee-affb-1f66eebf4c8e",
+          "status": "completed",
+          "visualReview": "rejected: cap cropped at canvas top",
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "1:1",
+            "prompt": "Production NPC sprite for POLITICMON, same chunky 16-bit top-down RPG proportions and pixel-art palette as reference. One fictional hapless ferry captain, navy cap with simple gold insignia, cream uniform with navy cuffs, burgundy neck scarf, dark trousers, brown shoes, curly dark hair, worried moustached face, hands behind his back. Full body standing facing SOUTH toward viewer, no real person likeness. Pure WHITE background with ample padding, no ground shadow, water, lettering, name, logo or extra objects."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204502_1348ccfe-908f-45c3-9441-aa2cffdfea2c.png",
+      "sourceSha256": "b051881af0a78f1144405c2e932c3c47d73b2c1b4145cfa1b766456ec6c0b68e"
+    },
+    {
+      "id": "journalist-south",
+      "index": 16,
+      "kind": "character",
+      "role": "journalist",
+      "direction": "south",
+      "columns": 3,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "9:16",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "35976efb-04b8-47e9-aadc-66ef0ed240cb"
+          }
+        ],
+        "prompt": "Game sprite animation strip, strict ONE COLUMN by FIVE ROWS, five full body figures on pure WHITE with generous white gaps. The reference's local journalist: black chin-length bob, round navy spectacles, cream trenchcoat, mint blouse, navy trousers, burgundy notepad and small microphone. Every single pose faces SOUTH DIRECTLY TOWARD THE VIEWER, perfectly symmetrical front face, both eyes visible, never side profile or three-quarter. Row1 idle feet together; row2 left leg stepping forward; row3 legs passing; row4 right leg stepping forward; row5 passing with opposite arm. Same clothes, identity, size, baseline. Handcrafted chunky 16-bit pixel art, midnight navy outlines, cream burgundy mint mustard palette. Exactly five sprites, no text, no frames, no labels, no ground shadow."
+      },
+      "jobId": "8bf29388-ccbc-455c-b7bb-1477fce39a15",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204022_8bf29388-ccbc-455c-b7bb-1477fce39a15.png",
+      "generatedParams": {
+        "prompt": "Game sprite animation strip, strict ONE COLUMN by FIVE ROWS, five full body figures on pure WHITE with generous white gaps. The reference's local journalist: black chin-length bob, round navy spectacles, cream trenchcoat, mint blouse, navy trousers, burgundy notepad and small microphone. Every single pose faces SOUTH DIRECTLY TOWARD THE VIEWER, perfectly symmetrical front face, both eyes visible, never side profile or three-quarter. Row1 idle feet together; row2 left leg stepping forward; row3 legs passing; row4 right leg stepping forward; row5 passing with opposite arm. Same clothes, identity, size, baseline. Handcrafted chunky 16-bit pixel art, midnight navy outlines, cream burgundy mint mustard palette. Exactly five sprites, no text, no frames, no labels, no ground shadow.",
+        "aspect_ratio": "9:16",
+        "input_images": [
+          {
+            "id": "35976efb-04b8-47e9-aadc-66ef0ed240cb",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_35976efb-04b8-47e9-aadc-66ef0ed240cb.png"
+          }
+        ],
+        "width": 1536,
+        "height": 2752,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "processing": {
+        "skipCells": [
+          0,
+          2,
+          3,
+          5,
+          6,
+          8,
+          9,
+          11,
+          12,
+          14
+        ],
+        "selection": "five South-facing poses in center column of generated 3\u00d75 sheet; outer columns excluded"
+      },
+      "sourceSha256": "a0567d4b17e98f02d5aae40bb6a44c796d0a6f3fe44b0be853509bcb68ade440"
+    },
+    {
+      "id": "journalist-west",
+      "index": 17,
+      "kind": "character",
+      "role": "journalist",
+      "direction": "west",
+      "columns": 1,
+      "rows": 5,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "9:16",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "35976efb-04b8-47e9-aadc-66ef0ed240cb"
+          }
+        ],
+        "prompt": "Game sprite animation strip, strict ONE COLUMN by FIVE ROWS, five full body figures on pure WHITE with generous white gaps. The reference's local journalist: black chin-length bob, round navy spectacles, cream trenchcoat, mint blouse, navy trousers, burgundy notepad and small microphone. Every single pose faces WEST TO THE LEFT EDGE OF THE IMAGE: nose, chin, toes and microphone point LEFT. Only LEFT profile, never right. Row1 idle feet together; row2 left leg stepping forward; row3 legs passing; row4 right leg stepping forward; row5 passing with opposite arm. Same clothes, identity, size, baseline. Handcrafted chunky 16-bit pixel art, midnight navy outlines, cream burgundy mint mustard palette. Exactly five sprites, no text, no frames, no labels, no ground shadow."
+      },
+      "jobId": "3a1fef52-9f5c-4e7e-bbf5-e3e56741c8b8",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204022_3a1fef52-9f5c-4e7e-bbf5-e3e56741c8b8.png",
+      "generatedParams": {
+        "prompt": "Game sprite animation strip, strict ONE COLUMN by FIVE ROWS, five full body figures on pure WHITE with generous white gaps. The reference's local journalist: black chin-length bob, round navy spectacles, cream trenchcoat, mint blouse, navy trousers, burgundy notepad and small microphone. Every single pose faces WEST TO THE LEFT EDGE OF THE IMAGE: nose, chin, toes and microphone point LEFT. Only LEFT profile, never right. Row1 idle feet together; row2 left leg stepping forward; row3 legs passing; row4 right leg stepping forward; row5 passing with opposite arm. Same clothes, identity, size, baseline. Handcrafted chunky 16-bit pixel art, midnight navy outlines, cream burgundy mint mustard palette. Exactly five sprites, no text, no frames, no labels, no ground shadow.",
+        "aspect_ratio": "9:16",
+        "input_images": [
+          {
+            "id": "35976efb-04b8-47e9-aadc-66ef0ed240cb",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_35976efb-04b8-47e9-aadc-66ef0ed240cb.png"
+          }
+        ],
+        "width": 1536,
+        "height": 2752,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "2c2c7eca7f13ec996404b8e3554418420c2aed71e6f42652eb11c915289e892c"
+    },
+    {
+      "id": "ruspa-south",
+      "index": 18,
+      "kind": "single",
+      "path": "public/sprites/chars/ruspa_south.png",
+      "width": 68,
+      "height": 68,
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "medias": [
+          {
+            "role": "image",
+            "value": "d07d0ad7-ad0c-465e-8c24-5d379faa6b87"
+          }
+        ],
+        "prompt": "One standalone game sprite of the reference's small mustard construction BULLDOZER, burgundy cab and dark navy caterpillar tracks. View SOUTH: STRICT SYMMETRICAL FRONT with equal tracks left and right, wide steel blade horizontal across BOTTOM facing the viewer, cab behind it at TOP. A slight overhead angle, no side wall, no diagonal/isometric/three-quarter angle. Do NOT show side of the machine. Entire vehicle visible centered on pure white background with large empty margin, NO shadow, no grid lines, no writing or logos. Same handcrafted chunky 16-bit pixel art and navy cream mustard burgundy palette."
+      },
+      "jobId": "91a71603-f849-4b85-b45a-ee724f461413",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204022_91a71603-f849-4b85-b45a-ee724f461413.png",
+      "generatedParams": {
+        "prompt": "One standalone game sprite of the reference's small mustard construction BULLDOZER, burgundy cab and dark navy caterpillar tracks. View SOUTH: STRICT SYMMETRICAL FRONT with equal tracks left and right, wide steel blade horizontal across BOTTOM facing the viewer, cab behind it at TOP. A slight overhead angle, no side wall, no diagonal/isometric/three-quarter angle. Do NOT show side of the machine. Entire vehicle visible centered on pure white background with large empty margin, NO shadow, no grid lines, no writing or logos. Same handcrafted chunky 16-bit pixel art and navy cream mustard burgundy palette.",
+        "aspect_ratio": "1:1",
+        "input_images": [
+          {
+            "id": "d07d0ad7-ad0c-465e-8c24-5d379faa6b87",
+            "type": "image_job",
+            "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203245_d07d0ad7-ad0c-465e-8c24-5d379faa6b87.png"
+          }
+        ],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "59a4636cb3644625e23c7191828dd5f7bc7121fcf17cf12bcca994f20d871351"
+    }
+  ]
+}

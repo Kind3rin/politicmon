@@ -1,5 +1,16 @@
 # Politicmon: risorse Higgsfield
 
+Settimo blocco: **295 PNG del mondo e del cantiere**, inclusi 220 frame di player
+e NPC, 12 viste di mezzi, traghetto e capitano, 60 terreni/edifici/oggetti e una
+scena civica. **68 crediti**, saldo **757,97 → 689,97**, cumulativo **196**.
+65 richieste: 38 completate e 27 fallite senza addebito; prove completate ma
+scartate incluse nel costo. GPT Image 2.5, Nano Banana 2 e Nano Banana Pro;
+quest'ultimo è registrato dal provider come `nano_banana_2`. Prompt, job,
+selezione delle celle e rigenerazioni nei manifest `higgsfield-world-*`.
+Integrazione, fonti satiriche e limiti delle prove: [MONDO-CANTIERI.md](MONDO-CANTIERI.md).
+
+I blocchi precedenti sono conservati sotto come cronologia della produzione.
+
 Blocco completato il 1 ottobre 2026: sette sfondi di battaglia e un nuovo
 sfondo titolo. Modello GPT Image 2.5, qualità high, risoluzione sorgente 1k.
 Saldo osservato prima/dopo: 885,97 → 873,97 crediti; costo del blocco: **12**.

@@ -9,6 +9,7 @@ import { BossBriefingScene } from "../../scenes/BossBriefingScene";
 import { trainerStyle } from "../battle/trainerStyle";
 import { changeMorale } from "../morale";
 import { civicNpcReply } from "../civicChoices";
+import { civicBridgeTile } from "./civicBridge";
 
 // Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
 function drawBallot(screen: Screen, dx: number, dy: number): void {
@@ -588,7 +589,7 @@ export class WorldScene implements Scene {
     if (ch === "T" && isBulldozed(this.state, this.map.id, x, y)) {
       return this.map.outdoor ? "." : "p";
     }
-    return ch;
+    return civicBridgeTile(this.state, this.map.id, x, y, ch);
   }
 
   // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
@@ -2436,7 +2437,7 @@ export class WorldScene implements Scene {
     const cx = playerPx - camX + TILE / 2;
     const cy = playerPy - camY + TILE / 2 - 18; // sopra la testa
     // Pulsazione: la freccia "spinge" verso l'obiettivo.
-    const pulse = 1 + Math.sin(this.time * 6) * 0.75;
+    const pulse = this.state.reduceEffects ? 1 : 1 + Math.sin(this.time * 6) * 0.75;
     const r = 9 + pulse;
     const tipX = cx + Math.cos(ang) * r;
     const tipY = cy + Math.sin(ang) * r;
@@ -3185,7 +3186,7 @@ export class WorldScene implements Scene {
     camX = Math.max(0, Math.min(mapW - VIEW_W, camX));
     camY = Math.max(0, Math.min(Math.max(0, mapH - VIEW_H), camY));
     // Scossone (RUSPA): sposta la camera di qualche pixel, dà peso all'impatto.
-    if (this.shake > 0) {
+    if (this.shake > 0 && !this.state.reduceEffects) {
       const amp = this.shake * 4;
       camX += Math.round((Math.random() - 0.5) * amp);
       camY += Math.round((Math.random() - 0.5) * amp);
@@ -3377,7 +3378,7 @@ export class WorldScene implements Scene {
         // Centro X: metà tile se singola, tile intero se porta doppia.
         const cxPx = w.x * TILE - camX + (doubleWide ? TILE : TILE / 2);
         const ey = w.y * TILE - camY;
-        const blink = Math.floor(this.time * 2) % 2 === 0;
+        const blink = this.state.reduceEffects || Math.floor(this.time * 2) % 2 === 0;
         const label = "USCITA";
         const lw = label.length * 6 + 4;
         screen.rect(cxPx - lw / 2, ey - 9, lw, 8, "rgba(16,20,31,0.85)");
@@ -3404,6 +3405,7 @@ export class WorldScene implements Scene {
         camX,
         camY,
         time: this.time,
+        reduceEffects: this.state.reduceEffects,
         exclaim,
         rematchReady,
         legendaryReady,
@@ -3459,7 +3461,7 @@ export class WorldScene implements Scene {
             screen.text(e, sx + 10, sy - 19, INK);
           } else if (adjacent) {
             // Doppia freccia "!!" lampeggiante: premi A per interagire.
-            const blink = Math.floor(this.time * 2) % 2 === 0;
+            const blink = this.state.reduceEffects || Math.floor(this.time * 2) % 2 === 0;
             if (blink) {
               screen.rect(sx + 3, sy - 22, 12, 10, "rgba(24,60,120,0.9)");
               screen.text("!!", sx + 5, sy - 20, "#9cd8e8");
@@ -3504,7 +3506,7 @@ export class WorldScene implements Scene {
       if (vehicle === "traghetto") {
         // TRAGHETTO: scafo che ondeggia, al timone il CAPITANO SCHETTINO (satira),
         // e il giocatore a bordo. Lo scafo si vede su acqua e a terra (è il mezzo).
-        const bob = this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
+        const bob = this.state.reduceEffects ? 0 : this.moving ? (frame === 0 ? 0 : 1) : (Math.floor(this.time * 2) % 2);
         const ferryImg = ferryImage();
         if (ferryImg) {
           const fb = screen.imageBounds(ferryImg);
@@ -3521,7 +3523,7 @@ export class WorldScene implements Scene {
       } else if (vehicle) {
         // Sobbalzo del mezzo in movimento (vibra un pelo, fa "motore").
         const motor = vehicle === "ruspa" || vehicle === "auto";
-        const jitter = this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
+        const jitter = !this.state.reduceEffects && this.moving && motor ? (frame === 0 ? 0 : 1) : 0;
         const vehImg = vehicleImage(vehicle, pos.facing);
         if (vehImg) {
           // Mezzi CHIUSI (auto, ruspa): vista dall'alto, il player è DENTRO →
@@ -3571,7 +3573,7 @@ export class WorldScene implements Scene {
       if (wx < -TILE || wx > VIEW_W || wy < -TILE || wy > VIEW_H) {
         continue;
       }
-      const pulse = Math.floor(this.time * 3) % 2 === 0;
+      const pulse = this.state.reduceEffects || Math.floor(this.time * 3) % 2 === 0;
       const color = pulse ? "#fff0a0" : "#e8c84a";
       const labelW = Math.min(VIEW_W - 4, warp.markerLabel.length * 6 + 8);
       const labelX = Math.max(2, Math.min(VIEW_W - labelW - 2, Math.round(wx + TILE / 2 - labelW / 2)));
@@ -3586,7 +3588,7 @@ export class WorldScene implements Scene {
     }
 
     // Scintille della cura passiva (Min. Salute): in coordinate-mondo.
-    for (const s of this.stepSparks) {
+    for (const s of this.state.reduceEffects ? [] : this.stepSparks) {
       const a = 1 - s.life / s.max;
       if (a <= 0) {
         continue;
@@ -3596,7 +3598,7 @@ export class WorldScene implements Scene {
     }
 
     // Fruscio dell'erba alta.
-    for (const rustle of this.rustles) {
+    for (const rustle of this.state.reduceEffects ? [] : this.rustles) {
       const rx = rustle.x * TILE - camX;
       const ry = rustle.y * TILE - camY;
       const phase = rustle.t > 0.2 ? 0 : 1;
@@ -3763,7 +3765,7 @@ export class WorldScene implements Scene {
 
     this.msg.draw(screen);
 
-    if (this.encounterFlash > 0) {
+    if (this.encounterFlash > 0 && !this.state.reduceEffects) {
       const phase = Math.floor(this.encounterFlash * 12) % 2;
       if (phase === 0) {
         screen.dim(0.85);
@@ -3872,7 +3874,7 @@ export class WorldScene implements Scene {
       return;
     }
     // Flash schermo all'apparizione.
-    if (this.bannerFlash > 0) {
+    if (this.bannerFlash > 0 && !this.state.reduceEffects) {
       const ctx = screen.ctx;
       ctx.fillStyle = `rgba(255,240,180,${0.5 * (this.bannerFlash / 0.4)})`;
       ctx.fillRect(0, 0, VIEW_W, VIEW_H);

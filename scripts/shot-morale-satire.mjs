@@ -35,7 +35,7 @@ try {
     const { weeklySchedule } = await import("/src/game/weeklyCampaign.ts");
     const { calculateElectionResult, newElectionState } = await import("/src/game/election.ts");
     const { preloadSprites, waitForSprites, spriteStatus } = await import("/src/engine/assets.ts");
-    const entries = Object.fromEntries(["sportello", "studio", "molo", "verbale"].map((art) => [`civic:${art}`, `ui/civic/${art}.png`]));
+    const entries = Object.fromEntries([...new Set(Object.values(CIVIC_EVENTS).map(event => event.art))].map((art) => [`civic:${art}`, `ui/civic/${art}.png`]));
     preloadSprites(entries); await waitForSprites(Object.keys(entries), 5000);
     const screen = new Screen(document.createElement("canvas"));
     const input = new Input(); let pressed = "";

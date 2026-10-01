@@ -64,6 +64,8 @@
     "shot:switch-guide": "node scripts/shot-switch-guide.mjs",
     "shot:evolution-dossier": "node scripts/shot-evolution-dossier.mjs",
     "shot:supplies": "node scripts/shot-supplies.mjs",
+    "shot:world-redesign": "node scripts/shot-world-redesign.mjs",
+    "check:civic-bridge": "node scripts/check-civic-bridge.mjs",
     "check:duel": "node scripts/check-duel.mjs",
     "smoke:campaign": "node scripts/smoke-campaign.mjs",
     "smoke:pwa:release": "node scripts/smoke-pwa-release.mjs",

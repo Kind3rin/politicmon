@@ -1,0 +1,1197 @@
+{
+  "version": 1,
+  "credits": {
+    "before": 757.97,
+    "after": 689.97,
+    "roundSpent": 68
+  },
+  "assets": [
+    {
+      "id": "building-0",
+      "index": 0,
+      "kind": "building",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "build_house_front_red",
+          "path": "public/sprites/tiles/build_house_front_red.png",
+          "width": 64,
+          "height": 48,
+          "subject": "small burgundy-roof townhouse, cream plaster, navy shutters"
+        },
+        {
+          "id": "build_house_front_blue",
+          "path": "public/sprites/tiles/build_house_front_blue.png",
+          "width": 64,
+          "height": 48,
+          "subject": "small navy-roof townhouse, cream plaster, mint shutters"
+        },
+        {
+          "id": "build_house_front_green",
+          "path": "public/sprites/tiles/build_house_front_green.png",
+          "width": 64,
+          "height": 48,
+          "subject": "small forest mint-roof townhouse, cream plaster, burgundy shutters"
+        },
+        {
+          "id": "build_house_front_brick",
+          "path": "public/sprites/tiles/build_house_front_brick.png",
+          "width": 64,
+          "height": 48,
+          "subject": "small warm brick townhouse with navy roof and gold window frames"
+        },
+        {
+          "id": "build_circolo_front",
+          "path": "public/sprites/tiles/build_circolo_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door"
+        },
+        {
+          "id": "build_apartment_front",
+          "path": "public/sprites/tiles/build_apartment_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "compact cream civic apartment office with navy roof and mustard balcony"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small burgundy-roof townhouse, cream plaster, navy shutters; TOP CENTER: small navy-roof townhouse, cream plaster, mint shutters; TOP RIGHT: small forest mint-roof townhouse, cream plaster, burgundy shutters; BOTTOM LEFT: small warm brick townhouse with navy roof and gold window frames; BOTTOM CENTER: neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door; BOTTOM RIGHT: compact cream civic apartment office with navy roof and mustard balcony. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "66ecabeb-d6d8-4a11-9ef6-5962ec7d8d8c",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small burgundy-roof townhouse, cream plaster, navy shutters; TOP CENTER: small navy-roof townhouse, cream plaster, mint shutters; TOP RIGHT: small forest mint-roof townhouse, cream plaster, burgundy shutters; BOTTOM LEFT: small warm brick townhouse with navy roof and gold window frames; BOTTOM CENTER: neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door; BOTTOM RIGHT: compact cream civic apartment office with navy roof and mustard balcony. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "99e81adf-68b9-435f-a832-66aadf43b044",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small burgundy-roof townhouse, cream plaster, navy shutters; TOP CENTER: small navy-roof townhouse, cream plaster, mint shutters; TOP RIGHT: small forest mint-roof townhouse, cream plaster, burgundy shutters; BOTTOM LEFT: small warm brick townhouse with navy roof and gold window frames; BOTTOM CENTER: neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door; BOTTOM RIGHT: compact cream civic apartment office with navy roof and mustard balcony. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_66ecabeb-d6d8-4a11-9ef6-5962ec7d8d8c.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "c136eb8fd716e77069549658ecd895406bd7b243479ed055b9786a50d42a95cc"
+    },
+    {
+      "id": "building-1",
+      "index": 1,
+      "kind": "building",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "build_kiosk_front",
+          "path": "public/sprites/tiles/build_kiosk_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "navy newspaper kiosk with cream folded blank papers and mint roof"
+        },
+        {
+          "id": "build_lab_front",
+          "path": "public/sprites/tiles/build_lab_front.png",
+          "width": 64,
+          "height": 48,
+          "subject": "eccentric political research laboratory, navy roof, cream wall, mint gauge emblem"
+        },
+        {
+          "id": "build_bar_front",
+          "path": "public/sprites/tiles/build_bar_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "neighborhood bar, mint awning and tiny mustard coffee-cup emblem"
+        },
+        {
+          "id": "build_gym_front",
+          "path": "public/sprites/tiles/build_gym_front.png",
+          "width": 96,
+          "height": 48,
+          "subject": "political debate arena, burgundy roof, cream stone, gold laurel emblem"
+        },
+        {
+          "id": "build_casino_front",
+          "path": "public/sprites/tiles/build_casino_front.png",
+          "width": 96,
+          "height": 48,
+          "subject": "decadent political casino, dark burgundy facade, navy roof, antique gold chip emblem"
+        },
+        {
+          "id": "build_palace",
+          "path": "public/sprites/tiles/build_palace.png",
+          "width": 160,
+          "height": 64,
+          "subject": "broad grand cream institutional palace with navy mansard roof, symmetrical closed gold windows, mint and burgundy banners"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: navy newspaper kiosk with cream folded blank papers and mint roof; TOP CENTER: eccentric political research laboratory, navy roof, cream wall, mint gauge emblem; TOP RIGHT: neighborhood bar, mint awning and tiny mustard coffee-cup emblem; BOTTOM LEFT: political debate arena, burgundy roof, cream stone, gold laurel emblem; BOTTOM CENTER: decadent political casino, dark burgundy facade, navy roof, antique gold chip emblem; BOTTOM RIGHT: broad grand cream institutional palace with navy mansard roof, symmetrical closed gold windows, mint and burgundy banners. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "920a118e-be95-4ac8-ab6c-0ff4f338c41c",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: navy newspaper kiosk with cream folded blank papers and mint roof; TOP CENTER: eccentric political research laboratory, navy roof, cream wall, mint gauge emblem; TOP RIGHT: neighborhood bar, mint awning and tiny mustard coffee-cup emblem; BOTTOM LEFT: political debate arena, burgundy roof, cream stone, gold laurel emblem; BOTTOM CENTER: decadent political casino, dark burgundy facade, navy roof, antique gold chip emblem; BOTTOM RIGHT: broad grand cream institutional palace with navy mansard roof, symmetrical closed gold windows, mint and burgundy banners. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "7f03864c-1bd4-4cd1-9d2f-873394a9f4dd",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: navy newspaper kiosk with cream folded blank papers and mint roof; TOP CENTER: eccentric political research laboratory, navy roof, cream wall, mint gauge emblem; TOP RIGHT: neighborhood bar, mint awning and tiny mustard coffee-cup emblem; BOTTOM LEFT: political debate arena, burgundy roof, cream stone, gold laurel emblem; BOTTOM CENTER: decadent political casino, dark burgundy facade, navy roof, antique gold chip emblem; BOTTOM RIGHT: broad grand cream institutional palace with navy mansard roof, symmetrical closed gold windows, mint and burgundy banners. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_920a118e-be95-4ac8-ab6c-0ff4f338c41c.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "2e99de015598a98dc15f70ea91d0023263ec5417b4ef38294d362d6fb6239608"
+    },
+    {
+      "id": "building-2",
+      "index": 2,
+      "kind": "building",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "build_studio_front",
+          "path": "public/sprites/tiles/build_studio_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "campaign television studio, navy facade, burgundy awning and small golden camera emblem"
+        },
+        {
+          "id": "build_bistro_front",
+          "path": "public/sprites/tiles/build_bistro_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "elegant political cafe-bistro with cream wall, burgundy shutters and mint awning"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 2 equal rectangular cells in a STRICT 2 COLUMN by 1 ROW grid, no labels or separators. LEFT: campaign television studio, navy facade, burgundy awning and small golden camera emblem; RIGHT: elegant political cafe-bistro with cream wall, burgundy shutters and mint awning. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "0c0f6638-1469-480d-87aa-cc61f14be486",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 2 equal rectangular cells in a STRICT 2 COLUMN by 1 ROW grid, no labels or separators. LEFT: campaign television studio, navy facade, burgundy awning and small golden camera emblem; RIGHT: elegant political cafe-bistro with cream wall, burgundy shutters and mint awning. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1376,
+        "height": 768,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "7bd64121-43cb-4472-b6bb-8ac490a278f5",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "2:1",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 2 equal rectangular cells in a STRICT 2 COLUMN by 1 ROW grid, no labels or separators. LEFT: campaign television studio, navy facade, burgundy awning and small golden camera emblem; RIGHT: elegant political cafe-bistro with cream wall, burgundy shutters and mint awning. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_0c0f6638-1469-480d-87aa-cc61f14be486.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "selection": "top row; lower row is a repeated illustration",
+        "stripGridLines": true
+      },
+      "sourceSha256": "0717eb303a44820053e8f8952bf4d36817bb7a4e5f6d10498bd8b1444b019ff4"
+    },
+    {
+      "id": "prop-0",
+      "index": 3,
+      "kind": "prop",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "tree",
+          "path": "public/sprites/tiles/tree.png",
+          "width": 32,
+          "height": 40,
+          "subject": "round-canopy mint and dark forest tree with a short brown trunk"
+        },
+        {
+          "id": "sign",
+          "path": "public/sprites/tiles/sign.png",
+          "width": 32,
+          "height": 32,
+          "subject": "cream blank notice board on two dark wooden posts with mustard border"
+        },
+        {
+          "id": "fence",
+          "path": "public/sprites/tiles/fence.png",
+          "width": 32,
+          "height": 32,
+          "subject": "low cream-and-navy wooden fence segment"
+        },
+        {
+          "id": "obj_bed",
+          "path": "public/sprites/tiles/obj_bed.png",
+          "width": 32,
+          "height": 32,
+          "subject": "cream wooden bed with burgundy blanket and mint pillow"
+        },
+        {
+          "id": "obj_table",
+          "path": "public/sprites/tiles/obj_table.png",
+          "width": 32,
+          "height": 32,
+          "subject": "round cream wooden table with mustard mug and blank navy folder"
+        },
+        {
+          "id": "obj_shelf",
+          "path": "public/sprites/tiles/obj_shelf.png",
+          "width": 32,
+          "height": 32,
+          "subject": "navy bookcase of blank burgundy, cream and mint folders"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: round-canopy mint and dark forest tree with a short brown trunk; TOP CENTER: cream blank notice board on two dark wooden posts with mustard border; TOP RIGHT: low cream-and-navy wooden fence segment; BOTTOM LEFT: cream wooden bed with burgundy blanket and mint pillow; BOTTOM CENTER: round cream wooden table with mustard mug and blank navy folder; BOTTOM RIGHT: navy bookcase of blank burgundy, cream and mint folders. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "ffb79422-3a6b-4a1e-83bb-308524b84d56",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: round-canopy mint and dark forest tree with a short brown trunk; TOP CENTER: cream blank notice board on two dark wooden posts with mustard border; TOP RIGHT: low cream-and-navy wooden fence segment; BOTTOM LEFT: cream wooden bed with burgundy blanket and mint pillow; BOTTOM CENTER: round cream wooden table with mustard mug and blank navy folder; BOTTOM RIGHT: navy bookcase of blank burgundy, cream and mint folders. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "4845fe33-172b-4dda-b891-1a8df8ac085c",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: round-canopy mint and dark forest tree with a short brown trunk; TOP CENTER: cream blank notice board on two dark wooden posts with mustard border; TOP RIGHT: low cream-and-navy wooden fence segment; BOTTOM LEFT: cream wooden bed with burgundy blanket and mint pillow; BOTTOM CENTER: round cream wooden table with mustard mug and blank navy folder; BOTTOM RIGHT: navy bookcase of blank burgundy, cream and mint folders. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_ffb79422-3a6b-4a1e-83bb-308524b84d56.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "71c65e9df2d1c6d972f012176f70c1e6638551c12473e4f56318c75b9c67f242"
+    },
+    {
+      "id": "prop-1",
+      "index": 4,
+      "kind": "prop",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "obj_plant",
+          "path": "public/sprites/tiles/obj_plant.png",
+          "width": 32,
+          "height": 32,
+          "subject": "bushy mint indoor plant in burgundy clay pot"
+        },
+        {
+          "id": "obj_counter",
+          "path": "public/sprites/tiles/obj_counter.png",
+          "width": 32,
+          "height": 32,
+          "subject": "cream shop counter with navy front and brass cash till"
+        },
+        {
+          "id": "obj_machine",
+          "path": "public/sprites/tiles/obj_machine.png",
+          "width": 32,
+          "height": 32,
+          "subject": "satirical polling machine, navy cabinet, mint gauge, mustard lever"
+        },
+        {
+          "id": "obj_tallgrass",
+          "path": "public/sprites/tiles/obj_tallgrass.png",
+          "width": 32,
+          "height": 32,
+          "subject": "three dense tall forest-mint grass tufts, only blades, no earth base"
+        },
+        {
+          "id": "obj_flowers",
+          "path": "public/sprites/tiles/obj_flowers.png",
+          "width": 32,
+          "height": 32,
+          "subject": "a loose scatter of small burgundy and cream flowers with mint leaves, no earth base"
+        },
+        {
+          "id": "obj_girder",
+          "path": "public/sprites/tiles/obj_girder.png",
+          "width": 32,
+          "height": 32,
+          "subject": "navy and brass bridge girder, vertical steel support"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: bushy mint indoor plant in burgundy clay pot; TOP CENTER: cream shop counter with navy front and brass cash till; TOP RIGHT: satirical polling machine, navy cabinet, mint gauge, mustard lever; BOTTOM LEFT: three dense tall forest-mint grass tufts, only blades, no earth base; BOTTOM CENTER: a loose scatter of small burgundy and cream flowers with mint leaves, no earth base; BOTTOM RIGHT: navy and brass bridge girder, vertical steel support. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "6e088f83-ec9d-40e2-8ceb-cda85dfdfa8d",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: bushy mint indoor plant in burgundy clay pot; TOP CENTER: cream shop counter with navy front and brass cash till; TOP RIGHT: satirical polling machine, navy cabinet, mint gauge, mustard lever; BOTTOM LEFT: three dense tall forest-mint grass tufts, only blades, no earth base; BOTTOM CENTER: a loose scatter of small burgundy and cream flowers with mint leaves, no earth base; BOTTOM RIGHT: navy and brass bridge girder, vertical steel support. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "f1fbd95b-225f-4759-86c4-3deb166968ef",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: bushy mint indoor plant in burgundy clay pot; TOP CENTER: cream shop counter with navy front and brass cash till; TOP RIGHT: satirical polling machine, navy cabinet, mint gauge, mustard lever; BOTTOM LEFT: three dense tall forest-mint grass tufts, only blades, no earth base; BOTTOM CENTER: a loose scatter of small burgundy and cream flowers with mint leaves, no earth base; BOTTOM RIGHT: navy and brass bridge girder, vertical steel support. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_6e088f83-ec9d-40e2-8ceb-cda85dfdfa8d.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "13bd0c608719386685b850b67900c198ace2b2f2fde00cb749772db4da98d8f7"
+    },
+    {
+      "id": "prop-2",
+      "index": 5,
+      "kind": "prop",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "obj_crane",
+          "path": "public/sprites/tiles/obj_crane.png",
+          "width": 32,
+          "height": 32,
+          "subject": "compact mustard construction crane with navy legs and burgundy cab"
+        },
+        {
+          "id": "boat_moored",
+          "path": "public/sprites/tiles/boat_moored.png",
+          "width": 32,
+          "height": 32,
+          "subject": "small moored brown wooden rowboat with cream interior and navy rim, no water"
+        },
+        {
+          "id": "obj_golddoor",
+          "path": "public/sprites/tiles/obj_golddoor.png",
+          "width": 32,
+          "height": 32,
+          "subject": "ornate gold institutional doorway with dark navy inner opening"
+        },
+        {
+          "id": "obj_fountain",
+          "path": "public/sprites/tiles/obj_fountain.png",
+          "width": 28,
+          "height": 22,
+          "subject": "small round cream civic fountain with mint water and gold rim"
+        },
+        {
+          "id": "obj_statue",
+          "path": "public/sprites/tiles/obj_statue.png",
+          "width": 16,
+          "height": 29,
+          "subject": "small pale gold bureaucrat statue holding blank papers on navy plinth"
+        },
+        {
+          "id": "obj_bench",
+          "path": "public/sprites/tiles/obj_bench.png",
+          "width": 24,
+          "height": 19,
+          "subject": "cream neighborhood bench with navy legs"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: compact mustard construction crane with navy legs and burgundy cab; TOP CENTER: small moored brown wooden rowboat with cream interior and navy rim, no water; TOP RIGHT: ornate gold institutional doorway with dark navy inner opening; BOTTOM LEFT: small round cream civic fountain with mint water and gold rim; BOTTOM CENTER: small pale gold bureaucrat statue holding blank papers on navy plinth; BOTTOM RIGHT: cream neighborhood bench with navy legs. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "2c6ddd5c-12c4-4388-960b-8854aa70bfa9",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: compact mustard construction crane with navy legs and burgundy cab; TOP CENTER: small moored brown wooden rowboat with cream interior and navy rim, no water; TOP RIGHT: ornate gold institutional doorway with dark navy inner opening; BOTTOM LEFT: small round cream civic fountain with mint water and gold rim; BOTTOM CENTER: small pale gold bureaucrat statue holding blank papers on navy plinth; BOTTOM RIGHT: cream neighborhood bench with navy legs. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "799b2651-e7ca-4b5e-9fd0-32b5e22daea7",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: compact mustard construction crane with navy legs and burgundy cab; TOP CENTER: small moored brown wooden rowboat with cream interior and navy rim, no water; TOP RIGHT: ornate gold institutional doorway with dark navy inner opening; BOTTOM LEFT: small round cream civic fountain with mint water and gold rim; BOTTOM CENTER: small pale gold bureaucrat statue holding blank papers on navy plinth; BOTTOM RIGHT: cream neighborhood bench with navy legs. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_2c6ddd5c-12c4-4388-960b-8854aa70bfa9.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "7ba3f28c318e4e9bfe4795206f68ea421a1907b5ae2095b5b80b81359b269d4d"
+    },
+    {
+      "id": "prop-3",
+      "index": 6,
+      "kind": "prop",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "atto3_stage",
+          "path": "public/sprites/tiles/atto3_stage.png",
+          "width": 64,
+          "height": 32,
+          "subject": "small campaign stage with burgundy canopy, blank cream backdrop, two navy loudspeakers"
+        },
+        {
+          "id": "atto3_gazebo",
+          "path": "public/sprites/tiles/atto3_gazebo.png",
+          "width": 48,
+          "height": 32,
+          "subject": "mint campaign gazebo with cream table and burgundy little flag"
+        },
+        {
+          "id": "atto3_poster",
+          "path": "public/sprites/tiles/atto3_poster.png",
+          "width": 32,
+          "height": 32,
+          "subject": "mustard campaign poster frame with blank cream paper and burgundy ribbon"
+        },
+        {
+          "id": "atto3_voting_booth",
+          "path": "public/sprites/tiles/atto3_voting_booth.png",
+          "width": 32,
+          "height": 32,
+          "subject": "navy polling booth with burgundy curtain and cream roof"
+        },
+        {
+          "id": "atto3_ballot_box",
+          "path": "public/sprites/tiles/atto3_ballot_box.png",
+          "width": 32,
+          "height": 32,
+          "subject": "cream election ballot box with navy slot and mustard corners"
+        },
+        {
+          "id": "atto3_social_screen",
+          "path": "public/sprites/tiles/atto3_social_screen.png",
+          "width": 48,
+          "height": 32,
+          "subject": "navy social-media billboard screen with purely abstract mint graph and burgundy shapes, no writing"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small campaign stage with burgundy canopy, blank cream backdrop, two navy loudspeakers; TOP CENTER: mint campaign gazebo with cream table and burgundy little flag; TOP RIGHT: mustard campaign poster frame with blank cream paper and burgundy ribbon; BOTTOM LEFT: navy polling booth with burgundy curtain and cream roof; BOTTOM CENTER: cream election ballot box with navy slot and mustard corners; BOTTOM RIGHT: navy social-media billboard screen with purely abstract mint graph and burgundy shapes, no writing. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "d53a2b2c-af43-4e92-93d5-e602d42ee6d7",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small campaign stage with burgundy canopy, blank cream backdrop, two navy loudspeakers; TOP CENTER: mint campaign gazebo with cream table and burgundy little flag; TOP RIGHT: mustard campaign poster frame with blank cream paper and burgundy ribbon; BOTTOM LEFT: navy polling booth with burgundy curtain and cream roof; BOTTOM CENTER: cream election ballot box with navy slot and mustard corners; BOTTOM RIGHT: navy social-media billboard screen with purely abstract mint graph and burgundy shapes, no writing. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "f3c9d3a5-a931-4a82-8c98-35a62f1085a2",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small campaign stage with burgundy canopy, blank cream backdrop, two navy loudspeakers; TOP CENTER: mint campaign gazebo with cream table and burgundy little flag; TOP RIGHT: mustard campaign poster frame with blank cream paper and burgundy ribbon; BOTTOM LEFT: navy polling booth with burgundy curtain and cream roof; BOTTOM CENTER: cream election ballot box with navy slot and mustard corners; BOTTOM RIGHT: navy social-media billboard screen with purely abstract mint graph and burgundy shapes, no writing. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_d53a2b2c-af43-4e92-93d5-e602d42ee6d7.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "328d7c921f461c12bb5df5c57c0a91f563c982157dc0123f5f9535d416cdd6e8"
+    },
+    {
+      "id": "prop-4",
+      "index": 7,
+      "kind": "prop",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "atto3_press_van",
+          "path": "public/sprites/tiles/atto3_press_van.png",
+          "width": 48,
+          "height": 32,
+          "subject": "cream mobile press van facing right with navy wheels and brass roof antenna"
+        },
+        {
+          "id": "atto3_fortress",
+          "path": "public/sprites/tiles/atto3_fortress.png",
+          "width": 96,
+          "height": 48,
+          "subject": "wide stone political party fortress with navy turrets, burgundy banners, cream walls and tiny centered dark entrance"
+        },
+        {
+          "id": "cave_boulder",
+          "path": "public/sprites/tiles/cave_boulder.png",
+          "width": 16,
+          "height": 16,
+          "subject": "single round dark slate cave boulder with muted mint highlight"
+        },
+        {
+          "id": "cave_mouth",
+          "path": "public/sprites/tiles/cave_mouth.png",
+          "width": 16,
+          "height": 16,
+          "subject": "small front cave entrance, navy dark opening in slate stone arch"
+        },
+        {
+          "id": "cave_stalagmite",
+          "path": "public/sprites/tiles/cave_stalagmite.png",
+          "width": 16,
+          "height": 16,
+          "subject": "single pointed navy-slate cave stalagmite"
+        },
+        {
+          "id": "snow_pine",
+          "path": "public/sprites/tiles/snow_pine.png",
+          "width": 16,
+          "height": 16,
+          "subject": "small forest-mint pine tree with cream snowy branches and short trunk"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: cream mobile press van facing right with navy wheels and brass roof antenna; TOP CENTER: wide stone political party fortress with navy turrets, burgundy banners, cream walls and tiny centered dark entrance; TOP RIGHT: single round dark slate cave boulder with muted mint highlight; BOTTOM LEFT: small front cave entrance, navy dark opening in slate stone arch; BOTTOM CENTER: single pointed navy-slate cave stalagmite; BOTTOM RIGHT: small forest-mint pine tree with cream snowy branches and short trunk. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "3bf810e9-97b3-4570-9aa1-8c31681e49f4",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: cream mobile press van facing right with navy wheels and brass roof antenna; TOP CENTER: wide stone political party fortress with navy turrets, burgundy banners, cream walls and tiny centered dark entrance; TOP RIGHT: single round dark slate cave boulder with muted mint highlight; BOTTOM LEFT: small front cave entrance, navy dark opening in slate stone arch; BOTTOM CENTER: single pointed navy-slate cave stalagmite; BOTTOM RIGHT: small forest-mint pine tree with cream snowy branches and short trunk. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "medias": [],
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "24ddcfbe-8906-4869-8ceb-d5a4378f7cc9",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "3:2",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: cream mobile press van facing right with navy wheels and brass roof antenna; TOP CENTER: wide stone political party fortress with navy turrets, burgundy banners, cream walls and tiny centered dark entrance; TOP RIGHT: single round dark slate cave boulder with muted mint highlight; BOTTOM LEFT: small front cave entrance, navy dark opening in slate stone arch; BOTTOM CENTER: single pointed navy-slate cave stalagmite; BOTTOM RIGHT: small forest-mint pine tree with cream snowy branches and short trunk. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202841_3bf810e9-97b3-4570-9aa1-8c31681e49f4.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "cellHeightFraction": 0.865,
+        "selection": "exclude generated captions beneath isolated objects",
+        "stripGridLines": true
+      },
+      "sourceSha256": "58e35e2e903caa3eeb44d3c177d3890f766a14bf43aaeb418509335eb204e4e7"
+    },
+    {
+      "id": "terrain-0",
+      "index": 8,
+      "kind": "terrain",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "grass_flat",
+          "path": "public/sprites/tiles/grass_flat.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat muted forest-mint lawn, a few subtle one-pixel grass specks, no large tufts"
+        },
+        {
+          "id": "path_flat",
+          "path": "public/sprites/tiles/path_flat.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat warm pale ochre dirt path, a few subtle muted stone specks, absolutely no cliff edge"
+        },
+        {
+          "id": "sand",
+          "path": "public/sprites/tiles/sand.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat warm cream coastal sand, tiny soft gold specks"
+        },
+        {
+          "id": "water",
+          "path": "public/sprites/tiles/water.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat calm teal water with a few short pale mint wave dashes, no shoreline"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat muted forest-mint lawn, a few subtle one-pixel grass specks, no large tufts; TOP RIGHT: flat warm pale ochre dirt path, a few subtle muted stone specks, absolutely no cliff edge; BOTTOM LEFT: flat warm cream coastal sand, tiny soft gold specks; BOTTOM RIGHT: flat calm teal water with a few short pale mint wave dashes, no shoreline. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "medias": []
+      },
+      "jobId": "0f7bfd2d-5064-4af3-a3da-82e9e2e95f87",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat muted forest-mint lawn, a few subtle one-pixel grass specks, no large tufts; TOP RIGHT: flat warm pale ochre dirt path, a few subtle muted stone specks, absolutely no cliff edge; BOTTOM LEFT: flat warm cream coastal sand, tiny soft gold specks; BOTTOM RIGHT: flat calm teal water with a few short pale mint wave dashes, no shoreline. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "30ace4c1-dc5e-4edb-ad1e-9cc30c21bf2a",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "1:1",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat muted forest-mint lawn, a few subtle one-pixel grass specks, no large tufts; TOP RIGHT: flat warm pale ochre dirt path, a few subtle muted stone specks, absolutely no cliff edge; BOTTOM LEFT: flat warm cream coastal sand, tiny soft gold specks; BOTTOM RIGHT: flat calm teal water with a few short pale mint wave dashes, no shoreline. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202510_0f7bfd2d-5064-4af3-a3da-82e9e2e95f87.png",
+      "sourceSha256": "cd56308dc9a76f340a0eb51e44b5537cb106cbc5c5a50b85ddb28b92f620f3d1"
+    },
+    {
+      "id": "terrain-1",
+      "index": 9,
+      "kind": "terrain",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "snow_floor",
+          "path": "public/sprites/tiles/snow_floor.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat pale cool cream snow, subtle blue shade specks"
+        },
+        {
+          "id": "snow_drift",
+          "path": "public/sprites/tiles/snow_drift.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat soft deep snow with understated cool mint clustered texture"
+        },
+        {
+          "id": "floor_wood",
+          "path": "public/sprites/tiles/floor_wood.png",
+          "width": 16,
+          "height": 16,
+          "subject": "warm cream interior wood planks, simple horizontal joints, low-contrast grain",
+          "superseded": true
+        },
+        {
+          "id": "wall_interior",
+          "path": "public/sprites/tiles/wall_interior.png",
+          "width": 16,
+          "height": 16,
+          "subject": "navy grey interior masonry, small flat brick pattern with low-contrast cream mortar",
+          "superseded": true
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat pale cool cream snow, subtle blue shade specks; TOP RIGHT: flat soft deep snow with understated cool mint clustered texture; BOTTOM LEFT: warm cream interior wood planks, simple horizontal joints, low-contrast grain; BOTTOM RIGHT: navy grey interior masonry, small flat brick pattern with low-contrast cream mortar. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "2a0042ed-aaa0-4bd7-9733-53691f447ff2",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat pale cool cream snow, subtle blue shade specks; TOP RIGHT: flat soft deep snow with understated cool mint clustered texture; BOTTOM LEFT: warm cream interior wood planks, simple horizontal joints, low-contrast grain; BOTTOM RIGHT: navy grey interior masonry, small flat brick pattern with low-contrast cream mortar. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "e83324a7-5c4d-4a7f-a275-d231d02b2a04",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "1:1",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat pale cool cream snow, subtle blue shade specks; TOP RIGHT: flat soft deep snow with understated cool mint clustered texture; BOTTOM LEFT: warm cream interior wood planks, simple horizontal joints, low-contrast grain; BOTTOM RIGHT: navy grey interior masonry, small flat brick pattern with low-contrast cream mortar. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_2a0042ed-aaa0-4bd7-9733-53691f447ff2.png",
+      "sourceSha256": "237966c69521f7af935df322b497784edc8a831d74209322fa1d8873ec62c1e9"
+    },
+    {
+      "id": "terrain-2",
+      "index": 10,
+      "kind": "terrain",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "doormat",
+          "path": "public/sprites/tiles/doormat.png",
+          "width": 16,
+          "height": 16,
+          "subject": "burgundy flat doorway mat with a thin antique gold border, no writing"
+        },
+        {
+          "id": "cliff_sand",
+          "path": "public/sprites/tiles/cliff_sand.png",
+          "width": 16,
+          "height": 16,
+          "subject": "front face of a sandy ochre cliff, visibly solid vertical navy-brown rock bands and a thin pale ledge at top",
+          "superseded": true
+        },
+        {
+          "id": "stairs_sand",
+          "path": "public/sprites/tiles/stairs_sand.png",
+          "width": 16,
+          "height": 16,
+          "subject": "simple front-view sandy stairs, horizontal pale treads and ochre risers, no angle"
+        },
+        {
+          "id": "deck_asphalt",
+          "path": "public/sprites/tiles/deck_asphalt.png",
+          "width": 32,
+          "height": 32,
+          "subject": "flat navy asphalt deck with short broken cream center lane marking, top-down no perspective"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: burgundy flat doorway mat with a thin antique gold border, no writing; TOP RIGHT: front face of a sandy ochre cliff, visibly solid vertical navy-brown rock bands and a thin pale ledge at top; BOTTOM LEFT: simple front-view sandy stairs, horizontal pale treads and ochre risers, no angle; BOTTOM RIGHT: flat navy asphalt deck with short broken cream center lane marking, top-down no perspective. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "7be57cec-7038-4a9a-b620-f40332b004b1",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: burgundy flat doorway mat with a thin antique gold border, no writing; TOP RIGHT: front face of a sandy ochre cliff, visibly solid vertical navy-brown rock bands and a thin pale ledge at top; BOTTOM LEFT: simple front-view sandy stairs, horizontal pale treads and ochre risers, no angle; BOTTOM RIGHT: flat navy asphalt deck with short broken cream center lane marking, top-down no perspective. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "7448014c-6f1b-482e-88fd-0437233a6b95",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "1:1",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: burgundy flat doorway mat with a thin antique gold border, no writing; TOP RIGHT: front face of a sandy ochre cliff, visibly solid vertical navy-brown rock bands and a thin pale ledge at top; BOTTOM LEFT: simple front-view sandy stairs, horizontal pale treads and ochre risers, no angle; BOTTOM RIGHT: flat navy asphalt deck with short broken cream center lane marking, top-down no perspective. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_7be57cec-7038-4a9a-b620-f40332b004b1.png",
+      "sourceSha256": "bcf23f667d5f9f9b4a7e0cf6fb0344faea190ac04d0761dab8fda76d4097a976"
+    },
+    {
+      "id": "terrain-3",
+      "index": 11,
+      "kind": "terrain",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "deck_wood",
+          "path": "public/sprites/tiles/deck_wood.png",
+          "width": 32,
+          "height": 32,
+          "subject": "flat coastal wooden dock deck, warm brown horizontal boards with short dark nails"
+        },
+        {
+          "id": "cave_floor",
+          "path": "public/sprites/tiles/cave_floor.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat low-contrast navy slate cave floor, small muted grey stone specks"
+        },
+        {
+          "id": "cave_rock",
+          "path": "public/sprites/tiles/cave_rock.png",
+          "width": 16,
+          "height": 16,
+          "subject": "solid rough grey cave wall texture, low-contrast navy ridges"
+        },
+        {
+          "id": "snow_path",
+          "path": "public/sprites/tiles/snow_path.png",
+          "width": 16,
+          "height": 16,
+          "subject": "flat packed cream snow footpath, pale ochre grit, no footprints or large objects"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat coastal wooden dock deck, warm brown horizontal boards with short dark nails; TOP RIGHT: flat low-contrast navy slate cave floor, small muted grey stone specks; BOTTOM LEFT: solid rough grey cave wall texture, low-contrast navy ridges; BOTTOM RIGHT: flat packed cream snow footpath, pale ochre grit, no footprints or large objects. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "30365ad3-2cbf-4aa8-b89c-6be68aefb160",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat coastal wooden dock deck, warm brown horizontal boards with short dark nails; TOP RIGHT: flat low-contrast navy slate cave floor, small muted grey stone specks; BOTTOM LEFT: solid rough grey cave wall texture, low-contrast navy ridges; BOTTOM RIGHT: flat packed cream snow footpath, pale ochre grit, no footprints or large objects. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "1:1",
+        "medias": [],
+        "width": 1024,
+        "height": 1024,
+        "resolution": "1k",
+        "batch_size": 1,
+        "is_inpaint": false,
+        "reference_elements": []
+      },
+      "previousAttempts": [
+        {
+          "jobId": "3e3729c5-53f2-4fab-b005-d03486eeeea0",
+          "status": "failed",
+          "params": {
+            "model": "gpt_image_2_5",
+            "quality": "high",
+            "resolution": "1k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "aspect_ratio": "1:1",
+            "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat coastal wooden dock deck, warm brown horizontal boards with short dark nails; TOP RIGHT: flat low-contrast navy slate cave floor, small muted grey stone specks; BOTTOM LEFT: solid rough grey cave wall texture, low-contrast navy ridges; BOTTOM RIGHT: flat packed cream snow footpath, pale ochre grit, no footprints or large objects. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+          }
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_30365ad3-2cbf-4aa8-b89c-6be68aefb160.png",
+      "sourceSha256": "d719a3f8a3f825099d37120b29cf7c109327ef359d3543041d6ebff053958576"
+    },
+    {
+      "id": "cliff-final",
+      "index": 12,
+      "kind": "terrain",
+      "columns": 1,
+      "rows": 1,
+      "outputs": [
+        {
+          "id": "cliff_sand",
+          "path": "public/sprites/tiles/cliff_sand.png",
+          "width": 16,
+          "height": 16
+        }
+      ],
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "A single game terrain tile: FRONT FACE OF AN OCHRE SANDSTONE CLIFF. Handcrafted chunky 16-bit pixel art for a satirical Italian RPG, warm sandstone face with dark brown vertical geological cracks, horizontal cream upper ledge. ROCK ONLY, no wood, no boards, no doors, no buildings, no water, no plants, no objects, no frame, no text. Fill the entire square edge to edge with a solid impassable rocky cliff front. Navy outline accents, muted gold and cream. Crisp block pixels and restrained palette."
+      },
+      "jobId": "5e73a928-dc0c-41cf-b8ce-9d1bda240f99",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203531_5e73a928-dc0c-41cf-b8ce-9d1bda240f99.png",
+      "generatedParams": {
+        "prompt": "A single game terrain tile: FRONT FACE OF AN OCHRE SANDSTONE CLIFF. Handcrafted chunky 16-bit pixel art for a satirical Italian RPG, warm sandstone face with dark brown vertical geological cracks, horizontal cream upper ledge. ROCK ONLY, no wood, no boards, no doors, no buildings, no water, no plants, no objects, no frame, no text. Fill the entire square edge to edge with a solid impassable rocky cliff front. Navy outline accents, muted gold and cream. Crisp block pixels and restrained palette.",
+        "aspect_ratio": "1:1",
+        "input_images": [],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "0df76e670fccaaa012151f6a8ca25c9a04a227752e7ea502a90ec14492eaa940"
+    },
+    {
+      "id": "cantiere",
+      "index": 13,
+      "kind": "scene",
+      "columns": 1,
+      "rows": 1,
+      "outputs": [
+        {
+          "id": "cantiere",
+          "path": "public/sprites/ui/civic/cantiere.png",
+          "width": 240,
+          "height": 135
+        }
+      ],
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production narrative illustration for POLITICMON, satirical Italian monster RPG. Widescreen 16-bit pixel art, clean large pixel clusters, midnight navy, warm cream, burgundy, antique gold and forest mint palette. By a small calm teal village pond, a silver-haired retired civic observer in a navy waistcoat and cream shirt observes an unfinished little WOODEN FOOTBRIDGE leading to a tiny grassy island. An absurd burgundy ceremonial ribbon spans the gap where the actual bridge planks are missing. A campaign aide presents a glossy diagram while a citizen carrying groceries waits on the shore. Satirical focus: ceremonies over practical access. Show clear silhouettes, readable composition at 80 by 45 pixels. No writing, no letters, no labels, no captions, no logos, no watermark, no user interface. Original fictional citizens, no specific real politician."
+      },
+      "jobId": "9df806bd-eca9-4199-a8ab-3f039ee3362b",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203531_9df806bd-eca9-4199-a8ab-3f039ee3362b.png",
+      "generatedParams": {
+        "prompt": "Production narrative illustration for POLITICMON, satirical Italian monster RPG. Widescreen 16-bit pixel art, clean large pixel clusters, midnight navy, warm cream, burgundy, antique gold and forest mint palette. By a small calm teal village pond, a silver-haired retired civic observer in a navy waistcoat and cream shirt observes an unfinished little WOODEN FOOTBRIDGE leading to a tiny grassy island. An absurd burgundy ceremonial ribbon spans the gap where the actual bridge planks are missing. A campaign aide presents a glossy diagram while a citizen carrying groceries waits on the shore. Satirical focus: ceremonies over practical access. Show clear silhouettes, readable composition at 80 by 45 pixels. No writing, no letters, no labels, no captions, no logos, no watermark, no user interface. Original fictional citizens, no specific real politician.",
+        "aspect_ratio": "16:9",
+        "input_images": [],
+        "width": 2752,
+        "height": 1536,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "6223dc948e4d14ba7cccb9cecd3fc0e461c6c57c12e10981dd600956d68cb966"
+    },
+    {
+      "id": "wall_interior-review",
+      "index": 70,
+      "kind": "terrain",
+      "columns": 1,
+      "rows": 1,
+      "outputs": [
+        {
+          "id": "wall_interior",
+          "path": "public/sprites/tiles/wall_interior.png",
+          "width": 16,
+          "height": 16
+        }
+      ],
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "One seamless flat game texture, a midnight navy plaster interior wall for an Italian satirical pixel RPG. The square represents ONLY sixteen by sixteen native pixels, magnified crisply with extremely large pixel blocks. Solid muted navy slate #243247 dominates, subtle sparse uneven plaster patches #2d3c50, a few lower contrast square chips, no horizontal stripes, no lines, no bricks, no cream highlights, no light border. Calm low contrast background so tiny characters stand out. Entire square filled edge to edge. No perspective, no room, no objects, no labels, no text, no grid, no frames. True coarse 16 by 16 pixel art."
+      },
+      "jobId": "ad9d2d10-435c-4820-a117-d4e55ace4d62",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_210512_ad9d2d10-435c-4820-a117-d4e55ace4d62.png",
+      "generatedParams": {
+        "prompt": "One seamless flat game texture, a midnight navy plaster interior wall for an Italian satirical pixel RPG. The square represents ONLY sixteen by sixteen native pixels, magnified crisply with extremely large pixel blocks. Solid muted navy slate #243247 dominates, subtle sparse uneven plaster patches #2d3c50, a few lower contrast square chips, no horizontal stripes, no lines, no bricks, no cream highlights, no light border. Calm low contrast background so tiny characters stand out. Entire square filled edge to edge. No perspective, no room, no objects, no labels, no text, no grid, no frames. True coarse 16 by 16 pixel art.",
+        "aspect_ratio": "1:1",
+        "input_images": [],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "747ab570d7d33fbd0e407abc3d696de4b289394b39958da33afa3b503e7f22ef"
+    },
+    {
+      "id": "floor_wood-review",
+      "index": 71,
+      "kind": "terrain",
+      "columns": 1,
+      "rows": 1,
+      "outputs": [
+        {
+          "id": "floor_wood",
+          "path": "public/sprites/tiles/floor_wood.png",
+          "width": 16,
+          "height": 16
+        }
+      ],
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "1:1",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "One seamless flat game texture, warm muted cream maple wood floor for an Italian satirical pixel RPG. Square represents ONLY sixteen by sixteen native pixels magnified with extremely large crisp pixel blocks. Four broad horizontal wood planks, extremely subtle muted tan seams and ONLY two short darker staggered vertical joints. Base pale warm cream #d8c79c, seams #b5a37e, one soft long grain mark on each plank. Very low contrast, quiet legible background, no tiny dots, no noise, no checkerboards, no room, no perspective, no border, no grid, no objects, no text. Whole square filled edge to edge. Coarse handcrafted 16 by 16 pixel art."
+      },
+      "jobId": "dc504446-973a-42d2-a97b-0483f6297d4c",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_210512_dc504446-973a-42d2-a97b-0483f6297d4c.png",
+      "generatedParams": {
+        "prompt": "One seamless flat game texture, warm muted cream maple wood floor for an Italian satirical pixel RPG. Square represents ONLY sixteen by sixteen native pixels magnified with extremely large crisp pixel blocks. Four broad horizontal wood planks, extremely subtle muted tan seams and ONLY two short darker staggered vertical joints. Base pale warm cream #d8c79c, seams #b5a37e, one soft long grain mark on each plank. Very low contrast, quiet legible background, no tiny dots, no noise, no checkerboards, no room, no perspective, no border, no grid, no objects, no text. Whole square filled edge to edge. Coarse handcrafted 16 by 16 pixel art.",
+        "aspect_ratio": "1:1",
+        "input_images": [],
+        "width": 2048,
+        "height": 2048,
+        "resolution": "2k",
+        "batch_size": 1,
+        "input_image": null,
+        "application": null,
+        "surface": null
+      },
+      "sourceSha256": "4b757faab0adffdda5c8c20e8c2ee9fa2834c282fde14dc3ee6c95ce70a6c6db"
+    }
+  ]
+}

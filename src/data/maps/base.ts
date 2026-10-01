@@ -197,7 +197,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { x: 17, y: 7, lines: ["PERCORSO 1", "Nord: MEDIOPOLI. Sud: BORGO URNE.", "L'erba alta pullula di candidati. La GROTTA a est nasconde qualcosa."] }
     ],
     pickups: [
-      // Tesoro sull'isoletta in mezzo al LAGHETTO: ci arrivi solo col TRAGHETTO.
+      // The civic footbridge offers early access; otherwise return by ferry.
       { id: "pk-r1-isola", x: 6, y: 6, itemId: "schedona", qty: 2 },
       { id: "pk-r1", x: 24, y: 9, itemId: "caffe", qty: 2 }
     ],
@@ -208,8 +208,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Mi alleno tra le due città. Tu dove credi di andare?"]
       },
       {
-        id: "viandante-r1", pal: "granny", x: 9, y: 12, facing: "right",
-        lines: ["Una volta tra BORGO e MEDIOPOLI c'era solo erba.", "Ora c'è ancora solo erba. Ma con più sondaggi."]
+        id: "viandante-r1", pal: "granny", x: 9, y: 8, facing: "right", nameplate: "UMARELL",
+        lines: ["Tre inaugurazioni. La passerella è ancora un allegato.", "L'isola ha due SCHEDE BLINDATE. Il nastro non ti ci porta."]
       }
     ]
   },

@@ -1,0 +1,1301 @@
+{
+  "version": 1,
+  "balanceBefore": 757.97,
+  "balanceAfter": 689.97,
+  "spent": 68,
+  "batches": [
+    {
+      "name": "retries",
+      "version": 1,
+      "pilot": {
+        "requests": [
+          {
+            "index": 0,
+            "params": {
+              "model": "gpt_image_2_5",
+              "quality": "high",
+              "resolution": "1k",
+              "aspect_ratio": "4:5",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An energetic teenage campaign volunteer, tousled brown hair, burgundy hoodie with cream drawstrings, navy shorts, mustard trainers, a little stack of blank pamphlets. Youthful and readable, not a real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures.",
+              "medias": []
+            }
+          },
+          {
+            "index": 1,
+            "params": {
+              "model": "gpt_image_2_5",
+              "quality": "high",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "1:1",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat muted forest-mint lawn, a few subtle one-pixel grass specks, no large tufts; TOP RIGHT: flat warm pale ochre dirt path, a few subtle muted stone specks, absolutely no cliff edge; BOTTOM LEFT: flat warm cream coastal sand, tiny soft gold specks; BOTTOM RIGHT: flat calm teal water with a few short pale mint wave dashes, no shoreline. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+              "medias": []
+            }
+          }
+        ],
+        "jobs": [
+          {
+            "index": 0,
+            "job_id": "8e90fa10-9daf-4633-a6f0-3cb04ad8ed3b",
+            "status": "pending"
+          },
+          {
+            "index": 1,
+            "job_id": "45ec08de-b769-4b71-9079-8d583b53b5e8",
+            "status": "pending"
+          }
+        ]
+      }
+    },
+    {
+      "name": "followup-jobs",
+      "version": 1,
+      "environment": {
+        "requests": [
+          {
+            "index": 0,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small burgundy-roof townhouse, cream plaster, navy shutters; TOP CENTER: small navy-roof townhouse, cream plaster, mint shutters; TOP RIGHT: small forest mint-roof townhouse, cream plaster, burgundy shutters; BOTTOM LEFT: small warm brick townhouse with navy roof and gold window frames; BOTTOM CENTER: neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door; BOTTOM RIGHT: compact cream civic apartment office with navy roof and mustard balcony. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 1,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: navy newspaper kiosk with cream folded blank papers and mint roof; TOP CENTER: eccentric political research laboratory, navy roof, cream wall, mint gauge emblem; TOP RIGHT: neighborhood bar, mint awning and tiny mustard coffee-cup emblem; BOTTOM LEFT: political debate arena, burgundy roof, cream stone, gold laurel emblem; BOTTOM CENTER: decadent political casino, dark burgundy facade, navy roof, antique gold chip emblem; BOTTOM RIGHT: broad grand cream institutional palace with navy mansard roof, symmetrical closed gold windows, mint and burgundy banners. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 2,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "16:9",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 2 equal rectangular cells in a STRICT 2 COLUMN by 1 ROW grid, no labels or separators. LEFT: campaign television studio, navy facade, burgundy awning and small golden camera emblem; RIGHT: elegant political cafe-bistro with cream wall, burgundy shutters and mint awning. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 3,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: round-canopy mint and dark forest tree with a short brown trunk; TOP CENTER: cream blank notice board on two dark wooden posts with mustard border; TOP RIGHT: low cream-and-navy wooden fence segment; BOTTOM LEFT: cream wooden bed with burgundy blanket and mint pillow; BOTTOM CENTER: round cream wooden table with mustard mug and blank navy folder; BOTTOM RIGHT: navy bookcase of blank burgundy, cream and mint folders. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 4,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: bushy mint indoor plant in burgundy clay pot; TOP CENTER: cream shop counter with navy front and brass cash till; TOP RIGHT: satirical polling machine, navy cabinet, mint gauge, mustard lever; BOTTOM LEFT: three dense tall forest-mint grass tufts, only blades, no earth base; BOTTOM CENTER: a loose scatter of small burgundy and cream flowers with mint leaves, no earth base; BOTTOM RIGHT: navy and brass bridge girder, vertical steel support. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 5,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: compact mustard construction crane with navy legs and burgundy cab; TOP CENTER: small moored brown wooden rowboat with cream interior and navy rim, no water; TOP RIGHT: ornate gold institutional doorway with dark navy inner opening; BOTTOM LEFT: small round cream civic fountain with mint water and gold rim; BOTTOM CENTER: small pale gold bureaucrat statue holding blank papers on navy plinth; BOTTOM RIGHT: cream neighborhood bench with navy legs. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 6,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: small campaign stage with burgundy canopy, blank cream backdrop, two navy loudspeakers; TOP CENTER: mint campaign gazebo with cream table and burgundy little flag; TOP RIGHT: mustard campaign poster frame with blank cream paper and burgundy ribbon; BOTTOM LEFT: navy polling booth with burgundy curtain and cream roof; BOTTOM CENTER: cream election ballot box with navy slot and mustard corners; BOTTOM RIGHT: navy social-media billboard screen with purely abstract mint graph and burgundy shapes, no writing. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 7,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "3:2",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: cream mobile press van facing right with navy wheels and brass roof antenna; TOP CENTER: wide stone political party fortress with navy turrets, burgundy banners, cream walls and tiny centered dark entrance; TOP RIGHT: single round dark slate cave boulder with muted mint highlight; BOTTOM LEFT: small front cave entrance, navy dark opening in slate stone arch; BOTTOM CENTER: single pointed navy-slate cave stalagmite; BOTTOM RIGHT: small forest-mint pine tree with cream snowy branches and short trunk. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. Objects are viewed mostly from above with a small front face, clean readable silhouette, entire object visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 9,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "1:1",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat pale cool cream snow, subtle blue shade specks; TOP RIGHT: flat soft deep snow with understated cool mint clustered texture; BOTTOM LEFT: warm cream interior wood planks, simple horizontal joints, low-contrast grain; BOTTOM RIGHT: navy grey interior masonry, small flat brick pattern with low-contrast cream mortar. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 10,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "1:1",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: burgundy flat doorway mat with a thin antique gold border, no writing; TOP RIGHT: front face of a sandy ochre cliff, visibly solid vertical navy-brown rock bands and a thin pale ledge at top; BOTTOM LEFT: simple front-view sandy stairs, horizontal pale treads and ochre risers, no angle; BOTTOM RIGHT: flat navy asphalt deck with short broken cream center lane marking, top-down no perspective. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          },
+          {
+            "index": 11,
+            "params": {
+              "model": "nano_banana_2",
+              "resolution": "1k",
+              "use_unlim": false,
+              "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+              "aspect_ratio": "1:1",
+              "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: flat coastal wooden dock deck, warm brown horizontal boards with short dark nails; TOP RIGHT: flat low-contrast navy slate cave floor, small muted grey stone specks; BOTTOM LEFT: solid rough grey cave wall texture, low-contrast navy ridges; BOTTOM RIGHT: flat packed cream snow footpath, pale ochre grit, no footprints or large objects. Each cell is COMPLETELY FILLED edge to edge with its own FLAT SEAMLESS TOP-DOWN texture. No margins, white background, frames, labels, perspective, raised platforms, or decorative objects. Low contrast patterns which repeat unobtrusively. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+            }
+          }
+        ],
+        "jobs": [
+          {
+            "index": 0,
+            "job_id": "66ecabeb-d6d8-4a11-9ef6-5962ec7d8d8c",
+            "status": "pending"
+          },
+          {
+            "index": 1,
+            "job_id": "920a118e-be95-4ac8-ab6c-0ff4f338c41c",
+            "status": "pending"
+          },
+          {
+            "index": 2,
+            "job_id": "0c0f6638-1469-480d-87aa-cc61f14be486",
+            "status": "pending"
+          },
+          {
+            "index": 3,
+            "job_id": "ffb79422-3a6b-4a1e-83bb-308524b84d56",
+            "status": "pending"
+          },
+          {
+            "index": 4,
+            "job_id": "6e088f83-ec9d-40e2-8ceb-cda85dfdfa8d",
+            "status": "pending"
+          },
+          {
+            "index": 5,
+            "job_id": "2c6ddd5c-12c4-4388-960b-8854aa70bfa9",
+            "status": "pending"
+          },
+          {
+            "index": 6,
+            "job_id": "d53a2b2c-af43-4e92-93d5-e602d42ee6d7",
+            "status": "pending"
+          },
+          {
+            "index": 7,
+            "job_id": "3bf810e9-97b3-4570-9aa1-8c31681e49f4",
+            "status": "pending"
+          },
+          {
+            "index": 9,
+            "job_id": "2a0042ed-aaa0-4bd7-9733-53691f447ff2",
+            "status": "pending"
+          },
+          {
+            "index": 10,
+            "job_id": "7be57cec-7038-4a9a-b620-f40332b004b1",
+            "status": "pending"
+          },
+          {
+            "index": 11,
+            "job_id": "30365ad3-2cbf-4aa8-b89c-6be68aefb160",
+            "status": "pending"
+          }
+        ]
+      },
+      "kidPro": [
+        {
+          "index": 3,
+          "job_id": "61c684a9-ee7b-4130-81cf-6a3571ffcb14",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        }
+      ],
+      "alternate": {
+        "jobs": [
+          {
+            "index": 0,
+            "job_id": "b8b450b7-f269-4a82-93fb-bca330cf6a30",
+            "status": "pending"
+          },
+          {
+            "index": 1,
+            "job_id": "0f7bfd2d-5064-4af3-a3da-82e9e2e95f87",
+            "status": "pending"
+          }
+        ],
+        "submitted_count": 2,
+        "failed_count": 0
+      },
+      "failedPilot": {
+        "jobs": [
+          {
+            "index": 0,
+            "job_id": "8e90fa10-9daf-4633-a6f0-3cb04ad8ed3b",
+            "status": "pending"
+          },
+          {
+            "index": 1,
+            "job_id": "45ec08de-b769-4b71-9079-8d583b53b5e8",
+            "status": "pending"
+          }
+        ],
+        "submitted_count": 2,
+        "failed_count": 0
+      }
+    },
+    {
+      "name": "character-retry-jobs",
+      "version": 1,
+      "requests": [
+        {
+          "index": 4,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A sharp local reporter, black chin-length hair, round dark glasses, cream trench coat over mint blouse, navy trousers, small navy microphone and burgundy notepad. Gender-neutral, no branded equipment. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 5,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An imposing fictional party leader, swept auburn hair, cream moustache, navy suit, burgundy tie, mustard pocket square, brown briefcase. Smug theatrical expression, no real politician likeness. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 6,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An elderly Italian neighborhood matriarch, silver hair in neat bun, burgundy cardigan over cream blouse, long mint skirt, brown practical shoes, mustard shopping tote. Expressive kindly skeptical face. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 7,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A confident young Italian campaign rival, red-brown short spiky hair, mint cropped jacket with burgundy lapel pin, cream shirt, navy trousers, gold trainers, small folded strategy notebook. No real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 8,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A flamboyant campaign influencer with purple bob hair, oversized mustard hoodie, navy leggings, burgundy sneakers, small smartphone held low, mint belt bag. Clearly readable silhouette, no logos. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 9,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. A harried middle-aged political aide, receding dark hair, small rectangular glasses, cream shirt, burgundy tie and navy vest, dark trousers, mustard clipboard stuffed with blank paper. Always organized-looking, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 10,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production animated CHARACTER SPRITESHEET for POLITICMON, a satirical Italian fantasy monster RPG. An Italian bar proprietor, curled dark moustache and short dark hair, cream shirt sleeves, mint apron over navy trousers, burgundy towel at hip, brown shoes. Warm skeptical expression, no real person. Handcrafted chunky 16-bit top-down RPG pixel art, orthographic view with just enough overhead angle to see the top of the head, big readable head and compact body, dark midnight navy outline, antique gold details, restrained burgundy, forest mint and cream palette, crisp large pixel clusters, no gradients, no photorealism. Plain uniform PURE WHITE background. No ground shadow, border, separator, grid line, label, letters, numbers, caption, logo or watermark. STRICT exactly FOUR COLUMNS and FIVE ROWS = TWENTY equal-sized cells, each containing ONE FULL-BODY sprite of the SAME character, same clothes and proportions. Each sprite centered in its cell with at least 15 percent pure white padding on all sides. Column order, on EVERY row: column 1 facing SOUTH toward viewer; column 2 facing NORTH away from viewer with BACK OF HEAD and no visible face; column 3 facing EAST to the right; column 4 facing WEST to the left. ROW 1 standing idle; ROW 2 walking with left foot forward; ROW 3 left-foot planted passing pose; ROW 4 walking with right foot forward; ROW 5 right-foot planted passing pose. Feet stay aligned to a consistent baseline in every cell. Actual 4-direction RPG sprite sheet, no perspective scenery or presentation mockup. Exactly 4 by 5 sprites, no extra figures. Use the reference solely for pixel-art proportions and palette; depict the specific new role, not the reference clothes. IMPORTANT: follow the reference's EXACT 4-column 5-row sheet layout. Keep all 20 grid positions unchanged; only change the character's identity and outfit.",
+            "medias": [
+              {
+                "role": "image",
+                "value": "34ece627-4045-4dba-af92-1d28f598bcd0"
+              }
+            ]
+          }
+        },
+        {
+          "index": 11,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "1:1",
+            "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A navy official compact sedan with cream cabin roof, gold trim and burgundy pennant on short antenna, whimsical election campaign car, no logo or text. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+          }
+        },
+        {
+          "index": 12,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "1:1",
+            "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mustard yellow compact bulldozer with burgundy cab, dark navy caterpillar tracks, chunky front scoop, cream work light, satirical little political roadworks vehicle. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+          }
+        },
+        {
+          "index": 13,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "1:1",
+            "prompt": "Production VEHICLE SPRITESHEET for POLITICMON satirical Italian top-down RPG. A mint electric kick scooter with a mustard handlebar, dark navy wheels and platform, burgundy battery housing, no human rider, clear two-wheeled silhouette. Same crisp chunky 16-bit pixel-art palette and dark navy outlines as reference, view mostly from above with small visible side face, NO isometric scenery. Exactly FOUR equal square cells in a 2 by 2 grid. TOP LEFT vehicle points SOUTH toward bottom of screen (front seen); TOP RIGHT points NORTH toward top (rear seen); BOTTOM LEFT points EAST to screen right; BOTTOM RIGHT points WEST to screen left. Each cell shows the same entire vehicle in that orientation, centered with 15 percent padding. Plain PURE WHITE backdrop, no ground shadows, roads, grid lines, text, labels, logos or extra objects. Reference is only palette and style; do not include the reference character."
+          }
+        },
+        {
+          "index": 14,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "4:3",
+            "prompt": "Production game sprite for POLITICMON, crisp chunky 16-bit top-down RPG pixel art in navy, cream, muted burgundy, antique gold. One small old Italian passenger ferry from overhead, pointed bow at top, broad stern at bottom, cream deck, navy hull, burgundy smokestack, mustard railing, small lifebuoy. Entire ship isolated on pure WHITE background with generous margin, no sea, waves, shadow, frame, lettering, names, logos, number, no people. Use reference only for pixel palette."
+          }
+        },
+        {
+          "index": 15,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [],
+            "aspect_ratio": "1:1",
+            "prompt": "Production NPC sprite for POLITICMON, same chunky 16-bit top-down RPG proportions and pixel-art palette as reference. One fictional hapless ferry captain, navy cap with simple gold insignia, cream uniform with navy cuffs, burgundy neck scarf, dark trousers, brown shoes, curly dark hair, worried moustached face, hands behind his back. Full body standing facing SOUTH toward viewer, no real person likeness. Pure WHITE background with ample padding, no ground shadow, water, lettering, name, logo or extra objects."
+          }
+        }
+      ],
+      "jobs": [
+        {
+          "index": 4,
+          "job_id": "35976efb-04b8-47e9-aadc-66ef0ed240cb",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 5,
+          "job_id": "beb3ea08-7682-4b6e-ad75-5c85014196bd",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 6,
+          "job_id": "a94cee2b-d455-4790-942a-03d2dad962e3",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 7,
+          "job_id": "d9804825-f714-48cf-b835-54d32ddb6983",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 8,
+          "job_id": "7f7fa032-0fc8-469b-93d6-ac44ecf6af1b",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 9,
+          "job_id": "2e82a50e-a96b-4a7e-8c84-5d48bc36721f",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 10,
+          "job_id": "a617ae54-25bd-4554-8c1d-b6c2b97c0873",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 11,
+          "job_id": "a059d384-986b-4441-aa93-cf4793f2707a",
+          "status": "pending"
+        },
+        {
+          "index": 12,
+          "job_id": "d07d0ad7-ad0c-465e-8c24-5d379faa6b87",
+          "status": "pending"
+        },
+        {
+          "index": 13,
+          "job_id": "e1f34ab1-413c-4126-a5b9-d3d90deb30e1",
+          "status": "pending"
+        },
+        {
+          "index": 14,
+          "job_id": "c253b2f7-a4e9-4b13-a84f-fa6a51fd8506",
+          "status": "pending"
+        },
+        {
+          "index": 15,
+          "job_id": "23b8b72d-e6ca-47ee-affb-1f66eebf4c8e",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "final-jobs",
+      "requests": [
+        {
+          "index": 12,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "1:1",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "A single game terrain tile: FRONT FACE OF AN OCHRE SANDSTONE CLIFF. Handcrafted chunky 16-bit pixel art for a satirical Italian RPG, warm sandstone face with dark brown vertical geological cracks, horizontal cream upper ledge. ROCK ONLY, no wood, no boards, no doors, no buildings, no water, no plants, no objects, no frame, no text. Fill the entire square edge to edge with a solid impassable rocky cliff front. Navy outline accents, muted gold and cream. Crisp block pixels and restrained palette."
+          }
+        },
+        {
+          "index": 13,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "16:9",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "Production narrative illustration for POLITICMON, satirical Italian monster RPG. Widescreen 16-bit pixel art, clean large pixel clusters, midnight navy, warm cream, burgundy, antique gold and forest mint palette. By a small calm teal village pond, a silver-haired retired civic observer in a navy waistcoat and cream shirt observes an unfinished little WOODEN FOOTBRIDGE leading to a tiny grassy island. An absurd burgundy ceremonial ribbon spans the gap where the actual bridge planks are missing. A campaign aide presents a glossy diagram while a citizen carrying groceries waits on the shore. Satirical focus: ceremonies over practical access. Show clear silhouettes, readable composition at 80 by 45 pixels. No writing, no letters, no labels, no captions, no logos, no watermark, no user interface. Original fictional citizens, no specific real politician."
+          }
+        }
+      ],
+      "jobs": [
+        {
+          "index": 12,
+          "job_id": "5e73a928-dc0c-41cf-b8ce-9d1bda240f99",
+          "status": "pending"
+        },
+        {
+          "index": 13,
+          "job_id": "9df806bd-eca9-4199-a8ab-3f039ee3362b",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "direction-fixes",
+      "requests": [
+        {
+          "index": 0,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "9:16",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "35976efb-04b8-47e9-aadc-66ef0ed240cb"
+              }
+            ],
+            "prompt": "Game sprite animation strip, strict ONE COLUMN by FIVE ROWS, five full body figures on pure WHITE with generous white gaps. The reference's local journalist: black chin-length bob, round navy spectacles, cream trenchcoat, mint blouse, navy trousers, burgundy notepad and small microphone. Every single pose faces SOUTH DIRECTLY TOWARD THE VIEWER, perfectly symmetrical front face, both eyes visible, never side profile or three-quarter. Row1 idle feet together; row2 left leg stepping forward; row3 legs passing; row4 right leg stepping forward; row5 passing with opposite arm. Same clothes, identity, size, baseline. Handcrafted chunky 16-bit pixel art, midnight navy outlines, cream burgundy mint mustard palette. Exactly five sprites, no text, no frames, no labels, no ground shadow."
+          }
+        },
+        {
+          "index": 1,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "9:16",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "35976efb-04b8-47e9-aadc-66ef0ed240cb"
+              }
+            ],
+            "prompt": "Game sprite animation strip, strict ONE COLUMN by FIVE ROWS, five full body figures on pure WHITE with generous white gaps. The reference's local journalist: black chin-length bob, round navy spectacles, cream trenchcoat, mint blouse, navy trousers, burgundy notepad and small microphone. Every single pose faces WEST TO THE LEFT EDGE OF THE IMAGE: nose, chin, toes and microphone point LEFT. Only LEFT profile, never right. Row1 idle feet together; row2 left leg stepping forward; row3 legs passing; row4 right leg stepping forward; row5 passing with opposite arm. Same clothes, identity, size, baseline. Handcrafted chunky 16-bit pixel art, midnight navy outlines, cream burgundy mint mustard palette. Exactly five sprites, no text, no frames, no labels, no ground shadow."
+          }
+        },
+        {
+          "index": 2,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "1:1",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "medias": [
+              {
+                "role": "image",
+                "value": "d07d0ad7-ad0c-465e-8c24-5d379faa6b87"
+              }
+            ],
+            "prompt": "One standalone game sprite of the reference's small mustard construction BULLDOZER, burgundy cab and dark navy caterpillar tracks. View SOUTH: STRICT SYMMETRICAL FRONT with equal tracks left and right, wide steel blade horizontal across BOTTOM facing the viewer, cab behind it at TOP. A slight overhead angle, no side wall, no diagonal/isometric/three-quarter angle. Do NOT show side of the machine. Entire vehicle visible centered on pure white background with large empty margin, NO shadow, no grid lines, no writing or logos. Same handcrafted chunky 16-bit pixel art and navy cream mustard burgundy palette."
+          }
+        }
+      ],
+      "jobs": [
+        {
+          "index": 0,
+          "job_id": "8bf29388-ccbc-455c-b7bb-1477fce39a15",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 1,
+          "job_id": "3a1fef52-9f5c-4e7e-bbf5-e3e56741c8b8",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        },
+        {
+          "index": 2,
+          "job_id": "91a71603-f849-4b85-b45a-ee724f461413",
+          "status": "pending",
+          "adjustments": {
+            "medias[0].role": {
+              "requested": "image",
+              "used": "image_references",
+              "reason": "Nano Banana Pro backend expects schema-key media roles"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "singles-final",
+      "requests": [
+        {
+          "index": 0,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:5",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "One SINGLE FULL-BODY pixel-art sprite of a fictional middle-aged pompous Italian ferry captain: dark wavy hair, modest navy captain cap with gold plain badge, cream uniform shirt, burgundy scarf, navy trousers, brown shoes. Facing SOUTH directly towards viewer. Small compact 16-bit top-down RPG proportions. Entire cap top AND shoes fully visible, ABSOLUTELY NO CROPPING. Character occupies only the CENTRAL 55 percent of the canvas width and height, with at least 20 percent PURE WHITE empty margin on all four sides. No shadow, no scenery, no grid, no writing. Crisp pixel clusters, midnight navy cream burgundy antique gold palette. No real insignia or realistic portrait."
+          }
+        },
+        {
+          "index": 1,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "4:3",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "One standalone small cartoon PASSENGER FERRY game sprite, strict OVERHEAD top-down view, bow points to TOP, stern at BOTTOM. SHORT WIDE hull with width almost equal to its length, boxy passenger ferry shape, NOT a narrow canoe or rowboat. Midnight navy hull, cream open deck with wide space for two standing passengers, burgundy small rear funnel and mustard rail. Compact 16-bit RPG pixel art with strong chunky pixel clusters. Pure WHITE background, whole vessel visible with 20 percent empty white margin on every side, no water or shadow, no people, no text, no logo, no numbers, no grid. Orthographic, no side walls, no perspective angle."
+          }
+        }
+      ],
+      "jobs": [
+        {
+          "index": 0,
+          "job_id": "1348ccfe-908f-45c3-9441-aa2cffdfea2c",
+          "status": "pending"
+        },
+        {
+          "index": 1,
+          "job_id": "43cf303f-cfca-4fb1-9463-b32b379dfa7d",
+          "status": "pending"
+        }
+      ]
+    },
+    {
+      "name": "texture-review",
+      "requests": [
+        {
+          "index": 70,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "1:1",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "One seamless flat game texture, a midnight navy plaster interior wall for an Italian satirical pixel RPG. The square represents ONLY sixteen by sixteen native pixels, magnified crisply with extremely large pixel blocks. Solid muted navy slate #243247 dominates, subtle sparse uneven plaster patches #2d3c50, a few lower contrast square chips, no horizontal stripes, no lines, no bricks, no cream highlights, no light border. Calm low contrast background so tiny characters stand out. Entire square filled edge to edge. No perspective, no room, no objects, no labels, no text, no grid, no frames. True coarse 16 by 16 pixel art."
+          }
+        },
+        {
+          "index": 71,
+          "params": {
+            "model": "nano_banana_pro",
+            "resolution": "2k",
+            "aspect_ratio": "1:1",
+            "use_unlim": false,
+            "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+            "prompt": "One seamless flat game texture, warm muted cream maple wood floor for an Italian satirical pixel RPG. Square represents ONLY sixteen by sixteen native pixels magnified with extremely large crisp pixel blocks. Four broad horizontal wood planks, extremely subtle muted tan seams and ONLY two short darker staggered vertical joints. Base pale warm cream #d8c79c, seams #b5a37e, one soft long grain mark on each plank. Very low contrast, quiet legible background, no tiny dots, no noise, no checkerboards, no room, no perspective, no border, no grid, no objects, no text. Whole square filled edge to edge. Coarse handcrafted 16 by 16 pixel art."
+          }
+        }
+      ],
+      "submission": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Submitted 2/2 image generations.\n- index 70: ad9d2d10-435c-4820-a117-d4e55ace4d62 (pending)\n- index 71: dc504446-973a-42d2-a97b-0483f6297d4c (pending)\nWait for the complete requested set with jobs_wait, then show it together with show_generation_by_ids using the collected indexed jobs. This includes jobs submitted across separate calls. job_display accepts only one id and cannot display a group; do not pass ids or call it once per job."
+          }
+        ],
+        "structuredContent": {
+          "jobs": [
+            {
+              "index": 70,
+              "job_id": "ad9d2d10-435c-4820-a117-d4e55ace4d62",
+              "status": "pending"
+            },
+            {
+              "index": 71,
+              "job_id": "dc504446-973a-42d2-a97b-0483f6297d4c",
+              "status": "pending"
+            }
+          ],
+          "submitted_count": 2,
+          "failed_count": 0
+        },
+        "isError": false
+      }
+    }
+  ],
+  "finalStatuses": [
+    {
+      "index": 0,
+      "job_id": "08930a59-0af4-4242-a1d6-92fc95452e39",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 1,
+      "job_id": "0c0f6638-1469-480d-87aa-cc61f14be486",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_0c0f6638-1469-480d-87aa-cc61f14be486.png"
+    },
+    {
+      "index": 2,
+      "job_id": "0f7bfd2d-5064-4af3-a3da-82e9e2e95f87",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202510_0f7bfd2d-5064-4af3-a3da-82e9e2e95f87.png"
+    },
+    {
+      "index": 3,
+      "job_id": "1348ccfe-908f-45c3-9441-aa2cffdfea2c",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204502_1348ccfe-908f-45c3-9441-aa2cffdfea2c.png"
+    },
+    {
+      "index": 4,
+      "job_id": "17eca780-d2e8-47e6-9706-1b166eda3290",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 5,
+      "job_id": "1ac56824-b72c-40e7-956d-da04aa193a49",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 6,
+      "job_id": "23b8b72d-e6ca-47ee-affb-1f66eebf4c8e",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203246_23b8b72d-e6ca-47ee-affb-1f66eebf4c8e.png"
+    },
+    {
+      "index": 7,
+      "job_id": "24ddcfbe-8906-4869-8ceb-d5a4378f7cc9",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 8,
+      "job_id": "278670d9-406c-44dd-9370-884ec3d3a67c",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 9,
+      "job_id": "2a0042ed-aaa0-4bd7-9733-53691f447ff2",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_2a0042ed-aaa0-4bd7-9733-53691f447ff2.png"
+    },
+    {
+      "index": 10,
+      "job_id": "2c6ddd5c-12c4-4388-960b-8854aa70bfa9",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_2c6ddd5c-12c4-4388-960b-8854aa70bfa9.png"
+    },
+    {
+      "index": 11,
+      "job_id": "2e82a50e-a96b-4a7e-8c84-5d48bc36721f",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_2e82a50e-a96b-4a7e-8c84-5d48bc36721f.png"
+    },
+    {
+      "index": 12,
+      "job_id": "30365ad3-2cbf-4aa8-b89c-6be68aefb160",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_30365ad3-2cbf-4aa8-b89c-6be68aefb160.png"
+    },
+    {
+      "index": 13,
+      "job_id": "30ace4c1-dc5e-4edb-ad1e-9cc30c21bf2a",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 14,
+      "job_id": "34ece627-4045-4dba-af92-1d28f598bcd0",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_34ece627-4045-4dba-af92-1d28f598bcd0.png"
+    },
+    {
+      "index": 15,
+      "job_id": "35976efb-04b8-47e9-aadc-66ef0ed240cb",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_35976efb-04b8-47e9-aadc-66ef0ed240cb.png"
+    },
+    {
+      "index": 16,
+      "job_id": "3800a279-e37c-4522-b3ba-7a0239115f16",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 17,
+      "job_id": "3a1fef52-9f5c-4e7e-bbf5-e3e56741c8b8",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204022_3a1fef52-9f5c-4e7e-bbf5-e3e56741c8b8.png"
+    },
+    {
+      "index": 18,
+      "job_id": "3bf810e9-97b3-4570-9aa1-8c31681e49f4",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202841_3bf810e9-97b3-4570-9aa1-8c31681e49f4.png"
+    },
+    {
+      "index": 19,
+      "job_id": "3e3729c5-53f2-4fab-b005-d03486eeeea0",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 20,
+      "job_id": "3fd20cef-aab6-4a84-866e-c3a564448d41",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 21,
+      "job_id": "43cf303f-cfca-4fb1-9463-b32b379dfa7d",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204501_43cf303f-cfca-4fb1-9463-b32b379dfa7d.png"
+    },
+    {
+      "index": 22,
+      "job_id": "45ec08de-b769-4b71-9079-8d583b53b5e8",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 23,
+      "job_id": "4845fe33-172b-4dda-b891-1a8df8ac085c",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 24,
+      "job_id": "5e73a928-dc0c-41cf-b8ce-9d1bda240f99",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203531_5e73a928-dc0c-41cf-b8ce-9d1bda240f99.png"
+    },
+    {
+      "index": 25,
+      "job_id": "61c684a9-ee7b-4130-81cf-6a3571ffcb14",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202843_61c684a9-ee7b-4130-81cf-6a3571ffcb14.png"
+    },
+    {
+      "index": 26,
+      "job_id": "66ecabeb-d6d8-4a11-9ef6-5962ec7d8d8c",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_66ecabeb-d6d8-4a11-9ef6-5962ec7d8d8c.png"
+    },
+    {
+      "index": 27,
+      "job_id": "684779e4-e3a0-4e1b-8a93-611151d10eb9",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 28,
+      "job_id": "6e088f83-ec9d-40e2-8ceb-cda85dfdfa8d",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_6e088f83-ec9d-40e2-8ceb-cda85dfdfa8d.png"
+    },
+    {
+      "index": 29,
+      "job_id": "7448014c-6f1b-482e-88fd-0437233a6b95",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 30,
+      "job_id": "799b2651-e7ca-4b5e-9fd0-32b5e22daea7",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 31,
+      "job_id": "7bb98fac-a289-43c8-9e63-adfe0920230d",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_7bb98fac-a289-43c8-9e63-adfe0920230d.png"
+    },
+    {
+      "index": 32,
+      "job_id": "7bd64121-43cb-4472-b6bb-8ac490a278f5",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 33,
+      "job_id": "7be57cec-7038-4a9a-b620-f40332b004b1",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_7be57cec-7038-4a9a-b620-f40332b004b1.png"
+    },
+    {
+      "index": 34,
+      "job_id": "7f03864c-1bd4-4cd1-9d2f-873394a9f4dd",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 35,
+      "job_id": "7f7fa032-0fc8-469b-93d6-ac44ecf6af1b",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203242_7f7fa032-0fc8-469b-93d6-ac44ecf6af1b.png"
+    },
+    {
+      "index": 36,
+      "job_id": "81812cb2-a7fd-41cd-b90a-8c1893771776",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 37,
+      "job_id": "823596cc-57d9-4d0a-a664-4fc57a474597",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_201011_823596cc-57d9-4d0a-a664-4fc57a474597.png"
+    },
+    {
+      "index": 38,
+      "job_id": "8bf29388-ccbc-455c-b7bb-1477fce39a15",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204022_8bf29388-ccbc-455c-b7bb-1477fce39a15.png"
+    },
+    {
+      "index": 39,
+      "job_id": "8e90fa10-9daf-4633-a6f0-3cb04ad8ed3b",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 40,
+      "job_id": "91a71603-f849-4b85-b45a-ee724f461413",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_204022_91a71603-f849-4b85-b45a-ee724f461413.png"
+    },
+    {
+      "index": 41,
+      "job_id": "920a118e-be95-4ac8-ab6c-0ff4f338c41c",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_920a118e-be95-4ac8-ab6c-0ff4f338c41c.png"
+    },
+    {
+      "index": 42,
+      "job_id": "947e0419-cf9d-44c1-bff7-f42caad63b2d",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 43,
+      "job_id": "99e81adf-68b9-435f-a832-66aadf43b044",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 44,
+      "job_id": "9bf6126f-1919-4f6e-82df-298e5aa573f1",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 45,
+      "job_id": "9df806bd-eca9-4199-a8ab-3f039ee3362b",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203531_9df806bd-eca9-4199-a8ab-3f039ee3362b.png"
+    },
+    {
+      "index": 46,
+      "job_id": "a059d384-986b-4441-aa93-cf4793f2707a",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203245_a059d384-986b-4441-aa93-cf4793f2707a.png"
+    },
+    {
+      "index": 47,
+      "job_id": "a617ae54-25bd-4554-8c1d-b6c2b97c0873",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203246_a617ae54-25bd-4554-8c1d-b6c2b97c0873.png"
+    },
+    {
+      "index": 48,
+      "job_id": "a94cee2b-d455-4790-942a-03d2dad962e3",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203243_a94cee2b-d455-4790-942a-03d2dad962e3.png"
+    },
+    {
+      "index": 49,
+      "job_id": "ad9d2d10-435c-4820-a117-d4e55ace4d62",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_210512_ad9d2d10-435c-4820-a117-d4e55ace4d62.png"
+    },
+    {
+      "index": 50,
+      "job_id": "b8b450b7-f269-4a82-93fb-bca330cf6a30",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202510_b8b450b7-f269-4a82-93fb-bca330cf6a30.png"
+    },
+    {
+      "index": 51,
+      "job_id": "bc1b4e58-ab99-43e1-976a-19562eee7cfb",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 52,
+      "job_id": "beb3ea08-7682-4b6e-ad75-5c85014196bd",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203243_beb3ea08-7682-4b6e-ad75-5c85014196bd.png"
+    },
+    {
+      "index": 53,
+      "job_id": "c253b2f7-a4e9-4b13-a84f-fa6a51fd8506",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203246_c253b2f7-a4e9-4b13-a84f-fa6a51fd8506.png"
+    },
+    {
+      "index": 54,
+      "job_id": "d07d0ad7-ad0c-465e-8c24-5d379faa6b87",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203245_d07d0ad7-ad0c-465e-8c24-5d379faa6b87.png"
+    },
+    {
+      "index": 55,
+      "job_id": "d53a2b2c-af43-4e92-93d5-e602d42ee6d7",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202840_d53a2b2c-af43-4e92-93d5-e602d42ee6d7.png"
+    },
+    {
+      "index": 56,
+      "job_id": "d9804825-f714-48cf-b835-54d32ddb6983",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203243_d9804825-f714-48cf-b835-54d32ddb6983.png"
+    },
+    {
+      "index": 57,
+      "job_id": "dc504446-973a-42d2-a97b-0483f6297d4c",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_210512_dc504446-973a-42d2-a97b-0483f6297d4c.png"
+    },
+    {
+      "index": 58,
+      "job_id": "df930d00-6446-4344-ad25-1d563e04db80",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 59,
+      "job_id": "e1f34ab1-413c-4126-a5b9-d3d90deb30e1",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_2",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_203246_e1f34ab1-413c-4126-a5b9-d3d90deb30e1.png"
+    },
+    {
+      "index": 60,
+      "job_id": "e83324a7-5c4d-4a7f-a275-d231d02b2a04",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 61,
+      "job_id": "ebcb3e81-f77e-488c-b681-9cd23a8cf826",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 62,
+      "job_id": "f1fbd95b-225f-4759-86c4-3deb166968ef",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 63,
+      "job_id": "f3c9d3a5-a931-4a82-8c98-35a62f1085a2",
+      "status": "failed",
+      "type": "image",
+      "model": "gpt_image_2_5"
+    },
+    {
+      "index": 64,
+      "job_id": "ffb79422-3a6b-4a1e-83bb-308524b84d56",
+      "status": "completed",
+      "type": "image",
+      "model": "nano_banana_flash",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_202838_ffb79422-3a6b-4a1e-83bb-308524b84d56.png"
+    }
+  ]
+}

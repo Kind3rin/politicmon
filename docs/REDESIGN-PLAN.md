@@ -18,16 +18,17 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Roster | 52 fogli Higgsfield, quattro pose per specie; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
 | Boss | Nove illustrazioni, briefing e leader persistente | `shot:boss-briefing` |
-| Morale | Fiducia, coesione, tre promesse con scadenza, sette scelte civiche e memorie nei dialoghi | unit test, `shot:morale-satire` |
+| Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
+| Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
 | Schede squadra | Cinque pagine, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
 | Evoluzioni | Confronto, rinvio, ripresa al cap, soglie aggiornate, tessera dopo conferma, presentazione accessibile | `shot:evolution-dossier`, unit test |
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
-| PWA | Precache e primo utilizzo offline dei 109 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| PWA | Precache e primo utilizzo offline dei 404 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 757,97; spesa cumulativa 128 crediti. Non sono stati attivati acquisti
+verificato: 689,97; spesa cumulativa 196 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -35,8 +36,9 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 1. **Esplorazione e mondo.** Audit visivo delle 66 mappe e dei percorsi reali,
    identità di quartieri e interni, scene e oggetti coerenti con la satira,
    segnaletica leggibile, incontri e deviazioni che producano decisioni.
-   Rivedere anche i PNG storici di player, NPC, terreni, edifici e veicoli:
-   l'esistenza di un PNG non prova che il redesign sia concluso.
+   I PNG di player, NPC, terreni, edifici e veicoli sono sostituiti e revisionati
+   su 252 viste campione. Restano percorsi, incontri e identità delle singole
+   zone: la matrice non prova una campagna interamente percorsa.
 2. **Lotte e crescita.** Rivedere ritmo delle lotte selvatiche, curva delle mosse
    dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
@@ -74,9 +76,9 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round
 
-[RISERVE-DIRETTIVE.md](RISERVE-DIRETTIVE.md): 250 test, 2.992 layout, zaino e
-negozio con informazioni tattiche e preventivi, insegnamento consultabile da
-livello/direttiva, due direttive ripristinate e trenta icone sostituite/aggiunte.
-Tre ambienti e cinque fogli Higgsfield: 12 crediti. Il catalogo di texture
-ASCII non utilizzato è eliminato. Build: 216,9/348,3 KiB iniziali/totali; p95 18,5 ms.
-La PWA verifica 109 asset. [Asset e provenienza](HIGGSFIELD-ASSETS.md).
+[MONDO-CANTIERI.md](MONDO-CANTIERI.md): 295 PNG, 254 test, 252 viste su 66 mappe,
+nuova scelta civica con passerella persistente e prova di cammino/raccolta.
+Spesa del round: 68 crediti. La PWA verifica 404 asset. I controlli di campagna
+rimangono simulazioni di checkpoint, non una partita completa nell'interfaccia.
+[Asset e provenienza](HIGGSFIELD-ASSETS.md). Il mandato resta attivo finché tutte
+le superfici del gioco avranno un aspetto nuovo e coerente.

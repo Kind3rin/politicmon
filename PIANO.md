@@ -1,5 +1,13 @@
 # PIANO — Politicmon
 
+Piano attivo, 1 ottobre 2026: [redesign completo](docs/REDESIGN-PLAN.md).
+Ultimo round: [mondo e cantieri](docs/MONDO-CANTIERI.md), 295 PNG e passerella
+costruibile. La richiesta attuale supera il feature freeze del programma
+storico sotto. Il redesign prosegue fino a un aspetto nuovo e coerente in tutto
+il gioco; il completamento di un round non chiude il progetto.
+
+## Archivio del programma di luglio
+
 Aggiornato: 2026-07-10
 
 ## Programma hardening professionale — 2026-07-12

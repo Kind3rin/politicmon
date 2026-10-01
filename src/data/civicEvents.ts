@@ -5,11 +5,20 @@ export interface CivicChoice {
   promise?: PromiseId; fulfill?: boolean; lines: readonly string[];
 }
 export interface CivicEvent {
-  id: string; title: string; art: "sportello" | "studio" | "molo" | "verbale" | "pompa";
+  id: string; title: string; art: "sportello" | "studio" | "molo" | "verbale" | "pompa" | "cantiere";
   lines: readonly string[]; choices: readonly CivicChoice[];
 }
 
 export const CIVIC_EVENTS: Readonly<Record<string, CivicEvent>> = {
+  cantiere: {
+    id: "cantiere", title: "IL NASTRO NON REGGE", art: "cantiere",
+    lines: ["L'umarell conta tre inaugurazioni.", "La passerella è ancora nel PDF.", "Due SCHEDE BLINDATE sull'isola."],
+    choices: [
+      { id: "build", label: "MONTA LA PASSERELLA", cost: 240, polls: -3, trust: 9, cohesion: 10, lines: ["Quattro assi. Nessuna conferenza.", "Ora arrivi all'isola anche a piedi.", "Il collaudo: una signora ci passa."] },
+      { id: "report", label: "PUBBLICA IL VERBALE", cost: 0, polls: -2, trust: 6, cohesion: 5, lines: ["Il ritardo ha un nome e un costo.", "La passerella resta chiusa.", "Hai salvato i fondi, non il passaggio."] },
+      { id: "ribbon", label: "QUARTA INAUGURAZIONE", cost: 80, polls: 9, trust: -9, cohesion: -5, lines: ["Il nastro attraversa il laghetto.", "Tu lo tagli. Lui non regge nessuno.", "Per l'isola ti servirà il TRAGHETTO."] }
+    ]
+  },
   pompa: {
     id: "pompa", title: "IL PREZZO DEL CARTELLO", art: "pompa",
     lines: ["Il pieno costa una candidatura.", "Arriva un cartello col prezzo medio.", "Il pendolare chiede uno sconto."],
@@ -77,5 +86,5 @@ export const CIVIC_EVENTS: Readonly<Record<string, CivicEvent>> = {
 
 export const CIVIC_NPCS: Readonly<Record<string, string>> = {
   "egg-pensionato": "bus", "talkshow-fan": "remix", "pensionato-euro": "sportello",
-  "influencer-cap": "citofono", ingegnere: "traghetto", "campo-capo-campagna": "volunteers", "benzinaio-r3": "pompa"
+  "influencer-cap": "citofono", ingegnere: "traghetto", "campo-capo-campagna": "volunteers", "benzinaio-r3": "pompa", "viandante-r1": "cantiere"
 };

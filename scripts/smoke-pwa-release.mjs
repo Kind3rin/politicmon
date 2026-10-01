@@ -1,6 +1,7 @@
 import { chromium, devices, webkit } from "playwright";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { worldAssetPaths } from "./world-asset-paths.mjs";
 const fixtureState = (name) => {
   const spec = JSON.parse(readFileSync(resolve("tests/fixtures/saves", name), "utf8"));
   return spec.extends ? { ...fixtureState(spec.extends), ...structuredClone(spec.patch) } : structuredClone(spec.state);
@@ -12,6 +13,7 @@ const dossierArtPaths = [
   ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
   ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
 ];
+const worldArtPaths = worldAssetPaths();
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
@@ -112,8 +114,8 @@ const backdropEvidence = await page.evaluate(async (monsterFrames) => {
     checked.push(path);
   }
   return checked;
-}, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths]);
-if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
+}, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths]);
+if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length + worldArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
 console.log(`Primo utilizzo offline: ${backdropEvidence.length} asset Higgsfield.`);
 const offlineWorld = await page.evaluate(async () => {
   const keys = await caches.keys();

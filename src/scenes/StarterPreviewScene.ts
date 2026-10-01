@@ -1,4 +1,4 @@
-import { MONSTER_ACTION_ART, MONSTER_ART, monsterImage } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { SPECIES } from "../data/species";
 import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { audio } from "../engine/audio";
@@ -17,11 +17,12 @@ export class StarterPreviewScene implements Scene {
     private stack: SceneStack,
     private input: Input,
     private speciesId: string,
-    private onConfirm: () => void
+    private onConfirm: () => void,
+    private reduceEffects = false
   ) {}
 
   update(dt: number): void {
-    this.time += dt;
+    if (!this.reduceEffects) this.time += dt;
     const action = this.menu.update(this.input);
     if (action === "cancel") {
       this.stack.pop();
@@ -45,41 +46,8 @@ export class StarterPreviewScene implements Scene {
     screen.rect(0, 0, VIEW_W, 4, "#f4d34a");
     screen.text("LA TUA PRIMA SCHEDA", 8, 10, "#f4d34a");
 
-    // Sprite grande, animato: respiro + urlo periodico (frame d'azione se c'è).
-    const breath = Math.sin(this.time * 3) * 0.04;
-    const shout = Math.sin(this.time * 1.2) > 0.7; // ogni tanto "parla"
-    const png = monsterImage(this.speciesId);
-    if (png) {
-      const b = screen.imageBounds(png);
-      const scale = Math.min(78 / b.w, 84 / b.h);
-      const sx = 1 - breath;
-      const sy = 1 + breath;
-      const cx = 56;
-      const by = 118;
-      const drawW = b.w * scale * sx;
-      const drawH = b.h * scale * sy;
-      screen.rect(cx - 24, by - 2, 48, 6, "rgba(0,0,0,0.3)");
-      screen.imageSpriteCropped(png, cx - drawW / 2, by - drawH, { scaleX: scale * sx, scaleY: scale * sy });
-    } else {
-      const action = MONSTER_ACTION_ART[this.speciesId];
-      const art = shout && action ? action : MONSTER_ART[this.speciesId];
-      if (art) {
-        const w = art.art[0].length;
-        const h = art.art.length;
-        const scale = 3;
-        const sx = 1 - breath;
-        const sy = 1 + breath;
-        const cx = 56;
-        const by = 118;
-        const drawW = w * scale * sx;
-        const drawH = h * scale * sy;
-        // Piedistallo + ombra.
-        screen.rect(cx - 24, by - 2, 48, 6, "rgba(0,0,0,0.3)");
-        screen.sprite(`preview:${this.speciesId}${shout && action ? ":a" : ""}`, art, cx - drawW / 2, by - drawH, {
-          scale, scaleX: sx, scaleY: sy
-        });
-      }
-    }
+    // Lo stesso roster animato della squadra, senza ritratti testuali legacy.
+    drawMonsterSprite(screen, this.speciesId, 17, 28, 78, 90, { animationTime: this.time });
 
     // Scheda informativa a destra.
     const px = 104;

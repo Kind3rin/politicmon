@@ -4,7 +4,7 @@
 // NESSUNA logica di gioco qui: solo stato visivo e disegno.
 
 import {
-  MONSTER_ART, MONSTER_ACTION_ART, MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG, monsterImage, drawMonsterLoading
+  MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG, monsterImage, drawMonsterLoading
 } from "../../art/monsters";
 import { memeForm } from "../memeForms";
 import { STATUS_LABELS } from "../../data/moves";
@@ -416,13 +416,7 @@ export function drawBattleMonster(
   who: BattleSide
 ): void {
   const speciesId = comb.mon.speciesId;
-  const baseArt = MONSTER_ART[speciesId];
-  if (!baseArt && !MONSTERS_WITH_PNG.has(speciesId)) {
-    return;
-  }
-  const w = baseArt?.art[0]?.length ?? 24;
-  const h = baseArt?.art.length ?? 24;
-  const scale = 2;
+  if (!MONSTERS_WITH_PNG.has(speciesId)) return;
 
   // Affondo: 0 a riposo, ~1 al picco del colpo.
   const lunge = !fx.reduceEffects && lungeT > 0 ? Math.sin((0.3 - lungeT) / 0.3 * Math.PI) : 0;
@@ -476,23 +470,9 @@ export function drawBattleMonster(
     }
   }
 
-  // Frame d'azione (bocca urlante) per i mostri chiave durante l'affondo.
-  const action = MONSTER_ACTION_ART[speciesId];
-  const useAction = lunge > 0.4 && (Boolean(action) || MONSTERS_WITH_ACTION_PNG.has(speciesId));
-  const art = useAction && action ? action : baseArt;
-  const key = `${who === "foe" ? "battle" : "battleback"}:${speciesId}${useAction ? ":a" : ""}`;
-
-  // Redesign PixelLab: se c'è uno sprite PNG pronto per la specie, lo si disegna
-  // al posto della pixmap, conservando TUTTA l'animazione procedurale (respiro,
-  // affondo, contraccolpo, status) già calcolata in sx/sy/dx. Ancoraggio
-  // identico (centro in basso fermo). Il PNG è 64px: lo si scala per stare in
-  // linea con gli altri mostri (pixmap ~48px renderizzati). Gli effetti
-  // post-draw (velo SCANDALO, simbolo status) restano condivisi sotto.
-  // Una specie migrata può avere ancora MONSTER_ACTION_ART legacy ma non il
-  // corrispondente PNG `_action`. In quel caso l'affondo deve continuare a usare
-  // il PNG base: chiedere un action frame inesistente faceva sparire il mostro
-  // e mostrava il placeholder `…` per tutta l'animazione (es. GIORGIAGON).
-  const usePngAction = useAction && MONSTERS_WITH_ACTION_PNG.has(speciesId);
+  // I 52 fogli animati hanno la priorità. Il PNG d'azione resta un fallback
+  // disponibile solo per le specie che lo dichiarano nel registry.
+  const usePngAction = lunge > 0.4 && MONSTERS_WITH_ACTION_PNG.has(speciesId);
   const png = monsterImage(speciesId, usePngAction);
   const frames = monsterFramesImage(speciesId);
   let drawW: number;
@@ -513,21 +493,13 @@ export function drawBattleMonster(
     x = cx - drawW / 2 + dx;
     y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
     screen.imageSprite(png, x, y, { flipX, scaleX: sx * pngScale, scaleY: sy * pngScale });
-  } else if (MONSTERS_WITH_PNG.has(speciesId)) {
-    // Mai mostrare la pixmap legacy durante il decode o dopo una cache PWA
-    // incompleta: viene sostituita da un placeholder neutro per pochi frame.
+  } else {
+    // Decode o asset assente: placeholder neutro, mai una vecchia caricatura.
     drawW = 30;
     drawH = 38;
     x = cx - drawW / 2 + dx;
     y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
     drawMonsterLoading(screen, x, y, drawW, drawH);
-  } else {
-    drawW = w * scale * sx;
-    drawH = h * scale * sy;
-    // Ancoraggio: centro in basso resta fermo (lo scaling non fa "fluttuare").
-    x = cx - drawW / 2 + dx;
-    y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
-    screen.sprite(key, art, x, y, { flipX, scaleX: sx, scaleY: sy, scale });
   }
   screen.ctx.restore();
 

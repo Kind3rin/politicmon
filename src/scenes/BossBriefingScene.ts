@@ -1,4 +1,4 @@
-import { drawMonsterSprite, MONSTER_ART } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import type { TrainerDef } from "../data/trainers";
 import { ITEMS } from "../data/items";
 import { TYPE_ORDER } from "../data/poltypes";
@@ -71,7 +71,7 @@ export class BossBriefingScene implements Scene {
       screen.textRight(`${mon.hp}/${statsOf(mon).hp} PV`,226,y,mon.hp>0?GREY:"#b04848");
     }
     const mon=this.state.party[this.index];if(mon) {
-      drawMonsterSprite(screen,mon.speciesId,MONSTER_ART[mon.speciesId],10,121,48,32);
+      drawMonsterSprite(screen,mon.speciesId,10,121,48,32);
       screen.textFit(`LV ${mon.level} ${speciesOf(mon).types.join("/")}`,64,123,162,INK);
       screen.textFit(mon.status ? `STATUS: ${mon.status.toUpperCase()}` : "PRONTO AL DIBATTITO",64,135,162,mon.status?"#b04848":GREY);
       screen.textFit(mon.heldItem?ITEMS[mon.heldItem]?.name??"OGGETTO NON NOTO":"NESSUN OGGETTO TENUTO",64,147,162,GREY);

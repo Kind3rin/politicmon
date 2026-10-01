@@ -8,6 +8,7 @@ const fixtureState = (name) => {
 const legacySave = JSON.stringify(fixtureState("v13-post-ue.json"));
 const monsterFramePaths = JSON.parse(readFileSync("scripts/higgsfield-monster-frames.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
 const bossArtPaths = JSON.parse(readFileSync("scripts/higgsfield-premium-next.json", "utf8")).assets.filter((asset) => asset.kind === "boss").map((asset) => asset.path.replace(/^public\//, ""));
+const dossierArtPaths = JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
@@ -108,8 +109,8 @@ const backdropEvidence = await page.evaluate(async (monsterFrames) => {
     checked.push(path);
   }
   return checked;
-}, [...monsterFramePaths,...bossArtPaths]);
-if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
+}, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths]);
+if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
 console.log(`Primo utilizzo offline: ${backdropEvidence.length} asset Higgsfield.`);
 const offlineWorld = await page.evaluate(async () => {
   const keys = await caches.keys();

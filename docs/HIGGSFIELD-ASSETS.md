@@ -15,8 +15,14 @@ Totale dei primi tre blocchi: **56 crediti**.
 
 Quarto blocco: le **28 specie rimanenti** (42 crediti) e **nove illustrazioni
 dei boss** (13,5 crediti). Saldo osservato: **829,97 → 774,47**;
-costo: **55,5 crediti**. Totale di tutti i blocchi: **111,5 crediti**.
+costo: **55,5 crediti**. Totale dei primi quattro blocchi: **111,5 crediti**.
 Il roster completo ha **52 fogli / 208 pose**. Nessun acquisto o abbonamento attivato.
+
+Quinto blocco: fondali per evoluzione e scheda squadra, vignetta caro carburante.
+**4,5 crediti**, saldo **774,47 → 769,97**; spesa cumulativa **116 crediti**.
+Tre PNG a 48 colori, **132.807 byte** complessivi. Provenienza e riproduzione:
+`scripts/higgsfield-evolution-dossier.json` e `scripts/prepare-evolution-dossier.py`.
+Integrazione e controlli: [EVOLUZIONI-SCHEDE.md](EVOLUZIONI-SCHEDE.md).
 
 ![Pose dei tre starter e delle evoluzioni](img/monster-frames.png)
 
@@ -143,7 +149,7 @@ npm run smoke:pwa:release
 
 Lo screenshot harness controlla otto campi PVE, un duello PVP, il titolo,
 caricamento PNG e fallback per un asset mancante. Il test PWA rimuove le copie
-versionate dalla cache e verifica che tutti i 73 asset siano recuperabili
+versionate dalla cache e verifica che tutti i 76 asset siano recuperabili
 dalla precache durante il reload offline Chromium/Pixel 7.
 
 Politicdex, dossier, ritmo delle lotte e controlli sono documentati in

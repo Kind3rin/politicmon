@@ -17,11 +17,6 @@ const speciesStarts = matches(speciesText, /^\s{2}([A-Za-z0-9_]+): S\(\{/gm);
 const speciesIds = new Set(speciesStarts.map((m) => m[1]));
 const moveIds = new Set(matches(movesText, /^\s{2}([A-Za-z0-9_]+): M\(\{/gm).map((m) => m[1]));
 
-const artStart = monstersText.indexOf("export const MONSTER_ART");
-const actionStart = monstersText.indexOf("export const MONSTER_ACTION_ART");
-const artText = artStart >= 0 && actionStart > artStart ? monstersText.slice(artStart, actionStart) : "";
-const artIds = new Set(matches(artText, /^\s{2}([A-Za-z0-9_]+): caricature\(\{/gm).map((m) => m[1]));
-
 const pngSetStart = monstersText.indexOf("new Set<string>([");
 const pngSetEnd = monstersText.indexOf("]);", pngSetStart);
 const pngText = pngSetStart >= 0 && pngSetEnd > pngSetStart ? monstersText.slice(pngSetStart, pngSetEnd) : "";
@@ -58,11 +53,7 @@ for (let i = 0; i < speciesStarts.length; i += 1) {
       problems.push(`${id}: evolves to missing species '${target}'`);
     }
     const pngExists = pngIds.has(target) && existsSync(join(root, "public", "sprites", "monsters", `${target}.png`));
-    // PixelLab reboot: un PNG registrato e presente è una sorgente completa.
-    // Il fallback testuale è obbligatorio solo finché la migrazione non esiste.
-    if (!artIds.has(target) && !pngExists) {
-      problems.push(`${id}: evolution target '${target}' has neither MONSTER_ART nor PixelLab PNG`);
-    }
+    if (!pngExists) problems.push(`${id}: evolution target '${target}' is missing its registered PNG`);
     if (pngIds.has(target) && !pngExists) {
       problems.push(`${id}: evolution target '${target}' is in MONSTERS_WITH_PNG but PNG is missing`);
     }
@@ -73,6 +64,10 @@ for (let i = 0; i < speciesStarts.length; i += 1) {
       itemEvolutionRules += 1;
     }
   }
+}
+
+for (const id of speciesIds) {
+  if (!pngIds.has(id)) problems.push(`Species ${id} has no PNG registry entry`);
 }
 
 for (const id of pngIds) {

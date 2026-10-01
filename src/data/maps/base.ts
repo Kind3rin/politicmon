@@ -675,8 +675,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Questa conversazione non è mai avvenuta."]
       },
       {
-        id: "questuante-r3", pal: "aide", x: 9, y: 16, facing: "right",
-        lines: ["Aspetto una firma dal 1987.", "Il timbro c'è. Manca il funzionario. E il ministero. E la firma."]
+        id: "benzinaio-r3", pal: "barista", x: 9, y: 16, facing: "right",
+        lines: ["Alla pompa è arrivato il cartello nuovo. Lo sconto no.", "Il pendolare ha un turno alle sei. Il comunicato esce alle nove."]
       }
     ]
   },

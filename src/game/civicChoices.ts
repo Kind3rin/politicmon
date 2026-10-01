@@ -30,6 +30,9 @@ export function civicNpcReply(state: GameState, npcId: string): string[] | undef
     if (promise?.status === "broken") return ["La data è passata. Noi siamo ancora qui.", "Dal menu MORALE puoi rimediare: il ritardo costa di più."];
     const decision = state.morale.decisions.find((id) => id.startsWith(`${event}:`));
     const replies: Record<string, string[]> = {
+      "pompa:bus": ["La corsa delle sei ha dodici passeggeri. Dodici pieni in meno.", "Il grafico parla di mobilità. Qui la chiamiamo arrivare in orario."],
+      "pompa:sign": ["Il cartello funziona: il prezzo si legge benissimo.", "A oscurarsi, per ora, è soltanto il conto del pendolare."],
+      "pompa:speech": ["Il taglio gira ancora sui telefoni. La pompa non ha il telefono.", "Un cliente ha mostrato il video alla cassa. Ho chiesto il bancomat."],
       "bus:crop": ["La fermata è sparita dalla foto. Io continuo ad aspettare qui.", "Il fotografo almeno lo hai accompagnato in macchina."],
       "sportello:chart": ["Nel grafico siamo tutti serviti. L'ufficio però è ancora chiuso.", "Ho stampato il grafico. Non vale come documento."],
       "traghetto:ribbon": ["Il plastico è perfetto. Sul molo il passeggino lo solleviamo in due.", "Ci servirebbe una rampa in scala uno a uno."],

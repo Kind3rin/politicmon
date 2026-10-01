@@ -159,15 +159,15 @@ export class BagScene implements Scene {
               return;
             }
             const fromId = mon.speciesId;
-            this.consume(itemId);
             // Scena dedicata con animazione; l'evoluzione si applica al termine.
             this.stack.push(
               new EvolutionScene(this.stack, this.input, fromId, targetId, () => {
+                this.consume(itemId);
                 evolve(mon, targetId);
                 markSeen(this.state, targetId);
                 markCaught(this.state, targetId);
                 saveGame(this.state);
-              })
+              }, { mon, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed })
             );
             return;
           }

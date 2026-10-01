@@ -5,11 +5,20 @@ export interface CivicChoice {
   promise?: PromiseId; fulfill?: boolean; lines: readonly string[];
 }
 export interface CivicEvent {
-  id: string; title: string; art: "sportello" | "studio" | "molo" | "verbale";
+  id: string; title: string; art: "sportello" | "studio" | "molo" | "verbale" | "pompa";
   lines: readonly string[]; choices: readonly CivicChoice[];
 }
 
 export const CIVIC_EVENTS: Readonly<Record<string, CivicEvent>> = {
+  pompa: {
+    id: "pompa", title: "IL PREZZO DEL CARTELLO", art: "pompa",
+    lines: ["Il pieno costa una candidatura.", "Arriva un cartello col prezzo medio.", "Il pendolare chiede uno sconto."],
+    choices: [
+      { id: "bus", label: "FINANZIA DUE CORSE", cost: 220, polls: -2, trust: 10, cohesion: 8, lines: ["Due turni hanno un posto sul bus.", "Il prezzo non scende. La spesa sì.", "L'autista chiede il percorso, non il logo."] },
+      { id: "sign", label: "INAUGURA IL CARTELLO", cost: 80, polls: 5, trust: -5, cohesion: -2, lines: ["Il prezzo si legge da più lontano.", "Nessuno può pagarlo da più vicino.", "Il nastro costa ottanta euro."] },
+      { id: "speech", label: "ANNUNCIA UN TAGLIO", cost: 0, polls: 9, trust: -10, cohesion: -4, lines: ["Il video taglia sette secondi.", "Il rifornimento nessun centesimo.", "La pompa non accetta promesse al litro."] }
+    ]
+  },
   bus: {
     id: "bus", title: "IL BUS NELLA FOTO", art: "sportello",
     lines: ["Il bus passa solo sul manifesto.", "Il fotografo propone di togliere", "la fermata: almeno non si aspetta."],
@@ -68,5 +77,5 @@ export const CIVIC_EVENTS: Readonly<Record<string, CivicEvent>> = {
 
 export const CIVIC_NPCS: Readonly<Record<string, string>> = {
   "egg-pensionato": "bus", "talkshow-fan": "remix", "pensionato-euro": "sportello",
-  "influencer-cap": "citofono", ingegnere: "traghetto", "campo-capo-campagna": "volunteers"
+  "influencer-cap": "citofono", ingegnere: "traghetto", "campo-capo-campagna": "volunteers", "benzinaio-r3": "pompa"
 };

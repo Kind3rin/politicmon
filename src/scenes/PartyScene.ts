@@ -1,12 +1,16 @@
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { MOVES, STATUS_LABELS, moveSummary } from "../data/moves";
-import { TYPE_COLORS, typeIcon } from "../data/poltypes";
+import { ITEMS } from "../data/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { abilityOf, canLearnMove, heldItemOf, nextEvolutionLevel, speciesOf, statsOf, type Monster } from "../game/monster";
-import { saveGame } from "../game/state";
+import { abilityOf, canLearnMove, heldItemOf, evolve, levelEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
+import { markCaught, markSeen, saveGame } from "../game/state";
+import { sceneImage } from "../engine/assets";
+import { careerNotes } from "../game/evolutionGuide";
+import { defensiveMatchups } from "../game/dexGuide";
+import { EvolutionScene } from "./EvolutionScene";
 import type { GameState } from "../game/state";
 import { drawHpBar, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
@@ -31,20 +35,9 @@ export class PartyScene implements Scene {
   // Cursore nel DETTAGLIO: scorre le voci ispezionabili (mosse + abilità) per
   // mostrarne la descrizione in basso. -1 = nessuna selezione (vista neutra).
   private detailIndex = 0;
-
-  // Voci ispezionabili del dettaglio, nell'ordine di navigazione: prima le mosse
-  // poi l'abilità (se la specie ne ha una). Ognuna con label e descrizione.
-  private detailEntries(mon: Monster): Array<{ label: string; desc: string }> {
-    const entries = mon.moves.map((slot) => {
-      const move = MOVES[slot.id];
-      return { label: move.name, desc: moveSummary(move) };
-    });
-    const ability = abilityOf(mon);
-    if (ability) {
-      entries.push({ label: `ABILITÀ: ${ability.name}`, desc: ability.desc });
-    }
-    return entries;
-  }
+  private summaryPage = 0;
+  private summaryScroll = 0;
+  private time = 0;
 
   constructor(
     private stack: SceneStack,
@@ -53,49 +46,36 @@ export class PartyScene implements Scene {
     private opts: PartyOptions
   ) {}
 
-  update(): void {
+  update(dt = 0): void {
+    if (!this.state.reduceEffects) this.time += dt;
     const party = this.opts.partyOverride ?? this.state.party;
     if (this.summary) {
-      // START nel dettaglio: togli l'oggetto tenuto (torna nella borsa).
+      const mon = this.summary;
+      if (this.input.wasPressed("b")) { audio.cancel(); this.summary = null; return; }
+      if (this.input.wasPressed("a")) { this.summaryPage = (this.summaryPage + 1) % 5; this.summaryScroll = 0; audio.cursor(); return; }
+      const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
+      if (dir && party.length > 1) {
+        this.index = (this.index + dir + party.length) % party.length;
+        this.summary = party[this.index]; this.detailIndex = 0; this.summaryScroll = 0; audio.cursor(); return;
+      }
+      const delta = this.input.wasPressed("down") ? 1 : this.input.wasPressed("up") ? -1 : 0;
+      if (delta) { this.summaryScroll = Math.max(0, Math.min(Math.max(0, this.summaryLines(mon).length - 7), this.summaryScroll + delta)); audio.cursor(); return; }
       if (this.input.wasPressed("start")) {
-        const held = heldItemOf(this.summary);
-        if (held) {
-          delete this.summary.heldItem;
-          this.state.bag[held.id] = (this.state.bag[held.id] ?? 0) + 1;
-          audio.confirm();
-          saveGame(this.state);
-        } else {
-          audio.cancel();
+        if (this.summaryPage === 1) { this.detailIndex = (this.detailIndex + 1) % Math.max(1, mon.moves.length); this.summaryScroll = 0; audio.cursor(); return; }
+        if (this.summaryPage === 3 && !this.opts.partyOverride) {
+          const target = levelEvolution(mon, this.state.sondaggi);
+          if (target) {
+            this.stack.push(new EvolutionScene(this.stack, this.input, mon.speciesId, target, () => {
+              evolve(mon, target); markSeen(this.state, target); markCaught(this.state, target); saveGame(this.state); this.summaryScroll = 0;
+            }, { mon, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed }));
+            audio.confirm(); return;
+          }
         }
-        return;
-      }
-      // Su/giù: scorre mosse+abilità per leggerne la descrizione in basso.
-      const entries = this.detailEntries(this.summary);
-      if (entries.length > 0) {
-        if (this.input.wasPressed("up")) {
-          this.detailIndex = (this.detailIndex + entries.length - 1) % entries.length;
-          audio.cursor();
+        if (this.summaryPage === 0 && !this.opts.partyOverride) {
+          const held = heldItemOf({ ...mon });
+          if (held) { delete mon.heldItem; this.state.bag[held.id] = (this.state.bag[held.id] ?? 0) + 1; saveGame(this.state); audio.confirm(); this.summaryScroll = 0; return; }
         }
-        if (this.input.wasPressed("down")) {
-          this.detailIndex = (this.detailIndex + 1) % entries.length;
-          audio.cursor();
-        }
-      }
-      // Sinistra/destra: passa al mostro precedente/successivo senza uscire
-      // (come la sfoglia del Politicdex). Il cursore lista segue.
-      if (party.length > 1) {
-        const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
-        if (dir !== 0) {
-          this.index = (this.index + dir + party.length) % party.length;
-          this.summary = party[this.index];
-          this.detailIndex = 0;
-          audio.cursor();
-          return;
-        }
-      }
-      if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
         audio.cancel();
-        this.summary = null;
       }
       return;
     }
@@ -154,6 +134,7 @@ export class PartyScene implements Scene {
         this.moveFrom = null;
         this.detailIndex = 0;
         this.summary = mon;
+        this.summaryPage = 0; this.summaryScroll = 0;
         return;
       }
       if (this.opts.mode === "battle-switch" || this.opts.mode === "forced-switch") {
@@ -204,7 +185,7 @@ export class PartyScene implements Scene {
         screen.frame(4, y, VIEW_W - 8, 22, this.moveFrom !== null ? "#f0c040" : INK);
       }
       // Mini-sprite nello slot lista (box 26x21, ancorato in basso).
-      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 6, y + 1, 26, 21, { memeFormId: mon.memeFormId });
+      drawMonsterSprite(screen, mon.speciesId, 6, y + 1, 26, 21, { memeFormId: mon.memeFormId });
       const ink = INK;
       screen.text(speciesOf(mon).name, 36, y + 3, ink);
       screen.textRight(`L${mon.level}`, VIEW_W - 64, y + 3, ink);
@@ -238,102 +219,45 @@ export class PartyScene implements Scene {
     screen.text(hint, 8, VIEW_H - 10, GREY);
   }
 
+  private summaryLines(mon: Monster): string[] {
+    const species = speciesOf(mon), stats = statsOf(mon), held = ITEMS[mon.heldItem ?? ""];
+    let notes: string[];
+    if (this.summaryPage === 0) {
+      notes = [held?.kind === "hold" && !this.opts.partyOverride ? "START: RIPRENDI L'OGGETTO." : "LEGGERE NON CAMBIA LA SQUADRA.", species.category,
+        `PV: ${mon.hp}/${stats.hp}. STATUS: ${mon.status ? STATUS_LABELS[mon.status] : "NESSUNO"}.`,
+        `GRINTA ${stats.atk}. FACCIA TOSTA ${stats.def}. RETORICA ${stats.spc}. OPPORTUNISMO ${stats.spd}.`,
+        `OGGETTO: ${held?.kind === "hold" ? held.name : "NESSUNO"}.`, `ESPERIENZA TOTALE: ${mon.exp}.`, species.dexLine];
+    } else if (this.summaryPage === 1) {
+      const slot = mon.moves[this.detailIndex] ?? mon.moves[0], move = slot ? MOVES[slot.id] : undefined;
+      notes = move && slot ? ["START: PROSSIMA MOSSA.", `${this.detailIndex + 1}/${mon.moves.length}: ${move.name}.`, `PP ${slot.pp}/${move.pp}. TIPO ${move.type}.`, moveSummary(move), `PRIORITÀ ${move.effect?.priority ?? 0}.`, slot.pp === 0 ? "PP ESAURITI: NON DISPONIBILE IN LOTTA." : "I PP SI CONSUMANO SOLO USANDO LA MOSSA."] : ["NESSUNA MOSSA."];
+    } else if (this.summaryPage === 2) {
+      const ability = abilityOf(mon);
+      notes = [ability ? `${ability.name}. ${ability.desc}` : "NESSUNA ABILITÀ PASSIVA.", held?.kind === "hold" ? `${held.name}. ${held.desc}` : "NESSUN OGGETTO TENUTO."];
+    } else if (this.summaryPage === 3) {
+      notes = careerNotes(mon, this.state.sondaggi).map((line) => line.replace("A APRE IL CONFRONTO", "START APRE IL CONFRONTO"));
+      if (this.opts.partyOverride) notes.unshift("MIRROR: LE EVOLUZIONI SI GESTISCONO NELLA SQUADRA ORIGINALE.");
+    } else notes = ["DANNO SUBITO PER TIPO:", ...defensiveMatchups(mon.speciesId).map((m) => `${m.type}: x${m.mult} ${m.mult > 1 ? "DEBOLE" : m.mult < 1 ? "RESISTE" : "NEUTRO"}.`), "ABILITÀ, OGGETTI E SONDAGGI POSSONO MODIFICARE IL RISULTATO."];
+    return notes.flatMap((line) => wrapText(line, 35));
+  }
+
   private drawSummary(screen: Screen, mon: Monster): void {
-    const species = speciesOf(mon);
-    screen.clear("#e3ebef");
-    screen.panel(4, 4, VIEW_W - 8, VIEW_H - 8, "card");
-    drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], 8, 8, 56, 54, { memeFormId: mon.memeFormId });
-    screen.text(species.name, 70, 12, INK);
-    // Sfoglia ◄►: indicatore posizione nella squadra (come nel Politicdex).
-    const party = this.opts.partyOverride ?? this.state.party;
-    if (party.length > 1) {
-      screen.textRight(`◄${this.index + 1}/${party.length}►`, 226, 12, GREY);
-    }
-    // Anticipa la prossima evoluzione su una riga dedicata. Affiancarla alla
-    // categoria comprimeva i casi lunghi fino al 47% della larghezza naturale.
-    const evoLv = nextEvolutionLevel(mon);
-    const evoLabel = evoLv !== undefined ? `EVOLVE a L${evoLv}` : "";
-    screen.textFit(`L${mon.level}  ${species.category}`, 70, 22, 156, GREY);
-    let tx = 70;
-    for (const type of species.types) {
-      const icon = typeIcon(type);
-      const iconW = icon ? 11 : 0;
-      const w = type.length * 6 + 6 + iconW;
-      screen.rect(tx, 32, w, 11, TYPE_COLORS[type]);
-      if (icon) {
-        screen.imageSprite(icon, tx + 1, 33, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
-      }
-      screen.text(type, tx + 3 + iconW, 34, PAPER);
-      tx += w + 4;
-    }
-    if (evoLabel) screen.textRight(evoLabel, 226, 44, "#e8c84a");
-    // STAT: colonna destra accanto allo sprite (x 70..226), 5 righe y48..88.
-    // Occupa SOLO la metà destra: la lista MOSSE sta interamente SOTTO (da y98),
-    // così le due colonne non si sovrappongono più (prima le mosse lunghe a
-    // x=14 invadevano la fascia delle stat).
-    const stats = statsOf(mon);
-    const rows: Array<[string, number]> = [
-      ["PV", stats.hp], ["GRINTA", stats.atk], ["FACCIA TOSTA", stats.def],
-      ["RETORICA", stats.spc], ["OPPORTUN.", stats.spd]
-    ];
-    const statsY = evoLabel ? 53 : 48;
-    for (let i = 0; i < rows.length; i += 1) {
-      screen.text(rows[i][0], 70, statsY + i * 9, INK);
-      screen.textRight(String(rows[i][1]), 226, statsY + i * 9, INK);
-    }
-    // MOSSE + ABILITÀ ispezionabili: la voce selezionata (detailIndex) è
-    // evidenziata e la sua descrizione appare nel box in basso. Le mosse
-    // occupano gli indici 0..n-1, l'abilità (se c'è) l'indice n.
-    const ability = abilityOf(mon);
-    screen.text("MOSSE:", 14, 95, GREY);
-    for (let i = 0; i < mon.moves.length; i += 1) {
-      const slot = mon.moves[i];
-      const move = MOVES[slot.id];
-      const my = 105 + i * 9;
-      const sel = this.detailIndex === i;
-      if (sel) {
-        // Barra d'evidenza + cursore sulla voce selezionata.
-        screen.rect(10, my - 1, VIEW_W - 20, 9, "#fff0bd");
-        screen.text("►", 10, my, "#8c5b12");
-      }
-      screen.textFit(move.name, 18, my, 150, INK);
-      screen.textRight(`PP ${slot.pp}/${move.pp}`, 226, my, sel ? INK : GREY);
-    }
-    // ABILITÀ passiva della specie (voce ispezionabile, indice = n. mosse) +
-    // OGGETTO tenuto sulla STESSA riga a destra: libera lo spazio in basso per
-    // il box descrizione. Cursore Y progressivo sotto l'ultima mossa.
-    const abilityY = 105 + mon.moves.length * 9 + 3;
-    const abilityIdx = mon.moves.length;
-    const abilitySel = ability !== null && this.detailIndex === abilityIdx;
-    if (abilitySel) {
-      screen.rect(10, abilityY - 1, VIEW_W - 20, 9, "#fff0bd");
-      screen.text("►", 10, abilityY, "#8c5b12");
-    }
-    // OGGETTO tenuto (raro): se presente riserva la metà destra della riga e
-    // l'abilità si clippa più corta; altrimenti l'abilità ha tutta la riga.
-    const held = heldItemOf(mon);
-    const abilityMax = held ? 8 : 22;
-    screen.text(
-      `ABILITÀ: ${ability ? ability.name.slice(0, abilityMax) : "—"}`,
-      18, abilityY, ability ? "#e8c84a" : (abilitySel ? PAPER : GREY)
-    );
-    if (held) {
-      screen.textRight(`OGG: ${held.name.slice(0, 10)}`, 226, abilityY, INK);
-    }
-    // Box descrizione della voce selezionata (mossa o abilità), ancorato in
-    // fondo. Max 2 righe (le desc stanno tutte in ~76 char): niente overflow.
-    const entries = this.detailEntries(mon);
-    const entry = entries[this.detailIndex];
-    if (entry) {
-      const descLines = wrapText(entry.desc, 38).slice(0, 2);
-      // Altezza minima per evitare che una descrizione di una sola riga resti
-      // schiacciata contro il bordo inferiore del pannello moderno.
-      const boxH = Math.max(21, 7 + descLines.length * 8);
-      const boxY = VIEW_H - 4 - boxH;
-      screen.panel(6, boxY, VIEW_W - 12, boxH, "dialog");
-      for (let i = 0; i < descLines.length; i += 1) {
-        screen.text(descLines[i], 12, boxY + 5 + i * 8, INK);
-      }
-    }
+    const species = speciesOf(mon), party = this.opts.partyOverride ?? this.state.party;
+    screen.clear("#101b32");
+    const bg = sceneImage("ui:dossier", "ui/dossier.png");
+    if (bg) screen.image(bg, 0, 0, 240, 180);
+    drawScreenHeader(screen, "DOSSIER DI SQUADRA");
+    screen.rect(6, 20, 228, 59, "#101b32");
+    screen.frame(6, 20, 228, 59, "#d3a745");
+    drawMonsterSprite(screen, mon.speciesId, 10, 29, 54, 45, { memeFormId: mon.memeFormId, animationTime: this.time });
+    screen.text(species.name, 76, 25, "#fff3cc");
+    screen.text(`L${mon.level}  ${this.index + 1}/${party.length}`, 76, 38, "#b7cedc");
+    species.types.forEach((type, i) => screen.text(type, 76, 51 + i * 11, "#fff3cc"));
+    screen.panel(6, 82, 228, 83, "card");
+    screen.text(["PROFILO", "MOSSE", "ABILITÀ/OGGETTO", "CARRIERA", "DIFESE"][this.summaryPage], 14, 88, "#8c5b12");
+    const lines = this.summaryLines(mon);
+    this.summaryScroll = Math.min(this.summaryScroll, Math.max(0, lines.length - 7));
+    lines.slice(this.summaryScroll, this.summaryScroll + 7).forEach((line, i) => screen.text(line, 14, 97 + i * 8, INK));
+    screen.text(`SU/GIU: TESTO ${this.summaryScroll + 1}/${Math.max(1, lines.length - 6)}`, 14, 154, "#59657d");
+    screen.text("A:PAGINA ◄►:SQUADRA B:LISTA", 8, 169, "#fff3cc");
   }
 }

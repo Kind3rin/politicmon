@@ -1,147 +1,102 @@
-import { MONSTER_ART, MONSTERS_WITH_PNG, drawMonsterSprite } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { SPECIES } from "../data/species";
+import { sceneImage } from "../engine/assets";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { wrapText, INK } from "../ui/widgets";
+import type { Screen } from "../engine/screen";
+import { evolutionComparison } from "../game/evolutionGuide";
+import type { Monster } from "../game/monster";
+import { drawScreenHeader, wrapText, INK } from "../ui/widgets";
 
-// Scena dedicata all'evoluzione, in stile Pokémon: lo sprite del POLITICMON
-// pulsa alternando la forma vecchia e quella nuova sempre più in fretta, poi un
-// flash bianco e — PUF! — appare la forma evoluta, con fanfara.
-//
-// Fasi:
-//  0 intro   - sprite vecchio fermo, "X si sta evolvendo..."
-//  1 morph   - alterna vecchio/nuovo accelerando + bagliore crescente
-//  2 flash   - schermo che sbianca, jingle
-//  3 reveal  - nuovo sprite + scritta finale, attende conferma
+export interface EvolutionOptions {
+  mon?: Monster;
+  reduceEffects?: boolean;
+  battleSpeed?: 1 | 2;
+  onDecline?: () => void;
+}
+const PAGES = ["VALORI", "TIPI/ABILITÀ", "MOSSE"];
+
 export class EvolutionScene implements Scene {
   private time = 0;
   private phase = 0;
   private phaseT = 0;
   private done = false;
+  private review: boolean;
+  private page = 0;
+  private scroll = 0;
 
-  // Durate (s) delle fasi animate.
-  private static INTRO = 1.6;
-  private static MORPH = 2.8;
-  private static FLASH = 0.7;
-
-  constructor(
-    private stack: SceneStack,
-    private input: Input,
-    private fromId: string,
-    private toId: string,
-    private onDone: () => void
-  ) {
-    // Niente cambio di traccia: il momento è scandito dai jingle (PUF! + fanfara),
-    // così non c'è uno stacco musicale brusco entrando nella scena.
+  constructor(private stack: SceneStack, private input: Input, private fromId: string, private toId: string, private onDone: () => void, private options: EvolutionOptions = {}) {
+    this.review = !!options.mon;
   }
-
+  private lines(): string[] {
+    return this.options.mon ? evolutionComparison(this.options.mon, this.toId, this.page).flatMap((line) => wrapText(line, 35)) : [];
+  }
+  private finish(accepted: boolean): void {
+    if (this.done) return;
+    this.done = true;
+    this.stack.pop();
+    if (accepted) this.onDone();
+    else this.options.onDecline?.();
+  }
   update(dt: number): void {
-    this.time += dt;
-    this.phaseT += dt;
-    if (this.phase === 0 && this.phaseT >= EvolutionScene.INTRO) {
-      this.phase = 1;
-      this.phaseT = 0;
-    } else if (this.phase === 1 && this.phaseT >= EvolutionScene.MORPH) {
-      this.phase = 2;
-      this.phaseT = 0;
-      audio.confirm(); // momento del "PUF!": stacco secco
-    } else if (this.phase === 2 && this.phaseT >= EvolutionScene.FLASH) {
-      this.phase = 3;
-      this.phaseT = 0;
-      audio.evolveJingle(); // arpeggio magico di rivelazione, distinto dal level-up
-    }
-    // Nella fase finale si conferma per uscire.
-    if (this.phase === 3 && !this.done) {
-      if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
-        this.done = true;
-        this.stack.pop();
-        this.onDone();
-      }
-    }
-  }
-
-  // Quanto velocemente alterna le forme: parte lento, finisce frenetico.
-  private morphShowsNew(): boolean {
-    const p = Math.min(1, this.phaseT / EvolutionScene.MORPH);
-    const freq = 2 + p * 16; // Hz crescente
-    return Math.sin(this.phaseT * freq * Math.PI) > 0;
-  }
-
-  private drawMon(screen: Screen, speciesId: string, glow: number, scaleBoost = 0): void {
-    const art = MONSTER_ART[speciesId];
-    if (!art && !MONSTERS_WITH_PNG.has(speciesId)) {
+    if (this.done) return;
+    if (!this.options.reduceEffects) this.time += dt;
+    if (this.review) {
+      if (this.input.wasPressed("b")) { audio.cancel(); this.finish(false); return; }
+      const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
+      if (dir) { this.page = (this.page + dir + PAGES.length) % PAGES.length; this.scroll = 0; audio.cursor(); return; }
+      const delta = this.input.wasPressed("down") ? 1 : this.input.wasPressed("up") ? -1 : 0;
+      if (delta) { this.scroll = Math.max(0, Math.min(Math.max(0, this.lines().length - 7), this.scroll + delta)); audio.cursor(); return; }
+      if (this.input.wasPressed("a")) { this.review = false; this.phaseT = 0; audio.confirm(); }
       return;
     }
-    const w = art?.art[0]?.length ?? 32;
-    const h = art?.art.length ?? 32;
-    const scale = 3 + scaleBoost;
-    const cx = VIEW_W / 2;
-    const by = 104;
-    const drawW = w * scale;
-    const drawH = h * scale;
-    const x = cx - drawW / 2;
-    const y = by - drawH;
-    // Alone luminoso dietro lo sprite (cresce col morph).
-    if (glow > 0) {
-      const r = Math.round(20 + glow * 40);
-      screen.ctx.save();
-      screen.ctx.globalAlpha = Math.min(0.85, glow);
-      screen.ctx.fillStyle = "#fff7d6";
-      screen.ctx.beginPath();
-      screen.ctx.arc(cx, by - drawH / 2, r, 0, Math.PI * 2);
-      screen.ctx.fill();
-      screen.ctx.restore();
+    if (this.phase === 3) {
+      if (this.input.wasPressed("a") || this.input.wasPressed("b")) this.finish(true);
+      return;
     }
-    // PNG PixelLab (o pixmap fallback) dentro la stessa box dell'animazione.
-    drawMonsterSprite(screen, speciesId, art, x, y, drawW, drawH);
+    this.phaseT += dt * (this.options.battleSpeed ?? 1);
+    const durations = this.options.reduceEffects ? [0.35, 0.65, 0.25] : [0.7, 1.8, 0.35];
+    if ((this.phase >= 1 && this.input.wasPressed("a")) || this.phaseT >= durations[this.phase]) {
+      this.phase = this.input.wasPressed("a") ? 3 : this.phase + 1;
+      this.phaseT = 0;
+      if (this.phase === 3) audio.evolveJingle();
+    }
   }
-
   draw(screen: Screen): void {
-    screen.clear("#0a1024");
-    // Stelline/scintille di fondo che ruotano piano (atmosfera "magica").
-    for (let i = 0; i < 24; i += 1) {
-      const a = (i / 24) * Math.PI * 2 + this.time * 0.4;
-      const rad = 60 + (i % 4) * 18;
-      const sx = Math.round(VIEW_W / 2 + Math.cos(a) * rad);
-      const sy = Math.round(70 + Math.sin(a) * rad * 0.7);
-      const tw = (Math.sin(this.time * 3 + i) + 1) / 2;
-      screen.rect(sx, sy, 1, 1, tw > 0.5 ? "#5a6da0" : "#39415a");
+    screen.clear("#101b32");
+    const art = sceneImage("ui:evolution", "ui/evolution.png");
+    if (art) screen.image(art, 0, 0, 240, 180);
+    drawScreenHeader(screen, this.review ? "SCELTA DI CARRIERA" : "CAMBIO DI CASACCA");
+    if (this.review) { this.drawReview(screen); return; }
+    const showNew = this.phase >= 2 || (this.phase === 1 && this.phaseT > 0.9);
+    const id = showNew ? this.toId : this.fromId;
+    if (!this.options.reduceEffects && this.phase === 1) {
+      for (let i = 0; i < 10; i++) {
+        const x = Math.round(35 + i * 18 + Math.sin(this.time + i) * 4);
+        const y = Math.round(120 - ((this.phaseT * 40 + i * 13) % 85));
+        screen.rect(x, y, 3, 2, i % 2 ? "#e6b944" : "#72d4c0");
+      }
     }
-
-    if (this.phase === 0) {
-      this.drawMon(screen, this.fromId, 0);
-      this.banner(screen, `${SPECIES[this.fromId].name} si sta evolvendo...`);
-    } else if (this.phase === 1) {
-      const p = this.phaseT / EvolutionScene.MORPH;
-      const showNew = this.morphShowsNew();
-      // Verso la fine, lo sprite si "gonfia" leggermente di luce.
-      this.drawMon(screen, showNew ? this.toId : this.fromId, p, p * 0.6);
-      this.banner(screen, "...");
-    } else if (this.phase === 2) {
-      // Flash bianco accecante che copre tutto, poi sfuma.
-      const k = 1 - this.phaseT / EvolutionScene.FLASH;
-      this.drawMon(screen, this.toId, 1, 0.6);
-      screen.ctx.save();
-      screen.ctx.globalAlpha = Math.max(0, k);
-      screen.ctx.fillStyle = "#ffffff";
-      screen.ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-      screen.ctx.restore();
-    } else {
-      // Rivelazione: nuovo sprite con un pulsare gioioso.
-      const bob = Math.sin(this.time * 4) * 0.05;
-      this.drawMon(screen, this.toId, 0, bob);
-      this.banner(screen, `Congratulazioni! ${SPECIES[this.fromId].name} è diventato ${SPECIES[this.toId].name}!`);
-      screen.textCenter("A: CONTINUA", VIEW_W / 2, VIEW_H - 52, "#9aa0b8");
-    }
+    screen.textCenter(this.phase === 3 ? SPECIES[this.toId].name : "LA LINEA CAMBIA. IL VERBALE RESTA.", 120, 25, "#fff3cc");
+    drawMonsterSprite(screen, id, 70, 36, 100, 89, { animationTime: this.options.reduceEffects ? 0 : this.time });
+    screen.panel(6, 132, 228, 29, "card");
+    const quote = this.phase === 3 ? "Stesso tesserato. Nuova carta intestata." : "Si approva il nuovo simbolo. Il carattere era già quello.";
+    wrapText(quote, 35).forEach((line, i) => screen.text(line, 14, 139 + i * 9, INK));
+    screen.textCenter(this.phase === 3 ? "A/B: CONTINUA" : "A: SALTA L'ANIMAZIONE", 120, 169, "#fff3cc");
   }
-
-  private banner(screen: Screen, text: string): void {
-    screen.panel(6, VIEW_H - 40, VIEW_W - 12, 32);
-    const lines = wrapText(text, 36);
-    for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-      screen.text(lines[i], 14, VIEW_H - 32 + i * 10, INK);
+  private drawReview(screen: Screen): void {
+    for (const [id, x] of [[this.fromId, 8], [this.toId, 128]] as const) {
+      screen.rect(x, 21, 104, 57, "#101b32");
+      screen.frame(x, 21, 104, 57, "#d3a745");
+      screen.textCenter(SPECIES[id].name, x + 52, 25, "#fff3cc");
+      drawMonsterSprite(screen, id, x + 28, 36, 48, 37);
     }
+    screen.panel(6, 82, 228, 83, "card");
+    screen.text(`◄ ${PAGES[this.page]} ►`, 14, 88, "#8c5b12");
+    const lines = this.lines();
+    lines.slice(this.scroll, this.scroll + 7).forEach((line, i) => screen.text(line, 14, 97 + i * 8, INK));
+    screen.textCenter(`SU/GIU: TESTO ${this.scroll + 1}/${Math.max(1, lines.length - 6)}`, 120, 154, "#59657d");
+    screen.text("A: EVOLVI   B: ORA NO", 8, 169, "#fff3cc");
   }
 }

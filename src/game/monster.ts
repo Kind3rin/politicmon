@@ -270,7 +270,7 @@ export function evolve(mon: Monster, targetId: string): void {
   const hpRatio = mon.hp / statsOf(mon).hp;
   mon.speciesId = targetId;
   delete mon.memeFormId;
-  mon.hp = Math.max(1, Math.round(statsOf(mon).hp * hpRatio));
+  mon.hp = hpRatio === 0 ? 0 : Math.max(1, Math.round(statsOf(mon).hp * hpRatio));
 }
 
 export function healMonster(mon: Monster): void {

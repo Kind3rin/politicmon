@@ -1,5 +1,5 @@
 import { audio } from "../engine/audio";
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -381,7 +381,7 @@ export class TitleScene implements Scene {
       screen.rect(cx - 6, 94, 12, 2, "#f4f4ec");
       screen.rect(cx + 6, 94, 12, 2, "#d23c3c");
       screen.frame(cx - 19, 89, 38, 8, "#10141f");
-      drawMonsterSprite(screen, id, MONSTER_ART[id], slot.x + 5, 52 + bob, 42, 40, { flipX: slot.flip });
+      drawMonsterSprite(screen, id, slot.x + 5, 52 + bob, 42, 40, { flipX: slot.flip });
     }
   }
 
@@ -402,7 +402,7 @@ export class TitleScene implements Scene {
       screen.rect(x + 49, y + 20, 3, 13, "#d8bc7c");
       screen.rect(x + 56, y + 16, 3, 17, "#d8bc7c");
       const starterId = STARTERS[Math.floor(this.time * 1.2) % STARTERS.length];
-      drawMonsterSprite(screen, starterId, MONSTER_ART[starterId], x + 49, y + 7, 28, 26);
+      drawMonsterSprite(screen, starterId, x + 49, y + 7, 28, 26);
       return;
     }
 

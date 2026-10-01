@@ -2,8 +2,12 @@
 
 Aggiornamento del 1 ottobre 2026. La campagna mette a confronto la visibilità
 del candidato con il lavoro che resta quando le telecamere se ne vanno.
-Il percorso delle medaglie e degli atti continua come prima; sei incontri
+Il percorso delle medaglie e degli atti continua come prima; sette incontri
 opzionali aggiungono decisioni con costi, vantaggi e conseguenze visibili.
+
+Il settimo incontro è il benzinaio del Percorso 3: cartello, annuncio o corse
+finanziate. La vignetta, le fonti e le conseguenze sono in
+[EVOLUZIONI-SCHEDE.md](EVOLUZIONI-SCHEDE.md).
 
 ![Scelte e conseguenze nel gioco](img/morale-satira.png)
 

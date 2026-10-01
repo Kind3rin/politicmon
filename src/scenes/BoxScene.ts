@@ -1,4 +1,4 @@
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
@@ -150,7 +150,7 @@ export class BoxScene implements Scene {
       if (selected) {
         screen.frame(x + 2, y, w - 4, 20, INK);
       }
-      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], x + 3, y + 1, 20, 19, { memeFormId: mon.memeFormId });
+      drawMonsterSprite(screen, mon.speciesId, x + 3, y + 1, 20, 19, { memeFormId: mon.memeFormId });
       const ink = INK;
       screen.text(speciesOf(mon).name.slice(0, 9), x + 24, y + 2, ink);
       screen.text(`L${mon.level}`, x + 24, y + 11, ink);

@@ -4,7 +4,7 @@
 // sequence number: cambiare offerta invalida le conferme su entrambi i lati.
 // Il mostro ricevuto è SEMPRE ricostruito localmente (vedi net/trade.ts).
 
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { MOVES } from "../data/moves";
 import { TYPE_COLORS, typeIcon } from "../data/poltypes";
 import { audio } from "../engine/audio";
@@ -95,7 +95,7 @@ export class TradeScene implements Scene {
                 markCaught(this.state, evoTarget);
                 saveGame(this.state);
                 this.stack.pop(); // chiude anche la TradeScene
-              })
+              }, { mon: recv, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed, onDecline: () => this.stack.pop() })
             );
             return;
           }
@@ -238,7 +238,7 @@ export class TradeScene implements Scene {
       } else if (selected) {
         screen.frame(x + 2, y, w - 4, 19, INK);
       }
-      drawMonsterSprite(screen, mon.speciesId, MONSTER_ART[mon.speciesId], x + 3, y + 1, 18, 17);
+      drawMonsterSprite(screen, mon.speciesId, x + 3, y + 1, 18, 17);
       const ink = selected ? INK : PAPER;
       screen.text(speciesOf(mon).name.slice(0, 9), x + 22, y + 2, ink);
       screen.text(`L${mon.level}`, x + 22, y + 11, ink);
@@ -261,7 +261,7 @@ export class TradeScene implements Scene {
       return;
     }
     const species = speciesOf(offer);
-    drawMonsterSprite(screen, offer.speciesId, MONSTER_ART[offer.speciesId], x + 4, 27, 40, 36);
+    drawMonsterSprite(screen, offer.speciesId, x + 4, 27, 40, 36);
     screen.text(species.name.slice(0, 10), x + 48, 30, PAPER);
     screen.text(`L${offer.level}`, x + 48, 40, PAPER);
     // Chip tipi (pattern PartyScene.drawSummary, compattato).

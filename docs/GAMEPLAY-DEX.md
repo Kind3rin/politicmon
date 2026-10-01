@@ -162,9 +162,13 @@ Gli effetti hanno 48 campioni (otto tipi, due direzioni, tre istanti).
 
 Il briefing aggiunge 2.106 layout su nove boss, sei dimensioni della squadra,
 NORMALE/DIFFICILE e tutte le posizioni di scorrimento. La suite completa ha
-242 test; i 73 asset Higgsfield passano la verifica del primo utilizzo offline
-Chromium/Pixel 7. Il bundle resta entro i budget: 219,0 KiB iniziali e
-349,4 KiB totali gzip; p95 sotto 19 ms nei tre scenari con CPU Chromium ×4.
+246 test; i 76 asset Higgsfield passano la verifica del primo utilizzo offline
+Chromium/Pixel 7. Il bundle resta entro i budget: 216,7 KiB iniziali e
+348,5 KiB totali gzip; p95 sotto 19 ms nei tre scenari con CPU Chromium ×4.
+
+Le schede squadra e le evoluzioni hanno ora un flusso dedicato, con confronto
+e rinvio: [EVOLUZIONI-SCHEDE.md](EVOLUZIONI-SCHEDE.md). Le caricature testuali
+legacy sono state eliminate; il roster usa fogli animati, PNG base e placeholder.
 
 Il confronto prima del cambio aggiunge 247 layout sulle 52 specie e sui percorsi
 ordinario, gratuito e obbligatorio. Il test attraversa le scene reali, verifica

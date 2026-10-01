@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "credits": {
+    "before": 774.47,
+    "after": 769.97,
+    "spent": 4.5
+  },
+  "assets": [
+    {
+      "id": "evolution",
+      "index": 0,
+      "jobId": "136d540c-13c6-4377-b0c4-350237e714c2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_185711_136d540c-13c6-4377-b0c4-350237e714c2.png",
+      "params": {
+        "prompt": "Production background for POLITICMON, a satirical Italian fantasy monster RPG. A midnight-blue bureaucratic transformation chamber resembling a theatrical party congress and a public registry office: gold brass stamp machinery, blank ballot papers flying in an orderly upward spiral, two tall empty illuminated plinths at the far left and far right edges, blank ribbon motifs, dim city skyline. CENTRAL TWO THIRDS OF THE IMAGE ARE AN EMPTY DARK NAVY STAGE for game-rendered creatures and legible UI, no character or silhouette. Richly detailed side wings, beautiful low-resolution pixel-art architecture, dark navy, muted burgundy, antique gold, pale mint highlights. Straight-on symmetrical view, wide horizontal composition, baseline near bottom. Authentic crisp pixel art with limited 32 color palette, large clean pixel clusters and two tone shading, no antialiasing, no painterly gradients, no photorealism. NO text, typography, numbers, symbols, logos, captions, watermarks, or interface. Entire background opaque. This is a reusable in-game evolution scene backdrop, not a promotional poster.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1344,
+        "height": 752,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      },
+      "path": "public/sprites/ui/evolution.png",
+      "width": 240,
+      "height": 180
+    },
+    {
+      "id": "dossier",
+      "index": 1,
+      "jobId": "f339e229-8e04-4c10-a0c7-8d420aaad931",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_185710_f339e229-8e04-4c10-a0c7-8d420aaad931.png",
+      "params": {
+        "prompt": "Production background for POLITICMON, a satirical Italian fantasy monster RPG. An extravagant press office for the launch of a rebranded political coalition: royal-blue curtain side wings, gold trusses, two elegant ornate EMPTY display pedestals at far outer edges, piles of BLANK colorful badges and blank campaign ribbons. CENTRAL TWO THIRDS ARE EMPTY DEEP NAVY wall and floor for a game-rendered creature and readable UI. Top down slightly frontal chamber, horizon halfway up, floor only bottom third. Inventive comedy through props: one small drawer overflowing with discarded blank party-color flags, a tiny set of ministerial office chairs being wheeled away at one edge. No humans, no animals. Extremely polished crisp videogame pixel art, restrained 32 colour palette, navy ivory burgundy and gold, flat two-tone shading, clean square pixels, no antialiasing or smooth gradients, no photographic textures. Landscape scene, visually quiet center. Absolutely NO words, letters, numbers, logos, captions, watermark or embedded game UI. Full opaque background. For an in-game candidate biography card.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1344,
+        "height": 752,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      },
+      "path": "public/sprites/ui/dossier.png",
+      "width": 240,
+      "height": 180
+    },
+    {
+      "id": "pompa",
+      "index": 2,
+      "jobId": "e6790796-addd-4f78-a9af-7734c633c48b",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_185711_e6790796-addd-4f78-a9af-7734c633c48b.png",
+      "params": {
+        "prompt": "Original production vignette for POLITICMON, an Italian satirical fantasy pixel-art videogame. A small roadside fuel station at dusk in a fantastical Italian town. One tiny exhausted anthropomorphic raccoon attendant holds a huge BLANK ivory sign in front of the pump while a turtle commuter stares at a tiny drop of shining liquid in an elaborate glass case, as if precious jewellery. Beside them, a pompous small owl official in a suit ceremonially unveils ANOTHER completely BLANK rectangular price board. The humor is that new signage arrives instead of affordable fuel. No real person likeness. Atmospheric blue dusk, brick red canopy, warm brass, ivory papers, petrol turquoise, cobbled street. Readable strong silhouettes, horizontally staged, central figures in middle third, leave bottom fourth quiet for game dialog. Professional crisp pixel art with clean black outlines, limited 48 color palette, two tone shading, blocky square pixels, no antialiasing no painterly gradients. Opaque full scene, widescreen landscape. NO letters, numbers, words, logos, text, captions, watermarks, or UI anywhere; all fuel displays and boards are blank.",
+        "aspect_ratio": "16:9",
+        "medias": [],
+        "width": 1344,
+        "height": 752,
+        "quality": "high",
+        "resolution": "1k",
+        "model": "flare",
+        "remove_bg": false,
+        "reference_elements": []
+      },
+      "path": "public/sprites/ui/civic/pompa.png",
+      "width": 240,
+      "height": 136
+    }
+  ]
+}

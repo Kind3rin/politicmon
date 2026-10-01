@@ -1,4 +1,4 @@
-import { MONSTER_ART, drawMonsterSprite } from "../art/monsters";
+import { drawMonsterSprite } from "../art/monsters";
 import { TYPE_ORDER, type PolType } from "../data/poltypes";
 import { DEX_ORDER, SPECIES, STARTERS } from "../data/species";
 import { ABILITIES } from "../data/abilities";
@@ -148,7 +148,7 @@ export class DexScene implements Scene {
     const id = DEX_ORDER[this.index]; const s = SPECIES[id]; const seen = !!this.state.dex[id];
     const forms = formsForSpecies(id, this.state.unlockedMemeForms); const form = forms[this.page - 5];
     screen.panel(4, 4, 232, 172, "card");
-    if (seen) drawMonsterSprite(screen, id, MONSTER_ART[id], 12, 12, 54, 43, { memeFormId: form?.id, animationTime: this.time });
+    if (seen) drawMonsterSprite(screen, id, 12, 12, 54, 43, { memeFormId: form?.id, animationTime: this.time });
     else screen.text("?", 30, 27, GREY, 3);
     screen.textFit(`N.${String(s.dexNum).padStart(2, "0")} ${seen ? s.name : "SCONOSCIUTO"}`, 76, 13, 150, INK);
     screen.textFit(seen ? s.category : "DOSSIER DA APRIRE", 76, 25, 150, GREY);

@@ -55,6 +55,7 @@ piazza a urlare.
 | 🐾 **52 Politicmon, 78 mosse** | 8 tipi politici, status (INDAGATO / SCANDALO / GAFFE), battaglie a turni con effetti per tipo e quattro pose per tutte le creature |
 | 🔎 **Politicdex da campo** | Filtri, habitat accessibili, statistiche, difese, evoluzioni e mosse; cinque pagine per ogni creatura |
 | 🎯 **Dossier di battaglia** | START nel menu mosse o nella scelta del cambio: stima del danno, priorità, abilità e immunità; costo del cambio esplicito, probabilità di reclutamento e ritmo normale o rapido |
+| 📑 **Carriere e schede** | Cinque pagine per candidato; confronto prima delle evoluzioni, rinvio e ripresa dalla squadra, tessere consumate dopo la conferma |
 | ♟️ **Boss tattici** | Nove briefing illustrati con tipi, livelli e scelta del leader; IA che valuta danno effettivo, cure, priorità e immunità |
 | 🤝 **Morale con conseguenze** | Fiducia modifica i prezzi, coesione modifica l'EXP; promesse finanziabili, scadenze e memoria delle scelte |
 | 📊 **SONDAGGI (0-100%)** | La stat-firma: muove prezzi, EXP (*onda del consenso*) e **rami evolutivi** governo↔opposizione |
@@ -106,6 +107,8 @@ npm run build        # typecheck + bundle di produzione
 | **[docs/HIGGSFIELD-ASSETS.md](docs/HIGGSFIELD-ASSETS.md)** | Ambienti di battaglia, provenienza degli asset e impiego del credito |
 | **[docs/SATIRA-MORALE.md](docs/SATIRA-MORALE.md)** | Nuova storia, incontri, conseguenze del morale e fonti dei meme |
 | **[docs/GAMEPLAY-DEX.md](docs/GAMEPLAY-DEX.md)** | Politicdex, dossier tattico, animazioni e verifiche del gameplay |
+| **[docs/EVOLUZIONI-SCHEDE.md](docs/EVOLUZIONI-SCHEDE.md)** | Nuove schede, scelta dell'evoluzione e scena sul caro carburante |
+| **[docs/REDESIGN-PLAN.md](docs/REDESIGN-PLAN.md)** | Redesign completo: stato verificato e lavoro ancora aperto |
 
 ---
 

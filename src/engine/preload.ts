@@ -120,10 +120,12 @@ function deferredSpriteEntries(): Record<string, string> {
   for (const backdrop of Object.values(BATTLE_BACKDROPS)) {
     entries[backdrop.spriteId] = backdrop.path;
   }
-  for (const art of ["sportello", "studio", "molo", "verbale"]) {
+  for (const art of ["sportello", "studio", "molo", "verbale", "pompa"]) {
     entries[`civic:${art}`] = `ui/civic/${art}.png`;
   }
   for (const id of BOSS_ART_IDS) entries[`boss:${id}`] = `ui/boss/${id}.png`;
+  entries["ui:evolution"] = "ui/evolution.png";
+  entries["ui:dossier"] = "ui/dossier.png";
 
   for (const dir of DIRS) {
     for (let frame = 0; frame < 4; frame += 1) {

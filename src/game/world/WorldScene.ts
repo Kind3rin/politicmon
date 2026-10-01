@@ -1,6 +1,6 @@
 import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
-import { MONSTER_ART, drawMonsterSprite } from "../../art/monsters";
+import { drawMonsterSprite } from "../../art/monsters";
 import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 import { CIVIC_EVENTS, CIVIC_NPCS } from "../../data/civicEvents";
@@ -2194,7 +2194,7 @@ export class WorldScene implements Scene {
     markSeen(this.state, speciesId);
     // Anteprima animata con stats e descrizione prima di confermare.
     this.stack.push(
-      new StarterPreviewScene(this.stack, this.input, speciesId, () => this.chooseStarter(speciesId))
+      new StarterPreviewScene(this.stack, this.input, speciesId, () => this.chooseStarter(speciesId), this.state.reduceEffects)
     );
   }
 
@@ -3847,7 +3847,7 @@ export class WorldScene implements Scene {
       for (let i = 0; i < rows; i += 1) {
         const s = this.healSnapshot[i];
         const ry = py + 17 + i * rowH;
-        drawMonsterSprite(screen, s.mon.speciesId, MONSTER_ART[s.mon.speciesId], panelX + 8, ry - 1, 14, 13);
+        drawMonsterSprite(screen, s.mon.speciesId, panelX + 8, ry - 1, 14, 13);
         this.drawHealHpRow(screen, panelX + 27, ry + 3, 122, s.disp, s.to);
         screen.textRight(`${Math.round(s.disp)}/${s.to}`, panelX + panelW - 24, ry + 2, INK);
       }

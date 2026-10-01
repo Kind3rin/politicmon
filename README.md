@@ -4,7 +4,7 @@
 
 ### *Catturali tutti, prima che ti tassino.*
 
-Un clone di **Pokémon** in salsa **satira politica italiana**. RPG stile Game Boy,
+Un clone di **Pokémon** in salsa **satira politica italiana**. RPG con illustrazioni satiriche e interfaccia moderna,
 gira nel browser, scritto in **TypeScript su canvas 2D puro**. Mobile-first,
 installabile come app, con **multiplayer peer-to-peer** — zero server, zero costi.
 
@@ -79,7 +79,7 @@ Questo non è un gioco fatto con un engine. È **tutto a mano**:
 - **Multiplayer 100% peer-to-peer** via WebRTC su relay pubblici gratuiti: nessun server proprio, nessun account, **nessun costo che possa mai crescere**.
 - **PWA** con service worker cache-first e installazione offline.
 - **Audio** sintetizzato a runtime (Web Audio), nessun file audio.
-- Grafica in **pixel art**: sprite PixelLab, titolo, sette ambienti di battaglia, quattro vignette narrative, nove scene dei boss e 208 pose Higgsfield, con supporto offline.
+- **Grafica Higgsfield**: 208 pose delle creature, 62 immagini statiche coerenti, mondo e quartier generale rinnovati; supporto offline. [Coerenza grafica e guida ai tipi](docs/COERENZA-GRAFICA.md).
 - **Morale e satira**: fiducia dei cittadini, coesione della squadra, promesse con scadenza, dialoghi che ricordano le scelte e quattro nuovi eventi ispirati a meme documentati.
 
 ```bash

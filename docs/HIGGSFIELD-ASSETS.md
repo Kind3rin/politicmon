@@ -1,5 +1,10 @@
 # Politicmon: risorse Higgsfield
 
+Round di coerenza: 62 PNG statici ricavati dalle pose Higgsfield esistenti,
+**zero nuove generazioni e zero crediti**. Provenienza in
+`higgsfield-monster-fallbacks.json`; [COERENZA-GRAFICA.md](COERENZA-GRAFICA.md)
+spiega integrazione e prova con tutti i fogli animati indisponibili.
+
 Ottavo blocco: **sei icone e tre ambienti del quartier generale**. Cinque job
 Nano Banana Pro, compreso un rifacimento per rimuovere scritte generate.
 **10 crediti**, saldo **689,97 → 679,97**, cumulativo **206**. Provenienza e

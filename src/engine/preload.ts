@@ -80,10 +80,7 @@ function criticalSpriteEntries(): Record<string, string> {
     "build:y:tiles/build_bistro_front.png": "tiles/build_bistro_front.png",
     "veh:ferry": "chars/ferry.png",
     "char:schettino": "chars/schettino.png",
-    // Superfici aperte spesso dal menu: evitare un primo frame con il fallback
-    // mentre PixelLab decodifica la cartina o la tessera.
-    "ui:world-campaign-map": "ui/world_campaign_map.png",
-    "ui:candidate-card": "ui/candidate_card.png",
+    // The candidate portrait is rendered inside the current document layout.
     "ui:candidate-avatar": "chars/player_south.png"
   };
 

@@ -104,8 +104,8 @@ export class Screen {
     this.panelBorder = border;
   }
 
-  // Riquadro di dialogo. Con cornice 9-slice PixelLab se disponibile, altrimenti
-  // il doppio bordo in stile Game Boy (fallback, identico a prima).
+  // Shared card style is the default. Explicit 9-slice overrides remain
+  // available to historical screenshot tools, but the game does not load them.
   panel(x: number, y: number, w: number, h: number, style: PanelStyle = "default"): void {
     if (style !== "default") {
       this.modernPanel(Math.round(x), Math.round(y), Math.round(w), Math.round(h), style);
@@ -115,11 +115,7 @@ export class Screen {
       this.nineSlice(this.panelImg, this.panelBorder, Math.round(x), Math.round(y), Math.round(w), Math.round(h));
       return;
     }
-    this.rect(x + 1, y + 1, w - 2, h - 2, "#f8f8f0");
-    this.frame(x + 1, y + 1, w - 2, h - 2, "#f8f8f0");
-    this.frame(x + 2, y + 2, w - 4, h - 4, "#10141f");
-    this.frame(x + 4, y + 4, w - 8, h - 8, "#9aa0b8");
-    this.rect(x + 5, y + 5, w - 10, h - 10, "#f8f8f0");
+    this.modernPanel(Math.round(x), Math.round(y), Math.round(w), Math.round(h), "card");
   }
 
   cacheStats(): { rasterizedSprites: number; rasterizedPixels: number; cachedGlyphs: number; glyphPixels: number } {

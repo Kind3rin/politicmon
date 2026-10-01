@@ -1,7 +1,8 @@
 # PIANO — Politicmon
 
 Piano attivo, 1 ottobre 2026: [redesign completo](docs/REDESIGN-PLAN.md).
-Ultimo round: [quartier generale](docs/QUARTIER-GENERALE.md), dossier completi,
+Ultimo round: [coerenza grafica](docs/COERENZA-GRAFICA.md), 62 fallback nuovi,
+pannelli uniformi e guida ai tipi. Il [quartier generale](docs/QUARTIER-GENERALE.md) offre dossier completi,
 circolo e archivio rivisti; segue il [mondo e cantieri](docs/MONDO-CANTIERI.md)
 con 295 PNG e passerella costruibile. La richiesta attuale supera il feature freeze del programma
 storico sotto. Il redesign prosegue fino a un aspetto nuovo e coerente in tutto

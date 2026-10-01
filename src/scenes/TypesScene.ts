@@ -1,9 +1,9 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen } from "../engine/screen";
 import { TYPE_COLORS, TYPE_ORDER, typeRelations, typeIcon, type PolType } from "../data/poltypes";
-import { GREY, PAPER } from "../ui/widgets";
+import { drawScreenHeader, INK, PAPER } from "../ui/widgets";
 
 // GUIDA TIPI: spiega il sistema politico di efficacia (chi batte chi). Scegli
 // un tipo attaccante col d-pad; vedi contro chi è FORTE e contro chi è DEBOLE.
@@ -39,63 +39,36 @@ export class TypesScene implements Scene {
     if (icon) {
       screen.imageSprite(icon, x + 1, y + 1, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
     }
-    screen.text(label, x + 3 + iconW, y + 2, PAPER);
+    const lightText = label === "DESTRA" || label === "SINISTRA" || label === "TECNO";
+    screen.text(label, x + 3 + iconW, y + 2, lightText ? PAPER : INK);
     return w;
   }
 
   draw(screen: Screen): void {
-    screen.clear("#222a3a");
-    screen.text("GUIDA TIPI", 8, 5, PAPER);
-    screen.text("Il tipo conta: scegli e leggi i match.", 8, 14, GREY);
-
-    // Colonna sinistra: lista degli 8 tipi (attaccante selezionato).
+    screen.clear("#112037");
+    drawScreenHeader(screen, "GUIDA AI TIPI", `${this.index + 1}/${TYPE_ORDER.length}`);
+    screen.text("SCEGLI IL TIPO DELLA MOSSA", 8, 23, PAPER);
     for (let i = 0; i < TYPE_ORDER.length; i += 1) {
-      const t = TYPE_ORDER[i];
-      const y = 26 + i * 16;
-      const sel = i === this.index;
-      if (sel) {
-        screen.rect(4, y - 1, 96, 14, "#3a4a64");
-        screen.frame(4, y - 1, 96, 14, "#f0c040");
+      const y = 36 + i * 14;
+      const selected = i === this.index;
+      if (selected) {
+        screen.rect(4, y - 1, 97, 13, "#263a51");
+        screen.frame(4, y - 1, 97, 13, "#e6b944");
       }
-      this.chip(screen, t, 8, y);
+      this.chip(screen, TYPE_ORDER[i], 8, y);
     }
-
-    // Pannello destro: relazioni del tipo selezionato.
-    const attacker = TYPE_ORDER[this.index];
-    const rel = typeRelations(attacker);
-    const px = 106;
-    screen.panel(px, 24, VIEW_W - px - 4, VIEW_H - 24 - 22);
-    screen.text("FORTE CONTRO:", px + 6, 30, "#7ad858");
-    let cx = px + 6;
-    let cy = 40;
-    if (rel.strong.length === 0) {
-      screen.text("nessuno", cx, cy, GREY);
-    } else {
-      for (const t of rel.strong) {
-        if (cx + t.length * 6 + 8 > VIEW_W - 8) {
-          cx = px + 6;
-          cy += 13;
-        }
-        cx += this.chip(screen, t, cx, cy) + 3;
-      }
-    }
-    const wy = cy + 18;
-    screen.text("DEBOLE CONTRO:", px + 6, wy, "#d86868");
-    let dx = px + 6;
-    let dy = wy + 10;
-    if (rel.weak.length === 0) {
-      screen.text("nessuno", dx, dy, GREY);
-    } else {
-      for (const t of rel.weak) {
-        if (dx + t.length * 6 + 8 > VIEW_W - 8) {
-          dx = px + 6;
-          dy += 13;
-        }
-        dx += this.chip(screen, t, dx, dy) + 3;
-      }
-    }
-
-    screen.text("In lotta: ▲ super  ▼ poco efficace.", 8, VIEW_H - 18, GREY);
-    screen.text("Su/Giù: scegli   A/B: chiudi", 8, VIEW_H - 9, GREY);
+    const rel = typeRelations(TYPE_ORDER[this.index]);
+    screen.panel(105, 34, 129, 121, "card");
+    screen.text("DANNO x2", 112, 41, "#23654e");
+    let y = 53;
+    if (!rel.strong.length) screen.text("NESSUNO", 112, y, "#526279");
+    for (const type of rel.strong) { this.chip(screen, type, 112, y); y += 13; }
+    y = Math.max(82, y + 7);
+    screen.text("DANNO x0,5", 112, y, "#8c3544");
+    y += 12;
+    if (!rel.weak.length) screen.text("NESSUNO", 112, y, "#526279");
+    for (const type of rel.weak) { this.chip(screen, type, 112, y); y += 13; }
+    screen.text("GLI ALTRI TIPI: DANNO x1", 8, 158, PAPER);
+    screen.text("SU/GIU: SCEGLI   A/B: CHIUDI", 8, 170, "#a9b9ca");
   }
 }

@@ -14,7 +14,7 @@ import { syncRunCheckpoints, tickRunStats } from "./game/runstats";
 import { Input } from "./engine/input";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
-import { loadPanelImage, getSpriteImage } from "./engine/assets";
+import { getSpriteImage } from "./engine/assets";
 import { APP_BUILD_ID } from "./engine/build";
 import { preloadCoreSprites } from "./engine/preload";
 import { setTypeIconLoader } from "./data/poltypes";
@@ -157,10 +157,6 @@ void preloadCoreSprites().finally(() => {
   performance.mark("politicmon:assets-ready");
   performance.measure("politicmon:boot-assets", "politicmon:boot-start", "politicmon:assets-ready");
 });
-
-// Redesign PixelLab: carica la cornice 9-slice dei pannelli (dialoghi/menu).
-// Non bloccante: finché non è pronta, i pannelli usano il fallback a codice.
-loadPanelImage((img, border) => screen.setPanelImage(img, border), "ui/dialog.png", 6);
 
 // Icone-tipo (type-badge): collega il loader async di assets.ts a poltypes.ts.
 setTypeIconLoader(getSpriteImage);

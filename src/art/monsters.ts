@@ -31,7 +31,7 @@ export function monsterImage(speciesId: string, action = false): HTMLImageElemen
   return getSpriteImage(`mon:${speciesId}${suffix}`, `monsters/${speciesId}${suffix}.png`);
 }
 
-// Un PNG dichiarato PixelLab non deve mai mostrare per un frame la vecchia
+// Un PNG dichiarato nel registry non deve mai mostrare per un frame la vecchia
 // caricatura testuale: su rete mobile quel flash sembra un asset corrotto. In
 // attesa del decode usiamo un placeholder neutro, piccolo e riconoscibile.
 export function drawMonsterLoading(

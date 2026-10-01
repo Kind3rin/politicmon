@@ -15,7 +15,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 
 | Area | Stato attuale | Prova |
 |---|---|---|
-| Roster | 52 fogli Higgsfield, quattro pose per specie; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
+| Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
 | Boss | Nove illustrazioni, briefing e leader persistente | `shot:boss-briefing` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
@@ -26,7 +26,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 47 missioni | `shot:hq`: 99 viste e prove di trasferimento/tocco |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
-| PWA | Precache e primo utilizzo offline dei 413 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| PWA | Precache e primo utilizzo offline dei 475 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
 verificato: 679,97; spesa cumulativa 206 crediti. Non sono stati attivati acquisti
@@ -77,6 +77,11 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[COERENZA-GRAFICA.md](COERENZA-GRAFICA.md): 62 PNG di riserva nativi, pannelli
+uniformi e guida ai tipi; 52 ritratti e 62 pose in lotta con animazioni bloccate.
+Zero nuovi crediti. La PWA verifica 475 risorse, il deploy 366 checksum.
+
 
 [QUARTIER-GENERALE.md](QUARTIER-GENERALE.md): nove PNG, 254 test, 99 viste,
 47 dossier completi, circolo consultabile e archivio con caricamento tramite

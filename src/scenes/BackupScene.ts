@@ -3,7 +3,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { exportSaveCode, importSaveCode, saveGame, type GameState } from "../game/state";
-import { Menu, MessageBox, GREY, INK } from "../ui/widgets";
+import { Menu, MessageBox, INK } from "../ui/widgets";
 
 // BACKUP del salvataggio: esporta/importa un "CODICE SALVATAGGIO" (btoa del
 // JSON). La copia usa navigator.clipboard con fallback a un overlay HTML con
@@ -159,10 +159,10 @@ export class BackupScene implements Scene {
     if (this.pendingImport) {
       screen.text("SOVRASCRIVERE IL", 34, 58, INK);
       screen.text("SALVATAGGIO ATTUALE?", 34, 68, INK);
-      screen.text("A: SÌ   B: NO", 34, 88, GREY);
+      screen.text("A: SÌ   B: NO", 34, 88, "#526279");
     } else {
       this.menu.draw(screen, 34, 52, VIEW_W - 68);
-      screen.text("B: indietro", 34, VIEW_H - 42, GREY);
+      screen.text("B: indietro", 34, VIEW_H - 42, "#526279");
     }
     this.msg.draw(screen);
   }

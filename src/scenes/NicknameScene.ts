@@ -184,7 +184,7 @@ export class NicknameScene implements Scene {
     screen.panel(8, 20, VIEW_W - 16, 22);
     const caret = Math.floor(this.time * 2) % 2 === 0 ? "_" : " ";
     screen.text((this.value || "") + caret, 16, 28, INK);
-    screen.text(`${this.value.length}/${NICK_MAX}`, VIEW_W - 46, 30, GREY);
+    screen.text(`${this.value.length}/${NICK_MAX}`, VIEW_W - 46, 30, "#526279");
 
     // Modalità tastiera nativa: niente griglia, solo istruzioni + un grande
     // pulsante FINE toccabile (il resto lo fa la tastiera di sistema).

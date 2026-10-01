@@ -1,0 +1,1185 @@
+{
+  "version": 1,
+  "newGenerationCredits": 0,
+  "parentManifest": "scripts/higgsfield-monster-frames.json",
+  "assets": [
+    {
+      "id": "giorgetta",
+      "path": "public/sprites/monsters/giorgetta.png",
+      "pose": 0,
+      "jobId": "d8b3713d-4ae0-426a-9fc5-d5310c907da4",
+      "parentPath": "public/sprites/monsters/animated/giorgetta.png",
+      "parentSha256": "e2f32830efc49613c327844644b3e915c9091bc001d146ee3bc7ce1eb3379ecd",
+      "sha256": "cef2799f6afe9c7cd10fbf4893e4ddfbc72b14d31cbb24013da99d835ebbea1e",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        6,
+        50,
+        58
+      ]
+    },
+    {
+      "id": "ellyna",
+      "path": "public/sprites/monsters/ellyna.png",
+      "pose": 0,
+      "jobId": "171749f6-b82b-4440-a323-e28c3779fe2e",
+      "parentPath": "public/sprites/monsters/animated/ellyna.png",
+      "parentSha256": "5b6bd385a9368f3de671c120a64c86f18743cc42d970cd64d658010b0de9d607",
+      "sha256": "20315dac313f109848cd7000d4b241a11c7f9536ed9a7123b7aaf620540f38e1",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        7,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "renzino",
+      "path": "public/sprites/monsters/renzino.png",
+      "pose": 0,
+      "jobId": "f1a4a800-a110-4b7a-a0a6-99d00baf54b0",
+      "parentPath": "public/sprites/monsters/animated/renzino.png",
+      "parentSha256": "cc7a3ebe3393b32abf3ce0f91a574d7c6175e81b2a9c1122745a59cf7c6ac174",
+      "sha256": "2ca29a3ac2764e3ad14a080666de057447dce64fb6d7dc53e71c7426f22f1c0c",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        56,
+        58
+      ]
+    },
+    {
+      "id": "giorgiagon",
+      "path": "public/sprites/monsters/giorgiagon.png",
+      "pose": 0,
+      "jobId": "ce2805b8-84cb-4cfc-9a04-81243885bd50",
+      "parentPath": "public/sprites/monsters/animated/giorgiagon.png",
+      "parentSha256": "204013fddd1d30a6e619363734d89de90ea2f6ab4fb13afe49686427df9e8c13",
+      "sha256": "706aa4181f2dd3987baf2efe3129bf70d8ba16d203d45517a192f241c9deed8d",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        7,
+        50,
+        58
+      ]
+    },
+    {
+      "id": "schleinix",
+      "path": "public/sprites/monsters/schleinix.png",
+      "pose": 0,
+      "jobId": "61e9fa1e-cf75-49fe-8726-6e87ea875229",
+      "parentPath": "public/sprites/monsters/animated/schleinix.png",
+      "parentSha256": "4a547e45056e552040312e0b063491daf50c9cb74ff9061f4b1365c7b4b0bfe2",
+      "sha256": "2e73326161179d34b6e431de8ccd5f67bdb1371d536143ba328c0a58af9e4a9d",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        6,
+        50,
+        58
+      ]
+    },
+    {
+      "id": "renzilla",
+      "path": "public/sprites/monsters/renzilla.png",
+      "pose": 0,
+      "jobId": "d48cb4bb-7b59-4958-9705-2d2a74b3658f",
+      "parentPath": "public/sprites/monsters/animated/renzilla.png",
+      "parentSha256": "800eb9645cb6deecb711d97d29273b589ac6007bd694f9136e0aa99ddd3f20fd",
+      "sha256": "4343d227a2d1d44630edece7446019beeabb5a2fab76b5180343332a66f7ed64",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        11,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "salvinott",
+      "path": "public/sprites/monsters/salvinott.png",
+      "pose": 0,
+      "jobId": "ae404e7e-c3c0-4a91-a869-0e30963fdaa1",
+      "parentPath": "public/sprites/monsters/animated/salvinott.png",
+      "parentSha256": "6f6c5484bd06b98c9dcf200b6dec889ef073504c68494e0b1a82e1a19a8662b6",
+      "sha256": "e596a07d5be20338267e3967c7c73855b2483fdc4cbc150078fde0530a2b00fe",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        6,
+        8,
+        58,
+        58
+      ]
+    },
+    {
+      "id": "grillix",
+      "path": "public/sprites/monsters/grillix.png",
+      "pose": 0,
+      "jobId": "534dc8e3-6ba9-414b-81bd-84efa1a3232a",
+      "parentPath": "public/sprites/monsters/animated/grillix.png",
+      "parentSha256": "0dd7eecc1963ea5026c4c9fdf1e0bde0185b6eeaafbc21684656c0c936f3e995",
+      "sha256": "9b7271f647334c7c64d92aae23570640ad894206cb7dc49786f121d80c204b69",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        6,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "vannaccix",
+      "path": "public/sprites/monsters/vannaccix.png",
+      "pose": 0,
+      "jobId": "0bff8e32-23f0-4a34-a0d1-05cd3882c122",
+      "parentPath": "public/sprites/monsters/animated/vannaccix.png",
+      "parentSha256": "fcc4b150065526fb688d54189fdffd4cb9c50024a74ec1387d9e4e9a96442e61",
+      "sha256": "f4332e9c5de337b45e9b342fba65d9e592ae7eb8a59bd65749bcc5fdbecc7026",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        7,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "contemorfo",
+      "path": "public/sprites/monsters/contemorfo.png",
+      "pose": 0,
+      "jobId": "a46bcfa2-56e3-4b80-9236-86af8a71dd80",
+      "parentPath": "public/sprites/monsters/animated/contemorfo.png",
+      "parentSha256": "e8c7c248902d24e259068dd13e4181425b71fb4446436d5fa7788c7a87df4a73",
+      "sha256": "7b6d8dcead4dfdf70b5baa6a3eeddfeacf615010eeba0a4f1db8f9d771e7fd0c",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        5,
+        6,
+        58,
+        58
+      ]
+    },
+    {
+      "id": "calendauro",
+      "path": "public/sprites/monsters/calendauro.png",
+      "pose": 0,
+      "jobId": "79a4e08f-fd56-481b-9a68-dc553f0356f7",
+      "parentPath": "public/sprites/monsters/animated/calendauro.png",
+      "parentSha256": "2cb6c3e3c626dfc77561f766da43849e8123279794b6319f09c579aeed02ab6a",
+      "sha256": "7d3273795332220d963647c730be4aa7487568c494a786c0bacd8ac04b22c9ce",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        56,
+        58
+      ]
+    },
+    {
+      "id": "tajanide",
+      "path": "public/sprites/monsters/tajanide.png",
+      "pose": 0,
+      "jobId": "7aefc417-e53f-40cd-9735-7f52646f6d7c",
+      "parentPath": "public/sprites/monsters/animated/tajanide.png",
+      "parentSha256": "4650094f6df73c8e33c31bef4589072f5ea1392b63ee4fe16ad8c88421124f38",
+      "sha256": "66e54803cb2089019e3f55b0487ca14707ab5d9d49232dc27d1b89c0e5e93ab2",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        56,
+        58
+      ]
+    },
+    {
+      "id": "capitanone",
+      "path": "public/sprites/monsters/capitanone.png",
+      "pose": 0,
+      "jobId": "560ec7ad-50e6-47b3-b619-27ee46631e94",
+      "parentPath": "public/sprites/monsters/animated/capitanone.png",
+      "parentSha256": "1ce29d0c3208b636710fc6d151321087797920def44cb76857a03cb85356ba7f",
+      "sha256": "ca59327b7ab3d795c795a36680138b78f599f0b74ea3aad66ef4a1d61abb5a1c",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "mattarellux",
+      "path": "public/sprites/monsters/mattarellux.png",
+      "pose": 0,
+      "jobId": "3ed0e347-3d9f-4a1e-8f80-e5a0d22d7325",
+      "parentPath": "public/sprites/monsters/animated/mattarellux.png",
+      "parentSha256": "a49ec83346185567fb239be2f2f86f096425b03e44354f86852c377541335d9e",
+      "sha256": "e8628783c9010ff1c44c3b8214ec9e64d61f584685181bae5ba0a220661966df",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        14,
+        7,
+        50,
+        58
+      ]
+    },
+    {
+      "id": "draghimon",
+      "path": "public/sprites/monsters/draghimon.png",
+      "pose": 0,
+      "jobId": "14c49aac-16f0-406f-94b9-1382f628b000",
+      "parentPath": "public/sprites/monsters/animated/draghimon.png",
+      "parentSha256": "cb620f76085a460946a21fe35c71e99e8e9860ca1243a83a9b03a5df1dccc1ae",
+      "sha256": "1a0142398559134e9e8091f11d0b8a8e102c7fc82cbf49785758f2eb47c397e9",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        6,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "berlusconix",
+      "path": "public/sprites/monsters/berlusconix.png",
+      "pose": 0,
+      "jobId": "616f71df-2a56-40d8-8066-eff791c6b96a",
+      "parentPath": "public/sprites/monsters/animated/berlusconix.png",
+      "parentSha256": "8391389ff5cc7143403c4bf8cb9435d1155824b31f71225bba600b03035cf3f5",
+      "sha256": "7f7a42eafac99cee5751a7cfaa8ac8f1eecd945f945e1c35399f8912e4906e61",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        12,
+        6,
+        51,
+        58
+      ]
+    },
+    {
+      "id": "trumpon",
+      "path": "public/sprites/monsters/trumpon.png",
+      "pose": 0,
+      "jobId": "92cc93ba-3ca1-477c-bb0b-b2c74169fb00",
+      "parentPath": "public/sprites/monsters/animated/trumpon.png",
+      "parentSha256": "3e62c94264e7f30a198d0fd7fc06fef60a07632a72d811e6f25dcf71582da76f",
+      "sha256": "56d7073d362741aa580c88d8625c83c00424f035616f54267e8dbbab9dbfa4d4",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        7,
+        6,
+        57,
+        58
+      ]
+    },
+    {
+      "id": "ursulax",
+      "path": "public/sprites/monsters/ursulax.png",
+      "pose": 0,
+      "jobId": "d0594f94-77c1-43cf-bbee-568425ace5bf",
+      "parentPath": "public/sprites/monsters/animated/ursulax.png",
+      "parentSha256": "3e60cfb551fba02fb3cc9e1e908a6de9b9e76819a8c8ca7aabc4e88445d132f1",
+      "sha256": "965bd7a702fb51652c58b6a683f5e33eb7d616a6956cb040d6baa9d014da3f8c",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "muskrat",
+      "path": "public/sprites/monsters/muskrat.png",
+      "pose": 0,
+      "jobId": "6ddc706f-cae0-4fdf-aca7-24fb220f50b0",
+      "parentPath": "public/sprites/monsters/animated/muskrat.png",
+      "parentSha256": "630f13f02e5913eff6ec9497ab5d9deb97f0bbf9e4a57169be535872c0f7d343",
+      "sha256": "79f798d89c723d8fc362be4f37b1c49cabc245c4a394da20ff2367367edd7b34",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        9,
+        54,
+        58
+      ]
+    },
+    {
+      "id": "putingrad",
+      "path": "public/sprites/monsters/putingrad.png",
+      "pose": 0,
+      "jobId": "b6ad6f20-2b21-4f94-89f7-19e423a95d54",
+      "parentPath": "public/sprites/monsters/animated/putingrad.png",
+      "parentSha256": "a1562579dde56e1b19e08ac038814c6c592a2540dcd200cc6f771d8d6059c3f3",
+      "sha256": "0f660f8f9bfbbfc62eb95fe2b93ae57f26129ba0851258b42018906a0d70bae3",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        14,
+        8,
+        49,
+        58
+      ]
+    },
+    {
+      "id": "macronfox",
+      "path": "public/sprites/monsters/macronfox.png",
+      "pose": 0,
+      "jobId": "4d766ba1-ed83-4b14-b662-b739a172a544",
+      "parentPath": "public/sprites/monsters/animated/macronfox.png",
+      "parentSha256": "d37a32acac76ba7bf453d23a499113edc6173377de5730f2530c3ecf88ea498f",
+      "sha256": "2cfbb68323930abf3cf1422245cded57e996722aa1bb070f6f2f88d2cb4583cb",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        6,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "zelenskir",
+      "path": "public/sprites/monsters/zelenskir.png",
+      "pose": 0,
+      "jobId": "e51cda9b-50ba-4718-b449-f95edabf0bc6",
+      "parentPath": "public/sprites/monsters/animated/zelenskir.png",
+      "parentSha256": "e3d75f588c2847d71a420cbab52c96171277545d47b33a100a6f9a63fb72fdb7",
+      "sha256": "5c65d8d4064ce61ac6c236295e11feff069344f4a5a73a7cac671a47742a5dfc",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "xipanda",
+      "path": "public/sprites/monsters/xipanda.png",
+      "pose": 0,
+      "jobId": "b8fa7b8e-f85e-4364-9ffb-4b7071d2bc4c",
+      "parentPath": "public/sprites/monsters/animated/xipanda.png",
+      "parentSha256": "4a0390399a6292f43afdc74df82e8225d29944ff859ade92edbf41c39dd9dac3",
+      "sha256": "7d3d9ca8258e7dc060d276fd7986046381610418bc121676ee2eee2a659b645e",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        6,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "bojoon",
+      "path": "public/sprites/monsters/bojoon.png",
+      "pose": 0,
+      "jobId": "02fbde02-4eca-4b92-99db-1111ee28d65b",
+      "parentPath": "public/sprites/monsters/animated/bojoon.png",
+      "parentSha256": "667fa3ef87f603587cfd98b30b2fa6c1204556c4e477b5e70b2afb65b3f4a432",
+      "sha256": "c3ec887307f2e812e2713162e70cfd877b99be0f8b944f50f79040f07c42a569",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        6,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "salvinator",
+      "path": "public/sprites/monsters/salvinator.png",
+      "pose": 0,
+      "jobId": "3b13958b-3afc-457f-ba39-a0afd3c8f39d",
+      "parentPath": "public/sprites/monsters/animated/salvinator.png",
+      "parentSha256": "5a78d68f1826e6a97710a8f17bacf220c24babce236499b109fd9efe13f16b97",
+      "sha256": "a0c5993143e9541efc2151abc43921876a6f4bc6a43afcb5ce8ac90d669bba8a",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        6,
+        54,
+        58
+      ]
+    },
+    {
+      "id": "bunkerput",
+      "path": "public/sprites/monsters/bunkerput.png",
+      "pose": 0,
+      "jobId": "bdf53fcf-66ed-4ebf-bb0b-dd0de6367571",
+      "parentPath": "public/sprites/monsters/animated/bunkerput.png",
+      "parentSha256": "c19cde53050206840d6e6f6d0a95498ee8a99caf5a90b4057d1e36810a13dd90",
+      "sha256": "755e313516d562593d6aafd6bf14be41128ad7e97f0c336226ed2e0edb621b42",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        5,
+        10,
+        58,
+        58
+      ]
+    },
+    {
+      "id": "vaffenix",
+      "path": "public/sprites/monsters/vaffenix.png",
+      "pose": 0,
+      "jobId": "a554f61f-35cc-43e2-8821-54d081ed458d",
+      "parentPath": "public/sprites/monsters/animated/vaffenix.png",
+      "parentSha256": "529ebd6a5f1048ebf2e851f6f81cd356f72c6452b5be8886506ab64416fa7277",
+      "sha256": "5378ec1adc25919195318662cd972d232968b3a05c2242967c76a1a74062e19e",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        7,
+        6,
+        57,
+        58
+      ]
+    },
+    {
+      "id": "movimenton",
+      "path": "public/sprites/monsters/movimenton.png",
+      "pose": 0,
+      "jobId": "e7a01a69-d522-44d2-85f1-6fc1118181ff",
+      "parentPath": "public/sprites/monsters/animated/movimenton.png",
+      "parentSha256": "8d435276662f974d6d2d253863059d364035144e21897aeeb7e24bf5899e2818",
+      "sha256": "484f7490ca512d1c1e0b5b8f1b827b51c6b9d026560648d8a4efb5fe77b2180d",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        7,
+        6,
+        56,
+        58
+      ]
+    },
+    {
+      "id": "marsrat",
+      "path": "public/sprites/monsters/marsrat.png",
+      "pose": 0,
+      "jobId": "ab63a552-0817-43d6-a8b5-21b49dfb7980",
+      "parentPath": "public/sprites/monsters/animated/marsrat.png",
+      "parentSha256": "ce8dfc50e0e1e8c7e26560dad7678e7a0d5a47926823f618de9bf97caaefd11b",
+      "sha256": "4814751d1ab349d65175c89ac795cba53b822b13b2a4d3fb072d4c4bea315d57",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        8,
+        54,
+        58
+      ]
+    },
+    {
+      "id": "mediocrate",
+      "path": "public/sprites/monsters/mediocrate.png",
+      "pose": 0,
+      "jobId": "985ebe00-f7f4-4974-8fa1-8ce97e5baaa6",
+      "parentPath": "public/sprites/monsters/animated/mediocrate.png",
+      "parentSha256": "dd2b3102fa934b352f45bc65dc2625fd890d08a87f6a7fb2d2d944b5da0b8484",
+      "sha256": "134ba7816f16e5e1cc75ee048deaa895a73c911bc32c0462601a322e31eb14e6",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        12,
+        6,
+        51,
+        58
+      ]
+    },
+    {
+      "id": "pontigor",
+      "path": "public/sprites/monsters/pontigor.png",
+      "pose": 0,
+      "jobId": "8fd2f5a1-8af4-4a46-a050-6cc0f4801aa4",
+      "parentPath": "public/sprites/monsters/animated/pontigor.png",
+      "parentSha256": "52a8f3e936a329b2b051e7165d25459297bc0b0b950aee5a5c7298b147603f13",
+      "sha256": "6416e7470cf93128e835a8017c82ae1cfdec540d62f457277f732a590df14a6c",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        6,
+        54,
+        58
+      ]
+    },
+    {
+      "id": "conteblob",
+      "path": "public/sprites/monsters/conteblob.png",
+      "pose": 0,
+      "jobId": "57e213b5-2e5e-4f5c-a4f1-b2791f8b1280",
+      "parentPath": "public/sprites/monsters/animated/conteblob.png",
+      "parentSha256": "e45923404418bdb2d5d4080b43a526394fb17dd296442d8c2af3ffdd671db2a4",
+      "sha256": "61ad2a33ad966ee2f3d22eca9a440ade0183ed9c6ce7bc4ad4fd804107116f50",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "calendrone",
+      "path": "public/sprites/monsters/calendrone.png",
+      "pose": 0,
+      "jobId": "6eee57ce-f542-43a2-88d5-f8ef7922f3f5",
+      "parentPath": "public/sprites/monsters/animated/calendrone.png",
+      "parentSha256": "bc054ef7f6f90149d05eceec57d01444de616837fb327c3935290d087e014666",
+      "sha256": "4c50a4fd5ee6874d54267e2172f391f5ba0fbdfb21f40cd5f8eccc3f17231286",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "generorso",
+      "path": "public/sprites/monsters/generorso.png",
+      "pose": 0,
+      "jobId": "8bf6d9cf-9f79-4ffb-b582-847e68c45bff",
+      "parentPath": "public/sprites/monsters/animated/generorso.png",
+      "parentSha256": "c8af752a7c883382e04af33b7be7bac41767d661b988caa2a103106d718b20e7",
+      "sha256": "f5d4171a7ad6e853e581fa83b0c821cf0be29a28d6a38bd01b00a6856b523520",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        6,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "futurorso",
+      "path": "public/sprites/monsters/futurorso.png",
+      "pose": 0,
+      "jobId": "de7be154-3512-48ec-ba23-678c970ffaa7",
+      "parentPath": "public/sprites/monsters/animated/futurorso.png",
+      "parentSha256": "9f06bdb291376a4faf1c845790c0d42a7482b15047c9c90a613527082c7035a6",
+      "sha256": "b2e0089168f5102e68950e9ee7d6900e05bf579f9b7224538258d22e13e44554",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        14,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "futurorso",
+      "path": "public/sprites/monsters/futurorso_action.png",
+      "pose": 1,
+      "jobId": "de7be154-3512-48ec-ba23-678c970ffaa7",
+      "parentPath": "public/sprites/monsters/animated/futurorso.png",
+      "parentSha256": "9f06bdb291376a4faf1c845790c0d42a7482b15047c9c90a613527082c7035a6",
+      "sha256": "c02e6c2fd1c89c9f7b477847742b16f44f19467d60aa36ee43555a1c81018072",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        5,
+        12,
+        59,
+        58
+      ]
+    },
+    {
+      "id": "gianimago",
+      "path": "public/sprites/monsters/gianimago.png",
+      "pose": 0,
+      "jobId": "e738e9a8-892a-48a0-a433-d33afad68156",
+      "parentPath": "public/sprites/monsters/animated/gianimago.png",
+      "parentSha256": "4d367c8b6951de25e6f1b56053b6251da4fbede1c5e3b7fb5207f1f6fdec762a",
+      "sha256": "deb9ad3cfbb6aeee3466ebf7e8816fda122a4616ec585325e933ab10442f8cda",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        6,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "gianimago",
+      "path": "public/sprites/monsters/gianimago_action.png",
+      "pose": 1,
+      "jobId": "e738e9a8-892a-48a0-a433-d33afad68156",
+      "parentPath": "public/sprites/monsters/animated/gianimago.png",
+      "parentSha256": "4d367c8b6951de25e6f1b56053b6251da4fbede1c5e3b7fb5207f1f6fdec762a",
+      "sha256": "a576318a71213b9603a5270778e679e54dbef5376368f6372792cd57da4f1acb",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "quasimagiani",
+      "path": "public/sprites/monsters/quasimagiani.png",
+      "pose": 0,
+      "jobId": "28e6c76b-6ce6-4604-a469-22590007e8f4",
+      "parentPath": "public/sprites/monsters/animated/quasimagiani.png",
+      "parentSha256": "f106126616515430eb650fcdbf1d68e992ced838b582f06f730920566bb721f1",
+      "sha256": "f7703e160e12eae0f28def79967e3d27a950c26fb4aa76862c02e54ba4481227",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        7,
+        50,
+        58
+      ]
+    },
+    {
+      "id": "quasimagiani",
+      "path": "public/sprites/monsters/quasimagiani_action.png",
+      "pose": 1,
+      "jobId": "28e6c76b-6ce6-4604-a469-22590007e8f4",
+      "parentPath": "public/sprites/monsters/animated/quasimagiani.png",
+      "parentSha256": "f106126616515430eb650fcdbf1d68e992ced838b582f06f730920566bb721f1",
+      "sha256": "6d0d5b546d4780b7cab0c82ae0a9046e089665e71d0dde30ee0245a1a4552cff",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "crosettank",
+      "path": "public/sprites/monsters/crosettank.png",
+      "pose": 0,
+      "jobId": "86314d35-eb4d-4e24-b6aa-29e57fa75230",
+      "parentPath": "public/sprites/monsters/animated/crosettank.png",
+      "parentSha256": "ebfd13a0c93355b472977eedc64dfb05f719f336636ce33a4160357245d632a8",
+      "sha256": "e2b2cb572804e15a1c9cd007db401eb8bae70b9aba2c03cd2c5850e8f288d3f9",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        6,
+        54,
+        58
+      ]
+    },
+    {
+      "id": "crosettank",
+      "path": "public/sprites/monsters/crosettank_action.png",
+      "pose": 1,
+      "jobId": "86314d35-eb4d-4e24-b6aa-29e57fa75230",
+      "parentPath": "public/sprites/monsters/animated/crosettank.png",
+      "parentSha256": "ebfd13a0c93355b472977eedc64dfb05f719f336636ce33a4160357245d632a8",
+      "sha256": "a4dcc78c2add971565f908d297e86d19b6757bf859c998d3f9b953049b323788",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "fratocorno",
+      "path": "public/sprites/monsters/fratocorno.png",
+      "pose": 0,
+      "jobId": "5073b274-6776-4ca6-ab60-de36cbb96fe4",
+      "parentPath": "public/sprites/monsters/animated/fratocorno.png",
+      "parentSha256": "514b003d75fff2a066f23d7f0283ce3a08519b9d96bca4bc4402711a8c89ae18",
+      "sha256": "53b8d2299900ce92514bf575bc46c423f74ea78157104d959ae1a448c8521b60",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        6,
+        6,
+        58,
+        58
+      ]
+    },
+    {
+      "id": "fratocorno",
+      "path": "public/sprites/monsters/fratocorno_action.png",
+      "pose": 1,
+      "jobId": "5073b274-6776-4ca6-ab60-de36cbb96fe4",
+      "parentPath": "public/sprites/monsters/animated/fratocorno.png",
+      "parentSha256": "514b003d75fff2a066f23d7f0283ce3a08519b9d96bca4bc4402711a8c89ae18",
+      "sha256": "77289d21b9ab65264e9ac3dcae4c187dc8e4f6b0d5b13d77ac758fa64409191b",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        5,
+        6,
+        58,
+        58
+      ]
+    },
+    {
+      "id": "campocorno",
+      "path": "public/sprites/monsters/campocorno.png",
+      "pose": 0,
+      "jobId": "bb3c6629-4c97-49e4-b05b-8a0c2ddf26b8",
+      "parentPath": "public/sprites/monsters/animated/campocorno.png",
+      "parentSha256": "44071e2c80bbc1f17380405fd6d020de9999c1df0c0627b3feacde3b498319f4",
+      "sha256": "36d3dfd94e931a254b944320f0b2174c4f3168eb3f25964b79d2d040e9672ba1",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        7,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "campocorno",
+      "path": "public/sprites/monsters/campocorno_action.png",
+      "pose": 1,
+      "jobId": "bb3c6629-4c97-49e4-b05b-8a0c2ddf26b8",
+      "parentPath": "public/sprites/monsters/animated/campocorno.png",
+      "parentSha256": "44071e2c80bbc1f17380405fd6d020de9999c1df0c0627b3feacde3b498319f4",
+      "sha256": "9ea4503905a0ec8c000175847c7102563f0c3a79c6b250b8ef22efca90833fe9",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        6,
+        7,
+        57,
+        58
+      ]
+    },
+    {
+      "id": "nordiodo",
+      "path": "public/sprites/monsters/nordiodo.png",
+      "pose": 0,
+      "jobId": "df83016f-cd76-42e2-b50c-5997f7c19045",
+      "parentPath": "public/sprites/monsters/animated/nordiodo.png",
+      "parentSha256": "2c5eaf015fdbc8ef1063a7539dc9a257cd597f6179fa075b8dd20dedb39c2a69",
+      "sha256": "d8323a9a890b740cfb6fabe8263da5fbca7a4feb4df2b9ac11df01f3bab9e5c1",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        6,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "nordiodo",
+      "path": "public/sprites/monsters/nordiodo_action.png",
+      "pose": 1,
+      "jobId": "df83016f-cd76-42e2-b50c-5997f7c19045",
+      "parentPath": "public/sprites/monsters/animated/nordiodo.png",
+      "parentSha256": "2c5eaf015fdbc8ef1063a7539dc9a257cd597f6179fa075b8dd20dedb39c2a69",
+      "sha256": "7867df910f73d75c595b404337b9ef5a2fc2ddebb8babdde58e3b9ee42e94071",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        6,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "referendodo",
+      "path": "public/sprites/monsters/referendodo.png",
+      "pose": 0,
+      "jobId": "f8a5a4ee-358c-4861-8e3b-c0a02acea22a",
+      "parentPath": "public/sprites/monsters/animated/referendodo.png",
+      "parentSha256": "5773f65cbd473ef6a055a33f0482ee76510661a4fff1b53f2cd16d68e41959c7",
+      "sha256": "7cc80f56e927d4937cc18af415d6c7ac8e4641c2d7fb35d6db4b0ec6d6d2ff7a",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        8,
+        12,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "referendodo",
+      "path": "public/sprites/monsters/referendodo_action.png",
+      "pose": 1,
+      "jobId": "f8a5a4ee-358c-4861-8e3b-c0a02acea22a",
+      "parentPath": "public/sprites/monsters/animated/referendodo.png",
+      "parentSha256": "5773f65cbd473ef6a055a33f0482ee76510661a4fff1b53f2cd16d68e41959c7",
+      "sha256": "7af9a64ba09ba42e7fcf0b424ff11eee199b93e324123052582afeeb29956fb1",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        5,
+        11,
+        59,
+        58
+      ]
+    },
+    {
+      "id": "tajacolomba",
+      "path": "public/sprites/monsters/tajacolomba.png",
+      "pose": 0,
+      "jobId": "5213d715-6a3b-4783-a732-a3a35c802830",
+      "parentPath": "public/sprites/monsters/animated/tajacolomba.png",
+      "parentSha256": "cfcabc864a7bf0605bd810c5464301819a2936cefe2cc1f346105d753486b557",
+      "sha256": "a9a02b216f0dd96efe934a1783b6692e566f8d24f56634a355acee2ef39a8ab2",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        6,
+        51,
+        58
+      ]
+    },
+    {
+      "id": "telecrate",
+      "path": "public/sprites/monsters/telecrate.png",
+      "pose": 0,
+      "jobId": "a9f064bb-1f9b-4e07-82dc-e51981129006",
+      "parentPath": "public/sprites/monsters/animated/telecrate.png",
+      "parentSha256": "aa9d6467cbfe6395c785a20df5b6f0b3ebf06be6942011ed3a277f50ce18ae25",
+      "sha256": "83d86b41be845e9832737a35972372119f5c7ac69c8aa2c5203968a360d6e192",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        13,
+        6,
+        51,
+        58
+      ]
+    },
+    {
+      "id": "pontimax",
+      "path": "public/sprites/monsters/pontimax.png",
+      "pose": 0,
+      "jobId": "54061518-8459-461d-9864-b72d0eec8b7d",
+      "parentPath": "public/sprites/monsters/animated/pontimax.png",
+      "parentSha256": "a3a3000b08a84ddced9bfa5dae18925ff6b6afb2baf373d625d257d417d09a62",
+      "sha256": "c479d9b00e996efbdbbb8e30328aca8bc4c4f4b97503b14d32ea906d7efa748f",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        14,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "verdolino",
+      "path": "public/sprites/monsters/verdolino.png",
+      "pose": 0,
+      "jobId": "8a7a3b82-6715-432a-a466-2efa51ad2cb0",
+      "parentPath": "public/sprites/monsters/animated/verdolino.png",
+      "parentSha256": "cd5b4fe682536375bc0987ba30255eb54ae5dee26c26359b9248c73e977a3d04",
+      "sha256": "e2c6f4f20512e389f2bbaecd3d578607588c88a2a4643af341634d8e86a70b01",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        16,
+        6,
+        47,
+        58
+      ]
+    },
+    {
+      "id": "ecoverdon",
+      "path": "public/sprites/monsters/ecoverdon.png",
+      "pose": 0,
+      "jobId": "c73dfd13-acdf-4c01-ad30-31ae7d7c23f6",
+      "parentPath": "public/sprites/monsters/animated/ecoverdon.png",
+      "parentSha256": "4024b31f602302dd238ebe811a9e02a18e06c41ce3b41e20f7e133b52679921b",
+      "sha256": "6046b677afc966a6d99a28142dffd90127ed0c82acb62a0c4c03ea37c58240ee",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        11,
+        7,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "contepop",
+      "path": "public/sprites/monsters/contepop.png",
+      "pose": 0,
+      "jobId": "7c165679-2d17-47a3-a54c-7ecbb802e291",
+      "parentPath": "public/sprites/monsters/animated/contepop.png",
+      "parentSha256": "6ad93febdf9b0aa6d14372aff398b4ebb8be02f4c9fd35c2cb5b9356b2072af1",
+      "sha256": "ec74e6d2a473f3c03b6b561d9d8cc8183b823e62d4ffda2b0919f3bb368b5a07",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        9,
+        9,
+        55,
+        58
+      ]
+    },
+    {
+      "id": "salvinurlo",
+      "path": "public/sprites/monsters/salvinurlo.png",
+      "pose": 0,
+      "jobId": "f8063a5e-8066-4233-b745-027d7cc0bb3c",
+      "parentPath": "public/sprites/monsters/animated/salvinurlo.png",
+      "parentSha256": "b55686f98af12247dbcd4ddf811e037396af1c3aeb3d00f7c98928ef7e1b10cd",
+      "sha256": "2fc52a1b7d303d978c483b2156da3625f1c2d2d51c823b68a50d69099f460070",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        6,
+        54,
+        58
+      ]
+    },
+    {
+      "id": "verdoribelle",
+      "path": "public/sprites/monsters/verdoribelle.png",
+      "pose": 0,
+      "jobId": "70ab57a9-e2d9-47fc-b284-3a22ed5e4c18",
+      "parentPath": "public/sprites/monsters/animated/verdoribelle.png",
+      "parentSha256": "1f7a475a7a3dedd8491395b8fd7598c0abe0db9862c41a24c41bd1004a9c5a55",
+      "sha256": "c9b268abfc886e94c4c98d3b0e56aab4d41c5f948bb4dd759fb989a095a055ec",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        10,
+        6,
+        53,
+        58
+      ]
+    },
+    {
+      "id": "salistrobo",
+      "path": "public/sprites/monsters/salistrobo.png",
+      "pose": 0,
+      "jobId": "61fa4a6c-a746-4ef7-9c58-00cad43fffa1",
+      "parentPath": "public/sprites/monsters/animated/salistrobo.png",
+      "parentSha256": "73c678c0acc0ed3c0dff999b6e198a3f67d49e67d4992c06a64dd61b99f51707",
+      "sha256": "21aa44fcae0cd05fab5e5bf34f8f77dc644093183d5ceaef73bcb25778c2dd73",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        12,
+        8,
+        52,
+        58
+      ]
+    },
+    {
+      "id": "salistrobo",
+      "path": "public/sprites/monsters/salistrobo_action.png",
+      "pose": 1,
+      "jobId": "61fa4a6c-a746-4ef7-9c58-00cad43fffa1",
+      "parentPath": "public/sprites/monsters/animated/salistrobo.png",
+      "parentSha256": "73c678c0acc0ed3c0dff999b6e198a3f67d49e67d4992c06a64dd61b99f51707",
+      "sha256": "719ac0bc3ed1cadb37fafb837e1731550b20a1370614cebc3541d0b5449c13ef",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        7,
+        6,
+        56,
+        58
+      ]
+    },
+    {
+      "id": "salisound",
+      "path": "public/sprites/monsters/salisound.png",
+      "pose": 0,
+      "jobId": "1261b249-5dc0-4565-b149-47ee39e43e8a",
+      "parentPath": "public/sprites/monsters/animated/salisound.png",
+      "parentSha256": "b90ac1e389013945242833f3232751193eb3eafd3a00b3f588470c0fa1c80b8f",
+      "sha256": "4c5798033c325f4f86bfe53862deabe5c707b1831b33d0c88b42d542100cd059",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        6,
+        9,
+        57,
+        58
+      ]
+    },
+    {
+      "id": "salisound",
+      "path": "public/sprites/monsters/salisound_action.png",
+      "pose": 1,
+      "jobId": "1261b249-5dc0-4565-b149-47ee39e43e8a",
+      "parentPath": "public/sprites/monsters/animated/salisound.png",
+      "parentSha256": "b90ac1e389013945242833f3232751193eb3eafd3a00b3f588470c0fa1c80b8f",
+      "sha256": "711e03b94c2ce9e6c685217822bce7ac6f0bdc39965fa4855e1729252f61c603",
+      "size": [
+        64,
+        64
+      ],
+      "bounds": [
+        5,
+        9,
+        58,
+        58
+      ]
+    }
+  ]
+}

@@ -54,7 +54,7 @@ piazza a urlare.
 |---|---|
 | 🐾 **52 Politicmon, 78 mosse** | 8 tipi politici, status (INDAGATO / SCANDALO / GAFFE), battaglie a turni con effetti per tipo e quattro pose per tutte le creature |
 | 🔎 **Politicdex da campo** | Filtri, habitat accessibili, statistiche, difese, evoluzioni e mosse; cinque pagine per ogni creatura |
-| 🎯 **Dossier di battaglia** | START nel menu mosse: stima del danno, priorità, abilità, immunità e probabilità di reclutamento; ritmo normale o rapido |
+| 🎯 **Dossier di battaglia** | START nel menu mosse o nella scelta del cambio: stima del danno, priorità, abilità e immunità; costo del cambio esplicito, probabilità di reclutamento e ritmo normale o rapido |
 | ♟️ **Boss tattici** | Nove briefing illustrati con tipi, livelli e scelta del leader; IA che valuta danno effettivo, cure, priorità e immunità |
 | 🤝 **Morale con conseguenze** | Fiducia modifica i prezzi, coesione modifica l'EXP; promesse finanziabili, scadenze e memoria delle scelte |
 | 📊 **SONDAGGI (0-100%)** | La stat-firma: muove prezzi, EXP (*onda del consenso*) e **rami evolutivi** governo↔opposizione |

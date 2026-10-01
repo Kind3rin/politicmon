@@ -11,7 +11,7 @@ export class BattleIntelScene implements Scene {
   private page = 0;
   private scroll = 0;
   private slots: Array<{ id: string; pp: number }>;
-  constructor(private stack: SceneStack, private input: Input, private attacker: Combatant, private defender: Combatant, private index: number, private context?: DamageContext, private onSelect?: (index: number) => void, private recruitment: string[] = [], private opponentNotes: readonly string[] = []) {
+  constructor(private stack: SceneStack, private input: Input, private attacker: Combatant, private defender: Combatant, private index: number, private context?: DamageContext, private onSelect?: (index: number) => void, private recruitment: string[] = [], private opponentNotes: readonly string[] = [], private returnLabel = "LOTTA") {
     this.slots = attacker.mon.moves.length ? attacker.mon.moves : [{ id: "comizio", pp: 0 }];
     this.index = Math.min(index, this.slots.length - 1);
   }
@@ -38,6 +38,6 @@ export class BattleIntelScene implements Scene {
     const lines = this.lines();
     for (const [i, line] of lines.slice(this.scroll, this.scroll + 9).entries()) screen.text(line, 14, 55 + i * 10, INK);
     screen.text(lines.length > 9 ? `SU/GIU: TESTO ${this.scroll + 1}/${lines.length - 8}` : "LEGGERE NON CONSUMA UN TURNO", 14, 151, GREY);
-    screen.text("◄►: MOSSE   B/START: LOTTA", 14, 164, GREY);
+    screen.text(`◄►: MOSSE   B/START: ${this.returnLabel}`, 14, 164, GREY);
   }
 }

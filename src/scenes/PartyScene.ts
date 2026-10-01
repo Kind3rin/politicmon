@@ -19,6 +19,8 @@ export interface PartyOptions {
   // Squadra alternativa (es. i MIRROR del DUELLO PvP): la scena opera su
   // questa lista invece di state.party, che resta intoccato.
   partyOverride?: Monster[];
+  onInspect?: (mon: Monster) => void;
+  freeSwitch?: boolean;
   onChoose?: (mon: Monster) => void;
 }
 
@@ -96,6 +98,11 @@ export class PartyScene implements Scene {
         this.summary = null;
       }
       return;
+    }
+    if (this.opts.onInspect && this.input.wasPressed("start")) {
+      const mon = party[this.index];
+      if (!mon || mon.hp <= 0 || mon.uid === this.opts.currentUid) { audio.cancel(); return; }
+      audio.confirm(); this.opts.onInspect(mon); return;
     }
     // Riordino squadra (solo nel menu PARTY): START prende lo slot, START su un
     // altro lo scambia. Il primo della lista combatte per primo.
@@ -216,6 +223,12 @@ export class PartyScene implements Scene {
       if (mon.hp <= 0) {
         screen.text("KO", VIEW_W - 56, y + 3, "#d04848");
       }
+    }
+    if (this.opts.onInspect) {
+      const mon = party[this.index];
+      screen.text(mon?.uid === this.opts.currentUid ? "GIA IN CAMPO" : mon?.hp === 0 ? "CANDIDATO KO" : this.opts.freeSwitch ? "RIMPASTO GRATIS" : "CAMBIO: TURNO AL NEMICO", 8, 156, INK);
+      screen.text(this.opts.mode === "forced-switch" ? "A: CAMBIA START: DOSSIER" : "A: CAMBIA START: DOSSIER B: TORNA", 8, VIEW_H - 10, "#59657d");
+      return;
     }
     const hint = this.opts.mode !== "view"
       ? "A: scegli"

@@ -61,6 +61,7 @@
     "shot:move-effects": "node scripts/shot-move-effects.mjs",
     "shot:monster-frames": "node scripts/shot-monster-frames.mjs",
     "shot:boss-briefing": "node scripts/shot-boss-briefing.mjs",
+    "shot:switch-guide": "node scripts/shot-switch-guide.mjs",
     "check:duel": "node scripts/check-duel.mjs",
     "smoke:campaign": "node scripts/smoke-campaign.mjs",
     "smoke:pwa:release": "node scripts/smoke-pwa-release.mjs",

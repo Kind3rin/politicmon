@@ -56,6 +56,28 @@ La GAFFE temporanea ora raddoppia il fattore di status per il reclutamento come
 INDAGATO e SCANDALO, rispettando il limite della formula e senza sommare due
 volte il bonus se un altro status è presente.
 
+## Consultare un candidato prima del cambio
+
+Nella squadra aperta durante una battaglia PVE, START sul candidato sano apre
+il suo dossier senza schierarlo. Le frecce confrontano le sue mosse; A alterna
+MOSSA e CAMPO. B o START tornano alla squadra mantenendo il candidato selezionato.
+A nella squadra conferma il cambio. Il componente già in campo e i KO non
+possono essere consultati come sostituti.
+
+Il messaggio sotto la squadra distingue CAMBIO: TURNO AL NEMICO da RIMPASTO
+GRATIS. Il cambio ordinario concede il contrattacco; quello dopo un KO, proprio
+o avversario, non concede un attacco immediato. La selezione obbligatoria dopo
+un proprio KO permette di leggere il dossier, ma B nella squadra non la annulla.
+
+Il confronto ricostruisce il candidato con PV, status, oggetto e PP attuali,
+azzera i suoi modificatori precedenti e applica le abilità d'ingresso su copie.
+Include il bonus di velocità di VOLTAGABBANA e l'azzeramento dei modificatori di
+entrambi con TABULA RASA. CAMPO ricorda il costo del cambio: la stima precede
+l'eventuale contrattacco e non prevede la mossa nemica. Leggere conserva squadra,
+avversario, PP, abilità una tantum, sequenza casuale e salvataggio.
+
+![Scelta del candidato e dossier prima del cambio](img/switch-guide.png)
+
 ## Ritmo e presentazione
 
 In PAUSA > OPZIONI, RITMO LOTTE alterna NORMALE e RAPIDO. Il ritmo rapido accelera
@@ -120,6 +142,7 @@ npm run audit:progression
 npm run shot:gameplay-guide
 npm run shot:monster-frames
 npm run shot:boss-briefing
+npm run shot:switch-guide
 npm run balance:bosses
 npm run shot:move-effects
 npm run shot:morale-satire
@@ -139,9 +162,15 @@ Gli effetti hanno 48 campioni (otto tipi, due direzioni, tre istanti).
 
 Il briefing aggiunge 2.106 layout su nove boss, sei dimensioni della squadra,
 NORMALE/DIFFICILE e tutte le posizioni di scorrimento. La suite completa ha
-240 test; i 73 asset Higgsfield passano la verifica del primo utilizzo offline
+242 test; i 73 asset Higgsfield passano la verifica del primo utilizzo offline
 Chromium/Pixel 7. Il bundle resta entro i budget: 219,0 KiB iniziali e
-349,1 KiB totali gzip; p95 sotto 19 ms nei tre scenari con CPU Chromium ×4.
+349,4 KiB totali gzip; p95 sotto 19 ms nei tre scenari con CPU Chromium ×4.
+
+Il confronto prima del cambio aggiunge 247 layout sulle 52 specie e sui percorsi
+ordinario, gratuito e obbligatorio. Il test attraversa le scene reali, verifica
+che la lettura non modifichi lo stato e controlla che il contrattacco consumi
+un PP nemico solo quando il cambio è ordinario. Confronta inoltre TABULA RASA
+nell'anteprima con la sua applicazione nel cambio confermato.
 
 Le metriche Vercel si avviano sul deploy; l'anteprima locale le disattiva per
 evitare richieste JavaScript a endpoint non presenti e relativi errori HTML.

@@ -6,7 +6,7 @@ import { MAPS } from "../../src/data/maps";
 import { createMonster } from "../../src/game/monster";
 import { newGameState, parseGameState } from "../../src/game/state";
 import { defensiveMatchups, dexAcquisitionNotes, dexHabitats, dexMatches, evolutionCondition, reachableDexMaps } from "../../src/game/dexGuide";
-import { damageRange, fieldTactics, moveTactics } from "../../src/game/battle/tactics";
+import { damageRange, fieldTactics, moveTactics, switchPreview } from "../../src/game/battle/tactics";
 import { calcDamage, catchChance, makeCombatant } from "../../src/game/battle/sim";
 
 test("temporary GAFFE boosts capture like persistent statuses, without stacking twice", () => {
@@ -61,6 +61,30 @@ test("status and stat forecasts report immunity and stage caps", () => {
   assert.match(moveTactics(a, d, MOVES.slogan).join(" "), /FACCIA TOSTA \+0/);
   d.gaffeTurns = 3;
   assert.match(moveTactics(d, a, MOVES.comizio).join(" "), /33%/);
+});
+
+test("switch inspection applies entry abilities on snapshots without changing the party or live foe", () => {
+  const mon=createMonster("futurorso",45), foe=makeCombatant(createMonster("berlusconix",45));
+  mon.hp=23;mon.status="scandalo";mon.heldItem="caffettiera";
+  foe.stages.atk=4;foe.stages.spd=-2;foe.firstHitTaken=true;foe.gaffeTurns=3;
+  const before=JSON.stringify([mon,foe]);
+  const preview=switchPreview(mon,foe);
+  assert.deepEqual(preview.entrant.stages,{atk:0,def:0,spc:0,spd:0});
+  assert.deepEqual(preview.opponent.stages,{atk:0,def:0,spc:0,spd:0});
+  assert.equal(preview.opponent.firstHitTaken,true);assert.equal(preview.opponent.gaffeTurns,3);
+  assert.equal(preview.entrant.mon.hp,23);assert.equal(preview.entrant.mon.status,"scandalo");
+  assert.equal(preview.entrant.mon.heldItem,"caffettiera");
+  preview.entrant.mon.moves[0].pp--;
+  assert.equal(JSON.stringify([mon,foe]),before);
+});
+
+test("switch inspection preserves ordinary opponent stages and includes VOLTAGABBANA speed on entry", () => {
+  const mon=createMonster("renzino",30), foe=makeCombatant(createMonster("giorgiagon",30));
+  foe.stages.def=3;
+  const preview=switchPreview(mon,foe);
+  assert.equal(preview.entrant.stages.spd,1);
+  assert.equal(preview.opponent.stages.def,3);
+  assert.notEqual(preview.opponent.stages,foe.stages);
 });
 
 test("field guide exposes accurate branch conditions and incoming type matchups", () => {

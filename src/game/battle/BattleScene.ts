@@ -40,6 +40,7 @@ import { battleBackdropForMap, type BattleBackdrop } from "./backdrop";
 import { moraleExpMultiplier } from "../morale";
 import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
+import { switchPreview } from "./tactics";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -880,6 +881,8 @@ export class BattleScene implements Scene {
                   new PartyScene(this.stack, this.input, this.state, {
                     mode: "battle-switch",
                     currentUid: this.player.mon.uid,
+                    freeSwitch: true,
+                    onInspect: (mon) => this.openSwitchIntel(mon, true),
                     // afterFaint=false → il cambio è "gratis" qui (turno nuovo),
                     // ma switchTo(false) fa contrattaccare: passiamo true così il
                     // nemico appena schierato NON attacca subito (come nei Pokémon).
@@ -1036,6 +1039,8 @@ export class BattleScene implements Scene {
           this.stack.push(
             new PartyScene(this.stack, this.input, this.state, {
               mode: "forced-switch",
+              freeSwitch: true,
+              onInspect: (mon) => this.openSwitchIntel(mon, true),
               onChoose: (mon) => this.switchTo(mon, true)
             })
           );
@@ -1078,6 +1083,15 @@ export class BattleScene implements Scene {
     }
     this.pushFront(steps);
     this.mode = "queue";
+  }
+
+  private openSwitchIntel(mon: Monster, free: boolean): void {
+    const preview = switchPreview(mon, this.foe);
+    this.stack.push(new BattleIntelScene(this.stack, this.input, preview.entrant, preview.opponent, 0, { sondaggi: this.state.sondaggi }, undefined, [], [
+      `CANDIDATO: ${speciesOf(mon).name}.`,
+      free ? "RIMPASTO GRATIS: NESSUN CONTRATTACCO." : "CAMBIO: IL NEMICO ATTACCA PRIMA CHE TU POSSA USARE UNA MOSSA.",
+      "STIMA DOPO IL CAMBIO E LE ABILITA DI INGRESSO. LEGGERE NON SCHIERA."
+    ], "SQUADRA"));
   }
 
   private pushEndOfTurn(): void {
@@ -1428,6 +1442,7 @@ export class BattleScene implements Scene {
           new PartyScene(this.stack, this.input, this.state, {
             mode: "battle-switch",
             currentUid: this.player.mon.uid,
+            onInspect: (mon) => this.openSwitchIntel(mon, false),
             onChoose: (mon) => this.switchTo(mon, false)
           })
         );

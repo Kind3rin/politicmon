@@ -1,10 +1,20 @@
 import type { Move } from "../../data/moves";
 import { STATUS_NAMES } from "../../data/moves";
-import { abilityOf, statsOf } from "../monster";
-import { calcDamage, effectiveStat, statName, type Combatant, type DamageContext } from "./sim";
-import { statDropBlockReason, statusBlockReason } from "./effectContract";
+import { abilityOf, statsOf, type Monster } from "../monster";
+import { calcDamage, effectiveStat, makeCombatant, statName, type Combatant, type DamageContext } from "./sim";
+import { resolveEntryAbility, statDropBlockReason, statusBlockReason } from "./effectContract";
 
 function snapshot(c: Combatant): Combatant { return { ...c, stages: { ...c.stages }, mon: { ...c.mon, moves: c.mon.moves.map((m) => ({ ...m })) } }; }
+
+// Un cambio reale crea il combattente e poi applica l'abilità d'ingresso.
+// L'anteprima usa copie: TABULA RASA non deve cancellare i bonus nemici live.
+export function switchPreview(mon: Monster, opponent: Combatant): { entrant: Combatant; opponent: Combatant } {
+  const entrant = makeCombatant({ ...mon, moves: mon.moves.map((s) => ({ ...s })) });
+  const foe = snapshot(opponent);
+  const entry = resolveEntryAbility(entrant, foe);
+  entrant.stages = entry.entrantStages; foe.stages = entry.opponentStages;
+  return { entrant, opponent: foe };
+}
 
 // calcDamage records first-hit/first-attack flags. Run it on snapshots: reading
 // an estimate must never spend LODO/PRIMA PAGINA or advance a live RNG stream.

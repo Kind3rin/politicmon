@@ -61,4 +61,9 @@ Gli screenshot campione non certificano tutti i flussi di rete o una campagna
 completa. Continuano i round sulle altre interfacce, sui dialoghi delle zone,
 sul ritmo delle lotte, sugli effetti e sulla verifica integrale del gioco.
 
+Pubblicato nel commit `50b50ca`: CI riuscita e deploy verificato su
+[politicmon.vercel.app](https://politicmon.vercel.app/). Tutti i 304 PNG del
+verificatore corrispondono ai file locali; la PWA del sito pubblico passa il
+primo utilizzo offline dei 413 asset e il ritorno dal background.
+
 ![Missioni, circolo e archivio](img/headquarters.png)

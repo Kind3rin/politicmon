@@ -4,7 +4,10 @@ import { newTechnoRun, pressTechno, TECHNO_BEAT_SECONDS, TECHNO_SEQUENCE, techno
 
 test("P5-T04: sequenza completa perfetta produce sei hit", () => {
   let run = newTechnoRun(false);
-  for (const button of TECHNO_SEQUENCE) run = pressTechno(run, button);
+  for (const button of TECHNO_SEQUENCE) {
+    for (let i=0;i<3;i++) run = tickTechno(run, .225);
+    run = pressTechno(run, button);
+  }
   assert.equal(run.complete, true);
   assert.equal(run.hits, 6);
   assert.equal(run.misses, 0);
@@ -12,7 +15,7 @@ test("P5-T04: sequenza completa perfetta produce sei hit", () => {
 });
 
 test("P5-T04: input errato avanza senza bloccare la run", () => {
-  let run = newTechnoRun(false);
+  let run = newTechnoRun(true);
   for (let i = 0; i < TECHNO_SEQUENCE.length; i += 1) run = pressTechno(run, TECHNO_SEQUENCE[i] === "left" ? "right" : "left");
   assert.equal(run.complete, true);
   assert.ok(run.misses > 0);

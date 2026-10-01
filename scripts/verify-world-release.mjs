@@ -1,3 +1,4 @@
+import { epilogueAssetPaths } from "./epilogue-asset-paths.mjs";
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -17,7 +18,7 @@ const corePaths = coreUiPaths();
 assert.equal(corePaths.length, 11);
 const campaignPaths = campaignUiPaths();
 assert.equal(campaignPaths.length, 5);
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths];
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths()];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -42,4 +43,6 @@ assert.ok(source.includes('DOSSIER MISSIONE'), 'mission dossier missing from dep
 assert.ok(source.includes('STORICO DEL CONFRONTO'), 'complete chat history missing from deployed bundles');
 assert.ok(source.includes('EFFETTI REALI'), 'campaign decision previews missing from deployed bundles');
 assert.ok(source.includes('RIPARATO ORA'), 'diplomacy repair missing from deployed bundles');
+assert.ok(source.includes('CHI RESTA AL TAVOLO'), 'personal campaign epilogue missing');
+assert.ok(source.includes('ASPETTA LA ZONA VERDE'), 'timing gameplay missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

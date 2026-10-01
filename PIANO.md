@@ -1,7 +1,9 @@
 # PIANO — Politicmon
 
 Piano attivo, 2 ottobre 2026: [redesign completo](docs/REDESIGN-PLAN.md).
-Ultimo round: [patti e conseguenze](docs/PATTI-CONSEGUENZE.md), cinque ambienti,
+Ultimo round: [epiloghi e postgame](docs/EPILOGHI-POSTGAME.md): finali personali,
+ricordi visibili, monumenti, ritmo e favori annullabili.
+Precede [patti e conseguenze](docs/PATTI-CONSEGUENZE.md), cinque ambienti,
 dossier annullabili, riparazione effettiva e bonus di coalizione applicati.
 Precede [rete ed emblemi](docs/RETE-EMBLEMI.md), chat completa, scambi
 leggibili e duello/scambio verificati su rete reale. Precede la [coerenza grafica](docs/COERENZA-GRAFICA.md), 62 fallback nuovi,

@@ -51,3 +51,14 @@ export function applyAtto3EndingReward(state: GameState, ending: Atto3EndingDef)
   state.bag.schedona = (state.bag.schedona ?? 0) + 2;
   return true;
 }
+
+export const ENDING_SOUVENIRS: Readonly<Record<Atto3EndingId, { image: string; name: string }>> = {
+  government_cohesive: { image: "sash", name: "FASCIA DEL GOVERNO" },
+  government_fractured: { image: "bell", name: "CAMPANELLA DELLA CRISI" },
+  opposition_cohesive: { image: "megaphone", name: "MEGAFONO D'OPPOSIZIONE" },
+  opposition_fractured: { image: "membership", name: "TESSERA GRUPPO MISTO" }
+};
+
+export function earnedEndingSouvenirs(state: GameState): Atto3EndingId[] {
+  return (Object.keys(ATTO3_ENDINGS) as Atto3EndingId[]).filter(id => state.flags[ATTO3_ENDINGS[id].cosmeticFlag]);
+}

@@ -1,9 +1,11 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
-import { Menu, MessageBox, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import { drawScreenHeader } from "../ui/widgets";
+import { sceneImage } from "../engine/assets";
+import { drawEpilogueBackdrop, drawEpiloguePage, epiloguePages } from "../ui/epilogueArt";
 
 // MONUMENTO AL CANDIDATO — money-sink TERMINALE (R42 economia, LOTTO 3). Dopo la
 // Coppa/UE i soldi non servono più: qui si bruciano in un monumento a sé stessi,
@@ -48,144 +50,69 @@ export function monumentDecoLines(level: number): string[] {
   return [`MONUMENTO AL CANDIDATO (LIVELLO ${lv}).`, ...MONUMENT_STAGES[lv]];
 }
 
+export function buyMonumentLevel(state: GameState, expectedLevel: number): boolean {
+  const cost = MONUMENT_COSTS[expectedLevel];
+  if (state.monumentLevel !== expectedLevel || !Number.isInteger(expectedLevel) || cost === undefined || state.money < cost) return false;
+  state.money -= cost;
+  state.monumentLevel++;
+  return true;
+}
+
 export class MonumentScene implements Scene {
-  private menu: Menu;
-  private msg = new MessageBox();
-  private time = 0;
-
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
-    this.menu = this.buildMenu();
-  }
-
-  private nextCost(): number | null {
-    const lv = this.state.monumentLevel;
-    return lv < MONUMENT_MAX ? MONUMENT_COSTS[lv] : null;
-  }
-
-  private buildMenu(): Menu {
-    const cost = this.nextCost();
-    const items = cost === null
-      ? [{ label: "IL MONUMENTO È COMPLETO" }, { label: "ESCI" }]
-      : [
-          { label: this.state.monumentLevel === 0 ? "FINANZIA IL MONUMENTO" : "AMPLIA IL MONUMENTO", rightLabel: `${cost}€` },
-          { label: "ESCI" }
-        ];
-    return new Menu(items);
-  }
-
-  update(dt: number): void {
-    this.time += dt;
-    if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
+  readonly transparent = false;
+  private mode: "view" | "review" | "story" = "view";
+  private page = 0;
+  private pages: string[][] = [];
+  private expectedLevel = 0;
+  private notice = "";
+  constructor(private stack: SceneStack, private input: Input, private state: GameState) {}
+  update(): void {
+    if (this.input.wasPressed("b")) {
+      if (this.mode !== "view") { this.mode = "view"; this.page = 0; }
+      else this.stack.pop();
       return;
     }
-    const action = this.menu.update(this.input);
-    if (action === "cancel") {
-      this.stack.pop();
-      return;
-    }
-    if (action !== "select") {
-      return;
-    }
-    const cost = this.nextCost();
-    // Ultima voce = ESCI (o quando è completo, index 1).
-    const buyIndex = cost === null ? -1 : 0;
-    if (this.menu.index === buyIndex && cost !== null) {
-      this.build(cost);
-      return;
-    }
-    this.stack.pop();
-  }
-
-  private build(cost: number): void {
-    if (this.state.money < cost) {
-      audio.cancel();
-      this.msg.show([
-        "L'ARCHITETTO scuote la testa: fondi insufficienti.",
-        `Servono ${cost}€. Il marmo di Carrara non si paga a strette di mano.`
-      ]);
-      return;
-    }
-    this.state.money -= cost;
-    this.state.monumentLevel = Math.min(MONUMENT_MAX, this.state.monumentLevel + 1);
-    const lv = this.state.monumentLevel;
-    audio.badgeFanfare();
-    saveGame(this.state);
-    this.menu = this.buildMenu();
-    const lines = [
-      `LIVELLO ${lv} INAUGURATO! ${cost}€ ben spesi (per te).`,
-      ...MONUMENT_STAGES[lv]
-    ];
-    if (lv >= MONUMENT_MAX) {
-      // Al livello 3: TITOLO permanente + achievement (satira).
-      lines.push(
-        `Da oggi sei ${MONUMENT_TITLE}.`,
-        "Un titolo che nessuno ti ha dato, ma che ti sei preso. Legalmente."
-      );
-    }
-    this.msg.show(lines);
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#1c2230");
-    // Cielo istituzionale sfumato in alto.
-    screen.rect(0, 0, VIEW_W, 12, "#2a3550");
-    screen.text("MONUMENTO AL CANDIDATO", 8, 8, "#f4d34a");
-    screen.textRight(`${this.state.money}€`, VIEW_W - 8, 8, "#e8c84a");
-
-    const lv = this.state.monumentLevel;
-    // "Anteprima" ASCII del monumento: cresce col livello (pilastro + corpo).
-    this.drawMonument(screen, VIEW_W / 2, 26, lv);
-
-    // Descrizione dello stadio corrente (a capo pulito entro la larghezza schermo).
-    // Fallback all'ultimo stadio se lv è fuori range (save manomesso): parseState
-    // già clampa a 0..3, questa è difesa in profondità per non crashare mai.
-    const desc = MONUMENT_STAGES[lv] ?? MONUMENT_STAGES[MONUMENT_STAGES.length - 1];
-    const wrapped = desc.flatMap((line) => wrapText(line, 36));
-    let y = VIEW_H - 66;
-    screen.text(`LIVELLO ${lv}/${MONUMENT_MAX}`, 10, y, PAPER);
-    y += 10;
-    for (const line of wrapped.slice(0, 3)) {
-      screen.text(line, 10, y, INK);
-      y += 8;
-    }
-
-    this.menu.draw(screen, 14, VIEW_H - 24, VIEW_W - 28);
-    if (this.msg.isOpen) {
-      this.msg.draw(screen);
-    } else {
-      screen.text("A: scegli  B: esci", 8, VIEW_H - 8, GREY);
-    }
-  }
-
-  // Statua stilizzata che cresce col livello: base sempre, poi corpo/busto,
-  // poi braccia, poi aureola di stelle. Puramente cosmetica (nessun asset).
-  private drawMonument(screen: Screen, cx: number, top: number, lv: number): void {
-    const gold = "#d8b838";
-    const bronze = "#b8884a";
-    const marble = "#cfc7b0";
-    const baseY = top + 40;
-    // Basamento in marmo (sempre presente).
-    screen.rect(cx - 20, baseY, 40, 6, marble);
-    screen.rect(cx - 14, baseY - 4, 28, 4, "#b8b0a0");
-    if (lv >= 1) {
-      // Busto / colonna centrale.
-      screen.rect(cx - 4, baseY - 20, 8, 16, bronze);
-      screen.rect(cx - 5, baseY - 26, 10, 6, bronze); // testa
-    }
-    if (lv >= 2) {
-      // Statua a figura intera: corpo più alto + braccio puntato.
-      screen.rect(cx - 5, baseY - 34, 10, 14, bronze);
-      screen.rect(cx + 4, baseY - 32, 10, 3, bronze); // braccio teso
-    }
-    if (lv >= 3) {
-      // Colosso dorato: piedistallo esteso, corpo altissimo, aureola di stelle.
-      screen.rect(cx - 24, baseY - 2, 48, 4, gold);
-      screen.rect(cx - 6, baseY - 44, 12, 20, gold);
-      screen.rect(cx - 7, baseY - 50, 14, 8, gold); // testa/corona
-      for (let i = -2; i <= 2; i += 1) {
-        screen.text("*", cx + i * 8 - 2, baseY - 60, "#f4d34a");
+    if (this.mode === "view") {
+      const level = this.state.monumentLevel;
+      if (this.input.wasPressed("start")) {
+        this.mode = "story"; this.page = 0;
+        this.pages = epiloguePages([...MONUMENT_STAGES[level], ...(level === 3 ? [MONUMENT_TITLE, "IL TITOLO È VISIBILE NELLA TESSERA. È INTERAMENTE AUTOPROCLAMATO."] : [])]);
+      } else if (this.input.wasPressed("a") && level < MONUMENT_MAX) {
+        this.expectedLevel = level; this.mode = "review"; this.page = 0;
+        this.pages = epiloguePages([`LIVELLO ${level + 1}: COSTO ${MONUMENT_COSTS[level]}€.`, ...MONUMENT_STAGES[level + 1], "SPESA COSMETICA CON I TUOI FONDI. NESSUN BONUS ALLE LOTTE O AI SONDAGGI.", "LA CERIMONIA È FACOLTATIVA. LA FATTURA NO. A ALLA FINE CONFERMA; B ANNULLA."]);
       }
+      return;
     }
+    if (!this.input.wasPressed("a")) return;
+    if (this.page < this.pages.length - 1) { this.page++; return; }
+    if (this.mode === "review") {
+      if (buyMonumentLevel(this.state, this.expectedLevel)) {
+        saveGame(this.state); audio.badgeFanfare(); this.notice = `INAUGURATO: LIVELLO ${this.state.monumentLevel}.`;
+      } else { audio.cancel(); this.notice = "FONDI O LIVELLO NON DISPONIBILI."; }
+    }
+    this.mode = "view"; this.page = 0;
+  }
+  draw(screen: Screen): void {
+    drawEpilogueBackdrop(screen, "monument");
+    const level = this.mode === "review" ? this.expectedLevel + 1 : this.state.monumentLevel;
+    drawScreenHeader(screen, "MONUMENTO AL CANDIDATO", this.mode === "view" ? `${level}/3` : `${this.page + 1}/${this.pages.length}`);
+    const image = sceneImage(`epilogue:monument_${level}`, `ui/epilogue/monument_${level}.png`);
+    if (this.mode !== "view") {
+      if (image) screen.image(image, 10, 20, 32, 38);
+      drawEpiloguePage(screen, this.pages[this.page]);
+      screen.text(this.mode === "review" && this.page === this.pages.length - 1 ? "A: PAGA   B: ANNULLA" : "A: AVANTI   B: INDIETRO", 12, 167, "#fffaf0");
+      return;
+    }
+    if (image) screen.image(image, 9, 27, 64, 76);
+    screen.panel(83, 29, 149, 73, "card");
+    screen.text("FONDI PERSONALI", 92, 40, "#68758a");
+    screen.text(`${this.state.money}€`, 92, 53, "#17243d");
+    screen.text(level < 3 ? "PROSSIMO LIVELLO" : "COLLEZIONE COMPLETA", 92, 70, "#68758a");
+    screen.text(level < 3 ? `${MONUMENT_COSTS[level]}€` : "TITOLO NELLA TESSERA", 92, 83, "#17243d");
+    screen.panel(8, 109, 224, 47, "dialog");
+    screen.text(this.notice || "UN SELFIE NON PAGA LA FATTURA.", 16, 119, "#17243d");
+    screen.text("START: LEGGI TUTTA LA STORIA.", 16, 132, "#17243d");
+    screen.text("SOLO COSMETICO. NESSUN BONUS.", 16, 144, "#17243d");
+    screen.text(level < 3 ? "A: ANTEPRIMA   B: ESCI" : "START: STORIA   B: ESCI", 12, 167, "#fffaf0");
   }
 }

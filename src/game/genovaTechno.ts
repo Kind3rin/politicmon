@@ -1,8 +1,13 @@
+import type { GameState } from "./state";
 import type { Button } from "../engine/input";
 
 export type TechnoButton = Extract<Button, "up" | "down" | "left" | "right" | "a">;
 export const TECHNO_SEQUENCE: readonly TechnoButton[] = ["left", "a", "right", "up", "a", "down"];
 export const TECHNO_BEAT_SECONDS = 1.35;
+export const TECHNO_WINDOW_SECONDS = 0.22;
+export function technoInWindow(run: TechnoRun): boolean {
+  return run.reducedMotion || Math.abs(run.remaining - TECHNO_BEAT_SECONDS / 2) <= TECHNO_WINDOW_SECONDS;
+}
 
 export interface TechnoRun {
   readonly index: number;
@@ -30,7 +35,8 @@ function advance(run: TechnoRun, hit: boolean): TechnoRun {
 
 export function pressTechno(run: TechnoRun, button: TechnoButton): TechnoRun {
   if (run.complete) return run;
-  return advance(run, TECHNO_SEQUENCE[run.index] === button);
+  if (!run.reducedMotion && run.remaining > TECHNO_BEAT_SECONDS / 2 + TECHNO_WINDOW_SECONDS) return run;
+  return advance(run, technoInWindow(run) && TECHNO_SEQUENCE[run.index] === button);
 }
 
 export function tickTechno(run: TechnoRun, dt: number): TechnoRun {
@@ -42,7 +48,17 @@ export function tickTechno(run: TechnoRun, dt: number): TechnoRun {
 export interface TechnoReward { readonly grade: "PERFETTO" | "IN ONDA" | "FUORI TEMPO"; readonly money: number; readonly sondaggi: number; }
 
 export function technoReward(hits: number): TechnoReward {
-  if (hits >= 5) return { grade: "PERFETTO", money: 1200, sondaggi: 4 };
+  if (hits >= 6) return { grade: "PERFETTO", money: 1200, sondaggi: 4 };
   if (hits >= 3) return { grade: "IN ONDA", money: 600, sondaggi: 2 };
   return { grade: "FUORI TEMPO", money: 200, sondaggi: 0 };
+}
+
+export function claimTechnoReward(state: GameState, run: TechnoRun): { money: number; sondaggi: number } {
+  if (!run.complete || state.flags["genova-techno-complete"]) return { money: 0, sondaggi: 0 };
+  const reward = technoReward(run.hits), before = state.sondaggi;
+  state.flags["genova-techno-complete"] = true;
+  state.flags[`genova-techno:${reward.grade.toLowerCase().replaceAll(" ", "-")}`] = true;
+  state.money += reward.money;
+  state.sondaggi = Math.min(100, state.sondaggi + reward.sondaggi);
+  return { money: reward.money, sondaggi: state.sondaggi - before };
 }

@@ -1,5 +1,11 @@
 # Politicmon: risorse Higgsfield
 
+Undicesimo blocco: sette ambienti del postgame, quattro souvenir e quattro
+statue. Nove job Nano Banana Pro, **18 crediti**, saldo **657,97 → 639,97**,
+cumulativo **246**. Prompt, job e SHA-256 in `higgsfield-epilogue.json`;
+staging con `prepare-epilogue-assets.py`, revisione nativa e 15 PNG integrati.
+[EPILOGHI-POSTGAME.md](EPILOGHI-POSTGAME.md) documenta gameplay e verifiche.
+
 Decimo blocco: cinque ambienti per foto, convenzione, diplomazia, coalizione e
 scrutinio. Cinque job Nano Banana Pro, **10 crediti**, saldo **667,97 → 657,97**,
 cumulativo **228**. Prompt, job e checksum in `higgsfield-campaign-ui.json`;

@@ -3,48 +3,39 @@ import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import { audio } from "../engine/audio";
 import { applyAtto3EndingReward, deriveAtto3Ending, type Atto3EndingDef } from "../game/atto3Ending";
+import { campaignEpilogue } from "../game/campaignEpilogue";
 import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader, wrapText } from "../ui/widgets";
-import { moraleEpilogue } from "../game/morale";
+import { drawScreenHeader } from "../ui/widgets";
+import { drawEpilogueBackdrop, drawEpiloguePage, epiloguePages } from "../ui/epilogueArt";
 
 export class Atto3EndingScene implements Scene {
   readonly transparent = false;
   private page = 0;
+  private finished = false;
   private ending: Atto3EndingDef;
+  private pages: { title: string; lines: string[] }[];
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState, private onFinish: () => void) {
     const ending = deriveAtto3Ending(state);
     if (!ending) throw new Error("Atto3EndingScene richiede un risultato elettorale");
     this.ending = ending;
+    this.pages = campaignEpilogue(state, ending).flatMap(section => epiloguePages(section.paragraphs).map(lines => ({ title: section.title, lines })));
   }
 
   update(): void {
-    if (!this.input.wasPressed("a") && !this.input.wasPressed("b")) return;
-    if (this.page < 4) { this.page += 1; audio.confirm(); return; }
+    if (this.finished) return;
+    if (this.input.wasPressed("b")) { this.page = Math.max(0, this.page - 1); audio.cancel(); return; }
+    if (!this.input.wasPressed("a")) return;
+    if (this.page < this.pages.length - 1) { this.page++; audio.confirm(); return; }
+    this.finished = true;
     if (applyAtto3EndingReward(this.state, this.ending)) audio.catchJingle();
     saveGame(this.state); this.stack.pop(); this.onFinish();
   }
 
   draw(screen: Screen): void {
-    screen.clear(this.ending.id.includes("fractured") ? "#3d2939" : "#173e42");
-    const headings = [this.ending.title, "GOVERNO OMBRA", "DOPO LE TELECAMERE", "CREDITI", "POST-GAME"];
-    drawScreenHeader(screen, headings[this.page], `${this.page + 1}/5`);
-    screen.panel(8, 30, 224, 116, "dialog");
-    const ministers = Object.keys(this.state.ministri);
-    const paragraphs = this.page === 0
-      ? [this.ending.subtitle, ...this.ending.lines]
-      : this.page === 1
-        ? [ministers.length ? `${ministers.length} MINISTERI RESTANO ASSEGNATI.` : "NESSUN MINISTERO ERA ASSEGNATO.", "IL GOVERNO OMBRA CONTINUA A DARE I SUOI BONUS NEL POST-GAME."]
-        : this.page === 2
-          ? moraleEpilogue(this.state.morale)
-          : this.page === 3
-          ? ["POLITICMON", "IDEA, CODICE E SATIRA: LUCA TIENGO + CODEX", "PIXEL ART: PIXELLAB + HIGGSFIELD", "GRAZIE PER AVER VOTATO. ORA RESTANO LE SEDIE."]
-          : ["PREMIO: 2500€ + 2 SCHEDE BLINDATE.", "SBLOCCATO UN COSMETICO DELL'EPILOGO.", "PUOI TORNARE OVUNQUE: QUEST, DEX, COPPA E ONLINE RESTANO ATTIVI."];
-    let y = 42;
-    for (const paragraph of paragraphs) {
-      for (const line of wrapText(paragraph, 33)) { screen.text(line, 15, y, "#10141f"); y += 11; }
-      y += 5;
-    }
-    screen.text(this.page < 4 ? "A: CONTINUA   B: CONTINUA" : "A: TORNA AL POST-GAME", 12, 158, "#ffe38a");
+    drawEpilogueBackdrop(screen, this.ending.id);
+    drawScreenHeader(screen, this.pages[this.page].title, `${this.page + 1}/${this.pages.length}`);
+    drawEpiloguePage(screen, this.pages[this.page].lines);
+    screen.text(this.page < this.pages.length - 1 ? "A: AVANTI   B: INDIETRO" : "A: POSTGAME   B: INDIETRO", 12, 167, "#fffaf0");
   }
 }

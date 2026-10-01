@@ -79,7 +79,7 @@ Questo non è un gioco fatto con un engine. È **tutto a mano**:
 - **Multiplayer 100% peer-to-peer** via WebRTC su relay pubblici gratuiti: nessun server proprio, nessun account, **nessun costo che possa mai crescere**.
 - **PWA** con service worker cache-first e installazione offline.
 - **Audio** sintetizzato a runtime (Web Audio), nessun file audio.
-- **Grafica Higgsfield**: 208 pose delle creature, 62 immagini statiche coerenti, mondo e quartier generale rinnovati; supporto offline. [Patti e conseguenze](docs/PATTI-CONSEGUENZE.md): cinque ambienti politici, dossier annullabili, morale e alleanze con effetti reali. [Emblemi, chat e scambi](docs/RETE-EMBLEMI.md), con prove di rete reali.
+- **Grafica Higgsfield**: 208 pose delle creature, 62 immagini statiche coerenti, mondo e quartier generale rinnovati; supporto offline. [Epiloghi e postgame](docs/EPILOGHI-POSTGAME.md): finali personali, souvenir visibili, monumenti e ritmo accessibile. [Patti e conseguenze](docs/PATTI-CONSEGUENZE.md): cinque ambienti politici, dossier annullabili, morale e alleanze con effetti reali. [Emblemi, chat e scambi](docs/RETE-EMBLEMI.md), con prove di rete reali.
 - **Morale e satira**: fiducia dei cittadini, coesione della squadra, promesse con scadenza, dialoghi che ricordano le scelte e quattro nuovi eventi ispirati a meme documentati.
 
 ```bash

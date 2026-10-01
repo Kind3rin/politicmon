@@ -1,0 +1,297 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 657.97,
+  "estimatedCredits": 18,
+  "assets": [
+    {
+      "id": "government_cohesive",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/government_cohesive.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. An Italian cabinet meeting room at dawn, a stable round table with different empty chairs joined by an intact mint ribbon, a small gold ceremonial sash on a lectern, ordinary work papers and a steaming coffee ready. A giant decorative scissors lies unused on a shelf. Main focus in upper LEFT quarter, right half dark calm negative space, entire lower half quiet dark shadow. Full bleed landscape, no HUD or frames.",
+      "index": 0,
+      "jobId": "948e0d5f-1bbf-43de-9345-c231b1f9d701",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_948e0d5f-1bbf-43de-9345-c231b1f9d701.png",
+      "sourceSha256": "054743156d7cf9f12acd0cb981456838d27e6d2d46a03765b026834783d11149"
+    },
+    {
+      "id": "government_fractured",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/government_fractured.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. An Italian cabinet meeting room at late night, a gilt lectern with a small brass crisis bell, a table with a deep crack, mismatched empty chairs pulling apart with tangled severed burgundy ribbons, several microphones pointed in opposite directions. Main focus upper LEFT quarter, right half dark calm negative space, entire lower half quiet dark shadow. Full bleed landscape, no HUD or frames.",
+      "index": 1,
+      "jobId": "ef5d4eb2-aa18-4cad-88f0-2b5c90893e3e",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_ef5d4eb2-aa18-4cad-88f0-2b5c90893e3e.png",
+      "sourceSha256": "22ddbe5aecf5f0a09a681afbb5938e86b4292f968fca64eff11d25357abed752"
+    },
+    {
+      "id": "opposition_cohesive",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/opposition_cohesive.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. An Italian parliamentary corridor with a solid mint bench, five folders neatly aligned, one brass megaphone ready for use, mismatched empty chairs held together by one intact mint ribbon. Warm morning light, faint silhouette of the chamber in background. Main focus upper LEFT quarter, right half dark calm negative space, entire lower half quiet dark shadow. Full bleed landscape, no HUD or frames.",
+      "index": 2,
+      "jobId": "d6efd22a-9341-4630-8dd3-4960fb95c22f",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_d6efd22a-9341-4630-8dd3-4960fb95c22f.png",
+      "sourceSha256": "d79386555c57df5b9d3db29738007ae3403a7cccbaa84468d1f2816fae75f12c"
+    },
+    {
+      "id": "opposition_fractured",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/opposition_fractured.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. An Italian parliamentary corridor turned into a absurd tiny co-working office: too many individual miniature gilt desks, a constellation of separate blank membership cards pinned with burgundy threads, empty mismatched chairs pointing everywhere. Slightly comic but sophisticated dusk lighting. Main focus upper LEFT quarter, right half dark calm negative space, entire lower half quiet dark shadow. Full bleed landscape, no HUD or frames.",
+      "index": 3,
+      "jobId": "cc137dbc-93b2-4f9f-993d-5f406f2d19f0",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_cc137dbc-93b2-4f9f-993d-5f406f2d19f0.png",
+      "sourceSha256": "0c70dc333a105ab1db6cf0432063699c025848790443eca784d2f997b4dcd886"
+    },
+    {
+      "id": "mafia",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/mafia.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. A satirical Italian backroom for clientelist favors, an empty burgundy leather chair at a walnut desk, three stamped blank envelopes, a rotary telephone with absurdly many wires, a waiting-room rope that opens a side door, horse-shaped paperweight. Warm cream desk lamp and dark navy shadows. Interesting objects on LEFT THIRD, right two thirds dark quiet space. Full bleed landscape, no UI or frames.",
+      "index": 4,
+      "jobId": "40463111-b65c-40a8-861a-8c3a58e7688b",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_40463111-b65c-40a8-861a-8c3a58e7688b.png",
+      "sourceSha256": "1fd0f0fc8eade86fb037d74469c1deea62d51875391134fe0bda598e4072e4fc"
+    },
+    {
+      "id": "techno",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/techno.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. A colorful Italian waterfront political techno stage, abandoned gilt podium converted into a DJ desk, loudspeakers, mint and gold static strip lights, burgundy curtain and five blank square light pads, tiny harbor crane in distance. View from audience, stage and objects on LEFT THIRD, right half calm navy negative space. Full bleed landscape, no HUD, no frames, no text.",
+      "index": 5,
+      "jobId": "73d98d64-82e6-4f10-9533-b5c3602c6acd",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_73d98d64-82e6-4f10-9533-b5c3602c6acd.png",
+      "sourceSha256": "89c30387933f26db3ddd7163f917c59708329a99f6c3a1693468ef8d06ce86da"
+    },
+    {
+      "id": "monument",
+      "kind": "background",
+      "path": "public/sprites/ui/epilogue/monument.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. A satirical Italian civic plaza dedicated to self-celebration: empty circular marble dais in LEFT THIRD, small construction barriers and a ridiculous red ceremonial ribbon, a discreet invoice on a clipboard blank without writing. Navy evening sky, mint hedges, warm gold light. Center-left dais completely empty for a separate sprite; right half quiet negative space. Full bleed landscape, no UI, no text, no borders.",
+      "index": 6,
+      "jobId": "fa6dfff1-3492-4523-b388-e5b2d49b428f",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230615_fa6dfff1-3492-4523-b388-e5b2d49b428f.png",
+      "sourceSha256": "7d126235f8074045f5aec3a9364e1d8a673c1062df888353f0679a7660a9f4db"
+    },
+    {
+      "id": "cosmetics",
+      "kind": "icons",
+      "items": [
+        "sash",
+        "bell",
+        "megaphone",
+        "membership"
+      ],
+      "cols": 2,
+      "rows": 2,
+      "width": 32,
+      "height": 32,
+      "aspect_ratio": "1:1",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. A precise evenly spaced 2x2 sprite-sheet on pure white. Upper-left a folded ivory/mint/gold ceremonial sash with burgundy clasp; upper-right a brass hand bell with burgundy handle; lower-left a brass megaphone with mint mouth rim and burgundy grip; lower-right a completely blank burgundy membership card with a small gold eight-point star, NO LETTERS. Every object centered in its cell, equal optical size, separated with wide pure white padding, do not touch cell boundaries. No shadows touching white boundaries, no frames or cell borders.",
+      "index": 7,
+      "jobId": "45933b25-1a49-43fa-8c35-2d164cab26c7",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230615_45933b25-1a49-43fa-8c35-2d164cab26c7.png",
+      "sourceSha256": "efa4c9cb1cd5dd2395b3293c524586c339d2a2d6f2b5b969d92677b6d29ba75e"
+    },
+    {
+      "id": "monument-stages",
+      "kind": "icons",
+      "items": [
+        "monument_0",
+        "monument_1",
+        "monument_2",
+        "monument_3"
+      ],
+      "cols": 2,
+      "rows": 2,
+      "width": 64,
+      "height": 76,
+      "aspect_ratio": "1:1",
+      "prompt": "POLITICMON satirical Italian political RPG, modern crisp pixel art with large readable forms at small native resolution, cinematic theatrical lighting, navy, warm ivory, mint, burgundy and restrained gold palette. Original fictional objects, no real people, no letters, numbers, words or logos. A precise evenly spaced 2x2 sprite-sheet on pure white, FOUR self-celebratory statues based on the exact same small ivory marble pedestal. Every statue completely contained in its cell with generous white margins, front view with slight depth, common base width. Upper-left EMPTY ivory pedestal with blank bronze plaque. Upper-right a bronze bust of a fictional round-faced smug suited mayor looking at a tiny mirror, on that pedestal. Lower-left a bronze equestrian statue of that fictional mayor pointing grandly, horse visibly looking back toward exit, same pedestal. Lower-right a comically enormous gold statue of that mayor with one hand on heart and other on a money briefcase, small mint fountain bowls at base, same pedestal. No letters on plaques, no text, no frames, no connecting objects, no cell borders, clean white margins.",
+      "index": 8,
+      "jobId": "62468a1f-2dbd-4bac-b6aa-0571e7774847",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230616_62468a1f-2dbd-4bac-b6aa-0571e7774847.png",
+      "sourceSha256": "9ed8b05eb1b9b75f9bd35e4e63c123ee50266f0bf543539b2f937792e412a155"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "public/sprites/ui/epilogue/government_cohesive.png",
+      "sha256": "d8a603074150cd3c0571e39dc879ae20ff9d10ded6c2f51dabbf40094797af55",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "948e0d5f-1bbf-43de-9345-c231b1f9d701"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/government_fractured.png",
+      "sha256": "faf6eec54636614582f552d2adf7ca591274e53886b0161afb820036ba8c8795",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "ef5d4eb2-aa18-4cad-88f0-2b5c90893e3e"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/opposition_cohesive.png",
+      "sha256": "97109a2a862019ef9d4e7ebc510e2bbde054fbc305b31c5f7865affb38ba39f6",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "d6efd22a-9341-4630-8dd3-4960fb95c22f"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/opposition_fractured.png",
+      "sha256": "e0481e1938a50a5ba4b7647dd809127389bffb6cfe9fa60587740cb226a41843",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "cc137dbc-93b2-4f9f-993d-5f406f2d19f0"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/mafia.png",
+      "sha256": "c10d41b9457eac43555389893cd3918a4a1118625cadbd549be18ad2c880e9c5",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "40463111-b65c-40a8-861a-8c3a58e7688b"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/techno.png",
+      "sha256": "b7f3460c4b827920c49425dfc8d0b08ca57e0d4b67c80e74815ea751029e99e9",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "73d98d64-82e6-4f10-9533-b5c3602c6acd"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/monument.png",
+      "sha256": "0d69d455876f14b50e5ca3d361a3de2cfea174010b42ba7ec73675c3a50ef472",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "fa6dfff1-3492-4523-b388-e5b2d49b428f"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/sash.png",
+      "sha256": "3f57e43dafca8b1eba84268af7d981bfe8a29163b96284216915066b8ac3c7c1",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "45933b25-1a49-43fa-8c35-2d164cab26c7"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/bell.png",
+      "sha256": "031a0aee76134abfda12495e14b6b15bc2f92610d1d9bdfc9c101dec395bb777",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "45933b25-1a49-43fa-8c35-2d164cab26c7"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/megaphone.png",
+      "sha256": "5891544928a9d01317235c8b383b68f33e4b98f5aefb58c06676360ac2f6b473",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "45933b25-1a49-43fa-8c35-2d164cab26c7"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/membership.png",
+      "sha256": "78246f6c40e642a2bc0f6ad3d97c3b376df3cfe650364b0ce9f921d3092b3ee0",
+      "size": [
+        32,
+        32
+      ],
+      "jobId": "45933b25-1a49-43fa-8c35-2d164cab26c7"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/monument_0.png",
+      "sha256": "9ddcebb390705c5951d0ec547349b8a601f386cbdcb11576aa799f143ef1c2a1",
+      "size": [
+        64,
+        76
+      ],
+      "jobId": "62468a1f-2dbd-4bac-b6aa-0571e7774847"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/monument_1.png",
+      "sha256": "843a1f5019fa6332fdbe6ed1e5ed7297e41a70075f7308b090b3ec5b9b3aca22",
+      "size": [
+        64,
+        76
+      ],
+      "jobId": "62468a1f-2dbd-4bac-b6aa-0571e7774847"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/monument_2.png",
+      "sha256": "42bede159d7ada9c33a03247fcf537e9f75f73dcb1220081ddcb880c9ffa341c",
+      "size": [
+        64,
+        76
+      ],
+      "jobId": "62468a1f-2dbd-4bac-b6aa-0571e7774847"
+    },
+    {
+      "path": "public/sprites/ui/epilogue/monument_3.png",
+      "sha256": "eae52c637dfc6d665c1cea164eb0a90a6f528057e6419be751852cd7a62b26a9",
+      "size": [
+        64,
+        76
+      ],
+      "jobId": "62468a1f-2dbd-4bac-b6aa-0571e7774847"
+    }
+  ],
+  "balanceAfter": 639.97,
+  "creditsSpent": 18,
+  "review": "Reviewed native proof; trimmed 16px separator margins only on both sheets; all 15 PNGs approved."
+}

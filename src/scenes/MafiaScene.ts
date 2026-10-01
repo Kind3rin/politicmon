@@ -3,10 +3,12 @@ import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { addSondaggi, sondaggiColor } from "../game/governo";
+import { addSondaggi } from "../game/governo";
 import { healMonster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { Menu, MessageBox, wrapText, GREY } from "../ui/widgets";
+import { Menu, MessageBox, wrapText } from "../ui/widgets";
+import { drawEpilogueBackdrop, drawEpiloguePage, epiloguePages } from "../ui/epilogueArt";
+import { drawScreenHeader } from "../ui/widgets";
 import { changeMorale } from "../game/morale";
 
 // RETROBOTTEGA DEL PADRINO — la "famiglia" come satira bonaria del clientelismo
@@ -63,6 +65,23 @@ export class MafiaScene implements Scene {
   private msg = new MessageBox();
   private mode: Mode = "menu";
   private time = 0;
+  private pending: { market: boolean; index: number; pages: string[][] } | null = null;
+  private page = 0;
+
+  private review(market: boolean, index: number): void {
+    const deal = market ? BLACK_MARKET[index] : null;
+    const alreadyProtected = !market && index === 2 && Boolean(this.state.flags["mafia-protezione"]);
+    const cost = alreadyProtected ? 0 : deal?.price ?? [0, RACCOMANDAZIONE_COST, PROTEZIONE_COST, BET_MIN][index];
+    const loss = alreadyProtected ? 0 : deal ? -deal.sondaggi : [0, 2, 5, 0][index];
+    const trust = alreadyProtected ? 0 : deal ? 5 : [0, 6, 10, 0][index], cohesion = alreadyProtected ? 0 : deal ? 2 : [0, 3, 5, 0][index];
+    const paragraphs = deal ? [(ITEMS[deal.itemId]?.desc ?? "DIRETTIVA RISERVATA.").toUpperCase(), `ACQUISTO: ${ITEMS[deal.itemId]?.name}.`] : mafiaOptionDetails(index, Boolean(this.state.flags["mafia-protezione"]));
+    this.pending = { market, index, pages: epiloguePages([...paragraphs,
+      `COSTO ${cost}€. FONDI ATTUALI ${this.state.money}€.`,
+      `PERDITA REALE: SOND ${Math.min(this.state.sondaggi, loss)}, FID ${Math.min(this.state.morale.trust, trust)}, COE ${Math.min(this.state.morale.cohesion, cohesion)}.`,
+      index === 3 && !market ? "INCASSI LORDI: 600€, 200€ O 0€. IL BANCO TRATTIENE IN MEDIA 6€ SU OGNI PUNTATA." : "LA FILA RESTA FUORI. LA PORTA LATERALE NON EMETTE UN NUMERO DI ATTESA.",
+      "A ALLA FINE CONFERMA. B ANNULLA."])};
+    this.page = 0;
+  }
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     this.menu = this.buildMenu();
@@ -97,6 +116,17 @@ export class MafiaScene implements Scene {
       this.msg.update(dt, this.input);
       return;
     }
+    if (this.pending) {
+      if (this.input.wasPressed("b")) { this.pending = null; return; }
+      if (!this.input.wasPressed("a")) return;
+      if (this.page < this.pending.pages.length - 1) { this.page++; return; }
+      const selected = this.pending; this.pending = null;
+      if (selected.market) this.buyMarket(selected.index);
+      else if (selected.index === 1) this.raccomandazione();
+      else if (selected.index === 2) this.protezione();
+      else this.scommessa();
+      return;
+    }
     if (this.mode === "market") {
       this.updateMarket();
       return;
@@ -115,13 +145,13 @@ export class MafiaScene implements Scene {
         this.mode = "market";
         break;
       case 1:
-        this.raccomandazione();
+        this.review(false, 1);
         break;
       case 2:
-        this.protezione();
+        this.review(false, 2);
         break;
       case 3:
-        this.scommessa();
+        this.review(false, 3);
         break;
       default:
         this.stack.pop();
@@ -139,7 +169,11 @@ export class MafiaScene implements Scene {
     if (action !== "select") {
       return;
     }
-    const deal = BLACK_MARKET[this.marketMenu.index];
+    this.review(true, this.marketMenu.index);
+  }
+
+  private buyMarket(index: number): void {
+    const deal = BLACK_MARKET[index];
     if (!deal) {
       return;
     }
@@ -156,18 +190,24 @@ export class MafiaScene implements Scene {
     }
     this.state.money -= deal.price;
     this.state.bag[deal.itemId] = (this.state.bag[deal.itemId] ?? 0) + 1;
+    const beforeSond = this.state.sondaggi;
     const now = addSondaggi(this.state, deal.sondaggi);
     changeMorale(this.state, "FAVORE SOTTOBANCO", -5, -2);
     audio.confirm();
     saveGame(this.state);
     this.msg.show([
       `Affare fatto: ${item?.name ?? deal.itemId}.`,
-      `Ma certi giri si pagano: ${deal.sondaggi} sondaggi (ora ${now}%).`,
-      "Fiducia -5, coesione -2. Chi aspetta in fila ha visto la porta laterale."
+      `Ma certi giri si pagano: ${now - beforeSond} sondaggi (ora ${now}%).`,
+      this.moraleReceipt()
     ]);
   }
 
   // ---- RACCOMANDAZIONE ----
+
+  private moraleReceipt(): string {
+    const record = this.state.morale.history.at(-1)!;
+    return `Fiducia ${record.trust}, coesione ${record.cohesion}. La fila ha visto la porta laterale.`;
+  }
 
   private raccomandazione(): void {
     if (this.state.money < RACCOMANDAZIONE_COST) {
@@ -180,6 +220,7 @@ export class MafiaScene implements Scene {
       healMonster(mon);
     }
     this.state.bag.schedona = (this.state.bag.schedona ?? 0) + 2;
+    const beforeSond = this.state.sondaggi;
     const now = addSondaggi(this.state, -2);
     changeMorale(this.state, "RACCOMANDAZIONE", -6, -3);
     audio.heal();
@@ -187,8 +228,8 @@ export class MafiaScene implements Scene {
     this.msg.show([
       "Una telefonata giusta e tutto si sistema.",
       "Squadra rimessa a nuovo e 2 SCHEDE BLINDATE in omaggio.",
-      `La rispettabilità però scende: -2 sondaggi (ora ${now}%).`,
-      "Fiducia -6, coesione -3. La scorciatoia non era aperta a tutti."
+      `La rispettabilità però scende: ${now - beforeSond} sondaggi (ora ${now}%).`,
+      this.moraleReceipt()
     ]);
   }
 
@@ -207,6 +248,7 @@ export class MafiaScene implements Scene {
     }
     this.state.money -= PROTEZIONE_COST;
     this.state.flags["mafia-protezione"] = true;
+    const beforeSond = this.state.sondaggi;
     const now = addSondaggi(this.state, -5);
     changeMorale(this.state, "PROTEZIONE PRIVATA", -10, -5);
     audio.confirm();
@@ -215,8 +257,8 @@ export class MafiaScene implements Scene {
     this.msg.show([
       "Da oggi sei sotto PROTEZIONE: meno seccatori per strada.",
       "I candidati selvatici ti danno tregua.",
-      `Ma la cosa si sa: -5 sondaggi (ora ${now}%).`,
-      "Fiducia -10, coesione -5. Adesso devi rispondere anche a chi ti protegge."
+      `Ma la cosa si sa: ${now - beforeSond} sondaggi (ora ${now}%).`,
+      this.moraleReceipt()
     ]);
   }
 
@@ -253,12 +295,15 @@ export class MafiaScene implements Scene {
   // ---- Draw ----
 
   draw(screen: Screen): void {
-    screen.clear("#1a1410");
-    // Atmosfera fumosa: lampada calda in alto.
-    screen.rect(0, 0, VIEW_W, 10, "#2a1e14");
-    screen.text("RETROBOTTEGA DEL PADRINO", 8, 10, "#c8a85a");
-    screen.textRight(`${this.state.money}€`, VIEW_W - 8, 10, "#e8c84a");
-    screen.text(`SOND ${this.state.sondaggi}%`, 8, 20, sondaggiColor(this.state.sondaggi));
+    drawEpilogueBackdrop(screen, "mafia");
+    drawScreenHeader(screen, "RETROBOTTEGA DEL PADRINO", `${this.state.money}€`);
+    if (this.pending) {
+      drawEpiloguePage(screen, this.pending.pages[this.page]);
+      screen.text(this.page === this.pending.pages.length - 1 ? "A: CONFERMA   B: ANNULLA" : "A: AVANTI   B: ANNULLA", 12, 167, "#fffaf0");
+      return;
+    }
+    screen.rect(0, 17, VIEW_W, 13, "#17243d");
+    screen.text(`SOND ${this.state.sondaggi}%`, 8, 20, "#fffaf0");
 
     if (this.mode === "market") {
       this.marketMenu.draw(screen, 14, 34, VIEW_W - 28);
@@ -271,13 +316,13 @@ export class MafiaScene implements Scene {
         screen.text(`COSTO ${deal.price}€ / ${deal.sondaggi} SOND`, 14, 139, "#d04848");
         screen.text("FIDUCIA -5 / COESIONE -2", 14, 150, "#d04848");
       }
-      screen.text("A: COMPRA  B: INDIETRO", 8, VIEW_H - 10, GREY);
+      screen.text("A: DOSSIER  B: INDIETRO", 8, VIEW_H - 13, "#fffaf0");
     } else {
       this.menu.draw(screen, 14, 34, VIEW_W - 28);
       screen.panel(10, 114, VIEW_W - 20, 46, "card");
       const details = mafiaOptionDetails(this.menu.index, Boolean(this.state.flags["mafia-protezione"]));
       details.forEach((line, i) => screen.text(line, 14, 118 + i * 9, i === details.length - 1 ? "#99531e" : "#10141f"));
-      screen.text("A: SCEGLI  B: ESCI", 8, VIEW_H - 10, GREY);
+      screen.text("A: DOSSIER  B: ESCI", 8, VIEW_H - 13, "#fffaf0");
     }
     this.msg.draw(screen);
   }

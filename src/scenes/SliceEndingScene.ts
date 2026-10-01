@@ -5,15 +5,18 @@ import { audio } from "../engine/audio";
 import { saveGame, type GameState } from "../game/state";
 import { drawScreenHeader, wrapText } from "../ui/widgets";
 
+import { drawCampaignBackdrop } from "../ui/campaignArt";
+
 export type SliceEnding = "stable" | "fractured";
 
 export function deriveSliceEnding(state: GameState): SliceEnding {
-  return state.coalition.members.some((member) => member.status === "strained") ? "fractured" : "stable";
+  return state.coalition.members.some((member) => member.status === "strained") || Object.keys(state.flags).some(key => key.startsWith("coalition-broken:") && state.flags[key]) ? "fractured" : "stable";
 }
 
 export class SliceEndingScene implements Scene {
   readonly transparent = false;
   private ending: SliceEnding;
+  private finished = false;
   private lines: string[];
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState, private onFinish: () => void) {
@@ -24,7 +27,9 @@ export class SliceEndingScene implements Scene {
   }
 
   update(): void {
+    if (this.finished) return;
     if (!this.input.wasPressed("a") && !this.input.wasPressed("b")) return;
+    this.finished = true;
     this.state.flags[`campo-slice-ending:${this.ending}`] = true;
     this.state.flags["campo-photo-complete"] = true;
     this.state.flags["atto3-slice-complete"] = true;
@@ -35,8 +40,8 @@ export class SliceEndingScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear(this.ending === "stable" ? "#254a42" : "#4a303c");
-    drawScreenHeader(screen, "FINE VERTICAL SLICE", this.ending === "stable" ? "COESA" : "TESA");
+    drawCampaignBackdrop(screen, "photo");
+    drawScreenHeader(screen, "DOPO LA FOTO", this.ending === "stable" ? "COESA" : "TESA");
     screen.panel(8, 30, 224, 116, "dialog");
     let y = 45;
     for (const paragraph of this.lines) {

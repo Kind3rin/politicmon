@@ -28,10 +28,11 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
 | Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 142 viste, unit test e prove di rete |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
-| PWA | Precache e primo utilizzo offline dei 491 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
+| PWA | Precache e primo utilizzo offline dei 506 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 667,97; spesa cumulativa 218 crediti. Non sono stati attivati acquisti
+verificato: 639,97; spesa cumulativa 246 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -104,3 +105,11 @@ Il round precedente [MONDO-CANTIERI.md](MONDO-CANTIERI.md) pubblica 295 PNG,
 rimangono simulazioni di checkpoint, non una partita completa nell'interfaccia.
 [Asset e provenienza](HIGGSFIELD-ASSETS.md). Il mandato resta attivo finché tutte
 le superfici del gioco avranno un aspetto nuovo e coerente.
+
+### Epiloghi e postgame — 2 ottobre 2026
+
+[EPILOGHI-POSTGAME.md](EPILOGHI-POSTGAME.md): sette ambienti, quattro ricordi
+e quattro statue, 265 test e 214 viste native. Finali con promesse e alleati
+nominati, premi visibili, monumenti annullabili, finestre ritmiche e pausa,
+favori con dossier e conferma. 18 crediti, saldo 639,97. Verifica PWA su 506
+risorse e 397 checksum nella build. Obiettivo generale ancora attivo.

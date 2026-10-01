@@ -1,3 +1,6 @@
+import { earnedEndingSouvenirs, ENDING_SOUVENIRS } from "../game/atto3Ending";
+import { MONUMENT_TITLE } from "./MonumentScene";
+import { wrapText } from "../ui/widgets";
 import { sceneImage } from "../engine/assets";
 import { MAPS } from "../data/maps";
 import { audio } from "../engine/audio";
@@ -44,6 +47,8 @@ export class PauseScene implements Scene {
   private entries: string[] = [];
   private msg = new MessageBox();
   private showCard = false;
+  private souvenirIndex = 0;
+  private cardAwards = false;
   // Sotto-menu attivo (OPZIONI/ONLINE/EXTRA): un solo livello di profondità.
   private sub: SubMenu | null = null;
 
@@ -140,6 +145,9 @@ export class PauseScene implements Scene {
       return;
     }
     if (this.showCard) {
+      if (this.input.wasPressed("start")) this.cardAwards = !this.cardAwards;
+      const count = earnedEndingSouvenirs(this.state).length;
+      if (count && (this.input.wasPressed("left") || this.input.wasPressed("right"))) this.souvenirIndex = (this.souvenirIndex + (this.input.wasPressed("left") ? count - 1 : 1)) % count;
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) {
         audio.cancel();
         this.showCard = false;
@@ -184,6 +192,7 @@ export class PauseScene implements Scene {
       case "TESSERA":
         audio.confirm();
         this.showCard = true;
+        this.cardAwards = false;
         break;
       case "POLITICDEX":
         this.stack.push(new DexScene(this.stack, this.input, this.state));
@@ -331,6 +340,9 @@ export class PauseScene implements Scene {
 
   draw(screen: Screen): void {
     if (this.showCard) {
+      if (this.input.wasPressed("start")) this.cardAwards = !this.cardAwards;
+      const count = earnedEndingSouvenirs(this.state).length;
+      if (count && (this.input.wasPressed("left") || this.input.wasPressed("right"))) this.souvenirIndex = (this.souvenirIndex + (this.input.wasPressed("left") ? count - 1 : 1)) % count;
       this.drawCard(screen);
       return;
     }
@@ -354,6 +366,17 @@ export class PauseScene implements Scene {
   private drawCard(screen: Screen): void {
     screen.rect(0, 0, VIEW_W, VIEW_H, "#101827");
     drawScreenHeader(screen, "TESSERA CANDIDATO", "A/B CHIUDI");
+    const earned = earnedEndingSouvenirs(this.state);
+    const souvenir = earned.length ? ENDING_SOUVENIRS[earned[this.souvenirIndex % earned.length]] : null;
+    if (this.cardAwards) {
+      screen.panel(8, 28, 224, 128, "card");
+      const lines = ["RICORDI DELLA CAMPAGNA", souvenir ? souvenir.name : "NESSUN SOUVENIR DELL'EPILOGO.", this.state.monumentLevel === 3 ? MONUMENT_TITLE : `MONUMENTO: LIVELLO ${this.state.monumentLevel}/3.`, "SOLO COSMETICI, NESSUN BONUS."];
+      let y = 39;
+      for (const paragraph of lines) { for (const line of wrapText(paragraph, 34)) { screen.text(line, 16, y, "#17243d"); y += 10; } y += 5; }
+      if (souvenir) { const icon = sceneImage(`epilogue:${souvenir.image}`, `ui/epilogue/${souvenir.image}.png`); if (icon) screen.image(icon, 192, 118, 32, 32); }
+      screen.text("SIN/DES: RICORDO  START: TESSERA", 12, 167, "#fffaf0");
+      return;
+    }
     const title = this.state.flags["garante-beaten"]
       ? "CAMPIONE COSTITUZIONALE"
       : this.state.flags["boss-beaten"]
@@ -379,6 +402,10 @@ export class PauseScene implements Scene {
         avatarBounds.h, 27, 65, 41, 49);
     }
 
+    if (souvenir) {
+      const icon = sceneImage(`epilogue:${souvenir.image}`, `ui/epilogue/${souvenir.image}.png`);
+      if (icon) screen.image(icon, 51, 96, 24, 24);
+    }
     screen.text("CANDIDATO", 84, 55, "#68758a");
     screen.textFit(loadNick() || "ONOREVOLE", 84, 66, 132, "#17243d");
     screen.text("QUALIFICA", 84, 80, "#68758a");
@@ -400,5 +427,6 @@ export class PauseScene implements Scene {
     screen.text(`${this.state.money}€`, 56, 151, "#17243d");
     screen.text("MEDAGLIE", 116, 151, "#68758a");
     screen.textRight(`${this.state.badges.length}/3`, 218, 151, "#17243d");
+    screen.text("START: RICONOSCIMENTI", 12, 172, "#fffaf0");
   }
 }

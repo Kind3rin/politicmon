@@ -1,10 +1,11 @@
-import type { Input, Button } from "../engine/input";
+import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import { audio } from "../engine/audio";
-import { newTechnoRun, pressTechno, TECHNO_BEAT_SECONDS, TECHNO_SEQUENCE, technoReward, tickTechno, type TechnoButton, type TechnoRun } from "../game/genovaTechno";
+import { claimTechnoReward, newTechnoRun, pressTechno, TECHNO_BEAT_SECONDS, TECHNO_SEQUENCE, TECHNO_WINDOW_SECONDS, technoInWindow, technoReward, tickTechno, type TechnoButton, type TechnoRun } from "../game/genovaTechno";
 import { saveGame, type GameState } from "../game/state";
 import { drawScreenHeader } from "../ui/widgets";
+import { drawEpilogueBackdrop, drawEpiloguePage } from "../ui/epilogueArt";
 
 const BUTTONS: readonly TechnoButton[] = ["up", "down", "left", "right", "a"];
 const LABEL: Record<TechnoButton, string> = { up: "SU", down: "GIÙ", left: "SINISTRA", right: "DESTRA", a: "A" };
@@ -12,68 +13,72 @@ const LABEL: Record<TechnoButton, string> = { up: "SU", down: "GIÙ", left: "SIN
 export class GenovaTechnoScene implements Scene {
   readonly transparent = false;
   private run: TechnoRun;
-  private applied = false;
-  private reward = technoReward(0);
-
+  private phase: "ready" | "play" | "pause" | "result" = "ready";
+  private paid = { money: 0, sondaggi: 0 };
+  private feedback = "";
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
     this.run = newTechnoRun(state.reduceEffects);
   }
-
   update(dt: number): void {
-    if (this.run.complete) {
-      if (!this.applied) this.applyResult();
+    if (this.phase === "ready") {
+      if (this.input.wasPressed("b")) { this.stack.pop(); return; }
+      if (this.input.wasPressed("left") || this.input.wasPressed("right")) this.run = newTechnoRun(!this.run.reducedMotion);
+      if (this.input.wasPressed("a")) { this.phase = "play"; audio.confirm(); }
+      return;
+    }
+    if (this.phase === "pause") {
+      if (this.input.wasPressed("b")) this.stack.pop();
+      else if (this.input.wasPressed("a")) this.phase = "play";
+      return;
+    }
+    if (this.phase === "result") {
       if (this.input.wasPressed("a") || this.input.wasPressed("b")) this.stack.pop();
       return;
     }
-    let pressed: TechnoButton | null = null;
-    for (const button of BUTTONS) if (this.input.wasPressed(button as Button)) { pressed = button; break; }
+    if (this.input.wasPressed("b")) { this.phase = "pause"; return; }
+    const pressed = BUTTONS.find(button => this.input.wasPressed(button));
+    const before = this.run;
     if (pressed) {
-      const hit = TECHNO_SEQUENCE[this.run.index] === pressed;
-      this.run = pressTechno(this.run, pressed);
-      hit ? audio.confirm() : audio.cancel();
-    } else {
-      const next = tickTechno(this.run, dt);
-      if (next.misses > this.run.misses) audio.cancel();
-      this.run = next;
+      this.run = pressTechno(before, pressed);
+      this.feedback = this.run === before ? "ASPETTA LA ZONA VERDE" : this.run.hits > before.hits ? "A TEMPO!" : "FUORI TEMPO";
+      if (this.run !== before) this.run.hits > before.hits ? audio.confirm() : audio.cancel();
     }
-  }
-
-  private applyResult(): void {
-    this.applied = true;
-    this.reward = technoReward(this.run.hits);
-    if (!this.state.flags["genova-techno-complete"]) {
-      this.state.flags["genova-techno-complete"] = true;
-      this.state.flags[`genova-techno:${this.reward.grade.toLowerCase().replaceAll(" ", "-")}`] = true;
-      this.state.money += this.reward.money;
-      this.state.sondaggi = Math.min(100, this.state.sondaggi + this.reward.sondaggi);
-      saveGame(this.state);
-    }
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#15102d");
-    drawScreenHeader(screen, "GENOVA TECHNO", this.run.reducedMotion ? "SENZA TIMER" : `BEAT ${this.run.index + 1}/6`);
+    if (this.run === before) this.run = tickTechno(this.run, dt);
+    if (!pressed && this.run.misses > before.misses) { this.feedback = "BATTUTA PERSA"; audio.cancel(); }
     if (this.run.complete) {
-      screen.panel(18, 42, 204, 101, "dialog");
-      screen.text(this.reward.grade, 70, 60, this.reward.grade === "FUORI TEMPO" ? "#a0443e" : "#26745d");
-      screen.text(`BATTUTE GIUSTE ${this.run.hits}/6`, 42, 82, "#10141f");
-      screen.text(`PREMIO ${this.reward.money}€`, 42, 99, "#26745d");
-      screen.text(`SONDAGGI +${this.reward.sondaggi}`, 42, 116, "#26745d");
-      screen.text("A: CONTINUA", 72, 153, "#ffe38a");
-      return;
+      this.paid = claimTechnoReward(this.state, this.run);
+      if (this.paid.money) saveGame(this.state);
+      this.phase = "result";
     }
-    screen.text("SEGUI IL MAXISCHERMO", 46, 31, "#86e8e0");
-    screen.panel(70, 53, 100, 76, "card");
-    const expected = TECHNO_SEQUENCE[this.run.index];
-    const cueScale = LABEL[expected].length > 5 ? 2 : 3;
-    screen.textCenter(LABEL[expected], 120, 78, "#10141f", cueScale);
-    if (!this.run.reducedMotion) {
-      const width = Math.round(88 * this.run.remaining / TECHNO_BEAT_SECONDS);
-      screen.rect(76, 116, 88, 5, "#d8d8d8");
-      screen.rect(76, 116, width, 5, this.run.remaining < 0.4 ? "#d04848" : "#4abf9b");
+  }
+  draw(screen: Screen): void {
+    drawEpilogueBackdrop(screen, "techno");
+    drawScreenHeader(screen, "GENOVA TECHNO", this.phase === "play" ? `${this.run.index + 1}/6` : this.phase === "result" ? "ESITO" : "PALCO");
+    if (this.phase === "ready") {
+      const selected = this.run.reducedMotion ? "► SENZA TIMER" : "► A TEMPO";
+      drawEpiloguePage(screen, ["IL PODIO È DIVENTATO UN DJ SET.", "IL MODERATORE CHIEDE AL BASSO", "DI RISPETTARE IL CONTRADDITTORIO.", this.run.reducedMotion ? "SEGUI IL TASTO, SENZA SCADENZA." : "PREMI IL TASTO NELLA ZONA VERDE.", "SEI BATTUTE. PREMIO UNA SOLA VOLTA.", this.state.flags["genova-techno-complete"] ? "PREMIO GIÀ RITIRATO: ALLENAMENTO." : "6 HIT: 1200€; 3-5: 600€; 0-2: 200€.", selected]);
+      screen.text("SIN/DES: MODO   A: VIA   B: ESCI", 12, 167, "#fffaf0");
+    } else if (this.phase === "pause") {
+      drawEpiloguePage(screen, ["PROVA IN PAUSA. IL TEMPO È FERMO.", "A: RIPRENDI LA STESSA BATTUTA.", "B: ESCI SENZA PREMIO.", "IL DJ CHIAMA QUESTA PAUSA UN DROP.", "IL PORTAVOCE: UNA RIFLESSIONE."]);
+      screen.text("A: RIPRENDI   B: ESCI", 12, 167, "#fffaf0");
+    } else if (this.phase === "result") {
+      drawEpiloguePage(screen, [technoReward(this.run.hits).grade, `BATTUTE GIUSTE ${this.run.hits}/6.`, `ACCREDITATI ${this.paid.money}€.`, `SONDAGGI +${this.paid.sondaggi}.`, this.paid.money ? "IL PREMIO NON È RIPETIBILE." : "ALLENAMENTO: NESSUN NUOVO PREMIO.", "IL VERBALE REGISTRA SEI INTERVENTI.", "NESSUNO HA CHIESTO UN EMENDAMENTO."]);
+      screen.text("A/B: TORNA AL PORTO", 12, 167, "#fffaf0");
     } else {
-      screen.text("PREMI QUANDO VUOI", 65, 137, "#ffe38a");
+      screen.panel(40, 30, 160, 65, "card");
+      const label = LABEL[TECHNO_SEQUENCE[this.run.index]];
+      screen.textCenter(label, 120, 48, "#17243d", label.length > 5 ? 2 : 3);
+      screen.rect(16, 104, 208, 42, "#17243d");
+      if (this.run.reducedMotion) screen.text("PREMI QUANDO VUOI", 58, 112, "#fffaf0");
+      else {
+        screen.rect(24, 112, 192, 8, "#68758a");
+        const windowWidth = 192 * 2 * TECHNO_WINDOW_SECONDS / TECHNO_BEAT_SECONDS;
+        screen.rect(120 - windowWidth / 2, 112, windowWidth, 8, "#55a889");
+        screen.rect(24 + 190 * (1 - this.run.remaining / TECHNO_BEAT_SECONDS), 109, 2, 14, "#ffe38a");
+        screen.text(technoInWindow(this.run) ? "ORA!" : "ASPETTA", 98, 129, "#fffaf0");
+      }
+      screen.textCenter(this.feedback || "SEGUI IL TASTO", 120, 149, "#fffaf0");
+      screen.text(`GIUSTE ${this.run.hits}  ERRORI ${this.run.misses}  B: PAUSA`, 12, 167, "#fffaf0");
     }
-    screen.text(`GIUSTE ${this.run.hits} · ERRORI ${this.run.misses}`, 53, 157, "#fffaf0");
   }
 }

@@ -88,3 +88,8 @@ rete mobile/NAT. La chat è verificata nell'interfaccia, con ricezione controlla
 non è ancora una conversazione reale fra due peer. Campagna completa, altre
 scene sociali/politiche, audio e involucro esterno del gioco restano nel piano
 attivo. Il progetto non è dichiarato completamente ridisegnato.
+
+Pubblicato nel commit `e6132e8`: CI riuscita; tutti i 377 PNG finali e il codice
+dello storico verificati su [politicmon.vercel.app](https://politicmon.vercel.app/).
+La prova pubblica Chromium/Pixel 7 conferma il primo uso offline delle 486
+risorse, migrazione, aggiornamento e resume.

@@ -25,7 +25,7 @@ const resumeReport=resumePath?JSON.parse(readFileSync(resumePath,'utf8')):null;
 const resumeStage=process.env.RESUME_STAGE??'garante-result-1';
 const resumeCode=resumeReport?.codes[resumeStage]??null;
 if(resumePath){assert.ok(resumeCode,'Earned milestone save missing');assert.equal(resumeReport.id,id,'Starter does not match earned save');}
-assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy'].includes(endAt),'Unknown campaign endpoint');
+assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy','tour'].includes(endAt),'Unknown campaign endpoint');
 assert.ok(['alliance','distance','opposition'].includes(futurePlan),'Unknown future choice');
 assert.ok(['loyalty','autonomy','home'].includes(diplomacyPlan),'Unknown diplomacy choice');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
@@ -45,7 +45,7 @@ try{
   const state=resumeCode?importSaveCode(resumeCode):newGameState();
   if(!state||(resumeCode&&!state.flags['garante-beaten']))throw Error('Resume must be an earned post-Garante save');
   const world=new WorldScene(stack,input,state);stack.push(world);
-  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let boxPending=null,repairPending=false,futureRecruit=false;let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
+  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let boxPending=null,repairPending=false,futureRecruit=false,tourTarget=null;let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
   const narrative=[],say=world.say.bind(world);world.say=(lines,...rest)=>{narrative.push({map:state.pos.mapId,lines:[...lines],trust:state.morale.trust,cohesion:state.morale.cohesion});return say(lines,...rest);};
   const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
   const trace=(type,detail)=>events.push({type,detail,steps:state.stepsTotal,map:state.pos.mapId,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp})),money:state.money});
@@ -183,6 +183,17 @@ try{
     const focus=s.candidates[s.index];
     if(target.includes(focus)&&!state.coalition.members.some(m=>m.allyId===focus)){trace('coalition-add',{id:focus});press('a');}else press('b');return true;
    }
+   if(name==='DistrictScene'){
+    if(!tourTarget)throw Error('No planned Tour action');
+    if(s.mode==='menu'){
+     if(s.index!==tourTarget.index){press('down');return true;}
+     if(tourTarget.ally&&s.allies()[s.allyIndex]!==tourTarget.ally){press('right');return true;}
+     const p=s.preview();if(!p.ok)throw Error('Tour action rejected: '+p.error);
+     trace('district-dossier',{id:s.districtId,choice:s.selected(),preview:p.lines,before:{money:state.money,morale:structuredClone(state.morale),coalition:structuredClone(state.coalition),election:structuredClone(state.election)}});press('a');return true;
+    }
+    if(s.mode==='result'){press('b');press('b');return true;}
+    press('a');return true;
+   }
    if(name==='PhotoChoiceScene'){
     const target=photoPlan==='panoramica'?1:0;
     if(s.error)throw Error('Photo rejected: '+s.error);
@@ -267,6 +278,8 @@ try{
    if(!candidates.length)throw Error('No '+dir+' exit '+map.id);if(!walkTo(candidates[0].x,y))return false;face(dir);press(dir);settle();if(state.pos.mapId===map.id)throw Error(dir+' exit blocked '+map.id);return true;
   }
   function heal(){
+   if(state.pos.mapId.startsWith('district_'))enterMap('tour_feed');
+   if(state.pos.mapId==='tour_feed')enterMap('diplomacy_lobby');
    while(state.pos.mapId.startsWith('diplomacy_'))enterMap(state.pos.mapId==='diplomacy_lobby'?'futuro_piazza':'diplomacy_lobby');
    while(['futuro_sede','futuro_scissione','futuro_rebrand','futuro_tesoreria','futuro_piazza'].includes(state.pos.mapId)){
     const target=state.pos.mapId==='futuro_piazza'?'campo_largo':state.pos.mapId==='futuro_sede'?'futuro_piazza':'futuro_sede';enterMap(target);
@@ -582,6 +595,23 @@ try{
     }
     if(state.flags.diplomacyComplete){if(state.pos.mapId==='diplomacy_terrace')enterMap('diplomacy_lobby');await milestone('diplomacy-verbale');enterMap('tour_feed');await milestone('diplomacy-tour');}
    }
+   if(endAt==='tour'){
+    if(!state.flags.diplomacyComplete)throw Error('Tour requires an earned Hotel victory');
+    settle();await milestone('tour-earned-resume');
+    const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing Tour NPC '+id);interact(npc.x,npc.y);};
+    const care=()=>{heal();if(state.pos.mapId==='bruxelles'){enterMap('campo_largo');heal();}if(state.pos.mapId!=='campo_largo')throw Error('Tour care did not return to Campo');enterMap('futuro_piazza');enterMap('diplomacy_lobby');enterMap('tour_feed');};
+    for(const [district,index,ally]of [['nord',1],['centro',2],['sud',2],['isole',3,'generorso'],['feed',2]]){
+     care();enterMap('district_'+district);await milestone('tour-'+district+'-arrival');
+     tourTarget={index:0};talk('district-kiosk-'+district);await milestone('tour-'+district+'-debate');
+     if(!state.election.districts.find(d=>d.id===district).outcomes.some(o=>o.action==='debate'))throw Error('No manual debate result: '+district);
+     if(state.pos.mapId!=='district_'+district){care();enterMap('district_'+district);}
+     tourTarget={index,ally};talk('district-kiosk-'+district);await milestone('tour-'+district+'-closed');
+     if(!state.flags['district-complete:'+district])throw Error('Tour district not closed '+district);
+     enterMap('tour_feed');
+    }
+    if(!state.flags.tourComplete||state.election.phase!=='ready')throw Error('Five manually earned dossiers did not open Palazzo');
+    await milestone('tour-five-dossiers');enterMap('palazzo_feed');await milestone('tour-palazzo');
+   }
   }catch(e){failure=e.message;trace('failure',{message:failure,pos:{...state.pos},npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y,canWander:n.canWander})),tiles:world.map.tiles});}
   return {levelCap:LEVEL_CAP,id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,photoPlan,campoPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,coalition:state.coalition,election:state.election,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
  },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode});
@@ -600,7 +630,7 @@ try{
   }
  }
  if(process.env.EXPECT_BADGE==='1')assert.ok(result.final.badges.includes(endAt),`Campaign did not earn ${endAt}`);
- if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':endAt==='future'?'futureResolved':endAt==='diplomacy'?'diplomacyComplete':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
+ if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':endAt==='future'?'futureResolved':endAt==='diplomacy'?'diplomacyComplete':endAt==='tour'?'tourComplete':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
  console.log(JSON.stringify({id,seed,plan,failure:result.failure,milestones:result.milestones,final:result.final,battles:result.battles.map(b=>({trainer:b.trainer,outcome:b.outcome,foes:b.foes}))},null,2));
  if(result.failure)process.exitCode=1;
 }finally{await browser.close();}

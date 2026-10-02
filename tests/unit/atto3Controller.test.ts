@@ -5,6 +5,16 @@ import { newGameState } from "../../src/game/state.ts";
 import type { WorldCommand } from "../../src/game/world/worldContext.ts";
 import { CAMPO_VOICES } from "../../src/data/campo.ts";
 
+test('Tour kiosks keep closed dossiers accessible without dispatching rewards or changing state',()=>{
+  for(const district of ['nord','centro','sud','isole','feed'] as const)for(const closed of [false,true]){
+    const state=newGameState();state.flags[`district-complete:${district}`]=closed;
+    const before=JSON.stringify(state),commands:WorldCommand[]=[];
+    assert.equal(createAtto3Controller().interactNpc(`district-kiosk-${district}`,{state,dispatch:c=>commands.push(c)}),true);
+    assert.deepEqual(commands,[{kind:'openDistrict',districtId:district}]);
+    assert.equal(JSON.stringify(state),before);
+  }
+});
+
 test("Genova DJ opens both the first set and practice without altering earned state", () => {
   for (const complete of [false, true]) {
     const state = newGameState();

@@ -54,7 +54,7 @@ export const MAP_NAMES: Readonly<Record<string, string>> = Object.assign(Object.
   "diplomacy_home": "STANZA CONSENSO",
   "diplomacy_terrace": "TERRAZZA-STUDIO",
   "genova_techno": "GENOVA TECHNO",
-  "tour_feed": "TOUR DEL FEED",
+  "tour_feed": "CENTRALE DEL TOUR",
   "district_nord": "NORD PRODUTTIVO",
   "district_centro": "CENTRO DEI SALOTTI",
   "district_sud": "SUD DELLE PROMESSE",

@@ -76,7 +76,12 @@ test("IA: tutte le specie e le mosse producono punteggi finiti", () => {
 });
 
 test("IA: boss con stili distinti e profili di difficoltà separati", () => {
-  assert.equal(new Set(BOSS_ART_IDS).size,31);
+  assert.equal(new Set(BOSS_ART_IDS).size,36);
+  for(const [id,style]of [["nord","fortress"],["centro","control"],["sud","pressure"],["isole","setup"],["feed","rush"]]){
+    assert.ok(BOSS_ART_IDS.includes(`district-${id}`));
+    assert.equal(trainerAi(`district-${id}`,false,false,3).style,style);
+    assert.equal(trainerAi(`district-${id}`,false,false,3).canHeal,false);
+  }
   assert.ok(BOSS_ART_IDS.includes("stagista"));
   assert.equal(trainerAi("stagista",false,false,0).canHeal,false);
   assert.equal(trainerAi("stagista",false,true,0).canHeal,false);

@@ -1,0 +1,1082 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 466.72,
+  "estimatedCredits": 37.5,
+  "assets": [
+    {
+      "id": "backdrop-nord",
+      "kind": "background",
+      "width": 240,
+      "height": 163,
+      "outputs": [
+        "public/sprites/ui/campaign/district-nord.png",
+        "public/sprites/ui/boss/district-nord.png"
+      ],
+      "aspectRatio": "3:2",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette steel blue, mint teal, copper and chalk ivory. Full-bleed scene illustration of a spacious industrial hall devoted to producing endless meetings; an empty round meeting table, copper document conveyor, mint lamps. a stout caramel BEAVER engineer with a copper pencil behind one ear, mint-blue work overalls and a rolled blank meeting document occupies the UPPER LEFT CORNER, relaxed but expressive, full original fictional mascot design. Location cues in the upper corners. Center upper area and entire lower half deliberately quiet dark navy negative space for the actual game interface. The civic absurdity is visible through the props, not caricatured citizens. No UI, framing or writing.",
+      "index": 0,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "c95bb172-2ba6-42eb-9916-eec739519f76",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_c95bb172-2ba6-42eb-9916-eec739519f76.png",
+      "sourceSha256": "9e3a7382941cc8819da42234bb2bf0fd4dcb854793d1a832cc9b6ad112fb81df",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/district-nord.png": "b66402f6b1a8940acd99256d077468e2779afac0c56d24e754d3627d8f05c272",
+        "public/sprites/ui/boss/district-nord.png": "82f37372d55cacd17391b7043c6e900e0286b10ac7d7ed7e9021f33d79a1957f"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        0,
+        1024,
+        333
+      ],
+      "outputCropBoxes": {
+        "public/sprites/ui/boss/district-nord.png": [
+          0,
+          0,
+          1024,
+          333
+        ]
+      }
+    },
+    {
+      "id": "backdrop-centro",
+      "kind": "background",
+      "width": 240,
+      "height": 163,
+      "outputs": [
+        "public/sprites/ui/campaign/district-centro.png",
+        "public/sprites/ui/boss/district-centro.png"
+      ],
+      "aspectRatio": "3:2",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette burgundy plum, warm cream, restrained gold and midnight navy. Full-bleed scene illustration of a television studio of identical interchangeable guest chairs, burgundy curtains, an empty gold microphone and a dramatic spotlight. a russet FOX television presenter in a plum blazer and ivory bow tie holding blank cream cue cards occupies the UPPER LEFT CORNER, relaxed but expressive, full original fictional mascot design. Location cues in the upper corners. Center upper area and entire lower half deliberately quiet dark navy negative space for the actual game interface. The civic absurdity is visible through the props, not caricatured citizens. No UI, framing or writing.",
+      "index": 1,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "4154bdca-ed87-43b6-8b55-9f943e58db18",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153751_4154bdca-ed87-43b6-8b55-9f943e58db18.png",
+      "sourceSha256": "553263dccca8dc5ff1b341dfba4de803f7142c21d02829a8ac4977a27c3480c6",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/district-centro.png": "bada341ae30785efea6b1b3f1099728e6492a758b47ae3a13d1e0dab7135db43",
+        "public/sprites/ui/boss/district-centro.png": "a58abdf0e7ca97675f3d1430fd73f54cc505167a29a02a9feb8d03226f7e88f4"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        0,
+        1024,
+        333
+      ],
+      "outputCropBoxes": {
+        "public/sprites/ui/boss/district-centro.png": [
+          0,
+          0,
+          1024,
+          333
+        ]
+      }
+    },
+    {
+      "id": "backdrop-sud",
+      "kind": "background",
+      "width": 240,
+      "height": 163,
+      "outputs": [
+        "public/sprites/ui/campaign/district-sud.png",
+        "public/sprites/ui/boss/district-sud.png"
+      ],
+      "aspectRatio": "3:2",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette sandstone ivory, cobalt blue, coral orange and midnight navy. Full-bleed scene illustration of an unfinished civic site where ceremonial coral ribbon outnumbers the bricks, a single cornerstone and an empty camera tripod. a moss-green TORTOISE site surveyor in cobalt work coveralls, ivory hard hat and a coral ribbon spool held beside a spirit level occupies the UPPER LEFT CORNER, relaxed but expressive, full original fictional mascot design. Location cues in the upper corners. Center upper area and entire lower half deliberately quiet dark navy negative space for the actual game interface. The civic absurdity is visible through the props, not caricatured citizens. No UI, framing or writing.",
+      "index": 2,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "ebb70d94-a171-4730-babf-98d170572a3f",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_ebb70d94-a171-4730-babf-98d170572a3f.png",
+      "sourceSha256": "fd5d6ab29167624aa9fc6c620c273d40f02a004d72c3c12dafe318baab95a6a7",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/district-sud.png": "7a6dd5b9aa26e843fd15e5a51da4ab2074e19742b8fc7e4ac6279035638e98fb",
+        "public/sprites/ui/boss/district-sud.png": "8187fe3c9a9d470a636ca1bf79f5bbfca3ed70d4a4d20ab4eccbaad13a75e80b"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        0,
+        1024,
+        333
+      ],
+      "outputCropBoxes": {
+        "public/sprites/ui/boss/district-sud.png": [
+          0,
+          0,
+          1024,
+          333
+        ]
+      }
+    },
+    {
+      "id": "backdrop-isole",
+      "kind": "background",
+      "width": 240,
+      "height": 163,
+      "outputs": [
+        "public/sprites/ui/campaign/district-isole.png",
+        "public/sprites/ui/boss/district-isole.png"
+      ],
+      "aspectRatio": "3:2",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette deep cobalt, turquoise teal, chalk ivory and ochre orange. Full-bleed scene illustration of a calm ferry quay, a tiny immaculate bridge model on a turquoise table, a real fuel receipt much larger than the model, simple distant ferry silhouette. a cream PELICAN ferry captain with a navy peacoat and ochre life vest holding a miniature cobalt ferry beside a rolled blank receipt occupies the UPPER LEFT CORNER, relaxed but expressive, full original fictional mascot design. Location cues in the upper corners. Center upper area and entire lower half deliberately quiet dark navy negative space for the actual game interface. The civic absurdity is visible through the props, not caricatured citizens. No UI, framing or writing.",
+      "index": 3,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "1dcc3b84-6902-422c-aeb2-2c467287cc51",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_1dcc3b84-6902-422c-aeb2-2c467287cc51.png",
+      "sourceSha256": "8242b280b655a82f09994e6ab9833fd3b9ce0d5023ebf94b42c40ef0584788ac",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/district-isole.png": "bb37f2b85900a23213beba467b0e83387e58cb0d8be490def05ca31caaafa91a",
+        "public/sprites/ui/boss/district-isole.png": "483858b3d4aa1a12f673fc4635f282542a0281764b3b6988b895f1864c7d3d10"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        0,
+        1024,
+        333
+      ],
+      "outputCropBoxes": {
+        "public/sprites/ui/boss/district-isole.png": [
+          0,
+          0,
+          1024,
+          333
+        ]
+      }
+    },
+    {
+      "id": "backdrop-feed",
+      "kind": "background",
+      "width": 240,
+      "height": 163,
+      "outputs": [
+        "public/sprites/ui/campaign/district-feed.png",
+        "public/sprites/ui/boss/district-feed.png"
+      ],
+      "aspectRatio": "3:2",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette ink navy, cool violet, mint teal and chalk ivory. Full-bleed scene illustration of a news-feed control room, blank violet/mint screens, an idle magnifying glass and a printer inventing blank receipts. a black-and-ivory MAGPIE data editor in a violet scarf, holding a magnifying glass over a blank ivory document occupies the UPPER LEFT CORNER, relaxed but expressive, full original fictional mascot design. Location cues in the upper corners. Center upper area and entire lower half deliberately quiet dark navy negative space for the actual game interface. The civic absurdity is visible through the props, not caricatured citizens. No UI, framing or writing.",
+      "index": 4,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "3b969fcb-1940-4da2-b747-ba915523aa7f",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_3b969fcb-1940-4da2-b747-ba915523aa7f.png",
+      "sourceSha256": "2fcb51cdcc34db99ad485441ad8ab50f0538c15915aaa3a4c3f7228bdf196cff",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/district-feed.png": "cf5cbb8f3099c7ef478a27c13794cfab5aa1c9f52f0d57e0fa2e77bee77dd89c",
+        "public/sprites/ui/boss/district-feed.png": "3ef335a45a45e35402c2fef5f6c11d6c75a89e94aa48248485c2e9ec78fe2893"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        0,
+        1024,
+        333
+      ],
+      "outputCropBoxes": {
+        "public/sprites/ui/boss/district-feed.png": [
+          0,
+          0,
+          1024,
+          333
+        ]
+      }
+    },
+    {
+      "id": "npc-nord",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_tour-nord_south.png",
+        "public/sprites/chars/npc_tour-nord_north.png",
+        "public/sprites/chars/npc_tour-nord_west.png",
+        "public/sprites/chars/npc_tour-nord_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette steel blue, mint teal, copper and chalk ivory. A FOUR-DIRECTION character sheet, exactly FOUR complete sprites of a stout caramel BEAVER engineer with a copper pencil behind one ear, mint-blue work overalls and a rolled blank meeting document. A clean centered TWO BY TWO grid with very wide empty separation. TOP LEFT: FRONT facing SOUTH, face visible straight toward viewer. TOP RIGHT: BACK facing NORTH, back of head/body only, no face. BOTTOM LEFT: TRUE LEFT-FACING WEST PROFILE, nose/beak and body face the LEFT edge. BOTTOM RIGHT: TRUE RIGHT-FACING EAST PROFILE, nose/beak and body face the RIGHT edge. Same identity, clothes and accessory in all four views. No duplicated profile or three-quarter angles. Tiny RPG NPC, compact head and body, complete feet, generous transparent margins, no ground, cast shadows, glow, scenery or writing.",
+      "index": 5,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "fea7ebc6-d461-4d51-b630-bb66e8e7f46d",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153751_fea7ebc6-d461-4d51-b630-bb66e8e7f46d.png",
+      "sourceSha256": "f695d09fd23698661e66523a7d3ef5844a4897f63e5e41473e760ee1364f9584",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_tour-nord_south.png": "d1f582066985ec9a0c32bc264aaa26d8a1fe6181228097b75ef36dabef40f7ff",
+        "public/sprites/chars/npc_tour-nord_north.png": "57214b311ae91f93fb9357415721d79d180329f31fae9d889bffa6693d49c2fb",
+        "public/sprites/chars/npc_tour-nord_west.png": "2fd84a1ddfc6596d1824358c5de1c375a2fa69000f327268cbc7f9e7ca68f37d",
+        "public/sprites/chars/npc_tour-nord_east.png": "a16d6c71d501b6f207b0af458a1da8b9bebb093be203b23f0f8c8772033a6c32"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-centro",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_tour-centro_south.png",
+        "public/sprites/chars/npc_tour-centro_north.png",
+        "public/sprites/chars/npc_tour-centro_west.png",
+        "public/sprites/chars/npc_tour-centro_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette burgundy plum, warm cream, restrained gold and midnight navy. A FOUR-DIRECTION character sheet, exactly FOUR complete sprites of a russet FOX television presenter in a plum blazer and ivory bow tie holding blank cream cue cards. A clean centered TWO BY TWO grid with very wide empty separation. TOP LEFT: FRONT facing SOUTH, face visible straight toward viewer. TOP RIGHT: BACK facing NORTH, back of head/body only, no face. BOTTOM LEFT: TRUE LEFT-FACING WEST PROFILE, nose/beak and body face the LEFT edge. BOTTOM RIGHT: TRUE RIGHT-FACING EAST PROFILE, nose/beak and body face the RIGHT edge. Same identity, clothes and accessory in all four views. No duplicated profile or three-quarter angles. Tiny RPG NPC, compact head and body, complete feet, generous transparent margins, no ground, cast shadows, glow, scenery or writing.",
+      "index": 6,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "fc0e1e75-1451-4adb-bcc8-78b61918a4d4",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_fc0e1e75-1451-4adb-bcc8-78b61918a4d4.png",
+      "sourceSha256": "6b0ff2c206fe118217d7db75c2d165ab3a2c6fa338c7dd24e9e5f55399530e8b",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_tour-centro_south.png": "dd82b9ad4ca1553b31caec4a4a8ca81754596cda6a8a9efab4d6153a94ac12cf",
+        "public/sprites/chars/npc_tour-centro_north.png": "0eb617dd3fb731407e8927e4f605220090bdc479e9dd5dce2602537e37b4e7ec",
+        "public/sprites/chars/npc_tour-centro_west.png": "f9463d372833e9fa1aa235c3fcb0e1dd5a45648bd005e4c8def4901e2a75b053",
+        "public/sprites/chars/npc_tour-centro_east.png": "f494d83819e38ed0d6f635bca4ae229ac502bba4b440620e282371c43d4becd1"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-sud",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_tour-sud_south.png",
+        "public/sprites/chars/npc_tour-sud_north.png",
+        "public/sprites/chars/npc_tour-sud_west.png",
+        "public/sprites/chars/npc_tour-sud_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette sandstone ivory, cobalt blue, coral orange and midnight navy. A FOUR-DIRECTION character sheet, exactly FOUR complete sprites of a moss-green TORTOISE site surveyor in cobalt work coveralls, ivory hard hat and a coral ribbon spool held beside a spirit level. A clean centered TWO BY TWO grid with very wide empty separation. TOP LEFT: FRONT facing SOUTH, face visible straight toward viewer. TOP RIGHT: BACK facing NORTH, back of head/body only, no face. BOTTOM LEFT: TRUE LEFT-FACING WEST PROFILE, nose/beak and body face the LEFT edge. BOTTOM RIGHT: TRUE RIGHT-FACING EAST PROFILE, nose/beak and body face the RIGHT edge. Same identity, clothes and accessory in all four views. No duplicated profile or three-quarter angles. Tiny RPG NPC, compact head and body, complete feet, generous transparent margins, no ground, cast shadows, glow, scenery or writing.",
+      "index": 7,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "deb3bb00-f654-447a-bc80-9ef8a95959e2",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_deb3bb00-f654-447a-bc80-9ef8a95959e2.png",
+      "sourceSha256": "f11a6c4a1de24261dfde5819a287f890a1eed4c1224e02f02092470ac04cdebc",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_tour-sud_south.png": "a70848a781c0130841f8d3fabc6d37a3461d965db4c6510e7ff4abe82e270b0d",
+        "public/sprites/chars/npc_tour-sud_north.png": "e0360b48acc9c3e6be545faedc517891200cb796ed305fe700717e816e9762a4",
+        "public/sprites/chars/npc_tour-sud_west.png": "27710f0f9784acf07dad4dce792deea1a64b24f2b6157391cf1d989092ded5d0",
+        "public/sprites/chars/npc_tour-sud_east.png": "41571e16e242c178253118a45c1fb229c33f85f05d99b2dca1113c19e38dc667"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-isole",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_tour-isole_south.png",
+        "public/sprites/chars/npc_tour-isole_north.png",
+        "public/sprites/chars/npc_tour-isole_west.png",
+        "public/sprites/chars/npc_tour-isole_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette deep cobalt, turquoise teal, chalk ivory and ochre orange. A FOUR-DIRECTION character sheet, exactly FOUR complete sprites of a cream PELICAN ferry captain with a navy peacoat and ochre life vest holding a miniature cobalt ferry beside a rolled blank receipt. A clean centered TWO BY TWO grid with very wide empty separation. TOP LEFT: FRONT facing SOUTH, face visible straight toward viewer. TOP RIGHT: BACK facing NORTH, back of head/body only, no face. BOTTOM LEFT: TRUE LEFT-FACING WEST PROFILE, nose/beak and body face the LEFT edge. BOTTOM RIGHT: TRUE RIGHT-FACING EAST PROFILE, nose/beak and body face the RIGHT edge. Same identity, clothes and accessory in all four views. No duplicated profile or three-quarter angles. Tiny RPG NPC, compact head and body, complete feet, generous transparent margins, no ground, cast shadows, glow, scenery or writing.",
+      "index": 8,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "5df22eb2-c838-4f3a-8441-bac45c66de1b",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_5df22eb2-c838-4f3a-8441-bac45c66de1b.png",
+      "sourceSha256": "57b4c20f4e42b2a5ca73a80a90fa284de2222cb4da50b727789c71ac3af2c00b",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_tour-isole_south.png": "3b587e5120f31f893a7af69d4f9d5b21a79ffdda44682b310d970608806a2ae0",
+        "public/sprites/chars/npc_tour-isole_north.png": "1d8f92fc8b4ca7ef32e1d16b2293c340b74ae4cf57ccaaeb75bca6614e369304",
+        "public/sprites/chars/npc_tour-isole_west.png": "74dfae78a479cf6174591fff5d902ab7734ef555a39beb7c5f472203144e8030",
+        "public/sprites/chars/npc_tour-isole_east.png": "f25707ab6929cd414ce61dae82e04ba899f29368857c18d43156ea256d1f9bc8"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-feed",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_tour-feed_south.png",
+        "public/sprites/chars/npc_tour-feed_north.png",
+        "public/sprites/chars/npc_tour-feed_west.png",
+        "public/sprites/chars/npc_tour-feed_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette ink navy, cool violet, mint teal and chalk ivory. A FOUR-DIRECTION character sheet, exactly FOUR complete sprites of a black-and-ivory MAGPIE data editor in a violet scarf, holding a magnifying glass over a blank ivory document. A clean centered TWO BY TWO grid with very wide empty separation. TOP LEFT: FRONT facing SOUTH, face visible straight toward viewer. TOP RIGHT: BACK facing NORTH, back of head/body only, no face. BOTTOM LEFT: TRUE LEFT-FACING WEST PROFILE, nose/beak and body face the LEFT edge. BOTTOM RIGHT: TRUE RIGHT-FACING EAST PROFILE, nose/beak and body face the RIGHT edge. Same identity, clothes and accessory in all four views. No duplicated profile or three-quarter angles. Tiny RPG NPC, compact head and body, complete feet, generous transparent margins, no ground, cast shadows, glow, scenery or writing.",
+      "index": 9,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "fd883292-ca17-40f1-9ee4-3d82328384a3",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_fd883292-ca17-40f1-9ee4-3d82328384a3.png",
+      "sourceSha256": "5b6b1e5b1167056d6f16395b8f62408e6c7a4bf4aac76d1f15b3eb773cb1d88d",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_tour-feed_south.png": "655a8cb28bb24132883a501f88291bad2912bd57631e8f8a95fdf4a3987b5a49",
+        "public/sprites/chars/npc_tour-feed_north.png": "db6e790a4fdf14f800af9d6271d230cff2a628a4b16eea81700e637d7ed3ce72",
+        "public/sprites/chars/npc_tour-feed_west.png": "26f73e6c75b693770bbe1ba303e00af61c8d823f76b7c4b847df0ca50d85e822",
+        "public/sprites/chars/npc_tour-feed_east.png": "2903e8422c362ef43281e20b8be47600c1509665bc5b0c09dcc94394d6e73adb"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-hub",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_tour-hub_south.png",
+        "public/sprites/chars/npc_tour-hub_north.png",
+        "public/sprites/chars/npc_tour-hub_west.png",
+        "public/sprites/chars/npc_tour-hub_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette navy blue, mustard gold, mint teal, coral orange, burgundy and ivory. A FOUR-DIRECTION character sheet, exactly FOUR complete sprites of a tawny LYNX dispatcher with mustard jacket and navy headphones holding five blank differently colored document folders. A clean centered TWO BY TWO grid with very wide empty separation. TOP LEFT: FRONT facing SOUTH, face visible straight toward viewer. TOP RIGHT: BACK facing NORTH, back of head/body only, no face. BOTTOM LEFT: TRUE LEFT-FACING WEST PROFILE, nose/beak and body face the LEFT edge. BOTTOM RIGHT: TRUE RIGHT-FACING EAST PROFILE, nose/beak and body face the RIGHT edge. Same identity, clothes and accessory in all four views. No duplicated profile or three-quarter angles. Tiny RPG NPC, compact head and body, complete feet, generous transparent margins, no ground, cast shadows, glow, scenery or writing.",
+      "index": 10,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "ceb973b1-8790-49a2-a82c-11cd6aa99448",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_ceb973b1-8790-49a2-a82c-11cd6aa99448.png",
+      "sourceSha256": "f92dc2171306b8b1e6aa61d7e198e2fd288ed390d176ee975e0d320af56d6931",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_tour-hub_south.png": "0961618cb9e9ab6d78bcff326ce79612fa97f400efd4d8f3dee7a8fc374c2833",
+        "public/sprites/chars/npc_tour-hub_north.png": "091e19cdf3cc833a0ff1c9e09adc99eb58ab88339676840c6f05d6a3b63f7541",
+        "public/sprites/chars/npc_tour-hub_west.png": "7da905ea2f814c9862d2992d05b696807b62e6c9ae56dd763a56b688fabb012b",
+        "public/sprites/chars/npc_tour-hub_east.png": "546e559798af453e551c7fdd4c7752c94aaa30df18b29d9837b046949dc3a677"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-nord",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/tour_nord_set.png",
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette steel blue, mint teal, copper and chalk ivory. ONLY a mechanical conference-table conveyor: one empty round meeting table feeds rolled blank minutes into a copper machine and out again, absurd self-contained factory apparatus. Front view with a small visible top surface suitable for a top-down tile RPG; NOT isometric. Clear big shapes, complete object and feet on a fully transparent background. No people, scenery, ground tile, cast shadow or glow. All parts grouped as ONE compact self-contained prop with generous empty margins.",
+      "index": 11,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "16650fe3-f89d-46f4-985d-ff80daf89bac",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_16650fe3-f89d-46f4-985d-ff80daf89bac.png",
+      "sourceSha256": "096762cf349757dcaef834dc5c10f6bda8c94408a5e47d43a846cbff07d4d2b3",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_nord_set.png": "c9cb712e1d6c96fea00dc2e3d2eef5c40b5399d0d80411ede9c744c79f0ff9a6"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-centro",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/tour_centro_set.png",
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette burgundy plum, warm cream, restrained gold and midnight navy. ONLY an empty burgundy television debate set with two opposing swivel chairs, one oversized blank overhead spotlight and a small gold microphone, all as one grounded compact stage prop. Front view with a small visible top surface suitable for a top-down tile RPG; NOT isometric. Clear big shapes, complete object and feet on a fully transparent background. No people, scenery, ground tile, cast shadow or glow. All parts grouped as ONE compact self-contained prop with generous empty margins.",
+      "index": 12,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "81bd7ae3-b6f7-4541-a9bb-773cf2ecfd60",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_81bd7ae3-b6f7-4541-a9bb-773cf2ecfd60.png",
+      "sourceSha256": "10d634c586d2a0e904b8fe0910f8df6d0ac3738044b089c00d51a0b9076bfd66",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_centro_set.png": "54b47dbb5183c9340138db60cb7f47485c47193fd97bf6cbdc7e62d938130a4d"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-sud",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/tour_sud_set.png",
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette sandstone ivory, cobalt blue, coral orange and midnight navy. ONLY a tiny unfinished civic construction foundation surrounded by many coral ceremonial ribbon loops, one ivory cornerstone and one empty cobalt camera tripod; no workers, complete single compact prop. Front view with a small visible top surface suitable for a top-down tile RPG; NOT isometric. Clear big shapes, complete object and feet on a fully transparent background. No people, scenery, ground tile, cast shadow or glow. All parts grouped as ONE compact self-contained prop with generous empty margins.",
+      "index": 13,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "a574c9dd-1a61-4e45-a0b1-3f72e52b8d00",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_a574c9dd-1a61-4e45-a0b1-3f72e52b8d00.png",
+      "sourceSha256": "63addae3900b3052b2108db55f97762e59c1d999f64ac20e2481fc7b8af260a1",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_sud_set.png": "727a4fa652e74b37a20e035cad99ebd541d09c01a91c44965156ea758ba004e1"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-isole",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/tour_isole_set.png",
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette deep cobalt, turquoise teal, chalk ivory and ochre orange. ONLY a turquoise planning table carrying a miniature ivory bridge and tiny cobalt ferry, beside a long blank ochre fuel receipt, compact single grounded model exhibit. Front view with a small visible top surface suitable for a top-down tile RPG; NOT isometric. Clear big shapes, complete object and feet on a fully transparent background. No people, scenery, ground tile, cast shadow or glow. All parts grouped as ONE compact self-contained prop with generous empty margins.",
+      "index": 14,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "c85cc511-1447-4e0e-8fd8-fcd16160a743",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_c85cc511-1447-4e0e-8fd8-fcd16160a743.png",
+      "sourceSha256": "606be7e5aa93a9a259129869bd5f005804cdfc70270c3c308f8ff03eb66c14dc",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_isole_set.png": "28f2bbc5c3a40392ca5e8d64c3ca4dce6891205afb0bef417f3ab229c15eecba"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-feed",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/tour_feed_set.png",
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette ink navy, cool violet, mint teal and chalk ivory. ONLY an absurd compact navy social-feed control desk with three blank mint/violet screens, an ivory magnifying glass and one long paper feed, simple grounded single console. Front view with a small visible top surface suitable for a top-down tile RPG; NOT isometric. Clear big shapes, complete object and feet on a fully transparent background. No people, scenery, ground tile, cast shadow or glow. All parts grouped as ONE compact self-contained prop with generous empty margins.",
+      "index": 15,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "e4d7e9a6-c383-4029-a1f0-074da7bb9313",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_e4d7e9a6-c383-4029-a1f0-074da7bb9313.png",
+      "sourceSha256": "4e13e19413a63e9ca277b914ee2a6611bbfcd3ace4865f65f1f32d6d0a683ee6",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_feed_set.png": "17b0542072dc248bb75aeeccdf027794d3b1f67e9a8f291baa77ef0fb912dc18"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-hub",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/tour_hub_set.png",
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. Palette navy blue, mustard gold, mint teal, coral orange, burgundy and ivory. ONLY a grounded civic tour planning board on a low navy desk: five large separate colored route tabs in mint, plum, coral, cobalt and violet; blank tabs, no letters or symbols, all visible. Front view with a small visible top surface suitable for a top-down tile RPG; NOT isometric. Clear big shapes, complete object and feet on a fully transparent background. No people, scenery, ground tile, cast shadow or glow. All parts grouped as ONE compact self-contained prop with generous empty margins.",
+      "index": 16,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "be458c8f-ce52-4f67-b95c-099c1df6e0d9",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_be458c8f-ce52-4f67-b95c-099c1df6e0d9.png",
+      "sourceSha256": "29203c3732bbbdd13c9cebdd2ea669ff77f0d5e2abc948f670354933364bad86",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_hub_set.png": "956da6406afe2ef290e70a414bb0b29b92a168aa5d9632f03812df9a0c112518"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "floor-nord",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_nord_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless flat material texture: quiet steel-blue industrial concrete with only tiny subtle mint scuffs. Entire square is uninterrupted material, nearly a solid color. No scene, object, perspective, borders, visible grid, writing or strong repeated pattern.",
+      "index": 17,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "99afbffd-a17e-42ce-8c1a-1f5e52a1e622",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154105_99afbffd-a17e-42ce-8c1a-1f5e52a1e622.png",
+      "sourceSha256": "9bc6f18d3b5b5363db6f35b24a9c43291f620ea8612b92ae5c7836149e205f59",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_nord_floor.png": "3762ff043672370771f42a23ed01e3e882c1e867d770ee9b6739047a457989ea"
+      }
+    },
+    {
+      "id": "floor-centro",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_centro_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless flat material texture: quiet plum-gray television-studio flooring with sparse subtle cream scuffs. Entire square is uninterrupted material, nearly a solid color. No scene, object, perspective, borders, visible grid, writing or strong repeated pattern.",
+      "index": 18,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "29d17977-45de-4ddc-83a5-36a5e53fd819",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154105_29d17977-45de-4ddc-83a5-36a5e53fd819.png",
+      "sourceSha256": "38512022916ab9ef2c7033a0fc8229b94af3763d83190d7628455f7fc6725803",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_centro_floor.png": "c8e1aae7ac013c2bc552877af6287cf7324d97cb37f7b158245917c56588c6f5"
+      }
+    },
+    {
+      "id": "floor-sud",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_sud_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless flat material texture: quiet warm sandstone construction paving with tiny cobalt and gray aggregate specks. Entire square is uninterrupted material, nearly a solid color. No scene, object, perspective, borders, visible grid, writing or strong repeated pattern.",
+      "index": 19,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "8a1ef4a4-ba98-4f1b-96ee-57ce8692eb19",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154105_8a1ef4a4-ba98-4f1b-96ee-57ce8692eb19.png",
+      "sourceSha256": "d21f0504a9983a196551b94def1a3cda9c01c5f3a0c6d65dac7e135d139a7b87",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_sud_floor.png": "2bfdda7ca654de2b1019760ab7a0850970760ebe3292a2225abbc0a7113fc36f"
+      }
+    },
+    {
+      "id": "floor-isole",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_isole_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless flat material texture: quiet dark cobalt harbor paving with tiny muted turquoise scuffs. Entire square is uninterrupted material, nearly a solid color. No scene, object, perspective, borders, visible grid, writing or strong repeated pattern.",
+      "index": 20,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "1d8ea325-21ca-450a-8726-4ec5d8ab2d96",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154106_1d8ea325-21ca-450a-8726-4ec5d8ab2d96.png",
+      "sourceSha256": "edfa130fb817f4c98faebd138e9f9afc1c0a9cc19de69dcaf7d59bebbbeffbee",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_isole_floor.png": "3e0ed85fac16d98b39a436452c45fb77bdbe02fbd8d348545b8506c3edc7ec57"
+      }
+    },
+    {
+      "id": "floor-feed",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_feed_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless flat material texture: quiet cool violet-gray control-room flooring with sparse tiny mint scuffs. Entire square is uninterrupted material, nearly a solid color. No scene, object, perspective, borders, visible grid, writing or strong repeated pattern.",
+      "index": 21,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "4584e837-3b22-4ed4-85f9-ee75012f6ca8",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154106_4584e837-3b22-4ed4-85f9-ee75012f6ca8.png",
+      "sourceSha256": "61835c4a5a3bc496c55736a39a6b46d86a46f422aa2cb58d489e0f30a40108d0",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_feed_floor.png": "5300210f579bacf315aa4f638729810d9f94d4d79086eb0f4f4d5b904d2b201c"
+      }
+    },
+    {
+      "id": "floor-hub",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_hub_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "prompt": "POLITICMON original modern civic-satire fantasy RPG. Deliberate crisp pixel art readable at 240x180 native resolution, bold clean silhouettes, flat limited palette, hard pixel edges, two-tone shading. Consistent midnight navy outlines and chalk ivory highlights. No text, letters, numbers, logos, flags, real people, watermarks, photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless flat material texture: quiet warm navy-gray transit-hall terrazzo with tiny restrained mustard flecks. Entire square is uninterrupted material, nearly a solid color. No scene, object, perspective, borders, visible grid, writing or strong repeated pattern.",
+      "index": 22,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "variant": "flare",
+      "jobId": "667e3caa-967a-403c-a7c8-a673539db690",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154104_667e3caa-967a-403c-a7c8-a673539db690.png",
+      "sourceSha256": "9c7832ddc9d6ae7f780d7a5dd6df90184c6629715469baf5fe4d17812ca7e401",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_hub_floor.png": "98374ee15b6e63b2e1f24c62db449be2820eabdd4a2f17e133aee1e95e02d77c"
+      }
+    },
+    {
+      "index": 23,
+      "id": "threshold",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/tour_threshold.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "count": 1,
+        "use_unlim": false,
+        "background": "opaque",
+        "prompt": "POLITICMON crisp pixel art civic satire RPG, midnight navy outlines, chalk ivory and mint teal with restrained mustard brass. ONLY one flat TOP DOWN square entrance threshold floor tile, readable when reduced to 16 by 16 pixels. A large mint center square, simple thick ivory outline, dark navy outer border, one small mustard inset on each corner. Clear geometric entrance marker. Entire square uninterrupted opaque material. NO letters, words, numbers, arrows, perspective, cast shadow, texture noise, gradients, logos, antialiasing or scenery. Bold hard-edged pixel clusters."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_163618_2d46bd47-67ec-45a2-b1b4-aab168ad92ca.png",
+      "sourceSha256": "fdca04be3029eee994b67a6f5ddc5ea1f79ded0e4149cd62c4a7fca7d5f831ae",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_threshold.png": "ab1cc90b47099b62e000ecfade6651edc19f3e510339c03092080cdcfba2948a"
+      }
+    },
+    {
+      "index": 24,
+      "id": "rail",
+      "kind": "prop",
+      "width": 16,
+      "height": 24,
+      "path": "public/sprites/tiles/tour_rail.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "1:1",
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "count": 1,
+        "use_unlim": false,
+        "background": "transparent",
+        "prompt": "POLITICMON crisp pixel art civic satire RPG. Midnight navy outlines with steel blue, mint teal and chalk ivory. ONLY one tiny front-facing civic safety railing segment: two short navy metal posts joined by one mint horizontal bar, complete flat symmetrical shape, narrow large pixel clusters, readable at 16 by 24 pixels. Single grounded guardrail with complete feet and generous transparent margins. Fully transparent background, no ground, cast shadow, gradients, words, logos, perspective or isometric camera. Nearly flat and very simple."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_163619_556ea713-61fc-444b-9e91-77e5e6382584.png",
+      "sourceSha256": "3b017e0200053fab456fe07ece4284adfdaa733388de75faf1290b50583771fe",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/tour_rail.png": "78dca4eeeb752c985d4ccf9c1c1c36592b0dc2cab240304a30751bdad4b42026"
+      },
+      "alphaCutoff": 240,
+      "inspection": "Core inspected. Alpha cutoff 240 rejects the soft halo; full 16px width keeps the mint crossbar visible under nearest-neighbour sampling.",
+      "nativePadding": 0
+    }
+  ],
+  "jobs": [
+    {
+      "index": 0,
+      "job_id": "c95bb172-2ba6-42eb-9916-eec739519f76",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_c95bb172-2ba6-42eb-9916-eec739519f76.png"
+    },
+    {
+      "index": 1,
+      "job_id": "4154bdca-ed87-43b6-8b55-9f943e58db18",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153751_4154bdca-ed87-43b6-8b55-9f943e58db18.png"
+    },
+    {
+      "index": 2,
+      "job_id": "ebb70d94-a171-4730-babf-98d170572a3f",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_ebb70d94-a171-4730-babf-98d170572a3f.png"
+    },
+    {
+      "index": 3,
+      "job_id": "1dcc3b84-6902-422c-aeb2-2c467287cc51",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_1dcc3b84-6902-422c-aeb2-2c467287cc51.png"
+    },
+    {
+      "index": 4,
+      "job_id": "3b969fcb-1940-4da2-b747-ba915523aa7f",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153749_3b969fcb-1940-4da2-b747-ba915523aa7f.png"
+    },
+    {
+      "index": 5,
+      "job_id": "fea7ebc6-d461-4d51-b630-bb66e8e7f46d",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153751_fea7ebc6-d461-4d51-b630-bb66e8e7f46d.png"
+    },
+    {
+      "index": 6,
+      "job_id": "fc0e1e75-1451-4adb-bcc8-78b61918a4d4",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_fc0e1e75-1451-4adb-bcc8-78b61918a4d4.png"
+    },
+    {
+      "index": 7,
+      "job_id": "deb3bb00-f654-447a-bc80-9ef8a95959e2",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_deb3bb00-f654-447a-bc80-9ef8a95959e2.png"
+    },
+    {
+      "index": 8,
+      "job_id": "5df22eb2-c838-4f3a-8441-bac45c66de1b",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_5df22eb2-c838-4f3a-8441-bac45c66de1b.png"
+    },
+    {
+      "index": 9,
+      "job_id": "fd883292-ca17-40f1-9ee4-3d82328384a3",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_fd883292-ca17-40f1-9ee4-3d82328384a3.png"
+    },
+    {
+      "index": 10,
+      "job_id": "ceb973b1-8790-49a2-a82c-11cd6aa99448",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_ceb973b1-8790-49a2-a82c-11cd6aa99448.png"
+    },
+    {
+      "index": 11,
+      "job_id": "16650fe3-f89d-46f4-985d-ff80daf89bac",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153811_16650fe3-f89d-46f4-985d-ff80daf89bac.png"
+    },
+    {
+      "index": 12,
+      "job_id": "81bd7ae3-b6f7-4541-a9bb-773cf2ecfd60",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_81bd7ae3-b6f7-4541-a9bb-773cf2ecfd60.png"
+    },
+    {
+      "index": 13,
+      "job_id": "a574c9dd-1a61-4e45-a0b1-3f72e52b8d00",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_a574c9dd-1a61-4e45-a0b1-3f72e52b8d00.png"
+    },
+    {
+      "index": 14,
+      "job_id": "c85cc511-1447-4e0e-8fd8-fcd16160a743",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_c85cc511-1447-4e0e-8fd8-fcd16160a743.png"
+    },
+    {
+      "index": 15,
+      "job_id": "e4d7e9a6-c383-4029-a1f0-074da7bb9313",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_e4d7e9a6-c383-4029-a1f0-074da7bb9313.png"
+    },
+    {
+      "index": 16,
+      "job_id": "be458c8f-ce52-4f67-b95c-099c1df6e0d9",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_153831_be458c8f-ce52-4f67-b95c-099c1df6e0d9.png"
+    },
+    {
+      "index": 17,
+      "job_id": "99afbffd-a17e-42ce-8c1a-1f5e52a1e622",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154105_99afbffd-a17e-42ce-8c1a-1f5e52a1e622.png"
+    },
+    {
+      "index": 18,
+      "job_id": "29d17977-45de-4ddc-83a5-36a5e53fd819",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154105_29d17977-45de-4ddc-83a5-36a5e53fd819.png"
+    },
+    {
+      "index": 19,
+      "job_id": "8a1ef4a4-ba98-4f1b-96ee-57ce8692eb19",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154105_8a1ef4a4-ba98-4f1b-96ee-57ce8692eb19.png"
+    },
+    {
+      "index": 20,
+      "job_id": "1d8ea325-21ca-450a-8726-4ec5d8ab2d96",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154106_1d8ea325-21ca-450a-8726-4ec5d8ab2d96.png"
+    },
+    {
+      "index": 21,
+      "job_id": "4584e837-3b22-4ed4-85f9-ee75012f6ca8",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154106_4584e837-3b22-4ed4-85f9-ee75012f6ca8.png"
+    },
+    {
+      "index": 22,
+      "job_id": "667e3caa-967a-403c-a7c8-a673539db690",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_154104_667e3caa-967a-403c-a7c8-a673539db690.png"
+    },
+    {
+      "index": 23,
+      "job_id": "2d46bd47-67ec-45a2-b1b4-aab168ad92ca",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_163618_2d46bd47-67ec-45a2-b1b4-aab168ad92ca.png"
+    },
+    {
+      "index": 24,
+      "job_id": "556ea713-61fc-444b-9e91-77e5e6382584",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_163619_556ea713-61fc-444b-9e91-77e5e6382584.png"
+    }
+  ],
+  "submissionRejections": [
+    {
+      "index": 17,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    }
+  ],
+  "research": [
+    {
+      "url": "https://knowyourmeme.com/memes/source-i-made-it-up",
+      "use": "Original newsroom receipts inventing their own source; no copied text or characters."
+    },
+    {
+      "url": "https://knowyourmeme.com/memes/money-printer-go-brrr",
+      "use": "Original machine that prints meeting minutes and funding announcements."
+    }
+  ],
+  "galleryShown": true,
+  "balanceAfter": 429.22,
+  "spentCredits": 37.5,
+  "originalInspection": "All 23 sources inspected in original contact sheets; six sheets have true west/east profiles. Boss banners crop the illustrated upper strip instead of shrinking the entire scene. Additional threshold and rail inspected separately. Rail is transparent, floor opaque.",
+  "gallerySets": [
+    {
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "shown": true
+    },
+    {
+      "indices": [
+        23,
+        24
+      ],
+      "shown": true
+    }
+  ]
+}

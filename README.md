@@ -168,3 +168,5 @@ lotte, focus tastiera e salvataggio verificati su Chromium e WebKit.
 [Comandi mobile](docs/MOBILE-CONTROLS.md): cornice aperta, croce trascinabile, A/B più grandi con funzione visibile e comandi nella zona dei pollici. Dita e tastiera mantengono input indipendenti; corsa direzione+B verificata da un salvataggio guadagnato. Notch, rotazione e due motori browser verificati.
 
 [Genova: il beat e la fattura](docs/GENOVA-VERBALE.md): porto e tre cast originali, sei battute visibili, errori di tasto/tempo distinti, pause e allenamento riapribile senza doppio premio. Il contabile legge promesse e patti reali; quattro percorsi nativi nei due browser conservano il morale della vittoria diplomatica.
+
+[Tour: cinque dossier, una sola memoria](docs/TOUR-VERBALE.md): centrale e cinque collegi originali, personaggi direzionali, briefing con tattiche distinte e scelte che mostrano costi, patti e coesione prima della firma. Due azioni per collegio, sostegno unico per alleato e verbali riapribili. Cinque dibattiti guadagnati aprono il Palazzo; il redesign completo prosegue.

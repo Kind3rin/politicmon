@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
-import {chromium} from 'playwright';
-const browser=await chromium.launch();
+import {chromium,webkit} from 'playwright';
+const engine=process.env.BROWSER==='webkit'?'webkit':'chromium';const browser=await ({chromium,webkit}[engine]).launch();
 try {
  const page=await browser.newPage({viewport:{width:960,height:720}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -17,7 +17,7 @@ try {
   const {DistrictScene}=await import('/src/scenes/DistrictScene.ts');
   const {resolveDistrictPromise}=await import('/src/game/districtCampaign.ts');
   const {preloadSprites,waitForSprites}=await import('/src/engine/assets.ts'),{audio}=await import('/src/engine/audio.ts'); audio.enabled=false;
-  const ids=['photo','future','diplomacy','coalition','election'];preloadSprites(Object.fromEntries(ids.map(id=>[`campaign:${id}`,`ui/campaign/${id}.png`])));
+  const ids=['photo','future','diplomacy','coalition','election','district-nord','district-centro','district-sud','district-isole','district-feed'];preloadSprites(Object.fromEntries(ids.map(id=>[`campaign:${id}`,`ui/campaign/${id}.png`])));
   await waitForSprites(ids.map(id=>`campaign:${id}`));
   const canvas=document.createElement('canvas'),screen=new Screen(canvas),input=new Input();
   let key='',name='',views=0;input.wasPressed=b=>key===b; const press=(scene,b)=>{key=b;scene.update(.01);key='';};
@@ -60,13 +60,21 @@ try {
   for(const id of ['nord','centro','sud','isole','feed']) {
    const state=ready(),stack=new SceneStack(); let debate=0;
    const district=new DistrictScene(stack,input,state,id,()=>debate++);stack.push(district);
-   for(let i=0;i<4;i++){capture(`district-${id}-${i}`,district);press(district,'down');}
+   for(let i=0;i<4;i++){
+    capture(`district-${id}-${i}`,district);const unchanged=JSON.stringify(state);press(district,'a');
+    for(let p=0;p<district.pages().length;p++){capture(`district-${id}-${i}-review-${p}`,district);press(district,'right');}
+    check(JSON.stringify(state)===unchanged,'Tour dossier changed state');press(district,'b');
+    check(district.mode==='menu'&&JSON.stringify(state)===unchanged,'Tour dossier B did not cancel');press(district,'down');
+   }
    const before=JSON.stringify(state);press(district,'b');check(JSON.stringify(state)===before&&!stack.top&&debate===0,'district B changed state');
    if(id==='centro'){
     const strained=ready();strained.coalition=applyLineRedEvent(strained.coalition,10).state;
     const scene=new DistrictScene(new SceneStack(),input,strained,id,()=>{});press(scene,'down');press(scene,'down');
     const expected=resolveDistrictPromise(strained.election,strained.coalition,strained.money,id,true),oldCohesion=strained.morale.cohesion;
-    capture('district-centro-risk-after-strain',scene);press(scene,'a');
+    capture('district-centro-risk-after-strain',scene);const unchanged=JSON.stringify(strained);press(scene,'a');
+    check(JSON.stringify(strained)===unchanged,'Tour risk preview committed early');
+    for(let n=0;n<20&&!scene.result;n++){capture(`district-centro-risk-page-${scene.page}`,scene);press(scene,'a');}
+    check(scene.result?.ok,'Tour risk commit did not finish');capture('district-centro-risk-result',scene);
     check(expected.ok&&JSON.stringify(strained.election)===JSON.stringify(expected.election),'district preview used wrong coalition');
     check(strained.morale.cohesion===Math.max(0,oldCohesion-expected.strained.length*8-expected.broken.length*16),'district morality missing');
     const after=JSON.stringify(strained);press(scene,'a');check(JSON.stringify(strained)===after,'district committed twice');
@@ -84,6 +92,6 @@ try {
  });
  assert.deepEqual(errors,[]);assert.deepEqual(result.overflow,[]);
  mkdirSync('artifacts/screens/campaign-ui',{recursive:true});
- for(const [name,data] of Object.entries(result.shots))writeFileSync(`artifacts/screens/campaign-ui/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
+ for(const [name,data] of Object.entries(result.shots))writeFileSync(`artifacts/screens/campaign-ui/${engine}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  console.log(`PASS: ${result.views} rendered views, ${result.cases} decisions, pure preview/B cancellation/exact commit, 20 ally states/net effects, historic repair, five districts, two election endings, zero overflow.`);
 }finally{await browser.close();}

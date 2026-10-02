@@ -3,6 +3,11 @@ import type { AiProfile } from "./sim";
 export type AiStyle = "balanced" | "pressure" | "rush" | "control" | "fortress" | "setup";
 export interface TrainerStyle { style: AiStyle; label: string; hints: readonly string[]; art?: string; }
 const STYLES: Record<string, Omit<TrainerStyle, "art">> = {
+  "district-nord": { style: "fortress", label: "VERBALE A CICLO CONTINUO", hints: ["Difesa e controllo: alterna tipi efficaci.", "Il risultato consuma uno slot. B rinvia."] },
+  "district-centro": { style: "control", label: "LA RISPOSTA IN PUBBLICITÀ", hints: ["Controllo: leggi mosse e immunità nel dossier.", "Due azioni per collegio. B rinvia senza usarle."] },
+  "district-sud": { style: "pressure", label: "IL NASTRO HA TRE ANNIVERSARI", hints: ["Pressione e status: prepara una cura.", "B rinvia. La lotta conclusa registra il risultato."] },
+  "district-isole": { style: "setup", label: "IL PIENO IN SCALA REALE", hints: ["Si prepara: guarda i potenziamenti annunciati.", "Non regalare turni. B torna alla banchina."] },
+  "district-feed": { style: "rush", label: "FONTE: LA STAMPANTE", hints: ["Punta sul danno immediato: leggi i tipi.", "Rimpasto gratuito dopo un KO avversario. B rinvia."] },
   "campo-debate": { style: "balanced", label: "DUE TASTI, UNA VOCE", hints: ["Prova di capitolo. Anche una sconfitta registra il dibattito e apre il Fotografo.", "A sfida, B torna. L’ambulatorio recupera PV e PP; il risultato cambia il consenso del Centro."] },
   "campo-claque": { style: "balanced", label: "APPLAUSI A CIRCUITO CHIUSO", hints: ["Prova facoltativa. Tre avversari; non serve vincere per fare la foto.", "Premio: 3 CAFFÈ. Il medico resta aperto; START sceglie il leader."] },
   "campo-photographer": { style: "balanced", label: "IL PROGRAMMA FUORI CAMPO", hints: ["Tre avversari LV 50-52. Il Fotografo può curarsi: conserva PP e risposte di tipi diversi.", "B torna al set. Vincere apre Futuro Anteriore; i patti tesi restano tesi."] },

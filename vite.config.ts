@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
 import { minify } from "terser";
+import {compactPrivateMembers} from "./scripts/build-private-members";
 
 // ID di build AUTOMATICO: cambia a ogni `vite build`, senza bump manuali.
 // Alimenta sia APP_BUILD_ID (cache-busting sprite ?v=, chiavi localStorage del
@@ -80,11 +81,11 @@ export default defineConfig({
   define: {
     __APP_BUILD_ID__: JSON.stringify(BUILD_ID)
   },
-  plugins: [compactStartupHtml(), stampServiceWorker()],
+  plugins: [compactPrivateMembers(__dirname), compactStartupHtml(), stampServiceWorker()],
   build: {
     target: "es2022",
     minify: "terser",
-    terserOptions: { compress: { passes: 3 } }
+    terserOptions: { ecma: 2020, compress: { passes: 5 }, mangle: {properties: {regex: /^__pmPrivate_/}} }
   },
   server: {
     port: 5173,

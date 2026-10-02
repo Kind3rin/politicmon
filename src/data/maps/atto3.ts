@@ -194,21 +194,21 @@ const GENOVA_TECHNO_TILES = [
   "~~~~~~~~~~==~~~~~~~~"
 ];
 
-const TOUR_FEED_TILES = [
+const TOUR_HUB_TILES = [
   "AAAAAAAAAAAAAAAAAAAAAAAA",
-  "AbbbpppppppppppppppppbbA",
+  "AppppppppppcpppppppppppA",
   "AppppppppppppppppppppppA",
-  "AppppPppppPppppPppppPppA",
-  "AppppppppppppppppppppppA",
-  "ApphhhhhhhhhhhhhhhhhhhpA",
+  "ApppcppppcppppcppppcpppA",
   "AppppppppppppppppppppppA",
   "AppppppppppppppppppppppA",
-  "AppppPppppppppppppppPppA",
-  "AppppppppppppppppppppppA",
-  "ApphhhhhhhhhhhhhhhhhhhpA",
   "AppppppppppppppppppppppA",
   "AppppppppppppppppppppppA",
-  "ApppppppppccccpppppppppA",
+  "AppppppppppppppppppcpppA",
+  "Apppp1pppppppppppppppppA",
+  "AppppppppppppppppppppppA",
+  "AppppppppppppppppppppppA",
+  "AppppppppppppppppppppppA",
+  "ApppppppppccpppppppppppA",
   "AAAAAAAAAAAAAAAAAAAAAAAA"
 ];
 
@@ -238,22 +238,80 @@ const PALACE_FEED_STUDIO_TILES = [
   "AAAAAAAAAAAAAAAAAA"
 ];
 
-function districtArenaTiles(prop: string): string[] {
-  return [
-    "TTTTTTTTTTTTTTTTTT",
-    "TT...ffffffff...TT",
-    `TT...f===${prop}====f...TT`.slice(0, 18),
-    "TT...ffff==ffff.TT",
-    "TT.......==.....TT",
-    "TT.......==.....TT",
-    "TT...ffff==ffff.TT",
-    "TT...f========f.TT",
-    "TT...ffff==ffff.TT",
-    "TT.......==.....TT",
-    "TT.......==.....TT",
-    "TTTTTTTTT==TTTTTTT"
-  ];
-}
+const TOUR_NORD_TILES = [
+  "ffffffffffffffffffff",
+  "f..................f",
+  "f........==........f",
+  "f........==........f",
+  "f........==........f",
+  "f...2....==........f",
+  "f........==..fff...f",
+  "f........==........f",
+  "f...fff..==........f",
+  "f........==........f",
+  "f........==........f",
+  "fffffffff==fffffffff"
+];
+
+const TOUR_CENTRO_TILES = [
+  "ffffffffffffffffffff",
+  "f..................f",
+  "f........==........f",
+  "f........==........f",
+  "f........==........f",
+  "f...6....==........f",
+  "f........==........f",
+  "f........==..fff...f",
+  "f........=====.....f",
+  "f........==........f",
+  "f........==........f",
+  "fffffffff==fffffffff"
+];
+
+const TOUR_SUD_TILES = [
+  "ffffffffffffffffffff",
+  "f..................f",
+  "f........==........f",
+  "f........==........f",
+  "f........=====.....f",
+  "f...5....==........f",
+  "f........==........f",
+  "f........==........f",
+  "f..ff....==...=....f",
+  "f........=====.....f",
+  "f........==........f",
+  "fffffffff==fffffffff"
+];
+
+const TOUR_ISOLE_TILES = [
+  "ffffffffffffffffffff",
+  "f..................f",
+  "f........==........f",
+  "f........==........f",
+  "f........==........f",
+  "f...8....==........f",
+  "f........==........f",
+  "f..fff...==........f",
+  "f........=====.....f",
+  "f........==...f....f",
+  "f........==........f",
+  "fffffffff==fffffffff"
+];
+
+const TOUR_FEED_TILES = [
+  "ffffffffffffffffffff",
+  "f..................f",
+  "f........==........f",
+  "f........==........f",
+  "f........==........f",
+  "f...6....==........f",
+  "f........==........f",
+  "f........====......f",
+  "f...ff...==........f",
+  "f........==........f",
+  "f........==........f",
+  "fffffffff==fffffffff"
+];
 
 export const ATTO3_MAPS: Record<string, MapDef> = {
   campo_largo: {
@@ -548,17 +606,19 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     ]
   },
   tour_feed: {
-    id: "tour_feed", name: "TOUR DEL FEED", tiles: TOUR_FEED_TILES,
+    id: "tour_feed", name: "CENTRALE DEL TOUR", tiles: TOUR_HUB_TILES,
+    tileOverrides: { p: "tiles/tour_hub_floor.png", A: "tiles/diplomacy_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/tour_hub_set.png" }, objectSizes: { "1": 96 },
     outdoor: false, music: "election_night",
     warps: [
-      { x: 10, y: 13, toMap: "diplomacy_lobby", toX: 2, toY: 10, facing: "right" },
+      { x: 10, y: 13, markerLabel: "HOTEL", toMap: "diplomacy_lobby", toX: 2, toY: 10, facing: "right" },
       { x: 11, y: 13, toMap: "diplomacy_lobby", toX: 2, toY: 10, facing: "right" },
-      { x: 4, y: 3, toMap: "district_nord", toX: 9, toY: 10, facing: "up" },
-      { x: 9, y: 3, toMap: "district_centro", toX: 9, toY: 10, facing: "up" },
-      { x: 14, y: 3, toMap: "district_sud", toX: 9, toY: 10, facing: "up" },
-      { x: 19, y: 3, toMap: "district_isole", toX: 9, toY: 10, facing: "up" },
-      { x: 19, y: 8, toMap: "district_feed", toX: 9, toY: 10, facing: "up" },
-      { x: 11, y: 1, toMap: "palazzo_feed", toX: 9, toY: 8, facing: "up", requiresFlag: "tourComplete", lockedLines: ["PALAZZO DEI FEED CHIUSO.", "SERVONO I CINQUE DOSSIER COMPLETI."] }
+      { x: 4, y: 3, markerLabel: "NORD", toMap: "district_nord", toX: 9, toY: 10, facing: "up" },
+      { x: 9, y: 3, markerLabel: "CENTRO", toMap: "district_centro", toX: 9, toY: 10, facing: "up" },
+      { x: 14, y: 3, markerLabel: "SUD", toMap: "district_sud", toX: 9, toY: 10, facing: "up" },
+      { x: 19, y: 3, markerLabel: "ISOLE", toMap: "district_isole", toX: 9, toY: 10, facing: "up" },
+      { x: 19, y: 8, markerLabel: "FEED", toMap: "district_feed", toX: 9, toY: 10, facing: "up" },
+      { x: 11, y: 1, markerLabel: "PALAZZO", toMap: "palazzo_feed", toX: 9, toY: 8, facing: "up", requiresFlag: "tourComplete", lockedLines: ["PALAZZO DEI FEED CHIUSO.", "SERVONO I CINQUE DOSSIER COMPLETI."] }
     ],
     signs: [
       { x: 2, y: 1, lines: ["TOUR DEL FEED.", "CINQUE COLLEGI, DUE AZIONI CIASCUNO, UNA SOLA MEMORIA."] },
@@ -569,37 +629,47 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       { x: 19, y: 2, lines: ["ISOLE DEL PONTE", "INGRESSO AL PLASTICO DEFINITIVO."] },
       { x: 19, y: 7, lines: ["CAPITALE DEI FEED", "INGRESSO AL COLLEGIO ALGORITMICO."] }
     ], pickups: [],
-    npcs: [{ id: "tour-coordinator", pal: "aide", x: 11, y: 7, facing: "down", lines: ["SCEGLI L'ORDINE.", "OGNI COLLEGIO CHIUDE DOPO DUE AZIONI SU TRE."] }]
+    npcs: [{ id: "tour-coordinator", spriteSet: "tour-hub", wander: false, pal: "aide", x: 11, y: 7, facing: "down", lines: ["CINQUE DOSSIER. LA COPERTINA PROMETTE CHE SIAMO UNITI.", "OGNI COLLEGIO CHIUDE DOPO DUE AZIONI SU TRE."] }]
   },
   district_nord: {
-    id: "district_nord", name: "NORD PRODUTTIVO", tiles: districtArenaTiles("2"), outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "campo_largo",
-    warps: [{ x: 9, y: 11, toMap: "tour_feed", toX: 4, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 4, toY: 4, facing: "down" }],
-    signs: [{ x: 4, y: 5, lines: ["CAPANNONE DEL TAVOLO.", "PRODUCE RIUNIONI A CICLO CONTINUO."] }], pickups: [{ id: "secret-nord", x: 15, y: 8, itemId: "caffe", qty: 2, hidden: true }],
-    npcs: [{ id: "district-kiosk-nord", pal: "aide", x: 10, y: 2, facing: "down", lines: [] }]
+    id: "district_nord", name: "NORD PRODUTTIVO", tiles: TOUR_NORD_TILES, outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "campo_largo",
+    tileOverrides: { ".": "tiles/tour_nord_floor.png", "=": "tiles/campo_path.png" },
+    objectOverrides: { "2": "tiles/tour_nord_set.png", f: "tiles/tour_rail.png" }, objectSizes: { "2": 96 },
+    warps: [{ x: 9, y: 11, markerLabel: "CENTRALE TOUR", toMap: "tour_feed", toX: 4, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 4, toY: 4, facing: "down" }],
+    signs: [{ x: 4, y: 5, lines: ["CAPANNONE DEL TAVOLO.", "LA MACCHINA STAMPA VERBALI. IL TAVOLO CONVOCA CHI LI LEGGE."] }], pickups: [{ id: "secret-nord", x: 15, y: 8, itemId: "caffe", qty: 2, hidden: true }],
+    npcs: [{ id: "district-kiosk-nord", spriteSet: "tour-nord", wander: false, pal: "aide", x: 10, y: 2, facing: "down", lines: [] }]
   },
   district_centro: {
-    id: "district_centro", name: "CENTRO DEI SALOTTI", tiles: districtArenaTiles("6"), outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "mediopoli",
-    warps: [{ x: 9, y: 11, toMap: "tour_feed", toX: 9, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 9, toY: 4, facing: "down" }],
-    signs: [{ x: 4, y: 5, lines: ["SALOTTO A FERRO DI CAVALLO.", "LE OPINIONI GIRANO, IL TAVOLO RESTA."] }], pickups: [{ id: "secret-centro", x: 15, y: 8, itemId: "maalox", qty: 2, hidden: true }],
-    npcs: [{ id: "district-kiosk-centro", pal: "journalist", x: 10, y: 2, facing: "down", lines: [] }]
+    id: "district_centro", name: "CENTRO DEI SALOTTI", tiles: TOUR_CENTRO_TILES, outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "mediopoli",
+    tileOverrides: { ".": "tiles/tour_centro_floor.png", "=": "tiles/campo_path.png" },
+    objectOverrides: { "6": "tiles/tour_centro_set.png", f: "tiles/tour_rail.png" }, objectSizes: { "6": 96 },
+    warps: [{ x: 9, y: 11, markerLabel: "CENTRALE TOUR", toMap: "tour_feed", toX: 9, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 9, toY: 4, facing: "down" }],
+    signs: [{ x: 4, y: 5, lines: ["SALOTTO A FERRO DI CAVALLO.", "LA RISPOSTA È IN PUBBLICITÀ. GLI OSPITI HANNO GIÀ COMMENTATO LA DOMANDA."] }], pickups: [{ id: "secret-centro", x: 15, y: 8, itemId: "maalox", qty: 2, hidden: true }],
+    npcs: [{ id: "district-kiosk-centro", spriteSet: "tour-centro", wander: false, pal: "journalist", x: 10, y: 2, facing: "down", lines: [] }]
   },
   district_sud: {
-    id: "district_sud", name: "SUD DELLE PROMESSE", tiles: districtArenaTiles("5"), outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "stretto",
-    warps: [{ x: 9, y: 11, toMap: "tour_feed", toX: 14, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 14, toY: 4, facing: "down" }],
-    signs: [{ x: 4, y: 5, lines: ["CANTIERE DELLA PRIMA PIETRA.", "IL NASTRO È FINITO PRIMA DELL'OPERA."] }], pickups: [{ id: "secret-sud", x: 15, y: 8, itemId: "schedona", qty: 1, hidden: true }],
-    npcs: [{ id: "district-kiosk-sud", pal: "boss", x: 10, y: 2, facing: "down", lines: [] }]
+    id: "district_sud", name: "SUD DELLE PROMESSE", tiles: TOUR_SUD_TILES, outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "stretto",
+    tileOverrides: { ".": "tiles/tour_sud_floor.png", "=": "tiles/campo_path.png" },
+    objectOverrides: { "5": "tiles/tour_sud_set.png", f: "tiles/tour_rail.png" }, objectSizes: { "5": 96 },
+    warps: [{ x: 9, y: 11, markerLabel: "CENTRALE TOUR", toMap: "tour_feed", toX: 14, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 14, toY: 4, facing: "down" }],
+    signs: [{ x: 4, y: 5, lines: ["CANTIERE DELLA PRIMA PIETRA.", "L'OPERA NON HA UNA DATA. IL NASTRO HA GIÀ TRE ANNIVERSARI."] }], pickups: [{ id: "secret-sud", x: 15, y: 8, itemId: "schedona", qty: 1, hidden: true }],
+    npcs: [{ id: "district-kiosk-sud", spriteSet: "tour-sud", wander: false, pal: "boss", x: 10, y: 2, facing: "down", lines: [] }]
   },
   district_isole: {
-    id: "district_isole", name: "ISOLE DEL PONTE", tiles: districtArenaTiles("8"), outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "stretto",
-    warps: [{ x: 9, y: 11, toMap: "tour_feed", toX: 19, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 19, toY: 4, facing: "down" }],
-    signs: [{ x: 4, y: 5, lines: ["PLASTICO DEL PONTE.", "ATTRAVERSAMENTO PERFETTO, IN SCALA UNO A CENTO."] }], pickups: [{ id: "secret-isole", x: 15, y: 8, itemId: "spritz", qty: 2, hidden: true }],
-    npcs: [{ id: "district-kiosk-isole", pal: "aide", x: 10, y: 2, facing: "down", lines: [] }]
+    id: "district_isole", name: "ISOLE DEL PONTE", tiles: TOUR_ISOLE_TILES, outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "stretto",
+    tileOverrides: { ".": "tiles/tour_isole_floor.png", "=": "tiles/campo_path.png" },
+    objectOverrides: { "8": "tiles/tour_isole_set.png", f: "tiles/tour_rail.png" }, objectSizes: { "8": 96 },
+    warps: [{ x: 9, y: 11, markerLabel: "CENTRALE TOUR", toMap: "tour_feed", toX: 19, toY: 4, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 19, toY: 4, facing: "down" }],
+    signs: [{ x: 4, y: 5, lines: ["PLASTICO DEL PONTE.", "SUL PLASTICO IL TRAGHETTO NON CONSUMA. LA RICEVUTA DEL PIENO È A GRANDEZZA REALE."] }], pickups: [{ id: "secret-isole", x: 15, y: 8, itemId: "spritz", qty: 2, hidden: true }],
+    npcs: [{ id: "district-kiosk-isole", spriteSet: "tour-isole", wander: false, pal: "aide", x: 10, y: 2, facing: "down", lines: [] }]
   },
   district_feed: {
-    id: "district_feed", name: "CAPITALE DEI FEED", tiles: districtArenaTiles("6"), outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "social_tension",
-    warps: [{ x: 9, y: 11, toMap: "tour_feed", toX: 19, toY: 9, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 19, toY: 9, facing: "down" }],
-    signs: [{ x: 4, y: 5, lines: ["PALAZZO DEL TREND.", "IL FACT-CHECK ARRIVA DOPO LA SPONSORIZZAZIONE."] }], pickups: [{ id: "secret-feed", x: 15, y: 8, itemId: "dirWhatever", qty: 1, hidden: true }],
-    npcs: [{ id: "district-kiosk-feed", pal: "influencer", x: 10, y: 2, facing: "down", lines: [] }]
+    id: "district_feed", name: "CAPITALE DEI FEED", tiles: TOUR_FEED_TILES, outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "social_tension",
+    tileOverrides: { ".": "tiles/tour_feed_floor.png", "=": "tiles/campo_path.png" },
+    objectOverrides: { "6": "tiles/tour_feed_set.png", f: "tiles/tour_rail.png" }, objectSizes: { "6": 96 },
+    warps: [{ x: 9, y: 11, markerLabel: "CENTRALE TOUR", toMap: "tour_feed", toX: 19, toY: 9, facing: "down" }, { x: 10, y: 11, toMap: "tour_feed", toX: 19, toY: 9, facing: "down" }],
+    signs: [{ x: 4, y: 5, lines: ["PALAZZO DEL TREND.", "FONTE: LA STAMPANTE. SMENTITA: LA STESSA STAMPANTE, MA IN CORSIVO."] }], pickups: [{ id: "secret-feed", x: 15, y: 8, itemId: "dirWhatever", qty: 1, hidden: true }],
+    npcs: [{ id: "district-kiosk-feed", spriteSet: "tour-feed", wander: false, pal: "influencer", x: 10, y: 2, facing: "down", lines: [] }]
   },
   palazzo_feed: {
     id: "palazzo_feed", name: "PALAZZO DEI FEED", tiles: PALACE_FEED_LOBBY_TILES,

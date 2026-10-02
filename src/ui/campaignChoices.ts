@@ -6,6 +6,7 @@ import { CAMPAIGN_CHOICES, commitCampaignDecision, previewCampaignDecision, sign
 import { saveGame, type GameState } from "../game/state";
 import { drawCampaignBackdrop } from "./campaignArt";
 import { drawScreenHeader, wrapText } from "./widgets";
+import {dossierPages,drawDossierPage} from './dossier';
 
 export class CampaignChoiceScene implements Scene {
   readonly transparent = false;
@@ -20,13 +21,7 @@ export class CampaignChoiceScene implements Scene {
   }
   private dossier(preview: DecisionPreview): string[][] {
     const paragraphs = preview.ok ? [...preview.lines, ...(this.result ? [CAMPAIGN_CHOICES[this.kind].closing] : [])] : [preview.error];
-    const pages: string[][] = [[]];
-    for (const paragraph of paragraphs) {
-      const lines = wrapText(paragraph.toUpperCase(), 34);
-      if (pages.at(-1)!.length + lines.length > 9) pages.push([]);
-      pages.at(-1)!.push(...lines);
-    }
-    return pages;
+    return dossierPages(paragraphs);
   }
   update(): void {
     const preview = this.result ?? previewCampaignDecision(this.state, this.kind, this.index);
@@ -61,15 +56,7 @@ export class CampaignChoiceScene implements Scene {
     drawCampaignBackdrop(screen, this.kind);
     drawScreenHeader(screen, chapter.title, `${this.state.money}€`);
     if (this.reviewing || this.result) {
-      const lines = this.dossier(preview), pages = lines.length;
-      this.page = Math.min(this.page, pages - 1);
-      screen.panel(8, 25, 224, 132, "card");
-      screen.rect(14, 30, 212, 14, this.result ? "#55a889" : "#f4d34a");
-      screen.text(this.result ? "SCELTA REGISTRATA" : chapter.labels[this.index], 18, 34, "#10141f");
-      screen.textRight(`${this.page + 1}/${pages}`, 220, 34, "#10141f");
-      lines[this.page].forEach((line, i) => screen.text(line, 18, 51 + i * 11, "#17243d"));
-      const action = this.page < pages - 1 ? "A AVANTI" : this.result ? "A CONTINUA" : "A CONFERMA";
-      screen.text(`${action} · ${this.result ? "B ESCI" : "B ANNULLA"} · ◄ ►`, 8, 167, "#ffe38a");
+      this.page=drawDossierPage(screen,this.dossier(preview),this.page,this.result?'SCELTA REGISTRATA':chapter.labels[this.index],!!this.result,this.result?'A CONTINUA':'A CONFERMA',this.result?'B ESCI':'B ANNULLA');
       return;
     }
     const width = Math.floor(224 / chapter.keys.length);

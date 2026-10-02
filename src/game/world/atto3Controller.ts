@@ -1,6 +1,5 @@
 import type { WorldContext } from "./worldContext";
 import type { AllyId } from "../coalition";
-import { districtActionCount } from "../districtCampaign";
 import { CAMPO_VOICES } from "../../data/campo";
 import { futureAccountLines } from "../futureChapter";
 import { diplomacyAccountLines } from "../campaignDecisions";
@@ -82,14 +81,7 @@ export function createAtto3Controller(): Atto3Controller {
         "district-kiosk-feed": "feed"
       } as const)[npcId];
       if (districtId) {
-        const district = context.state.election.districts.find((item) => item.id === districtId);
-        if (districtActionCount(context.state.election, districtId) >= 2) {
-          context.dispatch({ kind: "say", lines: [
-            `DOSSIER ${districtId.toUpperCase()} COMPLETO.`,
-            `CONSENSO LOCALE: ${district?.localConsensus ?? 0}%. DUE AZIONI REGISTRATE.`,
-            "IL COLLEGIO È CHIUSO: IL RISULTATO RESTA NEL TOUR."
-          ] });
-        } else context.dispatch({ kind: "openDistrict", districtId });
+        context.dispatch({ kind: "openDistrict", districtId });
         return true;
       }
       if (npcId === "genova-dj") {

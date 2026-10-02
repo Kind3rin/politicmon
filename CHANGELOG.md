@@ -3,7 +3,7 @@
 ## Redesign in corso — 2026-10-03
 
 - Lotte: Polemica premia mosse diverse e riuscite; Fuorionda o cattura virale, intento avversario visibile e telefono del primo rivale che perde il copione.
-- Mobile: pulsanti di lotta grandi con danni, PP e costi; due tocchi per scegliere una mossa, schermo vicino al controller e comandi laterali in orizzontale, fermi durante i colpi.
+- Mobile: pulsanti di lotta grandi con danni, PP e costi; due tocchi per scegliere una mossa, blocco verticale compatto e comandi laterali in orizzontale, fermi durante i colpi.
 - Avvio: nome/briefing facoltativi, slot vuoto automatico, scelta starter compatta; notifiche di lotta automatiche, traguardi senza interruzioni e apprendimento immediato con slot libero.
 - Primo allenamento: un avversario, squadra curata e nuova prova senza perdere fondi; prima cattura più equilibrata; animazione Fuorionda Higgsfield (0,25 crediti). Budget codice totale 352 KiB (+2 KiB per i comandi accessibili); salvataggi conservati.
 

@@ -32,7 +32,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Starter con quattro dossier, guida rileggibile, riprova dopo sconfitta, pausa scorrevole e viaggio con contratto | `shot:desk`: 514 Chromium/506 WebKit, sei lotte del tutorial via input |
-| Cornice esterna | Schermo vicino ai comandi; pulsanti contestuali grandi nelle lotte, con danni/PP/costi e due tocchi per mossa | Prova touch reale e sette viewport senza overflow; POCO fisico non disponibile |
+| Cornice esterna | Blocco verticale compatto; pulsanti contestuali grandi nelle lotte, con danni/PP/costi e due tocchi per mossa | Prova touch reale e sette viewport senza overflow; POCO fisico non disponibile |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |

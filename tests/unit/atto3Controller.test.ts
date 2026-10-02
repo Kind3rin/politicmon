@@ -5,6 +5,17 @@ import { newGameState } from "../../src/game/state.ts";
 import type { WorldCommand } from "../../src/game/world/worldContext.ts";
 import { CAMPO_VOICES } from "../../src/data/campo.ts";
 
+test("Genova DJ opens both the first set and practice without altering earned state", () => {
+  for (const complete of [false, true]) {
+    const state = newGameState();
+    state.flags["genova-techno-complete"] = complete;
+    const before = JSON.stringify(state), commands: WorldCommand[] = [];
+    assert.equal(createAtto3Controller().interactNpc("genova-dj", { state, dispatch: c => commands.push(c) }), true);
+    assert.deepEqual(commands, [{ kind: "openGenovaTechno" }]);
+    assert.equal(JSON.stringify(state), before);
+  }
+});
+
 test("atto3 controller: candidato emette flag visto e apertura card", () => {
   const state = newGameState();
   const commands: WorldCommand[] = [];

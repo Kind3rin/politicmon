@@ -32,9 +32,10 @@ const bruxellesPaths = JSON.parse(readFileSync('scripts/higgsfield-bruxelles.jso
 const campoPaths = JSON.parse(readFileSync('scripts/higgsfield-campo.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const futurePaths = JSON.parse(readFileSync('scripts/higgsfield-future.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const diplomacyPaths = JSON.parse(readFileSync('scripts/higgsfield-diplomacy.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
+const genovaPaths = JSON.parse(readFileSync('scripts/higgsfield-genova.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const music = JSON.parse(readFileSync('public/audio/catalog.json','utf8'));
 const musicPaths = ['audio/catalog.json', ...Object.values(music).map(a=>a.file)];
-const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths, ...campoPaths, ...futurePaths, ...diplomacyPaths])];
+const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths, ...campoPaths, ...futurePaths, ...diplomacyPaths, ...genovaPaths])];
 const releasePaths = [...paths, ...musicPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
@@ -66,7 +67,7 @@ assert.ok(source.includes('STORICO DEL CONFRONTO'), 'complete chat history missi
 assert.ok(source.includes('EFFETTI REALI'), 'campaign decision previews missing from deployed bundles');
 assert.ok(source.includes('RIPARATO ORA'), 'diplomacy repair missing from deployed bundles');
 assert.ok(source.includes('CHI RESTA AL TAVOLO'), 'personal campaign epilogue missing');
-assert.ok(source.includes('ASPETTA LA ZONA VERDE'), 'timing gameplay missing');
+assert.ok(source.includes('TROPPO PRESTO: ASPETTA')&&source.includes('TASTO SBAGLIATO')&&source.includes('IN RITARDO'), 'distinct rhythm timing/key feedback missing');
 assert.ok(source.includes('TRE RULLI INDIPENDENTI'), 'casino odds dossier missing');
 assert.ok(source.includes('casino-club:'), 'daily club limit missing');
 assert.ok(source.includes('NESSUNA MULTA O TELETRASPORTO'), 'tournament loss contract missing');

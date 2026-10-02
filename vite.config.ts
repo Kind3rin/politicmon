@@ -9,6 +9,25 @@ import { minify } from "terser";
 // quella vecchia viene cancellata dall'activate del SW.
 const BUILD_ID = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
 
+function compactStartupHtml(): Plugin {
+  return {
+    name: "compact-startup-html",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      async handler(html) {
+        const inline = html.match(/<script>([\s\S]*?)<\/script>/);
+        if (inline) {
+          const result = await minify(inline[1]);
+          if (!result.code) throw new Error("First-paint script compilation produced no code");
+          html = html.replace(inline[0], `<script>${result.code}</script>`);
+        }
+        return html.replace(/<!--[^]*?-->/g, "").replace(/\n\s+(?=<)/g, "");
+      }
+    }
+  };
+}
+
 // Sostituisce il placeholder __APP_BUILD_ID__ dentro dist/sw.js dopo la build
 // (i file in public/ sono copiati verbatim, quindi define non li tocca).
 function stampServiceWorker(): Plugin {
@@ -56,11 +75,12 @@ function stampServiceWorker(): Plugin {
 }
 
 export default defineConfig({
+  json: { stringify: false },
   base: "./",
   define: {
     __APP_BUILD_ID__: JSON.stringify(BUILD_ID)
   },
-  plugins: [stampServiceWorker()],
+  plugins: [compactStartupHtml(), stampServiceWorker()],
   build: {
     target: "es2022",
     minify: "terser",

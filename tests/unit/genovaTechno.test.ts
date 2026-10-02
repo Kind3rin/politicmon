@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { newTechnoRun, pressTechno, TECHNO_BEAT_SECONDS, TECHNO_SEQUENCE, technoReward, tickTechno } from "../../src/game/genovaTechno.ts";
+import { newTechnoRun, pressTechno, TECHNO_BEAT_SECONDS, TECHNO_SEQUENCE, technoPressFeedback, technoReward, tickTechno } from "../../src/game/genovaTechno.ts";
 
 test("P5-T04: sequenza completa perfetta produce sei hit", () => {
   let run = newTechnoRun(false);
@@ -35,4 +35,14 @@ test("P5-T04: timeout conta errore solo in modalità normale", () => {
 test("P5-T04: fasce reward restano deterministiche", () => {
   assert.equal(technoReward(4).grade, "IN ONDA");
   assert.equal(technoReward(0).grade, "FUORI TEMPO");
+});
+
+test("Genova: correct key early, wrong key on time and correct key late have distinct feedback", () => {
+  const ready = newTechnoRun(false);
+  assert.equal(technoPressFeedback(ready, "left"), "TROPPO PRESTO: ASPETTA");
+  const onTime = { ...ready, remaining: TECHNO_BEAT_SECONDS / 2 };
+  assert.equal(technoPressFeedback(onTime, "right"), "TASTO SBAGLIATO");
+  assert.equal(technoPressFeedback(onTime, "left"), "A TEMPO!");
+  assert.equal(technoPressFeedback({ ...ready, remaining: .1 }, "left"), "IN RITARDO");
+  assert.equal(technoPressFeedback(newTechnoRun(true), "right"), "TASTO SBAGLIATO");
 });

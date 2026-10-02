@@ -263,7 +263,7 @@ export const QUESTS: QuestDef[] = [
     id: "side-genova-techno", side: true,
     title: "GENOVA TECHNO",
     desc: "Segui sei battute sul maxischermo. Sbagliare cambia il premio, non blocca nulla.",
-    hint: "Dopo Temptation Diplomacy, dall'ala est dell'hotel raggiungi il set. RIDUCI EFFETTI elimina il timer.",
+    hint: "Dall'ala est dell'hotel, parla al DJ. SIN/DES sceglie il timer; B mette in pausa. Puoi allenarti dopo il premio.",
     step: "Completa il set GENOVA TECHNO.",
     isDone: (s) => Boolean(s.flags["genova-techno-complete"]),
     target: { mapId: "diplomacy_lobby", x: 18, y: 10 }

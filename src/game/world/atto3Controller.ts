@@ -93,11 +93,11 @@ export function createAtto3Controller(): Atto3Controller {
         return true;
       }
       if (npcId === "genova-dj") {
-        if (context.state.flags["genova-techno-complete"]) {
-          context.dispatch({ kind: "say", lines: ["DJ: il set è chiuso.", "IL BEAT È STATO SCRUTINATO E IL RISULTATO È DEFINITIVO."] });
-        } else {
-          context.dispatch({ kind: "openGenovaTechno" });
-        }
+        context.dispatch({ kind: "openGenovaTechno" });
+        return true;
+      }
+      if (npcId === "genova-accountant") {
+        context.dispatch({ kind: "say", lines: ["ORE 23: BEAT DA GOVERNO. ORE 8: FATTURA DA PAGARE.", ...diplomacyAccountLines(context.state), context.state.flags["genova-techno-complete"] ? "PREMIO A BILANCIO. DAL DJ PUOI ALLENARTI." : "IL DJ PAGA UNA PROVA: 200-1200 EURO. LE PROMESSE RESTANO."] });
         return true;
       }
       if (npcId === "partner-after" || (npcId === "diplomacy-host" && context.state.flags.diplomacyComplete)) {

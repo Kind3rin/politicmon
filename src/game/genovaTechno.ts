@@ -9,6 +9,12 @@ export function technoInWindow(run: TechnoRun): boolean {
   return run.reducedMotion || Math.abs(run.remaining - TECHNO_BEAT_SECONDS / 2) <= TECHNO_WINDOW_SECONDS;
 }
 
+export function technoPressFeedback(run: TechnoRun, button: TechnoButton): string {
+  if (!run.reducedMotion && run.remaining > TECHNO_BEAT_SECONDS / 2 + TECHNO_WINDOW_SECONDS) return "TROPPO PRESTO: ASPETTA";
+  if (!technoInWindow(run)) return "IN RITARDO";
+  return TECHNO_SEQUENCE[run.index] === button ? "A TEMPO!" : "TASTO SBAGLIATO";
+}
+
 export interface TechnoRun {
   readonly index: number;
   readonly hits: number;

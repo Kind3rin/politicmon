@@ -44,14 +44,18 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Futuro Anteriore | Sede e tre sale proprie, sette cast, verbali prima delle leve, dossier manuale e vivaio guadagnato | Cinque segmenti normali fino al vertice, riparazioni ed evoluzione reali; FUTURO-VERBALE |
 | Hotel Diplomatico | Cinque mappe, cinque cast, tre suite, patti/debiti reali e Partner manuale | Cinque segmenti normali guadagnati fino al Tour; DIPLOMACY-VERBALE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 187.964 byte gzip iniziali, 701 risorse di installazione e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 669 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 187713 byte gzip iniziali, 721 risorse di installazione e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 689 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 484,72; spesa cumulativa 401,25 crediti. Non sono stati attivati acquisti
+verificato: 466,72; spesa cumulativa 419,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: controller mobile
+## Ultimo round: Genova
+
+[GENOVA-VERBALE.md](GENOVA-VERBALE.md): porto e tre cast propri, sequenza visibile, feedback distinto, allenamento riaperto dal DJ e contabile con debiti reali. Dodici job, 21 PNG, 18 crediti; 294 test, quattro percorsi nativi a tempo/senza timer dai salvataggi guadagnati e 214 viste per motore. Offline e budget mantenuti; prove dettagliate e pubblicazione nel [proof](genova-proof.json). Tour e Palazzo restano da ridisegnare; goal attivo.
+
+## Round precedente: controller mobile
 
 [MOBILE-CONTROLS.md](MOBILE-CONTROLS.md): cornice più aperta e comandi adatti ai pollici, croce trascinabile e input indipendenti, notch/rotazione, corsa nativa destra+B da salvataggio guadagnato. 292 test; 20 viewport e dieci percorsi di produzione nei due motori. Cataloghi deduplicati con tutti i dati verificati: bundle 358163 byte gzip, 237 di margine. Pubblicato `df71efb`, CI 37010182278 e tre Vercel riusciti; dieci prove della cornice, sei percorsi Hotel, checksum e PWA pubblici passano. Nessuna generazione a pagamento in questo round. Genova/Tour è il prossimo tratto e il goal integrale resta attivo.
 
@@ -317,3 +321,5 @@ Reload offline solo Chromium. Il redesign integrale resta attivo.
 Priorità aggiornata dall’utente: cornice e controller mobile precedono Genova. Hotel pubblicato `8259273`, CI 37007307216 e tre Vercel riusciti; checksum, PWA e sei percorsi pubblici nativi verificati nei due motori.
 
 [Controller mobile](MOBILE-CONTROLS.md): cornice aperta e controlli in basso/laterali, croce trascinabile, fonti indipendenti per dito/tasto, notch e rotazione. 292 test, 20 viewport dei due motori, dieci percorsi di produzione locale e corsa nativa da codice guadagnato. Cataloghi deduplicati con tutte le proprietà verificate; 358163 byte gzip, 237 di margine. Pubblicazione e verifiche pubbliche registrate nel proof; [Genova/Tour](GENOVA-TOUR-AUDIT.md) rimane la fase successiva.
+
+Genova completata come round locale: [verbale](GENOVA-VERBALE.md). Il seguito prioritario è Tour/Palazzo, comprese le otto segnalazioni strutturali preesistenti nel controllo mappe. Il redesign integrale non è completato.

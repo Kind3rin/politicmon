@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
-import {chromium} from 'playwright';
-const browser=await chromium.launch();
+import {chromium,webkit} from 'playwright';
+const engine=process.env.TEST_BROWSER??'chromium';
+const browser=await ({chromium,webkit})[engine].launch();
 try {
  const page=await browser.newPage({viewport:{width:960,height:720}}), errors=[];
  page.on('pageerror',e=>errors.push(e.message));
@@ -76,6 +77,6 @@ try {
   return {shots,overflow,views};
  });
  assert.deepEqual(errors,[]);assert.deepEqual(result.overflow,[]);
- mkdirSync('artifacts/screens/epilogue',{recursive:true});for(const [name,data] of Object.entries(result.shots))writeFileSync(`artifacts/screens/epilogue/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
+ mkdirSync(`artifacts/screens/epilogue/${engine}`,{recursive:true});for(const [name,data] of Object.entries(result.shots))writeFileSync(`artifacts/screens/epilogue/${engine}/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  console.log(`PASS: ${result.views} native views; four endings at three morale levels, persisted souvenirs, monuments preview/cancel/pay, timed and accessible rhythm, one-time rewards, all six clientelist transactions, zero overflow.`);
 }finally{await browser.close();}

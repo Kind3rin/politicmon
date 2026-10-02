@@ -178,20 +178,20 @@ const DIPLOMACY_TERRACE_TILES = [
 ];
 
 const GENOVA_TECHNO_TILES = [
-  "TTTTTTTTTTTTTTTTTTTT",
-  "TT....ffffffffff..TT",
-  "TT....f===1====f..TT",
-  "TT....ffff==ffff..TT",
-  "TT........==......TT",
-  "TT..7.....==....6.TT",
-  "TT........==......TT",
-  "TT....ffff==ffff..TT",
-  "TT....f========f..TT",
-  "TT....ffff==ffff..TT",
-  "TT........==......TT",
-  "TT........==......TT",
-  "TT........==......TT",
-  "TTTTTTTTTT==TTTTTTTT"
+  "~~~~~~~~~~~~~~~~~~~~",
+  "~....fffffffffff...~",
+  "~.........1=.......~",
+  "~.....3...==..3....~",
+  "~.........==.......~",
+  "~.........==.......~",
+  "~.........==....6..~",
+  "~...ffff=====ffff..~",
+  "~..7......==.......~",
+  "~.........==.......~",
+  "~.........==.......~",
+  "~.........==.......~",
+  "~.........==.......~",
+  "~~~~~~~~~~==~~~~~~~~"
 ];
 
 const TOUR_FEED_TILES = [
@@ -529,18 +529,22 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
   },
   genova_techno: {
     id: "genova_techno", name: "GENOVA TECHNO", tiles: GENOVA_TECHNO_TILES,
+    tileOverrides: { ".": "tiles/genova_quay.png", "=": "tiles/genova_path.png", "~": "tiles/genova_water.png" },
+    objectOverrides: { f: "tiles/genova_fence.png", "1": "tiles/genova_stage.png", "7": "tiles/genova_van.png", "3": "tiles/genova_speaker.png", "6": "tiles/genova_screen.png" },
+    objectSizes: { "1": 96, "7": 48, "3": 32, "6": 64 },
     outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "social_tension",
     warps: [
-      { x: 10, y: 13, toMap: "diplomacy_lobby", toX: 17, toY: 10, facing: "left" },
+      { x: 10, y: 13, toMap: "diplomacy_lobby", toX: 17, toY: 10, facing: "left", markerLabel: "HOTEL" },
       { x: 11, y: 13, toMap: "diplomacy_lobby", toX: 17, toY: 10, facing: "left" }
     ],
     signs: [
-      { x: 4, y: 5, lines: ["VAN STAMPA MOBILE.", "IL COMUNICATO ARRIVA PRIMA DEL RITORNELLO."] },
-      { x: 16, y: 5, lines: ["MAXISCHERMO DEL BEAT.", "SE RIDUCI GLI EFFETTI, IL TEMPO ASPETTA."] }
+      { x: 3, y: 8, lines: ["VAN STAMPA: DIRETTA DAL PORTO.", "FURGONE ARANCIONE. IL BILANCIO ASPETTA IL SUO COLORE."] },
+      { x: 16, y: 6, lines: ["SEI BATTUTE, DA SINISTRA A DESTRA.", "GIALLO: ADESSO. VERDE: HIT. ROSSO: GAFFE."] }
     ], pickups: [],
     npcs: [
-      { id: "genova-dj", pal: "influencer", x: 10, y: 4, facing: "down", lines: [] },
-      { id: "genova-stagehand", pal: "aide", x: 5, y: 8, facing: "right", lines: ["SE SBAGLI, LO CHIAMIAMO REMIX.", "LA STORIA CONTINUA COMUNQUE."] }
+      { id: "genova-dj", spriteSet: "genova-dj", wander: false, pal: "influencer", x: 10, y: 4, facing: "down", lines: [] },
+      { id: "genova-stagehand", spriteSet: "genova-stagehand", wander: false, pal: "aide", x: 5, y: 9, facing: "right", lines: ["SETTE BRACCIA AL PALCO. UNA ALLA LIBERATORIA.", "TASTO GIUSTO IN RITARDO? ERRORE. TASTO SBAGLIATO IN TEMPO? GAFFE.", "SIN/DES SCEGLIE IL MODO. B PAUSA; ANCORA B ESCE SENZA PREMIO."] },
+      { id: "genova-accountant", spriteSet: "genova-accountant", wander: false, pal: "journalist", x: 16, y: 9, facing: "left", lines: [] }
     ]
   },
   tour_feed: {

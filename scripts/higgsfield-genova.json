@@ -1,0 +1,456 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 484.72,
+  "estimatedCredits": 18,
+  "research": [
+    {
+      "url": "https://knowyourmeme.com/memes/making-a-beat-at-11-pm/",
+      "use": "Night-time confidence versus the morning verdict, adapted into original harbor party/accounting satire."
+    }
+  ],
+  "assets": [
+    {
+      "id": "techno",
+      "kind": "background",
+      "width": 240,
+      "height": 163,
+      "aspectRatio": "3:2",
+      "background": "opaque",
+      "index": 0,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. Full-bleed Genoa harbor NIGHT DJ SET illustration: a fictional round silver-gray seal with navy headphones and an orange work vest mixes music on a repurposed shipping-container console under amber harbor lamps. A coral octopus technician holds disconnected cables; a caramel crab accountant quietly holds a long blank receipt. Calm teal water and distant geometric harbor cranes, empty dock, not a crowd. Clear main silhouettes in the UPPER LEFT and upper right corners; center upper third and entire lower half deliberately quiet dark negative space for game panels. The party looks triumphant while the accountant waits with the bill. No UI or framing.",
+      "path": "public/sprites/ui/epilogue/techno.png",
+      "jobId": "e8229fcf-688f-4296-a9ea-9f0cdedde1b4",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141626_e8229fcf-688f-4296-a9ea-9f0cdedde1b4.png",
+      "sourceSha256": "1b6b611a470ae82d9e6fd40bcf528824a9e5a60dd93ce797488712aeb5db19bf",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/epilogue/techno.png": "906353fefcaa21451817df27ddcb11bfdd1996da9901d236a165c3a573cebfe7"
+      },
+      "cropBox": [
+        5,
+        0,
+        1018,
+        688
+      ],
+      "paletteColors": 48
+    },
+    {
+      "id": "quay",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "index": 1,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. ONLY a single quiet seamless flat steel-blue concrete DOCK FLOOR texture tile, almost solid navy-blue-gray, a few tiny subtle scuffs. Plain uninterrupted surface only, no buildings, city, objects, perspective, borders, visible grid or patterns. The whole image IS the floor material, not a scene.",
+      "path": "public/sprites/tiles/genova_quay.png",
+      "jobId": "5a0854d1-4143-4979-a05e-d483c101811f",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141627_5a0854d1-4143-4979-a05e-d483c101811f.png",
+      "sourceSha256": "7f6dc7516793c4255a7b27ca4bb50397a495a0cd433d5f321f2cb6a5fbe2a013",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_quay.png": "05f24d3c9098e0b7d765f70bdc02ff9e225729eda671a7fc7002eb277710f028"
+      }
+    },
+    {
+      "id": "water",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "index": 2,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless calm dark petrol-teal NIGHT HARBOR WATER texture tile. Two or three large quiet broken horizontal ripple shapes in muted teal. Almost uniform dark teal, no foam, bright sparkle, objects, ships, shores, city, landscape or perspective. Entire square is material.",
+      "path": "public/sprites/tiles/genova_water.png",
+      "jobId": "e45afab6-f748-42c5-ac24-5208711794a0",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141626_e45afab6-f748-42c5-ac24-5208711794a0.png",
+      "sourceSha256": "f31ed093e837157078bd3e3902ecdbd722549bf3a6e91d311a04d6376ed0d314",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_water.png": "25e048ba7bf187edf889c5185341a3a589c1a78724855585f95fb0c9624946ef"
+      }
+    },
+    {
+      "id": "path",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "index": 3,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. ONLY a single seamless warm ivory-gray wooden PIER FLOOR texture tile. Two wide horizontal flat plank bands, sparse gentle amber seams. Simple pale ground material readable at sixteen pixels, no objects, rails, buildings, city, perspective or checkerboard. Entire square is floor.",
+      "path": "public/sprites/tiles/genova_path.png",
+      "jobId": "c585b26d-e06d-466b-aea8-e801d7440bf6",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141626_c585b26d-e06d-466b-aea8-e801d7440bf6.png",
+      "sourceSha256": "28bd3fd93cdee80bae93324bea352f027fda02949a9ad859ec3eecd970d35515",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_path.png": "3d0eed802702421aeb457a45a319388d60c13da83e7a22a4eae7ca950948d38b"
+      }
+    },
+    {
+      "id": "fence",
+      "kind": "prop",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "index": 4,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. One very simple galvanized harbor guardrail tile, strict FRONT elevation, one horizontal pale teal pipe between two small dark posts, small amber corner bolts. Straight orthogonal flat line, no perspective. Bold quiet pixel shape fitting one tiny sixteen-pixel square. Isolated on real transparent background, wide transparent margins, no ground or shadow.",
+      "path": "public/sprites/tiles/genova_fence.png",
+      "jobId": "12d6001d-0e8b-4b69-a284-4893256bebe1",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141627_12d6001d-0e8b-4b69-a284-4893256bebe1.png",
+      "sourceSha256": "238b3b311cc8b912cf977bbbaeb1da824298e7ff165591f327fe7c1a63c37bf7",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_fence.png": "22c2f0dc6ca5570b0acbbf8055bb9b24616bf2bd079b802ccb749329375385f8"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "stage",
+      "kind": "prop",
+      "width": 96,
+      "height": 48,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "index": 5,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. One repurposed PETROL TEAL SHIPPING CONTAINER DJ STAGE, front elevation with very shallow orthogonal top face, centered. Wide warm wooden apron and two simple mixing platters, three large amber lamps on a straight overhead truss. Empty of characters. A quiet blank orange panel on front. Crisp low broad silhouette, not isometric, no buildings beyond this isolated prop. Actual transparent background and large transparent margins on every edge.",
+      "path": "public/sprites/tiles/genova_stage.png",
+      "jobId": "9e8e381a-08c5-4652-ac3c-d8316dcae7a8",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141627_9e8e381a-08c5-4652-ac3c-d8316dcae7a8.png",
+      "sourceSha256": "cd1986be8a1444053d0ae2fa8edd9a5fb7e19d3f9d34ecd41584b6277ad59226",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_stage.png": "c075261d2ce3273cf17698ec7e2cdcdd002911d4e32fb0c7b5c8cde0d8e30f40"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "van",
+      "kind": "prop",
+      "width": 48,
+      "height": 32,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "index": 6,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. One squat rusty-orange PRESS BROADCAST VAN with a simple ivory roof dish and rolled blank paper protruding from its rear slot, strict SIDE elevation facing right. Navy wheels, teal window, no writing, branding, objects around it or road. Icon-like broad pixel silhouette, actual transparent background and generous empty margins.",
+      "path": "public/sprites/tiles/genova_van.png",
+      "jobId": "472cf10d-2540-4577-a86e-b96d0c77fe49",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_472cf10d-2540-4577-a86e-b96d0c77fe49.png",
+      "sourceSha256": "da925783cbaae7404a7f8a28af3e3d97e6eaf0feaa2c316dfd28be9850f3a99c",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_van.png": "683102ae28c660b46f36d034fd20063cbccfc82f2bf787946e9448474d78e538"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "speaker",
+      "kind": "prop",
+      "width": 32,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "index": 7,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. One vertical teal-and-navy PA speaker tower on two short orange feet, strict front elevation. Two large ivory circular speaker cones and one amber indicator. Simple bold pixel silhouette, no cables or surroundings, actual transparent background and generous empty margins.",
+      "path": "public/sprites/tiles/genova_speaker.png",
+      "jobId": "567a5d02-77f1-430c-9c02-1876dbc06558",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_567a5d02-77f1-430c-9c02-1876dbc06558.png",
+      "sourceSha256": "d7c6e9051c75345b2006b838ba9bfb57deb6823e0a049412c79c1748c7092b66",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_speaker.png": "889eed7bb66c2d1f63e77e6e734fe9422edb1d801feb0f67d24d8a0b39a8f904"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "screen",
+      "kind": "prop",
+      "width": 64,
+      "height": 48,
+      "aspectRatio": "4:3",
+      "background": "transparent",
+      "index": 8,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. One free-standing large night-harbor LED EQUALIZER SCREEN on two short thick petrol posts, strict front elevation. Inside: exactly six wide low amber and mint bars of varied heights on plain dark navy, no lettering, digits, icons or UI. Very simple readable silhouette with a rusty-orange border. Actual transparent background and generous empty margins.",
+      "path": "public/sprites/tiles/genova_screen.png",
+      "jobId": "363913ff-8f37-428a-9e79-c47ed809a121",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_363913ff-8f37-428a-9e79-c47ed809a121.png",
+      "sourceSha256": "5ffb8519ac86e1263108af9524b617cdc6d63289f69e20e9b97beb8f7c4a5c97",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/genova_screen.png": "daf531efd578d4f4fe4209bbe349ec1c50a053bcbc704f12836f3b3a3277dd6e"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "dj",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "index": 9,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. Character sprite sheet in EXACTLY four equal 2x2 cells, ample transparent padding in every cell. SAME original short silver-gray anthropomorphic SEAL DJ in all cells, navy over-ear headphones, rusty-orange work vest, small ivory belly, rounded flippers, NO instruments. Upright cheerful reserved posture. Top LEFT: faces the viewer SOUTH; top RIGHT: BACK view facing away NORTH; bottom LEFT: strict LEFT-facing WEST profile with muzzle/nose clearly pointing to LEFT edge; bottom RIGHT: strict RIGHT-facing EAST profile with muzzle/nose pointing RIGHT. All four distinct directions, consistent proportions and visible feet, no mirrors duplicated. Real transparent background, no ground, captions, outlines of cells or scenery.",
+      "outputs": [
+        "public/sprites/chars/npc_genova-dj_south.png",
+        "public/sprites/chars/npc_genova-dj_north.png",
+        "public/sprites/chars/npc_genova-dj_west.png",
+        "public/sprites/chars/npc_genova-dj_east.png"
+      ],
+      "jobId": "5c3809df-2448-479a-9079-b087d5aa4d0a",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141816_5c3809df-2448-479a-9079-b087d5aa4d0a.png",
+      "sourceSha256": "815456eb9dbda6c0eb75676339732bffb22eaf8380fc42adf6652072ca1528fd",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_genova-dj_south.png": "5e5ca915483cc7b75e58c7db4dd718e560bf2f172b95ce2398922a04f0df4639",
+        "public/sprites/chars/npc_genova-dj_north.png": "1208c39f8e50df167bc0a18a8ab4056a632b72de73f085c7e1d9d4af90f81144",
+        "public/sprites/chars/npc_genova-dj_west.png": "641941c2145e3aeca21d3072055c8c6477f61722638a0147115b378e472ddb3d",
+        "public/sprites/chars/npc_genova-dj_east.png": "52513b8992a23caefa5e5dc2a04cfc330d6e67a9d5691b10d131e1c2ccb4094f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "stagehand",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "index": 10,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. Character sprite sheet in EXACTLY four equal 2x2 cells with generous transparent padding. SAME original friendly coral OCTOPUS harbor technician wearing a simple ivory hardhat and navy tool belt; large expressive head, several short tentacles forming a compact upright silhouette, one simple wrench in a tentacle, no cables. Top LEFT SOUTH faces viewer, top RIGHT NORTH back view away, bottom LEFT WEST strictly faces LEFT with eyes/body oriented LEFT, bottom RIGHT EAST strictly faces RIGHT with eyes/body oriented RIGHT. Four visibly distinct orientations, consistent proportions, no duplicate mirrored poses. Real transparent background, no ground, scenery, cell grid or captions.",
+      "outputs": [
+        "public/sprites/chars/npc_genova-stagehand_south.png",
+        "public/sprites/chars/npc_genova-stagehand_north.png",
+        "public/sprites/chars/npc_genova-stagehand_west.png",
+        "public/sprites/chars/npc_genova-stagehand_east.png"
+      ],
+      "jobId": "28153893-74c7-4b00-9639-0b113b317210",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_28153893-74c7-4b00-9639-0b113b317210.png",
+      "sourceSha256": "cd1dc0604db76212514a68bc881f87a488cb6b4a43f6b18d6d1afcd880a8e89d",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_genova-stagehand_south.png": "35a1956e7e8dca294f4552d83310b2cb6c98eabd38b34cb2776aaf114ecd5700",
+        "public/sprites/chars/npc_genova-stagehand_north.png": "a5a78d8002d380345fa4124286c7d1d9dd38a650b39dc3abfb38de33a07bfd3d",
+        "public/sprites/chars/npc_genova-stagehand_west.png": "a6ffe78cfccf7632326617c19ed6cff8b7a7b32b38d3df0f01a9af90faae36e0",
+        "public/sprites/chars/npc_genova-stagehand_east.png": "7d79ce530d0d57919f14e0372b80856a407a0ab9613fb63a1319bb19d3397d0f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "accountant",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "index": 11,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, crisp deliberate pixel art with bold shapes readable at tiny native scale. Midnight harbor navy, petrol teal, warm rusty orange, chalk ivory and restrained amber lamps. Flat limited palette, two-tone shading, hard pixel edges. No text, letters, numbers, logos, flags, watermark or real people; no photorealism, gradients, antialiasing or isometric perspective. Character sprite sheet in EXACTLY four equal 2x2 cells with generous transparent padding. SAME original upright caramel-orange CRAB harbor accountant wearing a simple petrol-teal visor, holding an ivory receipt roll and one large navy pencil with claws. Wide eye stalks, compact round shell, two short legs, serious sleepy expression. Top LEFT SOUTH faces viewer; top RIGHT NORTH back view away; bottom LEFT WEST strict LEFT-facing profile with eyes and visor brim pointing LEFT; bottom RIGHT EAST strict RIGHT-facing profile with eyes and brim pointing RIGHT. Four visibly different directions, consistent proportions, no duplicate poses. Real transparent background, no floor, scenery, cell grid or captions.",
+      "outputs": [
+        "public/sprites/chars/npc_genova-accountant_south.png",
+        "public/sprites/chars/npc_genova-accountant_north.png",
+        "public/sprites/chars/npc_genova-accountant_west.png",
+        "public/sprites/chars/npc_genova-accountant_east.png"
+      ],
+      "jobId": "fcf3c86e-015a-48d2-a241-7d88970d96cc",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_fcf3c86e-015a-48d2-a241-7d88970d96cc.png",
+      "sourceSha256": "23c01a3cb34c63580df0729612dfb4c9e5a0c8495f4a57a098d2a60516fd4d07",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_genova-accountant_south.png": "8ef36f027beaddc41858083c1ab6f0b914fe8472bf24e6856bbdb5563a29c9ca",
+        "public/sprites/chars/npc_genova-accountant_north.png": "5e8ef3a09ae5c97aaa9c4841d8a5b8a85b11e990233cb9e3fc97fd8b10c17cb3",
+        "public/sprites/chars/npc_genova-accountant_west.png": "b1011c317f0c1e0e52b263ad767582a2291f576189955de3c834a3a2a7c3b9ca",
+        "public/sprites/chars/npc_genova-accountant_east.png": "89b2e5512201f13885d5ba883a87c9bd01be04bfb3a5ead6374a3fac36fb274b"
+      },
+      "alphaCutoff": 128
+    }
+  ],
+  "jobs": [
+    {
+      "index": 0,
+      "job_id": "e8229fcf-688f-4296-a9ea-9f0cdedde1b4",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141626_e8229fcf-688f-4296-a9ea-9f0cdedde1b4.png"
+    },
+    {
+      "index": 1,
+      "job_id": "5a0854d1-4143-4979-a05e-d483c101811f",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141627_5a0854d1-4143-4979-a05e-d483c101811f.png"
+    },
+    {
+      "index": 2,
+      "job_id": "e45afab6-f748-42c5-ac24-5208711794a0",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141626_e45afab6-f748-42c5-ac24-5208711794a0.png"
+    },
+    {
+      "index": 3,
+      "job_id": "c585b26d-e06d-466b-aea8-e801d7440bf6",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141626_c585b26d-e06d-466b-aea8-e801d7440bf6.png"
+    },
+    {
+      "index": 4,
+      "job_id": "12d6001d-0e8b-4b69-a284-4893256bebe1",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141627_12d6001d-0e8b-4b69-a284-4893256bebe1.png"
+    },
+    {
+      "index": 5,
+      "job_id": "9e8e381a-08c5-4652-ac3c-d8316dcae7a8",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141627_9e8e381a-08c5-4652-ac3c-d8316dcae7a8.png"
+    },
+    {
+      "index": 6,
+      "job_id": "472cf10d-2540-4577-a86e-b96d0c77fe49",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_472cf10d-2540-4577-a86e-b96d0c77fe49.png"
+    },
+    {
+      "index": 7,
+      "job_id": "567a5d02-77f1-430c-9c02-1876dbc06558",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_567a5d02-77f1-430c-9c02-1876dbc06558.png"
+    },
+    {
+      "index": 8,
+      "job_id": "363913ff-8f37-428a-9e79-c47ed809a121",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_363913ff-8f37-428a-9e79-c47ed809a121.png"
+    },
+    {
+      "index": 9,
+      "job_id": "5c3809df-2448-479a-9079-b087d5aa4d0a",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141816_5c3809df-2448-479a-9079-b087d5aa4d0a.png"
+    },
+    {
+      "index": 10,
+      "job_id": "28153893-74c7-4b00-9639-0b113b317210",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_28153893-74c7-4b00-9639-0b113b317210.png"
+    },
+    {
+      "index": 11,
+      "job_id": "fcf3c86e-015a-48d2-a241-7d88970d96cc",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_141814_fcf3c86e-015a-48d2-a241-7d88970d96cc.png"
+    }
+  ],
+  "submissionRejections": [],
+  "balanceAfter": 466.72,
+  "paidCredits": 18,
+  "galleryShown": true,
+  "originalsInspected": true
+}

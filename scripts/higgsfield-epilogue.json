@@ -92,7 +92,8 @@
       "status": "completed",
       "model": "nano_banana_2",
       "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_230555_73d98d64-82e6-4f10-9533-b5c3602c6acd.png",
-      "sourceSha256": "89c30387933f26db3ddd7163f917c59708329a99f6c3a1693468ef8d06ce86da"
+      "sourceSha256": "89c30387933f26db3ddd7163f917c59708329a99f6c3a1693468ef8d06ce86da",
+      "supersededBy": "scripts/higgsfield-genova.json"
     },
     {
       "id": "monument",

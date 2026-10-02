@@ -21,12 +21,13 @@ const bruxellesPaths = JSON.parse(readFileSync('scripts/higgsfield-bruxelles.jso
 const campoPaths = JSON.parse(readFileSync('scripts/higgsfield-campo.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const futurePaths = JSON.parse(readFileSync('scripts/higgsfield-future.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const diplomacyPaths = JSON.parse(readFileSync('scripts/higgsfield-diplomacy.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
+const genovaPaths = JSON.parse(readFileSync('scripts/higgsfield-genova.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const dossierArtPaths = [
   ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
   ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
 ];
 const worldArtPaths = [...worldAssetPaths(), ...hqAssetPaths(), ...nativeFallbackPaths(), ...coreUiPaths(), ...campaignUiPaths(), ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...["archive", "audio"].flatMap(name => JSON.parse(readFileSync(`scripts/higgsfield-${name}.json`, "utf8")).assets.map((a) => a.path.replace(/^public\//, "")))];
-const firstUsePaths = [...new Set([...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths,...offshorePaths,...bruxellesPaths, ...campoPaths, ...futurePaths, ...diplomacyPaths])];
+const firstUsePaths = [...new Set([...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths,...offshorePaths,...bruxellesPaths, ...campoPaths, ...futurePaths, ...diplomacyPaths, ...genovaPaths])];
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;

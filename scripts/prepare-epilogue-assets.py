@@ -44,6 +44,7 @@ def cutout(image, target):
     return result
 
 for asset in manifest['assets']:
+    if asset.get('supersededBy'): continue
     assert asset['status']=='completed'
     source = base/f"{asset['id']}-source.png"
     if not source.exists():

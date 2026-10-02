@@ -15,3 +15,11 @@ La guida mobile conserva i comandi e li descrive più brevemente. Il titolo usa 
 Passano **320 test**, build, contenuti, contratti di input, le dieci prove compilate della guida e l’inventario esatto di **829 risorse PWA**. Il limite completo del codice rimane **358400 byte gzip**; la build locale misura **358264**, compreso il chunk del mondo. Non è una misura della nuova versione sul dominio principale, il cui ultimo deploy è stato limitato dalla quota Vercel. La PWA locale Chromium passa installazione, aggiornamento, riavvio offline e ripresa dal background, con 797 risorse Higgsfield e 19 tracce AAC. La pubblicazione di questo round viene registrata nel proof dopo il suo completamento.
 
 Restano campagne iniziali e seed ulteriori, una campagna a difficoltà alta, prova fisica sul telefono e valutazione del comfort audio. Questa apertura e i percorsi degli interni non sostituiscono quelle verifiche del gameplay.
+
+## Pubblicazione verificata
+
+Runtime `bde332b`, [CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/37058279834). L’[anteprima link-check](https://politicmon-link-check.vercel.app/) contiene il nuovo filmato e tutti i cambiamenti agli interni del round precedente. Video HTTP 200, 242210 byte e SHA-256 identico all’originale locale. Codice pubblico completo: **358262/358400 byte gzip**, 138 byte di margine.
+
+Sull’anteprima passano tutti i **38 casi dell’apertura nei due motori**, compresa la fine effettiva del filmato, verificata tramite l’evento `ended` e la posizione temporale. Chromium passa inoltre aggiornamento, riavvio offline e ripresa della campagna dopo background: 797 risorse Higgsfield e 19 tracce AAC. Il worker viene attivato in 29491 ms nella prova pubblica, entro la soglia standard di 30 secondi; nessuna soglia modificata.
+
+Dominio principale e `test-link` riportano «Deployment rate limited — retry in 24 hours.» per questo commit. Il principale resta a `adde6bc`, con scocca mobile e Palazzo già pubblicati, senza questo nuovo filmato e senza le ultime correzioni degli interni. L’anteprima consente di valutare il nuovo round; la PWA installata dal dominio principale non viene presentata come aggiornata a questa versione.

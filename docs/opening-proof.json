@@ -1,6 +1,6 @@
 {
   "date": "2026-10-02",
-  "status": "local_verified_publication_pending",
+  "status": "preview_verified_primary_rate_limited",
   "goal": "active; full redesign not completed",
   "sourceSha256": {
     "src/engine/intro.ts": "4ad64b4ce14ce761fdd0323a793264af934d87af5102d0e29f07a5b94761dc08",
@@ -840,9 +840,743 @@
     ]
   },
   "publication": {
-    "pending": true,
-    "primaryPreviouslyRateLimited": true,
-    "noQuotaWorkaround": true
+    "pending": false,
+    "runtimeCommit": "bde332bdf7d2a863130cc45641a8450f8b1cc7d1",
+    "ci": {
+      "conclusion": "success",
+      "status": "completed",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37058279834"
+    },
+    "deployments": {
+      "sha": "bde332bdf7d2a863130cc45641a8450f8b1cc7d1",
+      "statuses": [
+        {
+          "context": "Vercel – politicmon",
+          "description": "Deployment rate limited — retry in 24 hours.",
+          "state": "failure",
+          "target_url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+        },
+        {
+          "context": "Vercel – politicmon-test-link",
+          "description": "Deployment rate limited — retry in 24 hours.",
+          "state": "failure",
+          "target_url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+        },
+        {
+          "context": "Vercel – politicmon-link-check",
+          "description": "Deployment has completed",
+          "state": "success",
+          "target_url": "https://vercel.com/kind3rins-projects/politicmon-link-check/GQfGkhGHgwuYDEx2b8sDp8ja9PCN"
+        }
+      ]
+    },
+    "previewUrl": "https://politicmon-link-check.vercel.app/",
+    "primaryUrl": "https://politicmon.vercel.app/",
+    "primaryNewVersionAvailable": false,
+    "primaryPreviousCommit": "adde6bc1fee3dc9e0e3e7bdab486c4ddab41edab",
+    "publicBundle": {
+      "base": "https://politicmon-link-check.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon-link-check.vercel.app/",
+          "bytes": 2122
+        },
+        {
+          "url": "https://politicmon-link-check.vercel.app/sw.js",
+          "bytes": 885
+        },
+        {
+          "url": "https://politicmon-link-check.vercel.app/assets/index-BbDDG0mZ.js",
+          "bytes": 182650
+        },
+        {
+          "url": "https://politicmon-link-check.vercel.app/assets/index-M61wk0N5.css",
+          "bytes": 2996
+        },
+        {
+          "url": "https://politicmon-link-check.vercel.app/assets/WorldScene-huXt5Q3R.js",
+          "bytes": 169609
+        }
+      ],
+      "total": 358262,
+      "budget": 358400,
+      "margin": 138
+    },
+    "publicVideo": {
+      "http": 200,
+      "bytes": 242210,
+      "sha256": "c4898a3a94268935e963c43771720276c89d47bd0f9e5eecd7e7cc734b550bb0",
+      "matchesSource": true
+    },
+    "publicPwa": {
+      "passed": true,
+      "engine": "chromium",
+      "workerReadyMilliseconds": 29491,
+      "higgsfieldAssets": 797,
+      "aacTracks": 19,
+      "offlineReload": true,
+      "backgroundResume": true
+    },
+    "publicLogs": {
+      "bundle": {
+        "path": "/tmp/politicmon-opening-preview-bundle.log",
+        "sha256": "05fe5cb80b29c965a7954d2eeeccd603fc9e2aee69cd9163ca0649884b2a14dd",
+        "text": "PASS deployed bundle: 358262/358400 gzip bytes, 138 margin, 5 files including lazy chunks.\n"
+      },
+      "pwa": {
+        "path": "/tmp/politicmon-opening-pwa-preview.log",
+        "sha256": "9bcd49e6bd29f0ae6ba250f4274e8fd6478d0a384f6abb765480143c1a5fa84d",
+        "text": "\n> politicmon@1.0.0 smoke:pwa:release\n> node scripts/smoke-pwa-release.mjs\n\n[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 29491ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 797 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n"
+      },
+      "opening": {
+        "path": "/tmp/politicmon-opening-release-preview.log",
+        "sha256": "8916738072f9a69866e5c91216657105bd03fe42498280843766c54820fa0606",
+        "text": "\n> politicmon@1.0.0 check:opening:release\n> node scripts/check-opening-release.mjs\n\nPASS chromium opening layout portrait\nPASS chromium opening layout compact\nPASS chromium opening layout landscape\nPASS chromium opening layout compact-landscape\nPASS chromium opening natural-end\nPASS chromium opening tap\nPASS chromium opening reduced-motion\nPASS chromium opening seen\nPASS chromium opening missing-video\nPASS chromium opening autoplay-rejected\nPASS chromium opening stalled-download\nPASS webkit opening layout portrait\nPASS webkit opening layout compact\nPASS webkit opening layout landscape\nPASS webkit opening layout compact-landscape\nPASS webkit opening natural-end\nPASS webkit opening tap\nPASS webkit opening reduced-motion\nPASS webkit opening seen\nPASS webkit opening missing-video\nPASS webkit opening autoplay-rejected\nPASS webkit opening stalled-download\nPASS compiled opening: both engines, safe-area layouts, input isolation, reduced motion, repeat suppression, natural end and failure recovery\n"
+      }
+    },
+    "noQuotaWorkaround": true,
+    "publicOpening": {
+      "base": "https://politicmon-link-check.vercel.app/",
+      "physicalDevice": false,
+      "engines": [
+        {
+          "engine": "chromium",
+          "layouts": [
+            {
+              "name": "portrait",
+              "width": 412,
+              "height": 915,
+              "safe": {
+                "top": 28,
+                "bottom": 24,
+                "left": 0,
+                "right": 0
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 12,
+                    "y": 28,
+                    "right": 400,
+                    "bottom": 49,
+                    "w": 388,
+                    "h": 21
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 12,
+                    "y": 59,
+                    "right": 400,
+                    "bottom": 776.625,
+                    "w": 388,
+                    "h": 717.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 12,
+                    "y": 786.625,
+                    "right": 400,
+                    "bottom": 823,
+                    "w": 388,
+                    "h": 36.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 304.859375,
+                    "y": 833,
+                    "right": 398,
+                    "bottom": 877,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.041667,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            },
+            {
+              "name": "compact",
+              "width": 320,
+              "height": 568,
+              "safe": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 12,
+                    "y": 16,
+                    "right": 308,
+                    "bottom": 37,
+                    "w": 296,
+                    "h": 21
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 12,
+                    "y": 47,
+                    "right": 308,
+                    "bottom": 453.625,
+                    "w": 296,
+                    "h": 406.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 12,
+                    "y": 463.625,
+                    "right": 308,
+                    "bottom": 500,
+                    "w": 296,
+                    "h": 36.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 212.859375,
+                    "y": 510,
+                    "right": 306,
+                    "bottom": 554,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.041667,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            },
+            {
+              "name": "landscape",
+              "width": 915,
+              "height": 412,
+              "safe": {
+                "top": 0,
+                "bottom": 24,
+                "left": 36,
+                "right": 0
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 36,
+                    "y": 16,
+                    "right": 903,
+                    "bottom": 51,
+                    "w": 867,
+                    "h": 35
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 36,
+                    "y": 61,
+                    "right": 903,
+                    "bottom": 259.625,
+                    "w": 867,
+                    "h": 198.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 36,
+                    "y": 269.625,
+                    "right": 903,
+                    "bottom": 320,
+                    "w": 867,
+                    "h": 50.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 807.859375,
+                    "y": 330,
+                    "right": 901,
+                    "bottom": 374,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.041667,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            },
+            {
+              "name": "compact-landscape",
+              "width": 568,
+              "height": 320,
+              "safe": {
+                "top": 0,
+                "bottom": 16,
+                "left": 44,
+                "right": 44
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 44,
+                    "y": 16,
+                    "right": 524,
+                    "bottom": 43,
+                    "w": 480,
+                    "h": 27
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 44,
+                    "y": 53,
+                    "right": 524,
+                    "bottom": 189.625,
+                    "w": 480,
+                    "h": 136.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 44,
+                    "y": 199.625,
+                    "right": 524,
+                    "bottom": 236,
+                    "w": 480,
+                    "h": 36.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 416.859375,
+                    "y": 246,
+                    "right": 510,
+                    "bottom": 290,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.041667,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            }
+          ],
+          "routes": [
+            {
+              "route": "keyboard",
+              "key": "Enter",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "Escape",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "Space",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "z",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "x",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "k",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "j",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "Backspace",
+              "passed": true
+            },
+            {
+              "route": "natural-end",
+              "passed": true,
+              "introRequests": 4
+            },
+            {
+              "route": "tap",
+              "passed": true,
+              "introRequests": 2
+            },
+            {
+              "route": "reduced-motion",
+              "passed": true,
+              "introRequests": 0
+            },
+            {
+              "route": "seen",
+              "passed": true,
+              "introRequests": 0
+            },
+            {
+              "route": "missing-video",
+              "passed": true,
+              "introRequests": 2
+            },
+            {
+              "route": "autoplay-rejected",
+              "passed": true,
+              "introRequests": 1
+            },
+            {
+              "route": "stalled-download",
+              "passed": true,
+              "introRequests": 2
+            }
+          ]
+        },
+        {
+          "engine": "webkit",
+          "layouts": [
+            {
+              "name": "portrait",
+              "width": 412,
+              "height": 915,
+              "safe": {
+                "top": 28,
+                "bottom": 24,
+                "left": 0,
+                "right": 0
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 12,
+                    "y": 28,
+                    "right": 400,
+                    "bottom": 49,
+                    "w": 388,
+                    "h": 21
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 12,
+                    "y": 59,
+                    "right": 400,
+                    "bottom": 776.625,
+                    "w": 388,
+                    "h": 717.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 12,
+                    "y": 786.625,
+                    "right": 400,
+                    "bottom": 823,
+                    "w": 388,
+                    "h": 36.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 304.859375,
+                    "y": 833,
+                    "right": 398,
+                    "bottom": 877,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.042,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            },
+            {
+              "name": "compact",
+              "width": 320,
+              "height": 568,
+              "safe": {
+                "top": 0,
+                "bottom": 0,
+                "left": 0,
+                "right": 0
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 12,
+                    "y": 16,
+                    "right": 308,
+                    "bottom": 37,
+                    "w": 296,
+                    "h": 21
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 12,
+                    "y": 47,
+                    "right": 308,
+                    "bottom": 453.625,
+                    "w": 296,
+                    "h": 406.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 12,
+                    "y": 463.625,
+                    "right": 308,
+                    "bottom": 500,
+                    "w": 296,
+                    "h": 36.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 212.859375,
+                    "y": 510,
+                    "right": 306,
+                    "bottom": 554,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.042,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            },
+            {
+              "name": "landscape",
+              "width": 915,
+              "height": 412,
+              "safe": {
+                "top": 0,
+                "bottom": 24,
+                "left": 36,
+                "right": 0
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 36,
+                    "y": 16,
+                    "right": 903,
+                    "bottom": 51,
+                    "w": 867,
+                    "h": 35
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 36,
+                    "y": 61,
+                    "right": 903,
+                    "bottom": 259.625,
+                    "w": 867,
+                    "h": 198.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 36,
+                    "y": 269.625,
+                    "right": 903,
+                    "bottom": 320,
+                    "w": 867,
+                    "h": 50.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 807.859375,
+                    "y": 330,
+                    "right": 901,
+                    "bottom": 374,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.042,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            },
+            {
+              "name": "compact-landscape",
+              "width": 568,
+              "height": 320,
+              "safe": {
+                "top": 0,
+                "bottom": 16,
+                "left": 44,
+                "right": 44
+              },
+              "geometry": {
+                "boxes": [
+                  {
+                    "id": "intro-brand",
+                    "x": 44,
+                    "y": 16,
+                    "right": 524,
+                    "bottom": 43,
+                    "w": 480,
+                    "h": 27
+                  },
+                  {
+                    "id": "intro-video",
+                    "x": 44,
+                    "y": 53,
+                    "right": 524,
+                    "bottom": 189.625,
+                    "w": 480,
+                    "h": 136.625
+                  },
+                  {
+                    "id": "intro-line",
+                    "x": 44,
+                    "y": 199.625,
+                    "right": 524,
+                    "bottom": 236,
+                    "w": 480,
+                    "h": 36.375
+                  },
+                  {
+                    "id": "intro-skip",
+                    "x": 416.859375,
+                    "y": 246,
+                    "right": 510,
+                    "bottom": 290,
+                    "w": 93.140625,
+                    "h": 44
+                  }
+                ],
+                "video": {
+                  "width": 1112,
+                  "height": 834,
+                  "duration": 4.042,
+                  "muted": true
+                },
+                "inert": true,
+                "focus": "intro-skip"
+              }
+            }
+          ],
+          "routes": [
+            {
+              "route": "keyboard",
+              "key": "Enter",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "Escape",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "Space",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "z",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "x",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "k",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "j",
+              "passed": true
+            },
+            {
+              "route": "keyboard",
+              "key": "Backspace",
+              "passed": true
+            },
+            {
+              "route": "natural-end",
+              "passed": true,
+              "introRequests": 4
+            },
+            {
+              "route": "tap",
+              "passed": true,
+              "introRequests": 1
+            },
+            {
+              "route": "reduced-motion",
+              "passed": true,
+              "introRequests": 0
+            },
+            {
+              "route": "seen",
+              "passed": true,
+              "introRequests": 0
+            },
+            {
+              "route": "missing-video",
+              "passed": true,
+              "introRequests": 1
+            },
+            {
+              "route": "autoplay-rejected",
+              "passed": true,
+              "introRequests": 0
+            },
+            {
+              "route": "stalled-download",
+              "passed": true,
+              "introRequests": 1
+            }
+          ]
+        }
+      ]
+    }
   },
   "localPwa": {
     "passed": true,

@@ -4784,7 +4784,181 @@
     "scripts/shot-shell.mjs": "d6d4b5c672d47655363ab55bbbc0eb0f246a2828b8273a8cdfcffa6d9c93a147"
   },
   "publication": {
-    "pending": true
+    "pending": false,
+    "runtimeCommit": "bec21d09b82a2b9c0a0c4774100cf35ac8d5778b",
+    "url": "https://politicmon.vercel.app/",
+    "ci": {
+      "id": 37043962738,
+      "conclusion": "success",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37043962738"
+    },
+    "vercel": {
+      "politicmon": "DzmckK16C5jyJjkrk1qySYdXNNXR",
+      "politicmon-test-link": "Ccu5TRj3bNXMprhYX4NBUMMt85QN",
+      "politicmon-link-check": "5JT8bZjGCsCiAgpvz3maCjsSDTVL",
+      "all": "success"
+    },
+    "bundle": {
+      "base": "https://politicmon.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon.vercel.app/",
+          "bytes": 2143
+        },
+        {
+          "url": "https://politicmon.vercel.app/sw.js",
+          "bytes": 888
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/index-Bkgqng0a.js",
+          "bytes": 182690
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/index-BAicqtfz.css",
+          "bytes": 2909
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/WorldScene-C8t6ZBLr.js",
+          "bytes": 169725
+        }
+      ],
+      "total": 358355,
+      "budget": 358400,
+      "margin": 45
+    },
+    "compiledLocalGzipBytes": 358240,
+    "publicLayoutConfigurations": 20,
+    "publicRotationTransitions": 6,
+    "publicShellConfigurations": 10,
+    "publicPwaBrowsers": [
+      "chromium",
+      "webkit"
+    ],
+    "publicReportHashes": {
+      "mobile-layout.json": "d3bf9b5902e3dcb0cd9a63fcc13e633fda5a62d57f31b1ba9b9d798f2df4b1ba",
+      "mobile-shell-release.json": "1e49086719c68f3da14785d2062a06fc178e8af2848bb3e6c3a976c6e4fea824",
+      "politicmon-mobile-public-layout.log": "fe0c02fcc1ac074b46bf2cf87e7ff05602b7655db2c5e8d2d0335432d60137dc",
+      "politicmon-mobile-public-shell.log": "aa7fb537d701deff2ed95b5dc95652df5b582dfc17cb181ffff8bcd850d7040a",
+      "politicmon-mobile-public-pwa.log": "4230141def1ef920790d666f6a2bb6ffab6e1c870884c8eed4eed38e9a2e22bf",
+      "politicmon-mobile-public-pwa-webkit.log": "5cdc8ea4a1201f214edceb323c66158411196edb20fb8a77ad560c432ab4c3ae"
+    }
   },
-  "higgsfieldCreditsForController": 0
+  "higgsfieldCreditsForController": 0,
+  "performance": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": false
+    },
+    "boot": {
+      "assetsReadyMs": 1484.5999999940395,
+      "firstFrameMs": 1509.7999999821186,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 568735,
+      "wallMs": 2095.66
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.496,
+          "p50Ms": 0.4,
+          "p95Ms": 1.1,
+          "p99Ms": 1.4,
+          "maxMs": 6.7
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.74,
+          "p50Ms": 16.7,
+          "p95Ms": 18.5,
+          "p99Ms": 18.6,
+          "maxMs": 34.1
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.158,
+          "p50Ms": 0.1,
+          "p95Ms": 0.6,
+          "p99Ms": 0.9,
+          "maxMs": 1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.672,
+          "p50Ms": 16.7,
+          "p95Ms": 18.6,
+          "p99Ms": 18.6,
+          "maxMs": 18.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.299,
+          "p50Ms": 0.2,
+          "p95Ms": 0.9,
+          "p99Ms": 1.1,
+          "maxMs": 1.6
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.665,
+          "p50Ms": 16.7,
+          "p95Ms": 18.5,
+          "p99Ms": 18.7,
+          "maxMs": 18.8
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1088658,
+      "codeGzipBytes": 358240,
+      "initialCodeGzipBytes": 187627,
+      "spriteCompressedBytes": 3748468,
+      "spriteDecodedBytesEstimate": 16840576,
+      "spriteFiles": 736
+    },
+    "save": {
+      "payloadBytes": 8918,
+      "parseMeanMs": 0.0319,
+      "serializeMeanMs": 0.0183
+    }
+  }
 }

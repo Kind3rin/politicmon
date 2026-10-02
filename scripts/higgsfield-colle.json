@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "balanceBefore": 616.97,
+  "balanceAfter": 615.47,
+  "creditsSpent": 1.5,
+  "estimatedCredits": 1.5,
+  "assets": [
+    {
+      "id": "giudice1",
+      "path": "public/sprites/ui/boss/giudice1.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished elegant crisp chunky pixel art panorama readable at 224 x 78 pixels, navy ivory teal burgundy restrained gold palette. No text, letters, numbers or logos, no real recognizable person. Fictional constitutional review room, warm precise lighting, strong clear silhouettes, restrained original satire about institutions. Quiet navy top band for runtime title. All important face and props inside upper sixty percent for a full width top crop. A dignified older female judge with short silver hair, dark robe and teal scarf stands centered beside a simple balance scale. Two identical blank ivory permit cards on the scales, one ordinary, one with a comically tiny gold crown. The crown is being carefully removed so both cards weigh equally. Small stamp on the desk. Background elegant burgundy curtains and spare wooden shelves. Calm wry expression, no cruelty, beautiful modern game briefing art. Recompose this same fictional judge and exact visual metaphor as a much wider panorama, supported 21:9 aspect. Keep the complete head, face, hands and every meaningful metaphor prop visible in the upper eighty percent. Entire top fifteen percent is a completely quiet navy title band with no face or props; bottom eighteen percent only plain dark desk, expendable in a wide crop. Shrink the figure slightly so the complete head stays well below the title band. Balance scale, crown and both cards / key and door / empty chair and spotlight must all be fully visible within this safe composition. Retain crisp original pixel art and character identity; no typography.",
+      "model": "gpt_image_2_5",
+      "jobId": "b1bb2865-89cb-49b8-8617-3e65fd5dce37",
+      "status": "completed",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "referenceJobId": "1d88545b-7a31-4a36-8f7e-2c3975f8154f",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_040320_b1bb2865-89cb-49b8-8617-3e65fd5dce37.png",
+      "sourceSha256": "cac69f6a28fd2893476f7dc7f7b6a727a75154f4e67939d22afacabd0e14e29b",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "e7a0e45d610feb7e85b2ecbdf14537c559698bcdc435eaeee3071872fec0f396"
+    },
+    {
+      "id": "giudice2",
+      "path": "public/sprites/ui/boss/giudice2.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished elegant crisp chunky pixel art panorama readable at 224 x 78 pixels, navy ivory teal burgundy restrained gold palette. No text, letters, numbers or logos, no real recognizable person. Fictional constitutional review room, warm precise lighting, strong clear silhouettes, restrained original satire about institutions. Quiet navy top band for runtime title. All important face and props inside upper sixty percent for a full width top crop. A thoughtful middle aged male judge with glasses and a dark robe stands centered holding a plain small key. Behind him a comically wide conference table full of elaborate keys and gold chairs, none of them matching the tiny single keyhole in an ivory door on the right. Judge has put the correct small ordinary key next to a modest clipboard. Satire about competing powers all claiming ownership of one door. Quiet navy upper edge, upper body and key in upper sixty percent, beautiful modern game briefing art. Recompose this same fictional judge and exact visual metaphor as a much wider panorama, supported 21:9 aspect. Keep the complete head, face, hands and every meaningful metaphor prop visible in the upper eighty percent. Entire top fifteen percent is a completely quiet navy title band with no face or props; bottom eighteen percent only plain dark desk, expendable in a wide crop. Shrink the figure slightly so the complete head stays well below the title band. Balance scale, crown and both cards / key and door / empty chair and spotlight must all be fully visible within this safe composition. Retain crisp original pixel art and character identity; no typography.",
+      "model": "gpt_image_2_5",
+      "jobId": "6400debf-3dd5-414b-8819-ec0f05a7bec3",
+      "status": "completed",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "referenceJobId": "9b455273-047f-4ac3-a312-4d4fb9ca88ff",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_040322_6400debf-3dd5-414b-8819-ec0f05a7bec3.png",
+      "sourceSha256": "e96ee1dbb0d8a96b97e581d9fe8357caad4bb98f38eb6eb055c60b30384ee104",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "fd6cd85bfe8971c57801cfef0685ead6c29427660755adb657f5a441383c01f3"
+    },
+    {
+      "id": "giudice3",
+      "path": "public/sprites/ui/boss/giudice3.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished elegant crisp chunky pixel art panorama readable at 224 x 78 pixels, navy ivory teal burgundy restrained gold palette. No text, letters, numbers or logos, no real recognizable person. Fictional constitutional review room, warm precise lighting, strong clear silhouettes, restrained original satire about institutions. Quiet navy top band for runtime title. All important face and props inside upper sixty percent for a full width top crop. A composed middle aged female judge with dark curly hair and a dark robe stands centered holding open a small ivory book. A powerful gold spotlight on the left points at a tiny gold winner podium, while she gently redirects a second teal light to an ordinary empty chair on the right. One gold crown lies unused on the desk. Satire about protecting the absent person after the winner takes the photograph. Beautiful constitutional chamber with navy shelves and burgundy desk, face and meaningful props in upper sixty percent, clean original modern game briefing art. Recompose this same fictional judge and exact visual metaphor as a much wider panorama, supported 21:9 aspect. Keep the complete head, face, hands and every meaningful metaphor prop visible in the upper eighty percent. Entire top fifteen percent is a completely quiet navy title band with no face or props; bottom eighteen percent only plain dark desk, expendable in a wide crop. Shrink the figure slightly so the complete head stays well below the title band. Balance scale, crown and both cards / key and door / empty chair and spotlight must all be fully visible within this safe composition. Retain crisp original pixel art and character identity; no typography.",
+      "model": "gpt_image_2_5",
+      "jobId": "4ce8613b-dd2e-40da-b934-164dc0780389",
+      "status": "completed",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "referenceJobId": "f5dddbb3-d012-47ba-84f4-64a7c171b622",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_040324_4ce8613b-dd2e-40da-b934-164dc0780389.png",
+      "sourceSha256": "7038afb13deabc78de66ebb8d8db09f49c1e3285ffa8550d2778164564fd96ca",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "fbbde33c6ad5fe744a1b7f53827785070315b4361bd9970574ad0507a2a00412"
+    }
+  ],
+  "iterations": [
+    {
+      "id": "giudice1",
+      "path": "public/sprites/ui/boss/giudice1.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished elegant crisp chunky pixel art panorama readable at 224 x 78 pixels, navy ivory teal burgundy restrained gold palette. No text, letters, numbers or logos, no real recognizable person. Fictional constitutional review room, warm precise lighting, strong clear silhouettes, restrained original satire about institutions. Quiet navy top band for runtime title. All important face and props inside upper sixty percent for a full width top crop. A dignified older female judge with short silver hair, dark robe and teal scarf stands centered beside a simple balance scale. Two identical blank ivory permit cards on the scales, one ordinary, one with a comically tiny gold crown. The crown is being carefully removed so both cards weigh equally. Small stamp on the desk. Background elegant burgundy curtains and spare wooden shelves. Calm wry expression, no cruelty, beautiful modern game briefing art.",
+      "model": "gpt_image_2_5",
+      "jobId": "1d88545b-7a31-4a36-8f7e-2c3975f8154f",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_035017_1d88545b-7a31-4a36-8f7e-2c3975f8154f.png",
+      "cropTop": 100,
+      "crop": "full width, y100, height width*78/224; nearest resize",
+      "sourceSha256": "d6b01ba36e81e1ca159344a301a506790ebfb487f1b0347f319281e1f9907893",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "7232dd898a29320a0f9c31ea2ec40c9fdd86328d8fc912f10394aa0b25f1fef2",
+      "usedInGame": false,
+      "reason": "Title band overlapped the heads in native briefing; recomposed in 21:9."
+    },
+    {
+      "id": "giudice2",
+      "path": "public/sprites/ui/boss/giudice2.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished elegant crisp chunky pixel art panorama readable at 224 x 78 pixels, navy ivory teal burgundy restrained gold palette. No text, letters, numbers or logos, no real recognizable person. Fictional constitutional review room, warm precise lighting, strong clear silhouettes, restrained original satire about institutions. Quiet navy top band for runtime title. All important face and props inside upper sixty percent for a full width top crop. A thoughtful middle aged male judge with glasses and a dark robe stands centered holding a plain small key. Behind him a comically wide conference table full of elaborate keys and gold chairs, none of them matching the tiny single keyhole in an ivory door on the right. Judge has put the correct small ordinary key next to a modest clipboard. Satire about competing powers all claiming ownership of one door. Quiet navy upper edge, upper body and key in upper sixty percent, beautiful modern game briefing art.",
+      "model": "gpt_image_2_5",
+      "jobId": "9b455273-047f-4ac3-a312-4d4fb9ca88ff",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_035019_9b455273-047f-4ac3-a312-4d4fb9ca88ff.png",
+      "cropTop": 72,
+      "crop": "full width, y72, height width*78/224; nearest resize",
+      "sourceSha256": "ba9287d772af4d2df14539295780de00e5fbc812079675292828599e48c64982",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "87b3fceaaca750dd8b5ed35b3528653cb3b158504bda186ae19c704b19dfac44",
+      "usedInGame": false,
+      "reason": "Title band overlapped the heads in native briefing; recomposed in 21:9."
+    },
+    {
+      "id": "giudice3",
+      "path": "public/sprites/ui/boss/giudice3.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished elegant crisp chunky pixel art panorama readable at 224 x 78 pixels, navy ivory teal burgundy restrained gold palette. No text, letters, numbers or logos, no real recognizable person. Fictional constitutional review room, warm precise lighting, strong clear silhouettes, restrained original satire about institutions. Quiet navy top band for runtime title. All important face and props inside upper sixty percent for a full width top crop. A composed middle aged female judge with dark curly hair and a dark robe stands centered holding open a small ivory book. A powerful gold spotlight on the left points at a tiny gold winner podium, while she gently redirects a second teal light to an ordinary empty chair on the right. One gold crown lies unused on the desk. Satire about protecting the absent person after the winner takes the photograph. Beautiful constitutional chamber with navy shelves and burgundy desk, face and meaningful props in upper sixty percent, clean original modern game briefing art.",
+      "model": "gpt_image_2_5",
+      "jobId": "f5dddbb3-d012-47ba-84f4-64a7c171b622",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_035021_f5dddbb3-d012-47ba-84f4-64a7c171b622.png",
+      "cropTop": 72,
+      "crop": "full width, y72, height width*78/224; nearest resize",
+      "sourceSha256": "a37e18ddaf1436ab779125fff778d44b0f5369178c965b80fa8220ed353000b5",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "3188bc432ba5db63035775c46918ec786644dea0bba8271fcea01d7dd983bd12",
+      "usedInGame": false,
+      "reason": "Title band overlapped the heads in native briefing; recomposed in 21:9."
+    }
+  ]
+}

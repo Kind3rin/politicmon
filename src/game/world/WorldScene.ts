@@ -8,7 +8,7 @@ import { CIVIC_EVENTS, CIVIC_NPCS } from "../../data/civicEvents";
 import { CivicScene } from "../../scenes/CivicScene";
 import { BossBriefingScene } from "../../scenes/BossBriefingScene";
 import { trainerStyle } from "../battle/trainerStyle";
-import { changeMorale } from "../morale";
+import { changeMorale, moraleEpilogue } from "../morale";
 import { civicNpcReply } from "../civicChoices";
 import { civicBridgeTile } from "./civicBridge";
 
@@ -2134,12 +2134,10 @@ export class WorldScene implements Scene {
           this.state.flags["boss-beaten"] = true;
           saveGame(this.state);
           this.say([
-            "INCREDIBILE! Hai sconfitto il PRESIDENTE OMBRA!",
-            "Da oggi sei tu il CAMPIONE DI PALAZZOPOLI.",
-            "Mandato pieno, fiducia incondizionata, talk show in ginocchio.",
-            "Ma mentre festeggi... CLACK. Dietro lo scranno scatta una PORTA DORATA.",
-            "Una voce dall'alto: 'La nomina non basta. Serve la CONTROFIRMA del COLLE.'",
-            "La scala in fondo al PALAZZO ora è aperta: la CONSULTA ti aspetta."
+            "Il PRESIDENTE OMBRA consegna la chiave. Il fotografo consegna già la foto: non era interessato al risultato.",
+            "La PORTA DORATA apre il COLLE. Tre prove facoltative, poi il GARANTE. Puoi scendere al bar fra le lotte.",
+            "Fuori dalla stanza, il verbale delle tue scelte resta aperto.",
+            ...moraleEpilogue(this.state.morale)
           ]);
           return;
         }
@@ -2160,11 +2158,11 @@ export class WorldScene implements Scene {
           addSondaggi(this.state, 10);
           saveGame(this.state);
           this.say([
-            "Il GARANTE SUPREMO ripiega gli occhiali e... sorride.",
-            "GARANTE: 'Controfirmato. Con riserva, ma controfirmato.'",
-            "Sei ufficialmente CAMPIONE COSTITUZIONALE DI PALAZZOPOLI!",
-            `I SONDAGGI volano al ${this.state.sondaggi}%: persino gli astenuti applaudono.`,
-            "Si dice che nella sala accanto un DRAGO DEI MERCATI attenda la prossima crisi..."
+            "GARANTE: firmo il mandato. Non firmo una ricevuta in bianco per tutto quello che farai.",
+            `SONDAGGI ${this.state.sondaggi}%. Le telecamere contano gli applausi. Il quartiere conta le corse del bus.`,
+            ...moraleEpilogue(this.state.morale),
+            "START > MORALE: puoi ancora finanziare o riparare i servizi. Il ritardo resta nel registro.",
+            "Nella sala accanto, un DRAGO DEI MERCATI ha sentito la parola stabilità e ha aperto un grafico."
           ]);
         }
       }, isRematch);
@@ -2352,8 +2350,8 @@ export class WorldScene implements Scene {
       if (!tile || tile.water || this.isBlocked(nx, ny)) {
         continue;
       }
-      // Optional challengers must never occupy a door, exit or its approach.
-      if (this.map.warps.some(w => w.x === nx && (w.y === ny || (this.isOutdoorDoorWarp(w) && w.y + 1 === ny)))) {
+      // Keep the door approach and its lateral escape cells free of challengers.
+      if (this.map.warps.some(w => (w.x === nx && w.y === ny) || (this.isOutdoorDoorWarp(w) && w.y + 1 === ny && Math.abs(w.x - nx) <= 1))) {
         continue;
       }
       return { x: nx, y: ny, facing: opp[dir] };

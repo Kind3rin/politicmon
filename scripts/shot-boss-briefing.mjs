@@ -12,6 +12,7 @@ try {
   const {createMonster}=await import('/src/game/monster.ts');
   const {BossBriefingScene}=await import('/src/scenes/BossBriefingScene.ts');
   const {WorldScene}=await import('/src/game/world/WorldScene.ts');
+  const {BOSS_TRAINER_IDS}=await import('/src/game/battle/BattleScene.ts');
   const {BattleIntelScene}=await import('/src/scenes/BattleIntelScene.ts');
   const {makeCombatant}=await import('/src/game/battle/sim.ts');
   const {buildTrainerTeam}=await import('/src/game/world/battleCoordinator.ts');
@@ -40,7 +41,7 @@ try {
   for(const id of BOSS_ART_IDS)for(const hard of [false,true])for(let size=1;size<=6;size++) {
     const state=newGameState();state.hardMode=hard;state.party=partyIds.slice(0,size).map(s=>createMonster(s,55));
     state.party[0].status='indagato';if(size>1)state.party[1].hp=0;state.party[size-1].heldItem='caffettiera';
-    const team=buildTrainerTeam(state,TRAINERS[id],{fallbackTeam:()=>[],bossTrainerIds:BOSS_ART_IDS});
+    const team=buildTrainerTeam(state,TRAINERS[id],{fallbackTeam:()=>[],bossTrainerIds:BOSS_TRAINER_IDS});
     const brief=new BossBriefingScene(stack,input,state,TRAINERS[id],team,()=>{});
     for(let scroll=0;scroll<=Math.max(0,brief.notes().length-3);scroll++) {brief.scroll=scroll;draw(`${id}-${hard}-${size}-${scroll}`,brief,!hard&&size===6&&scroll===0);}
     brief.page=1;for(let i=0;i<size;i++){brief.index=i;draw(`${id}-${hard}-leader-${size}-${i}`,brief,!hard&&id==='boss'&&size===6&&i===5);}
@@ -57,6 +58,13 @@ try {
   if(stack.top?.constructor.name!=='BossBriefingScene')throw Error(`World does not open briefing: ${stack.top?.constructor.name}; flash=${world.encounterFlash}; pending=${Boolean(world.pendingBattle)}; message=${world.msg.isOpen}`);
   const cancelled=stack.top;press(cancelled,'b');
   if(stack.top!==world||JSON.stringify(state)!==before||ended||mp.duelBusy)throw Error('Cancel changed state or left multiplayer busy');
+  for(const id of ['giudice1','giudice2','giudice3','garante']){
+    world.startTrainerBattle(TRAINERS[id],()=>ended++);
+    for(let i=0;i<40&&stack.top===world;i++)world.update(.1);
+    if(stack.top?.constructor.name!=='BossBriefingScene')throw Error('Missing court briefing '+id);
+    press(stack.top,'b');
+    if(stack.top!==world||JSON.stringify(state)!==before||ended||mp.duelBusy)throw Error('Court cancel changed state '+id);
+  }
   world.startTrainerBattle(TRAINERS.boss,()=>ended++);
   for(let i=0;i<40&&stack.top===world;i++)world.update(.1);
   const brief=stack.top;

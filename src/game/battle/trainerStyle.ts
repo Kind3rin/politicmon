@@ -7,6 +7,9 @@ const STYLES: Record<string, TrainerStyle> = {
   funzionario: { style: "balanced", label: "CONTROLLO PRELIMINARE", art: "funzionario", hints: ["Facoltativo: A inizia, B annulla. Prepara mosse, non firme.", "Il bar recupera PV e PP prima di Lady Direttiva."] },
   diplomatico: { style: "balanced", label: "POSTI AL TAVOLO", art: "diplomatico", hints: ["Prova facoltativa. A sfida, B torna. Leggi il tipo di apertura.", "Puoi uscire e recuperare i PP al bar prima di Tycoon."] },
   oligarca: { style: "balanced", label: "CHI PAGA IL CONTO", art: "oligarca", hints: ["Prova facoltativa. A sfida, B torna. Controlla le resistenze.", "Tycoon ha tre avversari: conserva mosse e cure."] },
+  giudice1: { style: "balanced", label: "LA REGOLA COMUNE", art: "giudice1", hints: ["Prova facoltativa. A sfida, B torna. Due avversari, due tipi.", "Puoi scendere al bar di Capitale e recuperare i PP."] },
+  giudice2: { style: "balanced", label: "DI CHI È LA CHIAVE", art: "giudice2", hints: ["Prova facoltativa. START sceglie il leader prima della lotta.", "Controlla tipi e abilità: una sola risposta non copre tutto."] },
+  giudice3: { style: "balanced", label: "LA SEDIA DI CHI PERDE", art: "giudice3", hints: ["Prova facoltativa. Leggi le resistenze e conserva mosse efficaci.", "Il Garante ha quattro avversari. Il bar resta raggiungibile."] },
   emittenza: { style: "pressure", label: "PRIMA SERATA", art: "emittenza", hints: ["Punta su attacchi e status. Una difesa solida vale più del volume della voce.", "Gli status non passano attraverso TEFLON o GARANZIA."] },
   ladydirettiva: { style: "control", label: "PROTOCOLLO", art: "ladydirettiva", hints: ["Cerca di ridurre le statistiche. POLTRONA SALDA protegge dai cali.", "Alterna attacchi e controllo: preparati a cambiare il leader."] },
   tycoon: { style: "rush", label: "ACQUISIZIONE OSTILE", art: "tycoon", hints: ["Privilegia il danno immediato. Anche una mossa debole può chiudere un KO.", "Un attacco prioritario può ribaltare l'ordine. Controlla il dossier."] },
@@ -25,7 +28,7 @@ export function trainerAi(id: string, badge: boolean, hard: boolean, badges: num
   // The first lesson teaches moves and types, before introducing enemy healing.
   if (id === "rival1") return { whiff: hard ? .15 : .33, canHeal: false, finisher: hard, style: "balanced" };
   if (id === "stagista") return { whiff: hard ? .22 : .4, canHeal: false, finisher: hard, style: "balanced" };
-  const boss = (!badge && Boolean(STYLES[id]) && !["funzionario", "diplomatico", "oligarca"].includes(id)) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
+  const boss = (!badge && Boolean(STYLES[id]) && !["funzionario", "diplomatico", "oligarca", "giudice1", "giudice2", "giudice3"].includes(id)) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
   const profile: AiProfile = boss ? { whiff: hard ? .1 : .2, canHeal: true, finisher: true }
     : badge ? { whiff: hard ? .15 : .28, canHeal: true, finisher: true }
     : hard && id ? { whiff: Math.max(.22, .4 - badges * .05), canHeal: true, finisher: true }

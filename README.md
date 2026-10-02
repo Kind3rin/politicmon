@@ -112,6 +112,7 @@ npm run build        # typecheck + bundle di produzione
 | **[docs/PRIMO-ATTO-GAMEPLAY.md](docs/PRIMO-ATTO-GAMEPLAY.md)** | Crescita iniziale, reclutamento, panchina, satira e partite nuove fino alla prima medaglia |
 | **[docs/EUROTOWN-SCELTE.md](docs/EUROTOWN-SCELTE.md)** | Sfide volontarie, cura dei PP, satira del consenso precompilato e tre partite fino a Spread |
 | **[docs/CAPITALE-PREPARAZIONE.md](docs/CAPITALE-PREPARAZIONE.md)** | Percorso 3 e Tower facoltativi, nuova satira, avvio leggero e tre partite fino a Dazio |
+| **[docs/COLLE-VERBALE.md](docs/COLLE-VERBALE.md)** | Tre giudici illustrati, ritorno al bar, morale al finale e campagne native con risultati e limiti |
 | **[docs/RISERVE-DIRETTIVE.md](docs/RISERVE-DIRETTIVE.md)** | Zaino tattico, acquisti per quantità, confronto delle mosse e trenta nuovi oggetti |
 | **[docs/MONDO-CANTIERI.md](docs/MONDO-CANTIERI.md)** | 295 nuove risorse del mondo, otto scelte civiche e passerella persistente |
 | **[docs/QUARTIER-GENERALE.md](docs/QUARTIER-GENERALE.md)** | Titolo, riserva, dossier delle 47 missioni e archivio delle campagne |

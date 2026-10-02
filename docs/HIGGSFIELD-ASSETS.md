@@ -1,5 +1,13 @@
 # Politicmon: risorse Higgsfield
 
+Diciassettesimo blocco: tre giudici illustrati per la Consulta. Sei job
+`gpt_image_2_5`, incluse tre revisioni dell'inquadratura nativa: **1,50
+crediti**, saldo **616,97 → 615,47**, cumulativo **270,50**. Tre PNG 224×78,
+provenienza completa e iterazioni in `higgsfield-colle.json`.
+[COLLE-VERBALE.md](COLLE-VERBALE.md): sedici briefing, satira su regole,
+competenze e diritti, morale letto dal Palazzo e dal Garante; campagne
+nuove e limiti della progressione documentati.
+
 Sedicesimo blocco: tavolo diplomatico e conto dell'oligarca per le due prove
 facoltative della Global Tower. Due job `gpt_image_2_5`, **0,50 crediti**,
 saldo **617,47 → 616,97**, cumulativo **269,00**. Prompt, job, ritagli e

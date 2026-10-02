@@ -1,0 +1,1074 @@
+{
+  "schemaVersion": 1,
+  "method": "New game, native scene inputs, seeded accelerated controller. No assignment of levels, money, outcomes or completion flags. playSeconds is virtual and is not human play time.",
+  "scope": "These policies and one seed; not proof of balance for every team or difficulty.",
+  "runs": [
+    {
+      "codeStage": "baseline-fa07921",
+      "sourceArtifact": "artifacts/campaign-native/colle-baseline-ellyna-prepared-20261002.json",
+      "sourceSha256": "a97e46296c048a3ab066e8393fe6e044138300bd4ed9e6583099c32488449f9b",
+      "starter": "ellyna",
+      "seed": 20261002,
+      "plan": "prepared",
+      "euroPlan": "tactical",
+      "capitalPlan": "prepared",
+      "courtPlan": "direct",
+      "civicPlan": "skip",
+      "controllerFailure": null,
+      "garanteBeaten": false,
+      "steps": 933,
+      "runStats": {
+        "playSeconds": 1025.0000000001633,
+        "steps": 933,
+        "battles": 24,
+        "wins": 19,
+        "losses": 2,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 11,
+        "healingItemsUsed": 13,
+        "healerVisits": 18,
+        "checkpoints": {}
+      },
+      "money": 22030,
+      "morale": {
+        "trust": 50,
+        "cohesion": 60,
+        "progress": 14,
+        "promises": [],
+        "decisions": [],
+        "history": []
+      },
+      "party": [
+        {
+          "id": "schleinix",
+          "level": 30,
+          "hp": 110
+        },
+        {
+          "id": "movimenton",
+          "level": 26,
+          "hp": 103
+        },
+        {
+          "id": "generorso",
+          "level": 24,
+          "hp": 101
+        },
+        {
+          "id": "telecrate",
+          "level": 24,
+          "hp": 97
+        }
+      ],
+      "finalChapterBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ],
+      "observedConclusions": []
+    },
+    {
+      "codeStage": "colle-before-lateral-door-guard",
+      "sourceArtifact": "artifacts/campaign-native/colle-direct-ellyna-prepared-20261002.json",
+      "sourceSha256": "4f7295d6c03e061418826de35cace9d1441208339c84d9b6a556d3d0bdc94a96",
+      "starter": "ellyna",
+      "seed": 20261002,
+      "plan": "prepared",
+      "euroPlan": "tactical",
+      "capitalPlan": "prepared",
+      "courtPlan": "direct",
+      "civicPlan": "skip",
+      "controllerFailure": null,
+      "garanteBeaten": false,
+      "steps": 940,
+      "runStats": {
+        "playSeconds": 1005.30000000016,
+        "steps": 940,
+        "battles": 23,
+        "wins": 18,
+        "losses": 2,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 11,
+        "healingItemsUsed": 12,
+        "healerVisits": 18,
+        "checkpoints": {}
+      },
+      "money": 20830,
+      "morale": {
+        "trust": 50,
+        "cohesion": 60,
+        "progress": 13,
+        "promises": [],
+        "decisions": [],
+        "history": []
+      },
+      "party": [
+        {
+          "id": "schleinix",
+          "level": 27,
+          "hp": 100
+        },
+        {
+          "id": "generorso",
+          "level": 23,
+          "hp": 97
+        },
+        {
+          "id": "movimenton",
+          "level": 26,
+          "hp": 103
+        },
+        {
+          "id": "telecrate",
+          "level": 23,
+          "hp": 93
+        }
+      ],
+      "finalChapterBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ],
+      "observedConclusions": [
+        {
+          "map": "palazzo",
+          "lines": [
+            "Il PRESIDENTE OMBRA consegna la chiave. Il fotografo consegna già la foto: non era interessato al risultato.",
+            "La PORTA DORATA apre il COLLE. Tre prove facoltative, poi il GARANTE. Puoi scendere al bar fra le lotte.",
+            "Fuori dalla stanza, il verbale delle tue scelte resta aperto.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 0 APERTE."
+          ],
+          "trust": 50,
+          "cohesion": 60
+        }
+      ]
+    },
+    {
+      "codeStage": "colle-final",
+      "sourceArtifact": "artifacts/campaign-native/colle-publish-ellyna-prepared-20261002.json",
+      "sourceSha256": "3f5a9d5b53801ed5c356fb3518eb67222e4a31c30e825c14500d0df1d559ae85",
+      "starter": "ellyna",
+      "seed": 20261002,
+      "plan": "prepared",
+      "euroPlan": "tactical",
+      "capitalPlan": "prepared",
+      "courtPlan": "prepared",
+      "civicPlan": "skip",
+      "controllerFailure": null,
+      "garanteBeaten": true,
+      "steps": 1110,
+      "runStats": {
+        "playSeconds": 1122.6000000000745,
+        "steps": 1110,
+        "battles": 25,
+        "wins": 22,
+        "losses": 0,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 4,
+        "healingItemsUsed": 15,
+        "healerVisits": 21,
+        "checkpoints": {}
+      },
+      "money": 30750,
+      "morale": {
+        "trust": 50,
+        "cohesion": 60,
+        "progress": 17,
+        "promises": [],
+        "decisions": [],
+        "history": []
+      },
+      "party": [
+        {
+          "id": "schleinix",
+          "level": 33,
+          "hp": 45
+        },
+        {
+          "id": "movimenton",
+          "level": 28,
+          "hp": 0
+        },
+        {
+          "id": "generorso",
+          "level": 27,
+          "hp": 31
+        },
+        {
+          "id": "telecrate",
+          "level": 27,
+          "hp": 74
+        }
+      ],
+      "finalChapterBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ],
+      "observedConclusions": [
+        {
+          "map": "palazzo",
+          "lines": [
+            "Il PRESIDENTE OMBRA consegna la chiave. Il fotografo consegna già la foto: non era interessato al risultato.",
+            "La PORTA DORATA apre il COLLE. Tre prove facoltative, poi il GARANTE. Puoi scendere al bar fra le lotte.",
+            "Fuori dalla stanza, il verbale delle tue scelte resta aperto.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 0 APERTE."
+          ],
+          "trust": 50,
+          "cohesion": 60
+        },
+        {
+          "map": "colle",
+          "lines": [
+            "GARANTE: firmo il mandato. Non firmo una ricevuta in bianco per tutto quello che farai.",
+            "SONDAGGI 100%. Le telecamere contano gli applausi. Il quartiere conta le corse del bus.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+            "START > MORALE: puoi ancora finanziare o riparare i servizi. Il ritardo resta nel registro.",
+            "Nella sala accanto, un DRAGO DEI MERCATI ha sentito la parola stabilità e ha aperto un grafico."
+          ],
+          "trust": 50,
+          "cohesion": 60
+        }
+      ]
+    },
+    {
+      "codeStage": "colle-final",
+      "sourceArtifact": "artifacts/campaign-native/colle-publish-pledge-giorgetta-prepared-20261002.json",
+      "sourceSha256": "9856a2a09ecfba5a40e4d04ca3e07340bd25a212ea8ca6febc02775b1065b952",
+      "starter": "giorgetta",
+      "seed": 20261002,
+      "plan": "prepared",
+      "euroPlan": "tactical",
+      "capitalPlan": "prepared",
+      "courtPlan": "prepared",
+      "civicPlan": "pledge",
+      "controllerFailure": null,
+      "garanteBeaten": false,
+      "steps": 1077,
+      "runStats": {
+        "playSeconds": 1834.2999999994272,
+        "steps": 1077,
+        "battles": 23,
+        "wins": 16,
+        "losses": 4,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 28,
+        "healingItemsUsed": 37,
+        "healerVisits": 22,
+        "checkpoints": {}
+      },
+      "money": 17070,
+      "morale": {
+        "trust": 40,
+        "cohesion": 54,
+        "progress": 16,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "broken",
+            "dueAt": 4
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "generorso",
+          "level": 25,
+          "hp": 105
+        },
+        {
+          "id": "conteblob",
+          "level": 25,
+          "hp": 100
+        },
+        {
+          "id": "giorgiagon",
+          "level": 30,
+          "hp": 112
+        },
+        {
+          "id": "telecrate",
+          "level": 23,
+          "hp": 93
+        }
+      ],
+      "finalChapterBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ],
+      "observedConclusions": [
+        {
+          "map": "palazzo",
+          "lines": [
+            "Il PRESIDENTE OMBRA consegna la chiave. Il fotografo consegna già la foto: non era interessato al risultato.",
+            "La PORTA DORATA apre il COLLE. Tre prove facoltative, poi il GARANTE. Puoi scendere al bar fra le lotte.",
+            "Fuori dalla stanza, il verbale delle tue scelte resta aperto.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 1 APERTE."
+          ],
+          "trust": 40,
+          "cohesion": 54
+        }
+      ]
+    },
+    {
+      "codeStage": "colle-final",
+      "sourceArtifact": "artifacts/campaign-native/colle-publish-pay-renzino-prepared-20261002.json",
+      "sourceSha256": "1821012abf7be1f048f81f0ae74a39e40817871e28d25835e90134a5ca1bdc93",
+      "starter": "renzino",
+      "seed": 20261002,
+      "plan": "prepared",
+      "euroPlan": "tactical",
+      "capitalPlan": "prepared",
+      "courtPlan": "prepared",
+      "civicPlan": "pay",
+      "controllerFailure": null,
+      "garanteBeaten": false,
+      "steps": 1087,
+      "runStats": {
+        "playSeconds": 1452.2999999997746,
+        "steps": 1087,
+        "battles": 23,
+        "wins": 17,
+        "losses": 3,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 20,
+        "healingItemsUsed": 31,
+        "healerVisits": 21,
+        "checkpoints": {}
+      },
+      "money": 15210,
+      "morale": {
+        "trust": 62,
+        "cohesion": 66,
+        "progress": 15,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "kept",
+            "dueAt": 4
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "salvinator",
+          "level": 30,
+          "hp": 111
+        },
+        {
+          "id": "renzilla",
+          "level": 31,
+          "hp": 111
+        },
+        {
+          "id": "movimenton",
+          "level": 26,
+          "hp": 103
+        },
+        {
+          "id": "generorso",
+          "level": 28,
+          "hp": 115
+        }
+      ],
+      "finalChapterBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ],
+      "observedConclusions": [
+        {
+          "map": "palazzo",
+          "lines": [
+            "Il PRESIDENTE OMBRA consegna la chiave. Il fotografo consegna già la foto: non era interessato al risultato.",
+            "La PORTA DORATA apre il COLLE. Tre prove facoltative, poi il GARANTE. Puoi scendere al bar fra le lotte.",
+            "Fuori dalla stanza, il verbale delle tue scelte resta aperto.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "1 MANTENUTE. 0 RIPARATE. 0 APERTE."
+          ],
+          "trust": 62,
+          "cohesion": 66
+        }
+      ]
+    },
+    {
+      "codeStage": "colle-final-door-regression",
+      "sourceArtifact": "artifacts/campaign-native/colle-door-fixed-ellyna-prepared-20261002.json",
+      "sourceSha256": "eb3b13d9b6292042a1ea73f559590a9140edb3ce5f45dcf3bbfefe8975327c1b",
+      "starter": "ellyna",
+      "seed": 20261002,
+      "plan": "prepared",
+      "euroPlan": "tactical",
+      "capitalPlan": "prepared",
+      "courtPlan": "prepared",
+      "civicPlan": "pledge",
+      "controllerFailure": null,
+      "garanteBeaten": false,
+      "steps": 1032,
+      "runStats": {
+        "playSeconds": 1351.0999999998667,
+        "steps": 1032,
+        "battles": 22,
+        "wins": 17,
+        "losses": 2,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 17,
+        "healingItemsUsed": 28,
+        "healerVisits": 20,
+        "checkpoints": {}
+      },
+      "money": 19490,
+      "morale": {
+        "trust": 40,
+        "cohesion": 54,
+        "progress": 16,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "broken",
+            "dueAt": 4
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "movimenton",
+          "level": 30,
+          "hp": 117
+        },
+        {
+          "id": "schleinix",
+          "level": 31,
+          "hp": 113
+        },
+        {
+          "id": "salvinator",
+          "level": 27,
+          "hp": 101
+        },
+        {
+          "id": "generorso",
+          "level": 28,
+          "hp": 115
+        }
+      ],
+      "finalChapterBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ],
+      "observedConclusions": [
+        {
+          "map": "palazzo",
+          "lines": [
+            "Il PRESIDENTE OMBRA consegna la chiave. Il fotografo consegna già la foto: non era interessato al risultato.",
+            "La PORTA DORATA apre il COLLE. Tre prove facoltative, poi il GARANTE. Puoi scendere al bar fra le lotte.",
+            "Fuori dalla stanza, il verbale delle tue scelte resta aperto.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 1 APERTE."
+          ],
+          "trust": 40,
+          "cohesion": 54
+        }
+      ]
+    }
+  ]
+}

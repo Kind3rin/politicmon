@@ -23,7 +23,8 @@ assert.equal(campaignPaths.length, 5);
 const firstCampaignPaths = JSON.parse(readFileSync('scripts/higgsfield-first-campaign.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const eurotownPaths = JSON.parse(readFileSync('scripts/higgsfield-eurotown.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const capitalPaths = JSON.parse(readFileSync('scripts/higgsfield-capitale.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths];
+const courtPaths = JSON.parse(readFileSync('scripts/higgsfield-colle.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -66,4 +67,6 @@ assert.ok(source.includes('COSTO PER TE: 0€'), 'travel cost dossier missing');
 assert.ok(source.includes('IL FONDALE VUOLE CRESCERE')&&source.includes('PRATICANTE NINO')&&source.includes('PROVA MICROFONO'), 'recruitment/sharing/practice chapter missing');
 assert.ok(source.includes('CONTROLLO PRELIMINARE')&&source.includes('Il pubblico è libero. Il led sopra le sedie suggerisce quanto.'), 'Eurotown examination and original satire missing');
 assert.ok(source.includes('POSTI AL TAVOLO')&&source.includes('CHI PAGA IL CONTO'), 'Global Tower briefings missing');
+assert.ok(source.includes('LA REGOLA COMUNE')&&source.includes('LA SEDIA DI CHI PERDE'), 'Consulta briefings missing');
+assert.ok(source.includes('Il quartiere conta le corse del bus.'), 'personal Colle conclusion missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

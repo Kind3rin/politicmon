@@ -113,17 +113,17 @@ export const QUESTS: QuestDef[] = [
     id: "boss",
     title: "L'UOMO DEL PALAZZO",
     desc: "Con 3 medaglie, entra nel PALAZZO e sconfiggi il PRESIDENTE OMBRA.",
-    hint: "Il portone del Palazzo si apre solo ai candidati decorati.",
+    hint: "Quattro avversari. Il bar recupera PV e PP; l'ambulante di Capitale vende cure da usare in lotta.",
     step: "Con 3 medaglie, entra nel Palazzo.",
     isDone: (s) => Boolean(s.flags["boss-beaten"]),
     target: { mapId: "capitale", x: 14, y: 5 }
   },
   {
-    id: "colle",
-    title: "LA CRISI DEL COLLE",
-    desc: "La vittoria al PALAZZO non basta: serve la controfirma. Supera i 3 GIUDICI della CONSULTA.",
-    hint: "La PORTA DORATA in fondo al PALAZZO ora è aperta. Lassù niente BAR SPORT: preparati.",
-    step: "Sali al COLLE e batti i 3 GIUDICI.",
+    id: "colle", side: true,
+    title: "TRE SEDIE, TRE PROVE",
+    desc: "Tre sfide facoltative al COLLE: regole, competenze e diritti. Preparano la squadra per il GARANTE.",
+    hint: "A apre il briefing, B annulla. Puoi scendere al bar di Capitale fra le prove.",
+    step: "Affronta i tre GIUDICI, nell'ordine che vuoi.",
     isDone: (s) =>
       ["giudice1", "giudice2", "giudice3"].every((id) => s.defeatedTrainers.includes(id)),
     target: { mapId: "palazzo", x: 5, y: 1 }
@@ -132,7 +132,7 @@ export const QUESTS: QuestDef[] = [
     id: "garante",
     title: "LA CONTROFIRMA",
     desc: "Sconfiggi IL GARANTE SUPREMO e fatti controfirmare il mandato.",
-    hint: "Ti aspetta in cima al COLLE, con la penna già in mano.",
+    hint: "Porta dorata. START cambia leader. Prima rifornisci le cure dall'ambulante e recupera i PP al bar.",
     step: "Sconfiggi IL GARANTE SUPREMO.",
     isDone: (s) => Boolean(s.flags["garante-beaten"])
   },

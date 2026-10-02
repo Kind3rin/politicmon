@@ -34,7 +34,7 @@ try{
    if(spot)check(!map.warps.some(exit=>exit.x===spot.x&&(exit.y===spot.y||(w.isOutdoorDoorWarp(exit)&&exit.y+1===spot.y))),`Challenger blocked ${map.id} warp`);
    guarded++;
   }
-  for(const [map,x,y,forbidden]of [['mediopoli',7,11,[7,10]],['mediopoli',7,12,[7,11]],['borgo',4,7,[4,6]]]){
+  for(const [map,x,y,forbidden]of [['mediopoli',7,11,[7,10]],['mediopoli',7,12,[7,11]],['borgo',4,7,[4,6]],['capitale',23,8,[22,8]],['capitale',22,8,[23,8]]]){
    const w=new WorldScene(stack,input,stateAt(map,x,y)),spot=w.freeAdjacentSpot();check(!spot||spot.x!==forbidden[0]||spot.y!==forbidden[1],`Known doorway/pickup obstruction ${map}`);
   }
   for(const hard of [false,true]){

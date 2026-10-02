@@ -35,6 +35,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
+| Palazzo e Colle | Tre prove illustrate e volontarie, rifornimenti accessibili, verbale del morale letto al finale | Partita nuova di Ellyna fino al Garante; altri percorsi e limiti in COLLE-VERBALE |
 | Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 189.284 byte gzip iniziali, checksum e prova PWA |
 | PWA | Precache e primo utilizzo offline dei 533 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
@@ -91,6 +92,17 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[COLLE-VERBALE.md](COLLE-VERBALE.md): tre giudici illustrati e volontari,
+Garante su interazione A, ritorno al bar e guida alle cure. Nuova satira
+su regole comuni, competenze e diritti. Palazzo e Garante leggono il morale
+reale. Ellyna preparata raggiunge il finale da NUOVA PARTITA; i percorsi
+tattici con Giorgetta/Renzino perdono due volte contro il Garante, quindi
+la loro progressione resta aperta. 1,50 crediti, saldo 615,47. 281 test,
+3.690 briefing, 105 viste HQ, 427 checksum locali e 536 asset PWA. Totale
+358.361 byte gzip: 39 byte di margine. Restano progressione delle diverse
+squadre al Colle, atti successivi, audio, scrittura delle altre zone e
+verifica integrale. Il redesign non è dichiarato completo.
 
 [CAPITALE-PREPARAZIONE.md](CAPITALE-PREPARAZIONE.md): sei sfide volontarie,
 due briefing illustrati, nuova satira e guide veritiere di porto/veicoli.

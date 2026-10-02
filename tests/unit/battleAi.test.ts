@@ -76,7 +76,7 @@ test("IA: tutte le specie e le mosse producono punteggi finiti", () => {
 });
 
 test("IA: boss con stili distinti e profili di difficoltà separati", () => {
-  assert.equal(new Set(BOSS_ART_IDS).size,13);
+  assert.equal(new Set(BOSS_ART_IDS).size,16);
   assert.ok(BOSS_ART_IDS.includes("stagista"));
   assert.equal(trainerAi("stagista",false,false,0).canHeal,false);
   assert.equal(trainerAi("stagista",false,true,0).canHeal,false);
@@ -87,6 +87,12 @@ test("IA: boss con stili distinti e profili di difficoltà separati", () => {
     assert.equal(trainerAi(id,false,false,2).canHeal,false);
     assert.equal(trainerAi(id,false,false,2).whiff,.38);
     assert.ok(Math.abs(trainerAi(id,false,true,2).whiff-.3)<1e-12);
+  }
+  for (const id of ["giudice1", "giudice2", "giudice3"]) {
+    assert.equal(trainerAi(id,false,false,3).canHeal,false);
+    assert.equal(trainerAi(id,false,false,3).whiff,.33);
+    assert.equal(trainerAi(id,false,true,3).canHeal,true);
+    assert.equal(trainerAi(id,false,true,3).whiff,.25);
   }
   assert.equal(trainerAi("emittenza",true,false,1).whiff,.28);
   assert.equal(trainerAi("boss",false,true,3).whiff,.1);

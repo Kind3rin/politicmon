@@ -376,22 +376,22 @@ export const TRAINERS: Record<string, TrainerDef> = {
   giudice1: {
     id: "giudice1", name: "GIUDICE ONORARIA", pal: "granny",
     team: [["ursulax", 24], ["calendauro", 25]],
-    intro: ["Primo grado di giudizio: ammissibilità.", "Spoiler: il tuo ricorso è inammissibile."],
-    defeat: ["Ammissibile. Con riserva. E con stupore."],
+    intro: ["La regola vale per tutti. Il tuo ufficio ha aggiunto: salvo il titolare dell'ufficio.", "Ho tolto quella riga. Ora vediamo se sai giocare senza la nota a piè di pagina."],
+    defeat: ["Hai retto una regola comune. Il timbro VIP può tornare nel cassetto."],
     money: 1200
   },
   giudice2: {
     id: "giudice2", name: "GIUDICE EMERITO", pal: "aide",
     team: [["tajanide", 25], ["draghimon", 26]],
-    intro: ["Sono emerito: giudico anche in pensione.", "La mia giurisprudenza ti seppellirà di rinvii."],
-    defeat: ["Mi rimetto... alla Corte. E al divano."],
+    intro: ["Tre uffici rivendicano la porta. Nessuno ha riparato la serratura.", "Il tavolo delle competenze è completo. Manca solo qualcuno competente."],
+    defeat: ["Assegno la chiave a chi sa usarla. Il tavolo può smettere di riunirsi."],
     money: 1300
   },
   giudice3: {
     id: "giudice3", name: "GIUDICE SUPREMA", pal: "journalist",
     team: [["xipanda", 27], ["putingrad", 27]],
-    intro: ["Ultimo grado: legittimità costituzionale.", "Ho cassato riforme intere. Tu sei un comma."],
-    defeat: ["Sentenza ribaltata... depositerò le motivazioni tra nove anni."],
+    intro: ["La tua foto della vittoria è perfetta. Chi non ti ha votato è stato tagliato via.", "Rimetto quella sedia nell'inquadratura. I diritti non dipendono dal fotografo."],
+    defeat: ["C'è posto anche per chi ha perso. Puoi tenere la foto: la sedia resta qui."],
     money: 1500
   },
   garante: {

@@ -192,8 +192,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     signs: [
       // Spostati da (0,1)/(11,1): erano fiancheggiati da macchine `k` e muri `A`
       // (illeggibili). (3,0)/(8,0) hanno pavimento sotto → leggibili da (3,1)/(8,1).
-      { x: 3, y: 0, lines: ["Albo dei governi:", "68 in 80 anni. Nuovo record europeo."] },
-      { x: 8, y: 0, lines: ["Registro visite:", "'Lobbista, lobbista, lobbista, idraulico, lobbista.'"] }
+      { x: 3, y: 0, lines: ["ARCHIVIO DEI PROGRAMMI:", "Cartella ESEGUITI: vuota. Il tecnico dice che almeno si apre subito."] },
+      { x: 8, y: 0, lines: ["REGISTRO VISITE:", "L'idraulico aspetta. La perdita è urgente, ma non ha un ufficio stampa."] }
     ],
     pickups: [],
     npcs: [
@@ -205,9 +205,9 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       {
         id: "boss-after", pal: "boss", x: 2, y: 2, facing: "down", showIfFlag: "boss-beaten",
         lines: [
-          "Hai vinto, per ora. Ma ricorda:",
-          "i governi passano, io resto. Ci vediamo alla prossima crisi.",
-          "La PORTA DORATA lassù? Porta al COLLE. Nessuno è mai tornato... promosso."
+          "La stanza è tua. La cartella BOZZE è ancora piena: quella non applaude.",
+          "Al COLLE trovi tre prove facoltative e il GARANTE. Puoi tornare al bar di Capitale fra le lotte.",
+          "Il portone non sparisce quando esci. Per una volta, nemmeno il problema."
         ]
       }
     ]
@@ -226,40 +226,40 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     signs: [
       {
         x: 0, y: 3,
-        lines: ["ALBO DELLA CONSULTA:", "tre giudici, zero appelli, nessuna pausa caffè.", "Da qui in poi niente BAR SPORT: portati le scorte."]
+        lines: ["PROVE DELLA CONSULTA:", "tre sfide facoltative: regole, competenze, diritti. A apre il briefing, B annulla.", "Puoi scendere dal Palazzo e recuperare PV e PP al bar di Capitale, anche fra le prove."]
       },
       {
         x: 11, y: 5,
-        lines: ["AVVISO AI CANDIDATI:", "vietato l'ingresso ai sondaggisti.", "Le toghe non si misurano in percentuale."]
+        lines: ["PRIMA DEL GARANTE:", "quattro avversari. START sceglie il leader. Il bar recupera PV e PP; l'ambulante di Capitale vende cure.", "Il fotografo chiede una vittoria senza ombre. Abbiamo acceso la luce anche sull'altra sedia."]
       }
     ],
     pickups: [],
     npcs: [
       {
         id: "tr-giudice1", pal: "granny", x: 2, y: 6, facing: "right",
-        trainerId: "giudice1", sightRange: 4,
-        lines: ["La forma è sostanza. E la tua è rivedibile."]
+        trainerId: "giudice1",
+        lines: ["La regola vale anche per chi la firma. Prova facoltativa: A."]
       },
       {
         id: "tr-giudice2", pal: "aide", x: 9, y: 4, facing: "left",
-        trainerId: "giudice2", sightRange: 4,
-        lines: ["Ho bocciato leggi più simpatiche di te."]
+        trainerId: "giudice2",
+        lines: ["Una porta, tre uffici, nessuna chiave. Prova facoltativa: A."]
       },
       {
         id: "tr-giudice3", pal: "journalist", x: 2, y: 2, facing: "right",
-        trainerId: "giudice3", sightRange: 4,
-        lines: ["Tre gradi di giudizio. Sei al terzo."]
+        trainerId: "giudice3",
+        lines: ["Chi perde resta nella stanza. Prova facoltativa: A."]
       },
       {
         id: "tr-garante", pal: "boss", x: 5, y: 1, facing: "down",
-        trainerId: "garante", sightRange: 5, hideIfFlag: "garante-beaten",
+        trainerId: "garante", hideIfFlag: "garante-beaten",
         lines: []
       },
       {
         id: "garante-after", pal: "boss", x: 2, y: 1, facing: "down", showIfFlag: "garante-beaten",
         lines: [
-          "GARANTE: la controfirma non si revoca. Purtroppo per te, ora tocca governare.",
-          "Torna quando vuoi: il COLLE è sempre aperto. Le dimissioni, mai accettate."
+          "GARANTE: il mandato è firmato. Le promesse non si archiviano con la stessa penna.",
+          "START > MORALE conserva le date. Il cittadino aspetta il servizio, non questa cerimonia."
         ]
       },
       {
@@ -270,14 +270,11 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
           level: 30,
           flag: "legend-draghimon-gone",
           lines: [
-            "USCIERE DEL COLLE: da questa porta si evoca solo in caso di crisi.",
-            "Tu hai appena risolto una crisi. Tecnicamente... ne serve un'altra.",
-            "Lo spread sussulta. Un'ombra elegante esce dalla sala dei bilanci.",
-            "DRAGHIMON ti osserva, in silenzio. Whatever."
+            "USCIERE: avevamo scritto stabile. Il grafico ha chiesto rispetto per la sua carriera.",
+            "DRAGHIMON esce dai bilanci. Non applaude: vuole sapere come hai pagato le sedie."
           ],
           afterRunLines: [
-            "DRAGHIMON torna ai suoi grafici senza voltarsi.",
-            "L'usciere sospira: 'Riproveremo alla prossima manovra.'"
+            "DRAGHIMON riapre il grafico. L'usciere: torna pure, il confronto resta disponibile."
           ],
           afterGoneLines: [
             "La sala dei bilanci è vuota. Lo spread riposa.",
@@ -296,14 +293,11 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
           level: 49,
           flag: "legend-mattarellux-gone",
           lines: [
-            "USCIERE DEL COLLE: c'è ancora qualcuno che vuole conoscerti.",
-            "Le porte del Quirinale si socchiudono. Nessun clamore, solo garbo.",
-            "Un'aura istituzionale riempie la sala: MATTARELLUX ti osserva, paziente.",
-            "\"Volevo andare in pensione. Ma prima, mettiamoci alla prova.\""
+            "MATTARELLUX ha preparato la valigia. Sopra c'è una pratica urgente: è diventata una scrivania.",
+            "Vuole un confronto. Il livello 49 spiega perché la valigia aspetta ancora."
           ],
           afterRunLines: [
-            "MATTARELLUX annuisce e torna ai suoi doveri, senza rancore.",
-            "L'usciere sorride: 'Il GARANTE SUPREMO sa aspettare. Torna quando vuoi.'"
+            "MATTARELLUX rimette la pratica sulla valigia. Puoi tornare a sfidarlo."
           ],
           afterGoneLines: [
             "La sala presidenziale è di nuovo silenziosa e ordinata.",

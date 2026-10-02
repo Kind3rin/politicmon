@@ -31,7 +31,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Starter con quattro dossier, guida rileggibile, riprova dopo sconfitta, pausa scorrevole e viaggio con contratto | `shot:desk`: 514 Chromium/506 WebKit, sei lotte del tutorial via input |
-| Cornice esterna | Pagina moderna, guida che ferma gli aggiornamenti, focus e controlli touch senza sovrapposizioni | `shot:shell`: 20 configurazioni, Chromium/WebKit, pause mondo/lotta, input e salvataggio reali |
+| Cornice esterna | Superficie aperta, comandi in basso/laterali, croce trascinabile, input indipendenti per dito/tasto e notch | 20 viewport, dieci prove pubbliche nei due motori; corsa nativa da codice guadagnato, pause mondo/lotta e save |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
@@ -44,14 +44,18 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Futuro Anteriore | Sede e tre sale proprie, sette cast, verbali prima delle leve, dossier manuale e vivaio guadagnato | Cinque segmenti normali fino al vertice, riparazioni ed evoluzione reali; FUTURO-VERBALE |
 | Hotel Diplomatico | Cinque mappe, cinque cast, tre suite, patti/debiti reali e Partner manuale | Cinque segmenti normali guadagnati fino al Tour; DIPLOMACY-VERBALE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 188.046 byte gzip iniziali, 701 risorse di installazione e prova PWA |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 187.964 byte gzip iniziali, 701 risorse di installazione e prova PWA |
 | PWA | Precache e primo utilizzo offline dei 669 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
 verificato: 484,72; spesa cumulativa 401,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: Hotel Diplomatico
+## Ultimo round: controller mobile
+
+[MOBILE-CONTROLS.md](MOBILE-CONTROLS.md): cornice più aperta e comandi adatti ai pollici, croce trascinabile e input indipendenti, notch/rotazione, corsa nativa destra+B da salvataggio guadagnato. 292 test; 20 viewport e dieci percorsi di produzione nei due motori. Cataloghi deduplicati con tutti i dati verificati: bundle 358163 byte gzip, 237 di margine. Pubblicato `df71efb`, CI 37010182278 e tre Vercel riusciti; dieci prove della cornice, sei percorsi Hotel, checksum e PWA pubblici passano. Nessuna generazione a pagamento in questo round. Genova/Tour è il prossimo tratto e il goal integrale resta attivo.
+
+## Round precedente: Hotel Diplomatico
 
 [DIPLOMACY-VERBALE.md](DIPLOMACY-VERBALE.md): 35 PNG, cinque cast, suite distinte, padiglione a vetri e Partner manuale. Cinque segmenti guadagnati verificano riparazione, secondo strappo, sondaggi saturi e Futurorso realmente reclutato nel tratto precedente. Il premio inizializza nuovi collegi e mantiene i conti civici. 37,5 crediti, saldo 484,72; 291 test, 20 direzioni del cast nei due motori, 153 viste delle scelte, 563 checksum grafici, 669 asset offline e 19 AAC. Font lossless con digest dei 66 glifi; bundle 358245 byte su 358400, p95 massimo 17,6 ms. Verifiche di pubblicazione registrate in [diplomacy-proof.json](diplomacy-proof.json) dopo il deploy. Prossimo tratto in [GENOVA-TOUR-AUDIT.md](GENOVA-TOUR-AUDIT.md); il goal generale resta attivo.
 
@@ -312,4 +316,4 @@ Reload offline solo Chromium. Il redesign integrale resta attivo.
 
 Priorità aggiornata dall’utente: cornice e controller mobile precedono Genova. Hotel pubblicato `8259273`, CI 37007307216 e tre Vercel riusciti; checksum, PWA e sei percorsi pubblici nativi verificati nei due motori.
 
-[Controller mobile](MOBILE-CONTROLS.md): cornice aperta e controlli in basso/laterali, croce trascinabile, fonti indipendenti per dito/tasto, notch e rotazione. 292 test, 20 viewport dei due motori, dieci percorsi di produzione locale e corsa nativa da codice guadagnato. Cataloghi deduplicati con tutte le proprietà verificate; 358163 byte gzip, 237 di margine. Pubblicazione del round in corso; [Genova/Tour](GENOVA-TOUR-AUDIT.md) rimane la fase successiva.
+[Controller mobile](MOBILE-CONTROLS.md): cornice aperta e controlli in basso/laterali, croce trascinabile, fonti indipendenti per dito/tasto, notch e rotazione. 292 test, 20 viewport dei due motori, dieci percorsi di produzione locale e corsa nativa da codice guadagnato. Cataloghi deduplicati con tutte le proprietà verificate; 358163 byte gzip, 237 di margine. Pubblicazione e verifiche pubbliche registrate nel proof; [Genova/Tour](GENOVA-TOUR-AUDIT.md) rimane la fase successiva.

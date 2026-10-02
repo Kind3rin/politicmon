@@ -1,6 +1,6 @@
 {
   "date": "2026-10-02",
-  "status": "Verified locally; public deployment pending",
+  "status": "Published and verified at https://politicmon.vercel.app/",
   "goal": "Full redesign remains active. Mobile request implemented; Genova/Tour/Palace and wider redesign remain.",
   "sourceSha256": {
     "index.html": "7efac8361f938a5950006b7cab681bbcae14a55de76fe43b33fc8717823dbd11",
@@ -3398,5 +3398,882 @@
     "paidJobsThisRound": 0,
     "lastConfirmedBalance": 484.72,
     "hotelProof": "docs/diplomacy-proof.json"
+  },
+  "publication": {
+    "commit": "df71efbc930eb14ad1dd13819354924cb57a53c9",
+    "ci": {
+      "id": 37010182278,
+      "name": "CI",
+      "node_id": "WFR_kwLOS5soMs8AAAAInfqQhg",
+      "head_branch": "master",
+      "head_sha": "df71efbc930eb14ad1dd13819354924cb57a53c9",
+      "path": ".github/workflows/ci.yml",
+      "display_title": "Redesign mobile controls with captured drag and independent input sou…",
+      "run_number": 217,
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "workflow_id": 306282975,
+      "check_suite_id": 100246726129,
+      "check_suite_node_id": "CS_kwDOS5soMs8AAAAXVyul8Q",
+      "url": "https://api.github.com/repos/Kind3rin/politicmon/actions/runs/37010182278",
+      "html_url": "https://github.com/Kind3rin/politicmon/actions/runs/37010182278",
+      "pull_requests": [],
+      "created_at": "2026-10-02T13:00:35Z",
+      "updated_at": "2026-10-02T13:01:20Z",
+      "actor": {
+        "login": "Kind3rin",
+        "id": 72454268,
+        "node_id": "MDQ6VXNlcjcyNDU0MjY4",
+        "avatar_url": "https://avatars.githubusercontent.com/u/72454268?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/Kind3rin",
+        "html_url": "https://github.com/Kind3rin",
+        "followers_url": "https://api.github.com/users/Kind3rin/followers",
+        "following_url": "https://api.github.com/users/Kind3rin/following{/other_user}",
+        "gists_url": "https://api.github.com/users/Kind3rin/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/Kind3rin/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/Kind3rin/subscriptions",
+        "organizations_url": "https://api.github.com/users/Kind3rin/orgs",
+        "repos_url": "https://api.github.com/users/Kind3rin/repos",
+        "events_url": "https://api.github.com/users/Kind3rin/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/Kind3rin/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "run_attempt": 1,
+      "referenced_workflows": [],
+      "run_started_at": "2026-10-02T13:00:35Z",
+      "triggering_actor": {
+        "login": "Kind3rin",
+        "id": 72454268,
+        "node_id": "MDQ6VXNlcjcyNDU0MjY4",
+        "avatar_url": "https://avatars.githubusercontent.com/u/72454268?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/Kind3rin",
+        "html_url": "https://github.com/Kind3rin",
+        "followers_url": "https://api.github.com/users/Kind3rin/followers",
+        "following_url": "https://api.github.com/users/Kind3rin/following{/other_user}",
+        "gists_url": "https://api.github.com/users/Kind3rin/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/Kind3rin/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/Kind3rin/subscriptions",
+        "organizations_url": "https://api.github.com/users/Kind3rin/orgs",
+        "repos_url": "https://api.github.com/users/Kind3rin/repos",
+        "events_url": "https://api.github.com/users/Kind3rin/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/Kind3rin/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "jobs_url": "https://api.github.com/repos/Kind3rin/politicmon/actions/runs/37010182278/jobs",
+      "logs_url": "https://api.github.com/repos/Kind3rin/politicmon/actions/runs/37010182278/logs",
+      "check_suite_url": "https://api.github.com/repos/Kind3rin/politicmon/check-suites/100246726129",
+      "artifacts_url": "https://api.github.com/repos/Kind3rin/politicmon/actions/runs/37010182278/artifacts",
+      "cancel_url": "https://api.github.com/repos/Kind3rin/politicmon/actions/runs/37010182278/cancel",
+      "rerun_url": "https://api.github.com/repos/Kind3rin/politicmon/actions/runs/37010182278/rerun",
+      "previous_attempt_url": null,
+      "workflow_url": "https://api.github.com/repos/Kind3rin/politicmon/actions/workflows/306282975",
+      "head_commit": {
+        "id": "df71efbc930eb14ad1dd13819354924cb57a53c9",
+        "tree_id": "7981c1c0ff69530863b53d3ae434461d9a313f79",
+        "message": "Redesign mobile controls with captured drag and independent input sources",
+        "timestamp": "2026-10-02T13:00:30Z",
+        "author": {
+          "name": "Luca Tiengo",
+          "email": "lucat220297@gmail.com"
+        },
+        "committer": {
+          "name": "Luca Tiengo",
+          "email": "lucat220297@gmail.com"
+        }
+      },
+      "repository": {
+        "id": 1268459570,
+        "node_id": "R_kgDOS5soMg",
+        "name": "politicmon",
+        "full_name": "Kind3rin/politicmon",
+        "private": false,
+        "owner": {
+          "login": "Kind3rin",
+          "id": 72454268,
+          "node_id": "MDQ6VXNlcjcyNDU0MjY4",
+          "avatar_url": "https://avatars.githubusercontent.com/u/72454268?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/Kind3rin",
+          "html_url": "https://github.com/Kind3rin",
+          "followers_url": "https://api.github.com/users/Kind3rin/followers",
+          "following_url": "https://api.github.com/users/Kind3rin/following{/other_user}",
+          "gists_url": "https://api.github.com/users/Kind3rin/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/Kind3rin/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/Kind3rin/subscriptions",
+          "organizations_url": "https://api.github.com/users/Kind3rin/orgs",
+          "repos_url": "https://api.github.com/users/Kind3rin/repos",
+          "events_url": "https://api.github.com/users/Kind3rin/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/Kind3rin/received_events",
+          "type": "User",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "html_url": "https://github.com/Kind3rin/politicmon",
+        "description": "Clone di Pokemon a tema satira politica italiana - TypeScript, canvas 2D, mobile/PWA, multiplayer P2P. Giocabile su https://politicmon.vercel.app",
+        "fork": false,
+        "url": "https://api.github.com/repos/Kind3rin/politicmon",
+        "forks_url": "https://api.github.com/repos/Kind3rin/politicmon/forks",
+        "keys_url": "https://api.github.com/repos/Kind3rin/politicmon/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/Kind3rin/politicmon/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/Kind3rin/politicmon/teams",
+        "hooks_url": "https://api.github.com/repos/Kind3rin/politicmon/hooks",
+        "issue_events_url": "https://api.github.com/repos/Kind3rin/politicmon/issues/events{/number}",
+        "events_url": "https://api.github.com/repos/Kind3rin/politicmon/events",
+        "assignees_url": "https://api.github.com/repos/Kind3rin/politicmon/assignees{/user}",
+        "branches_url": "https://api.github.com/repos/Kind3rin/politicmon/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/Kind3rin/politicmon/tags",
+        "blobs_url": "https://api.github.com/repos/Kind3rin/politicmon/git/blobs{/sha}",
+        "git_tags_url": "https://api.github.com/repos/Kind3rin/politicmon/git/tags{/sha}",
+        "git_refs_url": "https://api.github.com/repos/Kind3rin/politicmon/git/refs{/sha}",
+        "trees_url": "https://api.github.com/repos/Kind3rin/politicmon/git/trees{/sha}",
+        "statuses_url": "https://api.github.com/repos/Kind3rin/politicmon/statuses/{sha}",
+        "languages_url": "https://api.github.com/repos/Kind3rin/politicmon/languages",
+        "stargazers_url": "https://api.github.com/repos/Kind3rin/politicmon/stargazers",
+        "contributors_url": "https://api.github.com/repos/Kind3rin/politicmon/contributors",
+        "subscribers_url": "https://api.github.com/repos/Kind3rin/politicmon/subscribers",
+        "subscription_url": "https://api.github.com/repos/Kind3rin/politicmon/subscription",
+        "commits_url": "https://api.github.com/repos/Kind3rin/politicmon/commits{/sha}",
+        "git_commits_url": "https://api.github.com/repos/Kind3rin/politicmon/git/commits{/sha}",
+        "comments_url": "https://api.github.com/repos/Kind3rin/politicmon/comments{/number}",
+        "issue_comment_url": "https://api.github.com/repos/Kind3rin/politicmon/issues/comments{/number}",
+        "contents_url": "https://api.github.com/repos/Kind3rin/politicmon/contents/{+path}",
+        "compare_url": "https://api.github.com/repos/Kind3rin/politicmon/compare/{base}...{head}",
+        "merges_url": "https://api.github.com/repos/Kind3rin/politicmon/merges",
+        "archive_url": "https://api.github.com/repos/Kind3rin/politicmon/{archive_format}{/ref}",
+        "downloads_url": "https://api.github.com/repos/Kind3rin/politicmon/downloads",
+        "issues_url": "https://api.github.com/repos/Kind3rin/politicmon/issues{/number}",
+        "pulls_url": "https://api.github.com/repos/Kind3rin/politicmon/pulls{/number}",
+        "milestones_url": "https://api.github.com/repos/Kind3rin/politicmon/milestones{/number}",
+        "notifications_url": "https://api.github.com/repos/Kind3rin/politicmon/notifications{?since,all,participating}",
+        "labels_url": "https://api.github.com/repos/Kind3rin/politicmon/labels{/name}",
+        "releases_url": "https://api.github.com/repos/Kind3rin/politicmon/releases{/id}",
+        "deployments_url": "https://api.github.com/repos/Kind3rin/politicmon/deployments"
+      },
+      "head_repository": {
+        "id": 1268459570,
+        "node_id": "R_kgDOS5soMg",
+        "name": "politicmon",
+        "full_name": "Kind3rin/politicmon",
+        "private": false,
+        "owner": {
+          "login": "Kind3rin",
+          "id": 72454268,
+          "node_id": "MDQ6VXNlcjcyNDU0MjY4",
+          "avatar_url": "https://avatars.githubusercontent.com/u/72454268?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/Kind3rin",
+          "html_url": "https://github.com/Kind3rin",
+          "followers_url": "https://api.github.com/users/Kind3rin/followers",
+          "following_url": "https://api.github.com/users/Kind3rin/following{/other_user}",
+          "gists_url": "https://api.github.com/users/Kind3rin/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/Kind3rin/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/Kind3rin/subscriptions",
+          "organizations_url": "https://api.github.com/users/Kind3rin/orgs",
+          "repos_url": "https://api.github.com/users/Kind3rin/repos",
+          "events_url": "https://api.github.com/users/Kind3rin/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/Kind3rin/received_events",
+          "type": "User",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "html_url": "https://github.com/Kind3rin/politicmon",
+        "description": "Clone di Pokemon a tema satira politica italiana - TypeScript, canvas 2D, mobile/PWA, multiplayer P2P. Giocabile su https://politicmon.vercel.app",
+        "fork": false,
+        "url": "https://api.github.com/repos/Kind3rin/politicmon",
+        "forks_url": "https://api.github.com/repos/Kind3rin/politicmon/forks",
+        "keys_url": "https://api.github.com/repos/Kind3rin/politicmon/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/Kind3rin/politicmon/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/Kind3rin/politicmon/teams",
+        "hooks_url": "https://api.github.com/repos/Kind3rin/politicmon/hooks",
+        "issue_events_url": "https://api.github.com/repos/Kind3rin/politicmon/issues/events{/number}",
+        "events_url": "https://api.github.com/repos/Kind3rin/politicmon/events",
+        "assignees_url": "https://api.github.com/repos/Kind3rin/politicmon/assignees{/user}",
+        "branches_url": "https://api.github.com/repos/Kind3rin/politicmon/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/Kind3rin/politicmon/tags",
+        "blobs_url": "https://api.github.com/repos/Kind3rin/politicmon/git/blobs{/sha}",
+        "git_tags_url": "https://api.github.com/repos/Kind3rin/politicmon/git/tags{/sha}",
+        "git_refs_url": "https://api.github.com/repos/Kind3rin/politicmon/git/refs{/sha}",
+        "trees_url": "https://api.github.com/repos/Kind3rin/politicmon/git/trees{/sha}",
+        "statuses_url": "https://api.github.com/repos/Kind3rin/politicmon/statuses/{sha}",
+        "languages_url": "https://api.github.com/repos/Kind3rin/politicmon/languages",
+        "stargazers_url": "https://api.github.com/repos/Kind3rin/politicmon/stargazers",
+        "contributors_url": "https://api.github.com/repos/Kind3rin/politicmon/contributors",
+        "subscribers_url": "https://api.github.com/repos/Kind3rin/politicmon/subscribers",
+        "subscription_url": "https://api.github.com/repos/Kind3rin/politicmon/subscription",
+        "commits_url": "https://api.github.com/repos/Kind3rin/politicmon/commits{/sha}",
+        "git_commits_url": "https://api.github.com/repos/Kind3rin/politicmon/git/commits{/sha}",
+        "comments_url": "https://api.github.com/repos/Kind3rin/politicmon/comments{/number}",
+        "issue_comment_url": "https://api.github.com/repos/Kind3rin/politicmon/issues/comments{/number}",
+        "contents_url": "https://api.github.com/repos/Kind3rin/politicmon/contents/{+path}",
+        "compare_url": "https://api.github.com/repos/Kind3rin/politicmon/compare/{base}...{head}",
+        "merges_url": "https://api.github.com/repos/Kind3rin/politicmon/merges",
+        "archive_url": "https://api.github.com/repos/Kind3rin/politicmon/{archive_format}{/ref}",
+        "downloads_url": "https://api.github.com/repos/Kind3rin/politicmon/downloads",
+        "issues_url": "https://api.github.com/repos/Kind3rin/politicmon/issues{/number}",
+        "pulls_url": "https://api.github.com/repos/Kind3rin/politicmon/pulls{/number}",
+        "milestones_url": "https://api.github.com/repos/Kind3rin/politicmon/milestones{/number}",
+        "notifications_url": "https://api.github.com/repos/Kind3rin/politicmon/notifications{?since,all,participating}",
+        "labels_url": "https://api.github.com/repos/Kind3rin/politicmon/labels{/name}",
+        "releases_url": "https://api.github.com/repos/Kind3rin/politicmon/releases{/id}",
+        "deployments_url": "https://api.github.com/repos/Kind3rin/politicmon/deployments"
+      }
+    },
+    "vercel": {
+      "state": "success",
+      "statuses": [
+        {
+          "url": "https://api.github.com/repos/Kind3rin/politicmon/statuses/df71efbc930eb14ad1dd13819354924cb57a53c9",
+          "avatar_url": "https://avatars.githubusercontent.com/in/8329?v=4",
+          "id": 55449289300,
+          "node_id": "SC_kwDOS5soMs8AAAAM6QkCVA",
+          "state": "success",
+          "description": "Deployment has completed",
+          "target_url": "https://vercel.com/kind3rins-projects/politicmon-link-check/CAdFNS9L7DPyJGyiKCwMaNPCLiGE",
+          "context": "Vercel – politicmon-link-check",
+          "created_at": "2026-10-02T13:01:09Z",
+          "updated_at": "2026-10-02T13:01:09Z"
+        },
+        {
+          "url": "https://api.github.com/repos/Kind3rin/politicmon/statuses/df71efbc930eb14ad1dd13819354924cb57a53c9",
+          "avatar_url": "https://avatars.githubusercontent.com/in/8329?v=4",
+          "id": 55449293209,
+          "node_id": "SC_kwDOS5soMs8AAAAM6QkRmQ",
+          "state": "success",
+          "description": "Deployment has completed",
+          "target_url": "https://vercel.com/kind3rins-projects/politicmon-test-link/7HVubo1XweLLoAHPxsp6i8ThiiZn",
+          "context": "Vercel – politicmon-test-link",
+          "created_at": "2026-10-02T13:01:13Z",
+          "updated_at": "2026-10-02T13:01:13Z"
+        },
+        {
+          "url": "https://api.github.com/repos/Kind3rin/politicmon/statuses/df71efbc930eb14ad1dd13819354924cb57a53c9",
+          "avatar_url": "https://avatars.githubusercontent.com/in/8329?v=4",
+          "id": 55449331615,
+          "node_id": "SC_kwDOS5soMs8AAAAM6Qmnnw",
+          "state": "success",
+          "description": "Deployment has completed",
+          "target_url": "https://vercel.com/kind3rins-projects/politicmon/evLLMu17hRyHaNs14PDfUe9Vkw5y",
+          "context": "Vercel – politicmon",
+          "created_at": "2026-10-02T13:01:49Z",
+          "updated_at": "2026-10-02T13:01:49Z"
+        }
+      ],
+      "sha": "df71efbc930eb14ad1dd13819354924cb57a53c9",
+      "total_count": 3,
+      "repository": {
+        "id": 1268459570,
+        "node_id": "R_kgDOS5soMg",
+        "name": "politicmon",
+        "full_name": "Kind3rin/politicmon",
+        "private": false,
+        "owner": {
+          "login": "Kind3rin",
+          "id": 72454268,
+          "node_id": "MDQ6VXNlcjcyNDU0MjY4",
+          "avatar_url": "https://avatars.githubusercontent.com/u/72454268?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/Kind3rin",
+          "html_url": "https://github.com/Kind3rin",
+          "followers_url": "https://api.github.com/users/Kind3rin/followers",
+          "following_url": "https://api.github.com/users/Kind3rin/following{/other_user}",
+          "gists_url": "https://api.github.com/users/Kind3rin/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/Kind3rin/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/Kind3rin/subscriptions",
+          "organizations_url": "https://api.github.com/users/Kind3rin/orgs",
+          "repos_url": "https://api.github.com/users/Kind3rin/repos",
+          "events_url": "https://api.github.com/users/Kind3rin/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/Kind3rin/received_events",
+          "type": "User",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "html_url": "https://github.com/Kind3rin/politicmon",
+        "description": "Clone di Pokemon a tema satira politica italiana - TypeScript, canvas 2D, mobile/PWA, multiplayer P2P. Giocabile su https://politicmon.vercel.app",
+        "fork": false,
+        "url": "https://api.github.com/repos/Kind3rin/politicmon",
+        "forks_url": "https://api.github.com/repos/Kind3rin/politicmon/forks",
+        "keys_url": "https://api.github.com/repos/Kind3rin/politicmon/keys{/key_id}",
+        "collaborators_url": "https://api.github.com/repos/Kind3rin/politicmon/collaborators{/collaborator}",
+        "teams_url": "https://api.github.com/repos/Kind3rin/politicmon/teams",
+        "hooks_url": "https://api.github.com/repos/Kind3rin/politicmon/hooks",
+        "issue_events_url": "https://api.github.com/repos/Kind3rin/politicmon/issues/events{/number}",
+        "events_url": "https://api.github.com/repos/Kind3rin/politicmon/events",
+        "assignees_url": "https://api.github.com/repos/Kind3rin/politicmon/assignees{/user}",
+        "branches_url": "https://api.github.com/repos/Kind3rin/politicmon/branches{/branch}",
+        "tags_url": "https://api.github.com/repos/Kind3rin/politicmon/tags",
+        "blobs_url": "https://api.github.com/repos/Kind3rin/politicmon/git/blobs{/sha}",
+        "git_tags_url": "https://api.github.com/repos/Kind3rin/politicmon/git/tags{/sha}",
+        "git_refs_url": "https://api.github.com/repos/Kind3rin/politicmon/git/refs{/sha}",
+        "trees_url": "https://api.github.com/repos/Kind3rin/politicmon/git/trees{/sha}",
+        "statuses_url": "https://api.github.com/repos/Kind3rin/politicmon/statuses/{sha}",
+        "languages_url": "https://api.github.com/repos/Kind3rin/politicmon/languages",
+        "stargazers_url": "https://api.github.com/repos/Kind3rin/politicmon/stargazers",
+        "contributors_url": "https://api.github.com/repos/Kind3rin/politicmon/contributors",
+        "subscribers_url": "https://api.github.com/repos/Kind3rin/politicmon/subscribers",
+        "subscription_url": "https://api.github.com/repos/Kind3rin/politicmon/subscription",
+        "commits_url": "https://api.github.com/repos/Kind3rin/politicmon/commits{/sha}",
+        "git_commits_url": "https://api.github.com/repos/Kind3rin/politicmon/git/commits{/sha}",
+        "comments_url": "https://api.github.com/repos/Kind3rin/politicmon/comments{/number}",
+        "issue_comment_url": "https://api.github.com/repos/Kind3rin/politicmon/issues/comments{/number}",
+        "contents_url": "https://api.github.com/repos/Kind3rin/politicmon/contents/{+path}",
+        "compare_url": "https://api.github.com/repos/Kind3rin/politicmon/compare/{base}...{head}",
+        "merges_url": "https://api.github.com/repos/Kind3rin/politicmon/merges",
+        "archive_url": "https://api.github.com/repos/Kind3rin/politicmon/{archive_format}{/ref}",
+        "downloads_url": "https://api.github.com/repos/Kind3rin/politicmon/downloads",
+        "issues_url": "https://api.github.com/repos/Kind3rin/politicmon/issues{/number}",
+        "pulls_url": "https://api.github.com/repos/Kind3rin/politicmon/pulls{/number}",
+        "milestones_url": "https://api.github.com/repos/Kind3rin/politicmon/milestones{/number}",
+        "notifications_url": "https://api.github.com/repos/Kind3rin/politicmon/notifications{?since,all,participating}",
+        "labels_url": "https://api.github.com/repos/Kind3rin/politicmon/labels{/name}",
+        "releases_url": "https://api.github.com/repos/Kind3rin/politicmon/releases{/id}",
+        "deployments_url": "https://api.github.com/repos/Kind3rin/politicmon/deployments"
+      },
+      "commit_url": "https://api.github.com/repos/Kind3rin/politicmon/commits/df71efbc930eb14ad1dd13819354924cb57a53c9",
+      "url": "https://api.github.com/repos/Kind3rin/politicmon/commits/df71efbc930eb14ad1dd13819354924cb57a53c9/status"
+    },
+    "shell": [
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "width": 320,
+        "height": 568,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 12,
+            "y": 123,
+            "right": 308,
+            "bottom": 345
+          },
+          "#touch-move": {
+            "x": 12,
+            "y": 390,
+            "right": 156,
+            "bottom": 534
+          },
+          "#touch-buttons": {
+            "x": 180,
+            "y": 404,
+            "right": 308,
+            "bottom": 520
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 308,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "width": 390,
+        "height": 844,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 12,
+            "y": 228.75,
+            "right": 378,
+            "bottom": 503.25
+          },
+          "#touch-move": {
+            "x": 12,
+            "y": 654,
+            "right": 168,
+            "bottom": 810
+          },
+          "#touch-buttons": {
+            "x": 228,
+            "y": 667,
+            "right": 378,
+            "bottom": 797
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 378,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "width": 568,
+        "height": 320,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 196,
+            "y": 113,
+            "right": 372,
+            "bottom": 245
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 107,
+            "right": 188,
+            "bottom": 251
+          },
+          "#touch-buttons": {
+            "x": 396,
+            "y": 121,
+            "right": 524,
+            "bottom": 237
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 524,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "width": 844,
+        "height": 390,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 216.671875,
+            "y": 60,
+            "right": 627.328125,
+            "bottom": 368
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 142,
+            "right": 188,
+            "bottom": 286
+          },
+          "#touch-buttons": {
+            "x": 672,
+            "y": 156,
+            "right": 800,
+            "bottom": 272
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 800,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "width": 1280,
+        "height": 800,
+        "bounds": {
+          "x": 184,
+          "y": 70.296875,
+          "width": 912,
+          "height": 684
+        }
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "width": 320,
+        "height": 568,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 12,
+            "y": 123,
+            "right": 308,
+            "bottom": 345
+          },
+          "#touch-move": {
+            "x": 12,
+            "y": 390,
+            "right": 156,
+            "bottom": 534
+          },
+          "#touch-buttons": {
+            "x": 180,
+            "y": 404,
+            "right": 308,
+            "bottom": 520
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 308,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "width": 390,
+        "height": 844,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 12,
+            "y": 228.734375,
+            "right": 378,
+            "bottom": 503.234375
+          },
+          "#touch-move": {
+            "x": 12,
+            "y": 653.984375,
+            "right": 168,
+            "bottom": 809.984375
+          },
+          "#touch-buttons": {
+            "x": 228,
+            "y": 666.984375,
+            "right": 378,
+            "bottom": 796.984375
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 378,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "width": 568,
+        "height": 320,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 196,
+            "y": 113,
+            "right": 372,
+            "bottom": 245
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 107,
+            "right": 188,
+            "bottom": 251
+          },
+          "#touch-buttons": {
+            "x": 396,
+            "y": 121,
+            "right": 524,
+            "bottom": 237
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 524,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "width": 844,
+        "height": 390,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 216.671875,
+            "y": 60,
+            "right": 627.328125,
+            "bottom": 368
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 142,
+            "right": 188,
+            "bottom": 286
+          },
+          "#touch-buttons": {
+            "x": 672,
+            "y": 156,
+            "right": 800,
+            "bottom": 272
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 800,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "width": 1280,
+        "height": 800,
+        "bounds": {
+          "x": 184,
+          "y": 70.296875,
+          "width": 912,
+          "height": 684
+        }
+      }
+    ],
+    "hotel": [
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "0fa452272d6d5b42cc38d80378c20396fe2da3adca01e519feb713b0eae39da4",
+        "stage": "diplomacy-arrival",
+        "target": "diplomacy_home",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_reception.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_wall.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_home_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_home.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-producer_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/ui/campaign/diplomacy.png?v=2026-10-02T13-01-26"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot, continue, movement and warp keys",
+          "choice or boss dossier opened and cancelled, or earned Tour entered",
+          "new artwork loaded",
+          "money, party, morale, coalition, election retained"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "dce4300d6ce67b6082fa9c71edac030358f4bc1b5f7b61c77ab33fbe2a048f90",
+        "stage": "diplomacy-choice",
+        "target": "diplomacy_terrace",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_reception.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_wall.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_west.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_north.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_terrace_path.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_home.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_stage.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_hotel.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-partner_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-partner_west.png?v=2026-10-02T13-01-26"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot, continue, movement and warp keys",
+          "choice or boss dossier opened and cancelled, or earned Tour entered",
+          "new artwork loaded",
+          "money, party, morale, coalition, election retained"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "301277d188b9be7abe11c5500aece186406878ad5deac76146756ebb692b71bf",
+        "stage": "diplomacy-verbale",
+        "target": "tour_feed",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_wall.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_reception.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_west.png?v=2026-10-02T13-01-26"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot, continue, movement and warp keys",
+          "choice or boss dossier opened and cancelled, or earned Tour entered",
+          "new artwork loaded",
+          "money, party, morale, coalition, election retained"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "0fa452272d6d5b42cc38d80378c20396fe2da3adca01e519feb713b0eae39da4",
+        "stage": "diplomacy-arrival",
+        "target": "diplomacy_home",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_reception.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_wall.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_home.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_home_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-producer_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/ui/campaign/diplomacy.png?v=2026-10-02T13-01-26"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot, continue, movement and warp keys",
+          "choice or boss dossier opened and cancelled, or earned Tour entered",
+          "new artwork loaded",
+          "money, party, morale, coalition, election retained"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "dce4300d6ce67b6082fa9c71edac030358f4bc1b5f7b61c77ab33fbe2a048f90",
+        "stage": "diplomacy-choice",
+        "target": "diplomacy_terrace",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_reception.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_wall.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_north.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_terrace_path.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_home.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_hotel.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_stage.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-partner_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-partner_west.png?v=2026-10-02T13-01-26"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot, continue, movement and warp keys",
+          "choice or boss dossier opened and cancelled, or earned Tour entered",
+          "new artwork loaded",
+          "money, party, morale, coalition, election retained"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "301277d188b9be7abe11c5500aece186406878ad5deac76146756ebb692b71bf",
+        "stage": "diplomacy-verbale",
+        "target": "tour_feed",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_wall.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_floor.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/tiles/diplomacy_reception.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_west.png?v=2026-10-02T13-01-26",
+          "https://politicmon.vercel.app/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T13-01-26"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot, continue, movement and warp keys",
+          "choice or boss dossier opened and cancelled, or earned Tour entered",
+          "new artwork loaded",
+          "money, party, morale, coalition, election retained"
+        ]
+      }
+    ],
+    "checksums": "PASS: 563 deployed PNG checksums, 20 audio/catalog checksums and civic dialogue/bridge code at https://politicmon.vercel.app.\n",
+    "offline": {
+      "chromium": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 17263ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 669 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n",
+      "webkit": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 3662ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 669 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (webkit/iPhone 13): installazione, runtime, sprite, cache, update, precache offline verificata (reload offline non supportato da Playwright WebKit) e resume.\n"
+    }
   }
 }

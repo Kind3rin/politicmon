@@ -1,6 +1,6 @@
 # Genova, Tour e Palazzo: prossimo tratto
 
-Priorità aggiornata: prima di questo tratto si ridisegnano cornice e controller mobile su richiesta dell’utente.
+Cornice e controller mobile richiesti dall’utente sono ora pubblicati e verificati: [MOBILE-CONTROLS.md](MOBILE-CONTROLS.md). Questo tratto riprende come prossimo capitolo.
 
 Audit del 2 ottobre 2026 sul sorgente dopo il nuovo Hotel. Cinque segmenti guadagnati vincono il Partner e arrivano al Tour. Questo non dimostra che il seguito sia ridisegnato.
 
@@ -10,4 +10,4 @@ Il gameplay effettivo in `src/game/genovaTechno.ts` ha sei input: sinistra, A, d
 
 Il Tour conserva hub e cinque ambienti/azioni del sistema elettorale. La vittoria diplomatica ha inizializzato i cinque collegi, mentre debiti, fiducia, coesione e patti sono sopravvissuti. Ridisegnare Nord, Centro, Sud, Isole e Feed attorno a decisioni e conseguenze specifiche; verificare azioni, costo, endorsement e dossier dall'hub nell'ordine scelto dal giocatore. L'accesso al Palazzo richiede i cinque dossier. Quattro archivi e studio elettorale conservano ancora materiali e cast condivisi: il cambio di nome della costante delle stanze in questo round evita un riferimento rimosso, non costituisce il loro redesign.
 
-Prima di altri sistemi il margine JS di 155 byte richiede modularità o eliminazione di ridondanze effettive, con il limite di 350 KiB invariato. Non eliminare scelte, dialoghi o supporto offline per ottenere una misura favorevole. Restano anche introduzione e animazioni, altri seed, difficoltà alta, campagne ininterrotte, audio e dispositivi fisici. Saldo Higgsfield verificato 484,72: nessun job del Hotel resta attivo; il credito residuo è autorizzato per il seguito.
+Prima di altri sistemi il margine di bundle di 237 byte richiede modularità o eliminazione di ridondanze effettive, con il limite di 350 KiB invariato. Non eliminare scelte, dialoghi o supporto offline per ottenere una misura favorevole. Restano anche introduzione e animazioni, altri seed, difficoltà alta, campagne ininterrotte, audio e dispositivi fisici. Saldo Higgsfield verificato 484,72: nessun job del Hotel resta attivo; il credito residuo è autorizzato per il seguito.

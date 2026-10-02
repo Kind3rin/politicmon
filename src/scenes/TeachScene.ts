@@ -18,7 +18,7 @@ export class TeachScene implements Scene {
   private scroll = 0;
   private confirm = false;
   constructor(private stack: SceneStack, private input: Input, private mon: Monster, private moveId: string,
-    private onLearned: () => void, private options: { source?: "level" | "directive" } = {}) {
+    private onLearned: () => void, private options: { source?: "level" | "directive" | "archive" } = {}) {
     this.menu = new Menu(mon.moves.map((slot) => ({ label: MOVES[slot.id].name, rightLabel: `PP ${slot.pp}` })));
   }
   private get old() { return this.mon.moves.length >= 4 ? this.mon.moves[this.menu.index] : undefined; }
@@ -26,8 +26,8 @@ export class TeachScene implements Scene {
     const old = this.old, incoming = MOVES[this.moveId];
     const notes = this.page === 0 ? moveNotes(this.mon, this.moveId) : this.page === 1 ? old ? moveNotes(this.mon, old.id, old.pp) : ["SLOT LIBERO: NESSUNA MOSSA CANCELLATA."] :
       [`NUOVA: ${incoming.name}. PP ${incoming.pp}/${incoming.pp}.`, old ? `SCARTI: ${MOVES[old.id].name}, INCLUSI I SUOI ${old.pp} PP RESIDUI.` : "AGGIUNGI SENZA PERDERE ALTRE MOSSE.",
-        "GLI ALTRI PP, I PV, LO STATUS E L'OGGETTO RESTANO UGUALI.", this.options.source === "level" ? "APPRENDIMENTO DA LIVELLO. RINUNCIARE NON ANNULLA IL LIVELLO GUADAGNATO." : "LA DIRETTIVA NON SI CONSUMA: PUOI RIUSARLA SU ALTRI CANDIDATI.",
-        "POTENZA NON È DANNO FINALE: CONTANO STATISTICHE, TIPO E ABILITÀ."];
+        "GLI ALTRI PP, I PV, LO STATUS E L'OGGETTO RESTANO UGUALI.", this.options.source === "level" ? "APPRENDIMENTO DA LIVELLO. RINUNCIARE NON ANNULLA IL LIVELLO GUADAGNATO." : this.options.source === "archive" ? "RIPRENDERE UNA LINEA NON COSTA FONDI O OGGETTI." : "LA DIRETTIVA NON SI CONSUMA: PUOI RIUSARLA SU ALTRI CANDIDATI.",
+        ...(this.options.source === "archive" ? ["ARCHIVIO GRATUITO: MOSSA DELLA FORMA ATTUALE, GIÀ DISPONIBILE AL TUO LIVELLO."] : []), "POTENZA NON È DANNO FINALE: CONTANO STATISTICHE, TIPO E ABILITÀ."];
     return notes.flatMap((line) => wrapText(line, 35));
   }
   update(dt: number): void {
@@ -60,7 +60,7 @@ export class TeachScene implements Scene {
   }
   draw(screen: Screen): void {
     screen.clear("#101b32"); const bg = sceneImage("ui:teach", "ui/teach.png"); if (bg) screen.image(bg);
-    drawScreenHeader(screen, this.options.source === "level" ? "NUOVA LINEA AL LIVELLO" : "DIRETTIVA DI PARTITO");
+    drawScreenHeader(screen, this.options.source === "archive" ? "RIPRENDI UNA LINEA" : this.options.source === "level" ? "NUOVA LINEA AL LIVELLO" : "DIRETTIVA DI PARTITO");
     if (this.msg.isOpen) { screen.clear("#101b32"); this.msg.draw(screen); return; }
     const move = MOVES[this.moveId];
     if (this.confirm || this.inspect) {

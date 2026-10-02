@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "balanceBefore": 615.47,
+  "balanceAfter": 615.22,
+  "creditsSpent": 0.25,
+  "estimatedCredits": 0.25,
+  "assets": [
+    {
+      "id": "recall",
+      "path": "public/sprites/ui/recall.png",
+      "width": 240,
+      "height": 180,
+      "model": "gpt_image_2_5",
+      "jobId": "2e1f7e58-fa0e-4c78-b473-4f68f3df9e57",
+      "status": "completed",
+      "prompt": "Create a polished pixel art background for Politicmon, an Italian political satire RPG, landscape 4:3. A midnight navy parliamentary archive, warm amber desk lamp, tiny colorful index tabs, dusty folders with little symbols like a microphone, handshake and megaphone. Satirical visual detail: an enormous shredder in the lower-right corner is unplugged; a neat salvaged folder rests safely beside it, a tiny paper phoenix bookmark rises from the folder. Rich crisp pixel art with deliberate pixel clusters, restrained navy, desaturated teal, cream and gold palette. This is an actual UI backdrop under opaque game panels: keep the entire central 90 percent quiet flat dark navy; all archive objects occupy thin edge bands, especially corners and bottom margin, no central table or bright objects. No writing, no letters, no logos, no watermarks. Full bleed rectangular background, not mockup, no frame, no interface elements.",
+      "aspectRatio": "4:3",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_044600_2e1f7e58-fa0e-4c78-b473-4f68f3df9e57.png",
+      "cropTop": 0,
+      "crop": "full width from y0; height width*180/240; nearest resize",
+      "sourceSha256": "698e48655987a54c61a8dd6687898985a8610b68b5e5565c531b306411e16c55",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "outputSha256": "933b8565e12263d4448620619a327b3150eb17a1f3247fc25579d77a8490426e"
+    }
+  ]
+}

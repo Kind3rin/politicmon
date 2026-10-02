@@ -1,5 +1,11 @@
 # Politicmon: risorse Higgsfield
 
+Diciottesimo blocco: archivio delle linee, un PNG 240×180 per recuperare
+le mosse dimenticate. Un job `gpt_image_2_5`, **0,25 crediti**, saldo
+**615,47 → 615,22**, cumulativo **270,75**. Prompt e checksum in
+`higgsfield-archive.json`; [ARCHIVIO-PREPARAZIONE.md](ARCHIVIO-PREPARAZIONE.md)
+riporta confronto, salvataggio, dossier dei rivali e nuove partite native.
+
 Diciassettesimo blocco: tre giudici illustrati per la Consulta. Sei job
 `gpt_image_2_5`, incluse tre revisioni dell'inquadratura nativa: **1,50
 crediti**, saldo **616,97 → 615,47**, cumulativo **270,50**. Tre PNG 224×78,

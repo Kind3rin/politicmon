@@ -1,13 +1,13 @@
 # Audit visuale professionale
 
-Generato: 2026-10-02T04:12:42.841Z
+Generato: 2026-10-02T05:07:28.226Z
 
 ## Sintesi
 
-- Scene: 47
-- Scene con evidenza screenshot: 47/47
+- Scene: 48
+- Scene con evidenza screenshot: 48/48
 - Chiamate di clipping residue: 0
-- Ellissi esplicite nelle scene: 111
+- Ellissi esplicite nelle scene: 113
 - Politicmon PNG: 52
 - Frame action dedicati: 10/52
 
@@ -27,10 +27,10 @@ Nessuna.
 - `src/scenes/MafiaScene.ts`: clip 0, ellissi 2
 - `src/scenes/MonumentScene.ts`: clip 0, ellissi 4
 - `src/scenes/NicknameScene.ts`: clip 0, ellissi 1
-- `src/scenes/PartyScene.ts`: clip 0, ellissi 2
+- `src/scenes/PartyScene.ts`: clip 0, ellissi 3
 - `src/scenes/PauseScene.ts`: clip 0, ellissi 4
 - `src/scenes/QuestScene.ts`: clip 0, ellissi 3
-- `src/scenes/TeachScene.ts`: clip 0, ellissi 3
+- `src/scenes/TeachScene.ts`: clip 0, ellissi 4
 - `src/scenes/TitleScene.ts`: clip 0, ellissi 3
 - `src/scenes/TournamentScene.ts`: clip 0, ellissi 2
 - `src/scenes/TradeScene.ts`: clip 0, ellissi 5

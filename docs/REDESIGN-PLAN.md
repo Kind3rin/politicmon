@@ -35,6 +35,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
+| Preparazione e archivio | Recupero gratuito delle mosse al livello, dossier reale della squadra avversaria, comparsa sicura degli sfidanti | Due partite fino al Garante; Renzino resta aperto in ARCHIVIO-PREPARAZIONE |
 | Palazzo e Colle | Tre prove illustrate e volontarie, rifornimenti accessibili, verbale del morale letto al finale | Partita nuova di Ellyna fino al Garante; altri percorsi e limiti in COLLE-VERBALE |
 | Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 189.284 byte gzip iniziali, checksum e prova PWA |
 | PWA | Precache e primo utilizzo offline dei 533 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
@@ -60,7 +61,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
    Genova, retrobottega, casinò e Coppa sono ora rivisti. Onboarding, pausa e trasporto stradale hanno ricevuto una revisione con dossier e prove delle azioni.
-   Anche la cornice esterna è rivista con guida modale e controlli nativi. Proseguire la revisione dei flussi integrati e dei box meno frequenti; il censimento delle 47 scene non prova che ogni loro stato sia moderno. Eliminare layout e asset residui vecchi;
+   Anche la cornice esterna è rivista con guida modale e controlli nativi. Proseguire la revisione dei flussi integrati e dei box meno frequenti; il censimento delle 48 scene non prova che ogni loro stato sia moderno. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
    ricorrenze e risposte alle azioni. La ricerca web deve generare satira
@@ -92,6 +93,16 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[ARCHIVIO-PREPARAZIONE.md](ARCHIVIO-PREPARAZIONE.md): recupero delle linee
+dimenticate, dossier di tutti i rivali prima della sfida e controllo dei
+passaggi quando compare uno sfidante. Tre partite nuove: Ellyna e Giorgetta
+vincono il Garante, Renzino perde due volte. 283 test, 633 viste archivio
+per motore e 6.605 briefing. 0,25 crediti; saldo 615,22. Build totale
+355.695 byte gzip, margine 2.705. Restano Renzino, atti successivi, audio,
+scrittura e verifica integrale.
+
+### Round precedente: Palazzo e Colle
 
 [COLLE-VERBALE.md](COLLE-VERBALE.md): tre giudici illustrati e volontari,
 Garante su interazione A, ritorno al bar e guida alle cure. Nuova satira

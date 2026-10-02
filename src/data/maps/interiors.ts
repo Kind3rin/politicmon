@@ -230,7 +230,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       },
       {
         x: 11, y: 5,
-        lines: ["PRIMA DEL GARANTE:", "quattro avversari. START sceglie il leader. Il bar recupera PV e PP; l'ambulante di Capitale vende cure.", "Il fotografo chiede una vittoria senza ombre. Abbiamo acceso la luce anche sull'altra sedia."]
+        lines: ["PRIMA DEL GARANTE:", "quattro avversari. START sceglie il leader. Il bar recupera PV e PP; l'ambulante di Capitale vende cure.", "Mosse dimenticate? START > SQUADRA: A scorre il dossier fino ad ARCHIVIO. Riprendi gratis le linee disponibili al tuo livello.", "Il fotografo chiede una vittoria senza ombre. Abbiamo acceso la luce anche sull'altra sedia."]
       }
     ],
     pickups: [],

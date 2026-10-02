@@ -50,6 +50,7 @@ export default defineConfig({
   },
   plugins: [stampServiceWorker()],
   build: {
+    target: "es2022",
     minify: "terser",
     terserOptions: { compress: { passes: 3 } }
   },

@@ -31,11 +31,17 @@ try{
    const s=stateAt(map.id,warp.x,y),w=new WorldScene(stack,input,s);
    if(w.isBlocked(warp.x,y))continue;
    const spot=w.freeAdjacentSpot();
+   if(spot)check(!w.cutsOffRoute(spot.x,spot.y),`Challenger cut a route ${map.id}`);
    if(spot)check(!map.warps.some(exit=>exit.x===spot.x&&(exit.y===spot.y||(w.isOutdoorDoorWarp(exit)&&exit.y+1===spot.y))),`Challenger blocked ${map.id} warp`);
    guarded++;
   }
   for(const [map,x,y,forbidden]of [['mediopoli',7,11,[7,10]],['mediopoli',7,12,[7,11]],['borgo',4,7,[4,6]],['capitale',23,8,[22,8]],['capitale',22,8,[23,8]]]){
    const w=new WorldScene(stack,input,stateAt(map,x,y)),spot=w.freeAdjacentSpot();check(!spot||spot.x!==forbidden[0]||spot.y!==forbidden[1],`Known doorway/pickup obstruction ${map}`);
+  }
+  {
+   const w=new WorldScene(stack,input,stateAt('capitale',22,8));
+   check(w.cutsOffRoute(21,8),'Narrow corridor/pickup regression did not reproduce');
+   const spot=w.freeAdjacentSpot();check(!spot||spot.x!==21||spot.y!==8,'Challenger blocked the bar corridor');
   }
   for(const hard of [false,true]){
    const s=stateAt('gymtv',5,6);s.hardMode=hard;const world=new WorldScene(stack,input,s);stack.replace(world);const before=JSON.stringify(s);

@@ -45,6 +45,10 @@ try {
     const brief=new BossBriefingScene(stack,input,state,TRAINERS[id],team,()=>{});
     for(let scroll=0;scroll<=Math.max(0,brief.notes().length-3);scroll++) {brief.scroll=scroll;draw(`${id}-${hard}-${size}-${scroll}`,brief,!hard&&size===6&&scroll===0);}
     brief.page=1;for(let i=0;i<size;i++){brief.index=i;draw(`${id}-${hard}-leader-${size}-${i}`,brief,!hard&&id==='boss'&&size===6&&i===5);}
+    if(size===6) {
+      brief.page=2;
+      for(let foe=0;foe<team.length;foe++) {brief.foeIndex=foe;for(let scroll=0;scroll<=Math.max(0,brief.notes().length-10);scroll++){brief.scroll=scroll;draw(`${id}-${hard}-preparation-${foe}-${scroll}`,brief,!hard&&id==='garante'&&foe===2&&scroll===0);}}
+    }
     const intel=new BattleIntelScene(stack,input,makeCombatant(state.party[0]),makeCombatant(team[0]),0,{sondaggi:80},()=>{},[],[`STILE: ${trainerStyle(id).label}`,...trainerStyle(id).hints]);
     intel.page=1;for(let scroll=0;scroll<=Math.max(0,intel.lines().length-9);scroll++){intel.scroll=scroll;draw(`${id}-${hard}-${size}-dossier-${scroll}`,intel,!hard&&size===6&&id==='boss'&&scroll===0);}
   }
@@ -58,6 +62,14 @@ try {
   if(stack.top?.constructor.name!=='BossBriefingScene')throw Error(`World does not open briefing: ${stack.top?.constructor.name}; flash=${world.encounterFlash}; pending=${Boolean(world.pendingBattle)}; message=${world.msg.isOpen}`);
   const cancelled=stack.top;press(cancelled,'b');
   if(stack.top!==world||JSON.stringify(state)!==before||ended||mp.duelBusy)throw Error('Cancel changed state or left multiplayer busy');
+  world.startTrainerBattle(TRAINERS.garante,()=>ended++);
+  for(let i=0;i<40&&stack.top===world;i++)world.update(.1);
+  const dossier=stack.top;press(dossier,'right');
+  if(dossier.page!==2)throw Error('Dossier not reachable');
+  press(dossier,'right');press(dossier,'down');press(dossier,'a');
+  if(stack.top!==dossier||dossier.page!==0||JSON.stringify(state)!==before||ended)throw Error('Dossier spent state or started fight');
+  press(dossier,'left');press(dossier,'b');
+  if(stack.top!==world||JSON.stringify(state)!==before||ended||mp.duelBusy)throw Error('Dossier cancel changed state');
   for(const id of ['giudice1','giudice2','giudice3','garante']){
     world.startTrainerBattle(TRAINERS[id],()=>ended++);
     for(let i=0;i<40&&stack.top===world;i++)world.update(.1);

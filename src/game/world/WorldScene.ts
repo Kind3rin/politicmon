@@ -2354,9 +2354,24 @@ export class WorldScene implements Scene {
       if (this.map.warps.some(w => (w.x === nx && w.y === ny) || (this.isOutdoorDoorWarp(w) && w.y + 1 === ny && Math.abs(w.x - nx) <= 1))) {
         continue;
       }
+      if (this.cutsOffRoute(nx, ny)) continue;
       return { x: nx, y: ny, facing: opp[dir] };
     }
     return null;
+  }
+
+  // An optional challenger must not become a locked door. Check connectivity
+  // beyond the immediate doorway too (a pickup can close the other escape).
+  private cutsOffRoute(x: number, y: number): boolean {
+    const key = (px: number, py: number) => `${px},${py}`;
+    const queue = [{ x: this.state.pos.x, y: this.state.pos.y }];
+    const seen = new Set([key(queue[0].x, queue[0].y)]);
+    for (let i = 0; i < queue.length; i++) for (const d of Object.values(DIR_DELTA)) {
+      const nx = queue[i].x + d.dx, ny = queue[i].y + d.dy, id = key(nx, ny);
+      if (seen.has(id) || (nx === x && ny === y) || this.isBlocked(nx, ny)) continue;
+      seen.add(id); queue.push({ x: nx, y: ny });
+    }
+    return Object.values(DIR_DELTA).some(d => !this.isBlocked(x + d.dx, y + d.dy) && !seen.has(key(x + d.dx, y + d.dy)));
   }
 
   // Direzione approssimata (in pixel mondo) verso un'altra mappa, per la guida

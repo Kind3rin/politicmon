@@ -1,0 +1,804 @@
+{
+  "version": 1,
+  "method": "NEW GAME, seeded native keyboard scene inputs; no injected levels, funds or outcomes; accelerated virtual time",
+  "difficulty": "normal",
+  "baseline": "docs/colle-playtests.json",
+  "runs": [
+    {
+      "starter": "ellyna",
+      "source": "artifacts/campaign-native/archive-final-ellyna-prepared-20261002.json",
+      "sourceSha256": "c707bb3ad1cb7199b92c802573d0800852ec2c965b820bf169e90482f4dc5c42",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "skip",
+        "archivePlan": "support"
+      },
+      "failure": null,
+      "steps": 1120,
+      "garanteBeaten": true,
+      "stats": {
+        "playSeconds": 1131.2000000000667,
+        "steps": 1120,
+        "battles": 25,
+        "wins": 22,
+        "losses": 0,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 5,
+        "healingItemsUsed": 16,
+        "healerVisits": 21,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 50,
+        "cohesion": 60,
+        "progress": 17,
+        "promises": [],
+        "decisions": [],
+        "history": []
+      },
+      "money": 30470,
+      "party": [
+        {
+          "id": "schleinix",
+          "level": 31,
+          "hp": 0,
+          "moves": [
+            {
+              "id": "transizione",
+              "pp": 6
+            },
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "piazza",
+              "pp": 15
+            },
+            {
+              "id": "scissione",
+              "pp": 9
+            }
+          ]
+        },
+        {
+          "id": "movimenton",
+          "level": 29,
+          "hp": 0,
+          "moves": [
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "redditone",
+              "pp": 10
+            },
+            {
+              "id": "vaffa",
+              "pp": 8
+            },
+            {
+              "id": "greenwashing",
+              "pp": 20
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 27,
+          "hp": 49,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 9
+            },
+            {
+              "id": "radici",
+              "pp": 25
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 27,
+          "hp": 60,
+          "moves": [
+            {
+              "id": "bunga",
+              "pp": 2
+            },
+            {
+              "id": "giravolta",
+              "pp": 25
+            },
+            {
+              "id": "conferenza",
+              "pp": 20
+            },
+            {
+              "id": "editoriale",
+              "pp": 10
+            }
+          ]
+        }
+      ],
+      "archiveActions": [
+        {
+          "species": "schleinix",
+          "move": "articolouno",
+          "replace": "pistaciclabile"
+        },
+        {
+          "species": "generorso",
+          "move": "iosonogiorgia",
+          "replace": "comizio"
+        },
+        {
+          "species": "movimenton",
+          "move": "redditone",
+          "replace": "comizio"
+        },
+        {
+          "species": "movimenton",
+          "move": "redditone",
+          "replace": "monopattino"
+        },
+        {
+          "species": "schleinix",
+          "move": "articolouno",
+          "replace": "sciopero"
+        }
+      ],
+      "finalBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "starter": "giorgetta",
+      "source": "artifacts/campaign-native/archive-final-giorgetta-prepared-20261002.json",
+      "sourceSha256": "7601fcce31e5e402ef684ecdc1deeb94849cc9e83515c853b06d33d6886b0d08",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "pledge",
+        "archivePlan": "support"
+      },
+      "failure": null,
+      "steps": 1049,
+      "garanteBeaten": true,
+      "stats": {
+        "playSeconds": 1588.299999999651,
+        "steps": 1049,
+        "battles": 22,
+        "wins": 17,
+        "losses": 2,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 19,
+        "healingItemsUsed": 26,
+        "healerVisits": 21,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 40,
+        "cohesion": 54,
+        "progress": 17,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "broken",
+            "dueAt": 4
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          }
+        ]
+      },
+      "money": 27890,
+      "party": [
+        {
+          "id": "generorso",
+          "level": 28,
+          "hp": 24,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 6
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "giorgiagon",
+          "level": 32,
+          "hp": 77,
+          "moves": [
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "decreto",
+              "pp": 19
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 5
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 25,
+          "hp": 26,
+          "moves": [
+            {
+              "id": "tweet",
+              "pp": 29
+            },
+            {
+              "id": "giravolta",
+              "pp": 25
+            },
+            {
+              "id": "conferenza",
+              "pp": 16
+            },
+            {
+              "id": "editoriale",
+              "pp": 0
+            }
+          ]
+        },
+        {
+          "id": "conteblob",
+          "level": 27,
+          "hp": 60,
+          "moves": [
+            {
+              "id": "comizio",
+              "pp": 30
+            },
+            {
+              "id": "fiducia",
+              "pp": 19
+            },
+            {
+              "id": "inciucio",
+              "pp": 15
+            },
+            {
+              "id": "telepromessa",
+              "pp": 15
+            }
+          ]
+        }
+      ],
+      "archiveActions": [
+        {
+          "species": "giorgiagon",
+          "move": "iosonogiorgia",
+          "replace": "radici"
+        },
+        {
+          "species": "generorso",
+          "move": "iosonogiorgia",
+          "replace": "comizio"
+        },
+        {
+          "species": "generorso",
+          "move": "iosonogiorgia",
+          "replace": "radici"
+        },
+        {
+          "species": "giorgiagon",
+          "move": "iosonogiorgia",
+          "replace": "giravolta"
+        }
+      ],
+      "finalBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "starter": "renzino",
+      "source": "artifacts/campaign-native/archive-final-renzino-prepared-20261002.json",
+      "sourceSha256": "89895882339fb2d40937e8623b734ba461e436080f182aaa90678430ad6f2b04",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "pay",
+        "archivePlan": "support"
+      },
+      "failure": null,
+      "steps": 1087,
+      "garanteBeaten": false,
+      "stats": {
+        "playSeconds": 1768.7999999994868,
+        "steps": 1087,
+        "battles": 23,
+        "wins": 17,
+        "losses": 3,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 22,
+        "healingItemsUsed": 31,
+        "healerVisits": 21,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 62,
+        "cohesion": 66,
+        "progress": 15,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "kept",
+            "dueAt": 4
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          }
+        ]
+      },
+      "money": 15210,
+      "party": [
+        {
+          "id": "salvinator",
+          "level": 29,
+          "hp": 108,
+          "moves": [
+            {
+              "id": "blocconavale",
+              "pp": 10
+            },
+            {
+              "id": "vaffa",
+              "pp": 10
+            },
+            {
+              "id": "mojito",
+              "pp": 10
+            },
+            {
+              "id": "ruspa",
+              "pp": 15
+            }
+          ]
+        },
+        {
+          "id": "renzilla",
+          "level": 30,
+          "hp": 107,
+          "moves": [
+            {
+              "id": "inciucio",
+              "pp": 15
+            },
+            {
+              "id": "rottamazione",
+              "pp": 10
+            },
+            {
+              "id": "editoriale",
+              "pp": 10
+            },
+            {
+              "id": "staisereno",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "movimenton",
+          "level": 25,
+          "hp": 100,
+          "moves": [
+            {
+              "id": "redditone",
+              "pp": 10
+            },
+            {
+              "id": "monopattino",
+              "pp": 30
+            },
+            {
+              "id": "vaffa",
+              "pp": 10
+            },
+            {
+              "id": "greenwashing",
+              "pp": 20
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 25,
+          "hp": 105,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 10
+            },
+            {
+              "id": "radici",
+              "pp": 25
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        }
+      ],
+      "archiveActions": [
+        {
+          "species": "salvinator",
+          "move": "mojito",
+          "replace": "comizio"
+        },
+        {
+          "species": "salvinator",
+          "move": "mojito",
+          "replace": "citofonata"
+        },
+        {
+          "species": "renzilla",
+          "move": "inciucio",
+          "replace": "giravolta"
+        },
+        {
+          "species": "movimenton",
+          "move": "redditone",
+          "replace": "comizio"
+        },
+        {
+          "species": "generorso",
+          "move": "iosonogiorgia",
+          "replace": "comizio"
+        }
+      ],
+      "finalBattles": [
+        {
+          "trainer": "boss",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 18
+            },
+            {
+              "id": "xipanda",
+              "level": 20
+            },
+            {
+              "id": "telecrate",
+              "level": 22
+            },
+            {
+              "id": "generorso",
+              "level": 24
+            }
+          ]
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 24
+            },
+            {
+              "id": "calendauro",
+              "level": 25
+            }
+          ]
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "tajanide",
+              "level": 25
+            },
+            {
+              "id": "draghimon",
+              "level": 26
+            }
+          ]
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 27
+            },
+            {
+              "id": "putingrad",
+              "level": 27
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 28
+            },
+            {
+              "id": "ursulax",
+              "level": 29
+            },
+            {
+              "id": "draghimon",
+              "level": 30
+            },
+            {
+              "id": "mattarellux",
+              "level": 32
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

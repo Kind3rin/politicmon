@@ -11,6 +11,8 @@ import { sceneImage } from "../engine/assets";
 import { careerNotes } from "../game/evolutionGuide";
 import { defensiveMatchups } from "../game/dexGuide";
 import { EvolutionScene } from "./EvolutionScene";
+import { RecallScene } from "./RecallScene";
+import { archivedMoves } from "../game/moveArchive";
 import type { GameState } from "../game/state";
 import { drawHpBar, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
 
@@ -52,7 +54,7 @@ export class PartyScene implements Scene {
     if (this.summary) {
       const mon = this.summary;
       if (this.input.wasPressed("b")) { audio.cancel(); this.summary = null; return; }
-      if (this.input.wasPressed("a")) { this.summaryPage = (this.summaryPage + 1) % 5; this.summaryScroll = 0; audio.cursor(); return; }
+      if (this.input.wasPressed("a")) { this.summaryPage = (this.summaryPage + 1) % 6; this.summaryScroll = 0; audio.cursor(); return; }
       const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
       if (dir && party.length > 1) {
         this.index = (this.index + dir + party.length) % party.length;
@@ -61,6 +63,9 @@ export class PartyScene implements Scene {
       const delta = this.input.wasPressed("down") ? 1 : this.input.wasPressed("up") ? -1 : 0;
       if (delta) { this.summaryScroll = Math.max(0, Math.min(Math.max(0, this.summaryLines(mon).length - 7), this.summaryScroll + delta)); audio.cursor(); return; }
       if (this.input.wasPressed("start")) {
+        if (this.summaryPage === 5 && this.opts.mode === "view" && !this.opts.partyOverride) {
+          this.stack.push(new RecallScene(this.stack, this.input, this.state, mon)); audio.confirm(); return;
+        }
         if (this.summaryPage === 1) { this.detailIndex = (this.detailIndex + 1) % Math.max(1, mon.moves.length); this.summaryScroll = 0; audio.cursor(); return; }
         if (this.summaryPage === 3 && !this.opts.partyOverride) {
           const target = levelEvolution(mon, this.state.sondaggi);
@@ -226,7 +231,7 @@ export class PartyScene implements Scene {
       notes = [held?.kind === "hold" && !this.opts.partyOverride ? "START: RIPRENDI L'OGGETTO." : "LEGGERE NON CAMBIA LA SQUADRA.", species.category,
         `PV: ${mon.hp}/${stats.hp}. STATUS: ${mon.status ? STATUS_LABELS[mon.status] : "NESSUNO"}.`,
         `GRINTA ${stats.atk}. FACCIA TOSTA ${stats.def}. RETORICA ${stats.spc}. OPPORTUNISMO ${stats.spd}.`,
-        `OGGETTO: ${held?.kind === "hold" ? held.name : "NESSUNO"}.`, `ESPERIENZA TOTALE: ${mon.exp}.`, species.dexLine];
+        `OGGETTO: ${held?.kind === "hold" ? held.name : "NESSUNO"}.`, `ESPERIENZA TOTALE: ${mon.exp}.`, "MOSSE DIMENTICATE? A FINO AD ARCHIVIO.", species.dexLine];
     } else if (this.summaryPage === 1) {
       const slot = mon.moves[this.detailIndex] ?? mon.moves[0], move = slot ? MOVES[slot.id] : undefined;
       notes = move && slot ? ["START: PROSSIMA MOSSA.", `${this.detailIndex + 1}/${mon.moves.length}: ${move.name}.`, `PP ${slot.pp}/${move.pp}. TIPO ${move.type}.`, moveSummary(move), `PRIORITÀ ${move.effect?.priority ?? 0}.`, slot.pp === 0 ? "PP ESAURITI: NON DISPONIBILE IN LOTTA." : "I PP SI CONSUMANO SOLO USANDO LA MOSSA."] : ["NESSUNA MOSSA."];
@@ -236,7 +241,8 @@ export class PartyScene implements Scene {
     } else if (this.summaryPage === 3) {
       notes = careerNotes(mon, this.state.sondaggi).map((line) => line.replace("A APRE IL CONFRONTO", "START APRE IL CONFRONTO"));
       if (this.opts.partyOverride) notes.unshift("MIRROR: LE EVOLUZIONI SI GESTISCONO NELLA SQUADRA ORIGINALE.");
-    } else notes = ["DANNO SUBITO PER TIPO:", ...defensiveMatchups(mon.speciesId).map((m) => `${m.type}: x${m.mult} ${m.mult > 1 ? "DEBOLE" : m.mult < 1 ? "RESISTE" : "NEUTRO"}.`), "ABILITÀ, OGGETTI E SONDAGGI POSSONO MODIFICARE IL RISULTATO."];
+    } else if (this.summaryPage === 4) notes = ["DANNO SUBITO PER TIPO:", ...defensiveMatchups(mon.speciesId).map((m) => `${m.type}: x${m.mult} ${m.mult > 1 ? "DEBOLE" : m.mult < 1 ? "RESISTE" : "NEUTRO"}.`), "ABILITÀ, OGGETTI E SONDAGGI POSSONO MODIFICARE IL RISULTATO."];
+    else notes = [this.opts.mode === "view" && !this.opts.partyOverride ? "START: APRI L'ARCHIVIO GRATUITO." : "ARCHIVIO DISPONIBILE FUORI LOTTA NELLA SQUADRA ORIGINALE.", "PUOI RIPRENDERE LE MOSSE DELLA FORMA ATTUALE FINO AL TUO LIVELLO.", ...archivedMoves(mon).map((id) => MOVES[id].name), "CONFRONTI E CONFERMI PRIMA DI CANCELLARE UNA MOSSA. GLI ALTRI PP RESTANO."];
     return notes.flatMap((line) => wrapText(line, 35));
   }
 
@@ -253,7 +259,7 @@ export class PartyScene implements Scene {
     screen.text(`L${mon.level}  ${this.index + 1}/${party.length}`, 76, 38, "#b7cedc");
     species.types.forEach((type, i) => screen.text(type, 76, 51 + i * 11, "#fff3cc"));
     screen.panel(6, 82, 228, 83, "card");
-    screen.text(["PROFILO", "MOSSE", "ABILITÀ/OGGETTO", "CARRIERA", "DIFESE"][this.summaryPage], 14, 88, "#8c5b12");
+    screen.text(["PROFILO", "MOSSE", "ABILITÀ/OGGETTO", "CARRIERA", "DIFESE", "ARCHIVIO DELLE LINEE"][this.summaryPage], 14, 88, "#8c5b12");
     const lines = this.summaryLines(mon);
     this.summaryScroll = Math.min(this.summaryScroll, Math.max(0, lines.length - 7));
     lines.slice(this.summaryScroll, this.summaryScroll + 7).forEach((line, i) => screen.text(line, 14, 97 + i * 8, INK));

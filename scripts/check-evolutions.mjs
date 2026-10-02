@@ -1,49 +1,31 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { tsImport } from "tsx/esm/api";
 
 const root = process.cwd();
-const speciesText = readFileSync(join(root, "src", "data", "species.ts"), "utf8");
-const movesText = readFileSync(join(root, "src", "data", "moves.ts"), "utf8");
-const monstersText = readFileSync(join(root, "src", "art", "monsters.ts"), "utf8");
+// Validate the actual exported registries, independent of source formatting.
+const [{SPECIES},{MOVES},{MONSTERS_WITH_PNG:pngIds}] = await Promise.all([
+  tsImport("../src/data/species.ts", import.meta.url),
+  tsImport("../src/data/moves.ts", import.meta.url),
+  tsImport("../src/art/monsters.ts", import.meta.url)
+]);
 const battleText = readFileSync(join(root, "src", "game", "battle", "BattleScene.ts"), "utf8");
 
 const problems = [];
 
-function matches(text, regex) {
-  return [...text.matchAll(regex)];
-}
-
-const speciesStarts = matches(speciesText, /^\s{2}([A-Za-z0-9_]+): S\(\{/gm);
-const speciesIds = new Set(speciesStarts.map((m) => m[1]));
-const moveIds = new Set(matches(movesText, /^\s{2}([A-Za-z0-9_]+): M\(\{/gm).map((m) => m[1]));
-
-const pngSetStart = monstersText.indexOf("new Set<string>([");
-const pngSetEnd = monstersText.indexOf("]);", pngSetStart);
-const pngText = pngSetStart >= 0 && pngSetEnd > pngSetStart ? monstersText.slice(pngSetStart, pngSetEnd) : "";
-const pngIds = new Set(matches(pngText, /"([^"]+)"/g).map((m) => m[1]));
+const speciesIds = new Set(Object.keys(SPECIES));
+const moveIds = new Set(Object.keys(MOVES));
 
 let levelEvolutionRules = 0;
 let itemEvolutionRules = 0;
 const evolvedTargets = new Set();
 
-for (let i = 0; i < speciesStarts.length; i += 1) {
-  const id = speciesStarts[i][1];
-  const start = speciesStarts[i].index;
-  const end = i + 1 < speciesStarts.length ? speciesStarts[i + 1].index : speciesText.indexOf("};", start);
-  const block = speciesText.slice(start, end);
-
-  for (const move of matches(block, /\[\s*\d+\s*,\s*"([^"]+)"/g).map((m) => m[1])) {
-    if (!moveIds.has(move)) {
-      problems.push(`${id}: learnset references missing move '${move}'`);
-    }
+for (const [id,species] of Object.entries(SPECIES)) {
+  for (const [,move] of species.learnset) {
+    if (!moveIds.has(move)) problems.push(`${id}: learnset references missing move '${move}'`);
   }
-
-  const evoMatch = block.match(/evolutions:\s*\[([\s\S]*?)\]/);
-  if (!evoMatch) {
-    continue;
-  }
-  for (const rule of matches(evoMatch[1], /\{([^}]+)\}/g).map((m) => m[1])) {
-    const target = rule.match(/id:\s*"([^"]+)"/)?.[1];
+  for (const rule of species.evolutions ?? []) {
+    const target = rule.id;
     if (!target) {
       problems.push(`${id}: evolution rule without target id`);
       continue;
@@ -57,10 +39,10 @@ for (let i = 0; i < speciesStarts.length; i += 1) {
     if (pngIds.has(target) && !pngExists) {
       problems.push(`${id}: evolution target '${target}' is in MONSTERS_WITH_PNG but PNG is missing`);
     }
-    if (/level:\s*\d+/.test(rule)) {
+    if (typeof rule.level === "number") {
       levelEvolutionRules += 1;
     }
-    if (/item:\s*"[^"]+"/.test(rule)) {
+    if (typeof rule.item === "string") {
       itemEvolutionRules += 1;
     }
   }

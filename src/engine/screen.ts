@@ -1,5 +1,5 @@
 import { CHAR_W, GLYPH_H, GLYPH_W, getGlyph } from "./font";
-import { gameCanvasSize } from "./gameViewport";
+import { gameCanvasSize, readSafeInsets } from "./gameViewport";
 
 export const VIEW_W = 240;
 export const VIEW_H = 180;
@@ -43,7 +43,7 @@ export class Screen {
     const viewport = window.visualViewport;
     const viewportW = viewport?.width ?? window.innerWidth;
     const viewportH = viewport?.height ?? window.innerHeight;
-    const size=gameCanvasSize(viewportW,viewportH,touch);
+    const size=gameCanvasSize(viewportW,viewportH,touch,readSafeInsets());
     const rawScale=size.width/VIEW_W;
 
     // Backing store ad alta densità: senza tener conto di devicePixelRatio, su

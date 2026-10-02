@@ -40,7 +40,8 @@ export interface ScreenPoint {
 
 // Stato input unificato tastiera + touch. `pressed` dura un solo frame.
 export class Input {
-  private held = new Set<Button>();
+  private sources = new Map<string, Button>();
+  private pointers = new Set<number>();
   private pressedNow = new Set<Button>();
   // Tocco diretto sul canvas: posizione (in coord. interne) del tap rilasciato
   // in questo frame. Un singolo frame, come pressedNow.
@@ -62,15 +63,12 @@ export class Input {
         return;
       }
       event.preventDefault();
-      if (!this.held.has(button)) {
-        this.pressedNow.add(button);
-      }
-      this.held.add(button);
+      this.setSource(event.code, button);
     });
     document.addEventListener("keyup", (event) => {
       const button = KEY_MAP[event.code];
       if (button) {
-        this.held.delete(button);
+        this.setSource(event.code, null);
       }
     });
     this.bindTouch();
@@ -125,28 +123,55 @@ export class Input {
     });
   }
 
+  // Each key/finger owns its hold. Releasing one cannot cancel another.
+  private setSource(source: string, button: Button | null): void {
+    const previous = this.sources.get(source);
+    if (previous === button) return;
+    const fresh = button && !this.isHeld(button);
+    this.sources.delete(source);
+    if (button) this.sources.set(source, button);
+    if (previous && !this.isHeld(previous)) this.showHeld(previous, false);
+    if (button) {
+      if (fresh) this.pressedNow.add(button);
+      this.showHeld(button, true);
+    }
+  }
+
+  private showHeld(button: Button, held: boolean): void {
+    document.querySelectorAll(`[data-key="${button}"]`).forEach(el => el.toggleAttribute('data-held', held));
+  }
+
   private bindTouch(): void {
-    const buttons = document.querySelectorAll<HTMLButtonElement>("[data-key]");
-    for (const el of buttons) {
+    for (const el of document.querySelectorAll<HTMLButtonElement>("[data-key]")) {
       const button = el.dataset.key as Button;
-      const press = (event: Event) => {
+      const pad = el.closest<HTMLElement>('#touch-dpad');
+      el.addEventListener('pointerdown', event => {
+        if (document.querySelector('dialog[open]')) return;
         event.preventDefault();
-        if (!this.held.has(button)) {
-          this.pressedNow.add(button);
-        }
-        this.held.add(button);
-      };
-      const release = (event: Event) => {
+        this.pointers.add(event.pointerId);
+        el.setPointerCapture(event.pointerId);
+        this.setSource(`pointer${event.pointerId}`, button);
+      });
+      el.addEventListener('pointermove', event => {
+        if (!pad || !this.pointers.has(event.pointerId)) return;
         event.preventDefault();
-        this.held.delete(button);
+        const r = pad.getBoundingClientRect();
+        const dx = event.clientX - r.left - r.width / 2, dy = event.clientY - r.top - r.height / 2;
+        const dir = Math.max(Math.abs(dx), Math.abs(dy)) < r.width / 6 ? null :
+          Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'right' : 'left') : dy > 0 ? 'down' : 'up';
+        this.setSource(`pointer${event.pointerId}`, dir);
+      });
+      const release = (event: PointerEvent) => {
+        this.pointers.delete(event.pointerId);
+        this.setSource(`pointer${event.pointerId}`, null);
       };
-      el.addEventListener("pointerdown", press);
-      el.addEventListener("pointerup", release);
-      el.addEventListener("pointerleave", release);
-      el.addEventListener("pointercancel", release);
-      el.addEventListener("contextmenu", (event) => event.preventDefault());
-      // Native keyboard activation dispatches click, without pointerdown.
-      el.addEventListener('click',(event)=>{if(event.detail===0&&!document.querySelector('dialog[open]'))this.pressedNow.add(button);});
+      el.addEventListener('pointerup', release);
+      el.addEventListener('pointercancel', release);
+      el.addEventListener('lostpointercapture', release);
+      el.addEventListener('contextmenu', event => event.preventDefault());
+      el.addEventListener('click', event => {
+        if (event.detail === 0 && !document.querySelector('dialog[open]')) this.pressedNow.add(button);
+      });
     }
   }
 
@@ -171,17 +196,8 @@ export class Input {
       if (dir === stickDir) {
         return;
       }
-      // Rilascia la direzione precedente, premi quella nuova.
-      if (stickDir) {
-        this.held.delete(stickDir);
-      }
       stickDir = dir;
-      if (dir) {
-        if (!this.held.has(dir)) {
-          this.pressedNow.add(dir);
-        }
-        this.held.add(dir);
-      }
+      this.setSource('stick', dir);
     };
 
     const moveCap = (dx: number, dy: number) => {
@@ -218,6 +234,7 @@ export class Input {
     this.releaseStick=release;
 
     stick.addEventListener("pointerdown", (event) => {
+      if (pointerId !== null || document.querySelector('dialog[open]')) return;
       event.preventDefault();
       pointerId = event.pointerId;
       stick.setPointerCapture(event.pointerId);
@@ -243,12 +260,13 @@ export class Input {
     };
     stick.addEventListener("pointerup", end);
     stick.addEventListener("pointercancel", end);
-    stick.addEventListener("pointerleave", end);
+    stick.addEventListener("lostpointercapture", end);
     stick.addEventListener("contextmenu", (event) => event.preventDefault());
   }
 
   isHeld(button: Button): boolean {
-    return this.held.has(button);
+    for (const value of this.sources.values()) if (value === button) return true;
+    return false;
   }
 
   wasPressed(button: Button): boolean {
@@ -257,7 +275,7 @@ export class Input {
 
   heldDirection(): Button | null {
     for (const dir of ["up", "down", "left", "right"] as const) {
-      if (this.held.has(dir)) {
+      if (this.isHeld(dir)) {
         return dir;
       }
     }
@@ -284,7 +302,7 @@ export class Input {
     this.tapNow = null;
   }
 
-  reset():void{this.releaseStick();this.releaseCanvas();this.held.clear();this.pressedNow.clear();this.tapNow=null;}
+  reset():void{this.releaseStick();this.releaseCanvas();for(const b of this.sources.values())this.showHeld(b,false);this.sources.clear();this.pointers.clear();this.pressedNow.clear();this.tapNow=null;}
 
   // Da chiamare a fine frame.
   endFrame(): void {

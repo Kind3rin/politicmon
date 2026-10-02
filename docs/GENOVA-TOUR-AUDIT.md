@@ -1,5 +1,7 @@
 # Genova, Tour e Palazzo: prossimo tratto
 
+Priorità aggiornata: prima di questo tratto si ridisegnano cornice e controller mobile su richiesta dell’utente.
+
 Audit del 2 ottobre 2026 sul sorgente dopo il nuovo Hotel. Cinque segmenti guadagnati vincono il Partner e arrivano al Tour. Questo non dimostra che il seguito sia ridisegnato.
 
 `genova_techno` conserva la pianta di palco aperto e arredi condivisi; DJ e assistente usano ruoli generici. Il panorama della scena è quello del precedente blocco epiloghi. Serve un porto/set riconoscibile, un DJ specifico, un assistente e un'interazione che colleghi satira, musica e ritmo. Il ritorno all'hotel è alle due celle inferiori e resta facoltativo, senza bloccare il Tour.

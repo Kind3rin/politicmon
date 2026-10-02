@@ -309,3 +309,7 @@ Round audio pubblicato in `1c2f092`: CI e tre deploy Vercel riusciti;
 percorso con input reali nei due motori, 543 risorse Higgsfield e 19 AAC
 decodificati offline. Sei configurazioni della cornice esterna riuscite.
 Reload offline solo Chromium. Il redesign integrale resta attivo.
+
+Priorità aggiornata dall’utente: cornice e controller mobile precedono Genova. Hotel pubblicato `8259273`, CI 37007307216 e tre Vercel riusciti; checksum, PWA e sei percorsi pubblici nativi verificati nei due motori.
+
+[Controller mobile](MOBILE-CONTROLS.md): cornice aperta e controlli in basso/laterali, croce trascinabile, fonti indipendenti per dito/tasto, notch e rotazione. 292 test, 20 viewport dei due motori, dieci percorsi di produzione locale e corsa nativa da codice guadagnato. Cataloghi deduplicati con tutte le proprietà verificate; 358163 byte gzip, 237 di margine. Pubblicazione del round in corso; [Genova/Tour](GENOVA-TOUR-AUDIT.md) rimane la fase successiva.

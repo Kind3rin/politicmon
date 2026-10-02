@@ -16,6 +16,7 @@
       content="Politicmon: catturali tutti, prima che ti tassino. RPG satirico in stile Game Boy sulla politica italiana."
     />
     <title>Politicmon</title>
+    <style>:root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}</style>
   </head>
   <body>
     <!-- First-paint dimensions match engine/gameViewport.ts. -->
@@ -27,8 +28,12 @@
         var vw = (vp && vp.width) || innerWidth;
         var vh = (vp && vp.height) || innerHeight;
         var landscape = touch && vw > vh && vh <= 500;
-        var availW = Math.max(1, vw - (landscape ? 312 : 32));
-        var availH = Math.max(1, vh - (touch ? (landscape ? 100 : 246) : 116));
+        var css = getComputedStyle(document.documentElement);
+        function inset(side) { return parseFloat(css.getPropertyValue('--safe-' + side)) || 0; }
+        var padW = touch ? Math.max(12, inset('left')) + Math.max(12, inset('right')) : 24;
+        var padH = touch ? Math.max(landscape ? 6 : 8, inset('top')) + Math.max(landscape ? 6 : 12, inset('bottom')) : 24;
+        var availW = Math.max(1, vw - padW - (touch ? (landscape ? 304 : 0) : 8));
+        var availH = Math.max(1, vh - padH - (touch ? (landscape ? 60 : 216) : 92));
         var s = Math.min(availW / 240, availH / 180, 4);
         document.write(
           '<style>#game-canvas{width:' + 240 * s + 'px;height:' + 180 * s + 'px}</style>'
@@ -52,9 +57,9 @@
             <button id="shell-fullscreen" type="button" aria-label="Apri a schermo intero" hidden><span aria-hidden="true">⛶</span></button>
           </div>
         </div>
-        <div id="screen-frame">
+        <div id="screen-stage"><div id="screen-frame">
           <canvas id="game-canvas" width="240" height="180" tabindex="0" aria-label="Schermo di Politicmon" aria-describedby="shell-hint"></canvas>
-        </div>
+        </div></div>
         <p id="shell-hint">FRECCE / WASD: muovi · Z / INVIO: conferma · X / ESC: torna · P: menu</p>
         <div id="touch-ui" role="group" aria-label="Controlli di gioco">
           <div id="touch-move">
@@ -70,8 +75,8 @@
             </div>
           </div>
           <div id="touch-buttons">
-            <button data-key="b" class="ab-btn b-btn" aria-label="B: torna o annulla">B</button>
-            <button data-key="a" class="ab-btn a-btn" aria-label="A: conferma o parla">A</button>
+            <button data-key="b" class="ab-btn b-btn" aria-label="B: torna o annulla"><span>B</span><small>INDIETRO</small></button>
+            <button data-key="a" class="ab-btn a-btn" aria-label="A: conferma o parla"><span>A</span><small>CONFERMA</small></button>
             <button data-key="start" class="start-btn" aria-label="Apri il quartier generale">MENU</button>
           </div>
         </div>
@@ -87,7 +92,7 @@
         <div><dt>Torna / annulla</dt><dd><kbd>X</kbd> <kbd>J</kbd> <kbd>ESC</kbd> <kbd>⌫</kbd> · touch: B</dd></div>
         <div><dt>Quartier generale</dt><dd><kbd>P</kbd> · pulsante POLITICMON / MENU</dd></div>
       </dl>
-      <p><strong>Sul telefono</strong> puoi anche toccare una voce sullo schermo: il primo tocco la seleziona, il secondo la apre nei menu. In OPZIONI scegli croce o levetta, effetti ridotti e ritmo delle lotte.</p>
+      <p><strong>Sul telefono</strong> puoi anche toccare una voce sullo schermo: il primo tocco la seleziona, il secondo la apre nei menu. Trascina sulla croce per cambiare direzione senza sollevare il dito; il centro ferma il movimento. Puoi tenere una direzione con un dito e premere A/B con l’altro. In OPZIONI scegli croce o levetta, effetti ridotti e ritmo delle lotte.</p>
       <p><strong>Nelle lotte</strong> START/MENU apre il dossier tattico dal menu LOTTA. Consultarlo non consuma il turno.</p>
       <p><strong>Per ripartire</strong> usa SALVA nel quartier generale. EXTRA → GUIDA CAMPAGNA mostra la prossima meta e il significato della morale.</p>
       <p class="guide-note">TAB passa fra i controlli della pagina. ESC chiude questa guida.</p>

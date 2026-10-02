@@ -1,0 +1,3402 @@
+{
+  "date": "2026-10-02",
+  "status": "Verified locally; public deployment pending",
+  "goal": "Full redesign remains active. Mobile request implemented; Genova/Tour/Palace and wider redesign remain.",
+  "sourceSha256": {
+    "index.html": "7efac8361f938a5950006b7cab681bbcae14a55de76fe43b33fc8717823dbd11",
+    "src/styles.css": "72137e3805c1d24ecf3a44c2009f90728a2de42427a9f42c1f6e58a0850776fc",
+    "src/engine/input.ts": "bd8f19dc4f45ba1aa232cb613a10923faf02859351aae2538a9aa6228052bd18",
+    "src/engine/gameViewport.ts": "fe9deaaced475dd54ca9cdaa473300c20fa39ac5d82f606e3ca05fd05bb8d8b7",
+    "src/engine/screen.ts": "bcca8ff9f8c611d498081a25a55723bd2b3e546931f5b2a02068800819202e5d",
+    "src/data/catalog.ts": "54220b58245088e0a2388e53fb0000f6ba1050c932df56ded8b0114e82e53226",
+    "src/data/moves.ts": "70f72ce353fae92ba56b934b4feb50f32d189ad4eb02c6d0e74f5f844a4eadde",
+    "src/data/species.ts": "418bca51bdc338b47e155b7b5fd6336fccfdf3467ca919b6b859afc2905434c4",
+    "scripts/check-evolutions.mjs": "db1e3fba7bf87eed28cfb3349110b8a730c083ae38adbf84c547514dcd3243a0",
+    "scripts/shot-shell.mjs": "08e3e2ce0bbf56ba67d6e860b78ca719b7e2d8cd109c49a0c576bb2f3cbff231",
+    "scripts/check-shell-release.mjs": "bb6e173e3a7856b8e828e1f125fd4f8f65f20a196d111be369f1dd06700a67a3",
+    "scripts/check-mobile-controls.mjs": "cc758575fa4ecf336ce4a34b4f29e7aef3d658767fefd253670f8efa11ba5d43",
+    "tests/unit/catalogIntegrity.test.ts": "50eb78394e1ed68cfc9015e6efd8261d3780a6faee15bc7152e0ead48bc76646"
+  },
+  "unitTests": 292,
+  "catalogCanonicalSha256": "86b189e723e4c5e577709acd0fa7290668a2dc70c6970126af0393e68677a32f",
+  "performance": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": false
+    },
+    "boot": {
+      "assetsReadyMs": 1420.300000011921,
+      "firstFrameMs": 1435.7000000178814,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 568559,
+      "wallMs": 1967.37
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.661,
+          "p50Ms": 0.6,
+          "p95Ms": 1.2,
+          "p99Ms": 1.4,
+          "maxMs": 6.9
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.735,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.6,
+          "maxMs": 33.4
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.223,
+          "p50Ms": 0.1,
+          "p95Ms": 0.7,
+          "p99Ms": 1,
+          "maxMs": 1.1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.663,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.6,
+          "maxMs": 17.8
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.468,
+          "p50Ms": 0.4,
+          "p95Ms": 1,
+          "p99Ms": 1.7,
+          "maxMs": 2.7
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.736,
+          "p50Ms": 16.7,
+          "p95Ms": 17.5,
+          "p99Ms": 17.6,
+          "maxMs": 33.4
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1110456,
+      "codeGzipBytes": 358163,
+      "initialCodeGzipBytes": 187964,
+      "spriteCompressedBytes": 3525885,
+      "spriteDecodedBytesEstimate": 15371968,
+      "spriteFiles": 668
+    },
+    "save": {
+      "payloadBytes": 8918,
+      "parseMeanMs": 0.0317,
+      "serializeMeanMs": 0.0187
+    }
+  },
+  "controls": [
+    {
+      "engine": "chromium",
+      "layouts": [
+        {
+          "width": 390,
+          "height": 844,
+          "safe": {
+            "top": 47,
+            "bottom": 34,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "screen": {
+              "x": 12,
+              "y": 228.75,
+              "right": 378,
+              "bottom": 503.25,
+              "w": 366,
+              "h": 274.5
+            },
+            "pad": {
+              "x": 12,
+              "y": 654,
+              "right": 168,
+              "bottom": 810,
+              "w": 156,
+              "h": 156
+            },
+            "actions": {
+              "x": 228,
+              "y": 667,
+              "right": 378,
+              "bottom": 797,
+              "w": 150,
+              "h": 130
+            },
+            "top": {
+              "x": 12,
+              "y": 47,
+              "right": 378,
+              "bottom": 91,
+              "w": 366,
+              "h": 44
+            }
+          }
+        },
+        {
+          "width": 844,
+          "height": 390,
+          "safe": {
+            "top": 0,
+            "bottom": 21,
+            "left": 59,
+            "right": 59
+          },
+          "geometry": {
+            "screen": {
+              "x": 220,
+              "y": 60,
+              "right": 624,
+              "bottom": 363,
+              "w": 404,
+              "h": 303
+            },
+            "pad": {
+              "x": 59,
+              "y": 139.5,
+              "right": 203,
+              "bottom": 283.5,
+              "w": 144,
+              "h": 144
+            },
+            "actions": {
+              "x": 657,
+              "y": 153.5,
+              "right": 785,
+              "bottom": 269.5,
+              "w": 128,
+              "h": 116
+            },
+            "top": {
+              "x": 59,
+              "y": 6,
+              "right": 785,
+              "bottom": 50,
+              "w": 726,
+              "h": 44
+            }
+          }
+        },
+        {
+          "width": 568,
+          "height": 320,
+          "safe": {
+            "top": 0,
+            "bottom": 16,
+            "left": 44,
+            "right": 44
+          },
+          "geometry": {
+            "screen": {
+              "x": 196,
+              "y": 113,
+              "right": 372,
+              "bottom": 245,
+              "w": 176,
+              "h": 132
+            },
+            "pad": {
+              "x": 44,
+              "y": 107,
+              "right": 188,
+              "bottom": 251,
+              "w": 144,
+              "h": 144
+            },
+            "actions": {
+              "x": 396,
+              "y": 121,
+              "right": 524,
+              "bottom": 237,
+              "w": 128,
+              "h": 116
+            },
+            "top": {
+              "x": 44,
+              "y": 6,
+              "right": 524,
+              "bottom": 50,
+              "w": 480,
+              "h": 44
+            }
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "safe": {
+            "top": 47,
+            "bottom": 34,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "screen": {
+              "x": 12,
+              "y": 228.75,
+              "right": 378,
+              "bottom": 503.25,
+              "w": 366,
+              "h": 274.5
+            },
+            "pad": {
+              "x": 12,
+              "y": 654,
+              "right": 168,
+              "bottom": 810,
+              "w": 156,
+              "h": 156
+            },
+            "actions": {
+              "x": 228,
+              "y": 667,
+              "right": 378,
+              "bottom": 797,
+              "w": 150,
+              "h": 130
+            },
+            "top": {
+              "x": 12,
+              "y": 47,
+              "right": 378,
+              "bottom": 91,
+              "w": 366,
+              "h": 44
+            }
+          }
+        }
+      ],
+      "realPointerCapture": true,
+      "drag": true,
+      "sourceOwnership": true,
+      "nativeMultiTouch": true,
+      "nativeSprint": {
+        "before": {
+          "mapId": "diplomacy_lobby",
+          "x": 9,
+          "y": 10,
+          "facing": "up"
+        },
+        "after": {
+          "mapId": "diplomacy_lobby",
+          "x": 10,
+          "y": 10,
+          "facing": "right"
+        },
+        "earnedSource": "diplomacy-arrival",
+        "running": true,
+        "resourcesRetained": true
+      },
+      "syntheticMultiPointer": true,
+      "physicalDevice": false
+    },
+    {
+      "engine": "webkit",
+      "layouts": [
+        {
+          "width": 390,
+          "height": 844,
+          "safe": {
+            "top": 47,
+            "bottom": 34,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "screen": {
+              "x": 12,
+              "y": 228.734375,
+              "right": 378,
+              "bottom": 503.234375,
+              "w": 366,
+              "h": 274.5
+            },
+            "pad": {
+              "x": 12,
+              "y": 653.984375,
+              "right": 168,
+              "bottom": 809.984375,
+              "w": 156,
+              "h": 156
+            },
+            "actions": {
+              "x": 228,
+              "y": 666.984375,
+              "right": 378,
+              "bottom": 796.984375,
+              "w": 150,
+              "h": 130
+            },
+            "top": {
+              "x": 12,
+              "y": 47,
+              "right": 378,
+              "bottom": 91,
+              "w": 366,
+              "h": 44
+            }
+          }
+        },
+        {
+          "width": 844,
+          "height": 390,
+          "safe": {
+            "top": 0,
+            "bottom": 21,
+            "left": 59,
+            "right": 59
+          },
+          "geometry": {
+            "screen": {
+              "x": 220,
+              "y": 60,
+              "right": 624,
+              "bottom": 363,
+              "w": 404,
+              "h": 303
+            },
+            "pad": {
+              "x": 59,
+              "y": 139.5,
+              "right": 203,
+              "bottom": 283.5,
+              "w": 144,
+              "h": 144
+            },
+            "actions": {
+              "x": 657,
+              "y": 153.5,
+              "right": 785,
+              "bottom": 269.5,
+              "w": 128,
+              "h": 116
+            },
+            "top": {
+              "x": 59,
+              "y": 6,
+              "right": 785,
+              "bottom": 50,
+              "w": 726,
+              "h": 44
+            }
+          }
+        },
+        {
+          "width": 568,
+          "height": 320,
+          "safe": {
+            "top": 0,
+            "bottom": 16,
+            "left": 44,
+            "right": 44
+          },
+          "geometry": {
+            "screen": {
+              "x": 196,
+              "y": 113,
+              "right": 372,
+              "bottom": 245,
+              "w": 176,
+              "h": 132
+            },
+            "pad": {
+              "x": 44,
+              "y": 107,
+              "right": 188,
+              "bottom": 251,
+              "w": 144,
+              "h": 144
+            },
+            "actions": {
+              "x": 396,
+              "y": 121,
+              "right": 524,
+              "bottom": 237,
+              "w": 128,
+              "h": 116
+            },
+            "top": {
+              "x": 44,
+              "y": 6,
+              "right": 524,
+              "bottom": 50,
+              "w": 480,
+              "h": 44
+            }
+          }
+        },
+        {
+          "width": 390,
+          "height": 844,
+          "safe": {
+            "top": 47,
+            "bottom": 34,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "screen": {
+              "x": 12,
+              "y": 228.734375,
+              "right": 378,
+              "bottom": 503.234375,
+              "w": 366,
+              "h": 274.5
+            },
+            "pad": {
+              "x": 12,
+              "y": 653.984375,
+              "right": 168,
+              "bottom": 809.984375,
+              "w": 156,
+              "h": 156
+            },
+            "actions": {
+              "x": 228,
+              "y": 666.984375,
+              "right": 378,
+              "bottom": 796.984375,
+              "w": 150,
+              "h": 130
+            },
+            "top": {
+              "x": 12,
+              "y": 47,
+              "right": 378,
+              "bottom": 91,
+              "w": 366,
+              "h": 44
+            }
+          }
+        }
+      ],
+      "realPointerCapture": true,
+      "drag": true,
+      "sourceOwnership": true,
+      "nativeMultiTouch": false,
+      "nativeSprint": null,
+      "syntheticMultiPointer": true,
+      "physicalDevice": false
+    }
+  ],
+  "shell": [
+    {
+      "engine": "chromium",
+      "reports": [
+        {
+          "name": "small-phone",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 320,
+              "height": 568
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 114.5,
+                "w": 296,
+                "h": 222,
+                "right": 308,
+                "bottom": 336.5
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 296,
+                "h": 44,
+                "right": 308,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 412,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 556
+              },
+              "#touch-buttons": {
+                "x": 180,
+                "y": 426,
+                "w": 128,
+                "h": 116,
+                "right": 308,
+                "bottom": 542
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 133.90625,
+                "h": 44,
+                "right": 145.90625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 212,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 256,
+                "bottom": 52
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 264,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 308,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 412,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 460
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 460,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 508
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 460,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 508
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 508,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 556
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 180,
+                "y": 430,
+                "w": 56,
+                "h": 56,
+                "right": 236,
+                "bottom": 486
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 244,
+                "y": 426,
+                "w": 64,
+                "h": 64,
+                "right": 308,
+                "bottom": 490
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 192,
+                "y": 498,
+                "w": 104,
+                "h": 44,
+                "right": 296,
+                "bottom": 542
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "phone",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 220.25,
+                "w": 366,
+                "h": 274.5,
+                "right": 378,
+                "bottom": 494.75
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 366,
+                "h": 44,
+                "right": 378,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 676,
+                "w": 156,
+                "h": 156,
+                "right": 168,
+                "bottom": 832
+              },
+              "#touch-buttons": {
+                "x": 228,
+                "y": 689,
+                "w": 150,
+                "h": 130,
+                "right": 378,
+                "bottom": 819
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 133.90625,
+                "h": 44,
+                "right": 145.90625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 282,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 326,
+                "bottom": 52
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 334,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 378,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 676,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 728
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 728,
+                "w": 52,
+                "h": 52,
+                "right": 64,
+                "bottom": 780
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 728,
+                "w": 52,
+                "h": 52,
+                "right": 168,
+                "bottom": 780
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 780,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 832
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 228,
+                "y": 695,
+                "w": 64,
+                "h": 64,
+                "right": 292,
+                "bottom": 759
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 302,
+                "y": 689,
+                "w": 76,
+                "h": 76,
+                "right": 378,
+                "bottom": 765
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 251,
+                "y": 775,
+                "w": 104,
+                "h": 44,
+                "right": 355,
+                "bottom": 819
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "android",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 892
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 236,
+                "w": 388,
+                "h": 291,
+                "right": 400,
+                "bottom": 527
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 388,
+                "h": 44,
+                "right": 400,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 724,
+                "w": 156,
+                "h": 156,
+                "right": 168,
+                "bottom": 880
+              },
+              "#touch-buttons": {
+                "x": 250,
+                "y": 737,
+                "w": 150,
+                "h": 130,
+                "right": 400,
+                "bottom": 867
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 133.90625,
+                "h": 44,
+                "right": 145.90625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 304,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 348,
+                "bottom": 52
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 356,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 724,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 776
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 776,
+                "w": 52,
+                "h": 52,
+                "right": 64,
+                "bottom": 828
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 776,
+                "w": 52,
+                "h": 52,
+                "right": 168,
+                "bottom": 828
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 828,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 880
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 250,
+                "y": 743,
+                "w": 64,
+                "h": 64,
+                "right": 314,
+                "bottom": 807
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 324,
+                "y": 737,
+                "w": 76,
+                "h": 76,
+                "right": 400,
+                "bottom": 813
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 273,
+                "y": 823,
+                "w": 104,
+                "h": 44,
+                "right": 377,
+                "bottom": 867
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "tablet",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 168.5,
+                "w": 744,
+                "h": 558,
+                "right": 756,
+                "bottom": 726.5
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 744,
+                "h": 44,
+                "right": 756,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 856,
+                "w": 156,
+                "h": 156,
+                "right": 168,
+                "bottom": 1012
+              },
+              "#touch-buttons": {
+                "x": 606,
+                "y": 869,
+                "w": 150,
+                "h": 130,
+                "right": 756,
+                "bottom": 999
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 157.28125,
+                "h": 44,
+                "right": 169.28125,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 603.8125,
+                "y": 8,
+                "w": 100.1875,
+                "h": 44,
+                "right": 704,
+                "bottom": 52
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 712,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 756,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 856,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 908
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 908,
+                "w": 52,
+                "h": 52,
+                "right": 64,
+                "bottom": 960
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 908,
+                "w": 52,
+                "h": 52,
+                "right": 168,
+                "bottom": 960
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 960,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 1012
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 606,
+                "y": 875,
+                "w": 64,
+                "h": 64,
+                "right": 670,
+                "bottom": 939
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 680,
+                "y": 869,
+                "w": 76,
+                "h": 76,
+                "right": 756,
+                "bottom": 945
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 629,
+                "y": 955,
+                "w": 104,
+                "h": 44,
+                "right": 733,
+                "bottom": 999
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "small-landscape",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 568,
+              "height": 320
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 164,
+                "y": 94,
+                "w": 240,
+                "h": 180,
+                "right": 404,
+                "bottom": 274
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 6,
+                "w": 544,
+                "h": 44,
+                "right": 556,
+                "bottom": 50
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 112,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 256
+              },
+              "#touch-buttons": {
+                "x": 428,
+                "y": 126,
+                "w": 128,
+                "h": 116,
+                "right": 556,
+                "bottom": 242
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 6,
+                "w": 133.90625,
+                "h": 44,
+                "right": 145.90625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 460,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 504,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 512,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 556,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 112,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 160
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 160,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 208
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 160,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 208
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 208,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 256
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 428,
+                "y": 130,
+                "w": 56,
+                "h": 56,
+                "right": 484,
+                "bottom": 186
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 492,
+                "y": 126,
+                "w": 64,
+                "h": 64,
+                "right": 556,
+                "bottom": 190
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 440,
+                "y": 198,
+                "w": 104,
+                "h": 44,
+                "right": 544,
+                "bottom": 242
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "landscape",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 844,
+              "height": 390
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 210,
+                "y": 60,
+                "w": 424,
+                "h": 318,
+                "right": 634,
+                "bottom": 378
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 6,
+                "w": 820,
+                "h": 44,
+                "right": 832,
+                "bottom": 50
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 147,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 291
+              },
+              "#touch-buttons": {
+                "x": 704,
+                "y": 161,
+                "w": 128,
+                "h": 116,
+                "right": 832,
+                "bottom": 277
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 6,
+                "w": 157.28125,
+                "h": 44,
+                "right": 169.28125,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 679.8125,
+                "y": 6,
+                "w": 100.1875,
+                "h": 44,
+                "right": 780,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 788,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 832,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 147,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 195
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 195,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 243
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 195,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 243
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 243,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 291
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 704,
+                "y": 165,
+                "w": 56,
+                "h": 56,
+                "right": 760,
+                "bottom": 221
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 768,
+                "y": 161,
+                "w": 64,
+                "h": 64,
+                "right": 832,
+                "bottom": 225
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 716,
+                "y": 233,
+                "w": 104,
+                "h": 44,
+                "right": 820,
+                "bottom": 277
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "short-landscape",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 667,
+              "height": 280
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 194.828125,
+                "y": 60,
+                "w": 277.328125,
+                "h": 208,
+                "right": 472.15625,
+                "bottom": 268
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 6,
+                "w": 643,
+                "h": 44,
+                "right": 655,
+                "bottom": 50
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 92,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 236
+              },
+              "#touch-buttons": {
+                "x": 527,
+                "y": 106,
+                "w": 128,
+                "h": 116,
+                "right": 655,
+                "bottom": 222
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 6,
+                "w": 157.28125,
+                "h": 44,
+                "right": 169.28125,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 502.8125,
+                "y": 6,
+                "w": 100.1875,
+                "h": 44,
+                "right": 603,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 611,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 655,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 92,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 140
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 140,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 188
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 140,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 188
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 188,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 236
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 527,
+                "y": 110,
+                "w": 56,
+                "h": 56,
+                "right": 583,
+                "bottom": 166
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 591,
+                "y": 106,
+                "w": 64,
+                "h": 64,
+                "right": 655,
+                "bottom": 170
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 539,
+                "y": 178,
+                "w": 104,
+                "h": 44,
+                "right": 643,
+                "bottom": 222
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "fullscreen": true,
+          "engine": "chromium"
+        },
+        {
+          "name": "desktop",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 800
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 184,
+                "y": 70.296875,
+                "w": 912,
+                "h": 684,
+                "right": 1096,
+                "bottom": 754.296875
+              },
+              "#console-top": {
+                "x": 184,
+                "y": 14.296875,
+                "w": 912,
+                "h": 44,
+                "right": 1096,
+                "bottom": 58.296875
+              },
+              "#shell-hint": {
+                "x": 446.65625,
+                "y": 766.296875,
+                "w": 386.671875,
+                "h": 19.390625,
+                "right": 833.328125,
+                "bottom": 785.6875
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 184,
+                "y": 14.296875,
+                "w": 157.28125,
+                "h": 44,
+                "right": 341.28125,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 943.8125,
+                "y": 14.296875,
+                "w": 100.1875,
+                "h": 44,
+                "right": 1044,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 1052,
+                "y": 14.296875,
+                "w": 44,
+                "h": 44,
+                "right": 1096,
+                "bottom": 58.296875
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": false
+        },
+        {
+          "name": "wide-desktop",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 240,
+                "y": 102.296875,
+                "w": 960,
+                "h": 720,
+                "right": 1200,
+                "bottom": 822.296875
+              },
+              "#console-top": {
+                "x": 240,
+                "y": 46.296875,
+                "w": 960,
+                "h": 44,
+                "right": 1200,
+                "bottom": 90.296875
+              },
+              "#shell-hint": {
+                "x": 526.65625,
+                "y": 834.296875,
+                "w": 386.671875,
+                "h": 19.390625,
+                "right": 913.328125,
+                "bottom": 853.6875
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 240,
+                "y": 46.296875,
+                "w": 157.28125,
+                "h": 44,
+                "right": 397.28125,
+                "bottom": 90.296875
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 1047.8125,
+                "y": 46.296875,
+                "w": 100.1875,
+                "h": 44,
+                "right": 1148,
+                "bottom": 90.296875
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 1156,
+                "y": 46.296875,
+                "w": 44,
+                "h": 44,
+                "right": 1200,
+                "bottom": 90.296875
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": false
+        },
+        {
+          "name": "small-desktop",
+          "engine": "chromium",
+          "geometry": {
+            "viewport": {
+              "width": 800,
+              "height": 600
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 77.328125,
+                "y": 70.296875,
+                "w": 645.328125,
+                "h": 484,
+                "right": 722.65625,
+                "bottom": 554.296875
+              },
+              "#console-top": {
+                "x": 77.328125,
+                "y": 14.296875,
+                "w": 645.328125,
+                "h": 44,
+                "right": 722.65625,
+                "bottom": 58.296875
+              },
+              "#shell-hint": {
+                "x": 206.65625,
+                "y": 566.296875,
+                "w": 386.671875,
+                "h": 19.390625,
+                "right": 593.328125,
+                "bottom": 585.6875
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 77.328125,
+                "y": 14.296875,
+                "w": 157.28125,
+                "h": 44,
+                "right": 234.609375,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 570.46875,
+                "y": 14.296875,
+                "w": 100.1875,
+                "h": 44,
+                "right": 670.65625,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 678.65625,
+                "y": 14.296875,
+                "w": 44,
+                "h": 44,
+                "right": 722.65625,
+                "bottom": 58.296875
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": false
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "reports": [
+        {
+          "name": "small-phone",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 320,
+              "height": 568
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 114.5,
+                "w": 296,
+                "h": 222,
+                "right": 308,
+                "bottom": 336.5
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 296,
+                "h": 44,
+                "right": 308,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 412,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 556
+              },
+              "#touch-buttons": {
+                "x": 180,
+                "y": 426,
+                "w": 128,
+                "h": 116,
+                "right": 308,
+                "bottom": 542
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 133.890625,
+                "h": 44,
+                "right": 145.890625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 264,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 308,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 412,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 460
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 460,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 508
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 460,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 508
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 508,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 556
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 180,
+                "y": 430,
+                "w": 56,
+                "h": 56,
+                "right": 236,
+                "bottom": 486
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 244,
+                "y": 426,
+                "w": 64,
+                "h": 64,
+                "right": 308,
+                "bottom": 490
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 192,
+                "y": 498,
+                "w": 104,
+                "h": 44,
+                "right": 296,
+                "bottom": 542
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "phone",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 220.234375,
+                "w": 366,
+                "h": 274.5,
+                "right": 378,
+                "bottom": 494.734375
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 366,
+                "h": 44,
+                "right": 378,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 675.984375,
+                "w": 156,
+                "h": 156,
+                "right": 168,
+                "bottom": 831.984375
+              },
+              "#touch-buttons": {
+                "x": 228,
+                "y": 688.984375,
+                "w": 150,
+                "h": 130,
+                "right": 378,
+                "bottom": 818.984375
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 133.890625,
+                "h": 44,
+                "right": 145.890625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 334,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 378,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 675.984375,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 727.984375
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 727.984375,
+                "w": 52,
+                "h": 52,
+                "right": 64,
+                "bottom": 779.984375
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 727.984375,
+                "w": 52,
+                "h": 52,
+                "right": 168,
+                "bottom": 779.984375
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 779.984375,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 831.984375
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 228,
+                "y": 694.984375,
+                "w": 64,
+                "h": 64,
+                "right": 292,
+                "bottom": 758.984375
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 302,
+                "y": 688.984375,
+                "w": 76,
+                "h": 76,
+                "right": 378,
+                "bottom": 764.984375
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 251,
+                "y": 774.984375,
+                "w": 104,
+                "h": 44,
+                "right": 355,
+                "bottom": 818.984375
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "android",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 892
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 236,
+                "w": 388,
+                "h": 291,
+                "right": 400,
+                "bottom": 527
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 388,
+                "h": 44,
+                "right": 400,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 724,
+                "w": 156,
+                "h": 156,
+                "right": 168,
+                "bottom": 880
+              },
+              "#touch-buttons": {
+                "x": 250,
+                "y": 737,
+                "w": 150,
+                "h": 130,
+                "right": 400,
+                "bottom": 867
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 133.890625,
+                "h": 44,
+                "right": 145.890625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 356,
+                "y": 8,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 724,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 776
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 776,
+                "w": 52,
+                "h": 52,
+                "right": 64,
+                "bottom": 828
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 776,
+                "w": 52,
+                "h": 52,
+                "right": 168,
+                "bottom": 828
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 828,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 880
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 250,
+                "y": 743,
+                "w": 64,
+                "h": 64,
+                "right": 314,
+                "bottom": 807
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 324,
+                "y": 737,
+                "w": 76,
+                "h": 76,
+                "right": 400,
+                "bottom": 813
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 273,
+                "y": 823,
+                "w": 104,
+                "h": 44,
+                "right": 377,
+                "bottom": 867
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "tablet",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 12,
+                "y": 168.5,
+                "w": 744,
+                "h": 558,
+                "right": 756,
+                "bottom": 726.5
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 8,
+                "w": 744,
+                "h": 44,
+                "right": 756,
+                "bottom": 52
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 856,
+                "w": 156,
+                "h": 156,
+                "right": 168,
+                "bottom": 1012
+              },
+              "#touch-buttons": {
+                "x": 606,
+                "y": 869,
+                "w": 150,
+                "h": 130,
+                "right": 756,
+                "bottom": 999
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 8,
+                "w": 157.265625,
+                "h": 44,
+                "right": 169.265625,
+                "bottom": 52
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 655.828125,
+                "y": 8,
+                "w": 100.171875,
+                "h": 44,
+                "right": 756,
+                "bottom": 52
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 856,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 908
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 908,
+                "w": 52,
+                "h": 52,
+                "right": 64,
+                "bottom": 960
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 908,
+                "w": 52,
+                "h": 52,
+                "right": 168,
+                "bottom": 960
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 960,
+                "w": 52,
+                "h": 52,
+                "right": 116,
+                "bottom": 1012
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 606,
+                "y": 875,
+                "w": 64,
+                "h": 64,
+                "right": 670,
+                "bottom": 939
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 680,
+                "y": 869,
+                "w": 76,
+                "h": 76,
+                "right": 756,
+                "bottom": 945
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 629,
+                "y": 955,
+                "w": 104,
+                "h": 44,
+                "right": 733,
+                "bottom": 999
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "small-landscape",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 568,
+              "height": 320
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 164,
+                "y": 94,
+                "w": 240,
+                "h": 180,
+                "right": 404,
+                "bottom": 274
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 6,
+                "w": 544,
+                "h": 44,
+                "right": 556,
+                "bottom": 50
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 112,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 256
+              },
+              "#touch-buttons": {
+                "x": 428,
+                "y": 126,
+                "w": 128,
+                "h": 116,
+                "right": 556,
+                "bottom": 242
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 6,
+                "w": 133.890625,
+                "h": 44,
+                "right": 145.890625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 512,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 556,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 112,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 160
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 160,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 208
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 160,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 208
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 208,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 256
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 428,
+                "y": 130,
+                "w": 56,
+                "h": 56,
+                "right": 484,
+                "bottom": 186
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 492,
+                "y": 126,
+                "w": 64,
+                "h": 64,
+                "right": 556,
+                "bottom": 190
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 440,
+                "y": 198,
+                "w": 104,
+                "h": 44,
+                "right": 544,
+                "bottom": 242
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "landscape",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 844,
+              "height": 390
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 210,
+                "y": 60,
+                "w": 424,
+                "h": 318,
+                "right": 634,
+                "bottom": 378
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 6,
+                "w": 820,
+                "h": 44,
+                "right": 832,
+                "bottom": 50
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 147,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 291
+              },
+              "#touch-buttons": {
+                "x": 704,
+                "y": 161,
+                "w": 128,
+                "h": 116,
+                "right": 832,
+                "bottom": 277
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 6,
+                "w": 157.265625,
+                "h": 44,
+                "right": 169.265625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 731.828125,
+                "y": 6,
+                "w": 100.171875,
+                "h": 44,
+                "right": 832,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 147,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 195
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 195,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 243
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 195,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 243
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 243,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 291
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 704,
+                "y": 165,
+                "w": 56,
+                "h": 56,
+                "right": 760,
+                "bottom": 221
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 768,
+                "y": 161,
+                "w": 64,
+                "h": 64,
+                "right": 832,
+                "bottom": 225
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 716,
+                "y": 233,
+                "w": 104,
+                "h": 44,
+                "right": 820,
+                "bottom": 277
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "name": "short-landscape",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 667,
+              "height": 280
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 194.828125,
+                "y": 60,
+                "w": 277.328125,
+                "h": 208,
+                "right": 472.15625,
+                "bottom": 268
+              },
+              "#console-top": {
+                "x": 12,
+                "y": 6,
+                "w": 643,
+                "h": 44,
+                "right": 655,
+                "bottom": 50
+              },
+              "#touch-move": {
+                "x": 12,
+                "y": 92,
+                "w": 144,
+                "h": 144,
+                "right": 156,
+                "bottom": 236
+              },
+              "#touch-buttons": {
+                "x": 527,
+                "y": 106,
+                "w": 128,
+                "h": 116,
+                "right": 655,
+                "bottom": 222
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 6,
+                "w": 157.265625,
+                "h": 44,
+                "right": 169.265625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 554.828125,
+                "y": 6,
+                "w": 100.171875,
+                "h": 44,
+                "right": 655,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 60,
+                "y": 92,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 140
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 12,
+                "y": 140,
+                "w": 48,
+                "h": 48,
+                "right": 60,
+                "bottom": 188
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 108,
+                "y": 140,
+                "w": 48,
+                "h": 48,
+                "right": 156,
+                "bottom": 188
+              },
+              {
+                "label": "Muovi giù",
+                "x": 60,
+                "y": 188,
+                "w": 48,
+                "h": 48,
+                "right": 108,
+                "bottom": 236
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 527,
+                "y": 110,
+                "w": 56,
+                "h": 56,
+                "right": 583,
+                "bottom": 166
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 591,
+                "y": 106,
+                "w": 64,
+                "h": 64,
+                "right": 655,
+                "bottom": 170
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 539,
+                "y": 178,
+                "w": 104,
+                "h": 44,
+                "right": 643,
+                "bottom": 222
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": true
+        },
+        {
+          "fullscreen": true,
+          "engine": "webkit"
+        },
+        {
+          "name": "desktop",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 1280,
+              "height": 800
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 184,
+                "y": 70.296875,
+                "w": 912,
+                "h": 684,
+                "right": 1096,
+                "bottom": 754.296875
+              },
+              "#console-top": {
+                "x": 184,
+                "y": 14.296875,
+                "w": 912,
+                "h": 44,
+                "right": 1096,
+                "bottom": 58.296875
+              },
+              "#shell-hint": {
+                "x": 446.65625,
+                "y": 766.296875,
+                "w": 386.671875,
+                "h": 19.390625,
+                "right": 833.328125,
+                "bottom": 785.6875
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 184,
+                "y": 14.296875,
+                "w": 157.265625,
+                "h": 44,
+                "right": 341.265625,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 943.828125,
+                "y": 14.296875,
+                "w": 100.171875,
+                "h": 44,
+                "right": 1044,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 1052,
+                "y": 14.296875,
+                "w": 44,
+                "h": 44,
+                "right": 1096,
+                "bottom": 58.296875
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": false
+        },
+        {
+          "name": "wide-desktop",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 240,
+                "y": 102.296875,
+                "w": 960,
+                "h": 720,
+                "right": 1200,
+                "bottom": 822.296875
+              },
+              "#console-top": {
+                "x": 240,
+                "y": 46.296875,
+                "w": 960,
+                "h": 44,
+                "right": 1200,
+                "bottom": 90.296875
+              },
+              "#shell-hint": {
+                "x": 526.65625,
+                "y": 834.296875,
+                "w": 386.671875,
+                "h": 19.390625,
+                "right": 913.328125,
+                "bottom": 853.6875
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 240,
+                "y": 46.296875,
+                "w": 157.265625,
+                "h": 44,
+                "right": 397.265625,
+                "bottom": 90.296875
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 1047.828125,
+                "y": 46.296875,
+                "w": 100.171875,
+                "h": 44,
+                "right": 1148,
+                "bottom": 90.296875
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 1156,
+                "y": 46.296875,
+                "w": 44,
+                "h": 44,
+                "right": 1200,
+                "bottom": 90.296875
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": false
+        },
+        {
+          "name": "small-desktop",
+          "engine": "webkit",
+          "geometry": {
+            "viewport": {
+              "width": 800,
+              "height": 600
+            },
+            "boxes": {
+              "#screen-frame": {
+                "x": 77.328125,
+                "y": 70.296875,
+                "w": 645.328125,
+                "h": 484,
+                "right": 722.65625,
+                "bottom": 554.296875
+              },
+              "#console-top": {
+                "x": 77.328125,
+                "y": 14.296875,
+                "w": 645.328125,
+                "h": 44,
+                "right": 722.65625,
+                "bottom": 58.296875
+              },
+              "#shell-hint": {
+                "x": 206.65625,
+                "y": 566.296875,
+                "w": 386.671875,
+                "h": 19.390625,
+                "right": 593.328125,
+                "bottom": 585.6875
+              }
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 77.328125,
+                "y": 14.296875,
+                "w": 157.265625,
+                "h": 44,
+                "right": 234.59375,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 570.484375,
+                "y": 14.296875,
+                "w": 100.171875,
+                "h": 44,
+                "right": 670.65625,
+                "bottom": 58.296875
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 678.65625,
+                "y": 14.296875,
+                "w": 44,
+                "h": 44,
+                "right": 722.65625,
+                "bottom": 58.296875
+              }
+            ]
+          },
+          "paused": true,
+          "keyboard": true,
+          "pointerSave": false
+        }
+      ]
+    }
+  ],
+  "localProduction": [
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "width": 320,
+      "height": 568,
+      "safe": {
+        "left": 0,
+        "right": 0,
+        "top": 47,
+        "bottom": 34
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 12,
+          "y": 123,
+          "right": 308,
+          "bottom": 345
+        },
+        "#touch-move": {
+          "x": 12,
+          "y": 390,
+          "right": 156,
+          "bottom": 534
+        },
+        "#touch-buttons": {
+          "x": 180,
+          "y": 404,
+          "right": 308,
+          "bottom": 520
+        },
+        "#console-top": {
+          "x": 12,
+          "y": 47,
+          "right": 308,
+          "bottom": 91
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "width": 390,
+      "height": 844,
+      "safe": {
+        "left": 0,
+        "right": 0,
+        "top": 47,
+        "bottom": 34
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 12,
+          "y": 228.75,
+          "right": 378,
+          "bottom": 503.25
+        },
+        "#touch-move": {
+          "x": 12,
+          "y": 654,
+          "right": 168,
+          "bottom": 810
+        },
+        "#touch-buttons": {
+          "x": 228,
+          "y": 667,
+          "right": 378,
+          "bottom": 797
+        },
+        "#console-top": {
+          "x": 12,
+          "y": 47,
+          "right": 378,
+          "bottom": 91
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "width": 568,
+      "height": 320,
+      "safe": {
+        "left": 44,
+        "right": 44,
+        "top": 0,
+        "bottom": 16
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 196,
+          "y": 113,
+          "right": 372,
+          "bottom": 245
+        },
+        "#touch-move": {
+          "x": 44,
+          "y": 107,
+          "right": 188,
+          "bottom": 251
+        },
+        "#touch-buttons": {
+          "x": 396,
+          "y": 121,
+          "right": 524,
+          "bottom": 237
+        },
+        "#console-top": {
+          "x": 44,
+          "y": 6,
+          "right": 524,
+          "bottom": 50
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "width": 844,
+      "height": 390,
+      "safe": {
+        "left": 44,
+        "right": 44,
+        "top": 0,
+        "bottom": 16
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 216.671875,
+          "y": 60,
+          "right": 627.328125,
+          "bottom": 368
+        },
+        "#touch-move": {
+          "x": 44,
+          "y": 142,
+          "right": 188,
+          "bottom": 286
+        },
+        "#touch-buttons": {
+          "x": 672,
+          "y": 156,
+          "right": 800,
+          "bottom": 272
+        },
+        "#console-top": {
+          "x": 44,
+          "y": 6,
+          "right": 800,
+          "bottom": 50
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "width": 1280,
+      "height": 800,
+      "bounds": {
+        "x": 184,
+        "y": 70.296875,
+        "width": 912,
+        "height": 684
+      }
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "width": 320,
+      "height": 568,
+      "safe": {
+        "left": 0,
+        "right": 0,
+        "top": 47,
+        "bottom": 34
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 12,
+          "y": 123,
+          "right": 308,
+          "bottom": 345
+        },
+        "#touch-move": {
+          "x": 12,
+          "y": 390,
+          "right": 156,
+          "bottom": 534
+        },
+        "#touch-buttons": {
+          "x": 180,
+          "y": 404,
+          "right": 308,
+          "bottom": 520
+        },
+        "#console-top": {
+          "x": 12,
+          "y": 47,
+          "right": 308,
+          "bottom": 91
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "width": 390,
+      "height": 844,
+      "safe": {
+        "left": 0,
+        "right": 0,
+        "top": 47,
+        "bottom": 34
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 12,
+          "y": 228.734375,
+          "right": 378,
+          "bottom": 503.234375
+        },
+        "#touch-move": {
+          "x": 12,
+          "y": 653.984375,
+          "right": 168,
+          "bottom": 809.984375
+        },
+        "#touch-buttons": {
+          "x": 228,
+          "y": 666.984375,
+          "right": 378,
+          "bottom": 796.984375
+        },
+        "#console-top": {
+          "x": 12,
+          "y": 47,
+          "right": 378,
+          "bottom": 91
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "width": 568,
+      "height": 320,
+      "safe": {
+        "left": 44,
+        "right": 44,
+        "top": 0,
+        "bottom": 16
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 196,
+          "y": 113,
+          "right": 372,
+          "bottom": 245
+        },
+        "#touch-move": {
+          "x": 44,
+          "y": 107,
+          "right": 188,
+          "bottom": 251
+        },
+        "#touch-buttons": {
+          "x": 396,
+          "y": 121,
+          "right": 524,
+          "bottom": 237
+        },
+        "#console-top": {
+          "x": 44,
+          "y": 6,
+          "right": 524,
+          "bottom": 50
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "width": 844,
+      "height": 390,
+      "safe": {
+        "left": 44,
+        "right": 44,
+        "top": 0,
+        "bottom": 16
+      },
+      "geometry": {
+        "#screen-frame": {
+          "x": 216.671875,
+          "y": 60,
+          "right": 627.328125,
+          "bottom": 368
+        },
+        "#touch-move": {
+          "x": 44,
+          "y": 142,
+          "right": 188,
+          "bottom": 286
+        },
+        "#touch-buttons": {
+          "x": 672,
+          "y": 156,
+          "right": 800,
+          "bottom": 272
+        },
+        "#console-top": {
+          "x": 44,
+          "y": 6,
+          "right": 800,
+          "bottom": 50
+        }
+      },
+      "drag": true,
+      "capture": true,
+      "independentKeyHold": true,
+      "physicalDevice": false
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "width": 1280,
+      "height": 800,
+      "bounds": {
+        "x": 184,
+        "y": 70.296875,
+        "width": 912,
+        "height": 684
+      }
+    }
+  ],
+  "localHotelRoutes": [
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "0fa452272d6d5b42cc38d80378c20396fe2da3adca01e519feb713b0eae39da4",
+      "stage": "diplomacy-arrival",
+      "target": "diplomacy_home",
+      "assets": [
+        "http://127.0.0.1:4184/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_reception.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_wall.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_home_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_home.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-producer_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/ui/campaign/diplomacy.png?v=2026-10-02T12-49-25"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot, continue, movement and warp keys",
+        "choice or boss dossier opened and cancelled, or earned Tour entered",
+        "new artwork loaded",
+        "money, party, morale, coalition, election retained"
+      ]
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "dce4300d6ce67b6082fa9c71edac030358f4bc1b5f7b61c77ab33fbe2a048f90",
+      "stage": "diplomacy-choice",
+      "target": "diplomacy_terrace",
+      "assets": [
+        "http://127.0.0.1:4184/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_wall.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_reception.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_terrace_path.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_stage.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_home.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_hotel.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-partner_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-partner_west.png?v=2026-10-02T12-49-25"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot, continue, movement and warp keys",
+        "choice or boss dossier opened and cancelled, or earned Tour entered",
+        "new artwork loaded",
+        "money, party, morale, coalition, election retained"
+      ]
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "301277d188b9be7abe11c5500aece186406878ad5deac76146756ebb692b71bf",
+      "stage": "diplomacy-verbale",
+      "target": "tour_feed",
+      "assets": [
+        "http://127.0.0.1:4184/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_wall.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_reception.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_north.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_west.png?v=2026-10-02T12-49-25"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot, continue, movement and warp keys",
+        "choice or boss dossier opened and cancelled, or earned Tour entered",
+        "new artwork loaded",
+        "money, party, morale, coalition, election retained"
+      ]
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "0fa452272d6d5b42cc38d80378c20396fe2da3adca01e519feb713b0eae39da4",
+      "stage": "diplomacy-arrival",
+      "target": "diplomacy_home",
+      "assets": [
+        "http://127.0.0.1:4184/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_reception.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_wall.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_west.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_home_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_home.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-producer_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/ui/campaign/diplomacy.png?v=2026-10-02T12-49-25"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot, continue, movement and warp keys",
+        "choice or boss dossier opened and cancelled, or earned Tour entered",
+        "new artwork loaded",
+        "money, party, morale, coalition, election retained"
+      ]
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "dce4300d6ce67b6082fa9c71edac030358f4bc1b5f7b61c77ab33fbe2a048f90",
+      "stage": "diplomacy-choice",
+      "target": "diplomacy_terrace",
+      "assets": [
+        "http://127.0.0.1:4184/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_wall.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_reception.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_east.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_terrace_path.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_stage.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_home.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_hotel.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-partner_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-partner_west.png?v=2026-10-02T12-49-25"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot, continue, movement and warp keys",
+        "choice or boss dossier opened and cancelled, or earned Tour entered",
+        "new artwork loaded",
+        "money, party, morale, coalition, election retained"
+      ]
+    },
+    {
+      "base": "http://127.0.0.1:4184/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "301277d188b9be7abe11c5500aece186406878ad5deac76146756ebb692b71bf",
+      "stage": "diplomacy-verbale",
+      "target": "tour_feed",
+      "assets": [
+        "http://127.0.0.1:4184/sprites/ui/boss/partner-perfetto.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_floor.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_wall.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_reception.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/tiles/diplomacy_navetta.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_south.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_west.png?v=2026-10-02T12-49-25",
+        "http://127.0.0.1:4184/sprites/chars/npc_diplomacy-host_north.png?v=2026-10-02T12-49-25"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot, continue, movement and warp keys",
+        "choice or boss dossier opened and cancelled, or earned Tour entered",
+        "new artwork loaded",
+        "money, party, morale, coalition, election retained"
+      ]
+    }
+  ],
+  "installationResources": 701,
+  "failures": [
+    {
+      "kind": "test protocol",
+      "details": "CDP touchEnd points identify the released finger, not the remaining finger. Corrected runner after event log confirmed the first finger was being ended."
+    },
+    {
+      "kind": "catalog checker",
+      "details": "Old evolution checker looked for S({/M({ source wrappers and returned zero. It now loads actual exported registries and verifies every target, learnset and PNG."
+    },
+    {
+      "kind": "bundle",
+      "details": "New input/safe-area code initially exceeded the unchanged budget. Minifier experiments increased size and were reverted. Single-source catalog identities/names reduce repeated data with all content retained."
+    }
+  ],
+  "limits": [
+    "No physical-phone comfort/FPS/audio certification.",
+    "Safe insets are simulated using the same variables as real OS insets.",
+    "Native multi-touch and sprint use Chromium CDP; WebKit multi-pointer ownership uses synthetic events, ordinary capture/drag is real.",
+    "Earned sprint segment makes no uninterrupted/full-campaign or victory claim.",
+    "237-byte gzip margin remains tight."
+  ],
+  "higgsfield": {
+    "paidJobsThisRound": 0,
+    "lastConfirmedBalance": 484.72,
+    "hotelProof": "docs/diplomacy-proof.json"
+  }
+}

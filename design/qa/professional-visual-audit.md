@@ -1,11 +1,11 @@
 # Audit visuale professionale
 
-Generato: 2026-10-02T05:07:28.226Z
+Generato: 2026-10-02T06:33:09.158Z
 
 ## Sintesi
 
-- Scene: 48
-- Scene con evidenza screenshot: 48/48
+- Scene: 49
+- Scene con evidenza screenshot: 49/49
 - Chiamate di clipping residue: 0
 - Ellissi esplicite nelle scene: 113
 - Politicmon PNG: 52

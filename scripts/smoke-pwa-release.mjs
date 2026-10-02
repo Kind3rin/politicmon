@@ -20,7 +20,7 @@ const dossierArtPaths = [
   ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
   ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
 ];
-const worldArtPaths = [...worldAssetPaths(), ...hqAssetPaths(), ...nativeFallbackPaths(), ...coreUiPaths(), ...campaignUiPaths(), ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...JSON.parse(readFileSync("scripts/higgsfield-archive.json", "utf8")).assets.map((a) => a.path.replace(/^public\//, ""))];
+const worldArtPaths = [...worldAssetPaths(), ...hqAssetPaths(), ...nativeFallbackPaths(), ...coreUiPaths(), ...campaignUiPaths(), ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...["archive", "audio"].flatMap(name => JSON.parse(readFileSync(`scripts/higgsfield-${name}.json`, "utf8")).assets.map((a) => a.path.replace(/^public\//, "")))];
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
@@ -124,6 +124,25 @@ const backdropEvidence = await page.evaluate(async (monsterFrames) => {
 }, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths]);
 if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length + worldArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
 console.log(`Primo utilizzo offline: ${backdropEvidence.length} asset Higgsfield.`);
+const musicEvidence = await page.evaluate(async () => {
+  const key = (await caches.keys()).find(name => name.startsWith("politicmon-"));
+  const cache = await caches.open(key), version = key.slice("politicmon-".length);
+  async function firstUse(path) {
+    const canonical = new URL(path, location.href), versioned = new URL(canonical); versioned.searchParams.set("v", version);
+    await cache.delete(versioned.href);
+    if (!(await cache.match(canonical.href))) throw Error("Music not precached: " + path);
+    const response = await fetch(versioned.href); if (!response.ok) throw Error("Offline music unavailable: " + path); return response;
+  }
+  const catalog = await (await firstUse("audio/catalog.json")).json(), context = new OfflineAudioContext(2, 1, 22050), checked = [];
+  for (const [id, track] of Object.entries(catalog)) {
+    const buffer = await context.decodeAudioData(await (await firstUse(track.file)).arrayBuffer());
+    if (buffer.numberOfChannels !== 2 || Math.abs(buffer.duration - track.seconds) > .08) throw Error("Offline AAC decode failed: " + id);
+    checked.push(id);
+  }
+  return checked;
+});
+if (musicEvidence.length !== Object.keys(JSON.parse(readFileSync("public/audio/catalog.json", "utf8"))).length) throw Error("Offline soundtrack coverage incomplete");
+console.log(`Primo utilizzo offline: ${musicEvidence.length} tracce AAC stereo e catalogo decodificati.`);
 const offlineWorld = await page.evaluate(async () => {
   const keys = await caches.keys();
   const requests = (await Promise.all(keys.map(async (key) => [...await (await caches.open(key)).keys()].map((request) => request.url)))).flat();

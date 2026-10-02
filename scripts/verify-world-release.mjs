@@ -26,7 +26,11 @@ const capitalPaths = JSON.parse(readFileSync('scripts/higgsfield-capitale.json',
 const courtPaths = JSON.parse(readFileSync('scripts/higgsfield-colle.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const archivePaths = JSON.parse(readFileSync('scripts/higgsfield-archive.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const strettoPaths = JSON.parse(readFileSync('scripts/higgsfield-stretto.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths];
+const audioPaths = JSON.parse(readFileSync('scripts/higgsfield-audio.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
+const music = JSON.parse(readFileSync('public/audio/catalog.json','utf8'));
+const musicPaths = ['audio/catalog.json', ...Object.values(music).map(a=>a.file)];
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths];
+const releasePaths = [...paths, ...musicPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -35,8 +39,8 @@ async function fetchBytes(path) {
 }
 let cursor = 0;
 await Promise.all(Array.from({ length: 6 }, async () => {
- while (cursor < paths.length) {
-  const path = paths[cursor++];
+ while (cursor < releasePaths.length) {
+  const path = releasePaths[cursor++];
   assert.equal(hash(await fetchBytes(path)), hash(readFileSync(`public/${path}`)), `${path}: deployed bytes differ`);
  }
 }));
@@ -73,4 +77,5 @@ assert.ok(source.includes('LA REGOLA COMUNE')&&source.includes('LA SEDIA DI CHI 
 assert.ok(source.includes('Il quartiere conta le corse del bus.'), 'personal Colle conclusion missing');
 assert.ok(source.includes('ARCHIVIO DELLE LINEE')&&source.includes('RIPRENDI UNA LINEA')&&source.includes('LE MOSSE ANNUNCIATE'), 'move archive/preparation missing');
 assert.ok(source.includes('IL RENDERING NON ATTRAVERSA')&&source.includes('COLLAUDO SENZA FILTRO')&&source.includes('RISPOSTA PREREGISTRATA'), 'Stretto writing/briefings missing');
-console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);
+assert.ok(source.includes('REGIA AUDIO')&&source.includes('audio/catalog.json'), 'new audio mixer/playback missing');
+console.log(`PASS: ${paths.length} deployed PNG checksums, ${musicPaths.length} audio/catalog checksums and civic dialogue/bridge code at ${base.origin}.`);

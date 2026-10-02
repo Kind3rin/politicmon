@@ -7,7 +7,7 @@ import { drawDeskBackdrop } from "../ui/deskArt";
 import { epiloguePages } from "../ui/epilogueArt";
 import { wrapText } from "../ui/widgets";
 import { sceneImage } from "../engine/assets";
-import { MAPS } from "../data/maps";
+import { AudioScene } from "./AudioScene";
 import { audio } from "../engine/audio";
 import { isGuideOn, loadControlMode, toggleControlMode, toggleGuide } from "../engine/controls";
 import { haptics } from "../engine/haptics";
@@ -338,10 +338,10 @@ export class PauseScene implements Scene {
       setReduceMotion(this.state.reduceEffects);
       saveGame(this.state);
     } else if (label.startsWith("AUDIO")) {
-      const enabled = audio.toggle();
-      if (enabled) {
-        audio.playMusic(MAPS[this.state.pos.mapId]?.music ?? "borgo");
-      }
+      this.stack.push(new AudioScene(this.stack, this.input, () => {
+        this.sub = this.buildOptionsMenu(); this.sub.menu.index = index;
+      }));
+      return;
     }
     audio.confirm();
     this.sub = this.buildOptionsMenu();

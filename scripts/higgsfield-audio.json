@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "balanceBefore": 613.97,
+  "creditsSpent": 0.25,
+  "estimatedCredits": 0.25,
+  "assets": [
+    {
+      "id": "audio",
+      "path": "public/sprites/ui/audio.png",
+      "width": 240,
+      "height": 180,
+      "prompt": "POLITICMON original satirical political fantasy RPG. Finished crisp square pixel art backdrop, elegant navy ivory teal burgundy restrained gold palette, full bleed 4:3. A warm modern broadcast sound control booth at night overlooking a tiny miniature parliament set, an unplugged gold ceremonial microphone on a shelf to the right while the actual compact mixing board is plugged in and working. Fictional political satire: the volume fader is physically connected to a red ribbon on a miniature podium. No words, letters, numbers, labels, logos or real people. Large simple clear shapes and chunky pixels, theatrical warm brass lighting with teal LEDs, no smooth 3D, no painting gradients. Composition for native 240 by 180: top 25 pixels quiet navy, middle and lower left two thirds very dark unobtrusive panel, all interesting props small on the right upper third at x155 to230 y28 to70, bottom20 pixels plain navy. The UI will cover x8 to232 y82 to162; do not place important subjects there. Clear calm readable studio, tasteful humorous details.",
+      "model": "gpt_image_2_5",
+      "aspectRatio": "4:3",
+      "jobId": "ed0d3132-512d-42e1-87b5-47172885caf6",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_060002_ed0d3132-512d-42e1-87b5-47172885caf6.png",
+      "cropTop": 0,
+      "crop": "full width, y0; height width*180/240, nearest resize",
+      "sourceSha256": "b681b8cffe17317cfb0db39bd57eb18627b011a9051f235c3a9271973cbc2490",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "outputSha256": "133d09453ef63a1c359236d3b7a82e2d1cfc84f57cb5293e04e0908c143ec3ce"
+    }
+  ],
+  "balanceAfter": 613.72,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+}

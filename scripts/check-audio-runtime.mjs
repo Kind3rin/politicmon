@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import {writeFileSync} from 'node:fs';
+import {chromium,webkit} from 'playwright';
+const engine=process.env.BROWSER==='webkit'?webkit:chromium;
+const browser=await engine.launch(),page=await browser.newPage(),errors=[],requests=[];
+page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('/audio/'))requests.push(r.url());});
+let attempts=0;
+await page.route('**/audio/bruxelles.m4a*',async route=>{if(!attempts++)await route.fulfill({status:503,body:'temporary failure'});else await route.continue();});
+await page.route('**/audio/borgo.m4a*',async route=>{await new Promise(r=>setTimeout(r,180));await route.continue();});
+const wait=()=>page.waitForFunction(()=>window.audioTest.musicState==='playing',{timeout:10000});
+try{
+ await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5190'}/scripts/perf-harness.html`);
+ await page.evaluate(async()=>{
+  const {audio}=await import('/src/engine/audio.ts');window.audioTest=audio;
+  audio.playMusic('title');
+  if(audio.ctx||audio.musicState==='playing')throw Error('Audio started before gesture');
+  const button=document.createElement('button');button.textContent='Ascolta';button.id='audio-unlock';button.onclick=()=>audio.unlock();document.body.append(button);
+ });
+ assert.deepEqual(requests,[],'Music fetched before user gesture');
+ await page.click('#audio-unlock');await wait();
+ assert.equal(await page.evaluate(()=>window.audioTest.currentTrack),'title');
+ await page.evaluate(()=>{const a=window.audioTest;a.playMusic('borgo');a.playMusic('stretto');a.playMusic('battle-boss');});await wait();
+ assert.equal(await page.evaluate(()=>window.audioTest.currentTrack),'battle-boss');
+ const bossDuration=await page.evaluate(async()=>{const a=window.audioTest,c=await (await fetch('/audio/catalog.json')).json();if(Math.abs(a.source.buffer.duration-c['battle-boss'].seconds)>.08)throw Error('Stale source played');return a.source.buffer.duration;});
+ await page.evaluate(()=>{const a=window.audioTest;a.pauseForLifecycle();if(a.source||a.loading)throw Error('Background left active music request');});
+ await page.waitForFunction(()=>window.audioTest.ctx.state==='suspended');
+ await page.evaluate(()=>window.audioTest.resumeForLifecycle());await wait();
+ assert.equal(await page.evaluate(()=>window.audioTest.currentTrack),'battle-boss');
+ await page.evaluate(()=>{const a=window.audioTest;a.toggle();if(a.source||a.enabled)throw Error('Mute did not stop source');a.toggle();});await wait();
+ assert.equal(await page.evaluate(()=>window.audioTest.currentTrack),'battle-boss','Unmute restored map music over battle');
+ await page.evaluate(()=>{const a=window.audioTest;a.setVolume('music',0);if(a.source)throw Error('Zero music volume kept source');a.setVolume('music',30);});await wait();
+ const fx=await page.evaluate(()=>{const a=window.audioTest;let oscillators=0;const create=a.ctx.createOscillator.bind(a.ctx);a.ctx.createOscillator=()=>{oscillators++;return create();};a.setVolume('effects',0);a.confirm();a.hitSuper();if(oscillators)throw Error('Muted effects still allocated oscillators');a.setVolume('effects',60);a.confirm();a.hitSuper();if(!oscillators)throw Error('Effects did not resume');a.pauseForLifecycle();if(a.effects.size)throw Error('Background retained scheduled effects');a.resumeForLifecycle();return oscillators;});
+ await page.evaluate(()=>window.audioTest.playMusic('bruxelles'));
+ await page.waitForFunction(()=>window.audioTest.trackTitle==='TRACCIA NON DISPONIBILE');
+ await page.evaluate(()=>window.audioTest.playMusic('bruxelles'));await wait();
+ assert.equal(attempts,2);
+ const memory=await page.evaluate(()=>{const a=window.audioTest;if(a.buffers.size>2)throw Error('Unbounded decoded music cache');const frames=[...a.buffers.values()].reduce((n,b)=>n+b.length*b.numberOfChannels,0);a.setVolume('music',40);a.setVolume('effects',0);a.destroy();if(a.ctx||a.buffers.size||a.source)throw Error('Audio teardown retained nodes');a.resumeForLifecycle();return {bufferSamples:frames};});
+ await wait();assert.equal(await page.evaluate(()=>window.audioTest.currentTrack),'bruxelles');
+ await page.reload();
+ const persisted=await page.evaluate(async()=>{const {audio}=await import('/src/engine/audio.ts');if(audio.ctx)throw Error('Reload bypassed gesture');return audio.mix;});
+ assert.deepEqual(persisted,{enabled:true,music:40,effects:0});assert.deepEqual(errors,[]);assert.equal(attempts,3);
+ const report={engine:engine.name(),bossDuration,fxOscillators:fx,memory,persisted,checks:['gesture before fetch','rapid latest-track wins','background suspend/resume','mute retains battle track','independent zero-volume buses','503 retry','two decoded buffers','teardown/pageshow rebuild','reload preferences']};
+ writeFileSync(`artifacts/audio-runtime-${engine.name()}.json`,JSON.stringify(report,null,2));
+ console.log(`PASS ${engine.name()}: gesture, track races, lifecycle, independent buses, 503 recovery, bounded cache and persisted reload preferences.`);
+}finally{await browser.close();}

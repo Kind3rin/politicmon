@@ -9,7 +9,8 @@ import { SPECIES } from "../src/data/species.ts";
 
 const ROOT = process.cwd();
 const BASELINE_PATH = resolve(ROOT, "docs/performance-baseline.json");
-const REPORT_PATH = resolve(ROOT, "artifacts/reports/performance-latest.json");
+const audioEnabled = process.env.PERF_AUDIO === "1";
+const REPORT_PATH = resolve(ROOT, `artifacts/reports/performance-${audioEnabled ? "audio" : "latest"}.json`);
 const MARKDOWN_PATH = resolve(ROOT, "docs/performance-baseline.md");
 const writeBaseline = process.argv.includes("--write-baseline");
 const checkBaseline = process.argv.includes("--check");
@@ -84,13 +85,21 @@ async function measureScenes(browser) {
     const page = await context.newPage();
     await mobileSession(browser, page);
     await page.goto(`${url}/scripts/perf-harness.html`, { waitUntil: "networkidle" });
-    const result = await page.evaluate(async () => {
+    if (audioEnabled) {
+      await page.evaluate(async () => {
+        const { audio } = await import("/src/engine/audio.ts");
+        const button = document.createElement("button"); button.textContent = "Enable audio";
+        button.addEventListener("click", () => audio.unlock()); document.body.append(button);
+      });
+      await page.getByRole("button", { name: "Enable audio" }).click();
+    }
+    const result = await page.evaluate(async (withAudio) => {
       const [{ Screen }, { Input }, { SceneStack }, { WorldScene }, { BattleScene }, { DexScene }, stateMod, monsterMod, speciesMod, assetsMod, audioMod] = await Promise.all([
         import("/src/engine/screen.ts"), import("/src/engine/input.ts"), import("/src/engine/scene.ts"),
         import("/src/game/world/WorldScene.ts"), import("/src/game/battle/BattleScene.ts"), import("/src/scenes/DexScene.ts"),
         import("/src/game/state.ts"), import("/src/game/monster.ts"), import("/src/data/species.ts"), import("/src/engine/assets.ts"), import("/src/engine/audio.ts")
       ]);
-      audioMod.audio.enabled = false;
+      audioMod.audio.enabled = withAudio;
       const canvas = document.createElement("canvas"); canvas.width = 240; canvas.height = 180;
       const screen = new Screen(canvas); const input = new Input(); const stack = new SceneStack();
       const percentile = (values, p) => [...values].sort((a, b) => a - b)[Math.floor((values.length - 1) * p)];
@@ -103,6 +112,11 @@ async function measureScenes(browser) {
         stack.replace(scene);
         for (let i = 0; i < 30; i += 1) { stack.update(1 / 60); stack.draw(screen); input.endFrame(); }
         await new Promise((resolveWait) => setTimeout(resolveWait, 800));
+        if (withAudio) {
+          const deadline = performance.now() + 5000;
+          while (audioMod.audio.musicState !== "playing" && performance.now() < deadline) await new Promise(r => setTimeout(r, 50));
+          if (audioMod.audio.musicState !== "playing") throw new Error(`Music not playing: ${audioMod.audio.trackTitle}`);
+        }
         const work = [];
         const intervals = [];
         await new Promise((resolveFrames) => {
@@ -119,7 +133,8 @@ async function measureScenes(browser) {
           };
           requestAnimationFrame(tick);
         });
-        return { work: summarize(work), interval: summarize(intervals), framesOver100ms: intervals.filter((value) => value > 100).length };
+        return { work: summarize(work), interval: summarize(intervals), framesOver100ms: intervals.filter((value) => value > 100).length,
+          audio: { enabled: audioMod.audio.enabled, state: audioMod.audio.musicState, title: audioMod.audio.trackTitle } };
       }
       const worldState = stateMod.newGameState();
       worldState.flags["intro-done"] = true; worldState.flags["dex-received"] = true;
@@ -133,7 +148,7 @@ async function measureScenes(browser) {
       for (const id of Object.keys(speciesMod.SPECIES)) dexState.dex[id] = "caught";
       const dex = await sample(new DexScene(stack, input, dexState));
       return { world, battle, dex, spriteRegistry: assetsMod.spriteRegistryStats(), rasterCache: screen.cacheStats() };
-    });
+    }, audioEnabled);
     for (const scene of ["world", "battle", "dex"]) for (const group of ["work", "interval"]) for (const key of ["meanMs", "p50Ms", "p95Ms", "p99Ms", "maxMs"]) result[scene][group][key] = Number(result[scene][group][key].toFixed(3));
     await context.close();
     return result;
@@ -206,7 +221,7 @@ let report;
 try {
   report = {
     schemaVersion: 2,
-    profile: { viewport: "390x844", deviceScaleFactor: 2, cpuThrottle: 4, bootNetwork: "40ms/4Mbps" },
+    profile: { viewport: "390x844", deviceScaleFactor: 2, cpuThrottle: 4, bootNetwork: "40ms/4Mbps", sceneAudio: audioEnabled },
     boot: await measureBoot(browser), scenes: await measureScenes(browser), sizes: await measureSizes(), save: measureSave()
   };
 } finally { await browser.close(); }

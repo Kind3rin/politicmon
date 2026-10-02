@@ -1,5 +1,13 @@
 # Politicmon: risorse Higgsfield
 
+Ventesimo blocco: regia audio, un fondale 240×180 per il mixer del gioco.
+Un job `gpt_image_2_5`, **0,25 crediti**, saldo **613,97 → 613,72**,
+cumulativo **272,25**. Prompt, cartella, job, fonte e checksum in
+`higgsfield-audio.json`. [AUDIO-REGIA.md](AUDIO-REGIA.md) documenta anche
+19 composizioni originali prodotte dal sintetizzatore del progetto,
+volumi indipendenti, controlli nativi e decodifica offline. La musica
+non è attribuita a Higgsfield e non ha consumato crediti del connettore.
+
 Diciannovesimo blocco: cinque panorami 224×78 per Capitano, DJ, Citofonista,
 attivista No-Ponte e Geometra. Cinque job `gpt_image_2_5`, **1,25 crediti**,
 saldo **615,22 → 613,97**, cumulativo **272,00**. Prompt, job, URL, ritagli

@@ -38,11 +38,12 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Preparazione e archivio | Recupero gratuito delle mosse al livello, dossier reale della squadra avversaria, comparsa sicura degli sfidanti | Tre starter fino al Garante con preparazione diversa; limiti e confronti in STRETTO-COLLAUDO |
 | Palazzo e Colle | Tre prove illustrate e volontarie, rifornimenti accessibili, verbale del morale letto al finale | Partita nuova di Ellyna fino al Garante; altri percorsi e limiti in COLLE-VERBALE |
 | Stretto | Cinque nuovi briefing, satira rendering/collaudo, ritorno prima della sfida e Tessera evolutiva; prove manuali anche dopo il Capitano | Tre partite nuove con preparazione diversa fino al Garante; confronto Giorgetta senza kit e accessi in due motori |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 187.227 byte gzip iniziali, checksum e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 542 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 187.797 byte gzip iniziali, checksum e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 543 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 613,97; spesa cumulativa 272,00 crediti. Non sono stati attivati acquisti
+verificato: 613,72; spesa cumulativa 272,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -62,7 +63,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
    Genova, retrobottega, casinò e Coppa sono ora rivisti. Onboarding, pausa e trasporto stradale hanno ricevuto una revisione con dossier e prove delle azioni.
-   Anche la cornice esterna è rivista con guida modale e controlli nativi. Proseguire la revisione dei flussi integrati e dei box meno frequenti; il censimento delle 48 scene non prova che ogni loro stato sia moderno. Eliminare layout e asset residui vecchi;
+   Anche la cornice esterna è rivista con guida modale e controlli nativi. Proseguire la revisione dei flussi integrati e dei box meno frequenti; il censimento delle 49 scene non prova che ogni loro stato sia moderno. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
    ricorrenze e risposte alle azioni. La ricerca web deve generare satira
@@ -70,6 +71,8 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    Il round carburante aggiunge una scena, non esaurisce questa revisione.
 5. **Audio e animazione.** Riesaminare feedback, musica, transizioni e momenti
    chiave; usare media generati dove servono al ritmo o alla comprensione.
+   Diciannove temi e regia sono ora sostituiti e verificati offline nei due motori;
+   restano ascolto su dispositivi fisici, sessioni lunghe e prove integrate con tutti gli effetti.
    Ogni effetto deve rispettare RIDUCI EFFETTI e RITMO RAPIDO.
 6. **Verifica integrale.** Campagna reale dall'inizio al finale, postgame,
    evoluzioni e percorsi alternativi, import/export dei save, offline e
@@ -263,3 +266,15 @@ campagna completa in difficoltà elevata.
 Round Stretto pubblicato in `83badd5`: CI e tre deploy Vercel riusciti,
 433 checksum sul dominio pubblico, 542 risorse PWA nei due motori e sei
 configurazioni della cornice esterna. Reload offline solo Chromium.
+
+### Regia audio — 2 ottobre 2026
+
+[AUDIO-REGIA.md](AUDIO-REGIA.md): diciannove nuove composizioni stereo,
+feedback rivisto, mixer dal titolo e dalla pausa, preferenze separate dai
+salvataggi, sospensione in background e cache di due tracce decodificate.
+Un PNG Higgsfield, 0,25 crediti; saldo 613,72. 286 test, 30 layout per
+motore, runtime e build di produzione tramite input nei due motori.
+CPU ×4 con musica attiva: p95 17,6 ms, bundle 183,4/348,9 KiB entro i
+limiti invariati. 434 checksum PNG e 20 audio/catalogo locali; 543 asset
+Higgsfield e 19 AAC decodificati offline in Chromium/WebKit. Reload
+offline solo Chromium. Ascolto e FPS su dispositivi fisici restano aperti.

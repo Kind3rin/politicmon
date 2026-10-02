@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
+import { createHash } from "node:crypto";
 import { ABILITIES } from "../src/data/abilities.ts";
 import { ITEMS } from "../src/data/items.ts";
 import { MAPS } from "../src/data/maps.ts";
@@ -31,6 +32,23 @@ function validateRegistry(name, registry) {
 }
 
 for (const [name, registry] of Object.entries({ SPECIES, MOVES, ITEMS, ABILITIES, TRAINERS, MAPS })) validateRegistry(name, registry);
+
+// Check the actual map registry: a mistyped track otherwise fails silently
+// only when that room is visited, including later campaign rooms.
+const musicCatalog = JSON.parse(readFileSync(resolve("public/audio/catalog.json"), "utf8"));
+for (const map of Object.values(MAPS)) if (map.music && !musicCatalog[map.music]) fail(`map ${map.id}`, `musica inesistente ${map.music}`);
+for (const id of ["title", "borgo", "battle-wild", "battle-trainer", "battle-gym", "battle-boss", "battle-legend", "battle-duel"]) {
+  if (!musicCatalog[id]) fail("music", `traccia di scena mancante ${id}`);
+}
+for (const [id, track] of Object.entries(musicCatalog)) {
+  const scope = `music ${id}`;
+  if (!track.title || !Number.isFinite(track.seconds) || track.seconds <= 0) fail(scope, "titolo/durata non validi");
+  if (!/^audio\/[a-z_-]+\.m4a$/.test(track.file)) { fail(scope, "percorso AAC non valido"); continue; }
+  const file = resolve("public", track.file);
+  if (!existsSync(file)) { fail(scope, "file AAC mancante"); continue; }
+  const bytes = readFileSync(file);
+  if (bytes.length !== track.bytes || createHash("sha256").update(bytes).digest("hex") !== track.sha256) fail(scope, "catalogo/file AAC non coincidono");
+}
 
 const types = new Set(Object.keys(TYPE_COLORS));
 for (const species of Object.values(SPECIES)) {

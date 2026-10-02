@@ -537,7 +537,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
   },
   palazzo_talkshow: {
     id: "palazzo_talkshow", name: "ARCHIVIO TALK SHOW", tiles: FUTURO_SIDE_ROOM_TILES,
-    outdoor: false, music: "battle_trainer", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 7, facing: "down" }], signs: [], pickups: [],
+    outdoor: false, music: "battle-trainer", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 7, facing: "down" }], signs: [], pickups: [],
     npcs: [
       { id: "palace-talkshow-a", pal: "journalist", x: 2, y: 3, facing: "down", lines: [] },
       { id: "palace-talkshow-b", pal: "boss", x: 7, y: 3, facing: "down", lines: [] }
@@ -545,7 +545,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
   },
   palazzo_silenzio: {
     id: "palazzo_silenzio", name: "SILENZIO STAMPA", tiles: FUTURO_SIDE_ROOM_TILES,
-    outdoor: false, music: "futuro_anteriore", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 7, facing: "down" }], signs: [], pickups: [],
+    outdoor: false, music: "election_night", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 7, facing: "down" }], signs: [], pickups: [],
     npcs: [
       { id: "palace-silence-a", pal: "aide", x: 2, y: 3, facing: "down", lines: [] },
       { id: "palace-silence-b", pal: "aide", x: 7, y: 3, facing: "down", lines: [] }

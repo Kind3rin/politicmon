@@ -1,0 +1,686 @@
+{
+  "date": "2026-10-02",
+  "parentCommit": "ccf367a9158f3f9f7310cb219d10b6a64b5c84aa",
+  "credits": {
+    "version": 1,
+    "balanceBefore": 613.97,
+    "creditsSpent": 0.25,
+    "estimatedCredits": 0.25,
+    "assets": [
+      {
+        "id": "audio",
+        "path": "public/sprites/ui/audio.png",
+        "width": 240,
+        "height": 180,
+        "prompt": "POLITICMON original satirical political fantasy RPG. Finished crisp square pixel art backdrop, elegant navy ivory teal burgundy restrained gold palette, full bleed 4:3. A warm modern broadcast sound control booth at night overlooking a tiny miniature parliament set, an unplugged gold ceremonial microphone on a shelf to the right while the actual compact mixing board is plugged in and working. Fictional political satire: the volume fader is physically connected to a red ribbon on a miniature podium. No words, letters, numbers, labels, logos or real people. Large simple clear shapes and chunky pixels, theatrical warm brass lighting with teal LEDs, no smooth 3D, no painting gradients. Composition for native 240 by 180: top 25 pixels quiet navy, middle and lower left two thirds very dark unobtrusive panel, all interesting props small on the right upper third at x155 to230 y28 to70, bottom20 pixels plain navy. The UI will cover x8 to232 y82 to162; do not place important subjects there. Clear calm readable studio, tasteful humorous details.",
+        "model": "gpt_image_2_5",
+        "aspectRatio": "4:3",
+        "jobId": "ed0d3132-512d-42e1-87b5-47172885caf6",
+        "status": "completed",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_060002_ed0d3132-512d-42e1-87b5-47172885caf6.png",
+        "cropTop": 0,
+        "crop": "full width, y0; height width*180/240, nearest resize",
+        "sourceSha256": "b681b8cffe17317cfb0db39bd57eb18627b011a9051f235c3a9271973cbc2490",
+        "sourceSize": [
+          1168,
+          880
+        ],
+        "outputSha256": "133d09453ef63a1c359236d3b7a82e2d1cfc84f57cb5293e04e0908c143ec3ce"
+      }
+    ],
+    "balanceAfter": 613.72,
+    "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+  },
+  "trackCount": 19,
+  "audioCompressedBytes": 3973617,
+  "catalogBytes": 8460,
+  "layout": {
+    "chromium": {
+      "issues": [],
+      "checked": 30,
+      "tracks": [
+        {
+          "id": "title",
+          "duration": 17.17986394557823,
+          "peak": 0.3419190049171448,
+          "rms": 0.08571976078733884,
+          "seam": 0.028092719614505768
+        },
+        {
+          "id": "borgo",
+          "duration": 20.012698412698413,
+          "peak": 0.3190041482448578,
+          "rms": 0.06027541428673929,
+          "seam": 0.015244362875819206
+        },
+        {
+          "id": "mediopoli",
+          "duration": 16.29750566893424,
+          "peak": 0.3317262828350067,
+          "rms": 0.057525894211465936,
+          "seam": 0.004796598106622696
+        },
+        {
+          "id": "eurotown",
+          "duration": 18.85170068027211,
+          "peak": 0.3879880905151367,
+          "rms": 0.06081005704804289,
+          "seam": 0.008798714727163315
+        },
+        {
+          "id": "capitale",
+          "duration": 21.359455782312924,
+          "peak": 0.37376558780670166,
+          "rms": 0.08930341892974747,
+          "seam": 0.05721001885831356
+        },
+        {
+          "id": "campo_largo",
+          "duration": 18.155102040816328,
+          "peak": 0.33802372217178345,
+          "rms": 0.0581397679577161,
+          "seam": 0.020260242745280266
+        },
+        {
+          "id": "social_tension",
+          "duration": 14.579229024943311,
+          "peak": 0.3380753993988037,
+          "rms": 0.05989806048552231,
+          "seam": 0.008980466518551111
+        },
+        {
+          "id": "election_night",
+          "duration": 23.44925170068027,
+          "peak": 0.3551652431488037,
+          "rms": 0.059093248479686944,
+          "seam": 0.0033628568053245544
+        },
+        {
+          "id": "interior",
+          "duration": 21.82385487528345,
+          "peak": 0.33007580041885376,
+          "rms": 0.06181027253410349,
+          "seam": 0.015864890534430742
+        },
+        {
+          "id": "palazzo",
+          "duration": 25.306848072562357,
+          "peak": 0.3793639838695526,
+          "rms": 0.08647111031820148,
+          "seam": 0.005237181670963764
+        },
+        {
+          "id": "stretto",
+          "duration": 17.78358276643991,
+          "peak": 0.3281688094139099,
+          "rms": 0.06148916978929868,
+          "seam": 0.0025564003735780716
+        },
+        {
+          "id": "battle-wild",
+          "duration": 15.508027210884354,
+          "peak": 0.35989224910736084,
+          "rms": 0.05799585128471457,
+          "seam": 0.010629529133439064
+        },
+        {
+          "id": "battle-trainer",
+          "duration": 14.161269841269842,
+          "peak": 0.316913366317749,
+          "rms": 0.05759446317040267,
+          "seam": 0.011880680918693542
+        },
+        {
+          "id": "battle-gym",
+          "duration": 13.371791383219955,
+          "peak": 0.3417396545410156,
+          "rms": 0.05996090541057622,
+          "seam": 0.013795144855976105
+        },
+        {
+          "id": "battle-boss",
+          "duration": 16.576145124716554,
+          "peak": 0.3535422086715698,
+          "rms": 0.08957595298045644,
+          "seam": 0.0402707252651453
+        },
+        {
+          "id": "battle-legend",
+          "duration": 26.70004535147392,
+          "peak": 0.3318467140197754,
+          "rms": 0.0615771802593382,
+          "seam": 0.003117564134299755
+        },
+        {
+          "id": "offshore",
+          "duration": 20.430657596371883,
+          "peak": 0.34269747138023376,
+          "rms": 0.061693749880275976,
+          "seam": 0.012400088831782341
+        },
+        {
+          "id": "bruxelles",
+          "duration": 19.223219954648528,
+          "peak": 0.37030893564224243,
+          "rms": 0.08817233882688297,
+          "seam": 0.03859556280076504
+        },
+        {
+          "id": "battle-duel",
+          "duration": 13.000272108843538,
+          "peak": 0.36676740646362305,
+          "rms": 0.06069030882127965,
+          "seam": 0.02013851096853614
+        }
+      ]
+    },
+    "webkit": {
+      "issues": [],
+      "checked": 30,
+      "tracks": [
+        {
+          "id": "title",
+          "duration": 17.142857142857142,
+          "peak": 0.3419190049171448,
+          "rms": 0.08581222204734779,
+          "seam": 0.02809271216392517
+        },
+        {
+          "id": "borgo",
+          "duration": 20,
+          "peak": 0.31900420784950256,
+          "rms": 0.06029454608200052,
+          "seam": 0.015244361013174057
+        },
+        {
+          "id": "mediopoli",
+          "duration": 16.27120181405896,
+          "peak": 0.3317262828350067,
+          "rms": 0.05757237373874544,
+          "seam": 0.004796590656042099
+        },
+        {
+          "id": "eurotown",
+          "duration": 18.823537414965987,
+          "peak": 0.3879880905151367,
+          "rms": 0.060855530484425234,
+          "seam": 0.008798718452453613
+        },
+        {
+          "id": "capitale",
+          "duration": 21.333333333333332,
+          "peak": 0.3737655580043793,
+          "rms": 0.08935806355941583,
+          "seam": 0.05721002630889416
+        },
+        {
+          "id": "campo_largo",
+          "duration": 18.113197278911564,
+          "peak": 0.33802375197410583,
+          "rms": 0.05820698269182175,
+          "seam": 0.02026023529469967
+        },
+        {
+          "id": "social_tension",
+          "duration": 14.545442176870749,
+          "peak": 0.3380753993988037,
+          "rms": 0.05996758611228543,
+          "seam": 0.008980465354397893
+        },
+        {
+          "id": "election_night",
+          "duration": 23.414648526077098,
+          "peak": 0.3551652133464813,
+          "rms": 0.05913689847237622,
+          "seam": 0.0033628474920988083
+        },
+        {
+          "id": "interior",
+          "duration": 21.818185941043083,
+          "peak": 0.33007580041885376,
+          "rms": 0.06181830249366817,
+          "seam": 0.01586488727480173
+        },
+        {
+          "id": "palazzo",
+          "duration": 25.263174603174605,
+          "peak": 0.379364013671875,
+          "rms": 0.08654580937294658,
+          "seam": 0.005237181670963764
+        },
+        {
+          "id": "stretto",
+          "duration": 17.77777777777778,
+          "peak": 0.3281688094139099,
+          "rms": 0.06149920850291031,
+          "seam": 0.0025563975796103477
+        },
+        {
+          "id": "battle-wild",
+          "duration": 15.483854875283447,
+          "peak": 0.35989224910736084,
+          "rms": 0.05804110373488635,
+          "seam": 0.010629536584019661
+        },
+        {
+          "id": "battle-trainer",
+          "duration": 14.117641723356009,
+          "peak": 0.3169133961200714,
+          "rms": 0.05768338810840653,
+          "seam": 0.011880681850016117
+        },
+        {
+          "id": "battle-gym",
+          "duration": 13.333333333333334,
+          "peak": 0.341739684343338,
+          "rms": 0.060047317649057644,
+          "seam": 0.013795144855976105
+        },
+        {
+          "id": "battle-boss",
+          "duration": 16.55174603174603,
+          "peak": 0.3535422682762146,
+          "rms": 0.08964194430623976,
+          "seam": 0.04027072712779045
+        },
+        {
+          "id": "battle-legend",
+          "duration": 26.666666666666668,
+          "peak": 0.3318467140197754,
+          "rms": 0.06161570682772498,
+          "seam": 0.003117564134299755
+        },
+        {
+          "id": "offshore",
+          "duration": 20.425532879818594,
+          "peak": 0.34269747138023376,
+          "rms": 0.061701488721601444,
+          "seam": 0.012400086969137192
+        },
+        {
+          "id": "bruxelles",
+          "duration": 19.2,
+          "peak": 0.37030890583992004,
+          "rms": 0.08822563284868651,
+          "seam": 0.03859556466341019
+        },
+        {
+          "id": "battle-duel",
+          "duration": 12.97297052154195,
+          "peak": 0.36676743626594543,
+          "rms": 0.06075413680564574,
+          "seam": 0.020138517022132874
+        }
+      ]
+    }
+  },
+  "runtime": {
+    "chromium": {
+      "engine": "chromium",
+      "bossDuration": 16.576125,
+      "fxOscillators": 3,
+      "memory": {
+        "bufferSamples": 3436736
+      },
+      "persisted": {
+        "enabled": true,
+        "music": 40,
+        "effects": 0
+      },
+      "checks": [
+        "gesture before fetch",
+        "rapid latest-track wins",
+        "background suspend/resume",
+        "mute retains battle track",
+        "independent zero-volume buses",
+        "503 retry",
+        "two decoded buffers",
+        "teardown/pageshow rebuild",
+        "reload preferences"
+      ]
+    },
+    "webkit": {
+      "engine": "webkit",
+      "bossDuration": 16.55175,
+      "fxOscillators": 3,
+      "memory": {
+        "bufferSamples": 3432168
+      },
+      "persisted": {
+        "enabled": true,
+        "music": 40,
+        "effects": 0
+      },
+      "checks": [
+        "gesture before fetch",
+        "rapid latest-track wins",
+        "background suspend/resume",
+        "mute retains battle track",
+        "independent zero-volume buses",
+        "503 retry",
+        "two decoded buffers",
+        "teardown/pageshow rebuild",
+        "reload preferences"
+      ]
+    }
+  },
+  "localRelease": {
+    "chromium": {
+      "base": "http://127.0.0.1:4180",
+      "engine": "chromium",
+      "loops": [
+        {
+          "duration": 17.179854166666665,
+          "channels": 2,
+          "loopEnd": 17.142857142857142
+        },
+        {
+          "duration": 17.179854166666665,
+          "channels": 2,
+          "loopEnd": 17.142857142857142
+        }
+      ],
+      "persisted": {
+        "enabled": true,
+        "music": 40,
+        "effects": 60
+      },
+      "checks": [
+        "no music before gesture",
+        "real title input opens mixer",
+        "independent sliders",
+        "mute/unmute title loop",
+        "reload preferences and gesture"
+      ]
+    },
+    "webkit": {
+      "base": "http://127.0.0.1:4180",
+      "engine": "webkit",
+      "loops": [
+        {
+          "duration": 17.142854166666666,
+          "channels": 2,
+          "loopEnd": 17.142854166666666
+        },
+        {
+          "duration": 17.142854166666666,
+          "channels": 2,
+          "loopEnd": 17.142854166666666
+        }
+      ],
+      "persisted": {
+        "enabled": true,
+        "music": 40,
+        "effects": 60
+      },
+      "checks": [
+        "no music before gesture",
+        "real title input opens mixer",
+        "independent sliders",
+        "mute/unmute title loop",
+        "reload preferences and gesture"
+      ]
+    }
+  },
+  "performanceAudio": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": true
+    },
+    "boot": {
+      "assetsReadyMs": 1382.0999999940395,
+      "firstFrameMs": 1391.199999988079,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 568717,
+      "wallMs": 1920.21
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.529,
+          "p50Ms": 0.5,
+          "p95Ms": 1,
+          "p99Ms": 1.2,
+          "maxMs": 6.2
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.736,
+          "p50Ms": 16.7,
+          "p95Ms": 17.5,
+          "p99Ms": 17.6,
+          "maxMs": 32.6
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "LA PORTA ACCANTO AL POTERE"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.165,
+          "p50Ms": 0.1,
+          "p95Ms": 0.6,
+          "p99Ms": 0.8,
+          "maxMs": 1.2
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.733,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.7,
+          "maxMs": 32.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "IL CANDIDATO NELL ERBA"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.248,
+          "p50Ms": 0.2,
+          "p95Ms": 0.7,
+          "p99Ms": 0.9,
+          "maxMs": 1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.733,
+          "p50Ms": 16.7,
+          "p95Ms": 17.5,
+          "p99Ms": 17.7,
+          "maxMs": 32.9
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "IL CANDIDATO NELL ERBA"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1121109,
+      "codeGzipBytes": 357276,
+      "initialCodeGzipBytes": 187797,
+      "spriteCompressedBytes": 2843352,
+      "spriteDecodedBytesEstimate": 14272512,
+      "spriteFiles": 542
+    },
+    "save": {
+      "payloadBytes": 8918,
+      "parseMeanMs": 0.031,
+      "serializeMeanMs": 0.018
+    }
+  },
+  "tests": {
+    "passed": 286,
+    "failed": 0
+  },
+  "deskViews": {
+    "chromium": 512,
+    "webkit": 504
+  },
+  "releaseAssetChecks": {
+    "png": 434,
+    "audioAndCatalog": 20
+  },
+  "pwa": {
+    "higgsAssets": 543,
+    "aacDecodedOffline": 19,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "offlineReload": "chromium only"
+  },
+  "limits": [
+    "No real-device listening or FPS certification",
+    "Signal metrics do not certify musical quality",
+    "Two cached decoded buffers; in-flight decoding and fading sources can temporarily retain others",
+    "No audio codec tested outside Chromium and WebKit"
+  ],
+  "performanceSilent": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": false
+    },
+    "boot": {
+      "assetsReadyMs": 1464.5,
+      "firstFrameMs": 1480.6000000238419,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 568717,
+      "wallMs": 2010.66
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.596,
+          "p50Ms": 0.6,
+          "p95Ms": 1.2,
+          "p99Ms": 1.5,
+          "maxMs": 7
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.745,
+          "p50Ms": 16.7,
+          "p95Ms": 18.6,
+          "p99Ms": 18.6,
+          "maxMs": 35.4
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.165,
+          "p50Ms": 0.1,
+          "p95Ms": 0.7,
+          "p99Ms": 0.8,
+          "maxMs": 1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.736,
+          "p50Ms": 16.7,
+          "p95Ms": 18.5,
+          "p99Ms": 18.6,
+          "maxMs": 31.6
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.273,
+          "p50Ms": 0.2,
+          "p95Ms": 0.8,
+          "p99Ms": 0.9,
+          "maxMs": 1.1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.745,
+          "p50Ms": 16.7,
+          "p95Ms": 18.6,
+          "p99Ms": 18.7,
+          "maxMs": 33.5
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1121109,
+      "codeGzipBytes": 357276,
+      "initialCodeGzipBytes": 187797,
+      "spriteCompressedBytes": 2843352,
+      "spriteDecodedBytesEstimate": 14272512,
+      "spriteFiles": 542
+    },
+    "save": {
+      "payloadBytes": 8918,
+      "parseMeanMs": 0.0313,
+      "serializeMeanMs": 0.0178
+    }
+  }
+}

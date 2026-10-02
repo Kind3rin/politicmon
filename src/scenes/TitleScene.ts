@@ -1,3 +1,4 @@
+import { AudioScene } from "./AudioScene";
 import { audio } from "../engine/audio";
 import { drawMonsterSprite } from "../art/monsters";
 import { STARTERS } from "../data/species";
@@ -144,13 +145,10 @@ export class TitleScene implements Scene {
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {
-      const enabled = audio.toggle();
-      if (enabled) {
-        audio.playMusic("title");
-      }
       const index = this.menu.index;
-      this.menu = this.buildMenu();
-      this.menu.index = Math.min(index, this.menu.items.length - 1);
+      this.stack.push(new AudioScene(this.stack, this.input, () => {
+        this.menu = this.buildMenu(); this.menu.index = Math.min(index, this.menu.items.length - 1);
+      }));
     }
   }
 

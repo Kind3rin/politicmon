@@ -56,7 +56,7 @@ piazza a urlare.
 | 🔎 **Politicdex da campo** | Filtri, habitat accessibili, statistiche, difese, evoluzioni e mosse; cinque pagine per ogni creatura |
 | 🎯 **Dossier di battaglia** | START nel menu mosse o nella scelta del cambio: stima del danno, priorità, abilità e immunità; costo del cambio esplicito, probabilità di reclutamento e ritmo normale o rapido |
 | 📑 **Carriere e schede** | Cinque pagine per candidato; confronto prima delle evoluzioni, rinvio e ripresa dalla squadra, tessere consumate dopo la conferma |
-| ♟️ **Boss e prove tattiche** | Tredici briefing illustrati con tipi, livelli e scelta del leader; prove facoltative fino alla Global Tower e IA che valuta danno effettivo, cure, priorità e immunità |
+| ♟️ **Boss e prove tattiche** | Ventuno briefing illustrati con tipi, livelli e scelta del leader; prove facoltative fino alla Consulta e allo Stretto e IA che valuta danno effettivo, cure, priorità e immunità |
 | 🌱 **Costruisci la squadra** | Reclutamento con EXP, bonus iniziale graduato e Divisa Equa per far crescere e apprendere mosse alla panchina viva; missioni che guidano la preparazione |
 | 🤝 **Morale con conseguenze** | Fiducia modifica i prezzi, coesione modifica l'EXP; promesse finanziabili, scadenze e memoria delle scelte |
 | 📊 **SONDAGGI (0-100%)** | La stat-firma: muove prezzi, EXP (*onda del consenso*) e **rami evolutivi** governo↔opposizione |
@@ -66,6 +66,7 @@ piazza a urlare.
 | 🗺️ **Storia in 3 atti** | Borgo, palestre, Palazzo e Colle; poi campagna internazionale e finale che riflette anche le scelte civiche |
 | 🎰 **Contenuti extra** | Ponte sullo Stretto, CASINÒ DI PALAZZO, veicoli (MONOPATTINO / RUSPA), rivale ricorrente |
 | 📱 **Mobile & PWA** | Levetta analogica, modalità guidata, **3 slot di salvataggio**, installabile e giocabile offline |
+| 🎚️ **Regia audio** | 19 nuovi temi stereo, volumi separati di musica ed effetti, preferenze persistenti e riproduzione offline |
 | 🌐 **Multiplayer P2P** | Vedi gli altri giocatori sulla tua mappa, **duelli PvP**, **scambi di mostri**, chat di zona, dialogo 1:1 ed emote — **senza server** |
 
 ---
@@ -79,7 +80,7 @@ Questo non è un gioco fatto con un engine. È **tutto a mano**:
 - **Motore a stack di scene**, battaglia come coda di *step*, matematica del danno gen-1 separata e **testata** (`node:test` in CI).
 - **Multiplayer 100% peer-to-peer** via WebRTC su relay pubblici gratuiti: nessun server proprio, nessun account, **nessun costo che possa mai crescere**.
 - **PWA** con service worker cache-first e installazione offline.
-- **Audio** sintetizzato a runtime (Web Audio), nessun file audio.
+- **Audio**: 19 composizioni originali AAC stereo, riproduzione Web Audio, feedback sintetizzato e mixer persistente. [Regia e verifiche](docs/AUDIO-REGIA.md).
 - **Grafica Higgsfield**: 208 pose delle creature, 62 immagini statiche coerenti, mondo e quartier generale rinnovati; supporto offline. [Epiloghi e postgame](docs/EPILOGHI-POSTGAME.md): finali personali, souvenir visibili, monumenti e ritmo accessibile. [Patti e conseguenze](docs/PATTI-CONSEGUENZE.md): cinque ambienti politici, dossier annullabili, morale e alleanze con effetti reali. [Emblemi, chat e scambi](docs/RETE-EMBLEMI.md), con prove di rete reali.
 - **Morale e satira**: fiducia dei cittadini, coesione della squadra, promesse con scadenza, dialoghi che ricordano le scelte e quattro nuovi eventi ispirati a meme documentati.
 
@@ -113,6 +114,7 @@ npm run build        # typecheck + bundle di produzione
 | **[docs/EUROTOWN-SCELTE.md](docs/EUROTOWN-SCELTE.md)** | Sfide volontarie, cura dei PP, satira del consenso precompilato e tre partite fino a Spread |
 | **[docs/CAPITALE-PREPARAZIONE.md](docs/CAPITALE-PREPARAZIONE.md)** | Percorso 3 e Tower facoltativi, nuova satira, avvio leggero e tre partite fino a Dazio |
 | **[docs/STRETTO-COLLAUDO.md](docs/STRETTO-COLLAUDO.md)** | Cinque briefing illustrati, deviazione con premio evolutivo, satira del rendering e tre campagne nuove fino al Garante |
+| **[docs/AUDIO-REGIA.md](docs/AUDIO-REGIA.md)** | 19 nuovi temi stereo, mixer da titolo/pausa, feedback, offline e prestazioni con musica attiva |
 | **[docs/ARCHIVIO-PREPARAZIONE.md](docs/ARCHIVIO-PREPARAZIONE.md)** | Mosse recuperabili, dossier degli avversari, passaggi sicuri e campagne con due starter fino al Garante |
 | **[docs/COLLE-VERBALE.md](docs/COLLE-VERBALE.md)** | Tre giudici illustrati, ritorno al bar, morale al finale e campagne native con risultati e limiti |
 | **[docs/RISERVE-DIRETTIVE.md](docs/RISERVE-DIRETTIVE.md)** | Zaino tattico, acquisti per quantità, confronto delle mosse e trenta nuovi oggetti |

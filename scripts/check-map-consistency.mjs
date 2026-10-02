@@ -10,6 +10,7 @@ await page.goto(BASE, { waitUntil: "networkidle" });
 const report = await page.evaluate(async () => {
   const { MAPS } = await import("/src/data/maps.ts");
   const { TILES } = await import("/src/art/tiles.ts");
+  const {arrivesBesideExit}=await import("/src/data/maps/portalGeometry.ts");
 
   const problems = [];
   const dirs = [[0, -1], [0, 1], [-1, 0], [1, 0]];
@@ -133,16 +134,15 @@ const report = await page.evaluate(async () => {
         if (!returnsToFront) {
           problems.push(`${mapId}->${warp.toMap}: uscita interna non torna davanti alla porta (${frontX},${frontY})`);
         }
-        const entersAboveExit = (target.warps ?? []).some(
+        const entersBesideExit = (target.warps ?? []).some(
           (back) =>
             back.toMap === mapId &&
             back.toY === frontY &&
             Math.abs(back.toX - frontX) <= 1 &&
-            warp.toX === back.x &&
-            warp.toY === back.y - 1
+            arrivesBesideExit(warp,back)
         );
-        if (!entersAboveExit) {
-          problems.push(`${mapId}->${warp.toMap}: ingresso interno non arriva sopra lo zerbino di uscita (${warp.toX},${warp.toY})`);
+        if (!entersBesideExit) {
+          problems.push(`${mapId}->${warp.toMap}: ingresso interno non arriva accanto all'uscita abbinata (${warp.toX},${warp.toY})`);
         }
       }
     }

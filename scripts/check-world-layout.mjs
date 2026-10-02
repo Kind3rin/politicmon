@@ -57,6 +57,7 @@ for (const file of ["src/main.ts", "scripts/shot-buildings.mjs", "scripts/shot-z
 const runtimeProblems = await page.evaluate(async () => {
   const { MAPS } = await import("/src/data/maps.ts");
   const { TILES } = await import("/src/art/tiles.ts");
+  const {arrivesBesideExit}=await import("/src/data/maps/portalGeometry.ts");
   const { SceneStack } = await import("/src/engine/scene.ts");
   const { Input } = await import("/src/engine/input.ts");
   const { WorldScene } = await import("/src/game/world/WorldScene.ts");
@@ -156,16 +157,15 @@ const runtimeProblems = await page.evaluate(async () => {
       if (!returnsToFront) {
         out.push(`${mapId}->${warp.toMap}: uscita interna non torna al fronte (${warp.x},${warp.y + 1})`);
       }
-      const entersAboveExit = (target.warps ?? []).some(
+      const entersBesideExit = (target.warps ?? []).some(
         (back) =>
           back.toMap === mapId &&
           back.toY === warp.y + 1 &&
           Math.abs(back.toX - warp.x) <= 1 &&
-          warp.toX === back.x &&
-          warp.toY === back.y - 1
+          arrivesBesideExit(warp,back)
       );
-      if (!entersAboveExit) {
-        out.push(`${mapId}->${warp.toMap}: ingresso interno non arriva sopra lo zerbino (${warp.toX},${warp.toY})`);
+      if (!entersBesideExit) {
+        out.push(`${mapId}->${warp.toMap}: ingresso interno non arriva accanto all'uscita abbinata (${warp.toX},${warp.toY})`);
       }
 
       {

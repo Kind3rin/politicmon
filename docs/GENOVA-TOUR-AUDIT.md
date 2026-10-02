@@ -1,5 +1,7 @@
 # Genova, Tour e Palazzo: audit e seguito
 
+Stato successivo alla baseline: [Tour](TOUR-VERBALE.md), [Palazzo e finale](PALAZZO-VERBALE.md), [layout PWA](MOBILE-PWA-LAYOUT.md) e [interni/ritorni](WORLD-INTERIORS-VERBALE.md) sono i round di seguito. I sei rilievi rimasti dopo il Palazzo sono risolti nell'ultimo round; i paragrafi seguenti conservano l'audit storico. Il redesign generale resta attivo: apertura, altre campagne/difficoltà e dispositivi fisici richiedono ancora prove. I 52 fogli animati principali esistono già; il conteggio 10/52 dell'audit riguarda esclusivamente i PNG action di fallback.
+
 Cornice e controller mobile richiesti dall’utente sono ora pubblicati e verificati: [MOBILE-CONTROLS.md](MOBILE-CONTROLS.md). Genova è ora il round documentato in [GENOVA-VERBALE.md](GENOVA-VERBALE.md); il seguito è Tour/Palazzo. Le sezioni seguenti conservano la baseline dell’audit.
 
 Audit del 2 ottobre 2026 sul sorgente dopo il nuovo Hotel. Cinque segmenti guadagnati vincono il Partner e arrivano al Tour. Questo non dimostra che il seguito sia ridisegnato.

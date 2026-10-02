@@ -34,6 +34,7 @@ import { haptics } from "../../engine/haptics";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
+import {worldCameraAxis} from "../../engine/worldCamera";
 import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion, wrapText } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
@@ -3176,10 +3177,8 @@ export class WorldScene implements Scene {
     const playerPx = this.moving ? px : pos.x * TILE;
     const playerPy = this.moving ? py : pos.y * TILE;
 
-    let camX = Math.round(playerPx + TILE / 2 - VIEW_W / 2);
-    let camY = Math.round(playerPy + TILE / 2 - VIEW_H / 2);
-    camX = Math.max(0, Math.min(mapW - VIEW_W, camX));
-    camY = Math.max(0, Math.min(Math.max(0, mapH - VIEW_H), camY));
+    let camX = worldCameraAxis(playerPx + TILE / 2,mapW,VIEW_W);
+    let camY = worldCameraAxis(playerPy + TILE / 2,mapH,VIEW_H);
     // Scossone (RUSPA): sposta la camera di qualche pixel, dà peso all'impatto.
     if (this.shake > 0 && !this.state.reduceEffects) {
       const amp = this.shake * 4;
@@ -3210,17 +3209,8 @@ export class WorldScene implements Scene {
           // (interno). Per i tile-facciata usiamo il terreno della cella sopra il
           // tetto così la base resta coerente col contorno.
           const baseCh2 = this.map.outdoor ? "." : "p";
-          if (this.map.outdoor) {
-            const bImg = this.tilePng(baseCh2);
-            if (bImg) {
-              drawWorldTilePng(screen, bImg, dx, dy);
-            }
-          } else {
-            const bImg = this.tilePng(baseCh2);
-            if (bImg) {
-              drawWorldTilePng(screen, bImg, dx, dy);
-            }
-          }
+          const bImg = this.tilePng(baseCh2);
+          if (bImg) drawWorldTilePng(screen, bImg, dx, dy);
           continue;
         }
         if (def.overlay) {

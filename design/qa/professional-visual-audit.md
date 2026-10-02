@@ -1,6 +1,6 @@
 # Audit visuale professionale
 
-Generato: 2026-10-02T18:21:26.307Z
+Generato: 2026-10-02T19:07:50.865Z
 
 ## Sintesi
 
@@ -9,7 +9,7 @@ Generato: 2026-10-02T18:21:26.307Z
 - Chiamate di clipping residue: 0
 - Ellissi esplicite nelle scene: 115
 - Politicmon PNG: 52
-- Frame action dedicati: 10/52
+- PNG action di fallback: 10/52. Questo conteggio non misura le animazioni principali: i 52 fogli a quattro pose hanno priorità nel renderer e sono verificati da rosterSprites.test.ts e check:roster-animations.
 
 ## Scene senza screenshot associato
 

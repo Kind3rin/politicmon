@@ -69,7 +69,7 @@ const md = `# Audit visuale professionale\n\n` +
   `- Chiamate di clipping residue: ${report.totals.clipCalls}\n` +
   `- Ellissi esplicite nelle scene: ${report.totals.explicitEllipses}\n` +
   `- Politicmon PNG: ${report.totals.monsterPng}\n` +
-  `- Frame action dedicati: ${report.totals.monsterDedicatedAction}/${report.totals.monsterPng}\n\n` +
+  `- PNG action di fallback: ${report.totals.monsterDedicatedAction}/${report.totals.monsterPng}. Questo conteggio non misura le animazioni principali: i 52 fogli a quattro pose hanno priorità nel renderer e sono verificati da rosterSprites.test.ts e check:roster-animations.\n\n` +
   `## Scene senza screenshot associato\n\n` +
   (missing.length ? missing.map((s) => `- \`${s.file}\``).join("\n") : "Nessuna.") +
   `\n\n## Scene con rischio testo\n\n` +
@@ -79,5 +79,5 @@ const md = `# Audit visuale professionale\n\n` +
 writeFileSync(join(ROOT, "design", "qa", "professional-visual-audit.md"), md);
 
 console.log(`Scene con screenshot: ${report.totals.scenesWithShot}/${report.totals.scenes}`);
-console.log(`Clip residui: ${report.totals.clipCalls}; action dedicate: ${report.totals.monsterDedicatedAction}/${report.totals.monsterPng}`);
+console.log(`Clip residui: ${report.totals.clipCalls}; PNG action di fallback: ${report.totals.monsterDedicatedAction}/${report.totals.monsterPng} (animazioni principali verificate separatamente)`);
 if (strict && (missing.length > 0 || report.totals.clipCalls > 0)) process.exit(1);

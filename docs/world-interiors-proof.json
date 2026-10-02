@@ -1,0 +1,3434 @@
+{
+  "date": "2026-10-02",
+  "status": "local_verified_publication_pending",
+  "goal": "active; full redesign not completed",
+  "sourceSha256": {
+    "src/engine/worldCamera.ts": "103d98d00eda75036e01301906c8727ea3af2cec858b2a3b07770e1545827d6a",
+    "src/data/maps/portalGeometry.ts": "f08e017c0b79f3ea9e4f3cc1df134ce7446810375ef35abded463c81c31dd46b",
+    "src/data/maps/atto3.ts": "f58d74627ddc029f2bbaa58a4e2b7eeb87e9ee3c087b7bfab7608fac6c9e0d00",
+    "src/game/world/WorldScene.ts": "e3b19096f258c62124fffc12247cef56d21af6bd71a0cf3ca9e1a6c83c774eaa",
+    "scripts/check-map-consistency.mjs": "4253e8073feaeafd892408a582339cd5a4c6b0a21cc99015dfb27bd5199ee312",
+    "scripts/check-world-layout.mjs": "742867fafbcbe557322d508bd89d594e4327b641c5c0623888db6a6f7cabc723",
+    "scripts/check-world-navigation-release.mjs": "d58bce0ec8977c9c7129f15b0e4ab125b30828dedee5a334b0f924746ce17d11",
+    "scripts/ignore-docs-only-build.mjs": "2db6667fa795577b707f6ed495f6c253199ed05f5ac6ff7d8db6aba333e2faa3",
+    "vercel.json": "c7c1fcdae6a58b155b84ce3454b1a55d28a947fd8a77959908ff178199b926e8",
+    "tests/content/worldArrivals.test.ts": "21705745ab58bbc6d89eb4131a61913dbd0ab5ae42c5b6d09a26db5cced5949b",
+    "tests/unit/worldCamera.test.ts": "b405a846e586072844ca32971cbce7824b1f34a1664769981c9c8eda2967336b",
+    "tests/unit/docsOnlyBuild.test.ts": "b7c80a79e13cd5bf5625f594d0a07d30612e1ca3e8196b103136ecfcf1d2957a"
+  },
+  "generation": {
+    "newJobs": 0,
+    "spentCredits": 0,
+    "reusedAsset": "public/sprites/tiles/tour_threshold.png",
+    "reusedAssetSha256": "ab1cc90b47099b62e000ecfade6651edc19f3e510339c03092080cdcfba2948a",
+    "lastVerifiedBalance": 382.72,
+    "lastVerifiedRound": "docs/palace-proof.json"
+  },
+  "tests": 320,
+  "localNavigation": {
+    "base": "http://127.0.0.1:4184/",
+    "physicalDevice": false,
+    "sourceCodeSha256": "c1cfbf0d75cbf7154cc29f99f56dccd73e1a48f3bf485c56b50567d60431ac79",
+    "engines": [
+      {
+        "engine": "chromium",
+        "rooms": [
+          {
+            "id": "palazzo_algoritmo",
+            "pixels": {
+              "actual": [
+                17,
+                34,
+                62,
+                255
+              ],
+              "expected": [
+                17,
+                34,
+                62,
+                255
+              ]
+            }
+          },
+          {
+            "id": "palazzo_factcheck",
+            "pixels": {
+              "actual": [
+                254,
+                249,
+                237,
+                255
+              ],
+              "expected": [
+                254,
+                249,
+                237,
+                255
+              ]
+            }
+          },
+          {
+            "id": "palazzo_talkshow",
+            "pixels": {
+              "actual": [
+                58,
+                42,
+                70,
+                255
+              ],
+              "expected": [
+                58,
+                42,
+                70,
+                255
+              ]
+            }
+          },
+          {
+            "id": "palazzo_silenzio",
+            "pixels": {
+              "actual": [
+                78,
+                99,
+                126,
+                255
+              ],
+              "expected": [
+                78,
+                99,
+                126,
+                255
+              ]
+            }
+          },
+          {
+            "id": "diplomacy_loyalty",
+            "pixels": {
+              "actual": [
+                251,
+                241,
+                219,
+                255
+              ],
+              "expected": [
+                251,
+                241,
+                219,
+                255
+              ]
+            }
+          },
+          {
+            "id": "diplomacy_autonomy",
+            "pixels": {
+              "actual": [
+                240,
+                250,
+                232,
+                255
+              ],
+              "expected": [
+                240,
+                250,
+                232,
+                255
+              ]
+            }
+          },
+          {
+            "id": "diplomacy_home",
+            "pixels": {
+              "actual": [
+                232,
+                242,
+                251,
+                255
+              ],
+              "expected": [
+                232,
+                242,
+                251,
+                255
+              ]
+            }
+          },
+          {
+            "id": "futuro_scissione",
+            "pixels": {
+              "actual": [
+                179,
+                147,
+                91,
+                255
+              ],
+              "expected": [
+                179,
+                147,
+                91,
+                255
+              ]
+            }
+          },
+          {
+            "id": "futuro_rebrand",
+            "pixels": {
+              "actual": [
+                50,
+                137,
+                141,
+                255
+              ],
+              "expected": [
+                50,
+                137,
+                141,
+                255
+              ]
+            }
+          },
+          {
+            "id": "futuro_tesoreria",
+            "pixels": {
+              "actual": [
+                98,
+                66,
+                176,
+                255
+              ],
+              "expected": [
+                98,
+                66,
+                176,
+                255
+              ]
+            }
+          }
+        ],
+        "returns": [
+          {
+            "from": "palazzo_algoritmo",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_algoritmo",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_factcheck",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_factcheck",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_talkshow",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_talkshow",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_silenzio",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_silenzio",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_loyalty",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_loyalty",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_autonomy",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_autonomy",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_home",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 9,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_home",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 9,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_terrace",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 9,
+              "facing": "left"
+            }
+          },
+          {
+            "from": "diplomacy_terrace",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 9,
+              "facing": "left"
+            }
+          },
+          {
+            "from": "futuro_scissione",
+            "exit": 0,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 3,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_scissione",
+            "exit": 1,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 3,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_rebrand",
+            "exit": 0,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 13,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_rebrand",
+            "exit": 1,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 13,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_tesoreria",
+            "exit": 0,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 15,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_tesoreria",
+            "exit": 1,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 15,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          }
+        ],
+        "finalPos": {
+          "mapId": "diplomacy_lobby",
+          "x": 9,
+          "y": 10,
+          "facing": "up"
+        },
+        "resourcesUnchanged": true,
+        "errors": []
+      },
+      {
+        "engine": "webkit",
+        "rooms": [
+          {
+            "id": "palazzo_algoritmo",
+            "pixels": {
+              "actual": [
+                17,
+                34,
+                62,
+                255
+              ],
+              "expected": [
+                17,
+                34,
+                62,
+                255
+              ]
+            }
+          },
+          {
+            "id": "palazzo_factcheck",
+            "pixels": {
+              "actual": [
+                254,
+                249,
+                237,
+                255
+              ],
+              "expected": [
+                254,
+                249,
+                237,
+                255
+              ]
+            }
+          },
+          {
+            "id": "palazzo_talkshow",
+            "pixels": {
+              "actual": [
+                58,
+                42,
+                70,
+                255
+              ],
+              "expected": [
+                58,
+                42,
+                70,
+                255
+              ]
+            }
+          },
+          {
+            "id": "palazzo_silenzio",
+            "pixels": {
+              "actual": [
+                78,
+                99,
+                126,
+                255
+              ],
+              "expected": [
+                78,
+                99,
+                126,
+                255
+              ]
+            }
+          },
+          {
+            "id": "diplomacy_loyalty",
+            "pixels": {
+              "actual": [
+                251,
+                241,
+                219,
+                255
+              ],
+              "expected": [
+                251,
+                241,
+                219,
+                255
+              ]
+            }
+          },
+          {
+            "id": "diplomacy_autonomy",
+            "pixels": {
+              "actual": [
+                240,
+                250,
+                232,
+                255
+              ],
+              "expected": [
+                240,
+                250,
+                232,
+                255
+              ]
+            }
+          },
+          {
+            "id": "diplomacy_home",
+            "pixels": {
+              "actual": [
+                232,
+                242,
+                251,
+                255
+              ],
+              "expected": [
+                232,
+                242,
+                251,
+                255
+              ]
+            }
+          },
+          {
+            "id": "futuro_scissione",
+            "pixels": {
+              "actual": [
+                179,
+                147,
+                91,
+                255
+              ],
+              "expected": [
+                179,
+                147,
+                91,
+                255
+              ]
+            }
+          },
+          {
+            "id": "futuro_rebrand",
+            "pixels": {
+              "actual": [
+                50,
+                137,
+                141,
+                255
+              ],
+              "expected": [
+                50,
+                137,
+                141,
+                255
+              ]
+            }
+          },
+          {
+            "id": "futuro_tesoreria",
+            "pixels": {
+              "actual": [
+                98,
+                66,
+                176,
+                255
+              ],
+              "expected": [
+                98,
+                66,
+                176,
+                255
+              ]
+            }
+          }
+        ],
+        "returns": [
+          {
+            "from": "palazzo_algoritmo",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_algoritmo",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_factcheck",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_factcheck",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 3,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_talkshow",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_talkshow",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 5,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_silenzio",
+            "exit": 0,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "palazzo_silenzio",
+            "exit": 1,
+            "to": {
+              "mapId": "palazzo_feed",
+              "x": 14,
+              "y": 7,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_loyalty",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_loyalty",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_autonomy",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_autonomy",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 4,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_home",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 9,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_home",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 3,
+              "y": 9,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "diplomacy_terrace",
+            "exit": 0,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 9,
+              "facing": "left"
+            }
+          },
+          {
+            "from": "diplomacy_terrace",
+            "exit": 1,
+            "to": {
+              "mapId": "diplomacy_lobby",
+              "x": 16,
+              "y": 9,
+              "facing": "left"
+            }
+          },
+          {
+            "from": "futuro_scissione",
+            "exit": 0,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 3,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_scissione",
+            "exit": 1,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 3,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_rebrand",
+            "exit": 0,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 13,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_rebrand",
+            "exit": 1,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 13,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_tesoreria",
+            "exit": 0,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 15,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          },
+          {
+            "from": "futuro_tesoreria",
+            "exit": 1,
+            "to": {
+              "mapId": "futuro_sede",
+              "x": 15,
+              "y": 5,
+              "facing": "down"
+            },
+            "tile": "p"
+          }
+        ],
+        "finalPos": {
+          "mapId": "diplomacy_lobby",
+          "x": 9,
+          "y": 10,
+          "facing": "up"
+        },
+        "resourcesUnchanged": true,
+        "errors": []
+      }
+    ]
+  },
+  "world": {
+    "maps": 66,
+    "worldViews": 254,
+    "directionalPosesDecoded": 220,
+    "beforeCoverage": {
+      "mapCount": 66,
+      "positions": {
+        "borgo": [
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 10,
+            "y": 19
+          },
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 18,
+            "y": 11
+          },
+          {
+            "x": 6,
+            "y": 13
+          }
+        ],
+        "route1": [
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 20,
+            "y": 11
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 22,
+            "y": 4
+          }
+        ],
+        "grotta1": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 12,
+            "y": 7
+          },
+          {
+            "x": 7,
+            "y": 13
+          }
+        ],
+        "oblast-meme": [
+          {
+            "x": 12,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 13
+          },
+          {
+            "x": 18,
+            "y": 12
+          },
+          {
+            "x": 6,
+            "y": 2
+          }
+        ],
+        "mediopoli": [
+          {
+            "x": 15,
+            "y": 10
+          },
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 24,
+            "y": 19
+          },
+          {
+            "x": 10,
+            "y": 14
+          },
+          {
+            "x": 7,
+            "y": 11
+          }
+        ],
+        "route2": [
+          {
+            "x": 14,
+            "y": 9
+          },
+          {
+            "x": 19,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 13
+          },
+          {
+            "x": 18,
+            "y": 14
+          }
+        ],
+        "eurotown": [
+          {
+            "x": 15,
+            "y": 8
+          },
+          {
+            "x": 15,
+            "y": 9
+          },
+          {
+            "x": 24,
+            "y": 14
+          },
+          {
+            "x": 9,
+            "y": 14
+          },
+          {
+            "x": 7,
+            "y": 6
+          }
+        ],
+        "route3": [
+          {
+            "x": 14,
+            "y": 9
+          },
+          {
+            "x": 11,
+            "y": 8
+          },
+          {
+            "x": 12,
+            "y": 12
+          },
+          {
+            "x": 19,
+            "y": 16
+          },
+          {
+            "x": 22,
+            "y": 4
+          }
+        ],
+        "grotta2": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 13
+          }
+        ],
+        "capitale": [
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 15,
+            "y": 14
+          },
+          {
+            "x": 20,
+            "y": 20
+          },
+          {
+            "x": 12,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 12
+          }
+        ],
+        "stretto": [
+          {
+            "x": 15,
+            "y": 7
+          },
+          {
+            "x": 18,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 24,
+            "y": 5
+          },
+          {
+            "x": 14,
+            "y": 15
+          }
+        ],
+        "offshore": [
+          {
+            "x": 15,
+            "y": 8
+          },
+          {
+            "x": 15,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 12
+          },
+          {
+            "x": 24,
+            "y": 14
+          },
+          {
+            "x": 2,
+            "y": 10
+          }
+        ],
+        "bruxelles": [
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 9
+          },
+          {
+            "x": 23,
+            "y": 9
+          },
+          {
+            "x": 7,
+            "y": 11
+          },
+          {
+            "x": 12,
+            "y": 5
+          }
+        ],
+        "commissione": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 2,
+            "y": 2
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "lab": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "gymtv": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "gymue": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "gymglobal": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 7
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "market1": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "market2": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "casino": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 4,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "palazzo": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "colle": [
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 9
+          }
+        ],
+        "home": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "circolo": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 1,
+            "y": 5
+          },
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "attico": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "redazione": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 1,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "lobbystudio": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "bistrot": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "salotto": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "retroscena": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "covo": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "chiosco": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "bar-borgo": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-medio": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-euro": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-cap": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-stretto": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-offshore": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-bruxelles": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "campo_largo": [
+          {
+            "x": 12,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 17
+          },
+          {
+            "x": 4,
+            "y": 9
+          },
+          {
+            "x": 16,
+            "y": 9
+          },
+          {
+            "x": 17,
+            "y": 13
+          }
+        ],
+        "retropalco_campo": [
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 7,
+            "y": 9
+          }
+        ],
+        "futuro_piazza": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 9,
+            "y": 7
+          },
+          {
+            "x": 4,
+            "y": 10
+          },
+          {
+            "x": 16,
+            "y": 10
+          },
+          {
+            "x": 10,
+            "y": 11
+          }
+        ],
+        "futuro_sede": [
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 11
+          }
+        ],
+        "futuro_scissione": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "futuro_rebrand": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "futuro_tesoreria": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_lobby": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 9,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 11
+          }
+        ],
+        "diplomacy_loyalty": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_autonomy": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_home": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_terrace": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 10
+          }
+        ],
+        "genova_techno": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 11
+          },
+          {
+            "x": 16,
+            "y": 11
+          },
+          {
+            "x": 10,
+            "y": 13
+          }
+        ],
+        "tour_feed": [
+          {
+            "x": 12,
+            "y": 7
+          },
+          {
+            "x": 11,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 13
+          }
+        ],
+        "district_nord": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_centro": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_sud": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_isole": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_feed": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "palazzo_feed": [
+          {
+            "x": 10,
+            "y": 5
+          },
+          {
+            "x": 9,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 9
+          }
+        ],
+        "palazzo_algoritmo": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_factcheck": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_talkshow": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_silenzio": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_feed_studio": [
+          {
+            "x": 9,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 4
+          },
+          {
+            "x": 8,
+            "y": 7
+          }
+        ],
+        "palazzo_feed_terrazza": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 10
+          }
+        ]
+      },
+      "missing": [],
+      "characterIssues": []
+    },
+    "afterCoverage": {
+      "mapCount": 66,
+      "positions": {
+        "borgo": [
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 10,
+            "y": 19
+          },
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 18,
+            "y": 11
+          },
+          {
+            "x": 6,
+            "y": 13
+          }
+        ],
+        "route1": [
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 20,
+            "y": 11
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 22,
+            "y": 4
+          }
+        ],
+        "grotta1": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 12,
+            "y": 7
+          },
+          {
+            "x": 7,
+            "y": 13
+          }
+        ],
+        "oblast-meme": [
+          {
+            "x": 12,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 13
+          },
+          {
+            "x": 18,
+            "y": 12
+          },
+          {
+            "x": 6,
+            "y": 2
+          }
+        ],
+        "mediopoli": [
+          {
+            "x": 15,
+            "y": 10
+          },
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 24,
+            "y": 19
+          },
+          {
+            "x": 10,
+            "y": 14
+          },
+          {
+            "x": 7,
+            "y": 11
+          }
+        ],
+        "route2": [
+          {
+            "x": 14,
+            "y": 9
+          },
+          {
+            "x": 19,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 13
+          },
+          {
+            "x": 18,
+            "y": 14
+          }
+        ],
+        "eurotown": [
+          {
+            "x": 15,
+            "y": 8
+          },
+          {
+            "x": 15,
+            "y": 9
+          },
+          {
+            "x": 24,
+            "y": 14
+          },
+          {
+            "x": 9,
+            "y": 14
+          },
+          {
+            "x": 7,
+            "y": 6
+          }
+        ],
+        "route3": [
+          {
+            "x": 14,
+            "y": 9
+          },
+          {
+            "x": 11,
+            "y": 8
+          },
+          {
+            "x": 12,
+            "y": 12
+          },
+          {
+            "x": 19,
+            "y": 16
+          },
+          {
+            "x": 22,
+            "y": 4
+          }
+        ],
+        "grotta2": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 13
+          }
+        ],
+        "capitale": [
+          {
+            "x": 15,
+            "y": 12
+          },
+          {
+            "x": 15,
+            "y": 14
+          },
+          {
+            "x": 20,
+            "y": 20
+          },
+          {
+            "x": 12,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 12
+          }
+        ],
+        "stretto": [
+          {
+            "x": 15,
+            "y": 7
+          },
+          {
+            "x": 18,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 24,
+            "y": 5
+          },
+          {
+            "x": 14,
+            "y": 15
+          }
+        ],
+        "offshore": [
+          {
+            "x": 15,
+            "y": 8
+          },
+          {
+            "x": 15,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 12
+          },
+          {
+            "x": 24,
+            "y": 14
+          },
+          {
+            "x": 2,
+            "y": 10
+          }
+        ],
+        "bruxelles": [
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 7,
+            "y": 9
+          },
+          {
+            "x": 23,
+            "y": 9
+          },
+          {
+            "x": 7,
+            "y": 11
+          },
+          {
+            "x": 12,
+            "y": 5
+          }
+        ],
+        "commissione": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 2,
+            "y": 2
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "lab": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "gymtv": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "gymue": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "gymglobal": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 7
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "market1": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "market2": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "casino": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 4,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "palazzo": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 7
+          }
+        ],
+        "colle": [
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 8
+          },
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 2,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 9
+          }
+        ],
+        "home": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "circolo": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 1,
+            "y": 5
+          },
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "attico": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "redazione": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 1,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "lobbystudio": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "bistrot": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "salotto": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "retroscena": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "covo": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "chiosco": [
+          {
+            "x": 5,
+            "y": 3
+          },
+          {
+            "x": 7,
+            "y": 3
+          },
+          {
+            "x": 5,
+            "y": 5
+          }
+        ],
+        "bar-borgo": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-medio": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-euro": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-cap": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-stretto": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-offshore": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "bar-bruxelles": [
+          {
+            "x": 6,
+            "y": 4
+          },
+          {
+            "x": 5,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 5,
+            "y": 6
+          }
+        ],
+        "campo_largo": [
+          {
+            "x": 12,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 17
+          },
+          {
+            "x": 4,
+            "y": 9
+          },
+          {
+            "x": 16,
+            "y": 9
+          },
+          {
+            "x": 17,
+            "y": 13
+          }
+        ],
+        "retropalco_campo": [
+          {
+            "x": 8,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 7,
+            "y": 9
+          }
+        ],
+        "futuro_piazza": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 9,
+            "y": 7
+          },
+          {
+            "x": 4,
+            "y": 10
+          },
+          {
+            "x": 16,
+            "y": 10
+          },
+          {
+            "x": 10,
+            "y": 11
+          }
+        ],
+        "futuro_sede": [
+          {
+            "x": 9,
+            "y": 6
+          },
+          {
+            "x": 4,
+            "y": 8
+          },
+          {
+            "x": 14,
+            "y": 8
+          },
+          {
+            "x": 8,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 11
+          }
+        ],
+        "futuro_scissione": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "futuro_rebrand": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "futuro_tesoreria": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_lobby": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 9,
+            "y": 5
+          },
+          {
+            "x": 8,
+            "y": 11
+          }
+        ],
+        "diplomacy_loyalty": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_autonomy": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_home": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 4,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "diplomacy_terrace": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 10
+          }
+        ],
+        "genova_techno": [
+          {
+            "x": 10,
+            "y": 7
+          },
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 5,
+            "y": 11
+          },
+          {
+            "x": 16,
+            "y": 11
+          },
+          {
+            "x": 10,
+            "y": 13
+          }
+        ],
+        "tour_feed": [
+          {
+            "x": 12,
+            "y": 7
+          },
+          {
+            "x": 11,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 13
+          }
+        ],
+        "district_nord": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_centro": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_sud": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_isole": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "district_feed": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 9,
+            "y": 11
+          }
+        ],
+        "palazzo_feed": [
+          {
+            "x": 10,
+            "y": 5
+          },
+          {
+            "x": 9,
+            "y": 7
+          },
+          {
+            "x": 8,
+            "y": 9
+          }
+        ],
+        "palazzo_algoritmo": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_factcheck": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_talkshow": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_silenzio": [
+          {
+            "x": 5,
+            "y": 4
+          },
+          {
+            "x": 2,
+            "y": 5
+          },
+          {
+            "x": 7,
+            "y": 5
+          },
+          {
+            "x": 4,
+            "y": 6
+          }
+        ],
+        "palazzo_feed_studio": [
+          {
+            "x": 9,
+            "y": 4
+          },
+          {
+            "x": 7,
+            "y": 4
+          },
+          {
+            "x": 8,
+            "y": 7
+          }
+        ],
+        "palazzo_feed_terrazza": [
+          {
+            "x": 10,
+            "y": 6
+          },
+          {
+            "x": 10,
+            "y": 4
+          },
+          {
+            "x": 6,
+            "y": 7
+          },
+          {
+            "x": 5,
+            "y": 10
+          }
+        ]
+      },
+      "missing": [],
+      "characterIssues": []
+    },
+    "comparison": "artifacts/screens/world-redesign/interiors-comparison.png",
+    "comparisonSha256": "34292f189b829bf288d01f99b2ca44ec17af3c37aecdb7c4606a61e28f6971a8",
+    "mapConsistencyIssues": 0,
+    "worldLayoutIssues": 0,
+    "noExitIssues": 0
+  },
+  "performance": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": false
+    },
+    "boot": {
+      "assetsReadyMs": 1498.5,
+      "firstFrameMs": 1516.7999999821186,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 568786,
+      "wallMs": 2063.68
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.497,
+          "p50Ms": 0.4,
+          "p95Ms": 1.1,
+          "p99Ms": 1.6,
+          "maxMs": 5.5
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.736,
+          "p50Ms": 16.7,
+          "p95Ms": 18.5,
+          "p99Ms": 18.7,
+          "maxMs": 35
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.148,
+          "p50Ms": 0.1,
+          "p95Ms": 0.5,
+          "p99Ms": 0.9,
+          "maxMs": 1.4
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.742,
+          "p50Ms": 16.7,
+          "p95Ms": 18.5,
+          "p99Ms": 18.7,
+          "maxMs": 34.9
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.299,
+          "p50Ms": 0.2,
+          "p95Ms": 0.9,
+          "p99Ms": 1.1,
+          "maxMs": 1.4
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.671,
+          "p50Ms": 16.7,
+          "p95Ms": 18.6,
+          "p99Ms": 18.6,
+          "maxMs": 18.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": false,
+          "state": "off",
+          "title": "REGIA IN CARICAMENTO"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1081756,
+      "codeGzipBytes": 358174,
+      "initialCodeGzipBytes": 187678,
+      "spriteCompressedBytes": 3897641,
+      "spriteDecodedBytesEstimate": 17911680,
+      "spriteFiles": 796
+    },
+    "save": {
+      "payloadBytes": 8919,
+      "parseMeanMs": 0.0308,
+      "serializeMeanMs": 0.0181
+    }
+  },
+  "localBundle": {
+    "base": "http://127.0.0.1:4184/",
+    "sizes": [
+      {
+        "url": "http://127.0.0.1:4184/",
+        "bytes": 2146
+      },
+      {
+        "url": "http://127.0.0.1:4184/sw.js",
+        "bytes": 888
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/index-CzHLph7s.js",
+        "bytes": 182623
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/index-BAicqtfz.css",
+        "bytes": 2909
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/WorldScene-DsUXc057.js",
+        "bytes": 169608
+      }
+    ],
+    "total": 358174,
+    "budget": 358400,
+    "margin": 226
+  },
+  "localLogs": {
+    "tests": {
+      "path": "/tmp/politicmon-interiors-tests.log",
+      "sha256": "86a0d1075ee69e2d57f43b3c89bfc1597c5633d4cd6818c9bed32c4a00adb1fe",
+      "text": "  duration_ms: 0.080458\n  type: 'test'\n  ...\n# Subtest: resistenza compressa a 0.6, non 0.5\nok 314 - resistenza compressa a 0.6, non 0.5\n  ---\n  duration_ms: 0.034333\n  type: 'test'\n  ...\n# Subtest: P6-T01: ISO week e schedule sono deterministici con 5 eventi, 3 dibattiti e finale\nok 315 - P6-T01: ISO week e schedule sono deterministici con 5 eventi, 3 dibattiti e finale\n  ---\n  duration_ms: 1.834292\n  type: 'test'\n  ...\n# Subtest: P6-T01: campagna si interrompe/riprende e ogni stage avanza una volta\nok 316 - P6-T01: campagna si interrompe/riprende e ogni stage avanza una volta\n  ---\n  duration_ms: 0.347084\n  type: 'test'\n  ...\n# Subtest: P6-T01: una nuova settimana crea una run nuova senza toccare la precedente in input\nok 317 - P6-T01: una nuova settimana crea una run nuova senza toccare la precedente in input\n  ---\n  duration_ms: 0.069167\n  type: 'test'\n  ...\n# Subtest: P6-T01: premio ha tre fasce ed è reclamabile una sola volta\nok 318 - P6-T01: premio ha tre fasce ed è reclamabile una sola volta\n  ---\n  duration_ms: 0.084916\n  type: 'test'\n  ...\n# Subtest: camera: stanze piccole centrate e stabili anche durante il movimento\nok 319 - camera: stanze piccole centrate e stabili anche durante il movimento\n  ---\n  duration_ms: 0.355208\n  type: 'test'\n  ...\n# Subtest: camera: mappe grandi conservano tracking, limiti e coordinate intere\nok 320 - camera: mappe grandi conservano tracking, limiti e coordinate intere\n  ---\n  duration_ms: 0.740708\n  type: 'test'\n  ...\n1..320\n# tests 320\n# suites 0\n# pass 320\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1626.006917\n"
+    },
+    "navigation": {
+      "path": "/tmp/politicmon-interiors-navigation-local.log",
+      "sha256": "76b0fbca1c1da000434347d6b7279f31197d9010d831392b4542a8e5e00cbdae",
+      "text": "PASS chromium: palazzo_algoritmo return #0 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS chromium: palazzo_algoritmo return #1 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS chromium: palazzo_factcheck return #0 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS chromium: palazzo_factcheck return #1 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS chromium: palazzo_talkshow return #0 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS chromium: palazzo_talkshow return #1 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS chromium: palazzo_silenzio return #0 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS chromium: palazzo_silenzio return #1 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS chromium: diplomacy_loyalty return #0 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_loyalty return #1 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_autonomy return #0 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_autonomy return #1 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_home return #0 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS chromium: diplomacy_home return #1 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS chromium: Hotel terrace door #0 -> actual south-side lobby arrival (16,9)\nPASS chromium: Hotel terrace door #1 -> actual south-side lobby arrival (16,9)\nPASS chromium: futuro_scissione return #0 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS chromium: futuro_scissione return #1 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS chromium: futuro_rebrand return #0 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS chromium: futuro_rebrand return #1 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS chromium: futuro_tesoreria return #0 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS chromium: futuro_tesoreria return #1 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS webkit: palazzo_algoritmo return #0 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS webkit: palazzo_algoritmo return #1 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS webkit: palazzo_factcheck return #0 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS webkit: palazzo_factcheck return #1 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS webkit: palazzo_talkshow return #0 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS webkit: palazzo_talkshow return #1 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS webkit: palazzo_silenzio return #0 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS webkit: palazzo_silenzio return #1 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS webkit: diplomacy_loyalty return #0 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_loyalty return #1 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_autonomy return #0 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_autonomy return #1 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_home return #0 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS webkit: diplomacy_home return #1 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS webkit: Hotel terrace door #0 -> actual south-side lobby arrival (16,9)\nPASS webkit: Hotel terrace door #1 -> actual south-side lobby arrival (16,9)\nPASS webkit: futuro_scissione return #0 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS webkit: futuro_scissione return #1 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS webkit: futuro_rebrand return #0 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS webkit: futuro_rebrand return #1 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS webkit: futuro_tesoreria return #0 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS webkit: futuro_tesoreria return #1 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS compiled world navigation: both engines, 20 centred room views, 44 actual return ports, untouched earned save and resources\n"
+    },
+    "maps": {
+      "path": "/tmp/politicmon-interiors-maps.log",
+      "sha256": "318ef9cbc95515414c78096675705f7ac44abc53bcfac94e3efdcf9736d60e10",
+      "text": "OK - map consistency: tile noti, warps validi, porte/fronti coerenti, placement pulito.\n"
+    },
+    "layout": {
+      "path": "/tmp/politicmon-interiors-layout.log",
+      "sha256": "733b3d1e34c98670e57590d91bc333bb3da92f3f5b72374a405e9c28952693d5",
+      "text": "OK - layout world: edifici ortogonali, ingressi solo dal centro porta, laterali/facing sbagliato respinti, scoglio solo dal gradino.\n"
+    },
+    "exits": {
+      "path": "/tmp/politicmon-interiors-exits.log",
+      "sha256": "c7ae8146de6488179317109f946833f6cfedce0aab61d6d9230a854f957363d3",
+      "text": "OK — ogni mappa ha un'uscita e ogni interno torna all'aperto.\n"
+    },
+    "visual": {
+      "path": "/tmp/politicmon-interiors-visual.log",
+      "sha256": "cac1a8424f0083b1d77ca42bcc92dfa5146d3689c27dd0fa3ecd3ad1c1cc49d0",
+      "text": "\n> politicmon@1.0.0 audit:professional:visual:strict\n> node scripts/audit-professional-visual.mjs --strict\n\nScene con screenshot: 50/50\nClip residui: 0; PNG action di fallback: 10/52 (animazioni principali verificate separatamente)\n"
+    },
+    "before": {
+      "path": "/tmp/politicmon-interiors-before.log",
+      "sha256": "67bf408275351d81e7bfb912bb460aba8e6eae06b407569004d60fc697a7e35c",
+      "text": "PASS: 66 maps, 254 world views and 220 directional character poses decoded (interiors-before).\n"
+    },
+    "after": {
+      "path": "/tmp/politicmon-interiors-after.log",
+      "sha256": "6ecbe37027e0f1b6d211658ba8399089dadd31ca89ef9dc34aa69d5647fb8d36",
+      "text": "PASS: 66 maps, 254 world views and 220 directional character poses decoded (interiors-after).\n"
+    },
+    "performance": {
+      "path": "/tmp/politicmon-interiors-performance.log",
+      "sha256": "280ef6172bb5663ac519efa006fc283f9157c7165018bc580f4419506acc8d95",
+      "text": "vite preview exit 143: \nvite serve exit 143: \nPERF OK — interval p95 world 18.5ms, battle 18.5ms, dex 18.6ms, bundle iniziale 183.3KiB / totale 349.8KiB.\n"
+    },
+    "bundle": {
+      "path": "/tmp/politicmon-interiors-bundle.log",
+      "sha256": "6c05fc0bfb7e624e436b4a3ab0f86bca046d8752518178b8dfb7210cc4f86628",
+      "text": "PASS deployed bundle: 358174/358400 gzip bytes, 226 margin, 5 files including lazy chunks.\n"
+    }
+  },
+  "scope": {
+    "physicalDevice": false,
+    "navigationOnly": true,
+    "noNewBattleOutcomes": true,
+    "primaryAnimationSheets": 52,
+    "fallbackActionPng": 10,
+    "fullRedesignRemaining": [
+      "opening audit/redesign",
+      "additional uninterrupted campaign starters/seeds",
+      "higher difficulty",
+      "physical device and audio comfort verification"
+    ]
+  },
+  "deploymentPolicy": {
+    "compare": "VERCEL_GIT_PREVIOUS_SHA to VERCEL_GIT_COMMIT_SHA",
+    "docsOnlyPaths": [
+      "docs/",
+      "design/qa/"
+    ],
+    "missingBaseline": "build",
+    "unknownInput": "build",
+    "sameShaRedeploy": "build",
+    "multiCommitCodeThenDocs": "build",
+    "references": [
+      "https://vercel.com/docs/project-configuration/vercel-json#ignorecommand",
+      "https://vercel.com/docs/environment-variables/system-environment-variables#vercel_git_previous_sha"
+    ]
+  },
+  "publication": {
+    "pending": true,
+    "url": "https://politicmon.vercel.app/"
+  }
+}

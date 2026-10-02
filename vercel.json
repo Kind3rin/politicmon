@@ -1,4 +1,5 @@
 {
+  "ignoreCommand": "node scripts/ignore-docs-only-build.mjs",
   "github": {
     "silent": true
   },

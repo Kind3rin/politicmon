@@ -58,9 +58,9 @@ const FUTURO_HQ_TILES = [
   "AbbbpppppppppppbbA",
   "AppppppppppppppppA",
   "AppppppppppppppppA",
+  "AppcpppppppppcpcpA",
   "AppppppppppppppppA",
-  "App4ppppppppp5pppA",
-  "AppPpppppppppppPpA",
+  "App4ppppppppp5pPpA",
   "AppppppppppppppppA",
   "AppppppppppppppppA",
   "AppppppppppppppppA",
@@ -513,7 +513,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     id: "futuro_sede",
     name: "SEDE DEL DOMANI",
     tiles: FUTURO_HQ_TILES,
-    tileOverrides: { p: "tiles/future_floor.png", A: "tiles/future_wall.png" },
+    tileOverrides: { p: "tiles/future_floor.png", A: "tiles/future_wall.png", c: "tiles/tour_threshold.png" },
     objectOverrides: { "4": "tiles/future_lever_a.png", "5": "tiles/future_lever_b.png" },
     objectSizes: { "5": 32 },
     outdoor: false,
@@ -521,9 +521,9 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     warps: [
       { x: 8, y: 11, toMap: "futuro_piazza", toX: 10, toY: 11, facing: "down" },
       { x: 9, y: 11, toMap: "futuro_piazza", toX: 11, toY: 11, facing: "down" },
-      { x: 3, y: 4, toMap: "futuro_scissione", toX: 4, toY: 5, facing: "up" },
-      { x: 13, y: 4, toMap: "futuro_rebrand", toX: 4, toY: 5, facing: "up" },
-      { x: 15, y: 4, toMap: "futuro_tesoreria", toX: 4, toY: 5, facing: "up" }
+      { markerLabel: "SCISSIONE", x: 3, y: 4, toMap: "futuro_scissione", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "REBRAND", x: 13, y: 4, toMap: "futuro_rebrand", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "TESORERIA", x: 15, y: 4, toMap: "futuro_tesoreria", toX: 4, toY: 5, facing: "up" }
     ],
     signs: [
       { x: 2, y: 1, lines: ["PORTA SCISSIONE A SINISTRA.", "IL VERBALE PRECEDE LA LEVA DI SINISTRA."] },
@@ -553,7 +553,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     tileOverrides: { p: "tiles/future_split_floor.png", A: "tiles/future_wall.png" },
     objectOverrides: { "6": "tiles/future_split_desk.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }],
+    warps: [{ markerLabel: "SEDE", x: 4, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }],
     signs: [{ x: 1, y: 1, lines: ["VERBALE DI SEPARAZIONE.", "MOTIVO: TROPPA UNITÀ NELLA STESSA DIREZIONE."] }], pickups: [],
     npcs: [{ id: "future-split-clerk", spriteSet: "future-split", wander: false, pal: "aide", x: 4, y: 3, facing: "down", lines: [] }]
   },
@@ -562,7 +562,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     tileOverrides: { p: "tiles/future_brand_floor.png", A: "tiles/future_wall.png" },
     objectOverrides: { "6": "tiles/future_brand_desk.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }],
+    warps: [{ markerLabel: "SEDE", x: 4, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }],
     signs: [{ x: 1, y: 1, lines: ["BOZZA LOGO 47-B.", "COME IL PRECEDENTE, MA RIVOLTO VERSO DOMANI."] }], pickups: [],
     npcs: [{ id: "future-brand-clerk", spriteSet: "future-brand", wander: false, pal: "influencer", x: 4, y: 3, facing: "down", lines: [] }]
   },
@@ -571,7 +571,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     tileOverrides: { p: "tiles/future_money_floor.png", A: "tiles/future_wall.png" },
     objectOverrides: { "6": "tiles/future_money_desk.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }],
+    warps: [{ markerLabel: "SEDE", x: 4, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }],
     signs: [{ x: 1, y: 1, lines: ["BILANCIO PREVISIONALE.", "ENTRATE: DOMANI. USCITE: GIÀ OGGI."] }], pickups: [],
     npcs: [{ id: "future-money-clerk", spriteSet: "future-treasurer", wander: false, pal: "aide", x: 4, y: 3, facing: "down", lines: [] }]
   },
@@ -583,9 +583,9 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     warps: [
       { x: 8, y: 11, toMap: "futuro_piazza", toX: 3, toY: 8, facing: "right" },
       { x: 9, y: 11, toMap: "futuro_piazza", toX: 3, toY: 8, facing: "right" },
-      { x: 3, y: 3, toMap: "diplomacy_loyalty", toX: 4, toY: 5, facing: "up" },
-      { x: 16, y: 3, toMap: "diplomacy_autonomy", toX: 4, toY: 5, facing: "up" },
-      { x: 3, y: 8, toMap: "diplomacy_home", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "FEDELTÀ", x: 3, y: 3, toMap: "diplomacy_loyalty", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "AUTONOMIA", x: 16, y: 3, toMap: "diplomacy_autonomy", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "CONSENSO", x: 3, y: 8, toMap: "diplomacy_home", toX: 4, toY: 5, facing: "up" },
       { x: 16, y: 8, toMap: "diplomacy_terrace", toX: 5, toY: 10, facing: "right", requiresFlag: "diplomacy-choice-complete", markerLabel: "PARTNER", lockedLines: ["PRIMA FIRMA UNA SCELTA NELLE SUITE. B RINVIA."] }
       ,{ x: 18, y: 10, toMap: "genova_techno", toX: 10, toY: 12, facing: "up", requiresFlag: "diplomacyComplete", markerLabel: "GENOVA", lockedLines: ["GENOVA APRE DOPO IL PARTNER."], confirm: "VAI AL SET GENOVA TECHNO?" }
       ,{ x: 1, y: 10, toMap: "tour_feed", toX: 11, toY: 12, facing: "up", requiresFlag: "diplomacyComplete", markerLabel: "TOUR", lockedLines: ["IL TOUR APRE DOPO IL PARTNER."], confirm: "INIZI IL TOUR DEI CINQUE COLLEGI?" }

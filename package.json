@@ -104,7 +104,8 @@
     "check:offshore": "node scripts/check-offshore.mjs",
     "check:offshore:release": "node --import tsx scripts/check-offshore-release.mjs",
     "check:palace:release": "node --import tsx scripts/check-palace-release.mjs",
-    "shot:palace": "node scripts/shot-palace.mjs"
+    "shot:palace": "node scripts/shot-palace.mjs",
+    "check:world-navigation:release": "node --import tsx scripts/check-world-navigation-release.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

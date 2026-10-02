@@ -1,6 +1,6 @@
 {
   "date": "2026-10-02",
-  "status": "local_verified_publication_pending",
+  "status": "published_verified",
   "goal": "active; full redesign not completed",
   "sourceSha256": {
     "src/data/maps/atto3.ts": "ffac248f28687323c44c1554fc02d9f5fa81c85f18926ce4a68e605f86f0e43c",
@@ -749,7 +749,7 @@
     "finalBuildInitialCodeGzipBytes": 187654,
     "budgetBytes": 358400,
     "marginBytes": 135,
-    "normalBuildIdCompressionVariation": "few bytes"
+    "normalBuildIdCompressionVariation": "Public Vercel output is measured separately: 358383 gzip bytes, within the unchanged 358400 cap; 17 bytes margin. Build IDs and environment can alter minified output."
   },
   "shellLocalCases": 10,
   "checksumPngs": 631,
@@ -784,6 +784,247 @@
     "Palace, final chapter, intro/animations, other seeds and hard difficulty remain"
   ],
   "publication": {
-    "pending": true
+    "pending": false,
+    "runtimeCommit": "503ce4e9e5b388d907be7da1511cd0fd7fb484bf",
+    "ci": {
+      "databaseId": 37037523961,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37037523961"
+    },
+    "vercel": [
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon/D48CgkPbPm63gwanQ3oxG1LTJKuK"
+      },
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon-link-check/4LB713fq4SxBZNupdnmJVsCLj2Vd"
+      },
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon-test-link/Fur3xk2B9tehEtu9qKuUcEd85coH"
+      }
+    ],
+    "publicBundle": {
+      "base": "https://politicmon.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon.vercel.app/",
+          "bytes": 2407
+        },
+        {
+          "url": "https://politicmon.vercel.app/sw.js",
+          "bytes": 886
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/index-8u5wCeCy.js",
+          "bytes": 182762
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/index-AJvKKp9o.css",
+          "bytes": 2603
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/WorldScene-lrDYg9iE.js",
+          "bytes": 169725
+        }
+      ],
+      "total": 358383,
+      "budget": 358400,
+      "margin": 17
+    }
+  },
+  "nativePublic": [
+    {
+      "base": "https://politicmon.vercel.app",
+      "engine": "chromium",
+      "profile": {
+        "viewport": "390x844",
+        "touch": true,
+        "dpr": 2
+      },
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceCodeSha256": "301277d188b9be7abe11c5500aece186406878ad5deac76146756ebb692b71bf",
+      "earnedTourReport": "artifacts/campaign-native/tour-final-ellyna-direct-20261002.json",
+      "earnedTourCodeSha256": "b01997aac0ad4eaa49e7d78473fdea37a99d1ddec684200124def5f6bcbf3704",
+      "stages": [
+        "hub",
+        "nord-arrival",
+        "nord-menu",
+        "nord-debate-review",
+        "nord-boss-briefing",
+        "nord-prudent-review",
+        "nord-prudent-result",
+        "nord-endorsement-review",
+        "nord-closed-result",
+        "nord-closed-history",
+        "centro-used-ally-denied",
+        "centro-risky-review",
+        "centro-risky-effects",
+        "sud-arrival",
+        "sud-menu",
+        "sud-risk-review",
+        "isole-arrival",
+        "isole-menu",
+        "isole-risk-review",
+        "feed-arrival",
+        "feed-menu",
+        "feed-risk-review",
+        "palace-still-locked",
+        "earned-palace-entry"
+      ],
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/district-nord.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-centro.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-sud.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-feed.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-isole.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_threshold.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_hub_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-hub_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_hub_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_nord_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_rail.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_nord_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-nord_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-nord.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_centro_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_centro_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-centro_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-centro.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-centro_north.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-sud_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_sud_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_sud_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-sud.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-hub_east.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_isole_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_isole_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-isole_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-isole_west.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-isole.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_feed_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_feed_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-feed_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-feed_north.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-feed.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-hub_west.png?v=2026-10-02T16-59-02"
+      ],
+      "checks": [
+        "untouched earned Hotel save; native world navigation",
+        "actual touch A/B/menu/dossier directions",
+        "manual boss briefing declined without battle result",
+        "paginated cancellation preserves resources",
+        "prudent and negative-compatible endorsement committed exactly once",
+        "closed kiosk reopens read-only history",
+        "one ally endorsement cannot be reused in another district",
+        "all five illustrated dossiers and both return ports",
+        "Palace remains locked with one closed district",
+        "untouched five-win Tour save opens Palace; no fake victories"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app",
+      "engine": "webkit",
+      "profile": {
+        "viewport": "390x844",
+        "touch": true,
+        "dpr": 2
+      },
+      "sourceReport": "artifacts/campaign-native/diplomacy-final-ellyna-direct-20261002.json",
+      "sourceCodeSha256": "301277d188b9be7abe11c5500aece186406878ad5deac76146756ebb692b71bf",
+      "earnedTourReport": "artifacts/campaign-native/tour-final-ellyna-direct-20261002.json",
+      "earnedTourCodeSha256": "b01997aac0ad4eaa49e7d78473fdea37a99d1ddec684200124def5f6bcbf3704",
+      "stages": [
+        "hub",
+        "nord-arrival",
+        "nord-menu",
+        "nord-debate-review",
+        "nord-boss-briefing",
+        "nord-prudent-review",
+        "nord-prudent-result",
+        "nord-endorsement-review",
+        "nord-closed-result",
+        "nord-closed-history",
+        "centro-used-ally-denied",
+        "centro-risky-review",
+        "centro-risky-effects",
+        "sud-arrival",
+        "sud-menu",
+        "sud-risk-review",
+        "isole-arrival",
+        "isole-menu",
+        "isole-risk-review",
+        "feed-arrival",
+        "feed-menu",
+        "feed-risk-review",
+        "palace-still-locked",
+        "earned-palace-entry"
+      ],
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/district-nord.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-centro.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-feed.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-isole.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/boss/district-sud.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_hub_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_hub_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-hub_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_threshold.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-hub_west.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_nord_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-nord_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_nord_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_rail.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-nord.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-nord_north.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_centro_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-centro_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_centro_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-centro.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_sud_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-sud_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_sud_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-sud.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-sud_west.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_isole_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-isole_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_isole_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-isole.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-isole_west.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-isole_north.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-feed_south.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_feed_floor.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/tiles/tour_feed_set.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/ui/campaign/district-feed.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-feed_north.png?v=2026-10-02T16-59-02",
+        "https://politicmon.vercel.app/sprites/chars/npc_tour-hub_north.png?v=2026-10-02T16-59-02"
+      ],
+      "checks": [
+        "untouched earned Hotel save; native world navigation",
+        "actual touch A/B/menu/dossier directions",
+        "manual boss briefing declined without battle result",
+        "paginated cancellation preserves resources",
+        "prudent and negative-compatible endorsement committed exactly once",
+        "closed kiosk reopens read-only history",
+        "one ally endorsement cannot be reused in another district",
+        "all five illustrated dossiers and both return ports",
+        "Palace remains locked with one closed district",
+        "untouched five-win Tour save opens Palace; no fake victories"
+      ]
+    }
+  ],
+  "publicLogs": {
+    "tourChromium": "chromium: hub\nchromium: nord-arrival\nchromium: nord-menu\nchromium: nord-debate-review\nchromium: nord-boss-briefing\nchromium: nord-prudent-review\nchromium: nord-prudent-result\nchromium: nord-endorsement-review\nchromium: nord-closed-result\nchromium: nord-closed-history\nchromium: centro-used-ally-denied\nchromium: centro-risky-review\nchromium: centro-risky-effects\nchromium: sud-arrival\nchromium: sud-menu\nchromium: sud-risk-review\nchromium: isole-arrival\nchromium: isole-menu\nchromium: isole-risk-review\nchromium: feed-arrival\nchromium: feed-menu\nchromium: feed-risk-review\nchromium: palace-still-locked\nchromium: earned-palace-entry\nPASS Tour chromium: touch dossiers, exact commits, closed history, five districts, earned Palace gate.\n",
+    "tourWebkit": "webkit: hub\nwebkit: nord-arrival\nwebkit: nord-menu\nwebkit: nord-debate-review\nwebkit: nord-boss-briefing\nwebkit: nord-prudent-review\nwebkit: nord-prudent-result\nwebkit: nord-endorsement-review\nwebkit: nord-closed-result\nwebkit: nord-closed-history\nwebkit: centro-used-ally-denied\nwebkit: centro-risky-review\nwebkit: centro-risky-effects\nwebkit: sud-arrival\nwebkit: sud-menu\nwebkit: sud-risk-review\nwebkit: isole-arrival\nwebkit: isole-menu\nwebkit: isole-risk-review\nwebkit: feed-arrival\nwebkit: feed-menu\nwebkit: feed-risk-review\nwebkit: palace-still-locked\nwebkit: earned-palace-entry\nPASS Tour webkit: touch dossiers, exact commits, closed history, five districts, earned Palace gate.\n",
+    "checksum": "PASS: 631 deployed PNG checksums, 20 audio/catalog checksums and civic dialogue/bridge code at https://politicmon.vercel.app.\n",
+    "shell": "PASS public shell chromium 320x568: layout, frozen title, native focus and resume\nPASS public shell chromium 390x844: layout, frozen title, native focus and resume\nPASS public shell chromium 568x320: layout, frozen title, native focus and resume\nPASS public shell chromium 844x390: layout, frozen title, native focus and resume\nPASS public shell chromium 1280x800: layout, frozen title, native focus and resume\nPASS public shell webkit 320x568: layout, frozen title, native focus and resume\nPASS public shell webkit 390x844: layout, frozen title, native focus and resume\nPASS public shell webkit 568x320: layout, frozen title, native focus and resume\nPASS public shell webkit 844x390: layout, frozen title, native focus and resume\nPASS public shell webkit 1280x800: layout, frozen title, native focus and resume\n",
+    "pwaChromium": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 14570ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 737 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n",
+    "pwaWebkit": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 2699ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 737 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (webkit/iPhone 13): installazione, runtime, sprite, cache, update, precache offline verificata (reload offline non supportato da Playwright WebKit) e resume.\n",
+    "genovaTouch": "PASS Genova chromium accessible touch: native reward, practice and return 11.\nPASS Genova chromium timed touch: native reward, practice and return 10.\nPASS Genova webkit accessible touch: native reward, practice and return 11.\nPASS Genova webkit timed touch: native reward, practice and return 10.\n"
   }
 }

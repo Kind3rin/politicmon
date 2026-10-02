@@ -144,5 +144,7 @@ ridisegnare, osservate direttamente nel codice corrente.
 dossier degli starter interi, guida legata alla missione, pause e opzioni
 scorrevoli, scorta con conferma e tutorial che consente la riprova dopo
 sconfitta senza falsa vittoria. 8 crediti; saldo 617,97. 276 test e 514/506
-viste Chromium/WebKit. Sei lotte del tutorial tramite input, in aggiunta
+viste Chromium/WebKit. Pubblicazione `162520d` con CI e Vercel riusciti, 420
+checksum pubblici e 529 risorse PWA su entrambi i motori (reload offline solo
+Chromium). Sei lotte del tutorial tramite input, in aggiunta
 ai callback forzati. La campagna completa non è ancora verificata.

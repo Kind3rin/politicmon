@@ -120,5 +120,11 @@ dei meme pack. Performance CPU ×4: p95 mondo/lotta 18,6ms, Dex 18,5ms;
 528 PNG installati; verifica build su 420 checksum e codice dei nuovi dossier.
 La PWA controlla 529 risorse Higgsfield.
 
+Pubblicazione verificata in `162520d`: CI riuscita, deploy principale Vercel
+riuscito e 420 checksum sul dominio pubblico. Le prove PWA su Chromium/Pixel 7
+e WebKit/iPhone 13 passano con 529 risorse. Il riavvio interamente offline è
+provato su Chromium; WebKit verifica la precache offline e la ripresa, poiché
+Playwright non supporta il reload offline in quel motore.
+
 Il redesign generale resta aperto: interfaccia esterna, dialoghi delle zone,
 audio, ritmo dei percorsi e bilanciamento della campagna con prove integrali.

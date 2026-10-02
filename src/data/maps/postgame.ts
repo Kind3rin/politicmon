@@ -399,7 +399,7 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       },
       // ---- NPC ambientale d'ingresso: bussola narrativa sull'attracco ----
       {
-        id: "hostess-ue", pal: "granny", x: 16, y: 13, facing: "left",
+        id: "hostess-ue", pal: "granny", x: 16, y: 13, facing: "left", wander: false,
         lines: [
           "HOSTESS: il lampione è rotto. Abbiamo già inaugurato il tavolo che ne discuterà.",
           "Quattro sfide facoltative sul viale, poi LA COMMISSIONE nel palazzo a nord. Parlaci con A, senza agguati.",

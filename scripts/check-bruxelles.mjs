@@ -28,7 +28,7 @@ try{
   function walk(tx,ty){const map=state.pos.mapId;for(let n=0;n<1000;n++){settle();if(state.pos.mapId!==map)return;if(state.pos.x===tx&&state.pos.y===ty)return;const p=path(tx,ty);if(!p?.length){tick();continue;}tick(p[0]);if(world.askMenu)return;}throw Error('Walk bound '+JSON.stringify({pos:state.pos,target:[tx,ty]}));}
   async function shot(id){for(let n=0;n<15;n++){stack.draw(screen);await new Promise(r=>setTimeout(r,50));}const c=document.createElement('canvas');c.width=240;c.height=180;c.getContext('2d').drawImage(canvas,0,0,240,180);shots[id]=c.toDataURL();}
   function adjacent(npc){const candidates=dirs.map(([d,dx,dy])=>({d:dirs.find(v=>v[1]===-dx&&v[2]===-dy)[0],x:npc.x+dx,y:npc.y+dy})).filter(c=>!world.isBlocked(c.x,c.y)&&path(c.x,c.y));check(candidates.length,'No adjacent route '+npc.id);candidates.sort((a,b)=>path(a.x,a.y).length-path(b.x,b.y).length);const c=candidates[0];walk(c.x,c.y);if(state.pos.facing!==c.d)tick(c.d);}
-  settle();walk(12,5);await shot('palace');
+  settle();check(!world.visibleNpcs().find(n=>n.id==='hostess-ue').canWander,'Hostess can block the route');walk(12,5);await shot('palace');
   const resources=()=>JSON.stringify({party:state.party,bag:state.bag,money:state.money,morale:state.morale});
   const money=state.money,morale=JSON.stringify(state.morale);
   walk(10,11);settle();check(state.pos.mapId==='bar-bruxelles','First cafe door failed');

@@ -1221,7 +1221,7 @@
     {
       "id": "ellyna",
       "report": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
-      "reportSha256": "8129f22871fc201b1388c3ac6209e0b9d50dc28e1278671feeba1e927accf73d",
+      "reportSha256": "f33b98e44a15299fee8bc632b28c6627435eeb7f23f77b634fd744f4e68732df",
       "resume": {
         "report": "artifacts/campaign-native/offshore-final-ellyna-direct-20261002.json",
         "stage": "tesoriere-result-1",
@@ -1235,7 +1235,7 @@
       "bruxPlan": "prepared",
       "archivePlan": "support",
       "kitPlan": "skip",
-      "frames": 6628,
+      "frames": 9544,
       "failure": null,
       "initialParty": [
         {
@@ -1272,13 +1272,13 @@
       "finalParty": [
         {
           "id": "schleinix",
-          "level": 45,
+          "level": 43,
           "hp": 0,
           "heldItem": null,
           "moves": [
             {
               "id": "transizione",
-              "pp": 6
+              "pp": 8
             },
             {
               "id": "articolouno",
@@ -1286,7 +1286,7 @@
             },
             {
               "id": "piazza",
-              "pp": 12
+              "pp": 9
             },
             {
               "id": "scissione",
@@ -1296,25 +1296,25 @@
         },
         {
           "id": "movimenton",
-          "level": 42,
-          "hp": 0,
+          "level": 44,
+          "hp": 132,
           "heldItem": null,
           "moves": [
             {
               "id": "articolouno",
-              "pp": 15
+              "pp": 0
             },
             {
               "id": "redditone",
-              "pp": 9
+              "pp": 0
             },
             {
               "id": "vaffa",
-              "pp": 7
+              "pp": 0
             },
             {
               "id": "fiducia",
-              "pp": 19
+              "pp": 0
             }
           ]
         },
@@ -1334,7 +1334,7 @@
             },
             {
               "id": "razzox",
-              "pp": 4
+              "pp": 5
             },
             {
               "id": "spread",
@@ -1344,37 +1344,37 @@
         },
         {
           "id": "putingrad",
-          "level": 45,
-          "hp": 92,
+          "level": 44,
+          "hp": 0,
           "heldItem": null,
           "moves": [
             {
               "id": "tavololungo",
-              "pp": 7
+              "pp": 8
             },
             {
               "id": "gasdotto",
-              "pp": 0
+              "pp": 10
             },
             {
               "id": "dossier",
-              "pp": 0
+              "pp": 13
             },
             {
               "id": "blocconavale",
-              "pp": 8
+              "pp": 10
             }
           ]
         },
         {
           "id": "generorso",
-          "level": 39,
-          "hp": 0,
+          "level": 43,
+          "hp": 87,
           "heldItem": null,
           "moves": [
             {
               "id": "dazilampo",
-              "pp": 8
+              "pp": 5
             },
             {
               "id": "pienipoteri",
@@ -1489,18 +1489,6 @@
           "moneyAfter": 43490
         },
         {
-          "trainer": "wild",
-          "outcome": "win",
-          "foes": [
-            {
-              "id": "macronfox",
-              "level": 44
-            }
-          ],
-          "moneyBefore": 43490,
-          "moneyAfter": 43490
-        },
-        {
           "trainer": "eu-eurodeputato",
           "outcome": "win",
           "foes": [
@@ -1513,8 +1501,8 @@
               "level": 46
             }
           ],
-          "moneyBefore": 43210,
-          "moneyAfter": 45160
+          "moneyBefore": 43490,
+          "moneyAfter": 45440
         },
         {
           "trainer": "eu-commissario",
@@ -1549,8 +1537,8 @@
               "level": 50
             }
           ],
-          "moneyBefore": 46840,
-          "moneyAfter": 49140
+          "moneyBefore": 46700,
+          "moneyAfter": 49000
         },
         {
           "trainer": "commissione",
@@ -1573,8 +1561,8 @@
               "level": 55
             }
           ],
-          "moneyBefore": 48720,
-          "moneyAfter": 53720
+          "moneyBefore": 48300,
+          "moneyAfter": 53300
         }
       ],
       "preparation": [
@@ -1625,13 +1613,22 @@
           }
         },
         {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-eurodeputato",
+            "uid": "mmuqmmqg03",
+            "species": "muskrat"
+          }
+        },
+        {
           "type": "supplies-purchased",
           "map": "bruxelles",
           "detail": {
             "bag": {
-              "caffe": 4,
+              "caffe": 3,
               "scheda": 3,
-              "maalox": 3,
+              "maalox": 4,
               "spritz": 8,
               "divisa": 1,
               "dirBunga": 1,
@@ -1640,16 +1637,7 @@
               "tessera": 2,
               "dirWhatever": 1
             },
-            "money": 43210
-          }
-        },
-        {
-          "type": "leader-selection",
-          "map": "bruxelles",
-          "detail": {
-            "trainer": "eu-eurodeputato",
-            "uid": "mmuqmmqg03",
-            "species": "muskrat"
+            "money": 45160
           }
         },
         {
@@ -1666,18 +1654,18 @@
           "map": "bruxelles",
           "detail": {
             "bag": {
-              "caffe": 4,
+              "caffe": 3,
               "scheda": 3,
-              "maalox": 3,
+              "maalox": 4,
               "spritz": 8,
               "divisa": 1,
               "dirBunga": 1,
-              "schedona": 14,
+              "schedona": 13,
               "mojito": 6,
               "tessera": 2,
               "dirWhatever": 1
             },
-            "money": 46840
+            "money": 46700
           }
         },
         {
@@ -1694,18 +1682,18 @@
           "map": "bruxelles",
           "detail": {
             "bag": {
-              "caffe": 4,
+              "caffe": 3,
               "scheda": 3,
-              "maalox": 3,
+              "maalox": 4,
               "spritz": 8,
               "divisa": 1,
               "dirBunga": 1,
-              "schedona": 14,
+              "schedona": 13,
               "mojito": 6,
               "tessera": 2,
               "dirWhatever": 1
             },
-            "money": 48720
+            "money": 48300
           }
         },
         {
@@ -1747,7 +1735,7 @@
     {
       "id": "renzino",
       "report": "artifacts/campaign-native/brux-final-renzino-direct-20261002.json",
-      "reportSha256": "64fa8171b7e0749a150eb43206ac217d228f50fdd80c48f3d3dccd5c9efc33d6",
+      "reportSha256": "7aacfebd4d36119ff9d9c86cbd5f5ef6bbc05ec7f6c56e582e3dfd7244d56734",
       "resume": {
         "report": "artifacts/campaign-native/offshore-ready-renzino-direct-20261002.json",
         "stage": "tesoriere-result-1",
@@ -1761,7 +1749,7 @@
       "bruxPlan": "prepared",
       "archivePlan": "support",
       "kitPlan": "skip",
-      "frames": 5788,
+      "frames": 9451,
       "failure": null,
       "initialParty": [
         {
@@ -1798,8 +1786,8 @@
       "finalParty": [
         {
           "id": "pontimax",
-          "level": 50,
-          "hp": 112,
+          "level": 52,
+          "hp": 147,
           "heldItem": null,
           "moves": [
             {
@@ -1808,7 +1796,7 @@
             },
             {
               "id": "spread",
-              "pp": 13
+              "pp": 4
             },
             {
               "id": "pienipoteri",
@@ -1816,19 +1804,19 @@
             },
             {
               "id": "vaffa",
-              "pp": 10
+              "pp": 0
             }
           ]
         },
         {
           "id": "capitanone",
-          "level": 42,
-          "hp": 0,
+          "level": 43,
+          "hp": 170,
           "heldItem": null,
           "moves": [
             {
               "id": "dazilampo",
-              "pp": 5
+              "pp": 10
             },
             {
               "id": "vaffa",
@@ -1836,11 +1824,11 @@
             },
             {
               "id": "pienipoteri",
-              "pp": 9
+              "pp": 10
             },
             {
               "id": "mojito",
-              "pp": 9
+              "pp": 10
             }
           ]
         },
@@ -1894,13 +1882,13 @@
         },
         {
           "id": "generorso",
-          "level": 40,
-          "hp": 83,
+          "level": 41,
+          "hp": 6,
           "heldItem": null,
           "moves": [
             {
               "id": "dazilampo",
-              "pp": 9
+              "pp": 6
             },
             {
               "id": "fiammatricolore",
@@ -1908,7 +1896,7 @@
             },
             {
               "id": "pienipoteri",
-              "pp": 10
+              "pp": 9
             },
             {
               "id": "iosonogiorgia",
@@ -1918,8 +1906,8 @@
         },
         {
           "id": "xipanda",
-          "level": 48,
-          "hp": 104,
+          "level": 47,
+          "hp": 88,
           "heldItem": null,
           "moves": [
             {
@@ -1932,7 +1920,7 @@
             },
             {
               "id": "spread",
-              "pp": 8
+              "pp": 9
             },
             {
               "id": "fiducia",
@@ -2051,8 +2039,20 @@
               "level": 46
             }
           ],
-          "moneyBefore": 42220,
-          "moneyAfter": 44170
+          "moneyBefore": 42090,
+          "moneyAfter": 44040
+        },
+        {
+          "trainer": "wild",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "putingrad",
+              "level": 47
+            }
+          ],
+          "moneyBefore": 44040,
+          "moneyAfter": 44040
         },
         {
           "trainer": "eu-commissario",
@@ -2067,8 +2067,8 @@
               "level": 48
             }
           ],
-          "moneyBefore": 43780,
-          "moneyAfter": 45880
+          "moneyBefore": 44040,
+          "moneyAfter": 46140
         },
         {
           "trainer": "eu-lobby",
@@ -2087,8 +2087,8 @@
               "level": 50
             }
           ],
-          "moneyBefore": 45880,
-          "moneyAfter": 48180
+          "moneyBefore": 45230,
+          "moneyAfter": 47530
         },
         {
           "trainer": "commissione",
@@ -2111,8 +2111,8 @@
               "level": 55
             }
           ],
-          "moneyBefore": 47660,
-          "moneyAfter": 52660
+          "moneyBefore": 46490,
+          "moneyAfter": 51490
         }
       ],
       "preparation": [
@@ -2163,15 +2163,6 @@
           }
         },
         {
-          "type": "leader-selection",
-          "map": "bruxelles",
-          "detail": {
-            "trainer": "eu-eurodeputato",
-            "uid": "mmuqmsqst2",
-            "species": "pontimax"
-          }
-        },
-        {
           "type": "supplies-purchased",
           "map": "bruxelles",
           "detail": {
@@ -2187,14 +2178,14 @@
               "mojito": 6,
               "dirWhatever": 1
             },
-            "money": 43780
+            "money": 42090
           }
         },
         {
           "type": "leader-selection",
           "map": "bruxelles",
           "detail": {
-            "trainer": "eu-commissario",
+            "trainer": "eu-eurodeputato",
             "uid": "mmuqmsqst2",
             "species": "pontimax"
           }
@@ -2203,7 +2194,7 @@
           "type": "leader-selection",
           "map": "bruxelles",
           "detail": {
-            "trainer": "eu-lobby",
+            "trainer": "eu-commissario",
             "uid": "mmuqmsqst2",
             "species": "pontimax"
           }
@@ -2224,7 +2215,35 @@
               "mojito": 6,
               "dirWhatever": 1
             },
-            "money": 47660
+            "money": 45230
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-lobby",
+            "uid": "mmuqmsqst2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 0,
+              "scheda": 2,
+              "maalox": 4,
+              "divisa": 1,
+              "schedona": 14,
+              "dirBunga": 1,
+              "tessera": 2,
+              "spritz": 8,
+              "mojito": 6,
+              "dirWhatever": 1
+            },
+            "money": 46490
           }
         },
         {
@@ -2275,7 +2294,7 @@
     {
       "id": "giorgetta",
       "report": "artifacts/campaign-native/brux-final-giorgetta-direct-20261002.json",
-      "reportSha256": "b996df13e1ed19362741698ffb2f6dbf754ae9046719bd2d77f77deee01d9945",
+      "reportSha256": "5d7fe8a792ee0b672aea1388395ff6c2a03dc2ec117052511cb333f357a08f91",
       "resume": {
         "report": "artifacts/campaign-native/offshore-ready-giorgetta-direct-20261002.json",
         "stage": "tesoriere-result-1",
@@ -2289,7 +2308,7 @@
       "bruxPlan": "prepared",
       "archivePlan": "support",
       "kitPlan": "skip",
-      "frames": 6572,
+      "frames": 6081,
       "failure": null,
       "initialParty": [
         {
@@ -2326,21 +2345,21 @@
       "finalParty": [
         {
           "id": "pontimax",
-          "level": 52,
-          "hp": 147,
+          "level": 51,
+          "hp": 100,
           "heldItem": "gilet",
           "moves": [
             {
               "id": "grafico",
-              "pp": 0
+              "pp": 20
             },
             {
               "id": "spread",
-              "pp": 0
+              "pp": 1
             },
             {
               "id": "pienipoteri",
-              "pp": 0
+              "pp": 10
             },
             {
               "id": "vaffa",
@@ -2350,17 +2369,17 @@
         },
         {
           "id": "generorso",
-          "level": 41,
-          "hp": 0,
+          "level": 42,
+          "hp": 28,
           "heldItem": "gilet",
           "moves": [
             {
               "id": "dazilampo",
-              "pp": 8
+              "pp": 7
             },
             {
               "id": "fiammatricolore",
-              "pp": 9
+              "pp": 10
             },
             {
               "id": "pienipoteri",
@@ -2374,8 +2393,8 @@
         },
         {
           "id": "giorgiagon",
-          "level": 42,
-          "hp": 151,
+          "level": 43,
+          "hp": 155,
           "heldItem": "gilet",
           "moves": [
             {
@@ -2422,8 +2441,8 @@
         },
         {
           "id": "conteblob",
-          "level": 40,
-          "hp": 152,
+          "level": 41,
+          "hp": 155,
           "heldItem": null,
           "moves": [
             {
@@ -2447,7 +2466,7 @@
         {
           "id": "xipanda",
           "level": 43,
-          "hp": 134,
+          "hp": 170,
           "heldItem": "gilet",
           "moves": [
             {
@@ -2456,7 +2475,7 @@
             },
             {
               "id": "viadellaseta",
-              "pp": 9
+              "pp": 10
             },
             {
               "id": "spread",
@@ -2599,8 +2618,8 @@
               "level": 46
             }
           ],
-          "moneyBefore": 33680,
-          "moneyAfter": 35630
+          "moneyBefore": 33540,
+          "moneyAfter": 35490
         },
         {
           "trainer": "eu-commissario",
@@ -2615,8 +2634,20 @@
               "level": 48
             }
           ],
-          "moneyBefore": 35630,
-          "moneyAfter": 37730
+          "moneyBefore": 35350,
+          "moneyAfter": 37450
+        },
+        {
+          "trainer": "wild",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 43
+            }
+          ],
+          "moneyBefore": 37450,
+          "moneyAfter": 37450
         },
         {
           "trainer": "eu-lobby",
@@ -2635,8 +2666,8 @@
               "level": 50
             }
           ],
-          "moneyBefore": 37590,
-          "moneyAfter": 39890
+          "moneyBefore": 37450,
+          "moneyAfter": 39750
         },
         {
           "trainer": "commissione",
@@ -2659,8 +2690,8 @@
               "level": 55
             }
           ],
-          "moneyBefore": 39330,
-          "moneyAfter": 44330
+          "moneyBefore": 39470,
+          "moneyAfter": 44470
         }
       ],
       "preparation": [
@@ -2712,19 +2743,30 @@
           }
         },
         {
-          "type": "leader-selection",
+          "type": "supplies-purchased",
           "map": "bruxelles",
           "detail": {
-            "trainer": "eu-eurodeputato",
-            "uid": "mmuqmsqsf2",
-            "species": "pontimax"
+            "bag": {
+              "caffe": 1,
+              "scheda": 0,
+              "maalox": 5,
+              "divisa": 1,
+              "dirBunga": 1,
+              "spritz": 8,
+              "schedona": 11,
+              "mojito": 4,
+              "gilet": 0,
+              "tessera": 3,
+              "dirWhatever": 1
+            },
+            "money": 33540
           }
         },
         {
           "type": "leader-selection",
           "map": "bruxelles",
           "detail": {
-            "trainer": "eu-commissario",
+            "trainer": "eu-eurodeputato",
             "uid": "mmuqmsqsf2",
             "species": "pontimax"
           }
@@ -2735,18 +2777,27 @@
           "detail": {
             "bag": {
               "caffe": 1,
-              "scheda": 2,
-              "maalox": 5,
+              "scheda": 0,
+              "maalox": 6,
               "divisa": 1,
               "dirBunga": 1,
               "spritz": 8,
-              "schedona": 12,
+              "schedona": 11,
               "mojito": 4,
               "gilet": 0,
               "tessera": 3,
               "dirWhatever": 1
             },
-            "money": 37590
+            "money": 35350
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-commissario",
+            "uid": "mmuqmsqsf2",
+            "species": "pontimax"
           }
         },
         {
@@ -2764,8 +2815,8 @@
           "detail": {
             "bag": {
               "caffe": 1,
-              "scheda": 2,
-              "maalox": 5,
+              "scheda": 0,
+              "maalox": 6,
               "divisa": 1,
               "dirBunga": 1,
               "spritz": 8,
@@ -2775,7 +2826,7 @@
               "tessera": 3,
               "dirWhatever": 1
             },
-            "money": 39330
+            "money": 39470
           }
         },
         {
@@ -2847,29 +2898,29 @@
       "sceneAudio": true
     },
     "boot": {
-      "assetsReadyMs": 1432.5,
-      "firstFrameMs": 1452,
+      "assetsReadyMs": 1420,
+      "firstFrameMs": 1435.7999999821186,
       "resourceRequestsAtFirstFrame": 158,
-      "resourceTransferBytesAtFirstFrame": 569155,
-      "wallMs": 2031.44
+      "resourceTransferBytesAtFirstFrame": 569157,
+      "wallMs": 1961.98
     },
     "scenes": {
       "world": {
         "work": {
           "frames": 240,
-          "meanMs": 0.708,
-          "p50Ms": 0.7,
-          "p95Ms": 1.3,
-          "p99Ms": 1.5,
-          "maxMs": 7
+          "meanMs": 0.602,
+          "p50Ms": 0.6,
+          "p95Ms": 1.1,
+          "p99Ms": 1.3,
+          "maxMs": 6.1
         },
         "interval": {
           "frames": 239,
-          "meanMs": 16.669,
+          "meanMs": 16.733,
           "p50Ms": 16.7,
           "p95Ms": 17.6,
           "p99Ms": 17.7,
-          "maxMs": 17.7
+          "maxMs": 32.6
         },
         "framesOver100ms": 0,
         "audio": {
@@ -2881,18 +2932,18 @@
       "battle": {
         "work": {
           "frames": 240,
-          "meanMs": 0.229,
-          "p50Ms": 0.1,
-          "p95Ms": 0.7,
-          "p99Ms": 0.8,
-          "maxMs": 1
+          "meanMs": 0.253,
+          "p50Ms": 0.2,
+          "p95Ms": 0.8,
+          "p99Ms": 0.9,
+          "maxMs": 1.1
         },
         "interval": {
           "frames": 239,
           "meanMs": 16.668,
           "p50Ms": 16.7,
           "p95Ms": 17.6,
-          "p99Ms": 17.6,
+          "p99Ms": 17.7,
           "maxMs": 17.7
         },
         "framesOver100ms": 0,
@@ -2905,19 +2956,19 @@
       "dex": {
         "work": {
           "frames": 240,
-          "meanMs": 0.331,
+          "meanMs": 0.31,
           "p50Ms": 0.2,
           "p95Ms": 0.8,
           "p99Ms": 0.9,
-          "maxMs": 1.1
+          "maxMs": 1.6
         },
         "interval": {
           "frames": 239,
-          "meanMs": 16.736,
+          "meanMs": 16.737,
           "p50Ms": 16.7,
-          "p95Ms": 17.5,
-          "p99Ms": 17.6,
-          "maxMs": 32.3
+          "p95Ms": 17.6,
+          "p99Ms": 17.7,
+          "maxMs": 33.5
         },
         "framesOver100ms": 0,
         "audio": {
@@ -2941,17 +2992,17 @@
       }
     },
     "sizes": {
-      "codeRawBytes": 1112489,
-      "codeGzipBytes": 357883,
+      "codeRawBytes": 1112499,
+      "codeGzipBytes": 357884,
       "initialCodeGzipBytes": 188237,
       "spriteCompressedBytes": 3176125,
       "spriteDecodedBytesEstimate": 14856960,
       "spriteFiles": 565
     },
     "save": {
-      "payloadBytes": 8917,
-      "parseMeanMs": 0.0321,
-      "serializeMeanMs": 0.0194
+      "payloadBytes": 8919,
+      "parseMeanMs": 0.0318,
+      "serializeMeanMs": 0.0196
     }
   },
   "releaseLocal": {
@@ -2963,11 +3014,11 @@
         "stage": "bruxelles-arrival",
         "target": "bar-bruxelles",
         "assets": [
-          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14"
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-34-17"
         ],
         "checks": [
           "earned save imported without edits",
@@ -2983,15 +3034,13 @@
         "stage": "commissione-result-1",
         "target": "campo_largo",
         "assets": [
-          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/chars/npc_commissione_east.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/chars/npc_commissione_north.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14"
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-34-17"
         ],
         "checks": [
           "earned save imported without edits",
@@ -3009,11 +3058,11 @@
         "stage": "bruxelles-arrival",
         "target": "bar-bruxelles",
         "assets": [
-          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14"
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-34-17"
         ],
         "checks": [
           "earned save imported without edits",
@@ -3029,14 +3078,15 @@
         "stage": "commissione-result-1",
         "target": "campo_largo",
         "assets": [
-          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/chars/npc_commissione_west.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
-          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14"
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_north.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_east.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-34-17",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-34-17"
         ],
         "checks": [
           "earned save imported without edits",
@@ -3055,8 +3105,18 @@
     "webkitOfflineLimitation": "Canonical/versioned cache requests and AAC decoding checked offline; full offline reload unsupported by Playwright WebKit."
   },
   "publication": {
-    "status": "pending",
-    "site": "https://politicmon.vercel.app/"
+    "status": "source-deployed-followup-pending",
+    "sourceCommit": "6d58cb0023e58370eb2442e38df48e36dff70a28",
+    "site": "https://politicmon.vercel.app/",
+    "sourceCiRun": 36984334435,
+    "sourceCiConclusion": "success",
+    "sourceVercelStatuses": "three success",
+    "publicChecksums": 458,
+    "publicPwa": {
+      "chromium": "success after one service-worker-ready timeout on first concurrent cold attempt",
+      "webkit": "success; full offline reload unsupported"
+    },
+    "followup": "Hostess now fixed near quay; public native return to Campo must be rechecked after followup deploy."
   },
   "sourceOutputs": [
     {

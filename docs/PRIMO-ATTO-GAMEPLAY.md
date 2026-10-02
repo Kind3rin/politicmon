@@ -178,3 +178,15 @@ Non certifica la campagna completa, il bilanciamento difficile o tutte le
 evoluzioni ramificate. Restano revisione delle zone successive, audio,
 percorsi alternativi, partita completa e postgame, come registrato in
 [`REDESIGN-PLAN.md`](REDESIGN-PLAN.md).
+
+## Pubblicazione verificata
+
+Codice pubblicato in `89addbb`, con
+[CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36955913237)
+e i tre deploy Vercel riusciti. Su [politicmon.vercel.app](https://politicmon.vercel.app/)
+sono verificati 421 checksum PNG e i riferimenti al nuovo primo atto nel
+bundle pubblico. PWA: 530 asset, aggiornamento, migrazione v13→v18,
+salvataggio conservato e ripresa dal background su Chromium/WebKit;
+riavvio senza rete su Chromium. Le sei configurazioni pubbliche della
+cornice esterna passano layout, pausa del titolo, focus nativo e ripresa
+(390×844, 844×390, 1280×800 su entrambi i motori).

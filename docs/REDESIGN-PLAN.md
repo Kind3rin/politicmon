@@ -178,3 +178,7 @@ tempo virtuale accelerato, nessuna certificazione della campagna integrale.
 Build locale: 421 checksum, 530 risorse PWA, bundle 207,3/349,9 KiB e p95
 massimo 17,6 ms con CPU ×4. Il margine del bundle richiede interventi sulla
 modularità prima di ulteriori funzioni; i limiti restano invariati.
+
+Round pubblicato in `89addbb`: CI e tre deploy Vercel riusciti, 421 checksum
+sul sito pubblico, PWA con 530 asset in Chromium/WebKit e sei configurazioni
+della cornice esterna riuscite. Reload offline verificato in Chromium.

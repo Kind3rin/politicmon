@@ -120,3 +120,14 @@ Il controllo pubblico della PWA riesce anche con WebKit/iPhone 13:
 525 asset recuperati offline e ripresa dopo background. Playwright WebKit
 non supporta il reload completamente offline: questo controllo prova
 precache e richieste offline, senza dichiarare quel riavvio come verificato.
+
+## Pubblicazione verificata
+
+Il round è pubblicato in `63f88cc`; la correzione dei comandi della tessera
+è in `5efbb84`. La [CI del codice finale](https://github.com/Kind3rin/politicmon/actions/runs/36944972495)
+è riuscita e i tre progetti Vercel riportano successo. Sul dominio pubblico
+[politicmon.vercel.app](https://politicmon.vercel.app/) sono verificati 416
+checksum, contratti nel codice, 525 richieste di asset offline su Chromium
+Pixel 7 e WebKit iPhone 13, migrazione, aggiornamento e ripresa. Il reload
+completamente offline è provato su Chromium; per WebKit vale il limite
+indicato sopra. Le 843 viste native riescono su entrambi i motori.

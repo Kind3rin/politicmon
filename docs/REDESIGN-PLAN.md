@@ -126,3 +126,13 @@ probabilità e costi consultabili, invito giornaliero con effetti sulla morale,
 squadra della campagna protetta durante i salvataggi del torneo, livelli esatti,
 leader e nuove battute dei sette fantasmi. 14 crediti; saldo 625,97.
 272 test, 843 viste native, budget di performance invariati.
+
+Pubblicazione del round casinò/Coppa verificata: `63f88cc` e correzione
+comandi tessera `5efbb84`, CI riuscita, tre deploy Vercel riusciti, 416
+checksum sul dominio pubblico e 525 asset offline in Chromium e WebKit.
+Il reload offline è verificato soltanto in Chromium. La prova dei match
+forza gli esiti e non chiude il lavoro sul bilanciamento della campagna.
+Prossima priorità: onboarding con descrizioni e scelte complete, pausa e
+viaggi; `StarterPreviewScene` conserva ancora soltanto due righe del testo
+Dex e la pausa usa un elenco sopra il mondo. Sono superfici ancora da
+ridisegnare, osservate direttamente nel codice corrente.

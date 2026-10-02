@@ -87,8 +87,8 @@ export const QUESTS: QuestDef[] = [
     id: "gym2",
     title: "MEDAGLIA SPREAD",
     desc: "Sconfiggi LADY DIRETTIVA nella PALESTRA UE di EUROTOWN.",
-    hint: "Eurotown è a nord di Mediopoli, oltre il PERCORSO 2. Tetto blu con le stelle.",
-    step: "Raggiungi Eurotown e sfida la Palestra UE.",
+    hint: "Oltre PERCORSO 2, tetto blu. Hans è facoltativo; esci e cura i PP al bar prima del boss.",
+    step: "Prepara la squadra e sfida Lady Direttiva.",
     isDone: (s) => s.badges.includes("spread"),
     target: { mapId: "eurotown", x: 6, y: 5 }
   },

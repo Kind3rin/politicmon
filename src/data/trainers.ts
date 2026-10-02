@@ -126,8 +126,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
   lobbista: {
     id: "lobbista", name: "LOBBISTA EUGENIO", pal: "aide",
     team: [["tajanide", 11], ["contemorfo", 12]],
-    intro: ["Rappresento interessi molto, molto importanti.", "I tuoi, se il prezzo è giusto. Intanto ti sfido!"],
-    defeat: ["Interessante... posso rappresentare anche te?"],
+    intro: ["Accetta tutto era già selezionato. Era una proposta di collaborazione.", "Rifiuta è nello stesso documento. Alla pagina che non mostriamo."],
+    defeat: ["Il consenso ha risposto. Togliamo la spunta prima di chiamarlo spontaneo."],
     money: 560
   },
   stagista: {
@@ -148,22 +148,22 @@ export const TRAINERS: Record<string, TrainerDef> = {
   opinionista: {
     id: "opinionista", name: "OPINIONISTA PERENNE", pal: "journalist",
     team: [["mediocrate", 12], ["tajanide", 13]],
-    intro: ["Sono ospite fisso di sette salotti.", "Il mio parere? Contrario. A cosa? Vedremo in onda."],
-    defeat: ["Ne parlerò malissimo in prima serata."],
+    intro: ["Ho un'opinione indipendente. Il contratto indica da chi.", "Se cambia la domanda, aspetto il segnale della regia."],
+    defeat: ["La risposta non era nella scaletta. Chiederò di aggiungere le domande."],
     money: 520, reward: { itemId: "scheda", qty: 2 }
   },
   claqueur: {
     id: "claqueur", name: "CAPO CLAQUE", pal: "influencer",
     team: [["vannaccix", 12], ["bojoon", 13]],
-    intro: ["APPLAUSI! No, non per te.", "La mia claque applaude a cachet. Ora fischia te."],
-    defeat: ["Cala il sipario... e pure il gettone."],
+    intro: ["Il pubblico è libero. Il led sopra le sedie suggerisce quanto.", "Se ti applaudono pago lo straordinario. Ti prego, parla male."],
+    defeat: ["Hanno applaudito a luce spenta. Quella voce non era nel preventivo."],
     money: 540, reward: { itemId: "spritz", qty: 1 }
   },
   telelobbista: {
     id: "telelobbista", name: "LOBBISTA CATODICO", pal: "aide",
     team: [["mediocrate", 13], ["calendauro", 14]],
-    intro: ["Piazzo emendamenti tra una pubblicità e l'altra.", "Il tuo consenso mi serve: lo compro o lo prendo."],
-    defeat: ["Segno la sconfitta a bilancio. Voce: investimenti."],
+    intro: ["Vendo un pubblico pronto all'ascolto. Delle tue abitudini d'acquisto.", "Tu non sei nel contratto: rispondi prima del jingle."],
+    defeat: ["Segno pubblico non conforme. Il cliente voleva soltanto una percentuale."],
     money: 560
   },
   emittenza: {
@@ -180,8 +180,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
   funzionario: {
     id: "funzionario", name: "FUNZIONARIO HANS", pal: "aide",
     team: [["tajanide", 15], ["calendauro", 15]],
-    intro: ["Halt! Per sfidare la palestra serve il modulo B-7.", "Non ce l'hai? Allora si combatte. È la procedura."],
-    defeat: ["Protocollo la sconfitta in triplice copia."],
+    intro: ["Sono HANS. Ho tolto il modulo per chiedere il modulo. Il consulente rimpiange il passaggio.", "Dopo la prova puoi uscire: il bar recupera i PP."],
+    defeat: ["Verifica chiusa. Il risultato vale con una firma."],
     money: 600
   },
   ladydirettiva: {

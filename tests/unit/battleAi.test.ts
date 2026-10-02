@@ -76,10 +76,13 @@ test("IA: tutte le specie e le mosse producono punteggi finiti", () => {
 });
 
 test("IA: boss con stili distinti e profili di difficoltà separati", () => {
-  assert.equal(new Set(BOSS_ART_IDS).size,10);
+  assert.equal(new Set(BOSS_ART_IDS).size,11);
   assert.ok(BOSS_ART_IDS.includes("stagista"));
   assert.equal(trainerAi("stagista",false,false,0).canHeal,false);
   assert.equal(trainerAi("stagista",false,true,0).canHeal,false);
+  assert.equal(trainerAi("funzionario",false,false,1).canHeal,false);
+  assert.equal(trainerAi("funzionario",false,false,1).whiff,.43);
+  assert.equal(trainerAi("funzionario",false,true,1).canHeal,true);
   assert.equal(trainerAi("emittenza",true,false,1).whiff,.28);
   assert.equal(trainerAi("boss",false,true,3).whiff,.1);
   assert.equal(trainerAi("ladydirettiva",true,false,2).style,"control");

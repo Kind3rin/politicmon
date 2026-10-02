@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "balanceBefore": 617.72,
+  "balanceAfter": 617.47,
+  "estimatedCredits": 0.25,
+  "creditsSpent": 0.25,
+  "assets": [
+    {
+      "id": "funzionario",
+      "path": "public/sprites/ui/boss/funzionario.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON, original satirical Italian political RPG. Finished modern pixel art panorama readable at 224 by 78 pixels; navy, ivory, teal, burgundy, restrained gold; crisp chunky pixels, rich theatrical lighting, strong silhouettes, no words, no letters, no numbers, no logos, no interface. A fictional meticulous European public clerk with round glasses, dark curly hair and navy waistcoat stands centered behind a modest service desk, offering one simple blank ivory form to the viewer. Behind him an absurd enormous spiral of folders and stamps coils into a maze, while a single clear mint-lit open doorway is visible at the far right. The clerk has an earnest slightly embarrassed face, one hand showing the accessible clear path and the other holding the last remaining stamp. Original satirical scene: the procedure is now simple but the apparatus still occupies the whole room. Upper body and form inside middle 75%; quiet dark top band for a runtime title. Wider panorama, all art contained safely in upper 62% so a top crop retains clerk and doorway. Consistent polished pixel art game illustration, not realistic and not a portrait of any real person.",
+      "model": "gpt_image_2_5",
+      "backendModel": "gpt_image_2_5",
+      "jobId": "26f92cbc-072d-42ff-be98-01ad15a177ae",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_023608_26f92cbc-072d-42ff-be98-01ad15a177ae.png",
+      "cropTop": 72,
+      "crop": "full width, y72, height width*78/224; nearest resize",
+      "sourceSha256": "b9c3aab9e7bc9c76cf7403288d1558d83e9083b9334ebf27f4b857a7b13572a6",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "440aef6c435cc50339dc09de34da9e16326f68ba5ce3282ee7f1481f6196660b"
+    }
+  ]
+}

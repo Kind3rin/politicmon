@@ -5,21 +5,23 @@ const browser=await chromium.launch();
 const id=process.env.STARTER??'ellyna',seed=Number(process.env.RUN_SEED??20261002),plan=process.env.RUN_PLAN??'direct';
 const label=process.env.RUN_LABEL??'current';
 const practice=process.env.RUN_PRACTICE==='1';
+const endAt=process.env.END_AT??'auditel';
+const euroPlan=process.env.EU_PLAN??plan;
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
- const result=await page.evaluate(async({id,seed,plan,practice})=>{
+ const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan})=>{
   const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,exportSaveCode,saveGame}=await import('/src/game/state.ts');
   const {Screen}=await import('/src/engine/screen.ts'),{Input}=await import('/src/engine/input.ts'),{SceneStack}=await import('/src/engine/scene.ts');
   const {MOVES}=await import('/src/data/moves.ts'),{ITEMS}=await import('/src/data/items.ts'),{MAPS,STARTER_SPOTS}=await import('/src/data/maps.ts');
-  const {statsOf}=await import('/src/game/monster.ts'),{damageRange}=await import('/src/game/battle/tactics.ts');
+  const {statsOf}=await import('/src/game/monster.ts'),{damageRange}=await import('/src/game/battle/tactics.ts'),{makeCombatant}=await import('/src/game/battle/sim.ts');
   const {seededRng}=await import('/src/game/tournament.ts'),{audio}=await import('/src/engine/audio.ts');audio.enabled=false;Math.random=seededRng(seed);
   const {mp}=await import('/src/net/mp.ts');mp.setEnabled(false); // Local campaign; relay timing must not consume the seeded RNG.
   const {TILES}=await import('/src/art/tiles.ts'),{tickRunStats}=await import('/src/game/runstats.ts'),{spriteRegistryStats}=await import('/src/engine/assets.ts');
   const canvas=document.createElement('canvas');canvas.id='game-canvas';document.body.append(canvas);const screen=new Screen(canvas),input=new Input(),stack=new SceneStack();
   const state=newGameState(),world=new WorldScene(stack,input,state);stack.push(world);
-  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map();let frames=0,itemPending=null;
+  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let frames=0,itemPending=null;
   const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
   const trace=(type,detail)=>events.push({type,detail,steps:state.stepsTotal,map:state.pos.mapId,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp})),money:state.money});
   function tick(button){
@@ -38,6 +40,15 @@ try{
   function linear(menu,target){if(menu.index!==target){press('down');return false;}press('a');return true;}
   function grid(menu,target){const i=menu.index;if(i===target){press('a');return true;}if(i%2!==target%2)press(i%2?'left':'right');else press(i<target?'down':'up');return false;}
   function bestMove(b){let index=-1,score=-1;for(const [i,s]of b.player.mon.moves.entries()){const m=MOVES[s.id];if(s.pp<=0||m.power<=0)continue;const r=damageRange(b.player,b.foe,m,{sondaggi:state.sondaggi}),value=(r.min+r.max)*m.accuracy;if(value>score){index=i;score=value;}}return {index,score};}
+  function bestCandidate(foe,currentUid){
+   let index=-1,score=-1;
+   for(const [i,mon]of state.party.entries()){
+    if(mon.hp<=0||mon.uid===currentUid)continue;
+    const value=bestMove({player:makeCombatant(mon),foe}).score*mon.hp/statsOf(mon).hp;
+    if(value>score){index=i;score=value;}
+   }
+   return index;
+  }
   function action(){
    const s=stack.top,name=s?.constructor.name;
    if(name==='WorldScene'){
@@ -50,7 +61,7 @@ try{
     if(s.mode==='menu'){
      const balls=['scheda','schedona'].filter(i=>state.bag[i]>0),heal=['spritz','caffe','mojito'].find(i=>state.bag[i]>0);
      const damage=bestMove(s),hpMax=statsOf(s.player.mon).hp;
-     const wantCatch=!s.trainer&&state.party.length<3&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
+     const wantCatch=!s.trainer&&state.party.length<(euroPlan==='tactical'&&state.badges.includes('auditel')?4:3)&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
      const wantHeal=s.player.mon.hp<hpMax*.35&&heal;
      itemPending=wantHeal?heal:wantCatch?balls[0]:null;grid(s.mainMenu,itemPending?1:0);return true;
     }
@@ -63,13 +74,23 @@ try{
     linear(s.view.menu,target);return true;
    }
    if(name==='PartyScene'){
-    const target=state.party.findIndex(m=>m.hp>0&&m.uid!==s.opts.currentUid);if(target<0)throw Error('No switch candidate');
+    const live=[...battles.keys()].findLast(b=>!battles.get(b).outcome);
+    const target=euroPlan==='tactical'&&state.badges.includes('auditel')&&live?bestCandidate(live.foe,s.opts.currentUid):state.party.findIndex(m=>m.hp>0&&m.uid!==s.opts.currentUid);if(target<0)throw Error('No switch candidate');
     if(s.index!==target)press('down');else press('a');return true;
    }
    if(name==='TeachScene'){
     if(!lessons.has(s)){const lesson={uid:s.mon.uid,id:s.mon.speciesId,move:s.moveId,level:s.mon.level};lessons.set(s,lesson);trace('learn',lesson);}
     const powers=s.mon.moves.map(slot=>MOVES[slot.id].power),target=powers.indexOf(Math.min(...powers));
     if(!s.confirm&&!s.msg.isOpen&&s.mon.moves.length>=4&&s.menu.index!==target)press('down');else press('a');return true;
+   }
+   if(name==='BossBriefingScene'&&euroPlan==='tactical'&&state.badges.includes('auditel')&&!briefChosen.has(s)){
+    if(s.page===0)press('start');
+    else{
+     const target=bestCandidate(makeCombatant(s.team[0]));if(target<0)throw Error('No briefing leader');
+     if(s.index!==target)press('down');
+     else{trace('leader-selection',{trainer:s.trainer.id,uid:state.party[target].uid,species:state.party[target].speciesId});press('a');briefChosen.add(s);}
+    }
+    return true;
    }
    if(['FieldGuideScene','StarterPreviewScene','EvolutionScene','BossBriefingScene','SliceEndingScene'].includes(name)){press('a');return true;}
    throw Error('Unhandled scene '+name);
@@ -116,8 +137,9 @@ try{
    if(!candidates.length)throw Error('No '+dir+' exit '+map.id);if(!walkTo(candidates[0].x,y))return false;face(dir);press(dir);settle();if(state.pos.mapId===map.id)throw Error(dir+' exit blocked '+map.id);return true;
   }
   function heal(){
-   if(state.pos.mapId==='route1')cross('up');
-   const bar=state.pos.mapId==='borgo'?'bar-borgo':'bar-medio';enterMap(bar);
+   if(['route1','route2','route3'].includes(state.pos.mapId))cross('up');
+   const bar={borgo:'bar-borgo',mediopoli:'bar-medio',eurotown:'bar-euro',capitale:'bar-cap'}[state.pos.mapId];
+   if(!bar)throw Error('No planned healer for '+state.pos.mapId);enterMap(bar);
    const healer=world.visibleNpcs().find(n=>n.healer);interact(healer.x,healer.y);walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();
   }
   function train(){
@@ -159,9 +181,44 @@ try{
     const boss=world.visibleNpcs().find(n=>n.trainerId==='emittenza');interact(boss.x,boss.y);settle();await milestone(`studio-result-${attempt}`);
    }
    await milestone('studio-result');
+   if(endAt!=='auditel'&&state.badges.includes('auditel')){
+    if(state.pos.mapId==='gymtv'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
+    heal();cross('up');
+    if(euroPlan==='tactical'){
+     const startWild=[...battles.values()].filter(b=>!b.trainer).length;
+     for(let n=0;state.party.length<4&&n<2500&&[...battles.values()].filter(b=>!b.trainer).length-startWild<15;n++){
+      const lead=state.party[0];
+      if(state.pos.mapId!=='route2'||lead.hp<statsOf(lead).hp*.5||!lead.moves.some(s=>s.pp>0&&MOVES[s.id].power>0)){
+       heal();cross(state.pos.mapId==='eurotown'?'down':'up');
+      }
+      const cells=world.map.tiles.flatMap((row,y)=>[...row].flatMap((ch,x)=>TILES[ch]?.encounter&&!world.isBlocked(x,y)?[{x,y,path:pathTo(x,y)}]:[])).filter(c=>c.path?.length).sort((a,b)=>a.path.length-b.path.length);
+      if(!cells.length)throw Error('No reachable route2 recruitment grass');walkTo(cells[0].x,cells[0].y);
+     }
+     await milestone('route2-recruitment');
+    }
+    if(euroPlan==='prepared'||euroPlan==='tactical'){
+     const guest=world.visibleNpcs().find(n=>n.trainerId==='telelobbista');interact(guest.x,guest.y);await milestone('route2-confront');
+    }
+    for(let n=0;state.pos.mapId!=='eurotown'&&n<4;n++){
+     if(state.pos.mapId==='mediopoli'){heal();cross('up');}
+     if(state.pos.mapId==='route2')cross('up');
+    }
+    if(state.pos.mapId!=='eurotown')throw Error('Eurotown not reached');
+    await milestone('eurotown');heal();enterMap('gymue');
+    if(euroPlan==='prepared'||euroPlan==='tactical'){
+     const examiner=world.visibleNpcs().find(n=>n.trainerId==='funzionario');interact(examiner.x,examiner.y);await milestone('spread-check');
+     if(state.pos.mapId==='gymue'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
+     heal();enterMap('gymue');
+    }
+    for(let attempt=1;attempt<=2&&!state.badges.includes('spread');attempt++){
+     if(state.pos.mapId!=='gymue'){heal();enterMap('gymue');}
+     const boss=world.visibleNpcs().find(n=>n.trainerId==='ladydirettiva');interact(boss.x,boss.y);settle();await milestone(`spread-result-${attempt}`);
+    }
+    await milestone('spread-result');
+   }
   }catch(e){failure=e.message;trace('failure',failure);}
-  return {id,seed,plan,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
- },{id,seed,plan,practice});
+  return {id,seed,plan,endAt,euroPlan,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
+ },{id,seed,plan,practice,endAt,euroPlan});
  assert.deepEqual(errors,[]);
  if(process.env.CHECK_GROWTH!=='0')for(const b of result.battles.filter(b=>b.outcome==='caught')){
   const old=b.before.party.find(m=>m.uid===b.recipientUid),grown=b.after.party.find(m=>m.uid===b.recipientUid);
@@ -174,6 +231,7 @@ try{
  mkdirSync('artifacts/campaign-native',{recursive:true});mkdirSync('artifacts/screens/campaign-native',{recursive:true});
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/campaign-native/${label}-${id}-${plan}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  delete result.shots;writeFileSync(`artifacts/campaign-native/${label}-${id}-${plan}-${seed}.json`,JSON.stringify(result,null,2));
+ if(process.env.EXPECT_BADGE==='1')assert.ok(result.final.badges.includes(endAt),`Campaign did not earn ${endAt}`);
  console.log(JSON.stringify({id,seed,plan,failure:result.failure,milestones:result.milestones,final:result.final,battles:result.battles.map(b=>({trainer:b.trainer,outcome:b.outcome,foes:b.foes}))},null,2));
  if(result.failure)process.exitCode=1;
 }finally{await browser.close();}

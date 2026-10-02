@@ -597,21 +597,16 @@ export function barMap(id: string, name: string, city: string, doorX: number, do
       { x: cx, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" },
       { x: cx + 1, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" }
     ],
-    signs: [{ x: 1, y: 3, lines: [`${name}`, "Una vetrina di bottiglie e promesse. Qui la squadra si rimette in sesto."] }],
+    signs: [{ x: 1, y: 3, lines: [name, "CURA GRATUITA: PV, PP, STATUS E KO."] }],
     pickups: [],
     npcs: [
       {
         id: `${id}-barista`, pal: "barista", x: 5, y: 3, facing: "down", healer: true,
-        lines: [
-          `${name}: benvenuto. Il banco offre, la squadra si riprende.`,
-          // Scopribilità RIVINCITE (audit C12): il barista spiega il "!" dorato.
-          "Voci dal bancone: gli sfidanti battuti si allenano per la RIVINCITA.",
-          "Quando vedi il '!' dorato sopra la testa di uno di loro, riparlaci."
-        ]
+        lines: [`${name}: il banco offre.`]
       },
       {
         id: `${id}-pc`, pal: "aide", x: 9, y: 3, facing: "down", box: true,
-        lines: ["COMPUTER DI PARTITO: qui gestisci chi sta in squadra e chi al CIRCOLO."]
+        lines: ["CIRCOLO: sposta i candidati tra squadra e riserva."]
       }
     ]
   };
@@ -646,16 +641,15 @@ export function lucaGuide(
         {
           label: "COME SI GIOCA",
           lines: [
-            "Indebolisci senza KO, poi lancia una SCHEDA: reclutare dà anche EXP.",
-            "Tieni d'occhio i SONDAGGI (barra in alto): salgono con le vittorie e sbloccano evoluzioni.",
-            "Attiva la GUIDA nel menu (freccia gialla) se non sai dove andare."
+            "Indebolisci senza KO. BORSA > SCHEDA recluta e dà EXP.",
+            "SONDAGGI: salgono con le vittorie e guidano le evoluzioni.",
+            "GUIDA nel menu: direzione della missione."
           ]
         },
         {
           label: "GIOCARE ONLINE",
           lines: [
-            "Menu PAUSA -> ONLINE: vedi gli altri giocatori nella tua zona.",
-            "Chat di zona, scambi e sfide con chi ti è accanto. Tutto peer-to-peer."
+            "PAUSA > ONLINE: chat, scambi e sfide nella tua zona. Rete peer-to-peer."
           ]
         }
       ]

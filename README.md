@@ -56,7 +56,7 @@ piazza a urlare.
 | 🔎 **Politicdex da campo** | Filtri, habitat accessibili, statistiche, difese, evoluzioni e mosse; cinque pagine per ogni creatura |
 | 🎯 **Dossier di battaglia** | START nel menu mosse o nella scelta del cambio: stima del danno, priorità, abilità e immunità; costo del cambio esplicito, probabilità di reclutamento e ritmo normale o rapido |
 | 📑 **Carriere e schede** | Cinque pagine per candidato; confronto prima delle evoluzioni, rinvio e ripresa dalla squadra, tessere consumate dopo la conferma |
-| ♟️ **Boss e prove tattiche** | Dieci briefing illustrati con tipi, livelli e scelta del leader; prova facoltativa di Mara e IA che valuta danno effettivo, cure, priorità e immunità |
+| ♟️ **Boss e prove tattiche** | Undici briefing illustrati con tipi, livelli e scelta del leader; prove facoltative di Mara e Hans e IA che valuta danno effettivo, cure, priorità e immunità |
 | 🌱 **Costruisci la squadra** | Reclutamento con EXP, bonus iniziale graduato e Divisa Equa per far crescere e apprendere mosse alla panchina viva; missioni che guidano la preparazione |
 | 🤝 **Morale con conseguenze** | Fiducia modifica i prezzi, coesione modifica l'EXP; promesse finanziabili, scadenze e memoria delle scelte |
 | 📊 **SONDAGGI (0-100%)** | La stat-firma: muove prezzi, EXP (*onda del consenso*) e **rami evolutivi** governo↔opposizione |
@@ -110,6 +110,7 @@ npm run build        # typecheck + bundle di produzione
 | **[docs/SATIRA-MORALE.md](docs/SATIRA-MORALE.md)** | Nuova storia, incontri, conseguenze del morale e fonti dei meme |
 | **[docs/GAMEPLAY-DEX.md](docs/GAMEPLAY-DEX.md)** | Politicdex, dossier tattico, animazioni e verifiche del gameplay |
 | **[docs/PRIMO-ATTO-GAMEPLAY.md](docs/PRIMO-ATTO-GAMEPLAY.md)** | Crescita iniziale, reclutamento, panchina, satira e partite nuove fino alla prima medaglia |
+| **[docs/EUROTOWN-SCELTE.md](docs/EUROTOWN-SCELTE.md)** | Sfide volontarie, cura dei PP, satira del consenso precompilato e tre partite fino a Spread |
 | **[docs/RISERVE-DIRETTIVE.md](docs/RISERVE-DIRETTIVE.md)** | Zaino tattico, acquisti per quantità, confronto delle mosse e trenta nuovi oggetti |
 | **[docs/MONDO-CANTIERI.md](docs/MONDO-CANTIERI.md)** | 295 nuove risorse del mondo, otto scelte civiche e passerella persistente |
 | **[docs/QUARTIER-GENERALE.md](docs/QUARTIER-GENERALE.md)** | Titolo, riserva, dossier delle 47 missioni e archivio delle campagne |

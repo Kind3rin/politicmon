@@ -17,7 +17,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
-| Boss e prove | Dieci illustrazioni, briefing e leader persistente; Mara facoltativa con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
+| Boss e prove | Undici illustrazioni, briefing e leader persistente; Mara e Hans facoltativi con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
@@ -33,10 +33,11 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Ingresso, pausa e scorta | Starter con quattro dossier, guida rileggibile, riprova dopo sconfitta, pausa scorrevole e viaggio con contratto | `shot:desk`: 514 Chromium/506 WebKit, sei lotte del tutorial via input |
 | Cornice esterna | Pagina moderna, guida che ferma gli aggiornamenti, focus e controlli touch senza sovrapposizioni | `shot:shell`: 20 configurazioni, Chromium/WebKit, pause mondo/lotta, input e salvataggio reali |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
-| PWA | Precache e primo utilizzo offline dei 530 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
+| PWA | Precache e primo utilizzo offline dei 531 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 617,72; spesa cumulativa 268,25 crediti. Non sono stati attivati acquisti
+verificato: 617,47; spesa cumulativa 268,50 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -51,7 +52,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
-   Il primo atto normale è percorso tramite input con tutti e tre gli starter;
+   La campagna normale fino a Spread è percorsa tramite input con tutti e tre gli starter;
    restano difficoltà alta, atti successivi e combinazioni alternative.
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
@@ -88,6 +89,17 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[EUROTOWN-SCELTE.md](EUROTOWN-SCELTE.md): sfide volontarie dal Percorso 2,
+Hans illustrato, bar che recupera PV/PP/status/KO con lezione una volta,
+satira originale del consenso precompilato e della consulenza sulla
+semplificazione. 0,25 crediti; saldo 617,47. Tre nuove partite preparate
+conquistano Spread al primo tentativo; la prova diretta di Giorgetta perde
+due volte. Livelli e IA avversari conservati. 280 test, 2.622 briefing,
+103 viste HQ, regressioni native in Chromium/WebKit, 422 checksum locali
+e 531 asset PWA. Bundle 212.218/358.369 byte gzip: restano appena 31 byte
+nel budget totale. Prossime funzioni richiedono recupero di spazio; la
+campagna integrale, l'audio e le altre zone restano aperti.
 
 [PATTI-CONSEGUENZE.md](PATTI-CONSEGUENZE.md): cinque ambienti, 261 test, 142 viste,
 anteprime annullabili, coesione e riparazione effettiva; bonus dichiarati collegati

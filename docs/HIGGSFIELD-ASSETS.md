@@ -1,5 +1,13 @@
 # Politicmon: risorse Higgsfield
 
+Quindicesimo blocco: sportello illustrato per la prova facoltativa di Hans.
+Un job `gpt_image_2_5`, **0,25 crediti**, saldo **617,72 → 617,47**,
+cumulativo **268,50**. Provenienza e ritaglio in `higgsfield-eurotown.json`;
+conversione con `prepare-first-campaign-assets.py --manifest`, compatibile
+con il comando precedente di Mara. [EUROTOWN-SCELTE.md](EUROTOWN-SCELTE.md)
+documenta la nuova satira, le sfide volontarie, la cura dei PP e tre partite
+nuove con preparazione tattica fino a Spread. Undici briefing illustrati.
+
 Quattordicesimo blocco: backstage illustrato per la prova facoltativa di Mara.
 Un job `gpt_image_2_5`, **0,25 crediti**, saldo **617,97 → 617,72**,
 cumulativo **268,25**. Prompt, job e checksum in

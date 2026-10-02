@@ -21,7 +21,8 @@ assert.equal(corePaths.length, 10);
 const campaignPaths = campaignUiPaths();
 assert.equal(campaignPaths.length, 5);
 const firstCampaignPaths = JSON.parse(readFileSync('scripts/higgsfield-first-campaign.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths];
+const eurotownPaths = JSON.parse(readFileSync('scripts/higgsfield-eurotown.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -61,4 +62,5 @@ assert.ok(source.includes('UN DIBATTITO PERSO NON È UNA CARRIERA PERSA'), 'tuto
 assert.ok(source.includes('EXTRA > GUIDA CAMPAGNA'), 'replayable onboarding guide missing');
 assert.ok(source.includes('COSTO PER TE: 0€'), 'travel cost dossier missing');
 assert.ok(source.includes('IL FONDALE VUOLE CRESCERE')&&source.includes('PRATICANTE NINO')&&source.includes('PROVA MICROFONO'), 'recruitment/sharing/practice chapter missing');
+assert.ok(source.includes('CONTROLLO PRELIMINARE')&&source.includes('Il pubblico è libero. Il led sopra le sedie suggerisce quanto.'), 'Eurotown examination and original satire missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

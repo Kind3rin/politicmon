@@ -5,16 +5,18 @@ from PIL import Image
 
 parser = argparse.ArgumentParser()
 parser.add_argument('source', type=Path)
+parser.add_argument('--manifest', type=Path, default=Path('scripts/higgsfield-first-campaign.json'))
 args = parser.parse_args()
 root = Path(__file__).resolve().parent.parent
-manifest_path = root / 'scripts/higgsfield-first-campaign.json'
+manifest_path = root / args.manifest
 manifest = json.loads(manifest_path.read_text())
 asset = manifest['assets'][0]
 source = Image.open(args.source).convert('RGB')
 w, h = asset['width'], asset['height']
 crop_h = round(source.width * h / w)
-assert crop_h <= source.height
-image = source.crop((0, 0, source.width, crop_h)).resize((w, h), Image.Resampling.NEAREST)
+crop_y = asset.get('cropTop', 0)
+assert 0 <= crop_y and crop_y + crop_h <= source.height
+image = source.crop((0, crop_y, source.width, crop_y + crop_h)).resize((w, h), Image.Resampling.NEAREST)
 target = root / asset['path']
 target.parent.mkdir(parents=True, exist_ok=True)
 image.save(target, optimize=True)

@@ -1293,14 +1293,14 @@ export class WorldScene implements Scene {
       if (!this.state.flags["heal-hint"]) {
         this.state.flags["heal-hint"] = true;
         lines.push(
-          "Quando la squadra è malconcia, passa da un BAR SPORT come questo: rimetto tutti in sesto, gratis.",
-          "Ne trovi uno in ogni città. Tornaci ogni volta che ti serve."
+          "Il bar cura PV, PP, status e KO gratis. Non cambia i SONDAGGI.",
+          "RIVINCITE: gli sfidanti si allenano. Con il '!' dorato accettano una nuova sfida."
         );
       }
       this.say(lines, () => {
         this.playHealFx(() => {
           saveGame(this.state);
-          this.say(["Un giro di caffè per tutta la squadra... offre la casa!", "I tuoi POLITICMON sono al massimo del consenso."]);
+          this.say(["PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."]);
         });
       });
       return;

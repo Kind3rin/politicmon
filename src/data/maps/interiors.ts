@@ -81,16 +81,16 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     [
       {
         id: "gym2-allievo", pal: "aide", x: 7, y: 4, facing: "left",
-        trainerId: "funzionario", sightRange: 3,
-        lines: ["Ho un modulo per ogni emozione. In triplice copia."]
+        trainerId: "funzionario", nameplate: "VERIFICA A",
+        lines: ["Verifica chiusa. Per i PP esci dal tappeto a sud: il bar è aperto."]
       },
       {
         id: "gym2-capo", pal: "granny", x: 4, y: 1, facing: "down",
         trainerId: "ladydirettiva",
-        lines: ["La tua vittoria sarà recepita negli ordinamenti nazionali."]
+        lines: ["Il risultato è registrato. La clausola vale anche quando vinci tu."]
       }
     ],
-    ["AVVISO UE:", "questa palestra è conforme alla direttiva 2026/1, allegato C."]
+    ["PALESTRA UE: Hans offre una verifica facoltativa.", "Il bar recupera PV, PP e status. Puoi uscire prima del boss."]
   ),
 
   gymglobal: gymMap(
@@ -399,8 +399,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     {
       id: "lobby-capo", pal: "boss", x: 6, y: 2, facing: "down",
       lines: [
-        "Una lobby? Che parolaccia. Diciamo 'consulenza per il bene comune'.",
-        "Il bene di chi? Dettaglio tecnico. Firma qui, qui e qui."
+        "Il pulsante accetta tutto occupa il tavolo. Quello rifiuta è nella fattura.",
+        "Scelta libera: la fatica di rifiutare non entra nella slide."
       ]
     }
   ], { variant: 0 }),
@@ -410,8 +410,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     {
       id: "bistrot-funz", pal: "professor", x: 7, y: 2, facing: "down",
       lines: [
-        "La DIRETTIVA 2024/banane stabilisce la curvatura massima del consenso.",
-        "Allegato B, comma 12: ogni promessa va tradotta in 24 lingue prima di romperla."
+        "La semplificazione toglie una pagina. Ho messo la spiegazione in un allegato di due.",
+        "Le DIRETTIVE della borsa si riusano: il candidato compatibile impara, la copia resta."
       ]
     }
   ], {

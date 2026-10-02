@@ -15,7 +15,7 @@ try{
   const {audio}=await import('/src/engine/audio.ts'),{mp}=await import('/src/net/mp.ts');audio.enabled=false;mp.setEnabled(false);
   const {seededRng}=await import('/src/game/tournament.ts');Math.random=seededRng(20261002);
   const {preloadSprites,waitForSprites,spriteStatus}=await import('/src/engine/assets.ts');
-  preloadSprites({'boss:stagista':'ui/boss/stagista.png','ui:teach':'ui/teach.png'});await waitForSprites(['boss:stagista','ui:teach']);
+  preloadSprites({'boss:stagista':'ui/boss/stagista.png','boss:funzionario':'ui/boss/funzionario.png','ui:teach':'ui/teach.png'});await waitForSprites(['boss:stagista','boss:funzionario','ui:teach']);
   const canvas=document.createElement('canvas');canvas.id='game-canvas';document.body.append(canvas);
   const screen=new Screen(canvas),input=new Input(),stack=new SceneStack(),shots={},captures=[],bounds=[];
   const codes={a:'KeyZ',b:'KeyX',start:'KeyP',up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'};
@@ -44,6 +44,30 @@ try{
    check(JSON.stringify(brief.team.map(m=>m.level))===JSON.stringify(hard?[11,12]:[8,9]),'Mara levels disagree with difficulty');
    check(spriteStatus('boss:stagista')==='ready','Mara image not decoded');shot(`mara-${hard?'hard':'normal'}`);
    tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling rehearsal changed campaign');
+  }
+  for(const hard of [false,true]){
+   const s=stateAt('gymue',5,6);s.hardMode=hard;s.badges=['auditel'];const world=new WorldScene(stack,input,s);stack.replace(world);const before=JSON.stringify(s);
+   world.startTrainerBattle(TRAINERS.funzionario);for(let n=0;stack.top===world&&n<50;n++)tick();
+   const brief=stack.top;check(brief.constructor.name==='BossBriefingScene','Hans briefing absent');
+   check(JSON.stringify(brief.team.map(m=>m.level))===JSON.stringify(hard?[18,18]:[15,15]),'Hans levels disagree with difficulty');
+   check(spriteStatus('boss:funzionario')==='ready','Hans image not decoded');shot(`hans-${hard?'hard':'normal'}`);
+   tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling examination changed campaign');
+  }
+  {
+   const s=stateAt('bar-euro',5,5);s.party.push(createMonster('salvinott',8));s.party[0].hp=0;s.party[0].status='scandalo';s.party[1].hp=1;s.party[1].status='indagato';
+   s.party.forEach(m=>m.moves.forEach(slot=>slot.pp=0));s.money=533;s.sondaggi=62;
+   const world=new WorldScene(stack,input,s);stack.replace(world);const before={money:s.money,sondaggi:s.sondaggi,morale:JSON.stringify(s.morale)},messages=[];
+   const show=world.msg.show.bind(world.msg);world.msg.show=(lines,...rest)=>{messages.push(...lines);show(lines,...rest);};
+   const healer=world.visibleNpcs().find(n=>n.healer);
+   for(let visit=0;visit<2;visit++){
+    world.interactNpc(healer);
+    for(let n=0;(world.msg.isOpen||world.healFx>0)&&n<2000;n++)tick('a');
+    check(!world.msg.isOpen&&world.healFx===0,'Healer did not return control');
+    check(s.money===before.money&&s.sondaggi===before.sondaggi&&JSON.stringify(s.morale)===before.morale,'Free healing changed funds, polls or morale');
+   }
+   const {statsOf}=await import('/src/game/monster.ts'),{MOVES}=await import('/src/data/moves.ts');
+   check(s.party.every(m=>m.hp===statsOf(m).hp&&m.status===null&&m.moves.every(slot=>slot.pp===MOVES[slot.id].pp)),'Bar did not restore KO/status/PV/PP');
+   check(messages.filter(line=>line.startsWith('RIVINCITE:')).length===1,'Rematch lesson repeated during routine healing');
   }
   for(const size of [3,6]){
    Math.random=seededRng(20261002+size);const s=newGameState();s.reduceEffects=true;
@@ -80,5 +104,5 @@ try{
  mkdirSync('artifacts/first-campaign',{recursive:true});mkdirSync('artifacts/screens/first-campaign',{recursive:true});
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/first-campaign/${engine.name()}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  delete result.shots;writeFileSync(`artifacts/first-campaign/${engine.name()}.json`,JSON.stringify(result,null,2));
- console.log(`PASS ${engine.name()}: ${result.guarded} warp approaches; real normal/hard rehearsal cancellation; natural capture with party 3/6, correct bench lesson, KO exclusion, new recruit exclusion, MANIFESTI and persistence.`,JSON.stringify(result.captures));
+ console.log(`PASS ${engine.name()}: ${result.guarded} warp approaches; normal/hard Mara and Hans cancellation; bar restores PV/PP/status/KO with unchanged funds/polls/morale and one rematch lesson; natural capture with party 3/6, bench lesson, KO/new recruit exclusion, MANIFESTI and persistence.`,JSON.stringify(result.captures));
 }finally{await browser.close();}

@@ -418,11 +418,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
     signs: [
       {
         x: 18, y: 8,
-        lines: ["LAGHETTO DELL'AUDITEL", "Le carpe applaudono a comando.", "L'isoletta al centro? Diritti TV in esclusiva."]
+        lines: ["LAGHETTO DELL'AUDITEL", "Il pubblico è spontaneo. Gli applausi hanno un capoturno.", "L'isola si raggiunge col TRAGHETTO."]
       },
       {
         x: 17, y: 14,
-        lines: ["PERCORSO 2", "Nord: EUROTOWN. Sud: MEDIOPOLI.", "Area di sosta opinionisti: massimo tre ospitate al giorno."]
+        lines: ["PERCORSO 2", "Nord: EUROTOWN. Sud: MEDIOPOLI.", "Gli ospiti sfidano con A. Il bar di EUROTOWN recupera anche i PP."]
       }
     ],
     pickups: [
@@ -436,22 +436,22 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-claqueur", pal: "influencer", x: 19, y: 5, facing: "left",
-        trainerId: "claqueur", sightRange: 3,
-        lines: ["La claque non dorme mai. Applaude a turni."]
+        trainerId: "claqueur", nameplate: "APPLAUSI A",
+        lines: ["Hanno applaudito a luce spenta. Non era a budget."]
       },
       {
         id: "tr-telelobbista", pal: "aide", x: 10, y: 11, facing: "right",
-        trainerId: "telelobbista", sightRange: 3,
-        lines: ["Tra una pubblicità e l'altra passa di tutto. Anche tu."]
+        trainerId: "telelobbista", nameplate: "CONFRONTO A",
+        lines: ["Il pubblico risponde. Non è nel pacchetto."]
       },
       {
         id: "tr-opinionista", pal: "journalist", x: 18, y: 12, facing: "left",
-        trainerId: "opinionista", sightRange: 3,
-        lines: ["Ho un parere su tutto. Soprattutto sul contrario."]
+        trainerId: "opinionista", nameplate: "PARERE A",
+        lines: ["La prossima opinione parte dai fatti."]
       },
       {
         id: "spettatore-r2", pal: "granny", x: 20, y: 15, facing: "down",
-        lines: ["Faccio la spola tra due talk show.", "Stesso ospite, stessa lite, stesso stupore. Che tempi."]
+        lines: ["Ho rifiutato il sondaggio. Mi hanno contato tra gli indecisi: fa più grafico che assente."]
       }
     ]
   },
@@ -501,7 +501,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
         // shadowava (interact() controlla gli NPC prima dei cartelli) → cartello
         // illeggibile. (22,11) è erba libera, accessibile da (23,11)/(22,12).
         x: 22, y: 11,
-        lines: ["EUROTOWN", "Gemellata con se stessa in 27 lingue diverse.", "PALESTRA UE: medaglia SPREAD in palio."]
+        lines: ["EUROTOWN", "Lo sportello è aperto. La clausola piccola pure.", "PALESTRA UE: SPREAD. Hans offre una verifica facoltativa."]
       }
     ],
     pickups: [
@@ -513,54 +513,50 @@ export const BASE_MAPS: Record<string, MapDef> = {
     decoratives: [
       {
         x: 6, y: 14,
-        lines: ["FONTANA DELL'EURO.", "Getta una monetina: viene subito ridistribuita a Bruxelles."]
+        lines: ["FONTANA DELL'EURO.", "Desiderio gratis: include l'accettazione di quelli dello sponsor."]
       },
       {
         x: 23, y: 14,
-        lines: ["STATUA DEL PADRE FONDATORE.", "Nessuno ricorda di cosa. Ma la targa è in tre lingue."]
+        lines: ["STATUA DEL PADRE FONDATORE.", "La targa dice: persona libera. Il chiosco chiede i dati per leggerla."]
       }
     ],
     npcs: [
       lucaGuide(
         "EUROTOWN", 15, 7,
         [
-          "EUROTOWN: capitale europea gemellata... con se stessa, in 27 lingue.",
-          "Per attraversare la piazza serve il modulo 27/B in triplice copia. Burocrazia pura.",
-          "Qui girano i big dell'UE: candidati tosti, portafogli europei."
+          "Hans verifica la squadra. Il consulente fattura la verifica.",
+          "Le DIRETTIVE insegnano mosse per tipo; non si consumano. Controlla resistenze e PP."
         ],
         [
-          "La PALESTRA locale mette in palio la medaglia SPREAD.",
-          "Da qui la strada prosegue verso CAPUT MUNDI, se hai le medaglie giuste."
+          "PALESTRA UE: Hans è facoltativo. Prima di LADY DIRETTIVA puoi uscire e curarti al bar.",
+          "SPREAD apre CAPUT MUNDI. Il boss abbassa le statistiche: il dossier spiega le difese."
         ]
       ),
       {
         id: "scorta-euro", pal: "guard", x: 24, y: 14, facing: "left", transport: true,
-        lines: ["SCORTA AUTO BLU:", "Abbiamo una corsia preferenziale approvata in 27 lingue."]
+        lines: ["SCORTA AUTO BLU: tragitto pubblico. Attesa a carico di chi va a piedi."]
       },
       {
         id: "tr-lobbista", pal: "aide", x: 9, y: 13, facing: "up",
-        trainerId: "lobbista", sightRange: 3,
-        lines: ["Rappresento interessi. Quali? Dipende da chi paga."]
+        trainerId: "lobbista", nameplate: "CLAUSOLE A",
+        lines: ["Ho tolto il consenso precompilato. Adesso qualcuno può dirmi di no."]
       },
       {
         id: "fan-ue", pal: "journalist", x: 18, y: 8, facing: "left",
         lines: [
-          "LADY DIRETTIVA ha regolamentato persino questa conversazione.",
-          "Il suo URSULAX multa chiunque la sfidi."
+          "START nel briefing sceglie il leader. Il tipo conta più del volume."
         ]
       },
       {
         id: "euroburocrate", pal: "aide", x: 3, y: 11, facing: "right",
         lines: [
-          "Modulo 27/B per attraversare la piazza: l'ha compilato?",
-          "No? Allora tecnicamente lei non è qui. Buona giornata."
+          "Ho eliminato una firma. Il consulente vuole tre incontri per certificarlo."
         ]
       },
       {
         id: "pensionato-euro", pal: "granny", x: 21, y: 11, facing: "down",
         lines: [
-          "Ai miei tempi il consenso si conquistava in fabbrica, non su TikTok.",
-          "Adesso vince chi balla meglio. Mah."
+          "Rifiuta tutto era in grigio. Ho premuto lo stesso: il sito mi ha chiesto perché fossi così negativo."
         ]
       }
     ]

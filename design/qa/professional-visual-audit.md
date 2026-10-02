@@ -1,6 +1,6 @@
 # Audit visuale professionale
 
-Generato: 2026-10-02T21:01:56.702Z
+Generato: 2026-10-02T21:24:45.191Z
 
 ## Sintesi
 

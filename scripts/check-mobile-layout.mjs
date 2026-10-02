@@ -34,6 +34,10 @@ for(const [engine,type] of [['chromium',chromium],['webkit',webkit]]){
    });
    const verify=(g,w,h,insets)=>{
     assert.equal(g.overflow,false,`${engine}/${name}: horizontal overflow`);
+    if(h>w){
+     assert.ok(g.top.y<=insets.top+12,'portrait header wastes the upper viewport');
+     assert.ok(Math.max(g.move.bottom,g.actions.bottom)>=h-insets.bottom-32,'portrait controls too far from the lower safe edge');
+    }
     assert.ok(Math.abs(g.screen.w/g.screen.h-4/3)<.01,'screen stretched');
     assert.ok(g.backing.width>=g.screen.w*dpr&&g.backing.height>=g.screen.h*dpr,'backing resolution below device density');
     const overlap=(a,b)=>a.x<b.right-1&&a.right>b.x+1&&a.y<b.bottom-1&&a.bottom>b.y+1;

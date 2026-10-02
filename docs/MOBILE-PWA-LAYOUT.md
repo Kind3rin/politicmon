@@ -1,5 +1,7 @@
 # Scocca e layout della PWA
 
+La [rifinitura successiva](MOBILE-PWA-FINALE.md) sostituisce la piastra e il dimensionamento compatto in verticale con controlli aperti e console a tutta altezza. I risultati qui sotto descrivono il primo round.
+
 Round del 2 ottobre 2026, dopo la segnalazione di scarsa leggibilità e comodità sul POCO F9 ULTRA con PWA installata. [Prove](mobile-pwa-layout-proof.json).
 
 Lo schermo occupa una superficie con cornice sottile, separata dalla piastra dei comandi. A e B sono circolari, distanziati e sfalsati: A color menta da 76 px, B da 64 px; sui formati compatti 64/56 px. La croce mantiene bersagli 52 px, 48 px sui formati compatti, e MENU resta 44 px. Logo e strumenti hanno una riga dedicata. Il pulsante ✥ alterna immediatamente croce e levetta, conserva la scelta al riavvio e azzera gli input precedenti.

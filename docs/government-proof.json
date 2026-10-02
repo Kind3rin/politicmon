@@ -1795,7 +1795,7 @@
     }
   ],
   "checks": {
-    "tests": 320,
+    "tests": 325,
     "sourceViewsPerEngine": 46,
     "catalogStatesPerEngine": 20,
     "precacheResources": 830,
@@ -1828,6 +1828,11 @@
       "total": 358397,
       "budget": 358400,
       "margin": 3
+    },
+    "inputAudit": {
+      "scenes": 41,
+      "singleAndDoubleQuotes": true,
+      "negativeTests": 5
     }
   },
   "logs": [
@@ -1930,10 +1935,68 @@
       "path": "/tmp/politicmon-government-build-release.log",
       "bytes": 798,
       "sha256": "4a6e8cd3579052a92aaa4d22a504c5e10775aa42ac596a1421fbc18559f74027"
+    },
+    {
+      "path": "/tmp/politicmon-government-input-contracts-final.log",
+      "bytes": 2404,
+      "sha256": "b093666160bb33aac098fe5f30682ac6df0968a0d23e7b5e6be8b85a40b85373"
+    },
+    {
+      "path": "/tmp/politicmon-government-tests-audit-final.log",
+      "bytes": 67514,
+      "sha256": "571a88eeb20b585ccada87756b69f1b8be0cf9fa2f8aa4f2056be58a8a325e87"
+    },
+    {
+      "path": "/tmp/politicmon-government-release-public.log",
+      "bytes": 236,
+      "sha256": "e697a4b4c8dc021c24c03ba08a3e78ecdd57c0e8968abdef3f81309516ddf31a"
+    },
+    {
+      "path": "/tmp/politicmon-government-mobile-public.log",
+      "bytes": 860,
+      "sha256": "fe0c02fcc1ac074b46bf2cf87e7ff05602b7655db2c5e8d2d0335432d60137dc"
+    },
+    {
+      "path": "/tmp/politicmon-government-bundle-public.log",
+      "bytes": 466,
+      "sha256": "0c70b5932fbb5c66a20dce4aea5cc5a41ef6f32977a267f43c16295aa32bfd19"
+    },
+    {
+      "path": "/tmp/politicmon-government-pwa-public.log",
+      "bytes": 551,
+      "sha256": "44c2b13e29207e215a8678f0e377888d88e1c19af363174974396b363e5ba5b6"
+    },
+    {
+      "path": "/tmp/politicmon-government-pwa-diagnosis.log",
+      "bytes": 969,
+      "sha256": "82cd057451a86fcaa57f26488f8ed31f098687a4fd9a904adc455235012b38c3"
+    },
+    {
+      "path": "/tmp/politicmon-government-pwa-public-isolated.log",
+      "bytes": 550,
+      "sha256": "cb44760c5c9e97766c38fed3191d887e05a06b9aedf52d84c9c2022e9892c4c4"
     }
   ],
   "publication": {
-    "status": "awaiting source commit; previous public controls 1872f9064e81e9c5af175118744a06781922ba7b, main remains adde6bc with previous Vercel quota failures"
+    "runtimeCommit": "dc4db987717347a94375213185f64c4d08b37465",
+    "main": "success",
+    "linkCheck": "success",
+    "testLink": "failure: deployment quota",
+    "publicGovernmentMobile": "passed Chromium and WebKit, 12 stages each",
+    "publicGovernmentPNG": "matched dbab15afa628f1d3aa66eea73343fff7bcbcf3c9ddea79d464aeff8c908f9820",
+    "publicPWA": "first run installation timeout; isolated run passed all 798 images and 19 AAC, update, offline reload and resume",
+    "publicBundle": {
+      "total": 358564,
+      "budget": 358400,
+      "margin": -164,
+      "status": "failed; dedicated TURN configuration was absent from the initial local measurement"
+    },
+    "followup": "Mobile shell, build margin and audit fix in progress; results in MOBILE-PWA-FINALE.md"
   },
-  "scope": "Government appointments and content catalog; no battle/statistics/pricing effects changed; complete redesign remains active"
+  "scope": "Government appointments and content catalog; no battle/statistics/pricing effects changed; complete redesign remains active",
+  "auditCorrection": {
+    "failedCI": "https://github.com/Kind3rin/politicmon/actions/runs/37064976156",
+    "reason": "Dossier focus was not recognized; single-quote inputs were previously skipped. Original local failure was mistakenly reported as a pass. Expanded audit checks existing starter tab title and page indicator, with negative tests.",
+    "runtimeChangedForAudit": false
+  }
 }

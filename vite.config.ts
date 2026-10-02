@@ -85,7 +85,7 @@ export default defineConfig({
   build: {
     target: "es2022",
     minify: "terser",
-    terserOptions: { ecma: 2020, compress: { passes: 5 }, mangle: {properties: {regex: /^__pmPrivate_/, reserved: Array.from({length:256},(_,i)=>"$"+i.toString(36))}} }
+    terserOptions: { ecma: 2020, compress: { passes: 10 }, mangle: {properties: {regex: /^__pmPrivate_/, reserved: Array.from({length:256},(_,i)=>"$"+i.toString(36))}} }
   },
   server: {
     port: 5173,

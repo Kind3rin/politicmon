@@ -53,11 +53,15 @@ Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
 verificato: 352,97; spesa cumulativa 533,00 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: Governo Ombra
+## Ultimo round: PWA installata
+
+[MOBILE-PWA-FINALE.md](MOBILE-PWA-FINALE.md): strumenti in alto, controller al bordo inferiore sicuro, superficie aperta senza piastra e pulsanti piatti. 20 layout e sei rotazioni nei due motori, dieci prove compilate della guida, 325 test e 41 contratti input. La misura locale include ora anche la configurazione TURN di produzione: 358352/358400 byte gzip. Nessuna generazione in questa rifinitura. Pubblicazione registrata nel proof.
+
+## Round precedente: Governo Ombra
 
 [GOVERNO-VERBALE.md](GOVERNO-VERBALE.md): sala dedicata Higgsfield, incarichi leggibili, benefici e costi completi, firma prima di cambiare la squadra di governo, effetti della Salute descritti correttamente. Catalogo dei capitoli coerente con i dossier. 0,25 crediti; saldo 352,97. 92 viste nei due motori e percorsi touch della produzione locale dal finale guadagnato di Giorgetta; dettagli e stato del deploy nel proof del round.
 
-Il round precedente [Comandi e campagne nuove](CONTROLLI-CAMPAGNE-VERBALE.md) corregge l'autorepeat e completa due nuove campagne ininterrotte: Giorgetta normale e Renzino difficile, con cinque dossier, quattro archivi, finale e ritorno al mondo. La prova usa classi reali e input, con tempo virtuale, senza assegnare risorse o vittorie. Il nuovo filmato e gli interni sono documentati in [OPENING-VERBALE.md](OPENING-VERBALE.md) e [WORLD-INTERIORS-VERBALE.md](WORLD-INTERIORS-VERBALE.md). L'anteprima è distinta dalla PWA principale finché la quota Vercel impedisce il suo deploy.
+Il round precedente [Comandi e campagne nuove](CONTROLLI-CAMPAGNE-VERBALE.md) corregge l'autorepeat e completa due nuove campagne ininterrotte: Giorgetta normale e Renzino difficile, con cinque dossier, quattro archivi, finale e ritorno al mondo. La prova usa classi reali e input, con tempo virtuale, senza assegnare risorse o vittorie. Il nuovo filmato e gli interni sono documentati in [OPENING-VERBALE.md](OPENING-VERBALE.md) e [WORLD-INTERIORS-VERBALE.md](WORLD-INTERIORS-VERBALE.md). Il runtime Governo `dc4db98`, che comprende filmato e interni, è pubblicato anche sulla PWA principale; risultati e limiti nel proof del round.
 
 ## Round storico: Genova
 

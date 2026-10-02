@@ -153,3 +153,15 @@ contatori in secondi non misurano minuti di gioco umano o prestazioni.
 Il round arriva a Spread normale. Capitale, Palazzo, Colle, atti successivi,
 campagna completa, difficoltà alta, audio e scrittura delle altre zone
 restano nel [piano attivo](REDESIGN-PLAN.md).
+
+## Pubblicazione verificata
+
+Codice e documentazione pubblicati in `2bdc24e`, con
+[CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36958740661)
+e tre deploy Vercel riusciti. Sul
+[dominio pubblico](https://politicmon.vercel.app/) corrispondono tutti i
+422 checksum e i nuovi riferimenti nel bundle. La PWA verifica 531 asset,
+migrazione v13→v18, salvataggio conservato, aggiornamento della cache e
+ripresa dal background in Chromium/WebKit; il reload offline passa in
+Chromium. Le sei configurazioni della cornice esterna passano in entrambi
+i motori, con titolo fermo sotto la guida e focus ripristinato alla chiusura.

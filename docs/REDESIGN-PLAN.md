@@ -101,6 +101,10 @@ e 531 asset PWA. Bundle 212.218/358.369 byte gzip: restano appena 31 byte
 nel budget totale. Prossime funzioni richiedono recupero di spazio; la
 campagna integrale, l'audio e le altre zone restano aperti.
 
+Pubblicato in `2bdc24e`: CI e tre deploy Vercel riusciti, 422 checksum sul
+dominio pubblico, 531 asset PWA e sei configurazioni della cornice esterna
+verificati in Chromium/WebKit. Reload offline verificato in Chromium.
+
 [PATTI-CONSEGUENZE.md](PATTI-CONSEGUENZE.md): cinque ambienti, 261 test, 142 viste,
 anteprime annullabili, coesione e riparazione effettiva; bonus dichiarati collegati
 a prezzi e ricompense. Spesa: 10 crediti, saldo 657,97. PWA: 491 risorse;

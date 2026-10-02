@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#10141f" />
+    <meta name="theme-color" content="#101c30" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -19,27 +19,7 @@
     <style>:root{--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px)}</style>
   </head>
   <body>
-    <!-- First-paint dimensions match engine/gameViewport.ts. -->
-    <script>
-      (function () {
-        var touch = matchMedia("(pointer: coarse)").matches;
-        if (touch) document.body.classList.add("touch");
-        var vp = window.visualViewport;
-        var vw = (vp && vp.width) || innerWidth;
-        var vh = (vp && vp.height) || innerHeight;
-        var landscape = touch && vw > vh && vh <= 500;
-        var css = getComputedStyle(document.documentElement);
-        function inset(side) { return parseFloat(css.getPropertyValue('--safe-' + side)) || 0; }
-        var padW = touch ? Math.max(12, inset('left')) + Math.max(12, inset('right')) : 24;
-        var padH = touch ? Math.max(landscape ? 6 : 8, inset('top')) + Math.max(landscape ? 6 : 12, inset('bottom')) : 24;
-        var availW = Math.max(1, vw - padW - (touch ? (landscape ? 304 : 0) : 8));
-        var availH = Math.max(1, vh - padH - (touch ? (landscape ? 60 : 216) : 92));
-        var s = Math.min(availW / 240, availH / 180, 4);
-        document.write(
-          '<style>#game-canvas{width:' + 240 * s + 'px;height:' + 180 * s + 'px}</style>'
-        );
-      })();
-    </script>
+    <script>if(matchMedia("(pointer: coarse)").matches)document.body.classList.add("touch");</script>
     <!-- Intro loads only on playback; never competes with startup assets. -->
     <div id="intro-overlay" hidden>
       <video id="intro-video" playsinline preload="none" src="./intro.mp4"></video>
@@ -49,10 +29,11 @@
       <div id="console-shell">
         <div id="console-top">
           <button class="console-brand" data-key="start" aria-label="Politicmon: apri il quartier generale">
-            <span class="console-mark" aria-hidden="true">P</span>
+            <span class="console-mark" aria-hidden="true">✦</span>
             <span class="console-brand-main">POLITICMON</span>
           </button>
           <div class="console-tools">
+            <button id="shell-control-mode" type="button" aria-label="Usa la levetta direzionale" hidden><span aria-hidden="true">✥</span></button>
             <button id="shell-help" type="button" aria-label="Apri la guida ai comandi" aria-haspopup="dialog"><span aria-hidden="true">?</span><span class="tool-label">COMANDI</span></button>
             <button id="shell-fullscreen" type="button" aria-label="Apri a schermo intero" hidden><span aria-hidden="true">⛶</span></button>
           </div>
@@ -92,7 +73,7 @@
         <div><dt>Torna / annulla</dt><dd><kbd>X</kbd> <kbd>J</kbd> <kbd>ESC</kbd> <kbd>⌫</kbd> · touch: B</dd></div>
         <div><dt>Quartier generale</dt><dd><kbd>P</kbd> · pulsante POLITICMON / MENU</dd></div>
       </dl>
-      <p><strong>Sul telefono</strong> puoi anche toccare una voce sullo schermo: il primo tocco la seleziona, il secondo la apre nei menu. Trascina sulla croce per cambiare direzione senza sollevare il dito; il centro ferma il movimento. Puoi tenere una direzione con un dito e premere A/B con l’altro. In OPZIONI scegli croce o levetta, effetti ridotti e ritmo delle lotte.</p>
+      <p><strong>Sul telefono</strong> puoi anche toccare una voce sullo schermo: il primo tocco la seleziona, il secondo la apre nei menu. Trascina sulla croce per cambiare direzione senza sollevare il dito; il centro ferma il movimento. Puoi tenere una direzione con un dito e premere A/B con l’altro. Il pulsante ✥ in alto alterna croce e levetta. In OPZIONI scegli effetti ridotti e ritmo delle lotte.</p>
       <p><strong>Nelle lotte</strong> START/MENU apre il dossier tattico dal menu LOTTA. Consultarlo non consuma il turno.</p>
       <p><strong>Per ripartire</strong> usa SALVA nel quartier generale. EXTRA → GUIDA CAMPAGNA mostra la prossima meta e il significato della morale.</p>
       <p class="guide-note">TAB passa fra i controlli della pagina. ESC chiude questa guida.</p>

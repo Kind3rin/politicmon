@@ -27,8 +27,10 @@ try{
   const overlap=(a,b)=>a.x<b.right-1&&a.right>b.x+1&&a.y<b.bottom-1&&a.bottom>b.y+1;
   for(let i=0;i<geometry.targets.length;i++)for(let j=i+1;j<geometry.targets.length;j++)assert.ok(!overlap(geometry.targets[i],geometry.targets[j]),`${name}: overlapping targets ${geometry.targets[i].label}/${geometry.targets[j].label}`);
   for(const label of ['#console-top','#touch-move','#touch-buttons'])if(geometry.boxes[label])assert.ok(!overlap(geometry.boxes['#screen-frame'],geometry.boxes[label]),`${name} ${label} covers game`);
-  const sizing=await page.evaluate(async()=>{const {gameCanvasSize}=await import('/src/engine/gameViewport.ts');const v=visualViewport,s=gameCanvasSize(v?.width??innerWidth,v?.height??innerHeight,document.body.classList.contains('touch'));const r=document.querySelector('canvas').getBoundingClientRect();const pre=document.querySelector('body>script').textContent;return {expected:s,actual:{width:r.width,height:r.height},synchronous:pre.includes('landscape ? 304 : 0')&&pre.includes('landscape ? 60 : 216')};});
-  assert.ok(Math.abs(sizing.expected.width-sizing.actual.width)<.1&&Math.abs(sizing.expected.height-sizing.actual.height)<.1&&sizing.synchronous,'prelayout formula diverged');
+  const sizing=await page.evaluate(()=>{const canvas=document.querySelector('canvas'),r=canvas.getBoundingClientRect(),frame=document.querySelector('#screen-frame').getBoundingClientRect();return {width:r.width,height:r.height,frameWidth:frame.width,frameHeight:frame.height,backingWidth:canvas.width,backingHeight:canvas.height};});
+  assert.ok(Math.abs(sizing.width/sizing.height-4/3)<.01,'canvas aspect ratio changed');
+  assert.ok(Math.abs(sizing.width-sizing.frameWidth)<.1&&Math.abs(sizing.height-sizing.frameHeight)<.1,'CSS stage and canvas diverged');
+  assert.ok(sizing.backingWidth>=sizing.width&&sizing.backingHeight>=sizing.height,'canvas backing store below display resolution');
   await page.screenshot({path:`${folder}/${name}.png`});
   await page.evaluate(async()=>{
    const {newGameState}=await import('/src/game/state.ts'),{createMonster}=await import('/src/game/monster.ts'),{WorldScene}=await import('/src/game/world/WorldScene.ts'),{audio}=await import('/src/engine/audio.ts');audio.enabled=false;

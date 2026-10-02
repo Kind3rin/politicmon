@@ -92,6 +92,7 @@
     "shot:desk": "node scripts/shot-desk.mjs",
     "shot:shell": "node scripts/shot-shell.mjs",
     "check:shell:release": "node scripts/check-shell-release.mjs",
+    "check:mobile-layout": "node scripts/check-mobile-layout.mjs",
     "playtest:campaign:native": "node scripts/play-campaign-native.mjs",
     "check:first-campaign": "node scripts/check-first-campaign.mjs",
     "check:stretto": "node scripts/check-stretto.mjs",

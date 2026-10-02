@@ -1,10 +1,19 @@
 import type {Input} from './input';
+import {loadControlMode,toggleControlMode} from './controls';
 
 export function initShell(input:Input):()=>boolean{
  const guide=document.querySelector<HTMLDialogElement>('#shell-guide');
  const help=document.querySelector<HTMLButtonElement>('#shell-help');
  const full=document.querySelector<HTMLButtonElement>('#shell-fullscreen');
  const canvas=document.querySelector<HTMLCanvasElement>('#game-canvas');
+ const mode=document.querySelector<HTMLButtonElement>('#shell-control-mode');
+ if(mode&&document.body.classList.contains('touch')){
+  mode.hidden=false;
+  const label=()=>mode.setAttribute('aria-label',loadControlMode()==='stick'?'Usa la croce direzionale':'Usa la levetta direzionale');
+  label();mode.addEventListener('focus',label);
+  mode.addEventListener('click',()=>{input.reset();toggleControlMode();label();canvas?.focus({preventScroll:true});});
+ }
+
  help?.addEventListener('click',()=>{input.reset();guide?.showModal();guide?.querySelector<HTMLButtonElement>('[autofocus]')?.focus();});
  // Safari can skip native buttons when its keyboard-navigation preference is
  // off. Keep both exits reachable, with the same focus loop in either browser.

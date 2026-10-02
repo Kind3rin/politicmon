@@ -1,5 +1,7 @@
 # Cornice e comandi mobile
 
+L’aggiornamento per la PWA segnalata sul POCO è documentato in [MOBILE-PWA-LAYOUT.md](MOBILE-PWA-LAYOUT.md). Le misure fisse descritte nel primo round qui sotto sono sostituite dal dimensionamento reale dello spazio CSS.
+
 Round del 2 ottobre 2026, su richiesta dell’utente. La superficie lascia il bordo spesso e la falsa scocca, porta il logo e gli strumenti in alto e ancora i comandi alla parte inferiore in verticale. In orizzontale croce e azioni occupano le fasce laterali. Schermo e controlli restano separati; il focus da tastiera mantiene un contorno visibile.
 
 La croce usa aree da 52 px, 48 sui formati compatti; A è 76 px, B 64, con etichette CONFERMA e INDIETRO. Sui formati compatti A/B diventano 64/56 px. MENU resta 44 px. Le misure condivise nel CSS consentono a croce, levetta e pulsanti di adattarsi insieme. Il centro della croce ferma il movimento; trascinare cambia asse e direzione senza sollevare il dito. La cattura del puntatore permette al dito di uscire dall’area visiva durante il gesto. A e B restano premuti fino al rilascio o alla cancellazione. Il feedback mostra l’input realmente mantenuto.

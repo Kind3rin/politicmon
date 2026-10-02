@@ -1,94 +1,40 @@
-import { drawMonsterSprite } from "../art/monsters";
-import { SPECIES } from "../data/species";
-import { TYPE_COLORS, typeLabelColor, typeIcon } from "../data/poltypes";
-import { audio } from "../engine/audio";
-import type { Input } from "../engine/input";
-import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { Menu, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import {drawMonsterSprite} from '../art/monsters';
+import {SPECIES,RIVAL_COUNTER} from '../data/species';
+import {audio} from '../engine/audio';
+import type {Input} from '../engine/input';
+import type {Scene,SceneStack} from '../engine/scene';
+import type {Screen} from '../engine/screen';
+import {starterDossier} from '../game/onboarding';
+import {epiloguePages,drawEpiloguePage} from '../ui/epilogueArt';
+import {drawDeskBackdrop} from '../ui/deskArt';
+import {drawScreenHeader} from '../ui/widgets';
 
-// Anteprima dello starter prima della scelta: sprite grande animato (respiro +
-// urlo periodico), tipo, statistiche base e descrizione del Dex. Conferma SÌ/NO.
-export class StarterPreviewScene implements Scene {
-  private menu = new Menu([{ label: "SCELGO LUI!" }, { label: "FAMMI PENSARE" }]);
-  private time = 0;
-
-  constructor(
-    private stack: SceneStack,
-    private input: Input,
-    private speciesId: string,
-    private onConfirm: () => void,
-    private reduceEffects = false
-  ) {}
-
-  update(dt: number): void {
-    if (!this.reduceEffects) this.time += dt;
-    const action = this.menu.update(this.input);
-    if (action === "cancel") {
-      this.stack.pop();
-      return;
-    }
-    if (action === "select") {
-      if (this.menu.index === 0) {
-        this.stack.pop();
-        this.onConfirm();
-      } else {
-        audio.cancel();
-        this.stack.pop();
-      }
-    }
-  }
-
-  draw(screen: Screen): void {
-    const species = SPECIES[this.speciesId];
-    screen.clear("#1c2740");
-    // Riflettori da palco.
-    screen.rect(0, 0, VIEW_W, 4, "#f4d34a");
-    screen.text("LA TUA PRIMA SCHEDA", 8, 10, "#f4d34a");
-
-    // Lo stesso roster animato della squadra, senza ritratti testuali legacy.
-    drawMonsterSprite(screen, this.speciesId, 17, 28, 78, 90, { animationTime: this.time });
-
-    // Scheda informativa a destra.
-    const px = 104;
-    screen.text(species.name, px, 26, PAPER);
-    let tx = px;
-    for (const type of species.types) {
-      const icon = typeIcon(type);
-      const iconW = icon ? 11 : 0;
-      const w = type.length * 6 + 6 + iconW;
-      screen.rect(tx, 36, w, 11, TYPE_COLORS[type]);
-      if (icon) {
-        screen.imageSprite(icon, tx + 1, 37, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
-      }
-      screen.text(type, tx + 3 + iconW, 38, typeLabelColor(type));
-      tx += w + 4;
-    }
-    screen.text(species.category, px, 50, GREY);
-
-    // Barre statistiche base.
-    const stats: Array<[string, number]> = [
-      ["PV", species.base.hp], ["GRT", species.base.atk], ["DIF", species.base.def],
-      ["RET", species.base.spc], ["VEL", species.base.spd]
-    ];
-    for (let i = 0; i < stats.length; i += 1) {
-      const y = 62 + i * 9;
-      screen.text(stats[i][0], px, y, PAPER);
-      screen.frame(px + 24, y, 102, 6, "#39415a");
-      const fill = Math.round((Math.min(120, stats[i][1]) / 120) * 100);
-      screen.rect(px + 25, y + 1, fill, 4, "#6aa8ff");
-    }
-
-    // Dexline in basso, su due righe.
-    screen.panel(4, 112, VIEW_W - 8, 40);
-    const dexMaxWidth = VIEW_W - 24;
-    const lines = wrapText(species.dexLine, 26);
-    for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-      screen.textFit(lines[i], 12, 120 + i * 10, dexMaxWidth, INK);
-    }
-
-    screen.text("A: CONFERMA", 8, VIEW_H - 24, GREY);
-    screen.text("B: INDIETRO", 8, VIEW_H - 13, GREY);
-    this.menu.draw(screen, VIEW_W - 130, VIEW_H - 30, 126, 11);
-  }
+export class StarterPreviewScene implements Scene{
+ private time=0;
+ private tab=0;
+ private page=0;
+ private confirming=false;
+ private closed=false;
+ constructor(private stack:SceneStack,private input:Input,private speciesId:string,private onConfirm:()=>void,private reduceEffects=false){}
+ private pages():string[][]{
+  const id=this.speciesId;
+  return epiloguePages(this.confirming?[`SCEGLI ${SPECIES[id].name} AL LIVELLO 5?`,`GIANNI SCEGLIERÀ ${SPECIES[RIVAL_COUNTER[id]].name}. LE ALTRE DUE SCHEDE DEL LABORATORIO NON SARANNO PIÙ DISPONIBILI.`,`LA CRESCITA E LE MOSSE SI CONSULTANO IN SQUADRA. B TI RIPORTA AL DOSSIER.`]:starterDossier(id,this.tab),34,6);
+ }
+ update(dt:number):void{
+  if(this.closed)return;if(!this.reduceEffects)this.time+=Math.max(0,Math.min(.25,dt));
+  if(this.input.wasPressed('b')){if(this.confirming){this.confirming=false;this.page=0;}else{this.closed=true;this.stack.pop();}return;}
+  if(this.confirming){if(this.input.wasPressed('a')){if(this.page<this.pages().length-1)this.page++;else{this.closed=true;this.stack.pop();audio.confirm();this.onConfirm();}}return;}
+  if(this.input.wasPressed('left')||this.input.wasPressed('right')){this.tab=(this.tab+(this.input.wasPressed('left')?3:1))%4;this.page=0;audio.cursor();}
+  if(this.input.wasPressed('up')||this.input.wasPressed('down'))this.page=(this.page+(this.input.wasPressed('up')?this.pages().length-1:1))%this.pages().length;
+  if(this.input.wasPressed('a')){this.confirming=true;this.page=0;}
+ }
+ draw(screen:Screen):void{
+  drawDeskBackdrop(screen,'starter');drawScreenHeader(screen,'PRIMA SCHEDA',SPECIES[this.speciesId].name);
+  drawMonsterSprite(screen,this.speciesId,12,27,48,32,{animationTime:this.time});
+  screen.text(this.confirming?'LA SCELTA RESTA.': ['IDENTITÀ','MOSSE AL LIVELLO 5','TIPI E PRIMO RIVALE','CRESCITA'][this.tab],70,29,'#fffaf0');
+  screen.text(`${this.page+1}/${this.pages().length}`,70,44,'#e6b944');
+  drawEpiloguePage(screen,this.pages()[this.page]);
+  screen.text(this.confirming?'A: CONFERMA  B: ANNULLA':'SIN/DES: DOSSIER  SU/GIU: TESTO',12,163,'#fffaf0');
+  if(!this.confirming)screen.text('A: SCEGLI  B: ALTRE SCHEDE',12,173,'#fffaf0');
+ }
 }

@@ -42,7 +42,7 @@ import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, loca
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordHealerVisit, recordRunStep } from "../runstats";
 import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge } from "./explorationInterrupts";
-import { availableTransportDestinations, type TransportDestination } from "./transport";
+import { resolveTransportDestination, type TransportDestination } from "./transport";
 import { buildNpcDrawCommand, type RuntimeNpc } from "./npcRenderer";
 import { recordDuelResult } from "../duelrecord";
 import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
@@ -73,6 +73,9 @@ import { ElectionResultsScene } from "../../scenes/ElectionResultsScene";
 import { Atto3EndingScene } from "../../scenes/Atto3EndingScene";
 import { WeeklyCampaignScene } from "../../scenes/WeeklyCampaignScene";
 import { SliceEndingScene } from "../../scenes/SliceEndingScene";
+import { TransportScene } from "../../scenes/TransportScene";
+import { FieldGuideScene } from "../../scenes/FieldGuideScene";
+import { welcomeGuide, firstDebateGuide } from "../onboarding";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 import { TournamentScene } from "../../scenes/TournamentScene";
 import {
@@ -268,10 +271,8 @@ export class WorldScene implements Scene {
   private askPick: ((index: number) => void) | null = null;
   // NPC guida già salutati in questa sessione (l'intro non si ripete).
   private guideGreeted = new Set<string>();
-  private transportMenu: Menu | null = null;
-  private transportDestinations: TransportDestination[] = [];
   // Menu d'interazione su un giocatore remoto adiacente (SCAMBIA/SFIDA/ANNULLA).
-  // NOTA: askLabel è CONDIVISO con transportMenu/askMenu (stati mutuamente
+  // NOTA: askLabel è CONDIVISO con remoteMenu/askMenu (stati mutuamente
   // esclusivi: mai due menu aperti insieme).
   private remoteMenu: Menu | null = null;
   private remoteMenuPeerId = "";
@@ -301,15 +302,13 @@ export class WorldScene implements Scene {
     // consegna quando sono in cima e lo ripristinano all'uscita).
     mp.onDuel = (msg, peerId) => this.onDuelMsg(msg, peerId);
     this.loadMap(this.state.pos.mapId);
+  }
+
+  onEnter(): void {
     if (!this.state.flags["intro-done"]) {
-      this.state.flags["intro-done"] = true;
-      this.say([
-        "PROF. QUIRINO (al megafono): Benvenuto a BORGO URNE, giovane!",
-        "Muoviti con le FRECCE (o il D-PAD). A per parlare e confermare, B per tornare indietro.",
-        "Segui la FRECCIA GIALLA: ti porta al mio LABORATORIO, l'edificio col tetto blu.",
-        "Lì scegli il tuo primo POLITICMON e parti per la scalata: tre MEDAGLIE e poi il PALAZZO!",
-        "Un consiglio: non tutti gli edifici sono palestre. Circoli, redazioni, salotti... molti nascondono STORIE e tesori. Entra ed esplora!"
-      ]);
+      this.stack.push(new FieldGuideScene(this.stack,this.input,"BRIEFING DI QUIRINO",welcomeGuide(this.state),()=>{
+        this.state.flags["intro-done"]=true;saveGame(this.state);
+      }));
     }
   }
 
@@ -1156,6 +1155,11 @@ export class WorldScene implements Scene {
   }
 
   private interactNpc(npc: RuntimeNpc): void {
+    if(npc.id==="professor" && this.state.flags["starter-chosen"] && !this.state.flags["dex-received"]){
+      if(this.state.flags["rival1-beaten"])this.giveDex();
+      else this.askYesNo("RIPROVI GIANNI?",()=>this.startFirstDebate());
+      return;
+    }
     const pos = this.state.pos;
     npc.currentFacing =
       npc.x > pos.x ? "left" : npc.x < pos.x ? "right" : npc.y > pos.y ? "up" : "down";
@@ -2016,23 +2020,14 @@ export class WorldScene implements Scene {
       ]);
       return;
     }
-    this.transportDestinations = availableTransportDestinations(this.state, this.map.id);
-    if (this.transportDestinations.length === 0) {
-      this.say(["SCORTA AUTO BLU: per ora non hai tratte autorizzate.", "Conquista medaglie e sbloccheremo nuove destinazioni."]);
-      return;
-    }
-    this.transportMenu = new Menu(this.transportDestinations.map((dest) => ({ label: dest.label })));
-    this.askLabel = "Dove ti porta la Macchina Elettorale?";
+    this.stack.push(new TransportScene(this.stack,this.input,this.state,this.map.id,(dest)=>this.travelToDestination(dest)));
   }
 
   private travelToDestination(dest: TransportDestination): void {
-    this.transportMenu = null;
-    this.transportDestinations = [];
-    this.state.pos = { mapId: dest.mapId, x: dest.x, y: dest.y, facing: dest.facing };
-    this.loadMap(dest.mapId);
-    audio.confirm();
-    saveGame(this.state);
-    this.say([`La scorta accende le sirene: destinazione ${dest.label}.`, "Arrivi senza traffico. La democrazia, quando vuole, sa parcheggiare."]);
+    if(!resolveTransportDestination(this.state,this.map.id,dest.mapId))return;
+    this.state.pos={mapId:dest.mapId,x:dest.x,y:dest.y,facing:dest.facing};
+    this.loadMap(dest.mapId);audio.confirm();saveGame(this.state);
+    this.say([`AUTISTA: ${dest.label}. IL CONTO LO VEDE IL CONTRIBUENTE.`,"TU PAGHI 0€. LA SQUADRA NON È STATA CURATA. IL BAR SPORT È QUI VICINO."]);
   }
 
   private interactLegendary(npc: RuntimeNpc): void {
@@ -2199,6 +2194,7 @@ export class WorldScene implements Scene {
   }
 
   private chooseStarter(speciesId: string): void {
+    if (this.state.flags["starter-chosen"]) return;
     const starter = createMonster(speciesId, 5);
     this.state.party.push(starter);
     this.state.starterId = speciesId;
@@ -2232,25 +2228,25 @@ export class WorldScene implements Scene {
         `GIANNI afferra la scheda di ${rivalSpecies.name}.`,
         "GIANNI: ho scelto il tuo contrario. Il consulente dice che così mi ricordano. Vediamo se basta."
       ],
-      () => {
-        const def: TrainerDef = {
-          id: "rival1",
-          name: "RIVALE GIANNI",
-          pal: "rival",
-          team: [[rivalStarterId, 4, this.tutorialRivalMoves(rivalStarterId)]],
-          intro: ["Preparati al primo dibattito della tua vita!"],
-          defeat: ["Cosa?! Chiederò il riconteggio!"],
-          money: 150
-        };
-        this.startTrainerBattle(def, () => {
-          this.state.flags["rival1-beaten"] = true;
-          this.state.rivalWins = 1; // sblocca la prima tappa ricorrente (Mediopoli)
-          this.npcs = this.npcs.filter((n) => n.id !== "rival-lab-cameo"); // Gianni esce
-          saveGame(this.state);
-          this.giveDex();
-        });
-      }
+      () => this.startFirstDebate()
     );
+  }
+
+  private startFirstDebate(): void {
+    const id=this.state.starterId,rivalStarterId=RIVAL_COUNTER[id];
+    if(!rivalStarterId || this.state.flags["rival1-beaten"]) return;
+    const begin=()=>{
+      const def:TrainerDef={id:"rival1",name:"RIVALE GIANNI",pal:"rival",team:[[rivalStarterId,4,this.tutorialRivalMoves(rivalStarterId)]],intro:["HO SCRITTO IL DISCORSO SUL TELEFONO. IL TELEFONO È AL DUE PER CENTO."],defeat:["IL CONSULENTE DICE CHE DEVO CAMBIARE TONO. HO SOLO IL VIVAVOCE."],money:150};
+      this.startTrainerBattle(def,(result)=>{
+        this.npcs=this.npcs.filter(n=>n.id!=="rival-lab-cameo");
+        if(result!=="win"){
+          this.say(["QUIRINO: UN DIBATTITO PERSO NON È UNA CARRIERA PERSA.","PARLAMI PER RIPROVARE GIANNI. MOSSE E TIPI SONO NELLA GUIDA."]);
+          return;
+        }
+        this.state.flags["rival1-beaten"]=true;this.state.rivalWins=Math.max(1,this.state.rivalWins);saveGame(this.state);this.giveDex();
+      });
+    };
+    this.stack.push(new FieldGuideScene(this.stack,this.input,"PRIMO DIBATTITO",firstDebateGuide(this.state,id),begin));
   }
 
   private tutorialRivalMoves(speciesId: string): string[] {
@@ -2264,6 +2260,7 @@ export class WorldScene implements Scene {
   }
 
   private giveDex(): void {
+    if(this.state.flags["dex-received"])return;
     this.say(
       [
         "GIANNI: ho perso? Nel video taglio prima. Per il prossimo però mi alleno davvero.",
@@ -2276,6 +2273,7 @@ export class WorldScene implements Scene {
         "Menu MORALE: fiducia dei cittadini, coesione dei tuoi e scadenze. Una promessa scade dopo tre NUOVI dibattiti vinti; le rivincite non contano."
       ],
       () => {
+        if(this.state.flags["dex-received"])return;
         this.state.flags["dex-received"] = true;
         this.state.bag.scheda = (this.state.bag.scheda ?? 0) + 5;
         audio.catchJingle();
@@ -2882,7 +2880,7 @@ export class WorldScene implements Scene {
     // Durante un DIALOGO (messaggio o menù aperto) gli NPC si CONGELANO: senza
     // questo, l'NPC con cui parli si rigira random ogni 2-5s (turnTimer) o
     // continua a vagare, "spostandosi" mentre gli parli. Freeze = mondo in pausa.
-    const talking = this.msg.isOpen || Boolean(this.askMenu) || Boolean(this.transportMenu) || Boolean(this.remoteMenu);
+    const talking = this.msg.isOpen || Boolean(this.askMenu) || Boolean(this.remoteMenu);
     if (!talking) {
       for (const npc of this.npcs) {
         // Percorso scriptato (es. Gianni che entra nel lab): ha la precedenza.
@@ -2965,20 +2963,6 @@ export class WorldScene implements Scene {
         this.pendingTrainer = null;
         this.exclaimNpc = null;
         this.startTrainerFight(def);
-      }
-      return;
-    }
-
-    if (this.transportMenu) {
-      const action = this.transportMenu.update(this.input);
-      if (action === "select") {
-        const dest = this.transportDestinations[this.transportMenu.index];
-        if (dest) {
-          this.travelToDestination(dest);
-        }
-      } else if (action === "cancel") {
-        this.transportMenu = null;
-        this.transportDestinations = [];
       }
       return;
     }
@@ -3627,7 +3611,7 @@ export class WorldScene implements Scene {
     // Overlay chat: ultime 2 righe sotto il nome zona, ma solo se RECENTI —
     // decadono dopo CHAT_OVERLAY_TTL, così un "Luca: Ciao!" non resta in alto
     // a sinistra a tempo indefinito. Lo storico completo vive nella ChatScene.
-    if (!this.msg.isOpen && !this.askMenu && !this.transportMenu && mp.chat.length > 0) {
+    if (!this.msg.isOpen && !this.askMenu && mp.chat.length > 0) {
       const now = performance.now();
       const recent = mp.chat.filter((c) => now - c.t < CHAT_OVERLAY_TTL).slice(-2);
       for (let i = 0; i < recent.length; i += 1) {
@@ -3713,7 +3697,7 @@ export class WorldScene implements Scene {
 
     // Obiettivo corrente in basso (solo all'aperto e a schermo libero).
     const quest = currentQuest(this.state);
-    if (quest && !this.msg.isOpen && !this.askMenu && !this.transportMenu && !this.remoteMenu && this.map.outdoor) {
+    if (quest && !this.msg.isOpen && !this.askMenu && !this.remoteMenu && this.map.outdoor) {
       // Obiettivo: testo INTERO, mandato a capo su più righe invece di troncarlo
       // con "..." (prima si perdeva la fine dello step). Il box cresce verso l'alto.
       const lines = wrapText(`► ${quest.step}`, 38);
@@ -3735,22 +3719,9 @@ export class WorldScene implements Scene {
       isGuideOn() &&
       !this.msg.isOpen &&
       !this.askMenu &&
-      !this.transportMenu &&
       !this.remoteMenu
     ) {
       this.drawGuideArrow(screen, quest.target, playerPx, playerPy, camX, camY);
-    }
-
-    if (this.transportMenu) {
-      screen.panel(0, VIEW_H - 58, VIEW_W, 58);
-      screen.textFit(this.askLabel, 10, VIEW_H - 46, VIEW_W - 20, INK);
-      // Pannello largo abbastanza da NON troncare "STRETTO DI MESSINA" (prima
-      // era 96px → "STRETTO DI ..."); auto-largo sul label più lungo, clampato.
-      const w = Math.min(VIEW_W - 8, Math.max(96, this.transportMenu.measureWidth() + 8));
-      // Clamp a ≥2: con molte destinazioni measureHeight() può spingere la y
-      // sopra il bordo schermo (y<0). Così resta sempre visibile.
-      const menuY = Math.max(2, VIEW_H - 58 - this.transportMenu.measureHeight());
-      this.transportMenu.draw(screen, VIEW_W - 4 - w, menuY, w);
     }
 
     if (this.askMenu) {
@@ -3782,7 +3753,6 @@ export class WorldScene implements Scene {
       !quest &&
       !this.msg.isOpen &&
       !this.askMenu &&
-      !this.transportMenu &&
       this.state.party.length === 0 &&
       this.map.id === "borgo"
     ) {

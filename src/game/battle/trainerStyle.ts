@@ -18,6 +18,8 @@ export function trainerStyle(id: string): TrainerStyle {
 }
 export const BOSS_ART_IDS = Object.values(STYLES).flatMap((s) => s.art ? [s.art] : []);
 export function trainerAi(id: string, badge: boolean, hard: boolean, badges: number): AiProfile {
+  // The first lesson teaches moves and types, before introducing enemy healing.
+  if (id === "rival1") return { whiff: hard ? .15 : .33, canHeal: false, finisher: hard, style: "balanced" };
   const boss = (!badge && Boolean(STYLES[id])) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
   const profile: AiProfile = boss ? { whiff: hard ? .1 : .2, canHeal: true, finisher: true }
     : badge ? { whiff: hard ? .15 : .28, canHeal: true, finisher: true }

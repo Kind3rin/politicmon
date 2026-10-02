@@ -1,5 +1,10 @@
 import { earnedEndingSouvenirs, ENDING_SOUVENIRS } from "../game/atto3Ending";
 import { MONUMENT_TITLE } from "./MonumentScene";
+import { FieldGuideScene } from "./FieldGuideScene";
+import { welcomeGuide } from "../game/onboarding";
+import { currentQuest } from "../data/quests";
+import { drawDeskBackdrop } from "../ui/deskArt";
+import { epiloguePages } from "../ui/epilogueArt";
 import { wrapText } from "../ui/widgets";
 import { sceneImage } from "../engine/assets";
 import { MAPS } from "../data/maps";
@@ -42,13 +47,14 @@ interface SubMenu {
 }
 
 export class PauseScene implements Scene {
-  readonly transparent = true;
+  readonly transparent = false;
   private menu: Menu;
   private entries: string[] = [];
   private msg = new MessageBox();
   private showCard = false;
   private souvenirIndex = 0;
   private cardAwards = false;
+  private notePage = 0;
   // Sotto-menu attivo (OPZIONI/ONLINE/EXTRA): un solo livello di profondità.
   private sub: SubMenu | null = null;
 
@@ -135,11 +141,19 @@ export class PauseScene implements Scene {
   // Sotto-menu EXTRA: consultazione non essenziale. La TESSERA è nel menu
   // principale perché il giocatore la deve ritrovare subito.
   private buildExtraMenu(): SubMenu {
-    const entries = ["CONTENUTI", "TRAGUARDI", "GUIDA TIPI", "FONTI SATIRA", "INDIETRO"];
+    const entries = ["GUIDA CAMPAGNA", "CONTENUTI", "TRAGUARDI", "GUIDA TIPI", "FONTI SATIRA", "INDIETRO"];
     return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
   update(dt: number): void {
+    const moraleIndex=this.entries.indexOf("MORALE"),coalitionIndex=this.entries.indexOf("COALIZIONE"),onlineIndex=this.entries.indexOf("ONLINE");
+    if(moraleIndex>=0)this.menu.items[moraleIndex].rightLabel=`${this.state.morale.trust}/${this.state.morale.cohesion}`;
+    if(coalitionIndex>=0)this.menu.items[coalitionIndex].rightLabel=`${this.state.coalition.members.length}/2`;
+    if(onlineIndex>=0)this.menu.items[onlineIndex].rightLabel=mp.isEnabled()&&mp.connected?`${mp.onlineCount+1} ON`:undefined;
+    if(this.sub?.kind==="online"){
+      const someone=mp.isEnabled()&&mp.connected&&mp.onlineCount>0;
+      this.sub.menu.items[1].disabled=!someone;this.sub.menu.items[1].rightLabel=someone?undefined:"OFFLINE";
+    }
     if (this.msg.isOpen) {
       this.msg.update(dt, this.input);
       return;
@@ -154,6 +168,11 @@ export class PauseScene implements Scene {
       }
       return;
     }
+    if(this.input.wasPressed("left")||this.input.wasPressed("right")){
+      const count=this.helpPages().length;
+      this.notePage=(this.notePage+(this.input.wasPressed("left")?count-1:1))%count;
+    }
+    if(this.input.wasPressed("up")||this.input.wasPressed("down"))this.notePage=0;
     // Sotto-menu attivo (OPZIONI/ONLINE/EXTRA): B/INDIETRO torna al menu.
     if (this.sub) {
       const a = this.sub.menu.update(this.input);
@@ -267,7 +286,9 @@ export class PauseScene implements Scene {
     }
     if (sub.kind === "extra") {
       audio.confirm();
-      if (label === "CONTENUTI") {
+      if (label === "GUIDA CAMPAGNA") {
+        this.stack.push(new FieldGuideScene(this.stack,this.input,"GUIDA CAMPAGNA",welcomeGuide(this.state)));
+      } else if (label === "CONTENUTI") {
         this.stack.push(new ContentScene(this.stack, this.input, this.state));
       } else if (label === "TRAGUARDI") {
         this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
@@ -343,21 +364,33 @@ export class PauseScene implements Scene {
       this.drawCard(screen);
       return;
     }
-    // Sotto-menu attivo: lista compatta con intestazione.
-    if (this.sub) {
-      const ow = Math.max(120, Math.min(this.sub.menu.measureWidth(), VIEW_W - 8));
-      const ox = VIEW_W - ow - 4;
-      screen.rect(ox + 4, 4, ow - 8, 11, "#17243d");
-      screen.rect(ox + 6, 14, ow - 12, 2, "#e6b944");
-      screen.text(this.sub.title, ox + 8, 6, "#fffaf0");
-      this.sub.menu.draw(screen, ox, 16, ow);
-      this.msg.draw(screen);
-      return;
-    }
-    // Menu principale: solo azioni. Larghezza adattata al contenuto.
-    const w = Math.max(110, Math.min(this.menu.measureWidth(), VIEW_W - 8));
-    this.menu.draw(screen, VIEW_W - w - 4, 4, w);
+    drawDeskBackdrop(screen,"pause");
+    drawScreenHeader(screen,this.sub?.title??"QUARTIER GENERALE");
+    screen.rect(0,17,240,13,"#17243d");screen.text(`${this.state.money}€`,8,21,"#fffaf0");screen.textRight(`SOND ${this.state.sondaggi}%`,232,21,"#fffaf0");
+    const menu=this.sub?.menu??this.menu;
+    menu.draw(screen,56,32,176,12,6);
+    const pages=this.helpPages();this.notePage%=pages.length;
+    screen.panel(8,120,224,40,"card");pages[this.notePage].forEach((line,i)=>screen.text(line,16,128+i*10,"#17243d"));
+    screen.text(this.sub?"SU/GIU: SCELTA  A: APRI  B: QG":"SU/GIU: SCELTA  A: APRI  B: CHIUDI",12,163,"#fffaf0");
+    screen.text(`SIN/DES: INFO ${this.notePage+1}/${pages.length}`,12,173,"#fffaf0");
     this.msg.draw(screen);
+  }
+
+  private helpPages():string[][]{
+    const menu=this.sub?.menu??this.menu,label=this.sub?.entries[menu.index]??this.entries[menu.index]??"";
+    const quest=currentQuest(this.state);
+    let note="A APRE LA SEZIONE. B TORNA AL QUARTIER GENERALE.";
+    if(label==="SALVA")note="REGISTRA LA PARTITA NELLO SLOT ATTIVO. IL MESSAGGIO CONFERMA SE LA SCRITTURA RIESCE.";
+    else if(label==="MISSIONI")note=quest?`${quest.title}. ${quest.step}`:"MISSIONI PRINCIPALI CONCLUSE. CONSULTA ANCHE LE STORIE DI QUARTIERE.";
+    else if(label==="MORALE")note=`FIDUCIA ${this.state.morale.trust}, COESIONE ${this.state.morale.cohesion}. APRI PROMESSE, SCADENZE E VERBALE DELLE SCELTE.`;
+    else if(label==="SQUADRA")note="CONSULTA MOSSE E CRESCITA, SCEGLI IL LEADER E GLI OGGETTI TENUTI.";
+    else if(label.startsWith("VEICOLO"))note="A CAMBIA MEZZO TERRESTRE. IL TRAGHETTO SI ATTIVA SULL’ACQUA, SE POSSEDUTO.";
+    else if(label.startsWith("RIDUCI EFFETTI"))note="RIDUCE MOVIMENTO, SCOSSE E LAMPI. LA SCELTA SI SALVA E PREVALE SUL DEFAULT DEL DISPOSITIVO.";
+    else if(label.startsWith("RITMO LOTTE"))note="ACCELERA I MESSAGGI DELLE LOTTE; REGOLE E TURNI RESTANO GLI STESSI.";
+    else if(label==="DUELLO PVP"&&!(mp.isEnabled()&&mp.connected&&mp.onlineCount>0))note="SERVE UN ALTRO GIOCATORE CONNESSO PER AVVIARE IL DUELLO.";
+    else if(label==="BACKUP")note="ESPORTA O IMPORTA IL CODICE PARTITA. VERIFICA LO SLOT PRIMA DI SOSTITUIRLO.";
+    else if(label==="GUIDA CAMPAGNA")note="RILEGGI CONTROLLI, PROSSIMA META E SIGNIFICATO DELLA MORALE.";
+    return epiloguePages([label,note],34,3);
   }
 
   private drawCard(screen: Screen): void {

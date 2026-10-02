@@ -1,5 +1,12 @@
 # Politicmon: risorse Higgsfield
 
+Tredicesimo blocco: quattro ambienti per onboarding, pausa e scorta.
+Quattro richieste `nano_banana_2`, backend registrato `nano_banana_flash`,
+**8 crediti**, saldo **625,97 → 617,97**, cumulativo **268**. Provenienza e
+checksum in `higgsfield-desk.json`, conversione con `prepare-desk-assets.py`.
+[INGRESSO-PAUSA-VIAGGI.md](INGRESSO-PAUSA-VIAGGI.md): 276 test, dossier
+completi, 514/506 viste native e sei lotte reali automatizzate del tutorial.
+
 Dodicesimo blocco: casinò, club, Coppa, dieci emblemi e sette ritratti.
 Sette job compresa la correzione dei fantasmi: **14 crediti**, saldo
 **639,97 → 625,97**, cumulativo **260**. Venti PNG; un vecchio cabinet

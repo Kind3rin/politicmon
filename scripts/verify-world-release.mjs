@@ -1,3 +1,4 @@
+import { deskAssetPaths } from "./desk-asset-paths.mjs";
 import { arenaAssetPaths } from "./arena-asset-paths.mjs";
 import { epilogueAssetPaths } from "./epilogue-asset-paths.mjs";
 import assert from 'node:assert/strict';
@@ -19,7 +20,7 @@ const corePaths = coreUiPaths();
 assert.equal(corePaths.length, 10);
 const campaignPaths = campaignUiPaths();
 assert.equal(campaignPaths.length, 5);
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths()];
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths()];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -50,4 +51,8 @@ assert.ok(source.includes('TRE RULLI INDIPENDENTI'), 'casino odds dossier missin
 assert.ok(source.includes('casino-club:'), 'daily club limit missing');
 assert.ok(source.includes('NESSUNA MULTA O TELETRASPORTO'), 'tournament loss contract missing');
 assert.ok(source.includes('Temporary party already active'), 'temporary party serialization guard missing');
+assert.ok(source.includes('LA SCELTA RESTA.'), 'starter dossier missing');
+assert.ok(source.includes('UN DIBATTITO PERSO NON È UNA CARRIERA PERSA'), 'tutorial retry missing');
+assert.ok(source.includes('EXTRA > GUIDA CAMPAGNA'), 'replayable onboarding guide missing');
+assert.ok(source.includes('COSTO PER TE: 0€'), 'travel cost dossier missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

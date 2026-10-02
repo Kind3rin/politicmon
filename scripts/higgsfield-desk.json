@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 625.97,
+  "estimatedCredits": 8,
+  "assets": [
+    {
+      "id": "starter",
+      "index": 0,
+      "kind": "background",
+      "path": "public/sprites/ui/desk/starter.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Modern crisp pixel art, strong silhouettes readable at 240x180, palette navy/ivory/mint/burgundy and restrained gold, theatrical light, no letters, words, numbers, logos, characters, HUD or interface. A quiet civic laboratory where three blank ballot cards wait on three individual ivory presentation stands under a mint spotlight. Shelves of binders, a small microphone and a brass magnifying glass. Focus upper-left third; right half and lower half calm deep navy negative space.",
+      "model": "nano_banana_2",
+      "resolution": "2k",
+      "jobId": "d60a1921-c075-4a15-9143-16f9837ab3f2",
+      "status": "completed",
+      "backendModel": "nano_banana_flash",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_002152_d60a1921-c075-4a15-9143-16f9837ab3f2.png",
+      "sourceSha256": "9447e84f4decccb39742bc3a19be97a58464c939ee742f242dbaef74cf720492"
+    },
+    {
+      "id": "pause",
+      "index": 1,
+      "kind": "background",
+      "path": "public/sprites/ui/desk/pause.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Modern crisp pixel art, strong silhouettes readable at 240x180, palette navy/ivory/mint/burgundy and restrained gold, theatrical light, no letters, words, numbers, logos, characters, HUD or interface. An empty campaign headquarters desk with a closed navy briefcase, neatly stacked ivory folders, a mint desk lamp, one burgundy scarf and a blank folded campaign map. Main objects confined to the leftmost quarter; right half and lower half calm deep navy negative space.",
+      "model": "nano_banana_2",
+      "resolution": "2k",
+      "jobId": "c354f7e1-2d7e-4b76-95f1-76b7f281f69e",
+      "status": "completed",
+      "backendModel": "nano_banana_flash",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_002152_c354f7e1-2d7e-4b76-95f1-76b7f281f69e.png",
+      "sourceSha256": "be90d058731ef0dd9c3e78e5d42a7ca005b50c20c834fd4995b5af6d77db27bc"
+    },
+    {
+      "id": "transport",
+      "index": 2,
+      "kind": "background",
+      "path": "public/sprites/ui/desk/transport.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Modern crisp pixel art, strong silhouettes readable at 240x180, palette navy/ivory/mint/burgundy and restrained gold, theatrical light, no letters, words, numbers, logos, characters, HUD or interface. A satirical chauffeured Italian campaign car, compact navy sedan with a tiny gold ceremonial flag, parked beside an empty mint bus shelter and a fuel pump. The receipt spool is absurdly long, clearly larger than the car's fuel tank. Focus upper-left third; right half and lower half quiet deep navy negative space.",
+      "model": "nano_banana_2",
+      "resolution": "2k",
+      "jobId": "5270ccd8-0f8d-4a29-bc45-691338f029c6",
+      "status": "completed",
+      "backendModel": "nano_banana_flash",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_002152_5270ccd8-0f8d-4a29-bc45-691338f029c6.png",
+      "sourceSha256": "06379673863797c4dbf9ad0a20775d3b84837c058abb6e6e0840be37e25a6ca3"
+    },
+    {
+      "id": "welcome",
+      "index": 3,
+      "kind": "background",
+      "path": "public/sprites/ui/desk/welcome.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Modern crisp pixel art, strong silhouettes readable at 240x180, palette navy/ivory/mint/burgundy and restrained gold, theatrical light, no letters, words, numbers, logos, characters, HUD or interface. A warm civic laboratory briefing area: a large blank ivory noticeboard, two empty tiny debate podiums, a gold stopwatch, a microphone and a mint bench. All storytelling objects in the upper-left third; right and lower halves calm deep navy negative space.",
+      "model": "nano_banana_2",
+      "resolution": "2k",
+      "jobId": "0f436157-5547-45f3-874b-017a197e537a",
+      "status": "completed",
+      "backendModel": "nano_banana_flash",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_002152_0f436157-5547-45f3-874b-017a197e537a.png",
+      "sourceSha256": "6b5c71dea00efd4a58fa6c1e9e9d415035c0c48048ef40d68e1ca47ca05ed6e9"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "public/sprites/ui/desk/starter.png",
+      "sha256": "3204ade9c1c8f3588cbb54b57440bb87e6f278a3693884918191713b0b55b981",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "d60a1921-c075-4a15-9143-16f9837ab3f2"
+    },
+    {
+      "path": "public/sprites/ui/desk/pause.png",
+      "sha256": "a30dafffe9f5692c6b2e7181d6750110773cb248e0f83883617ad044bcf7ce0c",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "c354f7e1-2d7e-4b76-95f1-76b7f281f69e"
+    },
+    {
+      "path": "public/sprites/ui/desk/transport.png",
+      "sha256": "65c579123dcb5d43f8e63e973bb197519eafe1b70103317b00920477def29195",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "5270ccd8-0f8d-4a29-bc45-691338f029c6"
+    },
+    {
+      "path": "public/sprites/ui/desk/welcome.png",
+      "sha256": "996dfb36498841bdb9dadd5835d46034b5a3a7e5ea76b68e8d046ff9e7f95d11",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "0f436157-5547-45f3-874b-017a197e537a"
+    }
+  ],
+  "balanceAfter": 617.97,
+  "creditsSpent": 8,
+  "review": "All four backgrounds reviewed at native 240x163: clear distinct silhouettes, usable quiet space for text. Approved for install."
+}

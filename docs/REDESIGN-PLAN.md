@@ -30,10 +30,11 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
-| PWA | Precache e primo utilizzo offline dei 525 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Ingresso, pausa e scorta | Starter con quattro dossier, guida rileggibile, riprova dopo sconfitta, pausa scorrevole e viaggio con contratto | `shot:desk`: 514 Chromium/506 WebKit, sei lotte del tutorial via input |
+| PWA | Precache e primo utilizzo offline dei 529 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 625,97; spesa cumulativa 260 crediti. Non sono stati attivati acquisti
+verificato: 617,97; spesa cumulativa 268 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -50,8 +51,8 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
-   Genova, retrobottega, casinò e Coppa sono ora rivisti. Restano onboarding, menu pausa,
-   viaggi e interfaccia esterna per una revisione coerente. Eliminare layout e asset residui vecchi;
+   Genova, retrobottega, casinò e Coppa sono ora rivisti. Onboarding, pausa e trasporto stradale hanno ricevuto una revisione con dossier e prove delle azioni.
+   Resta l’interfaccia esterna per una revisione coerente. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
    ricorrenze e risposte alle azioni. La ricerca web deve generare satira
@@ -136,3 +137,12 @@ Prossima priorità: onboarding con descrizioni e scelte complete, pausa e
 viaggi; `StarterPreviewScene` conserva ancora soltanto due righe del testo
 Dex e la pausa usa un elenco sopra il mondo. Sono superfici ancora da
 ridisegnare, osservate direttamente nel codice corrente.
+
+### Ingresso, pausa e viaggi — 2 ottobre 2026
+
+[INGRESSO-PAUSA-VIAGGI.md](INGRESSO-PAUSA-VIAGGI.md): quattro ambienti,
+dossier degli starter interi, guida legata alla missione, pause e opzioni
+scorrevoli, scorta con conferma e tutorial che consente la riprova dopo
+sconfitta senza falsa vittoria. 8 crediti; saldo 617,97. 276 test e 514/506
+viste Chromium/WebKit. Sei lotte del tutorial tramite input, in aggiunta
+ai callback forzati. La campagna completa non è ancora verificata.

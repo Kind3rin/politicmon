@@ -25,7 +25,7 @@ try{
   const shots={},overflow=[],original=screen.text.bind(screen);
   screen.text=(s,x,y,c,scale=1)=>{if(s&&(x<0||y<0||x+(s.length*6-1)*scale>240||y+7*scale>180))overflow.push({name,s,x,y});original(s,x,y,c,scale);};
   const capture=(id,scene,keep=true)=>{name=id;scene.draw(screen);views++;if(keep){nativeCtx.drawImage(canvas,0,0,240,180);shots[id]=native.toDataURL('image/png');}};
-  const funded=()=>{const s=newGameState();s.chips=1000;s.money=10000;return s;};
+  const funded=()=>{const s=newGameState();s.chips=1000;s.money=10000;s.flags['intro-done']=true;return s;};
   for(const reduced of [false,true]){
    const s=funded();s.reduceEffects=reduced;const scene=new CasinoScene(new SceneStack(),input,s),before=serializeGameState(s);capture(`casino-${reduced}`,scene);
    const rng=Math.random;let rolls=0;Math.random=()=>{rolls++;return .99;};

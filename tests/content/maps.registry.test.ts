@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { MAPS } from "../../src/data/maps";
+import { MAP_NAMES } from "../../src/data/maps/names";
 
 const EXPECTED_MAP_IDS = [
   "attico", "bar-borgo", "bar-bruxelles", "bar-cap", "bar-euro", "bar-medio",
@@ -31,4 +32,11 @@ test("registry mappe: chiave, id e riferimenti warp restano coerenti", () => {
       if (edge) assert.ok(MAPS[edge.toMap], `${id}: edge verso mappa inesistente ${edge.toMap}`);
     }
   }
+});
+
+test("salvataggi: etichette leggere coprono tutte le mappe e coincidono con il mondo", () => {
+  assert.deepEqual(Object.keys(MAP_NAMES).sort(), Object.keys(MAPS).sort());
+  for (const map of Object.values(MAPS)) assert.equal(MAP_NAMES[map.id], map.name);
+  assert.equal(MAP_NAMES.__proto__, undefined);
+  assert.equal(MAP_NAMES.constructor, undefined);
 });

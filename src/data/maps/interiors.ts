@@ -98,21 +98,21 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     [
       {
         id: "gym3-allievo1", pal: "guard", x: 2, y: 5, facing: "right",
-        trainerId: "diplomatico", sightRange: 3,
-        lines: ["La diplomazia è l'arte di perdere con stile."]
+        trainerId: "diplomatico", nameplate: "VERTICE A",
+        lines: ["Il tavolo adesso serve a parlare. Per i PP puoi tornare al bar."]
       },
       {
         id: "gym3-allievo2", pal: "aide", x: 7, y: 3, facing: "left",
-        trainerId: "oligarca", sightRange: 3,
-        lines: ["Io non perdo mai. Al massimo rinegozio."]
+        trainerId: "oligarca", nameplate: "CAPITALE A",
+        lines: ["Il conto è arrivato. La trattativa sulla mia quota è finita."]
       },
       {
         id: "gym3-capo", pal: "boss", x: 4, y: 1, facing: "down",
         trainerId: "tycoon",
-        lines: ["Nessuno perde meglio di me. Nessuno. È una vittoria enorme."]
+        lines: ["Sul conto compare il mio nome. Per una volta devo pagarlo io."]
       }
     ],
-    ["GLOBAL TOWER:", "il piano terra è gratis, l'attico è in svendita a un miliardo."]
+    ["GLOBAL TOWER: due prove facoltative. A inizia, B annulla.", "Tycoon: tre avversari. Puoi uscire e curare PV e PP al bar."]
   ),
 
   market1: marketMap("market1", "mediopoli", 22, 11),
@@ -424,13 +424,12 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     {
       id: "salotto-vip", pal: "influencer", x: 7, y: 2, facing: "down",
       lines: [
-        "Tesoro, al SALOTTO contano due cose: con chi ti siedi e da chi ti fai vedere.",
-        "Il programma elettorale? Lo serviamo come antipasto, tanto nessuno lo finisce."
+        "Ho fatto spostare le sedie. Sembrava un accordo: era per far entrare tutti nella foto."
       ]
     },
     {
       id: "salotto-trombato", pal: "aide", x: 2, y: 4, facing: "right",
-      lines: ["Sono un ex-ministro. Di cosa? Bella domanda. Anche io me lo chiedo."]
+      lines: ["Mi invitano come ex-ministro. Quando ero in carica volevano il mio autista."]
     }
   ], { variant: 2 }),
 
@@ -439,8 +438,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     {
       id: "retro-cronista", pal: "journalist", x: 5, y: 2, facing: "down",
       lines: [
-        "Fonti vicine al PALAZZO dicono che fonti vicine a te smentiscono le fonti.",
-        "Scrivo retroscena da vent'anni. Non è ancora successo nessuno scena, solo retro."
+        "La fonte chiede anonimato. Poi mi corregge perché dalla foto non si capisce chi è."
       ]
     }
   ], {

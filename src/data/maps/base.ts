@@ -595,7 +595,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     signs: [
       {
         x: 17, y: 2,
-        lines: ["PERCORSO 3", "Nord: CAPUT MUNDI. Sud: EUROTOWN.", "Coda stimata per il potere: 47 anni. Munirsi di numeretto."]
+        lines: ["PERCORSO 3", "Nord: CAPUT MUNDI. Sud: EUROTOWN.", "Sfide con A. ARCHIVIO a est: DIRETTIVA DECRETO. Il bar è in città."]
       }
     ],
     pickups: [
@@ -607,18 +607,18 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-usciere", pal: "guard", x: 11, y: 6, facing: "right",
-        trainerId: "usciere", sightRange: 3,
-        lines: ["Senza appuntamento non si passa. Nemmeno col numeretto."]
+        trainerId: "usciere", nameplate: "AGENDA A",
+        lines: ["Ti avevo messo in attesa. È diverso dal riceverti."]
       },
       {
         id: "tr-protocollista", pal: "granny", x: 12, y: 10, facing: "right",
-        trainerId: "protocollista", sightRange: 3,
-        lines: ["Il checkpoint è qui per il suo bene. Firmi qui, qui e qui."]
+        trainerId: "protocollista", nameplate: "AUDIT A",
+        lines: ["L'allegato indica chi paga. Ecco perché non lo proiettavano."]
       },
       {
         id: "tr-eminenza", pal: "aide", x: 19, y: 14, facing: "left",
-        trainerId: "eminenza", sightRange: 3,
-        lines: ["Questa conversazione non è mai avvenuta."]
+        trainerId: "eminenza", nameplate: "CONTATTI A",
+        lines: ["Abbiamo pubblicato gli incontri. Le cene restano conviviali."]
       },
       {
         id: "benzinaio-r3", pal: "barista", x: 9, y: 16, facing: "right",
@@ -652,7 +652,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { speciesId: "putingrad", weight: 12, minLv: 18, maxLv: 19 }
     ],
     signs: [
-      { x: 14, y: 3, lines: ["ARCHIVIO DI STATO", "Dossier su tutti. Anche su di te.", "Consultazione libera. Uscirne, meno."] }
+      { x: 14, y: 3, lines: ["ARCHIVIO DI STATO", "DECRETO in fondo a destra. Archivista facoltativo: A per la sfida."] }
     ],
     pickups: [
       { id: "pk-g2", x: 17, y: 2, itemId: "dirDecreto", qty: 1 },
@@ -661,8 +661,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-archivista", pal: "aide", x: 10, y: 6, facing: "down",
-        trainerId: "archivista", sightRange: 3,
-        lines: ["Shhh. I faldoni dormono.", "Ogni scaffale è un governo caduto. Non toccare niente."]
+        trainerId: "archivista", nameplate: "ACCESSO A",
+        lines: ["Il documento adesso si trova. La segretezza era tutta nel catalogo."]
       }
     ]
   },
@@ -724,12 +724,12 @@ export const BASE_MAPS: Record<string, MapDef> = {
     signs: [
       {
         x: 7, y: 19,
-        lines: ["CAPUT MUNDI", "Qui i potenti del mondo vengono a farsi fotografare."]
+        lines: ["CAPUT MUNDI", "La foto del vertice costa meno del conto. La pubblicano per prima."]
       },
       {
         // Accanto alla porta PALESTRA (6,11), non più scambiata col casinò.
         x: 7, y: 12,
-        lines: ["PALESTRA GLOBAL TOWER", "Capopalestra: MR. TYCOON.", "Medaglia DAZIO. Ingresso gratuito, uscita tassata."]
+        lines: ["PALESTRA GLOBAL TOWER", "Capopalestra: MR. TYCOON.", "DAZIO: tre avversari. Le prove sono facoltative; puoi tornare al bar."]
       },
       {
         // Accanto alla porta del CASINÒ (21,11). Il tetto bordeaux-oro con "$"
@@ -740,7 +740,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         // Cartello del PORTO (accanto al molo di legno, tile `s` a 5,19).
         x: 9, y: 19,
-        lines: ["PORTO DI CAPUT MUNDI — DARSENA DEL CONSENSO", "Traghetto per lo STRETTO: parte quando dice IL CAPITANO, non l'orario.", "Barca ormeggiata dal 1994. Il molo è pubblico, l'attracco è una raccomandazione."]
+        lines: ["PORTO: TRAGHETTO CON TRE MEDAGLIE.", "Il pinguino rifiuta il dazio. Chiedono una firma: non ha pollici."]
       },
       {
         // Cartello della SFIDA DEL GIORNO, accanto all'OPINIONISTA in piazza.
@@ -762,39 +762,34 @@ export const BASE_MAPS: Record<string, MapDef> = {
     decoratives: [
       {
         x: 9, y: 13,
-        lines: ["FONTANA MONUMENTALE.", "Acqua benedetta dai sondaggi. Bevi a tuo rischio dal 1994."]
+        lines: ["FONTANA MONUMENTALE.", "Il getto è pubblico. La foto sponsorizzata copre il rubinetto rotto."]
       },
       {
         x: 20, y: 13,
-        lines: ["STATUA EQUESTRE DEL LEADER.", "Il cavallo guarda a sinistra. Il leader, dipende dal giorno."]
+        lines: ["STATUA EQUESTRE.", "Chi pulisce il cavallo non entra nell'inquadratura del leader."]
       }
     ],
     npcs: [
       lucaGuide(
         "CAPUT MUNDI", 15, 12,
         [
-          "CAPUT MUNDI: qui i potenti del mondo vengono a farsi fotografare.",
-          "Palazzi, casinò, vertici internazionali. E candidati con squadre da capogiro.",
-          "C'è pure il porto per la Sicilia, se hai l'AUTO BLU e le medaglie."
+          "CAPUT MUNDI: GLOBAL TOWER, tetto blu a ovest. Il bar cura; l'ambulante rifornisce.",
+          "Tycoon punta sul danno. Leggi il dossier, prepara tipi e mosse, conserva le cure."
         ],
         [
-          "La GLOBAL TOWER mette in palio la medaglia DAZIO: la palestra più dura finora.",
-          "Vinci qui e IL PALAZZO ti apre le porte: da lì parte l'endgame."
+          "DAZIO apre IL PALAZZO. Con tre medaglie il marinaio dà il TRAGHETTO."
         ]
       ),
       {
         id: "scorta-cap", pal: "guard", x: 20, y: 18, facing: "right", transport: true,
         lines: [
-          "SCORTA AUTO BLU:",
-          "Ti porto tra le città che hai già visitato. Per lo STRETTO cerca l'IMBARCO a est: si va in TRAGHETTO.",
-          "Davanti al Palazzo non si cammina: si arriva con lampeggiante istituzionale."
+          "SCORTA: città già visitate. Per la Sicilia serve il TRAGHETTO al porto."
         ]
       },
       {
         id: "corazziere", pal: "guard", x: 12, y: 6, facing: "right",
         lines: [
-          "Il PALAZZO riceve solo candidati con 3 MEDAGLIE.",
-          "AUDITEL, SPREAD e DAZIO. Poi possiamo parlare."
+          "PALAZZO: servono AUDITEL, SPREAD e DAZIO. Il pass non è un invito a cena."
         ]
       },
       {
@@ -805,14 +800,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
         vehicleGift: {
           vehicle: "traghetto", flag: "veh-traghetto", requiresBadges: 3,
           lines: [
-            "MARINAIO: vuoi raggiungere la SICILIA? Di là si va solo per mare.",
-            "Hai le 3 MEDAGLIE: ti affido il TRAGHETTO. Al timone c'è il CAPITANO SCHETTINO.",
-            "Attivalo dal menu (START) alla voce VEICOLO e l'acqua diventa la tua strada.",
-            "Mi raccomando: prima si naviga, l'inchino dopo."
+            "TRE MEDAGLIE: TRAGHETTO CONSEGNATO. START > VEICOLO lo attiva per navigare.",
+            "Dal molo a sud raggiungi lo STRETTO. Il biglietto include l'acqua, non l'inchino."
           ],
           lockedLines: [
-            "MARINAIO: il mare è mosso e il molo è chiuso ai dilettanti.",
-            "Torna con 3 MEDAGLIE e ti consegno il TRAGHETTO."
+            "TRAGHETTO: torna con tre medaglie. Per ora il molo è chiuso."
           ]
         },
         lines: ["MARINAIO: il MOLO è dietro di me. Attiva il TRAGHETTO dal menu e vai verso la Sicilia."]
@@ -822,31 +814,27 @@ export const BASE_MAPS: Record<string, MapDef> = {
         vehicleGift: {
           vehicle: "ruspa", flag: "gift-ruspa",
           lines: [
-            "Cantiere fermo, appalto sospeso, ma la RUSPA è ancora carica.",
-            "Tienila tu: davanti a un albero che ti sbarra la strada, premi A.",
-            "Useremo il verbale come scorciatoia. Anzi: useremo la RUSPA."
+            "RUSPA CONSEGNATA: START > VEICOLO, poi A davanti a un albero.",
+            "Il cantiere è fermo. Le foto della ruspa sono sempre in movimento."
           ]
         },
-        lines: ["La RUSPA ce l'hai. Usala con parsimonia... o no, fai te."]
+        lines: ["La RUSPA è tua. Il cartello del cantiere diceva già presto."]
       },
       {
         id: "autista-cap", pal: "guard", x: 17, y: 18, facing: "down",
         vehicleGift: {
           vehicle: "auto", flag: "gift-auto",
           lines: [
-            "Ehi, candidato! Il PARTITO ti assegna un'AUTO BLU tutta tua.",
-            "Tienila: attivala dal menu (START) alla voce VEICOLO.",
-            "All'aperto sfreccia. In città fai scena. Il pieno lo paga lo Stato."
+            "AUTO BLU CONSEGNATA: START > VEICOLO. Accelera all'aperto.",
+            "Il pieno è nel bilancio. Il pendolare guarda il prezzo alla pompa."
           ]
         },
-        lines: ["L'AUTO BLU è tua. Lampeggiante a discrezione, multe mai."]
+        lines: ["AUTO BLU: il tragitto diventa urgente quando entri tu."]
       },
       {
         id: "turista-cap", pal: "kid", x: 17, y: 19, facing: "up",
         lines: [
-          "Sono venuto a Roma per la storia, la cultura, l'arte...",
-          "...e invece sto facendo la fila per un selfie col PRESIDENTE OMBRA.",
-          "Bravo eh, però spostati che non si vede il monumento."
+          "La guida indica il monumento. La transenna indica il fotografo del ministro."
         ]
       },
       {
@@ -862,8 +850,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         id: "influencer-cap", pal: "influencer", x: 22, y: 19, facing: "left",
         lines: [
-          "Story, reel, dirette: il consenso oggi si fa col telefono.",
-          "Tu invece giri a piedi nell'erba alta come nel 2005. Tenero."
+          "La diretta mostra il corteo. L'app ritaglia chi chiede chi paga."
         ]
       },
       {

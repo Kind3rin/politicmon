@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "balanceBefore": 617.47,
+  "balanceAfter": 616.97,
+  "estimatedCredits": 0.5,
+  "creditsSpent": 0.5,
+  "assets": [
+    {
+      "id": "diplomatico",
+      "path": "public/sprites/ui/boss/diplomatico.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG, finished modern crisp pixel art panorama, navy ivory teal burgundy restrained gold, readable tiny game art at 224 x 78 pixels, no text no letters no numbers no logos. A fictional calm middle aged diplomat with silver hair, dark blue suit and mint tie stands centered on a modest terrace, hands carefully adjusting two empty chairs on opposite sides of a comically long gold conference table that stretches far into the background. Every chair is pointed at a shiny television camera instead of the opposing negotiator. Diplomat expression patient, tired, earnest rather than cruel. One small plain ivory clipboard. Abstract international skyline, strong clear silhouette, rich warm dusk lighting, navy empty quiet top band for runtime title. All important face and upper body safely within upper sixty percent so wide top crop preserves them. Small original political satire about seating plans replacing dialogue, not a real person, not photorealistic. Compose a beautiful game briefing panorama with chunky pixels and precise clean edges.",
+      "model": "gpt_image_2_5",
+      "backendModel": "gpt_image_2_5",
+      "jobId": "7c7be64f-aff7-44d4-9b14-ac7d5101c594",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_031908_7c7be64f-aff7-44d4-9b14-ac7d5101c594.png",
+      "cropTop": 72,
+      "crop": "full width, y72, height width*78/224; nearest resize",
+      "sourceSha256": "eb96d112fe10f6a60524fd439ce8c3bdad796e9803ba653dc37ce29b74d11ed0",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "032decbd7399044e4acfdba5f36ae6d610f5332c122159cdefe93811b25bd707"
+    },
+    {
+      "id": "oligarca",
+      "path": "public/sprites/ui/boss/oligarca.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. Finished modern crisp chunky pixel art panorama readable at 224 x 78 pixels, rich navy ivory teal burgundy muted gold, no text no letters no numbers no logos. Fictional wealthy middle aged investor with dark beard and burgundy tailored suit centered on upper middle portion, holding a tiny gold yacht model, eyebrows alarmed at a plain ivory invoice being offered from a modest public service desk on the right. A huge white yacht outside dark window on the left sits uselessly on stilts while ordinary people use a small mint lit open doorway on right. Original satire: a luxury asset treated as untouchable while the ordinary bill becomes negotiable. Firm dramatic lighting, clear silhouette, calm readable scene, tiny blank forms, all face and key props inside upper sixty percent for wide top crop. Quiet dark navy top band reserved for runtime title. Elegant pixel art game briefing panorama, not photorealistic and not an identifiable real person.",
+      "model": "gpt_image_2_5",
+      "backendModel": "gpt_image_2_5",
+      "jobId": "f86fce4a-b1fe-4fba-82c5-d5b1f2281fff",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_031929_f86fce4a-b1fe-4fba-82c5-d5b1f2281fff.png",
+      "cropTop": 72,
+      "crop": "full width, y72, height width*78/224; nearest resize",
+      "sourceSha256": "463231457fab866a8beb635b6f7aa3870cda558609d00266d87c1caf6f765cab",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "f71de5b25c6d137b5f56ffca6c600d339e60f1f40da9fbd7f348c5df6850d6b1"
+    }
+  ]
+}

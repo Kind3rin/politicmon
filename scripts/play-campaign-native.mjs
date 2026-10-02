@@ -7,11 +7,13 @@ const label=process.env.RUN_LABEL??'current';
 const practice=process.env.RUN_PRACTICE==='1';
 const endAt=process.env.END_AT??'auditel';
 const euroPlan=process.env.EU_PLAN??plan;
+const capitalPlan=process.env.CAP_PLAN??'direct';
+assert.ok(['auditel','spread','dazio'].includes(endAt),'Unknown campaign endpoint');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
- const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan})=>{
+ const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan})=>{
   const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,exportSaveCode,saveGame}=await import('/src/game/state.ts');
   const {Screen}=await import('/src/engine/screen.ts'),{Input}=await import('/src/engine/input.ts'),{SceneStack}=await import('/src/engine/scene.ts');
   const {MOVES}=await import('/src/data/moves.ts'),{ITEMS}=await import('/src/data/items.ts'),{MAPS,STARTER_SPOTS}=await import('/src/data/maps.ts');
@@ -216,9 +218,33 @@ try{
     }
     await milestone('spread-result');
    }
+   if(endAt==='dazio'&&state.badges.includes('spread')){
+    if(state.pos.mapId==='gymue'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
+    heal();
+    if(capitalPlan==='prepared'){
+     cross('up');
+     const practiceNpc=world.visibleNpcs().find(n=>n.trainerId==='protocollista');interact(practiceNpc.x,practiceNpc.y);await milestone('route3-audit');
+    }
+    for(let n=0;state.pos.mapId!=='capitale'&&n<5;n++){
+     if(state.pos.mapId==='eurotown'){heal();cross('up');}
+     if(state.pos.mapId==='route3')cross('up');
+    }
+    if(state.pos.mapId!=='capitale')throw Error('Capitale not reached');
+    await milestone('capitale');heal();enterMap('gymglobal');
+    if(capitalPlan==='prepared')for(const trainerId of ['diplomatico','oligarca']){
+     const practiceNpc=world.visibleNpcs().find(n=>n.trainerId===trainerId);interact(practiceNpc.x,practiceNpc.y);await milestone(`global-${trainerId}`);
+     if(state.pos.mapId==='gymglobal'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
+     heal();enterMap('gymglobal');
+    }
+    for(let attempt=1;attempt<=2&&!state.badges.includes('dazio');attempt++){
+     if(state.pos.mapId!=='gymglobal'){heal();enterMap('gymglobal');}
+     const boss=world.visibleNpcs().find(n=>n.trainerId==='tycoon');interact(boss.x,boss.y);settle();await milestone(`dazio-result-${attempt}`);
+    }
+    await milestone('dazio-result');
+   }
   }catch(e){failure=e.message;trace('failure',failure);}
-  return {id,seed,plan,endAt,euroPlan,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
- },{id,seed,plan,practice,endAt,euroPlan});
+  return {id,seed,plan,endAt,euroPlan,capitalPlan,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
+ },{id,seed,plan,practice,endAt,euroPlan,capitalPlan});
  assert.deepEqual(errors,[]);
  if(process.env.CHECK_GROWTH!=='0')for(const b of result.battles.filter(b=>b.outcome==='caught')){
   const old=b.before.party.find(m=>m.uid===b.recipientUid),grown=b.after.party.find(m=>m.uid===b.recipientUid);

@@ -6,11 +6,12 @@ from PIL import Image
 parser = argparse.ArgumentParser()
 parser.add_argument('source', type=Path)
 parser.add_argument('--manifest', type=Path, default=Path('scripts/higgsfield-first-campaign.json'))
+parser.add_argument('--asset', help='Asset id in a multi-image manifest; defaults to the first asset')
 args = parser.parse_args()
 root = Path(__file__).resolve().parent.parent
 manifest_path = root / args.manifest
 manifest = json.loads(manifest_path.read_text())
-asset = manifest['assets'][0]
+asset = next(a for a in manifest['assets'] if a['id'] == args.asset) if args.asset else manifest['assets'][0]
 source = Image.open(args.source).convert('RGB')
 w, h = asset['width'], asset['height']
 crop_h = round(source.width * h / w)

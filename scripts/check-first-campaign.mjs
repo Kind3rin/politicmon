@@ -15,7 +15,7 @@ try{
   const {audio}=await import('/src/engine/audio.ts'),{mp}=await import('/src/net/mp.ts');audio.enabled=false;mp.setEnabled(false);
   const {seededRng}=await import('/src/game/tournament.ts');Math.random=seededRng(20261002);
   const {preloadSprites,waitForSprites,spriteStatus}=await import('/src/engine/assets.ts');
-  preloadSprites({'boss:stagista':'ui/boss/stagista.png','boss:funzionario':'ui/boss/funzionario.png','ui:teach':'ui/teach.png'});await waitForSprites(['boss:stagista','boss:funzionario','ui:teach']);
+  const art=Object.fromEntries(['stagista','funzionario','diplomatico','oligarca'].map(id=>[`boss:${id}`,`ui/boss/${id}.png`]));art['ui:teach']='ui/teach.png';preloadSprites(art);await waitForSprites(Object.keys(art));
   const canvas=document.createElement('canvas');canvas.id='game-canvas';document.body.append(canvas);
   const screen=new Screen(canvas),input=new Input(),stack=new SceneStack(),shots={},captures=[],bounds=[];
   const codes={a:'KeyZ',b:'KeyX',start:'KeyP',up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'};
@@ -52,6 +52,14 @@ try{
    check(JSON.stringify(brief.team.map(m=>m.level))===JSON.stringify(hard?[18,18]:[15,15]),'Hans levels disagree with difficulty');
    check(spriteStatus('boss:funzionario')==='ready','Hans image not decoded');shot(`hans-${hard?'hard':'normal'}`);
    tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling examination changed campaign');
+  }
+  for(const id of ['diplomatico','oligarca'])for(const hard of [false,true]){
+   const s=stateAt('gymglobal',5,6);s.hardMode=hard;s.badges=['auditel','spread'];const world=new WorldScene(stack,input,s);stack.replace(world);const before=JSON.stringify(s);
+   world.startTrainerBattle(TRAINERS[id]);for(let n=0;stack.top===world&&n<50;n++)tick();
+   const brief=stack.top,level=id==='diplomatico'?18:19;check(brief.constructor.name==='BossBriefingScene','Global Tower rehearsal absent');
+   check(brief.team.length===1&&brief.team[0].level===level+(hard?3:0),'Global Tower rehearsal levels disagree with difficulty');
+   check(spriteStatus(`boss:${id}`)==='ready','Global Tower art not decoded');shot(`${id}-${hard?'hard':'normal'}`);
+   tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling Global Tower rehearsal changed campaign');
   }
   {
    const s=stateAt('bar-euro',5,5);s.party.push(createMonster('salvinott',8));s.party[0].hp=0;s.party[0].status='scandalo';s.party[1].hp=1;s.party[1].status='indagato';
@@ -104,5 +112,5 @@ try{
  mkdirSync('artifacts/first-campaign',{recursive:true});mkdirSync('artifacts/screens/first-campaign',{recursive:true});
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/first-campaign/${engine.name()}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  delete result.shots;writeFileSync(`artifacts/first-campaign/${engine.name()}.json`,JSON.stringify(result,null,2));
- console.log(`PASS ${engine.name()}: ${result.guarded} warp approaches; normal/hard Mara and Hans cancellation; bar restores PV/PP/status/KO with unchanged funds/polls/morale and one rematch lesson; natural capture with party 3/6, bench lesson, KO/new recruit exclusion, MANIFESTI and persistence.`,JSON.stringify(result.captures));
+ console.log(`PASS ${engine.name()}: ${result.guarded} warp approaches; normal/hard Mara, Hans and Global Tower cancellation; bar restores PV/PP/status/KO with unchanged funds/polls/morale and one rematch lesson; natural capture with party 3/6, bench lesson, KO/new recruit exclusion, MANIFESTI and persistence.`,JSON.stringify(result.captures));
 }finally{await browser.close();}

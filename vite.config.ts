@@ -1,6 +1,7 @@
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
+import { minify } from "terser";
 
 // ID di build AUTOMATICO: cambia a ogni `vite build`, senza bump manuali.
 // Alimenta sia APP_BUILD_ID (cache-busting sprite ?v=, chiavi localStorage del
@@ -14,9 +15,9 @@ function stampServiceWorker(): Plugin {
   return {
     name: "stamp-service-worker",
     apply: "build",
-    closeBundle() {
+    async closeBundle() {
       const swPath = resolve(__dirname, "dist/sw.js");
-      try {
+      if (existsSync(swPath)) {
         const src = readFileSync(swPath, "utf8");
         const distRoot = resolve(__dirname, "dist");
         const collect = (dir: string): string[] => readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -31,14 +32,12 @@ function stampServiceWorker(): Plugin {
         const runtimeAssets = collect(distRoot).filter((path) =>
           path !== "./sw.js" && path !== "./intro.mp4" && !coreAssets.has(path)
         );
-        writeFileSync(
-          swPath,
-          src
+        const stamped = src
             .replaceAll("__APP_BUILD_ID__", BUILD_ID)
-            .replace("__PRECACHE_RUNTIME_ASSETS__", JSON.stringify(runtimeAssets))
-        );
-      } catch {
-        // dist/sw.js assente (build parziale): niente da stampare.
+            .replace("__PRECACHE_RUNTIME_ASSETS__", JSON.stringify(runtimeAssets));
+        const result = await minify(stamped, { compress: { passes: 3 }, format: { comments: false } });
+        if (!result.code) throw new Error("Service worker compilation produced no code");
+        writeFileSync(swPath, result.code);
       }
     }
   };

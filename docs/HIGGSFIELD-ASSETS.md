@@ -1,5 +1,13 @@
 # Politicmon: risorse Higgsfield
 
+Sedicesimo blocco: tavolo diplomatico e conto dell'oligarca per le due prove
+facoltative della Global Tower. Due job `gpt_image_2_5`, **0,50 crediti**,
+saldo **617,47 → 616,97**, cumulativo **269,00**. Prompt, job, ritagli e
+checksum in `higgsfield-capitale.json`; conversione con
+`prepare-first-campaign-assets.py --manifest --asset`.
+[CAPITALE-PREPARAZIONE.md](CAPITALE-PREPARAZIONE.md): tredici briefing
+illustrati, nuova satira, sfide volontarie e tre partite nuove fino a Dazio.
+
 Quindicesimo blocco: sportello illustrato per la prova facoltativa di Hans.
 Un job `gpt_image_2_5`, **0,25 crediti**, saldo **617,72 → 617,47**,
 cumulativo **268,50**. Provenienza e ritaglio in `higgsfield-eurotown.json`;

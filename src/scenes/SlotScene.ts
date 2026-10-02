@@ -1,5 +1,5 @@
 import { audio } from "../engine/audio";
-import { MAPS } from "../data/maps";
+import { MAP_NAMES } from "../data/maps/names";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
@@ -189,7 +189,7 @@ export class SlotScene implements Scene {
       drawHqIcon(screen, "backup", 10, y + 4, 20);
       screen.text(`${selected ? ">" : " "} SLOT ${i + 1}`, 34, y + 6, INK);
       screen.textRight(sum.exists ? this.summaryTag(sum) : "LIBERO", VIEW_W - 12, y + 6, sum.exists ? "#497b65" : "#526279");
-      screen.textFit(sum.exists ? MAPS[sum.mapId]?.name ?? sum.mapId
+      screen.textFit(sum.exists ? MAP_NAMES[sum.mapId] ?? sum.mapId
         : this.mode === "load" ? "Nessuna campagna da riprendere" : "La prima promessa parte qui",
         34, y + 16, VIEW_W - 47, INK);
     }

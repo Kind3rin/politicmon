@@ -17,7 +17,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
-| Boss e prove | Undici illustrazioni, briefing e leader persistente; Mara e Hans facoltativi con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
+| Boss e prove | Tredici illustrazioni, briefing e leader persistente; prove facoltative fino alla Global Tower con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
@@ -34,10 +34,12 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Cornice esterna | Pagina moderna, guida che ferma gli aggiornamenti, focus e controlli touch senza sovrapposizioni | `shot:shell`: 20 configurazioni, Chromium/WebKit, pause mondo/lotta, input e salvataggio reali |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
-| PWA | Precache e primo utilizzo offline dei 531 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 189.284 byte gzip iniziali, checksum e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 533 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 617,47; spesa cumulativa 268,50 crediti. Non sono stati attivati acquisti
+verificato: 616,97; spesa cumulativa 269,00 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -52,7 +54,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
-   La campagna normale fino a Spread è percorsa tramite input con tutti e tre gli starter;
+   La campagna normale fino a Dazio è percorsa tramite input con tutti e tre gli starter;
    restano difficoltà alta, atti successivi e combinazioni alternative.
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
@@ -89,6 +91,15 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[CAPITALE-PREPARAZIONE.md](CAPITALE-PREPARAZIONE.md): sei sfide volontarie,
+due briefing illustrati, nuova satira e guide veritiere di porto/veicoli.
+Tre partite preparate conquistano Dazio al primo tentativo; Giorgetta
+diretta perde e poi vince. Livelli e IA conservati. 0,50 crediti, saldo
+616,97. 281 test, 3.030 briefing, 103 viste HQ, 424 checksum locali e 533
+asset PWA. Avvio 212.218 → 189.284 byte gzip; totale 358.042, con 358 byte
+di margine. Il worker è ora compilato; restano Palazzo, Colle, atti
+successivi, audio, scrittura delle altre zone e verifica integrale.
 
 [EUROTOWN-SCELTE.md](EUROTOWN-SCELTE.md): sfide volontarie dal Percorso 2,
 Hans illustrato, bar che recupera PV/PP/status/KO con lezione una volta,

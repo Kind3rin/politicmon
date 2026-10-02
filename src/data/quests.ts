@@ -96,8 +96,8 @@ export const QUESTS: QuestDef[] = [
     id: "gym3",
     title: "MEDAGLIA DAZIO",
     desc: "Sconfiggi MR. TYCOON nella GLOBAL TOWER di CAPUT MUNDI.",
-    hint: "Caput Mundi è in cima al mondo, oltre il PERCORSO 3. Come piace a lui.",
-    step: "Sali a Caput Mundi e trova la Global Tower.",
+    hint: "Oltre PERCORSO 3, palestra a ovest. Due prove facoltative; cura PV e PP prima di Tycoon.",
+    step: "Prepara la squadra e sfida la Global Tower.",
     isDone: (s) => s.badges.includes("dazio"),
     target: { mapId: "capitale", x: 6, y: 11 }
   },

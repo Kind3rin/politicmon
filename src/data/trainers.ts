@@ -198,44 +198,44 @@ export const TRAINERS: Record<string, TrainerDef> = {
   diplomatico: {
     id: "diplomatico", name: "DIPLOMATICO SERGIO", pal: "guard",
     team: [["zelenskir", 18]],
-    intro: ["La diplomazia ha fallito.", "Si passa alle maniere forti, con eleganza."],
-    defeat: ["Propongo un cessate il fuoco. Subito."],
+    intro: ["Abbiamo spostato il tavolo per avvicinare le delegazioni.", "La regia lo rivuole lungo. Inquadra meglio la distanza."],
+    defeat: ["Tolgo due sedie dalla foto. Forse ora ci sentiamo."],
     money: 720
   },
   oligarca: {
     id: "oligarca", name: "OLIGARCA DIMITRI", pal: "aide",
     team: [["putingrad", 19]],
-    intro: ["Il mio capo non perde mai. Io nemmeno.", "Lo yacht l'ho vinto così."],
-    defeat: ["Niente panico. Ho altri tre yacht."],
+    intro: ["Lo yacht è un bene strategico. Il conto del bar è negoziabile.", "Non confondiamo il mio patrimonio col vostro preventivo."],
+    defeat: ["La mia quota era scritta in piccolo. Stavolta la leggo."],
     money: 900
   },
   // ---- PERCORSO 3 (Eurotown-Capitale) + GROTTA2 ----
   usciere: {
     id: "usciere", name: "USCIERE DEL POTERE", pal: "guard",
     team: [["tajanide", 16], ["contemorfo", 16]],
-    intro: ["Alt. Lei ha l'appuntamento?", "No? Allora l'anticamera la fa qui. Con me."],
-    defeat: ["Si accomodi... ma non si abitui."],
+    intro: ["L'agenda è piena. Riserviamo uno spazio a chi può svuotarla.", "Puoi passare. Oppure verificare chi prende il posto migliore."],
+    defeat: ["La prossima agenda avrà anche le disponibilità."],
     money: 720
   },
   protocollista: {
     id: "protocollista", name: "ISPETTRICE DEL PROTOCOLLO", pal: "granny",
     team: [["ursulax", 17], ["macronfox", 16]],
-    intro: ["Il suo passaggio non risulta protocollato.", "Regolarizziamo: uno scontro, in triplice copia."],
-    defeat: ["Annoto: respinta. Con timbro storto."],
+    intro: ["Il preventivo dice tutto incluso. L'allegato indica a chi.", "Facciamo una prova: qui le condizioni si vedono prima."],
+    defeat: ["Metto l'allegato davanti. Ha già risposto da solo."],
     money: 780, reward: { itemId: "caffe", qty: 1 }
   },
   eminenza: {
     id: "eminenza", name: "EMINENZA GRIGIA", pal: "aide",
     team: [["zelenskir", 17], ["muskrat", 17], ["calendauro", 18]],
-    intro: ["Non mi hai mai visto. Non sono mai stato qui.", "Decido io chi passa verso CAPUT MUNDI. Da sempre."],
-    defeat: ["Interessante... ti terrò d'occhio. Da nessun luogo."],
+    intro: ["Abbiamo reso pubblici gli incontri. Le cene non sono incontri.", "La prenotazione è a mio nome: quello è soltanto un dettaglio."],
+    defeat: ["Inserisco anche le cene. Il cameriere aveva già l'elenco."],
     money: 920, reward: { itemId: "schedona", qty: 1 }
   },
   archivista: {
     id: "archivista", name: "ARCHIVISTA CAPO", pal: "aide",
     team: [["muskrat", 16], ["contemorfo", 17]],
-    intro: ["Zitto! Qui i segreti di Stato dormono.", "E tu li stai calpestando. Multa e duello."],
-    defeat: ["Archivio la sconfitta sotto X. Di 'X file'."],
+    intro: ["Accesso libero. Il file si chiamava definitivo3_vero2.", "Puoi consultare il DECRETO o sfidare chi ha fatto il catalogo."],
+    defeat: ["Rinomino il documento. Ci voleva meno del diniego."],
     money: 800, reward: { itemId: "maalox", qty: 1 }
   },
   bunkerista: {

@@ -2,7 +2,7 @@ import { preloadSprites, waitForSprites } from "./assets";
 import { BAG_ORDER } from "../data/items";
 import { MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG } from "../art/monsters";
 import { ITEMS_WITH_PNG } from "../art/items";
-import { BATTLE_BACKDROPS } from "../game/battle/backdrop";
+import { BATTLE_BACKDROPS } from "../game/battle/backdropArt";
 import { ANIMATED_MONSTERS } from "../art/monsterFrames";
 import { BOSS_ART_IDS } from "../game/battle/trainerStyle";
 

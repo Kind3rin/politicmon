@@ -22,7 +22,8 @@ const campaignPaths = campaignUiPaths();
 assert.equal(campaignPaths.length, 5);
 const firstCampaignPaths = JSON.parse(readFileSync('scripts/higgsfield-first-campaign.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const eurotownPaths = JSON.parse(readFileSync('scripts/higgsfield-eurotown.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths];
+const capitalPaths = JSON.parse(readFileSync('scripts/higgsfield-capitale.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -42,6 +43,7 @@ assert.ok(html.includes('Nei duelli online non fermi l’avversario'), 'online p
 assert.ok(!html.includes('console-brand-color')&&!html.includes('console-power'), 'old handheld shell branding remains');
 const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(match => match[1]);
 let source = (await Promise.all(scripts.map(fetchBytes))).map(bytes => bytes.toString()).join('\n');
+assert.ok(!source.includes("Il pubblico è libero. Il led sopra le sedie suggerisce quanto."), 'initial bundle still contains the world map registry');
 const worldChunks = [...new Set([...source.matchAll(/WorldScene-[\w-]+\.js/g)].map(match => `assets/${match[0]}`))];
 source += (await Promise.all(worldChunks.map(fetchBytes))).map(bytes => bytes.toString()).join('\n');
 assert.ok(source.includes('dialog[open]')&&source.includes('fullscreenchange'), 'shell input isolation/fullscreen handlers missing');
@@ -63,4 +65,5 @@ assert.ok(source.includes('EXTRA > GUIDA CAMPAGNA'), 'replayable onboarding guid
 assert.ok(source.includes('COSTO PER TE: 0€'), 'travel cost dossier missing');
 assert.ok(source.includes('IL FONDALE VUOLE CRESCERE')&&source.includes('PRATICANTE NINO')&&source.includes('PROVA MICROFONO'), 'recruitment/sharing/practice chapter missing');
 assert.ok(source.includes('CONTROLLO PRELIMINARE')&&source.includes('Il pubblico è libero. Il led sopra le sedie suggerisce quanto.'), 'Eurotown examination and original satire missing');
+assert.ok(source.includes('POSTI AL TAVOLO')&&source.includes('CHI PAGA IL CONTO'), 'Global Tower briefings missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

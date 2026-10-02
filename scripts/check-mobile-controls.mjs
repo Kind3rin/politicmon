@@ -13,6 +13,13 @@ for(const [engine,type] of [['chromium',chromium],['webkit',webkit]]){
   await page.evaluate(()=>{window.stack.replace({update(){},draw(){}});window.__input.reset();document.querySelector('canvas').focus();});
   const held=key=>page.evaluate(key=>window.__input.isHeld(key),key);
   await page.keyboard.down('ArrowRight');await page.keyboard.down('d');await page.keyboard.up('ArrowRight');assert.ok(await held('right'),'one key released the other alias');await page.keyboard.up('d');assert.equal(await held('right'),false);
+  await page.keyboard.down('ArrowRight');await page.keyboard.down('ArrowRight');assert.ok(await held('right'),'repeat cancelled an existing hold');
+  await page.evaluate(()=>window.__input.reset());await page.keyboard.down('ArrowRight');assert.equal(await held('right'),false,'repeat resurrected an input cleared by reset');
+  await page.keyboard.up('ArrowRight');await page.keyboard.down('ArrowRight');assert.ok(await held('right'),'fresh press after reset was ignored');await page.keyboard.up('ArrowRight');
+  await page.evaluate(async()=>{const {openNativeKeyboard}=await import('/src/engine/nativeInput.ts');openNativeKeyboard({initial:'',maxLength:8,onInput:v=>window.__repeatText=v});});
+  await page.keyboard.down('d');await page.keyboard.down('d');await page.keyboard.up('d');
+  assert.equal(await page.locator('#native-text-input').inputValue(),'dd','repeat stopped native text entry');assert.equal(await held('right'),false,'native typing moved the game');
+  await page.evaluate(async()=>{const {closeNativeKeyboard}=await import('/src/engine/nativeInput.ts');closeNativeKeyboard();document.querySelector('canvas').focus();});
   const pad=await page.locator('#touch-dpad').boundingBox(),cx=pad.x+pad.width/2,cy=pad.y+pad.height/2;
   await page.mouse.move(cx,pad.y+20);await page.mouse.down();assert.ok(await held('up'));
   await page.mouse.move(pad.x+pad.width-20,cy);assert.ok(await held('right'));assert.equal(await held('up'),false);

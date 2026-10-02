@@ -63,7 +63,9 @@ export class Input {
         return;
       }
       event.preventDefault();
-      this.setSource(event.code, button);
+      // A key held through a modal/reset must be released before it can
+      // become a fresh command. Existing holds already drive continuous input.
+      if (!event.repeat) this.setSource(event.code, button);
     });
     document.addEventListener("keyup", (event) => {
       const button = KEY_MAP[event.code];

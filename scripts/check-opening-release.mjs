@@ -65,6 +65,17 @@ for(const [engine,type]of[['chromium',chromium],['webkit',webkit]]){
    await page.keyboard.press('ArrowDown');await page.waitForTimeout(100);assert.notDeepEqual(await first(page),[244,211,74,255],'game input not restored');
    assert.deepEqual(errors,[]);proof.routes.push({route:'keyboard',key,passed:true});await context.close();
   }
+  for(const key of ['Enter','Space','z','k']){
+   const {context,page,errors}=await open();await page.waitForFunction(()=>document.querySelector('#app').inert);
+   await page.keyboard.down(key);await closed(page);
+   await page.keyboard.down(key);await page.waitForTimeout(100);await closed(page);
+   await page.keyboard.up(key);
+   // After release, the next deliberate press still opens difficulty.
+   await page.keyboard.press(key);await page.waitForTimeout(100);
+   const border=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=240;c.height=180;const g=c.getContext('2d');g.imageSmoothingEnabled=false;g.drawImage(document.querySelector('#game-canvas'),0,0,240,180);return[...g.getImageData(26,46,1,1).data];});
+   assert.deepEqual(border,[244,211,74,255],'fresh confirmation after release was lost');
+   assert.deepEqual(errors,[]);proof.routes.push({route:'held-confirmation',key,passed:true});await context.close();
+  }
   for(const route of ['natural-end','tap','reduced-motion','seen','missing-video','autoplay-rejected','stalled-download']){
    const options=route==='natural-end'?{setup:()=>document.addEventListener('ended',e=>{window.__openingEnded={at:e.target.currentTime,duration:e.target.duration};},true)}:route==='reduced-motion'?{motion:'reduce'}:route==='seen'?{setup:()=>sessionStorage.setItem('politicmon-intro-seen','1')}:route==='missing-video'?{route:r=>r.fulfill({status:404,body:''})}:route==='stalled-download'?{route:()=>{}}:route==='autoplay-rejected'?{setup:()=>{HTMLMediaElement.prototype.play=()=>Promise.reject(new Error('simulated autoplay refusal'));}}:{};
    const {context,page,errors,requests}=await open(options);

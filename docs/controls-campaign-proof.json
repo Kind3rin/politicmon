@@ -1,0 +1,4750 @@
+{
+  "date": "2026-10-02",
+  "sourceParent": "bc757865a5aeb52ecff296588ba78c4e5e71775e",
+  "runtimeChange": "Ignore keydown autorepeat after modal/reset until physical release; continuous holds and native text input retained.",
+  "physicalDevice": false,
+  "campaignEngine": "Source game classes, real Input commands, fixed virtual dt=0.1; no injected resources, outcomes or flags; fresh Title/difficulty/slot/nickname UI. Milestone labels named earned-resume do not restart these fresh runs.",
+  "runtimeSources": [
+    {
+      "path": "src/engine/input.ts",
+      "bytes": 10981,
+      "sha256": "647b58edfa142cc3801271cb1f288fd8eef74b4ef930b74966180e94a809d5c0"
+    }
+  ],
+  "openingCases": 46,
+  "layoutCases": 20,
+  "rotations": 6,
+  "compiledBase": "http://127.0.0.1:4184/",
+  "bundle": {
+    "base": "http://127.0.0.1:4184/",
+    "sizes": [
+      {
+        "url": "http://127.0.0.1:4184/",
+        "bytes": 2122
+      },
+      {
+        "url": "http://127.0.0.1:4184/sw.js",
+        "bytes": 888
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/index-CZjeEZTI.js",
+        "bytes": 182655
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/index-M61wk0N5.css",
+        "bytes": 2996
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/WorldScene-GiDMPr7h.js",
+        "bytes": 169609
+      }
+    ],
+    "total": 358270,
+    "budget": 358400,
+    "margin": 130
+  },
+  "checks": [
+    {
+      "path": "artifacts/reports/opening-release.json",
+      "bytes": 16129,
+      "sha256": "9ede96b2ed06f2078d55668f440b0847bf3a92363b2136cb695fb56b7f727eab"
+    },
+    {
+      "path": "artifacts/reports/mobile-controls.json",
+      "bytes": 8142,
+      "sha256": "db779809c054c3b2befc4f13a6886aca51850254e1b44062ab0041b963319b9f"
+    },
+    {
+      "path": "artifacts/reports/mobile-layout.json",
+      "bytes": 87720,
+      "sha256": "cd2e542b57bbe903eb291b50a42e9613e9f65b64fc134f94d5e25036b4e73ca6"
+    }
+  ],
+  "logs": [
+    {
+      "path": "/tmp/politicmon-controls-campaign-tests.log",
+      "bytes": 66534,
+      "sha256": "b137037eb2de179ce92f81e4599d67ccd0f7af53f6ea45de319753dc5a58016f"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-content.log",
+      "bytes": 179,
+      "sha256": "4dc450b44b3757e86fbffd333a1a8daccb4e9aa569690e3c8153e077b1a8d1ad"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-opening.log",
+      "bytes": 1004,
+      "sha256": "8916738072f9a69866e5c91216657105bd03fe42498280843766c54820fa0606"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-mobile.log",
+      "bytes": 220,
+      "sha256": "0a9a3285bff62e0e0d0fd9c6dc0469e40f70d853e7d8f65fc9fbaeb7f1050b76"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-layout.log",
+      "bytes": 940,
+      "sha256": "e70604eeac29ab5831cefd40ec5a160ba7359a20bef937f176a3ee6777fefa10"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-pwa-4184.log",
+      "bytes": 624,
+      "sha256": "5869a257ca467ed3924f16c307e9c6e090984443ac42ff066f57a2c7e1411e5b"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-bundle.log",
+      "bytes": 91,
+      "sha256": "4752d29f1ce6f4cbac44bc4cb4f10662e27754d3845922e677ee19157d4252c5"
+    },
+    {
+      "path": "/tmp/politicmon-controls-campaign-input-contracts.log",
+      "bytes": 2147,
+      "sha256": "ee8f3e13073992ddb501d638e5d1a519317a194bcb0e3e26d20909a359ce13c0"
+    }
+  ],
+  "campaigns": [
+    {
+      "path": "artifacts/campaign-native/continuity-normal-giorgetta-prepared-20261003.json",
+      "bytes": 115175,
+      "sha256": "4fd9452695961bd41f72e8bd727bc5eb1744cc28b09131d697e5b280879a0840",
+      "starter": "giorgetta",
+      "seed": 20261003,
+      "endAt": "auditel",
+      "initialFlow": [
+        "title",
+        "difficulty:normal",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": false,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": null,
+      "final": {
+        "hardMode": false,
+        "map": "gymtv",
+        "money": 3475,
+        "badges": [
+          "auditel"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "legend-berlusconix-ready": true
+        },
+        "morale": {
+          "trust": 50,
+          "cohesion": 60,
+          "progress": 5,
+          "promises": [],
+          "decisions": [],
+          "history": []
+        },
+        "coalition": {
+          "members": [],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "inactive",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "aide",
+          "journalist",
+          "stagista",
+          "emittenza"
+        ],
+        "party": [
+          {
+            "id": "giorgetta",
+            "level": 15,
+            "hp": 6,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "radici",
+                "pp": 25
+              },
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "giravolta",
+                "pp": 19
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "grillix",
+            "level": 8,
+            "hp": 0,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "monopattino",
+                "pp": 28
+              }
+            ]
+          },
+          {
+            "id": "salvinott",
+            "level": 10,
+            "hp": 39,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "slogan",
+                "pp": 30
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 12,
+          "maalox": 1,
+          "spritz": 0,
+          "divisa": 1,
+          "dirBunga": 1
+        },
+        "runStats": {
+          "playSeconds": 434.9000000000304,
+          "steps": 362,
+          "battles": 10,
+          "wins": 7,
+          "losses": 1,
+          "captures": 2,
+          "runs": 0,
+          "partyKOs": 5,
+          "healingItemsUsed": 9,
+          "healerVisits": 7,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-hard-renzino-prepared-20261004.json",
+      "bytes": 130405,
+      "sha256": "fa29f235aeda940e06ddfb7cbdc6c31f9e3d3c56a8f7f839407f4393f08f6548",
+      "starter": "renzino",
+      "seed": 20261004,
+      "endAt": "auditel",
+      "initialFlow": [
+        "title",
+        "difficulty:hard",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": true,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": null,
+      "final": {
+        "hardMode": true,
+        "map": "mediopoli",
+        "money": 540,
+        "badges": [],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true
+        },
+        "morale": {
+          "trust": 50,
+          "cohesion": 60,
+          "progress": 1,
+          "promises": [],
+          "decisions": [],
+          "history": []
+        },
+        "coalition": {
+          "members": [],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "inactive",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1"
+        ],
+        "party": [
+          {
+            "id": "renzino",
+            "level": 11,
+            "hp": 41,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "inciucio",
+                "pp": 15
+              },
+              {
+                "id": "terzopolo",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "contemorfo",
+            "level": 9,
+            "hp": 39,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "pochette",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "grillix",
+            "level": 12,
+            "hp": 45,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "monopattino",
+                "pp": 30
+              },
+              {
+                "id": "slogan",
+                "pp": 30
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 12,
+          "maalox": 1,
+          "divisa": 1
+        },
+        "runStats": {
+          "playSeconds": 524.9000000000508,
+          "steps": 447,
+          "battles": 12,
+          "wins": 5,
+          "losses": 5,
+          "captures": 2,
+          "runs": 0,
+          "partyKOs": 11,
+          "healingItemsUsed": 6,
+          "healerVisits": 9,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result-2",
+        "studio-result"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-hard-trained-renzino-prepared-20261004.json",
+      "bytes": 157263,
+      "sha256": "9877a9c5d84301c44ad2405fd8e680bff0edf9ace4f8f0b40f35d49df607e66c",
+      "starter": "renzino",
+      "seed": 20261004,
+      "endAt": "auditel",
+      "initialFlow": [
+        "title",
+        "difficulty:hard",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": true,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": null,
+      "final": {
+        "hardMode": true,
+        "map": "gymtv",
+        "money": 3119,
+        "badges": [
+          "auditel"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "legend-berlusconix-ready": true
+        },
+        "morale": {
+          "trust": 50,
+          "cohesion": 60,
+          "progress": 3,
+          "promises": [],
+          "decisions": [],
+          "history": []
+        },
+        "coalition": {
+          "members": [],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "inactive",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "stagista",
+          "emittenza"
+        ],
+        "party": [
+          {
+            "id": "renzino",
+            "level": 15,
+            "hp": 0,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "inciucio",
+                "pp": 15
+              },
+              {
+                "id": "staisereno",
+                "pp": 7
+              }
+            ]
+          },
+          {
+            "id": "contemorfo",
+            "level": 11,
+            "hp": 0,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "pochette",
+                "pp": 15
+              },
+              {
+                "id": "inciucio",
+                "pp": 13
+              }
+            ]
+          },
+          {
+            "id": "grillix",
+            "level": 14,
+            "hp": 51,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "monopattino",
+                "pp": 29
+              },
+              {
+                "id": "slogan",
+                "pp": 30
+              },
+              {
+                "id": "greenwashing",
+                "pp": 20
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 12,
+          "maalox": 1,
+          "divisa": 1,
+          "dirBunga": 1
+        },
+        "runStats": {
+          "playSeconds": 619.8000000000724,
+          "steps": 634,
+          "battles": 19,
+          "wins": 15,
+          "losses": 2,
+          "captures": 2,
+          "runs": 0,
+          "partyKOs": 5,
+          "healingItemsUsed": 6,
+          "healerVisits": 10,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-normal-full-giorgetta-prepared-20261003.json",
+      "bytes": 1864890,
+      "sha256": "878c431ada103fcb3341067af3668b0293474a5806bb7b593d5143c7a200a6a6",
+      "starter": "giorgetta",
+      "seed": 20261003,
+      "endAt": "election",
+      "initialFlow": [
+        "title",
+        "difficulty:normal",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": false,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": "Scene did not settle DistrictScene",
+      "final": {
+        "hardMode": false,
+        "map": "district_isole",
+        "money": 55196,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "ach:plebiscito": true,
+          "crisi-governo-1": true,
+          "ach:tycoon": true,
+          "hint-casino": true,
+          "ach:collector": true,
+          "ach:three-badges": true,
+          "tm-hint": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "boss-beaten": true,
+          "garante-beaten": true,
+          "crisi-gov-day:2026-10-02": true,
+          "hint-offshore": true,
+          "hint-brux-arrivo": true,
+          "ue-beaten": true,
+          "atto3-invited": true,
+          "atto3Started": true,
+          "coalition-candidate-seen:campo_secretary": true,
+          "coalition-candidate-seen:quantum_centrist": true,
+          "coalition-candidate-seen:civic_mayor": true,
+          "atto3-photo-choice:stringetevi": true,
+          "campo-photo-choice-complete": true,
+          "campo-debate-resolved": true,
+          "campo-photo-complete": true,
+          "coalition-menu-unlocked": true,
+          "cornice-impossibile": true,
+          "feed-dossier-1": true,
+          "future-chapter-unlocked": true,
+          "future-badge-received": true,
+          "future-split-reviewed": true,
+          "future-brand-reviewed": true,
+          "future-lever-a-on": true,
+          "future-lever-b-on": true,
+          "future-shortcut-open": true,
+          "future-choice-complete": true,
+          "a3.future.distance": true,
+          "futuro-anteriore-beaten": true,
+          "futureResolved": true,
+          "futurorso-branch-unlocked": true,
+          "feed-dossier-nord": true,
+          "diplomacy-checked-in": true,
+          "diplomacy-choice-complete": true,
+          "a3.diplomacy.autonomy": true,
+          "diplomacyComplete": true,
+          "temptation-diplomacy-beaten": true,
+          "tour-feed-unlocked": true,
+          "diplomacy-clip-viral": true,
+          "district-complete:nord": true,
+          "district-dossier:nord": true,
+          "district-complete:centro": true,
+          "district-dossier:centro": true,
+          "district-complete:sud": true,
+          "district-dossier:sud": true
+        },
+        "morale": {
+          "trust": 52,
+          "cohesion": 54,
+          "progress": 37,
+          "promises": [
+            {
+              "id": "traghetto",
+              "status": "broken",
+              "dueAt": 16
+            }
+          ],
+          "decisions": [
+            "traghetto",
+            "traghetto:pledge"
+          ],
+          "history": [
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "IL PLASTICO GALLEGGIA",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: MOLO ACCESSIBILE",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "PROMESSA: PATTI DISATTESI",
+              "trust": 0,
+              "cohesion": -8
+            },
+            {
+              "label": "PROMESSA: PATTI DISATTESI",
+              "trust": 0,
+              "cohesion": -8
+            }
+          ]
+        },
+        "coalition": {
+          "members": [
+            {
+              "allyId": "campo_secretary",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            },
+            {
+              "allyId": "quantum_centrist",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            }
+          ],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "tour",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 51,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "prudent",
+                  "baseDelta": 4,
+                  "appliedDelta": 4
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "centro",
+              "localConsensus": 60,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "sud",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "isole",
+              "localConsensus": 46,
+              "actionMask": 1,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                }
+              ],
+              "revision": 1
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 7,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "aide",
+          "journalist",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3",
+          "garante",
+          "commercialista",
+          "prestanome",
+          "eu-relatore",
+          "eu-eurodeputato",
+          "eu-commissario",
+          "eu-lobby",
+          "commissione",
+          "campo-debate",
+          "campo-photographer",
+          "futuro-anteriore",
+          "partner-perfetto",
+          "district-nord",
+          "district-centro",
+          "district-sud",
+          "district-isole"
+        ],
+        "party": [
+          {
+            "id": "telecrate",
+            "level": 49,
+            "hp": 123,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "bunga",
+                "pp": 3
+              },
+              {
+                "id": "giravolta",
+                "pp": 20
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              },
+              {
+                "id": "editoriale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "campocorno",
+            "level": 51,
+            "hp": 199,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "direttiva",
+                "pp": 20
+              },
+              {
+                "id": "raccoltadifferenziata",
+                "pp": 20
+              },
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "concertone",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 55,
+            "hp": 170,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "gazzetta",
+                "pp": 15
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "greenwashing",
+                "pp": 18
+              }
+            ]
+          },
+          {
+            "id": "calendrone",
+            "level": 49,
+            "hp": 174,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "editoriale",
+                "pp": 10
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "dossier",
+                "pp": 15
+              },
+              {
+                "id": "spread",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "giorgiagon",
+            "level": 49,
+            "hp": 174,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "mondocontrario",
+                "pp": 10
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "putingrad",
+            "level": 52,
+            "hp": 206,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "tavololungo",
+                "pp": 10
+              },
+              {
+                "id": "gasdotto",
+                "pp": 10
+              },
+              {
+                "id": "dossier",
+                "pp": 15
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 3,
+          "maalox": 6,
+          "divisa": 1,
+          "dirBunga": 1,
+          "spritz": 0,
+          "schedona": 5,
+          "mojito": 0,
+          "tessera": 3,
+          "dirWhatever": 1,
+          "tessera_futuro": 1
+        },
+        "runStats": {
+          "playSeconds": 5368.200000001998,
+          "steps": 2932,
+          "battles": 60,
+          "wins": 51,
+          "losses": 4,
+          "captures": 5,
+          "runs": 0,
+          "partyKOs": 42,
+          "healingItemsUsed": 79,
+          "healerVisits": 70,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "civic-bus",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result",
+        "route2-recruitment",
+        "route2-confront",
+        "eurotown",
+        "spread-check",
+        "spread-result-1",
+        "spread-result",
+        "route3-audit",
+        "capitale",
+        "global-diplomatico",
+        "global-oligarca",
+        "dazio-result-1",
+        "dazio-result-2",
+        "dazio-result",
+        "stretto-arrival",
+        "stretto-capitano-1",
+        "stretto-geometra",
+        "stretto-djpapeete",
+        "stretto-citofonista",
+        "stretto-noponte",
+        "stretto-prepared",
+        "palazzo-result-1",
+        "colle",
+        "colle-giudice1",
+        "colle-giudice2",
+        "colle-giudice3",
+        "garante-supplies",
+        "garante-result-1",
+        "garante-result-2",
+        "earned-resume",
+        "offshore-arrival",
+        "offshore-recruitment",
+        "offshore-commercialista-1",
+        "offshore-prestanome-1",
+        "tesoriere-result-1",
+        "tesoriere-result-2",
+        "earned-brux-resume",
+        "bruxelles-arrival",
+        "brux-eu-relatore-1",
+        "brux-eu-eurodeputato-1",
+        "brux-eu-commissario-1",
+        "brux-eu-lobby-1",
+        "commissione-result-1",
+        "earned-campo-resume",
+        "campo-arrival",
+        "campo-retropalco",
+        "campo-recruitment",
+        "campo-photo-choice",
+        "campo-debate-1",
+        "campo-photographer-1",
+        "future-earned-resume",
+        "future-arrival",
+        "future-hq",
+        "futuro_scissione",
+        "futuro_rebrand",
+        "futuro_tesoreria",
+        "future-manifests",
+        "future-choice",
+        "future-boss-1",
+        "future-verbale",
+        "future-diplomacy",
+        "diplomacy-earned-resume",
+        "diplomacy-arrival",
+        "diplomacy_loyalty",
+        "diplomacy_autonomy",
+        "diplomacy_home",
+        "diplomacy-choice",
+        "diplomacy-boss-1",
+        "diplomacy-verbale",
+        "diplomacy-tour",
+        "tour-earned-resume",
+        "tour-nord-arrival",
+        "tour-nord-debate",
+        "tour-nord-closed",
+        "tour-centro-arrival",
+        "tour-centro-debate",
+        "tour-centro-closed",
+        "tour-sud-arrival",
+        "tour-sud-debate",
+        "tour-sud-closed",
+        "tour-isole-arrival",
+        "tour-isole-debate"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win"
+        },
+        {
+          "trainer": "commercialista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "prestanome",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "eu-relatore",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-eurodeputato",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-commissario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-lobby",
+          "outcome": "win"
+        },
+        {
+          "trainer": "commissione",
+          "outcome": "win"
+        },
+        {
+          "trainer": "campo-debate",
+          "outcome": "win"
+        },
+        {
+          "trainer": "campo-photographer",
+          "outcome": "win"
+        },
+        {
+          "trainer": "futuro-anteriore",
+          "outcome": "win"
+        },
+        {
+          "trainer": "partner-perfetto",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-nord",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-centro",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-sud",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-isole",
+          "outcome": "win"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-hard-full-renzino-prepared-20261004.json",
+      "bytes": 418584,
+      "sha256": "9e7e5446bf37a4ba8c501978a1d436be45e5b9abdd985568b963d683eff1d297",
+      "starter": "renzino",
+      "seed": 20261004,
+      "endAt": "election",
+      "initialFlow": [
+        "title",
+        "difficulty:hard",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": true,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": "Future requires earned Campo save",
+      "final": {
+        "hardMode": true,
+        "map": "capitale",
+        "money": 8279,
+        "badges": [
+          "auditel",
+          "spread"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "ach:plebiscito": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "crisi-governo-1": true,
+          "hint-casino": true,
+          "ach:collector": true
+        },
+        "morale": {
+          "trust": 46,
+          "cohesion": 62,
+          "progress": 9,
+          "promises": [
+            {
+              "id": "bus",
+              "status": "broken",
+              "dueAt": 4
+            }
+          ],
+          "decisions": [
+            "bus",
+            "bus:pledge"
+          ],
+          "history": [
+            {
+              "label": "IL BUS NELLA FOTO",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: CORSA DEL BORGO",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            }
+          ]
+        },
+        "coalition": {
+          "members": [],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "inactive",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca"
+        ],
+        "party": [
+          {
+            "id": "bojoon",
+            "level": 25,
+            "hp": 95,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "brexit",
+                "pp": 5
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "renzilla",
+            "level": 23,
+            "hp": 85,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "rottamazione",
+                "pp": 10
+              },
+              {
+                "id": "inciucio",
+                "pp": 15
+              },
+              {
+                "id": "staisereno",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "grillix",
+            "level": 20,
+            "hp": 67,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "monopattino",
+                "pp": 30
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "greenwashing",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "salvinator",
+            "level": 20,
+            "hp": 79,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "slogan",
+                "pp": 30
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              },
+              {
+                "id": "ruspa",
+                "pp": 15
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 10,
+          "maalox": 1,
+          "divisa": 1,
+          "spritz": 0,
+          "dirBunga": 1,
+          "schedona": 3
+        },
+        "runStats": {
+          "playSeconds": 1233.5999999999735,
+          "steps": 1143,
+          "battles": 34,
+          "wins": 26,
+          "losses": 5,
+          "captures": 3,
+          "runs": 0,
+          "partyKOs": 21,
+          "healingItemsUsed": 8,
+          "healerVisits": 19,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "civic-bus",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result-2",
+        "studio-result",
+        "route2-recruitment",
+        "route2-confront",
+        "eurotown",
+        "spread-check",
+        "spread-result-1",
+        "spread-result",
+        "route3-audit",
+        "capitale",
+        "global-diplomatico",
+        "global-oligarca",
+        "dazio-result-1",
+        "dazio-result-2",
+        "dazio-result"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-hard-supplies-renzino-prepared-20261004.json",
+      "bytes": 705908,
+      "sha256": "f99d9d9ddf296fa68494ac02411c39d2a3e114afb4226eef127c1b6b7674b238",
+      "starter": "renzino",
+      "seed": 20261004,
+      "endAt": "election",
+      "initialFlow": [
+        "title",
+        "difficulty:hard",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": true,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": "Future requires earned Campo save",
+      "final": {
+        "hardMode": true,
+        "map": "capitale",
+        "money": 23409,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "ach:plebiscito": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "crisi-governo-1": true,
+          "hint-casino": true,
+          "ach:collector": true,
+          "tm-hint": true,
+          "ach:three-badges": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "ach:tycoon": true,
+          "gift-ingegnere": true,
+          "boss-beaten": true
+        },
+        "morale": {
+          "trust": 36,
+          "cohesion": 56,
+          "progress": 19,
+          "promises": [
+            {
+              "id": "bus",
+              "status": "broken",
+              "dueAt": 4
+            },
+            {
+              "id": "traghetto",
+              "status": "broken",
+              "dueAt": 14
+            }
+          ],
+          "decisions": [
+            "bus",
+            "bus:pledge",
+            "traghetto",
+            "traghetto:pledge"
+          ],
+          "history": [
+            {
+              "label": "IL BUS NELLA FOTO",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: CORSA DEL BORGO",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "IL PLASTICO GALLEGGIA",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: MOLO ACCESSIBILE",
+              "trust": -12,
+              "cohesion": -6
+            }
+          ]
+        },
+        "coalition": {
+          "members": [],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "inactive",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3"
+        ],
+        "party": [
+          {
+            "id": "capitanone",
+            "level": 28,
+            "hp": 115,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "slogan",
+                "pp": 30
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              },
+              {
+                "id": "ruspa",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 30,
+            "hp": 117,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "monopattino",
+                "pp": 30
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "greenwashing",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "renzilla",
+            "level": 33,
+            "hp": 117,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "rottamazione",
+                "pp": 10
+              },
+              {
+                "id": "editoriale",
+                "pp": 10
+              },
+              {
+                "id": "staisereno",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "bojoon",
+            "level": 31,
+            "hp": 114,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "brexit",
+                "pp": 5
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 2,
+          "scheda": 10,
+          "maalox": 1,
+          "divisa": 1,
+          "spritz": 1,
+          "dirBunga": 1,
+          "schedona": 9,
+          "mojito": 6,
+          "tessera": 0
+        },
+        "runStats": {
+          "playSeconds": 1972.3999999993016,
+          "steps": 1680,
+          "battles": 45,
+          "wins": 36,
+          "losses": 6,
+          "captures": 3,
+          "runs": 0,
+          "partyKOs": 27,
+          "healingItemsUsed": 23,
+          "healerVisits": 34,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "civic-bus",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result-2",
+        "studio-result",
+        "route2-recruitment",
+        "route2-confront",
+        "eurotown",
+        "spread-check",
+        "spread-result-1",
+        "spread-result",
+        "route3-audit",
+        "capitale",
+        "global-diplomatico",
+        "global-oligarca",
+        "dazio-result-1",
+        "dazio-result-2",
+        "dazio-result",
+        "stretto-arrival",
+        "stretto-capitano-1",
+        "stretto-geometra",
+        "stretto-djpapeete",
+        "stretto-citofonista",
+        "stretto-noponte",
+        "stretto-prepared",
+        "palazzo-result-1",
+        "colle",
+        "colle-giudice1",
+        "colle-giudice2",
+        "colle-giudice3",
+        "garante-supplies",
+        "garante-result-1",
+        "garante-result-2"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-hard-equipped-renzino-prepared-20261004.json",
+      "bytes": 784990,
+      "sha256": "11d633f55d194bb2edbdfd9c3d47c2efb43062accbf13888d3250671527d3df3",
+      "starter": "renzino",
+      "seed": 20261004,
+      "endAt": "election",
+      "initialFlow": [
+        "title",
+        "difficulty:hard",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": true,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": "Future requires earned Campo save",
+      "final": {
+        "hardMode": true,
+        "map": "capitale",
+        "money": 7769,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "ach:plebiscito": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "crisi-governo-1": true,
+          "hint-casino": true,
+          "ach:collector": true,
+          "tm-hint": true,
+          "ach:three-badges": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "ach:tycoon": true,
+          "boss-beaten": true
+        },
+        "morale": {
+          "trust": 36,
+          "cohesion": 56,
+          "progress": 19,
+          "promises": [
+            {
+              "id": "bus",
+              "status": "broken",
+              "dueAt": 4
+            },
+            {
+              "id": "traghetto",
+              "status": "broken",
+              "dueAt": 14
+            }
+          ],
+          "decisions": [
+            "bus",
+            "bus:pledge",
+            "traghetto",
+            "traghetto:pledge"
+          ],
+          "history": [
+            {
+              "label": "IL BUS NELLA FOTO",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: CORSA DEL BORGO",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "IL PLASTICO GALLEGGIA",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: MOLO ACCESSIBILE",
+              "trust": -12,
+              "cohesion": -6
+            }
+          ]
+        },
+        "coalition": {
+          "members": [],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "inactive",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3"
+        ],
+        "party": [
+          {
+            "id": "capitanone",
+            "level": 30,
+            "hp": 123,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "blocconavale",
+                "pp": 10
+              },
+              {
+                "id": "slogan",
+                "pp": 30
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "ruspa",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "bojoon",
+            "level": 35,
+            "hp": 127,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "brexit",
+                "pp": 5
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 31,
+            "hp": 121,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "redditone",
+                "pp": 10
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "fiducia",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "renzilla",
+            "level": 35,
+            "hp": 123,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "inciucio",
+                "pp": 15
+              },
+              {
+                "id": "rottamazione",
+                "pp": 10
+              },
+              {
+                "id": "editoriale",
+                "pp": 10
+              },
+              {
+                "id": "staisereno",
+                "pp": 10
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 12,
+          "maalox": 1,
+          "divisa": 1,
+          "spritz": 0,
+          "dirBunga": 1,
+          "schedona": 9,
+          "mojito": 0,
+          "gilet": 0,
+          "tessera": 0
+        },
+        "runStats": {
+          "playSeconds": 2889.3999999984676,
+          "steps": 1847,
+          "battles": 49,
+          "wins": 38,
+          "losses": 8,
+          "captures": 3,
+          "runs": 0,
+          "partyKOs": 35,
+          "healingItemsUsed": 64,
+          "healerVisits": 39,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "civic-bus",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result-2",
+        "studio-result",
+        "route2-recruitment",
+        "route2-confront",
+        "eurotown",
+        "spread-check",
+        "spread-result-1",
+        "spread-result",
+        "route3-audit",
+        "capitale",
+        "global-diplomatico",
+        "global-oligarca",
+        "dazio-result-1",
+        "dazio-result-2",
+        "dazio-result",
+        "stretto-arrival",
+        "stretto-capitano-1",
+        "stretto-geometra",
+        "stretto-djpapeete",
+        "stretto-citofonista",
+        "stretto-noponte",
+        "stretto-prepared",
+        "palazzo-result-1",
+        "colle",
+        "colle-giudice1",
+        "colle-giudice2",
+        "colle-giudice3",
+        "garante-supplies",
+        "garante-result-1",
+        "garante-result-2",
+        "garante-result-3",
+        "garante-result-4"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        }
+      ]
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-normal-owned-ally-giorgetta-prepared-20261003.json",
+      "bytes": 2333643,
+      "sha256": "f1fb80be8faef40f37eb4e412aca1adf8f46c5433cfc2338e7989e155528867a",
+      "starter": "giorgetta",
+      "seed": 20261003,
+      "endAt": "election",
+      "initialFlow": [
+        "title",
+        "difficulty:normal",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": false,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": null,
+      "final": {
+        "hardMode": false,
+        "map": "palazzo_feed",
+        "money": 57400,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "ach:plebiscito": true,
+          "crisi-governo-1": true,
+          "ach:tycoon": true,
+          "hint-casino": true,
+          "ach:collector": true,
+          "ach:three-badges": true,
+          "tm-hint": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "boss-beaten": true,
+          "garante-beaten": true,
+          "crisi-gov-day:2026-10-02": true,
+          "hint-offshore": true,
+          "hint-brux-arrivo": true,
+          "ue-beaten": true,
+          "atto3-invited": true,
+          "atto3Started": true,
+          "coalition-candidate-seen:campo_secretary": true,
+          "coalition-candidate-seen:quantum_centrist": true,
+          "coalition-candidate-seen:civic_mayor": true,
+          "atto3-photo-choice:stringetevi": true,
+          "campo-photo-choice-complete": true,
+          "campo-debate-resolved": true,
+          "campo-photo-complete": true,
+          "coalition-menu-unlocked": true,
+          "cornice-impossibile": true,
+          "feed-dossier-1": true,
+          "future-chapter-unlocked": true,
+          "future-badge-received": true,
+          "future-split-reviewed": true,
+          "future-brand-reviewed": true,
+          "future-lever-a-on": true,
+          "future-lever-b-on": true,
+          "future-shortcut-open": true,
+          "future-choice-complete": true,
+          "a3.future.distance": true,
+          "futuro-anteriore-beaten": true,
+          "futureResolved": true,
+          "futurorso-branch-unlocked": true,
+          "feed-dossier-nord": true,
+          "diplomacy-checked-in": true,
+          "diplomacy-choice-complete": true,
+          "a3.diplomacy.autonomy": true,
+          "diplomacyComplete": true,
+          "temptation-diplomacy-beaten": true,
+          "tour-feed-unlocked": true,
+          "diplomacy-clip-viral": true,
+          "district-complete:nord": true,
+          "district-dossier:nord": true,
+          "district-complete:centro": true,
+          "district-dossier:centro": true,
+          "district-complete:sud": true,
+          "district-dossier:sud": true,
+          "district-complete:isole": true,
+          "district-dossier:isole": true,
+          "district-complete:feed": true,
+          "district-dossier:feed": true,
+          "tourComplete": true,
+          "palace:algoritmo:a": true,
+          "palace:algoritmo:b": true,
+          "palace-module:algoritmo": true,
+          "palace:factcheck:a": true,
+          "palace:factcheck:b": true,
+          "palace-module:factcheck": true,
+          "palace:talkshow:a": true,
+          "palace:talkshow:b": true,
+          "palace-module:talkshow": true,
+          "palace:silenzio:a": true,
+          "palace:silenzio:b": true,
+          "palace-module:silenzio": true,
+          "palaceRoomsComplete": true,
+          "election-snapshot-saved": true,
+          "election-night-complete": true,
+          "election-ending:government": true,
+          "atto3Complete": true,
+          "endingId:government_fractured": true,
+          "cosmetic-campanella-crisi": true,
+          "postgame-government": true
+        },
+        "morale": {
+          "trust": 52,
+          "cohesion": 54,
+          "progress": 38,
+          "promises": [
+            {
+              "id": "traghetto",
+              "status": "broken",
+              "dueAt": 16
+            }
+          ],
+          "decisions": [
+            "traghetto",
+            "traghetto:pledge"
+          ],
+          "history": [
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "IL PLASTICO GALLEGGIA",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: MOLO ACCESSIBILE",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "PROMESSA: PATTI DISATTESI",
+              "trust": 0,
+              "cohesion": -8
+            },
+            {
+              "label": "PROMESSA: PATTI DISATTESI",
+              "trust": 0,
+              "cohesion": -8
+            }
+          ]
+        },
+        "coalition": {
+          "members": [
+            {
+              "allyId": "campo_secretary",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            },
+            {
+              "allyId": "quantum_centrist",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            }
+          ],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "resolved",
+          "runId": "atto3-murf412c-10",
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 51,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "prudent",
+                  "baseDelta": 4,
+                  "appliedDelta": 4
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "centro",
+              "localConsensus": 60,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "sud",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "isole",
+              "localConsensus": 49,
+              "actionMask": 5,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "endorsement",
+                  "variant": "campo",
+                  "baseDelta": 3,
+                  "appliedDelta": 3,
+                  "allyId": "campo_secretary"
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "feed",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            }
+          ],
+          "endorsementDistrictByAlly": {
+            "campo_secretary": "isole"
+          },
+          "result": {
+            "bossWon": false,
+            "seats": 4,
+            "ending": "government",
+            "districts": [
+              {
+                "id": "nord",
+                "beforeRecount": 51,
+                "afterRecount": 51,
+                "seat": 1,
+                "recounted": false
+              },
+              {
+                "id": "centro",
+                "beforeRecount": 60,
+                "afterRecount": 60,
+                "seat": 1,
+                "recounted": false
+              },
+              {
+                "id": "sud",
+                "beforeRecount": 59,
+                "afterRecount": 59,
+                "seat": 1,
+                "recounted": false
+              },
+              {
+                "id": "isole",
+                "beforeRecount": 49,
+                "afterRecount": 49,
+                "seat": 0,
+                "recounted": false
+              },
+              {
+                "id": "feed",
+                "beforeRecount": 59,
+                "afterRecount": 59,
+                "seat": 1,
+                "recounted": false
+              }
+            ]
+          },
+          "snapshot": {
+            "schemaVersion": 1,
+            "runId": "atto3-murf412c-10",
+            "coalitionSnapshotId": "e22135d1ff025a594c7850eae7743510ece97685806e346fb21c93cf20c638c9",
+            "doctrine": "lista_civica",
+            "sondaggi": 100,
+            "districts": [
+              {
+                "id": "nord",
+                "localConsensus": 51,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 9
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "prudent",
+                    "baseDelta": 4,
+                    "appliedDelta": 4
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "centro",
+                "localConsensus": 60,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 9
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "risky",
+                    "baseDelta": 12,
+                    "appliedDelta": 13
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "sud",
+                "localConsensus": 59,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 8
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "risky",
+                    "baseDelta": 12,
+                    "appliedDelta": 13
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "isole",
+                "localConsensus": 49,
+                "actionMask": 5,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 8
+                  },
+                  {
+                    "action": "endorsement",
+                    "variant": "campo",
+                    "baseDelta": 3,
+                    "appliedDelta": 3,
+                    "allyId": "campo_secretary"
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "feed",
+                "localConsensus": 59,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 8
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "risky",
+                    "baseDelta": 12,
+                    "appliedDelta": 13
+                  }
+                ],
+                "revision": 2
+              }
+            ],
+            "coalition": {
+              "members": [
+                {
+                  "allyId": "campo_secretary",
+                  "status": "strained",
+                  "violationCount": 1,
+                  "reconciliationSpent": false
+                },
+                {
+                  "allyId": "quantum_centrist",
+                  "status": "strained",
+                  "violationCount": 1,
+                  "reconciliationSpent": false
+                }
+              ],
+              "locked": false,
+              "pendingConsequences": [],
+              "processedConsequences": []
+            },
+            "brokenDuringChapter": [],
+            "electionSnapshotId": "5b8f4e665c1510c6a1ed01fbdfeba4145ac02d691b37dfcf59a80b48f22048d8"
+          },
+          "revision": 12,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "aide",
+          "journalist",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3",
+          "garante",
+          "commercialista",
+          "prestanome",
+          "eu-relatore",
+          "eu-eurodeputato",
+          "eu-commissario",
+          "eu-lobby",
+          "commissione",
+          "campo-debate",
+          "campo-photographer",
+          "futuro-anteriore",
+          "partner-perfetto",
+          "district-nord",
+          "district-centro",
+          "district-sud",
+          "district-isole",
+          "district-feed"
+        ],
+        "party": [
+          {
+            "id": "calendrone",
+            "level": 51,
+            "hp": 181,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "editoriale",
+                "pp": 10
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "dossier",
+                "pp": 15
+              },
+              {
+                "id": "spread",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 55,
+            "hp": 204,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "gazzetta",
+                "pp": 15
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "greenwashing",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "telecrate",
+            "level": 50,
+            "hp": 187,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "bunga",
+                "pp": 5
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              },
+              {
+                "id": "editoriale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "campocorno",
+            "level": 53,
+            "hp": 206,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "direttiva",
+                "pp": 20
+              },
+              {
+                "id": "raccoltadifferenziata",
+                "pp": 20
+              },
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "concertone",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "giorgiagon",
+            "level": 50,
+            "hp": 178,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "mondocontrario",
+                "pp": 10
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "putingrad",
+            "level": 53,
+            "hp": 210,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "tavololungo",
+                "pp": 10
+              },
+              {
+                "id": "gasdotto",
+                "pp": 10
+              },
+              {
+                "id": "dossier",
+                "pp": 15
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 3,
+          "maalox": 6,
+          "divisa": 1,
+          "dirBunga": 1,
+          "spritz": 0,
+          "schedona": 7,
+          "mojito": 0,
+          "tessera": 3,
+          "dirWhatever": 1,
+          "tessera_futuro": 1
+        },
+        "runStats": {
+          "playSeconds": 4645.6999999993695,
+          "steps": 3234,
+          "battles": 62,
+          "wins": 52,
+          "losses": 5,
+          "captures": 5,
+          "runs": 0,
+          "partyKOs": 48,
+          "healingItemsUsed": 79,
+          "healerVisits": 72,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "civic-bus",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result",
+        "route2-recruitment",
+        "route2-confront",
+        "eurotown",
+        "spread-check",
+        "spread-result-1",
+        "spread-result",
+        "route3-audit",
+        "capitale",
+        "global-diplomatico",
+        "global-oligarca",
+        "dazio-result-1",
+        "dazio-result-2",
+        "dazio-result",
+        "stretto-arrival",
+        "stretto-capitano-1",
+        "stretto-geometra",
+        "stretto-djpapeete",
+        "stretto-citofonista",
+        "stretto-noponte",
+        "stretto-prepared",
+        "palazzo-result-1",
+        "colle",
+        "colle-giudice1",
+        "colle-giudice2",
+        "colle-giudice3",
+        "garante-supplies",
+        "garante-result-1",
+        "garante-result-2",
+        "earned-resume",
+        "offshore-arrival",
+        "offshore-recruitment",
+        "offshore-commercialista-1",
+        "offshore-prestanome-1",
+        "tesoriere-result-1",
+        "tesoriere-result-2",
+        "earned-brux-resume",
+        "bruxelles-arrival",
+        "brux-eu-relatore-1",
+        "brux-eu-eurodeputato-1",
+        "brux-eu-commissario-1",
+        "brux-eu-lobby-1",
+        "commissione-result-1",
+        "earned-campo-resume",
+        "campo-arrival",
+        "campo-retropalco",
+        "campo-recruitment",
+        "campo-photo-choice",
+        "campo-debate-1",
+        "campo-photographer-1",
+        "future-earned-resume",
+        "future-arrival",
+        "future-hq",
+        "futuro_scissione",
+        "futuro_rebrand",
+        "futuro_tesoreria",
+        "future-manifests",
+        "future-choice",
+        "future-boss-1",
+        "future-verbale",
+        "future-diplomacy",
+        "diplomacy-earned-resume",
+        "diplomacy-arrival",
+        "diplomacy_loyalty",
+        "diplomacy_autonomy",
+        "diplomacy_home",
+        "diplomacy-choice",
+        "diplomacy-boss-1",
+        "diplomacy-verbale",
+        "diplomacy-tour",
+        "tour-earned-resume",
+        "tour-nord-arrival",
+        "tour-nord-debate",
+        "tour-nord-closed",
+        "tour-centro-arrival",
+        "tour-centro-debate",
+        "tour-centro-closed",
+        "tour-sud-arrival",
+        "tour-sud-debate",
+        "tour-sud-closed",
+        "tour-isole-arrival",
+        "tour-isole-debate",
+        "tour-isole-closed",
+        "tour-feed-arrival",
+        "tour-feed-debate",
+        "tour-feed-closed",
+        "tour-five-dossiers",
+        "tour-palazzo",
+        "palace-earned-resume",
+        "palazzo_algoritmo-read",
+        "palazzo_algoritmo-verified",
+        "palazzo_factcheck-read",
+        "palazzo_factcheck-verified",
+        "palazzo_talkshow-read",
+        "palazzo_talkshow-verified",
+        "palazzo_silenzio-read",
+        "palazzo_silenzio-verified",
+        "palace-four-verdicts",
+        "palace-studio",
+        "election-earned-ending",
+        "election-reopened-world"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win"
+        },
+        {
+          "trainer": "commercialista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "prestanome",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "eu-relatore",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-eurodeputato",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-commissario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-lobby",
+          "outcome": "win"
+        },
+        {
+          "trainer": "commissione",
+          "outcome": "win"
+        },
+        {
+          "trainer": "campo-debate",
+          "outcome": "win"
+        },
+        {
+          "trainer": "campo-photographer",
+          "outcome": "win"
+        },
+        {
+          "trainer": "futuro-anteriore",
+          "outcome": "win"
+        },
+        {
+          "trainer": "partner-perfetto",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-nord",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-centro",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-sud",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-isole",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-feed",
+          "outcome": "win"
+        },
+        {
+          "trainer": "algoritmo-sovrano",
+          "outcome": "loss"
+        }
+      ],
+      "earnedEndingCode": "JTdCJTIycGFydHklMjIlM0ElNUIlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjNpeG02JTIyJTJDJTIyc3BlY2llc0lkJTIyJTNBJTIyY2FsZW5kcm9uZSUyMiUyQyUyMmxldmVsJTIyJTNBNTElMkMlMjJleHAlMjIlM0ExMzMzMjMlMkMlMjJocCUyMiUzQTE4MSUyQyUyMnN0YXR1cyUyMiUzQW51bGwlMkMlMjJtb3ZlcyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIyZWRpdG9yaWFsZSUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmdpcmF2b2x0YSUyMiUyQyUyMnBwJTIyJTNBMjUlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmRvc3NpZXIlMjIlMkMlMjJwcCUyMiUzQTE1JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJzcHJlYWQlMjIlMkMlMjJwcCUyMiUzQTE1JTdEJTVEJTdEJTJDJTdCJTIydWlkJTIyJTNBJTIybW11cmYzaXl1NyUyMiUyQyUyMnNwZWNpZXNJZCUyMiUzQSUyMm1vdmltZW50b24lMjIlMkMlMjJsZXZlbCUyMiUzQTU1JTJDJTIyZXhwJTIyJTNBMTY0OTMxJTJDJTIyaHAlMjIlM0EyMDQlMkMlMjJzdGF0dXMlMjIlM0FudWxsJTJDJTIybW92ZXMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMmRlY3JldG8lMjIlMkMlMjJwcCUyMiUzQTIwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJnYXp6ZXR0YSUyMiUyQyUyMnBwJTIyJTNBMTUlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnZhZmZhJTIyJTJDJTIycHAlMjIlM0ExMCU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyZ3JlZW53YXNoaW5nJTIyJTJDJTIycHAlMjIlM0EyMCU3RCU1RCU3RCUyQyU3QiUyMnVpZCUyMiUzQSUyMm1tdXJmM2p1aDEzJTIyJTJDJTIyc3BlY2llc0lkJTIyJTNBJTIydGVsZWNyYXRlJTIyJTJDJTIybGV2ZWwlMjIlM0E1MCUyQyUyMmV4cCUyMiUzQTEyNzU4NyUyQyUyMmhwJTIyJTNBMTg3JTJDJTIyc3RhdHVzJTIyJTNBbnVsbCUyQyUyMm1vdmVzJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJidW5nYSUyMiUyQyUyMnBwJTIyJTNBNSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyZ2lyYXZvbHRhJTIyJTJDJTIycHAlMjIlM0EyNSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyY29uZmVyZW56YSUyMiUyQyUyMnBwJTIyJTNBMjAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmVkaXRvcmlhbGUlMjIlMkMlMjJwcCUyMiUzQTEwJTdEJTVEJTdEJTJDJTdCJTIydWlkJTIyJTNBJTIybW11cmYzcnlwOTclMjIlMkMlMjJzcGVjaWVzSWQlMjIlM0ElMjJjYW1wb2Nvcm5vJTIyJTJDJTIybGV2ZWwlMjIlM0E1MyUyQyUyMmV4cCUyMiUzQTE1MDI1NSUyQyUyMmhwJTIyJTNBMjA2JTJDJTIyc3RhdHVzJTIyJTNBbnVsbCUyQyUyMm1vdmVzJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJkaXJldHRpdmElMjIlMkMlMjJwcCUyMiUzQTIwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJyYWNjb2x0YWRpZmZlcmVuemlhdGElMjIlMkMlMjJwcCUyMiUzQTIwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJhcnRpY29sb3VubyUyMiUyQyUyMnBwJTIyJTNBMTUlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmNvbmNlcnRvbmUlMjIlMkMlMjJwcCUyMiUzQTIwJTdEJTVEJTdEJTJDJTdCJTIydWlkJTIyJTNBJTIybW11cmYzaTZsMSUyMiUyQyUyMnNwZWNpZXNJZCUyMiUzQSUyMmdpb3JnaWFnb24lMjIlMkMlMjJsZXZlbCUyMiUzQTUwJTJDJTIyZXhwJTIyJTNBMTI5MjcyJTJDJTIyaHAlMjIlM0ExNzglMkMlMjJzdGF0dXMlMjIlM0FudWxsJTJDJTIybW92ZXMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMmRlY3JldG8lMjIlMkMlMjJwcCUyMiUzQTIwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJtb25kb2NvbnRyYXJpbyUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmdpcmF2b2x0YSUyMiUyQyUyMnBwJTIyJTNBMjUlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmJsb2Njb25hdmFsZSUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlNUQlN0QlMkMlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjNwMmY2MCUyMiUyQyUyMnNwZWNpZXNJZCUyMiUzQSUyMnB1dGluZ3JhZCUyMiUyQyUyMmxldmVsJTIyJTNBNTMlMkMlMjJleHAlMjIlM0ExNTMxNjklMkMlMjJocCUyMiUzQTIxMCUyQyUyMnN0YXR1cyUyMiUzQW51bGwlMkMlMjJtb3ZlcyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIydGF2b2xvbHVuZ28lMjIlMkMlMjJwcCUyMiUzQTEwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJnYXNkb3R0byUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmRvc3NpZXIlMjIlMkMlMjJwcCUyMiUzQTE1JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJibG9jY29uYXZhbGUlMjIlMkMlMjJwcCUyMiUzQTEwJTdEJTVEJTdEJTVEJTJDJTIyYmFnJTIyJTNBJTdCJTIyY2FmZmUlMjIlM0EwJTJDJTIyc2NoZWRhJTIyJTNBMyUyQyUyMm1hYWxveCUyMiUzQTYlMkMlMjJkaXZpc2ElMjIlM0ExJTJDJTIyZGlyQnVuZ2ElMjIlM0ExJTJDJTIyc3ByaXR6JTIyJTNBMCUyQyUyMnNjaGVkb25hJTIyJTNBNyUyQyUyMm1vaml0byUyMiUzQTAlMkMlMjJ0ZXNzZXJhJTIyJTNBMyUyQyUyMmRpcldoYXRldmVyJTIyJTNBMSUyQyUyMnRlc3NlcmFfZnV0dXJvJTIyJTNBMSU3RCUyQyUyMmRleCUyMiUzQSU3QiUyMmdpb3JnZXR0YSUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMnJlbnppbm8lMjIlM0ElMjJzZWVuJTIyJTJDJTIyc2Fsdmlub3R0JTIyJTNBJTIyc2VlbiUyMiUyQyUyMmdyaWxsaXglMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJ0YWphbmlkZSUyMiUzQSUyMnNlZW4lMjIlMkMlMjJjYWxlbmRhdXJvJTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIyY29udGVtb3JmbyUyMiUzQSUyMnNlZW4lMjIlMkMlMjJiZXJsdXNjb25peCUyMiUzQSUyMnNlZW4lMjIlMkMlMjJtZWRpb2NyYXRlJTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIybWFjcm9uZm94JTIyJTNBJTIyc2VlbiUyMiUyQyUyMnVyc3VsYXglMjIlM0ElMjJzZWVuJTIyJTJDJTIyZ2lvcmdpYWdvbiUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMnplbGVuc2tpciUyMiUzQSUyMnNlZW4lMjIlMkMlMjJtb3ZpbWVudG9uJTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIycHV0aW5ncmFkJTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIyY2FsZW5kcm9uZSUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMmJvam9vbiUyMiUzQSUyMnNlZW4lMjIlMkMlMjJtdXNrcmF0JTIyJTNBJTIyc2VlbiUyMiUyQyUyMnRydW1wb24lMjIlM0ElMjJzZWVuJTIyJTJDJTIydGVsZWNyYXRlJTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIyc2FsdmluYXRvciUyMiUzQSUyMnNlZW4lMjIlMkMlMjJ2YW5uYWNjaXglMjIlM0ElMjJzZWVuJTIyJTJDJTIyY2FwaXRhbm9uZSUyMiUzQSUyMnNlZW4lMjIlMkMlMjJ4aXBhbmRhJTIyJTNBJTIyc2VlbiUyMiUyQyUyMmdlbmVyb3JzbyUyMiUzQSUyMnNlZW4lMjIlMkMlMjJkcmFnaGltb24lMjIlM0ElMjJzZWVuJTIyJTJDJTIybWF0dGFyZWxsdXglMjIlM0ElMjJzZWVuJTIyJTJDJTIycG9udGltYXglMjIlM0ElMjJzZWVuJTIyJTJDJTIyY29udGVibG9iJTIyJTNBJTIyc2VlbiUyMiUyQyUyMmZyYXRvY29ybm8lMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJjYW1wb2Nvcm5vJTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIyZ2lhbmltYWdvJTIyJTNBJTIyc2VlbiUyMiUyQyUyMnNhbGlzdHJvYm8lMjIlM0ElMjJzZWVuJTIyJTJDJTIyZnV0dXJvcnNvJTIyJTNBJTIyc2VlbiUyMiUyQyUyMmNyb3NldHRhbmslMjIlM0ElMjJzZWVuJTIyJTJDJTIybm9yZGlvZG8lMjIlM0ElMjJzZWVuJTIyJTJDJTIycmVmZXJlbmRvZG8lMjIlM0ElMjJzZWVuJTIyJTJDJTIyc2FsaXNvdW5kJTIyJTNBJTIyc2VlbiUyMiU3RCUyQyUyMmZsYWdzJTIyJTNBJTdCJTIyaW50cm8tZG9uZSUyMiUzQXRydWUlMkMlMjJzdGFydGVyLWNob3NlbiUyMiUzQXRydWUlMkMlMjJyaXZhbDEtYmVhdGVuJTIyJTNBdHJ1ZSUyQyUyMmRleC1yZWNlaXZlZCUyMiUzQXRydWUlMkMlMjJhY2glM0FmaXJzdC1ibG9vZCUyMiUzQXRydWUlMkMlMjJnaWZ0LXRpcG9ncmFmbyUyMiUzQXRydWUlMkMlMjJoZWFsLWhpbnQlMjIlM0F0cnVlJTJDJTIyZ2lmdC1kaXZpc2ElMjIlM0F0cnVlJTJDJTIyYWNoJTNBZmlyc3QtY2F0Y2glMjIlM0F0cnVlJTJDJTIybGVnZW5kLWJlcmx1c2Nvbml4LXJlYWR5JTIyJTNBdHJ1ZSUyQyUyMmFjaCUzQWZpcnN0LWJhZGdlJTIyJTNBdHJ1ZSUyQyUyMmFjaCUzQXBsZWJpc2NpdG8lMjIlM0F0cnVlJTJDJTIyY3Jpc2ktZ292ZXJuby0xJTIyJTNBdHJ1ZSUyQyUyMmFjaCUzQXR5Y29vbiUyMiUzQXRydWUlMkMlMjJoaW50LWNhc2lubyUyMiUzQXRydWUlMkMlMjJhY2glM0Fjb2xsZWN0b3IlMjIlM0F0cnVlJTJDJTIyYWNoJTNBdGhyZWUtYmFkZ2VzJTIyJTNBdHJ1ZSUyQyUyMnRtLWhpbnQlMjIlM0F0cnVlJTJDJTIydmVoLXRyYWdoZXR0byUyMiUzQXRydWUlMkMlMjJwb250ZS1iZWF0ZW4lMjIlM0F0cnVlJTJDJTIyZ2lmdC1pbmdlZ25lcmUlMjIlM0F0cnVlJTJDJTIyYm9zcy1iZWF0ZW4lMjIlM0F0cnVlJTJDJTIyZ2FyYW50ZS1iZWF0ZW4lMjIlM0F0cnVlJTJDJTIyY3Jpc2ktZ292LWRheSUzQTIwMjYtMTAtMDIlMjIlM0F0cnVlJTJDJTIyaGludC1vZmZzaG9yZSUyMiUzQXRydWUlMkMlMjJoaW50LWJydXgtYXJyaXZvJTIyJTNBdHJ1ZSUyQyUyMnVlLWJlYXRlbiUyMiUzQXRydWUlMkMlMjJhdHRvMy1pbnZpdGVkJTIyJTNBdHJ1ZSUyQyUyMmF0dG8zU3RhcnRlZCUyMiUzQXRydWUlMkMlMjJjb2FsaXRpb24tY2FuZGlkYXRlLXNlZW4lM0FjYW1wb19zZWNyZXRhcnklMjIlM0F0cnVlJTJDJTIyY29hbGl0aW9uLWNhbmRpZGF0ZS1zZWVuJTNBcXVhbnR1bV9jZW50cmlzdCUyMiUzQXRydWUlMkMlMjJjb2FsaXRpb24tY2FuZGlkYXRlLXNlZW4lM0FjaXZpY19tYXlvciUyMiUzQXRydWUlMkMlMjJhdHRvMy1waG90by1jaG9pY2UlM0FzdHJpbmdldGV2aSUyMiUzQXRydWUlMkMlMjJjYW1wby1waG90by1jaG9pY2UtY29tcGxldGUlMjIlM0F0cnVlJTJDJTIyY2FtcG8tZGViYXRlLXJlc29sdmVkJTIyJTNBdHJ1ZSUyQyUyMmNhbXBvLXBob3RvLWNvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMmNvYWxpdGlvbi1tZW51LXVubG9ja2VkJTIyJTNBdHJ1ZSUyQyUyMmNvcm5pY2UtaW1wb3NzaWJpbGUlMjIlM0F0cnVlJTJDJTIyZmVlZC1kb3NzaWVyLTElMjIlM0F0cnVlJTJDJTIyZnV0dXJlLWNoYXB0ZXItdW5sb2NrZWQlMjIlM0F0cnVlJTJDJTIyZnV0dXJlLWJhZGdlLXJlY2VpdmVkJTIyJTNBdHJ1ZSUyQyUyMmZ1dHVyZS1zcGxpdC1yZXZpZXdlZCUyMiUzQXRydWUlMkMlMjJmdXR1cmUtYnJhbmQtcmV2aWV3ZWQlMjIlM0F0cnVlJTJDJTIyZnV0dXJlLWxldmVyLWEtb24lMjIlM0F0cnVlJTJDJTIyZnV0dXJlLWxldmVyLWItb24lMjIlM0F0cnVlJTJDJTIyZnV0dXJlLXNob3J0Y3V0LW9wZW4lMjIlM0F0cnVlJTJDJTIyZnV0dXJlLWNob2ljZS1jb21wbGV0ZSUyMiUzQXRydWUlMkMlMjJhMy5mdXR1cmUuZGlzdGFuY2UlMjIlM0F0cnVlJTJDJTIyZnV0dXJvLWFudGVyaW9yZS1iZWF0ZW4lMjIlM0F0cnVlJTJDJTIyZnV0dXJlUmVzb2x2ZWQlMjIlM0F0cnVlJTJDJTIyZnV0dXJvcnNvLWJyYW5jaC11bmxvY2tlZCUyMiUzQXRydWUlMkMlMjJmZWVkLWRvc3NpZXItbm9yZCUyMiUzQXRydWUlMkMlMjJkaXBsb21hY3ktY2hlY2tlZC1pbiUyMiUzQXRydWUlMkMlMjJkaXBsb21hY3ktY2hvaWNlLWNvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMmEzLmRpcGxvbWFjeS5hdXRvbm9teSUyMiUzQXRydWUlMkMlMjJkaXBsb21hY3lDb21wbGV0ZSUyMiUzQXRydWUlMkMlMjJ0ZW1wdGF0aW9uLWRpcGxvbWFjeS1iZWF0ZW4lMjIlM0F0cnVlJTJDJTIydG91ci1mZWVkLXVubG9ja2VkJTIyJTNBdHJ1ZSUyQyUyMmRpcGxvbWFjeS1jbGlwLXZpcmFsJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWNvbXBsZXRlJTNBbm9yZCUyMiUzQXRydWUlMkMlMjJkaXN0cmljdC1kb3NzaWVyJTNBbm9yZCUyMiUzQXRydWUlMkMlMjJkaXN0cmljdC1jb21wbGV0ZSUzQWNlbnRybyUyMiUzQXRydWUlMkMlMjJkaXN0cmljdC1kb3NzaWVyJTNBY2VudHJvJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWNvbXBsZXRlJTNBc3VkJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWRvc3NpZXIlM0FzdWQlMjIlM0F0cnVlJTJDJTIyZGlzdHJpY3QtY29tcGxldGUlM0Fpc29sZSUyMiUzQXRydWUlMkMlMjJkaXN0cmljdC1kb3NzaWVyJTNBaXNvbGUlMjIlM0F0cnVlJTJDJTIyZGlzdHJpY3QtY29tcGxldGUlM0FmZWVkJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWRvc3NpZXIlM0FmZWVkJTIyJTNBdHJ1ZSUyQyUyMnRvdXJDb21wbGV0ZSUyMiUzQXRydWUlMkMlMjJwYWxhY2UlM0FhbGdvcml0bW8lM0FhJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZSUzQWFsZ29yaXRtbyUzQWIlMjIlM0F0cnVlJTJDJTIycGFsYWNlLW1vZHVsZSUzQWFsZ29yaXRtbyUyMiUzQXRydWUlMkMlMjJwYWxhY2UlM0FmYWN0Y2hlY2slM0FhJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZSUzQWZhY3RjaGVjayUzQWIlMjIlM0F0cnVlJTJDJTIycGFsYWNlLW1vZHVsZSUzQWZhY3RjaGVjayUyMiUzQXRydWUlMkMlMjJwYWxhY2UlM0F0YWxrc2hvdyUzQWElMjIlM0F0cnVlJTJDJTIycGFsYWNlJTNBdGFsa3Nob3clM0FiJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZS1tb2R1bGUlM0F0YWxrc2hvdyUyMiUzQXRydWUlMkMlMjJwYWxhY2UlM0FzaWxlbnppbyUzQWElMjIlM0F0cnVlJTJDJTIycGFsYWNlJTNBc2lsZW56aW8lM0FiJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZS1tb2R1bGUlM0FzaWxlbnppbyUyMiUzQXRydWUlMkMlMjJwYWxhY2VSb29tc0NvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMmVsZWN0aW9uLXNuYXBzaG90LXNhdmVkJTIyJTNBdHJ1ZSUyQyUyMmVsZWN0aW9uLW5pZ2h0LWNvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMmVsZWN0aW9uLWVuZGluZyUzQWdvdmVybm1lbnQlMjIlM0F0cnVlJTJDJTIyYXR0bzNDb21wbGV0ZSUyMiUzQXRydWUlMkMlMjJlbmRpbmdJZCUzQWdvdmVybm1lbnRfZnJhY3R1cmVkJTIyJTNBdHJ1ZSUyQyUyMmNvc21ldGljLWNhbXBhbmVsbGEtY3Jpc2klMjIlM0F0cnVlJTJDJTIycG9zdGdhbWUtZ292ZXJubWVudCUyMiUzQXRydWUlN0QlMkMlMjJkZWZlYXRlZFRyYWluZXJzJTIyJTNBJTVCJTIycml2YWwxJTIyJTJDJTIyYWlkZSUyMiUyQyUyMmpvdXJuYWxpc3QlMjIlMkMlMjJzdGFnaXN0YSUyMiUyQyUyMmVtaXR0ZW56YSUyMiUyQyUyMnRlbGVsb2JiaXN0YSUyMiUyQyUyMmZ1bnppb25hcmlvJTIyJTJDJTIybGFkeWRpcmV0dGl2YSUyMiUyQyUyMnByb3RvY29sbGlzdGElMjIlMkMlMjJkaXBsb21hdGljbyUyMiUyQyUyMm9saWdhcmNhJTIyJTJDJTIydHljb29uJTIyJTJDJTIyaWxjYXBpdGFubyUyMiUyQyUyMmdlb21ldHJhJTIyJTJDJTIyZGpwYXBlZXRlJTIyJTJDJTIyY2l0b2ZvbmlzdGElMjIlMkMlMjJub3BvbnRlJTIyJTJDJTIyYm9zcyUyMiUyQyUyMmdpdWRpY2UxJTIyJTJDJTIyZ2l1ZGljZTIlMjIlMkMlMjJnaXVkaWNlMyUyMiUyQyUyMmdhcmFudGUlMjIlMkMlMjJjb21tZXJjaWFsaXN0YSUyMiUyQyUyMnByZXN0YW5vbWUlMjIlMkMlMjJldS1yZWxhdG9yZSUyMiUyQyUyMmV1LWV1cm9kZXB1dGF0byUyMiUyQyUyMmV1LWNvbW1pc3NhcmlvJTIyJTJDJTIyZXUtbG9iYnklMjIlMkMlMjJjb21taXNzaW9uZSUyMiUyQyUyMmNhbXBvLWRlYmF0ZSUyMiUyQyUyMmNhbXBvLXBob3RvZ3JhcGhlciUyMiUyQyUyMmZ1dHVyby1hbnRlcmlvcmUlMjIlMkMlMjJwYXJ0bmVyLXBlcmZldHRvJTIyJTJDJTIyZGlzdHJpY3Qtbm9yZCUyMiUyQyUyMmRpc3RyaWN0LWNlbnRybyUyMiUyQyUyMmRpc3RyaWN0LXN1ZCUyMiUyQyUyMmRpc3RyaWN0LWlzb2xlJTIyJTJDJTIyZGlzdHJpY3QtZmVlZCUyMiU1RCUyQyUyMnBpY2tlZEl0ZW1zJTIyJTNBJTVCJTIycGstb2ZmLWRpciUyMiU1RCUyQyUyMnBvcyUyMiUzQSU3QiUyMm1hcElkJTIyJTNBJTIycGFsYXp6b19mZWVkJTIyJTJDJTIyeCUyMiUzQTklMkMlMjJ5JTIyJTNBMiUyQyUyMmZhY2luZyUyMiUzQSUyMmRvd24lMjIlN0QlMkMlMjJzdGFydGVySWQlMjIlM0ElMjJnaW9yZ2V0dGElMjIlMkMlMjJtb25leSUyMiUzQTU3NDAwJTJDJTIyYmFkZ2VzJTIyJTNBJTVCJTIyYXVkaXRlbCUyMiUyQyUyMnNwcmVhZCUyMiUyQyUyMmRhemlvJTIyJTVEJTJDJTIyc29uZGFnZ2klMjIlM0E5NSUyQyUyMm1vcmFsZSUyMiUzQSU3QiUyMnRydXN0JTIyJTNBNTIlMkMlMjJjb2hlc2lvbiUyMiUzQTU0JTJDJTIycHJvZ3Jlc3MlMjIlM0EzOCUyQyUyMnByb21pc2VzJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJ0cmFnaGV0dG8lMjIlMkMlMjJzdGF0dXMlMjIlM0ElMjJicm9rZW4lMjIlMkMlMjJkdWVBdCUyMiUzQTE2JTdEJTVEJTJDJTIyZGVjaXNpb25zJTIyJTNBJTVCJTIydHJhZ2hldHRvJTIyJTJDJTIydHJhZ2hldHRvJTNBcGxlZGdlJTIyJTVEJTJDJTIyaGlzdG9yeSUyMiUzQSU1QiU3QiUyMmxhYmVsJTIyJTNBJTIyVkVSSUZJQ0ElMjBQVUJCTElDQSUyMiUyQyUyMnRydXN0JTIyJTNBNiUyQyUyMmNvaGVzaW9uJTIyJTNBOCU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIySUwlMjBQTEFTVElDTyUyMEdBTExFR0dJQSUyMiUyQyUyMnRydXN0JTIyJTNBMiUyQyUyMmNvaGVzaW9uJTIyJTNBMCU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIyU0NBRFVUQSUzQSUyME1PTE8lMjBBQ0NFU1NJQklMRSUyMiUyQyUyMnRydXN0JTIyJTNBLTEyJTJDJTIyY29oZXNpb24lMjIlM0EtNiU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIyVkVSSUZJQ0ElMjBQVUJCTElDQSUyMiUyQyUyMnRydXN0JTIyJTNBNiUyQyUyMmNvaGVzaW9uJTIyJTNBOCU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIyUFJPTUVTU0ElM0ElMjBQQVRUSSUyMERJU0FUVEVTSSUyMiUyQyUyMnRydXN0JTIyJTNBMCUyQyUyMmNvaGVzaW9uJTIyJTNBLTglN0QlMkMlN0IlMjJsYWJlbCUyMiUzQSUyMlBST01FU1NBJTNBJTIwUEFUVEklMjBESVNBVFRFU0klMjIlMkMlMjJ0cnVzdCUyMiUzQTAlMkMlMjJjb2hlc2lvbiUyMiUzQS04JTdEJTVEJTdEJTJDJTIybWluaXN0cmklMjIlM0ElN0IlN0QlMkMlMjJidWxsZG96ZWQlMjIlM0ElNUIlNUQlMkMlMjJ2ZWhpY2xlJTIyJTNBbnVsbCUyQyUyMnJpdmFsV2lucyUyMiUzQTElMkMlMjJjaGlwcyUyMiUzQTAlMkMlMjJib3hlZCUyMiUzQSU1QiU1RCUyQyUyMmxhc3RCYXIlMjIlM0ElMjJicnV4ZWxsZXMlMjIlMkMlMjJ6b25lUmV3YXJkc0NsYWltZWQlMjIlM0ElNUIlMjJtZWRpb3BvbGklMjIlNUQlMkMlMjJzdGVwc1RvdGFsJTIyJTNBMzIzNCUyQyUyMnRyYWluZXJSZW1hdGNoJTIyJTNBJTdCJTIycml2YWwxJTIyJTNBMTglMkMlMjJhaWRlJTIyJTNBNjUlMkMlMjJqb3VybmFsaXN0JTIyJTNBMTEyJTJDJTIyc3RhZ2lzdGElMjIlM0EzMjIlMkMlMjJlbWl0dGVuemElMjIlM0EzNTUlMkMlMjJ0ZWxlbG9iYmlzdGElMjIlM0E0NjclMkMlMjJmdW56aW9uYXJpbyUyMiUzQTUxMCUyQyUyMmxhZHlkaXJldHRpdmElMjIlM0E1NTIlMkMlMjJwcm90b2NvbGxpc3RhJTIyJTNBNjA0JTJDJTIyZGlwbG9tYXRpY28lMjIlM0E2NjklMkMlMjJvbGlnYXJjYSUyMiUzQTcyNCUyQyUyMnR5Y29vbiUyMiUzQTgxMyUyQyUyMmlsY2FwaXRhbm8lMjIlM0E4ODIlMkMlMjJnZW9tZXRyYSUyMiUzQTkwMCUyQyUyMmRqcGFwZWV0ZSUyMiUzQTkxNyUyQyUyMmNpdG9mb25pc3RhJTIyJTNBOTM5JTJDJTIybm9wb250ZSUyMiUzQTk2MiUyQyUyMmJvc3MlMjIlM0ExMDQ0JTJDJTIyZ2l1ZGljZTElMjIlM0ExMDg0JTJDJTIyZ2l1ZGljZTIlMjIlM0ExMTMyJTJDJTIyZ2l1ZGljZTMlMjIlM0ExMTg0JTJDJTIyZ2FyYW50ZSUyMiUzQTEzMTIlMkMlMjJjb21tZXJjaWFsaXN0YSUyMiUzQTE2NDglMkMlMjJwcmVzdGFub21lJTIyJTNBMTY4MiUyQyUyMmV1LXJlbGF0b3JlJTIyJTNBMTgwNyUyQyUyMmV1LWV1cm9kZXB1dGF0byUyMiUzQTE4MzclMkMlMjJldS1jb21taXNzYXJpbyUyMiUzQTE4NjklMkMlMjJldS1sb2JieSUyMiUzQTE5MDclMkMlMjJjb21taXNzaW9uZSUyMiUzQTE5NTglMkMlMjJjYW1wby1kZWJhdGUlMjIlM0EyMTU1JTJDJTIyY2FtcG8tcGhvdG9ncmFwaGVyJTIyJTNBMjE5MCUyQyUyMmZ1dHVyby1hbnRlcmlvcmUlMjIlM0EyMzU3JTJDJTIycGFydG5lci1wZXJmZXR0byUyMiUzQTI1NDIlMkMlMjJkaXN0cmljdC1ub3JkJTIyJTNBMjY1MCUyQyUyMmRpc3RyaWN0LWNlbnRybyUyMiUzQTI3NDQlMkMlMjJkaXN0cmljdC1zdWQlMjIlM0EyODM0JTJDJTIyZGlzdHJpY3QtaXNvbGUlMjIlM0EyOTMyJTJDJTIyZGlzdHJpY3QtZmVlZCUyMiUzQTMwMzAlN0QlMkMlMjJsYXN0RGFpbHlEYXRlJTIyJTNBJTIyJTIyJTJDJTIycmVwZWxsZW50U3RlcHMlMjIlM0EwJTJDJTIyZGFpbHlTdHJlYWslMjIlM0EwJTJDJTIyZHVlbFdpbnMlMjIlM0EwJTJDJTIyZHVlbExvc3NlcyUyMiUzQTAlMkMlMjJkYWlseVF1ZXN0c0RvbmUlMjIlM0ElNUIlMjJzdGVwczMwMCUzQWRvbmUlMjIlMkMlMjJ3aW4yJTNBZG9uZSUyMiUyQyUyMmNhdGNoMSUzQWRvbmUlMjIlNUQlMkMlMjJsYXN0RGFpbHlRdWVzdERhdGUlMjIlM0ElMjIyMDI2LTEwLTAyJTIyJTJDJTIyYnJvd3NlclNlZWQlMjIlM0ExNzY0Mjc1NzgwJTJDJTIyaGFyZE1vZGUlMjIlM0FmYWxzZSUyQyUyMmNvcHBhV2lucyUyMiUzQTAlMkMlMjJib29zdEV4cEJhdHRsZXMlMjIlM0EwJTJDJTIyYm9vc3RNb25leUJhdHRsZXMlMjIlM0EwJTJDJTIyYm9vc3RTb25kQmF0dGxlcyUyMiUzQTAlMkMlMjJyZWR1Y2VFZmZlY3RzJTIyJTNBdHJ1ZSUyQyUyMnJlZHVjZUVmZmVjdHNTZXQlMjIlM0FmYWxzZSUyQyUyMmJhdHRsZVNwZWVkJTIyJTNBMSUyQyUyMm1vbnVtZW50TGV2ZWwlMjIlM0EwJTJDJTIycnVuU3RhdHMlMjIlM0ElN0IlMjJwbGF5U2Vjb25kcyUyMiUzQTQ2NDUuNjk5OTk5OTk5MzY5NSUyQyUyMnN0ZXBzJTIyJTNBMzIzNCUyQyUyMmJhdHRsZXMlMjIlM0E2MiUyQyUyMndpbnMlMjIlM0E1MiUyQyUyMmxvc3NlcyUyMiUzQTUlMkMlMjJjYXB0dXJlcyUyMiUzQTUlMkMlMjJydW5zJTIyJTNBMCUyQyUyMnBhcnR5S09zJTIyJTNBNDglMkMlMjJoZWFsaW5nSXRlbXNVc2VkJTIyJTNBNzklMkMlMjJoZWFsZXJWaXNpdHMlMjIlM0E3MiUyQyUyMmNoZWNrcG9pbnRzJTIyJTNBJTdCJTdEJTdEJTJDJTIyY29hbGl0aW9uJTIyJTNBJTdCJTIybWVtYmVycyUyMiUzQSU1QiU3QiUyMmFsbHlJZCUyMiUzQSUyMmNhbXBvX3NlY3JldGFyeSUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMnN0cmFpbmVkJTIyJTJDJTIydmlvbGF0aW9uQ291bnQlMjIlM0ExJTJDJTIycmVjb25jaWxpYXRpb25TcGVudCUyMiUzQWZhbHNlJTdEJTJDJTdCJTIyYWxseUlkJTIyJTNBJTIycXVhbnR1bV9jZW50cmlzdCUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMnN0cmFpbmVkJTIyJTJDJTIydmlvbGF0aW9uQ291bnQlMjIlM0ExJTJDJTIycmVjb25jaWxpYXRpb25TcGVudCUyMiUzQWZhbHNlJTdEJTVEJTJDJTIybG9ja2VkJTIyJTNBZmFsc2UlMkMlMjJwZW5kaW5nQ29uc2VxdWVuY2VzJTIyJTNBJTVCJTVEJTJDJTIycHJvY2Vzc2VkQ29uc2VxdWVuY2VzJTIyJTNBJTVCJTVEJTdEJTJDJTIyZWxlY3Rpb24lMjIlM0ElN0IlMjJwaGFzZSUyMiUzQSUyMnJlc29sdmVkJTIyJTJDJTIycnVuSWQlMjIlM0ElMjJhdHRvMy1tdXJmNDEyYy0xMCUyMiUyQyUyMmRpc3RyaWN0cyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIybm9yZCUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNTElMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E5JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJwcnVkZW50JTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBNCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTQlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmNlbnRybyUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNjAlMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E5JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJyaXNreSUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTEyJTJDJTIyYXBwbGllZERlbHRhJTIyJTNBMTMlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnN1ZCUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNTklMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E4JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJyaXNreSUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTEyJTJDJTIyYXBwbGllZERlbHRhJTIyJTNBMTMlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmlzb2xlJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E0OSUyQyUyMmFjdGlvbk1hc2slMjIlM0E1JTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTglN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJlbmRvcnNlbWVudCUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJjYW1wbyUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTMlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0EzJTJDJTIyYWxseUlkJTIyJTNBJTIyY2FtcG9fc2VjcmV0YXJ5JTIyJTdEJTVEJTJDJTIycmV2aXNpb24lMjIlM0EyJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJmZWVkJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E1OSUyQyUyMmFjdGlvbk1hc2slMjIlM0EzJTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTglN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJwcm9taXNlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMnJpc2t5JTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBMTIlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0ExMyU3RCU1RCUyQyUyMnJldmlzaW9uJTIyJTNBMiU3RCU1RCUyQyUyMmVuZG9yc2VtZW50RGlzdHJpY3RCeUFsbHklMjIlM0ElN0IlMjJjYW1wb19zZWNyZXRhcnklMjIlM0ElMjJpc29sZSUyMiU3RCUyQyUyMnJlc3VsdCUyMiUzQSU3QiUyMmJvc3NXb24lMjIlM0FmYWxzZSUyQyUyMnNlYXRzJTIyJTNBNCUyQyUyMmVuZGluZyUyMiUzQSUyMmdvdmVybm1lbnQlMjIlMkMlMjJkaXN0cmljdHMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMm5vcmQlMjIlMkMlMjJiZWZvcmVSZWNvdW50JTIyJTNBNTElMkMlMjJhZnRlclJlY291bnQlMjIlM0E1MSUyQyUyMnNlYXQlMjIlM0ExJTJDJTIycmVjb3VudGVkJTIyJTNBZmFsc2UlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmNlbnRybyUyMiUyQyUyMmJlZm9yZVJlY291bnQlMjIlM0E2MCUyQyUyMmFmdGVyUmVjb3VudCUyMiUzQTYwJTJDJTIyc2VhdCUyMiUzQTElMkMlMjJyZWNvdW50ZWQlMjIlM0FmYWxzZSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyc3VkJTIyJTJDJTIyYmVmb3JlUmVjb3VudCUyMiUzQTU5JTJDJTIyYWZ0ZXJSZWNvdW50JTIyJTNBNTklMkMlMjJzZWF0JTIyJTNBMSUyQyUyMnJlY291bnRlZCUyMiUzQWZhbHNlJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJpc29sZSUyMiUyQyUyMmJlZm9yZVJlY291bnQlMjIlM0E0OSUyQyUyMmFmdGVyUmVjb3VudCUyMiUzQTQ5JTJDJTIyc2VhdCUyMiUzQTAlMkMlMjJyZWNvdW50ZWQlMjIlM0FmYWxzZSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyZmVlZCUyMiUyQyUyMmJlZm9yZVJlY291bnQlMjIlM0E1OSUyQyUyMmFmdGVyUmVjb3VudCUyMiUzQTU5JTJDJTIyc2VhdCUyMiUzQTElMkMlMjJyZWNvdW50ZWQlMjIlM0FmYWxzZSU3RCU1RCU3RCUyQyUyMnNuYXBzaG90JTIyJTNBJTdCJTIyc2NoZW1hVmVyc2lvbiUyMiUzQTElMkMlMjJydW5JZCUyMiUzQSUyMmF0dG8zLW11cmY0MTJjLTEwJTIyJTJDJTIyY29hbGl0aW9uU25hcHNob3RJZCUyMiUzQSUyMmUyMjEzNWQxZmYwMjVhNTk0Yzc4NTBlYWU3NzQzNTEwZWNlOTc2ODU4MDZlMzQ2ZmIyMWM5M2NmMjBjNjM4YzklMjIlMkMlMjJkb2N0cmluZSUyMiUzQSUyMmxpc3RhX2NpdmljYSUyMiUyQyUyMnNvbmRhZ2dpJTIyJTNBMTAwJTJDJTIyZGlzdHJpY3RzJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJub3JkJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E1MSUyQyUyMmFjdGlvbk1hc2slMjIlM0EzJTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTklN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJwcm9taXNlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMnBydWRlbnQlMjIlMkMlMjJiYXNlRGVsdGElMjIlM0E0JTJDJTIyYXBwbGllZERlbHRhJTIyJTNBNCU3RCU1RCUyQyUyMnJldmlzaW9uJTIyJTNBMiU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyY2VudHJvJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E2MCUyQyUyMmFjdGlvbk1hc2slMjIlM0EzJTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTklN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJwcm9taXNlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMnJpc2t5JTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBMTIlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0ExMyU3RCU1RCUyQyUyMnJldmlzaW9uJTIyJTNBMiU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyc3VkJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E1OSUyQyUyMmFjdGlvbk1hc2slMjIlM0EzJTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTglN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJwcm9taXNlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMnJpc2t5JTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBMTIlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0ExMyU3RCU1RCUyQyUyMnJldmlzaW9uJTIyJTNBMiU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyaXNvbGUlMjIlMkMlMjJsb2NhbENvbnNlbnN1cyUyMiUzQTQ5JTJDJTIyYWN0aW9uTWFzayUyMiUzQTUlMkMlMjJvdXRjb21lcyUyMiUzQSU1QiU3QiUyMmFjdGlvbiUyMiUzQSUyMmRlYmF0ZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJ3aW4lMjIlMkMlMjJiYXNlRGVsdGElMjIlM0E4JTJDJTIyYXBwbGllZERlbHRhJTIyJTNBOCU3RCUyQyU3QiUyMmFjdGlvbiUyMiUzQSUyMmVuZG9yc2VtZW50JTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMmNhbXBvJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBMyUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTMlMkMlMjJhbGx5SWQlMjIlM0ElMjJjYW1wb19zZWNyZXRhcnklMjIlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmZlZWQlMjIlMkMlMjJsb2NhbENvbnNlbnN1cyUyMiUzQTU5JTJDJTIyYWN0aW9uTWFzayUyMiUzQTMlMkMlMjJvdXRjb21lcyUyMiUzQSU1QiU3QiUyMmFjdGlvbiUyMiUzQSUyMmRlYmF0ZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJ3aW4lMjIlMkMlMjJiYXNlRGVsdGElMjIlM0E4JTJDJTIyYXBwbGllZERlbHRhJTIyJTNBOCU3RCUyQyU3QiUyMmFjdGlvbiUyMiUzQSUyMnByb21pc2UlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIycmlza3klMjIlMkMlMjJiYXNlRGVsdGElMjIlM0ExMiUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTEzJTdEJTVEJTJDJTIycmV2aXNpb24lMjIlM0EyJTdEJTVEJTJDJTIyY29hbGl0aW9uJTIyJTNBJTdCJTIybWVtYmVycyUyMiUzQSU1QiU3QiUyMmFsbHlJZCUyMiUzQSUyMmNhbXBvX3NlY3JldGFyeSUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMnN0cmFpbmVkJTIyJTJDJTIydmlvbGF0aW9uQ291bnQlMjIlM0ExJTJDJTIycmVjb25jaWxpYXRpb25TcGVudCUyMiUzQWZhbHNlJTdEJTJDJTdCJTIyYWxseUlkJTIyJTNBJTIycXVhbnR1bV9jZW50cmlzdCUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMnN0cmFpbmVkJTIyJTJDJTIydmlvbGF0aW9uQ291bnQlMjIlM0ExJTJDJTIycmVjb25jaWxpYXRpb25TcGVudCUyMiUzQWZhbHNlJTdEJTVEJTJDJTIybG9ja2VkJTIyJTNBZmFsc2UlMkMlMjJwZW5kaW5nQ29uc2VxdWVuY2VzJTIyJTNBJTVCJTVEJTJDJTIycHJvY2Vzc2VkQ29uc2VxdWVuY2VzJTIyJTNBJTVCJTVEJTdEJTJDJTIyYnJva2VuRHVyaW5nQ2hhcHRlciUyMiUzQSU1QiU1RCUyQyUyMmVsZWN0aW9uU25hcHNob3RJZCUyMiUzQSUyMjViOGY0ZTY2NWMxNTEwYzZhMWVkMDFmYmRmZWJhNDE0NWFjMDJkNjkxYjM3ZGZjZjU5YTgwYjQ4ZjIyMDQ4ZDglMjIlN0QlMkMlMjJyZXZpc2lvbiUyMiUzQTEyJTJDJTIyZXh0ZW5zaW9ucyUyMiUzQSU3QiUyMnVua25vd25EaXN0cmljdHMlMjIlM0ElNUIlNUQlN0QlN0QlMkMlMjJ3ZWVrbHlDYW1wYWlnbiUyMiUzQSU3QiUyMndlZWtLZXklMjIlM0ElMjIlMjIlMkMlMjJzZWVkJTIyJTNBMCUyQyUyMnBoYXNlJTIyJTNBJTIyaWRsZSUyMiUyQyUyMmN1cnNvciUyMiUzQTAlMkMlMjJzY29yZSUyMiUzQTAlMkMlMjJvdXRjb21lcyUyMiUzQSU1QiU1RCUyQyUyMnJld2FyZENsYWltZWQlMjIlM0FmYWxzZSU3RCUyQyUyMnVubG9ja2VkTWVtZUZvcm1zJTIyJTNBJTVCJTVEJTdE"
+    },
+    {
+      "path": "artifacts/campaign-native/continuity-hard-recruited-renzino-prepared-20261004.json",
+      "bytes": 2788754,
+      "sha256": "6cd6eac2e06b8c3dd69ab52980402f18b67f8bdc84eca9041c140bc7fd4d9236",
+      "starter": "renzino",
+      "seed": 20261004,
+      "endAt": "election",
+      "initialFlow": [
+        "title",
+        "difficulty:hard",
+        "empty-slot",
+        "nickname-grid",
+        "welcome-briefing"
+      ],
+      "initialState": {
+        "hardMode": true,
+        "money": 500,
+        "party": [],
+        "badges": [],
+        "flags": {}
+      },
+      "resume": null,
+      "failure": null,
+      "final": {
+        "hardMode": true,
+        "map": "palazzo_feed",
+        "money": 56779,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "ach:plebiscito": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "crisi-governo-1": true,
+          "hint-casino": true,
+          "ach:collector": true,
+          "tm-hint": true,
+          "ach:three-badges": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "ach:tycoon": true,
+          "boss-beaten": true,
+          "garante-beaten": true,
+          "crisi-gov-day:2026-10-02": true,
+          "hint-offshore": true,
+          "offshore-beaten": true,
+          "hint-brux-arrivo": true,
+          "ue-beaten": true,
+          "atto3-invited": true,
+          "atto3Started": true,
+          "coalition-candidate-seen:campo_secretary": true,
+          "coalition-candidate-seen:quantum_centrist": true,
+          "coalition-candidate-seen:civic_mayor": true,
+          "atto3-photo-choice:stringetevi": true,
+          "campo-photo-choice-complete": true,
+          "campo-debate-resolved": true,
+          "campo-photo-complete": true,
+          "coalition-menu-unlocked": true,
+          "cornice-impossibile": true,
+          "feed-dossier-1": true,
+          "future-chapter-unlocked": true,
+          "future-badge-received": true,
+          "future-split-reviewed": true,
+          "future-brand-reviewed": true,
+          "future-lever-a-on": true,
+          "future-lever-b-on": true,
+          "future-shortcut-open": true,
+          "future-choice-complete": true,
+          "a3.future.distance": true,
+          "futuro-anteriore-beaten": true,
+          "futureResolved": true,
+          "futurorso-branch-unlocked": true,
+          "feed-dossier-nord": true,
+          "diplomacy-checked-in": true,
+          "diplomacy-choice-complete": true,
+          "a3.diplomacy.autonomy": true,
+          "diplomacyComplete": true,
+          "temptation-diplomacy-beaten": true,
+          "tour-feed-unlocked": true,
+          "diplomacy-clip-viral": true,
+          "district-complete:nord": true,
+          "district-dossier:nord": true,
+          "district-complete:centro": true,
+          "district-dossier:centro": true,
+          "district-complete:sud": true,
+          "district-dossier:sud": true,
+          "district-complete:isole": true,
+          "district-dossier:isole": true,
+          "district-complete:feed": true,
+          "district-dossier:feed": true,
+          "tourComplete": true,
+          "palace:algoritmo:a": true,
+          "palace:algoritmo:b": true,
+          "palace-module:algoritmo": true,
+          "palace:factcheck:a": true,
+          "palace:factcheck:b": true,
+          "palace-module:factcheck": true,
+          "palace:talkshow:a": true,
+          "palace:talkshow:b": true,
+          "palace-module:talkshow": true,
+          "palace:silenzio:a": true,
+          "palace:silenzio:b": true,
+          "palace-module:silenzio": true,
+          "palaceRoomsComplete": true,
+          "election-snapshot-saved": true,
+          "election-night-complete": true,
+          "election-ending:government": true,
+          "atto3Complete": true,
+          "endingId:government_fractured": true,
+          "cosmetic-campanella-crisi": true,
+          "postgame-government": true
+        },
+        "morale": {
+          "trust": 42,
+          "cohesion": 48,
+          "progress": 38,
+          "promises": [
+            {
+              "id": "bus",
+              "status": "broken",
+              "dueAt": 4
+            },
+            {
+              "id": "traghetto",
+              "status": "broken",
+              "dueAt": 14
+            }
+          ],
+          "decisions": [
+            "bus",
+            "bus:pledge",
+            "traghetto",
+            "traghetto:pledge"
+          ],
+          "history": [
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "IL PLASTICO GALLEGGIA",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: MOLO ACCESSIBILE",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "PROMESSA: PATTI DISATTESI",
+              "trust": 0,
+              "cohesion": -8
+            },
+            {
+              "label": "PROMESSA: PATTI DISATTESI",
+              "trust": 0,
+              "cohesion": -8
+            }
+          ]
+        },
+        "coalition": {
+          "members": [
+            {
+              "allyId": "campo_secretary",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            },
+            {
+              "allyId": "quantum_centrist",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            }
+          ],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "resolved",
+          "runId": "atto3-murf861d-10",
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 51,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "prudent",
+                  "baseDelta": 4,
+                  "appliedDelta": 4
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "centro",
+              "localConsensus": 60,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "sud",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "isole",
+              "localConsensus": 49,
+              "actionMask": 5,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "endorsement",
+                  "variant": "campo",
+                  "baseDelta": 3,
+                  "appliedDelta": 3,
+                  "allyId": "campo_secretary"
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "feed",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 13
+                }
+              ],
+              "revision": 2
+            }
+          ],
+          "endorsementDistrictByAlly": {
+            "campo_secretary": "isole"
+          },
+          "result": {
+            "bossWon": true,
+            "seats": 4,
+            "ending": "government",
+            "districts": [
+              {
+                "id": "nord",
+                "beforeRecount": 51,
+                "afterRecount": 51,
+                "seat": 1,
+                "recounted": false
+              },
+              {
+                "id": "centro",
+                "beforeRecount": 60,
+                "afterRecount": 60,
+                "seat": 1,
+                "recounted": false
+              },
+              {
+                "id": "sud",
+                "beforeRecount": 59,
+                "afterRecount": 59,
+                "seat": 1,
+                "recounted": false
+              },
+              {
+                "id": "isole",
+                "beforeRecount": 49,
+                "afterRecount": 49,
+                "seat": 0,
+                "recounted": false
+              },
+              {
+                "id": "feed",
+                "beforeRecount": 59,
+                "afterRecount": 59,
+                "seat": 1,
+                "recounted": false
+              }
+            ]
+          },
+          "snapshot": {
+            "schemaVersion": 1,
+            "runId": "atto3-murf861d-10",
+            "coalitionSnapshotId": "e22135d1ff025a594c7850eae7743510ece97685806e346fb21c93cf20c638c9",
+            "doctrine": "lista_civica",
+            "sondaggi": 100,
+            "districts": [
+              {
+                "id": "nord",
+                "localConsensus": 51,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 9
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "prudent",
+                    "baseDelta": 4,
+                    "appliedDelta": 4
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "centro",
+                "localConsensus": 60,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 9
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "risky",
+                    "baseDelta": 12,
+                    "appliedDelta": 13
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "sud",
+                "localConsensus": 59,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 8
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "risky",
+                    "baseDelta": 12,
+                    "appliedDelta": 13
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "isole",
+                "localConsensus": 49,
+                "actionMask": 5,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 8
+                  },
+                  {
+                    "action": "endorsement",
+                    "variant": "campo",
+                    "baseDelta": 3,
+                    "appliedDelta": 3,
+                    "allyId": "campo_secretary"
+                  }
+                ],
+                "revision": 2
+              },
+              {
+                "id": "feed",
+                "localConsensus": 59,
+                "actionMask": 3,
+                "outcomes": [
+                  {
+                    "action": "debate",
+                    "variant": "win",
+                    "baseDelta": 8,
+                    "appliedDelta": 8
+                  },
+                  {
+                    "action": "promise",
+                    "variant": "risky",
+                    "baseDelta": 12,
+                    "appliedDelta": 13
+                  }
+                ],
+                "revision": 2
+              }
+            ],
+            "coalition": {
+              "members": [
+                {
+                  "allyId": "campo_secretary",
+                  "status": "strained",
+                  "violationCount": 1,
+                  "reconciliationSpent": false
+                },
+                {
+                  "allyId": "quantum_centrist",
+                  "status": "strained",
+                  "violationCount": 1,
+                  "reconciliationSpent": false
+                }
+              ],
+              "locked": false,
+              "pendingConsequences": [],
+              "processedConsequences": []
+            },
+            "brokenDuringChapter": [],
+            "electionSnapshotId": "c9639fe38da39e9a8cbf433f8db3f734591766b20ffa8b3a83f933e710829130"
+          },
+          "revision": 12,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3",
+          "garante",
+          "commercialista",
+          "prestanome",
+          "tesoriere",
+          "eu-relatore",
+          "eu-eurodeputato",
+          "eu-commissario",
+          "eu-lobby",
+          "commissione",
+          "campo-debate",
+          "campo-photographer",
+          "futuro-anteriore",
+          "partner-perfetto",
+          "district-nord",
+          "district-centro",
+          "district-sud",
+          "district-isole",
+          "district-feed",
+          "algoritmo-sovrano"
+        ],
+        "party": [
+          {
+            "id": "pontimax",
+            "level": 55,
+            "hp": 0,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "grafico",
+                "pp": 24
+              },
+              {
+                "id": "spread",
+                "pp": 10
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "campocorno",
+            "level": 54,
+            "hp": 0,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "direttiva",
+                "pp": 20
+              },
+              {
+                "id": "raccoltadifferenziata",
+                "pp": 20
+              },
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "concertone",
+                "pp": 18
+              }
+            ]
+          },
+          {
+            "id": "renzilla",
+            "level": 53,
+            "hp": 0,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "inciucio",
+                "pp": 15
+              },
+              {
+                "id": "rottamazione",
+                "pp": 10
+              },
+              {
+                "id": "editoriale",
+                "pp": 6
+              },
+              {
+                "id": "staisereno",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 50,
+            "hp": 108,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "fiducia",
+                "pp": 19
+              },
+              {
+                "id": "redditone",
+                "pp": 5
+              },
+              {
+                "id": "vaffa",
+                "pp": 4
+              },
+              {
+                "id": "articolouno",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "bojoon",
+            "level": 48,
+            "hp": 67,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "comizio",
+                "pp": 35
+              },
+              {
+                "id": "brexit",
+                "pp": 4
+              },
+              {
+                "id": "citofonata",
+                "pp": 20
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "generorso",
+            "level": 48,
+            "hp": 73,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "dazilampo",
+                "pp": 10
+              },
+              {
+                "id": "fiammatricolore",
+                "pp": 9
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "iosonogiorgia",
+                "pp": 10
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 5,
+          "maalox": 4,
+          "divisa": 1,
+          "spritz": 0,
+          "dirBunga": 1,
+          "schedona": 13,
+          "mojito": 0,
+          "gilet": 0,
+          "tessera": 2,
+          "dirWhatever": 1,
+          "tessera_futuro": 1
+        },
+        "runStats": {
+          "playSeconds": 5770.400000003461,
+          "steps": 3937,
+          "battles": 109,
+          "wins": 99,
+          "losses": 4,
+          "captures": 6,
+          "runs": 0,
+          "partyKOs": 37,
+          "healingItemsUsed": 77,
+          "healerVisits": 72,
+          "checkpoints": {}
+        }
+      },
+      "milestones": [
+        "debut",
+        "civic-bus",
+        "borgo-training",
+        "mediopoli",
+        "prepared",
+        "healed",
+        "rehearsal",
+        "studio-result-1",
+        "studio-result-2",
+        "studio-result",
+        "route2-recruitment",
+        "route2-confront",
+        "eurotown",
+        "spread-check",
+        "spread-result-1",
+        "spread-result",
+        "route3-audit",
+        "capitale",
+        "global-diplomatico",
+        "global-oligarca",
+        "dazio-result-1",
+        "dazio-result-2",
+        "dazio-result",
+        "stretto-arrival",
+        "stretto-capitano-1",
+        "stretto-trained",
+        "stretto-geometra",
+        "stretto-djpapeete",
+        "stretto-citofonista",
+        "stretto-noponte",
+        "stretto-prepared",
+        "palazzo-result-1",
+        "colle",
+        "colle-giudice1",
+        "colle-giudice2",
+        "colle-giudice3",
+        "garante-supplies",
+        "garante-result-1",
+        "earned-resume",
+        "offshore-arrival",
+        "offshore-recruitment",
+        "offshore-commercialista-1",
+        "offshore-prestanome-1",
+        "tesoriere-result-1",
+        "earned-brux-resume",
+        "bruxelles-arrival",
+        "brux-eu-relatore-1",
+        "brux-eu-eurodeputato-1",
+        "brux-eu-commissario-1",
+        "brux-eu-lobby-1",
+        "commissione-result-1",
+        "earned-campo-resume",
+        "campo-arrival",
+        "campo-retropalco",
+        "campo-recruitment",
+        "campo-photo-choice",
+        "campo-debate-1",
+        "campo-photographer-1",
+        "future-earned-resume",
+        "future-arrival",
+        "future-hq",
+        "futuro_scissione",
+        "futuro_rebrand",
+        "futuro_tesoreria",
+        "future-manifests",
+        "future-choice",
+        "future-boss-1",
+        "future-verbale",
+        "future-diplomacy",
+        "diplomacy-earned-resume",
+        "diplomacy-arrival",
+        "diplomacy_loyalty",
+        "diplomacy_autonomy",
+        "diplomacy_home",
+        "diplomacy-choice",
+        "diplomacy-boss-1",
+        "diplomacy-verbale",
+        "diplomacy-tour",
+        "tour-earned-resume",
+        "tour-nord-arrival",
+        "tour-nord-debate",
+        "tour-nord-closed",
+        "tour-centro-arrival",
+        "tour-centro-debate",
+        "tour-centro-closed",
+        "tour-sud-arrival",
+        "tour-sud-debate",
+        "tour-sud-closed",
+        "tour-isole-arrival",
+        "tour-isole-debate",
+        "tour-isole-closed",
+        "tour-feed-arrival",
+        "tour-feed-debate",
+        "tour-feed-closed",
+        "tour-five-dossiers",
+        "tour-palazzo",
+        "palace-earned-resume",
+        "palazzo_algoritmo-read",
+        "palazzo_algoritmo-verified",
+        "palazzo_factcheck-read",
+        "palazzo_factcheck-verified",
+        "palazzo_talkshow-read",
+        "palazzo_talkshow-verified",
+        "palazzo_silenzio-read",
+        "palazzo_silenzio-verified",
+        "palace-four-verdicts",
+        "palace-studio",
+        "election-earned-ending",
+        "election-reopened-world"
+      ],
+      "trainerOutcomes": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win"
+        },
+        {
+          "trainer": "commercialista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "prestanome",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-relatore",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-eurodeputato",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-commissario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "eu-lobby",
+          "outcome": "win"
+        },
+        {
+          "trainer": "commissione",
+          "outcome": "win"
+        },
+        {
+          "trainer": "campo-debate",
+          "outcome": "win"
+        },
+        {
+          "trainer": "campo-photographer",
+          "outcome": "win"
+        },
+        {
+          "trainer": "futuro-anteriore",
+          "outcome": "win"
+        },
+        {
+          "trainer": "partner-perfetto",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-nord",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-centro",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-sud",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-isole",
+          "outcome": "win"
+        },
+        {
+          "trainer": "district-feed",
+          "outcome": "win"
+        },
+        {
+          "trainer": "algoritmo-sovrano",
+          "outcome": "win"
+        }
+      ],
+      "earnedEndingCode": "JTdCJTIycGFydHklMjIlM0ElNUIlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjd1YmwxMTUlMjIlMkMlMjJzcGVjaWVzSWQlMjIlM0ElMjJwb250aW1heCUyMiUyQyUyMmxldmVsJTIyJTNBNTUlMkMlMjJleHAlMjIlM0ExNjU0MDYlMkMlMjJocCUyMiUzQTAlMkMlMjJzdGF0dXMlMjIlM0FudWxsJTJDJTIybW92ZXMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMmdyYWZpY28lMjIlMkMlMjJwcCUyMiUzQTI0JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJzcHJlYWQlMjIlMkMlMjJwcCUyMiUzQTEwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJwaWVuaXBvdGVyaSUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnZhZmZhJTIyJTJDJTIycHAlMjIlM0ExMCU3RCU1RCUyQyUyMmhlbGRJdGVtJTIyJTNBJTIyZ2lsZXQlMjIlN0QlMkMlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjd3eDAxNDAlMjIlMkMlMjJzcGVjaWVzSWQlMjIlM0ElMjJjYW1wb2Nvcm5vJTIyJTJDJTIybGV2ZWwlMjIlM0E1NCUyQyUyMmV4cCUyMiUzQTE1NzQzMyUyQyUyMmhwJTIyJTNBMCUyQyUyMnN0YXR1cyUyMiUzQSUyMnNjYW5kYWxvJTIyJTJDJTIybW92ZXMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMmRpcmV0dGl2YSUyMiUyQyUyMnBwJTIyJTNBMjAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnJhY2NvbHRhZGlmZmVyZW56aWF0YSUyMiUyQyUyMnBwJTIyJTNBMjAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmFydGljb2xvdW5vJTIyJTJDJTIycHAlMjIlM0ExNSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyY29uY2VydG9uZSUyMiUyQyUyMnBwJTIyJTNBMTglN0QlNUQlN0QlMkMlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjdtYmExJTIyJTJDJTIyc3BlY2llc0lkJTIyJTNBJTIycmVuemlsbGElMjIlMkMlMjJsZXZlbCUyMiUzQTUzJTJDJTIyZXhwJTIyJTNBMTUxMzY3JTJDJTIyaHAlMjIlM0EwJTJDJTIyc3RhdHVzJTIyJTNBJTIyaW5kYWdhdG8lMjIlMkMlMjJtb3ZlcyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIyaW5jaXVjaW8lMjIlMkMlMjJwcCUyMiUzQTE1JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJyb3R0YW1hemlvbmUlMjIlMkMlMjJwcCUyMiUzQTEwJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJlZGl0b3JpYWxlJTIyJTJDJTIycHAlMjIlM0E2JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJzdGFpc2VyZW5vJTIyJTJDJTIycHAlMjIlM0ExMCU3RCU1RCUyQyUyMmhlbGRJdGVtJTIyJTNBJTIyZ2lsZXQlMjIlN0QlMkMlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjduMnY2JTIyJTJDJTIyc3BlY2llc0lkJTIyJTNBJTIybW92aW1lbnRvbiUyMiUyQyUyMmxldmVsJTIyJTNBNTAlMkMlMjJleHAlMjIlM0ExMjU3NDElMkMlMjJocCUyMiUzQTEwOCUyQyUyMnN0YXR1cyUyMiUzQW51bGwlMkMlMjJtb3ZlcyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIyZmlkdWNpYSUyMiUyQyUyMnBwJTIyJTNBMTklN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnJlZGRpdG9uZSUyMiUyQyUyMnBwJTIyJTNBNSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIydmFmZmElMjIlMkMlMjJwcCUyMiUzQTQlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmFydGljb2xvdW5vJTIyJTJDJTIycHAlMjIlM0ExNSU3RCU1RCUyQyUyMmhlbGRJdGVtJTIyJTNBJTIyZ2lsZXQlMjIlN0QlMkMlN0IlMjJ1aWQlMjIlM0ElMjJtbXVyZjdveGgzMSUyMiUyQyUyMnNwZWNpZXNJZCUyMiUzQSUyMmJvam9vbiUyMiUyQyUyMmxldmVsJTIyJTNBNDglMkMlMjJleHAlMjIlM0ExMTc3NTUlMkMlMjJocCUyMiUzQTY3JTJDJTIyc3RhdHVzJTIyJTNBbnVsbCUyQyUyMm1vdmVzJTIyJTNBJTVCJTdCJTIyaWQlMjIlM0ElMjJjb21pemlvJTIyJTJDJTIycHAlMjIlM0EzNSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyYnJleGl0JTIyJTJDJTIycHAlMjIlM0E0JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJjaXRvZm9uYXRhJTIyJTJDJTIycHAlMjIlM0EyMCU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyY29uZmVyZW56YSUyMiUyQyUyMnBwJTIyJTNBMjAlN0QlNUQlMkMlMjJoZWxkSXRlbSUyMiUzQSUyMmdpbGV0JTIyJTdEJTJDJTdCJTIydWlkJTIyJTNBJTIybW11cmY3cmt3NTIlMjIlMkMlMjJzcGVjaWVzSWQlMjIlM0ElMjJnZW5lcm9yc28lMjIlMkMlMjJsZXZlbCUyMiUzQTQ4JTJDJTIyZXhwJTIyJTNBMTEzOTEzJTJDJTIyaHAlMjIlM0E3MyUyQyUyMnN0YXR1cyUyMiUzQW51bGwlMkMlMjJtb3ZlcyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIyZGF6aWxhbXBvJTIyJTJDJTIycHAlMjIlM0ExMCU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyZmlhbW1hdHJpY29sb3JlJTIyJTJDJTIycHAlMjIlM0E5JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJwaWVuaXBvdGVyaSUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmlvc29ub2dpb3JnaWElMjIlMkMlMjJwcCUyMiUzQTEwJTdEJTVEJTJDJTIyaGVsZEl0ZW0lMjIlM0ElMjJnaWxldCUyMiU3RCU1RCUyQyUyMmJhZyUyMiUzQSU3QiUyMmNhZmZlJTIyJTNBMCUyQyUyMnNjaGVkYSUyMiUzQTUlMkMlMjJtYWFsb3glMjIlM0E0JTJDJTIyZGl2aXNhJTIyJTNBMSUyQyUyMnNwcml0eiUyMiUzQTAlMkMlMjJkaXJCdW5nYSUyMiUzQTElMkMlMjJzY2hlZG9uYSUyMiUzQTEzJTJDJTIybW9qaXRvJTIyJTNBMCUyQyUyMmdpbGV0JTIyJTNBMCUyQyUyMnRlc3NlcmElMjIlM0EyJTJDJTIyZGlyV2hhdGV2ZXIlMjIlM0ExJTJDJTIydGVzc2VyYV9mdXR1cm8lMjIlM0ExJTdEJTJDJTIyZGV4JTIyJTNBJTdCJTIycmVuemlubyUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMmVsbHluYSUyMiUzQSUyMnNlZW4lMjIlMkMlMjJzYWx2aW5vdHQlMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJ0YWphbmlkZSUyMiUzQSUyMnNlZW4lMjIlMkMlMjJncmlsbGl4JTIyJTNBJTIyY2F1Z2h0JTIyJTJDJTIyY29udGVtb3JmbyUyMiUzQSUyMnNlZW4lMjIlMkMlMjJ2YW5uYWNjaXglMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJiZXJsdXNjb25peCUyMiUzQSUyMnNlZW4lMjIlMkMlMjJyZW56aWxsYSUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMmJvam9vbiUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMm1lZGlvY3JhdGUlMjIlM0ElMjJzZWVuJTIyJTJDJTIyY2FsZW5kYXVybyUyMiUzQSUyMnNlZW4lMjIlMkMlMjJtYWNyb25mb3glMjIlM0ElMjJzZWVuJTIyJTJDJTIydXJzdWxheCUyMiUzQSUyMnNlZW4lMjIlMkMlMjJ6ZWxlbnNraXIlMjIlM0ElMjJzZWVuJTIyJTJDJTIycHV0aW5ncmFkJTIyJTNBJTIyc2VlbiUyMiUyQyUyMnNhbHZpbmF0b3IlMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJtdXNrcmF0JTIyJTNBJTIyc2VlbiUyMiUyQyUyMnRydW1wb24lMjIlM0ElMjJzZWVuJTIyJTJDJTIyY2FwaXRhbm9uZSUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMm1vdmltZW50b24lMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJnZW5lcm9yc28lMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJwb250aWdvciUyMiUzQSUyMnNlZW4lMjIlMkMlMjJ4aXBhbmRhJTIyJTNBJTIyc2VlbiUyMiUyQyUyMnRlbGVjcmF0ZSUyMiUzQSUyMnNlZW4lMjIlMkMlMjJkcmFnaGltb24lMjIlM0ElMjJzZWVuJTIyJTJDJTIybWF0dGFyZWxsdXglMjIlM0ElMjJzZWVuJTIyJTJDJTIycG9udGltYXglMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJjb250ZWJsb2IlMjIlM0ElMjJzZWVuJTIyJTJDJTIyZnJhdG9jb3JubyUyMiUzQSUyMmNhdWdodCUyMiUyQyUyMmNhbXBvY29ybm8lMjIlM0ElMjJjYXVnaHQlMjIlMkMlMjJnaWFuaW1hZ28lMjIlM0ElMjJzZWVuJTIyJTJDJTIyc2FsaXN0cm9ibyUyMiUzQSUyMnNlZW4lMjIlMkMlMjJmdXR1cm9yc28lMjIlM0ElMjJzZWVuJTIyJTJDJTIyY3Jvc2V0dGFuayUyMiUzQSUyMnNlZW4lMjIlMkMlMjJub3JkaW9kbyUyMiUzQSUyMnNlZW4lMjIlMkMlMjJjYWxlbmRyb25lJTIyJTNBJTIyc2VlbiUyMiUyQyUyMnJlZmVyZW5kb2RvJTIyJTNBJTIyc2VlbiUyMiUyQyUyMnNhbGlzb3VuZCUyMiUzQSUyMnNlZW4lMjIlN0QlMkMlMjJmbGFncyUyMiUzQSU3QiUyMmludHJvLWRvbmUlMjIlM0F0cnVlJTJDJTIyc3RhcnRlci1jaG9zZW4lMjIlM0F0cnVlJTJDJTIycml2YWwxLWJlYXRlbiUyMiUzQXRydWUlMkMlMjJkZXgtcmVjZWl2ZWQlMjIlM0F0cnVlJTJDJTIyYWNoJTNBZmlyc3QtYmxvb2QlMjIlM0F0cnVlJTJDJTIyZ2lmdC10aXBvZ3JhZm8lMjIlM0F0cnVlJTJDJTIyaGVhbC1oaW50JTIyJTNBdHJ1ZSUyQyUyMmdpZnQtZGl2aXNhJTIyJTNBdHJ1ZSUyQyUyMmFjaCUzQWZpcnN0LWNhdGNoJTIyJTNBdHJ1ZSUyQyUyMmFjaCUzQXBsZWJpc2NpdG8lMjIlM0F0cnVlJTJDJTIybGVnZW5kLWJlcmx1c2Nvbml4LXJlYWR5JTIyJTNBdHJ1ZSUyQyUyMmFjaCUzQWZpcnN0LWJhZGdlJTIyJTNBdHJ1ZSUyQyUyMmNyaXNpLWdvdmVybm8tMSUyMiUzQXRydWUlMkMlMjJoaW50LWNhc2lubyUyMiUzQXRydWUlMkMlMjJhY2glM0Fjb2xsZWN0b3IlMjIlM0F0cnVlJTJDJTIydG0taGludCUyMiUzQXRydWUlMkMlMjJhY2glM0F0aHJlZS1iYWRnZXMlMjIlM0F0cnVlJTJDJTIydmVoLXRyYWdoZXR0byUyMiUzQXRydWUlMkMlMjJwb250ZS1iZWF0ZW4lMjIlM0F0cnVlJTJDJTIyZ2lmdC1pbmdlZ25lcmUlMjIlM0F0cnVlJTJDJTIyYWNoJTNBdHljb29uJTIyJTNBdHJ1ZSUyQyUyMmJvc3MtYmVhdGVuJTIyJTNBdHJ1ZSUyQyUyMmdhcmFudGUtYmVhdGVuJTIyJTNBdHJ1ZSUyQyUyMmNyaXNpLWdvdi1kYXklM0EyMDI2LTEwLTAyJTIyJTNBdHJ1ZSUyQyUyMmhpbnQtb2Zmc2hvcmUlMjIlM0F0cnVlJTJDJTIyb2Zmc2hvcmUtYmVhdGVuJTIyJTNBdHJ1ZSUyQyUyMmhpbnQtYnJ1eC1hcnJpdm8lMjIlM0F0cnVlJTJDJTIydWUtYmVhdGVuJTIyJTNBdHJ1ZSUyQyUyMmF0dG8zLWludml0ZWQlMjIlM0F0cnVlJTJDJTIyYXR0bzNTdGFydGVkJTIyJTNBdHJ1ZSUyQyUyMmNvYWxpdGlvbi1jYW5kaWRhdGUtc2VlbiUzQWNhbXBvX3NlY3JldGFyeSUyMiUzQXRydWUlMkMlMjJjb2FsaXRpb24tY2FuZGlkYXRlLXNlZW4lM0FxdWFudHVtX2NlbnRyaXN0JTIyJTNBdHJ1ZSUyQyUyMmNvYWxpdGlvbi1jYW5kaWRhdGUtc2VlbiUzQWNpdmljX21heW9yJTIyJTNBdHJ1ZSUyQyUyMmF0dG8zLXBob3RvLWNob2ljZSUzQXN0cmluZ2V0ZXZpJTIyJTNBdHJ1ZSUyQyUyMmNhbXBvLXBob3RvLWNob2ljZS1jb21wbGV0ZSUyMiUzQXRydWUlMkMlMjJjYW1wby1kZWJhdGUtcmVzb2x2ZWQlMjIlM0F0cnVlJTJDJTIyY2FtcG8tcGhvdG8tY29tcGxldGUlMjIlM0F0cnVlJTJDJTIyY29hbGl0aW9uLW1lbnUtdW5sb2NrZWQlMjIlM0F0cnVlJTJDJTIyY29ybmljZS1pbXBvc3NpYmlsZSUyMiUzQXRydWUlMkMlMjJmZWVkLWRvc3NpZXItMSUyMiUzQXRydWUlMkMlMjJmdXR1cmUtY2hhcHRlci11bmxvY2tlZCUyMiUzQXRydWUlMkMlMjJmdXR1cmUtYmFkZ2UtcmVjZWl2ZWQlMjIlM0F0cnVlJTJDJTIyZnV0dXJlLXNwbGl0LXJldmlld2VkJTIyJTNBdHJ1ZSUyQyUyMmZ1dHVyZS1icmFuZC1yZXZpZXdlZCUyMiUzQXRydWUlMkMlMjJmdXR1cmUtbGV2ZXItYS1vbiUyMiUzQXRydWUlMkMlMjJmdXR1cmUtbGV2ZXItYi1vbiUyMiUzQXRydWUlMkMlMjJmdXR1cmUtc2hvcnRjdXQtb3BlbiUyMiUzQXRydWUlMkMlMjJmdXR1cmUtY2hvaWNlLWNvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMmEzLmZ1dHVyZS5kaXN0YW5jZSUyMiUzQXRydWUlMkMlMjJmdXR1cm8tYW50ZXJpb3JlLWJlYXRlbiUyMiUzQXRydWUlMkMlMjJmdXR1cmVSZXNvbHZlZCUyMiUzQXRydWUlMkMlMjJmdXR1cm9yc28tYnJhbmNoLXVubG9ja2VkJTIyJTNBdHJ1ZSUyQyUyMmZlZWQtZG9zc2llci1ub3JkJTIyJTNBdHJ1ZSUyQyUyMmRpcGxvbWFjeS1jaGVja2VkLWluJTIyJTNBdHJ1ZSUyQyUyMmRpcGxvbWFjeS1jaG9pY2UtY29tcGxldGUlMjIlM0F0cnVlJTJDJTIyYTMuZGlwbG9tYWN5LmF1dG9ub215JTIyJTNBdHJ1ZSUyQyUyMmRpcGxvbWFjeUNvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMnRlbXB0YXRpb24tZGlwbG9tYWN5LWJlYXRlbiUyMiUzQXRydWUlMkMlMjJ0b3VyLWZlZWQtdW5sb2NrZWQlMjIlM0F0cnVlJTJDJTIyZGlwbG9tYWN5LWNsaXAtdmlyYWwlMjIlM0F0cnVlJTJDJTIyZGlzdHJpY3QtY29tcGxldGUlM0Fub3JkJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWRvc3NpZXIlM0Fub3JkJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWNvbXBsZXRlJTNBY2VudHJvJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWRvc3NpZXIlM0FjZW50cm8lMjIlM0F0cnVlJTJDJTIyZGlzdHJpY3QtY29tcGxldGUlM0FzdWQlMjIlM0F0cnVlJTJDJTIyZGlzdHJpY3QtZG9zc2llciUzQXN1ZCUyMiUzQXRydWUlMkMlMjJkaXN0cmljdC1jb21wbGV0ZSUzQWlzb2xlJTIyJTNBdHJ1ZSUyQyUyMmRpc3RyaWN0LWRvc3NpZXIlM0Fpc29sZSUyMiUzQXRydWUlMkMlMjJkaXN0cmljdC1jb21wbGV0ZSUzQWZlZWQlMjIlM0F0cnVlJTJDJTIyZGlzdHJpY3QtZG9zc2llciUzQWZlZWQlMjIlM0F0cnVlJTJDJTIydG91ckNvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZSUzQWFsZ29yaXRtbyUzQWElMjIlM0F0cnVlJTJDJTIycGFsYWNlJTNBYWxnb3JpdG1vJTNBYiUyMiUzQXRydWUlMkMlMjJwYWxhY2UtbW9kdWxlJTNBYWxnb3JpdG1vJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZSUzQWZhY3RjaGVjayUzQWElMjIlM0F0cnVlJTJDJTIycGFsYWNlJTNBZmFjdGNoZWNrJTNBYiUyMiUzQXRydWUlMkMlMjJwYWxhY2UtbW9kdWxlJTNBZmFjdGNoZWNrJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZSUzQXRhbGtzaG93JTNBYSUyMiUzQXRydWUlMkMlMjJwYWxhY2UlM0F0YWxrc2hvdyUzQWIlMjIlM0F0cnVlJTJDJTIycGFsYWNlLW1vZHVsZSUzQXRhbGtzaG93JTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZSUzQXNpbGVuemlvJTNBYSUyMiUzQXRydWUlMkMlMjJwYWxhY2UlM0FzaWxlbnppbyUzQWIlMjIlM0F0cnVlJTJDJTIycGFsYWNlLW1vZHVsZSUzQXNpbGVuemlvJTIyJTNBdHJ1ZSUyQyUyMnBhbGFjZVJvb21zQ29tcGxldGUlMjIlM0F0cnVlJTJDJTIyZWxlY3Rpb24tc25hcHNob3Qtc2F2ZWQlMjIlM0F0cnVlJTJDJTIyZWxlY3Rpb24tbmlnaHQtY29tcGxldGUlMjIlM0F0cnVlJTJDJTIyZWxlY3Rpb24tZW5kaW5nJTNBZ292ZXJubWVudCUyMiUzQXRydWUlMkMlMjJhdHRvM0NvbXBsZXRlJTIyJTNBdHJ1ZSUyQyUyMmVuZGluZ0lkJTNBZ292ZXJubWVudF9mcmFjdHVyZWQlMjIlM0F0cnVlJTJDJTIyY29zbWV0aWMtY2FtcGFuZWxsYS1jcmlzaSUyMiUzQXRydWUlMkMlMjJwb3N0Z2FtZS1nb3Zlcm5tZW50JTIyJTNBdHJ1ZSU3RCUyQyUyMmRlZmVhdGVkVHJhaW5lcnMlMjIlM0ElNUIlMjJyaXZhbDElMjIlMkMlMjJzdGFnaXN0YSUyMiUyQyUyMmVtaXR0ZW56YSUyMiUyQyUyMnRlbGVsb2JiaXN0YSUyMiUyQyUyMmZ1bnppb25hcmlvJTIyJTJDJTIybGFkeWRpcmV0dGl2YSUyMiUyQyUyMnByb3RvY29sbGlzdGElMjIlMkMlMjJkaXBsb21hdGljbyUyMiUyQyUyMm9saWdhcmNhJTIyJTJDJTIydHljb29uJTIyJTJDJTIyaWxjYXBpdGFubyUyMiUyQyUyMmdlb21ldHJhJTIyJTJDJTIyZGpwYXBlZXRlJTIyJTJDJTIyY2l0b2ZvbmlzdGElMjIlMkMlMjJub3BvbnRlJTIyJTJDJTIyYm9zcyUyMiUyQyUyMmdpdWRpY2UxJTIyJTJDJTIyZ2l1ZGljZTIlMjIlMkMlMjJnaXVkaWNlMyUyMiUyQyUyMmdhcmFudGUlMjIlMkMlMjJjb21tZXJjaWFsaXN0YSUyMiUyQyUyMnByZXN0YW5vbWUlMjIlMkMlMjJ0ZXNvcmllcmUlMjIlMkMlMjJldS1yZWxhdG9yZSUyMiUyQyUyMmV1LWV1cm9kZXB1dGF0byUyMiUyQyUyMmV1LWNvbW1pc3NhcmlvJTIyJTJDJTIyZXUtbG9iYnklMjIlMkMlMjJjb21taXNzaW9uZSUyMiUyQyUyMmNhbXBvLWRlYmF0ZSUyMiUyQyUyMmNhbXBvLXBob3RvZ3JhcGhlciUyMiUyQyUyMmZ1dHVyby1hbnRlcmlvcmUlMjIlMkMlMjJwYXJ0bmVyLXBlcmZldHRvJTIyJTJDJTIyZGlzdHJpY3Qtbm9yZCUyMiUyQyUyMmRpc3RyaWN0LWNlbnRybyUyMiUyQyUyMmRpc3RyaWN0LXN1ZCUyMiUyQyUyMmRpc3RyaWN0LWlzb2xlJTIyJTJDJTIyZGlzdHJpY3QtZmVlZCUyMiUyQyUyMmFsZ29yaXRtby1zb3ZyYW5vJTIyJTVEJTJDJTIycGlja2VkSXRlbXMlMjIlM0ElNUIlMjJway1vZmYtZGlyJTIyJTVEJTJDJTIycG9zJTIyJTNBJTdCJTIybWFwSWQlMjIlM0ElMjJwYWxhenpvX2ZlZWQlMjIlMkMlMjJ4JTIyJTNBOSUyQyUyMnklMjIlM0EyJTJDJTIyZmFjaW5nJTIyJTNBJTIyZG93biUyMiU3RCUyQyUyMnN0YXJ0ZXJJZCUyMiUzQSUyMnJlbnppbm8lMjIlMkMlMjJtb25leSUyMiUzQTU2Nzc5JTJDJTIyYmFkZ2VzJTIyJTNBJTVCJTIyYXVkaXRlbCUyMiUyQyUyMnNwcmVhZCUyMiUyQyUyMmRhemlvJTIyJTVEJTJDJTIyc29uZGFnZ2klMjIlM0ExMDAlMkMlMjJtb3JhbGUlMjIlM0ElN0IlMjJ0cnVzdCUyMiUzQTQyJTJDJTIyY29oZXNpb24lMjIlM0E0OCUyQyUyMnByb2dyZXNzJTIyJTNBMzglMkMlMjJwcm9taXNlcyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIyYnVzJTIyJTJDJTIyc3RhdHVzJTIyJTNBJTIyYnJva2VuJTIyJTJDJTIyZHVlQXQlMjIlM0E0JTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJ0cmFnaGV0dG8lMjIlMkMlMjJzdGF0dXMlMjIlM0ElMjJicm9rZW4lMjIlMkMlMjJkdWVBdCUyMiUzQTE0JTdEJTVEJTJDJTIyZGVjaXNpb25zJTIyJTNBJTVCJTIyYnVzJTIyJTJDJTIyYnVzJTNBcGxlZGdlJTIyJTJDJTIydHJhZ2hldHRvJTIyJTJDJTIydHJhZ2hldHRvJTNBcGxlZGdlJTIyJTVEJTJDJTIyaGlzdG9yeSUyMiUzQSU1QiU3QiUyMmxhYmVsJTIyJTNBJTIyVkVSSUZJQ0ElMjBQVUJCTElDQSUyMiUyQyUyMnRydXN0JTIyJTNBNiUyQyUyMmNvaGVzaW9uJTIyJTNBOCU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIySUwlMjBQTEFTVElDTyUyMEdBTExFR0dJQSUyMiUyQyUyMnRydXN0JTIyJTNBMiUyQyUyMmNvaGVzaW9uJTIyJTNBMCU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIyU0NBRFVUQSUzQSUyME1PTE8lMjBBQ0NFU1NJQklMRSUyMiUyQyUyMnRydXN0JTIyJTNBLTEyJTJDJTIyY29oZXNpb24lMjIlM0EtNiU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIyVkVSSUZJQ0ElMjBQVUJCTElDQSUyMiUyQyUyMnRydXN0JTIyJTNBNiUyQyUyMmNvaGVzaW9uJTIyJTNBOCU3RCUyQyU3QiUyMmxhYmVsJTIyJTNBJTIyUFJPTUVTU0ElM0ElMjBQQVRUSSUyMERJU0FUVEVTSSUyMiUyQyUyMnRydXN0JTIyJTNBMCUyQyUyMmNvaGVzaW9uJTIyJTNBLTglN0QlMkMlN0IlMjJsYWJlbCUyMiUzQSUyMlBST01FU1NBJTNBJTIwUEFUVEklMjBESVNBVFRFU0klMjIlMkMlMjJ0cnVzdCUyMiUzQTAlMkMlMjJjb2hlc2lvbiUyMiUzQS04JTdEJTVEJTdEJTJDJTIybWluaXN0cmklMjIlM0ElN0IlN0QlMkMlMjJidWxsZG96ZWQlMjIlM0ElNUIlNUQlMkMlMjJ2ZWhpY2xlJTIyJTNBbnVsbCUyQyUyMnJpdmFsV2lucyUyMiUzQTElMkMlMjJjaGlwcyUyMiUzQTAlMkMlMjJib3hlZCUyMiUzQSU1QiU3QiUyMnVpZCUyMiUzQSUyMm1tdXJmN240NjclMjIlMkMlMjJzcGVjaWVzSWQlMjIlM0ElMjJjYXBpdGFub25lJTIyJTJDJTIybGV2ZWwlMjIlM0E0MSUyQyUyMmV4cCUyMiUzQTc0ODg0JTJDJTIyaHAlMjIlM0ExNjMlMkMlMjJzdGF0dXMlMjIlM0FudWxsJTJDJTIybW92ZXMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMmRhemlsYW1wbyUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMm1vaml0byUyMiUyQyUyMnBwJTIyJTNBMTAlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnBpZW5pcG90ZXJpJTIyJTJDJTIycHAlMjIlM0ExMCU3RCUyQyU3QiUyMmlkJTIyJTNBJTIycnVzcGElMjIlMkMlMjJwcCUyMiUzQTE1JTdEJTVEJTJDJTIyaGVsZEl0ZW0lMjIlM0ElMjJnaWxldCUyMiU3RCU1RCUyQyUyMmxhc3RCYXIlMjIlM0ElMjJicnV4ZWxsZXMlMjIlMkMlMjJ6b25lUmV3YXJkc0NsYWltZWQlMjIlM0ElNUIlNUQlMkMlMjJzdGVwc1RvdGFsJTIyJTNBMzkzNyUyQyUyMnRyYWluZXJSZW1hdGNoJTIyJTNBJTdCJTIycml2YWwxJTIyJTNBMTglMkMlMjJzdGFnaXN0YSUyMiUzQTY2OSUyQyUyMmVtaXR0ZW56YSUyMiUzQTcyMiUyQyUyMnRlbGVsb2JiaXN0YSUyMiUzQTc5NSUyQyUyMmZ1bnppb25hcmlvJTIyJTNBODM4JTJDJTIybGFkeWRpcmV0dGl2YSUyMiUzQTg4MiUyQyUyMnByb3RvY29sbGlzdGElMjIlM0E5MzQlMkMlMjJkaXBsb21hdGljbyUyMiUzQTk5OSUyQyUyMm9saWdhcmNhJTIyJTNBMTA1NCUyQyUyMnR5Y29vbiUyMiUzQTExOTMlMkMlMjJpbGNhcGl0YW5vJTIyJTNBMTI2MCUyQyUyMmdlb21ldHJhJTIyJTNBMTg1MSUyQyUyMmRqcGFwZWV0ZSUyMiUzQTE4NjglMkMlMjJjaXRvZm9uaXN0YSUyMiUzQTE4OTAlMkMlMjJub3BvbnRlJTIyJTNBMTkxMyUyQyUyMmJvc3MlMjIlM0EyMDA1JTJDJTIyZ2l1ZGljZTElMjIlM0EyMDQ1JTJDJTIyZ2l1ZGljZTIlMjIlM0EyMDkzJTJDJTIyZ2l1ZGljZTMlMjIlM0EyMTQ1JTJDJTIyZ2FyYW50ZSUyMiUzQTIyMzUlMkMlMjJjb21tZXJjaWFsaXN0YSUyMiUzQTIzNTIlMkMlMjJwcmVzdGFub21lJTIyJTNBMjM5NiUyQyUyMnRlc29yaWVyZSUyMiUzQTI0NTQlMkMlMjJldS1yZWxhdG9yZSUyMiUzQTI1MTglMkMlMjJldS1ldXJvZGVwdXRhdG8lMjIlM0EyNTQ2JTJDJTIyZXUtY29tbWlzc2FyaW8lMjIlM0EyNTc4JTJDJTIyZXUtbG9iYnklMjIlM0EyNjE2JTJDJTIyY29tbWlzc2lvbmUlMjIlM0EyNjY3JTJDJTIyY2FtcG8tZGViYXRlJTIyJTNBMjg1OCUyQyUyMmNhbXBvLXBob3RvZ3JhcGhlciUyMiUzQTI4OTMlMkMlMjJmdXR1cm8tYW50ZXJpb3JlJTIyJTNBMzA2MCUyQyUyMnBhcnRuZXItcGVyZmV0dG8lMjIlM0EzMjQ1JTJDJTIyZGlzdHJpY3Qtbm9yZCUyMiUzQTMzNTMlMkMlMjJkaXN0cmljdC1jZW50cm8lMjIlM0EzNDQ3JTJDJTIyZGlzdHJpY3Qtc3VkJTIyJTNBMzUzNyUyQyUyMmRpc3RyaWN0LWlzb2xlJTIyJTNBMzYzNSUyQyUyMmRpc3RyaWN0LWZlZWQlMjIlM0EzNzMzJTJDJTIyYWxnb3JpdG1vLXNvdnJhbm8lMjIlM0EzOTMxJTdEJTJDJTIybGFzdERhaWx5RGF0ZSUyMiUzQSUyMiUyMiUyQyUyMnJlcGVsbGVudFN0ZXBzJTIyJTNBMCUyQyUyMmRhaWx5U3RyZWFrJTIyJTNBMCUyQyUyMmR1ZWxXaW5zJTIyJTNBMCUyQyUyMmR1ZWxMb3NzZXMlMjIlM0EwJTJDJTIyZGFpbHlRdWVzdHNEb25lJTIyJTNBJTVCJTIyc3RlcHMzMDAlM0Fkb25lJTIyJTJDJTIyd2luMiUzQWRvbmUlMjIlMkMlMjJjYXRjaDElM0Fkb25lJTIyJTVEJTJDJTIybGFzdERhaWx5UXVlc3REYXRlJTIyJTNBJTIyMjAyNi0xMC0wMiUyMiUyQyUyMmJyb3dzZXJTZWVkJTIyJTNBMTY0MDAyODIyNyUyQyUyMmhhcmRNb2RlJTIyJTNBdHJ1ZSUyQyUyMmNvcHBhV2lucyUyMiUzQTAlMkMlMjJib29zdEV4cEJhdHRsZXMlMjIlM0EwJTJDJTIyYm9vc3RNb25leUJhdHRsZXMlMjIlM0EwJTJDJTIyYm9vc3RTb25kQmF0dGxlcyUyMiUzQTAlMkMlMjJyZWR1Y2VFZmZlY3RzJTIyJTNBdHJ1ZSUyQyUyMnJlZHVjZUVmZmVjdHNTZXQlMjIlM0FmYWxzZSUyQyUyMmJhdHRsZVNwZWVkJTIyJTNBMSUyQyUyMm1vbnVtZW50TGV2ZWwlMjIlM0EwJTJDJTIycnVuU3RhdHMlMjIlM0ElN0IlMjJwbGF5U2Vjb25kcyUyMiUzQTU3NzAuNDAwMDAwMDAzNDYxJTJDJTIyc3RlcHMlMjIlM0EzOTM3JTJDJTIyYmF0dGxlcyUyMiUzQTEwOSUyQyUyMndpbnMlMjIlM0E5OSUyQyUyMmxvc3NlcyUyMiUzQTQlMkMlMjJjYXB0dXJlcyUyMiUzQTYlMkMlMjJydW5zJTIyJTNBMCUyQyUyMnBhcnR5S09zJTIyJTNBMzclMkMlMjJoZWFsaW5nSXRlbXNVc2VkJTIyJTNBNzclMkMlMjJoZWFsZXJWaXNpdHMlMjIlM0E3MiUyQyUyMmNoZWNrcG9pbnRzJTIyJTNBJTdCJTdEJTdEJTJDJTIyY29hbGl0aW9uJTIyJTNBJTdCJTIybWVtYmVycyUyMiUzQSU1QiU3QiUyMmFsbHlJZCUyMiUzQSUyMmNhbXBvX3NlY3JldGFyeSUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMnN0cmFpbmVkJTIyJTJDJTIydmlvbGF0aW9uQ291bnQlMjIlM0ExJTJDJTIycmVjb25jaWxpYXRpb25TcGVudCUyMiUzQWZhbHNlJTdEJTJDJTdCJTIyYWxseUlkJTIyJTNBJTIycXVhbnR1bV9jZW50cmlzdCUyMiUyQyUyMnN0YXR1cyUyMiUzQSUyMnN0cmFpbmVkJTIyJTJDJTIydmlvbGF0aW9uQ291bnQlMjIlM0ExJTJDJTIycmVjb25jaWxpYXRpb25TcGVudCUyMiUzQWZhbHNlJTdEJTVEJTJDJTIybG9ja2VkJTIyJTNBZmFsc2UlMkMlMjJwZW5kaW5nQ29uc2VxdWVuY2VzJTIyJTNBJTVCJTVEJTJDJTIycHJvY2Vzc2VkQ29uc2VxdWVuY2VzJTIyJTNBJTVCJTVEJTdEJTJDJTIyZWxlY3Rpb24lMjIlM0ElN0IlMjJwaGFzZSUyMiUzQSUyMnJlc29sdmVkJTIyJTJDJTIycnVuSWQlMjIlM0ElMjJhdHRvMy1tdXJmODYxZC0xMCUyMiUyQyUyMmRpc3RyaWN0cyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIybm9yZCUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNTElMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E5JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJwcnVkZW50JTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBNCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTQlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmNlbnRybyUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNjAlMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E5JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJyaXNreSUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTEyJTJDJTIyYXBwbGllZERlbHRhJTIyJTNBMTMlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMnN1ZCUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNTklMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E4JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJyaXNreSUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTEyJTJDJTIyYXBwbGllZERlbHRhJTIyJTNBMTMlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmlzb2xlJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E0OSUyQyUyMmFjdGlvbk1hc2slMjIlM0E1JTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTglN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJlbmRvcnNlbWVudCUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJjYW1wbyUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTMlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0EzJTJDJTIyYWxseUlkJTIyJTNBJTIyY2FtcG9fc2VjcmV0YXJ5JTIyJTdEJTVEJTJDJTIycmV2aXNpb24lMjIlM0EyJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJmZWVkJTIyJTJDJTIybG9jYWxDb25zZW5zdXMlMjIlM0E1OSUyQyUyMmFjdGlvbk1hc2slMjIlM0EzJTJDJTIyb3V0Y29tZXMlMjIlM0ElNUIlN0IlMjJhY3Rpb24lMjIlM0ElMjJkZWJhdGUlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyd2luJTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBOCUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTglN0QlMkMlN0IlMjJhY3Rpb24lMjIlM0ElMjJwcm9taXNlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMnJpc2t5JTIyJTJDJTIyYmFzZURlbHRhJTIyJTNBMTIlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0ExMyU3RCU1RCUyQyUyMnJldmlzaW9uJTIyJTNBMiU3RCU1RCUyQyUyMmVuZG9yc2VtZW50RGlzdHJpY3RCeUFsbHklMjIlM0ElN0IlMjJjYW1wb19zZWNyZXRhcnklMjIlM0ElMjJpc29sZSUyMiU3RCUyQyUyMnJlc3VsdCUyMiUzQSU3QiUyMmJvc3NXb24lMjIlM0F0cnVlJTJDJTIyc2VhdHMlMjIlM0E0JTJDJTIyZW5kaW5nJTIyJTNBJTIyZ292ZXJubWVudCUyMiUyQyUyMmRpc3RyaWN0cyUyMiUzQSU1QiU3QiUyMmlkJTIyJTNBJTIybm9yZCUyMiUyQyUyMmJlZm9yZVJlY291bnQlMjIlM0E1MSUyQyUyMmFmdGVyUmVjb3VudCUyMiUzQTUxJTJDJTIyc2VhdCUyMiUzQTElMkMlMjJyZWNvdW50ZWQlMjIlM0FmYWxzZSU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyY2VudHJvJTIyJTJDJTIyYmVmb3JlUmVjb3VudCUyMiUzQTYwJTJDJTIyYWZ0ZXJSZWNvdW50JTIyJTNBNjAlMkMlMjJzZWF0JTIyJTNBMSUyQyUyMnJlY291bnRlZCUyMiUzQWZhbHNlJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJzdWQlMjIlMkMlMjJiZWZvcmVSZWNvdW50JTIyJTNBNTklMkMlMjJhZnRlclJlY291bnQlMjIlM0E1OSUyQyUyMnNlYXQlMjIlM0ExJTJDJTIycmVjb3VudGVkJTIyJTNBZmFsc2UlN0QlMkMlN0IlMjJpZCUyMiUzQSUyMmlzb2xlJTIyJTJDJTIyYmVmb3JlUmVjb3VudCUyMiUzQTQ5JTJDJTIyYWZ0ZXJSZWNvdW50JTIyJTNBNDklMkMlMjJzZWF0JTIyJTNBMCUyQyUyMnJlY291bnRlZCUyMiUzQWZhbHNlJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJmZWVkJTIyJTJDJTIyYmVmb3JlUmVjb3VudCUyMiUzQTU5JTJDJTIyYWZ0ZXJSZWNvdW50JTIyJTNBNTklMkMlMjJzZWF0JTIyJTNBMSUyQyUyMnJlY291bnRlZCUyMiUzQWZhbHNlJTdEJTVEJTdEJTJDJTIyc25hcHNob3QlMjIlM0ElN0IlMjJzY2hlbWFWZXJzaW9uJTIyJTNBMSUyQyUyMnJ1bklkJTIyJTNBJTIyYXR0bzMtbXVyZjg2MWQtMTAlMjIlMkMlMjJjb2FsaXRpb25TbmFwc2hvdElkJTIyJTNBJTIyZTIyMTM1ZDFmZjAyNWE1OTRjNzg1MGVhZTc3NDM1MTBlY2U5NzY4NTgwNmUzNDZmYjIxYzkzY2YyMGM2MzhjOSUyMiUyQyUyMmRvY3RyaW5lJTIyJTNBJTIybGlzdGFfY2l2aWNhJTIyJTJDJTIyc29uZGFnZ2klMjIlM0ExMDAlMkMlMjJkaXN0cmljdHMlMjIlM0ElNUIlN0IlMjJpZCUyMiUzQSUyMm5vcmQlMjIlMkMlMjJsb2NhbENvbnNlbnN1cyUyMiUzQTUxJTJDJTIyYWN0aW9uTWFzayUyMiUzQTMlMkMlMjJvdXRjb21lcyUyMiUzQSU1QiU3QiUyMmFjdGlvbiUyMiUzQSUyMmRlYmF0ZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJ3aW4lMjIlMkMlMjJiYXNlRGVsdGElMjIlM0E4JTJDJTIyYXBwbGllZERlbHRhJTIyJTNBOSU3RCUyQyU3QiUyMmFjdGlvbiUyMiUzQSUyMnByb21pc2UlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIycHJ1ZGVudCUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTQlMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E0JTdEJTVEJTJDJTIycmV2aXNpb24lMjIlM0EyJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJjZW50cm8lMjIlMkMlMjJsb2NhbENvbnNlbnN1cyUyMiUzQTYwJTJDJTIyYWN0aW9uTWFzayUyMiUzQTMlMkMlMjJvdXRjb21lcyUyMiUzQSU1QiU3QiUyMmFjdGlvbiUyMiUzQSUyMmRlYmF0ZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJ3aW4lMjIlMkMlMjJiYXNlRGVsdGElMjIlM0E4JTJDJTIyYXBwbGllZERlbHRhJTIyJTNBOSU3RCUyQyU3QiUyMmFjdGlvbiUyMiUzQSUyMnByb21pc2UlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIycmlza3klMjIlMkMlMjJiYXNlRGVsdGElMjIlM0ExMiUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTEzJTdEJTVEJTJDJTIycmV2aXNpb24lMjIlM0EyJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJzdWQlMjIlMkMlMjJsb2NhbENvbnNlbnN1cyUyMiUzQTU5JTJDJTIyYWN0aW9uTWFzayUyMiUzQTMlMkMlMjJvdXRjb21lcyUyMiUzQSU1QiU3QiUyMmFjdGlvbiUyMiUzQSUyMmRlYmF0ZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJ3aW4lMjIlMkMlMjJiYXNlRGVsdGElMjIlM0E4JTJDJTIyYXBwbGllZERlbHRhJTIyJTNBOCU3RCUyQyU3QiUyMmFjdGlvbiUyMiUzQSUyMnByb21pc2UlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIycmlza3klMjIlMkMlMjJiYXNlRGVsdGElMjIlM0ExMiUyQyUyMmFwcGxpZWREZWx0YSUyMiUzQTEzJTdEJTVEJTJDJTIycmV2aXNpb24lMjIlM0EyJTdEJTJDJTdCJTIyaWQlMjIlM0ElMjJpc29sZSUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNDklMkMlMjJhY3Rpb25NYXNrJTIyJTNBNSUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E4JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIyZW5kb3JzZW1lbnQlMjIlMkMlMjJ2YXJpYW50JTIyJTNBJTIyY2FtcG8lMjIlMkMlMjJiYXNlRGVsdGElMjIlM0EzJTJDJTIyYXBwbGllZERlbHRhJTIyJTNBMyUyQyUyMmFsbHlJZCUyMiUzQSUyMmNhbXBvX3NlY3JldGFyeSUyMiU3RCU1RCUyQyUyMnJldmlzaW9uJTIyJTNBMiU3RCUyQyU3QiUyMmlkJTIyJTNBJTIyZmVlZCUyMiUyQyUyMmxvY2FsQ29uc2Vuc3VzJTIyJTNBNTklMkMlMjJhY3Rpb25NYXNrJTIyJTNBMyUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTdCJTIyYWN0aW9uJTIyJTNBJTIyZGViYXRlJTIyJTJDJTIydmFyaWFudCUyMiUzQSUyMndpbiUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTglMkMlMjJhcHBsaWVkRGVsdGElMjIlM0E4JTdEJTJDJTdCJTIyYWN0aW9uJTIyJTNBJTIycHJvbWlzZSUyMiUyQyUyMnZhcmlhbnQlMjIlM0ElMjJyaXNreSUyMiUyQyUyMmJhc2VEZWx0YSUyMiUzQTEyJTJDJTIyYXBwbGllZERlbHRhJTIyJTNBMTMlN0QlNUQlMkMlMjJyZXZpc2lvbiUyMiUzQTIlN0QlNUQlMkMlMjJjb2FsaXRpb24lMjIlM0ElN0IlMjJtZW1iZXJzJTIyJTNBJTVCJTdCJTIyYWxseUlkJTIyJTNBJTIyY2FtcG9fc2VjcmV0YXJ5JTIyJTJDJTIyc3RhdHVzJTIyJTNBJTIyc3RyYWluZWQlMjIlMkMlMjJ2aW9sYXRpb25Db3VudCUyMiUzQTElMkMlMjJyZWNvbmNpbGlhdGlvblNwZW50JTIyJTNBZmFsc2UlN0QlMkMlN0IlMjJhbGx5SWQlMjIlM0ElMjJxdWFudHVtX2NlbnRyaXN0JTIyJTJDJTIyc3RhdHVzJTIyJTNBJTIyc3RyYWluZWQlMjIlMkMlMjJ2aW9sYXRpb25Db3VudCUyMiUzQTElMkMlMjJyZWNvbmNpbGlhdGlvblNwZW50JTIyJTNBZmFsc2UlN0QlNUQlMkMlMjJsb2NrZWQlMjIlM0FmYWxzZSUyQyUyMnBlbmRpbmdDb25zZXF1ZW5jZXMlMjIlM0ElNUIlNUQlMkMlMjJwcm9jZXNzZWRDb25zZXF1ZW5jZXMlMjIlM0ElNUIlNUQlN0QlMkMlMjJicm9rZW5EdXJpbmdDaGFwdGVyJTIyJTNBJTVCJTVEJTJDJTIyZWxlY3Rpb25TbmFwc2hvdElkJTIyJTNBJTIyYzk2MzlmZTM4ZGEzOWU5YThjYmY0MzNmOGRiM2Y3MzQ1OTE3NjZiMjBmZmE4YjNhODNmOTMzZTcxMDgyOTEzMCUyMiU3RCUyQyUyMnJldmlzaW9uJTIyJTNBMTIlMkMlMjJleHRlbnNpb25zJTIyJTNBJTdCJTIydW5rbm93bkRpc3RyaWN0cyUyMiUzQSU1QiU1RCU3RCU3RCUyQyUyMndlZWtseUNhbXBhaWduJTIyJTNBJTdCJTIyd2Vla0tleSUyMiUzQSUyMiUyMiUyQyUyMnNlZWQlMjIlM0EwJTJDJTIycGhhc2UlMjIlM0ElMjJpZGxlJTIyJTJDJTIyY3Vyc29yJTIyJTNBMCUyQyUyMnNjb3JlJTIyJTNBMCUyQyUyMm91dGNvbWVzJTIyJTNBJTVCJTVEJTJDJTIycmV3YXJkQ2xhaW1lZCUyMiUzQWZhbHNlJTdEJTJDJTIydW5sb2NrZWRNZW1lRm9ybXMlMjIlM0ElNUIlNUQlN0Q="
+    }
+  ],
+  "higgsfield": {
+    "spentThisRound": 0,
+    "lastVerifiedBalance": 353.22
+  },
+  "publication": {
+    "status": "pending source commit; previous deployment quotas remain recorded in opening proof",
+    "mainLastVerifiedRuntime": "adde6bc1fee3dc9e0e3e7bdab486c4ddab41edab",
+    "previewLastVerifiedRuntime": "bde332bdf7d2a863130cc45641a8450f8b1cc7d1",
+    "preview": "https://politicmon-link-check.vercel.app/"
+  }
+}

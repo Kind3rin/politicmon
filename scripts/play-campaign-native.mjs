@@ -6,6 +6,8 @@ const id=process.env.STARTER??'ellyna',seed=Number(process.env.RUN_SEED??2026100
 const label=process.env.RUN_LABEL??'current';
 const practice=process.env.RUN_PRACTICE==='1';
 const endAt=process.env.END_AT??'auditel';
+const hard=process.env.RUN_HARD==='1';
+const endpoints=['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy','tour','palace','election'];
 const euroPlan=process.env.EU_PLAN??plan;
 const capitalPlan=process.env.CAP_PLAN??'direct';
 const courtPlan=process.env.COURT_PLAN??'direct';
@@ -25,15 +27,17 @@ const resumeReport=resumePath?JSON.parse(readFileSync(resumePath,'utf8')):null;
 const resumeStage=process.env.RESUME_STAGE??'garante-result-1';
 const resumeCode=resumeReport?.codes[resumeStage]??null;
 if(resumePath){assert.ok(resumeCode,'Earned milestone save missing');assert.equal(resumeReport.id,id,'Starter does not match earned save');}
-assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy','tour','palace','election'].includes(endAt),'Unknown campaign endpoint');
+assert.ok(endpoints.includes(endAt),'Unknown campaign endpoint');
+assert.ok(['skip','support'].includes(archivePlan),'Unknown archive plan');
+assert.ok(['skip','defensive'].includes(kitPlan),'Unknown equipment plan');
 assert.ok(['alliance','distance','opposition'].includes(futurePlan),'Unknown future choice');
 assert.ok(['loyalty','autonomy','home'].includes(diplomacyPlan),'Unknown diplomacy choice');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
- const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode})=>{
-  const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,importSaveCode,exportSaveCode,saveGame}=await import('/src/game/state.ts');
+ const result=await page.evaluate(async({id,seed,plan,practice,endAt,hard,endpoints,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode})=>{
+  const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{importSaveCode,exportSaveCode,saveGame}=await import('/src/game/state.ts');
   const {Screen}=await import('/src/engine/screen.ts'),{Input}=await import('/src/engine/input.ts'),{SceneStack}=await import('/src/engine/scene.ts');
   const {MOVES}=await import('/src/data/moves.ts'),{ITEMS}=await import('/src/data/items.ts'),{MAPS,STARTER_SPOTS}=await import('/src/data/maps.ts');
   const {statsOf,itemEvolution,LEVEL_CAP}=await import('/src/game/monster.ts'),{damageRange,switchPreview}=await import('/src/game/battle/tactics.ts'),{makeCombatant,foeMoveScore}=await import('/src/game/battle/sim.ts');
@@ -42,12 +46,32 @@ try{
   const {archivedMoves}=await import('/src/game/moveArchive.ts');
   const {TILES}=await import('/src/art/tiles.ts'),{tickRunStats}=await import('/src/game/runstats.ts'),{spriteRegistryStats}=await import('/src/engine/assets.ts');
   const canvas=document.createElement('canvas');canvas.id='game-canvas';document.body.append(canvas);const screen=new Screen(canvas),input=new Input(),stack=new SceneStack();
-  const state=resumeCode?importSaveCode(resumeCode):newGameState();
+  const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
+  let state,world,initialFlow=[];
+  if(resumeCode){
+   state=importSaveCode(resumeCode);if(!state||!state.flags['garante-beaten'])throw Error('Resume must be an earned post-Garante save');world=new WorldScene(stack,input,state);stack.push(world);
+  }else{
+   const {TitleScene}=await import('/src/scenes/TitleScene.ts');
+   stack.push(new TitleScene(stack,input));
+   const launchPress=button=>{document.dispatchEvent(new KeyboardEvent('keydown',{code:code[button],bubbles:true,cancelable:true}));stack.update(.1);input.endFrame();document.dispatchEvent(new KeyboardEvent('keyup',{code:code[button],bubbles:true,cancelable:true}));};
+   initialFlow.push('title');launchPress('a');
+   if(hard)launchPress('down');
+   initialFlow.push(hard?'difficulty:hard':'difficulty:normal');launchPress('a');
+   if(stack.top?.constructor.name!=='SlotScene')throw Error('New game did not open actual slot selector');
+   initialFlow.push('empty-slot');launchPress('a');
+   if(stack.top?.constructor.name!=='NicknameScene')throw Error('Fresh game did not open nickname');
+   // Desktop nickname grid: A, six rows down, right to FINE. No profile/save injection.
+   initialFlow.push('nickname-grid');launchPress('a');for(let n=0;n<6;n++)launchPress('down');launchPress('right');launchPress('a');
+   for(let n=0;n<100&&!stack.scenes.some(s=>s instanceof WorldScene);n++)await new Promise(r=>setTimeout(r,10));
+   world=stack.scenes.find(s=>s instanceof WorldScene);state=world?.state;
+   if(!state||state.hardMode!==hard||state.money!==500||state.party.length||state.badges.length||Object.keys(state.flags).length)throw Error('Actual new-game flow did not produce untouched starting resources/difficulty: '+JSON.stringify({scene:stack.top?.constructor.name,state:state&&{hardMode:state.hardMode,money:state.money,party:state.party,badges:state.badges,flags:state.flags}}));
+   initialFlow.push('welcome-briefing');
+  }
   if(!state||(resumeCode&&!state.flags['garante-beaten']))throw Error('Resume must be an earned post-Garante save');
-  const world=new WorldScene(stack,input,state);stack.push(world);
+  const initialState=structuredClone(state);
+  const continuesTo=stage=>endpoints.indexOf(endAt)>=endpoints.indexOf(stage);
   const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let boxPending=null,repairPending=false,futureRecruit=false,tourTarget=null,electionConfirm=false;let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
   const narrative=[],say=world.say.bind(world);world.say=(lines,...rest)=>{narrative.push({map:state.pos.mapId,lines:[...lines],trust:state.morale.trust,cohesion:state.morale.cohesion});return say(lines,...rest);};
-  const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
   const trace=(type,detail)=>events.push({type,detail,steps:state.stepsTotal,map:state.pos.mapId,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp})),money:state.money});
   function tick(button){
    if(frames++>400000)throw Error('Campaign exceeded frame bound');
@@ -100,7 +124,8 @@ try{
      const damage=bestMove(s),hpMax=statsOf(s.player.mon).hp;
      const islandRecruit=offshorePlan==='prepared'&&state.pos.mapId==='offshore'&&s.foe.mon.level>=33;
      const campoRecruit=campoPlan==='recruit'&&state.pos.mapId==='campo_largo';
-     const teamLimit=islandRecruit||campoRecruit||futureRecruit?6:euroPlan==='tactical'&&state.badges.includes('auditel')?4:3;
+     const strettoRecruit=state.hardMode&&strettoPlan==='prepared'&&state.pos.mapId==='stretto';
+     const teamLimit=islandRecruit||campoRecruit||futureRecruit||strettoRecruit?6:euroPlan==='tactical'&&state.badges.includes('auditel')?4:3;
      const wantCatch=!s.trainer&&state.party.length<teamLimit&&(!futureRecruit||s.foe.mon.speciesId==='vannaccix')&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
      const wantHeal=s.player.mon.hp<hpMax*.35&&heal;
      itemPending=wantHeal?heal:wantCatch?balls[0]:null;grid(s.mainMenu,itemPending?1:0);return true;
@@ -187,6 +212,7 @@ try{
     if(!tourTarget)throw Error('No planned Tour action');
     if(s.mode==='menu'){
      if(s.index!==tourTarget.index){press('down');return true;}
+     if(tourTarget.ally&&!s.allies().includes(tourTarget.ally))throw Error('Planned Tour ally was not recruited: '+tourTarget.ally);
      if(tourTarget.ally&&s.allies()[s.allyIndex]!==tourTarget.ally){press('right');return true;}
      const p=s.preview();if(!p.ok)throw Error('Tour action rejected: '+p.error);
      trace('district-dossier',{id:s.districtId,choice:s.selected(),preview:p.lines,before:{money:state.money,morale:structuredClone(state.morale),coalition:structuredClone(state.coalition),election:structuredClone(state.election)}});press('a');return true;
@@ -252,7 +278,7 @@ try{
   function walkTo(tx,ty){
    const map=state.pos.mapId,losses=[...battles.values()].filter(b=>b.outcome==='loss').length;let stalled=0;
    for(let n=0;n<3000;n++){
-    settle();if(state.pos.mapId!==map||[...battles.values()].filter(b=>b.outcome==='loss').length>losses)return false;
+    settle();if(state.pos.mapId!==map||[...battles.values()].filter(b=>b.outcome==='loss').length>losses||world.isBlocked(tx,ty))return false;
     if(state.pos.x===tx&&state.pos.y===ty)return true;
     const path=pathTo(tx,ty);
     // A passer-by can temporarily occupy a street. Wait through its natural
@@ -265,9 +291,15 @@ try{
   }
   function face(dir){if(state.pos.facing!==dir)press(dir);}
   function interact(tx,ty){
+   const map=state.pos.mapId,losses=[...battles.values()].filter(b=>b.outcome==='loss').length;
+   for(let attempt=0;attempt<6;attempt++){
    const choices=dirs.map(([dir,dx,dy])=>({dir:dirs.find(d=>d[1]===-dx&&d[2]===-dy)[0],x:tx+dx,y:ty+dy})).filter(c=>!world.isBlocked(c.x,c.y)&&pathTo(c.x,c.y));
    choices.sort((a,b)=>pathTo(a.x,a.y).length-pathTo(b.x,b.y).length);if(!choices.length)throw Error('No adjacent interaction tile '+tx+','+ty);
-   const c=choices[0];if(!walkTo(c.x,c.y)){trace('interrupted-interaction',{x:tx,y:ty});return false;}face(c.dir);press('a');settle();return true;
+   const c=choices[0];if(!walkTo(c.x,c.y)){
+    if(state.pos.mapId!==map||[...battles.values()].filter(b=>b.outcome==='loss').length>losses){trace('interrupted-interaction',{x:tx,y:ty});return false;}
+    trace('replanned-interaction',{x:tx,y:ty,occupied:{x:c.x,y:c.y}});continue;
+   }face(c.dir);press('a');settle();return true;
+   }throw Error('Interaction approaches stayed occupied '+tx+','+ty);
   }
   function enterMap(mapId){
    for(let n=0;n<3&&state.pos.mapId!==mapId;n++){
@@ -355,6 +387,16 @@ try{
    if(!state.flags['ponte-beaten'])return;
    heal();for(let attempt=0;!state.flags['gift-ingegnere']&&attempt<3;attempt++)interact(17,5);
    if(!state.flags['gift-ingegnere'])throw Error('Engineer gift input did not complete');
+   if(state.hardMode){
+    const startWild=[...battles.values()].filter(b=>!b.trainer).length;
+    for(let n=0;n<2500&&(state.party.length<6||state.party[0].level<35);n++){
+     if([...battles.values()].filter(b=>!b.trainer).length-startWild>=40)break;
+     const lead=state.party[0];if(lead.hp<statsOf(lead).hp*.5||!lead.moves.some(s=>s.pp>0&&MOVES[s.id].power>0))heal();
+     const cells=world.map.tiles.flatMap((row,y)=>[...row].flatMap((ch,x)=>TILES[ch]?.encounter&&!world.isBlocked(x,y)?[{x,y,path:pathTo(x,y)}]:[])).filter(c=>c.path?.length).sort((a,b)=>a.path.length-b.path.length);
+     if(!cells.length)throw Error('No reachable Stretto training grass');walkTo(cells[0].x,cells[0].y);
+    }
+    trace('stretto-training-complete',{wildBattles:[...battles.values()].filter(b=>!b.trainer).length-startWild});await milestone('stretto-trained');heal();
+   }
    for(const trainer of ['geometra','djpapeete','citofonista','noponte']){
     const npc=world.visibleNpcs().find(n=>n.trainerId===trainer);
     if(!npc)throw Error('Optional Stretto trial disappeared '+trainer);
@@ -365,7 +407,7 @@ try{
   function train(){
    const startWild=[...battles.values()].filter(b=>!b.trainer).length;
    for(let n=0;n<2500;n++){
-    if(state.party[0].level>=10&&state.party.length>=3)break;
+    if(state.party[0].level>=(state.hardMode?13:10)&&state.party.length>=3)break;
     if([...battles.values()].filter(b=>!b.trainer).length-startWild>=40)break;
     const lead=state.party[0];if(state.pos.mapId!=='route1'||lead.hp<statsOf(lead).hp*.5||!lead.moves.some(s=>s.pp>0&&MOVES[s.id].power>0)){
      heal();if(state.pos.mapId==='mediopoli')cross('down');else cross('up');
@@ -438,7 +480,7 @@ try{
     }
     await milestone('spread-result');
    }
-   if(['dazio','capitano','boss','garante','tesoriere','commissione','photographer'].includes(endAt)&&state.badges.includes('spread')){
+   if(continuesTo('dazio')&&state.badges.includes('spread')){
     if(state.pos.mapId==='gymue'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
     heal();
     if(capitalPlan==='prepared'){
@@ -456,20 +498,21 @@ try{
      if(state.pos.mapId==='gymglobal'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
      heal();enterMap('gymglobal');
     }
-    for(let attempt=1;attempt<=2&&!state.badges.includes('dazio');attempt++){
+    if(state.hardMode&&capitalPlan==='prepared'){supplies();enterMap('gymglobal');}
+    for(let attempt=1;attempt<=(state.hardMode?4:2)&&!state.badges.includes('dazio');attempt++){
      if(state.pos.mapId!=='gymglobal'){heal();enterMap('gymglobal');}
      const boss=world.visibleNpcs().find(n=>n.trainerId==='tycoon');interact(boss.x,boss.y);settle();await milestone(`dazio-result-${attempt}`);
     }
     await milestone('dazio-result');
    }
    if((strettoPlan==='prepared'||endAt==='capitano')&&state.badges.includes('dazio'))await visitStretto();
-   if(['boss','garante','tesoriere','commissione','photographer'].includes(endAt)&&state.badges.includes('dazio')){
+   if(continuesTo('boss')&&state.badges.includes('dazio')){
     if(courtPlan==='prepared')supplies();else heal();prepareArchive();enterMap('palazzo');
     for(let attempt=1;attempt<=2&&!state.flags['boss-beaten'];attempt++){
      if(state.pos.mapId!=='palazzo'){heal();enterMap('palazzo');}
      const npc=world.visibleNpcs().find(n=>n.trainerId==='boss');interact(npc.x,npc.y);await milestone(`palazzo-result-${attempt}`);
     }
-    if(['garante','tesoriere','commissione','photographer'].includes(endAt)&&state.flags['boss-beaten']){
+    if(continuesTo('garante')&&state.flags['boss-beaten']){
      heal();enterMap('palazzo');enterMap('colle');await milestone('colle');
      if(courtPlan==='prepared')for(const trainerId of ['giudice1','giudice2','giudice3']){
       const npc=world.visibleNpcs().find(n=>n.trainerId===trainerId);
@@ -477,14 +520,15 @@ try{
       heal();enterMap('palazzo');enterMap('colle');
      }
      if(courtPlan==='prepared'){supplies();prepareArchive();enterMap('palazzo');enterMap('colle');await milestone('garante-supplies');}
-     for(let attempt=1;attempt<=2&&!state.flags['garante-beaten'];attempt++){
+     for(let attempt=1;attempt<=(state.hardMode?4:2)&&!state.flags['garante-beaten'];attempt++){
+      if(state.hardMode&&attempt>1&&courtPlan==='prepared'){supplies();prepareArchive();prepareKit();}
       if(state.pos.mapId!=='colle'){heal();enterMap('palazzo');enterMap('colle');}
       const npc=world.visibleNpcs().find(n=>n.trainerId==='garante');interact(npc.x,npc.y);await milestone(`garante-result-${attempt}`);
      }
     }
    }
    }
-   if(['tesoriere','commissione','photographer'].includes(endAt)&&state.flags['garante-beaten']&&!state.flags['offshore-beaten']){
+   if(continuesTo('tesoriere')&&state.flags['garante-beaten']&&!state.flags['offshore-beaten']){
     await milestone('earned-resume');supplies();prepareArchive();
     if(!state.flags['veh-traghetto'])interact(4,19);
     enterMap('stretto');enterMap('offshore');await milestone('offshore-arrival');heal();
@@ -509,7 +553,7 @@ try{
     }
    }
 
-   if(['commissione','photographer'].includes(endAt)&&state.flags['garante-beaten']&&!state.flags['ue-beaten']){
+   if(continuesTo('commissione')&&state.flags['garante-beaten']&&!state.flags['ue-beaten']){
     await milestone('earned-brux-resume');settle();
     if(state.pos.mapId==='commissione'){const exit=world.map.warps.find(w=>w.toMap==='bruxelles');walkTo(exit.x,exit.y);settle();}
     if(state.pos.mapId!=='offshore'&&state.pos.mapId!=='bruxelles')throw Error('Brussels segment needs earned maritime arrival');
@@ -528,7 +572,7 @@ try{
      heal();enterMap('commissione');const npc=world.visibleNpcs().find(n=>n.trainerId==='commissione');interact(npc.x,npc.y);await milestone(`commissione-result-${attempt}`);
     }
    }
-   if(endAt==='photographer'&&state.flags['ue-beaten']){
+   if(continuesTo('photographer')&&state.flags['ue-beaten']&&!state.flags['campo-photo-complete']){
     await milestone('earned-campo-resume');settle();
     if(state.pos.mapId==='commissione') {const exit=world.map.warps.find(w=>w.toMap==='bruxelles');walkTo(exit.x,exit.y);settle();}
     if(state.pos.mapId==='bruxelles'){if(campoPlan!=='direct'){supplies();prepareArchive();prepareKit();}else heal();enterMap('campo_largo');}
@@ -557,7 +601,7 @@ try{
     for(let attempt=1;attempt<=2&&!state.flags['campo-photo-complete'];attempt++){campoCare();const npc=world.visibleNpcs().find(n=>n.id==='campo-fotografo');interact(npc.x,npc.y);await milestone(`campo-photographer-${attempt}`);}
    }
     if(endAt==='photographer'&&state.flags['campo-photo-complete']){const npc=world.visibleNpcs().find(n=>n.id==='campo-fotografo');interact(npc.x,npc.y);await milestone('campo-verbale');}
-   if(endAt==='future'){
+   if(continuesTo('future')&&!state.flags.futureResolved){
     if(!state.flags['campo-photo-complete'])throw Error('Future requires earned Campo save');
     settle();await milestone('future-earned-resume');heal();enterMap('futuro_piazza');await milestone('future-arrival');
     const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing Future NPC '+id);interact(npc.x,npc.y);};
@@ -587,7 +631,7 @@ try{
      enterMap('diplomacy_lobby');await milestone('future-diplomacy');
     }
    }
-   if(endAt==='diplomacy'){
+   if(continuesTo('diplomacy')&&!state.flags.diplomacyComplete){
     if(!state.flags.futureResolved||state.pos.mapId!=='diplomacy_lobby')throw Error('Diplomacy requires earned Future arrival');
     settle();await milestone('diplomacy-earned-resume');heal();enterMap('futuro_piazza');enterMap('diplomacy_lobby');await milestone('diplomacy-arrival');
     const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing diplomacy NPC '+id);interact(npc.x,npc.y);};
@@ -600,12 +644,14 @@ try{
     }
     if(state.flags.diplomacyComplete){if(state.pos.mapId==='diplomacy_terrace')enterMap('diplomacy_lobby');await milestone('diplomacy-verbale');enterMap('tour_feed');await milestone('diplomacy-tour');}
    }
-   if(endAt==='tour'){
+   if(continuesTo('tour')&&!state.flags.tourComplete){
     if(!state.flags.diplomacyComplete)throw Error('Tour requires an earned Hotel victory');
     settle();await milestone('tour-earned-resume');
     const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing Tour NPC '+id);interact(npc.x,npc.y);};
     const care=()=>{heal();if(state.pos.mapId==='bruxelles'){enterMap('campo_largo');heal();}if(state.pos.mapId!=='campo_largo')throw Error('Tour care did not return to Campo');enterMap('futuro_piazza');enterMap('diplomacy_lobby');enterMap('tour_feed');};
-    for(const [district,index,ally]of [['nord',1],['centro',2],['sud',2],['isole',3,'generorso'],['feed',2]]){
+    const islandAlly=state.coalition.members.find(m=>m.status!=='broken'&&!state.election.endorsementDistrictByAlly[m.allyId])?.allyId;
+    if(!islandAlly)throw Error('Tour requires an available, actually recruited ally');
+    for(const [district,index,ally]of [['nord',1],['centro',2],['sud',2],['isole',3,islandAlly],['feed',2]]){
      care();enterMap('district_'+district);await milestone('tour-'+district+'-arrival');
      tourTarget={index:0};talk('district-kiosk-'+district);await milestone('tour-'+district+'-debate');
      if(!state.election.districts.find(d=>d.id===district).outcomes.some(o=>o.action==='debate'))throw Error('No manual debate result: '+district);
@@ -617,7 +663,7 @@ try{
     if(!state.flags.tourComplete||state.election.phase!=='ready')throw Error('Five manually earned dossiers did not open Palazzo');
     await milestone('tour-five-dossiers');enterMap('palazzo_feed');await milestone('tour-palazzo');
    }
-   if(endAt==='palace'||endAt==='election'){
+   if(continuesTo('palace')){
     if(!state.flags.tourComplete||state.election.phase!=='ready')throw Error('Palace requires untouched earned Tour save');
     settle();await milestone('palace-earned-resume');
     const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing Palace NPC '+id);interact(npc.x,npc.y);};
@@ -634,8 +680,8 @@ try{
     }
    }
   }catch(e){failure=e.message;trace('failure',{message:failure,pos:{...state.pos},npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y,canWander:n.canWander})),tiles:world.map.tiles});}
-  return {levelCap:LEVEL_CAP,id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,photoPlan,campoPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,coalition:state.coalition,election:state.election,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
- },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode});
+  return {levelCap:LEVEL_CAP,id,seed,plan,endAt,initialFlow,initialState,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,photoPlan,campoPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{hardMode:state.hardMode,map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,coalition:state.coalition,election:state.election,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
+ },{id,seed,plan,practice,endAt,hard,endpoints,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode});
  result.resume=resumePath?{report:resumePath,stage:resumeStage,parentId:resumeReport.id,parentSeed:resumeReport.seed}:null;result.offshorePlan=offshorePlan;result.futurePlan=futurePlan;result.futureRepair=futureRepair;result.futureEvolve=futureEvolve;result.diplomacyPlan=diplomacyPlan;
  assert.deepEqual(errors,[]);
  mkdirSync('artifacts/campaign-native',{recursive:true});mkdirSync('artifacts/screens/campaign-native',{recursive:true});

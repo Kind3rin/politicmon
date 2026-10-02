@@ -167,6 +167,13 @@ Le durate del controller accelerato non rappresentano minuti di gioco umano.
   verificati precache e primo utilizzo offline, perché Playwright non
   supporta il reload offline del service worker WebKit.
 
-Pubblicazione e controlli sul dominio pubblico sono registrati dopo il
-deploy. Restano progressione fino al Colle per le diverse squadre, atti
-successivi, audio, dialoghi delle altre zone e verifica integrale del redesign.
+Pubblicazione **258b8bc** su master: [CI 36964930805](https://github.com/Kind3rin/politicmon/actions/runs/36964930805)
+e tutti e tre i deploy Vercel riusciti. Su
+[politicmon.vercel.app](https://politicmon.vercel.app/) sono verificati
+427 checksum PNG, 536 asset PWA, aggiornamento della cache, ripresa dopo
+background e sei configurazioni della cornice esterna in Chromium/WebKit
+(390×844, 844×390, 1280×800). Reload offline Chromium riuscito; la limitazione
+Playwright WebKit descritta sopra resta applicabile.
+
+Restano progressione fino al Colle per le diverse squadre, atti successivi,
+audio, dialoghi delle altre zone e verifica integrale del redesign.

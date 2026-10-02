@@ -104,6 +104,13 @@ la loro progressione resta aperta. 1,50 crediti, saldo 615,47. 281 test,
 squadre al Colle, atti successivi, audio, scrittura delle altre zone e
 verifica integrale. Il redesign non è dichiarato completo.
 
+Pubblicazione `258b8bc`: CI 36964930805 e tre deploy Vercel riusciti.
+Verificati sul dominio pubblico 427 checksum PNG, 536 asset PWA e sei
+configurazioni della cornice in Chromium/WebKit. Il corridoio del bar
+di Capitale è protetto anche dalle sfide opzionali adiacenti alla porta;
+la partita che si bloccava ora arriva al Garante. I limiti di equilibrio
+sono conservati anche in `colle-playtests.json`.
+
 [CAPITALE-PREPARAZIONE.md](CAPITALE-PREPARAZIONE.md): sei sfide volontarie,
 due briefing illustrati, nuova satira e guide veritiere di porto/veicoli.
 Tre partite preparate conquistano Dazio al primo tentativo; Giorgetta

@@ -28,7 +28,8 @@ menu, doppio tocco dei menu, dossier tattico e salvataggio. Mentre è aperta,
 il game loop continua a disegnare ma non aggiorna la scena o il tempo di
 partita. Le prove congelano esattamente lo stato sia nel mondo sia in una
 vera BattleScene. Non è una pausa dei messaggi ricevuti dalla rete: il round
-non modifica il protocollo multiplayer.
+non modifica il protocollo multiplayer. La guida distingue esplicitamente
+le lotte locali dai duelli online: consultarla non ferma l’avversario remoto.
 
 ESC o i due pulsanti chiudono la guida e restituiscono il focus al canvas.
 TAB e SHIFT+TAB restano nei due pulsanti della guida anche con le preferenze
@@ -68,6 +69,12 @@ La verifica della build locale passa su 420 checksum e presenza della nuova
 cornice. La PWA passa su Chromium/Pixel 7 e WebKit/iPhone 13 con 529 risorse;
 il reload completamente offline è provato soltanto su Chromium. Nessun PNG
 di gioco cambia: 528 file restano installati.
+
+Il round `b36ec49` è pubblicato: CI e tre deploy Vercel riusciti, 420 checksum
+e 529 risorse verificati sul dominio pubblico. `check:shell:release` prova
+anche la pagina di produzione in sei casi: telefono, orizzontale e computer
+su ciascun motore. Il titolo resta identico pixel per pixel durante la guida,
+TAB non esce dalla finestra modale e ESC restituisce il focus al canvas.
 
 Questo round non richiede raster o video aggiuntivi: **0 crediti**.
 Saldo Higgsfield letto **617,97**, spesa cumulativa del progetto **268**.

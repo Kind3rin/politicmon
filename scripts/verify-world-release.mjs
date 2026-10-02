@@ -36,6 +36,7 @@ await Promise.all(Array.from({ length: 6 }, async () => {
 }));
 const html = (await fetchBytes('')).toString();
 assert.ok(html.includes('id="shell-help"')&&html.includes('MANUALE DEL CANDIDATO'), 'modern shell and native command guide missing');
+assert.ok(html.includes('Nei duelli online non fermi l’avversario'), 'online pause distinction missing from command guide');
 assert.ok(!html.includes('console-brand-color')&&!html.includes('console-power'), 'old handheld shell branding remains');
 const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(match => match[1]);
 let source = (await Promise.all(scripts.map(fetchBytes))).map(bytes => bytes.toString()).join('\n');

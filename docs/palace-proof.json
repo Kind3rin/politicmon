@@ -1,6 +1,6 @@
 {
   "date": "2026-10-02",
-  "status": "local_verified_publication_pending",
+  "status": "published_verified",
   "goal": "active; full redesign not completed",
   "sourceSha256": {
     "src/game/palaceArchive.ts": "fd54966b1c1a57b93e3a2d67b941825344bccc2f4c790ae9a930ac8036b28954",
@@ -1008,7 +1008,512 @@
     }
   },
   "publication": {
-    "pending": true,
-    "url": "https://politicmon.vercel.app/"
+    "pending": false,
+    "runtimeCommit": "baff60088ccf517252abf89b63c252d6158123ab",
+    "url": "https://politicmon.vercel.app/",
+    "ci": {
+      "id": 37048577012,
+      "conclusion": "success",
+      "status": "completed",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37048577012"
+    },
+    "vercel": [
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon/4NTRHcCWCDsQJwL4uRUwu4wtgSe9"
+      },
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-link-check/8BrTjQUw6GzcrDtofz7RVJ7Ye4ua"
+      },
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-test-link/9gptyjHYApmiaBDdRi9eruc9UVsR"
+      }
+    ],
+    "bundle": {
+      "base": "https://politicmon.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon.vercel.app/",
+          "bytes": 2146
+        },
+        {
+          "url": "https://politicmon.vercel.app/sw.js",
+          "bytes": 889
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/index-Z2p-t5jg.js",
+          "bytes": 182792
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/index-BAicqtfz.css",
+          "bytes": 2909
+        },
+        {
+          "url": "https://politicmon.vercel.app/assets/WorldScene-B76a7igx.js",
+          "bytes": 169561
+        }
+      ],
+      "total": 358297,
+      "budget": 358400,
+      "margin": 103
+    },
+    "palaceFlow": [
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "stages": [
+          "reception",
+          "algoritmo-read",
+          "algoritmo-quiz",
+          "algoritmo-wrong",
+          "algoritmo-validated",
+          "factcheck-read",
+          "factcheck-quiz",
+          "factcheck-wrong",
+          "factcheck-validated",
+          "talkshow-read",
+          "talkshow-quiz",
+          "talkshow-wrong",
+          "talkshow-validated",
+          "silenzio-read",
+          "silenzio-quiz",
+          "silenzio-wrong",
+          "silenzio-validated",
+          "seal-cancel",
+          "seal-default-review",
+          "sealed-briefing"
+        ],
+        "assets": [
+          "/sprites/tiles/build_palace.png",
+          "/sprites/tiles/palace_wall.png",
+          "/sprites/tiles/palace_lobby_floor.png",
+          "/sprites/chars/npc_palace-reception_south.png",
+          "/sprites/tiles/palace_lobby_set.png",
+          "/sprites/chars/npc_palace-reception_east.png",
+          "/sprites/chars/npc_palace-algorithm-a_south.png",
+          "/sprites/chars/npc_palace-algorithm-b_south.png",
+          "/sprites/tiles/palace_algorithm_floor.png",
+          "/sprites/tiles/palace_algorithm_set.png",
+          "/sprites/ui/campaign/palace-algoritmo.png",
+          "/sprites/chars/npc_palace-algorithm-b_east.png",
+          "/sprites/chars/npc_palace-algorithm-a_north.png",
+          "/sprites/chars/npc_palace-reception_west.png",
+          "/sprites/tiles/palace_factcheck_floor.png",
+          "/sprites/chars/npc_palace-factcheck-b_south.png",
+          "/sprites/tiles/palace_factcheck_set.png",
+          "/sprites/chars/npc_palace-factcheck-a_south.png",
+          "/sprites/chars/npc_palace-factcheck-b_east.png",
+          "/sprites/ui/campaign/palace-factcheck.png",
+          "/sprites/chars/npc_palace-factcheck-b_north.png",
+          "/sprites/tiles/palace_talkshow_floor.png",
+          "/sprites/chars/npc_palace-talkshow-b_south.png",
+          "/sprites/chars/npc_palace-talkshow-a_south.png",
+          "/sprites/tiles/palace_talkshow_set.png",
+          "/sprites/ui/campaign/palace-talkshow.png",
+          "/sprites/chars/npc_palace-talkshow-a_north.png",
+          "/sprites/chars/npc_palace-talkshow-b_east.png",
+          "/sprites/chars/npc_palace-talkshow-a_west.png",
+          "/sprites/chars/npc_palace-talkshow-b_north.png",
+          "/sprites/tiles/palace_silence_floor.png",
+          "/sprites/chars/npc_palace-silence-a_south.png",
+          "/sprites/tiles/palace_silence_set.png",
+          "/sprites/chars/npc_palace-silence-b_south.png",
+          "/sprites/chars/npc_palace-silence-b_east.png",
+          "/sprites/ui/campaign/palace-silenzio.png",
+          "/sprites/chars/npc_palace-reception_north.png",
+          "/sprites/tiles/palace_studio_floor.png",
+          "/sprites/chars/npc_palace-studio_south.png",
+          "/sprites/tiles/palace_studio_set.png",
+          "/sprites/chars/npc_palace-studio_north.png"
+        ],
+        "cancelAndWrongPure": true,
+        "defaultDoesNotSeal": true,
+        "sealedSnapshot": {
+          "schemaVersion": 1,
+          "runId": "atto3-murb51yu-10",
+          "coalitionSnapshotId": "8200fb40c8ddfe9b869efa5ec5b7eb3e327014875d0dfbfe3aa366bf9f06b6a2",
+          "doctrine": "scissione",
+          "sondaggi": 100,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 51,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "prudent",
+                  "baseDelta": 4,
+                  "appliedDelta": 4
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "centro",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 12
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "sud",
+              "localConsensus": 58,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 12
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "isole",
+              "localConsensus": 52,
+              "actionMask": 5,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "endorsement",
+                  "variant": "destra",
+                  "baseDelta": 6,
+                  "appliedDelta": 6,
+                  "allyId": "generorso"
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "feed",
+              "localConsensus": 58,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 12
+                }
+              ],
+              "revision": 2
+            }
+          ],
+          "coalition": {
+            "members": [
+              {
+                "allyId": "quantum_centrist",
+                "status": "strained",
+                "violationCount": 1,
+                "reconciliationSpent": false
+              },
+              {
+                "allyId": "generorso",
+                "status": "strained",
+                "violationCount": 1,
+                "reconciliationSpent": false
+              }
+            ],
+            "locked": false,
+            "pendingConsequences": [],
+            "processedConsequences": []
+          },
+          "brokenDuringChapter": [
+            "campo_secretary"
+          ],
+          "electionSnapshotId": "c3bc53e3fb02a99530c55d6e8777bee29faef4fbef580caba43fed5115542dff"
+        },
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "stages": [
+          "reception",
+          "algoritmo-read",
+          "algoritmo-quiz",
+          "algoritmo-wrong",
+          "algoritmo-validated",
+          "factcheck-read",
+          "factcheck-quiz",
+          "factcheck-wrong",
+          "factcheck-validated",
+          "talkshow-read",
+          "talkshow-quiz",
+          "talkshow-wrong",
+          "talkshow-validated",
+          "silenzio-read",
+          "silenzio-quiz",
+          "silenzio-wrong",
+          "silenzio-validated",
+          "seal-cancel",
+          "seal-default-review",
+          "sealed-briefing"
+        ],
+        "assets": [
+          "/sprites/tiles/build_palace.png",
+          "/sprites/tiles/palace_lobby_set.png",
+          "/sprites/chars/npc_palace-reception_south.png",
+          "/sprites/tiles/palace_lobby_floor.png",
+          "/sprites/tiles/palace_wall.png",
+          "/sprites/chars/npc_palace-reception_north.png",
+          "/sprites/tiles/palace_algorithm_set.png",
+          "/sprites/chars/npc_palace-algorithm-b_south.png",
+          "/sprites/chars/npc_palace-algorithm-a_south.png",
+          "/sprites/tiles/palace_algorithm_floor.png",
+          "/sprites/ui/campaign/palace-algoritmo.png",
+          "/sprites/chars/npc_palace-algorithm-b_north.png",
+          "/sprites/chars/npc_palace-algorithm-a_west.png",
+          "/sprites/chars/npc_palace-algorithm-b_east.png",
+          "/sprites/chars/npc_palace-reception_east.png",
+          "/sprites/chars/npc_palace-factcheck-a_south.png",
+          "/sprites/tiles/palace_factcheck_floor.png",
+          "/sprites/chars/npc_palace-factcheck-b_south.png",
+          "/sprites/tiles/palace_factcheck_set.png",
+          "/sprites/chars/npc_palace-factcheck-a_east.png",
+          "/sprites/ui/campaign/palace-factcheck.png",
+          "/sprites/chars/npc_palace-factcheck-b_north.png",
+          "/sprites/chars/npc_palace-factcheck-b_west.png",
+          "/sprites/chars/npc_palace-talkshow-a_south.png",
+          "/sprites/chars/npc_palace-talkshow-b_south.png",
+          "/sprites/tiles/palace_talkshow_floor.png",
+          "/sprites/tiles/palace_talkshow_set.png",
+          "/sprites/chars/npc_palace-talkshow-a_east.png",
+          "/sprites/ui/campaign/palace-talkshow.png",
+          "/sprites/chars/npc_palace-talkshow-a_north.png",
+          "/sprites/tiles/palace_silence_floor.png",
+          "/sprites/chars/npc_palace-silence-b_south.png",
+          "/sprites/tiles/palace_silence_set.png",
+          "/sprites/chars/npc_palace-silence-a_south.png",
+          "/sprites/chars/npc_palace-silence-b_north.png",
+          "/sprites/ui/campaign/palace-silenzio.png",
+          "/sprites/chars/npc_palace-silence-a_west.png",
+          "/sprites/tiles/palace_studio_floor.png",
+          "/sprites/chars/npc_palace-studio_south.png",
+          "/sprites/tiles/palace_studio_set.png"
+        ],
+        "cancelAndWrongPure": true,
+        "defaultDoesNotSeal": true,
+        "sealedSnapshot": {
+          "schemaVersion": 1,
+          "runId": "atto3-murb722r-10",
+          "coalitionSnapshotId": "8200fb40c8ddfe9b869efa5ec5b7eb3e327014875d0dfbfe3aa366bf9f06b6a2",
+          "doctrine": "scissione",
+          "sondaggi": 100,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 51,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "prudent",
+                  "baseDelta": 4,
+                  "appliedDelta": 4
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "centro",
+              "localConsensus": 59,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 9
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 12
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "sud",
+              "localConsensus": 58,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 12
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "isole",
+              "localConsensus": 52,
+              "actionMask": 5,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "endorsement",
+                  "variant": "destra",
+                  "baseDelta": 6,
+                  "appliedDelta": 6,
+                  "allyId": "generorso"
+                }
+              ],
+              "revision": 2
+            },
+            {
+              "id": "feed",
+              "localConsensus": 58,
+              "actionMask": 3,
+              "outcomes": [
+                {
+                  "action": "debate",
+                  "variant": "win",
+                  "baseDelta": 8,
+                  "appliedDelta": 8
+                },
+                {
+                  "action": "promise",
+                  "variant": "risky",
+                  "baseDelta": 12,
+                  "appliedDelta": 12
+                }
+              ],
+              "revision": 2
+            }
+          ],
+          "coalition": {
+            "members": [
+              {
+                "allyId": "quantum_centrist",
+                "status": "strained",
+                "violationCount": 1,
+                "reconciliationSpent": false
+              },
+              {
+                "allyId": "generorso",
+                "status": "strained",
+                "violationCount": 1,
+                "reconciliationSpent": false
+              }
+            ],
+            "locked": false,
+            "pendingConsequences": [],
+            "processedConsequences": []
+          },
+          "brokenDuringChapter": [
+            "campo_secretary"
+          ],
+          "electionSnapshotId": "9e45db7c9897e4d6579154812ed673c8842d04b81bc4dd70eb0d9b0dae8f21df"
+        },
+        "physicalDevice": false
+      }
+    ],
+    "mobile": {
+      "layouts": 20,
+      "rotationTransitions": 6,
+      "physicalDevice": false,
+      "standaloneDetectionEmulated": true
+    },
+    "publicLogs": {
+      "palace": {
+        "path": "/tmp/politicmon-palace-public-flow.log",
+        "sha256": "625000cbe7c7b1c328831c1e6983d203dac58e4f0821ed65ba524d709fbc131d",
+        "text": "chromium: reception\nchromium: algoritmo-read\nchromium: algoritmo-quiz\nchromium: algoritmo-wrong\nchromium: algoritmo-validated\nchromium: factcheck-read\nchromium: factcheck-quiz\nchromium: factcheck-wrong\nchromium: factcheck-validated\nchromium: talkshow-read\nchromium: talkshow-quiz\nchromium: talkshow-wrong\nchromium: talkshow-validated\nchromium: silenzio-read\nchromium: silenzio-quiz\nchromium: silenzio-wrong\nchromium: silenzio-validated\nchromium: seal-cancel\nchromium: seal-default-review\nchromium: sealed-briefing\nPASS chromium: four actual quizzes, wrong/cancel no rewards, explicit seal, briefing cancellation preserves resumable snapshot\nwebkit: reception\nwebkit: algoritmo-read\nwebkit: algoritmo-quiz\nwebkit: algoritmo-wrong\nwebkit: algoritmo-validated\nwebkit: factcheck-read\nwebkit: factcheck-quiz\nwebkit: factcheck-wrong\nwebkit: factcheck-validated\nwebkit: talkshow-read\nwebkit: talkshow-quiz\nwebkit: talkshow-wrong\nwebkit: talkshow-validated\nwebkit: silenzio-read\nwebkit: silenzio-quiz\nwebkit: silenzio-wrong\nwebkit: silenzio-validated\nwebkit: seal-cancel\nwebkit: seal-default-review\nwebkit: sealed-briefing\nPASS webkit: four actual quizzes, wrong/cancel no rewards, explicit seal, briefing cancellation preserves resumable snapshot\n"
+      },
+      "mobile": {
+        "path": "/tmp/politicmon-palace-public-mobile.log",
+        "sha256": "fe0c02fcc1ac074b46bf2cf87e7ff05602b7655db2c5e8d2d0335432d60137dc",
+        "text": "PASS chromium compact 320x568 DPR 2\nPASS chromium android-pwa 412x915 DPR 3\nPASS chromium android-large 430x932 DPR 3\nPASS chromium android-wide 480x1040 DPR 3\nPASS chromium android-fractional-density 915x412 DPR 2.4\nPASS chromium browser-bars 412x700 DPR 3\nPASS chromium compact-landscape 568x320 DPR 2\nPASS chromium android-landscape 915x412 DPR 3\nPASS chromium wide-landscape 1040x480 DPR 3\nPASS chromium tablet-landscape 1024x768 DPR 2\nPASS webkit compact 320x568 DPR 2\nPASS webkit android-pwa 412x915 DPR 3\nPASS webkit android-large 430x932 DPR 3\nPASS webkit android-wide 480x1040 DPR 3\nPASS webkit android-fractional-density 915x412 DPR 2.4\nPASS webkit browser-bars 412x700 DPR 3\nPASS webkit compact-landscape 568x320 DPR 2\nPASS webkit android-landscape 915x412 DPR 3\nPASS webkit wide-landscape 1040x480 DPR 3\nPASS webkit tablet-landscape 1024x768 DPR 2\n"
+      },
+      "pwaChromium": {
+        "path": "/tmp/politicmon-palace-public-pwa-chromium.log",
+        "sha256": "fb0a9fe36bdb0d618aa1480198e19745f46c3e4b4cf9fe69eb08e891311b7df0",
+        "text": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 17866ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 797 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n"
+      },
+      "pwaWebkit": {
+        "path": "/tmp/politicmon-palace-public-pwa-webkit.log",
+        "sha256": "8270ce06816aee7cfdddfdd698043a23eb3d2ee99fbe7709e202fcbdc5ff92d3",
+        "text": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 2282ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 797 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (webkit/iPhone 13): installazione, runtime, sprite, cache, update, precache offline verificata (reload offline non supportato da Playwright WebKit) e resume.\n"
+      },
+      "assets": {
+        "path": "/tmp/politicmon-palace-public-assets.log",
+        "sha256": "d71446580987ffecc74e861d16ed6f0cee3555879bb370a3109941bb4f71b395",
+        "text": "PASS: 691 deployed PNG checksums, 20 audio/catalog checksums and civic dialogue/bridge code at https://politicmon.vercel.app.\n"
+      },
+      "bundle": {
+        "path": "/tmp/politicmon-palace-public-bundle.log",
+        "sha256": "5a27f3053a03cd5fdd52e7a8038918e262a826720effe489702970e2bcc53866",
+        "text": "PASS deployed bundle: 358297/358400 gzip bytes, 103 margin, 5 files including lazy chunks.\n"
+      }
+    },
+    "publicReportSha256": {
+      "artifacts/reports/palace-release.json": "42f8cd38762fd4d09d20b5c51d5432610aa23c2de5b5661442f5e39afbb4c5e5",
+      "artifacts/reports/mobile-layout.json": "d3bf9b5902e3dcb0cd9a63fcc13e633fda5a62d57f31b1ba9b9d798f2df4b1ba"
+    }
   }
 }

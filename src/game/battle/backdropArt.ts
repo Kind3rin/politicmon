@@ -21,4 +21,3 @@ export const BATTLE_BACKDROPS = {
 } as const satisfies Record<string, BattleBackdrop>;
 
 export type BattleBackdropId = keyof typeof BATTLE_BACKDROPS;
-

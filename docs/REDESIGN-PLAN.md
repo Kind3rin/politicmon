@@ -101,6 +101,10 @@ asset PWA. Avvio 212.218 → 189.284 byte gzip; totale 358.042, con 358 byte
 di margine. Il worker è ora compilato; restano Palazzo, Colle, atti
 successivi, audio, scrittura delle altre zone e verifica integrale.
 
+Pubblicazione `40c7c9d`: CI e tre deploy Vercel riusciti; 424 checksum
+pubblici, 533 asset PWA e sei configurazioni della cornice esterna
+verificati in Chromium/WebKit. Reload offline verificato in Chromium.
+
 [EUROTOWN-SCELTE.md](EUROTOWN-SCELTE.md): sfide volontarie dal Percorso 2,
 Hans illustrato, bar che recupera PV/PP/status/KO con lezione una volta,
 satira originale del consenso precompilato e della consulenza sulla

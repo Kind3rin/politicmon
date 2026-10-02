@@ -176,3 +176,15 @@ ulteriori funzioni senza nuove riduzioni o modularità. Nessun limite è alzato.
 I briefing difficili sono verificati, non una campagna difficile completa.
 Palazzo, Colle, atti successivi, finali tramite percorso reale, audio e
 scrittura delle altre zone restano nel [piano attivo](REDESIGN-PLAN.md).
+
+## Pubblicazione verificata
+
+Round pubblicato in `40c7c9d`, con
+[CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36960984682)
+e tre deploy Vercel riusciti. Sul
+[sito pubblico](https://politicmon.vercel.app/) corrispondono 424 checksum
+PNG e i riferimenti dei nuovi briefing; il contenuto del mondo è escluso
+dal bundle iniziale e presente nel modulo differito. La PWA verifica
+533 asset, migrazione v13→v18, salvataggio conservato, aggiornamento delle
+cache e ripresa in Chromium/WebKit. Reload offline verificato in Chromium.
+Le sei configurazioni della cornice esterna passano nei due motori.

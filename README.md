@@ -134,4 +134,4 @@ può prendere questo gioco, modificarlo e richiuderlo**. La satira è di chi la 
 
 Il round [Casinò e Coppa](docs/CASINO-COPPA.md) aggiunge tre ambienti e sette
 ritratti, dossier prima delle spese, morale negli inviti, leader e protezione
-della squadra durante i match. 272 test e 842 viste native; redesign ancora attivo.
+della squadra durante i match. 272 test e 843 viste native; redesign ancora attivo.

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
-import {chromium} from 'playwright';
+import {chromium,webkit} from 'playwright';
 const ids=JSON.parse(readFileSync('scripts/higgsfield-arena.json','utf8')).outputs.map(o=>o.path.split('/').at(-1).replace('.png',''));
-const browser=await chromium.launch();
+const browser=await (process.env.ARENA_BROWSER==='webkit'?webkit:chromium).launch();
 try{
  const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
@@ -94,6 +94,7 @@ try{
   {const s=funded();s.party=party();s.flags['garante-beaten']=true;s.flags['intro-done']=true;s.flags['dex-received']=true;s.pos={mapId:'offshore',x:18,y:11,facing:'up'};const stack=new SceneStack(),world=new WorldScene(stack,input,s);stack.push(world);world.openTournament();let ticks=0;while(stack.top?.constructor.name!=='TournamentScene'&&ticks++<150)press(stack.top,'a');check(stack.top?.constructor.name==='TournamentScene'&&s.money===8500,'real admission fee missing');check(loadGame().money===8500,'admission not saved');}
   {const s=funded();s.party=party();s.flags['garante-beaten']=true;s.flags['dex-received']=true;s.pos={mapId:'offshore',x:18,y:11,facing:'up'};const original=JSON.stringify(s.party),pos=JSON.stringify(s.pos),stack=new SceneStack(),world=new WorldScene(stack,input,s);stack.push(world);world.coppa=initTournament('2026-10-02');world.coppaRuleActive=COPPA_RULES[1];world.runTournamentRound();let ticks=0;while(stack.top?.constructor.name!=='BattleScene'&&ticks++<150)press(stack.top,'a');const battle=stack.top;check(battle?.constructor.name==='BattleScene','loss fixture missing battle');s.party[0].hp=0;battle.endBattle('loss');battle.queue.at(-1).run();check(s.money===10000&&JSON.stringify(s.pos)===pos&&JSON.stringify(s.party)===original&&!world.coppa,'coppa loss fined/warped/leaked party');check(loadGame().money===10000&&JSON.stringify(loadGame().party)===original,'loss not persisted');}
   {const s=funded();s.monumentLevel=3;s.coppaWins=12;s.flags['cosmetic-fascia-governo']=true;s.flags['atto3Complete']=true;s.flags['atto3-ending:government_cohesive']=true;const scene=new PauseScene(new SceneStack(),input,s);scene.showCard=true;press(scene,'start');capture('coppa-title-monument-card',scene);}
+  {const s=funded();s.flags['cosmetic-fascia-governo']=true;s.flags['cosmetic-campanella-crisi']=true;const scene=new PauseScene(new SceneStack(),input,s);scene.showCard=true;key='start';scene.update(.01);capture('card-same-frame-start',scene);check(scene.cardAwards===true,'draw consumed START twice');scene.draw(screen);check(scene.cardAwards===true,'repeated draw toggled card');key='right';scene.update(.01);const selected=scene.souvenirIndex;scene.draw(screen);scene.draw(screen);check(scene.souvenirIndex===selected&&selected===1,'draw consumed souvenir direction twice');key='';}
   check(spriteRegistryStats().missing===0,'missing arena sprites');return {shots,overflow,views};
  },ids);
  assert.deepEqual(errors,[]);assert.deepEqual(r.overflow,[]);

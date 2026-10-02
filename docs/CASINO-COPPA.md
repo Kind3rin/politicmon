@@ -94,7 +94,8 @@ Spesa **14 crediti**, saldo verificato **639,97 → 625,97**; cumulativo **260**
 272 test passano. Sette nuovi test coprono 125 esiti, transazioni negate,
 cambio, duplicati, limiti delle fiche, invito giornaliero dopo import,
 effetti reali, serializzazione temporanea e livelli effettivi della Coppa.
-`shot:arena` controlla 842 viste native e zero testo fuori canvas: sette
+`shot:arena` controlla 843 viste native su Chromium e WebKit, con zero testo
+fuori canvas: sette
 fantasmi × cinque regole, tutte le pagine, rinunce, leader, costo salvato
 prima dei rulli, inviti e percorso reale Mondo→Torneo→Lotta per tre round.
 Le vittorie e la sconfitta nel controllo dei callback sono **forzate**:
@@ -106,9 +107,16 @@ Typecheck, contenuti, meme pack, input, audit visivo, leggibilità ed evoluzioni
 passano. I tre avvisi editoriali preesistenti dei meme pack restano tracciati.
 Performance CPU ×4: p95 mondo/lotta/dex 18,5ms; bundle iniziale 206,7KiB,
 totale 346,0KiB gzip, entro le soglie invariate 250/350KiB e 33,4ms.
+La tessera gestisce gli input soltanto in update: START e direzioni
+restano attivi anche nello stesso frame del draw, senza doppi cambi.
 524 PNG installati. Il verificatore della build controlla 416 checksum e il
 codice dei nuovi contratti; la prova PWA copre 525 risorse Higgsfield.
 
 Il mandato complessivo resta attivo. Restano onboarding, pausa, viaggi,
 interfaccia esterna, audio, revisione narrativa delle singole zone e prova
 integrale della campagna con bilanciamento sul percorso reale.
+
+Il controllo pubblico della PWA riesce anche con WebKit/iPhone 13:
+525 asset recuperati offline e ripresa dopo background. Playwright WebKit
+non supporta il reload completamente offline: questo controllo prova
+precache e richieste offline, senza dichiarare quel riavvio come verificato.

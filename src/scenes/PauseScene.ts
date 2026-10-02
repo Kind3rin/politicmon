@@ -340,9 +340,6 @@ export class PauseScene implements Scene {
 
   draw(screen: Screen): void {
     if (this.showCard) {
-      if (this.input.wasPressed("start")) this.cardAwards = !this.cardAwards;
-      const count = earnedEndingSouvenirs(this.state).length;
-      if (count && (this.input.wasPressed("left") || this.input.wasPressed("right"))) this.souvenirIndex = (this.souvenirIndex + (this.input.wasPressed("left") ? count - 1 : 1)) % count;
       this.drawCard(screen);
       return;
     }

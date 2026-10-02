@@ -29,7 +29,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 142 viste, unit test e prove di rete |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
-| Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 842 viste, 272 test |
+| Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | PWA | Precache e primo utilizzo offline dei 525 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
@@ -125,4 +125,4 @@ dominio pubblico: 397 checksum, codice aggiornato e 506 risorse offline.
 probabilità e costi consultabili, invito giornaliero con effetti sulla morale,
 squadra della campagna protetta durante i salvataggi del torneo, livelli esatti,
 leader e nuove battute dei sette fantasmi. 14 crediti; saldo 625,97.
-272 test, 842 viste native, budget di performance invariati.
+272 test, 843 viste native, budget di performance invariati.

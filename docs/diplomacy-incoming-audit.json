@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-02",
+  "scope": "Pure previews of earned incoming saves; no boss victory or finished redesign claimed.",
+  "incoming": [
+    {
+      "starter": "ellyna",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceReportSha256": "30ee05803539eb50f6daf065d916442f8a58213927f0a15c0a799e0ba82521b4",
+      "saveCodeSha256": "bc332b6935252a1d3bec71f0b536bbd28f59c447343207dec5d5619e3e1a20ce",
+      "trust": 68,
+      "cohesion": 66,
+      "sondaggi": 100,
+      "members": [
+        {
+          "allyId": "campo_secretary",
+          "status": "strained",
+          "violationCount": 1,
+          "reconciliationSpent": false
+        },
+        {
+          "allyId": "quantum_centrist",
+          "status": "allied",
+          "violationCount": 0,
+          "reconciliationSpent": false
+        },
+        {
+          "allyId": "generorso",
+          "status": "allied",
+          "violationCount": 0,
+          "reconciliationSpent": false
+        }
+      ],
+      "choices": [
+        {
+          "choice": "loyalty",
+          "ok": true,
+          "funds": 832,
+          "polls": 0,
+          "cohesion": -16,
+          "repairTarget": null,
+          "strained": [],
+          "broken": [
+            "campo_secretary"
+          ]
+        },
+        {
+          "choice": "autonomy",
+          "ok": true,
+          "funds": -500,
+          "polls": 0,
+          "cohesion": 6,
+          "repairTarget": "campo_secretary",
+          "strained": [],
+          "broken": []
+        },
+        {
+          "choice": "home",
+          "ok": true,
+          "funds": 0,
+          "polls": 0,
+          "cohesion": -16,
+          "repairTarget": null,
+          "strained": [
+            "quantum_centrist",
+            "generorso"
+          ],
+          "broken": []
+        }
+      ]
+    },
+    {
+      "starter": "renzino",
+      "sourceReport": "artifacts/campaign-native/future-final-renzino-direct-20261002.json",
+      "sourceReportSha256": "ed8cb0c069f13e04f21289fcbdc380a15ac8fca05bea6bb47b01616d7798d219",
+      "saveCodeSha256": "68b337188f907b5b6a439e6b330edf08c768d793d883f1098c6e376c0d791fdd",
+      "trust": 80,
+      "cohesion": 56,
+      "sondaggi": 100,
+      "members": [
+        {
+          "allyId": "campo_secretary",
+          "status": "allied",
+          "violationCount": 0,
+          "reconciliationSpent": false
+        }
+      ],
+      "choices": [
+        {
+          "choice": "loyalty",
+          "ok": true,
+          "funds": 728,
+          "polls": 0,
+          "cohesion": -8,
+          "repairTarget": null,
+          "strained": [
+            "campo_secretary"
+          ],
+          "broken": []
+        },
+        {
+          "choice": "autonomy",
+          "ok": true,
+          "funds": 455,
+          "polls": 0,
+          "cohesion": 0,
+          "repairTarget": null,
+          "strained": [],
+          "broken": []
+        },
+        {
+          "choice": "home",
+          "ok": true,
+          "funds": 0,
+          "polls": 0,
+          "cohesion": 0,
+          "repairTarget": null,
+          "strained": [],
+          "broken": []
+        }
+      ]
+    },
+    {
+      "starter": "giorgetta",
+      "sourceReport": "artifacts/campaign-native/future-final-giorgetta-direct-20261002.json",
+      "sourceReportSha256": "9da81706f3b2b300668642e9cf4089e2f311ea6acde2c9b2582f2d8bcf1ea085",
+      "saveCodeSha256": "22e46649b746dc9f14cbe64f7e671212d3d264380aacc1b25283ec3a85672158",
+      "trust": 36,
+      "cohesion": 56,
+      "sondaggi": 100,
+      "members": [
+        {
+          "allyId": "campo_secretary",
+          "status": "allied",
+          "violationCount": 0,
+          "reconciliationSpent": false
+        },
+        {
+          "allyId": "civic_mayor",
+          "status": "allied",
+          "violationCount": 0,
+          "reconciliationSpent": false
+        }
+      ],
+      "choices": [
+        {
+          "choice": "loyalty",
+          "ok": true,
+          "funds": 752,
+          "polls": 0,
+          "cohesion": -16,
+          "repairTarget": null,
+          "strained": [
+            "campo_secretary",
+            "civic_mayor"
+          ],
+          "broken": []
+        },
+        {
+          "choice": "autonomy",
+          "ok": true,
+          "funds": 470,
+          "polls": 0,
+          "cohesion": 0,
+          "repairTarget": null,
+          "strained": [],
+          "broken": []
+        },
+        {
+          "choice": "home",
+          "ok": true,
+          "funds": 0,
+          "polls": 0,
+          "cohesion": 0,
+          "repairTarget": null,
+          "strained": [],
+          "broken": []
+        }
+      ]
+    }
+  ]
+}

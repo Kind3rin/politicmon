@@ -44,8 +44,12 @@ const within = (promise, name, ms = 15_000) => Promise.race([
 stage("apertura online");
 await page.goto(base, { waitUntil: "domcontentloaded", timeout: 20_000 });
 stage("attesa service worker");
-const installed = await within(page.evaluate(async () => { if (!("serviceWorker" in navigator)) return false; await navigator.serviceWorker.ready; return true; }), "service worker ready");
+// First installation downloads the full inventory, unlike the small update
+// check below. Public Chromium reached activation around the old 15s limit.
+const installStarted = Date.now();
+const installed = await within(page.evaluate(async () => { if (!("serviceWorker" in navigator)) return false; await navigator.serviceWorker.ready; return true; }), "service worker ready", 30_000);
 if (!installed) throw new Error("service worker non installato");
+console.log(`Service worker pronto in ${Date.now() - installStarted}ms.`);
 stage("verifica precache");
 const cacheEvidence = await page.evaluate(async () => {
   const keys = await caches.keys();

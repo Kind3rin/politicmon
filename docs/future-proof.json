@@ -20264,6 +20264,234 @@
     "/tmp/politicmon-future-world.log": "72c068e51237674225f4299cee8fde8340010841f0578de17e99a730dad6572d"
   },
   "publication": {
-    "status": "pending"
+    "status": "verified",
+    "sourceCommit": "a7ef2b28fab79d864be304c204b9f958e06d7526",
+    "ciRunId": 36999201936,
+    "ciConclusion": "success",
+    "ciUrl": "https://github.com/Kind3rin/politicmon/actions/runs/36999201936",
+    "deploys": [
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-test-link/EJQU2VsNTw9cX98KojatndCjA5rQ"
+      },
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon/DrAAKBRpHPLnz3jcVBwv2CKHyLXX"
+      },
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-link-check/FP1ZBq23HdiqHjbmgdagFSXWWZEA"
+      }
+    ]
+  },
+  "publicJourneys": [
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "d4eba861db4eff4cc3f5c0ca0c29f8796aeb7f17eb9b7aa6da8638ef8f2739f5",
+      "stage": "future-arrival",
+      "target": "futuro_sede",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/futuro-anteriore.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reception_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-treasurer_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_path.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_navetta.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_stage.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_hq.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reporter_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-treasurer_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reception_north.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reporter_north.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_b.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_a.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-brand_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-guard_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_floor.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_wall.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_east.png?v=2026-10-02T11-06-57"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "Future facade entered, manual boss dossier cancelled, or earned diplomatic return",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "820fd2448efa06c48d010906f20530737a72db313f75e737e75616efd0255792",
+      "stage": "future-choice",
+      "target": "futuro_sede",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/futuro-anteriore.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_floor.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_wall.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_a.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_b.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-brand_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-secretary_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-brand_north.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-secretary_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_north.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-secretary_north.png?v=2026-10-02T11-06-57"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "Future facade entered, manual boss dossier cancelled, or earned diplomatic return",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "bc332b6935252a1d3bec71f0b536bbd28f59c447343207dec5d5619e3e1a20ce",
+      "stage": "future-diplomacy",
+      "target": "futuro_piazza",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/futuro-anteriore.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reception_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_stage.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_path.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_hq.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_navetta.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-treasurer_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reporter_east.png?v=2026-10-02T11-06-57"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "Future facade entered, manual boss dossier cancelled, or earned diplomatic return",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "d4eba861db4eff4cc3f5c0ca0c29f8796aeb7f17eb9b7aa6da8638ef8f2739f5",
+      "stage": "future-arrival",
+      "target": "futuro_sede",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/futuro-anteriore.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_path.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_stage.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_navetta.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_hq.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-treasurer_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reporter_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reception_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-treasurer_north.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reception_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reporter_north.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_floor.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_wall.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-guard_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-brand_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_a.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_b.png?v=2026-10-02T11-06-57"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "Future facade entered, manual boss dossier cancelled, or earned diplomatic return",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "820fd2448efa06c48d010906f20530737a72db313f75e737e75616efd0255792",
+      "stage": "future-choice",
+      "target": "futuro_sede",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/futuro-anteriore.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_b.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_lever_a.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-brand_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-secretary_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_east.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_wall.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_floor.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-split_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-brand_east.png?v=2026-10-02T11-06-57"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "Future facade entered, manual boss dossier cancelled, or earned diplomatic return",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "bc332b6935252a1d3bec71f0b536bbd28f59c447343207dec5d5619e3e1a20ce",
+      "stage": "future-diplomacy",
+      "target": "futuro_piazza",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/ui/boss/futuro-anteriore.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_stage.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_path.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-reception_south.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/chars/npc_future-treasurer_west.png?v=2026-10-02T11-06-57",
+        "https://politicmon.vercel.app/sprites/tiles/future_navetta.png?v=2026-10-02T11-06-57"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "Future facade entered, manual boss dossier cancelled, or earned diplomatic return",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    }
+  ],
+  "publicAssets": {
+    "pngChecksums": 529,
+    "audioCatalogChecksums": 20,
+    "offlineHiggsfieldResources": 636,
+    "aacTracksDecoded": 19,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "fullOfflineReload": [
+      "chromium"
+    ],
+    "chromiumInstallMs": 13320
+  },
+  "publicLogsSha256": {
+    "/tmp/politicmon-future-public-checksums.log": "252854a6bf9c8ca35e3a62b14e78ca46bf7d2168913bfd5166444801dd673252",
+    "/tmp/politicmon-future-public-native.log": "51328d2aca79c48a10a0a03ac7251fdfeca0fff27fb39d4ec44111363cbc2694",
+    "/tmp/politicmon-future-public-pwa-diagnostic.log": "0268bb5e585cee32976542644e86f6b9af982bc13b56fbed57b60b182b1a8987",
+    "/tmp/politicmon-future-public-pwa-first-timeout.log": "fa89acf622298d572ad02adcc4582250e458c1708f9ba6f7ff60be876f43afbb",
+    "/tmp/politicmon-future-public-pwa-second-timeout.log": "fa89acf622298d572ad02adcc4582250e458c1708f9ba6f7ff60be876f43afbb",
+    "/tmp/politicmon-future-public-pwa-webkit.log": "01e85701821119c27b6c58232ada9cd3500015a9040ecc15dccd90d357882798",
+    "/tmp/politicmon-future-public-pwa.log": "3bc4aab9e919340e275201056f9eccde841b561c82e5b75a1719496710f9d616"
+  },
+  "installationAudit": {
+    "firstAttempts": "Two Chromium attempts hit the previous 15-second ready timeout; both failed logs retained.",
+    "diagnostic": "Separate desktop Chromium observer saw installing at 10s and activated at 15s, with no failed precached asset responses. Aborted intro requests were outside the inventory.",
+    "cause": "Exact cause of timeout not isolated; activation timing is close to the old test deadline. No production worker changes were made.",
+    "verificationChange": "First-install test timeout now 30s; all remaining stage deadlines unchanged. Final Pixel 7 run activated at 13320ms and passed the complete offline test.",
+    "verifierSha256": "5d96ca9d035e486ea766cbc4a6f342586baf92ef0963e1d07aa1ab92e1d84f92"
   }
 }

@@ -100,7 +100,9 @@ passaggi quando compare uno sfidante. Tre partite nuove: Ellyna e Giorgetta
 vincono il Garante, Renzino perde due volte. 283 test, 633 viste archivio
 per motore e 6.605 briefing. 0,25 crediti; saldo 615,22. Build totale
 355.695 byte gzip, margine 2.705. Restano Renzino, atti successivi, audio,
-scrittura e verifica integrale.
+scrittura e verifica integrale. Pubblicazione `91a217e`: CI e tre deploy
+Vercel riusciti, 428 checksum pubblici, 537 asset PWA nei due motori e sei
+configurazioni della cornice esterna. Reload offline verificato in Chromium.
 
 ### Round precedente: Palazzo e Colle
 

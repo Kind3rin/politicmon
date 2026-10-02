@@ -130,5 +130,13 @@ sono in `scripts/higgsfield-archive.json`. Nessun job ancora in attesa.
   motori. Reload offline Chromium; WebKit verifica precache e primo
   utilizzo offline, con il limite Playwright sul reload del service worker.
 
+Pubblicazione **91a217e** su master: [CI 36967657420](https://github.com/Kind3rin/politicmon/actions/runs/36967657420)
+e tutti e tre i deploy Vercel riusciti. Su
+[politicmon.vercel.app](https://politicmon.vercel.app/) sono verificati
+428 checksum PNG, codice di archivio/preparazione, 537 asset PWA, cache
+aggiornata e ripresa dopo background. Sei configurazioni della cornice
+esterna in Chromium/WebKit (390×844, 844×390, 1280×800) riuscite. Reload
+offline Chromium; WebKit conserva la limitazione Playwright descritta sopra.
+
 Restano la preparazione di Renzino, la campagna successiva, l'audio, la
 scrittura delle altre zone e la verifica integrale del nuovo aspetto.

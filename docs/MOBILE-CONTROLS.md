@@ -25,3 +25,5 @@ Questa cornice usa controlli HTML/CSS scalabili: il round non richiede generazio
 ## Seguito
 
 Pubblicato `df71efb`: CI 37010182278 e tre Vercel riusciti. Tutte le dieci prove della cornice e i sei percorsi nativi Hotel passano sul dominio pubblico nei due motori; 563 checksum grafici, 20 audio/catalogo e PWA con 669 asset e 19 AAC verificati. WebKit verifica precache/primo utilizzo offline; il reload offline completo è certificato in Chromium. Report e identificativi sono nel proof. Restano da verificare comodità, ascolto e prestazioni su telefoni fisici, inclusa la tastiera del sistema e le barre mobili del browser. Il redesign integrale prosegue: Genova, Tour, Palazzo, introduzione, animazioni e ulteriori combinazioni tattiche rimangono nel perimetro.
+
+Nel round [Genova](GENOVA-VERBALE.md) la stessa cornice supera inoltre otto percorsi pubblici a 390×844/DPR 2 con emulazione touch: tastiera e tap effettivi sulle sei battute nei due motori, anche con timer. Si conservano pausa, annullamento, premio unico e patti reali.

@@ -1,6 +1,6 @@
 # Genova, Tour e Palazzo: audit e seguito
 
-Cornice e controller mobile richiesti dall’utente sono ora pubblicati e verificati: [MOBILE-CONTROLS.md](MOBILE-CONTROLS.md). Questo tratto riprende come prossimo capitolo.
+Cornice e controller mobile richiesti dall’utente sono ora pubblicati e verificati: [MOBILE-CONTROLS.md](MOBILE-CONTROLS.md). Genova è ora il round documentato in [GENOVA-VERBALE.md](GENOVA-VERBALE.md); il seguito è Tour/Palazzo. Le sezioni seguenti conservano la baseline dell’audit.
 
 Audit del 2 ottobre 2026 sul sorgente dopo il nuovo Hotel. Cinque segmenti guadagnati vincono il Partner e arrivano al Tour. Questo non dimostra che il seguito sia ridisegnato.
 
@@ -15,3 +15,9 @@ Prima di altri sistemi il margine di bundle di 237 byte richiede modularità o e
 ## Esito del round Genova
 
 [GENOVA-VERBALE.md](GENOVA-VERBALE.md) sostituisce il vecchio porto, cast e panorama. Corretto inoltre il blocco dell’allenamento del DJ; sequenza e feedback rivisti, senza cambiare premi o morale. Dodici job conclusi, 18 crediti, saldo attuale 466,72. Quattro percorsi nativi da vittoria Hotel guadagnata passano nei due motori. Tour e Palazzo rimangono la priorità. Il proof conserva anche otto rilievi strutturali preesistenti fuori Genova da triagiare nel seguito.
+
+## Priorità di gameplay del Tour dopo l’analisi
+
+`DistrictScene` registra promessa o sostegno immediatamente alla pressione di A. Mostra una stima di consenso e costo, ma non presenta il dossier di conferma utilizzato nei capitoli precedenti. Due azioni su tre chiudono il collegio: la rinuncia alla terza deve essere visibile prima della scelta. Promessa prudente e rischiosa consumano lo stesso tipo di azione, e un alleato può offrire sostegno una sola volta nel Tour. Il menu continua a includere i sostegni già consumati e mostra il guadagno teorico prima che il resolver li rifiuti. Il seguito deve distinguere azioni disponibili/consumate, mostrare guadagni reali al limite del consenso e patti coinvolti, confermare le transazioni e preservare annullamento e salvataggi. Restano dibattiti manuali, ordine libero dei collegi e conseguenze locali: non trasformare questo tratto in una sequenza di premi automatici.
+
+L’archivio del Palazzo usa attualmente quattro copie della stessa stanza. La terrazza riutilizza il layout Hotel: alle vecchie uscite inferiori, ancora valide, vengono aggiunti i ritorni delle due porte visibili. Le prove di routing restano separate dalla futura vittoria finale guadagnata e dal redesign dell’ambiente. Le assunzioni del verificatore sull’ingresso interno dalla terrazza Hotel vanno invece confrontate con i percorsi nativi già riusciti.

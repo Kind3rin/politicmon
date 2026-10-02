@@ -53,7 +53,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round: Genova
 
-[GENOVA-VERBALE.md](GENOVA-VERBALE.md): porto e tre cast propri, sequenza visibile, feedback distinto, allenamento riaperto dal DJ e contabile con debiti reali. Dodici job, 21 PNG, 18 crediti; 294 test, quattro percorsi nativi a tempo/senza timer dai salvataggi guadagnati e 214 viste per motore. Offline e budget mantenuti; prove dettagliate e pubblicazione nel [proof](genova-proof.json). Tour e Palazzo restano da ridisegnare; goal attivo.
+[GENOVA-VERBALE.md](GENOVA-VERBALE.md): porto e tre cast propri, sequenza visibile, feedback distinto, allenamento riaperto dal DJ e contabile con debiti reali. Dodici job, 21 PNG, 18 crediti; 296 test, otto percorsi pubblici nativi a tempo/senza timer dai salvataggi guadagnati e 214 viste per motore. Offline e budget mantenuti; prove dettagliate e pubblicazione nel [proof](genova-proof.json). Tour e Palazzo restano da ridisegnare; goal attivo.
 
 ## Round precedente: controller mobile
 
@@ -323,3 +323,5 @@ Priorità aggiornata dall’utente: cornice e controller mobile precedono Genova
 [Controller mobile](MOBILE-CONTROLS.md): cornice aperta e controlli in basso/laterali, croce trascinabile, fonti indipendenti per dito/tasto, notch e rotazione. 292 test, 20 viewport dei due motori, dieci percorsi di produzione locale e corsa nativa da codice guadagnato. Cataloghi deduplicati con tutte le proprietà verificate; 358163 byte gzip, 237 di margine. Pubblicazione e verifiche pubbliche registrate nel proof; [Genova/Tour](GENOVA-TOUR-AUDIT.md) rimane la fase successiva.
 
 Genova completata come round locale: [verbale](GENOVA-VERBALE.md). Il seguito prioritario è Tour/Palazzo, comprese le otto segnalazioni strutturali preesistenti nel controllo mappe. Il redesign integrale non è completato.
+
+Genova pubblicata `16ae1b1`: CI 37024130490 e tre Vercel riusciti, otto percorsi pubblici con tastiera/tap, checksum e PWA pubblici passano. Correzione aggiuntiva delle due porte visibili della terrazza finale, mantenendo le uscite precedenti; pubblicazione e routing nel proof.

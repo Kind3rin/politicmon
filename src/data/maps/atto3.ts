@@ -661,6 +661,8 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     id: "palazzo_feed_terrazza", name: "TERRAZZA DEL DOPO", tiles: DIPLOMACY_TERRACE_TILES,
     outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "election_night",
     warps: [
+      { x: 5, y: 9, toMap: "palazzo_feed", toX: 9, toY: 2, facing: "down" },
+      { x: 6, y: 9, toMap: "palazzo_feed", toX: 9, toY: 2, facing: "down" },
       { x: 10, y: 11, toMap: "palazzo_feed", toX: 9, toY: 2, facing: "down" },
       { x: 11, y: 11, toMap: "palazzo_feed", toX: 9, toY: 2, facing: "down" }
     ],

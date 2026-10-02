@@ -16,6 +16,8 @@ Passano **320 test**, build, contenuti, contratti di input, le dieci prove compi
 
 Restano campagne iniziali e seed ulteriori, una campagna a difficoltà alta, prova fisica sul telefono e valutazione del comfort audio. Questa apertura e i percorsi degli interni non sostituiscono quelle verifiche del gameplay.
 
+Il round successivo [Comandi e campagne nuove](CONTROLLI-CAMPAGNE-VERBALE.md) corregge l'autorepeat di un tasto tenuto attraverso il salto dell'apertura, estende le prove a 46 casi e completa due campagne nuove, normale e difficile. Le 38 prove pubbliche registrate qui rimangono quelle della versione di questo round.
+
 ## Pubblicazione verificata
 
 Runtime `bde332b`, [CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/37058279834). L’[anteprima link-check](https://politicmon-link-check.vercel.app/) contiene il nuovo filmato e tutti i cambiamenti agli interni del round precedente. Video HTTP 200, 242210 byte e SHA-256 identico all’originale locale. Codice pubblico completo: **358262/358400 byte gzip**, 138 byte di margine.

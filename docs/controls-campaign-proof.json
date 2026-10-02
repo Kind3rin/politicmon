@@ -45,17 +45,17 @@
   },
   "checks": [
     {
-      "path": "artifacts/reports/opening-release.json",
+      "path": "artifacts/controls-campaign/local/opening-release.json",
       "bytes": 16129,
       "sha256": "9ede96b2ed06f2078d55668f440b0847bf3a92363b2136cb695fb56b7f727eab"
     },
     {
-      "path": "artifacts/reports/mobile-controls.json",
+      "path": "artifacts/controls-campaign/local/mobile-controls.json",
       "bytes": 8142,
       "sha256": "db779809c054c3b2befc4f13a6886aca51850254e1b44062ab0041b963319b9f"
     },
     {
-      "path": "artifacts/reports/mobile-layout.json",
+      "path": "artifacts/controls-campaign/local/mobile-layout.json",
       "bytes": 87720,
       "sha256": "cd2e542b57bbe903eb291b50a42e9613e9f65b64fc134f94d5e25036b4e73ca6"
     }
@@ -4742,9 +4742,116 @@
     "lastVerifiedBalance": 353.22
   },
   "publication": {
-    "status": "pending source commit; previous deployment quotas remain recorded in opening proof",
+    "runtimeCommit": "1872f9064e81e9c5af175118744a06781922ba7b",
+    "ci": {
+      "conclusion": "success",
+      "databaseId": 37061685167,
+      "headSha": "1872f9064e81e9c5af175118744a06781922ba7b",
+      "status": "completed",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37061685167"
+    },
+    "deployments": [
+      {
+        "context": "Vercel – politicmon",
+        "state": "failure",
+        "description": "Deployment rate limited — retry in 24 hours.",
+        "url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+      },
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "description": "Deployment has completed",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-test-link/EsF7yM4TN8hKXy8nmiqbzr1Abez4"
+      },
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "description": "Deployment has completed",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-link-check/F6pxBCdvxcdHk5KvyuSNvGwnKEGA"
+      }
+    ],
     "mainLastVerifiedRuntime": "adde6bc1fee3dc9e0e3e7bdab486c4ddab41edab",
-    "previewLastVerifiedRuntime": "bde332bdf7d2a863130cc45641a8450f8b1cc7d1",
-    "preview": "https://politicmon-link-check.vercel.app/"
+    "publicChecks": "passed on https://politicmon-test-link.vercel.app/",
+    "publicOpeningCases": 46,
+    "publicOpening": {
+      "path": "artifacts/controls-campaign/public/opening-release.json",
+      "bytes": 16147,
+      "sha256": "3e9141db202d24517d2be8cc437b1f834a15f4d2dd3227154f73ff6d4b1af965"
+    },
+    "publicBundle": {
+      "base": "https://politicmon-test-link.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon-test-link.vercel.app/",
+          "bytes": 2122
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/sw.js",
+          "bytes": 889
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/index-GSyDTvwN.js",
+          "bytes": 182655
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/index-M61wk0N5.css",
+          "bytes": 2996
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/WorldScene-Cp3rjMKu.js",
+          "bytes": 169608
+        }
+      ],
+      "total": 358270,
+      "budget": 358400,
+      "margin": 130
+    },
+    "publicLogs": [
+      {
+        "path": "/tmp/politicmon-controls-campaign-opening-public.log",
+        "bytes": 1004,
+        "sha256": "8916738072f9a69866e5c91216657105bd03fe42498280843766c54820fa0606"
+      },
+      {
+        "path": "/tmp/politicmon-controls-campaign-pwa-public.log",
+        "bytes": 626,
+        "sha256": "df542aba171177f3a3ed114913170837997fd342d2ee3d85f795dedd45c0ae7b"
+      },
+      {
+        "path": "/tmp/politicmon-controls-campaign-bundle-public.log",
+        "bytes": 91,
+        "sha256": "4752d29f1ce6f4cbac44bc4cb4f10662e27754d3845922e677ee19157d4252c5"
+      },
+      {
+        "path": "/tmp/politicmon-controls-campaign-shell-public.log",
+        "bytes": 892,
+        "sha256": "2eedc3fd570e34e5db5bf058024d0726e4330bce22946f582967d239af0eabba"
+      },
+      {
+        "path": "/tmp/politicmon-controls-campaign-layout-public.log",
+        "bytes": 940,
+        "sha256": "e70604eeac29ab5831cefd40ec5a160ba7359a20bef937f176a3ee6777fefa10"
+      }
+    ],
+    "publicPwa": {
+      "engine": "chromium",
+      "firstOfflineImages": 797,
+      "firstOfflineAudioTracks": 19,
+      "offlineReload": true,
+      "backgroundResume": true,
+      "base": "https://politicmon-test-link.vercel.app/"
+    },
+    "mobile-shell-release": {
+      "path": "artifacts/controls-campaign/public/mobile-shell-release.json",
+      "sha256": "6303a613ce82f1cfb391f0717960333e3b233b5d25165c261fa5ab13f4ac77a8",
+      "bytes": 6937
+    },
+    "mobile-layout": {
+      "path": "artifacts/controls-campaign/public/mobile-layout.json",
+      "sha256": "effa80d18c96b14d4d4336f203866763a7f19e5608535bd87bdbf624a8ea8abb",
+      "bytes": 87738
+    },
+    "publicLayoutCases": 20,
+    "publicRotations": 6
   }
 }

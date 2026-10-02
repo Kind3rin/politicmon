@@ -1,6 +1,6 @@
 {
   "date": "2026-10-02",
-  "status": "local_verified_publication_pending",
+  "status": "preview_verified_primary_rate_limited",
   "goal": "active; full redesign not completed",
   "sourceSha256": {
     "src/engine/worldCamera.ts": "103d98d00eda75036e01301906c8727ea3af2cec858b2a3b07770e1545827d6a",
@@ -3428,7 +3428,1117 @@
     ]
   },
   "publication": {
-    "pending": true,
-    "url": "https://politicmon.vercel.app/"
+    "runtimeCommit": "7dffc3c2665c82971d273667c78ce45069709a62",
+    "ci": {
+      "conclusion": "success",
+      "status": "completed",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37053103998"
+    },
+    "primary": {
+      "url": "https://politicmon.vercel.app/",
+      "state": "failure",
+      "description": "Deployment rate limited — retry in 24 hours.",
+      "previousSuccessfulCommit": "adde6bc1fee3dc9e0e3e7bdab486c4ddab41edab",
+      "newInteriorsAvailable": false,
+      "mobileShellAlreadyPublished": true
+    },
+    "previews": [
+      {
+        "url": "https://politicmon-test-link.vercel.app/",
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "description": "Deployment has completed",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon-test-link/FsZzxTH1vpae5c82RsVWfrehpod8"
+      },
+      {
+        "url": "https://politicmon-link-check.vercel.app/",
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "description": "Deployment has completed",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon-link-check/2MP3vf4DmXebqTQGgPs1bCwdmnPL"
+      }
+    ],
+    "previewBundle": {
+      "base": "https://politicmon-test-link.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon-test-link.vercel.app/",
+          "bytes": 2145
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/sw.js",
+          "bytes": 887
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/index-DJNu9rlo.js",
+          "bytes": 182622
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/index-BAicqtfz.css",
+          "bytes": 2909
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/WorldScene-BClxAO9d.js",
+          "bytes": 169608
+        }
+      ],
+      "total": 358171,
+      "budget": 358400,
+      "margin": 229
+    },
+    "previewNavigation": {
+      "base": "https://politicmon-test-link.vercel.app/",
+      "physicalDevice": false,
+      "sourceCodeSha256": "c1cfbf0d75cbf7154cc29f99f56dccd73e1a48f3bf485c56b50567d60431ac79",
+      "engines": [
+        {
+          "engine": "chromium",
+          "rooms": [
+            {
+              "id": "palazzo_algoritmo",
+              "pixels": {
+                "actual": [
+                  17,
+                  34,
+                  62,
+                  255
+                ],
+                "expected": [
+                  17,
+                  34,
+                  62,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "palazzo_factcheck",
+              "pixels": {
+                "actual": [
+                  254,
+                  249,
+                  237,
+                  255
+                ],
+                "expected": [
+                  254,
+                  249,
+                  237,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "palazzo_talkshow",
+              "pixels": {
+                "actual": [
+                  58,
+                  42,
+                  70,
+                  255
+                ],
+                "expected": [
+                  58,
+                  42,
+                  70,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "palazzo_silenzio",
+              "pixels": {
+                "actual": [
+                  78,
+                  99,
+                  126,
+                  255
+                ],
+                "expected": [
+                  78,
+                  99,
+                  126,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "diplomacy_loyalty",
+              "pixels": {
+                "actual": [
+                  251,
+                  241,
+                  219,
+                  255
+                ],
+                "expected": [
+                  251,
+                  241,
+                  219,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "diplomacy_autonomy",
+              "pixels": {
+                "actual": [
+                  240,
+                  250,
+                  232,
+                  255
+                ],
+                "expected": [
+                  240,
+                  250,
+                  232,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "diplomacy_home",
+              "pixels": {
+                "actual": [
+                  232,
+                  242,
+                  251,
+                  255
+                ],
+                "expected": [
+                  232,
+                  242,
+                  251,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "futuro_scissione",
+              "pixels": {
+                "actual": [
+                  179,
+                  147,
+                  91,
+                  255
+                ],
+                "expected": [
+                  179,
+                  147,
+                  91,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "futuro_rebrand",
+              "pixels": {
+                "actual": [
+                  50,
+                  137,
+                  141,
+                  255
+                ],
+                "expected": [
+                  50,
+                  137,
+                  141,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "futuro_tesoreria",
+              "pixels": {
+                "actual": [
+                  98,
+                  66,
+                  176,
+                  255
+                ],
+                "expected": [
+                  98,
+                  66,
+                  176,
+                  255
+                ]
+              }
+            }
+          ],
+          "returns": [
+            {
+              "from": "palazzo_algoritmo",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_algoritmo",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_factcheck",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_factcheck",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_talkshow",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_talkshow",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_silenzio",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_silenzio",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_loyalty",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_loyalty",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_autonomy",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_autonomy",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_home",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 9,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_home",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 9,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_terrace",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 9,
+                "facing": "left"
+              }
+            },
+            {
+              "from": "diplomacy_terrace",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 9,
+                "facing": "left"
+              }
+            },
+            {
+              "from": "futuro_scissione",
+              "exit": 0,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 3,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_scissione",
+              "exit": 1,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 3,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_rebrand",
+              "exit": 0,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 13,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_rebrand",
+              "exit": 1,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 13,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_tesoreria",
+              "exit": 0,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 15,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_tesoreria",
+              "exit": 1,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 15,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            }
+          ],
+          "finalPos": {
+            "mapId": "diplomacy_lobby",
+            "x": 9,
+            "y": 10,
+            "facing": "up"
+          },
+          "resourcesUnchanged": true,
+          "errors": []
+        },
+        {
+          "engine": "webkit",
+          "rooms": [
+            {
+              "id": "palazzo_algoritmo",
+              "pixels": {
+                "actual": [
+                  17,
+                  34,
+                  62,
+                  255
+                ],
+                "expected": [
+                  17,
+                  34,
+                  62,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "palazzo_factcheck",
+              "pixels": {
+                "actual": [
+                  254,
+                  249,
+                  237,
+                  255
+                ],
+                "expected": [
+                  254,
+                  249,
+                  237,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "palazzo_talkshow",
+              "pixels": {
+                "actual": [
+                  58,
+                  42,
+                  70,
+                  255
+                ],
+                "expected": [
+                  58,
+                  42,
+                  70,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "palazzo_silenzio",
+              "pixels": {
+                "actual": [
+                  78,
+                  99,
+                  126,
+                  255
+                ],
+                "expected": [
+                  78,
+                  99,
+                  126,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "diplomacy_loyalty",
+              "pixels": {
+                "actual": [
+                  251,
+                  241,
+                  219,
+                  255
+                ],
+                "expected": [
+                  251,
+                  241,
+                  219,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "diplomacy_autonomy",
+              "pixels": {
+                "actual": [
+                  240,
+                  250,
+                  232,
+                  255
+                ],
+                "expected": [
+                  240,
+                  250,
+                  232,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "diplomacy_home",
+              "pixels": {
+                "actual": [
+                  232,
+                  242,
+                  251,
+                  255
+                ],
+                "expected": [
+                  232,
+                  242,
+                  251,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "futuro_scissione",
+              "pixels": {
+                "actual": [
+                  179,
+                  147,
+                  91,
+                  255
+                ],
+                "expected": [
+                  179,
+                  147,
+                  91,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "futuro_rebrand",
+              "pixels": {
+                "actual": [
+                  50,
+                  137,
+                  141,
+                  255
+                ],
+                "expected": [
+                  50,
+                  137,
+                  141,
+                  255
+                ]
+              }
+            },
+            {
+              "id": "futuro_tesoreria",
+              "pixels": {
+                "actual": [
+                  98,
+                  66,
+                  176,
+                  255
+                ],
+                "expected": [
+                  98,
+                  66,
+                  176,
+                  255
+                ]
+              }
+            }
+          ],
+          "returns": [
+            {
+              "from": "palazzo_algoritmo",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_algoritmo",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_factcheck",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_factcheck",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 3,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_talkshow",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_talkshow",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 5,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_silenzio",
+              "exit": 0,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "palazzo_silenzio",
+              "exit": 1,
+              "to": {
+                "mapId": "palazzo_feed",
+                "x": 14,
+                "y": 7,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_loyalty",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_loyalty",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_autonomy",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_autonomy",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 4,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_home",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 9,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_home",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 3,
+                "y": 9,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "diplomacy_terrace",
+              "exit": 0,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 9,
+                "facing": "left"
+              }
+            },
+            {
+              "from": "diplomacy_terrace",
+              "exit": 1,
+              "to": {
+                "mapId": "diplomacy_lobby",
+                "x": 16,
+                "y": 9,
+                "facing": "left"
+              }
+            },
+            {
+              "from": "futuro_scissione",
+              "exit": 0,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 3,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_scissione",
+              "exit": 1,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 3,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_rebrand",
+              "exit": 0,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 13,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_rebrand",
+              "exit": 1,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 13,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_tesoreria",
+              "exit": 0,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 15,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            },
+            {
+              "from": "futuro_tesoreria",
+              "exit": 1,
+              "to": {
+                "mapId": "futuro_sede",
+                "x": 15,
+                "y": 5,
+                "facing": "down"
+              },
+              "tile": "p"
+            }
+          ],
+          "finalPos": {
+            "mapId": "diplomacy_lobby",
+            "x": 9,
+            "y": 10,
+            "facing": "up"
+          },
+          "resourcesUnchanged": true,
+          "errors": []
+        }
+      ]
+    },
+    "previewPwa": {
+      "engine": "chromium",
+      "passed": true,
+      "higgsfieldAssets": 797,
+      "aacTracks": 19,
+      "offlineReload": true,
+      "backgroundResume": true,
+      "firstAttempt": "service worker readiness observation timed out after 30 seconds; retained as failed run",
+      "diagnostic": "Actual worker installation observed to activation at the 20-second sample with 830 completed requests, zero pending and no worker/page errors. Canonical smoke rerun then passed without code or timeout changes.",
+      "installation": {
+        "snapshots": [
+          {
+            "seconds": 0,
+            "readyState": "interactive",
+            "firstFrame": 0,
+            "registrations": [],
+            "completed": 0,
+            "pending": 0,
+            "bad": [],
+            "oldest": []
+          },
+          {
+            "seconds": 5,
+            "readyState": "complete",
+            "firstFrame": 1,
+            "registrations": [
+              {
+                "scope": "https://politicmon-test-link.vercel.app/",
+                "installing": "installing"
+              }
+            ],
+            "completed": 142,
+            "pending": 688,
+            "bad": [],
+            "oldest": [
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/chars/npc_future-guard_east.png",
+                "seconds": 3
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/chars/npc_future-guard_north.png",
+                "seconds": 3
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/chars/npc_future-guard_south.png",
+                "seconds": 3
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/chars/npc_future-guard_west.png",
+                "seconds": 3
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/chars/npc_future-reception_east.png",
+                "seconds": 3
+              }
+            ]
+          },
+          {
+            "seconds": 10,
+            "readyState": "complete",
+            "firstFrame": 1,
+            "registrations": [
+              {
+                "scope": "https://politicmon-test-link.vercel.app/",
+                "installing": "installing"
+              }
+            ],
+            "completed": 434,
+            "pending": 396,
+            "bad": [],
+            "oldest": [
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/items/rimborso.png",
+                "seconds": 8
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/items/santino.png",
+                "seconds": 8
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/items/scheda.png",
+                "seconds": 8
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/items/schedona.png",
+                "seconds": 8
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/items/sondtruccato.png",
+                "seconds": 8
+              }
+            ]
+          },
+          {
+            "seconds": 15,
+            "readyState": "complete",
+            "firstFrame": 1,
+            "registrations": [
+              {
+                "scope": "https://politicmon-test-link.vercel.app/",
+                "installing": "installing"
+              }
+            ],
+            "completed": 722,
+            "pending": 108,
+            "bad": [],
+            "oldest": [
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/ui/audio.png",
+                "seconds": 13
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/ui/dossier.png",
+                "seconds": 13
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/ui/evolution.png",
+                "seconds": 13
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/ui/recall.png",
+                "seconds": 13
+              },
+              {
+                "url": "https://politicmon-test-link.vercel.app/sprites/ui/shop.png",
+                "seconds": 13
+              }
+            ]
+          },
+          {
+            "seconds": 20,
+            "readyState": "complete",
+            "firstFrame": 1,
+            "registrations": [
+              {
+                "scope": "https://politicmon-test-link.vercel.app/",
+                "active": "activated"
+              }
+            ],
+            "completed": 830,
+            "pending": 0,
+            "bad": [],
+            "oldest": []
+          }
+        ],
+        "bad": [],
+        "errors": []
+      },
+      "logs": {
+        "initialFailedSmoke": {
+          "path": "/tmp/politicmon-interiors-preview-pwa.log",
+          "sha256": "44c2b13e29207e215a8678f0e377888d88e1c19af363174974396b363e5ba5b6",
+          "text": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nfile:///Users/tiengo/Progetti/politicmon/scripts/smoke-pwa-release.mjs:46\n  new Promise((_, reject) => setTimeout(() => reject(new Error(`timeout: ${name}`)), ms))\n                                                     ^\n\nError: timeout: service worker ready\n    at Timeout._onTimeout (file:///Users/tiengo/Progetti/politicmon/scripts/smoke-pwa-release.mjs:46:54)\n    at listOnTimeout (node:internal/timers:585:17)\n    at process.processTimers (node:internal/timers:521:7)\n\nNode.js v22.23.3\n"
+        },
+        "finalSmoke": {
+          "path": "/tmp/politicmon-interiors-preview-pwa-final.log",
+          "sha256": "ea8dbdb677ccba7a08bdbfc7b73ea9e33b78423b080ad4cec13b2bfe3bac88a4",
+          "text": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 15199ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 797 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n"
+        },
+        "navigation": {
+          "path": "/tmp/politicmon-interiors-navigation-preview.log",
+          "sha256": "76b0fbca1c1da000434347d6b7279f31197d9010d831392b4542a8e5e00cbdae",
+          "text": "PASS chromium: palazzo_algoritmo return #0 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS chromium: palazzo_algoritmo return #1 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS chromium: palazzo_factcheck return #0 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS chromium: palazzo_factcheck return #1 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS chromium: palazzo_talkshow return #0 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS chromium: palazzo_talkshow return #1 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS chromium: palazzo_silenzio return #0 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS chromium: palazzo_silenzio return #1 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS chromium: diplomacy_loyalty return #0 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_loyalty return #1 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_autonomy return #0 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_autonomy return #1 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS chromium: diplomacy_home return #0 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS chromium: diplomacy_home return #1 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS chromium: Hotel terrace door #0 -> actual south-side lobby arrival (16,9)\nPASS chromium: Hotel terrace door #1 -> actual south-side lobby arrival (16,9)\nPASS chromium: futuro_scissione return #0 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS chromium: futuro_scissione return #1 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS chromium: futuro_rebrand return #0 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS chromium: futuro_rebrand return #1 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS chromium: futuro_tesoreria return #0 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS chromium: futuro_tesoreria return #1 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS webkit: palazzo_algoritmo return #0 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS webkit: palazzo_algoritmo return #1 -> palazzo_feed (5,3), centred floor pixels and resources intact\nPASS webkit: palazzo_factcheck return #0 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS webkit: palazzo_factcheck return #1 -> palazzo_feed (14,3), centred floor pixels and resources intact\nPASS webkit: palazzo_talkshow return #0 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS webkit: palazzo_talkshow return #1 -> palazzo_feed (5,7), centred floor pixels and resources intact\nPASS webkit: palazzo_silenzio return #0 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS webkit: palazzo_silenzio return #1 -> palazzo_feed (14,7), centred floor pixels and resources intact\nPASS webkit: diplomacy_loyalty return #0 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_loyalty return #1 -> diplomacy_lobby (3,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_autonomy return #0 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_autonomy return #1 -> diplomacy_lobby (16,4), centred floor pixels and resources intact\nPASS webkit: diplomacy_home return #0 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS webkit: diplomacy_home return #1 -> diplomacy_lobby (3,9), centred floor pixels and resources intact\nPASS webkit: Hotel terrace door #0 -> actual south-side lobby arrival (16,9)\nPASS webkit: Hotel terrace door #1 -> actual south-side lobby arrival (16,9)\nPASS webkit: futuro_scissione return #0 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS webkit: futuro_scissione return #1 -> futuro_sede (3,5), centred floor pixels and resources intact\nPASS webkit: futuro_rebrand return #0 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS webkit: futuro_rebrand return #1 -> futuro_sede (13,5), centred floor pixels and resources intact\nPASS webkit: futuro_tesoreria return #0 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS webkit: futuro_tesoreria return #1 -> futuro_sede (15,5), centred floor pixels and resources intact\nPASS compiled world navigation: both engines, 20 centred room views, 44 actual return ports, untouched earned save and resources\n"
+        },
+        "bundle": {
+          "path": "/tmp/politicmon-interiors-preview-bundle.log",
+          "sha256": "b44f0f8e34b2273d2e648f41b4dc12d7eab30dc07a601bd15abd858fad7723e1",
+          "text": "PASS deployed bundle: 358171/358400 gzip bytes, 229 margin, 5 files including lazy chunks.\n"
+        }
+      }
+    },
+    "fingerprintsBeforeDocumentation": {
+      "https://politicmon.vercel.app/": {
+        "htmlSha256": "3a244934f76a8916c017bf98320526ebf85cfc2c17de55f548b2e06c27f5ded9",
+        "swSha256": "811171f2791e9dae987bef12ead2c3adf232587a642941b7f4b1e1250de5bf30",
+        "scripts": [
+          "./assets/index-SXEeniu_.js"
+        ]
+      },
+      "https://politicmon-test-link.vercel.app/": {
+        "htmlSha256": "4fb9dd96eba5383dc7396258217181ed8a18d94529364dd2530a308346cdbc8d",
+        "swSha256": "f2b6df07b1a2d563cdd6360104adc8b5780c28cf60d73a92461915dbafc6419d",
+        "scripts": [
+          "./assets/index-DJNu9rlo.js"
+        ]
+      },
+      "https://politicmon-link-check.vercel.app/": {
+        "htmlSha256": "4fb9dd96eba5383dc7396258217181ed8a18d94529364dd2530a308346cdbc8d",
+        "swSha256": "f2b6df07b1a2d563cdd6360104adc8b5780c28cf60d73a92461915dbafc6419d",
+        "scripts": [
+          "./assets/index-DJNu9rlo.js"
+        ]
+      }
+    },
+    "documentationOnlySkipPubliclyVerified": false,
+    "automaticDeploymentAttemptOnly": true,
+    "paidUpgradeOrQuotaWorkaround": false
   }
 }

@@ -1812,7 +1812,8 @@
         "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
         "prompt": "Production key art for Politicmon, an Italian satirical fantasy monster videogame. A smiling fantasy diplomat bird with one elegant feathered wing and one discreet mechanical wing, wearing a midnight blue tailcoat with a white flower. It presents a blank agreement while the shadow casts crossed claws. Elegant diplomatic terrace, two mirrored podiums and a folded banquet table. Turquoise, ivory, plum. Wide landscape composition, the central figure fully inside the image, leave space around head and all edges. Original invented fantasy character, playful and sinister satire, never photorealistic. Authentic polished crisp pixel art, pixel blocks, clean outlines, flat limited 48-colour palette with two-tone shading, no antialiasing or painterly gradients. Rich staged environmental detail, expressive face, strong readable silhouette at 240 pixel width. Absolutely no letters, words, typography, numbers, labels, logos, UI, captions or watermark anywhere. Background opaque. The game will overlay its own title and tactical text. All panels, books, contracts, flags and screens are blank or purely geometric."
       },
-      "path": "public/sprites/ui/boss/partner-perfetto.png"
+      "path": "public/sprites/ui/boss/partner-perfetto.png",
+      "supersededBy": "scripts/higgsfield-diplomacy.json:partner-perfetto"
     },
     {
       "id": "commissione",

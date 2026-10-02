@@ -26,7 +26,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 105 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
-| Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 146 viste, unit test e prove di rete |
+| Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 153 viste, unit test e prove di rete |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
@@ -42,17 +42,22 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Bruxelles | Palazzo e caffè propri, materiali, cast direzionale, cinque dossier e verbale del morale | Tre campagne normali, percorsi nativi e accesso al Campo Largo nei due motori; BRUXELLES-VERBALE |
 | Campo Largo | Set e retropalco propri, quattro cast, foto con conseguenze, Circolo e reclutamento LV 43–46 | Quattro segmenti guadagnati, foto alternative e 16 direzioni nei due motori; CAMPO-CORNICE |
 | Futuro Anteriore | Sede e tre sale proprie, sette cast, verbali prima delle leve, dossier manuale e vivaio guadagnato | Cinque segmenti normali fino al vertice, riparazioni ed evoluzione reali; FUTURO-VERBALE |
+| Hotel Diplomatico | Cinque mappe, cinque cast, tre suite, patti/debiti reali e Partner manuale | Cinque segmenti normali guadagnati fino al Tour; DIPLOMACY-VERBALE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 188.410 byte gzip iniziali, 668 risorse di installazione e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 636 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 188.046 byte gzip iniziali, 701 risorse di installazione e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 669 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 522,22; spesa cumulativa 363,75 crediti. Non sono stati attivati acquisti
+verificato: 484,72; spesa cumulativa 401,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: Futuro Anteriore
+## Ultimo round: Hotel Diplomatico
 
-[FUTURO-VERBALE.md](FUTURO-VERBALE.md): nuova sede, tre uffici distinti, sette cast, due verbali prima delle leve e tre scelte con memoria dei debiti. Il Segretario apre un dossier manuale e conserva il morale al premio; il vivaio dopo la vittoria offre Vannaccix 43–46 nelle due versioni. Cinque segmenti guadagnati vincono: una prova paga le promesse scadute, recluta Vannaccix e consuma la Tessera ottenuta per Futurorso. 44 PNG, 39 crediti, saldo 522,22; 288 test, 28 viste del cast nei due motori, 146 viste delle scelte, 12.551 layout dossier per motore, 529 checksum PNG, 636 asset offline e 668 risorse esatte di build. Pubblicato `a7ef2b2`: CI 36999201936 e tre deploy riusciti; checksum, offline e sei percorsi nativi pubblici verificati in Chromium/WebKit. Prove e limiti del tempo di installazione in [future-proof.json](future-proof.json). Il prossimo audit è [DIPLOMACY-AUDIT.md](DIPLOMACY-AUDIT.md): tre segmenti normali hanno già verificato le scelte, il Partner e l’arrivo al Tour con morale conservato; hotel e cast restano da ridisegnare; il goal generale resta attivo.
+[DIPLOMACY-VERBALE.md](DIPLOMACY-VERBALE.md): 35 PNG, cinque cast, suite distinte, padiglione a vetri e Partner manuale. Cinque segmenti guadagnati verificano riparazione, secondo strappo, sondaggi saturi e Futurorso realmente reclutato nel tratto precedente. Il premio inizializza nuovi collegi e mantiene i conti civici. 37,5 crediti, saldo 484,72; 291 test, 20 direzioni del cast nei due motori, 153 viste delle scelte, 563 checksum grafici, 669 asset offline e 19 AAC. Font lossless con digest dei 66 glifi; bundle 358245 byte su 358400, p95 massimo 17,6 ms. Verifiche di pubblicazione registrate in [diplomacy-proof.json](diplomacy-proof.json) dopo il deploy. Prossimo tratto in [GENOVA-TOUR-AUDIT.md](GENOVA-TOUR-AUDIT.md); il goal generale resta attivo.
+
+## Round precedente: Futuro Anteriore
+
+[FUTURO-VERBALE.md](FUTURO-VERBALE.md): nuova sede, tre uffici distinti, sette cast, due verbali prima delle leve e tre scelte con memoria dei debiti. Il Segretario apre un dossier manuale e conserva il morale al premio; il vivaio dopo la vittoria offre Vannaccix 43–46 nelle due versioni. Cinque segmenti guadagnati vincono: una prova paga le promesse scadute, recluta Vannaccix e consuma la Tessera ottenuta per Futurorso. 44 PNG, 39 crediti, saldo 522,22; 288 test, 28 viste del cast nei due motori, 146 viste delle scelte, 12.551 layout dossier per motore, 529 checksum PNG, 636 asset offline e 668 risorse esatte di build. Pubblicato `a7ef2b2`: CI 36999201936 e tre deploy riusciti; checksum, offline e sei percorsi nativi pubblici verificati in Chromium/WebKit. Prove e limiti del tempo di installazione in [future-proof.json](future-proof.json). Il prossimo audit è [DIPLOMACY-AUDIT.md](DIPLOMACY-AUDIT.md): tre segmenti normali hanno già verificato le scelte, il Partner e l’arrivo al Tour con morale conservato; baseline storica conservata; il nuovo Hotel è documentato nel round successivo. Il goal generale resta attivo.
 
 ## Round precedente: Campo Largo
 

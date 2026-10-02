@@ -201,3 +201,9 @@ export function coalitionBonuses(state: CoalitionState, knockedOut: readonly All
   }
   return { id, bonus, malus };
 }
+
+// Rewards and political choices use the same rounding and current pact modifiers.
+export function coalitionFundGain(base: number, state: CoalitionState): number {
+  const { bonus, malus } = coalitionBonuses(state);
+  return Math.round(base * (1 + (bonus.funds + malus.funds) / 100));
+}

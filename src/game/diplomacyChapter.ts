@@ -1,4 +1,4 @@
-import { applyLineRedEvent, coalitionBonuses, reconcileAlly, type AllyId, type CoalitionState } from "./coalition";
+import { applyLineRedEvent, coalitionFundGain, reconcileAlly, type AllyId, type CoalitionState } from "./coalition";
 
 export type DiplomacyChoice = "loyalty" | "autonomy" | "home";
 export type DiplomacyChoiceError = "already_resolved" | "insufficient_funds";
@@ -27,10 +27,6 @@ export type DiplomacyChoiceResult =
   | { readonly ok: true; readonly patch: DiplomacyChoicePatch }
   | { readonly ok: false; readonly error: DiplomacyChoiceError };
 
-function applyFundGain(base: number, coalition: CoalitionState): number {
-  const modifiers = coalitionBonuses(coalition);
-  return Math.round(base * (1 + (modifiers.bonus.funds + modifiers.malus.funds) / 100));
-}
 
 export function resolveDiplomacyChoice(input: DiplomacyChoiceInput): DiplomacyChoiceResult {
   if (input.flags["diplomacy-choice-complete"]) return { ok: false, error: "already_resolved" };
@@ -44,7 +40,7 @@ export function resolveDiplomacyChoice(input: DiplomacyChoiceInput): DiplomacyCh
   const extraFlags: Record<string, true> = {};
 
   if (input.choice === "loyalty") {
-    moneyDelta = applyFundGain(800, coalition);
+    moneyDelta = coalitionFundGain(800, coalition);
     const lines = applyLineRedEvent(coalition, 12);
     coalition = lines.state; strained = lines.strained; broken = lines.broken;
     extraFlags["pass-vertice"] = true;
@@ -59,7 +55,7 @@ export function resolveDiplomacyChoice(input: DiplomacyChoiceInput): DiplomacyCh
       extraFlags[`reconcile-used:${target.allyId}:v${target.violationCount}`] = true;
       coalition = reconcileAlly(coalition, target.allyId)!;
     } else {
-      moneyDelta = applyFundGain(500, coalition);
+      moneyDelta = coalitionFundGain(500, coalition);
     }
     outcome = "a3.diplomacy.autonomy";
   } else {

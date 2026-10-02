@@ -49,7 +49,8 @@
       "status": "completed",
       "model": "nano_banana_2",
       "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_7a8a06b9-74ab-4e9f-886d-f9a6471e2078.png",
-      "sourceSha256": "69451c7cf67d4aeac84c8a31b7bfeea2050d8dbcd994f91d68b11e13ece57645"
+      "sourceSha256": "69451c7cf67d4aeac84c8a31b7bfeea2050d8dbcd994f91d68b11e13ece57645",
+      "supersededBy": "scripts/higgsfield-diplomacy.json:diplomacy"
     },
     {
       "index": 3,

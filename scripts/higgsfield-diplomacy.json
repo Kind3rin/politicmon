@@ -1,0 +1,674 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 522.22,
+  "estimatedCredits": 37.5,
+  "assets": [
+    {
+      "id": "diplomacy",
+      "kind": "backdrop",
+      "width": 224,
+      "height": 78,
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Full-bleed wide 21:9 diplomatic hotel panoramic illustration, quiet upper and lower crop edges. Three fictional delegations in different neat suits hold contradictory blank contracts under ONE brass selfie lamp: each points at its own paper while smiling for the same camera. One waiter carries a single long shared bill that trails under all three separate tables. A glass-walled hotel terrace, restrained staged detail, three clear silhouettes. Original satire: a carefully unified picture and incompatible responsibilities. Background opaque.",
+      "path": "public/sprites/ui/campaign/diplomacy.png",
+      "cropTop": 54,
+      "jobId": "5bd0facc-5a51-426f-a545-a3a9e3e4a2f4",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113002_5bd0facc-5a51-426f-a545-a3a9e3e4a2f4.png",
+      "sourceSha256": "e6b0b80b099c8a1faf3bb3e8ad9296cefc81f2e90bfb1ecbad2cb88459b6e836",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/diplomacy.png": "ed9d50cab459254d6b677b1d26d253704082f10155c26047dd1338da7adafcf5"
+      },
+      "cropBox": [
+        0,
+        54,
+        1344,
+        522
+      ]
+    },
+    {
+      "id": "floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Very quiet seamless champagne ivory HOTEL marble FLOOR texture. Almost plain ivory with sparse tiny subtle brass corner accents, no veins or diagonal stripes. Uniform flat light surface, one small 16x16 texture tile, no objects, borders or motifs.",
+      "path": "public/sprites/tiles/diplomacy_floor.png",
+      "jobId": "71cb21bb-071c-4404-b7f1-b6960feca296",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113003_71cb21bb-071c-4404-b7f1-b6960feca296.png",
+      "sourceSha256": "3b9c7a7d45b952b54e314cba8dd34abb54f428ff85c22b914064e697928a1bae",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_floor.png": "22d44b134ec096b1df1e08630dce5c71e4da136ea4b61a68512f6d848423b66c"
+      }
+    },
+    {
+      "id": "wall",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Seamless quiet midnight navy HOTEL WALL panel texture, very subtle brass join on one edge and tiny restrained teal accent, almost uniform deep navy. One 16x16 texture tile, no facade, window, diagonal lines or dense motifs.",
+      "path": "public/sprites/tiles/diplomacy_wall.png",
+      "jobId": "146dadec-8d35-466d-af56-c1f83e20515e",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113003_146dadec-8d35-466d-af56-c1f83e20515e.png",
+      "sourceSha256": "69923f4d67448a0acf0c5af3d8d11fadbf0127020289a0413c6b0a80910a10ea",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_wall.png": "5e633cda3aa064378aa494e4e37582863f5799d913c3950f7c198deccc0a4528"
+      }
+    },
+    {
+      "id": "loyalty_floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Very quiet seamless pale champagne carpet FLOOR texture, one extremely subtle brass dot near corner, almost plain light cream. No symbols or designs. One 16x16 tile, no borders.",
+      "path": "public/sprites/tiles/diplomacy_loyalty_floor.png",
+      "jobId": "8e1fd1af-f52c-4c05-8b25-5775cca61dcb",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113003_8e1fd1af-f52c-4c05-8b25-5775cca61dcb.png",
+      "sourceSha256": "85b50f0a91bb72b60c4cadb7a0345b488e4362e2267a1d40f0f33dd9fd81932d",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_loyalty_floor.png": "28327cf452145ac40d3857e5b86a9fabb8f4ba34a089770def6237a7d8d544e9"
+      }
+    },
+    {
+      "id": "autonomy_floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "Use the attached nearly plain ivory material swatch as reference. Recolor this one flat material to very pale mint ivory, only 2 closely related light mint colors plus at most two tiny teal flecks. NO woven checker pattern, no grid, no stripes, no shading, no visible texture density. Almost totally plain seamless square swatch viewed straight down, entire image one surface. Opaque. Pixel art. No objects, words, borders, buildings, people or scene.",
+      "path": "public/sprites/tiles/diplomacy_autonomy_floor.png",
+      "jobId": "98915b17-b77a-47a9-b226-e2837ecda08e",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_115705_98915b17-b77a-47a9-b226-e2837ecda08e.png",
+      "supersededSources": [
+        {
+          "jobId": "3400117a-4e6b-45e5-912a-1bfb3d4af553",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113002_3400117a-4e6b-45e5-912a-1bfb3d4af553.png",
+          "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Very quiet seamless pale mint ivory carpet FLOOR texture, sparse faint teal thread, almost uniform light surface. One 16x16 tile, no objects, stripes or dense motifs.",
+          "sourceSha256": "3d2ae8dea4961004f0e495a15035bdfefccde5af13cd5701f2c3ccdfcc951b42",
+          "reason": "Full town instead of flat material"
+        },
+        {
+          "jobId": "3e25c59e-0833-430c-89c8-5d685023c379",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_114739_3e25c59e-0833-430c-89c8-5d685023c379.png",
+          "prompt": "Flat material swatch ONLY. Uniform very pale mint ivory woven carpet surface, subtle sparse light teal pixels. A seamless square texture tile intended to shrink to 16 by 16 pixels. The WHOLE image is one nearly plain material surface. Strictly no scene, city, buildings, objects, people, borders, stripes, perspective or symbols. Crisp flat limited-palette pixel texture, no gradient. Opaque.",
+          "sourceSha256": "6fbe96550a9ba68e088aa093a8e363b37a0e62564f55cf656cde61de7bd5f049",
+          "reason": "Mint weave pattern too dense at native size"
+        }
+      ],
+      "sourceSha256": "de8cde008b9dc14d6ef9bf2fc248e4e9df7d111a101290153eb23540fa1909d4",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_autonomy_floor.png": "c742b64569628a2120de6fdfdea363ef634577cc2fd753633abf1a57b5c27154"
+      }
+    },
+    {
+      "id": "home_floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "Flat material swatch ONLY. Uniform very pale cool blue ivory carpet surface, one or two faint blue pixels. A seamless square texture tile intended to shrink to 16 by 16 pixels. The WHOLE image is one nearly plain material surface. Strictly no scene, city, buildings, objects, people, borders, grids, stripes, perspective or symbols. Crisp flat limited-palette pixel texture, no gradient. Opaque.",
+      "path": "public/sprites/tiles/diplomacy_home_floor.png",
+      "jobId": "a62e47bc-dc96-4f38-839e-98f6c6eeb584",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_114739_a62e47bc-dc96-4f38-839e-98f6c6eeb584.png",
+      "supersededSources": [
+        {
+          "jobId": "9595a727-65a9-453a-b983-cbcd6fa96839",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113003_9595a727-65a9-453a-b983-cbcd6fa96839.png",
+          "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Very quiet seamless pale cool blue ivory carpet FLOOR texture, one tiny faint navy accent. One 16x16 tile, no objects, stripes, grids or dense motifs.",
+          "sourceSha256": "9f3461f126b4d57c0005d367cd2d0ad4dcdf74b6ee7083f85d19d7c593800a94",
+          "reason": "Full town instead of flat material"
+        }
+      ],
+      "sourceSha256": "c6008ac45399a798c99ab48d9b699f76d1ccce066a45130a754eda8bffa96129",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_home_floor.png": "d3c6833f3473ec0a6cc08cbd4052ced17a3b547c3aa0a960b144d215a0ef71a7"
+      }
+    },
+    {
+      "id": "terrace_path",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Quiet seamless glazed pale champagne TERRACE pavement texture, two broad plain rectangular slabs joined by one very faint straight horizontal line. Nearly uniform ivory; no small squares, veins or busy patterns. One 16x16 tile.",
+      "path": "public/sprites/tiles/diplomacy_terrace_path.png",
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "aa13af48-e41b-4391-8f15-649c6a305936",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113140_aa13af48-e41b-4391-8f15-649c6a305936.png",
+      "sourceSha256": "ec9995a321a218aca43a31b081dbab462d887cb7747cdf7e0a855ad841305bac",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_terrace_path.png": "b1fc5bfb949ee0d5c0500bf931880a622452ba0e0190df0e6b4953855c1f72f4"
+      }
+    },
+    {
+      "id": "hotel",
+      "kind": "building",
+      "width": 128,
+      "height": 48,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated complete diplomatic hotel glazed pavilion, orthogonal straight-on overhead RPG building designed as an exact EIGHT tile wide THREE tile tall footprint. Broad flat champagne stepped roof with navy glass skylights; three-tile-deep mass. Bottom facade has two central adjacent dark door openings with brass jambs, large quiet teal windows either side. No roofs extending beyond width, no perspective or ground. The glass building represents a luxurious meeting room whose agreements are visible but unreadable. Transparent background, complete silhouette with margins.",
+      "path": "public/sprites/tiles/diplomacy_hotel.png",
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "b39ef1be-511d-4ec9-9efc-2d8aecf11cb8",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113141_b39ef1be-511d-4ec9-9efc-2d8aecf11cb8.png",
+      "sourceSha256": "444babbce998f0815a67e06aea8997d505dd689dfe7702f72b98645b0de4e8c7",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_hotel.png": "428e4b30d283d149a71cf7f709f937438b894cf01bf04b541c39227ad7230e83"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "reception",
+      "kind": "prop",
+      "width": 48,
+      "height": 32,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated broad elegant hotel reception desk, champagne marble with navy front and brass edge, two blank folded registration cards and a small brass desk bell. Orthogonal RPG prop, front visible, slight overhead view, clean simple silhouette. Transparent background, full object with generous margins and no floor.",
+      "path": "public/sprites/tiles/diplomacy_reception.png",
+      "jobId": "96d1eec1-78cc-4f4b-a9d3-d50c4a4f895a",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113006_96d1eec1-78cc-4f4b-a9d3-d50c4a4f895a.png",
+      "sourceSha256": "496469a0539aad8c2c5fb3955c6a0ad85aa2e25dc915df228c8a93d1dc5900d4",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_reception.png": "33f4b114dd7a239c82793ddb8061836f09fe40ddb27a8d87c27a14b07df76aec"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "loyalty",
+      "kind": "prop",
+      "width": 48,
+      "height": 32,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated orthogonal RPG diplomatic agreement table: ONE large brass rubber stamp simultaneously bridges TWO blank ivory papers. A quiet navy table with brass legs and a single long pale bill protruding underneath. Clear large shapes. Transparent background, full object with generous margins and no floor.",
+      "path": "public/sprites/tiles/diplomacy_loyalty.png",
+      "jobId": "b132b645-5abf-46e3-8c6b-99264ca8d2a2",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113006_b132b645-5abf-46e3-8c6b-99264ca8d2a2.png",
+      "sourceSha256": "ef7cd93dd88ea6facf766eae73c668b64efca08828ab00537241cce02ce4e4c7",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_loyalty.png": "fbd931e649a263a29af207bd92f224a4d8fee28bc0048aad2648b4a25a7d52ab"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "autonomy",
+      "kind": "prop",
+      "width": 48,
+      "height": 32,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated orthogonal RPG mediation workstation: TWO separated square teal tables connected only by ONE long unmarked cream bill, a small brass repair clasp on the join. Plain ivory papers, deliberate visibly separated desks. Transparent background, full object with generous margins and no floor.",
+      "path": "public/sprites/tiles/diplomacy_autonomy.png",
+      "jobId": "0e06b5d9-02a6-415a-9000-154d7beb6fca",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113005_0e06b5d9-02a6-415a-9000-154d7beb6fca.png",
+      "sourceSha256": "4382787ed900d165de24e648085a2e20e942dafb95f128d95504a4da171dcae0",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_autonomy.png": "545bb5d8ba76f886da7534c94b3da2c3df61a34e699a9752cb3b14a402fbd31f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "home",
+      "kind": "prop",
+      "width": 48,
+      "height": 48,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated orthogonal RPG TV teleprompter stand, navy and brass frame. Blank saturated solid teal gauge with NO digits, a single small bright red indicator, a pale microphone and a brass headset hook. A folded empty chair beside it. Simple silhouette readable at 48px. Transparent background, full object with generous margins and no floor.",
+      "path": "public/sprites/tiles/diplomacy_home.png",
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "675751c3-b045-47c6-a5f5-0fad289c1298",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113140_675751c3-b045-47c6-a5f5-0fad289c1298.png",
+      "sourceSha256": "c0e07606c7bc2318ee2460c1d8b7ce3de4943174659a63bf90d6cd4e82aafe80",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_home.png": "6d2cdf978ce780754daad0fb2e13859e2e11f511a139f9853f1f3976a63bdfcc"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "stage",
+      "kind": "prop",
+      "width": 80,
+      "height": 48,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated broad orthogonal RPG diplomatic terrace platform. Two plain navy podiums joined by a brass ring selfie lamp, a small empty cream folded banquet table underneath, one trailing shared bill. Champagne base, no curtains or steps outside footprint. Front and overhead visible, simple large staged silhouettes. Transparent background, full object with generous margins and no floor.",
+      "path": "public/sprites/tiles/diplomacy_stage.png",
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "cccd4f7f-bb75-4d3e-9bcb-ea4599014a8e",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113140_cccd4f7f-bb75-4d3e-9bcb-ea4599014a8e.png",
+      "sourceSha256": "9d0749230658d960d105bd7d42e31062f24dd7383edfc8f078c4f6dd999bcac0",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_stage.png": "f7c07aaa7e75fab1ab3cc3338d66dc69b59eb8a1885d8d1340e1cb13d18b6290"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "navetta",
+      "kind": "prop",
+      "width": 48,
+      "height": 40,
+      "aspectRatio": "3:2",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE isolated orthogonal RPG hotel shuttle terminal: elegant teal canopy, brass handrail, ONE cream blank ticket and two simple folded navy luggage cases. No humans, wheels or destination text, one cohesive prop silhouette. Transparent background, full object with generous margins and no floor.",
+      "path": "public/sprites/tiles/diplomacy_navetta.png",
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "635f2ec6-4289-4da9-98bb-59b59d28980f",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113143_635f2ec6-4289-4da9-98bb-59b59d28980f.png",
+      "sourceSha256": "ce8ee5e062fad378ed92f79b4aae6836263542372f53b788bf8a715266dd34f2",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/diplomacy_navetta.png": "7e2232618bfa3a512a00c116789e494fe4422c2e6b0be717a6de1efff2c95f3c"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "host",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE four-direction character sprite sheet, EXACT 2x2 grid with large transparent gaps and equal quadrants. SAME character in all four views, full body with margins. TOP LEFT facing SOUTH toward viewer; TOP RIGHT facing NORTH, back toward viewer; BOTTOM LEFT facing WEST left profile; BOTTOM RIGHT facing EAST right profile. Orthogonal overhead RPG angle, short sturdy proportions and broad simple forms. A fictional female hotel host, middle aged, neat black bob haircut, champagne scarf, midnight navy receptionist jacket and skirt, brass flat shoes, holds TWO blank ivory keycards. Human, warm confident face. No floor or shadows outside the figure. Transparent background.",
+      "outputs": [
+        "public/sprites/chars/npc_diplomacy-host_south.png",
+        "public/sprites/chars/npc_diplomacy-host_north.png",
+        "public/sprites/chars/npc_diplomacy-host_west.png",
+        "public/sprites/chars/npc_diplomacy-host_east.png"
+      ],
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "ad3f3346-8b33-4473-918b-665bf6447760",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113143_ad3f3346-8b33-4473-918b-665bf6447760.png",
+      "sourceSha256": "20d3f25f7fd6ce0f55cf8b9ca40bdfe41c4862a74b2df19d55724371446d7453",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_diplomacy-host_south.png": "6184e9bf773fc808cd8d34d1f1801ec7024b14199dc180e55ad566cabeba0136",
+        "public/sprites/chars/npc_diplomacy-host_north.png": "184c3f81abab9b2cf2178990464f8c439bd0296b11d4232067a435364cae475e",
+        "public/sprites/chars/npc_diplomacy-host_west.png": "a24d617c33eb5965fb58bd72e0d04297f2baab89a78d34ffa142411cdd766159",
+        "public/sprites/chars/npc_diplomacy-host_east.png": "50260930552680bbf2354daab2acb2d5a7bc8ad5e41ce16a25e91c4b5378ff52"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "loyalist",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "Keep exactly this fictional bald diplomat: ivory jacket with navy collar and cuffs, navy trousers, dark glasses, gold shoes and brass stamp. Generate a corrected transparent 2x2 directional sprite sheet with FOUR DISTINCT orientations. TOP LEFT frontal face looking SOUTH toward viewer. TOP RIGHT back of head looking NORTH away from viewer. BOTTOM LEFT strict left-facing profile, nose points toward the LEFT edge of the sheet; both shoes point LEFT. BOTTOM RIGHT strict right-facing profile, nose and shoes point RIGHT. The bottom two views MUST face opposite directions. Same body proportions and outfit all views. Each body entirely inside its own quadrant with clear gutters, clean alpha, no glow or shadows around the figures. Crisp limited palette pixel art. No text, symbols or scenery.",
+      "outputs": [
+        "public/sprites/chars/npc_diplomacy-loyalist_south.png",
+        "public/sprites/chars/npc_diplomacy-loyalist_north.png",
+        "public/sprites/chars/npc_diplomacy-loyalist_west.png",
+        "public/sprites/chars/npc_diplomacy-loyalist_east.png"
+      ],
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "f9b561fa-8614-4745-b2e1-36ab87aaabac",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_114826_f9b561fa-8614-4745-b2e1-36ab87aaabac.png",
+      "supersededSources": [
+        {
+          "jobId": "328311a2-0337-4740-8720-711f4ef7630f",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113143_328311a2-0337-4740-8720-711f4ef7630f.png",
+          "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE four-direction character sprite sheet, EXACT 2x2 grid with large transparent gaps and equal quadrants. SAME character in all four views, full body with margins. TOP LEFT facing SOUTH toward viewer; TOP RIGHT facing NORTH, back toward viewer; BOTTOM LEFT facing WEST left profile; BOTTOM RIGHT facing EAST right profile. Orthogonal overhead RPG angle, short sturdy proportions and broad simple forms. A fictional bald male protocol officer, tall upright head and navy glasses, champagne cream formal jacket with navy cuffs, dark trousers, brass shoes, carries a comically large brass rubber stamp. Human, solemn face. No floor or shadows outside the figure. Transparent background.",
+          "sourceSha256": "cbff8e9317f2a1d15c16265812a847730bd3f17c450ac14e69bb2fc4bdc1a1d5",
+          "reason": "Both side profiles face right"
+        }
+      ],
+      "sourceSha256": "4ffdbc9b5f3cc3492e2a5f56fbfdccbb7f64ca877fe53a0db4dd4660bdd27864",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_diplomacy-loyalist_south.png": "c9b373ea29163588bbec3d93064be8595aa6d7ff71a51886c9613c1c38a97ea6",
+        "public/sprites/chars/npc_diplomacy-loyalist_north.png": "4883e425fdcbd520050ffee060efbd07048d99d4cc06cab658d1e3fa11084886",
+        "public/sprites/chars/npc_diplomacy-loyalist_west.png": "f50271acdad6176c99c0e4ec880f8fec199e1e0692e455b6b951d1e4b88f4891",
+        "public/sprites/chars/npc_diplomacy-loyalist_east.png": "19c9a559219ecd62c11ba9e57f3a535397110b577dec174146574b21aa56c472"
+      },
+      "alphaCutoff": 128,
+      "directionSources": {
+        "2": {
+          "sourcePath": "artifacts/diplomacy/loyalist-west.png",
+          "jobId": "9f4c60cd-dcf7-4240-8564-4f18eeb2e86e",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_115050_9f4c60cd-dcf7-4240-8564-4f18eeb2e86e.png",
+          "prompt": "ONE SINGLE left-facing side profile of the attached fictional bald diplomat. Head and entire body face the LEFT EDGE of the image. The nose is on the LEFT side of the skull; the back of the bald head is on the RIGHT. Both shoes point LEFT. No front view, no back view, no right-facing profile, no sheet or grid. Preserve ivory jacket, navy collar and cuffs, navy trousers, dark glasses, gold shoes and brass stamp. Full body upright, centered with padding. Crisp pixel art, clean transparent background, no glow or shadow around subject, no text or scenery.",
+          "reason": "Second four-view generation still faced right in both side cells. Separate left profile inspected and accepted.",
+          "sourceSha256": "f0e8bd0597f5b71a09ddf29d80f6cd4d7e9934197ea35089b7aa6fcdc48856e4",
+          "sourceSize": [
+            1024,
+            1024
+          ]
+        }
+      }
+    },
+    {
+      "id": "mediator",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE four-direction character sprite sheet, EXACT 2x2 grid with large transparent gaps and equal quadrants. SAME character in all four views, full body with margins. TOP LEFT facing SOUTH toward viewer; TOP RIGHT facing NORTH, back toward viewer; BOTTOM LEFT facing WEST left profile; BOTTOM RIGHT facing EAST right profile. Orthogonal overhead RPG angle, short sturdy proportions and broad simple forms. A fictional female diplomatic mediator, short silver pixie hair, petrol teal jacket, rolled ivory sleeves, dark trousers and brass shoes, carries a folded long blank bill and one small brass clasp. Human, practical expression. No floor or shadows outside the figure. Transparent background.",
+      "outputs": [
+        "public/sprites/chars/npc_diplomacy-mediator_south.png",
+        "public/sprites/chars/npc_diplomacy-mediator_north.png",
+        "public/sprites/chars/npc_diplomacy-mediator_west.png",
+        "public/sprites/chars/npc_diplomacy-mediator_east.png"
+      ],
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "ab775408-6431-499d-b3f3-c6d0585f29fb",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113400_ab775408-6431-499d-b3f3-c6d0585f29fb.png",
+      "sourceSha256": "fa3ddd57810bdbfb126e2ef65827515187e7438878e9702ee120fac47479fdf4",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_diplomacy-mediator_south.png": "8e6f699dc0e9e06e0656498e179b81b40e9e3888c38d33686ce556be1b2a0389",
+        "public/sprites/chars/npc_diplomacy-mediator_north.png": "e5a837114b43c32deed84e0f259c6efb4f6dfd9e2436a6d796318a2f11261860",
+        "public/sprites/chars/npc_diplomacy-mediator_west.png": "2d18241a1db5e58b4e3012524b7a5a57210754d1bb6bdd76568b415012173a3f",
+        "public/sprites/chars/npc_diplomacy-mediator_east.png": "7c63f439fbae3f64dc155c91e027b92cc0aedcae921106780608b3e1ce4147d9"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "producer",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE four-direction character sprite sheet, EXACT 2x2 grid with large transparent gaps and equal quadrants. SAME character in all four views, full body with margins. TOP LEFT facing SOUTH toward viewer; TOP RIGHT facing NORTH, back toward viewer; BOTTOM LEFT facing WEST left profile; BOTTOM RIGHT facing EAST right profile. Orthogonal overhead RPG angle, short sturdy proportions and broad simple forms. A fictional male TV producer, short curly brown hair, ochre skin, neat brass headset, navy sweater with petrol teal cuffs, dark trousers, cream clipboard. Human, concentrated face. No floor or shadows outside the figure. Transparent background.",
+      "outputs": [
+        "public/sprites/chars/npc_diplomacy-producer_south.png",
+        "public/sprites/chars/npc_diplomacy-producer_north.png",
+        "public/sprites/chars/npc_diplomacy-producer_west.png",
+        "public/sprites/chars/npc_diplomacy-producer_east.png"
+      ],
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "c4c7b13f-c40f-482b-a31a-53773821f7f7",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113401_c4c7b13f-c40f-482b-a31a-53773821f7f7.png",
+      "sourceSha256": "bc22ee4dfcabe0cc68d8e2d3d862c5d6b806fecc330909a28f4a8e7778ef6ad1",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_diplomacy-producer_south.png": "4ff4516b0bc78e924660adbb28323c9cb1cb023522e609812b7dcd50d716d079",
+        "public/sprites/chars/npc_diplomacy-producer_north.png": "22b6121d7d47b704d03810d88bdbd73801422f12d646b35f1b4fd3030d5792cf",
+        "public/sprites/chars/npc_diplomacy-producer_west.png": "5acdfc2862f90e45bb1f16c50b9710971dccea298e919dd5d111b7c647105d68",
+        "public/sprites/chars/npc_diplomacy-producer_east.png": "2a31c5924e9727deedbec792895aab1b4c25b71bed5a5d3c8af66d5bd614aaa2"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "partner",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. ONE four-direction character sprite sheet, EXACT 2x2 grid with large transparent gaps and equal quadrants. SAME character in all four views, full body with margins. TOP LEFT facing SOUTH toward viewer; TOP RIGHT facing NORTH, back toward viewer; BOTTOM LEFT facing WEST left profile; BOTTOM RIGHT facing EAST right profile. Orthogonal overhead RPG angle, short sturdy proportions and broad simple forms. A fictional elegant anthropomorphic diplomat bird, slate blue head, short petrol teal feather crest, small gold hooked beak, expressive eyes, midnight navy tailcoat with ONE ivory flower and gold shoes. ONE natural feathered wing and ONE discreet brass mechanical wing, both tucked. Stands upright like a human trainer, carries a small folded blank agreement. Playful polished sinister smile. Full invented fantasy character, not any existing bird character. No floor or shadows outside the figure. Transparent background.",
+      "outputs": [
+        "public/sprites/chars/npc_diplomacy-partner_south.png",
+        "public/sprites/chars/npc_diplomacy-partner_north.png",
+        "public/sprites/chars/npc_diplomacy-partner_west.png",
+        "public/sprites/chars/npc_diplomacy-partner_east.png"
+      ],
+      "submissionFailure": "gpt_image_2_5 backend request failed (429): rate_limit_reached",
+      "status": "completed",
+      "jobId": "982a034b-6466-4264-bbb7-36a2505fe8aa",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113140_982a034b-6466-4264-bbb7-36a2505fe8aa.png",
+      "sourceSha256": "494230a2d9df63866299d3b9313f14718c498dc898cc54fa5c255505e284b5d7",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_diplomacy-partner_south.png": "ed0008cf819ff4c16a27fd009df7891144b3822953acb524e177ab622454c3e1",
+        "public/sprites/chars/npc_diplomacy-partner_north.png": "dd93380ad4a5c29a865fa993e0e64030477f01cf69d48ba833cb212f8ea0cd21",
+        "public/sprites/chars/npc_diplomacy-partner_west.png": "9c579ef542252d6401192b68a81e11efbc7db4d24c7cd9f4f09801336e30ced4",
+        "public/sprites/chars/npc_diplomacy-partner_east.png": "b1378e066c41f73621b566e0c3331e977db98140092b21eee632e327be43513b"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "partner-perfetto",
+      "kind": "briefing",
+      "width": 224,
+      "height": 78,
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Crisp deliberate pixel art, simple bold shapes readable at tiny native game scale, restrained midnight navy, warm champagne ivory, petrol teal and brass gold. Flat limited palette, two-tone shading. Orthogonal overhead RPG geometry, never isometric. No text, letters, numerals, symbols, logos, real people, recognizable politicians, flags, emblems, watermark. No photorealism, 3D, gradients or antialiasing. Full-bleed 21:9 panoramic scene with quiet crop edges: SAME fictional diplomat bird as the attached reference, navy tailcoat with ivory flower, slate blue head, teal short crest, gold beak, one natural and one brass mechanical wing. Single view, no grid. Smiling at a glass diplomatic terrace beneath one brass selfie ring. Its wings hold TWO incompatible blank agreements above one long shared bill. A distant small municipal bench waits outside the glass pavilion, neat champagne roof, plain blank panels. Wide original satire of perfect diplomatic photos and hidden obligations, clear centered character and readable staged shapes. Background opaque.",
+      "path": "public/sprites/ui/boss/partner-perfetto.png",
+      "cropTop": 54,
+      "jobId": "692551fe-3b24-414b-aaca-8b76995fe0fb",
+      "status": "completed",
+      "referenceJobId": "982a034b-6466-4264-bbb7-36a2505fe8aa",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_113515_692551fe-3b24-414b-aaca-8b76995fe0fb.png",
+      "sourceSha256": "0d1975fb7ef17874ca91c15918bc812de82e4b94a21ff91e6131cf8563eae652",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/partner-perfetto.png": "2745538a548180d8f12f33a63bf178256ee986c57888aed26e35ab138ed402f8"
+      },
+      "cropBox": [
+        0,
+        54,
+        1344,
+        522
+      ]
+    }
+  ],
+  "submissionFailures": [
+    {
+      "index": 6,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 7,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 11,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 12,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 13,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 14,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 15,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 16,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 17,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 18,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    },
+    {
+      "index": 16,
+      "status": "submission_failed",
+      "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+    }
+  ],
+  "generationAttempts": 25,
+  "completedGenerations": 25,
+  "balanceAfter": 484.72,
+  "actualCreditsSpent": 37.5
+}

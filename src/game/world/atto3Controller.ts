@@ -3,6 +3,7 @@ import type { AllyId } from "../coalition";
 import { districtActionCount } from "../districtCampaign";
 import { CAMPO_VOICES } from "../../data/campo";
 import { futureAccountLines } from "../futureChapter";
+import { diplomacyAccountLines } from "../campaignDecisions";
 
 // Punto d'ingresso deliberatamente piccolo per R1. La logica Atto 3 vivrà qui
 // e restituirà comandi dichiarativi; WorldScene resterà l'adattatore UI.
@@ -99,9 +100,13 @@ export function createAtto3Controller(): Atto3Controller {
         }
         return true;
       }
+      if (npcId === "partner-after" || (npcId === "diplomacy-host" && context.state.flags.diplomacyComplete)) {
+        context.dispatch({ kind: "say", lines: ["IL VERTICE HA FIRMATO TRE COPIE. IL CAMERIERE HA TENUTO L'ORIGINALE DEL CONTO.", ...diplomacyAccountLines(context.state), "CINQUE COLLEGI NUOVI. LE PROMESSE E I PATTI RESTANO TUOI.", "TOUR A SINISTRA, GENOVA A DESTRA. CURE AL CAMPO VIA FUTURO."] });
+        return true;
+      }
       if (npcId === "diplomacy-host") {
         if (!context.state.flags["diplomacy-checked-in"]) context.dispatch({ kind: "setFlag", flag: "diplomacy-checked-in" });
-        context.dispatch({ kind: "say", lines: ["HOST: un selfie, tre sovranità.", "VISITA LE STANZE FEDELTÀ, AUTONOMIA E CONSENSO. OGNI PORTA MOSTRA IL PREZZO."] });
+        context.dispatch({ kind: "say", lines: ["TRE CAMERE COMUNICANTI. LE TRE VERSIONI DEI FATTI, MENO.", "FEDELTÀ IN ALTO A SINISTRA, AUTONOMIA A DESTRA, CONSENSO IN BASSO A SINISTRA. A APRE IL DOSSIER, B RINVIA.", "DOPO LA SCELTA, PARTNER IN TERRAZZA A DESTRA. CURE AL CAMPO VIA FUTURO."] });
         return true;
       }
       const diplomacyChoice = ({
@@ -111,7 +116,7 @@ export function createAtto3Controller(): Atto3Controller {
       } as const)[npcId];
       if (diplomacyChoice) {
         if (context.state.flags["diplomacy-choice-complete"]) {
-          context.dispatch({ kind: "say", lines: ["LA SCELTA È GIÀ IN ONDA.", "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."] });
+          context.dispatch({ kind: "say", lines: ["SCELTA REGISTRATA. I TAVOLI SONO SEPARATI; IL VERBALE È UNICO.", ...diplomacyAccountLines(context.state), "PARTNER IN TERRAZZA: A APRE IL DOSSIER, B RINVIA. CURE AL CAMPO VIA FUTURO."] });
         } else {
           context.dispatch({ kind: "openDiplomacyChoice", initial: diplomacyChoice });
         }

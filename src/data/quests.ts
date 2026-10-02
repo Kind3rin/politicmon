@@ -245,7 +245,7 @@ export const QUESTS: QuestDef[] = [
     id: "atto3-diplomacy-scelta",
     title: "TRE PASS, UNA SCELTA",
     desc: "Valuta FEDELTÀ, AUTONOMIA e CONSENSO prima della diretta.",
-    hint: "Le tre stanze dell'hotel mostrano fondi, SONDAGGI e LINEE ROSSE prima della conferma.",
+    hint: "Apri i tre dossier: AUTONOMIA ripara un patto teso per 500€. CONSENSO può strappare patti anche a SONDAGGI 100.",
     step: "Registra la scelta diplomatica.",
     isDone: (s) => Boolean(s.flags["diplomacy-choice-complete"]),
     target: { mapId: "diplomacy_lobby", x: 9, y: 3 }
@@ -254,7 +254,7 @@ export const QUESTS: QuestDef[] = [
     id: "atto3-diplomacy-boss",
     title: "IL PARTNER PERFETTO",
     desc: "La terrazza è in diretta. Chiudi il vertice senza farti ritagliare dal selfie.",
-    hint: "Dopo la scelta, entra nella TERRAZZA-STUDIO dall'ala destra dell'hotel.",
+    hint: "Terrazza dall'ala destra: parla al Partner e apri il dossier. Per curarti torna a CAMPO LARGO via FUTURO ANTERIORE.",
     step: "Sconfiggi IL PARTNER PERFETTO.",
     isDone: (s) => Boolean(s.flags.diplomacyComplete),
     target: { mapId: "diplomacy_terrace", x: 10, y: 2 }

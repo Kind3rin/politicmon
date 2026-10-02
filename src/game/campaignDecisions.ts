@@ -19,8 +19,8 @@ export const CAMPAIGN_CHOICES = {
   },
   diplomacy: {
     title: "TEMPTATION DIPLOMACY", keys: ["loyalty", "autonomy", "home"], labels: ["FEDELTÀ", "AUTONOMIA", "CONSENSO"],
-    stories: ["Il vertice finanzia la fedeltà. Gli alleati scoprono di non essere nel preventivo.", "Un patto si ripara pagando il tavolo. Nessuno restituisce il primo strappo.", "Il comunicato torna a casa prima di te. Gli alleati lo leggono in copia nascosta."],
-    closing: "Il vertice si chiude. Le conseguenze non hanno un volo di ritorno."
+    stories: ["Il timbro copre due accordi incompatibili. Da lontano sembra una firma sola; da vicino serve una spiegazione.", "Chiedi tavoli separati. Arriva un conto unico: almeno il cameriere sa chi deve parlarsi.", "Dichiari di aver ascoltato tutti. Il fonico conferma: ha lasciato accesi solo i microfoni che applaudono."],
+    closing: "La foto ha cancellato le distanze. Il verbale conserva gli strappi."
   }
 } as const;
 export type CampaignKind = keyof typeof CAMPAIGN_CHOICES;
@@ -33,6 +33,14 @@ export type DecisionPreview = { ok: false; error: string } | {
   cohesionDelta: number; repairTarget: AllyId | null; lines: string[];
 };
 export const signed = (value: number): string => value > 0 ? `+${value}` : String(value);
+export function diplomacyAccountLines(state: Readonly<GameState>): string[] {
+  const status = { allied: "ATTIVO", strained: "TESO", reconciled: "RIPARATO" };
+  return [
+    ...futureAccountLines(state).slice(0, -2),
+    ...state.coalition.members.map(m => `${ALLY_NAMES[m.allyId]}: ${status[m.status]}, STRAPPI ${m.violationCount}.`),
+    "I PATTI E I SERVIZI HANNO CONTI DISTINTI. MORALE RIPARA I SERVIZI."
+  ];
+}
 const ERRORS: Record<string, string> = {
   already_resolved: "SCELTA GIÀ REGISTRATA", insufficient_funds: "FONDI INSUFFICIENTI",
   coalition_full: "COALIZIONE PIENA", candidates_unseen: "INCONTRA I TRE CANDIDATI",
@@ -66,6 +74,11 @@ export function previewCampaignDecision(state: Readonly<GameState>, kind: Campai
     ? "PATTO CON GENERORSO CONFERMATO." : "GENERORSO ENTRA NELLA COALIZIONE.");
   if (kind === "future") lines.push(...futureAccountLines(state));
   if (kind === "diplomacy" && index === 0) lines.push("PASS PER IL VERTICE OTTENUTO.");
+  if (kind === "diplomacy") {
+    if (index === 1 && !repairTarget) lines.push("NESSUN PATTO RIPARATO: INCASSO CON I MODIFICATORI DEGLI ALLEATI.");
+    if (index === 2 && pollsDelta < 4) lines.push(`LIMITE SONDAGGI 100: AUMENTO EFFETTIVO ${signed(pollsDelta)}. I PATTI POSSONO COMUNQUE STRAPPARSI.`);
+    lines.push(...diplomacyAccountLines({ ...state, coalition: patch.coalition, morale: { ...state.morale, cohesion: state.morale.cohesion + cohesionDelta } }));
+  }
   if (cohesionDelta) lines.push("DA 70 COE: EXP +8%. SOTTO 30: EXP -8%. SOLO CAMPAGNA.");
   return { ok: true, patch, moneyDelta, pollsDelta, localDelta, cohesionDelta, repairTarget, lines };
 }

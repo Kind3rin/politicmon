@@ -73,8 +73,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
       ["ursulax", 53, ["decreto", "autonomia", "fiducia", "quorum"], "gilet"],
       ["trumpon", 54, ["festival", "comizio", "piazza_aperta", "mondocontrario"]]
     ],
-    intro: ["UN SELFIE, TRE SOVRANITÀ.", "SORRIDI: LA CLAUSOLA DI RECESSO È GIÀ NEL FILTRO."],
-    defeat: ["LA DIPLOMAZIA RESISTE.", "LA CLIP, PURTROPPO, È GIÀ VIRALE."],
+    intro: ["LA FOTO DICE CHE SIAMO UNITI.", "I TRE CONTRATTI HANNO CHIESTO DI RESTARE FUORI CAMPO."],
+    defeat: ["LA FOTO È VENUTA BENE.", "IL CAMERIERE CONTINUA A CHIEDERE CHI PAGA."],
     money: 2600, reward: { itemId: "schedona", qty: 2 }
   },
   "district-nord": {

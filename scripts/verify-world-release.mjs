@@ -31,9 +31,10 @@ const offshorePaths = JSON.parse(readFileSync('scripts/higgsfield-offshore.json'
 const bruxellesPaths = JSON.parse(readFileSync('scripts/higgsfield-bruxelles.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const campoPaths = JSON.parse(readFileSync('scripts/higgsfield-campo.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const futurePaths = JSON.parse(readFileSync('scripts/higgsfield-future.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
+const diplomacyPaths = JSON.parse(readFileSync('scripts/higgsfield-diplomacy.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const music = JSON.parse(readFileSync('public/audio/catalog.json','utf8'));
 const musicPaths = ['audio/catalog.json', ...Object.values(music).map(a=>a.file)];
-const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths, ...campoPaths, ...futurePaths])];
+const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths, ...campoPaths, ...futurePaths, ...diplomacyPaths])];
 const releasePaths = [...paths, ...musicPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {

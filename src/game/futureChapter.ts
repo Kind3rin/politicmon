@@ -1,6 +1,6 @@
 import type { GameState } from "./state";
 import { PROMISES, promiseCost } from "./morale";
-import { addAlly, applyLineRedEvent, coalitionBonuses, type AllyId, type CoalitionState } from "./coalition";
+import { addAlly, applyLineRedEvent, coalitionFundGain, type AllyId, type CoalitionState } from "./coalition";
 
 export type FutureChoice = "alliance" | "distance" | "opposition";
 export type FutureChoiceError = "already_resolved" | "insufficient_funds" | "coalition_full";
@@ -28,10 +28,6 @@ export type FutureChoiceResult =
   | { readonly ok: true; readonly patch: FutureChoicePatch }
   | { readonly ok: false; readonly error: FutureChoiceError };
 
-function fundGain(base: number, coalition: CoalitionState): number {
-  const modifiers = coalitionBonuses(coalition);
-  return Math.round(base * (1 + (modifiers.bonus.funds + modifiers.malus.funds) / 100));
-}
 
 export function resolveFutureChoice(input: FutureChoiceInput): FutureChoiceResult {
   if (input.flags["future-choice-complete"]) return { ok: false, error: "already_resolved" };
@@ -57,7 +53,7 @@ export function resolveFutureChoice(input: FutureChoiceInput): FutureChoiceResul
     moneyDelta = -800;
     outcomeFlag = "a3.future.ally";
   } else if (input.choice === "distance") {
-    moneyDelta = fundGain(600, coalition);
+    moneyDelta = coalitionFundGain(600, coalition);
     outcomeFlag = "a3.future.distance";
   } else {
     const lines = applyLineRedEvent(coalition, 11);

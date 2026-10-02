@@ -161,4 +161,6 @@ lotte, focus tastiera e salvataggio verificati su Chromium e WebKit.
 
 [Campo Largo: cornice e contratti](docs/CAMPO-CORNICE.md): cast, dossier volontari, retropalco e reclutamento con crescita realmente schierata.
 
-[Futuro Anteriore: il conto del nuovo logo](docs/FUTURO-VERBALE.md): sede e tre uffici, sette personaggi, verbali prima delle leve, scelte con patti e debiti reali. Cinque percorsi guadagnati superano il Segretario; il vivaio permette di usare la Tessera vinta per evolvere un Vannaccix appena reclutato in Futurorso. 44 risorse, 39 crediti, Chromium/WebKit e offline verificati. Il redesign completo prosegue verso il vertice diplomatico.
+[Futuro Anteriore: il conto del nuovo logo](docs/FUTURO-VERBALE.md): sede e tre uffici, sette personaggi, verbali prima delle leve, scelte con patti e debiti reali. Cinque percorsi guadagnati superano il Segretario; il vivaio permette di usare la Tessera vinta per evolvere un Vannaccix appena reclutato in Futurorso. 44 risorse, 39 crediti, Chromium/WebKit e offline verificati. Il redesign completo prosegue oltre il vertice diplomatico.
+
+[Hotel Diplomatico: una foto, tre conti](docs/DIPLOMACY-VERBALE.md): cinque mappe e cinque personaggi nuovi, suite distinte, Partner con dossier manuale e scelte che leggono i patti reali. Cinque percorsi guadagnati arrivano al Tour conservando debiti, riparazioni ed evoluzioni. 35 PNG, 37,5 crediti, 291 test e verifiche offline Chromium/WebKit. Il lavoro prosegue su Genova, Tour e Palazzo.

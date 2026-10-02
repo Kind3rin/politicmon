@@ -1,5 +1,7 @@
 # Temptation Diplomacy: audit dopo Futuro
 
+Documento storico della baseline prima del redesign. Per il nuovo Hotel, cast e risultati aggiornati leggere [DIPLOMACY-VERBALE.md](DIPLOMACY-VERBALE.md) e [diplomacy-proof.json](diplomacy-proof.json). Le descrizioni del vecchio layout e dell’attacco a vista sottostanti sono osservazioni precedenti, non lo stato corrente.
+
 Il 2 ottobre 2026 cinque segmenti guadagnati superano il Segretario e arrivano all’Hotel Diplomatico. Questo accesso non certifica il redesign del vertice.
 
 Il lobby 20×13, tre stanze 10×8 e terrazza 20×12 sono in `src/data/maps/atto3.ts`. Le tre stanze condividono la pianta precedente di Futuro, arredi comuni e ruoli generici. La terrazza usa il palco e oggetti condivisi. Serve un hotel riconoscibile, tre spazi con identità, cast, segnali e ritorni chiari. Il Partner Perfetto attacca con `sightRange: 5`: rendere consultabile il dossier prima di impegnare risorse.

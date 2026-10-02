@@ -69,7 +69,7 @@ const FUTURO_HQ_TILES = [
   "AAAAAAAAAAAAAAAAAA"
 ];
 
-const FUTURO_SIDE_ROOM_TILES = [
+const PALACE_ARCHIVE_TILES = [
   "AAAAAAAAAA",
   "AbppppppbA",
   "AppppppppA",
@@ -77,7 +77,7 @@ const FUTURO_SIDE_ROOM_TILES = [
   "AppppppppA",
   "AppppppppA",
   "ApppccpppA",
-  "AAAAAAAAAA"
+  "AAAAAAAAAA",
 ];
 
 const FUTURO_SPLIT_TILES = [
@@ -115,32 +115,65 @@ const FUTURO_MONEY_TILES = [
 
 const DIPLOMACY_LOBBY_TILES = [
   "AAAAAAAAAAAAAAAAAAAA",
-  "AbbbpppppppppppppbbA",
+  "AbbppppppppppppppbbA",
+  "AppppppppppppppppppA",
+  "AppcppppppppppppcppA",
+  "Apppppppp4pppppppppA",
   "AppppppppppppppppppA",
   "AppppppppppppppppppA",
   "AppppppppppppppppppA",
-  "ApppphhhhhhhhhhppppA",
+  "AppcppppppppppppcppA",
+  "Ap7pppppppppppppp7pA",
   "AppppppppppppppppppA",
-  "AppppppppppppppppppA",
-  "AppppppppppppppppppA",
-  "AppppppppppppppppppA",
-  "AppppppppppppppppppA",
-  "ApppppppccccpppppppA",
+  "ApppppppccpppppppppA",
   "AAAAAAAAAAAAAAAAAAAA"
+];
+
+const DIPLOMACY_LOYALTY_TILES = [
+  "AAAAAAAAAA",
+  "AbbppppppA",
+  "AppppppppA",
+  "Apppppp6pA",
+  "AppppppppA",
+  "AbpppppppA",
+  "ApppccpppA",
+  "AAAAAAAAAA"
+];
+
+const DIPLOMACY_AUTONOMY_TILES = [
+  "AAAAAAAAAA",
+  "AppppppppA",
+  "ApPppppppA",
+  "Apppppp6pA",
+  "AppppppppA",
+  "AppppppPpA",
+  "ApppccpppA",
+  "AAAAAAAAAA"
+];
+
+const DIPLOMACY_HOME_TILES = [
+  "AAAAAAAAAA",
+  "AbpppppppA",
+  "AppppppppA",
+  "Apppppp6pA",
+  "AppppppppA",
+  "ApPppppppA",
+  "ApppccpppA",
+  "AAAAAAAAAA"
 ];
 
 const DIPLOMACY_TERRACE_TILES = [
   "TTTTTTTTTTTTTTTTTTTT",
-  "TT....ffffffffff..TT",
-  "TT....f====1===f..TT",
-  "TT....ffff==ffff..TT",
   "TT........==......TT",
-  "TT..6.....==....3.TT",
   "TT........==......TT",
-  "TT....ffff==ffff..TT",
-  "TT....f========f..TT",
-  "TT....ffff==ffff..TT",
+  "TT........1=......TT",
   "TT........==......TT",
+  "TT..6.....==......TT",
+  "TT........==......TT",
+  "TTvvvvvvvv==......TT",
+  "TTvvvvvvvv==......TT",
+  "TTmmmddmmm==......TT",
+  "TT...=======......TT",
   "TTTTTTTTTT==TTTTTTTT"
 ];
 
@@ -436,6 +469,8 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
   },
   diplomacy_lobby: {
     id: "diplomacy_lobby", name: "HOTEL DIPLOMATICO", tiles: DIPLOMACY_LOBBY_TILES,
+    tileOverrides: { p: "tiles/diplomacy_floor.png", A: "tiles/diplomacy_wall.png" },
+    objectOverrides: { "4": "tiles/diplomacy_reception.png", "7": "tiles/diplomacy_navetta.png" }, objectSizes: { "4": 48 },
     outdoor: false, music: "social_tension",
     warps: [
       { x: 8, y: 11, toMap: "futuro_piazza", toX: 3, toY: 8, facing: "right" },
@@ -443,45 +478,53 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       { x: 3, y: 3, toMap: "diplomacy_loyalty", toX: 4, toY: 5, facing: "up" },
       { x: 16, y: 3, toMap: "diplomacy_autonomy", toX: 4, toY: 5, facing: "up" },
       { x: 3, y: 8, toMap: "diplomacy_home", toX: 4, toY: 5, facing: "up" },
-      { x: 16, y: 8, toMap: "diplomacy_terrace", toX: 10, toY: 10, facing: "up", requiresFlag: "diplomacy-choice-complete" }
-      ,{ x: 18, y: 10, toMap: "genova_techno", toX: 10, toY: 12, facing: "up", requiresFlag: "diplomacyComplete", confirm: "VAI AL SET GENOVA TECHNO?" }
-      ,{ x: 1, y: 10, toMap: "tour_feed", toX: 11, toY: 12, facing: "up", requiresFlag: "diplomacyComplete", confirm: "INIZI IL TOUR DEI CINQUE COLLEGI?" }
+      { x: 16, y: 8, toMap: "diplomacy_terrace", toX: 5, toY: 10, facing: "right", requiresFlag: "diplomacy-choice-complete", markerLabel: "PARTNER", lockedLines: ["PRIMA FIRMA UNA SCELTA NELLE SUITE. B RINVIA."] }
+      ,{ x: 18, y: 10, toMap: "genova_techno", toX: 10, toY: 12, facing: "up", requiresFlag: "diplomacyComplete", markerLabel: "GENOVA", lockedLines: ["GENOVA APRE DOPO IL PARTNER."], confirm: "VAI AL SET GENOVA TECHNO?" }
+      ,{ x: 1, y: 10, toMap: "tour_feed", toX: 11, toY: 12, facing: "up", requiresFlag: "diplomacyComplete", markerLabel: "TOUR", lockedLines: ["IL TOUR APRE DOPO IL PARTNER."], confirm: "INIZI IL TOUR DEI CINQUE COLLEGI?" }
     ],
     signs: [
       { x: 2, y: 1, lines: ["CHECK-IN DEL VERTICE.", "TRE PASS, UNA SOLA USCITA DIPLOMATICA."] },
       { x: 17, y: 1, lines: ["TERRAZZA-STUDIO.", "APRE DOPO UNA SCELTA DEFINITIVA."] }
     ], pickups: [],
-    npcs: [{ id: "diplomacy-host", pal: "influencer", x: 9, y: 3, facing: "down", lines: ["UN SELFIE, TRE SOVRANITÀ.", "FEDELTÀ, AUTONOMIA O SHARE: SALVATENE UNA."] }]
+    npcs: [{ id: "diplomacy-host", spriteSet: "diplomacy-host", wander: false, pal: "influencer", x: 9, y: 3, facing: "down", lines: [] }]
   },
   diplomacy_loyalty: {
-    id: "diplomacy_loyalty", name: "STANZA FEDELTÀ", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "diplomacy_loyalty", name: "STANZA FEDELTÀ", tiles: DIPLOMACY_LOYALTY_TILES,
+    tileOverrides: { p: "tiles/diplomacy_loyalty_floor.png", A: "tiles/diplomacy_wall.png" },
+    objectOverrides: { "6": "tiles/diplomacy_loyalty.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "diplomacy_lobby", toX: 3, toY: 4, facing: "down" }],
-    signs: [{ x: 1, y: 1, lines: ["PREVIEW FEDELTÀ:", "+800 FONDI BASE. RISCHIO LINEA ROSSA 12."] }], pickups: [],
-    npcs: [{ id: "diplomacy-choice-loyalty", pal: "boss", x: 4, y: 3, facing: "down", lines: [] }]
+    warps: [{ x: 4, y: 6, toMap: "diplomacy_lobby", toX: 3, toY: 4, facing: "down" }, { x: 5, y: 6, toMap: "diplomacy_lobby", toX: 3, toY: 4, facing: "down" }],
+    signs: [{ x: 1, y: 1, lines: ["FEDELTÀ:", "+800€ BASE. RISCHIO PER SEGRETARIO E SINDACO."] }], pickups: [],
+    npcs: [{ id: "diplomacy-choice-loyalty", spriteSet: "diplomacy-loyalist", wander: false, pal: "boss", x: 4, y: 3, facing: "down", lines: [] }]
   },
   diplomacy_autonomy: {
-    id: "diplomacy_autonomy", name: "STANZA AUTONOMIA", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "diplomacy_autonomy", name: "STANZA AUTONOMIA", tiles: DIPLOMACY_AUTONOMY_TILES,
+    tileOverrides: { p: "tiles/diplomacy_autonomy_floor.png", A: "tiles/diplomacy_wall.png" },
+    objectOverrides: { "6": "tiles/diplomacy_autonomy.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "diplomacy_lobby", toX: 16, toY: 4, facing: "down" }],
-    signs: [{ x: 1, y: 1, lines: ["PREVIEW AUTONOMIA:", "SE C'È UN TESO: -500 E TOKEN RIPARA. ALTRIMENTI +500 BASE."] }], pickups: [],
-    npcs: [{ id: "diplomacy-choice-autonomy", pal: "aide", x: 4, y: 3, facing: "down", lines: [] }]
+    warps: [{ x: 4, y: 6, toMap: "diplomacy_lobby", toX: 16, toY: 4, facing: "down" }, { x: 5, y: 6, toMap: "diplomacy_lobby", toX: 16, toY: 4, facing: "down" }],
+    signs: [{ x: 1, y: 1, lines: ["AUTONOMIA:", "-500€ RIPARA UN PATTO TESO. ALTRIMENTI +500€ BASE. IL DOSSIER CALCOLA I BONUS."] }], pickups: [],
+    npcs: [{ id: "diplomacy-choice-autonomy", spriteSet: "diplomacy-mediator", wander: false, pal: "aide", x: 4, y: 3, facing: "down", lines: [] }]
   },
   diplomacy_home: {
-    id: "diplomacy_home", name: "STANZA CONSENSO", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "diplomacy_home", name: "STANZA CONSENSO", tiles: DIPLOMACY_HOME_TILES,
+    tileOverrides: { p: "tiles/diplomacy_home_floor.png", A: "tiles/diplomacy_wall.png" },
+    objectOverrides: { "6": "tiles/diplomacy_home.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "diplomacy_lobby", toX: 3, toY: 9, facing: "down" }],
-    signs: [{ x: 1, y: 1, lines: ["PREVIEW CONSENSO:", "+4 SONDAGGI. RISCHIO LINEA ROSSA 13."] }], pickups: [],
-    npcs: [{ id: "diplomacy-choice-home", pal: "journalist", x: 4, y: 3, facing: "down", lines: [] }]
+    warps: [{ x: 4, y: 6, toMap: "diplomacy_lobby", toX: 3, toY: 9, facing: "down" }, { x: 5, y: 6, toMap: "diplomacy_lobby", toX: 3, toY: 9, facing: "down" }],
+    signs: [{ x: 1, y: 1, lines: ["CONSENSO:", "FINO A +4 SONDAGGI, LIMITE 100. I PATTI RISCHIANO ANCHE AL LIMITE."] }], pickups: [],
+    npcs: [{ id: "diplomacy-choice-home", spriteSet: "diplomacy-producer", wander: false, pal: "journalist", x: 4, y: 3, facing: "down", lines: [] }]
   },
   diplomacy_terrace: {
     id: "diplomacy_terrace", name: "TERRAZZA-STUDIO", tiles: DIPLOMACY_TERRACE_TILES,
+    tileOverrides: { "=": "tiles/diplomacy_terrace_path.png" }, buildingOverrides: { v: "tiles/diplomacy_hotel.png" },
+    objectOverrides: { "1": "tiles/diplomacy_stage.png", "6": "tiles/diplomacy_home.png" }, objectSizes: { "1": 80 },
     outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "election_night",
-    warps: [{ x: 10, y: 11, toMap: "diplomacy_lobby", toX: 16, toY: 9, facing: "left" }, { x: 11, y: 11, toMap: "diplomacy_lobby", toX: 16, toY: 9, facing: "left" }],
+    warps: [{ x: 5, y: 9, toMap: "diplomacy_lobby", toX: 16, toY: 9, facing: "left" }, { x: 6, y: 9, toMap: "diplomacy_lobby", toX: 16, toY: 9, facing: "left" }],
     signs: [{ x: 4, y: 5, lines: ["LIVE INTERNAZIONALE.", "IL FILTRO È SOBRIO. LA DIPLOMAZIA MENO."] }], pickups: [],
     npcs: [
-      { id: "partner-perfetto", pal: "boss", x: 10, y: 2, facing: "down", trainerId: "partner-perfetto", sightRange: 5, hideIfFlag: "diplomacyComplete", lines: [] },
-      { id: "partner-after", pal: "boss", x: 10, y: 4, facing: "down", showIfFlag: "diplomacyComplete", lines: ["LA DIPLOMAZIA RESISTE.", "LA CLIP È GIÀ VIRALE. IL TOUR DEL FEED È APERTO."] }
+      { id: "partner-perfetto", spriteSet: "diplomacy-partner", wander: false, pal: "boss", x: 10, y: 2, facing: "down", trainerId: "partner-perfetto", hideIfFlag: "diplomacyComplete", lines: [] },
+      { id: "partner-after", spriteSet: "diplomacy-partner", wander: false, pal: "boss", x: 10, y: 4, facing: "down", showIfFlag: "diplomacyComplete", lines: [] }
     ]
   },
   genova_techno: {
@@ -573,7 +616,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     npcs: [{ id: "palace-reception", pal: "journalist", x: 9, y: 5, facing: "down", lines: [] }]
   },
   palazzo_algoritmo: {
-    id: "palazzo_algoritmo", name: "ARCHIVIO ALGORITMO", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "palazzo_algoritmo", name: "ARCHIVIO ALGORITMO", tiles: PALACE_ARCHIVE_TILES,
     outdoor: false, music: "social_tension", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 3, facing: "down" }], signs: [], pickups: [],
     npcs: [
       { id: "palace-algorithm-a", pal: "influencer", x: 2, y: 3, facing: "down", lines: [] },
@@ -581,7 +624,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     ]
   },
   palazzo_factcheck: {
-    id: "palazzo_factcheck", name: "ARCHIVIO FACT-CHECK", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "palazzo_factcheck", name: "ARCHIVIO FACT-CHECK", tiles: PALACE_ARCHIVE_TILES,
     outdoor: false, music: "mediopoli", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 3, facing: "down" }], signs: [], pickups: [],
     npcs: [
       { id: "palace-factcheck-a", pal: "aide", x: 2, y: 3, facing: "down", lines: [] },
@@ -589,7 +632,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     ]
   },
   palazzo_talkshow: {
-    id: "palazzo_talkshow", name: "ARCHIVIO TALK SHOW", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "palazzo_talkshow", name: "ARCHIVIO TALK SHOW", tiles: PALACE_ARCHIVE_TILES,
     outdoor: false, music: "battle-trainer", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 7, facing: "down" }], signs: [], pickups: [],
     npcs: [
       { id: "palace-talkshow-a", pal: "journalist", x: 2, y: 3, facing: "down", lines: [] },
@@ -597,7 +640,7 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     ]
   },
   palazzo_silenzio: {
-    id: "palazzo_silenzio", name: "SILENZIO STAMPA", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "palazzo_silenzio", name: "SILENZIO STAMPA", tiles: PALACE_ARCHIVE_TILES,
     outdoor: false, music: "election_night", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 7, facing: "down" }], signs: [], pickups: [],
     npcs: [
       { id: "palace-silence-a", pal: "aide", x: 2, y: 3, facing: "down", lines: [] },

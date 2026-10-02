@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { CAMPAIGN_CHOICES, commitCampaignDecision, previewCampaignDecision, redeemCoalitionRepair, type CampaignKind } from "../../src/game/campaignDecisions.ts";
-import { addAlly, applyLineRedEvent, coalitionBonuses, reconcileAlly } from "../../src/game/coalition.ts";
+import { CAMPAIGN_CHOICES, commitCampaignDecision, diplomacyAccountLines, previewCampaignDecision, redeemCoalitionRepair, type CampaignKind } from "../../src/game/campaignDecisions.ts";
+import { ALLY_NAMES, addAlly, applyLineRedEvent, coalitionBonuses, reconcileAlly } from "../../src/game/coalition.ts";
 import { newElectionState } from "../../src/game/election.ts";
 import { newGameState } from "../../src/game/state.ts";
 import { moraleExpMultiplier } from "../../src/game/morale.ts";
@@ -49,6 +49,30 @@ test("dossier: fondi insufficienti, candidati ignoti e slot pieni non mutano nul
 test("foto: consenso al limite mostra il delta realmente disponibile", () => {
   const state = ready(); state.election = { ...state.election, districts: state.election.districts.map(d => d.id === "centro" ? { ...d, localConsensus: 98 } : d) };
   const preview = previewCampaignDecision(state, "photo", 1); assert.ok(preview.ok); if (preview.ok) assert.equal(preview.localDelta, 2);
+});
+
+test("diplomazia: consenso saturo può comunque rompere un patto, il dossier mostra il conto successivo", () => {
+  const state = ready(); state.sondaggi = 100;
+  state.coalition = applyLineRedEvent(state.coalition, 13).state;
+  const before = structuredClone(state), preview = previewCampaignDecision(state, "diplomacy", 2);
+  assert.ok(preview.ok); assert.deepEqual(state, before);
+  assert.equal(preview.pollsDelta, 0); assert.equal(preview.cohesionDelta, -16);
+  assert.match(preview.lines.join(" "), /AUMENTO EFFETTIVO 0.*PATTI POSSONO COMUNQUE STRAPPARSI/);
+  assert.ok(!preview.lines.some(l => l.startsWith(`${ALLY_NAMES.quantum_centrist}:`) && l.includes("TESO")));
+  assert.ok(commitCampaignDecision(state, "diplomacy", 2).ok);
+  assert.equal(state.coalition.members.some(m => m.allyId === "quantum_centrist"), false);
+  assert.deepEqual(state.morale.promises, before.morale.promises);
+  assert.equal(state.morale.trust, before.morale.trust);
+});
+
+test("diplomazia: autonomia senza patto riparabile dichiara l'incasso e non inventa riparazioni", () => {
+  const state = ready(), before = structuredClone(state), preview = previewCampaignDecision(state, "diplomacy", 1);
+  assert.ok(preview.ok); assert.equal(preview.repairTarget, null); assert.ok(preview.moneyDelta > 0);
+  assert.match(preview.lines.join(" "), /NESSUN PATTO RIPARATO: INCASSO/);
+  assert.deepEqual(state, before);
+  assert.ok(commitCampaignDecision(state, "diplomacy", 1).ok);
+  assert.deepEqual(state.coalition, before.coalition); assert.deepEqual(state.morale, before.morale);
+  assert.match(diplomacyAccountLines(state).join(" "), /PATTI E I SERVIZI HANNO CONTI DISTINTI/);
 });
 
 test("patto violato: coesione, EXP e ledger di rottura cambiano una volta", () => {

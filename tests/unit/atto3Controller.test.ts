@@ -106,24 +106,16 @@ test("atto3 controller: vecchie leve già approvate restano valide", () => {
   assert.ok(commands.some(c => c.kind === "setFlag" && c.flag === "future-shortcut-open"));
 });
 
-test("P5-T06: ogni archivio richiede due terminali e il quarto apre lo studio", () => {
-  const state = newGameState();
-  const commands: WorldCommand[] = [];
-  const dispatch = (command: WorldCommand) => {
-    commands.push(command);
-    if (command.kind === "setFlag") state.flags[command.flag] = true;
-  };
-  const controller = createAtto3Controller();
-  for (const module of ["algorithm", "factcheck", "talkshow", "silence"] as const) {
-    controller.interactNpc(`palace-${module}-a`, { state, dispatch });
-    const domainId = module === "algorithm" ? "algoritmo" : module === "silence" ? "silenzio" : module;
-    assert.equal(Boolean(state.flags[`palace-module:${domainId}`]), false);
-    controller.interactNpc(`palace-${module}-b`, { state, dispatch });
-    assert.equal(state.flags[`palace-module:${domainId}`], true);
+test("P5-T06: parlare ai terminali apre dossier senza assegnare completamenti", () => {
+ const state=newGameState(),before=structuredClone(state),commands:WorldCommand[]=[];
+ const controller=createAtto3Controller();
+ for(const [npc,module]of [["algorithm","algoritmo"],["factcheck","factcheck"],["talkshow","talkshow"],["silence","silenzio"]] as const){
+  for(const terminal of ["a","b"] as const){
+   assert.equal(controller.interactNpc(`palace-${npc}-${terminal}`,{state,dispatch:c=>commands.push(c)}),true);
+   assert.deepEqual(commands.at(-1),{kind:"openPalaceArchive",module,terminal});
   }
-  assert.equal(state.flags.palaceRoomsComplete, true);
-  const lastSay = [...commands].reverse().find((command) => command.kind === "say");
-  assert.match(lastSay?.kind === "say" ? lastSay.lines.join(" ") : "", /STUDIO ELETTORALE È APERTO/);
+ }
+ assert.deepEqual(state,before);
 });
 
 test("P5-T06: reception mostra progresso senza modificare la campagna", () => {

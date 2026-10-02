@@ -33,10 +33,10 @@ const scenes = sceneFiles.map((file) => {
 });
 
 const monsterSource = readFileSync(join(ROOT, "src", "art", "monsters.ts"), "utf8");
-const baseMatch = monsterSource.match(/MONSTERS_WITH_PNG = new Set<string>\(\[([\s\S]*?)\]\)/);
+const roster = JSON.parse(readFileSync(join(ROOT, "src/data/roster.json"), "utf8"));
 const actionMatch = monsterSource.match(/MONSTERS_WITH_ACTION_PNG = new Set<string>\(\[([\s\S]*?)\]\)/);
 const ids = (match) => [...(match?.[1].matchAll(/"([a-z0-9-]+)"/g) ?? [])].map((m) => m[1]);
-const baseIds = ids(baseMatch);
+const baseIds = roster.species.map(species => species.id);
 const actionIds = new Set(ids(actionMatch));
 const actionCoverage = baseIds.map((id) => ({ id, dedicatedAction: actionIds.has(id) }));
 

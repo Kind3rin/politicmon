@@ -31,35 +31,7 @@ export function createAtto3Controller(): Atto3Controller {
       } as const)[npcId];
       if (palaceTerminal) {
         const [module, terminal] = palaceTerminal;
-        const terminalFlag = `palace:${module}:${terminal}`;
-        const otherFlag = `palace:${module}:${terminal === "a" ? "b" : "a"}`;
-        const moduleFlag = `palace-module:${module}`;
-        if (!context.state.flags[terminalFlag]) context.dispatch({ kind: "setFlag", flag: terminalFlag });
-        const usedEndorsements = Object.keys(context.state.election.endorsementDistrictByAlly).length;
-        const lines = ({
-          algoritmo: terminal === "a"
-            ? ["ALGORITMO: RICOSTRUZIONE DELLE PRIORITÀ.", `${usedEndorsements} ALLEATI HANNO GIÀ SPESO IL PROPRIO SOSTEGNO.`]
-            : ["ALGORITMO: NESSUN VOTO NUOVO.", "IL SISTEMA RICORDA SOLO CHI HAI SCELTO DI MOSTRARE."],
-          factcheck: terminal === "a"
-            ? ["FACT-CHECK: LE PROMESSE SONO GIÀ NEI DOSSIER.", "COSTI E LINEE ROSSE RESTANO QUELLI ACCETTATI NEL TOUR."]
-            : ["FACT-CHECK COMPLETATO.", "NESSUN BONUS NASCOSTO. NESSUNA PENALITÀ AGGIUNTA."],
-          talkshow: terminal === "a"
-            ? ["TALK SHOW: RIVEDIAMO I DIBATTITI TERRITORIALI.", "VITTORIE E SCONFITTE SONO GIÀ INCLUSE NEL CONSENSO LOCALE."]
-            : ["REGIA: IL CONTRADDITTORIO È ARCHIVIATO.", "NON SERVE RIPETERE NESSUNA BATTAGLIA."],
-          silenzio: terminal === "a"
-            ? ["SILENZIO STAMPA.", "QUI NON SI CAMBIANO LE SCELTE DOPO AVERLE FATTE."]
-            : ["NESSUNA DICHIARAZIONE AGGIUNTIVA.", "ANCHE IL SILENZIO È STATO REGISTRATO."]
-        } as const)[module];
-        if (context.state.flags[otherFlag] && !context.state.flags[moduleFlag]) {
-          context.dispatch({ kind: "setFlag", flag: moduleFlag });
-          lines.push(`MODULO ${module.toUpperCase()} COMPLETO.`);
-        }
-        const modules = ["algoritmo", "factcheck", "talkshow", "silenzio"];
-        if (modules.every((id) => context.state.flags[`palace-module:${id}`]) && !context.state.flags.palaceRoomsComplete) {
-          context.dispatch({ kind: "setFlag", flag: "palaceRoomsComplete" });
-          lines.push("QUATTRO ARCHIVI COMPLETI. LO STUDIO ELETTORALE È APERTO.");
-        }
-        context.dispatch({ kind: "say", lines: [...lines] });
+        context.dispatch({kind:"openPalaceArchive",module,terminal});
         return true;
       }
       if (npcId === "palace-reception") {

@@ -1,5 +1,7 @@
 # Tour: cinque dossier, una sola memoria
 
+Round successivo: [Palazzo e finale effettivo](PALAZZO-VERBALE.md).
+
 Round del 2 ottobre 2026, dopo [Genova](GENOVA-VERBALE.md) e il [controller mobile](MOBILE-CONTROLS.md). Prove e pubblicazione in [tour-proof.json](tour-proof.json). Il redesign completo resta attivo: questo round arriva alla porta del Palazzo, senza dichiarare completata la campagna finale.
 
 La centrale ha pavimento, tavolo dei percorsi, ingressi evidenti e un coordinatore lince. I cinque collegi hanno piantine, materiali, personaggi, illustrazioni e briefing propri: castoro dei verbali al Nord, volpe televisiva al Centro, tartaruga dei cantieri al Sud, pellicano dei traghetti nelle Isole e gazza delle fonti nel Feed. Le quattro direzioni dei sei personaggi sono disegnate effettivamente; non vengono ottenute specchiando i profili. Le uscite e gli arrivi dei salvataggi precedenti si conservano.

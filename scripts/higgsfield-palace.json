@@ -1,0 +1,982 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 429.22,
+  "estimatedCredits": 36,
+  "assets": [
+    {
+      "id": "npc-reception",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-reception_south.png",
+        "public/sprites/chars/npc_palace-reception_north.png",
+        "public/sprites/chars/npc_palace-reception_west.png",
+        "public/sprites/chars/npc_palace-reception_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: barn owl registrar with navy waistcoat, small circular spectacles and a brass-bound ledger; one ivory feather tuft and gold pencil make east and west profiles distinct. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "309e462838b82e7e7fe8d96f94ec04b7b4899a9a79c02e16b164b967a96ed7de",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-reception_south.png": "de9878824fc531e3ede147573e17d05f1cb853953f9cd74ec1ce016dbc92ad16",
+        "public/sprites/chars/npc_palace-reception_north.png": "8e04e61db1069d6a96dcdc66f22035a0704925d01725df216bc91472a57075de",
+        "public/sprites/chars/npc_palace-reception_west.png": "3558f6a3569cb5d07eaedd8f18a34cb6e9c136a6bebf54e4dbe77470c92adac0",
+        "public/sprites/chars/npc_palace-reception_east.png": "1cdc619dbd85e2d86c57a0e8c4f0cc3bfbeea58989e1f685b88e9228f6a42b1d"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-algorithm-a",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-algorithm-a_south.png",
+        "public/sprites/chars/npc_palace-algorithm-a_north.png",
+        "public/sprites/chars/npc_palace-algorithm-a_west.png",
+        "public/sprites/chars/npc_palace-algorithm-a_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: spider recommendation analyst in teal blazer, four visible arm pairs holding three identical little content cards and a disconnected cord; clearly legible spider silhouette. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "ac1f9c7e611a126005bf4f19a8e07e1cea2a4a8b644ccbabf2fbd9e305c1f588",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-algorithm-a_south.png": "017c4858c4bcd98f8f18843e38e6c8fe164063885b301634f47b05d9d644cacb",
+        "public/sprites/chars/npc_palace-algorithm-a_north.png": "8df896ef13e53c4224c7588f955cb2cc36c5134f576402adbff35d28470fe659",
+        "public/sprites/chars/npc_palace-algorithm-a_west.png": "dcf6faaf16fc27ee0a20ee5f57c0266319390a616724652eafed5131b751e741",
+        "public/sprites/chars/npc_palace-algorithm-a_east.png": "97ad4921f710be7268a808e81bac430e3bafbb2b8bc2addffe54ddcaafbd9bcd"
+      },
+      "alphaCutoff": 128,
+      "directionSources": {
+        "1": {
+          "sourcePath": "artifacts/higgsfield-palace/dossiers/north.png",
+          "jobId": "88493771-eea7-4e1a-8885-4433bececb36",
+          "review": "Original north view rejected: visible eyes. Dedicated Higgsfield correction accepted: back of head/jacket, no face.",
+          "sourceSha256": "45b1382fb3a1099d9101fbddb3b202b6221a9076ab1efb982afaf8588c7a0c47",
+          "sourceSize": [
+            1024,
+            1024
+          ]
+        }
+      }
+    },
+    {
+      "id": "npc-algorithm-b",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-algorithm-b_south.png",
+        "public/sprites/chars/npc_palace-algorithm-b_north.png",
+        "public/sprites/chars/npc_palace-algorithm-b_west.png",
+        "public/sprites/chars/npc_palace-algorithm-b_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: mouse conveyor curator wearing mustard overalls, large ears, carrying a spool and one stamped content card; profile tail on correct opposite sides. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "74b23d7c41b0efbff74a5d4db0f11a5a2192f679953c6f29e45abf052dc3ce21",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-algorithm-b_south.png": "225fa01e8f7f3d68558b531424cc2898f892fee069aee562ee5c54b6bb9b8a87",
+        "public/sprites/chars/npc_palace-algorithm-b_north.png": "d298d732d78ffe0732da1b302d6f473ec3cdc0124d8fb37237bc7cf4cc44b1d5",
+        "public/sprites/chars/npc_palace-algorithm-b_west.png": "8ed9f571d8b18e246a2a76bc5c406d35ca58de635a56a33677df0824389fda87",
+        "public/sprites/chars/npc_palace-algorithm-b_east.png": "c245c7a8493a767c788a69d1010b0c2a80b9d5fad2a2998dfa63508c48e3fd8f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-factcheck-a",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-factcheck-a_south.png",
+        "public/sprites/chars/npc_palace-factcheck-a_north.png",
+        "public/sprites/chars/npc_palace-factcheck-a_west.png",
+        "public/sprites/chars/npc_palace-factcheck-a_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: ibis archivist in burgundy jacket, long curved beak, carrying an original document clipped above two smaller copies with an ink stamp. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "5b8b6335e1c9b93b4eb6d1a1738731785691af6e6b7c31fef2e2c36d1b07187a",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-factcheck-a_south.png": "f99b2c5275ec3ef9bb14f16ca8a60f30968dbb1689ef387603554be7279cb4cd",
+        "public/sprites/chars/npc_palace-factcheck-a_north.png": "af9d2e5fa983ce645704d502ecea36e562601a8b2ec3afc39f00c6dadf640cfe",
+        "public/sprites/chars/npc_palace-factcheck-a_west.png": "d8fcdba93f134a6c9809e1d863fb7e6278e92d3fe55ff420de26d44fb191ae69",
+        "public/sprites/chars/npc_palace-factcheck-a_east.png": "0c36221b4b6ebb9b283b8a77e45a81771854f3076b8d5ae09bcbdc05f38268c5"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-factcheck-b",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-factcheck-b_south.png",
+        "public/sprites/chars/npc_palace-factcheck-b_north.png",
+        "public/sprites/chars/npc_palace-factcheck-b_west.png",
+        "public/sprites/chars/npc_palace-factcheck-b_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: badger auditor wearing an ivory vest, navy face stripes and mint magnifier, comparing two index cards with different corner holes. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "efa811b5de7b8597d5879ef3a3ec4c55381c91cf33da86deb1fba89977370f75",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-factcheck-b_south.png": "3f2f66468febed0f7a04d4b22d10c64a0161dd78a1d967a399829079cb441e81",
+        "public/sprites/chars/npc_palace-factcheck-b_north.png": "97a109b059b51bf3b55e339cda1875bd0c4638003a3de6927f68d2d446c7013a",
+        "public/sprites/chars/npc_palace-factcheck-b_west.png": "07c405b8d72c9db4084edd6ec9cdad84836aeba20ec3274e50cfb4bec48d6191",
+        "public/sprites/chars/npc_palace-factcheck-b_east.png": "60d99ba3f587848257e9317fa6d3c9ac7c7ad7b862030744f73c1204d67d05db"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-talkshow-a",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-talkshow-a_south.png",
+        "public/sprites/chars/npc_palace-talkshow-a_north.png",
+        "public/sprites/chars/npc_palace-talkshow-a_west.png",
+        "public/sprites/chars/npc_palace-talkshow-a_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: macaw moderator in plum blazer with golden microphone and a conspicuous mute-button cuff; red and turquoise feathers. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "7e383486c0399d9d5025ca107231a5afc8dd912229b127cd5140baf247bc53b7",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-talkshow-a_south.png": "688ec3ec3a1468e4a06a65b67b117718bbc9604eb69d6f20bc0d3db6ab19ef3b",
+        "public/sprites/chars/npc_palace-talkshow-a_north.png": "5735258032c25f7f3ba80dd7672e90bf68c1899a8de55b4158761c87d9c35d0f",
+        "public/sprites/chars/npc_palace-talkshow-a_west.png": "ef370fc9e672e25f1b2b969582d2d7718837d7315cf593970e8678a1a4ff948c",
+        "public/sprites/chars/npc_palace-talkshow-a_east.png": "63746faaa31a646d40bbbd12a7a4200fc38c563b4df6e33e20027ec34ddd7d00"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-talkshow-b",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-talkshow-b_south.png",
+        "public/sprites/chars/npc_palace-talkshow-b_north.png",
+        "public/sprites/chars/npc_palace-talkshow-b_west.png",
+        "public/sprites/chars/npc_palace-talkshow-b_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: flamingo camera operator in navy overalls with coral scarf, holding a little camera with three outward pointing lenses, one bent knee. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "c7c55c2303fa4e60e3b4e970b3ce4a696c217ece85f679987251cb29672c210a",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-talkshow-b_south.png": "8ec680ecfd59b6184ec0c91381254e159634d4edbaec6f102714187e2e28b79a",
+        "public/sprites/chars/npc_palace-talkshow-b_north.png": "f8d025f8571e9339d6e8b112549be098eb07adf3830155eb3ee22b6515bde97b",
+        "public/sprites/chars/npc_palace-talkshow-b_west.png": "f9e52dfcf950507770d744ab5630ad49931fb46a0595a00644162b5c0db8e234",
+        "public/sprites/chars/npc_palace-talkshow-b_east.png": "6c94dc224f68af40447ab912d6f840f5ba3933be15e5c94672086b52f03f0d65"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-silence-a",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-silence-a_south.png",
+        "public/sprites/chars/npc_palace-silence-a_north.png",
+        "public/sprites/chars/npc_palace-silence-a_west.png",
+        "public/sprites/chars/npc_palace-silence-a_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: snail press secretary in neat navy collar, mustard spiral shell, carrying a red light and a sealed speech slip; stoic expression. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "3f5f83118868fc3c28708e85db59bc87c7a86998ada8c94512c4488fd9c37d37",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-silence-a_south.png": "d01085ff610f6494f07cbd6b9e1cf1bfeb603675dc3af3b154fbfd822217ea55",
+        "public/sprites/chars/npc_palace-silence-a_north.png": "eb47eddb98e43031a75e0840c36adbe2fc271381b01b2b821f36476dd5e2ca70",
+        "public/sprites/chars/npc_palace-silence-a_west.png": "56bb97539aae4013613899aadeac0964b39520734b5b63b3dff92c9e26124e50",
+        "public/sprites/chars/npc_palace-silence-a_east.png": "17ad7e136419622c0645b859344a54b574c8f6cc198a05706b92821a1835824f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-silence-b",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-silence-b_south.png",
+        "public/sprites/chars/npc_palace-silence-b_north.png",
+        "public/sprites/chars/npc_palace-silence-b_west.png",
+        "public/sprites/chars/npc_palace-silence-b_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: porcupine reporter wearing mint shirt and coral press vest, with angular ivory quills, empty microphone and a blank paper stack. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "b9fd439c9305db383f4f0dc76b2730c11c596531f96bc4b0d3822d914c92201c",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-silence-b_south.png": "ed235077940da296897c3b8d0ade56349bee068c2295bcb254ec7c15dcc042d7",
+        "public/sprites/chars/npc_palace-silence-b_north.png": "f08556c57a3dda85b37f3a7c180719e677f0fad2f2e94096dd199834a089b47d",
+        "public/sprites/chars/npc_palace-silence-b_west.png": "14151251fa95c39fdb9a1f3b51938ab75537f7513d807992e60ff9a5ac8b172b",
+        "public/sprites/chars/npc_palace-silence-b_east.png": "aa7fcc8f4c8a4f37bf7c448fea930998140e14373d5a5b5872b4a85f37c5380e"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "npc-studio",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "outputs": [
+        "public/sprites/chars/npc_palace-studio_south.png",
+        "public/sprites/chars/npc_palace-studio_north.png",
+        "public/sprites/chars/npc_palace-studio_west.png",
+        "public/sprites/chars/npc_palace-studio_east.png"
+      ],
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A production sprite sheet with FOUR equal cells in a strict 2x2 grid, ample transparent separation, no grid lines: top-left facing SOUTH toward viewer, top-right facing NORTH away, bottom-left genuine WEST profile facing left, bottom-right genuine EAST profile facing right. Same full-body original character in every cell: anglerfish broadcast sovereign in midnight navy tailcoat; a mustard clickbait lantern arcs over its ivory teeth, mint fins and a little five-slot ballot remote; menacing but funny. Entire body and prop visible, standing idle. All four cells independently drawn, no copied or mirrored text. Transparent exterior only, fully opaque pixels for the character, hard edges, no halo. Fit a 24x32 native NPC silhouette."
+      },
+      "sourceSha256": "abde06733ed1a4568b8ea31dc820ab0a6005a57871c73595bf73405a3a1798ca",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-studio_south.png": "36de1a66f278b8380868896c3e644ba02ca8799f2bdad4b6f5d4afcdd2ac94fc",
+        "public/sprites/chars/npc_palace-studio_north.png": "4677318f48eab408bb9168fca5a8e0521016d540ff407bd1062893784f36a4ea",
+        "public/sprites/chars/npc_palace-studio_west.png": "6a47636bdd7653d460eecc22c35b35ed99650b1f5443a0f6ffbf4a7e4b93ddb6",
+        "public/sprites/chars/npc_palace-studio_east.png": "90e24454dbde3f19a5dc760942f4a890911095284cb0f8c6f35e47eb7251da37"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "floor-lobby",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_lobby_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet slate marble floor with tiny ivory join lines and sparse mustard inset squares. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "d99c51cab18b5bf03a4ce77f70d94d7605a15832d545c8d55889920e46c86a21",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_lobby_floor.png": "4a2647ec288e219a8494bb383de79e1a393c918c78a0839b61adb39325b5d608"
+      }
+    },
+    {
+      "id": "floor-algorithm",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_algorithm_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet navy technical floor with a sparse mint circuit trace loop and squared nodes. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "bbcd07b1fefccdc42a703042cb4f02c18196dfaa2172200d22f0dc82e0bdc4b7",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_algorithm_floor.png": "fd2d4e30b30c7f85eb8ebceaf995f51bd2711d2c2137c7e11271b1e0c6aef0df"
+      }
+    },
+    {
+      "id": "floor-factcheck",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_factcheck_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet ivory archival terrazzo floor with tiny burgundy and slate flecks. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "595571cef144168abf4a0fbebb49ad8b925417844ff8e5ac712df3a523e38a87",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_factcheck_floor.png": "5c14c08d69203473019839598cd7d9d9f1497678aafc839a54d9b2d0920e4ceb"
+      }
+    },
+    {
+      "id": "floor-talkshow",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_talkshow_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet plum studio rubber floor with sparse muted coral cable grooves. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "fbe0caa3fe29e88d43a9367842b51e0285eccd0ce691bfd754b60741cea84d05",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_talkshow_floor.png": "20d630303efb3d0cd92149e9f50dd7868aea9fcaf7504880f2730de01aac81ad"
+      }
+    },
+    {
+      "id": "floor-silence",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_silence_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet blue-grey acoustic floor, fine squared grid and sparse red status inset. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "b7bed8dc12b47f9dec0b1edaed73a598808461c9870da4ea304dfd79f0fee45c",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_silence_floor.png": "fd47718c65aa8de50e891b24901d998e2cf8b735c61a81d148cb546292dddae6"
+      }
+    },
+    {
+      "id": "floor-studio",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_studio_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet midnight navy studio floor with muted mustard square insets and subtle mint join lines. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "e9e2d8608ee5c23f605215e903d7c12f376c43c61c23fc6541a3873d538a39c1",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_studio_floor.png": "8b46897b6286bd5f61b61c1200330bc14fbbbb6582233d4b292f14cd21c0195c"
+      }
+    },
+    {
+      "id": "floor-terrace",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_terrace_floor.png",
+      "params": {
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. A single seamless flat top-down game floor tile: quiet turquoise rooftop paving floor with tiny ivory joints and sparse ochre flecks. Low contrast small repeating pattern, no focal object, lettering, border, bevel or perspective. Edge-to-edge opaque tile, designed to downsample clearly to 16x16 pixels."
+      },
+      "sourceSha256": "95c4d5ae2b59bbffd752959ad076814a2dea2272f1d391e8f1e1e92b009f94d9",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_terrace_floor.png": "75fc6b8ffbed1060cc3b0638ef066834d4df7d1fb3f4af4bca633dca59acd7dc"
+      }
+    },
+    {
+      "id": "prop-lobby",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_lobby_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: a low four-compartment reception routing cabinet: mint circuit file, burgundy document file, plum microphone file, slate red-light file. Orthographic front-facing 3/4-topdown game prop, flat not perspective-isometric. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "23746ff1a743b108895077c85c0b06a8c56e7e31da7a75df5af5ecd7417c031f",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_lobby_set.png": "70422979c4b343676d12fb509bf6a9b54edb9e939e2dc7f59909874f191f50bc"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-algorithm",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_algorithm_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: a closed-loop content conveyor with three identical card shapes, a spool, arrows returning to its own intake and an unplugged original-source lead. Small machinery, orthographic front-facing 3/4-topdown. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "71f54f40e8599f4267c4d03fe6624fc45a7d305d06168168f6922bef64220ecc",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_algorithm_set.png": "733b63ed27dc141d5df87fd89cb9d956456c80338750ef9cb14280d467d56085"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-factcheck",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_factcheck_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: an archive desk with an original ivory document attached by a solid burgundy cord to a primary ink pot, and two copies with loose navy cords and a disconnected round approval stamp. Orthographic front-facing 3/4-topdown. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "4224fc912cd8863632d263b65e25900d5b56fb322299662dbc09d5976e8aeecc",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_factcheck_set.png": "31b58652dfcd226696cba95810a8a1685242baa2c189c09a90941b740a929533"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-talkshow",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_talkshow_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: a semicircular broadcast console with three guest microphones each pointing away from their little chairs toward one large host microphone; conspicuous mute buttons. Orthographic front-facing 3/4-topdown. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "80154c55685d20c237199934546704b08c7e5b5eb01992b3d8f9c3e860648771",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_talkshow_set.png": "6bdb92d1c11bd0c9ed721268dd44fabbada59f509131360b9522a375f758dea4"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-silence",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_silence_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: a sealed press podium with an unplugged microphone, prominent red tally light, a small hot radiator with a red warning gauge, and a neat untouched blank speech stack. Original absurd bureaucratic design, no flames, no meme cartoon copy. Orthographic front-facing 3/4-topdown. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "4d31bebb4e1d9e79203485727dbcf499b5b32626734523a0f939fafe2b188d8e",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_silence_set.png": "0b49c310b2886b52ef7e4dde0842cb22158f66cb2ddd1bb9c2beed6628886631"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-studio",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_studio_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: a low wide election broadcast console, five equally sized mechanical ballot windows, ivory ballot stack, mustard lock lever and mint confirmation light. No numeric votes painted into art. Orthographic front-facing 3/4-topdown. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "99550ffd040ba1e046028dbae3e2510e0cd52fab8c15efc67d791b0218924b62",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_studio_set.png": "691eca69fb0ac7ca3b375ce5be13d753389b911b14c68e13186b588f2de68db9"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "prop-terrace",
+      "kind": "prop",
+      "width": 96,
+      "height": 64,
+      "path": "public/sprites/tiles/palace_terrace_set.png",
+      "params": {
+        "aspect_ratio": "3:2",
+        "background": "transparent",
+        "prompt": "Original Politicmon political satire game, premium clean pixel art. Midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, slate blue, accent violet. Bold block shapes, flat opaque colours, precise hard pixel edges; no photorealism, gradient, glow, antialiasing, drop shadows, readable text, logos or real people. Modern coherent illustrated game art, readable at tiny native size. One isolated full game prop: a rooftop semicircle of five political meeting chairs, one skewed chair and a separate small side table holding a stubborn brass bell; sparse mint potted plant and ivory rail segment. Orthographic front-facing 3/4-topdown. Entire silhouette fits within a compact wide 96x64 native sprite with ample clear exterior padding. Transparent exterior, hard binary alpha edge, no cast shadow, no ground/background rectangle, no tiny labels. Prioritise the visual gag and readable distinct components."
+      },
+      "sourceSha256": "0bbfc64d9f311a2ce2138d049f7b129994f4c16eded09460c59b13f488dd9e00",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_terrace_set.png": "55c43120fb1f33bb231ba6d8ce3f50a7e0ed32a416ba869b729f53982051af95"
+      },
+      "alphaCutoff": 128
+    }
+  ],
+  "jobs": [
+    {
+      "index": 0,
+      "job_id": "37ebad1a-6e5a-4406-9289-f5a140e4a5ff",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172513_37ebad1a-6e5a-4406-9289-f5a140e4a5ff.png"
+    },
+    {
+      "index": 1,
+      "job_id": "65e4960b-9768-4a30-aa4d-649c8ad18d26",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172513_65e4960b-9768-4a30-aa4d-649c8ad18d26.png"
+    },
+    {
+      "index": 2,
+      "job_id": "6b545864-60cc-48d7-8972-9d033b992c8b",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172512_6b545864-60cc-48d7-8972-9d033b992c8b.png"
+    },
+    {
+      "index": 3,
+      "job_id": "e94f005c-9cb4-4fbc-969c-90fe9aa7ba4e",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172516_e94f005c-9cb4-4fbc-969c-90fe9aa7ba4e.png"
+    },
+    {
+      "index": 4,
+      "job_id": "d7bb5b6b-ba3b-467b-ac78-9d014cbbbe51",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172513_d7bb5b6b-ba3b-467b-ac78-9d014cbbbe51.png"
+    },
+    {
+      "index": 5,
+      "job_id": "0f6bee47-ebdf-4417-9294-bc1d270c0048",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172513_0f6bee47-ebdf-4417-9294-bc1d270c0048.png"
+    },
+    {
+      "index": 6,
+      "job_id": "d64e7eaa-f64b-4d87-b5c9-159d9e82d366",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172653_d64e7eaa-f64b-4d87-b5c9-159d9e82d366.png"
+    },
+    {
+      "index": 7,
+      "job_id": "9de7fb0a-dee8-4226-8ddd-330776bdb742",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172654_9de7fb0a-dee8-4226-8ddd-330776bdb742.png"
+    },
+    {
+      "index": 8,
+      "job_id": "fecf8d16-3e5c-4763-8390-24ec39bebf80",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172655_fecf8d16-3e5c-4763-8390-24ec39bebf80.png"
+    },
+    {
+      "index": 9,
+      "job_id": "fc375316-8a65-492c-849c-330fcea2b748",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172655_fc375316-8a65-492c-849c-330fcea2b748.png"
+    },
+    {
+      "index": 10,
+      "job_id": "5676f213-b2c1-41c9-b7a4-e8744941f53a",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172654_5676f213-b2c1-41c9-b7a4-e8744941f53a.png"
+    },
+    {
+      "index": 11,
+      "job_id": "f8e85f3e-54bf-4ae8-8c2e-c61381276528",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_172656_f8e85f3e-54bf-4ae8-8c2e-c61381276528.png"
+    },
+    {
+      "index": 12,
+      "job_id": "38de9694-220c-4dee-9baa-6661e67a5b34",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173055_38de9694-220c-4dee-9baa-6661e67a5b34.png"
+    },
+    {
+      "index": 13,
+      "job_id": "006d9c9a-7af1-40cb-8956-349337920005",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173055_006d9c9a-7af1-40cb-8956-349337920005.png"
+    },
+    {
+      "index": 14,
+      "job_id": "8154c8af-20b5-46a8-ba61-b82d78155428",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173054_8154c8af-20b5-46a8-ba61-b82d78155428.png"
+    },
+    {
+      "index": 15,
+      "job_id": "b6cfdcf6-2548-4d51-b162-de6953b2ee3f",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173053_b6cfdcf6-2548-4d51-b162-de6953b2ee3f.png"
+    },
+    {
+      "index": 16,
+      "job_id": "04e12ee3-cf04-431f-b7c1-59efec116202",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173056_04e12ee3-cf04-431f-b7c1-59efec116202.png"
+    },
+    {
+      "index": 17,
+      "job_id": "f0bc2bf5-3f69-43a9-86c9-37ad1a5510de",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173055_f0bc2bf5-3f69-43a9-86c9-37ad1a5510de.png"
+    },
+    {
+      "index": 18,
+      "job_id": "d9b9aa0f-ba24-4040-a711-01e9f718376b",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173739_d9b9aa0f-ba24-4040-a711-01e9f718376b.png"
+    },
+    {
+      "index": 19,
+      "job_id": "945b341c-635d-4ab5-87ff-461e8015f23b",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173741_945b341c-635d-4ab5-87ff-461e8015f23b.png"
+    },
+    {
+      "index": 20,
+      "job_id": "9d076b17-4f2c-459d-ad6c-b6a3bac945d7",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173738_9d076b17-4f2c-459d-ad6c-b6a3bac945d7.png"
+    },
+    {
+      "index": 21,
+      "job_id": "33eb04de-b75e-424f-8770-1f14236f043a",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173739_33eb04de-b75e-424f-8770-1f14236f043a.png"
+    },
+    {
+      "index": 22,
+      "job_id": "4ea2c6b4-ffef-4cac-83d5-6016a1840040",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173740_4ea2c6b4-ffef-4cac-83d5-6016a1840040.png"
+    },
+    {
+      "index": 23,
+      "job_id": "d056d0f2-5285-4b7d-aaee-36a3298eed3c",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_173742_d056d0f2-5285-4b7d-aaee-36a3298eed3c.png"
+    }
+  ],
+  "research": [
+    "https://knowyourmeme.com/memes/this-is-fine"
+  ],
+  "notes": [
+    "24-job primary Palace cast/material set; gallery only after all terminal",
+    "No old map port or saved outcome is to be erased",
+    "Separate dossier/studio art set follows inspection of primary set",
+    "24/24 terminal completed; exact gallery displayed once. Original outputs await native review/integration; mobile PWA correction shipped separately."
+  ],
+  "submissions": [
+    {
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "jobs": [
+        {
+          "index": 0,
+          "job_id": "37ebad1a-6e5a-4406-9289-f5a140e4a5ff",
+          "status": "pending"
+        },
+        {
+          "index": 1,
+          "job_id": "65e4960b-9768-4a30-aa4d-649c8ad18d26",
+          "status": "pending"
+        },
+        {
+          "index": 2,
+          "job_id": "6b545864-60cc-48d7-8972-9d033b992c8b",
+          "status": "pending"
+        },
+        {
+          "index": 3,
+          "job_id": "e94f005c-9cb4-4fbc-969c-90fe9aa7ba4e",
+          "status": "pending"
+        },
+        {
+          "index": 4,
+          "job_id": "d7bb5b6b-ba3b-467b-ac78-9d014cbbbe51",
+          "status": "pending"
+        },
+        {
+          "index": 5,
+          "job_id": "0f6bee47-ebdf-4417-9294-bc1d270c0048",
+          "status": "pending"
+        }
+      ],
+      "submitted_count": 6,
+      "failed_count": 0
+    },
+    {
+      "indices": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "jobs": [
+        {
+          "index": 6,
+          "job_id": "d64e7eaa-f64b-4d87-b5c9-159d9e82d366",
+          "status": "pending"
+        },
+        {
+          "index": 7,
+          "job_id": "9de7fb0a-dee8-4226-8ddd-330776bdb742",
+          "status": "pending"
+        },
+        {
+          "index": 8,
+          "job_id": "fecf8d16-3e5c-4763-8390-24ec39bebf80",
+          "status": "pending"
+        },
+        {
+          "index": 9,
+          "job_id": "fc375316-8a65-492c-849c-330fcea2b748",
+          "status": "pending"
+        },
+        {
+          "index": 10,
+          "job_id": "5676f213-b2c1-41c9-b7a4-e8744941f53a",
+          "status": "pending"
+        },
+        {
+          "index": 11,
+          "job_id": "f8e85f3e-54bf-4ae8-8c2e-c61381276528",
+          "status": "pending"
+        }
+      ],
+      "submitted_count": 6,
+      "failed_count": 0
+    },
+    {
+      "indices": [
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "jobs": [
+        {
+          "index": 12,
+          "job_id": "38de9694-220c-4dee-9baa-6661e67a5b34",
+          "status": "pending"
+        },
+        {
+          "index": 13,
+          "job_id": "006d9c9a-7af1-40cb-8956-349337920005",
+          "status": "pending"
+        },
+        {
+          "index": 14,
+          "job_id": "8154c8af-20b5-46a8-ba61-b82d78155428",
+          "status": "pending"
+        },
+        {
+          "index": 15,
+          "job_id": "b6cfdcf6-2548-4d51-b162-de6953b2ee3f",
+          "status": "pending"
+        },
+        {
+          "index": 16,
+          "job_id": "04e12ee3-cf04-431f-b7c1-59efec116202",
+          "status": "pending"
+        },
+        {
+          "index": 17,
+          "job_id": "f0bc2bf5-3f69-43a9-86c9-37ad1a5510de",
+          "status": "pending"
+        }
+      ],
+      "submitted_count": 6,
+      "failed_count": 0
+    },
+    {
+      "indices": [
+        18,
+        19,
+        20,
+        21,
+        22,
+        23
+      ],
+      "jobs": [
+        {
+          "index": 18,
+          "job_id": "d9b9aa0f-ba24-4040-a711-01e9f718376b",
+          "status": "pending"
+        },
+        {
+          "index": 19,
+          "job_id": "945b341c-635d-4ab5-87ff-461e8015f23b",
+          "status": "pending"
+        },
+        {
+          "index": 20,
+          "job_id": "9d076b17-4f2c-459d-ad6c-b6a3bac945d7",
+          "status": "pending"
+        },
+        {
+          "index": 21,
+          "job_id": "33eb04de-b75e-424f-8770-1f14236f043a",
+          "status": "pending"
+        },
+        {
+          "index": 22,
+          "job_id": "4ea2c6b4-ffef-4cac-83d5-6016a1840040",
+          "status": "pending"
+        },
+        {
+          "index": 23,
+          "job_id": "d056d0f2-5285-4b7d-aaee-36a3298eed3c",
+          "status": "pending"
+        }
+      ],
+      "submitted_count": 6,
+      "failed_count": 0
+    }
+  ],
+  "galleryShown": true,
+  "balanceAfter": 393.22,
+  "actualCredits": 36,
+  "review": "All native directional silhouettes, floors and props inspected; north spider repaired separately. Gameplay integration ongoing."
+}

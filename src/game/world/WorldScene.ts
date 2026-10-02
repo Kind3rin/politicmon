@@ -1,3 +1,4 @@
+import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
 import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { drawMonsterSprite } from "../../art/monsters";
@@ -1399,6 +1400,9 @@ export class WorldScene implements Scene {
       this.openDistrict(command.districtId);
       return;
     }
+    if(command.kind==="openPalaceArchive"){
+      this.stack.push(new PalaceArchiveScene(this.stack,this.input,this.state,command.module,command.terminal));return;
+    }
     if (command.kind === "openElectionNight") {
       this.openElectionNight();
       return;
@@ -1498,7 +1502,7 @@ export class WorldScene implements Scene {
       "PUNTO DI NON RITORNO: INIZIA ELECTION NIGHT.",
       "COALIZIONE E CINQUE COLLEGI VERRANNO CONGELATI.",
       "IL GIOCO SALVA PRIMA DELLA DIRETTA. A PER CONTINUARE."
-    ], begin);
+    ], () => this.askChoice("INIZIA LA DIRETTA?", ["RIVEDI I VERBALI", "CONGELA E SFIDA"], index => { if(index===1)void begin(); }));
   }
 
   private openAtto3Ending(): void {

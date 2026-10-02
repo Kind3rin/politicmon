@@ -111,6 +111,16 @@ const BUILDING_FOOTPRINT_PNG: Record<string, Record<string, string>> = {
   }
 };
 
+// One canonical asset table serves rendering and the existing boot inventory.
+// The deck and Atto3 furniture retain their lazy/background loading policy.
+export function coreTerrainEntries():Record<string,string>{
+ return Object.fromEntries([
+  ...Object.entries(TILE_PNG).filter(([ch])=>ch!=='q').map(([ch,path])=>[`tile:${ch}`,path]),
+  ...Object.entries(OBJECT_PNG).filter(([ch])=>ch!=='X'&&!/^\d$/.test(ch)).map(([ch,path])=>[`obj:${ch}`,path]),
+  ...Object.entries(BUILDING_PNG).flatMap(([ch,path])=>[path,...Object.values(BUILDING_FOOTPRINT_PNG[ch]??{})].map(file=>[`build:${ch}:${file}`,file]))
+ ]);
+}
+
 // I PNG PixelLab hanno la porta al CENTRO della facciata: con footprint a
 // larghezza PARI la porta visiva cavalca i DUE tile centrali (w/2-1 e w/2).
 // Le mappe quindi mettono `d` su entrambi (es. `mddm`, `mmddmm`) con un warp

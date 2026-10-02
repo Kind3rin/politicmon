@@ -1,3 +1,4 @@
+import type {PalaceModule} from "../palaceArchive";
 import type { GameState } from "../state";
 import type { AllyId } from "../coalition";
 import type { DiplomacyChoice } from "../diplomacyChapter";
@@ -17,6 +18,7 @@ export type WorldCommand =
   | { kind: "openDiplomacyChoice"; initial: DiplomacyChoice }
   | { kind: "openGenovaTechno" }
   | { kind: "openDistrict"; districtId: DistrictId }
+  | {kind:"openPalaceArchive";module:PalaceModule;terminal:"a"|"b"}
   | { kind: "openElectionNight" }
   | { kind: "openWeeklyCampaign" }
   | { kind: "openSliceEnding" }

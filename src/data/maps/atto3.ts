@@ -69,12 +69,47 @@ const FUTURO_HQ_TILES = [
   "AAAAAAAAAAAAAAAAAA"
 ];
 
-const PALACE_ARCHIVE_TILES = [
+
+
+const PALACE_ALGORITMO_TILES = [
   "AAAAAAAAAA",
-  "AbppppppbA",
   "AppppppppA",
-  "AppPppPppA",
+  "Apppp1pppA",
   "AppppppppA",
+  "AppApppppA",
+  "AppppppppA",
+  "ApppccpppA",
+  "AAAAAAAAAA",
+];
+
+const PALACE_FACTCHECK_TILES = [
+  "AAAAAAAAAA",
+  "AppppppppA",
+  "Apppp1pppA",
+  "AppppppppA",
+  "AppppppApA",
+  "AppppppppA",
+  "ApppccpppA",
+  "AAAAAAAAAA",
+];
+
+const PALACE_TALKSHOW_TILES = [
+  "AAAAAAAAAA",
+  "AppppppppA",
+  "Apppp1pppA",
+  "AppppppppA",
+  "ApAppppppA",
+  "AppppppppA",
+  "ApppccpppA",
+  "AAAAAAAAAA",
+];
+
+const PALACE_SILENZIO_TILES = [
+  "AAAAAAAAAA",
+  "AppppppppA",
+  "Apppp1pppA",
+  "AppppppppA",
+  "ApppppAppA",
   "AppppppppA",
   "ApppccpppA",
   "AAAAAAAAAA",
@@ -214,28 +249,43 @@ const TOUR_HUB_TILES = [
 
 const PALACE_FEED_LOBBY_TILES = [
   "AAAAAAAAAAAAAAAAAAAA",
-  "AbbbpppppppppppppbbA",
-  "AppppppppppppppppppA",
-  "AppppppppppppppppppA",
-  "ApppphhhhhhhhhhppppA",
-  "AppppppppppppppppppA",
+  "AppppppppcpppppppppA",
+  "AppppcppppppppcppppA",
   "AppppppppppppppppppA",
   "AppppppppppppppppppA",
   "AppppppppppppppppppA",
-  "ApppppppccccpppppppA",
-  "AAAAAAAAAAAAAAAAAAAA"
+  "AppppcppppppppcppppA",
+  "AppppppppppppppppppA",
+  "Apppppppppppppppp1pA",
+  "ApppppppccpppppppppA",
+  "AAAAAAAAAAAAAAAAAAAA",
 ];
 
 const PALACE_FEED_STUDIO_TILES = [
   "AAAAAAAAAAAAAAAAAA",
-  "AbbbppppppppppbbbA",
-  "ApppppppPpPppppppA",
   "AppppppppppppppppA",
-  "ApphhhhhhhhhhhhppA",
   "AppppppppppppppppA",
+  "AppppppppppppppppA",
+  "AppppppppppppppppA",
+  "Apppppppppppp1pppA",
   "AppppppppppppppppA",
   "ApppppppccpppppppA",
-  "AAAAAAAAAAAAAAAAAA"
+  "AAAAAAAAAAAAAAAAAA",
+];
+
+const PALACE_TERRACE_TILES = [
+  "ffffffffffffffffffff",
+  "fppppppppppppppppppf",
+  "fppppppppppppppppppf",
+  "fppppppppppppppppppf",
+  "fppppppppppppppppppf",
+  "fppppppppppppppppppf",
+  "fppppppppppppppppppf",
+  "fpppppppppppp1pppppf",
+  "fppppppppppppppppppf",
+  "fppppccppppppppppppf",
+  "fppppppppppppppppppf",
+  "ffffffffffccffffffff",
 ];
 
 const TOUR_NORD_TILES = [
@@ -673,62 +723,76 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
   },
   palazzo_feed: {
     id: "palazzo_feed", name: "PALAZZO DEI FEED", tiles: PALACE_FEED_LOBBY_TILES,
+    tileOverrides: { p: "tiles/palace_lobby_floor.png", A: "tiles/palace_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_lobby_set.png" }, objectSizes: { "1": 48 },
     outdoor: false, music: "election_night",
     warps: [
       { x: 8, y: 9, toMap: "tour_feed", toX: 11, toY: 12, facing: "up" },
       { x: 9, y: 9, toMap: "tour_feed", toX: 11, toY: 12, facing: "up" },
-      { x: 5, y: 2, toMap: "palazzo_algoritmo", toX: 4, toY: 5, facing: "up" },
-      { x: 14, y: 2, toMap: "palazzo_factcheck", toX: 4, toY: 5, facing: "up" },
-      { x: 5, y: 6, toMap: "palazzo_talkshow", toX: 4, toY: 5, facing: "up" },
-      { x: 14, y: 6, toMap: "palazzo_silenzio", toX: 4, toY: 5, facing: "up" },
-      { x: 9, y: 1, toMap: "palazzo_feed_studio", toX: 8, toY: 6, facing: "up", requiresFlag: "palaceRoomsComplete", lockedLines: ["LO STUDIO È CHIUSO.", "ARCHIVIA ALGORITMO, FACT-CHECK, TALK SHOW E SILENZIO STAMPA."] }
+      { markerLabel: "ALGORITMO", x: 5, y: 2, toMap: "palazzo_algoritmo", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "FACTCHECK", x: 14, y: 2, toMap: "palazzo_factcheck", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "REGIA", x: 5, y: 6, toMap: "palazzo_talkshow", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "STAMPA", x: 14, y: 6, toMap: "palazzo_silenzio", toX: 4, toY: 5, facing: "up" },
+      { markerLabel: "STUDIO", x: 9, y: 1, toMap: "palazzo_feed_studio", toX: 8, toY: 6, facing: "up", requiresFlag: "palaceRoomsComplete", lockedLines: ["LO STUDIO È CHIUSO.", "ARCHIVIA ALGORITMO, FACT-CHECK, TALK SHOW E SILENZIO STAMPA."] }
     ],
     signs: [
       { x: 2, y: 1, lines: ["PALAZZO DEI FEED.", "QUATTRO ARCHIVI. NESSUN NUOVO REGOLAMENTO."] },
       { x: 17, y: 1, lines: ["STUDIO ELETTORALE.", "APRE QUANDO I QUATTRO MODULI SONO COMPLETI."] }
     ], pickups: [],
-    npcs: [{ id: "palace-reception", pal: "journalist", x: 9, y: 5, facing: "down", lines: [] }]
+    npcs: [{ id: "palace-reception", spriteSet: "palace-reception", wander: false, pal: "journalist", x: 9, y: 5, facing: "down", lines: [] }]
   },
   palazzo_algoritmo: {
-    id: "palazzo_algoritmo", name: "ARCHIVIO ALGORITMO", tiles: PALACE_ARCHIVE_TILES,
-    outdoor: false, music: "social_tension", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 3, facing: "down" }], signs: [], pickups: [],
+    id: "palazzo_algoritmo", name: "ARCHIVIO ALGORITMO", tiles: PALACE_ALGORITMO_TILES,
+    tileOverrides: { p: "tiles/palace_algorithm_floor.png", A: "tiles/palace_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_algorithm_set.png" }, objectSizes: { "1": 64 },
+    outdoor: false, music: "social_tension", warps: [{ markerLabel: "RECEPTION", x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 3, facing: "down" }, { x: 5, y: 6, toMap: "palazzo_feed", toX: 5, toY: 3, facing: "down" }], signs: [], pickups: [],
     npcs: [
-      { id: "palace-algorithm-a", pal: "influencer", x: 2, y: 3, facing: "down", lines: [] },
-      { id: "palace-algorithm-b", pal: "journalist", x: 7, y: 3, facing: "down", lines: [] }
+      { id: "palace-algorithm-a", spriteSet: "palace-algorithm-a", wander: false, pal: "influencer", x: 2, y: 3, facing: "down", lines: [] },
+      { id: "palace-algorithm-b", spriteSet: "palace-algorithm-b", wander: false, pal: "journalist", x: 7, y: 3, facing: "down", lines: [] }
     ]
   },
   palazzo_factcheck: {
-    id: "palazzo_factcheck", name: "ARCHIVIO FACT-CHECK", tiles: PALACE_ARCHIVE_TILES,
-    outdoor: false, music: "mediopoli", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 3, facing: "down" }], signs: [], pickups: [],
+    id: "palazzo_factcheck", name: "ARCHIVIO FACT-CHECK", tiles: PALACE_FACTCHECK_TILES,
+    tileOverrides: { p: "tiles/palace_factcheck_floor.png", A: "tiles/palace_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_factcheck_set.png" }, objectSizes: { "1": 64 },
+    outdoor: false, music: "mediopoli", warps: [{ markerLabel: "RECEPTION", x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 3, facing: "down" }, { x: 5, y: 6, toMap: "palazzo_feed", toX: 14, toY: 3, facing: "down" }], signs: [], pickups: [],
     npcs: [
-      { id: "palace-factcheck-a", pal: "aide", x: 2, y: 3, facing: "down", lines: [] },
-      { id: "palace-factcheck-b", pal: "journalist", x: 7, y: 3, facing: "down", lines: [] }
+      { id: "palace-factcheck-a", spriteSet: "palace-factcheck-a", wander: false, pal: "aide", x: 2, y: 3, facing: "down", lines: [] },
+      { id: "palace-factcheck-b", spriteSet: "palace-factcheck-b", wander: false, pal: "journalist", x: 7, y: 3, facing: "down", lines: [] }
     ]
   },
   palazzo_talkshow: {
-    id: "palazzo_talkshow", name: "ARCHIVIO TALK SHOW", tiles: PALACE_ARCHIVE_TILES,
-    outdoor: false, music: "battle-trainer", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 7, facing: "down" }], signs: [], pickups: [],
+    id: "palazzo_talkshow", name: "ARCHIVIO TALK SHOW", tiles: PALACE_TALKSHOW_TILES,
+    tileOverrides: { p: "tiles/palace_talkshow_floor.png", A: "tiles/palace_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_talkshow_set.png" }, objectSizes: { "1": 64 },
+    outdoor: false, music: "battle-trainer", warps: [{ markerLabel: "RECEPTION", x: 4, y: 6, toMap: "palazzo_feed", toX: 5, toY: 7, facing: "down" }, { x: 5, y: 6, toMap: "palazzo_feed", toX: 5, toY: 7, facing: "down" }], signs: [], pickups: [],
     npcs: [
-      { id: "palace-talkshow-a", pal: "journalist", x: 2, y: 3, facing: "down", lines: [] },
-      { id: "palace-talkshow-b", pal: "boss", x: 7, y: 3, facing: "down", lines: [] }
+      { id: "palace-talkshow-a", spriteSet: "palace-talkshow-a", wander: false, pal: "journalist", x: 2, y: 3, facing: "down", lines: [] },
+      { id: "palace-talkshow-b", spriteSet: "palace-talkshow-b", wander: false, pal: "boss", x: 7, y: 3, facing: "down", lines: [] }
     ]
   },
   palazzo_silenzio: {
-    id: "palazzo_silenzio", name: "SILENZIO STAMPA", tiles: PALACE_ARCHIVE_TILES,
-    outdoor: false, music: "election_night", warps: [{ x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 7, facing: "down" }], signs: [], pickups: [],
+    id: "palazzo_silenzio", name: "SILENZIO STAMPA", tiles: PALACE_SILENZIO_TILES,
+    tileOverrides: { p: "tiles/palace_silence_floor.png", A: "tiles/palace_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_silence_set.png" }, objectSizes: { "1": 64 },
+    outdoor: false, music: "election_night", warps: [{ markerLabel: "RECEPTION", x: 4, y: 6, toMap: "palazzo_feed", toX: 14, toY: 7, facing: "down" }, { x: 5, y: 6, toMap: "palazzo_feed", toX: 14, toY: 7, facing: "down" }], signs: [], pickups: [],
     npcs: [
-      { id: "palace-silence-a", pal: "aide", x: 2, y: 3, facing: "down", lines: [] },
-      { id: "palace-silence-b", pal: "aide", x: 7, y: 3, facing: "down", lines: [] }
+      { id: "palace-silence-a", spriteSet: "palace-silence-a", wander: false, pal: "aide", x: 2, y: 3, facing: "down", lines: [] },
+      { id: "palace-silence-b", spriteSet: "palace-silence-b", wander: false, pal: "aide", x: 7, y: 3, facing: "down", lines: [] }
     ]
   },
   palazzo_feed_studio: {
     id: "palazzo_feed_studio", name: "STUDIO ELETTORALE", tiles: PALACE_FEED_STUDIO_TILES,
+    tileOverrides: { p: "tiles/palace_studio_floor.png", A: "tiles/palace_wall.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_studio_set.png" }, objectSizes: { "1": 80 },
     outdoor: false, music: "election_night", warps: [{ x: 8, y: 7, toMap: "palazzo_feed", toX: 9, toY: 2, facing: "down" }],
     signs: [{ x: 2, y: 1, lines: ["STUDIO ELETTORALE.", "IL SALVATAGGIO PRIMA DEL DIRETTO È OBBLIGATORIO."] }], pickups: [],
-    npcs: [{ id: "palace-election-desk", pal: "boss", x: 7, y: 2, facing: "down", lines: [] }]
+    npcs: [{ id: "palace-election-desk", spriteSet: "palace-studio", wander: false, pal: "boss", x: 7, y: 2, facing: "down", lines: [] }]
   },
   palazzo_feed_terrazza: {
-    id: "palazzo_feed_terrazza", name: "TERRAZZA DEL DOPO", tiles: DIPLOMACY_TERRACE_TILES,
+    id: "palazzo_feed_terrazza", name: "TERRAZZA DEL DOPO", tiles: PALACE_TERRACE_TILES,
+    tileOverrides: { p: "tiles/palace_terrace_floor.png", c: "tiles/tour_threshold.png" },
+    objectOverrides: { "1": "tiles/palace_terrace_set.png", f: "tiles/tour_rail.png" }, objectSizes: { "1": 80 },
     outdoor: true, allowWanderers: false, encounterRate: 0, encounters: [], music: "election_night",
     warps: [
       { x: 5, y: 9, toMap: "palazzo_feed", toX: 9, toY: 2, facing: "down" },
@@ -739,8 +803,8 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     signs: [{ x: 4, y: 5, lines: ["TERRAZZA DEL DOPO.", "IL RISULTATO È DEFINITIVO. IL MONDO, FORTUNATAMENTE, RESTA VISITABILE."] }],
     pickups: [],
     npcs: [
-      { id: "atto3-postgame-host", pal: "journalist", x: 10, y: 2, facing: "down", lines: ["LA DIRETTA È FINITA.", "IL POST-GAME NO: TORNEI, DEX, QUEST E ONLINE RESTANO APERTI."] },
-      { id: "weekly-campaign-host", pal: "influencer", x: 6, y: 5, facing: "right", lines: [] }
+      { id: "atto3-postgame-host", spriteSet: "palace-reception", wander: false, pal: "journalist", x: 10, y: 2, facing: "down", lines: ["LA DIRETTA È FINITA.", "IL POST-GAME NO: TORNEI, DEX, QUEST E ONLINE RESTANO APERTI."] },
+      { id: "weekly-campaign-host", spriteSet: "palace-talkshow-a", wander: false, pal: "influencer", x: 6, y: 5, facing: "right", lines: [] }
     ]
   }
 };

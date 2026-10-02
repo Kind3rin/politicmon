@@ -38,3 +38,27 @@ test('private-member compilation preserves constructor bindings, callbacks, publ
   assert.deepEqual(built.check().keys.filter((k:string)=>k==='id'),['id']);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
+
+test('fixed engine aliases survive separate chunk minification while Scene and payload contracts retain names',async()=>{
+ const root=mkdtempSync(join(tmpdir(),'politicmon-engine-'));
+ try{
+  mkdirSync(join(root,'src/engine'),{recursive:true});
+  writeFileSync(join(root,'tsconfig.json'),JSON.stringify({compilerOptions:{target:'ES2022',useDefineForClassFields:true,strict:true},include:['src']}));
+  const engine=`export class Screen {private calls=0;constructor(public readonly ctx:{text:string}){} text(value:string){this.calls++;return this.ctx.text+value+this.calls;} get color(){return this.ctx.text;} set color(value:string){this.ctx.text=value;}}`;
+  const consumer=`import {Screen} from './engine/screen';interface Scene {draw():string;update():void;} export function check(){const screen=new Screen({text:'wire:'});screen.color='kept:';const foreign={text:'public',ctx:'public'};const scene:Scene={draw:()=>screen.text('hello'),update:()=>{}};scene.update();return {text:scene.draw(),ctx:foreign.ctx,color:screen.color,wire:{text:foreign.text},contracts:Object.keys(scene)};}`;
+  const enginePath=join(root,'src/engine/screen.ts'),consumerPath=join(root,'src/consumer.ts');writeFileSync(enginePath,engine);writeFileSync(consumerPath,consumer);
+  const plugin=compactPrivateMembers(root);(plugin.buildStart as Function)();
+  const transform=(s:string,p:string)=>(plugin.transform as Function)(s,p).code;
+  const compile=(s:string)=>ts.transpileModule(s,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext,useDefineForClassFields:true}}).outputText;
+  const compact=async(s:string)=>{
+   const r=await minify(compile(s),{module:true,mangle:{properties:{regex:/^__pmPrivate_/}}});assert.ok(r.code);return r.code;
+  };
+  // Each chunk gets an independent Terser invocation, as Vite does.
+  const compiledEngine=await compact(transform(engine,enginePath));
+  const url='data:text/javascript;base64,'+Buffer.from(compiledEngine).toString('base64');
+  const compiledConsumer=await compact(transform(consumer,consumerPath).replace('./engine/screen',url));
+  assert.match(compiledEngine,/\$[0-9a-z]/);assert.match(compiledConsumer,/\.draw\(/);assert.match(compiledConsumer,/\.update\(/);
+  const module=await import('data:text/javascript;base64,'+Buffer.from(compiledConsumer).toString('base64'));
+  assert.deepEqual(module.check(),{text:'kept:hello1',ctx:'public',color:'kept:',wire:{text:'public'},contracts:['draw','update']});
+ }finally{rmSync(root,{recursive:true,force:true});}
+});

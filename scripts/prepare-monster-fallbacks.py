@@ -15,7 +15,7 @@ manifest = json.loads((ROOT/'scripts/higgsfield-monster-frames.json').read_text(
 source = (ROOT/'src/art/monsters.ts').read_text()
 def registry(name):
     return set(re.findall(r'"([a-z0-9-]+)"',re.search(name+r' = new Set<string>\(\[([\s\S]*?)\]\)',source).group(1)))
-base_ids = registry('MONSTERS_WITH_PNG')
+base_ids = {entry['id'] for entry in json.loads((ROOT/'src/data/roster.json').read_text())['species']}
 actions = registry('MONSTERS_WITH_ACTION_PNG')
 assert base_ids == {asset['id'] for asset in manifest['assets']}
 assert actions <= base_ids

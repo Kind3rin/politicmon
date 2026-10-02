@@ -25,7 +25,7 @@ const resumeReport=resumePath?JSON.parse(readFileSync(resumePath,'utf8')):null;
 const resumeStage=process.env.RESUME_STAGE??'garante-result-1';
 const resumeCode=resumeReport?.codes[resumeStage]??null;
 if(resumePath){assert.ok(resumeCode,'Earned milestone save missing');assert.equal(resumeReport.id,id,'Starter does not match earned save');}
-assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy','tour'].includes(endAt),'Unknown campaign endpoint');
+assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy','tour','palace','election'].includes(endAt),'Unknown campaign endpoint');
 assert.ok(['alliance','distance','opposition'].includes(futurePlan),'Unknown future choice');
 assert.ok(['loyalty','autonomy','home'].includes(diplomacyPlan),'Unknown diplomacy choice');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
@@ -45,7 +45,7 @@ try{
   const state=resumeCode?importSaveCode(resumeCode):newGameState();
   if(!state||(resumeCode&&!state.flags['garante-beaten']))throw Error('Resume must be an earned post-Garante save');
   const world=new WorldScene(stack,input,state);stack.push(world);
-  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let boxPending=null,repairPending=false,futureRecruit=false,tourTarget=null;let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
+  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let boxPending=null,repairPending=false,futureRecruit=false,tourTarget=null,electionConfirm=false;let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
   const narrative=[],say=world.say.bind(world);world.say=(lines,...rest)=>{narrative.push({map:state.pos.mapId,lines:[...lines],trust:state.morale.trust,cohesion:state.morale.cohesion});return say(lines,...rest);};
   const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
   const trace=(type,detail)=>events.push({type,detail,steps:state.stepsTotal,map:state.pos.mapId,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp})),money:state.money});
@@ -90,7 +90,7 @@ try{
    const s=stack.top,name=s?.constructor.name;
    if(name==='WorldScene'){
     if(world.msg.isOpen){press('a');return true;}
-    if(world.askMenu){press('a');return true;}
+    if(world.askMenu){linear(world.askMenu,electionConfirm&&world.askLabel==='INIZIA LA DIRETTA?'?1:0);return true;}
     if(world.justEnteredMap||world.fadeT>0||world.moving||world.fadeOut>0||world.healFx>0||world.encounterFlash>0||world.exclaimT>0||world.npcs.some(n=>n.path?.length)){tick();return true;}
     return false;
    }
@@ -194,6 +194,10 @@ try{
     if(s.mode==='result'){press('b');press('b');return true;}
     press('a');return true;
    }
+   if(name==='PalaceArchiveScene'){
+    if(s.mode==='quiz')linear(s.menu,s.data.options.indexOf(s.data.answer));else press('a');
+    return true;
+   }
    if(name==='PhotoChoiceScene'){
     const target=photoPlan==='panoramica'?1:0;
     if(s.error)throw Error('Photo rejected: '+s.error);
@@ -230,7 +234,7 @@ try{
     }
     return true;
    }
-   if(['FieldGuideScene','StarterPreviewScene','EvolutionScene','BossBriefingScene','SliceEndingScene'].includes(name)){press('a');return true;}
+   if(['FieldGuideScene','StarterPreviewScene','EvolutionScene','BossBriefingScene','SliceEndingScene','ElectionResultsScene','Atto3EndingScene'].includes(name)){press('a');return true;}
    throw Error('Unhandled scene '+name);
   }
   function settle(){let n=0;while(action()){if(n++>10000)throw Error('Scene did not settle '+stack.top?.constructor.name);}}
@@ -278,6 +282,7 @@ try{
    if(!candidates.length)throw Error('No '+dir+' exit '+map.id);if(!walkTo(candidates[0].x,y))return false;face(dir);press(dir);settle();if(state.pos.mapId===map.id)throw Error(dir+' exit blocked '+map.id);return true;
   }
   function heal(){
+   while(state.pos.mapId.startsWith('palazzo_'))enterMap(state.pos.mapId==='palazzo_feed'?'tour_feed':'palazzo_feed');
    if(state.pos.mapId.startsWith('district_'))enterMap('tour_feed');
    if(state.pos.mapId==='tour_feed')enterMap('diplomacy_lobby');
    while(state.pos.mapId.startsWith('diplomacy_'))enterMap(state.pos.mapId==='diplomacy_lobby'?'futuro_piazza':'diplomacy_lobby');
@@ -612,6 +617,22 @@ try{
     if(!state.flags.tourComplete||state.election.phase!=='ready')throw Error('Five manually earned dossiers did not open Palazzo');
     await milestone('tour-five-dossiers');enterMap('palazzo_feed');await milestone('tour-palazzo');
    }
+   if(endAt==='palace'||endAt==='election'){
+    if(!state.flags.tourComplete||state.election.phase!=='ready')throw Error('Palace requires untouched earned Tour save');
+    settle();await milestone('palace-earned-resume');
+    const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing Palace NPC '+id);interact(npc.x,npc.y);};
+    for(const [map,prefix]of [['palazzo_algoritmo','algorithm'],['palazzo_factcheck','factcheck'],['palazzo_talkshow','talkshow'],['palazzo_silenzio','silence']]){
+     enterMap(map);talk('palace-'+prefix+'-a');await milestone(map+'-read');talk('palace-'+prefix+'-b');await milestone(map+'-verified');enterMap('palazzo_feed');
+    }
+    if(!state.flags.palaceRoomsComplete)throw Error('Four verified dossiers did not open studio');await milestone('palace-four-verdicts');
+    if(endAt==='election'){
+     heal();if(state.pos.mapId==='bruxelles'){enterMap('campo_largo');heal();}enterMap('futuro_piazza');enterMap('diplomacy_lobby');enterMap('tour_feed');enterMap('palazzo_feed');enterMap('palazzo_feed_studio');await milestone('palace-studio');
+     electionConfirm=true;talk('palace-election-desk');
+     for(let i=0;i<100&&!state.flags.atto3Complete;i++){await new Promise(r=>setTimeout(r,20));settle();}
+     if(!state.flags.atto3Complete)throw Error('Native Election Night did not reach earned epilogue');
+     await milestone('election-earned-ending');enterMap('palazzo_feed');await milestone('election-reopened-world');
+    }
+   }
   }catch(e){failure=e.message;trace('failure',{message:failure,pos:{...state.pos},npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y,canWander:n.canWander})),tiles:world.map.tiles});}
   return {levelCap:LEVEL_CAP,id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,photoPlan,campoPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,coalition:state.coalition,election:state.election,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
  },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode});
@@ -630,7 +651,7 @@ try{
   }
  }
  if(process.env.EXPECT_BADGE==='1')assert.ok(result.final.badges.includes(endAt),`Campaign did not earn ${endAt}`);
- if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':endAt==='future'?'futureResolved':endAt==='diplomacy'?'diplomacyComplete':endAt==='tour'?'tourComplete':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
+ if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':endAt==='future'?'futureResolved':endAt==='diplomacy'?'diplomacyComplete':endAt==='tour'?'tourComplete':endAt==='palace'?'palaceRoomsComplete':endAt==='election'?'atto3Complete':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
  console.log(JSON.stringify({id,seed,plan,failure:result.failure,milestones:result.milestones,final:result.final,battles:result.battles.map(b=>({trainer:b.trainer,outcome:b.outcome,foes:b.foes}))},null,2));
  if(result.failure)process.exitCode=1;
 }finally{await browser.close();}

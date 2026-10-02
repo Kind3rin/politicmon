@@ -290,7 +290,7 @@ export const QUESTS: QuestDef[] = [
     id: "atto3-palazzo-feed",
     title: "PALAZZO DEI FEED",
     desc: "Archivia algoritmo, fact-check, talk show e silenzio stampa prima della diretta.",
-    hint: "Dal TOUR DEL FEED entra nel Palazzo. Ogni stanza ricorda due conseguenze già decise.",
+    hint: "Dal TOUR DEL FEED entra nel Palazzo. Leggi i verbali e verifica i fatti nei quattro archivi.",
     step: "Completa i quattro archivi del Palazzo.",
     isDone: (s) => Boolean(s.flags.palaceRoomsComplete),
     target: { mapId: "tour_feed", x: 11, y: 1 }

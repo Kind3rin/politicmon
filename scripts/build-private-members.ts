@@ -9,6 +9,7 @@ import type {Plugin} from 'vite';
 export function compactPrivateMembers(root:string):Plugin{
  let program:ts.Program,checker:ts.TypeChecker;
  const names=new Map<ts.Symbol,string>();
+ const engineFiles:Record<string,string>={Screen:'engine/screen.ts',Input:'engine/input.ts',SceneStack:'engine/scene.ts',AudioEngine:'engine/audio.ts',Menu:'ui/widgets.ts',MessageBox:'ui/widgets.ts',Haptics:'engine/haptics.ts',Composer:'ui/composer.ts',SupplyView:'ui/SupplyView.ts'};
  return{
   name:'compact-private-members',apply:'build',enforce:'pre',
   buildStart(){
@@ -16,18 +17,29 @@ export function compactPrivateMembers(root:string):Plugin{
    if(config.error)throw Error(ts.flattenDiagnosticMessageText(config.error.messageText,'\n'));
    const parsed=ts.parseJsonConfigFileContent(config.config,ts.sys,root);
    program=ts.createProgram(parsed.fileNames,parsed.options);checker=program.getTypeChecker();
-   for(const file of program.getSourceFiles().filter(f=>f.fileName.startsWith(resolve(root,'src')+'/'))){
+   names.clear();
+   for(const file of program.getSourceFiles().filter(f=>f.fileName.startsWith(resolve(root,'src')+'/')).sort((a,b)=>a.fileName<b.fileName?-1:a.fileName>b.fileName?1:0)){
     const visit=(node:ts.Node):void=>{
      if(ts.isClassDeclaration(node)||ts.isClassExpression(node)){
       const type=checker.getTypeAtLocation(node);
+      // These application-internal engine/UI classes cross bundle boundaries.
+      // Their public members receive fixed short names, never independent
+      // per-chunk property mangling. Scene contracts and save/network shapes
+      // are excluded; browser APIs and foreign same-name properties retain keys.
+      let engineIndex=0;
+      const engine=node.name&&engineFiles[node.name.text]&&file.fileName===resolve(root,'src',engineFiles[node.name.text]);
       for(const member of node.members){
        const candidates:ts.Node[]=ts.isConstructorDeclaration(member)?[...member.parameters]:[member];
        for(const candidate of candidates){
-        if(!ts.canHaveModifiers(candidate)||!ts.getModifiers(candidate)?.some(m=>m.kind===ts.SyntaxKind.PrivateKeyword))continue;
+        const privateMember=ts.canHaveModifiers(candidate)&&ts.getModifiers(candidate)?.some(m=>m.kind===ts.SyntaxKind.PrivateKeyword);
+        if(!privateMember&&!engine)continue;
+        if(ts.isConstructorDeclaration(candidate))continue;
+        if(ts.isParameter(candidate)&&!privateMember&&!ts.getModifiers(candidate)?.some(m=>[ts.SyntaxKind.PublicKeyword,ts.SyntaxKind.ProtectedKeyword,ts.SyntaxKind.ReadonlyKeyword].includes(m.kind)))continue;
         const name=(candidate as ts.NamedDeclaration).name;
         if(!name||!ts.isIdentifier(name))continue;
         const symbol=checker.getSymbolAtLocation(name),property=checker.getPropertyOfType(type,name.text);
-        const alias=`__pmPrivate_${names.size}`;
+        if((symbol&&names.has(symbol))||(property&&names.has(property)))continue;
+        const alias=privateMember?`__pmPrivate_${names.size}`:`$${(engineIndex++).toString(36)}`;
         if(symbol)names.set(symbol,alias);if(property)names.set(property,alias);
         // A constructor parameter property has two symbols: the instance
         // field and the local parameter used in the constructor body.

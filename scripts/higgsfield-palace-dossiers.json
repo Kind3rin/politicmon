@@ -1,0 +1,305 @@
+{
+  "version": 1,
+  "balanceBefore": 393.22,
+  "estimatedCredits": 10.5,
+  "assets": [
+    {
+      "id": "algoritmo",
+      "kind": "background",
+      "width": 240,
+      "height": 160,
+      "path": "public/sprites/ui/campaign/palace-algoritmo.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. Wide panorama composed for a 240x78 crop: all important characters and props inside the TOP 49 percent of the image, quiet dark top margin for a runtime title, generous space around heads. A spider analyst in teal blazer watches a closed-loop content conveyor that feeds identical blank cards into its own input. An owl holds an unplugged source cord. The conveyor dominates the foreground, original absurd political echo chamber."
+      },
+      "sourceSha256": "20f27597645a9ce313109827b118abe4db62a44c58bb938868b1fbd601b08ac4",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/palace-algoritmo.png": "530211d9f9cfac72f2924846e0ea105711d8ddbde833ca8582814fcb2297e676"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        2,
+        1024,
+        685
+      ]
+    },
+    {
+      "id": "factcheck",
+      "kind": "background",
+      "width": 240,
+      "height": 160,
+      "path": "public/sprites/ui/campaign/palace-factcheck.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. Wide panorama composed for a 240x78 crop: all important characters and props inside the TOP 49 percent of the image, quiet dark top margin for a runtime title, generous space around heads. An ibis archivist in burgundy presents the single original blank page linked to a blue inkpot. A badger with magnifier examines two copied pages whose cords are disconnected. Archives behind them echo the same folder silhouette. Satire about checking a copy against another copy."
+      },
+      "sourceSha256": "b5e510d46f598082e2eac45ca328c149bdfb362f33c2eb5165210638208421c9",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/palace-factcheck.png": "0b49e5c2a5cbbf6f39f1bdb1ba4d127dd4f39d2b77d736d2edbeebbfb89759e2"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        2,
+        1024,
+        685
+      ]
+    },
+    {
+      "id": "talkshow",
+      "kind": "background",
+      "width": 240,
+      "height": 160,
+      "path": "public/sprites/ui/campaign/palace-talkshow.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. Wide panorama composed for a 240x78 crop: all important characters and props inside the TOP 49 percent of the image, quiet dark top margin for a runtime title, generous space around heads. A crimson macaw host holds the only live microphone. Three guest microphones connect to the host desk, a flamingo camera operator aims three lenses at the same empty chair. Original political talk show, cheerful staged debate and conspicuous muted guests."
+      },
+      "sourceSha256": "5125072c9b645ba9087090c507086f256badb78d4a333fb89166e5f73c70b0ec",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/palace-talkshow.png": "4329c5d895d00d6621459764c45e9a65c20f5a909709a06a860359b1d27860b8"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        2,
+        1024,
+        685
+      ]
+    },
+    {
+      "id": "silenzio",
+      "kind": "background",
+      "width": 240,
+      "height": 160,
+      "path": "public/sprites/ui/campaign/palace-silenzio.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. Wide panorama composed for a 240x78 crop: all important characters and props inside the TOP 49 percent of the image, quiet dark top margin for a runtime title, generous space around heads. A snail press secretary raises one reassuring thumb beside a podium, its red warning light reflected in the porcupine journalist's spectacles. Under the lectern a hot radiator gauge points red while everyone calmly changes the spotlight colour. Original bureaucratic denial satire; no dog, no flames, no external meme artwork."
+      },
+      "sourceSha256": "29701e98092ca2807c600f2c98ca64a03b27eb7ccb8c911e28086fe3f84246f6",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/palace-silenzio.png": "c08894fdc0505f2a4d8788fc11edef26ac93b97646ead2e50b29220ec100f3ae"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        2,
+        1024,
+        685
+      ]
+    },
+    {
+      "id": "seal",
+      "kind": "background",
+      "width": 240,
+      "height": 160,
+      "path": "public/sprites/ui/campaign/palace-seal.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. Wide panorama composed for a 240x78 crop: all important characters and props inside the TOP 49 percent of the image, quiet dark top margin for a runtime title, generous space around heads. An anglerfish broadcaster in midnight suit stands to one side of a five-window ballot console; a large brass sealing lever is still raised, a barn owl registrar keeps a blank ledger open. The central latch is visibly open, theatrical studio but no ballot outcome depicted."
+      },
+      "sourceSha256": "08c87de306014ccec8f27c90f011269fd84a6bafda3d910a21f349128347c3bc",
+      "sourceSize": [
+        1024,
+        688
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/palace-seal.png": "8cd2cbd70ad5327b4dd2ab6b0d58fc5f1367a065aa42d188615e6d5d659eb868"
+      },
+      "paletteColors": 48,
+      "cropBox": [
+        0,
+        2,
+        1024,
+        685
+      ]
+    },
+    {
+      "id": "wall",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "path": "public/sprites/tiles/palace_wall.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "background": "opaque",
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. A single seamless game wall tile, top-down indoor navy architectural panel with a quiet ivory upper seam and two muted mint inset rivets. Opaque edge-to-edge, uniform tile designed for 16x16 nearest-neighbour downsampling; no perspective or focal illustration."
+      },
+      "sourceSha256": "c1896a22d1fe2bb0dc7d3a5c73750194b31aa2bfc72983a130286ca56c90111a",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/palace_wall.png": "2f4af6a39b5e6162e209b0d2e22e687988a7bb137f9544f05038cc469b203525"
+      }
+    },
+    {
+      "id": "north",
+      "kind": "direction",
+      "width": 24,
+      "height": 32,
+      "path": "public/sprites/chars/npc_palace-algorithm-a_north.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "variant": "flare",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "1:1",
+        "background": "transparent",
+        "medias": [
+          {
+            "role": "image",
+            "value": "65e4960b-9768-4a30-aa4d-649c8ad18d26"
+          }
+        ],
+        "prompt": "Original Politicmon political satire RPG. Polished precise chunky pixel art, navy ink #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral and plum. Flat hard-edged colours, clean readable silhouettes. No words, numbers, letters, logos, interface, gradient or realistic people. Using the supplied sprite sheet, draw ONLY the BACK VIEW of the same spider analyst in teal blazer, navy trousers, four visible arm pairs with blank mustard cards, loose cord. Face turned away toward NORTH: show the back of the dark head and teal jacket, absolutely NO eyes or face visible. Same proportions and equipment, full body contained with transparent margins, no shadow. Single isolated sprite, hard alpha, for 24x32 game size."
+      },
+      "sourceSha256": "45b1382fb3a1099d9101fbddb3b202b6221a9076ab1efb982afaf8588c7a0c47",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_palace-algorithm-a_north.png": "8df896ef13e53c4224c7588f955cb2cc36c5134f576402adbff35d28470fe659"
+      },
+      "alphaCutoff": 128
+    }
+  ],
+  "jobs": [
+    {
+      "index": 0,
+      "job_id": "8037dcab-9fd0-4dd8-a700-425c20e13050",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180445_8037dcab-9fd0-4dd8-a700-425c20e13050.png"
+    },
+    {
+      "index": 1,
+      "job_id": "052d5b81-9830-4d81-82a4-0fc49f008e6e",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180445_052d5b81-9830-4d81-82a4-0fc49f008e6e.png"
+    },
+    {
+      "index": 2,
+      "job_id": "57dff8bd-b671-4883-adcb-72f0164098e1",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180446_57dff8bd-b671-4883-adcb-72f0164098e1.png"
+    },
+    {
+      "index": 3,
+      "job_id": "96e4f6b9-fc0a-4d3b-8c14-71ab7bb168f8",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180447_96e4f6b9-fc0a-4d3b-8c14-71ab7bb168f8.png"
+    },
+    {
+      "index": 4,
+      "job_id": "42be01ff-de4b-4dde-82a1-e64b02bb8b55",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180444_42be01ff-de4b-4dde-82a1-e64b02bb8b55.png"
+    },
+    {
+      "index": 5,
+      "job_id": "033e167a-1cde-4348-8b85-0366427bc67e",
+      "status": "completed",
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180445_033e167a-1cde-4348-8b85-0366427bc67e.png"
+    },
+    {
+      "index": 6,
+      "job_id": "88493771-eea7-4e1a-8885-4433bececb36",
+      "status": "completed",
+      "adjustments": {
+        "medias[0].role": {
+          "requested": "image",
+          "used": "image_references",
+          "reason": "GPT Image 2.5 backend expects schema-key media roles"
+        }
+      },
+      "type": "image",
+      "model": "gpt_image_2_5",
+      "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_180504_88493771-eea7-4e1a-8885-4433bececb36.png"
+    }
+  ],
+  "galleryShown": true,
+  "review": "Accepted original pixel illustrations; full panorama retained at 240x160 to fit the campaign backdrop without cropping characters. North repair has no visible face."
+}

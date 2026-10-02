@@ -26,7 +26,7 @@ export class ElectionResultsScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    drawCampaignBackdrop(screen, "election");
+    drawCampaignBackdrop(screen, "palace-seal");
     drawScreenHeader(screen, "NOTTE ELETTORALE", this.revealed === 5 ? `${this.result.seats}/5 SEGGI` : `${this.revealed}/5 APERTI`);
     for (let i = 0; i < 5; i++) {
       screen.rect(70 + i * 32, 25, 27, 8, i < this.revealed ? this.result.districts[i]?.seat ? "#55a889" : "#d76458" : "#9aa0b8");

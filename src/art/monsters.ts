@@ -1,21 +1,11 @@
+import { SPECIES } from "../data/species";
 import type { Screen } from "../engine/screen";
 import { getSpriteImage } from "../engine/assets";
 import { memeForm } from "../game/memeForms";
 import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "./monsterFrames";
 
 // Roster completo migrato ai PNG: non carica più caricature testuali.
-export const MONSTERS_WITH_PNG = new Set<string>([
-  "salvinator", "giorgiagon", "ellyna", "schleinix", "renzino", "grillix",
-  "renzilla", "contemorfo", "calendauro", "vannaccix", "tajanide", "berlusconix",
-  "draghimon", "trumpon", "xipanda", "macronfox", "mattarellux", "putingrad",
-  "bunkerput", "ursulax", "bojoon", "zelenskir", "muskrat", "vaffenix", "capitanone", "mediocrate",
-  "giorgetta", "salvinott", "movimenton", "marsrat", "pontigor", "conteblob",
-  "calendrone", "generorso", "tajacolomba", "telecrate", "pontimax",
-  "futurorso",
-  "verdolino", "ecoverdon", "contepop", "salvinurlo", "verdoribelle",
-  "salistrobo", "salisound", "gianimago", "quasimagiani", "crosettank",
-  "fratocorno", "campocorno", "nordiodo", "referendodo"
-]);
+export const MONSTERS_WITH_PNG = new Set<string>(Object.keys(SPECIES));
 
 export const MONSTERS_WITH_ACTION_PNG = new Set<string>([
   "salistrobo", "salisound", "futurorso", "gianimago", "quasimagiani", "crosettank",

@@ -2,7 +2,7 @@
   "name": "politicmon",
   "version": "1.0.0",
   "private": true,
-  "description": "Clone di Pok\u00e9mon a tema satira politica italiana (TypeScript + Vite, canvas 2D, multiplayer P2P).",
+  "description": "Clone di Pokémon a tema satira politica italiana (TypeScript + Vite, canvas 2D, multiplayer P2P).",
   "license": "AGPL-3.0-only",
   "author": "Luca Tiengo",
   "homepage": "https://politicmon.vercel.app",
@@ -102,7 +102,9 @@
     "check:bruxelles:release": "node --import tsx scripts/check-bruxelles-release.mjs",
     "check:bruxelles": "node scripts/check-bruxelles.mjs",
     "check:offshore": "node scripts/check-offshore.mjs",
-    "check:offshore:release": "node --import tsx scripts/check-offshore-release.mjs"
+    "check:offshore:release": "node --import tsx scripts/check-offshore-release.mjs",
+    "check:palace:release": "node --import tsx scripts/check-palace-release.mjs",
+    "shot:palace": "node scripts/shot-palace.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

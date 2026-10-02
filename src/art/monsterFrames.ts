@@ -1,17 +1,8 @@
+import { SPECIES } from "../data/species";
 import { getSpriteImage } from "../engine/assets";
 import type { Screen } from "../engine/screen";
 
-export const ANIMATED_MONSTERS = new Set<string>([
-  "giorgetta", "ellyna", "renzino", "giorgiagon", "schleinix", "renzilla",
-  "salvinott", "grillix", "contemorfo", "calendauro", "vannaccix", "tajanide",
-  "capitanone", "mattarellux", "draghimon", "berlusconix", "trumpon", "ursulax",
-  "muskrat", "putingrad", "macronfox", "zelenskir", "xipanda", "bojoon",
-  "salvinator", "bunkerput", "vaffenix", "movimenton", "marsrat", "mediocrate",
-  "pontigor", "conteblob", "calendrone", "generorso", "futurorso", "gianimago",
-  "quasimagiani", "crosettank", "fratocorno", "campocorno", "nordiodo",
-  "referendodo", "tajacolomba", "telecrate", "pontimax", "verdolino", "ecoverdon",
-  "contepop", "salvinurlo", "verdoribelle", "salistrobo", "salisound"
-]);
+export const ANIMATED_MONSTERS = new Set<string>(Object.keys(SPECIES));
 export const MONSTER_FRAME_SIZE = 64;
 
 export function monsterFramesImage(id: string): HTMLImageElement | null {

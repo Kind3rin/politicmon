@@ -20493,5 +20493,28 @@
     "cause": "Exact cause of timeout not isolated; activation timing is close to the old test deadline. No production worker changes were made.",
     "verificationChange": "First-install test timeout now 30s; all remaining stage deadlines unchanged. Final Pixel 7 run activated at 13320ms and passed the complete offline test.",
     "verifierSha256": "5d96ca9d035e486ea766cbc4a6f342586baf92ef0963e1d07aa1ab92e1d84f92"
+  },
+  "documentationFollowup": {
+    "commit": "cc548e936bd8c8966acd285c67438f6121c661ed",
+    "ciRunId": 36999810028,
+    "ciConclusion": "success",
+    "deploys": [
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-link-check/4WXMxEyarn5smw7xpnL1YQezHA9V"
+      },
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon/pYd9rDiV8BrnMUsAc4zVsdF52XVa"
+      },
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-test-link/3TRayVu3MiosRL9Kna5XCb48uSw5"
+      }
+    ],
+    "publicChecksumLogSha256": "252854a6bf9c8ca35e3a62b14e78ca46bf7d2168913bfd5166444801dd673252"
   }
 }

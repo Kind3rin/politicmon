@@ -1,0 +1,2010 @@
+{
+  "date": "2026-10-02",
+  "scope": "Pre-redesign baseline of Temptation Diplomacy. Existing hotel assets and automatic sight challenge remain pending redesign.",
+  "runtimeSourceCommit": "cc548e936bd8c8966acd285c67438f6121c661ed",
+  "harness": "scripts/play-campaign-native.mjs",
+  "harnessSha256": "f10e3b8ce07829f0b97050ebca0780e1189ecda0e567394e36080e55653b6bbe",
+  "campaigns": [
+    {
+      "report": "artifacts/campaign-native/diplomacy-audit-ellyna-direct-20261002.json",
+      "reportSha256": "e228a3a4a2599540ece31ef49908bf7e6e6fd821d8f03e2620ee6cb583142d44",
+      "parentReport": "artifacts/campaign-native/future-final-ellyna-direct-20261002.json",
+      "parentReportSha256": "30ee05803539eb50f6daf065d916442f8a58213927f0a15c0a799e0ba82521b4",
+      "parentStage": "future-diplomacy",
+      "parentCodeSha256": "bc332b6935252a1d3bec71f0b536bbd28f59c447343207dec5d5619e3e1a20ce",
+      "elapsedSettlingSeconds": 0.3999999999996362,
+      "starter": "ellyna",
+      "plan": "autonomy",
+      "seed": 20261002,
+      "segmentReseeds": true,
+      "difficulty": "normal",
+      "milestoneCodeSha256s": {
+        "diplomacy-earned-resume": "c06db7c6051676b8163e31d8f09dc54e2617ebd1cee19c986a2d365f8e174aef",
+        "diplomacy-arrival": "0fa452272d6d5b42cc38d80378c20396fe2da3adca01e519feb713b0eae39da4",
+        "diplomacy_loyalty": "00def4041200abd3bac13dc0c022759cd02625cb61ae214273042cfada11a177",
+        "diplomacy_autonomy": "5cfcd42704e5bf8bfcb4488560982fbf64a5d5dc21d9c6588ea9d50d4e4b7496",
+        "diplomacy_home": "c9efdf1aa31d85be593343d1bb7c9f4165ea0c769f22cee9d10f1970a71a7d3e",
+        "diplomacy-choice": "65d7a812d8e9e1835bd6bb8dd93f2b7252aef32b1793c2e7cdfa218b57aaa2b4",
+        "diplomacy-boss-1": "9ebda526088a7dfc602ce039333c8edcad1de311f5568e8c0c5f4fba009e27ff",
+        "diplomacy-verbale": "dbdd4990c9a867bf54f0c83e42bf6c0c7e35f98daa55c333998c32942b4c721b",
+        "diplomacy-tour": "325e2cea2ca5430456368ac2f4994dcd7ef0439b20e3ac863ae00dc09f33bf6d"
+      },
+      "battles": [
+        {
+          "trainer": "partner-perfetto",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 52,
+              "exp": 139526,
+              "uid": "mmuqvg33f1"
+            },
+            {
+              "id": "ursulax",
+              "level": 53,
+              "exp": 147191,
+              "uid": "mmuqvg33f2"
+            },
+            {
+              "id": "trumpon",
+              "level": 54,
+              "exp": 155131,
+              "uid": "mmuqvg33f3"
+            }
+          ],
+          "deployed": [
+            {
+              "uid": "mmuqmmqg03",
+              "id": "muskrat",
+              "level": 46
+            },
+            {
+              "uid": "mmuqj6ie417",
+              "id": "telecrate",
+              "level": 44
+            },
+            {
+              "uid": "mmuqj6hdb8",
+              "id": "movimenton",
+              "level": 47
+            }
+          ],
+          "before": {
+            "party": [
+              {
+                "id": "muskrat",
+                "level": 46,
+                "hp": 149,
+                "exp": 99435,
+                "uid": "mmuqmmqg03"
+              },
+              {
+                "id": "telecrate",
+                "level": 43,
+                "hp": 162,
+                "exp": 85872,
+                "uid": "mmuqj6ie417"
+              },
+              {
+                "id": "schleinix",
+                "level": 46,
+                "hp": 162,
+                "exp": 101104,
+                "uid": "mmuqj6gp61"
+              },
+              {
+                "id": "movimenton",
+                "level": 47,
+                "hp": 176,
+                "exp": 107046,
+                "uid": "mmuqj6hdb8"
+              },
+              {
+                "id": "putingrad",
+                "level": 47,
+                "hp": 187,
+                "exp": 105328,
+                "uid": "mmuqmmqgq4"
+              },
+              {
+                "id": "generorso",
+                "level": 46,
+                "hp": 181,
+                "exp": 99497,
+                "uid": "mmuqj6h9w6"
+              }
+            ],
+            "bag": {
+              "caffe": 3,
+              "scheda": 7,
+              "maalox": 4,
+              "spritz": 0,
+              "divisa": 1,
+              "dirBunga": 1,
+              "schedona": 15,
+              "mojito": 5,
+              "tessera": 3,
+              "dirWhatever": 1,
+              "tessera_futuro": 1
+            },
+            "money": 57022
+          },
+          "outcome": "win",
+          "announcedConsensus": 12412,
+          "recipientUid": "mmuqj6hdb8",
+          "after": {
+            "party": [
+              {
+                "id": "muskrat",
+                "level": 47,
+                "hp": 99,
+                "exp": 107315,
+                "uid": "mmuqmmqg03"
+              },
+              {
+                "id": "telecrate",
+                "level": 45,
+                "hp": 98,
+                "exp": 94224,
+                "uid": "mmuqj6ie417"
+              },
+              {
+                "id": "schleinix",
+                "level": 47,
+                "hp": 165,
+                "exp": 107309,
+                "uid": "mmuqj6gp61"
+              },
+              {
+                "id": "movimenton",
+                "level": 48,
+                "hp": 70,
+                "exp": 115636,
+                "uid": "mmuqj6hdb8"
+              },
+              {
+                "id": "putingrad",
+                "level": 48,
+                "hp": 191,
+                "exp": 111533,
+                "uid": "mmuqmmqgq4"
+              },
+              {
+                "id": "generorso",
+                "level": 47,
+                "hp": 185,
+                "exp": 105702,
+                "uid": "mmuqj6h9w6"
+              }
+            ],
+            "bag": {
+              "caffe": 0,
+              "scheda": 7,
+              "maalox": 4,
+              "spritz": 0,
+              "divisa": 1,
+              "dirBunga": 1,
+              "schedona": 17,
+              "mojito": 4,
+              "tessera": 3,
+              "dirWhatever": 1,
+              "tessera_futuro": 1
+            },
+            "money": 59726
+          }
+        }
+      ],
+      "narrative": [
+        {
+          "map": "campo_largo",
+          "lines": [
+            "AMBULATORIO VOLONTARIO.",
+            "CURO I POLITICMON. LE FRATTURE POLITICHE LE MANDA IL RETROPALCO."
+          ],
+          "trust": 68,
+          "cohesion": 66
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."
+          ],
+          "trust": 68,
+          "cohesion": 66
+        },
+        {
+          "map": "diplomacy_lobby",
+          "lines": [
+            "HOST: un selfie, tre sovranità.",
+            "VISITA LE STANZE FEDELTÀ, AUTONOMIA E CONSENSO. OGNI PORTA MOSTRA IL PREZZO."
+          ],
+          "trust": 68,
+          "cohesion": 66
+        },
+        {
+          "map": "diplomacy_autonomy",
+          "lines": [
+            "LA SCELTA È GIÀ IN ONDA.",
+            "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."
+          ],
+          "trust": 68,
+          "cohesion": 72
+        },
+        {
+          "map": "diplomacy_home",
+          "lines": [
+            "LA SCELTA È GIÀ IN ONDA.",
+            "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."
+          ],
+          "trust": 68,
+          "cohesion": 72
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "AMBULATORIO VOLONTARIO.",
+            "CURO I POLITICMON. LE FRATTURE POLITICHE LE MANDA IL RETROPALCO."
+          ],
+          "trust": 68,
+          "cohesion": 72
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."
+          ],
+          "trust": 68,
+          "cohesion": 72
+        },
+        {
+          "map": "diplomacy_terrace",
+          "lines": [
+            "IL PARTNER PERFETTO ti ha notato!"
+          ],
+          "trust": 68,
+          "cohesion": 72
+        }
+      ],
+      "final": {
+        "map": "tour_feed",
+        "money": 59726,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "ach:plebiscito": true,
+          "ach:tycoon": true,
+          "ach:collector": true,
+          "ach:three-badges": true,
+          "hint-casino": true,
+          "tm-hint": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "boss-beaten": true,
+          "garante-beaten": true,
+          "crisi-gov-day:2026-10-02": true,
+          "hint-offshore": true,
+          "offshore-beaten": true,
+          "hint-brux-arrivo": true,
+          "ue-beaten": true,
+          "atto3-invited": true,
+          "atto3Started": true,
+          "coalition-candidate-seen:campo_secretary": true,
+          "coalition-candidate-seen:quantum_centrist": true,
+          "coalition-candidate-seen:civic_mayor": true,
+          "atto3-photo-choice:stringetevi": true,
+          "campo-photo-choice-complete": true,
+          "campo-debate-resolved": true,
+          "campo-photo-complete": true,
+          "coalition-menu-unlocked": true,
+          "cornice-impossibile": true,
+          "feed-dossier-1": true,
+          "future-chapter-unlocked": true,
+          "future-badge-received": true,
+          "future-split-reviewed": true,
+          "future-brand-reviewed": true,
+          "future-lever-a-on": true,
+          "future-lever-b-on": true,
+          "future-shortcut-open": true,
+          "future-choice-complete": true,
+          "a3.future.ally": true,
+          "futuro-anteriore-beaten": true,
+          "futureResolved": true,
+          "futurorso-branch-unlocked": true,
+          "feed-dossier-nord": true,
+          "diplomacy-checked-in": true,
+          "diplomacy-choice-complete": true,
+          "a3.diplomacy.autonomy": true,
+          "reconcile-token:campo_secretary:v1": true,
+          "reconcile-used:campo_secretary:v1": true,
+          "diplomacyComplete": true,
+          "temptation-diplomacy-beaten": true,
+          "tour-feed-unlocked": true,
+          "diplomacy-clip-viral": true
+        },
+        "morale": {
+          "trust": 68,
+          "cohesion": 72,
+          "progress": 35,
+          "promises": [
+            {
+              "id": "traghetto",
+              "dueAt": 16,
+              "status": "kept"
+            }
+          ],
+          "decisions": [
+            "traghetto",
+            "traghetto:pay"
+          ],
+          "history": [
+            {
+              "label": "MANTENUTA: MOLO ACCESSIBILE",
+              "trust": 12,
+              "cohesion": 6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "ALLEANZA: PATTI",
+              "trust": 0,
+              "cohesion": -8
+            },
+            {
+              "label": "AUTONOMIA: PATTI",
+              "trust": 0,
+              "cohesion": 6
+            }
+          ]
+        },
+        "coalition": {
+          "members": [
+            {
+              "allyId": "campo_secretary",
+              "status": "reconciled",
+              "violationCount": 1,
+              "reconciliationSpent": true
+            },
+            {
+              "allyId": "quantum_centrist",
+              "status": "allied",
+              "violationCount": 0,
+              "reconciliationSpent": false
+            },
+            {
+              "allyId": "generorso",
+              "status": "allied",
+              "violationCount": 0,
+              "reconciliationSpent": false
+            }
+          ],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "tour",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "aide",
+          "journalist",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3",
+          "garante",
+          "commercialista",
+          "prestanome",
+          "tesoriere",
+          "eu-relatore",
+          "eu-eurodeputato",
+          "eu-commissario",
+          "eu-lobby",
+          "commissione",
+          "campo-debate",
+          "campo-claque",
+          "campo-photographer",
+          "futuro-anteriore",
+          "partner-perfetto"
+        ],
+        "party": [
+          {
+            "id": "muskrat",
+            "level": 47,
+            "hp": 99,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "memedoge",
+                "pp": 10
+              },
+              {
+                "id": "grafico",
+                "pp": 25
+              },
+              {
+                "id": "razzox",
+                "pp": 4
+              },
+              {
+                "id": "spread",
+                "pp": 14
+              }
+            ]
+          },
+          {
+            "id": "telecrate",
+            "level": 45,
+            "hp": 98,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "bunga",
+                "pp": 0
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              },
+              {
+                "id": "editoriale",
+                "pp": 9
+              }
+            ]
+          },
+          {
+            "id": "schleinix",
+            "level": 47,
+            "hp": 165,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "transizione",
+                "pp": 10
+              },
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "piazza",
+                "pp": 15
+              },
+              {
+                "id": "scissione",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 48,
+            "hp": 70,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "redditone",
+                "pp": 9
+              },
+              {
+                "id": "vaffa",
+                "pp": 3
+              },
+              {
+                "id": "fiducia",
+                "pp": 19
+              }
+            ]
+          },
+          {
+            "id": "putingrad",
+            "level": 48,
+            "hp": 191,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "tavololungo",
+                "pp": 10
+              },
+              {
+                "id": "gasdotto",
+                "pp": 10
+              },
+              {
+                "id": "dossier",
+                "pp": 15
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "generorso",
+            "level": 47,
+            "hp": 185,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "dazilampo",
+                "pp": 10
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "iosonogiorgia",
+                "pp": 10
+              },
+              {
+                "id": "fiammatricolore",
+                "pp": 10
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 7,
+          "maalox": 4,
+          "spritz": 0,
+          "divisa": 1,
+          "dirBunga": 1,
+          "schedona": 17,
+          "mojito": 4,
+          "tessera": 3,
+          "dirWhatever": 1,
+          "tessera_futuro": 1
+        },
+        "runStats": {
+          "playSeconds": 3466.299999997943,
+          "steps": 2345,
+          "battles": 49,
+          "wins": 44,
+          "losses": 0,
+          "captures": 5,
+          "runs": 0,
+          "partyKOs": 15,
+          "healingItemsUsed": 71,
+          "healerVisits": 58,
+          "checkpoints": {}
+        }
+      },
+      "checks": [
+        "Earned source code imported; only playSeconds changed during settling.",
+        "One native Partner victory; no injected party, funds, items or victory flags.",
+        "All three rooms visited; native Campo HP/PP care before the fight.",
+        "Chosen cohesion change; civic trust and promise ledger retained.",
+        "Victory reset five election districts independently of morale.",
+        "Native terrace exit and unlocked Tour reached."
+      ]
+    },
+    {
+      "report": "artifacts/campaign-native/diplomacy-audit-renzino-direct-20261002.json",
+      "reportSha256": "6c8b7a3fb78a2025ea8a22db1ade31a59f309277992aca9f8af8574a5776c46f",
+      "parentReport": "artifacts/campaign-native/future-final-renzino-direct-20261002.json",
+      "parentReportSha256": "ed8cb0c069f13e04f21289fcbdc380a15ac8fca05bea6bb47b01616d7798d219",
+      "parentStage": "future-diplomacy",
+      "parentCodeSha256": "68b337188f907b5b6a439e6b330edf08c768d793d883f1098c6e376c0d791fdd",
+      "elapsedSettlingSeconds": 0.3999999999996362,
+      "starter": "renzino",
+      "plan": "loyalty",
+      "seed": 20261002,
+      "segmentReseeds": true,
+      "difficulty": "normal",
+      "milestoneCodeSha256s": {
+        "diplomacy-earned-resume": "80013ad0450ea4af5516a69685330f17665bf095477576cfaa961da4e19fc68f",
+        "diplomacy-arrival": "41c29975231cbad287cca147bc75679548cc22a73d7da9fbc0cb9228aab428b5",
+        "diplomacy_loyalty": "03d2c4c5e3af4638e935693b0597fc2806c3dfdf62a1feb95d3e7bf38dd40bae",
+        "diplomacy_autonomy": "689c7969ad4552a9f1ee4b7b333c0479feece872e4260747a69bf08e9def7c4b",
+        "diplomacy_home": "53f2659c83e15bca24117e3bb538047c1a11f3084e743f3b6f5531bdebf2498d",
+        "diplomacy-choice": "187a60fb2754a2ee8ef5b94208f62b6b71d489a02547b3f30a5010a1dac3dea1",
+        "diplomacy-boss-1": "a6f8f84e81322e772c99cc87bf0402e6c26b7332fe9fa803b3f9cebaf7224713",
+        "diplomacy-verbale": "7022a07b3eef9d50daef307f4b266648b9b14dbd845af923a6d26062ea12880d",
+        "diplomacy-tour": "2a3f9d157cae07faffd77114a381e35826e062f62d4953ba10496baf00bc9c71"
+      },
+      "battles": [
+        {
+          "trainer": "partner-perfetto",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 52,
+              "exp": 139526,
+              "uid": "mmuqvg33e1"
+            },
+            {
+              "id": "ursulax",
+              "level": 53,
+              "exp": 147191,
+              "uid": "mmuqvg33e2"
+            },
+            {
+              "id": "trumpon",
+              "level": 54,
+              "exp": 155131,
+              "uid": "mmuqvg33e3"
+            }
+          ],
+          "deployed": [
+            {
+              "uid": "mmuqmsqst2",
+              "id": "pontimax",
+              "level": 54
+            },
+            {
+              "uid": "mmuqmsqtb3",
+              "id": "xipanda",
+              "level": 50
+            }
+          ],
+          "before": {
+            "party": [
+              {
+                "id": "pontimax",
+                "level": 54,
+                "hp": 249,
+                "exp": 158956,
+                "uid": "mmuqmsqst2"
+              },
+              {
+                "id": "xipanda",
+                "level": 50,
+                "hp": 196,
+                "exp": 125071,
+                "uid": "mmuqmsqtb3"
+              },
+              {
+                "id": "capitanone",
+                "level": 45,
+                "hp": 177,
+                "exp": 93636,
+                "uid": "mmuqj9yw67"
+              },
+              {
+                "id": "renzilla",
+                "level": 45,
+                "hp": 154,
+                "exp": 97440,
+                "uid": "mmuqj9y2q1"
+              },
+              {
+                "id": "movimenton",
+                "level": 43,
+                "hp": 162,
+                "exp": 83704,
+                "uid": "mmuqj9yue6"
+              },
+              {
+                "id": "generorso",
+                "level": 43,
+                "hp": 170,
+                "exp": 82763,
+                "uid": "mmuqj9zve14"
+              }
+            ],
+            "bag": {
+              "caffe": 0,
+              "scheda": 2,
+              "maalox": 4,
+              "divisa": 1,
+              "schedona": 16,
+              "dirBunga": 1,
+              "tessera": 3,
+              "spritz": 2,
+              "mojito": 6,
+              "dirWhatever": 1,
+              "tessera_futuro": 1
+            },
+            "money": 56240
+          },
+          "outcome": "win",
+          "announcedConsensus": 11493,
+          "recipientUid": "mmuqmsqtb3",
+          "after": {
+            "party": [
+              {
+                "id": "pontimax",
+                "level": 55,
+                "hp": 128,
+                "exp": 164044,
+                "uid": "mmuqmsqst2"
+              },
+              {
+                "id": "xipanda",
+                "level": 51,
+                "hp": 70,
+                "exp": 135013,
+                "uid": "mmuqmsqtb3"
+              },
+              {
+                "id": "capitanone",
+                "level": 46,
+                "hp": 181,
+                "exp": 99381,
+                "uid": "mmuqj9yw67"
+              },
+              {
+                "id": "renzilla",
+                "level": 46,
+                "hp": 157,
+                "exp": 103185,
+                "uid": "mmuqj9y2q1"
+              },
+              {
+                "id": "movimenton",
+                "level": 44,
+                "hp": 166,
+                "exp": 89449,
+                "uid": "mmuqj9yue6"
+              },
+              {
+                "id": "generorso",
+                "level": 44,
+                "hp": 174,
+                "exp": 88508,
+                "uid": "mmuqj9zve14"
+              }
+            ],
+            "bag": {
+              "caffe": 0,
+              "scheda": 4,
+              "maalox": 4,
+              "divisa": 1,
+              "schedona": 18,
+              "dirBunga": 1,
+              "tessera": 3,
+              "spritz": 1,
+              "mojito": 6,
+              "dirWhatever": 1,
+              "tessera_futuro": 1
+            },
+            "money": 58606
+          }
+        }
+      ],
+      "narrative": [
+        {
+          "map": "campo_largo",
+          "lines": [
+            "AMBULATORIO VOLONTARIO.",
+            "CURO I POLITICMON. LE FRATTURE POLITICHE LE MANDA IL RETROPALCO."
+          ],
+          "trust": 80,
+          "cohesion": 56
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."
+          ],
+          "trust": 80,
+          "cohesion": 56
+        },
+        {
+          "map": "diplomacy_lobby",
+          "lines": [
+            "HOST: un selfie, tre sovranità.",
+            "VISITA LE STANZE FEDELTÀ, AUTONOMIA E CONSENSO. OGNI PORTA MOSTRA IL PREZZO."
+          ],
+          "trust": 80,
+          "cohesion": 56
+        },
+        {
+          "map": "diplomacy_autonomy",
+          "lines": [
+            "LA SCELTA È GIÀ IN ONDA.",
+            "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."
+          ],
+          "trust": 80,
+          "cohesion": 48
+        },
+        {
+          "map": "diplomacy_home",
+          "lines": [
+            "LA SCELTA È GIÀ IN ONDA.",
+            "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."
+          ],
+          "trust": 80,
+          "cohesion": 48
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "AMBULATORIO VOLONTARIO.",
+            "CURO I POLITICMON. LE FRATTURE POLITICHE LE MANDA IL RETROPALCO."
+          ],
+          "trust": 80,
+          "cohesion": 48
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."
+          ],
+          "trust": 80,
+          "cohesion": 48
+        },
+        {
+          "map": "diplomacy_terrace",
+          "lines": [
+            "IL PARTNER PERFETTO ti ha notato!"
+          ],
+          "trust": 80,
+          "cohesion": 48
+        }
+      ],
+      "final": {
+        "map": "tour_feed",
+        "money": 58606,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "ach:plebiscito": true,
+          "ach:collector": true,
+          "ach:three-badges": true,
+          "ach:tycoon": true,
+          "hint-casino": true,
+          "tm-hint": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "boss-beaten": true,
+          "garante-beaten": true,
+          "crisi-gov-day:2026-10-02": true,
+          "hint-offshore": true,
+          "offshore-beaten": true,
+          "hint-brux-arrivo": true,
+          "ue-beaten": true,
+          "atto3-invited": true,
+          "atto3Started": true,
+          "coalition-candidate-seen:campo_secretary": true,
+          "coalition-candidate-seen:quantum_centrist": true,
+          "coalition-candidate-seen:civic_mayor": true,
+          "atto3-photo-choice:panoramica": true,
+          "campo-photo-choice-complete": true,
+          "campo-debate-resolved": true,
+          "campo-photo-complete": true,
+          "coalition-menu-unlocked": true,
+          "cornice-impossibile": true,
+          "feed-dossier-1": true,
+          "future-chapter-unlocked": true,
+          "future-badge-received": true,
+          "future-split-reviewed": true,
+          "future-brand-reviewed": true,
+          "future-lever-a-on": true,
+          "future-lever-b-on": true,
+          "future-shortcut-open": true,
+          "future-choice-complete": true,
+          "a3.future.oppose": true,
+          "coalition-broken:quantum_centrist": true,
+          "futuro-anteriore-beaten": true,
+          "futureResolved": true,
+          "futurorso-branch-unlocked": true,
+          "feed-dossier-nord": true,
+          "diplomacy-checked-in": true,
+          "diplomacy-choice-complete": true,
+          "a3.diplomacy.loyalty": true,
+          "pass-vertice": true,
+          "diplomacyComplete": true,
+          "temptation-diplomacy-beaten": true,
+          "tour-feed-unlocked": true,
+          "diplomacy-clip-viral": true
+        },
+        "morale": {
+          "trust": 80,
+          "cohesion": 48,
+          "progress": 33,
+          "promises": [
+            {
+              "id": "bus",
+              "dueAt": 4,
+              "status": "kept"
+            },
+            {
+              "id": "traghetto",
+              "dueAt": 15,
+              "status": "kept"
+            }
+          ],
+          "decisions": [
+            "bus",
+            "bus:pay",
+            "traghetto",
+            "traghetto:pay"
+          ],
+          "history": [
+            {
+              "label": "MANTENUTA: CORSA DEL BORGO",
+              "trust": 12,
+              "cohesion": 6
+            },
+            {
+              "label": "MANTENUTA: MOLO ACCESSIBILE",
+              "trust": 12,
+              "cohesion": 6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            },
+            {
+              "label": "PANORAMICA: PATTI",
+              "trust": 0,
+              "cohesion": -8
+            },
+            {
+              "label": "CONTRASTO: PATTI",
+              "trust": 0,
+              "cohesion": -16
+            },
+            {
+              "label": "FEDELTÀ: PATTI",
+              "trust": 0,
+              "cohesion": -8
+            }
+          ]
+        },
+        "coalition": {
+          "members": [
+            {
+              "allyId": "campo_secretary",
+              "status": "strained",
+              "violationCount": 1,
+              "reconciliationSpent": false
+            }
+          ],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "tour",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "aide",
+          "journalist",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3",
+          "garante",
+          "commercialista",
+          "prestanome",
+          "tesoriere",
+          "eu-relatore",
+          "eu-eurodeputato",
+          "eu-commissario",
+          "eu-lobby",
+          "commissione",
+          "campo-debate",
+          "campo-photographer",
+          "futuro-anteriore",
+          "partner-perfetto"
+        ],
+        "party": [
+          {
+            "id": "pontimax",
+            "level": 55,
+            "hp": 128,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "grafico",
+                "pp": 24
+              },
+              {
+                "id": "spread",
+                "pp": 13
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "xipanda",
+            "level": 51,
+            "hp": 70,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "oscuramento",
+                "pp": 10
+              },
+              {
+                "id": "viadellaseta",
+                "pp": 0
+              },
+              {
+                "id": "spread",
+                "pp": 8
+              },
+              {
+                "id": "fiducia",
+                "pp": 18
+              }
+            ]
+          },
+          {
+            "id": "capitanone",
+            "level": 46,
+            "hp": 181,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "dazilampo",
+                "pp": 10
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "mojito",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "renzilla",
+            "level": 46,
+            "hp": 157,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "inciucio",
+                "pp": 15
+              },
+              {
+                "id": "rottamazione",
+                "pp": 10
+              },
+              {
+                "id": "editoriale",
+                "pp": 10
+              },
+              {
+                "id": "staisereno",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "movimenton",
+            "level": 44,
+            "hp": 166,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "articolouno",
+                "pp": 15
+              },
+              {
+                "id": "redditone",
+                "pp": 10
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              },
+              {
+                "id": "fiducia",
+                "pp": 20
+              }
+            ]
+          },
+          {
+            "id": "generorso",
+            "level": 44,
+            "hp": 174,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "dazilampo",
+                "pp": 10
+              },
+              {
+                "id": "fiammatricolore",
+                "pp": 10
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "iosonogiorgia",
+                "pp": 10
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 0,
+          "scheda": 4,
+          "maalox": 4,
+          "divisa": 1,
+          "schedona": 18,
+          "dirBunga": 1,
+          "tessera": 3,
+          "spritz": 1,
+          "mojito": 6,
+          "dirWhatever": 1,
+          "tessera_futuro": 1
+        },
+        "runStats": {
+          "playSeconds": 3374.4999999980264,
+          "steps": 2259,
+          "battles": 44,
+          "wins": 38,
+          "losses": 1,
+          "captures": 5,
+          "runs": 0,
+          "partyKOs": 16,
+          "healingItemsUsed": 46,
+          "healerVisits": 57,
+          "checkpoints": {}
+        }
+      },
+      "checks": [
+        "Earned source code imported; only playSeconds changed during settling.",
+        "One native Partner victory; no injected party, funds, items or victory flags.",
+        "All three rooms visited; native Campo HP/PP care before the fight.",
+        "Chosen cohesion change; civic trust and promise ledger retained.",
+        "Victory reset five election districts independently of morale.",
+        "Native terrace exit and unlocked Tour reached."
+      ]
+    },
+    {
+      "report": "artifacts/campaign-native/diplomacy-audit-giorgetta-direct-20261002.json",
+      "reportSha256": "ade8fe4d64447d01ade955874968625419993147abe797cf92eb502cb64e8a00",
+      "parentReport": "artifacts/campaign-native/future-final-giorgetta-direct-20261002.json",
+      "parentReportSha256": "9da81706f3b2b300668642e9cf4089e2f311ea6acde2c9b2582f2d8bcf1ea085",
+      "parentStage": "future-diplomacy",
+      "parentCodeSha256": "22e46649b746dc9f14cbe64f7e671212d3d264380aacc1b25283ec3a85672158",
+      "elapsedSettlingSeconds": 0.3999999999996362,
+      "starter": "giorgetta",
+      "plan": "home",
+      "seed": 20261002,
+      "segmentReseeds": true,
+      "difficulty": "normal",
+      "milestoneCodeSha256s": {
+        "diplomacy-earned-resume": "9786787c878274cdf9bee3e8d690fba5b2966525826ed3eeb10cb370bc4d0d70",
+        "diplomacy-arrival": "235ce67bad780ce602a00145498f480dc7e32e7bd2015f4fd76a386ba5c113fa",
+        "diplomacy_loyalty": "47c878913d6cfee2271f3ea521439d792bc7ff17331dc92644afc6cbaf30ad60",
+        "diplomacy_autonomy": "fc3060967205fb12e4397e10a25f50add016a8f9b9259d21be727590b3d7bf28",
+        "diplomacy_home": "7192fa2f5a9bf948ecf5de1d5b65389fcd9b8d820547f7cce0d299a71e5dedc6",
+        "diplomacy-choice": "af0651a86c27134bdd1c9b8d01681ed729019c0f9f3562d027fd340e9be31192",
+        "diplomacy-boss-1": "828f1045feb7409a78ec7233dff53e1c2c60e5a6e1536535931ac2515d78cbff",
+        "diplomacy-verbale": "46a4df054c175362e45e480c7a2b0a01fff930e1faa3356e57beeac9f74e9601",
+        "diplomacy-tour": "09728ab5ee14a46e13dd565be0ada8aa16871da6ce52501878f3ed2e17dd19c6"
+      },
+      "battles": [
+        {
+          "trainer": "partner-perfetto",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 52,
+              "exp": 139526,
+              "uid": "mmuqvg33e1"
+            },
+            {
+              "id": "ursulax",
+              "level": 53,
+              "exp": 147191,
+              "uid": "mmuqvg33e2"
+            },
+            {
+              "id": "trumpon",
+              "level": 54,
+              "exp": 155131,
+              "uid": "mmuqvg33e3"
+            }
+          ],
+          "deployed": [
+            {
+              "uid": "mmuqmsqsf2",
+              "id": "pontimax",
+              "level": 54
+            },
+            {
+              "uid": "mmuqmsqt63",
+              "id": "xipanda",
+              "level": 45
+            }
+          ],
+          "before": {
+            "party": [
+              {
+                "id": "pontimax",
+                "level": 54,
+                "hp": 249,
+                "exp": 159041,
+                "uid": "mmuqmsqsf2"
+              },
+              {
+                "id": "generorso",
+                "level": 44,
+                "hp": 174,
+                "exp": 87846,
+                "uid": "mmuqjerpo6"
+              },
+              {
+                "id": "giorgiagon",
+                "level": 45,
+                "hp": 161,
+                "exp": 94157,
+                "uid": "mmuqjeqxy1"
+              },
+              {
+                "id": "telecrate",
+                "level": 41,
+                "hp": 155,
+                "exp": 74758,
+                "uid": "mmuqjesrx14"
+              },
+              {
+                "id": "conteblob",
+                "level": 43,
+                "hp": 162,
+                "exp": 83410,
+                "uid": "mmuqjerr17"
+              },
+              {
+                "id": "xipanda",
+                "level": 45,
+                "hp": 177,
+                "exp": 96727,
+                "uid": "mmuqmsqt63"
+              }
+            ],
+            "bag": {
+              "caffe": 3,
+              "scheda": 0,
+              "maalox": 6,
+              "divisa": 1,
+              "dirBunga": 1,
+              "spritz": 7,
+              "schedona": 14,
+              "mojito": 4,
+              "gilet": 0,
+              "tessera": 4,
+              "dirWhatever": 1,
+              "tessera_futuro": 1
+            },
+            "money": 48422
+          },
+          "outcome": "win",
+          "announcedConsensus": 11493,
+          "recipientUid": "mmuqmsqt63",
+          "after": {
+            "party": [
+              {
+                "id": "pontimax",
+                "level": 55,
+                "hp": 146,
+                "exp": 164129,
+                "uid": "mmuqmsqsf2"
+              },
+              {
+                "id": "generorso",
+                "level": 45,
+                "hp": 177,
+                "exp": 93591,
+                "uid": "mmuqjerpo6"
+              },
+              {
+                "id": "giorgiagon",
+                "level": 46,
+                "hp": 164,
+                "exp": 99902,
+                "uid": "mmuqjeqxy1"
+              },
+              {
+                "id": "telecrate",
+                "level": 42,
+                "hp": 159,
+                "exp": 80503,
+                "uid": "mmuqjesrx14"
+              },
+              {
+                "id": "conteblob",
+                "level": 44,
+                "hp": 166,
+                "exp": 89155,
+                "uid": "mmuqjerr17"
+              },
+              {
+                "id": "xipanda",
+                "level": 47,
+                "hp": 24,
+                "exp": 106669,
+                "uid": "mmuqmsqt63"
+              }
+            ],
+            "bag": {
+              "caffe": 3,
+              "scheda": 0,
+              "maalox": 6,
+              "divisa": 1,
+              "dirBunga": 1,
+              "spritz": 6,
+              "schedona": 16,
+              "mojito": 4,
+              "gilet": 0,
+              "tessera": 4,
+              "dirWhatever": 1,
+              "tessera_futuro": 1
+            },
+            "money": 50866
+          }
+        }
+      ],
+      "narrative": [
+        {
+          "map": "campo_largo",
+          "lines": [
+            "AMBULATORIO VOLONTARIO.",
+            "CURO I POLITICMON. LE FRATTURE POLITICHE LE MANDA IL RETROPALCO."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "diplomacy_lobby",
+          "lines": [
+            "HOST: un selfie, tre sovranità.",
+            "VISITA LE STANZE FEDELTÀ, AUTONOMIA E CONSENSO. OGNI PORTA MOSTRA IL PREZZO."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "diplomacy_autonomy",
+          "lines": [
+            "LA SCELTA È GIÀ IN ONDA.",
+            "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "diplomacy_home",
+          "lines": [
+            "LA SCELTA È GIÀ IN ONDA.",
+            "LE ALTRE DUE PORTE SONO DIVENTATE OPINIONI PERSONALI."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "AMBULATORIO VOLONTARIO.",
+            "CURO I POLITICMON. LE FRATTURE POLITICHE LE MANDA IL RETROPALCO."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "campo_largo",
+          "lines": [
+            "PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        },
+        {
+          "map": "diplomacy_terrace",
+          "lines": [
+            "IL PARTNER PERFETTO ti ha notato!"
+          ],
+          "trust": 36,
+          "cohesion": 56
+        }
+      ],
+      "final": {
+        "map": "tour_feed",
+        "money": 50866,
+        "badges": [
+          "auditel",
+          "spread",
+          "dazio"
+        ],
+        "flags": {
+          "intro-done": true,
+          "starter-chosen": true,
+          "rival1-beaten": true,
+          "dex-received": true,
+          "ach:first-blood": true,
+          "gift-tipografo": true,
+          "heal-hint": true,
+          "gift-divisa": true,
+          "ach:first-catch": true,
+          "ach:plebiscito": true,
+          "legend-berlusconix-ready": true,
+          "ach:first-badge": true,
+          "ach:collector": true,
+          "ach:tycoon": true,
+          "ach:three-badges": true,
+          "hint-casino": true,
+          "tm-hint": true,
+          "veh-traghetto": true,
+          "ponte-beaten": true,
+          "gift-ingegnere": true,
+          "boss-beaten": true,
+          "garante-beaten": true,
+          "crisi-gov-day:2026-10-02": true,
+          "hint-offshore": true,
+          "offshore-beaten": true,
+          "hint-brux-arrivo": true,
+          "ue-beaten": true,
+          "atto3-invited": true,
+          "atto3Started": true,
+          "coalition-candidate-seen:campo_secretary": true,
+          "coalition-candidate-seen:quantum_centrist": true,
+          "coalition-candidate-seen:civic_mayor": true,
+          "atto3-photo-choice:panoramica": true,
+          "campo-photo-choice-complete": true,
+          "campo-debate-resolved": true,
+          "campo-photo-complete": true,
+          "coalition-menu-unlocked": true,
+          "cornice-impossibile": true,
+          "feed-dossier-1": true,
+          "future-chapter-unlocked": true,
+          "future-badge-received": true,
+          "future-split-reviewed": true,
+          "future-brand-reviewed": true,
+          "future-lever-a-on": true,
+          "future-lever-b-on": true,
+          "future-shortcut-open": true,
+          "future-choice-complete": true,
+          "a3.future.distance": true,
+          "futuro-anteriore-beaten": true,
+          "futureResolved": true,
+          "futurorso-branch-unlocked": true,
+          "feed-dossier-nord": true,
+          "diplomacy-checked-in": true,
+          "diplomacy-choice-complete": true,
+          "a3.diplomacy.home": true,
+          "diplomacyComplete": true,
+          "temptation-diplomacy-beaten": true,
+          "tour-feed-unlocked": true,
+          "diplomacy-clip-viral": true
+        },
+        "morale": {
+          "trust": 36,
+          "cohesion": 56,
+          "progress": 34,
+          "promises": [
+            {
+              "id": "bus",
+              "dueAt": 4,
+              "status": "broken"
+            },
+            {
+              "id": "traghetto",
+              "dueAt": 16,
+              "status": "broken"
+            }
+          ],
+          "decisions": [
+            "bus",
+            "bus:pledge",
+            "traghetto",
+            "traghetto:pledge"
+          ],
+          "history": [
+            {
+              "label": "IL BUS NELLA FOTO",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: CORSA DEL BORGO",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "IL PLASTICO GALLEGGIA",
+              "trust": 2,
+              "cohesion": 0
+            },
+            {
+              "label": "SCADUTA: MOLO ACCESSIBILE",
+              "trust": -12,
+              "cohesion": -6
+            },
+            {
+              "label": "VERIFICA PUBBLICA",
+              "trust": 6,
+              "cohesion": 8
+            }
+          ]
+        },
+        "coalition": {
+          "members": [
+            {
+              "allyId": "campo_secretary",
+              "status": "allied",
+              "violationCount": 0,
+              "reconciliationSpent": false
+            },
+            {
+              "allyId": "civic_mayor",
+              "status": "allied",
+              "violationCount": 0,
+              "reconciliationSpent": false
+            }
+          ],
+          "locked": false,
+          "pendingConsequences": [],
+          "processedConsequences": []
+        },
+        "election": {
+          "phase": "tour",
+          "runId": null,
+          "districts": [
+            {
+              "id": "nord",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "centro",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "sud",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "isole",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            },
+            {
+              "id": "feed",
+              "localConsensus": 38,
+              "actionMask": 0,
+              "outcomes": [],
+              "revision": 0
+            }
+          ],
+          "endorsementDistrictByAlly": {},
+          "result": null,
+          "snapshot": null,
+          "revision": 0,
+          "extensions": {
+            "unknownDistricts": []
+          }
+        },
+        "defeatedTrainers": [
+          "rival1",
+          "aide",
+          "journalist",
+          "stagista",
+          "emittenza",
+          "telelobbista",
+          "funzionario",
+          "ladydirettiva",
+          "protocollista",
+          "diplomatico",
+          "oligarca",
+          "tycoon",
+          "ilcapitano",
+          "geometra",
+          "djpapeete",
+          "citofonista",
+          "noponte",
+          "boss",
+          "giudice1",
+          "giudice2",
+          "giudice3",
+          "garante",
+          "commercialista",
+          "prestanome",
+          "tesoriere",
+          "eu-relatore",
+          "eu-eurodeputato",
+          "eu-commissario",
+          "eu-lobby",
+          "commissione",
+          "campo-debate",
+          "campo-photographer",
+          "futuro-anteriore",
+          "partner-perfetto"
+        ],
+        "party": [
+          {
+            "id": "pontimax",
+            "level": 55,
+            "hp": 146,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "grafico",
+                "pp": 24
+              },
+              {
+                "id": "spread",
+                "pp": 13
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "vaffa",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "generorso",
+            "level": 45,
+            "hp": 177,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "dazilampo",
+                "pp": 10
+              },
+              {
+                "id": "fiammatricolore",
+                "pp": 10
+              },
+              {
+                "id": "pienipoteri",
+                "pp": 10
+              },
+              {
+                "id": "iosonogiorgia",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "giorgiagon",
+            "level": 46,
+            "hp": 164,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "mondocontrario",
+                "pp": 10
+              },
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "iosonogiorgia",
+                "pp": 10
+              },
+              {
+                "id": "blocconavale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "telecrate",
+            "level": 42,
+            "hp": 159,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "bunga",
+                "pp": 5
+              },
+              {
+                "id": "giravolta",
+                "pp": 25
+              },
+              {
+                "id": "conferenza",
+                "pp": 20
+              },
+              {
+                "id": "editoriale",
+                "pp": 10
+              }
+            ]
+          },
+          {
+            "id": "conteblob",
+            "level": 44,
+            "hp": 166,
+            "heldItem": null,
+            "moves": [
+              {
+                "id": "decreto",
+                "pp": 20
+              },
+              {
+                "id": "fiducia",
+                "pp": 20
+              },
+              {
+                "id": "gazzetta",
+                "pp": 15
+              },
+              {
+                "id": "telepromessa",
+                "pp": 15
+              }
+            ]
+          },
+          {
+            "id": "xipanda",
+            "level": 47,
+            "hp": 24,
+            "heldItem": "gilet",
+            "moves": [
+              {
+                "id": "oscuramento",
+                "pp": 10
+              },
+              {
+                "id": "viadellaseta",
+                "pp": 0
+              },
+              {
+                "id": "spread",
+                "pp": 6
+              },
+              {
+                "id": "fiducia",
+                "pp": 18
+              }
+            ]
+          }
+        ],
+        "bag": {
+          "caffe": 3,
+          "scheda": 0,
+          "maalox": 6,
+          "divisa": 1,
+          "dirBunga": 1,
+          "spritz": 6,
+          "schedona": 16,
+          "mojito": 4,
+          "gilet": 0,
+          "tessera": 4,
+          "dirWhatever": 1,
+          "tessera_futuro": 1
+        },
+        "runStats": {
+          "playSeconds": 3707.2999999977237,
+          "steps": 2262,
+          "battles": 45,
+          "wins": 38,
+          "losses": 2,
+          "captures": 5,
+          "runs": 0,
+          "partyKOs": 22,
+          "healingItemsUsed": 68,
+          "healerVisits": 57,
+          "checkpoints": {}
+        }
+      },
+      "checks": [
+        "Earned source code imported; only playSeconds changed during settling.",
+        "One native Partner victory; no injected party, funds, items or victory flags.",
+        "All three rooms visited; native Campo HP/PP care before the fight.",
+        "Chosen cohesion change; civic trust and promise ledger retained.",
+        "Victory reset five election districts independently of morale.",
+        "Native terrace exit and unlocked Tour reached."
+      ]
+    }
+  ],
+  "helperCorrection": {
+    "failedPrototypeReports": [
+      {
+        "report": "artifacts/campaign-native/diplomacy-baseline-ellyna-direct-20261002-helper-failed.json",
+        "reportSha256": "59bbefc796a8432ba699f7ae8b7c990cf1850bb2076985434631903dbde1f3ef"
+      },
+      {
+        "report": "artifacts/campaign-native/diplomacy-baseline-renzino-direct-20261002-helper-failed.json",
+        "reportSha256": "f7c2aaaad5a8c8498caedfd3c1ca23aba57f6f411206ae8ca8588334be41a00a"
+      },
+      {
+        "report": "artifacts/campaign-native/diplomacy-baseline-giorgetta-direct-20261002-helper-failed.json",
+        "reportSha256": "fcfb0fd1265581d7d565969b73dabcdf1f323757f425bd4c13ba34d186bc028f"
+      }
+    ],
+    "failure": "Prototype helper tried the cell below an outdoor terrace exit, outside the map, after a real victory.",
+    "fix": "Approach from below only for actual tile d building doors. Walk directly onto ordinary warps. No production WorldScene or map changes."
+  },
+  "creditsSpent": 0
+}

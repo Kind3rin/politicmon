@@ -33,3 +33,17 @@ Ricerca del 2 ottobre: [Two Buttons](https://knowyourmeme.com/memes/daily-strugg
 La lobby deve avere reception, tre accessi distinguibili, terrazza e ritorno al Campo leggibili. Fedeltà: un timbro che attraversa due fogli e lascia il conto fuori dall'inquadratura. Autonomia: due tavoli separati collegati da un solo conto; il responsabile chiama per nome l'alleato effettivamente riparabile. Consenso: un teleprompter rivolto verso il pubblico, un contatore già pieno e sedie che spariscono dalla coalizione. La terrazza mette in scena la stretta di mano e il conto, con il Partner in quattro direzioni coerenti con il panorama. Personaggi fermi, briefing manuale, entrambe le uscite di ogni stanza e progressi conservati nel ritorno alle cure.
 
 Prima di spendere o modificare livelli, percorrere i salvataggi guadagnati fino alla sfida. Dopo il redesign verificare almeno la riparazione reale di Ellyna, il secondo strappo, i servizi scaduti di Giorgetta, le scelte annullate, fondi insufficienti, trasferimenti e nuove elezioni dopo la vittoria. La build attuale pesa 357954 byte gzip su 358400 consentiti: restano 446 byte. Le nuove funzioni richiedono rimozione di ridondanze o caricamento modulare; non alzare il limite.
+
+## Baseline percorsa fino al Tour
+
+Il runner nativo ora accetta `END_AT=diplomacy` e `DIPLOMACY_PLAN=loyalty|autonomy|home`, ripartendo da `future-diplomacy`. Tre segmenti normali, seed 20261002, visitano le tre stanze, tornano realmente dal medico al Campo, scelgono e vincono il Partner al primo tentativo. Squadre, strumenti, fondi e flag di vittoria non vengono assegnati dal runner. Il primo snapshot coincide col codice padre salvo 0,4 secondi del normale assestamento. Il redesign delle sale, del cast e del dossier manuale resta aperto.
+
+| Segmento | Fondi finali | Fiducia / coesione | Conseguenza conservata dopo la vittoria |
+|---|---:|---:|---|
+| Ellyna, Autonomia | 59726 | 68 / 72 | Segretaria riconciliata, violazione ancora registrata, riparazione consumata |
+| Renzino, Fedeltà | 58606 | 80 / 48 | Segretaria tesa al primo strappo; Centrista non ricompare |
+| Giorgetta, Consenso | 50866 | 36 / 56 | Bus e molo ancora scaduti; sondaggi già saturi |
+
+Tutti arrivano al Tour tramite warp nativi. I cinque collegi hanno maschere e revisioni azzerate dalla vittoria; fiducia, scadenze e stato dei patti restano distinti dal nuovo scrutinio. Nessun livello o roster è stato ridotto. Prove, combattenti realmente schierati, codici e hash sono in [diplomacy-baseline-proof.json](diplomacy-baseline-proof.json). Non sono prove di difficoltà alta, campagne ininterrotte o del futuro redesign.
+
+Il prototipo aveva vinto le tre lotte ma cercava la cella sotto l'uscita della terrazza, fuori mappa. Il helper ora si avvicina dal basso soltanto alle vere porte `d`; attraversa normalmente gli altri warp. I report falliti restano identificati nel proof. WorldScene e mappe di produzione sono invariati. Questa preparazione non spende crediti.

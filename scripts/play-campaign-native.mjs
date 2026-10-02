@@ -17,6 +17,7 @@ const offshorePlan=process.env.OFFSHORE_PLAN??'direct';
 const bruxPlan=process.env.BRUX_PLAN??'direct';
 const photoPlan=process.env.PHOTO_PLAN??'stringetevi';
 const campoPlan=process.env.CAMPO_PLAN??'prepared';
+const diplomacyPlan=process.env.DIPLOMACY_PLAN??'autonomy';
 const futurePlan=process.env.FUTURE_PLAN??'distance';
 const futureRepair=process.env.FUTURE_REPAIR==='1',futureEvolve=process.env.FUTURE_EVOLVE==='1';
 const resumePath=process.env.RESUME_REPORT;
@@ -24,13 +25,14 @@ const resumeReport=resumePath?JSON.parse(readFileSync(resumePath,'utf8')):null;
 const resumeStage=process.env.RESUME_STAGE??'garante-result-1';
 const resumeCode=resumeReport?.codes[resumeStage]??null;
 if(resumePath){assert.ok(resumeCode,'Earned milestone save missing');assert.equal(resumeReport.id,id,'Starter does not match earned save');}
-assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future'].includes(endAt),'Unknown campaign endpoint');
+assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer','future','diplomacy'].includes(endAt),'Unknown campaign endpoint');
 assert.ok(['alliance','distance','opposition'].includes(futurePlan),'Unknown future choice');
+assert.ok(['loyalty','autonomy','home'].includes(diplomacyPlan),'Unknown diplomacy choice');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
- const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,resumeCode})=>{
+ const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode})=>{
   const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,importSaveCode,exportSaveCode,saveGame}=await import('/src/game/state.ts');
   const {Screen}=await import('/src/engine/screen.ts'),{Input}=await import('/src/engine/input.ts'),{SceneStack}=await import('/src/engine/scene.ts');
   const {MOVES}=await import('/src/data/moves.ts'),{ITEMS}=await import('/src/data/items.ts'),{MAPS,STARTER_SPOTS}=await import('/src/data/maps.ts');
@@ -187,6 +189,12 @@ try{
     if(!s.reviewing&&!s.result&&s.index!==target)press('down');
     else{if(!s.reviewing&&!s.result)trace('photo-dossier',{choice:photoPlan,money:state.money,coalition:state.coalition});press('a');}return true;
    }
+   if(name==='DiplomacyChoiceScene'){
+    const target=['loyalty','autonomy','home'].indexOf(diplomacyPlan);
+    if(s.error)throw Error('Diplomacy rejected: '+s.error);
+    if(!s.reviewing&&!s.result&&s.index!==target)press('down');
+    else{if(!s.reviewing&&!s.result)trace('diplomacy-dossier',{choice:diplomacyPlan,money:state.money,coalition:state.coalition,morale:state.morale});press('a');}return true;
+   }
    if(name==='FutureChoiceScene'){
     const target=['alliance','distance','opposition'].indexOf(futurePlan);
     if(s.error)throw Error('Future rejected: '+s.error);
@@ -249,7 +257,7 @@ try{
   function enterMap(mapId){
    for(let n=0;n<3&&state.pos.mapId!==mapId;n++){
     const warp=world.map.warps.find(w=>w.toMap===mapId);if(!warp)throw Error('No warp to '+mapId);
-    if(world.map.outdoor&&!MAPS[mapId].outdoor){if(!walkTo(warp.x,warp.y+1))continue;face('up');press('up');settle();}
+    if(world.map.outdoor&&!MAPS[mapId].outdoor&&world.map.tiles[warp.y]?.[warp.x]==='d'){if(!walkTo(warp.x,warp.y+1))continue;face('up');press('up');settle();}
     else{walkTo(warp.x,warp.y);settle();}
    }
    if(state.pos.mapId!==mapId)throw Error('Door did not enter '+mapId+' '+JSON.stringify({pos:state.pos,moving:world.moving,fadeIn:world.fadeIn,fadeOut:world.fadeOut,msg:world.msg.isOpen,npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y}))}));
@@ -259,6 +267,7 @@ try{
    if(!candidates.length)throw Error('No '+dir+' exit '+map.id);if(!walkTo(candidates[0].x,y))return false;face(dir);press(dir);settle();if(state.pos.mapId===map.id)throw Error(dir+' exit blocked '+map.id);return true;
   }
   function heal(){
+   while(state.pos.mapId.startsWith('diplomacy_'))enterMap(state.pos.mapId==='diplomacy_lobby'?'futuro_piazza':'diplomacy_lobby');
    while(['futuro_sede','futuro_scissione','futuro_rebrand','futuro_tesoreria','futuro_piazza'].includes(state.pos.mapId)){
     const target=state.pos.mapId==='futuro_piazza'?'campo_largo':state.pos.mapId==='futuro_sede'?'futuro_piazza':'futuro_sede';enterMap(target);
    }
@@ -560,10 +569,23 @@ try{
      enterMap('diplomacy_lobby');await milestone('future-diplomacy');
     }
    }
+   if(endAt==='diplomacy'){
+    if(!state.flags.futureResolved||state.pos.mapId!=='diplomacy_lobby')throw Error('Diplomacy requires earned Future arrival');
+    settle();await milestone('diplomacy-earned-resume');heal();enterMap('futuro_piazza');enterMap('diplomacy_lobby');await milestone('diplomacy-arrival');
+    const talk=id=>{const npc=world.visibleNpcs().find(n=>n.id===id);if(!npc)throw Error('Missing diplomacy NPC '+id);interact(npc.x,npc.y);};
+    talk('diplomacy-host');
+    for(const [map,npc]of [['diplomacy_loyalty','diplomacy-choice-loyalty'],['diplomacy_autonomy','diplomacy-choice-autonomy'],['diplomacy_home','diplomacy-choice-home']]){enterMap(map);talk(npc);await milestone(map);enterMap('diplomacy_lobby');}
+    if(!state.flags['diplomacy-choice-complete'])throw Error('Diplomatic choice not registered');await milestone('diplomacy-choice');
+    for(let attempt=1;attempt<=2&&!state.flags.diplomacyComplete;attempt++){
+     heal();if(state.pos.mapId==='bruxelles'){enterMap('campo_largo');heal();}if(state.pos.mapId!=='campo_largo')throw Error('Diplomacy care did not return to Campo');enterMap('futuro_piazza');enterMap('diplomacy_lobby');enterMap('diplomacy_terrace');
+     if(!state.flags.diplomacyComplete)talk('partner-perfetto');await milestone('diplomacy-boss-'+attempt);
+    }
+    if(state.flags.diplomacyComplete){if(state.pos.mapId==='diplomacy_terrace')enterMap('diplomacy_lobby');await milestone('diplomacy-verbale');enterMap('tour_feed');await milestone('diplomacy-tour');}
+   }
   }catch(e){failure=e.message;trace('failure',{message:failure,pos:{...state.pos},npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y,canWander:n.canWander})),tiles:world.map.tiles});}
   return {levelCap:LEVEL_CAP,id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,photoPlan,campoPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,coalition:state.coalition,election:state.election,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
- },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,resumeCode});
- result.resume=resumePath?{report:resumePath,stage:resumeStage,parentId:resumeReport.id,parentSeed:resumeReport.seed}:null;result.offshorePlan=offshorePlan;result.futurePlan=futurePlan;result.futureRepair=futureRepair;result.futureEvolve=futureEvolve;
+ },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,futurePlan,futureRepair,futureEvolve,diplomacyPlan,resumeCode});
+ result.resume=resumePath?{report:resumePath,stage:resumeStage,parentId:resumeReport.id,parentSeed:resumeReport.seed}:null;result.offshorePlan=offshorePlan;result.futurePlan=futurePlan;result.futureRepair=futureRepair;result.futureEvolve=futureEvolve;result.diplomacyPlan=diplomacyPlan;
  assert.deepEqual(errors,[]);
  mkdirSync('artifacts/campaign-native',{recursive:true});mkdirSync('artifacts/screens/campaign-native',{recursive:true});
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/campaign-native/${label}-${id}-${plan}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
@@ -578,7 +600,7 @@ try{
   }
  }
  if(process.env.EXPECT_BADGE==='1')assert.ok(result.final.badges.includes(endAt),`Campaign did not earn ${endAt}`);
- if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':endAt==='future'?'futureResolved':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
+ if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':endAt==='future'?'futureResolved':endAt==='diplomacy'?'diplomacyComplete':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
  console.log(JSON.stringify({id,seed,plan,failure:result.failure,milestones:result.milestones,final:result.final,battles:result.battles.map(b=>({trainer:b.trainer,outcome:b.outcome,foes:b.foes}))},null,2));
  if(result.failure)process.exitCode=1;
 }finally{await browser.close();}

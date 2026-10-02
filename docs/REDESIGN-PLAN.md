@@ -325,3 +325,5 @@ Priorità aggiornata dall’utente: cornice e controller mobile precedono Genova
 Genova completata come round locale: [verbale](GENOVA-VERBALE.md). Il seguito prioritario è Tour/Palazzo, comprese le otto segnalazioni strutturali preesistenti nel controllo mappe. Il redesign integrale non è completato.
 
 Genova pubblicata `16ae1b1`: CI 37024130490 e tre Vercel riusciti, otto percorsi pubblici con tastiera/tap, checksum e PWA pubblici passano. Correzione aggiuntiva delle due porte visibili della terrazza finale, mantenendo le uscite precedenti; pubblicazione e routing nel proof.
+
+Follow-up `31a198d`: porte visibili della terrazza finale collegate, uscite precedenti conservate. 296 test; CI 37026260106 e tre Vercel riusciti. Otto fixture native pubbliche di routing passano; checksum e offline pubblico verificati di nuovo. Non è una vittoria finale guadagnata e non completa il redesign di Tour/Palazzo.

@@ -1,6 +1,6 @@
 {
   "date": "2026-10-02",
-  "status": "Genova published and publicly verified; visible postgame door routing fix pending publication",
+  "status": "Genova and visible terrace return doors published and publicly verified",
   "goal": "Full redesign remains active. Genova round, following published mobile controls. Tour and Palace remain.",
   "sourceSha256": {
     "src/data/maps/atto3.ts": "e1624fad1c6b3614a373f7ada5d3e398e8dce97cfa77070253c337e23ab1151c",
@@ -733,7 +733,7 @@
     ],
     "allMapWarpAndExteriorDoorTests": true,
     "scope": "Routing only; no earned final victory claimed",
-    "publicationPending": true,
+    "publicationPending": false,
     "nativeLocal": [
       {
         "base": "http://127.0.0.1:4184",
@@ -910,6 +910,212 @@
         ]
       }
     ],
-    "localLog": "PASS terrace routing fixture chromium: return 5,9.\nPASS terrace routing fixture chromium: return 6,9.\nPASS terrace routing fixture chromium: return 10,11.\nPASS terrace routing fixture chromium: return 11,11.\nPASS terrace routing fixture webkit: return 5,9.\nPASS terrace routing fixture webkit: return 6,9.\nPASS terrace routing fixture webkit: return 10,11.\nPASS terrace routing fixture webkit: return 11,11.\n"
+    "localLog": "PASS terrace routing fixture chromium: return 5,9.\nPASS terrace routing fixture chromium: return 6,9.\nPASS terrace routing fixture chromium: return 10,11.\nPASS terrace routing fixture chromium: return 11,11.\nPASS terrace routing fixture webkit: return 5,9.\nPASS terrace routing fixture webkit: return 6,9.\nPASS terrace routing fixture webkit: return 10,11.\nPASS terrace routing fixture webkit: return 11,11.\n",
+    "runtimeCommit": "31a198d3ea79a9fd705bb2f9df028c7acb8d15d2",
+    "ci": {
+      "conclusion": "success",
+      "databaseId": 37026260106,
+      "status": "completed",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37026260106"
+    },
+    "vercel": [
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon-link-check/xoiupwh7jmWqBWwJchRf5opi5NXb"
+      },
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon/5yyXV7FgrGdNAEMJsFLdaGArXJe3"
+      },
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "target_url": "https://vercel.com/kind3rins-projects/politicmon-test-link/EfBxQfdgu2YWK2MmU9voKiSfQiJp"
+      }
+    ],
+    "nativePublic": [
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "fixtureOnly": true,
+        "results": [
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 5,
+              "y": 10,
+              "facing": "up"
+            },
+            "exit": {
+              "x": 5,
+              "y": 9
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          },
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 6,
+              "y": 10,
+              "facing": "up"
+            },
+            "exit": {
+              "x": 6,
+              "y": 9
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          },
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 10,
+              "y": 10,
+              "facing": "down"
+            },
+            "exit": {
+              "x": 10,
+              "y": 11
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          },
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 11,
+              "y": 10,
+              "facing": "down"
+            },
+            "exit": {
+              "x": 11,
+              "y": 11
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          }
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "fixtureOnly": true,
+        "results": [
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 5,
+              "y": 10,
+              "facing": "up"
+            },
+            "exit": {
+              "x": 5,
+              "y": 9
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          },
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 6,
+              "y": 10,
+              "facing": "up"
+            },
+            "exit": {
+              "x": 6,
+              "y": 9
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          },
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 10,
+              "y": 10,
+              "facing": "down"
+            },
+            "exit": {
+              "x": 10,
+              "y": 11
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          },
+          {
+            "fixtureOnly": true,
+            "placedAt": {
+              "mapId": "palazzo_feed_terrazza",
+              "x": 11,
+              "y": 10,
+              "facing": "down"
+            },
+            "exit": {
+              "x": 11,
+              "y": 11
+            },
+            "arrival": {
+              "mapId": "palazzo_feed",
+              "x": 9,
+              "y": 2,
+              "facing": "down"
+            },
+            "resourcesPreserved": true
+          }
+        ]
+      }
+    ],
+    "publicLog": "PASS terrace routing fixture chromium: return 5,9.\nPASS terrace routing fixture chromium: return 6,9.\nPASS terrace routing fixture chromium: return 10,11.\nPASS terrace routing fixture chromium: return 11,11.\nPASS terrace routing fixture webkit: return 5,9.\nPASS terrace routing fixture webkit: return 6,9.\nPASS terrace routing fixture webkit: return 10,11.\nPASS terrace routing fixture webkit: return 11,11.\n"
+  },
+  "finalPublicLogs": {
+    "checksum": "PASS: 583 deployed PNG checksums, 20 audio/catalog checksums and civic dialogue/bridge code at https://politicmon.vercel.app.\n",
+    "pwaChromium": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 14820ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 689 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n",
+    "pwaWebkit": "[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 4798ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 689 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (webkit/iPhone 13): installazione, runtime, sprite, cache, update, precache offline verificata (reload offline non supportato da Playwright WebKit) e resume.\n"
   }
 }

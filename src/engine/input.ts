@@ -19,19 +19,17 @@ const KEY_MAP: Record<string, Button> = {
   KeyJ: "b",
   Escape: "b",
   Backspace: "b",
-  KeyP: "start",
-  Tab: "start"
+  KeyP: "start"
 };
 
-// Il target di un evento tastiera è un campo di testo editabile? Se sì, i tasti
-// sono per lui (tastiera nativa del telefono), non per il gioco.
-function isTextInputTarget(target: EventTarget | null): boolean {
+// Native controls and modal guides own their keyboard activation.
+function isNativeControlTarget(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
   if (!el || !el.tagName) {
     return false;
   }
   const tag = el.tagName.toLowerCase();
-  return tag === "input" || tag === "textarea" || el.isContentEditable === true;
+  return tag === "input" || tag === "textarea" || tag === "button" || tag === "select" || tag === "a" || el.isContentEditable === true || Boolean(document.querySelector('dialog[open]'));
 }
 
 // Punto in coordinate interne dello schermo (240x180).
@@ -47,6 +45,8 @@ export class Input {
   // Tocco diretto sul canvas: posizione (in coord. interne) del tap rilasciato
   // in questo frame. Un singolo frame, come pressedNow.
   private tapNow: ScreenPoint | null = null;
+  private releaseStick:()=>void=()=>{};
+  private releaseCanvas:()=>void=()=>{};
 
   constructor() {
     document.addEventListener("keydown", (event) => {
@@ -54,7 +54,7 @@ export class Input {
       // vedi nativeInput.ts), i tasti appartengono a quel campo, NON al gioco:
       // altrimenti Invio/Spazio venivano mappati su "A" e chiudevano la scena
       // mentre l'utente scriveva. Il campo gestisce input/Enter da sé.
-      if (isTextInputTarget(event.target)) {
+      if (isNativeControlTarget(event.target)) {
         return;
       }
       const button = KEY_MAP[event.code];
@@ -68,9 +68,6 @@ export class Input {
       this.held.add(button);
     });
     document.addEventListener("keyup", (event) => {
-      if (isTextInputTarget(event.target)) {
-        return;
-      }
       const button = KEY_MAP[event.code];
       if (button) {
         this.held.delete(button);
@@ -79,6 +76,8 @@ export class Input {
     this.bindTouch();
     this.bindStick();
     this.bindCanvas();
+    window.addEventListener('blur',()=>this.reset());
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)this.reset();});
   }
 
   // Tocco diretto sullo schermo di gioco: traduce le coordinate del puntatore
@@ -93,6 +92,7 @@ export class Input {
     let downId: number | null = null;
     let downClientX = 0;
     let downClientY = 0;
+    this.releaseCanvas=()=>{downId=null;};
 
     const toInternal = (clientX: number, clientY: number): ScreenPoint => {
       const rect = canvas.getBoundingClientRect();
@@ -145,6 +145,8 @@ export class Input {
       el.addEventListener("pointerleave", release);
       el.addEventListener("pointercancel", release);
       el.addEventListener("contextmenu", (event) => event.preventDefault());
+      // Native keyboard activation dispatches click, without pointerdown.
+      el.addEventListener('click',(event)=>{if(event.detail===0&&!document.querySelector('dialog[open]'))this.pressedNow.add(button);});
     }
   }
 
@@ -213,6 +215,7 @@ export class Input {
         cap.style.transform = "translate(0px, 0px)";
       }
     };
+    this.releaseStick=release;
 
     stick.addEventListener("pointerdown", (event) => {
       event.preventDefault();
@@ -280,6 +283,8 @@ export class Input {
   clearTap(): void {
     this.tapNow = null;
   }
+
+  reset():void{this.releaseStick();this.releaseCanvas();this.held.clear();this.pressedNow.clear();this.tapNow=null;}
 
   // Da chiamare a fine frame.
   endFrame(): void {

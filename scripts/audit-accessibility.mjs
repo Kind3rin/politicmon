@@ -14,8 +14,8 @@ add("reduced-motion", pause.includes("RIDUCI EFFETTI") && pause.includes("setRed
 add("vibration-off", pause.includes("VIBRA:") && haptics.includes("enabled"), "vibrazione esposta e disattivabile");
 add("native-input", nativeInput.includes("font-size") || nativeInput.includes("fontSize"), "input nativo mobile con protezione anti-zoom");
 add("focus-cue", widgets.includes("►") || widgets.includes("SCELTA"), "selezione comunicata anche con simbolo/testo");
-add("landscape-controls", styles.includes("orientation: landscape") && styles.includes("pointer: coarse"), "layout touch dedicato landscape");
-const inkPaper = contrast("#10141f", "#efe6da"); const touchText = contrast("#d4dcff", "#171e33");
+add("landscape-controls", /orientation:\s*landscape/.test(styles) && /pointer:\s*coarse/.test(styles), "layout touch dedicato landscape");
+const inkPaper = contrast("#101c30", "#fffaf0"); const touchText = contrast("#fffaf0", "#243751");
 add("contrast-main", inkPaper >= 4.5 && touchText >= 4.5, `testo/pannello ${inkPaper.toFixed(1)}:1, controlli ${touchText.toFixed(1)}:1`);
 
 const browser = await chromium.launch(); const base = process.env.BASE_URL ?? "http://127.0.0.1:5179";
@@ -23,7 +23,7 @@ for (const spec of [{ name: "portrait", width: 390, height: 844 }, { name: "land
   const context = await browser.newContext({ viewport: spec, isMobile: true, hasTouch: true }); const page = await context.newPage();
   await page.goto(base, { waitUntil: "load" }); await page.evaluate(() => sessionStorage.setItem("politicmon-intro-seen", "1")); await page.reload({ waitUntil: "networkidle" });
   const targets = await page.locator("#touch-ui button, .console-brand").evaluateAll((nodes) => nodes.map((node) => { const r = node.getBoundingClientRect(); return { label: node.getAttribute("aria-label") || node.textContent?.trim() || "", width: r.width, height: r.height }; }));
-  add(`touch-${spec.name}`, targets.every((target) => target.label && target.width >= 24 && target.height >= 24), `${targets.length} target con nome e minimo 24px`); await context.close();
+  add(`touch-${spec.name}`, targets.every((target) => target.label && target.width >= 44 && target.height >= 44), `${targets.length} target con nome e minimo 44px`); await context.close();
 }
 await browser.close();
 const lines = ["# P7-T06 — Audit accessibilità", "", "| Controllo | Esito | Evidenza |", "|---|---|---|"];

@@ -12,6 +12,7 @@ import { loadNick } from "./net/profile";
 import { flushActiveState, getActiveState } from "./game/state";
 import { syncRunCheckpoints, tickRunStats } from "./game/runstats";
 import { Input } from "./engine/input";
+import { initShell } from "./engine/shell";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
 import { getSpriteImage } from "./engine/assets";
@@ -150,6 +151,7 @@ if (!canvas) {
 
 const screen = new Screen(canvas);
 const input = new Input();
+const shellGuideOpen=initShell(input);
 const stack = new SceneStack();
 let bootReady = false;
 void preloadCoreSprites().finally(() => {
@@ -252,11 +254,11 @@ function frame(now: number): void {
   }
   try {
     const active = getActiveState();
-    if (active) {
+    if (active&&!shellGuideOpen()) {
       tickRunStats(active, dt, !document.hidden);
       syncRunCheckpoints(active);
     }
-    stack.update(dt);
+    if(!shellGuideOpen())stack.update(dt);
     stack.draw(screen);
     input.endFrame();
     if (firstReadyFrame) {

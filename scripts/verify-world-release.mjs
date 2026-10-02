@@ -35,10 +35,13 @@ await Promise.all(Array.from({ length: 6 }, async () => {
  }
 }));
 const html = (await fetchBytes('')).toString();
+assert.ok(html.includes('id="shell-help"')&&html.includes('MANUALE DEL CANDIDATO'), 'modern shell and native command guide missing');
+assert.ok(!html.includes('console-brand-color')&&!html.includes('console-power'), 'old handheld shell branding remains');
 const scripts = [...html.matchAll(/<script[^>]+src="([^"]+)"/g)].map(match => match[1]);
 let source = (await Promise.all(scripts.map(fetchBytes))).map(bytes => bytes.toString()).join('\n');
 const worldChunks = [...new Set([...source.matchAll(/WorldScene-[\w-]+\.js/g)].map(match => `assets/${match[0]}`))];
 source += (await Promise.all(worldChunks.map(fetchBytes))).map(bytes => bytes.toString()).join('\n');
+assert.ok(source.includes('dialog[open]')&&source.includes('fullscreenchange'), 'shell input isolation/fullscreen handlers missing');
 assert.ok(source.includes('QUARTA INAUGURAZIONE'), 'civic dialogue missing from deployed bundles');
 assert.ok(source.includes('cantiere:build'), 'bridge decision missing from deployed bundles');
 assert.ok(source.includes('DOSSIER MISSIONE'), 'mission dossier missing from deployed bundles');

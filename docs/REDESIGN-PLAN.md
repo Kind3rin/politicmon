@@ -31,6 +31,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Starter con quattro dossier, guida rileggibile, riprova dopo sconfitta, pausa scorrevole e viaggio con contratto | `shot:desk`: 514 Chromium/506 WebKit, sei lotte del tutorial via input |
+| Cornice esterna | Pagina moderna, guida che ferma gli aggiornamenti, focus e controlli touch senza sovrapposizioni | `shot:shell`: 20 configurazioni, Chromium/WebKit, pause mondo/lotta, input e salvataggio reali |
 | PWA | Precache e primo utilizzo offline dei 529 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
@@ -52,7 +53,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
    Genova, retrobottega, casinò e Coppa sono ora rivisti. Onboarding, pausa e trasporto stradale hanno ricevuto una revisione con dossier e prove delle azioni.
-   Resta l’interfaccia esterna per una revisione coerente. Eliminare layout e asset residui vecchi;
+   Anche la cornice esterna è rivista con guida modale e controlli nativi. Proseguire la revisione dei flussi integrati e dei box meno frequenti; il censimento delle 47 scene non prova che ogni loro stato sia moderno. Eliminare layout e asset residui vecchi;
    mantenere controlli leggibili su canvas 240×180 e mobile.
 4. **Scrittura.** Revisione dei dialoghi e degli archi di ogni zona, incluse
    ricorrenze e risposte alle azioni. La ricerca web deve generare satira
@@ -133,10 +134,8 @@ comandi tessera `5efbb84`, CI riuscita, tre deploy Vercel riusciti, 416
 checksum sul dominio pubblico e 525 asset offline in Chromium e WebKit.
 Il reload offline è verificato soltanto in Chromium. La prova dei match
 forza gli esiti e non chiude il lavoro sul bilanciamento della campagna.
-Prossima priorità: onboarding con descrizioni e scelte complete, pausa e
-viaggi; `StarterPreviewScene` conserva ancora soltanto due righe del testo
-Dex e la pausa usa un elenco sopra il mondo. Sono superfici ancora da
-ridisegnare, osservate direttamente nel codice corrente.
+La priorità emersa in quel round, onboarding con descrizioni complete,
+pausa e viaggi, è affrontata nel round seguente.
 
 ### Ingresso, pausa e viaggi — 2 ottobre 2026
 
@@ -148,3 +147,12 @@ viste Chromium/WebKit. Pubblicazione `162520d` con CI e Vercel riusciti, 420
 checksum pubblici e 529 risorse PWA su entrambi i motori (reload offline solo
 Chromium). Sei lotte del tutorial tramite input, in aggiunta
 ai callback forzati. La campagna completa non è ancora verificata.
+
+### Cornice e controlli — 2 ottobre 2026
+
+[INTERFACCIA-ESTERNA.md](INTERFACCIA-ESTERNA.md): rimozione della scocca vecchia,
+guida modale, focus e input nativi, pulsanti da 44px, salvataggio reale e
+controlli senza sovrapposizioni anche in orizzontale. 20 configurazioni fra
+Chromium/WebKit, rotazione e pausa nel mondo e in lotta. 0 nuovi crediti,
+saldo riletto 617,97. 276 test e budget 207,3/349,3KiB, p95 18,5ms.
+Restano scrittura delle zone, ritmo dei percorsi, audio e campagna integrale.

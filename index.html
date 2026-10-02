@@ -2,7 +2,7 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#10141f" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -18,11 +18,7 @@
     <title>Politicmon</title>
   </head>
   <body>
-    <!-- Pre-layout SINCRONO prima del primo paint: classe touch + dimensione
-         canvas con la STESSA formula di Screen.fitToWindow. Senza questo, il
-         bundle (grande) applica il layout touch secondi dopo il primo paint e
-         l'intera shell salta (CLS ~0.3 misurato). Qui il primo paint nasce già
-         nel layout definitivo; fitToWindow poi riapplica valori identici. -->
+    <!-- First-paint dimensions match engine/gameViewport.ts. -->
     <script>
       (function () {
         var touch = matchMedia("(pointer: coarse)").matches;
@@ -30,18 +26,16 @@
         var vp = window.visualViewport;
         var vw = (vp && vp.width) || innerWidth;
         var vh = (vp && vp.height) || innerHeight;
-        var availW = Math.max(240, vw - (touch ? 18 : 20));
-        var availH = Math.max(160, vh - (touch ? 150 : 30));
-        var s = Math.min(availW / 240, availH / 180);
+        var landscape = touch && vw > vh && vh <= 500;
+        var availW = Math.max(1, vw - (landscape ? 312 : 32));
+        var availH = Math.max(1, vh - (touch ? (landscape ? 100 : 246) : 116));
+        var s = Math.min(availW / 240, availH / 180, 4);
         document.write(
           '<style>#game-canvas{width:' + 240 * s + 'px;height:' + 180 * s + 'px}</style>'
         );
       })();
     </script>
-    <!-- Intro video: splash satirico (Ponte sullo Stretto + marcetta). Si chiude
-         da solo a fine video o al tocco. Gestito da src/engine/intro.ts.
-         preload="none": lo scarica solo chi lo deve vedere (intro.ts chiama
-         load() prima di play), non compete col bundle sulla banda mobile. -->
+    <!-- Intro loads only on playback; never competes with startup assets. -->
     <div id="intro-overlay" hidden>
       <video id="intro-video" playsinline preload="none" src="./intro.mp4"></video>
       <button id="intro-skip" type="button">SALTA ▶</button>
@@ -49,22 +43,26 @@
     <div id="app">
       <div id="console-shell">
         <div id="console-top">
-          <button class="console-brand" data-key="start" aria-label="Apri il menu di gioco">
+          <button class="console-brand" data-key="start" aria-label="Politicmon: apri il quartier generale">
+            <span class="console-mark" aria-hidden="true">P</span>
             <span class="console-brand-main">POLITICMON</span>
-            <span class="console-brand-color">COLOR</span>
           </button>
-          <span class="console-power"><i></i> POWER</span>
+          <div class="console-tools">
+            <button id="shell-help" type="button" aria-label="Apri la guida ai comandi" aria-haspopup="dialog"><span aria-hidden="true">?</span><span class="tool-label">COMANDI</span></button>
+            <button id="shell-fullscreen" type="button" aria-label="Apri a schermo intero" hidden><span aria-hidden="true">⛶</span></button>
+          </div>
         </div>
         <div id="screen-frame">
-          <canvas id="game-canvas" width="240" height="180"></canvas>
+          <canvas id="game-canvas" width="240" height="180" tabindex="0" aria-label="Schermo di Politicmon" aria-describedby="shell-hint"></canvas>
         </div>
-        <div id="touch-ui" aria-hidden="true">
+        <p id="shell-hint">FRECCE / WASD: muovi · Z / INVIO: conferma · X / ESC: torna · P: menu</p>
+        <div id="touch-ui" role="group" aria-label="Controlli di gioco">
           <div id="touch-move">
             <div id="touch-dpad">
-              <button data-key="up" class="dpad-btn dpad-up">▲</button>
-              <button data-key="left" class="dpad-btn dpad-left">◀</button>
-              <button data-key="right" class="dpad-btn dpad-right">▶</button>
-              <button data-key="down" class="dpad-btn dpad-down">▼</button>
+              <button data-key="up" class="dpad-btn dpad-up" aria-label="Muovi su">▲</button>
+              <button data-key="left" class="dpad-btn dpad-left" aria-label="Muovi a sinistra">◀</button>
+              <button data-key="right" class="dpad-btn dpad-right" aria-label="Muovi a destra">▶</button>
+              <button data-key="down" class="dpad-btn dpad-down" aria-label="Muovi giù">▼</button>
             </div>
             <div id="touch-stick" data-stick aria-label="Levetta direzionale">
               <div id="touch-stick-base"></div>
@@ -72,13 +70,29 @@
             </div>
           </div>
           <div id="touch-buttons">
-            <button data-key="b" class="ab-btn b-btn">B</button>
-            <button data-key="a" class="ab-btn a-btn">A</button>
-            <button data-key="start" class="start-btn">START</button>
+            <button data-key="b" class="ab-btn b-btn" aria-label="B: torna o annulla">B</button>
+            <button data-key="a" class="ab-btn a-btn" aria-label="A: conferma o parla">A</button>
+            <button data-key="start" class="start-btn" aria-label="Apri il quartier generale">MENU</button>
           </div>
         </div>
       </div>
     </div>
+    <dialog id="shell-guide" aria-labelledby="shell-guide-title">
+      <div class="guide-heading"><span class="guide-eyebrow">MANUALE DEL CANDIDATO</span><button id="shell-guide-close" type="button" autofocus aria-label="Chiudi la guida">✕</button></div>
+      <h1 id="shell-guide-title">Il consenso non si conquista da fermo.</h1>
+      <p>Muoviti, leggi le mosse e scegli dove impegnarti. La partita è in pausa mentre consulti questa guida.</p>
+      <dl class="guide-controls">
+        <div><dt>Muovi / scegli</dt><dd><kbd>↑ ↓ ← →</kbd> oppure <kbd>W A S D</kbd></dd></div>
+        <div><dt>Parla / conferma</dt><dd><kbd>Z</kbd> <kbd>K</kbd> <kbd>INVIO</kbd> <kbd>SPAZIO</kbd> · touch: A</dd></div>
+        <div><dt>Torna / annulla</dt><dd><kbd>X</kbd> <kbd>J</kbd> <kbd>ESC</kbd> <kbd>⌫</kbd> · touch: B</dd></div>
+        <div><dt>Quartier generale</dt><dd><kbd>P</kbd> · pulsante POLITICMON / MENU</dd></div>
+      </dl>
+      <p><strong>Sul telefono</strong> puoi anche toccare una voce sullo schermo: il primo tocco la seleziona, il secondo la apre nei menu. In OPZIONI scegli croce o levetta, effetti ridotti e ritmo delle lotte.</p>
+      <p><strong>Nelle lotte</strong> START/MENU apre il dossier tattico dal menu LOTTA. Consultarlo non consuma il turno.</p>
+      <p><strong>Per ripartire</strong> usa SALVA nel quartier generale. EXTRA → GUIDA CAMPAGNA mostra la prossima meta e il significato della morale.</p>
+      <p class="guide-note">TAB passa fra i controlli della pagina. ESC chiude questa guida.</p>
+      <button id="shell-guide-resume" type="button">TORNA ALLA CAMPAGNA →</button>
+    </dialog>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

@@ -88,7 +88,8 @@
     "shot:campaign-ui": "node scripts/shot-campaign-ui.mjs",
     "shot:epilogue": "node scripts/shot-epilogue.mjs",
     "shot:arena": "node scripts/shot-arena.mjs",
-    "shot:desk": "node scripts/shot-desk.mjs"
+    "shot:desk": "node scripts/shot-desk.mjs",
+    "shot:shell": "node scripts/shot-shell.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

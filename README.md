@@ -94,7 +94,8 @@ npm run build        # typecheck + bundle di produzione
 | Muoversi | Frecce / WASD | D-pad o **levetta analogica** |
 | Conferma / Interagisci | Z, Spazio, Invio | A |
 | Annulla | X, Esc | B |
-| Menu pausa | P, Tab | START |
+| Menu pausa | P | MENU / logo POLITICMON |
+| Controlli della pagina | Tab / Shift+Tab | Pulsante ? / COMANDI |
 
 ---
 
@@ -140,3 +141,7 @@ della squadra durante i match. 272 test e 843 viste native; redesign ancora atti
 tre starter, guida rileggibile, tutorial con riprova, quartier generale
 scorrevole e scorta con conferma. Quattro nuovi ambienti; 276 test e
 verifica su Chromium/WebKit.
+
+La [cornice e guida ai comandi](docs/INTERFACCIA-ESTERNA.md) sostituisce la
+scocca esterna: controlli da 44px, schermo intero, guida che ferma mondo e
+lotte, focus tastiera e salvataggio verificati su Chromium e WebKit.

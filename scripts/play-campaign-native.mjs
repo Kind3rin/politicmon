@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mkdirSync,writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {chromium} from 'playwright';
 const browser=await chromium.launch();
 const id=process.env.STARTER??'ellyna',seed=Number(process.env.RUN_SEED??20261002),plan=process.env.RUN_PLAN??'direct';
@@ -13,13 +13,19 @@ const civicPlan=process.env.CIVIC_PLAN??'skip';
 const archivePlan=process.env.ARCHIVE_PLAN??'skip';
 const strettoPlan=process.env.STRETTO_PLAN??'skip';
 const kitPlan=process.env.KIT_PLAN??'skip';
-assert.ok(['auditel','spread','dazio','capitano','boss','garante'].includes(endAt),'Unknown campaign endpoint');
+const offshorePlan=process.env.OFFSHORE_PLAN??'direct';
+const resumePath=process.env.RESUME_REPORT;
+const resumeReport=resumePath?JSON.parse(readFileSync(resumePath,'utf8')):null;
+const resumeStage=process.env.RESUME_STAGE??'garante-result-1';
+const resumeCode=resumeReport?.codes[resumeStage]??null;
+if(resumePath){assert.ok(resumeCode,'Earned milestone save missing');assert.equal(resumeReport.id,id,'Starter does not match earned save');}
+assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere'].includes(endAt),'Unknown campaign endpoint');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
- const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan})=>{
-  const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,exportSaveCode,saveGame}=await import('/src/game/state.ts');
+ const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,resumeCode})=>{
+  const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,importSaveCode,exportSaveCode,saveGame}=await import('/src/game/state.ts');
   const {Screen}=await import('/src/engine/screen.ts'),{Input}=await import('/src/engine/input.ts'),{SceneStack}=await import('/src/engine/scene.ts');
   const {MOVES}=await import('/src/data/moves.ts'),{ITEMS}=await import('/src/data/items.ts'),{MAPS,STARTER_SPOTS}=await import('/src/data/maps.ts');
   const {statsOf,itemEvolution}=await import('/src/game/monster.ts'),{damageRange,switchPreview}=await import('/src/game/battle/tactics.ts'),{makeCombatant,foeMoveScore}=await import('/src/game/battle/sim.ts');
@@ -28,7 +34,9 @@ try{
   const {archivedMoves}=await import('/src/game/moveArchive.ts');
   const {TILES}=await import('/src/art/tiles.ts'),{tickRunStats}=await import('/src/game/runstats.ts'),{spriteRegistryStats}=await import('/src/engine/assets.ts');
   const canvas=document.createElement('canvas');canvas.id='game-canvas';document.body.append(canvas);const screen=new Screen(canvas),input=new Input(),stack=new SceneStack();
-  const state=newGameState(),world=new WorldScene(stack,input,state);stack.push(world);
+  const state=resumeCode?importSaveCode(resumeCode):newGameState();
+  if(!state||(resumeCode&&!state.flags['garante-beaten']))throw Error('Resume must be an earned post-Garante save');
+  const world=new WorldScene(stack,input,state);stack.push(world);
   const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
   const narrative=[],say=world.say.bind(world);world.say=(lines,...rest)=>{narrative.push({map:state.pos.mapId,lines:[...lines],trust:state.morale.trust,cohesion:state.morale.cohesion});return say(lines,...rest);};
   const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
@@ -73,14 +81,16 @@ try{
    if(name==='WorldScene'){
     if(world.msg.isOpen){press('a');return true;}
     if(world.askMenu){press('a');return true;}
-    if(world.moving||world.fadeOut>0||world.healFx>0||world.encounterFlash>0||world.exclaimT>0||world.npcs.some(n=>n.path?.length)){tick();return true;}
+    if(world.justEnteredMap||world.fadeT>0||world.moving||world.fadeOut>0||world.healFx>0||world.encounterFlash>0||world.exclaimT>0||world.npcs.some(n=>n.path?.length)){tick();return true;}
     return false;
    }
    if(name==='BattleScene'){
     if(s.mode==='menu'){
      const balls=['scheda','schedona'].filter(i=>state.bag[i]>0),heal=['spritz','caffe','mojito'].find(i=>state.bag[i]>0);
      const damage=bestMove(s),hpMax=statsOf(s.player.mon).hp;
-     const wantCatch=!s.trainer&&state.party.length<(euroPlan==='tactical'&&state.badges.includes('auditel')?4:3)&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
+     const islandRecruit=offshorePlan==='prepared'&&state.pos.mapId==='offshore'&&s.foe.mon.level>=33;
+     const teamLimit=islandRecruit?6:euroPlan==='tactical'&&state.badges.includes('auditel')?4:3;
+     const wantCatch=!s.trainer&&state.party.length<teamLimit&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
      const wantHeal=s.player.mon.hp<hpMax*.35&&heal;
      itemPending=wantHeal?heal:wantCatch?balls[0]:null;grid(s.mainMenu,itemPending?1:0);return true;
     }
@@ -212,7 +222,7 @@ try{
    }
    if(state.pos.mapId==='stretto'&&!state.flags['ponte-beaten'])enterMap('capitale');
    if(['route1','route2','route3'].includes(state.pos.mapId))cross('up');
-   const bar={borgo:'bar-borgo',mediopoli:'bar-medio',eurotown:'bar-euro',capitale:'bar-cap',stretto:'bar-stretto'}[state.pos.mapId];
+   const bar={borgo:'bar-borgo',mediopoli:'bar-medio',eurotown:'bar-euro',capitale:'bar-cap',stretto:'bar-stretto',offshore:'bar-offshore',bruxelles:'bar-bruxelles'}[state.pos.mapId];
    if(!bar)throw Error('No planned healer for '+state.pos.mapId);enterMap(bar);
    const healer=world.visibleNpcs().find(n=>n.healer);interact(healer.x,healer.y);walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();
   }
@@ -295,6 +305,7 @@ try{
   async function milestone(label){trace('milestone',label);milestones.push({label,steps:state.stepsTotal,money:state.money,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,moves:m.moves.map(s=>({...s}))})),bag:{...state.bag},badges:[...state.badges]});saveGame(state);codes[label]=exportSaveCode(state);for(let i=0;i<100;i++){stack.draw(screen);await new Promise(r=>setTimeout(r,50));if(!spriteRegistryStats().loading&&i>2)break;}stack.draw(screen);const native=document.createElement('canvas');native.width=240;native.height=180;native.getContext('2d').drawImage(canvas,0,0,240,180);shots[label]=native.toDataURL();}
   let failure=null;
   try{
+   if(!resumeCode){
    settle();enterMap('lab');
    const starter=STARTER_SPOTS.find(s=>s.speciesId===id);interact(starter.x,starter.y);settle();
    for(let attempt=0;!state.flags['dex-received']&&attempt<3;attempt++)interact(9,4);
@@ -354,7 +365,7 @@ try{
     }
     await milestone('spread-result');
    }
-   if(['dazio','capitano','boss','garante'].includes(endAt)&&state.badges.includes('spread')){
+   if(['dazio','capitano','boss','garante','tesoriere'].includes(endAt)&&state.badges.includes('spread')){
     if(state.pos.mapId==='gymue'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
     heal();
     if(capitalPlan==='prepared'){
@@ -379,13 +390,13 @@ try{
     await milestone('dazio-result');
    }
    if((strettoPlan==='prepared'||endAt==='capitano')&&state.badges.includes('dazio'))await visitStretto();
-   if(['boss','garante'].includes(endAt)&&state.badges.includes('dazio')){
+   if(['boss','garante','tesoriere'].includes(endAt)&&state.badges.includes('dazio')){
     if(courtPlan==='prepared')supplies();else heal();prepareArchive();enterMap('palazzo');
     for(let attempt=1;attempt<=2&&!state.flags['boss-beaten'];attempt++){
      if(state.pos.mapId!=='palazzo'){heal();enterMap('palazzo');}
      const npc=world.visibleNpcs().find(n=>n.trainerId==='boss');interact(npc.x,npc.y);await milestone(`palazzo-result-${attempt}`);
     }
-    if(endAt==='garante'&&state.flags['boss-beaten']){
+    if(['garante','tesoriere'].includes(endAt)&&state.flags['boss-beaten']){
      heal();enterMap('palazzo');enterMap('colle');await milestone('colle');
      if(courtPlan==='prepared')for(const trainerId of ['giudice1','giudice2','giudice3']){
       const npc=world.visibleNpcs().find(n=>n.trainerId===trainerId);
@@ -399,9 +410,35 @@ try{
      }
     }
    }
+   }
+   if(endAt==='tesoriere'&&state.flags['garante-beaten']){
+    await milestone('earned-resume');supplies();prepareArchive();
+    if(!state.flags['veh-traghetto'])interact(4,19);
+    enterMap('stretto');enterMap('offshore');await milestone('offshore-arrival');heal();
+    if(offshorePlan==='prepared'){
+     const initialWild=[...battles.values()].filter(b=>!b.trainer).length;
+     for(let n=0;n<500&&state.party.length<6&&[...battles.values()].filter(b=>!b.trainer).length-initialWild<12;n++){
+      const lead=state.party[0];if(lead.hp<statsOf(lead).hp*.5||!lead.moves.some(s=>s.pp>0&&MOVES[s.id].power>0))heal();
+      const cells=world.map.tiles.flatMap((row,y)=>[...row].flatMap((ch,x)=>TILES[ch]?.encounter&&!world.isBlocked(x,y)?[{x,y,path:pathTo(x,y)}]:[])).filter(c=>c.path?.length).sort((a,b)=>a.path.length-b.path.length);
+      if(!cells.length)throw Error('No legal offshore recruitment grass');walkTo(cells[0].x,cells[0].y);
+     }
+     await milestone('offshore-recruitment');heal();prepareArchive();
+     supplies();prepareKit();
+     for(const trainerId of ['commercialista','prestanome']){
+      for(let attempt=1;attempt<=2&&!state.defeatedTrainers.includes(trainerId);attempt++){
+       const npc=world.visibleNpcs().find(n=>n.trainerId===trainerId);interact(npc.x,npc.y);await milestone(`offshore-${trainerId}-${attempt}`);heal();supplies();
+      }
+     }
+    }
+    for(let attempt=1;attempt<=2&&!state.flags['offshore-beaten'];attempt++){
+     if(state.pos.mapId!=='offshore')throw Error('Offshore loss did not return to island');
+     heal();const npc=world.visibleNpcs().find(n=>n.trainerId==='tesoriere');interact(npc.x,npc.y);await milestone(`tesoriere-result-${attempt}`);
+    }
+   }
   }catch(e){failure=e.message;trace('failure',{message:failure,pos:{...state.pos},npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y,canWander:n.canWander})),tiles:world.map.tiles});}
   return {id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
- },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan});
+ },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,resumeCode});
+ result.resume=resumePath?{report:resumePath,stage:resumeStage,parentId:resumeReport.id,parentSeed:resumeReport.seed}:null;result.offshorePlan=offshorePlan;
  assert.deepEqual(errors,[]);
  if(process.env.CHECK_GROWTH!=='0')for(const b of result.battles.filter(b=>b.outcome==='caught')){
   const old=b.before.party.find(m=>m.uid===b.recipientUid),grown=b.after.party.find(m=>m.uid===b.recipientUid);
@@ -415,7 +452,7 @@ try{
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/campaign-native/${label}-${id}-${plan}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  delete result.shots;writeFileSync(`artifacts/campaign-native/${label}-${id}-${plan}-${seed}.json`,JSON.stringify(result,null,2));
  if(process.env.EXPECT_BADGE==='1')assert.ok(result.final.badges.includes(endAt),`Campaign did not earn ${endAt}`);
- if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
+ if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
  console.log(JSON.stringify({id,seed,plan,failure:result.failure,milestones:result.milestones,final:result.final,battles:result.battles.map(b=>({trainer:b.trainer,outcome:b.outcome,foes:b.foes}))},null,2));
  if(result.failure)process.exitCode=1;
 }finally{await browser.close();}

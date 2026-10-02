@@ -16,6 +16,7 @@ const fixtureState = (name) => {
 const legacySave = JSON.stringify(fixtureState("v13-post-ue.json"));
 const monsterFramePaths = JSON.parse(readFileSync("scripts/higgsfield-monster-frames.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
 const bossArtPaths = [...JSON.parse(readFileSync("scripts/higgsfield-premium-next.json", "utf8")).assets.filter((asset) => asset.kind === "boss"), ...["first-campaign", "eurotown", "capitale", "colle", "stretto"].flatMap(name => JSON.parse(readFileSync(`scripts/higgsfield-${name}.json`, "utf8")).assets)].map((asset) => asset.path.replace(/^public\//, ""));
+const offshorePaths = JSON.parse(readFileSync("scripts/higgsfield-offshore.json", "utf8")).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,""));
 const dossierArtPaths = [
   ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
   ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
@@ -121,8 +122,8 @@ const backdropEvidence = await page.evaluate(async (monsterFrames) => {
     checked.push(path);
   }
   return checked;
-}, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths]);
-if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length + worldArtPaths.length) throw new Error("copertura offline immagini e pose incompleta");
+}, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths,...offshorePaths]);
+if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length + worldArtPaths.length + offshorePaths.length) throw new Error("copertura offline immagini e pose incompleta");
 console.log(`Primo utilizzo offline: ${backdropEvidence.length} asset Higgsfield.`);
 const musicEvidence = await page.evaluate(async () => {
   const key = (await caches.keys()).find(name => name.startsWith("politicmon-"));

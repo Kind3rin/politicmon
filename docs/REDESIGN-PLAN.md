@@ -1,7 +1,7 @@
 # Politicmon: piano del redesign completo
 
 Aggiornato il 2 ottobre 2026. Obiettivo attivo: rifare gameplay, scene, asset,
-dialoghi satirici, lotte, evoluzioni e schede, usando il credito Higgsfield dove
+dialoghi satirici, lotte, evoluzioni e schede; rivedere anche ambienti, edifici e PG, usando il credito Higgsfield dove
 migliora il gioco. I round pubblicati sono tappe; il progetto non è dichiarato
 completamente ridisegnato. Le vecchie rinunce per «basso ROI» del piano PixelLab
 sono superate dalla richiesta attuale.
@@ -17,7 +17,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
-| Boss e prove | Ventuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta e allo Stretto con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
+| Boss e prove | Ventiquattro illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto e a Offshore con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
@@ -38,12 +38,13 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Preparazione e archivio | Recupero gratuito delle mosse al livello, dossier reale della squadra avversaria, comparsa sicura degli sfidanti | Tre starter fino al Garante con preparazione diversa; limiti e confronti in STRETTO-COLLAUDO |
 | Palazzo e Colle | Tre prove illustrate e volontarie, rifornimenti accessibili, verbale del morale letto al finale | Partita nuova di Ellyna fino al Garante; altri percorsi e limiti in COLLE-VERBALE |
 | Stretto | Cinque nuovi briefing, satira rendering/collaudo, ritorno prima della sfida e Tessera evolutiva; prove manuali anche dopo il Capitano | Tre partite nuove con preparazione diversa fino al Garante; confronto Giorgetta senza kit e accessi in due motori |
+| Offshore | Lido a conchiglia, palme, Tesoriere direzionale, tre dossier e negozio; satire originali e morale conservato | Tre campagne riprese da salvataggi giocati, porte/ritorno/Bruxelles in due motori; OFFSHORE-REGISTRO |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 187.797 byte gzip iniziali, checksum e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 543 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 187.968 byte gzip iniziali, checksum e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 552 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 613,72; spesa cumulativa 272,25 crediti. Non sono stati attivati acquisti
+verificato: 604,72; spesa cumulativa 281,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -97,6 +98,10 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
 ## Ultimo round
+
+[OFFSHORE-REGISTRO.md](OFFSHORE-REGISTRO.md): nuova identità dell’isola, edificio, palme e Tesoriere; tre dossier volontari, negozio e morale letto al finale. Sei job Higgsfield, nove PNG, 9 crediti; saldo 604,72. Tre salvataggi realmente giocati superano le prove e il boss in normale, con reclutamenti diversi. 286 test, 9.724 briefing per motore, ritorno e viaggio a Bruxelles verificati senza Tesoriere o Sherpa. Build 357.916 byte gzip, margine 484; 443 checksum PNG, 20 audio/catalogo e 552 risorse PWA. Difficoltà alta, altri seed e atti successivi restano aperti.
+
+### Round precedente: archivio
 
 [ARCHIVIO-PREPARAZIONE.md](ARCHIVIO-PREPARAZIONE.md): recupero delle linee
 dimenticate, dossier di tutti i rivali prima della sfida e controllo dei

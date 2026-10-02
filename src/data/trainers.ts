@@ -307,27 +307,26 @@ export const TRAINERS: Record<string, TrainerDef> = {
   commercialista: {
     id: "commercialista", name: "COMMERCIALISTA CREATIVO", pal: "aide",
     team: [["contemorfo", 40], ["muskrat", 41]],
-    intro: ["Detraggo, deduco, delocalizzo.", "Il tuo consenso? Lo segno tra le passività."],
-    defeat: ["Metto la sconfitta in ammortamento. Decennale."],
+    intro: ["La sede operativa è quella conchiglia. L'amministratore è il timbro.", "Gli utili hanno cambiato spiaggia. I camerieri aspettano ancora lo stipendio."],
+    defeat: ["Il timbro ha approvato la sconfitta. Per lo stipendio serve la firma di una conchiglia più grande."],
     money: 1800, reward: { itemId: "maalox", qty: 1 }
   },
   prestanome: {
     id: "prestanome", name: "PRESTANOME DI FIDUCIA", pal: "influencer",
     team: [["bojoon", 41], ["macronfox", 42], ["trumpon", 43]],
-    intro: ["Qui è tutto mio: il lido, gli yacht, i conti.", "Cioè, è intestato a me. Di chi sia davvero... non chiederlo."],
-    defeat: ["Questa sconfitta non è mia. È solo intestata a me."],
+    intro: ["Mi hanno regalato le chiavi di tre alberghi. Il portiere non mi fa entrare.", "Il patrimonio è mio. Il panino lo pago a rate."],
+    defeat: ["La sconfitta la firmo io. Le congratulazioni vanno al beneficiario effettivo."],
     money: 2200
   },
   tesoriere: {
     id: "tesoriere", name: "IL TESORIERE FANTASMA", pal: "boss",
     team: [["telecrate", 46], ["conteblob", 48], ["berlusconix", 50]],
     intro: [
-      "Benvenuto nel caveau a cielo aperto.",
-      "Custodisco i conti di TUTTI i partiti. Nessuno escluso, nessuno registrato.",
-      "Il segreto? Non esistere. Tu invece esisti: pessima mossa.",
-      "Vediamo se il tuo consenso vale in valuta estera."
+      "Nel caveau c'è un altro caveau. Nel terzo c'è la ricevuta del primo.",
+      "La sdraio ha un proprietario. L'ombra risiede altrove.",
+      "Tu vuoi aprire i conti. Io preferisco aprire una nuova società."
     ],
-    defeat: ["Congelato... come i miei conti alle Cayman."],
+    defeat: ["Hai trovato la ricevuta. Non il tesoro: il costo di custodirlo."],
     money: 4500, reward: { itemId: "tessera", qty: 1 }
   },
   // ---- BRUXELLES: gauntlet ELEZIONI UE (post-game, dopo garante-beaten) ----

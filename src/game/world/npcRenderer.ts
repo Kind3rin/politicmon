@@ -1,4 +1,5 @@
 import { npcImage, type Facing } from "../../art/characters";
+import { getSpriteImage } from "../../engine/assets";
 import type { NpcDef } from "../../data/maps";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { INK } from "../../ui/widgets";
@@ -56,7 +57,8 @@ export function buildNpcDrawCommand(options: {
   const ny = Math.round(npc.dispY) - camY - 1;
   const moving = Boolean(npc.stepFrom);
   const walkCycle = moving ? Math.floor(time * 8) % 4 : 0;
-  const image = npcImage(npc.pal, npc.currentFacing, walkCycle, moving);
+  const direction = { down: "south", up: "north", left: "west", right: "east" }[npc.currentFacing];
+  const image = (npc.spriteSet && getSpriteImage(`npc:${npc.spriteSet}:${direction}`, `chars/npc_${npc.spriteSet}_${direction}.png`)) || npcImage(npc.pal, npc.currentFacing, walkCycle, moving);
 
   return {
     baseY: npc.dispY + 16,

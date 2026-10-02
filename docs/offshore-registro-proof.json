@@ -1,0 +1,1062 @@
+{
+  "round": "offshore-registro",
+  "date": "2026-10-02",
+  "creditsSpent": 9,
+  "balanceAfter": 604.72,
+  "assets": 9,
+  "tests": 286,
+  "briefingsPerEngine": 9724,
+  "navigation": {
+    "chromium": {
+      "paths": [
+        "tiles/offshore_bar.png",
+        "tiles/offshore_palm.png",
+        "ui/boss/commercialista.png",
+        "ui/boss/prestanome.png",
+        "ui/boss/tesoriere.png",
+        "chars/npc_offshore-treasurer_north.png",
+        "chars/npc_offshore-treasurer_south.png",
+        "chars/npc_offshore-treasurer_west.png",
+        "chars/npc_offshore-treasurer_east.png"
+      ],
+      "checks": [
+        "both Lido doors and free healing",
+        "no sight fights",
+        "three real briefings and cancellation",
+        "merchant quote/cancel without cost",
+        "pre-boss maritime return",
+        "EU cancellation and accepted travel before boss and Sherpa",
+        "four custom cast directions"
+      ]
+    },
+    "webkit": {
+      "paths": [
+        "tiles/offshore_bar.png",
+        "tiles/offshore_palm.png",
+        "ui/boss/commercialista.png",
+        "ui/boss/prestanome.png",
+        "ui/boss/tesoriere.png",
+        "chars/npc_offshore-treasurer_north.png",
+        "chars/npc_offshore-treasurer_south.png",
+        "chars/npc_offshore-treasurer_west.png",
+        "chars/npc_offshore-treasurer_east.png"
+      ],
+      "checks": [
+        "both Lido doors and free healing",
+        "no sight fights",
+        "three real briefings and cancellation",
+        "merchant quote/cancel without cost",
+        "pre-boss maritime return",
+        "EU cancellation and accepted travel before boss and Sherpa",
+        "four custom cast directions"
+      ]
+    },
+    "fixtureOnly": "Synthetic post-Garante state; Offshore and Stretto encounter rates zero only in this isolated navigation test. Campaign runs retain real random encounters."
+  },
+  "world": {
+    "maps": 66,
+    "views": 252,
+    "characterPoses": 220,
+    "missing": [],
+    "characterIssues": []
+  },
+  "campaigns": [
+    {
+      "id": "ellyna",
+      "report": "artifacts/campaign-native/offshore-final-ellyna-direct-20261002.json",
+      "reportSha256": "0f9e0f1311ccb62085389440500df7b494f3623534667503707c5476394a4871",
+      "seed": 20261002,
+      "resume": {
+        "report": "artifacts/campaign-native/stretto-final-ellyna-prepared-20261002.json",
+        "stage": "garante-result-1",
+        "parentId": "ellyna",
+        "parentSeed": 20261002
+      },
+      "sourceCodeSha256": "c2b9b2837c87faa65280a47c6e41efbd371c464d9ca3deedc0d2bd7eaee63882",
+      "difficulty": "normal",
+      "archivePlan": "support",
+      "kitPlan": "skip",
+      "frames": 4653,
+      "failure": null,
+      "bossWon": true,
+      "initialParty": [
+        {
+          "id": "schleinix",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "movimenton",
+          "level": 32,
+          "heldItem": null
+        },
+        {
+          "id": "generorso",
+          "level": 29,
+          "heldItem": null
+        },
+        {
+          "id": "telecrate",
+          "level": 29,
+          "heldItem": null
+        }
+      ],
+      "finalParty": [
+        {
+          "id": "muskrat",
+          "level": 38,
+          "heldItem": null
+        },
+        {
+          "id": "schleinix",
+          "level": 39,
+          "heldItem": null
+        },
+        {
+          "id": "putingrad",
+          "level": 39,
+          "heldItem": null
+        },
+        {
+          "id": "movimenton",
+          "level": 37,
+          "heldItem": null
+        },
+        {
+          "id": "generorso",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "telecrate",
+          "level": 34,
+          "heldItem": null
+        }
+      ],
+      "money": 42810,
+      "sourceMorale": {
+        "trust": 62,
+        "cohesion": 66,
+        "progress": 22,
+        "promises": [
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          }
+        ]
+      },
+      "arrivalMorale": {
+        "trust": 68,
+        "cohesion": 74,
+        "progress": 22,
+        "promises": [
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "finalMorale": {
+        "trust": 68,
+        "cohesion": 74,
+        "progress": 25,
+        "promises": [
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "battles": [
+        {
+          "trainer": null,
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "muskrat",
+              "level": 17
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "telecrate",
+              "level": 33
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "caught",
+          "foes": [
+            {
+              "id": "muskrat",
+              "level": 34
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "caught",
+          "foes": [
+            {
+              "id": "putingrad",
+              "level": 36
+            }
+          ]
+        },
+        {
+          "trainer": "commercialista",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 40
+            },
+            {
+              "id": "muskrat",
+              "level": 41
+            }
+          ]
+        },
+        {
+          "trainer": "prestanome",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "bojoon",
+              "level": 41
+            },
+            {
+              "id": "macronfox",
+              "level": 42
+            },
+            {
+              "id": "trumpon",
+              "level": 43
+            }
+          ]
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "telecrate",
+              "level": 46
+            },
+            {
+              "id": "conteblob",
+              "level": 48
+            },
+            {
+              "id": "berlusconix",
+              "level": 50
+            }
+          ]
+        }
+      ],
+      "tesoriereDialogue": [
+        {
+          "map": "offshore",
+          "lines": [
+            "Il TESORIERE apre l'ultimo caveau: una ricevuta per la custodia degli altri due.",
+            "Il lido torna in vista. Le promesse aperte restano nel verbale.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "LA SQUADRA RESTA ANCHE A CAMERE SPENTE.",
+            "1 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+            "SONDAGGI al 100%."
+          ],
+          "trust": 68,
+          "cohesion": 74
+        }
+      ]
+    },
+    {
+      "id": "renzino",
+      "report": "artifacts/campaign-native/offshore-ready-renzino-direct-20261002.json",
+      "reportSha256": "20ebb8ef84dca1ae7c6f49f09498ea4febd13af5d377d25acba0b2cb6b1fa8df",
+      "seed": 20261002,
+      "resume": {
+        "report": "artifacts/campaign-native/stretto-final-renzino-prepared-20261002.json",
+        "stage": "garante-result-1",
+        "parentId": "renzino",
+        "parentSeed": 20261002
+      },
+      "sourceCodeSha256": "6078aa1751f279c8386502a64d9e9406122e901161f85d2592f4824963987449",
+      "difficulty": "normal",
+      "archivePlan": "support",
+      "kitPlan": "skip",
+      "frames": 5416,
+      "failure": null,
+      "bossWon": true,
+      "initialParty": [
+        {
+          "id": "capitanone",
+          "level": 33,
+          "heldItem": null
+        },
+        {
+          "id": "renzilla",
+          "level": 34,
+          "heldItem": null
+        },
+        {
+          "id": "movimenton",
+          "level": 29,
+          "heldItem": null
+        },
+        {
+          "id": "generorso",
+          "level": 29,
+          "heldItem": null
+        }
+      ],
+      "finalParty": [
+        {
+          "id": "pontimax",
+          "level": 45,
+          "heldItem": null
+        },
+        {
+          "id": "capitanone",
+          "level": 37,
+          "heldItem": null
+        },
+        {
+          "id": "renzilla",
+          "level": 38,
+          "heldItem": null
+        },
+        {
+          "id": "movimenton",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "generorso",
+          "level": 34,
+          "heldItem": null
+        },
+        {
+          "id": "xipanda",
+          "level": 42,
+          "heldItem": null
+        }
+      ],
+      "money": 40550,
+      "sourceMorale": {
+        "trust": 74,
+        "cohesion": 72,
+        "progress": 21,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "kept"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 15,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay",
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          }
+        ]
+      },
+      "arrivalMorale": {
+        "trust": 80,
+        "cohesion": 80,
+        "progress": 21,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "kept"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 15,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay",
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "finalMorale": {
+        "trust": 80,
+        "cohesion": 80,
+        "progress": 24,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "kept"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 15,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay",
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "battles": [
+        {
+          "trainer": null,
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "caught",
+          "foes": [
+            {
+              "id": "pontimax",
+              "level": 43
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "caught",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 39
+            }
+          ]
+        },
+        {
+          "trainer": "commercialista",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 40
+            },
+            {
+              "id": "muskrat",
+              "level": 41
+            }
+          ]
+        },
+        {
+          "trainer": "prestanome",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "bojoon",
+              "level": 41
+            },
+            {
+              "id": "macronfox",
+              "level": 42
+            },
+            {
+              "id": "trumpon",
+              "level": 43
+            }
+          ]
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "telecrate",
+              "level": 46
+            },
+            {
+              "id": "conteblob",
+              "level": 48
+            },
+            {
+              "id": "berlusconix",
+              "level": 50
+            }
+          ]
+        }
+      ],
+      "tesoriereDialogue": [
+        {
+          "map": "offshore",
+          "lines": [
+            "Il TESORIERE apre l'ultimo caveau: una ricevuta per la custodia degli altri due.",
+            "Il lido torna in vista. Le promesse aperte restano nel verbale.",
+            "TI AFFIDANO UN PROBLEMA, NON SOLO UN VOTO.",
+            "LA SQUADRA RESTA ANCHE A CAMERE SPENTE.",
+            "2 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+            "SONDAGGI al 100%."
+          ],
+          "trust": 80,
+          "cohesion": 80
+        }
+      ]
+    },
+    {
+      "id": "giorgetta",
+      "report": "artifacts/campaign-native/offshore-ready-giorgetta-direct-20261002.json",
+      "reportSha256": "96abe4699aa2d1890b5668b80b5af7df274a08aecc4d66b861df01950677feee",
+      "seed": 20261002,
+      "resume": {
+        "report": "artifacts/campaign-native/stretto-kit-giorgetta-prepared-20261002.json",
+        "stage": "garante-result-1",
+        "parentId": "giorgetta",
+        "parentSeed": 20261002
+      },
+      "sourceCodeSha256": "828f949cd19316189f13a30b170c6232df4e10639ea6c966d02145e319f1fbbf",
+      "difficulty": "normal",
+      "archivePlan": "support",
+      "kitPlan": "defensive",
+      "frames": 5709,
+      "failure": null,
+      "bossWon": true,
+      "initialParty": [
+        {
+          "id": "generorso",
+          "level": 31,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "giorgiagon",
+          "level": 35,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "telecrate",
+          "level": 28,
+          "heldItem": null
+        },
+        {
+          "id": "conteblob",
+          "level": 30,
+          "heldItem": null
+        }
+      ],
+      "finalParty": [
+        {
+          "id": "pontimax",
+          "level": 46,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "generorso",
+          "level": 36,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "giorgiagon",
+          "level": 38,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "telecrate",
+          "level": 33,
+          "heldItem": null
+        },
+        {
+          "id": "conteblob",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "xipanda",
+          "level": 38,
+          "heldItem": "gilet"
+        }
+      ],
+      "money": 32440,
+      "sourceMorale": {
+        "trust": 30,
+        "cohesion": 48,
+        "progress": 22,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "broken"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "broken"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge",
+          "traghetto",
+          "traghetto:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "IL PLASTICO GALLEGGIA",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: MOLO ACCESSIBILE",
+            "trust": -12,
+            "cohesion": -6
+          }
+        ]
+      },
+      "arrivalMorale": {
+        "trust": 36,
+        "cohesion": 56,
+        "progress": 22,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "broken"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "broken"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge",
+          "traghetto",
+          "traghetto:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "IL PLASTICO GALLEGGIA",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: MOLO ACCESSIBILE",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "finalMorale": {
+        "trust": 36,
+        "cohesion": 56,
+        "progress": 25,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "broken"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "broken"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge",
+          "traghetto",
+          "traghetto:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "IL PLASTICO GALLEGGIA",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: MOLO ACCESSIBILE",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "battles": [
+        {
+          "trainer": null,
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "caught",
+          "foes": [
+            {
+              "id": "pontimax",
+              "level": 42
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "caught",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 35
+            }
+          ]
+        },
+        {
+          "trainer": "commercialista",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "contemorfo",
+              "level": 40
+            },
+            {
+              "id": "muskrat",
+              "level": 41
+            }
+          ]
+        },
+        {
+          "trainer": null,
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "telecrate",
+              "level": 30
+            }
+          ]
+        },
+        {
+          "trainer": "prestanome",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "bojoon",
+              "level": 41
+            },
+            {
+              "id": "macronfox",
+              "level": 42
+            },
+            {
+              "id": "trumpon",
+              "level": 43
+            }
+          ]
+        },
+        {
+          "trainer": "tesoriere",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "telecrate",
+              "level": 46
+            },
+            {
+              "id": "conteblob",
+              "level": 48
+            },
+            {
+              "id": "berlusconix",
+              "level": 50
+            }
+          ]
+        }
+      ],
+      "tesoriereDialogue": [
+        {
+          "map": "offshore",
+          "lines": [
+            "Il TESORIERE apre l'ultimo caveau: una ricevuta per la custodia degli altri due.",
+            "Il lido torna in vista. Le promesse aperte restano nel verbale.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 2 APERTE.",
+            "SONDAGGI al 100%."
+          ],
+          "trust": 36,
+          "cohesion": 56
+        }
+      ]
+    }
+  ],
+  "performance": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": true
+    },
+    "boot": {
+      "assetsReadyMs": 1383.5999999940395,
+      "firstFrameMs": 1398.3999999761581,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 568889,
+      "wallMs": 1926.76
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.715,
+          "p50Ms": 0.7,
+          "p95Ms": 1.5,
+          "p99Ms": 1.6,
+          "maxMs": 5.9
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.738,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.6,
+          "maxMs": 34.1
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "LA PORTA ACCANTO AL POTERE"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.195,
+          "p50Ms": 0.1,
+          "p95Ms": 0.6,
+          "p99Ms": 0.9,
+          "maxMs": 0.9
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.663,
+          "p50Ms": 16.7,
+          "p95Ms": 17.5,
+          "p99Ms": 17.6,
+          "maxMs": 17.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "IL CANDIDATO NELL ERBA"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.337,
+          "p50Ms": 0.2,
+          "p95Ms": 0.8,
+          "p99Ms": 1.1,
+          "maxMs": 1.3
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.665,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.7,
+          "maxMs": 17.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "IL CANDIDATO NELL ERBA"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1123216,
+      "codeGzipBytes": 357916,
+      "initialCodeGzipBytes": 187968,
+      "spriteCompressedBytes": 2974340,
+      "spriteDecodedBytesEstimate": 14508800,
+      "spriteFiles": 551
+    },
+    "save": {
+      "payloadBytes": 8918,
+      "parseMeanMs": 0.032,
+      "serializeMeanMs": 0.0192
+    }
+  },
+  "localRelease": {
+    "pngChecksums": 443,
+    "audioAndCatalogChecksums": 20,
+    "pwaHiggsfieldAssets": 552,
+    "offlineAacTracksPerEngine": 19,
+    "offlineReload": "Chromium only"
+  },
+  "publicRelease": null
+}

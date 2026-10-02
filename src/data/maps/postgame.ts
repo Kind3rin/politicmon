@@ -184,6 +184,9 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
     tiles: OFFSHORE_TILES,
     outdoor: true,
     music: "offshore",
+    tileOverrides: { ".": "tiles/sand.png", j: "tiles/deck_wood.png" },
+    buildingOverrides: { e: "tiles/offshore_bar.png", Q: "tiles/offshore_bar.png" },
+    objectOverrides: { T: "tiles/offshore_palm.png" },
     warps: [
       // Punta del molo: ritorno in TRAGHETTO allo STRETTO (approdo sul pilone
       // del ponte, MAI su acqua).
@@ -197,7 +200,7 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       { x: 15, y: 4, toMap: "bar-offshore", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       // ROTTA PER BRUXELLES: dalle boe a est (acqua) parte il traghetto per la
       // capitale UE. Contenuto end-game come l'offshore: stesso gate garante-beaten
-      // (chi è qui l'ha già), ma serve anche aver appreso la rotta (flag hint-ue).
+      // (chi è qui l'ha già). Lo Sherpa informa, non blocca il passaggio.
       {
         x: 28, y: 9, toMap: "bruxelles", toX: 14, toY: 13, facing: "up",
         requiresFlag: "garante-beaten",
@@ -232,8 +235,8 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         x: 6, y: 9,
         lines: [
           "PARADISO OFFSHORE",
-          "Capitali? Mai visti. Chiedere al mare.",
-          "Pressione fiscale: 0%. Pressione dei SONDAGGI: altissima."
+          "La conchiglia è una sede. La sdraio un consiglio d'amministrazione.",
+          "LIDO CAYMAN a nord: PV e PP gratis. Le sfide iniziano con A."
         ]
       }
     ],
@@ -249,38 +252,42 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       lucaGuide(
         "L'OFFSHORE", 15, 8,
         [
-          "PARADISO OFFSHORE: un'isola che non risulta su nessun catasto.",
-          "Pressione fiscale 0%, pressione dei sondaggi altissima.",
-          "Evasori, prestanome e commercialisti creativi: candidati sfuggenti."
+          "Qui l'indirizzo della società è più importante di chi ci abita.",
+          "Commercialista e Prestanome sono prove facoltative: A apre il dossier.",
+          "L'erba ha nuovi candidati. Cura PV e PP al LIDO CAYMAN prima di reclutarli."
         ],
         [
-          "Il mini-boss è IL TESORIERE FANTASMA: da qualche parte, tra i conti cifrati.",
-          "Da qui si salpa per BRUXELLES e le elezioni europee."
+          "Il TESORIERE è sull'altopiano a nord-est: sali dalla scala, leggi il dossier, scegli il leader.",
+          "Le boe a est portano a BRUXELLES anche senza batterlo. La vittoria non riscrive le tue promesse."
         ]
       ),
       {
         id: "tr-commercialista", pal: "aide", x: 8, y: 10, facing: "left",
-        trainerId: "commercialista", sightRange: 3,
-        lines: ["Qui ogni scontrino diventa una nota spese. Anche il tuo."]
+        trainerId: "commercialista",
+        lines: ["La conchiglia non assume personale. Fattura soltanto il lavoro degli altri."]
       },
       {
         id: "tr-prestanome", pal: "influencer", x: 24, y: 12, facing: "left",
-        trainerId: "prestanome", sightRange: 3,
-        lines: ["Firmo tutto io. Capire, invece, non è compito mio."]
+        trainerId: "prestanome",
+        lines: ["Sul contratto sono il padrone. Sul citofono sono il fattorino."]
       },
       {
         // Il MINI-BOSS in cima all'altopiano: si dissolve dopo la sconfitta
         // (flag offshore-beaten, coerente con l'epilogo in WorldScene).
-        id: "tr-tesoriere", pal: "boss", x: 24, y: 5, facing: "left",
-        trainerId: "tesoriere", sightRange: 3, hideIfFlag: "offshore-beaten",
+        id: "tr-tesoriere", pal: "boss", spriteSet: "offshore-treasurer", x: 24, y: 5, facing: "left",
+        trainerId: "tesoriere", hideIfFlag: "offshore-beaten",
         lines: []
       },
       {
         id: "evasore-offshore", pal: "influencer", x: 12, y: 12, facing: "down",
         lines: [
-          "Io? In vacanza. Da undici anni fiscali consecutivi.",
-          "Il mio commercialista dice che tecnicamente non esisto. Che pace."
+          "Il dépliant diceva casa gratis. Era gratis solo il mio nome sulla società.",
+          "Ho provato a dormirci. Mi hanno offerto una casella postale."
         ]
+      },
+      {
+        id: "ambulante-offshore", pal: "barista", x: 10, y: 9, facing: "down", shop: true,
+        lines: ["I fondi viaggiano. Cure, schede e oggetti restano sul banco: il preventivo viene prima della firma."]
       },
       {
         // BANDITORE della COPPA DELLE POLTRONE: compare solo post-garante.
@@ -294,10 +301,9 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         id: "sherpa-ue", pal: "journalist", x: 25, y: 10, facing: "left",
         showIfFlag: "garante-beaten", setFlag: "hint-ue",
         lines: [
-          "SHERPA UE: la vera partita non è a Roma. È a BRUXELLES.",
-          "Oltre quelle boe c'è un motoscafo diplomatico: rotta per la capitale UE.",
-          "Si vota per il PARLAMENTO. E LA COMMISSIONE non cede la poltrona a nessuno.",
-          "Prendi il traghetto a est. Porta una squadra da lv 50+: LA COMMISSIONE non perdona."
+          "SHERPA UE: le boe a est portano a BRUXELLES. Il Tesoriere non timbra il biglietto.",
+          "Il CAFFÈ SCHUMAN cura PV e PP. Prima della Commissione ci sono quattro prove.",
+          "Qui spostano gli utili. Là spostano gli emendamenti. Chiedi sempre dove finiscono."
         ]
       }
     ]

@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 613.72,
+  "estimatedCredits": 9,
+  "assets": [
+    {
+      "id": "commercialista",
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Elegant modern restrained navy ivory teal burgundy brass-gold palette, bold readable large shapes, crisp pixels visible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet margins above and below for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Consistent theatrical warm light, turquoise sea, subtle ridiculous institutional details. A tropical island accountant's desk: a large empty seashell is used as an office building, its only occupant a brass rubber stamp in a swivel chair. A modest fictional accountant in rolled sleeves moves identical blank folders from the left tray to a palm-shaped tray on the right. A small letterbox outside the shell is overflowing although there is no door. Clear visual joke about a shell company, sunny charming setting, papers and fingers clean and simple, strong left-to-right visual story.",
+      "path": "public/sprites/ui/boss/commercialista.png",
+      "width": 224,
+      "height": 78,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "aspectRatio": "21:9",
+      "jobId": "65b017a5-1904-48d8-9fa5-28145ee78e5f",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_064748_65b017a5-1904-48d8-9fa5-28145ee78e5f.png",
+      "cropTop": 54,
+      "crop": "full width, y54; height width*78/224, nearest resize",
+      "sourceSha256": "bf01d539c2589ee145b55069bd45f4e2bef8204f61f6d0ac56dfbc2b83051f55",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "9dbb5ef0a65d21e50c22f67a0bfca0d25439d9b56ed52c3d523f056b17a99cfc"
+    },
+    {
+      "id": "prestanome",
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Elegant modern restrained navy ivory teal burgundy brass-gold palette, bold readable large shapes, crisp pixels visible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet margins above and below for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Consistent theatrical warm light, turquoise sea, subtle ridiculous institutional details. A timid fictional beach clerk at a small signless reception counter is weighed down by an absurdly huge golden keyring. Each key connects with a thin red string to a tiny model yacht, hotel and beach parasol on a shelf, while the clerk's own lunch is a plain small sandwich. A large elegant shadow of another unseen owner stretches away behind the models. Playful precise joke about nominal ownership without control, character deliberately small, keyring and model properties the clear subjects.",
+      "path": "public/sprites/ui/boss/prestanome.png",
+      "width": 224,
+      "height": 78,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "aspectRatio": "21:9",
+      "jobId": "283dfcf8-04a9-4de7-a22a-42c388195a2b",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_064748_283dfcf8-04a9-4de7-a22a-42c388195a2b.png",
+      "cropTop": 54,
+      "crop": "full width, y54; height width*78/224, nearest resize",
+      "sourceSha256": "592436a0297d5414bf07ac48bade7d4caec07c7187f1525a223ab28b5aa6fbe0",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "b09703af9b5a9b7dab08068917e1440298b9c09dc8f7ef58769c4f8f0862f47f"
+    },
+    {
+      "id": "tesoriere",
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Elegant modern restrained navy ivory teal burgundy brass-gold palette, bold readable large shapes, crisp pixels visible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet margins above and below for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Consistent theatrical warm light, turquoise sea, subtle ridiculous institutional details. An outdoor bank vault on a tropical clifftop, a small fictional phantom treasurer in an ivory suit hidden behind an open gold safe. Inside the safe is a smaller safe, inside that another smaller safe; the last contains a single blank receipt. Loose blank receipts sail away like small paper boats on the sea. A big empty deck chair has a gold crown placed on it. No money symbols or currency lettering. Funny ominous beautiful institutional theatre, nested ownership, rich navy sea and tiny golden highlights.",
+      "path": "public/sprites/ui/boss/tesoriere.png",
+      "width": 224,
+      "height": 78,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "aspectRatio": "21:9",
+      "jobId": "e5677460-d180-4f06-ae2b-57730395a67e",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_064748_e5677460-d180-4f06-ae2b-57730395a67e.png",
+      "cropTop": 54,
+      "crop": "full width, y54; height width*78/224, nearest resize",
+      "sourceSha256": "0af2aa7f354822e1b1e1e5e5f70fad256b98a2d8c9aa8f524b7324d1b85d5168",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "c23863e5e6b8bc054cd089de53ff8e9330f6794482996df80dc79a149616f79c"
+    },
+    {
+      "id": "offshore-bar",
+      "path": "public/sprites/tiles/offshore_bar.png",
+      "width": 64,
+      "height": 32,
+      "prompt": "POLITICMON modern original satirical RPG game asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large shapes legible at tiny native resolution, orthographic straight front view, no perspective camera or isometric ground. Transparent background with clean alpha, no shadow on the background, no lettering, symbols, logos, watermark or real people. One complete isolated beach healing café building, wide and low rectangle width exactly twice height. A large ivory seashell canopy forms the roof upper half. Lower half a simple warm timber façade, brass-edged rectangular double entrance centered at bottom, entrance takes the middle half of building width and touches the bottom edge; turquoise shutters on left and right. Two small paper receipt rolls like pillars at the outside corners. Small palm leaf adornments sit inside the silhouette. Exterior feels like a tropical café at a ridiculous finance resort. No pavement, no scenery, no actors. Building silhouette nearly fills the canvas width, symmetrical main door.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "background": "transparent",
+      "aspectRatio": "1:1",
+      "jobId": "f424e78f-daeb-4fc8-85a0-cbdce4554bd7",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_070251_f424e78f-daeb-4fc8-85a0-cbdce4554bd7.png",
+      "layout": "tight alpha bounds; nearest resize to runtime footprint",
+      "kind": "building",
+      "sourceSha256": "2f1bd1527d97c4a8a4725befa82801075d77ad33532f6bbb0f64fe8ac48fd002",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "alphaCutoff": 128,
+      "outputSha256s": {
+        "public/sprites/tiles/offshore_bar.png": "9f4e4977ec858e09fc85039c9710ab94a2a03d6556c2c99c8d2a6567b89cfce1"
+      }
+    },
+    {
+      "id": "offshore-palm",
+      "path": "public/sprites/tiles/offshore_palm.png",
+      "width": 32,
+      "height": 48,
+      "prompt": "POLITICMON modern original satirical RPG game asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large shapes legible at tiny native resolution, orthographic straight front view, no perspective camera or isometric ground. Transparent background with clean alpha, no shadow on the background, no lettering, symbols, logos, watermark or real people. One isolated stylized tropical palm tree for a top-down RPG prop, tall silhouette width two thirds of height. Thick simple gently curved brown trunk centered at the bottom; six broad chunky dark teal and green palm leaves, two small golden coconuts. No base ground or pot. Leaves within the frame, bottom trunk centered, entire tree visible. Tiny golden ribbon tied to trunk as playful suggestion that even the shade has an owner. Clearly a palm at 32x48 pixels.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "background": "transparent",
+      "aspectRatio": "1:1",
+      "jobId": "6968cec0-79a8-4acb-837c-9cd8239125e7",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_070251_6968cec0-79a8-4acb-837c-9cd8239125e7.png",
+      "layout": "tight alpha bounds; nearest resize to runtime footprint",
+      "kind": "object",
+      "sourceSha256": "4bd6fcce41e993e60cd21a373b38bec77443be92a8ccd962bbe254043dfc794e",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "alphaCutoff": 128,
+      "outputSha256s": {
+        "public/sprites/tiles/offshore_palm.png": "f65fc276c3cf5f3e1a8833ff653ab4f2823eeb391c845ee20dd7c75a16605384"
+      }
+    },
+    {
+      "id": "offshore-treasurer-directions",
+      "path": "public/sprites/chars/npc_offshore-treasurer_south.png",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON modern original satirical RPG game asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large shapes legible at tiny native resolution, orthographic straight front view, no perspective camera or isometric ground. Transparent background with clean alpha, no shadow on the background, no lettering, symbols, logos, watermark or real people. A clean 2 by 2 sprite reference sheet with FOUR views of the EXACT SAME fictional phantom tropical bank treasurer. Top-left FRONT facing south, top-right BACK facing north, bottom-left facing WEST left, bottom-right facing EAST right. Each equal square quadrant contains ONE full body only, centered with ample transparent margin, no frame dividers. Small ivory suit, burgundy necktie, ivory straw hat with burgundy ribbon, dark navy face with tiny teal eyes, ordinary readable ivory shoes, a tiny gold key in one hand. Chibi full body proportion, upright idle stance, no movement streak, no props other than key. All four views same scale, feet aligned at the same relative height in each cell. Never duplicate the front for the back. Literal left and right profiles. No lettering.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "background": "transparent",
+      "aspectRatio": "1:1",
+      "jobId": "04c977fb-b9c9-457b-90e5-03b11914ca49",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_070252_04c977fb-b9c9-457b-90e5-03b11914ca49.png",
+      "outputs": [
+        "public/sprites/chars/npc_offshore-treasurer_south.png",
+        "public/sprites/chars/npc_offshore-treasurer_north.png",
+        "public/sprites/chars/npc_offshore-treasurer_west.png",
+        "public/sprites/chars/npc_offshore-treasurer_east.png"
+      ],
+      "layout": "2x2 south,north,west,east; alpha bounds per cell; contained in 24x32",
+      "kind": "directions",
+      "sourceSha256": "dc15c827fe901d2f0fb80c56d624b32f6cb743ab55100ec46eb42803d33d09d2",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "alphaCutoff": 128,
+      "outputSha256s": {
+        "public/sprites/chars/npc_offshore-treasurer_south.png": "33b2a8967c565c8fd560335944326465ce07d11c29c0924b6c57391111f9947c",
+        "public/sprites/chars/npc_offshore-treasurer_north.png": "05bba629bce12a60ba96d7ad95d26b35dbcb84a6ce336a793cf59952a9758d71",
+        "public/sprites/chars/npc_offshore-treasurer_west.png": "7e1c3fb9900fd041573a6721204a0b94212f85f6322e56e4f49afce38f3651c4",
+        "public/sprites/chars/npc_offshore-treasurer_east.png": "61efec12e6c4701e0f3eb8f4fc7e0654493f8d354c12efa1c3836297ec1ac691"
+      }
+    }
+  ],
+  "creditsSpent": 9,
+  "balanceAfter": 604.72
+}

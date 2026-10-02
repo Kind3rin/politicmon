@@ -150,8 +150,8 @@ export const QUESTS: QuestDef[] = [
   {
     id: "offshore-tesoriere",
     title: "IL TESORIERE FANTASMA",
-    desc: "Qualcuno custodisce i conti di TUTTI i partiti sull'isola. Stanalo sull'altopiano.",
-    hint: "In cima agli scogli a nord-est dell'isola: l'unica via è la scala. Porta una squadra da lv 45+.",
+    desc: "Sul lido le società abitano in conchiglie. Sull'altopiano il TESORIERE tiene un caveau dentro l'altro.",
+    hint: "Scala a nord-est. A apre il dossier: tipi, mosse e leader. Il LIDO CAYMAN cura PV e PP; le due prove e i reclutamenti preparano la squadra.",
     step: "Sconfiggi IL TESORIERE FANTASMA.",
     isDone: (s) => Boolean(s.flags["offshore-beaten"]),
     target: { mapId: "offshore", x: 23, y: 7 }

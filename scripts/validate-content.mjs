@@ -103,6 +103,14 @@ for (const trainer of Object.values(TRAINERS)) {
 const globalPickupIds = new Set();
 for (const map of Object.values(MAPS)) {
   const scope = `map ${map.id}`;
+  for (const group of [map.tileOverrides, map.buildingOverrides, map.objectOverrides]) {
+    for (const [ch, path] of Object.entries(group ?? {})) {
+      if (!TILES[ch] || !existsSync(resolve("public/sprites", path))) fail(scope, `override senza tile/PNG ${ch}: ${path}`);
+    }
+  }
+  for (const npc of map.npcs) if (npc.spriteSet) for (const dir of ["north", "south", "east", "west"]) {
+    if (!existsSync(resolve(`public/sprites/chars/npc_${npc.spriteSet}_${dir}.png`))) fail(scope, `vista NPC mancante ${npc.id} ${dir}`);
+  }
   if (!map.tiles.length || !map.tiles[0].length) { fail(scope, "tilemap vuota"); continue; }
   const width = map.tiles[0].length;
   map.tiles.forEach((row, y) => {

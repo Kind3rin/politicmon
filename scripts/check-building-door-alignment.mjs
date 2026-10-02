@@ -65,7 +65,7 @@ const problems = await page.evaluate(async () => {
         }
 
         const fp = buildingFootprint(map, x, y, ch);
-        const path = buildingPath(ch, fp);
+        const path = map.buildingOverrides?.[ch] ?? buildingPath(ch, fp);
         if (!path) {
           out.push(`${mapId}: edificio '${ch}' a (${x},${y}) senza PNG per footprint ${fp.w}x${fp.h}`);
           continue;

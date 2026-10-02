@@ -119,9 +119,9 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
   offshore: {
     flag: "hint-offshore",
     lines: [
-      "Sei nel PARADISO OFFSHORE: sabbia bianca e conti opachi.",
-      "Qui i POLITICMON sono fortissimi: lv 38+. Il BAR LIDO CAYMAN rimette in sesto, gratis.",
-      "Sull'altopiano a nord-est qualcuno custodisce un segreto contabile..."
+      "PARADISO OFFSHORE: il sole è pubblico. L'ombra ha cambiato residenza.",
+      "Nuovi candidati nell'erba, LV 30-45. Il LIDO CAYMAN a nord recupera PV e PP.",
+      "Tre sfide volontarie: A apre il dossier, B torna. Le boe a est portano a BRUXELLES."
     ]
   },
   // Primo sbarco a BRUXELLES: banner d'ingresso (flag hint-ue già impostato dallo
@@ -622,6 +622,10 @@ export class WorldScene implements Scene {
       return getSpriteImage(`tile:ov:${this.map.id}:${ch}`, ov);
     }
     return tileImage(ch);
+  }
+  private objectPng(ch: string): HTMLImageElement | null {
+    const path = this.map.objectOverrides?.[ch];
+    return path ? getSpriteImage(`obj:ov:${this.map.id}:${ch}`, path) : objectImage(ch);
   }
 
   // Footprint di un EDIFICIO a partire dall'angolo alto-sx (atx,aty) di un blocco
@@ -2107,9 +2111,9 @@ export class WorldScene implements Scene {
           addSondaggi(this.state, 8);
           saveGame(this.state);
           this.say([
-            "IL TESORIERE si dissolve in una nuvola di ricevute non emesse.",
-            "'I conti tornano sempre... a qualcun altro.'",
-            "I fondi neri riemergono: i giornali parlano di MIRACOLO CONTABILE.",
+            "Il TESORIERE apre l'ultimo caveau: una ricevuta per la custodia degli altri due.",
+            "Il lido torna in vista. Le promesse aperte restano nel verbale.",
+            ...moraleEpilogue(this.state.morale),
             `SONDAGGI al ${this.state.sondaggi}%.`
           ]);
           return;
@@ -3232,12 +3236,12 @@ export class WorldScene implements Scene {
         } else if (def.overlay) {
           // Oggetto overlay (albero/segnale/...): PNG 32px ancorato in basso al
           // tile (la chioma sborda verso l'alto).
-          const obj = objectImage(ch);
+          const obj = this.objectPng(ch);
           if (obj) {
             drawWorldObjectPng(screen, ch, obj, dx, dy);
           }
         } else {
-          const objImg = objectImage(ch);
+          const objImg = this.objectPng(ch);
           if (objImg) {
             // Tile non-overlay con oggetto PNG (es. erba alta `~`): prima il
             // terreno base (erba/pavimento), poi i ciuffi PNG ancorati in basso.
@@ -3300,7 +3304,8 @@ export class WorldScene implements Scene {
           continue;
         }
         const fp = this.buildingFootprint(tx, ty, ch);
-        const build = buildingImage(ch, fp);
+        const override = this.map.buildingOverrides?.[ch];
+        const build = override ? getSpriteImage(`build:ov:${this.map.id}:${ch}`, override) : buildingImage(ch, fp);
         if (!build) {
           continue;
         }

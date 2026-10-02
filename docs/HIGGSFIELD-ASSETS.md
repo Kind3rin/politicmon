@@ -1,5 +1,7 @@
 # Politicmon: risorse Higgsfield
 
+Ventunesimo blocco: Offshore, tre panorami di briefing, Lido Cayman a conchiglia, palma e quattro viste del Tesoriere. Sei job `gpt_image_2_5` qualità high, **9 crediti**, saldo **613,72 → 604,72**, cumulativo **281,25**. Nove PNG, prompt e checksum in `higgsfield-offshore.json`; conversioni ripetibili e prove in [OFFSHORE-REGISTRO.md](OFFSHORE-REGISTRO.md). Porte, annullamento, ritorno e rotta UE verificati nei due motori; tre salvataggi di campagne reali vincono il boss con preparazioni diverse.
+
 Ventesimo blocco: regia audio, un fondale 240×180 per il mixer del gioco.
 Un job `gpt_image_2_5`, **0,25 crediti**, saldo **613,97 → 613,72**,
 cumulativo **272,25**. Prompt, cartella, job, fonte e checksum in

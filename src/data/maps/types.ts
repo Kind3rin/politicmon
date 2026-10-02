@@ -2,6 +2,7 @@ import type { Facing } from "../../art/characters";
 import type { FeatureId } from "../../game/features";
 
 export interface NpcDef {
+  spriteSet?: string; // optional directional appearance, independent of gameplay role
   id: string;
   pal: string;
   x: number;
@@ -123,4 +124,6 @@ export interface MapDef {
   // GROTTA: pavimento `p` -> roccia, muro `A` -> roccia scura). Non tocca la
   // logica di collisione (resta quella di TILES[ch]).
   tileOverrides?: Record<string, string>;
+  buildingOverrides?: Record<string, string>; // roof family -> complete footprint PNG
+  objectOverrides?: Record<string, string>; // overlay char -> anchored prop PNG
 }

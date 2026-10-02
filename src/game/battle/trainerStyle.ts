@@ -3,6 +3,9 @@ import type { AiProfile } from "./sim";
 export type AiStyle = "balanced" | "pressure" | "rush" | "control" | "fortress" | "setup";
 export interface TrainerStyle { style: AiStyle; label: string; hints: readonly string[]; art?: string; }
 const STYLES: Record<string, TrainerStyle> = {
+  commercialista: { style: "balanced", label: "LA SEDE NELLA CONCHIGLIA", art: "commercialista", hints: ["Prova facoltativa. Due avversari; B torna al lido.", "Il LIDO CAYMAN a nord recupera PV e PP. La firma non cura."] },
+  prestanome: { style: "balanced", label: "LE CHIAVI SENZA LA CASA", art: "prestanome", hints: ["Prova facoltativa. Tre avversari di tipi diversi; scegli il leader.", "Il rimpasto dopo un KO avversario è gratuito. Nessun obbligo di sfida per salpare."] },
+  tesoriere: { style: "balanced", label: "LA RICEVUTA NEL CAVEAU", art: "tesoriere", hints: ["Tre avversari, ultima forma leggendaria. Leggi mosse e abilità.", "B annulla. Il bar resta raggiungibile; puoi reclutare sull'isola. Premio: TESSERA DORATA."] },
   stagista: { style: "balanced", label: "PROVA MICROFONO", art: "stagista", hints: ["Prova facoltativa: A inizia, B torna in studio. Avversari diversi richiedono risposte diverse.", "Dopo il KO di un avversario il rimpasto è gratuito. Il bar recupera PV e PP prima della diretta."] },
   funzionario: { style: "balanced", label: "CONTROLLO PRELIMINARE", art: "funzionario", hints: ["Facoltativo: A inizia, B annulla. Prepara mosse, non firme.", "Il bar recupera PV e PP prima di Lady Direttiva."] },
   diplomatico: { style: "balanced", label: "POSTI AL TAVOLO", art: "diplomatico", hints: ["Prova facoltativa. A sfida, B torna. Leggi il tipo di apertura.", "Puoi uscire e recuperare i PP al bar prima di Tycoon."] },
@@ -33,7 +36,8 @@ export function trainerAi(id: string, badge: boolean, hard: boolean, badges: num
   // The first lesson teaches moves and types, before introducing enemy healing.
   if (id === "rival1") return { whiff: hard ? .15 : .33, canHeal: false, finisher: hard, style: "balanced" };
   if (id === "stagista") return { whiff: hard ? .22 : .4, canHeal: false, finisher: hard, style: "balanced" };
-  const boss = (!badge && Boolean(STYLES[id]) && !["funzionario", "diplomatico", "oligarca", "giudice1", "giudice2", "giudice3", "djpapeete", "citofonista", "noponte", "geometra"].includes(id)) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
+  // Art alone must not grant boss healing/accuracy to an optional trial.
+  const boss = (!badge && ["emittenza", "ladydirettiva", "tycoon", "boss", "garante", "futuro-anteriore", "partner-perfetto", "commissione", "algoritmo-sovrano"].includes(id)) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
   const profile: AiProfile = boss ? { whiff: hard ? .1 : .2, canHeal: true, finisher: true }
     : badge ? { whiff: hard ? .15 : .28, canHeal: true, finisher: true }
     : hard && id ? { whiff: Math.max(.22, .4 - badges * .05), canHeal: true, finisher: true }

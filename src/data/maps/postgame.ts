@@ -318,6 +318,8 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
     id: "bruxelles",
     name: "BRUXELLES",
     tiles: BRUXELLES_TILES,
+    tileOverrides: { "=": "tiles/commissione_floor.png" },
+    buildingOverrides: { M: "tiles/bruxelles_palace.png", e: "tiles/bruxelles_cafe.png", Q: "tiles/bruxelles_cafe.png" },
     outdoor: true,
     music: "bruxelles",
     warps: [
@@ -358,9 +360,9 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       {
         x: 18, y: 11,
         lines: [
-          "PARLAMENTO EUROPEO - AULA PLENARIA",
-          "Sessione a Bruxelles. Poi a Strasburgo. Poi di nuovo a Bruxelles.",
-          "Il trasloco mensile è previsto dai Trattati. Le poltrone viaggiano in camion."
+          "IL VIALE DEGLI ALLEGATI",
+          "Quattro prove volontarie. A apre il dossier; B torna al viale.",
+          "Il palazzo è a nord. Il CAFFÈ SCHUMAN recupera PV e PP; l’ambulante vende cure ed equipaggiamento."
         ]
       }
     ],
@@ -370,34 +372,38 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       { id: "pk-brux-dir", x: 24, y: 9, itemId: "dirMulta", qty: 1, hidden: true }
     ],
     npcs: [
-      // ---- GAUNTLET UE (4 allenatori sul viale) ----
+      // Quattro prove facoltative: nessuna lotta parte attraversando il viale.
       {
         id: "tr-eucommissario", pal: "guard", x: 7, y: 7, facing: "right",
-        trainerId: "eu-commissario", sightRange: 3,
-        lines: ["Ho un portafoglio: la CONCORRENZA. E tu mi fai concorrenza sleale."]
+        trainerId: "eu-commissario",
+        lines: ["La bilancia è imparziale. Il tavolo appartiene al concorrente più grande."]
       },
       {
         id: "tr-eulobby", pal: "influencer", x: 23, y: 7, facing: "left",
-        trainerId: "eu-lobby", sightRange: 3,
-        lines: ["Rue de la Loi è la mia seconda casa. La prima è il corridoio."]
+        trainerId: "eu-lobby",
+        lines: ["Ti apro una porta. La chiave, però, resta al mio cliente."]
       },
       {
         id: "tr-eurelatore", pal: "aide", x: 7, y: 9, facing: "right",
-        trainerId: "eu-relatore", sightRange: 3,
-        lines: ["Il mio emendamento ha 400 pagine di allegati. Buona lettura."]
+        trainerId: "eu-relatore",
+        lines: ["La riunione deve decidere chi risponde alla mail che convocava la riunione."]
       },
       {
         id: "tr-eurodeputato", pal: "journalist", x: 21, y: 9, facing: "left",
-        trainerId: "eu-eurodeputato", sightRange: 3,
-        lines: ["Presente in aula il 12% delle volte. Ma alle foto, sempre."]
+        trainerId: "eu-eurodeputato",
+        lines: ["Il cartonato è già nella foto. La sedia aspetta ancora qualcuno."]
+      },
+      {
+        id: "ambulante-bruxelles", pal: "barista", x: 8, y: 12, facing: "right", shop: true,
+        lines: ["Le ricevute sono in triplice copia. Lo Spritz funziona già alla prima."]
       },
       // ---- NPC ambientale d'ingresso: bussola narrativa sull'attracco ----
       {
         id: "hostess-ue", pal: "granny", x: 16, y: 13, facing: "left",
         lines: [
-          "HOSTESS DI PARTITO: benvenuto a BRUXELLES!",
-          "Il PARLAMENTO è a sinistra, la COMMISSIONE lassù in fondo al viale.",
-          "Vinci il gauntlet e prenditi la poltrona europea. In bocca al lupo."
+          "HOSTESS: il lampione è rotto. Abbiamo già inaugurato il tavolo che ne discuterà.",
+          "Quattro sfide facoltative sul viale, poi LA COMMISSIONE nel palazzo a nord. Parlaci con A, senza agguati.",
+          "Al CAFFÈ SCHUMAN recuperi PV e PP. Dal molo puoi tornare sull’isola anche prima della lotta."
         ]
       }
     ]
@@ -408,7 +414,9 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
   commissione: {
     id: "commissione",
     name: "PALAZZO DELLA COMMISSIONE",
-    tiles: COMMISSIONE_TILES,
+    tiles: COMMISSIONE_TILES.map((row, y) => y === 3 ? row.slice(0, 2) + "t" + row.slice(3, 9) + "t" + row.slice(10) : row),
+    tileOverrides: { p: "tiles/commissione_floor.png", A: "tiles/commissione_wall.png", c: "tiles/commissione_carpet.png" },
+    objectOverrides: { t: "tiles/commissione_table.png" },
     outdoor: false,
     music: "palazzo",
     warps: [
@@ -416,33 +424,32 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       { x: 6, y: 7, toMap: "bruxelles", toX: 13, toY: 5, facing: "down" }
     ],
     signs: [
-      { x: 3, y: 0, lines: ["Motto sopra la porta:", "'IN VARIETATE CONCORDIA.' Cioè: litighiamo, ma in 24 lingue."] }
+      { x: 3, y: 0, lines: ["REGISTRO DELLE COMPETENZE", "Tre tavoli si passano il lampione rotto. La luce non passa da nessuno."] }
     ],
     pickups: [],
     npcs: [
       lucaGuide(
         "BRUXELLES", 8, 6,
         [
-          "BRUXELLES: la capitale UE delle elezioni europee.",
-          "Il Parlamento trasloca ogni mese: nessuno sa mai dove sia la seduta.",
-          "In varietate concordia: qui si litiga, ma in 24 lingue diverse."
+          "Il primo tavolo propone una lampadina. Il secondo approva la proposta del tavolo.",
+          "Il terzo inaugura il verbale. Fuori è ancora buio."
         ],
         [
-          "Gauntlet finale: commissari, lobbisti ed eurodeputati fino a LA COMMISSIONE.",
-          "Batti il boss e ti prendi la TESSERA DORATA: sei arrivato in cima."
+          "Quattro prove facoltative sul viale. LA COMMISSIONE ha quattro avversari, LV 52-55; Ursulax porta il GILET.",
+          "A apre il dossier, B annulla. Puoi uscire e curarti al CAFFÈ SCHUMAN. Il premio è una TESSERA DORATA."
         ]
       ),
       {
-        id: "commissione", pal: "boss", x: 5, y: 1, facing: "down",
-        trainerId: "commissione", sightRange: 5, hideIfFlag: "ue-beaten",
+        id: "commissione", pal: "boss", spriteSet: "commissione", x: 5, y: 1, facing: "down",
+        trainerId: "commissione", hideIfFlag: "ue-beaten",
         lines: []
       },
       {
-        id: "commissione-after", pal: "boss", x: 2, y: 1, facing: "down", showIfFlag: "ue-beaten",
+        id: "commissione-after", pal: "boss", spriteSet: "commissione", x: 2, y: 1, facing: "down", showIfFlag: "ue-beaten",
         lines: [
-          "LA COMMISSIONE: complimenti, hai vinto le elezioni. Ora inizia il difficile.",
-          "Riunioni, trilogo, comitatologia. Rimpiangerai i comizi.",
-          "La poltrona è tua. Il REGOLAMENTO, però, resta mio. Come sempre."
+          "LA COMMISSIONE: il verbale dice chi cambia la lampadina. Finalmente non è il verbale.",
+          "La foto con il lampione acceso la facciamo dopo. Prima serve accenderlo.",
+          "Una vittoria non mantiene le promesse al posto tuo. Il registro resta aperto."
         ]
       }
     ]

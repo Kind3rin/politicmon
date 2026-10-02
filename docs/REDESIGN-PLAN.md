@@ -17,7 +17,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
-| Boss e prove | Ventiquattro illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto e a Offshore con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
+| Boss e prove | Ventotto illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
@@ -39,13 +39,18 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Palazzo e Colle | Tre prove illustrate e volontarie, rifornimenti accessibili, verbale del morale letto al finale | Partita nuova di Ellyna fino al Garante; altri percorsi e limiti in COLLE-VERBALE |
 | Stretto | Cinque nuovi briefing, satira rendering/collaudo, ritorno prima della sfida e Tessera evolutiva; prove manuali anche dopo il Capitano | Tre partite nuove con preparazione diversa fino al Garante; confronto Giorgetta senza kit e accessi in due motori |
 | Offshore | Lido a conchiglia, palme, Tesoriere direzionale, tre dossier e negozio; satire originali e morale conservato | Tre campagne riprese da salvataggi giocati, porte/ritorno/Bruxelles in due motori; OFFSHORE-REGISTRO |
+| Bruxelles | Palazzo e caffè propri, materiali, cast direzionale, cinque dossier e verbale del morale | Tre campagne normali, percorsi nativi e accesso al Campo Largo nei due motori; BRUXELLES-VERBALE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 187.968 byte gzip iniziali, checksum e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 552 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 188.237 byte gzip iniziali, checksum e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 566 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 604,72; spesa cumulativa 281,25 crediti. Non sono stati attivati acquisti
+verificato: 586,72; spesa cumulativa 299,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
+
+## Ultimo round: Bruxelles
+
+[BRUXELLES-VERBALE.md](BRUXELLES-VERBALE.md): dodici job, quindici PNG, 18 crediti. Cinque sfide volontarie, preparazione sul posto e finale che conserva le promesse reali. Tre segmenti da salvataggi guadagnati vincono in normale; 286 test e 11.222 layout per motore. Porte, cure, ritorni e accesso guadagnato al Campo Largo verificati in Chromium/WebKit. Bundle 357.883 byte gzip, 458 checksum PNG, 566 risorse PWA. La pubblicazione è in verifica; il goal generale resta attivo.
 
 ## Lavoro ancora necessario
 

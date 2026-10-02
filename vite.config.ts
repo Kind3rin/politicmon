@@ -32,9 +32,22 @@ function stampServiceWorker(): Plugin {
         const runtimeAssets = collect(distRoot).filter((path) =>
           path !== "./sw.js" && path !== "./intro.mp4" && !coreAssets.has(path)
         );
+        // Keep the exact precache inventory, encoding shared directory/extension
+        // once per group. The worker reconstructs every original path on load.
+        const assetGroups = new Map<string, string[]>();
+        for (const path of runtimeAssets) {
+          const slash = path.lastIndexOf("/"), dot = path.lastIndexOf(".");
+          const directory = path.slice(0, slash + 1), extension = dot > slash ? path.slice(dot) : "";
+          const name = path.slice(slash + 1, extension ? dot : undefined);
+          if (name.includes("|")) throw new Error(`Unsupported precache filename: ${path}`);
+          const key = JSON.stringify([directory, extension]);
+          assetGroups.set(key, [...(assetGroups.get(key) ?? []), name]);
+        }
+        const encodedAssets = [...assetGroups].map(([key, names]) => [...JSON.parse(key), names.join("|")]);
+        const runtimeExpression = `${JSON.stringify(encodedAssets)}.flatMap(([dir,ext,names])=>names.split("|").map(name=>dir+name+ext))`;
         const stamped = src
             .replaceAll("__APP_BUILD_ID__", BUILD_ID)
-            .replace("__PRECACHE_RUNTIME_ASSETS__", JSON.stringify(runtimeAssets));
+            .replace("__PRECACHE_RUNTIME_ASSETS__", runtimeExpression);
         const result = await minify(stamped, { compress: { passes: 3 }, format: { comments: false } });
         if (!result.code) throw new Error("Service worker compilation produced no code");
         writeFileSync(swPath, result.code);

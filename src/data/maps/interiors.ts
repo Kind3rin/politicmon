@@ -482,5 +482,9 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
   "bar-cap": barMap("bar-cap", "GRAN CAFFÈ ROMANO", "capitale", 24, 8),
   "bar-stretto": barMap("bar-stretto", "CHIRINGUITO PAPEETE", "stretto", 15, 5),
   "bar-offshore": barMap("bar-offshore", "LIDO CAYMAN", "offshore", 15, 5),
-  "bar-bruxelles": barMap("bar-bruxelles", "CAFFÈ SCHUMAN", "bruxelles", 10, 12)
+  "bar-bruxelles": {
+    ...barMap("bar-bruxelles", "CAFFÈ SCHUMAN", "bruxelles", 10, 12),
+    tileOverrides: { p: "tiles/commissione_floor.png", A: "tiles/commissione_wall.png" },
+    objectOverrides: { t: "tiles/commissione_table.png" }
+  }
 };

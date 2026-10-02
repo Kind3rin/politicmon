@@ -58,3 +58,7 @@ vanno generate, revisionate alla risoluzione nativa e verificate nel gioco;
 nessuna è dichiarata pronta in questo audit. Il margine di bundle è solo
 484 byte: occorre separare altro codice prima di aggiungere questo capitolo,
 senza alzare i limiti di prestazioni.
+
+## Implementazione successiva
+
+Il round [BRUXELLES-VERBALE.md](BRUXELLES-VERBALE.md) implementa e verifica ambienti, cast, prove e scrittura descritti sopra. Questo audit resta la fotografia precedente; prove, credito e limiti aggiornati sono nel documento del round e nel relativo registro JSON.

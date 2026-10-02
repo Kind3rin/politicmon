@@ -1,0 +1,364 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 604.72,
+  "estimatedCredits": 18,
+  "assets": [
+    {
+      "id": "eu-relatore",
+      "path": "public/sprites/ui/boss/eu-relatore.png",
+      "width": 224,
+      "height": 78,
+      "kind": "briefing",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Restrained navy ivory teal burgundy brass-gold palette, bold large shapes legible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet top and bottom margins for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Brussels-inspired fictional civic quarter, cool glass and warm amber light, clear visual joke rather than clutter. A fictional parliamentary rapporteur sits at a very long meeting table. Every empty chair has a huge blank envelope instead of a person. The rapporteur opens one envelope that contains another smaller envelope, while a tiny unresolved broken street lamp lies on a side desk ignored by the folders. Precise visual joke about a meeting held to decide who will answer an email. An empty central chair points toward the viewer, envelopes dominate, simple clean hands.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "8d301641-3855-4a58-b6d0-b5249d217e0b",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075353_8d301641-3855-4a58-b6d0-b5249d217e0b.png",
+      "sourceSha256": "79445c564da64d68e891c2a0e95489c0fdca34b695bb15cbf901b0c4ce9f9350",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/eu-relatore.png": "64d41b82f4faf16f9b562d729b462cb81c558f4ccba113f734d543c40dfa3f04"
+      }
+    },
+    {
+      "id": "eu-eurodeputato",
+      "path": "public/sprites/ui/boss/eu-eurodeputato.png",
+      "width": 224,
+      "height": 78,
+      "kind": "briefing",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Restrained navy ivory teal burgundy brass-gold palette, bold large shapes legible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet top and bottom margins for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Brussels-inspired fictional civic quarter, cool glass and warm amber light, clear visual joke rather than clutter. A fictional elected delegate's handsome life-size cardboard silhouette occupies a gold photo backdrop. The real small delegate is behind it adjusting the backdrop, while an empty modest navy seat at a desk carries a neglected folded blank paper and a cold espresso. Clearly distinguish cardboard flat cutout from actual person, photo light shining only on the cardboard, playful representation versus attendance, no camera UI.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "e495918a-90f0-4115-99cd-52b899e67dd0",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075352_e495918a-90f0-4115-99cd-52b899e67dd0.png",
+      "sourceSha256": "5f280ef707b5012695cb12b0ffdbf69ad6947f42d74a77ef0dec421b11c48038",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/eu-eurodeputato.png": "1185cfbefc83da013b6f02221c85edd38743843671dfe94de3242b68a99912c0"
+      }
+    },
+    {
+      "id": "eu-commissario",
+      "path": "public/sprites/ui/boss/eu-commissario.png",
+      "width": 224,
+      "height": 78,
+      "kind": "briefing",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Restrained navy ivory teal burgundy brass-gold palette, bold large shapes legible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet top and bottom margins for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Brussels-inspired fictional civic quarter, cool glass and warm amber light, clear visual joke rather than clutter. A small fictional competition commissioner weighs two plain company boxes on a large brass balance scale. One modest box sits on one pan; an absurdly huge ivory box has bought the entire teal table supporting the scale, its thick root-like supports extend underneath both pans. Commissioner studies the tilted table with a ruler rather than touching the weights. Clear visual joke about equality of weights when the powerful owns the infrastructure. Large readable scale and table, tidy silhouettes.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "7285b4c5-67c1-4a8a-ae8d-55d72acef70f",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075352_7285b4c5-67c1-4a8a-ae8d-55d72acef70f.png",
+      "sourceSha256": "f5d128314f7c2cf448f9439895c83d1b544ed155ef3db758e5f075762599c3f4",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/eu-commissario.png": "202d16197c97e7caa5f927d0b88e4bd4098ea8f72d1d98e66412deb0460fb371"
+      }
+    },
+    {
+      "id": "eu-lobby",
+      "path": "public/sprites/ui/boss/eu-lobby.png",
+      "width": 224,
+      "height": 78,
+      "kind": "briefing",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Restrained navy ivory teal burgundy brass-gold palette, bold large shapes legible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet top and bottom margins for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Brussels-inspired fictional civic quarter, cool glass and warm amber light, clear visual joke rather than clutter. A charming fictional lobbyist in a burgundy jacket holds a tiny gold door handle at the entrance of an institutional corridor. Behind the lobbyist, a row of closed navy doors each has an enormous golden key belonging to a different unseen sponsor; the doors lead back into the same corridor. A little citizen with a plain folder stands outside on a simple bench, never inside the corridor. The handle is offered like a gift but the keys stay hidden behind. Crisp architectural rhythm, clear circle of access.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "b212b824-1b5f-4ae1-94d2-facb60eca46a",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075352_b212b824-1b5f-4ae1-94d2-facb60eca46a.png",
+      "sourceSha256": "8b3fc5796412cf468f56437108ef93c6dce5a8c114fa4dd279cd873855a66dc4",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/eu-lobby.png": "cef88901de1dd8c03661caee24c1eb8514ff3e4fe0247c846daa2e798cf357aa"
+      }
+    },
+    {
+      "id": "commissione",
+      "path": "public/sprites/ui/boss/commissione.png",
+      "width": 224,
+      "height": 78,
+      "kind": "briefing",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "prompt": "POLITICMON original satirical political fantasy RPG, finished panoramic pixel art. Restrained navy ivory teal burgundy brass-gold palette, bold large shapes legible at native 224x78. Wide 21:9 full-bleed view, action and main props centered vertically with quiet top and bottom margins for a 224x78 crop. No text, labels, letters, numbers, logos, real people or recognizable politicians. No smooth 3D or photorealism. Brussels-inspired fictional civic quarter, cool glass and warm amber light, clear visual joke rather than clutter. A fictional Commission chamber made of cool teal glass and ivory stone. Three large desks form a triangle around one tiny broken street lamp that needs repair. Each desk points a brass stamp toward the next desk, while a narrow burgundy carpet leads from the viewer to an empty central chair. A small composed fictional commissioner in a navy suit carries a single simple folder toward the actual lamp, leaving the ceremonial stamps behind. Original satire about responsibility passed around and a small concrete problem. Calm dramatic institution, no money or voting symbols.",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "8f705fe9-2485-4be0-8b88-8acf843efde3",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075353_8f705fe9-2485-4be0-8b88-8acf843efde3.png",
+      "sourceSha256": "d086e6ed79ebd68ed52f071a1cd7e6fcd72d69f3f8e4e18ab5d7a6cf0d750756",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/commissione.png": "1e9e12ed552a19b494377ebf7be13d4857fb3a3f911d5df4a0d244f953efef02"
+      }
+    },
+    {
+      "id": "bruxelles-palace",
+      "path": "public/sprites/tiles/bruxelles_palace.png",
+      "width": 160,
+      "height": 64,
+      "kind": "building",
+      "prompt": "POLITICMON modern original satirical RPG asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large simple shapes readable at tiny native resolution. Orthographic straight front view, no isometric camera or perspective ground. Transparent background with clean alpha, no shadow on background, no text, symbols, letters, logos, watermarks or real people. One complete isolated wide modern civic palace façade. Building width exactly two and a half times height, framed nearly full canvas width, four visual horizontal levels in cool teal glass and ivory stone. Front is perfectly flat and symmetric. Main dark navy double entrance at CENTER of BOTTOM edge, entrance total width exactly ONE FIFTH of the building width. Gold edges on the two door leaves and a burgundy carpet visible only inside the doorway. Upper part has broad glass bands and two simple golden paper-fold shapes at outer corners. No flags, stars, seals or ground. Elegant fictional Brussels institution, architecture more readable than ornament.",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "e85dd95a-5519-4db8-b368-a7e0d1a43100",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075352_e85dd95a-5519-4db8-b368-a7e0d1a43100.png",
+      "sourceSha256": "01b03e321c08eb49e9c3c8c38957c8f4750f3cd77f3666393670643432605928",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/bruxelles_palace.png": "6159bd10a43cb49dc5533e1529664a20aedfc2d95ee5e099204501a88d04973f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "bruxelles-cafe",
+      "path": "public/sprites/tiles/bruxelles_cafe.png",
+      "width": 64,
+      "height": 32,
+      "kind": "building",
+      "prompt": "POLITICMON modern original satirical RPG asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large simple shapes readable at tiny native resolution. Orthographic straight front view, no isometric camera or perspective ground. Transparent background with clean alpha, no shadow on background, no text, symbols, letters, logos, watermarks or real people. One complete isolated small modern institutional espresso café façade, wide and low, width exactly twice height. Cool teal glazed canopy upper half, warm ivory stone lower half, brass-edged DARK NAVY DOUBLE ENTRANCE centered at BOTTOM edge. Entrance width exactly HALF the whole building width. Two simple espresso cup shapes sit at outside corners under canopy, burgundy shutters flank entrance. No pavement or people. A welcoming café in an otherwise formal civic quarter, clearly visible symmetrical entrance.",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "f3d669c2-ee7b-48f5-8a4d-7493eebd5c0f",
+      "status": "completed",
+      "submissionAttempts": [
+        {
+          "status": "submission_failed",
+          "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+        },
+        {
+          "status": "pending",
+          "jobId": "f3d669c2-ee7b-48f5-8a4d-7493eebd5c0f"
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075531_f3d669c2-ee7b-48f5-8a4d-7493eebd5c0f.png",
+      "sourceSha256": "aa26de94c4c326dbf5b62f1b1c89b8bbee9195d94753a22c5743d6484b88634a",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/bruxelles_cafe.png": "fe9cfbadabf20954efc40e1d8a240b572155a9ba31a6591f542ceb0bd545d200"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "commissione-directions",
+      "path": "public/sprites/chars/npc_commissione_south.png",
+      "outputs": [
+        "public/sprites/chars/npc_commissione_south.png",
+        "public/sprites/chars/npc_commissione_north.png",
+        "public/sprites/chars/npc_commissione_west.png",
+        "public/sprites/chars/npc_commissione_east.png"
+      ],
+      "width": 24,
+      "height": 32,
+      "kind": "directions",
+      "prompt": "POLITICMON modern original satirical RPG asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large simple shapes readable at tiny native resolution. Orthographic straight front view, no isometric camera or perspective ground. Transparent background with clean alpha, no shadow on background, no text, symbols, letters, logos, watermarks or real people. A clean 2 by 2 sprite reference sheet with FOUR views of the EXACT SAME fictional composed commissioner. Top-left FRONT facing SOUTH, top-right BACK facing NORTH, bottom-left profile facing WEST left, bottom-right profile facing EAST right. Each equal quadrant contains ONE complete upright body centered, equal scale, feet at same relative height; ample transparent spacing, no dividers. Chibi full body proportion, navy tailored trouser suit, simple ivory lapels, burgundy scarf, short silver bob hair, small teal spectacles and ONE plain ivory folder held close in one hand. Distinct back shows back of silver hair and jacket; literal opposite side profiles. No real person resemblance, no flags, stars or insignia, no movement streaks.",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "c8008cd5-8804-4105-b282-21d2ccebf564",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075354_c8008cd5-8804-4105-b282-21d2ccebf564.png",
+      "sourceSha256": "ef04019656568108ae7b64bd69ee2a3fdf3d4bcc1ffe99ab86fd0959f1a1417a",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_commissione_south.png": "cf29b69b27592bf7c0366594be6106339ca5045358af0b9241a126ee2d4edf5a",
+        "public/sprites/chars/npc_commissione_north.png": "7af32d779c65bad34e0bcc45fa8f0111729b7350d53ea210a4108d056e386452",
+        "public/sprites/chars/npc_commissione_west.png": "279b537c6476f2b7345796ce3f56ecf523086d4f92bcadb6aea67bf6ecde334e",
+        "public/sprites/chars/npc_commissione_east.png": "bc0db03f8df3a44df626d7644696534200db89febfe0ca231f2c5ac5d7b7f72f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "commissione-floor",
+      "path": "public/sprites/tiles/commissione_floor.png",
+      "width": 16,
+      "height": 16,
+      "kind": "texture",
+      "background": "opaque",
+      "prompt": "One seamless square repeating floor texture for POLITICMON modern civic pixel RPG, overhead orthographic flat material only. Large warm ivory limestone blocks, faint teal-grey grout lines, very quiet pale grain. Designed to downsample to ONE 16x16 pixel tile, simple restrained navy ivory teal burgundy palette. No object, shadow, border, perspective, lettering, logo or motif. Opposite edges repeat cleanly, plain low contrast supports small actors and controls.",
+      "aspectRatio": "1:1",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "b0b041f7-fc17-4a8e-8282-f888b771c231",
+      "status": "completed",
+      "submissionAttempts": [
+        {
+          "status": "submission_failed",
+          "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+        },
+        {
+          "status": "pending",
+          "jobId": "b0b041f7-fc17-4a8e-8282-f888b771c231"
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075531_b0b041f7-fc17-4a8e-8282-f888b771c231.png",
+      "sourceSha256": "15c2ec37deb3972f25abdfae9fbd497109fc3475f7d6f25a80cf7fc8be9c61da",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/commissione_floor.png": "4f4177535fdf3b02889d05790f5d88014b585dc2f046cb634abdfff1de168ef4"
+      }
+    },
+    {
+      "id": "commissione-wall",
+      "path": "public/sprites/tiles/commissione_wall.png",
+      "width": 16,
+      "height": 16,
+      "kind": "texture",
+      "background": "opaque",
+      "prompt": "One seamless square repeating wall material texture for POLITICMON modern civic pixel RPG. Flat deep navy and desaturated teal glass panel material with subtle vertical structural seams and a muted teal highlight. Designed to downsample to ONE 16x16 pixel tile. No object, shadow, border, perspective, lettering, logo, reflections of people or scenery. Opposite edges repeat cleanly. Simple large shapes, low contrast, no speckled noise.",
+      "aspectRatio": "1:1",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "0b61ddb0-c689-489c-8aba-2f5d6a05dbbe",
+      "status": "completed",
+      "submissionAttempts": [],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075354_0b61ddb0-c689-489c-8aba-2f5d6a05dbbe.png",
+      "sourceSha256": "f3e1cb9ccfde7dc154b1b9e264e54556733633aacd39d6dd5a1a059c0f5b6edc",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/commissione_wall.png": "02642c9e2a8c225b4276412aa4cacce069ccf4f3d496546ad2b1d5f8afd24814"
+      }
+    },
+    {
+      "id": "commissione-carpet",
+      "path": "public/sprites/tiles/commissione_carpet.png",
+      "width": 16,
+      "height": 16,
+      "kind": "texture",
+      "background": "opaque",
+      "prompt": "One seamless square repeating carpet material texture for POLITICMON modern civic pixel RPG, flat overhead orthographic. Deep muted burgundy woven carpet with extremely subtle lighter burgundy broad straight weave, no stripe or ornaments. Designed to downsample to ONE 16x16 pixel tile. No object, shadow, border, perspective, lettering, logos or symbols. Opposite edges repeat cleanly. Calm ceremonial textile, matte material, no speckled noise.",
+      "aspectRatio": "1:1",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "550ace02-56fd-44af-9db5-bce7d9d0bfc3",
+      "status": "completed",
+      "submissionAttempts": [
+        {
+          "status": "submission_failed",
+          "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+        },
+        {
+          "status": "pending",
+          "jobId": "550ace02-56fd-44af-9db5-bce7d9d0bfc3"
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075531_550ace02-56fd-44af-9db5-bce7d9d0bfc3.png",
+      "sourceSha256": "981591673c5604ee023ba070f06163eeeddc96e892e9646813d4dc6383970701",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/commissione_carpet.png": "119e1743fa47b461b7add1c3ee54ac377bfd8623d837b94c4fd48cf0053dbf73"
+      }
+    },
+    {
+      "id": "commissione-table",
+      "path": "public/sprites/tiles/commissione_table.png",
+      "width": 32,
+      "height": 32,
+      "kind": "object",
+      "prompt": "POLITICMON modern original satirical RPG asset. Crisp deliberate pixel art, navy ivory teal burgundy brass-gold palette, large simple shapes readable at tiny native resolution. Orthographic straight front view, no isometric camera or perspective ground. Transparent background with clean alpha, no shadow on background, no text, symbols, letters, logos, watermarks or real people. One isolated small civic discussion table viewed from a slightly overhead straight frontal RPG asset view, width roughly equals height. Simple oval ivory top on a navy pedestal, one plain closed burgundy folder and one tiny gold rubber stamp on top. Top and pedestal clearly within one compact silhouette, no chairs, people or ground. Large readable shapes, minimal details, institutional rather than domestic.",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "9a8df6b4-0ba3-4f9a-8f57-dabfb40953ab",
+      "status": "completed",
+      "submissionAttempts": [
+        {
+          "status": "submission_failed",
+          "error": "gpt_image_2_5 backend request failed (429): rate_limit_reached"
+        },
+        {
+          "status": "pending",
+          "jobId": "9a8df6b4-0ba3-4f9a-8f57-dabfb40953ab"
+        }
+      ],
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_075531_9a8df6b4-0ba3-4f9a-8f57-dabfb40953ab.png",
+      "sourceSha256": "95a24144b22f18e8ba753c7b7fd90d7141b8f968c817a291f644c366703cef1a",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/commissione_table.png": "2721ccd6e761e1da20b57ccbc94b53e4c6f3dc840c077e4424f2381ac4123e3d"
+      },
+      "alphaCutoff": 128
+    }
+  ],
+  "creditsSpent": 18,
+  "balanceAfter": 586.72
+}

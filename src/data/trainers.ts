@@ -329,33 +329,33 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Hai trovato la ricevuta. Non il tesoro: il costo di custodirlo."],
     money: 4500, reward: { itemId: "tessera", qty: 1 }
   },
-  // ---- BRUXELLES: gauntlet ELEZIONI UE (post-game, dopo garante-beaten) ----
+  // Bruxelles: quattro prove volontarie e il verbale finale (post Garante).
   "eu-relatore": {
     id: "eu-relatore", name: "RELATORE OMBRA", pal: "aide",
     team: [["macronfox", 44], ["bojoon", 45]],
-    intro: ["Sono il RELATORE di un regolamento che nessuno leggerà.", "Ma l'emendamento 74-ter ti seppellirà."],
-    defeat: ["Ritiro l'emendamento. E anche la candidatura."],
+    intro: ["Ho convocato una riunione per decidere chi risponde alla mail.", "La risposta è allegata. L’allegato chiede un’altra riunione."],
+    defeat: ["Rispondo io. Senza allegare il gruppo di lavoro."],
     money: 1800, reward: { itemId: "maalox", qty: 1 }
   },
   "eu-eurodeputato": {
     id: "eu-eurodeputato", name: "EURODEPUTATO ASSENTE", pal: "journalist",
     team: [["zelenskir", 45], ["ursulax", 46]],
-    intro: ["Presente! ...ah no, quello era il gettone.", "Voto quel che mi dicono. Ma combatto per conto mio."],
-    defeat: ["Metto la sconfitta a verbale. In seduta plenaria."],
+    intro: ["Il cartonato ha una presenza impeccabile. Non interrompe mai il fotografo.", "La sedia in aula reclama l’originale. Le ho mandato una foto."],
+    defeat: ["Porto il cartonato alla foto. In aula provo ad andarci io."],
     money: 1950
   },
   "eu-commissario": {
     id: "eu-commissario", name: "COMMISSARIO ALLA CONCORRENZA", pal: "guard",
     team: [["xipanda", 47], ["putingrad", 48]],
-    intro: ["Sanziono i giganti del web prima di colazione.", "La tua campagna? Concorrenza sleale. Apro un'istruttoria."],
-    defeat: ["Archivio il caso. Con una multa simbolica a me stesso."],
+    intro: ["I pesi sono uguali per tutti. Il concorrente più grande ha comprato il tavolo.", "Non contesto la bilancia. Vorrei capire perché pende l’edificio."],
+    defeat: ["Misurerò anche il tavolo. La bilancia da sola sembrava perfetta."],
     money: 2100, reward: { itemId: "schedona", qty: 1 }
   },
   "eu-lobby": {
     id: "eu-lobby", name: "LOBBISTA DI RUE DE LA LOI", pal: "influencer",
     team: [["ursulax", 48], ["macronfox", 49], ["trumpon", 50]],
-    intro: ["Rappresento 300 aziende e nessun elettore.", "Il tuo consenso? Lo compro all'ingrosso. O te lo strappo."],
-    defeat: ["Rinegozio. Da posizioni più deboli, ammetto."],
+    intro: ["Non vendo decisioni. Offro una maniglia per avvicinarsi alla stanza.", "La chiave la tiene il cliente. Il cittadino ha una panchina molto comoda."],
+    defeat: ["Questa porta si apre anche da fuori. Il cliente non l’aveva previsto."],
     money: 2300
   },
   commissione: {
@@ -363,12 +363,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
     // Asso finale con il GILET (PVE): regge più a lungo, come il Garante.
     team: [["macronfox", 52], ["putingrad", 53], ["xipanda", 53], ["ursulax", 55, undefined, "gilet"]],
     intro: [
-      "Benvenuto a BRUXELLES. Io sono LA COMMISSIONE. Non mi ha votata nessuno, e infatti non rispondo a nessuno.",
-      "Ho un REGOLAMENTO per ogni cosa: la curvatura delle banane, il consenso, persino i sogni.",
-      "I governi nazionali vanno e vengono. Il TRILOGO, invece, è per sempre.",
-      "Dimostrami che il tuo mandato regge una DIRETTIVA. In 24 lingue."
+      "Tre tavoli hanno approvato il lampione. Nessuno ha cambiato la lampadina.",
+      "Il primo attende il parere del secondo. Il secondo cita il verbale del terzo.",
+      "Tu hai portato una squadra. Vediamo se arriva fino al problema."
     ],
-    defeat: ["Prendo atto. Convoco un tavolo tecnico. Ci rivediamo alla prossima legislatura."],
+    defeat: ["Scrivo un nome accanto al lavoro da fare. Il prossimo verbale potrà essere più corto."],
     money: 5000, reward: { itemId: "tessera", qty: 1 }
   },
   giudice1: {

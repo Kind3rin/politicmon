@@ -3,6 +3,10 @@ import type { AiProfile } from "./sim";
 export type AiStyle = "balanced" | "pressure" | "rush" | "control" | "fortress" | "setup";
 export interface TrainerStyle { style: AiStyle; label: string; hints: readonly string[]; art?: string; }
 const STYLES: Record<string, TrainerStyle> = {
+  "eu-relatore": { style: "balanced", label: "LA RISPOSTA ALLEGATA", art: "eu-relatore", hints: ["Prova facoltativa. Due avversari, LV 44-45; B torna al viale.", "Il CAFFÈ SCHUMAN recupera PV e PP. Una mail non cura."] },
+  "eu-eurodeputato": { style: "balanced", label: "PRESENZA IN CARTONE", art: "eu-eurodeputato", hints: ["Prova facoltativa. Due avversari, LV 45-46; scegli il leader.", "Leggi abilità e mosse. Il rimpasto dopo un KO avversario è gratuito."] },
+  "eu-commissario": { style: "balanced", label: "IL TAVOLO DELLA BILANCIA", art: "eu-commissario", hints: ["Prova facoltativa. Due avversari, LV 47-48; conserva PP efficaci.", "B torna. Puoi curarti e cambiare equipaggiamento prima di riprovare."] },
+  "eu-lobby": { style: "balanced", label: "LA MANIGLIA IN PRESTITO", art: "eu-lobby", hints: ["Prova facoltativa. Tre avversari, LV 48-50; una sola risposta non copre tutto.", "START sceglie il leader. Il bar e l’ambulante restano raggiungibili."] },
   commercialista: { style: "balanced", label: "LA SEDE NELLA CONCHIGLIA", art: "commercialista", hints: ["Prova facoltativa. Due avversari; B torna al lido.", "Il LIDO CAYMAN a nord recupera PV e PP. La firma non cura."] },
   prestanome: { style: "balanced", label: "LE CHIAVI SENZA LA CASA", art: "prestanome", hints: ["Prova facoltativa. Tre avversari di tipi diversi; scegli il leader.", "Il rimpasto dopo un KO avversario è gratuito. Nessun obbligo di sfida per salpare."] },
   tesoriere: { style: "balanced", label: "LA RICEVUTA NEL CAVEAU", art: "tesoriere", hints: ["Tre avversari, ultima forma leggendaria. Leggi mosse e abilità.", "B annulla. Il bar resta raggiungibile; puoi reclutare sull'isola. Premio: TESSERA DORATA."] },
@@ -25,7 +29,7 @@ const STYLES: Record<string, TrainerStyle> = {
   garante: { style: "fortress", label: "TEMPI ISTITUZIONALI", art: "garante", hints: ["Valuta cure e difesa. Conserva PP per la parte finale della squadra.", "L'ultimo avversario ha GARANZIA: status e cali non funzionano."] },
   "futuro-anteriore": { style: "setup", label: "RIFONDAZIONE", art: "futuro-anteriore", hints: ["Si potenzia quando ha tempo. Non regalargli turni di preparazione.", "Sotto metà PV cancella i suoi malus e guadagna velocità, una sola volta."] },
   "partner-perfetto": { style: "pressure", label: "CORDIALITÀ COMPETITIVA", art: "partner-perfetto", hints: ["Usa danni e status per tenerti sulla difensiva. Prepara una cura degli status.", "Il meteo dei sondaggi aiuta entrambi: guarda quali tipi potenzia."] },
-  commissione: { style: "fortress", label: "ISTRUTTORIA", art: "commissione", hints: ["Una squadra lunga con resistenze diverse. Conserva cure e mosse efficaci.", "La sua difesa non cresce da sola: ogni potenziamento costa un turno."] },
+  commissione: { style: "fortress", label: "CHI CAMBIA LA LAMPADINA", art: "commissione", hints: ["Una squadra lunga con resistenze diverse. Conserva cure e mosse efficaci.", "La sua difesa non cresce da sola: ogni potenziamento costa un turno."] },
   "algoritmo-sovrano": { style: "balanced", label: "CAMPIONE ADATTIVO", art: "algoritmo-sovrano", hints: ["Valuta il campo attuale. Cambiare tipo può rendere meno utile il suo piano.", "La dottrina della tua campagna modifica questa finale: leggi gli annunci."] }
 };
 export function trainerStyle(id: string): TrainerStyle {

@@ -1,0 +1,3150 @@
+{
+  "round": "bruxelles-verbale",
+  "date": "2026-10-02",
+  "creditsSpent": 18,
+  "balanceAfter": 586.72,
+  "cumulativeCreditsSpent": 299.25,
+  "sourceJobs": 12,
+  "runtimePngs": 15,
+  "newPaths": 14,
+  "tests": 286,
+  "briefingsPerEngine": 11222,
+  "navigation": {
+    "chromium": {
+      "paths": [
+        "tiles/bruxelles_palace.png",
+        "tiles/bruxelles_cafe.png",
+        "tiles/commissione_floor.png",
+        "tiles/commissione_wall.png",
+        "tiles/commissione_carpet.png",
+        "tiles/commissione_table.png",
+        "ui/boss/eu-relatore.png",
+        "ui/boss/eu-eurodeputato.png",
+        "ui/boss/eu-commissario.png",
+        "ui/boss/eu-lobby.png",
+        "ui/boss/commissione.png",
+        "chars/npc_commissione_north.png",
+        "chars/npc_commissione_south.png",
+        "chars/npc_commissione_west.png",
+        "chars/npc_commissione_east.png"
+      ],
+      "checks": [
+        "both cafe doors/free HP+PP recovery",
+        "four manual trial dossiers and zero-mutation cancellation",
+        "merchant quote/cancel",
+        "both palace doors/exits",
+        "manual Commissione dossier and cancellation",
+        "four custom cast directions",
+        "pre-boss offshore return and cancellation",
+        "Campo gate stays closed before victory"
+      ]
+    },
+    "webkit": {
+      "paths": [
+        "tiles/bruxelles_palace.png",
+        "tiles/bruxelles_cafe.png",
+        "tiles/commissione_floor.png",
+        "tiles/commissione_wall.png",
+        "tiles/commissione_carpet.png",
+        "tiles/commissione_table.png",
+        "ui/boss/eu-relatore.png",
+        "ui/boss/eu-eurodeputato.png",
+        "ui/boss/eu-commissario.png",
+        "ui/boss/eu-lobby.png",
+        "ui/boss/commissione.png",
+        "chars/npc_commissione_north.png",
+        "chars/npc_commissione_south.png",
+        "chars/npc_commissione_west.png",
+        "chars/npc_commissione_east.png"
+      ],
+      "checks": [
+        "both cafe doors/free HP+PP recovery",
+        "four manual trial dossiers and zero-mutation cancellation",
+        "merchant quote/cancel",
+        "both palace doors/exits",
+        "manual Commissione dossier and cancellation",
+        "four custom cast directions",
+        "pre-boss offshore return and cancellation",
+        "Campo gate stays closed before victory"
+      ]
+    }
+  },
+  "navigationFixture": "Synthetic post-Garante state; Offshore/Brussels encounters disabled only here. Directional rendering changes NPC facing. Campaigns retain normal encounters and earned save state.",
+  "world": {
+    "mapCount": 66,
+    "positions": {
+      "borgo": [
+        {
+          "x": 15,
+          "y": 12
+        },
+        {
+          "x": 10,
+          "y": 19
+        },
+        {
+          "x": 10,
+          "y": 9
+        },
+        {
+          "x": 18,
+          "y": 11
+        },
+        {
+          "x": 6,
+          "y": 13
+        }
+      ],
+      "route1": [
+        {
+          "x": 14,
+          "y": 8
+        },
+        {
+          "x": 20,
+          "y": 11
+        },
+        {
+          "x": 9,
+          "y": 10
+        },
+        {
+          "x": 22,
+          "y": 4
+        }
+      ],
+      "grotta1": [
+        {
+          "x": 10,
+          "y": 7
+        },
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 13
+        }
+      ],
+      "oblast-meme": [
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 5,
+          "y": 13
+        },
+        {
+          "x": 18,
+          "y": 12
+        },
+        {
+          "x": 6,
+          "y": 2
+        }
+      ],
+      "mediopoli": [
+        {
+          "x": 15,
+          "y": 10
+        },
+        {
+          "x": 15,
+          "y": 12
+        },
+        {
+          "x": 24,
+          "y": 19
+        },
+        {
+          "x": 10,
+          "y": 14
+        },
+        {
+          "x": 7,
+          "y": 11
+        }
+      ],
+      "route2": [
+        {
+          "x": 14,
+          "y": 9
+        },
+        {
+          "x": 19,
+          "y": 7
+        },
+        {
+          "x": 10,
+          "y": 13
+        },
+        {
+          "x": 18,
+          "y": 14
+        }
+      ],
+      "eurotown": [
+        {
+          "x": 15,
+          "y": 8
+        },
+        {
+          "x": 15,
+          "y": 9
+        },
+        {
+          "x": 24,
+          "y": 14
+        },
+        {
+          "x": 9,
+          "y": 14
+        },
+        {
+          "x": 7,
+          "y": 6
+        }
+      ],
+      "route3": [
+        {
+          "x": 14,
+          "y": 9
+        },
+        {
+          "x": 11,
+          "y": 8
+        },
+        {
+          "x": 12,
+          "y": 12
+        },
+        {
+          "x": 19,
+          "y": 16
+        },
+        {
+          "x": 22,
+          "y": 4
+        }
+      ],
+      "grotta2": [
+        {
+          "x": 10,
+          "y": 7
+        },
+        {
+          "x": 10,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 13
+        }
+      ],
+      "capitale": [
+        {
+          "x": 15,
+          "y": 12
+        },
+        {
+          "x": 15,
+          "y": 14
+        },
+        {
+          "x": 20,
+          "y": 20
+        },
+        {
+          "x": 12,
+          "y": 8
+        },
+        {
+          "x": 7,
+          "y": 12
+        }
+      ],
+      "stretto": [
+        {
+          "x": 15,
+          "y": 7
+        },
+        {
+          "x": 18,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 7
+        },
+        {
+          "x": 24,
+          "y": 5
+        },
+        {
+          "x": 14,
+          "y": 15
+        }
+      ],
+      "offshore": [
+        {
+          "x": 15,
+          "y": 8
+        },
+        {
+          "x": 15,
+          "y": 10
+        },
+        {
+          "x": 8,
+          "y": 12
+        },
+        {
+          "x": 24,
+          "y": 14
+        },
+        {
+          "x": 2,
+          "y": 10
+        }
+      ],
+      "bruxelles": [
+        {
+          "x": 14,
+          "y": 8
+        },
+        {
+          "x": 7,
+          "y": 9
+        },
+        {
+          "x": 23,
+          "y": 9
+        },
+        {
+          "x": 7,
+          "y": 11
+        },
+        {
+          "x": 12,
+          "y": 5
+        }
+      ],
+      "commissione": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 8,
+          "y": 7
+        },
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 2,
+          "y": 2
+        },
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "lab": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "gymtv": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 7,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "gymue": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 7,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "gymglobal": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "market1": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 2,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "market2": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 2,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "casino": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 4
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "palazzo": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "colle": [
+        {
+          "x": 6,
+          "y": 5
+        },
+        {
+          "x": 2,
+          "y": 8
+        },
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 2,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 9
+        }
+      ],
+      "home": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 7,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "circolo": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 1,
+          "y": 5
+        },
+        {
+          "x": 6,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "attico": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "redazione": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 1,
+          "y": 4
+        },
+        {
+          "x": 6,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "lobbystudio": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "bistrot": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 7,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "salotto": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 7,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 6
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "retroscena": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "covo": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "chiosco": [
+        {
+          "x": 5,
+          "y": 3
+        },
+        {
+          "x": 7,
+          "y": 3
+        },
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "bar-borgo": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "bar-medio": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "bar-euro": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "bar-cap": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "bar-stretto": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "bar-offshore": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "bar-bruxelles": [
+        {
+          "x": 6,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "campo_largo": [
+        {
+          "x": 12,
+          "y": 9
+        },
+        {
+          "x": 10,
+          "y": 17
+        },
+        {
+          "x": 4,
+          "y": 9
+        },
+        {
+          "x": 16,
+          "y": 9
+        },
+        {
+          "x": 17,
+          "y": 13
+        }
+      ],
+      "retropalco_campo": [
+        {
+          "x": 8,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 9
+        }
+      ],
+      "futuro_piazza": [
+        {
+          "x": 10,
+          "y": 7
+        },
+        {
+          "x": 9,
+          "y": 7
+        },
+        {
+          "x": 4,
+          "y": 10
+        },
+        {
+          "x": 16,
+          "y": 10
+        },
+        {
+          "x": 10,
+          "y": 11
+        }
+      ],
+      "futuro_sede": [
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 8
+        },
+        {
+          "x": 14,
+          "y": 8
+        },
+        {
+          "x": 8,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 11
+        }
+      ],
+      "futuro_scissione": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "futuro_rebrand": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "futuro_tesoreria": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "diplomacy_lobby": [
+        {
+          "x": 10,
+          "y": 6
+        },
+        {
+          "x": 9,
+          "y": 4
+        },
+        {
+          "x": 8,
+          "y": 11
+        }
+      ],
+      "diplomacy_loyalty": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "diplomacy_autonomy": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "diplomacy_home": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 4,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "diplomacy_terrace": [
+        {
+          "x": 10,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 10,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 11
+        }
+      ],
+      "genova_techno": [
+        {
+          "x": 10,
+          "y": 7
+        },
+        {
+          "x": 10,
+          "y": 6
+        },
+        {
+          "x": 5,
+          "y": 10
+        },
+        {
+          "x": 10,
+          "y": 13
+        }
+      ],
+      "tour_feed": [
+        {
+          "x": 12,
+          "y": 7
+        },
+        {
+          "x": 11,
+          "y": 9
+        },
+        {
+          "x": 10,
+          "y": 13
+        }
+      ],
+      "district_nord": [
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 9,
+          "y": 11
+        }
+      ],
+      "district_centro": [
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 9,
+          "y": 11
+        }
+      ],
+      "district_sud": [
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 9,
+          "y": 11
+        }
+      ],
+      "district_isole": [
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 9,
+          "y": 11
+        }
+      ],
+      "district_feed": [
+        {
+          "x": 9,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 9,
+          "y": 11
+        }
+      ],
+      "palazzo_feed": [
+        {
+          "x": 10,
+          "y": 5
+        },
+        {
+          "x": 9,
+          "y": 7
+        },
+        {
+          "x": 8,
+          "y": 9
+        }
+      ],
+      "palazzo_algoritmo": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "palazzo_factcheck": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "palazzo_talkshow": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "palazzo_silenzio": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 5
+        },
+        {
+          "x": 4,
+          "y": 6
+        }
+      ],
+      "palazzo_feed_studio": [
+        {
+          "x": 9,
+          "y": 5
+        },
+        {
+          "x": 7,
+          "y": 3
+        },
+        {
+          "x": 8,
+          "y": 7
+        }
+      ],
+      "palazzo_feed_terrazza": [
+        {
+          "x": 10,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 4
+        },
+        {
+          "x": 6,
+          "y": 6
+        },
+        {
+          "x": 10,
+          "y": 11
+        }
+      ]
+    },
+    "missing": [],
+    "characterIssues": []
+  },
+  "campaigns": [
+    {
+      "id": "ellyna",
+      "report": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+      "reportSha256": "8129f22871fc201b1388c3ac6209e0b9d50dc28e1278671feeba1e927accf73d",
+      "resume": {
+        "report": "artifacts/campaign-native/offshore-final-ellyna-direct-20261002.json",
+        "stage": "tesoriere-result-1",
+        "parentId": "ellyna",
+        "parentSeed": 20261002
+      },
+      "parentReportSha256": "0f9e0f1311ccb62085389440500df7b494f3623534667503707c5476394a4871",
+      "sourceSaveCodeSha256": "7ae20190e93c7f13f0499713d54186162034e300b6e85fadb766c8a47d3705aa",
+      "difficulty": "normal",
+      "seed": 20261002,
+      "bruxPlan": "prepared",
+      "archivePlan": "support",
+      "kitPlan": "skip",
+      "frames": 6628,
+      "failure": null,
+      "initialParty": [
+        {
+          "id": "muskrat",
+          "level": 38,
+          "heldItem": null
+        },
+        {
+          "id": "schleinix",
+          "level": 39,
+          "heldItem": null
+        },
+        {
+          "id": "putingrad",
+          "level": 39,
+          "heldItem": null
+        },
+        {
+          "id": "movimenton",
+          "level": 37,
+          "heldItem": null
+        },
+        {
+          "id": "generorso",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "telecrate",
+          "level": 34,
+          "heldItem": null
+        }
+      ],
+      "finalParty": [
+        {
+          "id": "schleinix",
+          "level": 45,
+          "hp": 0,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "transizione",
+              "pp": 6
+            },
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "piazza",
+              "pp": 12
+            },
+            {
+              "id": "scissione",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "movimenton",
+          "level": 42,
+          "hp": 0,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "redditone",
+              "pp": 9
+            },
+            {
+              "id": "vaffa",
+              "pp": 7
+            },
+            {
+              "id": "fiducia",
+              "pp": 19
+            }
+          ]
+        },
+        {
+          "id": "muskrat",
+          "level": 43,
+          "hp": 0,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "memedoge",
+              "pp": 10
+            },
+            {
+              "id": "grafico",
+              "pp": 23
+            },
+            {
+              "id": "razzox",
+              "pp": 4
+            },
+            {
+              "id": "spread",
+              "pp": 15
+            }
+          ]
+        },
+        {
+          "id": "putingrad",
+          "level": 45,
+          "hp": 92,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "tavololungo",
+              "pp": 7
+            },
+            {
+              "id": "gasdotto",
+              "pp": 0
+            },
+            {
+              "id": "dossier",
+              "pp": 0
+            },
+            {
+              "id": "blocconavale",
+              "pp": 8
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 39,
+          "hp": 0,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 8
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 9
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            },
+            {
+              "id": "fiammatricolore",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 40,
+          "hp": 0,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "bunga",
+              "pp": 3
+            },
+            {
+              "id": "giravolta",
+              "pp": 25
+            },
+            {
+              "id": "conferenza",
+              "pp": 20
+            },
+            {
+              "id": "editoriale",
+              "pp": 10
+            }
+          ]
+        }
+      ],
+      "initialMorale": {
+        "trust": 68,
+        "cohesion": 74,
+        "progress": 25,
+        "promises": [
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "finalMorale": {
+        "trust": 68,
+        "cohesion": 74,
+        "progress": 30,
+        "promises": [
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "battles": [
+        {
+          "trainer": "eu-relatore",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 44
+            },
+            {
+              "id": "bojoon",
+              "level": 45
+            }
+          ],
+          "moneyBefore": 41690,
+          "moneyAfter": 43490
+        },
+        {
+          "trainer": "wild",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 44
+            }
+          ],
+          "moneyBefore": 43490,
+          "moneyAfter": 43490
+        },
+        {
+          "trainer": "eu-eurodeputato",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 45
+            },
+            {
+              "id": "ursulax",
+              "level": 46
+            }
+          ],
+          "moneyBefore": 43210,
+          "moneyAfter": 45160
+        },
+        {
+          "trainer": "eu-commissario",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 47
+            },
+            {
+              "id": "putingrad",
+              "level": 48
+            }
+          ],
+          "moneyBefore": 45160,
+          "moneyAfter": 47260
+        },
+        {
+          "trainer": "eu-lobby",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 48
+            },
+            {
+              "id": "macronfox",
+              "level": 49
+            },
+            {
+              "id": "trumpon",
+              "level": 50
+            }
+          ],
+          "moneyBefore": 46840,
+          "moneyAfter": 49140
+        },
+        {
+          "trainer": "commissione",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 52
+            },
+            {
+              "id": "putingrad",
+              "level": 53
+            },
+            {
+              "id": "xipanda",
+              "level": 53
+            },
+            {
+              "id": "ursulax",
+              "level": 55
+            }
+          ],
+          "moneyBefore": 48720,
+          "moneyAfter": 53720
+        }
+      ],
+      "preparation": [
+        {
+          "type": "supplies-purchased",
+          "map": "offshore",
+          "detail": {
+            "bag": {
+              "caffe": 3,
+              "scheda": 3,
+              "maalox": 2,
+              "spritz": 8,
+              "divisa": 1,
+              "dirBunga": 1,
+              "schedona": 12,
+              "mojito": 6,
+              "tessera": 2,
+              "dirWhatever": 1
+            },
+            "money": 41690
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "offshore",
+          "detail": {
+            "species": "movimenton",
+            "move": "articolouno",
+            "replace": "gazzetta"
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "offshore",
+          "detail": {
+            "species": "generorso",
+            "move": "pienipoteri",
+            "replace": "decreto"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-relatore",
+            "uid": "mmuqj6gp61",
+            "species": "schleinix"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 4,
+              "scheda": 3,
+              "maalox": 3,
+              "spritz": 8,
+              "divisa": 1,
+              "dirBunga": 1,
+              "schedona": 12,
+              "mojito": 6,
+              "tessera": 2,
+              "dirWhatever": 1
+            },
+            "money": 43210
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-eurodeputato",
+            "uid": "mmuqmmqg03",
+            "species": "muskrat"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-commissario",
+            "uid": "mmuqj6hdb8",
+            "species": "movimenton"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 4,
+              "scheda": 3,
+              "maalox": 3,
+              "spritz": 8,
+              "divisa": 1,
+              "dirBunga": 1,
+              "schedona": 14,
+              "mojito": 6,
+              "tessera": 2,
+              "dirWhatever": 1
+            },
+            "money": 46840
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-lobby",
+            "uid": "mmuqj6gp61",
+            "species": "schleinix"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 4,
+              "scheda": 3,
+              "maalox": 3,
+              "spritz": 8,
+              "divisa": 1,
+              "dirBunga": 1,
+              "schedona": 14,
+              "mojito": 6,
+              "tessera": 2,
+              "dirWhatever": 1
+            },
+            "money": 48720
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "bruxelles",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "mondocontrario"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "commissione",
+          "detail": {
+            "trainer": "commissione",
+            "uid": "mmuqj6gp61",
+            "species": "schleinix"
+          }
+        }
+      ],
+      "epilogue": {
+        "map": "commissione",
+        "lines": [
+          "LA COMMISSIONE posa il timbro. Sul verbale scrive chi deve cambiare la lampadina.",
+          "La vittoria assegna il lavoro. Non lo dichiara già fatto.",
+          "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+          "LA SQUADRA RESTA ANCHE A CAMERE SPENTE.",
+          "1 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+          "SONDAGGI al 100%. Premio: TESSERA DORATA.",
+          "A sud-est di BRUXELLES ti aspettano al CAMPO LARGO. Consulta l’ATTO 3 in EXTRA > CONTENUTI.",
+          "Vogliono una coalizione che entri nella foto. Vedremo chi resta quando si spegne il flash."
+        ],
+        "trust": 68,
+        "cohesion": 74
+      },
+      "bossWon": true
+    },
+    {
+      "id": "renzino",
+      "report": "artifacts/campaign-native/brux-final-renzino-direct-20261002.json",
+      "reportSha256": "64fa8171b7e0749a150eb43206ac217d228f50fdd80c48f3d3dccd5c9efc33d6",
+      "resume": {
+        "report": "artifacts/campaign-native/offshore-ready-renzino-direct-20261002.json",
+        "stage": "tesoriere-result-1",
+        "parentId": "renzino",
+        "parentSeed": 20261002
+      },
+      "parentReportSha256": "20ebb8ef84dca1ae7c6f49f09498ea4febd13af5d377d25acba0b2cb6b1fa8df",
+      "sourceSaveCodeSha256": "b3ad4f83d2ab9249b463822398ec93e49ef7b57dab1829ec5cc5f9b9172f427a",
+      "difficulty": "normal",
+      "seed": 20261002,
+      "bruxPlan": "prepared",
+      "archivePlan": "support",
+      "kitPlan": "skip",
+      "frames": 5788,
+      "failure": null,
+      "initialParty": [
+        {
+          "id": "pontimax",
+          "level": 45,
+          "heldItem": null
+        },
+        {
+          "id": "capitanone",
+          "level": 37,
+          "heldItem": null
+        },
+        {
+          "id": "renzilla",
+          "level": 38,
+          "heldItem": null
+        },
+        {
+          "id": "movimenton",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "generorso",
+          "level": 34,
+          "heldItem": null
+        },
+        {
+          "id": "xipanda",
+          "level": 42,
+          "heldItem": null
+        }
+      ],
+      "finalParty": [
+        {
+          "id": "pontimax",
+          "level": 50,
+          "hp": 112,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "grafico",
+              "pp": 23
+            },
+            {
+              "id": "spread",
+              "pp": 13
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "vaffa",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "capitanone",
+          "level": 42,
+          "hp": 0,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 5
+            },
+            {
+              "id": "vaffa",
+              "pp": 10
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 9
+            },
+            {
+              "id": "mojito",
+              "pp": 9
+            }
+          ]
+        },
+        {
+          "id": "renzilla",
+          "level": 43,
+          "hp": 148,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "inciucio",
+              "pp": 15
+            },
+            {
+              "id": "rottamazione",
+              "pp": 10
+            },
+            {
+              "id": "editoriale",
+              "pp": 10
+            },
+            {
+              "id": "staisereno",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "movimenton",
+          "level": 41,
+          "hp": 155,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "redditone",
+              "pp": 10
+            },
+            {
+              "id": "vaffa",
+              "pp": 10
+            },
+            {
+              "id": "fiducia",
+              "pp": 20
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 40,
+          "hp": 83,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 9
+            },
+            {
+              "id": "fiammatricolore",
+              "pp": 10
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "xipanda",
+          "level": 48,
+          "hp": 104,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "oscuramento",
+              "pp": 8
+            },
+            {
+              "id": "viadellaseta",
+              "pp": 0
+            },
+            {
+              "id": "spread",
+              "pp": 8
+            },
+            {
+              "id": "fiducia",
+              "pp": 18
+            }
+          ]
+        }
+      ],
+      "initialMorale": {
+        "trust": 80,
+        "cohesion": 80,
+        "progress": 24,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "kept"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 15,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay",
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "finalMorale": {
+        "trust": 80,
+        "cohesion": 80,
+        "progress": 29,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "kept"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 15,
+            "status": "kept"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay",
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "battles": [
+        {
+          "trainer": "eu-relatore",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 44
+            },
+            {
+              "id": "bojoon",
+              "level": 45
+            }
+          ],
+          "moneyBefore": 40420,
+          "moneyAfter": 42220
+        },
+        {
+          "trainer": "eu-eurodeputato",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 45
+            },
+            {
+              "id": "ursulax",
+              "level": 46
+            }
+          ],
+          "moneyBefore": 42220,
+          "moneyAfter": 44170
+        },
+        {
+          "trainer": "eu-commissario",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 47
+            },
+            {
+              "id": "putingrad",
+              "level": 48
+            }
+          ],
+          "moneyBefore": 43780,
+          "moneyAfter": 45880
+        },
+        {
+          "trainer": "eu-lobby",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 48
+            },
+            {
+              "id": "macronfox",
+              "level": 49
+            },
+            {
+              "id": "trumpon",
+              "level": 50
+            }
+          ],
+          "moneyBefore": 45880,
+          "moneyAfter": 48180
+        },
+        {
+          "trainer": "commissione",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 52
+            },
+            {
+              "id": "putingrad",
+              "level": 53
+            },
+            {
+              "id": "xipanda",
+              "level": 53
+            },
+            {
+              "id": "ursulax",
+              "level": 55
+            }
+          ],
+          "moneyBefore": 47660,
+          "moneyAfter": 52660
+        }
+      ],
+      "preparation": [
+        {
+          "type": "supplies-purchased",
+          "map": "offshore",
+          "detail": {
+            "bag": {
+              "caffe": 1,
+              "scheda": 2,
+              "maalox": 3,
+              "divisa": 1,
+              "schedona": 13,
+              "dirBunga": 1,
+              "tessera": 2,
+              "spritz": 8,
+              "mojito": 6,
+              "dirWhatever": 1
+            },
+            "money": 40420
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "offshore",
+          "detail": {
+            "species": "movimenton",
+            "move": "articolouno",
+            "replace": "decreto"
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "offshore",
+          "detail": {
+            "species": "generorso",
+            "move": "pienipoteri",
+            "replace": "decreto"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-relatore",
+            "uid": "mmuqmsqst2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-eurodeputato",
+            "uid": "mmuqmsqst2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 1,
+              "scheda": 2,
+              "maalox": 4,
+              "divisa": 1,
+              "schedona": 13,
+              "dirBunga": 1,
+              "tessera": 2,
+              "spritz": 8,
+              "mojito": 6,
+              "dirWhatever": 1
+            },
+            "money": 43780
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-commissario",
+            "uid": "mmuqmsqst2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-lobby",
+            "uid": "mmuqmsqst2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 1,
+              "scheda": 2,
+              "maalox": 4,
+              "divisa": 1,
+              "schedona": 14,
+              "dirBunga": 1,
+              "tessera": 2,
+              "spritz": 8,
+              "mojito": 6,
+              "dirWhatever": 1
+            },
+            "money": 47660
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "bruxelles",
+          "detail": {
+            "species": "movimenton",
+            "move": "redditone",
+            "replace": "gazzetta"
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "bruxelles",
+          "detail": {
+            "species": "generorso",
+            "move": "pienipoteri",
+            "replace": "mondocontrario"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "commissione",
+          "detail": {
+            "trainer": "commissione",
+            "uid": "mmuqmsqst2",
+            "species": "pontimax"
+          }
+        }
+      ],
+      "epilogue": {
+        "map": "commissione",
+        "lines": [
+          "LA COMMISSIONE posa il timbro. Sul verbale scrive chi deve cambiare la lampadina.",
+          "La vittoria assegna il lavoro. Non lo dichiara già fatto.",
+          "TI AFFIDANO UN PROBLEMA, NON SOLO UN VOTO.",
+          "LA SQUADRA RESTA ANCHE A CAMERE SPENTE.",
+          "2 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+          "SONDAGGI al 100%. Premio: TESSERA DORATA.",
+          "A sud-est di BRUXELLES ti aspettano al CAMPO LARGO. Consulta l’ATTO 3 in EXTRA > CONTENUTI.",
+          "Vogliono una coalizione che entri nella foto. Vedremo chi resta quando si spegne il flash."
+        ],
+        "trust": 80,
+        "cohesion": 80
+      },
+      "bossWon": true
+    },
+    {
+      "id": "giorgetta",
+      "report": "artifacts/campaign-native/brux-final-giorgetta-direct-20261002.json",
+      "reportSha256": "b996df13e1ed19362741698ffb2f6dbf754ae9046719bd2d77f77deee01d9945",
+      "resume": {
+        "report": "artifacts/campaign-native/offshore-ready-giorgetta-direct-20261002.json",
+        "stage": "tesoriere-result-1",
+        "parentId": "giorgetta",
+        "parentSeed": 20261002
+      },
+      "parentReportSha256": "96abe4699aa2d1890b5668b80b5af7df274a08aecc4d66b861df01950677feee",
+      "sourceSaveCodeSha256": "17d962e8643f608025da524d3ce7c3e6104152c14f87b36480d49738d4264d9f",
+      "difficulty": "normal",
+      "seed": 20261002,
+      "bruxPlan": "prepared",
+      "archivePlan": "support",
+      "kitPlan": "skip",
+      "frames": 6572,
+      "failure": null,
+      "initialParty": [
+        {
+          "id": "pontimax",
+          "level": 46,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "generorso",
+          "level": 36,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "giorgiagon",
+          "level": 38,
+          "heldItem": "gilet"
+        },
+        {
+          "id": "telecrate",
+          "level": 33,
+          "heldItem": null
+        },
+        {
+          "id": "conteblob",
+          "level": 35,
+          "heldItem": null
+        },
+        {
+          "id": "xipanda",
+          "level": 38,
+          "heldItem": "gilet"
+        }
+      ],
+      "finalParty": [
+        {
+          "id": "pontimax",
+          "level": 52,
+          "hp": 147,
+          "heldItem": "gilet",
+          "moves": [
+            {
+              "id": "grafico",
+              "pp": 0
+            },
+            {
+              "id": "spread",
+              "pp": 0
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 0
+            },
+            {
+              "id": "vaffa",
+              "pp": 0
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 41,
+          "hp": 0,
+          "heldItem": "gilet",
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 8
+            },
+            {
+              "id": "fiammatricolore",
+              "pp": 9
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 9
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "giorgiagon",
+          "level": 42,
+          "hp": 151,
+          "heldItem": "gilet",
+          "moves": [
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "decreto",
+              "pp": 20
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 39,
+          "hp": 148,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "bunga",
+              "pp": 5
+            },
+            {
+              "id": "giravolta",
+              "pp": 25
+            },
+            {
+              "id": "conferenza",
+              "pp": 20
+            },
+            {
+              "id": "editoriale",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "conteblob",
+          "level": 40,
+          "hp": 152,
+          "heldItem": null,
+          "moves": [
+            {
+              "id": "decreto",
+              "pp": 20
+            },
+            {
+              "id": "fiducia",
+              "pp": 20
+            },
+            {
+              "id": "gazzetta",
+              "pp": 15
+            },
+            {
+              "id": "telepromessa",
+              "pp": 15
+            }
+          ]
+        },
+        {
+          "id": "xipanda",
+          "level": 43,
+          "hp": 134,
+          "heldItem": "gilet",
+          "moves": [
+            {
+              "id": "oscuramento",
+              "pp": 10
+            },
+            {
+              "id": "viadellaseta",
+              "pp": 9
+            },
+            {
+              "id": "spread",
+              "pp": 15
+            },
+            {
+              "id": "fiducia",
+              "pp": 20
+            }
+          ]
+        }
+      ],
+      "initialMorale": {
+        "trust": 36,
+        "cohesion": 56,
+        "progress": 25,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "broken"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "broken"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge",
+          "traghetto",
+          "traghetto:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "IL PLASTICO GALLEGGIA",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: MOLO ACCESSIBILE",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "finalMorale": {
+        "trust": 36,
+        "cohesion": 56,
+        "progress": 30,
+        "promises": [
+          {
+            "id": "bus",
+            "dueAt": 4,
+            "status": "broken"
+          },
+          {
+            "id": "traghetto",
+            "dueAt": 16,
+            "status": "broken"
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge",
+          "traghetto",
+          "traghetto:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "IL PLASTICO GALLEGGIA",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: MOLO ACCESSIBILE",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "VERIFICA PUBBLICA",
+            "trust": 6,
+            "cohesion": 8
+          }
+        ]
+      },
+      "battles": [
+        {
+          "trainer": "eu-relatore",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 44
+            },
+            {
+              "id": "bojoon",
+              "level": 45
+            }
+          ],
+          "moneyBefore": 31880,
+          "moneyAfter": 33680
+        },
+        {
+          "trainer": "eu-eurodeputato",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "zelenskir",
+              "level": 45
+            },
+            {
+              "id": "ursulax",
+              "level": 46
+            }
+          ],
+          "moneyBefore": 33680,
+          "moneyAfter": 35630
+        },
+        {
+          "trainer": "eu-commissario",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "xipanda",
+              "level": 47
+            },
+            {
+              "id": "putingrad",
+              "level": 48
+            }
+          ],
+          "moneyBefore": 35630,
+          "moneyAfter": 37730
+        },
+        {
+          "trainer": "eu-lobby",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "ursulax",
+              "level": 48
+            },
+            {
+              "id": "macronfox",
+              "level": 49
+            },
+            {
+              "id": "trumpon",
+              "level": 50
+            }
+          ],
+          "moneyBefore": 37590,
+          "moneyAfter": 39890
+        },
+        {
+          "trainer": "commissione",
+          "outcome": "win",
+          "foes": [
+            {
+              "id": "macronfox",
+              "level": 52
+            },
+            {
+              "id": "putingrad",
+              "level": 53
+            },
+            {
+              "id": "xipanda",
+              "level": 53
+            },
+            {
+              "id": "ursulax",
+              "level": 55
+            }
+          ],
+          "moneyBefore": 39330,
+          "moneyAfter": 44330
+        }
+      ],
+      "preparation": [
+        {
+          "type": "supplies-purchased",
+          "map": "offshore",
+          "detail": {
+            "bag": {
+              "caffe": 1,
+              "scheda": 0,
+              "maalox": 4,
+              "divisa": 1,
+              "dirBunga": 1,
+              "spritz": 8,
+              "schedona": 11,
+              "mojito": 4,
+              "gilet": 0,
+              "tessera": 3,
+              "dirWhatever": 1
+            },
+            "money": 31880
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "offshore",
+          "detail": {
+            "species": "generorso",
+            "move": "pienipoteri",
+            "replace": "mondocontrario"
+          }
+        },
+        {
+          "type": "archive-plan",
+          "map": "offshore",
+          "detail": {
+            "species": "conteblob",
+            "move": "fiducia",
+            "replace": "concertone"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-relatore",
+            "uid": "mmuqmsqsf2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-eurodeputato",
+            "uid": "mmuqmsqsf2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-commissario",
+            "uid": "mmuqmsqsf2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 1,
+              "scheda": 2,
+              "maalox": 5,
+              "divisa": 1,
+              "dirBunga": 1,
+              "spritz": 8,
+              "schedona": 12,
+              "mojito": 4,
+              "gilet": 0,
+              "tessera": 3,
+              "dirWhatever": 1
+            },
+            "money": 37590
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "bruxelles",
+          "detail": {
+            "trainer": "eu-lobby",
+            "uid": "mmuqmsqsf2",
+            "species": "pontimax"
+          }
+        },
+        {
+          "type": "supplies-purchased",
+          "map": "bruxelles",
+          "detail": {
+            "bag": {
+              "caffe": 1,
+              "scheda": 2,
+              "maalox": 5,
+              "divisa": 1,
+              "dirBunga": 1,
+              "spritz": 8,
+              "schedona": 12,
+              "mojito": 4,
+              "gilet": 0,
+              "tessera": 3,
+              "dirWhatever": 1
+            },
+            "money": 39330
+          }
+        },
+        {
+          "type": "leader-selection",
+          "map": "commissione",
+          "detail": {
+            "trainer": "commissione",
+            "uid": "mmuqmsqsf2",
+            "species": "pontimax"
+          }
+        }
+      ],
+      "epilogue": {
+        "map": "commissione",
+        "lines": [
+          "LA COMMISSIONE posa il timbro. Sul verbale scrive chi deve cambiare la lampadina.",
+          "La vittoria assegna il lavoro. Non lo dichiara già fatto.",
+          "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+          "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+          "0 MANTENUTE. 0 RIPARATE. 2 APERTE.",
+          "SONDAGGI al 100%. Premio: TESSERA DORATA.",
+          "A sud-est di BRUXELLES ti aspettano al CAMPO LARGO. Consulta l’ATTO 3 in EXTRA > CONTENUTI.",
+          "Vogliono una coalizione che entri nella foto. Vedremo chi resta quando si spegne il flash."
+        ],
+        "trust": 36,
+        "cohesion": 56
+      },
+      "bossWon": true
+    }
+  ],
+  "baseline": {
+    "report": "artifacts/campaign-native/brux-baseline-ellyna-direct-20261002.json",
+    "reportSha256": "789b313dbbd4c9d09a493c507c6ba9a9e79cb68006a251a49aaf092e51fa95c0",
+    "battles": [
+      {
+        "trainer": "eu-relatore",
+        "outcome": "win"
+      },
+      {
+        "trainer": "eu-eurodeputato",
+        "outcome": "win"
+      },
+      {
+        "trainer": "eu-commissario",
+        "outcome": "win"
+      },
+      {
+        "trainer": "eu-lobby",
+        "outcome": "loss"
+      },
+      {
+        "trainer": "eu-lobby",
+        "outcome": "win"
+      },
+      {
+        "trainer": "commissione",
+        "outcome": "win"
+      }
+    ],
+    "limitation": "Same seed restarted at the segment boundary, but routes/dialogues differ and consume RNG differently. These runs do not isolate a causal balance improvement."
+  },
+  "performance": {
+    "schemaVersion": 2,
+    "profile": {
+      "viewport": "390x844",
+      "deviceScaleFactor": 2,
+      "cpuThrottle": 4,
+      "bootNetwork": "40ms/4Mbps",
+      "sceneAudio": true
+    },
+    "boot": {
+      "assetsReadyMs": 1432.5,
+      "firstFrameMs": 1452,
+      "resourceRequestsAtFirstFrame": 158,
+      "resourceTransferBytesAtFirstFrame": 569155,
+      "wallMs": 2031.44
+    },
+    "scenes": {
+      "world": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.708,
+          "p50Ms": 0.7,
+          "p95Ms": 1.3,
+          "p99Ms": 1.5,
+          "maxMs": 7
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.669,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.7,
+          "maxMs": 17.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "LA PORTA ACCANTO AL POTERE"
+        }
+      },
+      "battle": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.229,
+          "p50Ms": 0.1,
+          "p95Ms": 0.7,
+          "p99Ms": 0.8,
+          "maxMs": 1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.668,
+          "p50Ms": 16.7,
+          "p95Ms": 17.6,
+          "p99Ms": 17.6,
+          "maxMs": 17.7
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "IL CANDIDATO NELL ERBA"
+        }
+      },
+      "dex": {
+        "work": {
+          "frames": 240,
+          "meanMs": 0.331,
+          "p50Ms": 0.2,
+          "p95Ms": 0.8,
+          "p99Ms": 0.9,
+          "maxMs": 1.1
+        },
+        "interval": {
+          "frames": 239,
+          "meanMs": 16.736,
+          "p50Ms": 16.7,
+          "p95Ms": 17.5,
+          "p99Ms": 17.6,
+          "maxMs": 32.3
+        },
+        "framesOver100ms": 0,
+        "audio": {
+          "enabled": true,
+          "state": "playing",
+          "title": "IL CANDIDATO NELL ERBA"
+        }
+      },
+      "spriteRegistry": {
+        "entries": 31,
+        "ready": 31,
+        "loading": 0,
+        "missing": 0,
+        "decodedBytesEstimate": 560352
+      },
+      "rasterCache": {
+        "rasterizedSprites": 0,
+        "rasterizedPixels": 0,
+        "cachedGlyphs": 198,
+        "glyphPixels": 9240
+      }
+    },
+    "sizes": {
+      "codeRawBytes": 1112489,
+      "codeGzipBytes": 357883,
+      "initialCodeGzipBytes": 188237,
+      "spriteCompressedBytes": 3176125,
+      "spriteDecodedBytesEstimate": 14856960,
+      "spriteFiles": 565
+    },
+    "save": {
+      "payloadBytes": 8917,
+      "parseMeanMs": 0.0321,
+      "serializeMeanMs": 0.0194
+    }
+  },
+  "releaseLocal": {
+    "chromium": [
+      {
+        "base": "http://127.0.0.1:4180/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "stage": "bruxelles-arrival",
+        "target": "bar-bruxelles",
+        "assets": [
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      },
+      {
+        "base": "http://127.0.0.1:4180/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "stage": "commissione-result-1",
+        "target": "campo_largo",
+        "assets": [
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_east.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_north.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      }
+    ],
+    "webkit": [
+      {
+        "base": "http://127.0.0.1:4180/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "stage": "bruxelles-arrival",
+        "target": "bar-bruxelles",
+        "assets": [
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      },
+      {
+        "base": "http://127.0.0.1:4180/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "stage": "commissione-result-1",
+        "target": "campo_largo",
+        "assets": [
+          "http://127.0.0.1:4180/sprites/tiles/commissione_wall.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_floor.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/commissione_table.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/chars/npc_commissione_west.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-17-14",
+          "http://127.0.0.1:4180/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-17-14"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      }
+    ]
+  },
+  "releaseChecks": {
+    "localUniquePngs": 458,
+    "audioAndCatalog": 20,
+    "offlineFirstUseAssets": 566,
+    "decodedAacTracks": 19,
+    "webkitOfflineLimitation": "Canonical/versioned cache requests and AAC decoding checked offline; full offline reload unsupported by Playwright WebKit."
+  },
+  "publication": {
+    "status": "pending",
+    "site": "https://politicmon.vercel.app/"
+  },
+  "sourceOutputs": [
+    {
+      "id": "eu-relatore",
+      "jobId": "8d301641-3855-4a58-b6d0-b5249d217e0b",
+      "outputs": {
+        "public/sprites/ui/boss/eu-relatore.png": "64d41b82f4faf16f9b562d729b462cb81c558f4ccba113f734d543c40dfa3f04"
+      }
+    },
+    {
+      "id": "eu-eurodeputato",
+      "jobId": "e495918a-90f0-4115-99cd-52b899e67dd0",
+      "outputs": {
+        "public/sprites/ui/boss/eu-eurodeputato.png": "1185cfbefc83da013b6f02221c85edd38743843671dfe94de3242b68a99912c0"
+      }
+    },
+    {
+      "id": "eu-commissario",
+      "jobId": "7285b4c5-67c1-4a8a-ae8d-55d72acef70f",
+      "outputs": {
+        "public/sprites/ui/boss/eu-commissario.png": "202d16197c97e7caa5f927d0b88e4bd4098ea8f72d1d98e66412deb0460fb371"
+      }
+    },
+    {
+      "id": "eu-lobby",
+      "jobId": "b212b824-1b5f-4ae1-94d2-facb60eca46a",
+      "outputs": {
+        "public/sprites/ui/boss/eu-lobby.png": "cef88901de1dd8c03661caee24c1eb8514ff3e4fe0247c846daa2e798cf357aa"
+      }
+    },
+    {
+      "id": "commissione",
+      "jobId": "8f705fe9-2485-4be0-8b88-8acf843efde3",
+      "outputs": {
+        "public/sprites/ui/boss/commissione.png": "1e9e12ed552a19b494377ebf7be13d4857fb3a3f911d5df4a0d244f953efef02"
+      }
+    },
+    {
+      "id": "bruxelles-palace",
+      "jobId": "e85dd95a-5519-4db8-b368-a7e0d1a43100",
+      "outputs": {
+        "public/sprites/tiles/bruxelles_palace.png": "6159bd10a43cb49dc5533e1529664a20aedfc2d95ee5e099204501a88d04973f"
+      }
+    },
+    {
+      "id": "bruxelles-cafe",
+      "jobId": "f3d669c2-ee7b-48f5-8a4d-7493eebd5c0f",
+      "outputs": {
+        "public/sprites/tiles/bruxelles_cafe.png": "fe9cfbadabf20954efc40e1d8a240b572155a9ba31a6591f542ceb0bd545d200"
+      }
+    },
+    {
+      "id": "commissione-directions",
+      "jobId": "c8008cd5-8804-4105-b282-21d2ccebf564",
+      "outputs": {
+        "public/sprites/chars/npc_commissione_south.png": "cf29b69b27592bf7c0366594be6106339ca5045358af0b9241a126ee2d4edf5a",
+        "public/sprites/chars/npc_commissione_north.png": "7af32d779c65bad34e0bcc45fa8f0111729b7350d53ea210a4108d056e386452",
+        "public/sprites/chars/npc_commissione_west.png": "279b537c6476f2b7345796ce3f56ecf523086d4f92bcadb6aea67bf6ecde334e",
+        "public/sprites/chars/npc_commissione_east.png": "bc0db03f8df3a44df626d7644696534200db89febfe0ca231f2c5ac5d7b7f72f"
+      }
+    },
+    {
+      "id": "commissione-floor",
+      "jobId": "b0b041f7-fc17-4a8e-8282-f888b771c231",
+      "outputs": {
+        "public/sprites/tiles/commissione_floor.png": "4f4177535fdf3b02889d05790f5d88014b585dc2f046cb634abdfff1de168ef4"
+      }
+    },
+    {
+      "id": "commissione-wall",
+      "jobId": "0b61ddb0-c689-489c-8aba-2f5d6a05dbbe",
+      "outputs": {
+        "public/sprites/tiles/commissione_wall.png": "02642c9e2a8c225b4276412aa4cacce069ccf4f3d496546ad2b1d5f8afd24814"
+      }
+    },
+    {
+      "id": "commissione-carpet",
+      "jobId": "550ace02-56fd-44af-9db5-bce7d9d0bfc3",
+      "outputs": {
+        "public/sprites/tiles/commissione_carpet.png": "119e1743fa47b461b7add1c3ee54ac377bfd8623d837b94c4fd48cf0053dbf73"
+      }
+    },
+    {
+      "id": "commissione-table",
+      "jobId": "9a8df6b4-0ba3-4f9a-8f57-dabfb40953ab",
+      "outputs": {
+        "public/sprites/tiles/commissione_table.png": "2721ccd6e761e1da20b57ccbc94b53e4c6f3dc840c077e4424f2381ac4123e3d"
+      }
+    }
+  ]
+}

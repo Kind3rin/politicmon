@@ -171,9 +171,9 @@ export const QUESTS: QuestDef[] = [
   },
   {
     id: "ue-commissione",
-    title: "LA POLTRONA DI BRUXELLES",
-    desc: "Vinci il gauntlet UE e strappa la poltrona europea a LA COMMISSIONE.",
-    hint: "In cima al viale di BRUXELLES, davanti al Palazzo della Commissione. Porta una squadra da lv 50+.",
+    title: "IL VERBALE DI BRUXELLES",
+    desc: "Supera LA COMMISSIONE. Una firma deve assegnare un lavoro, non soltanto un altro tavolo.",
+    hint: "Palazzo a nord: quattro avversari LV 52-55. Le prove sul viale sono facoltative. Il CAFFÈ SCHUMAN cura PV e PP.",
     step: "Sconfiggi LA COMMISSIONE a BRUXELLES.",
     isDone: (s) => Boolean(s.flags["ue-beaten"]),
     target: { mapId: "bruxelles", x: 12, y: 5 }

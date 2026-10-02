@@ -1827,7 +1827,8 @@
         "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
         "prompt": "Production key art for Politicmon, an Italian satirical fantasy monster videogame. Three stern fantasy owl commissioners in dark suits gathered around one oversized balance scale, blank papers and a teacup. Their central owl has a broad blue sash and silver spectacles. Monumental blue-and-gold European style hall of symmetrical cabinets. Navy, gold and pale stone. Wide landscape composition, the central figure fully inside the image, leave space around head and all edges. Original invented fantasy character, playful and sinister satire, never photorealistic. Authentic polished crisp pixel art, pixel blocks, clean outlines, flat limited 48-colour palette with two-tone shading, no antialiasing or painterly gradients. Rich staged environmental detail, expressive face, strong readable silhouette at 240 pixel width. Absolutely no letters, words, typography, numbers, labels, logos, UI, captions or watermark anywhere. Background opaque. The game will overlay its own title and tactical text. All panels, books, contracts, flags and screens are blank or purely geometric."
       },
-      "path": "public/sprites/ui/boss/commissione.png"
+      "path": "public/sprites/ui/boss/commissione.png",
+      "supersededBy": "scripts/higgsfield-bruxelles.json"
     },
     {
       "id": "algoritmo-sovrano",

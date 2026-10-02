@@ -129,9 +129,9 @@ const MAP_ENTRY_HINTS: Record<string, { flag: string; lines: string[] }> = {
   bruxelles: {
     flag: "hint-brux-arrivo",
     lines: [
-      "Sei a BRUXELLES, la capitale d'Europa.",
-      "Wild da lv 42+: qui vive il roster UE. Il CAFFÈ SCHUMAN cura la squadra, gratis.",
-      "Risali il viale delle istituzioni: in fondo LA COMMISSIONE non molla la poltrona."
+      "BRUXELLES: tre tavoli per un lampione. La strada aspetta la luce.",
+      "Candidati LV 42-50 nell’erba. Il CAFFÈ SCHUMAN recupera PV e PP, gratis.",
+      "Quattro prove volontarie sul viale: A apre il dossier, B torna. LA COMMISSIONE aspetta nel palazzo a nord."
     ]
   }
 };
@@ -2124,13 +2124,12 @@ export class WorldScene implements Scene {
           addSondaggi(this.state, 10);
           saveGame(this.state);
           this.say([
-            "LA COMMISSIONE ripone il REGOLAMENTO e ti stringe la mano, formalmente.",
-            "COMMISSIONE: 'Recepito. Hai vinto le elezioni EUROPEE.'",
-            "Sei il nuovo PORTAVOCE D'EUROPA: 24 traduzioni simultanee del tuo trionfo.",
-            `I SONDAGGI schizzano al ${this.state.sondaggi}%: persino Strasburgo applaude.`,
-            "Ti spetta una TESSERA DORATA: 'Prassi consolidata. Non chiederne conto.'",
-            "BREAKING NEWS: a sud-est di BRUXELLES ti aspettano al CAMPO LARGO.",
-            "Cercano qualcuno capace di far entrare una coalizione intera in una sola foto."
+            "LA COMMISSIONE posa il timbro. Sul verbale scrive chi deve cambiare la lampadina.",
+            "La vittoria assegna il lavoro. Non lo dichiara già fatto.",
+            ...moraleEpilogue(this.state.morale),
+            `SONDAGGI al ${this.state.sondaggi}%. Premio: TESSERA DORATA.`,
+            "A sud-est di BRUXELLES ti aspettano al CAMPO LARGO. Consulta l’ATTO 3 in EXTRA > CONTENUTI.",
+            "Vogliono una coalizione che entri nella foto. Vedremo chi resta quando si spegne il flash."
           ]);
           return;
         }

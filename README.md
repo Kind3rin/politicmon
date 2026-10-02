@@ -156,3 +156,5 @@ scocca esterna: controlli da 44px, schermo intero, guida che ferma mondo e
 lotte, focus tastiera e salvataggio verificati su Chromium e WebKit.
 
 [Offshore: il registro e la ricevuta](docs/OFFSHORE-REGISTRO.md): spiaggia, Lido a conchiglia, palme e Tesoriere con quattro viste. Tre nuove sfide illustrate e volontarie, negozio sull’isola e morale conservato al finale. Tre campagne riprese da salvataggi giocati superano il boss; porte, ritorno e viaggio a Bruxelles verificati in Chromium/WebKit. Redesign completo ancora in corso.
+
+[Bruxelles: tre tavoli, un lampione](docs/BRUXELLES-VERBALE.md): palazzo e caffè distinti, cast direzionale, cinque dossier volontari e finale personale del morale. Tre campagne da salvataggi giocati vincono la Commissione; porte, ritorni, cure e accesso al Campo Largo verificati nei due motori. Redesign completo ancora in corso.

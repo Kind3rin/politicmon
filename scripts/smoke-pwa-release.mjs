@@ -17,11 +17,13 @@ const legacySave = JSON.stringify(fixtureState("v13-post-ue.json"));
 const monsterFramePaths = JSON.parse(readFileSync("scripts/higgsfield-monster-frames.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, ""));
 const bossArtPaths = [...JSON.parse(readFileSync("scripts/higgsfield-premium-next.json", "utf8")).assets.filter((asset) => asset.kind === "boss"), ...["first-campaign", "eurotown", "capitale", "colle", "stretto"].flatMap(name => JSON.parse(readFileSync(`scripts/higgsfield-${name}.json`, "utf8")).assets)].map((asset) => asset.path.replace(/^public\//, ""));
 const offshorePaths = JSON.parse(readFileSync("scripts/higgsfield-offshore.json", "utf8")).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,""));
+const bruxellesPaths = JSON.parse(readFileSync('scripts/higgsfield-bruxelles.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const dossierArtPaths = [
   ...JSON.parse(readFileSync("scripts/higgsfield-evolution-dossier.json", "utf8")).assets.map((asset) => asset.path.replace(/^public\//, "")),
   ...JSON.parse(readFileSync("scripts/higgsfield-supplies.json", "utf8")).assets.flatMap((asset) => asset.items ? asset.items.map((id) => `sprites/items/${id}.png`) : [asset.path.replace(/^public\//, "")])
 ];
 const worldArtPaths = [...worldAssetPaths(), ...hqAssetPaths(), ...nativeFallbackPaths(), ...coreUiPaths(), ...campaignUiPaths(), ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...["archive", "audio"].flatMap(name => JSON.parse(readFileSync(`scripts/higgsfield-${name}.json`, "utf8")).assets.map((a) => a.path.replace(/^public\//, "")))];
+const firstUsePaths = [...new Set([...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths,...offshorePaths,...bruxellesPaths])];
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
@@ -122,8 +124,8 @@ const backdropEvidence = await page.evaluate(async (monsterFrames) => {
     checked.push(path);
   }
   return checked;
-}, [...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths,...offshorePaths]);
-if (backdropEvidence.length !== 12 + monsterFramePaths.length + bossArtPaths.length + dossierArtPaths.length + worldArtPaths.length + offshorePaths.length) throw new Error("copertura offline immagini e pose incompleta");
+}, firstUsePaths);
+if (backdropEvidence.length !== 12 + firstUsePaths.length) throw new Error("copertura offline immagini e pose incompleta");
 console.log(`Primo utilizzo offline: ${backdropEvidence.length} asset Higgsfield.`);
 const musicEvidence = await page.evaluate(async () => {
   const key = (await caches.keys()).find(name => name.startsWith("politicmon-"));

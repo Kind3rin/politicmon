@@ -28,9 +28,10 @@ const archivePaths = JSON.parse(readFileSync('scripts/higgsfield-archive.json','
 const strettoPaths = JSON.parse(readFileSync('scripts/higgsfield-stretto.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const audioPaths = JSON.parse(readFileSync('scripts/higgsfield-audio.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const offshorePaths = JSON.parse(readFileSync('scripts/higgsfield-offshore.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
+const bruxellesPaths = JSON.parse(readFileSync('scripts/higgsfield-bruxelles.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const music = JSON.parse(readFileSync('public/audio/catalog.json','utf8'));
 const musicPaths = ['audio/catalog.json', ...Object.values(music).map(a=>a.file)];
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths];
+const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths])];
 const releasePaths = [...paths, ...musicPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
@@ -80,4 +81,5 @@ assert.ok(source.includes('ARCHIVIO DELLE LINEE')&&source.includes('RIPRENDI UNA
 assert.ok(source.includes('IL RENDERING NON ATTRAVERSA')&&source.includes('COLLAUDO SENZA FILTRO')&&source.includes('RISPOSTA PREREGISTRATA'), 'Stretto writing/briefings missing');
 assert.ok(source.includes('REGIA AUDIO')&&source.includes('audio/catalog.json'), 'new audio mixer/playback missing');
 assert.ok(source.includes('LA SEDE NELLA CONCHIGLIA')&&source.includes('LA RICEVUTA NEL CAVEAU')&&source.includes('offshore-treasurer')&&source.includes('offshore_bar.png'), 'Offshore writing, dossiers and world cast missing');
+assert.ok(source.includes('CHI CAMBIA LA LAMPADINA')&&source.includes('PRESENZA IN CARTONE')&&source.includes('bruxelles_palace.png')&&source.includes('ambulante-bruxelles'), 'Brussels narrative/world/preparation missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums, ${musicPaths.length} audio/catalog checksums and civic dialogue/bridge code at ${base.origin}.`);

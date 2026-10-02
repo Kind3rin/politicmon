@@ -98,6 +98,8 @@
     "shot:audio": "node scripts/shot-audio.mjs",
     "check:audio-runtime": "node scripts/check-audio-runtime.mjs",
     "check:audio-release": "node scripts/check-audio-release.mjs",
+    "check:bruxelles:release": "node --import tsx scripts/check-bruxelles-release.mjs",
+    "check:bruxelles": "node scripts/check-bruxelles.mjs",
     "check:offshore": "node scripts/check-offshore.mjs",
     "check:offshore:release": "node --import tsx scripts/check-offshore-release.mjs"
   },

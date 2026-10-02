@@ -1,5 +1,12 @@
 # Politicmon: risorse Higgsfield
 
+Diciannovesimo blocco: cinque panorami 224×78 per Capitano, DJ, Citofonista,
+attivista No-Ponte e Geometra. Cinque job `gpt_image_2_5`, **1,25 crediti**,
+saldo **615,22 → 613,97**, cumulativo **272,00**. Prompt, job, URL, ritagli
+e SHA degli originali e dei PNG in `higgsfield-stretto.json`.
+[STRETTO-COLLAUDO.md](STRETTO-COLLAUDO.md): sfide volontarie, ritorno
+verificato, premio evolutivo e campagne native con morale distinto dalle vittorie.
+
 Diciottesimo blocco: archivio delle linee, un PNG 240×180 per recuperare
 le mosse dimenticate. Un job `gpt_image_2_5`, **0,25 crediti**, saldo
 **615,47 → 615,22**, cumulativo **270,75**. Prompt e checksum in

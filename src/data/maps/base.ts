@@ -800,14 +800,15 @@ export const BASE_MAPS: Record<string, MapDef> = {
         vehicleGift: {
           vehicle: "traghetto", flag: "veh-traghetto", requiresBadges: 3,
           lines: [
-            "TRE MEDAGLIE: TRAGHETTO CONSEGNATO. START > VEICOLO lo attiva per navigare.",
-            "Dal molo a sud raggiungi lo STRETTO. Il biglietto include l'acqua, non l'inchino."
+            "TRE MEDAGLIE: TRAGHETTO CONSEGNATO. Cammina sull'acqua per imbarcarti; sulla terra scendi automaticamente.",
+            "Il molo a sud porta allo STRETTO. Deviazione facoltativa: il Capitano assegna una TESSERA DORATA per certe evoluzioni.",
+            "Il biglietto include l'acqua, non l'inchino. La darsena dello Stretto riporta qui anche prima della sfida."
           ],
           lockedLines: [
             "TRAGHETTO: torna con tre medaglie. Per ora il molo è chiuso."
           ]
         },
-        lines: ["MARINAIO: il MOLO è dietro di me. Attiva il TRAGHETTO dal menu e vai verso la Sicilia."]
+        lines: ["MARINAIO: il MOLO è a sud. Il traghetto si attiva sull'acqua. Il rendering del ponte, invece, galleggia solo nella presentazione."]
       },
       {
         id: "ruspista", pal: "aide", x: 8, y: 18, facing: "down",

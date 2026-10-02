@@ -25,7 +25,8 @@ const eurotownPaths = JSON.parse(readFileSync('scripts/higgsfield-eurotown.json'
 const capitalPaths = JSON.parse(readFileSync('scripts/higgsfield-capitale.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const courtPaths = JSON.parse(readFileSync('scripts/higgsfield-colle.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const archivePaths = JSON.parse(readFileSync('scripts/higgsfield-archive.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths];
+const strettoPaths = JSON.parse(readFileSync('scripts/higgsfield-stretto.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -71,4 +72,5 @@ assert.ok(source.includes('POSTI AL TAVOLO')&&source.includes('CHI PAGA IL CONTO
 assert.ok(source.includes('LA REGOLA COMUNE')&&source.includes('LA SEDIA DI CHI PERDE'), 'Consulta briefings missing');
 assert.ok(source.includes('Il quartiere conta le corse del bus.'), 'personal Colle conclusion missing');
 assert.ok(source.includes('ARCHIVIO DELLE LINEE')&&source.includes('RIPRENDI UNA LINEA')&&source.includes('LE MOSSE ANNUNCIATE'), 'move archive/preparation missing');
+assert.ok(source.includes('IL RENDERING NON ATTRAVERSA')&&source.includes('COLLAUDO SENZA FILTRO')&&source.includes('RISPOSTA PREREGISTRATA'), 'Stretto writing/briefings missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

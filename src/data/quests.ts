@@ -103,11 +103,12 @@ export const QUESTS: QuestDef[] = [
   },
   {
     id: "ponte", side: true, // area OPZIONALE: non deve deviare l'HUD dal PALAZZO
-    title: "MEME SULLO STRETTO",
-    desc: "L'AUTO BLU ora arriva allo STRETTO DI MESSINA. Sconfiggi IL CAPITANO in fondo al ponte incompiuto.",
-    hint: "Parla con la scorta con 3 medaglie in tasca. Il ponte finisce a metà: lui è lì.",
-    step: "Auto blu per lo STRETTO: batti IL CAPITANO.",
-    isDone: (s) => Boolean(s.flags["ponte-beaten"])
+    title: "IL RENDERING NON ATTRAVERSA",
+    desc: "Deviazione facoltativa con tre medaglie: il marinaio al porto di Capitale consegna il TRAGHETTO. Il Capitano assegna una TESSERA DORATA.",
+    hint: "Marinaio a sudovest, molo a sud. A apre il briefing del Capitano, B annulla. La darsena riporta a Capitale.",
+    step: "Leggi il premio e prepara il collaudo dello Stretto.",
+    isDone: (s) => Boolean(s.flags["ponte-beaten"]),
+    target: { mapId: "capitale", x: 4, y: 19 }
   },
   {
     id: "boss",

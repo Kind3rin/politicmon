@@ -265,29 +265,29 @@ export const TRAINERS: Record<string, TrainerDef> = {
   djpapeete: {
     id: "djpapeete", name: "DJ DEL PAPEETE", pal: "influencer",
     team: [["salvinott", 19], ["salvinott", 20]],
-    intro: ["Questa spiaggia è una pista da ballo elettorale!", "L'inno nazionale? Lo metto dopo, in versione remix."],
-    defeat: ["Ok, abbasso il volume... ma solo fino al ballottaggio."],
+    intro: ["Cinque correnti, un solo volume. Il remix cambia titolo quando il pubblico riconosce la promessa.", "Il microfono del dibattito è staccato. Incredibile: tutti d'accordo."],
+    defeat: ["Ricollego il microfono. Stavolta il pubblico può rispondere senza comprare la versione deluxe."],
     money: 700, reward: { itemId: "spritz", qty: 1 }
   },
   citofonista: {
     id: "citofonista", name: "CITOFONISTA SERIALE", pal: "aide",
     team: [["vannaccix", 20], ["contemorfo", 20]],
-    intro: ["DRIIIN. Scusi, lei spaccia consensi?", "Lo chiedo a tutti, citofonando. Le telecamere sono già accese."],
-    defeat: ["Nessuno mi apre più... nemmeno la sconfitta."],
+    intro: ["Ho scritto la tua risposta prima di citofonare. Risparmiamo tempo a entrambi.", "Se dici qualcosa di diverso, la regia lo corregge. È il servizio pubblico dell'intervista privata."],
+    defeat: ["Lascio un campo vuoto nella scaletta. È più difficile, ma almeno ci entra una risposta."],
     money: 760
   },
   noponte: {
     id: "noponte", name: "ATTIVISTA NO-PONTE", pal: "journalist",
     team: [["grillix", 20], ["calendauro", 21]],
-    intro: ["Fermo! Questo ponte è un ecomostro!", "Il fatto che non esista non lo rende meno mostruoso!"],
-    defeat: ["Va bene... protesterò contro la prossima opera. In anticipo."],
+    intro: ["Il tavolo ha già scelto il colore del nastro. Sul tavolo non c'è il piano per chi attraversa oggi.", "Il Capitano chiama progresso la foto. Io chiedo di leggere anche la pagina dietro."],
+    defeat: ["Apro il dossier, non la guerra dei manifesti. Una domanda utile vale più di un no stampato bene."],
     money: 800
   },
   geometra: {
     id: "geometra", name: "GEOMETRA DEL CANTIERE", pal: "guard",
     team: [["tajanide", 21], ["muskrat", 21]],
-    intro: ["Alt! Zona cantiere: servono casco e maggioranza qualificata.", "Il progetto è PRONTO dal 1969. Manca solo il ponte."],
-    defeat: ["Segno la sconfitta sul libretto di cantiere. Pagina 4500."],
+    intro: ["La livella dice che la cornice del rendering è dritta. Mi hanno già chiesto il certificato del ponte.", "Ho portato lo strumento sul passaggio. L'ufficio stampa preferiva misurare le condivisioni."],
+    defeat: ["Collaudo registrato sul passaggio vero. La cornice può smettere di fare da infrastruttura."],
     money: 850, reward: { itemId: "caffe", qty: 1 }
   },
   ilcapitano: {
@@ -296,12 +296,11 @@ export const TRAINERS: Record<string, TrainerDef> = {
     // sempre calda al Papeete" (l'held item non passa in PvP).
     team: [["salvinator", 22], ["vannaccix", 22], ["capitanone", 24, undefined, "caffettiera"]],
     intro: [
-      "Benvenuto nel cantiere più fotografato d'Italia.",
-      "Da qui si vede la SICILIA. Avvicinarla è il mio mandato.",
-      "Ho giurato sul mojito: prima gli italiani, poi il collaudo.",
-      "Difendo questo ponte con tutto quello che ho. Cioè un molo."
+      "Il rendering arriva dall'altra parte. Ho chiesto al geometra perché insiste a usare i piedi.",
+      "Per la foto ho tolto dal programma la parola collaudo: allungava il nastro.",
+      "CAPITANONE ha la CAFFETTIERA. La moka recupera PV a ogni turno: quella almeno ha superato la prova di carico."
     ],
-    defeat: ["Ok, ok... rinviamo l'inaugurazione. DI NUOVO."],
+    defeat: ["Il geometra vuole un risultato vero. Gli consegno il passaggio; alla regia resta la foto."],
     money: 3000, reward: { itemId: "tessera", qty: 1 }
   },
   // ---- PARADISO OFFSHORE (post-game, dopo garante-beaten) ----

@@ -17,14 +17,14 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
-| Boss e prove | Tredici illustrazioni, briefing e leader persistente; prove facoltative fino alla Global Tower con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
+| Boss e prove | Ventuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta e allo Stretto con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
-| Schede squadra | Cinque pagine, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
+| Schede squadra | Sei pagine, archivio recuperabile, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
 | Evoluzioni | Confronto, rinvio, ripresa al cap, soglie aggiornate, tessera dopo conferma, presentazione accessibile | `shot:evolution-dossier`, unit test |
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
-| Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 103 viste e prove di trasferimento/tocco |
+| Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 105 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
 | Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 142 viste, unit test e prove di rete |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
@@ -35,13 +35,14 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
-| Preparazione e archivio | Recupero gratuito delle mosse al livello, dossier reale della squadra avversaria, comparsa sicura degli sfidanti | Due partite fino al Garante; Renzino resta aperto in ARCHIVIO-PREPARAZIONE |
+| Preparazione e archivio | Recupero gratuito delle mosse al livello, dossier reale della squadra avversaria, comparsa sicura degli sfidanti | Tre starter fino al Garante con preparazione diversa; limiti e confronti in STRETTO-COLLAUDO |
 | Palazzo e Colle | Tre prove illustrate e volontarie, rifornimenti accessibili, verbale del morale letto al finale | Partita nuova di Ellyna fino al Garante; altri percorsi e limiti in COLLE-VERBALE |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 189.284 byte gzip iniziali, checksum e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 533 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
+| Stretto | Cinque nuovi briefing, satira rendering/collaudo, ritorno prima della sfida e Tessera evolutiva; prove manuali anche dopo il Capitano | Tre partite nuove con preparazione diversa fino al Garante; confronto Giorgetta senza kit e accessi in due motori |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 187.227 byte gzip iniziali, checksum e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 542 asset Higgsfield; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 616,97; spesa cumulativa 269,00 crediti. Non sono stati attivati acquisti
+verificato: 613,97; spesa cumulativa 272,00 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
 ## Lavoro ancora necessario
@@ -56,7 +57,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
-   La campagna normale fino a Dazio è percorsa tramite input con tutti e tre gli starter;
+   La campagna normale fino al Garante è percorsa tramite input con tutti e tre gli starter, con diverse preparazioni;
    restano difficoltà alta, atti successivi e combinazioni alternative.
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
@@ -245,3 +246,16 @@ modularità prima di ulteriori funzioni; i limiti restano invariati.
 Round pubblicato in `89addbb`: CI e tre deploy Vercel riusciti, 421 checksum
 sul sito pubblico, PWA con 530 asset in Chromium/WebKit e sei configurazioni
 della cornice esterna riuscite. Reload offline verificato in Chromium.
+
+### Stretto e collaudo — 2 ottobre 2026
+
+[STRETTO-COLLAUDO.md](STRETTO-COLLAUDO.md): cinque nuove illustrazioni,
+sfide avviate con A, Geometra disponibile dopo il Capitano e missione
+che indica il traghetto reale, anziché una rotta Auto Blu inesistente.
+Tre partite nuove arrivano al Garante: Renzino usa una Tessera su Salvinator,
+Giorgetta acquista due Gilet; il confronto senza kit perde due volte al
+Capitano e al Garante. La morale ricorda le promesse scadute anche dopo
+la vittoria. 1,25 crediti, saldo 613,97; 283 test, 8.449 briefing per motore,
+105 viste HQ, 433 checksum locali e 542 risorse PWA. Obiettivo attivo:
+restano audio, scrittura e ritmo delle zone successive, altri seed e
+campagna completa in difficoltà elevata.

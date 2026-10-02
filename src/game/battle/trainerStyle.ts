@@ -10,6 +10,11 @@ const STYLES: Record<string, TrainerStyle> = {
   giudice1: { style: "balanced", label: "LA REGOLA COMUNE", art: "giudice1", hints: ["Prova facoltativa. A sfida, B torna. Due avversari, due tipi.", "Puoi scendere al bar di Capitale e recuperare i PP."] },
   giudice2: { style: "balanced", label: "DI CHI È LA CHIAVE", art: "giudice2", hints: ["Prova facoltativa. START sceglie il leader prima della lotta.", "Controlla tipi e abilità: una sola risposta non copre tutto."] },
   giudice3: { style: "balanced", label: "LA SEDIA DI CHI PERDE", art: "giudice3", hints: ["Prova facoltativa. Leggi le resistenze e conserva mosse efficaci.", "Il Garante ha quattro avversari. Il bar resta raggiungibile."] },
+  ilcapitano: { style: "balanced", label: "COLLAUDO SENZA FILTRO", art: "ilcapitano", hints: ["Tre avversari. CAPITANONE tiene la CAFFETTIERA: recupera PV a fine turno.", "B annulla. Prima della vittoria torni al bar di Capitale dalla darsena. Premio: TESSERA DORATA.", "L'ambulante di Capitale vende oggetti da equipaggiare dalla BORSA. Un solo slot per candidato."] },
+  djpapeete: { style: "balanced", label: "VOLUME DEL MANDATO", art: "djpapeete", hints: ["Prova facoltativa. Due avversari POPULISMO. A sfida, B torna.", "Dopo il Capitano il bar dello Stretto recupera PV e PP."] },
+  citofonista: { style: "balanced", label: "RISPOSTA PREREGISTRATA", art: "citofonista", hints: ["Prova facoltativa. Controlla mosse e immunità nel dossier.", "START sceglie il leader; il bar dello Stretto resta aperto."] },
+  noponte: { style: "balanced", label: "PRIMA DEL NASTRO", art: "noponte", hints: ["Prova facoltativa. Due avversari di tipi diversi.", "Puoi curarti al bar e riprendere le mosse dall'archivio."] },
+  geometra: { style: "balanced", label: "IL LIVELLO DEL MARE", art: "geometra", hints: ["Prova facoltativa, anche dopo il Capitano. Misura il danno, non solo la potenza.", "B torna al cantiere. Nessun PP speso leggendo il dossier."] },
   emittenza: { style: "pressure", label: "PRIMA SERATA", art: "emittenza", hints: ["Punta su attacchi e status. Una difesa solida vale più del volume della voce.", "Gli status non passano attraverso TEFLON o GARANZIA."] },
   ladydirettiva: { style: "control", label: "PROTOCOLLO", art: "ladydirettiva", hints: ["Cerca di ridurre le statistiche. POLTRONA SALDA protegge dai cali.", "Alterna attacchi e controllo: preparati a cambiare il leader."] },
   tycoon: { style: "rush", label: "ACQUISIZIONE OSTILE", art: "tycoon", hints: ["Privilegia il danno immediato. Anche una mossa debole può chiudere un KO.", "Un attacco prioritario può ribaltare l'ordine. Controlla il dossier."] },
@@ -28,7 +33,7 @@ export function trainerAi(id: string, badge: boolean, hard: boolean, badges: num
   // The first lesson teaches moves and types, before introducing enemy healing.
   if (id === "rival1") return { whiff: hard ? .15 : .33, canHeal: false, finisher: hard, style: "balanced" };
   if (id === "stagista") return { whiff: hard ? .22 : .4, canHeal: false, finisher: hard, style: "balanced" };
-  const boss = (!badge && Boolean(STYLES[id]) && !["funzionario", "diplomatico", "oligarca", "giudice1", "giudice2", "giudice3"].includes(id)) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
+  const boss = (!badge && Boolean(STYLES[id]) && !["funzionario", "diplomatico", "oligarca", "giudice1", "giudice2", "giudice3", "djpapeete", "citofonista", "noponte", "geometra"].includes(id)) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
   const profile: AiProfile = boss ? { whiff: hard ? .1 : .2, canHeal: true, finisher: true }
     : badge ? { whiff: hard ? .15 : .28, canHeal: true, finisher: true }
     : hard && id ? { whiff: Math.max(.22, .4 - badges * .05), canHeal: true, finisher: true }

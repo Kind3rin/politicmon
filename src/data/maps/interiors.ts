@@ -464,8 +464,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     {
       id: "chiosco-oste", pal: "barista", x: 7, y: 2, facing: "down",
       lines: [
-        "Vendo granite e plastici del PONTE da trent'anni. Il ponte non c'è, le granite sì.",
-        "Tutti chiedono: 'quando lo finite?'. Io rispondo: 'quale, il ponte o la granita?'."
+        "La granita si scioglie se la lasci nella presentazione. Il plastico no: infatti è il prodotto che va meglio.",
+        "Il cliente ha chiesto il ponte senza ghiaccio. Ho richiamato l'ingegnere."
       ]
     }
   ], {

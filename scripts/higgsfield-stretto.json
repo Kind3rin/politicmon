@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "balanceBefore": 615.22,
+  "creditsSpent": 1.25,
+  "estimatedCredits": 1.25,
+  "assets": [
+    {
+      "id": "ilcapitano",
+      "path": "public/sprites/ui/boss/ilcapitano.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. A finished crisp chunky pixel art panorama readable at 224 x 78 pixels, elegant navy ivory teal burgundy restrained gold palette, full bleed 21:9. No letters, writing, numbers, logos or recognizable real person. Fictional seaside political satire, modern readable shapes, precise warm lighting, strong clear silhouettes. Top fifteen percent entirely quiet navy title band; complete heads, faces, hands and every meaningful prop within y20 to y seventy percent. Shrink figures to fit panorama, lower eighteen percent only plain expendable foreground. A fictional suntanned campaign captain in navy polo and rolled sleeves holding ceremonial gold scissors. Behind him a large framed beautiful complete bridge rendering, while beside the frame the real tiny pier stops over teal seawater. A crimson ribbon attached only to the rendering, a small moka coffee pot sits on the pier. Wry confident expression; metaphor: the photo is inaugurated, the actual passage still needs testing.",
+      "model": "gpt_image_2_5",
+      "aspectRatio": "21:9",
+      "jobId": "b4a8ffe6-27af-4d7c-8744-58f58e47c2da",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_052057_b4a8ffe6-27af-4d7c-8744-58f58e47c2da.png",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "sourceSha256": "a1d10ea4cdc3bf64673dfcd23f0f6c8afae194cc6db83cafb365464f7067b528",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "cfaad43fa1a0af8c61f2f9df581d841fd132fa9a1105d57cfd810f2eb9dd103b"
+    },
+    {
+      "id": "djpapeete",
+      "path": "public/sprites/ui/boss/djpapeete.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. A finished crisp chunky pixel art panorama readable at 224 x 78 pixels, elegant navy ivory teal burgundy restrained gold palette, full bleed 21:9. No letters, writing, numbers, logos or recognizable real person. Fictional seaside political satire, modern readable shapes, precise warm lighting, strong clear silhouettes. Top fifteen percent entirely quiet navy title band; complete heads, faces, hands and every meaningful prop within y20 to y seventy percent. Shrink figures to fit panorama, lower eighteen percent only plain expendable foreground. A fictional seaside DJ with amber headphones and a burgundy jacket, pointing to an elegant mixing board whose every fader is locked in the same position. A quiet unplugged microphone cable and a single pulsating equalizer bar. Warm beach club dusk, wry playful face. Metaphor: five songs announced as different political lines share the exact same volume.",
+      "model": "gpt_image_2_5",
+      "aspectRatio": "21:9",
+      "jobId": "83cda3d5-af14-4b9c-b858-fd0e1ca06310",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_052059_83cda3d5-af14-4b9c-b858-fd0e1ca06310.png",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "sourceSha256": "ec125a159ce206611098b96ff51a3c0287863b854b2d965c1084b3a930412355",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "b3c03afe727cc2ab0c06acf973c5be879c53db10f06f809b049d7630fbaef836"
+    },
+    {
+      "id": "citofonista",
+      "path": "public/sprites/ui/boss/citofonista.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. A finished crisp chunky pixel art panorama readable at 224 x 78 pixels, elegant navy ivory teal burgundy restrained gold palette, full bleed 21:9. No letters, writing, numbers, logos or recognizable real person. Fictional seaside political satire, modern readable shapes, precise warm lighting, strong clear silhouettes. Top fifteen percent entirely quiet navy title band; complete heads, faces, hands and every meaningful prop within y20 to y seventy percent. Shrink figures to fit panorama, lower eighteen percent only plain expendable foreground. A fictional young interviewer in teal blazer holding a door intercom and a gold microphone. A little tripod camera and a polite resident's closed navy front door. Visible intercom cord loops back to the interviewer's own handheld device, not the resident. Wry realization in face; metaphor: the interviewer had prerecorded the answer before ringing.",
+      "model": "gpt_image_2_5",
+      "aspectRatio": "21:9",
+      "jobId": "edb90e89-4fde-4000-84d1-5c62a7ad3378",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_052057_edb90e89-4fde-4000-84d1-5c62a7ad3378.png",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "sourceSha256": "9f5587c626374b58ca940d12817bf4f8ce19720586d60323623d69d75eed2a1d",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "d6818854966bcb87e4e5776f7ccf2e7a777622b9a1c584983523c41c5b99657c"
+    },
+    {
+      "id": "noponte",
+      "path": "public/sprites/ui/boss/noponte.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. A finished crisp chunky pixel art panorama readable at 224 x 78 pixels, elegant navy ivory teal burgundy restrained gold palette, full bleed 21:9. No letters, writing, numbers, logos or recognizable real person. Fictional seaside political satire, modern readable shapes, precise warm lighting, strong clear silhouettes. Top fifteen percent entirely quiet navy title band; complete heads, faces, hands and every meaningful prop within y20 to y seventy percent. Shrink figures to fit panorama, lower eighteen percent only plain expendable foreground. A fictional thoughtful woman organizer in burgundy scarf beside a round public meeting table, two chairs, one chair on each miniature bank of a narrow teal water model. The table has a simple paper ferry route and a tiny bridge proposal, both being examined with a magnifying glass, not slogans. Calm questioning expression. Metaphor: ask how people cross today before framing the ceremonial ribbon.",
+      "model": "gpt_image_2_5",
+      "aspectRatio": "21:9",
+      "jobId": "337593a1-e4e2-479b-8e69-de3def6fec38",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_052059_337593a1-e4e2-479b-8e69-de3def6fec38.png",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "sourceSha256": "7421ceb0a4ea76c86675a01699808495f1efc6525b330f1da64d1ee54918cdd1",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "220963b901573d65e079fcfd10e8fc05553392c25224bc9537b9daf0b1f92519"
+    },
+    {
+      "id": "geometra",
+      "path": "public/sprites/ui/boss/geometra.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original satirical political RPG. A finished crisp chunky pixel art panorama readable at 224 x 78 pixels, elegant navy ivory teal burgundy restrained gold palette, full bleed 21:9. No letters, writing, numbers, logos or recognizable real person. Fictional seaside political satire, modern readable shapes, precise warm lighting, strong clear silhouettes. Top fifteen percent entirely quiet navy title band; complete heads, faces, hands and every meaningful prop within y20 to y seventy percent. Shrink figures to fit panorama, lower eighteen percent only plain expendable foreground. A fictional thoughtful site surveyor with yellow helmet and teal work jacket. He holds a spirit level correctly against a small real unfinished pier while a pristine framed bridge rendering rests on a stand behind him with a comically decorative approval stamp. Gold ruler and measuring notebook with no writing. Metaphor: test the passage, not the photograph.",
+      "model": "gpt_image_2_5",
+      "aspectRatio": "21:9",
+      "jobId": "c13a0bf0-6ff5-42f9-b921-c54642b9992e",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_052057_c13a0bf0-6ff5-42f9-b921-c54642b9992e.png",
+      "cropTop": 0,
+      "crop": "full width from y0, height width*78/224; nearest resize",
+      "sourceSha256": "d9c6f679ad958e13b5e6c4ac72ba0dea04574f28e08330eceb5810222dc3cb2c",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256": "0588b59aeef0b7101b40bdf1fb997c92216fbc2f078833e6c41418d025cd7557"
+    }
+  ],
+  "balanceAfter": 613.97
+}

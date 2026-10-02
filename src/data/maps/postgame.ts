@@ -58,16 +58,16 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         x: 14, y: 2,
         lines: [
           "PONTE SULLO STRETTO - CANTIERE APERTO",
-          "Fine lavori prevista: 1972. Poi 1985. Poi 2009. Poi 2024.",
-          "Nuova stima: 'prima dei prossimi sondaggi'."
+          "Rendering: attraversamento in tre minuti. Cantiere: tre minuti solo per trovare la slide.",
+          "IL CAPITANO aspetta A sul ponte. B annulla il briefing. Premio: TESSERA DORATA; il bar a nord apre dopo la vittoria."
         ]
       },
       {
         x: 5, y: 5,
         lines: [
           "SPIAGGIA PAPEETE BEACH",
-          "Vietato disturbare il Ministro durante la consolle.",
-          "Mojito sì, mozioni no."
+          "Cinque remix della stessa promessa. Il fonico chiede quale versione abbia almeno una data.",
+          "Le prove sulla spiaggia sono facoltative: A apre il briefing. Il bar recupera PV e PP."
         ]
       },
       {
@@ -77,7 +77,7 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         lines: [
           "DARSENA DELLO STRETTO",
           "Traghetto per CAPUT MUNDI: sali in acqua qui a fianco.",
-          "Il CAPITANO SCHETTINO ti riporta a casa... si spera."
+          "Ritorno disponibile anche prima della sfida. La traversata non cura: il bar di Capitale sì."
         ]
       }
     ],
@@ -92,13 +92,13 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       lucaGuide(
         "LO STRETTO", 18, 5,
         [
-          "STRETTO DI MESSINA: spiaggia, mojito e un ponte eternamente incompiuto.",
-          "Fine lavori prevista: 1972. Poi 2024. Poi... vabbè.",
-          "Al Papeete c'è il Ministro alla consolle: qui si fa campagna in costume."
+          "Il rendering arriva sull'altra sponda. Il geometra vorrebbe arrivarci con i piedi.",
+          "IL CAPITANO sul ponte: A apre il briefing, B torna. Tre avversari; l'ultimo recupera PV con la CAFFETTIERA.",
+          "Dopo la vittoria: bar a nord e quattro prove facoltative sulla spiaggia."
         ],
         [
-          "Il boss IL CAPITANO ti aspetta: mojito sì, mozioni no.",
-          "Zona endgame-meme: torni indietro dalla darsena quando vuoi."
+          "Premio del Capitano: TESSERA DORATA. BORSA > TESSERA: scegli un tesserato. Se compatibile, confronti prima di accettare.",
+          "La darsena a sudovest riporta a Capitale anche prima di vincere. Deviazione facoltativa; il Palazzo resta la missione principale."
         ]
       ),
       {
@@ -108,9 +108,8 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       {
         id: "elevato", pal: "professor", x: 24, y: 3, facing: "down",
         lines: [
-          "Io sono L'ELEVATO. Parlo solo dal mio scoglio sacro.",
-          "Un tempo da qui si gridava una parola sola. Il mare la grida ancora.",
-          "Vedi quel ponte? Lo avevo previsto nel mio blog. Nessuno legge più i blog."
+          "L'ELEVATO: ho abolito le intermediazioni. Per parlarmi serve il mio addetto alle intermediazioni.",
+          "Il blog dice che qui siamo tutti alla stessa altezza. Lo leggo dal mio scoglio."
         ]
       },
       {
@@ -118,42 +117,39 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         gift: {
           itemId: "mojito", qty: 2, flag: "gift-ingegnere",
           lines: [
-            "INGEGNERE CAPO: il progetto è pronto dal 1969. PRONTISSIMO.",
-            "Manca solo il ponte. Dettagli. Tieni: 2 MOJITO, offre l'appalto."
+            "INGEGNERE: nella slide ho collaudato il ponte con un camion trasparente. Non ha pesato affatto.",
+            "Per la lotta servono cure vere: 2 MOJITO. Recuperano PV, non PP. Il bar recupera entrambi."
           ]
         },
-        lines: ["Il rendering è bellissimo. Vuoi vederlo? È l'unica cosa costruita."]
+        lines: ["Il cliente chiede più realismo. Ho aggiunto una buca al rendering. Approvato senza riserve."]
       },
       {
         id: "tr-djpapeete", pal: "influencer", x: 6, y: 7, facing: "right",
-        trainerId: "djpapeete", sightRange: 3,
+        trainerId: "djpapeete",
         lines: ["La cassa dritta è l'unica linea politica che non tradisce."]
       },
       {
         id: "tr-citofonista", pal: "aide", x: 22, y: 6, facing: "left",
-        trainerId: "citofonista", sightRange: 3,
-        lines: ["Citofonare prima di entrare. Sempre. È il mio format."]
+        trainerId: "citofonista",
+        lines: ["Il citofono squilla. La risposta era già nella scaletta."]
       },
       {
         id: "tr-noponte", pal: "journalist", x: 8, y: 2, facing: "left",
-        trainerId: "noponte", sightRange: 3,
-        lines: ["Protesto contro il ponte da prima che non esistesse."]
+        trainerId: "noponte",
+        lines: ["Prima di scegliere il nastro, possiamo leggere il piano dei trasporti?"]
       },
       {
         // Presidia la banchina a (12,7), fuori dal corridoio single-file (col 14).
-        // facing "up": il cono guarda la spiaggia (12,6)=z, (12,5)== (libere) e
-        // sfida chi sbarca dal ponte. hideIfFlag ponte-beaten: sparisce col boss.
+        // Prova volontaria sulla banchina, disponibile anche dopo il Capitano.
         id: "tr-geometra", pal: "guard", x: 12, y: 7, facing: "up",
-        trainerId: "geometra", sightRange: 3, hideIfFlag: "ponte-beaten",
-        lines: ["Il collaudo è ok: il ponte regge benissimo dove c'è."]
+        trainerId: "geometra",
+        lines: ["Il collaudo del plastico è perfetto. Ora porto la livella sul passaggio vero."]
       },
       {
-        // Cancello OBBLIGATORIO del ponte: a (14,12) guarda a SUD lungo il corridoio
-        // single-file (col 14). Il cono di vista (sightRange 4) copre (14,13..15)
-        // con margine: sbarcando dal mare su (14,15) il fight scatta SUBITO,
-        // non è aggirabile (col 15 è tutta tralicci 'J' solidi).
+        // Presidia il corridoio del ponte. Aspetta A: lo sbarco non avvia lotte.
+        // B nel briefing lascia libero il ritorno alla darsena a sud.
         id: "tr-ilcapitano", pal: "boss", x: 14, y: 12, facing: "down",
-        trainerId: "ilcapitano", sightRange: 4, hideIfFlag: "ponte-beaten",
+        trainerId: "ilcapitano", hideIfFlag: "ponte-beaten",
         lines: []
       },
       {
@@ -161,9 +157,8 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         // qualsiasi NPC sul corridoio single-file (col 14) murerebbe il passaggio.
         id: "capitano-after", pal: "boss", x: 17, y: 6, facing: "left", showIfFlag: "ponte-beaten",
         lines: [
-          "IL CAPITANO: lo senti? Il profumo della SICILIA. Praticamente fatta.",
-          "Il ponte si farà. Intanto ho fatto il selfie dal pilone: 49 milioni di like.",
-          "Anzi no, 49 e basta. Ma torneranno. Tornano sempre."
+          "IL CAPITANO: avevo preparato una foto in cui avevo già vinto. Il geometra dice che non è un risultato misurabile.",
+          "La TESSERA DORATA almeno apre una carriera vera. BORSA > TESSERA: leggi il confronto prima di usarla."
         ]
       },
       {

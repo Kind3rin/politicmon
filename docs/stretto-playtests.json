@@ -1,0 +1,2142 @@
+{
+  "version": 1,
+  "method": "NEW GAME; seeded native keyboard inputs through real scenes; no assigned levels, money, evolution or outcomes; accelerated virtual time",
+  "difficulty": "normal",
+  "baseline": "docs/archive-playtests.json",
+  "runs": [
+    {
+      "starter": "ellyna",
+      "role": "main",
+      "source": "artifacts/campaign-native/stretto-final-ellyna-prepared-20261002.json",
+      "sourceSha256": "15cd54b334c5c7489678620036292de63bf2384be8a9be724c6f1bf27bb85957",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "skip",
+        "archivePlan": "support",
+        "strettoPlan": "prepared",
+        "kitPlan": "skip"
+      },
+      "failure": null,
+      "steps": 1292,
+      "captainBeaten": true,
+      "garanteBeaten": true,
+      "stats": {
+        "playSeconds": 1426.7999999997978,
+        "steps": 1292,
+        "battles": 32,
+        "wins": 29,
+        "losses": 0,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 5,
+        "healingItemsUsed": 18,
+        "healerVisits": 28,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 62,
+        "cohesion": 66,
+        "progress": 22,
+        "promises": [
+          {
+            "id": "traghetto",
+            "status": "kept",
+            "dueAt": 16
+          }
+        ],
+        "decisions": [
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "schleinix",
+          "level": 35,
+          "hp": 72,
+          "moves": [
+            {
+              "id": "transizione",
+              "pp": 8
+            },
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "piazza",
+              "pp": 13
+            },
+            {
+              "id": "scissione",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "movimenton",
+          "level": 32,
+          "hp": 116,
+          "moves": [
+            {
+              "id": "decreto",
+              "pp": 20
+            },
+            {
+              "id": "redditone",
+              "pp": 10
+            },
+            {
+              "id": "vaffa",
+              "pp": 8
+            },
+            {
+              "id": "fiducia",
+              "pp": 20
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 29,
+          "hp": 119,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 10
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 29,
+          "hp": 82,
+          "moves": [
+            {
+              "id": "bunga",
+              "pp": 0
+            },
+            {
+              "id": "giravolta",
+              "pp": 17
+            },
+            {
+              "id": "conferenza",
+              "pp": 20
+            },
+            {
+              "id": "editoriale",
+              "pp": 0
+            }
+          ]
+        }
+      ],
+      "money": 36270,
+      "bag": {
+        "caffe": 3,
+        "scheda": 17,
+        "maalox": 1,
+        "spritz": 4,
+        "divisa": 1,
+        "dirBunga": 1,
+        "schedona": 12,
+        "mojito": 6,
+        "tessera": 1
+      },
+      "preparationEvents": [
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "schleinix",
+            "move": "articolouno",
+            "replace": "pistaciclabile"
+          },
+          "steps": 869,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "schleinix",
+              "level": 26,
+              "hp": 97
+            },
+            {
+              "id": "generorso",
+              "level": 20,
+              "hp": 86
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "mediocrate",
+              "level": 19,
+              "hp": 71
+            }
+          ],
+          "money": 13750
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "comizio"
+          },
+          "steps": 869,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "schleinix",
+              "level": 26,
+              "hp": 97
+            },
+            {
+              "id": "generorso",
+              "level": 20,
+              "hp": 86
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "mediocrate",
+              "level": 19,
+              "hp": 71
+            }
+          ],
+          "money": 13750
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "movimenton",
+            "move": "redditone",
+            "replace": "comizio"
+          },
+          "steps": 869,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "schleinix",
+              "level": 26,
+              "hp": 97
+            },
+            {
+              "id": "generorso",
+              "level": 20,
+              "hp": 86
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "mediocrate",
+              "level": 19,
+              "hp": 71
+            }
+          ],
+          "money": 13750
+        },
+        {
+          "type": "tessera-retained",
+          "detail": {
+            "reason": "no compatible career"
+          },
+          "steps": 982,
+          "map": "stretto",
+          "party": [
+            {
+              "id": "movimenton",
+              "level": 26,
+              "hp": 103
+            },
+            {
+              "id": "schleinix",
+              "level": 29,
+              "hp": 107
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            },
+            {
+              "id": "telecrate",
+              "level": 23,
+              "hp": 93
+            }
+          ],
+          "money": 19410
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "movimenton",
+            "move": "redditone",
+            "replace": "monopattino"
+          },
+          "steps": 1051,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "movimenton",
+              "level": 26,
+              "hp": 103
+            },
+            {
+              "id": "schleinix",
+              "level": 29,
+              "hp": 107
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            },
+            {
+              "id": "telecrate",
+              "level": 23,
+              "hp": 93
+            }
+          ],
+          "money": 19270
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "schleinix",
+            "move": "articolouno",
+            "replace": "sciopero"
+          },
+          "steps": 1051,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "movimenton",
+              "level": 26,
+              "hp": 103
+            },
+            {
+              "id": "schleinix",
+              "level": 29,
+              "hp": 107
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            },
+            {
+              "id": "telecrate",
+              "level": 23,
+              "hp": 93
+            }
+          ],
+          "money": 19270
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "movimenton",
+            "move": "fiducia",
+            "replace": "greenwashing"
+          },
+          "steps": 1269,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "movimenton",
+              "level": 30,
+              "hp": 117
+            },
+            {
+              "id": "schleinix",
+              "level": 33,
+              "hp": 120
+            },
+            {
+              "id": "generorso",
+              "level": 27,
+              "hp": 112
+            },
+            {
+              "id": "telecrate",
+              "level": 27,
+              "hp": 107
+            }
+          ],
+          "money": 28270
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "radici"
+          },
+          "steps": 1269,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "movimenton",
+              "level": 30,
+              "hp": 117
+            },
+            {
+              "id": "schleinix",
+              "level": 33,
+              "hp": 120
+            },
+            {
+              "id": "generorso",
+              "level": 27,
+              "hp": 112
+            },
+            {
+              "id": "telecrate",
+              "level": 27,
+              "hp": 107
+            }
+          ],
+          "money": 28270
+        }
+      ],
+      "trainerResults": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win"
+        }
+      ],
+      "finalNarrative": [
+        {
+          "map": "stretto",
+          "lines": [
+            "Il CAPITANO taglia il nastro della foto. Il geometra apre il passaggio vero e segna il collaudo sul verbale.",
+            "A nord trovi il bar per PV e PP e quattro prove facoltative. La darsena a sudovest riporta a Capitale.",
+            "I meme su questa vittoria fanno il giro dei social: SONDAGGI al 100%.",
+            "TESSERA DORATA ricevuta. BORSA > TESSERA: scegli un candidato compatibile, confronta e conferma la carriera. Il morale conserva le tue promesse."
+          ],
+          "trust": 50,
+          "cohesion": 60
+        },
+        {
+          "map": "colle",
+          "lines": [
+            "GARANTE: firmo il mandato. Non firmo una ricevuta in bianco per tutto quello che farai.",
+            "SONDAGGI 100%. Le telecamere contano gli applausi. Il quartiere conta le corse del bus.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "1 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+            "START > MORALE: puoi ancora finanziare o riparare i servizi. Il ritardo resta nel registro.",
+            "Nella sala accanto, un DRAGO DEI MERCATI ha sentito la parola stabilità e ha aperto un grafico."
+          ],
+          "trust": 62,
+          "cohesion": 66
+        }
+      ]
+    },
+    {
+      "starter": "renzino",
+      "role": "main",
+      "source": "artifacts/campaign-native/stretto-final-renzino-prepared-20261002.json",
+      "sourceSha256": "4c0c41a243776e163c094a63b83cb1230ffd16920781e8470771ef821241e9f1",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "pay",
+        "archivePlan": "support",
+        "strettoPlan": "prepared",
+        "kitPlan": "skip"
+      },
+      "failure": null,
+      "steps": 1221,
+      "captainBeaten": true,
+      "garanteBeaten": true,
+      "stats": {
+        "playSeconds": 1378.3999999998418,
+        "steps": 1221,
+        "battles": 28,
+        "wins": 24,
+        "losses": 1,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 12,
+        "healingItemsUsed": 12,
+        "healerVisits": 27,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 74,
+        "cohesion": 72,
+        "progress": 21,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "kept",
+            "dueAt": 4
+          },
+          {
+            "id": "traghetto",
+            "status": "kept",
+            "dueAt": 15
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pay",
+          "traghetto",
+          "traghetto:pay"
+        ],
+        "history": [
+          {
+            "label": "MANTENUTA: CORSA DEL BORGO",
+            "trust": 12,
+            "cohesion": 6
+          },
+          {
+            "label": "MANTENUTA: MOLO ACCESSIBILE",
+            "trust": 12,
+            "cohesion": 6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "capitanone",
+          "level": 33,
+          "hp": 0,
+          "moves": [
+            {
+              "id": "mojito",
+              "pp": 9
+            },
+            {
+              "id": "slogan",
+              "pp": 30
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "ruspa",
+              "pp": 7
+            }
+          ]
+        },
+        {
+          "id": "renzilla",
+          "level": 34,
+          "hp": 67,
+          "moves": [
+            {
+              "id": "inciucio",
+              "pp": 15
+            },
+            {
+              "id": "rottamazione",
+              "pp": 10
+            },
+            {
+              "id": "editoriale",
+              "pp": 8
+            },
+            {
+              "id": "staisereno",
+              "pp": 8
+            }
+          ]
+        },
+        {
+          "id": "movimenton",
+          "level": 29,
+          "hp": 37,
+          "moves": [
+            {
+              "id": "articolouno",
+              "pp": 15
+            },
+            {
+              "id": "redditone",
+              "pp": 10
+            },
+            {
+              "id": "vaffa",
+              "pp": 10
+            },
+            {
+              "id": "greenwashing",
+              "pp": 19
+            }
+          ]
+        },
+        {
+          "id": "generorso",
+          "level": 29,
+          "hp": 119,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 10
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        }
+      ],
+      "money": 33350,
+      "bag": {
+        "caffe": 1,
+        "scheda": 13,
+        "maalox": 2,
+        "divisa": 1,
+        "schedona": 14,
+        "dirBunga": 1,
+        "tessera": 1,
+        "spritz": 5,
+        "mojito": 6
+      },
+      "preparationEvents": [
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "salvinator",
+            "move": "mojito",
+            "replace": "comizio"
+          },
+          "steps": 808,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 24,
+              "hp": 89
+            },
+            {
+              "id": "salvinator",
+              "level": 21,
+              "hp": 82
+            },
+            {
+              "id": "grillix",
+              "level": 17,
+              "hp": 59
+            },
+            {
+              "id": "vannaccix",
+              "level": 19,
+              "hp": 70
+            }
+          ],
+          "money": 10690
+        },
+        {
+          "type": "tessera-plan",
+          "detail": {
+            "from": "salvinator",
+            "to": "capitanone"
+          },
+          "steps": 921,
+          "map": "stretto",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 29,
+              "hp": 104
+            },
+            {
+              "id": "salvinator",
+              "level": 25,
+              "hp": 95
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            }
+          ],
+          "money": 16350
+        },
+        {
+          "type": "tessera-used",
+          "detail": {
+            "from": "salvinator",
+            "to": "capitanone",
+            "remaining": 1
+          },
+          "steps": 921,
+          "map": "stretto",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 29,
+              "hp": 104
+            },
+            {
+              "id": "capitanone",
+              "level": 25,
+              "hp": 105
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            }
+          ],
+          "money": 16350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "renzilla",
+            "move": "inciucio",
+            "replace": "giravolta"
+          },
+          "steps": 975,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 29,
+              "hp": 104
+            },
+            {
+              "id": "capitanone",
+              "level": 25,
+              "hp": 105
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            }
+          ],
+          "money": 16350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "capitanone",
+            "move": "pienipoteri",
+            "replace": "citofonata"
+          },
+          "steps": 975,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 29,
+              "hp": 104
+            },
+            {
+              "id": "capitanone",
+              "level": 25,
+              "hp": 105
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            }
+          ],
+          "money": 16350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "movimenton",
+            "move": "redditone",
+            "replace": "comizio"
+          },
+          "steps": 975,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 29,
+              "hp": 104
+            },
+            {
+              "id": "capitanone",
+              "level": 25,
+              "hp": 105
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            }
+          ],
+          "money": 16350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "comizio"
+          },
+          "steps": 975,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "renzilla",
+              "level": 29,
+              "hp": 104
+            },
+            {
+              "id": "capitanone",
+              "level": 25,
+              "hp": 105
+            },
+            {
+              "id": "movimenton",
+              "level": 22,
+              "hp": 90
+            },
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            }
+          ],
+          "money": 16350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "capitanone",
+            "move": "mojito",
+            "replace": "blocconavale"
+          },
+          "steps": 1198,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "capitanone",
+              "level": 31,
+              "hp": 126
+            },
+            {
+              "id": "renzilla",
+              "level": 32,
+              "hp": 114
+            },
+            {
+              "id": "movimenton",
+              "level": 26,
+              "hp": 103
+            },
+            {
+              "id": "generorso",
+              "level": 27,
+              "hp": 112
+            }
+          ],
+          "money": 25350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "movimenton",
+            "move": "redditone",
+            "replace": "monopattino"
+          },
+          "steps": 1198,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "capitanone",
+              "level": 31,
+              "hp": 126
+            },
+            {
+              "id": "renzilla",
+              "level": 32,
+              "hp": 114
+            },
+            {
+              "id": "movimenton",
+              "level": 26,
+              "hp": 103
+            },
+            {
+              "id": "generorso",
+              "level": 27,
+              "hp": 112
+            }
+          ],
+          "money": 25350
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "radici"
+          },
+          "steps": 1198,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "capitanone",
+              "level": 31,
+              "hp": 126
+            },
+            {
+              "id": "renzilla",
+              "level": 32,
+              "hp": 114
+            },
+            {
+              "id": "movimenton",
+              "level": 26,
+              "hp": 103
+            },
+            {
+              "id": "generorso",
+              "level": 27,
+              "hp": 112
+            }
+          ],
+          "money": 25350
+        }
+      ],
+      "trainerResults": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win"
+        }
+      ],
+      "finalNarrative": [
+        {
+          "map": "stretto",
+          "lines": [
+            "Il CAPITANO taglia il nastro della foto. Il geometra apre il passaggio vero e segna il collaudo sul verbale.",
+            "A nord trovi il bar per PV e PP e quattro prove facoltative. La darsena a sudovest riporta a Capitale.",
+            "I meme su questa vittoria fanno il giro dei social: SONDAGGI al 100%.",
+            "TESSERA DORATA ricevuta. BORSA > TESSERA: scegli un candidato compatibile, confronta e conferma la carriera. Il morale conserva le tue promesse."
+          ],
+          "trust": 62,
+          "cohesion": 66
+        },
+        {
+          "map": "colle",
+          "lines": [
+            "GARANTE: firmo il mandato. Non firmo una ricevuta in bianco per tutto quello che farai.",
+            "SONDAGGI 100%. Le telecamere contano gli applausi. Il quartiere conta le corse del bus.",
+            "TI AFFIDANO UN PROBLEMA, NON SOLO UN VOTO.",
+            "LA SQUADRA RESTA ANCHE A CAMERE SPENTE.",
+            "2 MANTENUTE. 0 RIPARATE. 0 APERTE.",
+            "START > MORALE: puoi ancora finanziare o riparare i servizi. Il ritardo resta nel registro.",
+            "Nella sala accanto, un DRAGO DEI MERCATI ha sentito la parola stabilità e ha aperto un grafico."
+          ],
+          "trust": 74,
+          "cohesion": 72
+        }
+      ]
+    },
+    {
+      "starter": "giorgetta",
+      "role": "main",
+      "source": "artifacts/campaign-native/stretto-kit-giorgetta-prepared-20261002.json",
+      "sourceSha256": "b7bf36cab52d57943cabb246c92128c14b37d9a169056722d1de1b8d57aabeb1",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "pledge",
+        "archivePlan": "support",
+        "strettoPlan": "prepared",
+        "kitPlan": "defensive"
+      },
+      "failure": null,
+      "steps": 1231,
+      "captainBeaten": true,
+      "garanteBeaten": true,
+      "stats": {
+        "playSeconds": 2018.5999999992596,
+        "steps": 1231,
+        "battles": 28,
+        "wins": 23,
+        "losses": 2,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 18,
+        "healingItemsUsed": 35,
+        "healerVisits": 28,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 30,
+        "cohesion": 48,
+        "progress": 22,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "broken",
+            "dueAt": 4
+          },
+          {
+            "id": "traghetto",
+            "status": "broken",
+            "dueAt": 16
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge",
+          "traghetto",
+          "traghetto:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          },
+          {
+            "label": "IL PLASTICO GALLEGGIA",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: MOLO ACCESSIBILE",
+            "trust": -12,
+            "cohesion": -6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "generorso",
+          "level": 31,
+          "hp": 59,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 0
+            },
+            {
+              "id": "decreto",
+              "pp": 20
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 0
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 0
+            }
+          ]
+        },
+        {
+          "id": "giorgiagon",
+          "level": 35,
+          "hp": 69,
+          "moves": [
+            {
+              "id": "mondocontrario",
+              "pp": 6
+            },
+            {
+              "id": "decreto",
+              "pp": 19
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 7
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 28,
+          "hp": 51,
+          "moves": [
+            {
+              "id": "bunga",
+              "pp": 0
+            },
+            {
+              "id": "giravolta",
+              "pp": 24
+            },
+            {
+              "id": "conferenza",
+              "pp": 18
+            },
+            {
+              "id": "editoriale",
+              "pp": 2
+            }
+          ]
+        },
+        {
+          "id": "conteblob",
+          "level": 30,
+          "hp": 55,
+          "moves": [
+            {
+              "id": "decreto",
+              "pp": 20
+            },
+            {
+              "id": "concertone",
+              "pp": 13
+            },
+            {
+              "id": "inciucio",
+              "pp": 15
+            },
+            {
+              "id": "telepromessa",
+              "pp": 15
+            }
+          ]
+        }
+      ],
+      "money": 31300,
+      "bag": {
+        "caffe": 1,
+        "scheda": 13,
+        "maalox": 2,
+        "divisa": 1,
+        "dirBunga": 1,
+        "spritz": 0,
+        "schedona": 12,
+        "mojito": 0,
+        "gilet": 0,
+        "tessera": 1
+      },
+      "preparationEvents": [
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "giorgiagon",
+            "move": "iosonogiorgia",
+            "replace": "radici"
+          },
+          "steps": 796,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 25,
+              "hp": 96
+            },
+            {
+              "id": "mediocrate",
+              "level": 15,
+              "hp": 59
+            },
+            {
+              "id": "generorso",
+              "level": 21,
+              "hp": 90
+            },
+            {
+              "id": "conteblob",
+              "level": 19,
+              "hp": 79
+            }
+          ],
+          "money": 12550
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "comizio"
+          },
+          "steps": 796,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 25,
+              "hp": 96
+            },
+            {
+              "id": "mediocrate",
+              "level": 15,
+              "hp": 59
+            },
+            {
+              "id": "generorso",
+              "level": 21,
+              "hp": 90
+            },
+            {
+              "id": "conteblob",
+              "level": 19,
+              "hp": 79
+            }
+          ],
+          "money": 12550
+        },
+        {
+          "type": "kit-equipped",
+          "detail": {
+            "species": "giorgiagon",
+            "item": "gilet",
+            "money": 9310
+          },
+          "steps": 796,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 25,
+              "hp": 96
+            },
+            {
+              "id": "mediocrate",
+              "level": 15,
+              "hp": 59
+            },
+            {
+              "id": "generorso",
+              "level": 21,
+              "hp": 90
+            },
+            {
+              "id": "conteblob",
+              "level": 19,
+              "hp": 79
+            }
+          ],
+          "money": 9310
+        },
+        {
+          "type": "kit-equipped",
+          "detail": {
+            "species": "generorso",
+            "item": "gilet",
+            "money": 9310
+          },
+          "steps": 796,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 25,
+              "hp": 96
+            },
+            {
+              "id": "mediocrate",
+              "level": 15,
+              "hp": 59
+            },
+            {
+              "id": "generorso",
+              "level": 21,
+              "hp": 90
+            },
+            {
+              "id": "conteblob",
+              "level": 19,
+              "hp": 79
+            }
+          ],
+          "money": 9310
+        },
+        {
+          "type": "tessera-retained",
+          "detail": {
+            "reason": "no compatible career"
+          },
+          "steps": 909,
+          "map": "stretto",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 29,
+              "hp": 109
+            },
+            {
+              "id": "telecrate",
+              "level": 20,
+              "hp": 83
+            },
+            {
+              "id": "generorso",
+              "level": 24,
+              "hp": 101
+            },
+            {
+              "id": "conteblob",
+              "level": 23,
+              "hp": 93
+            }
+          ],
+          "money": 15420
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "giorgiagon",
+            "move": "iosonogiorgia",
+            "replace": "giravolta"
+          },
+          "steps": 978,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 29,
+              "hp": 109
+            },
+            {
+              "id": "telecrate",
+              "level": 20,
+              "hp": 83
+            },
+            {
+              "id": "generorso",
+              "level": 24,
+              "hp": 101
+            },
+            {
+              "id": "conteblob",
+              "level": 23,
+              "hp": 93
+            }
+          ],
+          "money": 14440
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "blocconavale"
+          },
+          "steps": 1213,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "generorso",
+              "level": 29,
+              "hp": 119
+            },
+            {
+              "id": "giorgiagon",
+              "level": 33,
+              "hp": 122
+            },
+            {
+              "id": "telecrate",
+              "level": 25,
+              "hp": 100
+            },
+            {
+              "id": "conteblob",
+              "level": 28,
+              "hp": 110
+            }
+          ],
+          "money": 23300
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "conteblob",
+            "move": "fiducia",
+            "replace": "comizio"
+          },
+          "steps": 1213,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "generorso",
+              "level": 29,
+              "hp": 119
+            },
+            {
+              "id": "giorgiagon",
+              "level": 33,
+              "hp": 122
+            },
+            {
+              "id": "telecrate",
+              "level": 25,
+              "hp": 100
+            },
+            {
+              "id": "conteblob",
+              "level": 28,
+              "hp": 110
+            }
+          ],
+          "money": 23300
+        }
+      ],
+      "trainerResults": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "win"
+        },
+        {
+          "trainer": "geometra",
+          "outcome": "win"
+        },
+        {
+          "trainer": "djpapeete",
+          "outcome": "win"
+        },
+        {
+          "trainer": "citofonista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "noponte",
+          "outcome": "win"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "win"
+        }
+      ],
+      "finalNarrative": [
+        {
+          "map": "stretto",
+          "lines": [
+            "Il CAPITANO taglia il nastro della foto. Il geometra apre il passaggio vero e segna il collaudo sul verbale.",
+            "A nord trovi il bar per PV e PP e quattro prove facoltative. La darsena a sudovest riporta a Capitale.",
+            "I meme su questa vittoria fanno il giro dei social: SONDAGGI al 100%.",
+            "TESSERA DORATA ricevuta. BORSA > TESSERA: scegli un candidato compatibile, confronta e conferma la carriera. Il morale conserva le tue promesse."
+          ],
+          "trust": 40,
+          "cohesion": 54
+        },
+        {
+          "map": "colle",
+          "lines": [
+            "GARANTE: firmo il mandato. Non firmo una ricevuta in bianco per tutto quello che farai.",
+            "SONDAGGI 100%. Le telecamere contano gli applausi. Il quartiere conta le corse del bus.",
+            "IL QUARTIERE ASPETTA IL PROSSIMO VERBALE.",
+            "I VOLONTARI CHIEDONO UNA DATA, NON UNO SLOGAN.",
+            "0 MANTENUTE. 0 RIPARATE. 2 APERTE.",
+            "START > MORALE: puoi ancora finanziare o riparare i servizi. Il ritardo resta nel registro.",
+            "Nella sala accanto, un DRAGO DEI MERCATI ha sentito la parola stabilità e ha aperto un grafico."
+          ],
+          "trust": 30,
+          "cohesion": 48
+        }
+      ]
+    },
+    {
+      "starter": "giorgetta",
+      "role": "without-kit comparison",
+      "source": "artifacts/campaign-native/stretto-final-giorgetta-prepared-20261002.json",
+      "sourceSha256": "57c0dbe4e6b3ff3e765f31d66d15c32f22584432b17a834c55f7bd5162a7bc3d",
+      "seed": 20261002,
+      "policies": {
+        "plan": "prepared",
+        "euroPlan": "tactical",
+        "capitalPlan": "prepared",
+        "courtPlan": "prepared",
+        "civicPlan": "pledge",
+        "archivePlan": "support",
+        "strettoPlan": "prepared",
+        "kitPlan": "skip"
+      },
+      "failure": null,
+      "steps": 1157,
+      "captainBeaten": false,
+      "garanteBeaten": false,
+      "stats": {
+        "playSeconds": 2123.0999999991645,
+        "steps": 1157,
+        "battles": 27,
+        "wins": 18,
+        "losses": 6,
+        "captures": 3,
+        "runs": 0,
+        "partyKOs": 34,
+        "healingItemsUsed": 42,
+        "healerVisits": 24,
+        "checkpoints": {}
+      },
+      "morale": {
+        "trust": 40,
+        "cohesion": 54,
+        "progress": 16,
+        "promises": [
+          {
+            "id": "bus",
+            "status": "broken",
+            "dueAt": 4
+          }
+        ],
+        "decisions": [
+          "bus",
+          "bus:pledge"
+        ],
+        "history": [
+          {
+            "label": "IL BUS NELLA FOTO",
+            "trust": 2,
+            "cohesion": 0
+          },
+          {
+            "label": "SCADUTA: CORSA DEL BORGO",
+            "trust": -12,
+            "cohesion": -6
+          }
+        ]
+      },
+      "party": [
+        {
+          "id": "generorso",
+          "level": 30,
+          "hp": 123,
+          "moves": [
+            {
+              "id": "dazilampo",
+              "pp": 10
+            },
+            {
+              "id": "pienipoteri",
+              "pp": 10
+            },
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "conteblob",
+          "level": 28,
+          "hp": 110,
+          "moves": [
+            {
+              "id": "comizio",
+              "pp": 35
+            },
+            {
+              "id": "concertone",
+              "pp": 20
+            },
+            {
+              "id": "inciucio",
+              "pp": 15
+            },
+            {
+              "id": "telepromessa",
+              "pp": 15
+            }
+          ]
+        },
+        {
+          "id": "giorgiagon",
+          "level": 32,
+          "hp": 118,
+          "moves": [
+            {
+              "id": "mondocontrario",
+              "pp": 10
+            },
+            {
+              "id": "decreto",
+              "pp": 20
+            },
+            {
+              "id": "iosonogiorgia",
+              "pp": 10
+            },
+            {
+              "id": "blocconavale",
+              "pp": 10
+            }
+          ]
+        },
+        {
+          "id": "telecrate",
+          "level": 27,
+          "hp": 107,
+          "moves": [
+            {
+              "id": "bunga",
+              "pp": 5
+            },
+            {
+              "id": "giravolta",
+              "pp": 25
+            },
+            {
+              "id": "conferenza",
+              "pp": 20
+            },
+            {
+              "id": "editoriale",
+              "pp": 10
+            }
+          ]
+        }
+      ],
+      "money": 14890,
+      "bag": {
+        "caffe": 0,
+        "scheda": 13,
+        "maalox": 1,
+        "divisa": 1,
+        "dirBunga": 1,
+        "spritz": 0,
+        "schedona": 9,
+        "mojito": 0
+      },
+      "preparationEvents": [
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "giorgiagon",
+            "move": "iosonogiorgia",
+            "replace": "radici"
+          },
+          "steps": 796,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 25,
+              "hp": 96
+            },
+            {
+              "id": "mediocrate",
+              "level": 15,
+              "hp": 59
+            },
+            {
+              "id": "generorso",
+              "level": 21,
+              "hp": 90
+            },
+            {
+              "id": "conteblob",
+              "level": 19,
+              "hp": 79
+            }
+          ],
+          "money": 12550
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "comizio"
+          },
+          "steps": 796,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "giorgiagon",
+              "level": 25,
+              "hp": 96
+            },
+            {
+              "id": "mediocrate",
+              "level": 15,
+              "hp": 59
+            },
+            {
+              "id": "generorso",
+              "level": 21,
+              "hp": 90
+            },
+            {
+              "id": "conteblob",
+              "level": 19,
+              "hp": 79
+            }
+          ],
+          "money": 12550
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "giorgiagon",
+            "move": "iosonogiorgia",
+            "replace": "giravolta"
+          },
+          "steps": 876,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "generorso",
+              "level": 23,
+              "hp": 97
+            },
+            {
+              "id": "giorgiagon",
+              "level": 27,
+              "hp": 102
+            },
+            {
+              "id": "mediocrate",
+              "level": 19,
+              "hp": 71
+            },
+            {
+              "id": "conteblob",
+              "level": 21,
+              "hp": 86
+            }
+          ],
+          "money": 8070
+        },
+        {
+          "type": "archive-plan",
+          "detail": {
+            "species": "generorso",
+            "move": "iosonogiorgia",
+            "replace": "blocconavale"
+          },
+          "steps": 1109,
+          "map": "capitale",
+          "party": [
+            {
+              "id": "generorso",
+              "level": 29,
+              "hp": 119
+            },
+            {
+              "id": "conteblob",
+              "level": 27,
+              "hp": 107
+            },
+            {
+              "id": "giorgiagon",
+              "level": 30,
+              "hp": 112
+            },
+            {
+              "id": "telecrate",
+              "level": 24,
+              "hp": 97
+            }
+          ],
+          "money": 16090
+        }
+      ],
+      "trainerResults": [
+        {
+          "trainer": "rival1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "aide",
+          "outcome": "win"
+        },
+        {
+          "trainer": "journalist",
+          "outcome": "win"
+        },
+        {
+          "trainer": "stagista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "emittenza",
+          "outcome": "win"
+        },
+        {
+          "trainer": "telelobbista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "funzionario",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "ladydirettiva",
+          "outcome": "win"
+        },
+        {
+          "trainer": "protocollista",
+          "outcome": "win"
+        },
+        {
+          "trainer": "diplomatico",
+          "outcome": "win"
+        },
+        {
+          "trainer": "oligarca",
+          "outcome": "win"
+        },
+        {
+          "trainer": "tycoon",
+          "outcome": "win"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "ilcapitano",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "boss",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice1",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice2",
+          "outcome": "win"
+        },
+        {
+          "trainer": "giudice3",
+          "outcome": "win"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        },
+        {
+          "trainer": "garante",
+          "outcome": "loss"
+        }
+      ],
+      "finalNarrative": []
+    }
+  ]
+}

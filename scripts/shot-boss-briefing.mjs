@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
-import { chromium } from "playwright";
+import { chromium, webkit } from "playwright";
 import { mkdirSync, writeFileSync } from "node:fs";
-const browser=await chromium.launch();
+const engine=process.env.BROWSER==='webkit'?webkit:chromium;
+const browser=await engine.launch();
 try {
  const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5179'}/scripts/perf-harness.html`,{waitUntil:'networkidle'});
@@ -70,7 +71,7 @@ try {
   if(stack.top!==dossier||dossier.page!==0||JSON.stringify(state)!==before||ended)throw Error('Dossier spent state or started fight');
   press(dossier,'left');press(dossier,'b');
   if(stack.top!==world||JSON.stringify(state)!==before||ended||mp.duelBusy)throw Error('Dossier cancel changed state');
-  for(const id of ['giudice1','giudice2','giudice3','garante']){
+  for(const id of ['giudice1','giudice2','giudice3','garante','ilcapitano','djpapeete','citofonista','noponte','geometra']){
     world.startTrainerBattle(TRAINERS[id],()=>ended++);
     for(let i=0;i<40&&stack.top===world;i++)world.update(.1);
     if(stack.top?.constructor.name!=='BossBriefingScene')throw Error('Missing court briefing '+id);
@@ -94,5 +95,5 @@ try {
  writeFileSync('artifacts/premium-next/boss-layout.json',JSON.stringify(result.issues,null,2));
  assert.deepEqual(errors,[]);assert.deepEqual(result.issues,[]);
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/boss-briefing/${name}.png`,Buffer.from(data.split(',')[1],'base64'));
- console.log(`PASS: ${result.checked} boss layouts; World cancel, KO rejection, persisted leader, actual BattleScene start, no PP/reward consumption.`);
+ console.log(`PASS ${engine.name()}: ${result.checked} boss layouts; World cancel, KO rejection, persisted leader, actual BattleScene start, no PP/reward consumption.`);
 }finally{await browser.close();}

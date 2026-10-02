@@ -2146,10 +2146,10 @@ export class WorldScene implements Scene {
           addSondaggi(this.state, 6);
           saveGame(this.state);
           this.say([
-            "IL CAPITANO si toglie gli occhiali da sole. Tramonto a favore di telecamera.",
-            "CAPITANO: 'Hai vinto tu. Ma il ponte si farà. Me lo sento. Dal 1969.'",
+            "Il CAPITANO taglia il nastro della foto. Il geometra apre il passaggio vero e segna il collaudo sul verbale.",
+            "A nord trovi il bar per PV e PP e quattro prove facoltative. La darsena a sudovest riporta a Capitale.",
             `I meme su questa vittoria fanno il giro dei social: SONDAGGI al ${this.state.sondaggi}%.`,
-            "Ti lascia una TESSERA DORATA: 'A me ormai serve solo l'ombrellone.'"
+            "TESSERA DORATA ricevuta. BORSA > TESSERA: scegli un candidato compatibile, confronta e conferma la carriera. Il morale conserva le tue promesse."
           ]);
           return;
         }

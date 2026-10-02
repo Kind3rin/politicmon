@@ -26,11 +26,11 @@ Tre segmenti in normale ripartono dal risultato del Tesoriere, senza inserire sp
 
 | Starter iniziale | Prove sul viale | Commissione | Morale al finale |
 |---|---|---|---|
-| Ellyna | Quattro vittorie; anche un incontro selvatico vinto | Vittoria al primo tentativo | 68 fiducia / 74 coesione, una promessa mantenuta |
-| Renzino | Quattro vittorie | Vittoria al primo tentativo | 80 / 80, due mantenute |
-| Giorgetta | Quattro vittorie, Gilet già ottenuti nel percorso precedente | Vittoria al primo tentativo | 36 / 56, due promesse ancora scadute |
+| Ellyna | Quattro vittorie | Vittoria al primo tentativo | 68 fiducia / 74 coesione, una promessa mantenuta |
+| Renzino | Quattro vittorie; anche un incontro selvatico vinto | Vittoria al primo tentativo | 80 / 80, due mantenute |
+| Giorgetta | Quattro vittorie e un incontro selvatico, Gilet già ottenuti nel percorso precedente | Vittoria al primo tentativo | 36 / 56, due promesse ancora scadute |
 
-Ellyna arriva al finale con cinque candidati KO e Putingrad vivo: il successo non prova che sia sufficiente qualsiasi squadra. Prima del redesign, lo stesso salvataggio aveva perso una volta contro il lobbista; percorsi e dialoghi diversi consumano il generatore casuale diversamente, quindi il confronto non isola un miglioramento causale del bilanciamento. Livelli, roster e profili IA non sono stati abbassati per far passare le prove.
+Ellyna arriva al finale con quattro candidati KO, Movimenton e Generorso vivi: il successo non prova che sia sufficiente qualsiasi squadra. Prima del redesign, lo stesso salvataggio aveva perso una volta contro il lobbista; percorsi e dialoghi diversi consumano il generatore casuale diversamente, quindi il confronto non isola un miglioramento causale del bilanciamento. Livelli, roster e profili IA non sono stati abbassati per far passare le prove.
 
 Il [registro delle prove](bruxelles-verbale-proof.json) conserva hash dei report, salvataggi padre, squadre, acquisti, mosse recuperate, esiti e finali personali. Gli originali completi restano in `artifacts/campaign-native/`.
 
@@ -46,7 +46,7 @@ Chromium e WebKit verificano entrambe le porte del caffè e del palazzo, cure gr
 
 Il worker codifica directory ed estensioni comuni una sola volta e ricostruisce l'inventario completo; nessuna risorsa è stata esclusa per ridurre il bundle. Con audio attivo e CPU ×4, il codice pesa **357.884 byte gzip** (margine 516 sul limite 350 KiB), iniziale 188.237; rAF p95 mondo/lotta/Dex 17,6 / 17,6 / 17,6 ms. I limiti non sono stati alzati. Restano da verificare prestazioni su dispositivi fisici.
 
-La preview locale verifica **458 checksum PNG**, 20 audio/catalogo, primo utilizzo offline di **566 risorse** e decodifica delle 19 tracce AAC nei due motori. Chromium verifica anche il riavvio offline; Playwright WebKit permette le richieste offline alla cache ma non il reload offline completo. La pubblicazione è in corso e verrà registrata dopo la verifica del deploy.
+La preview locale verifica **458 checksum PNG**, 20 audio/catalogo, primo utilizzo offline di **566 risorse** e decodifica delle 19 tracce AAC nei due motori. Chromium verifica anche il riavvio offline; Playwright WebKit permette le richieste offline alla cache ma non il reload offline completo. Il sito pubblico verifica gli stessi 458 checksum, 566 risorse offline, AAC e percorsi nativi nei due motori. La prima installazione Chromium concorrente è scaduta durante l’attesa del worker; il tentativo isolato e quello sul follow-up sono riusciti. Il deploy principale `6d58cb0` ha CI 36984334435 e tre Vercel riusciti; il follow-up della hostess `9a5a78a` ha CI 36985613752 e tre Vercel riusciti. Le prove pubbliche usano salvataggi guadagnati e registrano anche il checksum del codice importato.
 
 [CAMPO-LARGO-AUDIT.md](CAMPO-LARGO-AUDIT.md) registra il prossimo tratto, requisiti reali della foto e discrepanza dei livelli selvatici da indagare.
 

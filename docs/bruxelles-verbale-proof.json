@@ -3105,18 +3105,20 @@
     "webkitOfflineLimitation": "Canonical/versioned cache requests and AAC decoding checked offline; full offline reload unsupported by Playwright WebKit."
   },
   "publication": {
-    "status": "source-deployed-followup-pending",
+    "status": "verified",
     "sourceCommit": "6d58cb0023e58370eb2442e38df48e36dff70a28",
+    "followupCommit": "9a5a78aa2e455d1c93d1334c01863c33bf639e9e",
     "site": "https://politicmon.vercel.app/",
     "sourceCiRun": 36984334435,
-    "sourceCiConclusion": "success",
-    "sourceVercelStatuses": "three success",
+    "followupCiRun": 36985613752,
+    "ciConclusions": "both success",
+    "vercelStatuses": "three success for both commits",
     "publicChecksums": 458,
     "publicPwa": {
-      "chromium": "success after one service-worker-ready timeout on first concurrent cold attempt",
+      "chromium": "success; initial concurrent cold install attempt timed out, isolated retry and followup both passed",
       "webkit": "success; full offline reload unsupported"
     },
-    "followup": "Hostess now fixed near quay; public native return to Campo must be rechecked after followup deploy."
+    "publicNative": "Both engines: earned arrival -> cafe, earned Commissione win -> Campo; original save-code checksum recorded for each stage."
   },
   "sourceOutputs": [
     {
@@ -3206,5 +3208,97 @@
         "public/sprites/tiles/commissione_table.png": "2721ccd6e761e1da20b57ccbc94b53e4c6f3dc840c077e4424f2381ac4123e3d"
       }
     }
-  ]
+  ],
+  "releasePublic": {
+    "chromium": [
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "471ae3f826c0fe549a47df59b508b714a960e289980ee1fdd71cd35e9cfc8da7",
+        "stage": "bruxelles-arrival",
+        "target": "bar-bruxelles",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_floor.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-43-09"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "06179abc01b657785517e41cf369e27cf86c8439749c025cad8b8fe729c6e9ef",
+        "stage": "commissione-result-1",
+        "target": "campo_largo",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/tiles/commissione_wall.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_floor.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_table.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/chars/npc_commissione_east.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-43-09"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      }
+    ],
+    "webkit": [
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "471ae3f826c0fe549a47df59b508b714a960e289980ee1fdd71cd35e9cfc8da7",
+        "stage": "bruxelles-arrival",
+        "target": "bar-bruxelles",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_floor.png?v=2026-10-02T08-43-09"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      },
+      {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/brux-final-ellyna-direct-20261002.json",
+        "sourceSaveCodeSha256": "06179abc01b657785517e41cf369e27cf86c8439749c025cad8b8fe729c6e9ef",
+        "stage": "commissione-result-1",
+        "target": "campo_largo",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/chars/npc_commissione_south.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_carpet.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_table.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_floor.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/commissione_wall.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/chars/npc_commissione_east.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_palace.png?v=2026-10-02T08-43-09",
+          "https://politicmon.vercel.app/sprites/tiles/bruxelles_cafe.png?v=2026-10-02T08-43-09"
+        ],
+        "checks": [
+          "earned save imported without edits",
+          "native slot/continue/map/warp keys",
+          "new artwork loaded",
+          "travel leaves money/party/morale intact"
+        ]
+      }
+    ]
+  }
 }

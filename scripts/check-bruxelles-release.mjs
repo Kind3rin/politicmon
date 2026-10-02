@@ -1,5 +1,6 @@
 // Production input test. Both states come from a completed earned campaign.
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {chromium,webkit} from 'playwright';
 import {importSaveCode,serializeGameState} from '../src/game/state.ts';
@@ -30,7 +31,7 @@ for(const [name,engine] of [['chromium',chromium],['webkit',webkit]]){
    assert.ok(assets.some(u=>u.includes(stage==='bruxelles-arrival'?'bruxelles_cafe.png':'npc_commissione_')),'New artwork not loaded');
    mkdirSync('artifacts/screens/bruxelles',{recursive:true});const data=await page.evaluate(()=>{const c=document.createElement('canvas');c.width=240;c.height=180;c.getContext('2d').drawImage(document.querySelector('#game-canvas'),0,0,240,180);return c.toDataURL();});
    writeFileSync(`artifacts/screens/bruxelles/release-${name}-${stage}.png`,Buffer.from(data.split(',')[1],'base64'));
-   writeFileSync(`artifacts/bruxelles-release-${name}-${stage}.json`,JSON.stringify({base,engine:name,sourceReport:reportPath,stage,target,assets,checks:['earned save imported without edits','native slot/continue/map/warp keys','new artwork loaded','travel leaves money/party/morale intact']},null,2)+'\n');
+   writeFileSync(`artifacts/bruxelles-release-${name}-${stage}.json`,JSON.stringify({base,engine:name,sourceReport:reportPath,sourceSaveCodeSha256:createHash("sha256").update(report.codes[stage]).digest("hex"),stage,target,assets,checks:['earned save imported without edits','native slot/continue/map/warp keys','new artwork loaded','travel leaves money/party/morale intact']},null,2)+'\n');
    console.log(`PASS release Brussels ${name}: ${stage} -> ${target}, native keys, new artwork and unchanged resources.`);await context.close();
   }
  }finally{await browser.close();}

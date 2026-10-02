@@ -50,7 +50,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round: Bruxelles
 
-[BRUXELLES-VERBALE.md](BRUXELLES-VERBALE.md): dodici job, quindici PNG, 18 crediti. Cinque sfide volontarie, preparazione sul posto e finale che conserva le promesse reali. Tre segmenti da salvataggi guadagnati vincono in normale; 286 test e 11.222 layout per motore. Porte, cure, ritorni e accesso guadagnato al Campo Largo verificati in Chromium/WebKit. Bundle 357.884 byte gzip, 458 checksum PNG, 566 risorse PWA. Il deploy `6d58cb0` ha CI 36984334435 e tre Vercel riusciti; checksum pubblici e PWA nei due motori verificati. La hostess è ora ferma al molo dopo un ostacolo incontrato nella prova pubblica. Il goal generale resta attivo; [CAMPO-LARGO-AUDIT.md](CAMPO-LARGO-AUDIT.md) documenta il prossimo capitolo.
+[BRUXELLES-VERBALE.md](BRUXELLES-VERBALE.md): dodici job, quindici PNG, 18 crediti. Cinque sfide volontarie, preparazione sul posto e finale che conserva le promesse reali. Tre segmenti da salvataggi guadagnati vincono in normale; 286 test e 11.222 layout per motore. Porte, cure, ritorni e accesso guadagnato al Campo Largo verificati in Chromium/WebKit. Bundle 357.884 byte gzip, 458 checksum PNG, 566 risorse PWA. Il deploy `6d58cb0` ha CI 36984334435 e tre Vercel riusciti; checksum pubblici e PWA nei due motori verificati. La hostess è ora ferma al molo dopo un ostacolo incontrato nella prova pubblica. Il follow-up `9a5a78a` ha CI 36985613752 e tre Vercel riusciti; i percorsi pubblici al caffè e al Campo Largo passano nei due motori. Il goal generale resta attivo; [CAMPO-LARGO-AUDIT.md](CAMPO-LARGO-AUDIT.md) documenta il prossimo capitolo.
 
 ## Lavoro ancora necessario
 

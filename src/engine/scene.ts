@@ -1,6 +1,8 @@
 import type { Screen } from "./screen";
+import type { TouchAction } from "./touchActions";
 
 export interface Scene {
+  readonly touchActions?: readonly TouchAction[];
   update(dt: number): void;
   draw(screen: Screen): void;
   // Se true, la scena sottostante resta visibile (menu sovrapposti).

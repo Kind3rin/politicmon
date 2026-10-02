@@ -10,7 +10,7 @@ import {TRANSPORT_DESTINATIONS,resolveTransportDestination,transportRequirement}
 
 test('Starter dossiers retain the whole Dex story, every actual starting move and correct matchup',()=>{
  for(const id of STARTERS){
-  const identity=starterDossier(id,0).join(' ');assert.ok(identity.includes(SPECIES[id].dexLine));assert.ok(identity.includes(`GRINTA ${SPECIES[id].base.atk}`));
+  const identity=starterDossier(id,0).join(' ');assert.ok(identity.includes(SPECIES[id].dexLine));
   const moves=starterDossier(id,1).join(' '),types=starterDossier(id,2).join(' ');
   for(const slot of movesAtLevel(id,5)){const m=MOVES[slot.id];assert.ok(moves.includes(m.name));assert.ok(moves.includes(m.flavor));if(m.power>0)assert.ok(types.includes(`${m.name} CONTRO GIANNI: ×${typeMultiplier(m.type,SPECIES[RIVAL_COUNTER[id]].types)}`));}
   assert.ok(starterDossier(id,3).join(' ').includes('LIVELLO 16'));

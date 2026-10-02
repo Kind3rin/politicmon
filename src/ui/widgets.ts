@@ -191,6 +191,8 @@ export class MessageBox {
   private pageIndex = 0;
   private chars = 0;
   private done = false;
+  private autoAdvance = false;
+  private autoElapsed = 0;
   onFinished: (() => void) | null = null;
 
   get isOpen(): boolean {
@@ -198,7 +200,7 @@ export class MessageBox {
   }
 
   // Accoda messaggi; ogni stringa diventa una o più pagine da 2 righe.
-  show(messages: string[], onFinished?: () => void): void {
+  show(messages: string[], onFinished?: () => void, autoAdvance = false): void {
     this.pages = [];
     for (const message of messages) {
       const lines = wrapText(message, 36);
@@ -207,7 +209,9 @@ export class MessageBox {
       }
     }
     this.pageIndex = 0;
-    this.chars = 0;
+    this.autoAdvance = autoAdvance;
+    this.autoElapsed = 0;
+    this.chars = autoAdvance ? Infinity : 0;
     this.done = this.pages.length === 0;
     this.onFinished = onFinished ?? null;
     if (this.done) {
@@ -220,6 +224,22 @@ export class MessageBox {
     this.pageIndex = 0;
   }
 
+  advance(): void {
+    if (!this.isOpen) return;
+    const total = this.pages[this.pageIndex].join("").length;
+    if (this.chars < total) { this.chars = total; return; }
+    audio.cursor();
+    if (this.pageIndex < this.pages.length - 1) {
+      this.pageIndex += 1;
+      this.chars = this.autoAdvance ? Infinity : 0;
+      this.autoElapsed = 0;
+    } else {
+      const callback = this.onFinished;
+      this.close();
+      callback?.();
+    }
+  }
+
   update(dt: number, input: Input): void {
     if (!this.isOpen) {
       return;
@@ -227,7 +247,9 @@ export class MessageBox {
     // Toccare il box di dialogo avanza/completa la pagina (come premere A).
     const boxY = VIEW_H - 44;
     const tapped = input.tapInRect(0, boxY, VIEW_W, 44);
-    const advance = input.wasPressed("a") || input.wasPressed("b") || tapped;
+    this.autoElapsed += Math.max(0, dt);
+    const advance = input.wasPressed("a") || input.wasPressed("b") || tapped ||
+      (this.autoAdvance && this.autoElapsed >= (this.pages[this.pageIndex].length > 1 ? 1.6 : 1.05));
     const page = this.pages[this.pageIndex];
     const total = page.join("").length;
     if (this.chars < total) {
@@ -245,17 +267,7 @@ export class MessageBox {
       }
       return;
     }
-    if (advance) {
-      audio.cursor();
-      if (this.pageIndex < this.pages.length - 1) {
-        this.pageIndex += 1;
-        this.chars = 0;
-      } else {
-        const callback = this.onFinished;
-        this.close();
-        callback?.();
-      }
-    }
+    if (advance) this.advance();
   }
 
   // Tempo per far lampeggiare l'indicatore "continua" e agitare le urla.
@@ -320,7 +332,7 @@ export class MessageBox {
       }
       // Hint discreto: come avanzare (utile per i nuovi giocatori).
       const more = this.pageIndex < this.pages.length - 1;
-      screen.text(more ? "A: AVANTI" : "A: OK", 12, boxY + 30, GREY);
+      screen.text(this.autoAdvance ? "A: ACCELERA" : more ? "A: AVANTI" : "A: OK", 12, boxY + 33, GREY);
     }
   }
 }

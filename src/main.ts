@@ -13,6 +13,7 @@ import { flushActiveState, getActiveState } from "./game/state";
 import { syncRunCheckpoints, tickRunStats } from "./game/runstats";
 import { Input } from "./engine/input";
 import { initShell } from "./engine/shell";
+import { renderTouchActions } from "./engine/touchActions";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
 import { getSpriteImage } from "./engine/assets";
@@ -259,6 +260,7 @@ function frame(now: number): void {
       syncRunCheckpoints(active);
     }
     if(!shellGuideOpen())stack.update(dt);
+    renderTouchActions(stack.top?.touchActions);
     stack.draw(screen);
     input.endFrame();
     if (firstReadyFrame) {

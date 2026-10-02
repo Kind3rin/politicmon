@@ -4,9 +4,25 @@ import { createMonster } from "../../src/game/monster.ts";
 import { newGameState } from "../../src/game/state.ts";
 import {
   INITIAL_WANDERER_COOLDOWN,
+  firstRecruitLevel,
   newWandererCadence,
   planWanderingChallenge
 } from "../../src/game/world/explorationInterrupts.ts";
+
+test("first recruitment stays at the living lead's level, then releases the encounter table", () => {
+  const state = newGameState();
+  state.pos.mapId = "route1";
+  const fainted = createMonster("giorgetta", 8);
+  fainted.hp = 0;
+  state.party = [fainted, createMonster("ellyna", 5)];
+  assert.equal(firstRecruitLevel(state, 7), 5);
+  assert.equal(firstRecruitLevel(state, 3), 3);
+  state.flags["ach:first-catch"] = true;
+  assert.equal(firstRecruitLevel(state, 7), 7);
+  delete state.flags["ach:first-catch"];
+  state.pos.mapId = "route2";
+  assert.equal(firstRecruitLevel(state, 7), 7);
+});
 
 test("sfida vagante: il cooldown iniziale concede 50 passi liberi", () => {
   const state = newGameState();

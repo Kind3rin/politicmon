@@ -280,3 +280,6 @@ dalla precache durante il reload offline Chromium/Pixel 7.
 
 Politicdex, dossier, ritmo delle lotte e controlli sono documentati in
 [GAMEPLAY-DEX.md](GAMEPLAY-DEX.md).
+
+Lotto lotte — Fuorionda: saldo **352,97 → 352,72** (0,25 crediti), job `50580beb-1fcf-4ac5-9131-6e50a6069c3c`.
+Quattro fotogrammi visti e integrati nella finale di Polemica; atlante 480×270, sorgente e checksum nel manifest esistente.

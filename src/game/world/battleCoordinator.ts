@@ -1,6 +1,6 @@
 import { MOVES } from "../../data/moves";
 import type { TrainerDef } from "../../data/trainers";
-import { createMonster, type Monster } from "../monster";
+import { createMonster, healMonster, type Monster } from "../monster";
 import { hardModeLevelBonus } from "../rematch";
 import type { GameState } from "../state";
 import { advanceMoraleProgress } from "../morale";
@@ -11,6 +11,12 @@ export interface TrainerTeamOptions {
 }
 
 export type TrainerBattleResult = "win" | "loss" | "caught" | "run";
+
+export function preparePractice(state: GameState, trainerId: string): boolean {
+  if (trainerId !== "praticante" || state.defeatedTrainers.includes(trainerId)) return false;
+  state.party.forEach(healMonster);
+  return true;
+}
 
 export function buildTrainerTeam(state: GameState, def: TrainerDef, options: TrainerTeamOptions): Monster[] {
   if (def.team.length === 0) return options.fallbackTeam();

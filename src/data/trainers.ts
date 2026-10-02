@@ -139,7 +139,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   praticante: {
     id: "praticante", name: "PRATICANTE NINO", pal: "kid",
-    team: [["contemorfo", 6], ["calendauro", 7]],
+    team: [["contemorfo", 5]],
     intro: ["Lo sportello è unico. La password cambia a ogni ufficio.", "Mi alleno qui: almeno la fila avanza quando perdiamo un candidato."],
     defeat: ["Pratica chiusa. Non serve un altro modulo per riconoscere che hai vinto."],
     money: 260, reward: { itemId: "scheda", qty: 3 }

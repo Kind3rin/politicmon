@@ -36,6 +36,10 @@
       "civic": [
         240,
         136
+      ],
+      "battle-animation": [
+        480,
+        270
       ]
     },
     "resampling": "nearest",
@@ -304,6 +308,24 @@
           }
         ]
       }
+    },
+    {
+      "id": "battle-fuorionda",
+      "path": "public/sprites/ui/battle/fuorionda.png",
+      "width": 480,
+      "height": 270,
+      "jobId": "50580beb-1fcf-4ac5-9131-6e50a6069c3c",
+      "model": "gpt_image_2_5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_215604_50580beb-1fcf-4ac5-9131-6e50a6069c3c.png",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "sourceSha256": "49d312cd7c19d2eda2a50b4fae5e22795ad1f25fb1b3af396724a4ce99554eb7",
+      "sha256": "40e4ba8fe7f662cc75e99aefd4a81c842bb9aef74ecad183690ea71e45bac425",
+      "kind": "battle-animation",
+      "processing": "Nearest-neighbor delivery resize; four equal 240x135 frames, 2x2 atlas.",
+      "creditsSpent": 0.25
     }
   ]
 }

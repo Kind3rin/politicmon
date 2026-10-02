@@ -30,18 +30,26 @@ export class TeachScene implements Scene {
         ...(this.options.source === "archive" ? ["ARCHIVIO GRATUITO: MOSSA DELLA FORMA ATTUALE, GIÀ DISPONIBILE AL TUO LIVELLO."] : []), "POTENZA NON È DANNO FINALE: CONTANO STATISTICHE, TIPO E ABILITÀ."];
     return notes.flatMap((line) => wrapText(line, 35));
   }
+  private learn(): void {
+    const move = MOVES[this.moveId];
+    if (this.mon.moves.some(slot => slot.id === this.moveId)) { this.done = true; this.stack.pop(); return; }
+    if (this.old) this.mon.moves[this.menu.index] = { id: this.moveId, pp: move.pp };
+    else this.mon.moves.push({ id: this.moveId, pp: move.pp });
+    this.done = true; this.onLearned(); audio.levelUp();
+    this.msg.show([`${speciesOf(this.mon).name} adotta ${move.name}.`], () => this.stack.pop(), true);
+  }
+  private choose(): void {
+    if (this.old) this.confirm = true;
+    else this.learn();
+    audio.confirm();
+  }
   update(dt: number): void {
     if (this.msg.isOpen) { this.msg.update(dt, this.input); return; }
     if (this.done) return;
     if (this.confirm) {
       if (this.input.wasPressed("b")) { this.confirm = false; audio.cancel(); return; }
       if (!this.input.wasPressed("a")) return;
-      const move = MOVES[this.moveId];
-      if (this.mon.moves.some((slot) => slot.id === this.moveId)) { this.done = true; this.stack.pop(); return; }
-      if (this.old) this.mon.moves[this.menu.index] = { id: this.moveId, pp: move.pp };
-      else this.mon.moves.push({ id: this.moveId, pp: move.pp });
-      this.done = true; this.onLearned(); audio.levelUp();
-      this.msg.show([`${speciesOf(this.mon).name} adotta ${move.name}.`, "Stavolta cambiare linea cambia davvero la lotta."], () => this.stack.pop());
+      this.learn();
       return;
     }
     if (this.input.wasPressed("start")) { this.inspect = !this.inspect; this.scroll = 0; audio.cursor(); return; }
@@ -51,12 +59,12 @@ export class TeachScene implements Scene {
       if (dir) { this.page = (this.page + dir + 3) % 3; this.scroll = 0; audio.cursor(); return; }
       const delta = this.input.wasPressed("down") ? 1 : this.input.wasPressed("up") ? -1 : 0;
       if (delta) this.scroll = Math.max(0, Math.min(Math.max(0, this.lines().length - 9), this.scroll + delta));
-      if (this.input.wasPressed("a")) { this.confirm = true; audio.confirm(); }
+      if (this.input.wasPressed("a")) this.choose();
       return;
     }
     const action = this.mon.moves.length >= 4 ? this.menu.update(this.input) : this.input.wasPressed("a") ? "select" : this.input.wasPressed("b") ? "cancel" : null;
     if (action === "cancel") { this.done = true; this.stack.pop(); audio.cancel(); }
-    if (action === "select") { this.confirm = true; audio.confirm(); }
+    if (action === "select") this.choose();
   }
   draw(screen: Screen): void {
     screen.clear("#101b32"); const bg = sceneImage("ui:teach", "ui/teach.png"); if (bg) screen.image(bg);

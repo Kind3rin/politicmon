@@ -3,7 +3,6 @@
 html,body{height:100%;overflow:hidden;background:#101c30;font-family:system-ui,sans-serif;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 button:focus-visible,canvas:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-#screen-frame:focus-within{outline:2px solid var(--gold);outline-offset:4px}
 #shell-guide button:focus-visible{outline-color:var(--ink)}
 button[hidden],[hidden]{display:none!important}
 #app{height:var(--app-height,100dvh);display:flex;align-items:center;justify-content:center;padding:max(12px,var(--safe-top)) max(12px,var(--safe-right)) max(12px,var(--safe-bottom)) max(12px,var(--safe-left))}
@@ -22,7 +21,7 @@ button[hidden],[hidden]{display:none!important}
 #touch-ui{display:none}
 body.touch #shell-hint{display:none}
 body.touch #console-shell{max-width:560px;height:100%;grid-template-rows:44px minmax(0,1fr) 184px}
-body.touch #screen-stage{align-self:center;aspect-ratio:4/3;max-height:100%}
+body.touch #screen-stage{align-self:end;aspect-ratio:4/3;max-height:100%;padding:0;border:0;background:transparent}
 body.touch #touch-ui{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px}
 #touch-move{display:flex;align-items:center;justify-content:center;min-width:0}
 #touch-dpad{position:relative;width:calc(var(--pad)*3);height:calc(var(--pad)*3);touch-action:none}
@@ -30,8 +29,8 @@ body.touch #touch-ui{display:flex;justify-content:space-between;align-items:cent
 .dpad-btn{position:absolute;width:var(--pad);height:var(--pad);border:1px solid #657e97;border-radius:14px;background:#2a4059;color:#fffaf0;font-size:20px;touch-action:none}
 .dpad-up{top:0;left:var(--pad)}.dpad-down{bottom:0;left:var(--pad)}.dpad-left{left:0;top:var(--pad)}.dpad-right{right:0;top:var(--pad)}
 #touch-buttons{display:grid;grid-template-columns:var(--b) var(--a);grid-template-rows:88px 44px;gap:12px var(--gap);align-items:center}
-.ab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:var(--b);height:var(--b);border-radius:50%;border:1px solid #8294ab;background:#344c66;color:var(--paper);font-size:25px;font-weight:850;touch-action:none}
-.ab-btn small{font-size:8px;font-weight:750;letter-spacing:.025em}
+.ab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:var(--b);height:var(--b);border-radius:18px;border:1px solid #8294ab;background:#344c66;color:var(--paper);font-size:25px;font-weight:850;touch-action:none}
+.ab-btn small{font-size:10px;font-weight:750;letter-spacing:.025em}
 .b-btn{align-self:end}
 .a-btn{align-self:start;width:var(--a);height:var(--a);color:#0e2730;background:#79ddba;border-color:#a6f2d6}
 .start-btn{grid-column:1/3;justify-self:center;min-width:104px;height:44px;background:#1a2c41;border:1px solid #5a728d;border-radius:14px;color:#e7edf5;font-size:10px;font-weight:800;letter-spacing:.1em;touch-action:none}
@@ -43,6 +42,12 @@ body.touch #touch-ui{display:flex;justify-content:space-between;align-items:cent
 #touch-stick-base::after{top:calc(50% - 1px);left:12px;height:2px;width:calc(100% - 24px)}
 #touch-stick-cap{position:relative;width:64px;height:64px;border-radius:50%;border:2px solid #aff4dc;background:#79ddba;pointer-events:none}
 body.ctrl-stick #touch-dpad{display:none}body.ctrl-stick #touch-stick{display:flex}
+body.battle-touch #touch-move,body.battle-touch #touch-buttons{display:none}
+body.battle-touch #touch-ui{display:block;padding:0}
+#battle-actions{display:grid;height:100%;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,minmax(44px,1fr));gap:8px}
+#battle-actions button{display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:0;min-height:44px;padding:6px;border:1px solid #546d83;border-radius:14px;background:#1b2b41;color:#fffaf0;text-align:left}
+#battle-actions strong{font-size:13px}#battle-actions small{font-size:11px;line-height:1.2;color:#c3dbd4}
+#battle-actions button:disabled{opacity:.45}#battle-actions button:active{background:#285348}
 @media(max-width:600px){.console-brand{font-size:12px;letter-spacing:.06em;gap:7px}.console-tools .tool-label{display:none}.console-tools button{padding:0;width:44px}#shell-hint{font-size:10px}}
 @media(max-width:360px){:root{--pad:48px;--a:64px;--b:56px;--gap:8px}body.touch #touch-ui{padding:6px}}
 @media(orientation:landscape) and (pointer:coarse){
@@ -54,6 +59,12 @@ body.ctrl-stick #touch-dpad{display:none}body.ctrl-stick #touch-stick{display:fl
  body.touch #touch-move{grid-column:1;grid-row:2}
  body.touch #touch-buttons{grid-column:3;grid-row:2;justify-self:end;align-self:center}
  :root{--pad:48px;--a:64px;--b:56px;--gap:8px}
+ body.battle-touch #console-shell{grid-template-rows:44px repeat(3,minmax(44px,1fr))}
+ body.battle-touch #screen-stage{grid-row:2/5}
+ body.battle-touch #touch-ui,body.battle-touch #battle-actions{display:contents}
+ #battle-actions button:nth-child(odd){grid-column:1}#battle-actions button:nth-child(even){grid-column:3}
+ #battle-actions button:nth-child(-n+2){grid-row:2}#battle-actions button:nth-child(n+3):nth-child(-n+4){grid-row:3}#battle-actions button:nth-child(n+5){grid-row:4}
+ #battle-actions strong{font-size:11px}#battle-actions small{font-size:10px}
 }
 #shell-guide{width:min(520px,calc(100vw - 32px));max-height:calc(100dvh - 32px);margin:auto;padding:22px;border:1px solid #d4c9b1;border-radius:16px;background:var(--paper);color:var(--ink);box-shadow:0 24px 80px #000a;overflow:auto;touch-action:pan-y pinch-zoom;user-select:text}
 #shell-guide::backdrop{background:#050b15d9}

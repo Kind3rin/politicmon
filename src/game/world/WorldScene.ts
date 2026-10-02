@@ -44,7 +44,7 @@ import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailabili
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordHealerVisit, recordRunStep } from "../runstats";
-import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge } from "./explorationInterrupts";
+import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge, firstRecruitLevel } from "./explorationInterrupts";
 import { resolveTransportDestination, type TransportDestination } from "./transport";
 import { buildNpcDrawCommand, type RuntimeNpc } from "./npcRenderer";
 import { recordDuelResult } from "../duelrecord";
@@ -77,8 +77,6 @@ import { Atto3EndingScene } from "../../scenes/Atto3EndingScene";
 import { WeeklyCampaignScene } from "../../scenes/WeeklyCampaignScene";
 import { SliceEndingScene } from "../../scenes/SliceEndingScene";
 import { TransportScene } from "../../scenes/TransportScene";
-import { FieldGuideScene } from "../../scenes/FieldGuideScene";
-import { welcomeGuide, firstDebateGuide } from "../onboarding";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 import { TournamentScene } from "../../scenes/TournamentScene";
 import {
@@ -86,7 +84,7 @@ import {
   coppaOpponentDef, coppaRule, prepareCoppaParty, COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE,
   type CoppaRule, type TournamentState
 } from "../tournament";
-import { buildTrainerTeam, recordNewTrainerVictory, shouldPersistTrainerVictory } from "./battleCoordinator";
+import { buildTrainerTeam, preparePractice, recordNewTrainerVictory, shouldPersistTrainerVictory } from "./battleCoordinator";
 import { routeNpcInteraction } from "./npcInteraction";
 import { createAtto3Controller, type Atto3Controller } from "./atto3Controller";
 import { isFeatureEnabled } from "../features";
@@ -297,9 +295,8 @@ export class WorldScene implements Scene {
 
   onEnter(): void {
     if (!this.state.flags["intro-done"]) {
-      this.stack.push(new FieldGuideScene(this.stack,this.input,"BRIEFING DI QUIRINO",welcomeGuide(this.state),()=>{
-        this.state.flags["intro-done"]=true;saveGame(this.state);
-      }));
+      this.state.flags["intro-done"] = true;
+      saveGame(this.state);
     }
   }
 
@@ -859,9 +856,9 @@ export class WorldScene implements Scene {
     }
     const sond = this.state.sondaggi;
     const pool: Array<{ dLevel: number; line: string }> = [
-      { dLevel: 3, line: "COMIZIO AFFOLLATO! Un POLITICMON carico e agguerrito ti sbarra la strada." },
-      { dLevel: -2, line: "Un ASTENSIONISTA svogliato ti incrocia, senza troppa voglia di lottare." },
-      { dLevel: 1, line: "Aria di campagna elettorale: l'avversario sembra più motivato del solito." }
+      { dLevel: 3, line: "COMIZIO PIENO.\nL'AVVERSARIO ARRIVA CARICO." },
+      { dLevel: -2, line: "ASTENSIONISTA.\nNON HA PRESO IL CAFFÈ." },
+      { dLevel: 1, line: "CAMPAGNA ELETTORALE:\nUN CAFFÈ IN PIÙ." }
     ];
     // SONDAGGI alti -> più probabile il "VIP" tosto; bassi -> più astensionisti.
     if (sond >= 70 && Math.random() < 0.6) {
@@ -899,6 +896,7 @@ export class WorldScene implements Scene {
 
   private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void, isRematch = false, doctrine?: ElectionDoctrine, maxHealingItems?: number | null): void {
     this.queueBattle(() => {
+      const practice = preparePractice(this.state, def.id);
       const team = buildTrainerTeam(this.state, def, {
         fallbackTeam: () => this.buildRivalTeam(),
         bossTrainerIds: BOSS_TRAINER_IDS
@@ -907,7 +905,7 @@ export class WorldScene implements Scene {
         new BattleScene(this.stack, this.input, {
           state: this.state,
           foeTeam: team,
-          trainer: def,
+          trainer: practice ? { ...def, intro: ["TIROCINIO GRATIS.\nALMENO QUI TI CURANO."] } : def,
           isRematch,
           electionDoctrine: doctrine,
           maxBattleHealingItems: maxHealingItems,
@@ -971,7 +969,11 @@ export class WorldScene implements Scene {
               this.wanderNpc = null;
               this.wanderTrainer = null;
             }
-            this.onBattleEnd(result, def.id.startsWith("coppa:"));
+            if (practice && result === "loss") {
+              this.state.party.forEach(healMonster);
+              this.showBanner("PRATICA", "SQUADRA CURATA: RIPROVA.", "#79ddba");
+            }
+            this.onBattleEnd(result, practice || def.id.startsWith("coppa:"));
             if (promiseNotices.length) this.say(promiseNotices, () => after?.(result));
             else after?.(result);
           }
@@ -2201,7 +2203,6 @@ export class WorldScene implements Scene {
     saveGame(this.state);
 
     const rivalStarterId = RIVAL_COUNTER[speciesId];
-    const rivalSpecies = SPECIES[rivalStarterId];
     markSeen(this.state, rivalStarterId);
 
     // Gianni ENTRA in scena dalla porta del lab (5,7) e si piazza al centro,
@@ -2218,12 +2219,8 @@ export class WorldScene implements Scene {
 
     this.say(
       [
-        `${SPECIES[speciesId].name} è il tuo primo POLITICMON!`,
-        "PROF. QUIRINO: il tipo conta in lotta. Quello che ci fai conta fuori.",
-        "?!? Qualcuno entra di corsa nel laboratorio...",
-        "RIVALE GIANNI: aspettate, non ero nell'inquadratura. Adesso scegliamo!",
-        `GIANNI afferra la scheda di ${rivalSpecies.name}.`,
-        "GIANNI: ho scelto il tuo contrario. Il consulente dice che così mi ricordano. Vediamo se basta."
+        `QUIRINO: ${SPECIES[speciesId].name} è con te. Il microfono non perdona.`,
+        "GIANNI: scelgo il tuo contrario. Mi risparmia un programma."
       ],
       () => this.startFirstDebate()
     );
@@ -2243,7 +2240,7 @@ export class WorldScene implements Scene {
         this.state.flags["rival1-beaten"]=true;this.state.rivalWins=Math.max(1,this.state.rivalWins);saveGame(this.state);this.giveDex();
       });
     };
-    this.stack.push(new FieldGuideScene(this.stack,this.input,"PRIMO DIBATTITO",firstDebateGuide(this.state,id),begin));
+    begin();
   }
 
   private tutorialRivalMoves(speciesId: string): string[] {
@@ -2258,26 +2255,14 @@ export class WorldScene implements Scene {
 
   private giveDex(): void {
     if(this.state.flags["dex-received"])return;
-    this.say(
-      [
-        "GIANNI: ho perso? Nel video taglio prima. Per il prossimo però mi alleno davvero.",
-        "PROF. QUIRINO: avete conquistato l'attenzione. È la parte facile da misurare.",
-        "Tieni, questo è il POLITICDEX: registra ogni politico che vedi o elegga.",
-        "E queste sono 5 SCHEDE ELETTORALI: indebolisci i candidati selvatici e lanciale!",
-        "I TIPI DECIDONO LE SFIDE: studia la GUIDA TIPI nel menu prima di ogni lotta.",
-        "Conquista le 3 MEDAGLIE: AUDITEL a MEDIOPOLI, SPREAD a EUROTOWN, DAZIO a CAPUT MUNDI.",
-        "Solo allora il PALAZZO ti aprirà il portone. Nel frattempo ascolta chi aspetta il bus a Borgo.",
-        "Menu MORALE: fiducia dei cittadini, coesione dei tuoi e scadenze. Una promessa scade dopo tre NUOVI dibattiti vinti; le rivincite non contano."
-      ],
-      () => {
-        if(this.state.flags["dex-received"])return;
-        this.state.flags["dex-received"] = true;
-        this.state.bag.scheda = (this.state.bag.scheda ?? 0) + 5;
-        audio.catchJingle();
-        this.say(["Hai ricevuto il POLITICDEX e 5 SCHEDE ELETTORALI!", "Trovi il Dex e le MISSIONI nel menu (tasto P o START)."]);
-        saveGame(this.state);
-      }
-    );
+    this.state.flags["dex-received"] = true;
+    this.state.bag.scheda = (this.state.bag.scheda ?? 0) + 5;
+    saveGame(this.state);
+    audio.catchJingle();
+    this.say([
+      "GIANNI: nel video taglio prima del KO. Nella rivincita taglio meno.",
+      "QUIRINO: Dex e 5 schede, tieni. Nell'erba scegli chi reclutare."
+    ]);
   }
 
   // ---- Trainer line-of-sight ----
@@ -2754,8 +2739,8 @@ export class WorldScene implements Scene {
             // A SONDAGGI alti compaiono più "VIP" (tosti); a SONDAGGI bassi più
             // astensionisti deboli. Un annuncio dà colore al momento.
             const mod = this.rollEncounterFlavor();
+            level = firstRecruitLevel(this.state, Math.max(2, level + (mod?.dLevel ?? 0)));
             if (mod) {
-              level = Math.max(2, level + mod.dLevel);
               this.say([mod.line], () => this.startWildBattle(entry.speciesId, level));
             } else {
               this.startWildBattle(entry.speciesId, level);
@@ -3050,17 +3035,11 @@ export class WorldScene implements Scene {
       }
       const fresh = checkAchievements(this.state);
       if (fresh.length > 0) {
-        const lines: string[] = [];
-        for (const a of fresh) {
-          lines.push(`TRAGUARDO SBLOCCATO: ${a.name}!`, `${a.desc} Premio: ${a.reward}€.`);
-        }
         saveGame(this.state);
         // Banner dorato + fanfara di "evento" (non più il jingle riciclato della
         // cattura): un traguardo si DEVE sentire come un traguardo.
         audio.victory();
-        this.showBanner("TRAGUARDO SBLOCCATO!", fresh[0].name, "#e8c84a");
-        this.say(lines);
-        return;
+        this.showBanner(fresh[0].name, `+${fresh.reduce((sum, a) => sum + a.reward, 0)}€`, "#e8c84a");
       }
       // Eventi d'ingresso mappa: valutati SOLO al primo frame idle dopo loadMap
       // in cui il giocatore NON sta già premendo una direzione (chi arriva sulla

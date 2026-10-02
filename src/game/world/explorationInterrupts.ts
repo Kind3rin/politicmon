@@ -7,6 +7,13 @@ export const MIN_FREE_STEPS = 8;
 export const INITIAL_WANDERER_COOLDOWN = 50;
 export const WANDERER_CHANCE = 0.02;
 
+/** The first recruit teaches risk without outlevelling the only party member. */
+export function firstRecruitLevel(state: GameState, rolled: number): number {
+  if (state.pos.mapId !== "route1" || state.flags["ach:first-catch"]) return rolled;
+  const lead = state.party.find(mon => mon.hp > 0);
+  return lead ? Math.min(rolled, lead.level) : rolled;
+}
+
 export interface WandererCadence {
   cooldown: number;
   recentIds: string[];

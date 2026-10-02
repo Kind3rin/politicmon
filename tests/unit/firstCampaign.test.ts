@@ -4,7 +4,7 @@ import {createMonster, expForLevel, expYield, gainExp} from '../../src/game/mons
 import {newGameState, parseGameState, serializeGameState} from '../../src/game/state.ts';
 import {currentQuest} from '../../src/data/quests.ts';
 import {TRAINERS} from '../../src/data/trainers.ts';
-import {buildTrainerTeam, recordNewTrainerVictory} from '../../src/game/world/battleCoordinator.ts';
+import {buildTrainerTeam, preparePractice, recordNewTrainerVictory} from '../../src/game/world/battleCoordinator.ts';
 import {MAPS} from '../../src/data/maps.ts';
 
 test('Early learning accelerates recruitment; advanced yields remain unchanged and stronger foes pay more',()=>{
@@ -53,4 +53,16 @@ test('Route practice has a distinct result and rehearsal uses announced normal/h
   state.hardMode=hard;
   assert.deepEqual(buildTrainerTeam(state,TRAINERS.stagista,{fallbackTeam:()=>[],bossTrainerIds:[]}).map(m=>m.level),hard?[11,12]:[8,9]);
  }
+});
+
+test('First practice repairs the earned party without changing progress; completed practice and other trainers do not',()=>{
+ const state=newGameState(),mon=createMonster('ellyna',6);
+ state.party=[mon];mon.hp=1;mon.status='scandalo';mon.moves[0].pp=0;
+ const exp=mon.exp,money=state.money;
+ assert.equal(preparePractice(state,'praticante'),true);
+ assert.ok(mon.hp>1);assert.equal(mon.status,null);assert.ok(mon.moves[0].pp>0);
+ assert.equal(mon.exp,exp);assert.equal(state.money,money);assert.deepEqual(state.defeatedTrainers,[]);
+ mon.hp=1;state.defeatedTrainers.push('praticante');
+ assert.equal(preparePractice(state,'praticante'),false);assert.equal(mon.hp,1);
+ assert.equal(preparePractice(state,'auditel'),false);assert.equal(mon.hp,1);
 });

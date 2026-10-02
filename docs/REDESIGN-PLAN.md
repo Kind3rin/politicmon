@@ -1,6 +1,6 @@
 # Politicmon: piano del redesign completo
 
-Aggiornato il 2 ottobre 2026. Obiettivo attivo: rifare gameplay, scene, asset,
+Aggiornato il 3 ottobre 2026. Obiettivo attivo: rifare gameplay, scene, asset,
 dialoghi satirici, lotte, evoluzioni e schede; rivedere anche ambienti, edifici e PG, usando il credito Higgsfield dove
 migliora il gioco. I round pubblicati sono tappe; il progetto non è dichiarato
 completamente ridisegnato. Le vecchie rinunce per «basso ROI» del piano PixelLab
@@ -16,7 +16,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Area | Stato attuale | Prova |
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
-| Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
+| Battaglie | Polemica, Fuorionda/cattura virale, intento onesto e copione del rivale; notifiche automatiche | Prova touch reale: prima vittoria e cattura; unit test |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |
@@ -32,7 +32,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Starter con quattro dossier, guida rileggibile, riprova dopo sconfitta, pausa scorrevole e viaggio con contratto | `shot:desk`: 514 Chromium/506 WebKit, sei lotte del tutorial via input |
-| Cornice esterna | Superficie aperta, comandi in basso/laterali, croce trascinabile, input indipendenti per dito/tasto e notch | 20 viewport, dieci prove pubbliche nei due motori; corsa nativa da codice guadagnato, pause mondo/lotta e save |
+| Cornice esterna | Schermo vicino ai comandi; pulsanti contestuali grandi nelle lotte, con danni/PP/costi e due tocchi per mossa | Prova touch reale e sette viewport senza overflow; POCO fisico non disponibile |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
@@ -50,10 +50,18 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | PWA | Scocca Android rivista, 20 layout/sei rotazioni; release locale con 798 asset Higgsfield e 19 tracce AAC offline | MOBILE-PWA-LAYOUT, GOVERNO-VERBALE; `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 352,97; spesa cumulativa 533,00 crediti. Non sono stati attivati acquisti
+verificato: 352,72; spesa cumulativa 533,25 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: PWA installata
+## Ultimo round: lotte e ritmo della prima zona
+
+Avvio e starter abbreviati, Polemica/cattura rapida e pulsanti mobili giocati nel browser.
+Ellyna ha vinto il rivale e reclutato Vannaccix; la prima evoluzione e l'ordine della slice
+restano da ripensare. 340 test; animazione Fuorionda: 0,25 crediti, saldo 352,72.
+Pratica ridotta vinta in quattro turni reali; PWA locale riaperta offline con i progressi guadagnati.
+La pubblicazione di questa tappa non conclude il mandato in `CODEX-GOAL.md`.
+
+## Round precedente: PWA installata
 
 [MOBILE-PWA-FINALE.md](MOBILE-PWA-FINALE.md): strumenti in alto, controller al bordo inferiore sicuro, superficie aperta senza piastra e pulsanti piatti. 20 layout e sei rotazioni nei due motori, dieci prove compilate della guida, 325 test e 41 contratti input. La misura locale include ora anche la configurazione TURN di produzione: 358352/358400 byte gzip. Nessuna generazione in questa rifinitura. Pubblicazione registrata nel proof.
 

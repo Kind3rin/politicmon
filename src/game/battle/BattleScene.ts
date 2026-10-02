@@ -41,7 +41,9 @@ import { battleBackdropForMap, type BattleBackdrop } from "./backdrop";
 import { moraleExpMultiplier } from "../morale";
 import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
-import { switchPreview } from "./tactics";
+import { switchPreview, damageRange } from "./tactics";
+import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
+import type { TouchAction } from "../../engine/touchActions";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -98,10 +100,16 @@ export class BattleScene implements Scene {
   private ai!: AiProfile; // profilo di difficoltà, calcolato dal contesto
 
   private queue: Step[] = [];
-  private mode: "queue" | "menu" | "fight" | "ask" | "campaign" = "queue";
+  private mode: "queue" | "menu" | "fight" | "ask" | "campaign" | "recruit" = "queue";
   private msg = new MessageBox();
+  private polemica = new Polemica();
+  private foeIntent: Move | null = null;
+  private recruitMenu = new Menu([]);
+  private recruitBall = "";
+  private battery = 3;
+  private finisherT = 0;
   private mainMenu = new Menu([
-    { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "CAMPAGNA" }, { label: "FUGA" }
+    { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUORIONDA" }, { label: "CAMPAGNA" }, { label: "FUGA" }
   ]);
   private campaignMenu = new Menu([]);
   private catchBoost = false; // APPELLO AL VOTO: raddoppia la prossima cattura
@@ -179,6 +187,7 @@ export class BattleScene implements Scene {
       this.firstSeenBanner = 2.2;
     }
 
+    sceneImage("battle:fuorionda", "ui/battle/fuorionda.png");
     this.ai = this.computeAiProfile();
     audio.playMusic(battleMusic(opts));
     if (this.isLegendary) {
@@ -191,17 +200,14 @@ export class BattleScene implements Scene {
       this.push({ text: `Un'aura dorata squarcia la campagna elettorale...` });
       this.push({ text: `POLITICMON LEGGENDARIO! ${this.foeName()} si manifesta!` });
     } else if (this.trainer) {
-      this.push({ text: `${this.trainer.name} ti sfida!` });
       for (const line of this.trainer.intro) {
         this.push({ text: line });
       }
-      this.push({ text: `${this.trainer.name} manda in campo ${this.foeName()}!` });
       if (this.trainer.id === "algoritmo-sovrano") this.push({ text: `DOTTRINA SNAPSHOT: ${DOCTRINE_LABEL[this.electionDoctrine]}!` });
     } else {
       this.push({ text: `Un ${this.foeName()} selvatico sbuca dalla campagna elettorale!` });
     }
     this.pushEntryAbility(this.foe, this.player, `Il nemico ${this.foeName()}`);
-    this.push({ text: `Vai, ${this.playerName()}!` });
     // SONDAGGI COME METEO: annuncio a inizio battaglia quando il gradimento
     // attiva il modificatore (+15% ai tipi establishment o anti-establishment).
     // Solo PVE: il duello PvP non passa mai dai SONDAGGI.
@@ -298,6 +304,7 @@ export class BattleScene implements Scene {
 
   private startTurn(playerMove: Move): void {
     this.electionTurn += 1;
+    this.drainBattery();
     if (this.electionDoctrine === "destra_competitiva" && !this.electionDoctrineTriggered && this.electionTurn >= 7) {
       this.electionDoctrineTriggered = true;
       this.foe.stages.atk = Math.min(6, this.foe.stages.atk + 2);
@@ -316,7 +323,7 @@ export class BattleScene implements Scene {
     if (slot) {
       slot.pp = Math.max(0, slot.pp - 1);
     }
-    const foeMove = chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
+    const foeMove = this.takeFoeIntent();
     const pPriority = playerMove.effect?.priority ?? 0;
     const fPriority = foeMove.effect?.priority ?? 0;
     const playerFirst =
@@ -398,10 +405,63 @@ export class BattleScene implements Scene {
     return {
       run: () => {
         if (this.foe.mon.hp > 0) {
-          this.pushMoveNow("foe", chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi }));
+          this.pushMoveNow("foe", this.takeFoeIntent());
+          this.drainBattery();
         }
       }
     };
+  }
+
+  private drainBattery(): void {
+    if (this.trainer?.id === "rival1" && --this.battery === 0) {
+      this.foe.stages.atk = Math.max(-6, this.foe.stages.atk - 1);
+      this.pushFront([{ text: "BATTERIA 0%! Copione perso: GRINTA -1." }]);
+    }
+  }
+
+  private takeFoeIntent(): Move {
+    const move = this.foeIntent ?? chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
+    this.foeIntent = null;
+    return move;
+  }
+
+  private useFuorionda(): void {
+    if (!this.polemica.spend()) return;
+    audio.confirm();
+    this.mode = "queue";
+    this.startTurn(FUORIONDA);
+  }
+
+  private catchEstimate(itemId: string, viral = false): number {
+    return recruitmentChance(catchChance(this.foe.mon, itemId, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0), this.catchBoost, viral);
+  }
+
+  private openRecruit(): void {
+    this.recruitBall = Object.keys(this.state.bag).find(id => this.state.bag[id] > 0 && ITEMS[id]?.kind === "ball") ?? "";
+    if (!this.recruitBall) {
+      this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, onUse: id => this.useItem(id) }));
+      return;
+    }
+    this.recruitMenu = new Menu([
+      { label: `SCHEDA: ${Math.round(this.catchEstimate(this.recruitBall) * 100)}%`, rightLabel: `x${this.state.bag[this.recruitBall]}` },
+      { label: `VIRALE: ${Math.round(this.catchEstimate(this.recruitBall, true) * 100)}%`, rightLabel: "-3 POLEMICA", disabled: this.polemica.value < 3 },
+      { label: "ALTRE SCHEDE / BORSA" }
+    ]);
+    this.mode = "recruit";
+  }
+
+  private moveHint(move: Move): string {
+    const stat = move.effect?.stat;
+    if (stat) {
+      const target = stat.target === "self" ? this.player : this.foe;
+      if (move.power === 0 && stat.target === "foe" && stat.stages < 0 && statDropBlockReason(target.mon)) return `BLOCCATA: ${statDropBlockReason(target.mon) === "garanzia" ? "GARANZIA" : "POLTRONA SALDA"}`;
+      if (target.stages[stat.key] === (stat.stages > 0 ? 6 : -6)) return "STATISTICA GIÀ AL LIMITE";
+    }
+    if (move.power > 0) {
+      const range = damageRange(this.player, this.foe, move, { sondaggi: this.state.sondaggi });
+      return `DANNI ${range.min}-${range.max} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P`;
+    }
+    return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P`;
   }
 
   private moveSteps(
@@ -414,6 +474,10 @@ export class BattleScene implements Scene {
   ): Step[] {
     const defenderName = side === "player" ? `Il nemico ${this.foeName()}` : this.playerName();
     const steps: Step[] = [];
+    const before = {
+      hp: defender.mon.hp, status: defender.mon.status, gaffe: defender.gaffeTurns,
+      own: { ...attacker.stages }, foe: { ...defender.stages }
+    };
 
     // Telegrafia: il nemico "carica" la mossa con un'aura colorata per categoria,
     // così il giocatore può leggere se sarà fisica, speciale o di status.
@@ -428,7 +492,10 @@ export class BattleScene implements Scene {
       });
     }
 
-    steps.push({ text: `${attackerName} usa ${move.name}!` });
+    if (move.id === FUORIONDA.id) steps.push({
+      run: () => { this.finisherT = this.state.reduceEffects ? 0 : .8; audio.hitSuper(); }, pause: this.state.reduceEffects ? .12 : .8
+    });
+    steps.push({ text: `${side === "player" ? this.playerName() : this.foeName()}: ${move.name}!` });
 
     if (side === "foe") {
       const slot = attacker.mon.moves.find((s) => s.id === move.id);
@@ -445,7 +512,9 @@ export class BattleScene implements Scene {
 
     if (move.power > 0) {
       // Contesto SONDAGGI (meteo politico): SOLO qui nel PVE; il duello resta neutro.
-      const result = calcDamage(attacker, defender, move, Math.random, { sondaggi: this.state.sondaggi });
+      const result = move.id === FUORIONDA.id
+        ? { damage: fuoriondaDamage(statsOf(defender.mon).hp), crit: false, typeMult: 1, offensive: [], pollEstimate: undefined, lodo: false }
+        : calcDamage(attacker, defender, move, Math.random, { sondaggi: this.state.sondaggi });
       const civicFavored = this.electionDoctrine === "lista_civica" && side === "foe"
         && ((this.electionTurn % 2 === 1 && move.category === "fisico") || (this.electionTurn % 2 === 0 && move.category === "speciale"));
       const appliedDamage = civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
@@ -639,6 +708,12 @@ export class BattleScene implements Scene {
         }
       }
     }
+
+    if (side === "player") steps.push({ run: () => {
+      const changed = defender.mon.hp < before.hp || defender.mon.status !== before.status || defender.gaffeTurns !== before.gaffe ||
+        (Object.keys(before.own) as Array<keyof typeof before.own>).some(key => attacker.stages[key] !== before.own[key] || defender.stages[key] !== before.foe[key]);
+      if (this.polemica.reward(move, changed) > 0) audio.cursor();
+    } });
 
     // KO del BERSAGLIO (colpito dalla mossa).
     steps.push(...this.koCheckSteps(side === "player" ? "foe" : "player"));
@@ -1157,7 +1232,7 @@ export class BattleScene implements Scene {
     this.mode = "queue";
   }
 
-  private throwBall(itemId: string): void {
+  private throwBall(itemId: string, viral = false): void {
     const item = ITEMS[itemId];
     if (this.trainer) {
       this.pushFront([
@@ -1167,15 +1242,15 @@ export class BattleScene implements Scene {
       this.mode = "queue";
       return;
     }
-    this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
-    bumpDailyQuest(this.state, "item1"); // anche la SCHEDA lanciata è un oggetto usato
-    const propaganda = hasMinistro(this.state, "propaganda");
-    let chance = catchChance(this.foe.mon, itemId, propaganda ? 1.25 : 1, this.foe.gaffeTurns > 0);
-    // APPELLO AL VOTO (mossa da campagna): raddoppia la prossima cattura, una volta.
-    if (this.catchBoost) {
-      this.catchBoost = false;
-      chance = Math.min(0.95, chance * 2);
+    if ((this.state.bag[itemId] ?? 0) <= 0 || this.foe.mon.hp <= 0 || (viral && this.polemica.value < 3)) {
+      audio.cancel();
+      return;
     }
+    const chance = this.catchEstimate(itemId, viral);
+    if (viral) this.polemica.spend();
+    this.catchBoost = false;
+    this.state.bag[itemId] -= 1;
+    bumpDailyQuest(this.state, "item1");
     const success = Math.random() < chance;
     const shakes = success ? 3 : Math.min(2, Math.floor(chance * 4 * Math.random()));
     const pct = Math.round(chance * 100);
@@ -1294,11 +1369,63 @@ export class BattleScene implements Scene {
 
   // ---- Update ----
 
+  get touchActions(): readonly TouchAction[] | undefined {
+    const mode = this.mode;
+    const action = (label: string, run: () => void, hint?: string, disabled = false): TouchAction => ({
+      label, hint, disabled,
+      run: () => {
+        if (disabled || this.stack.top !== this || this.mode !== mode || this.finished) return;
+        this.input.reset();
+        audio.confirm();
+        run();
+      }
+    });
+    const back = () => { this.mode = "menu"; };
+    if (mode === "queue") return this.mainMenu.items.map((item, index) => action(
+      index === 5 ? "ACCELERA" : item.label,
+      () => this.msg.advance(),
+      index === 5 ? "Le notifiche scorrono da sole" : undefined,
+      index !== 5 || !this.msg.isOpen
+    ));
+    if (mode === "menu") return this.mainMenu.items.map((item, index) => action(
+      index === 1 && !this.trainer ? "CATTURA" : item.label, () => this.chooseMainAction(index),
+      index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : undefined,
+      index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
+    ));
+    if (mode === "fight") return [
+      ...this.fightMenu.items.map((item, index) => {
+        const slot = this.player.mon.moves[index];
+        const move = this.fightFallback ? MOVES.comizio : MOVES[slot.id];
+        return action(move.name, () => {
+          this.mode = "queue";
+          this.startTurn(move);
+        }, `${this.moveHint(move)}${this.fightFallback ? "" : ` · ${slot.pp} PP`}`, item.disabled);
+      }),
+      action("INDIETRO", back),
+      action("DOSSIER", () => this.openFightIntel(), "Tipi, effetti e avversario", this.fightFallback)
+    ];
+    if (mode === "recruit") return [
+      action(this.recruitMenu.items[0].label, () => this.throwBall(this.recruitBall), `${this.state.bag[this.recruitBall]} schede · Se fallisce, risponde`),
+      action(this.recruitMenu.items[1].label, () => this.throwBall(this.recruitBall, true), "Costa 3 Polemica", this.polemica.value < 3),
+      action("BORSA", () => {
+        back();
+        this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, onUse: id => this.useItem(id) }));
+      }),
+      action("INDIETRO", back)
+    ];
+    if (mode === "campaign") return [
+      ...this.campaignMenu.items.map((item, index) => action(item.label, () => this.useCampaign(CAMPAIGN_ACTIONS[index]), `${CAMPAIGN_ACTIONS[index].cost}% sondaggi · ${["Cura 30% PV e status", "Grinta +2", "Ignora la difesa", "Prossima cattura x2"][index]}`, item.disabled)),
+      action("INDIETRO", back)
+    ];
+    return undefined;
+  }
+
   update(dt: number): void {
     if (this.finished) {
       return;
     }
     dt *= this.state.battleSpeed === 2 ? 2 : 1;
+    this.finisherT = Math.max(0, this.finisherT - dt);
     this.legendBanner = Math.max(0, this.legendBanner - dt);
     this.firstSeenBanner = Math.max(0, this.firstSeenBanner - dt);
     this.legendIntroFlash = Math.max(0, this.legendIntroFlash - dt);
@@ -1356,6 +1483,7 @@ export class BattleScene implements Scene {
       if (!step) {
         if (hpSettled) {
           this.mainMenu.index = 0;
+          this.foeIntent ??= chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
           this.mode = "menu";
         }
         return;
@@ -1369,7 +1497,7 @@ export class BattleScene implements Scene {
         this.stepTimer = step.pause;
       }
       if (step.text) {
-        this.msg.show([step.text]);
+        this.msg.show([step.text], undefined, true);
       }
       return;
     }
@@ -1379,28 +1507,19 @@ export class BattleScene implements Scene {
       if (result === null) {
         return;
       }
-      if (result === 0) {
-        this.openFightMenu();
-      } else if (result === 1) {
-        this.stack.push(
-          new BagScene(this.stack, this.input, this.state, {
-            inBattle: true,
-            onUse: (itemId) => this.useItem(itemId)
-          })
-        );
-      } else if (result === 2) {
-        this.stack.push(
-          new PartyScene(this.stack, this.input, this.state, {
-            mode: "battle-switch",
-            currentUid: this.player.mon.uid,
-            onInspect: (mon) => this.openSwitchIntel(mon, false),
-            onChoose: (mon) => this.switchTo(mon, false)
-          })
-        );
-      } else if (result === 3) {
-        this.openCampaignMenu();
-      } else if (result === 4) {
-        this.tryRun();
+      this.chooseMainAction(result);
+      return;
+    }
+
+    if (this.mode === "recruit") {
+      const action = this.recruitMenu.update(this.input);
+      if (action === "cancel") this.mode = "menu";
+      else if (action === "select") {
+        if (this.recruitMenu.index < 2) this.throwBall(this.recruitBall, this.recruitMenu.index === 1);
+        else {
+          this.mode = "menu";
+          this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, onUse: id => this.useItem(id) }));
+        }
       }
       return;
     }
@@ -1418,12 +1537,7 @@ export class BattleScene implements Scene {
 
     if (this.mode === "fight") {
       if (!this.fightFallback && this.input.wasPressed("start")) {
-        const recruitment = this.trainer ? [] : ["RECLUTAMENTO NELLO STATO ATTUALE:", ...Object.entries(this.state.bag).filter(([id, qty]) => qty > 0 && ITEMS[id]?.kind === "ball").map(([id, qty]) => {
-          const base = catchChance(this.foe.mon, id, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0);
-          const chance = this.catchBoost ? Math.min(.95, base * 2) : base;
-          return `${ITEMS[id].name}: ${Math.round(chance * 100)}% (${qty} IN BORSA).`;
-        }), "INDEBOLIRE E APPLICARE UNO STATUS AIUTA. METTERLO KO IMPEDISCE LA CATTURA.", ...(this.catchBoost ? ["APPELLO AL VOTO ATTIVO: PROSSIMA SCHEDA x2."] : [])];
-        this.stack.push(new BattleIntelScene(this.stack, this.input, this.player, this.foe, this.fightMenu.index, { sondaggi: this.state.sondaggi }, (index) => { this.fightMenu.index = index; }, recruitment, this.trainer ? [`STILE: ${trainerStyle(this.trainer.id).label}.`, ...trainerStyle(this.trainer.id).hints] : []));
+        this.openFightIntel();
         audio.confirm();
         return;
       }
@@ -1462,9 +1576,63 @@ export class BattleScene implements Scene {
     }
   }
 
+  private openFightIntel(): void {
+    const recruitment = this.trainer ? [] : ["RECLUTAMENTO NELLO STATO ATTUALE:", ...Object.entries(this.state.bag).filter(([id, qty]) => qty > 0 && ITEMS[id]?.kind === "ball").map(([id, qty]) => {
+      const base = catchChance(this.foe.mon, id, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0);
+      const chance = this.catchBoost ? Math.min(.95, base * 2) : base;
+      return `${ITEMS[id].name}: ${Math.round(chance * 100)}% (${qty} IN BORSA).`;
+    }), "INDEBOLIRE E APPLICARE UNO STATUS AIUTA. METTERLO KO IMPEDISCE LA CATTURA.", ...(this.catchBoost ? ["APPELLO AL VOTO ATTIVO: PROSSIMA SCHEDA x2."] : [])];
+    this.stack.push(new BattleIntelScene(this.stack, this.input, this.player, this.foe, this.fightMenu.index, { sondaggi: this.state.sondaggi }, (index) => { this.fightMenu.index = index; }, recruitment, this.trainer ? [`STILE: ${trainerStyle(this.trainer.id).label}.`, ...trainerStyle(this.trainer.id).hints] : []));
+  }
+
+  private chooseMainAction(result: number): void {
+    if (result === 0) {
+      this.openFightMenu();
+    } else if (result === 1 && !this.trainer) {
+      this.openRecruit();
+    } else if (result === 1) {
+      this.stack.push(
+        new BagScene(this.stack, this.input, this.state, {
+          inBattle: true,
+          onUse: (itemId) => this.useItem(itemId)
+        })
+      );
+    } else if (result === 2) {
+      this.stack.push(
+        new PartyScene(this.stack, this.input, this.state, {
+          mode: "battle-switch",
+          currentUid: this.player.mon.uid,
+          onInspect: (mon) => this.openSwitchIntel(mon, false),
+          onChoose: (mon) => this.switchTo(mon, false)
+        })
+      );
+    } else if (result === 3) {
+      if (this.polemica.value >= 3) this.useFuorionda();
+      else audio.cancel();
+    } else if (result === 4) {
+      this.openCampaignMenu();
+    } else if (result === 5) {
+      this.tryRun();
+    }
+  }
+
+
   private menuGridUpdate(): number | null {
-    // Griglia a 2 colonne, 5 voci: LOTTA BORSA / SQUADRA CAMPAGNA / FUGA.
-    const n = this.mainMenu.items.length; // 5
+    const tap = this.input.consumeTap();
+    if (tap && tap.x >= 92 && tap.x < 240 && tap.y >= 120 && tap.y < 180) {
+      const row = Math.floor((tap.y - 120) / 16);
+      const col = tap.x < 166 ? 0 : 1;
+      const target = row * 2 + col;
+      this.input.clearTap();
+      if (target < this.mainMenu.items.length) {
+        if (target === this.mainMenu.index) return target;
+        this.mainMenu.index = target;
+        audio.cursor();
+      }
+      return null;
+    }
+    // Two columns, matching the six visible action cells.
+    const n = this.mainMenu.items.length;
     const idx = this.mainMenu.index;
     const set = (target: number) => {
       const clamped = Math.max(0, Math.min(n - 1, target));
@@ -1591,7 +1759,7 @@ export class BattleScene implements Scene {
         return {
           label: a.label,
           rightLabel: `-${a.cost}%`,
-          disabled: !affordable
+          disabled: !affordable || a.kind === "appello" && Boolean(this.trainer)
         };
       })
     );
@@ -1599,6 +1767,7 @@ export class BattleScene implements Scene {
   }
 
   private useCampaign(action: { kind: CampaignKind; label: string; cost: number; minSond: number }): void {
+    if (action.kind === "appello" && this.trainer) { audio.cancel(); return; }
     const sond = this.state.sondaggi;
     if (sond < action.cost || sond < action.minSond) {
       audio.cancel();
@@ -1625,7 +1794,7 @@ export class BattleScene implements Scene {
       });
     } else if (action.kind === "farlocco") {
       steps.push({
-        text: "Sondaggio farlocco: i numeri gonfiati danno GRINTA!",
+        text: "NUMERI GONFIATI: GRINTA +2!",
         run: () => {
           this.player.stages.atk = Math.min(6, this.player.stages.atk + 2);
           audio.confirm();
@@ -1757,11 +1926,20 @@ export class BattleScene implements Scene {
 
     // Riquadro testo.
     screen.panel(2, VIEW_H - 44, VIEW_W - 4, 42, "dialog");
+    if (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit") {
+      screen.panel(6, 42, 116, 27, "card");
+      screen.text(`POLEMICA ${this.polemica.value}/3`, 12, 47, this.polemica.value === 3 ? "#26745d" : INK);
+      const intent = this.foeIntent;
+      screen.textFit(intent ? `ARRIVA: ${intent.name}` : "", 12, 59, 104, "#8c5b12");
+    }
     if (this.mode === "menu") {
       this.drawMainMenu(screen);
+    } else if (this.mode === "recruit") {
+      screen.panel(8, 113, 226, 21, "card");
+      screen.textFit("FALLISCE? IL NEMICO RISPONDE.", 14, 117, 208, INK);
+      screen.textFit("A: LANCIA  B: LOTTA", 14, 126, 208, GREY);
+      this.recruitMenu.draw(screen, 6, 138, 228, 12);
     } else if (this.mode === "fight") {
-      screen.panel(6, 42, 104, 13, "card");
-      screen.text("A:USA B:MENU", 14, 45, INK);
       // Quattro righe a larghezza piena: le mosse arrivano a 22 caratteri e
       // nella vecchia griglia 2x2 venivano compresse fino al 69%.
       const items = this.fightMenu.items;
@@ -1810,7 +1988,7 @@ export class BattleScene implements Scene {
         // PP restano nelle righe delle mosse; qui rendi scopribile il dossier.
         screen.textRight("START:INFO", 226, 117, GREY);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.textFit(moveSummary(move), 14, 126, 208, GREY);
+        screen.textFit(this.moveHint(move), 14, 126, 208, INK);
       }
     } else if (this.mode === "campaign") {
       // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)
@@ -1856,6 +2034,12 @@ export class BattleScene implements Scene {
       this.askMenu.draw(screen, VIEW_W - 58, VIEW_H - 42, 50, 11);
     }
     this.msg.draw(screen);
+    if (this.finisherT > 0) {
+      const atlas = sceneImage("battle:fuorionda", "ui/battle/fuorionda.png");
+      const frame = Math.min(3, Math.floor((.8 - this.finisherT) / .2));
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
+      screen.textCenter("MICROFONO APERTO!", 120, 119, "#fffaf0");
+    }
 
     // Bagliore dorato al level-up + raggi che pulsano dallo sprite del player.
     // RIDUCI EFFETTI: soppresso (l'evento resta nel testo "sale al livello X").
@@ -2075,8 +2259,8 @@ export class BattleScene implements Scene {
   }
 
   private drawMainMenu(screen: Screen): void {
-    const labels = ["LOTTA", "BORSA", "SQUADRA", "CAMPAGNA", "FUGA"];
-    const rows = Math.ceil(labels.length / 2); // 3
+    const labels = ["LOTTA", this.trainer ? "BORSA" : "CATTURA", "SQUADRA", "FUORIONDA", "CAMPAGNA", "FUGA"];
+    const rows = Math.ceil(labels.length / 2);
     const h = 12 + rows * 16;
     const w = 148;
     const x = VIEW_W - w;
@@ -2092,14 +2276,14 @@ export class BattleScene implements Scene {
         screen.rect(cx - 5, cy - 3, 2, 13, "#e0a92f");
         screen.text("►", cx - 2, cy, "#8c5b12");
       }
-      screen.textFit(labels[i], cx + 6, cy, colW - 8, INK);
+      screen.textFit(labels[i], cx + 6, cy, colW - 8, i === 3 && this.polemica.value < 3 ? GREY : INK);
     }
     // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
     // Ancorati al pannello testo (VIEW_H-44), non al box menu: con la cornice
     // chiara il testo che sborda sopra il bordo si nota subito.
     const panelY = VIEW_H - 44;
-    screen.text("AZIONE?", 12, panelY + 9, INK);
-    screen.text(`CONSENSO ${this.state.sondaggi}%`, 12, panelY + 22, "#7ad858");
+    screen.text(this.mainMenu.index === 3 ? "COSTO 3 P" : "VARIA LE", 12, panelY + 9, INK);
+    screen.text(this.mainMenu.index === 3 ? "40% PV" : "MOSSE!", 12, panelY + 22, "#26745d");
   }
 }
 

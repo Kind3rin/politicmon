@@ -333,6 +333,6 @@ export function statName(key: StatKey): string {
     case "spc":
       return "RETORICA";
     case "spd":
-      return "OPPORTUNISMO";
+      return "VELOCITÀ";
   }
 }

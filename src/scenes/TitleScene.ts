@@ -5,10 +5,10 @@ import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { hasAnySave, loadGame, newGameState, type GameState } from "../game/state";
+import { hasAnySave, hasSaveInSlot, setActiveSlot, SLOT_COUNT, loadGame, newGameState, type GameState } from "../game/state";
 import { BackupScene } from "./BackupScene";
 import { mp } from "../net/mp";
-import { hasNick, loadNick } from "../net/profile";
+import { loadNick } from "../net/profile";
 import { Menu, wrapText, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
@@ -98,8 +98,7 @@ export class TitleScene implements Scene {
       return;
     }
     const tapAction = this.handleMenuTap();
-    // Nota: NON chiediamo più il nome all'avvio. Prima si vede la schermata del
-    // titolo; il nome si imposta dal menu o, se manca, alla prima campagna.
+    // Online identity is optional: first play must not require a keyboard.
     const action = tapAction ?? this.menu.update(this.input);
     if (action !== "select") {
       return;
@@ -187,8 +186,7 @@ export class TitleScene implements Scene {
     this.start(state);
   }
 
-  // Scelta la difficoltà, fai scegliere lo SLOT di destinazione, poi crea lo
-  // stato e avvia (chiedendo il nome se manca). Il selettore fissa lo slot attivo.
+  // Empty slots need no selection. Full archives keep explicit overwrite choice.
   private beginNewCampaign(hard: boolean): void {
     const makeState = (): GameState => {
       const state = newGameState();
@@ -196,17 +194,15 @@ export class TitleScene implements Scene {
       return state;
     };
     const launch = (): void => {
-      if (!hasNick()) {
-        this.stack.push(
-          new NicknameScene(this.stack, this.input, (nick) => {
-            mp.setIdentity(nick, "player");
-            this.start(makeState());
-          }, true)
-        );
-      } else {
-        this.start(makeState());
-      }
+      mp.setIdentity(loadNick() || "OSPITE", "player");
+      void this.start(makeState());
     };
+    const empty = Array.from({ length: SLOT_COUNT }, (_, slot) => slot).find((slot) => !hasSaveInSlot(slot));
+    if (empty !== undefined) {
+      setActiveSlot(empty);
+      launch();
+      return;
+    }
     this.stack.push(
       new SlotScene(this.stack, this.input, "new", (picked) => {
         // picked === null ⇒ slot scelto e fissato: procedi. (SlotScene chiude da sé

@@ -1,4 +1,3 @@
-import {ABILITIES} from '../data/abilities';
 import {MOVES} from '../data/moves';
 import {TYPE_ORDER,typeMultiplier} from '../data/poltypes';
 import {currentQuest} from '../data/quests';
@@ -10,14 +9,21 @@ import type {GameState} from './state';
 
 export function starterDossier(id:string,tab:number):string[]{
  const species=SPECIES[id],rival=SPECIES[RIVAL_COUNTER[id]],moves=movesAtLevel(id,5).map(m=>MOVES[m.id]);
- if(tab===0)return [species.category,species.dexLine,`STATISTICHE BASE: PV ${species.base.hp}, GRINTA ${species.base.atk}, DIFESA ${species.base.def}, RETORICA ${species.base.spc}, VELOCITÀ ${species.base.spd}.`,...(species.ability?[`${ABILITIES[species.ability].name}: ${ABILITIES[species.ability].desc}`]:[])];
+ if(tab===0)return [species.category,species.dexLine];
  if(tab===1)return ['ENTRA AL LIVELLO 5 CON QUESTE MOSSE:',...moves.flatMap(m=>[`${m.name}: ${m.type}, ${m.category}. POT ${m.power}, PREC ${m.accuracy}%, PP ${m.pp}.`,m.flavor])];
  if(tab===2)return [`TIPI: ${species.types.join(' / ')}.`, 'DANNO RICEVUTO PER TIPO DI MOSSA:',...TYPE_ORDER.map(t=>`${t}: ×${typeMultiplier(t,species.types)}.`),`GIANNI SCEGLIE ${rival.name}: ${rival.types.join(' / ')}.`,...moves.filter(m=>m.power>0).map(m=>`${m.name} CONTRO GIANNI: ×${typeMultiplier(m.type,rival.types)}.`),'IL DANNO DIPENDE ANCHE DA STATISTICHE, STATI E BONUS.'];
- return [...(species.evolutions??[]).map((r,i)=>`${SPECIES[r.id].name}: ${evolutionCondition(r,species.evolutions?.slice(0,i))}.`),...(species.evolutions?.length?[]:['NESSUNA EVOLUZIONE.']),'L’EVOLUZIONE APRE UN CONFRONTO. PUOI RINVIARE E RIPRENDERLA DALLA SQUADRA.','LE ALTRE SCHEDE DEL LABORATORIO SI CHIUDONO DOPO LA SCELTA. POTRAI RECLUTARE ALTRE SPECIE NELLA CAMPAGNA.'];
+ return [...(species.evolutions??[]).map((r,i)=>`${SPECIES[r.id].name}: ${evolutionCondition(r,species.evolutions?.slice(0,i))}.`),...(species.evolutions?.length?[]:['NESSUNA EVOLUZIONE.'])];
 }
 export function welcomeGuide(state:GameState):string[]{
  const quest=currentQuest(state);
- return ['QUIRINO: IL CONSENSO SI MISURA. IL BUS CHE NON PASSA PURE. QUI IMPARERAI A GUARDARE ENTRAMBI.', 'FRECCE / CROCE / LEVETTA: CAMMINA. A PARLA E CONFERMA; B TORNA. START O P APRE IL QUARTIER GENERALE.','NEL MENU TROVI SALVA, MISSIONI, MAPPA E MORALE. EXTRA > GUIDA CAMPAGNA RIPETE QUESTO BRIEFING.',quest?`PROSSIMO PASSO: ${quest.title}. ${quest.step} ${quest.hint}`:'LE MISSIONI PRINCIPALI SONO CONCLUSE. MAPPA E CONTENUTI MOSTRANO LE ATTIVITÀ ANCORA APERTE.',state.flags['dex-received']&&!state.badges.includes('auditel')?'KO E CATTURE DANNO EXP: IL LEADER RICEVE ×2 FINO A LIVELLO 10, POI IL BONUS CALA A ×1 A 20. RECLUTA NEL PERCORSO 1; CHIEDI LA DIVISA AL SINDACALISTA. MARA OFFRE UNA PROVA ANNULLABILE. IL BAR CURA PV, PP E STATUS GRATIS.':'PRIMA META: IL LABORATORIO COL TETTO BLU A BORGO URNE. TRE SCHEDE, TRE STILI. LEGGI MOSSE E TIPI PRIMA DI CONFERMARE.','TRE MEDAGLIE APRONO IL PALAZZO. LE STORIE DI QUARTIERE CAMBIANO FIDUCIA E COESIONE: I SONDAGGI DA SOLI NON RACCONTANO COME GOVERNI.','UNA PROMESSA SCADE DOPO TRE NUOVI DIBATTITI VINTI. LE RIVINCITE NON FANNO SCORRERE QUELLA SCADENZA. MORALE MOSTRA IL VERBALE.'];
+ return [
+  'FRECCE/CROCE: CAMMINA. A: PARLA. B: TORNA. START: MENU.',
+  'VARIA MOSSE RIUSCITE: CARICA POLEMICA. A 3, FUORIONDA O CATTURA VIRALE.',
+  ...(quest ? [`PROSSIMO: ${quest.title}.`,quest.step,quest.hint] : ['MISSIONI PRINCIPALI CONCLUSE. MAPPA: ALTRE ATTIVITÀ.']),
+  'NELL’ERBA: INDEBOLISCI, POI CATTURA. UN KO IMPEDISCE IL RECLUTAMENTO.',
+  'BAR: CURA GRATUITA. TRE MEDAGLIE APRONO IL PALAZZO.',
+  'MORALE: FIDUCIA, COESIONE. PROMESSE: TRE NUOVI DIBATTITI VINTI.'
+ ];
 }
 export function firstDebateGuide(state:GameState,id:string):string[]{
  const rival=SPECIES[RIVAL_COUNTER[id]],level=4+hardModeLevelBonus(state,4),lead=state.party[0],chosen=SPECIES[lead?.speciesId??id],moves=lead?.moves??movesAtLevel(id,5);

@@ -49,24 +49,40 @@ test("atto3 controller: fotografo apre la scelta una volta, poi mostra conseguen
   assert.match(commands[0]?.kind === "say" ? commands[0].lines.join(" ") : "", /FUTURO ANTERIORE/);
 });
 
-test("atto3 controller: le due leve aprono il corridoio e il tavolo apre la scelta", () => {
+test("atto3 controller: leggere i verbali autorizza le leve senza riparare debiti", () => {
   const state = newGameState();
   const commands: WorldCommand[] = [];
   const controller = createAtto3Controller();
-  controller.interactNpc("future-lever-a", { state, dispatch: (command) => {
+  const before = JSON.stringify({ morale: state.morale, coalition: state.coalition, money: state.money });
+  const context = { state, dispatch: (command: WorldCommand) => {
     commands.push(command);
     if (command.kind === "setFlag") state.flags[command.flag] = true;
-  } });
+  } };
+  controller.interactNpc("future-lever-a", context);
+  assert.equal(state.flags["future-lever-a-on"], undefined);
+  assert.equal(state.flags["future-shortcut-open"], undefined);
+  controller.interactNpc("future-split-clerk", context);
+  controller.interactNpc("future-lever-a", context);
   assert.equal(state.flags["future-lever-a-on"], true);
   commands.length = 0;
-  controller.interactNpc("future-lever-b", { state, dispatch: (command) => {
-    commands.push(command);
-    if (command.kind === "setFlag") state.flags[command.flag] = true;
-  } });
+  controller.interactNpc("future-lever-b", context);
+  assert.equal(state.flags["future-shortcut-open"], undefined);
+  controller.interactNpc("future-brand-clerk", context);
+  controller.interactNpc("future-lever-b", context);
   assert.equal(state.flags["future-shortcut-open"], true);
+  assert.equal(JSON.stringify({ morale: state.morale, coalition: state.coalition, money: state.money }), before);
   commands.length = 0;
   controller.interactNpc("future-choice-desk", { state, dispatch: (command) => commands.push(command) });
   assert.deepEqual(commands, [{ kind: "openFutureChoice" }]);
+});
+
+test("atto3 controller: vecchie leve già approvate restano valide", () => {
+  const state = newGameState();
+  state.flags["future-lever-a-on"] = true;
+  state.flags["future-lever-b-on"] = true;
+  const commands: WorldCommand[] = [];
+  createAtto3Controller().interactNpc("future-lever-a", { state, dispatch: c => commands.push(c) });
+  assert.ok(commands.some(c => c.kind === "setFlag" && c.flag === "future-shortcut-open"));
 });
 
 test("P5-T06: ogni archivio richiede due terminali e il quarto apre lo studio", () => {

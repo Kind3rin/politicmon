@@ -1795,7 +1795,8 @@
         "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
         "prompt": "Production key art for Politicmon, an Italian satirical fantasy monster videogame. A sturdy fantasy bear general with dark fur, a tailored blue suit and shoulder decorations, clutching a compass and an unfinished blank party badge. Dramatic industrial hangar full of blank flag prototypes and half-built podiums. Rust metal, electric blue, deep red highlights. Wide landscape composition, the central figure fully inside the image, leave space around head and all edges. Original invented fantasy character, playful and sinister satire, never photorealistic. Authentic polished crisp pixel art, pixel blocks, clean outlines, flat limited 48-colour palette with two-tone shading, no antialiasing or painterly gradients. Rich staged environmental detail, expressive face, strong readable silhouette at 240 pixel width. Absolutely no letters, words, typography, numbers, labels, logos, UI, captions or watermark anywhere. Background opaque. The game will overlay its own title and tactical text. All panels, books, contracts, flags and screens are blank or purely geometric."
       },
-      "path": "public/sprites/ui/boss/futuro-anteriore.png"
+      "path": "public/sprites/ui/boss/futuro-anteriore.png",
+      "supersededBy": "scripts/higgsfield-future.json:futuro-anteriore"
     },
     {
       "id": "partner-perfetto",

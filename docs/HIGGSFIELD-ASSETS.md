@@ -1,5 +1,7 @@
 # Politicmon: risorse Higgsfield
 
+Ventiquattresimo blocco: Futuro Anteriore, sede a manifesti piegati, tre uffici, sette cast direzionali, scelte e Segretario. 27 tentativi `gpt_image_2_5` high: 26 completati, uno fallito rimborsato. 23 sorgenti finali, **44 PNG runtime**, 42 percorsi nuovi, **39 crediti**, saldo **561,22 → 522,22**, cumulativo **363,75**. Tre rigenerazioni correggono identità del cast e leggibilità dei materiali. Provenienza in `higgsfield-future.json`; [FUTURO-VERBALE.md](FUTURO-VERBALE.md) documenta firme, morale, cinque campagne, vivaio ed evoluzione realmente guadagnata.
+
 Ventitreesimo blocco: Campo Largo, set e retropalco, quattro cast direzionali, tre dossier e nuova foto. Diciassette job `gpt_image_2_5` high, **25,5 crediti**, saldo **586,72 → 561,22**, cumulativo **324,75**. Ventinove PNG runtime, 28 percorsi nuovi. Provenienza in `higgsfield-campo.json`; [CAMPO-CORNICE.md](CAMPO-CORNICE.md) documenta conseguenze, Circolo, reclutamento, quattro campagne e verifiche offline.
 
 Ventiduesimo blocco: Bruxelles, cinque panorami, palazzo e caffè, quattro viste della Commissione, materiali e tavolo. Dodici job `gpt_image_2_5` high, **18 crediti**, saldo **604,72 → 586,72**, cumulativo **299,25**. Quindici PNG runtime, uno sostituisce la precedente Commissione. Prompt, tentativi e checksum in `higgsfield-bruxelles.json`; [BRUXELLES-VERBALE.md](BRUXELLES-VERBALE.md) documenta conversioni, navigazione, tre campagne reali e morale conservato.

@@ -3,8 +3,9 @@ import type { GameState } from "./state";
 // ------------------------------------------------------- VERSIONE ESCLUSIVA
 // Il browserSeed (save v11, generato una volta e persistito) divide i giocatori
 // in due "versioni" stile rosso/blu: pari = GOVERNO, dispari = OPPOSIZIONE.
-// Quattro specie wild sono esclusive di una versione (weight 0 nell'altra):
-// il Dex globale si completa SOLO scambiando online. I gate di zona (dexzones)
+// Quattro specie wild sono esclusive nella campagna iniziale (weight 0 nell'altra):
+// Vannaccix diventa trasversale nel vivaio Futuro dopo la vittoria sul Segretario.
+// Le altre esclusive richiedono ancora scambi online per il Dex globale. I gate di zona (dexzones)
 // escludono le specie dell'altra versione, così il 100% di zona resta
 // raggiungibile sul campo.
 

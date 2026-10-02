@@ -26,7 +26,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 105 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
-| Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 142 viste, unit test e prove di rete |
+| Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 146 viste, unit test e prove di rete |
 | Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
@@ -41,15 +41,20 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Offshore | Lido a conchiglia, palme, Tesoriere direzionale, tre dossier e negozio; satire originali e morale conservato | Tre campagne riprese da salvataggi giocati, porte/ritorno/Bruxelles in due motori; OFFSHORE-REGISTRO |
 | Bruxelles | Palazzo e caffè propri, materiali, cast direzionale, cinque dossier e verbale del morale | Tre campagne normali, percorsi nativi e accesso al Campo Largo nei due motori; BRUXELLES-VERBALE |
 | Campo Largo | Set e retropalco propri, quattro cast, foto con conseguenze, Circolo e reclutamento LV 43–46 | Quattro segmenti guadagnati, foto alternative e 16 direzioni nei due motori; CAMPO-CORNICE |
+| Futuro Anteriore | Sede e tre sale proprie, sette cast, verbali prima delle leve, dossier manuale e vivaio guadagnato | Cinque segmenti normali fino al vertice, riparazioni ed evoluzione reali; FUTURO-VERBALE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 188.412 byte gzip iniziali, 626 risorse di installazione e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 594 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 188.410 byte gzip iniziali, 668 risorse di installazione e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 636 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 561,22; spesa cumulativa 324,75 crediti. Non sono stati attivati acquisti
+verificato: 522,22; spesa cumulativa 363,75 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: Campo Largo
+## Ultimo round: Futuro Anteriore
+
+[FUTURO-VERBALE.md](FUTURO-VERBALE.md): nuova sede, tre uffici distinti, sette cast, due verbali prima delle leve e tre scelte con memoria dei debiti. Il Segretario apre un dossier manuale e conserva il morale al premio; il vivaio dopo la vittoria offre Vannaccix 43–46 nelle due versioni. Cinque segmenti guadagnati vincono: una prova paga le promesse scadute, recluta Vannaccix e consuma la Tessera ottenuta per Futurorso. 44 PNG, 39 crediti, saldo 522,22; 288 test, 28 viste del cast nei due motori, 146 viste delle scelte, 12.551 layout dossier per motore, 529 checksum PNG, 636 asset offline e 668 risorse esatte di build. Pubblicazione e prove in [future-proof.json](future-proof.json). Il prossimo audit è [DIPLOMACY-AUDIT.md](DIPLOMACY-AUDIT.md); il goal generale resta attivo.
+
+## Round precedente: Campo Largo
 
 [CAMPO-CORNICE.md](CAMPO-CORNICE.md): 17 job, 29 PNG, 25,5 crediti. Tre dossier manuali, quattro attori, patti/cohesione con conseguenze osservate, Circolo e crescita di un reclutamento realmente schierato. Quattro segmenti guadagnati vincono in normale; 286 test, 12.551 layout dei dossier per motore, 486 checksum PNG e 594 risorse offline. L’inventario PWA è un dato JSON versionato: 626 risorse di build verificate senza esclusioni. I percorsi nativi della produzione locale verificano retropalco, varco bloccato e accesso guadagnato a Futuro nei due motori. Saldo 561,22. Il commit `044516d` ha CI 36992112395 e tre deploy Vercel riusciti; checksum, PWA e sei percorsi nativi pubblici passano nei due motori. Provenienza nel verbale; il prossimo tratto è [FUTURO-ANTERIORE-AUDIT.md](FUTURO-ANTERIORE-AUDIT.md). Il goal generale resta attivo.
 
@@ -63,7 +68,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    identità di quartieri e interni, scene e oggetti coerenti con la satira,
    segnaletica leggibile, incontri e deviazioni che producano decisioni.
    I PNG di player, NPC, terreni, edifici e veicoli sono sostituiti e revisionati
-   su 252 viste campione. Restano percorsi, incontri e identità delle singole
+   su 253 viste campione. Restano percorsi, incontri e identità delle singole
    zone: la matrice non prova una campagna interamente percorsa.
 2. **Lotte e crescita.** Rivedere ritmo delle lotte selvatiche, curva delle mosse
    dopo il nuovo confronto, strumenti tattici, ricompense e identità delle evoluzioni ramificate.
@@ -107,7 +112,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 - Aggiornare le guide alla fine di ogni round, distinguendo prove eseguite e
   lavoro aperto. Il completamento richiede evidenza su tutte le aree sopra.
 
-## Ultimo round
+## Round precedente: Offshore
 
 [OFFSHORE-REGISTRO.md](OFFSHORE-REGISTRO.md): nuova identità dell’isola, edificio, palme e Tesoriere; tre dossier volontari, negozio e morale letto al finale. Sei job Higgsfield, nove PNG, 9 crediti; saldo 604,72. Tre salvataggi realmente giocati superano le prove e il boss in normale, con reclutamenti diversi. 286 test, 9.724 briefing per motore, ritorno e viaggio a Bruxelles verificati senza Tesoriere o Sherpa. Build 357.916 byte gzip, margine 484; 443 checksum PNG, 20 audio/catalogo e 552 risorse PWA. Difficoltà alta, altri seed e atti successivi restano aperti. Pubblicazione `817fbb2`: CI 36979312017 e tre deploy Vercel riusciti; checksum e PWA pubblica verificati nei due motori. [BRUXELLES-AUDIT.md](BRUXELLES-AUDIT.md) registra ambienti, sfide e scrittura ancora da rivedere.
 

@@ -1,3 +1,5 @@
+import type { GameState } from "./state";
+import { PROMISES, promiseCost } from "./morale";
 import { addAlly, applyLineRedEvent, coalitionBonuses, type AllyId, type CoalitionState } from "./coalition";
 
 export type FutureChoice = "alliance" | "distance" | "opposition";
@@ -92,4 +94,16 @@ export const FUTURE_REWARD_FLAGS = Object.freeze({
 
 export function futureRewardPatch(flags: Readonly<Record<string, boolean>>): typeof FUTURE_REWARD_FLAGS | null {
   return flags.futureResolved ? null : FUTURE_REWARD_FLAGS;
+}
+
+// A new party name cannot settle a civic debt or reconcile an ally.
+export function futureAccountLines(state: Readonly<GameState>): string[] {
+  const tense = state.coalition.members.filter(m => m.status === "strained").length;
+  const debts = state.morale.promises.filter(p => p.status === "broken");
+  return [
+    `FIDUCIA ${state.morale.trust}. COESIONE ${state.morale.cohesion}. ${tense} PATTI TESI.`,
+    ...debts.map(p => `${PROMISES[p.id].title}: DA RIPARARE, ${promiseCost(p)}€ NEL MENU MORALE.`),
+    debts.length ? "IL NOME È NUOVO. I CREDITORI TI HANNO RICONOSCIUTO." : "NESSUNA PROMESSA SCADUTA. IL LOGO NON SI PRENDE IL MERITO.",
+    "UN PATTO SI RIPARA CON UN ACCORDO. VINCERE L'ASSEMBLEA NON CANCELLA IL CONTO."
+  ];
 }

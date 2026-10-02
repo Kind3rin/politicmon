@@ -217,8 +217,8 @@ export const QUESTS: QuestDef[] = [
   {
     id: "atto3-futuro-scelta",
     title: "DUE MANIFESTI E UNA LINEA",
-    desc: "Ruota i manifesti e scegli ALLEANZA, DISTANZA o CONTRASTO.",
-    hint: "Aziona entrambe le leve nella SEDE DEL DOMANI; il tavolo centrale mostrerà conseguenze e rischi.",
+    desc: "Leggi Scissione e Rebranding, ruota i manifesti e scegli una linea.",
+    hint: "Parla con i due responsabili nelle sale laterali, poi con gli addetti alle leve. La Tesoreria legge i tuoi debiti; il tavolo centrale mostra tre scelte.",
     step: "Apri il corridoio e registra la scelta.",
     isDone: (s) => Boolean(s.flags["future-choice-complete"]),
     target: { mapId: "futuro_sede", x: 8, y: 3 }
@@ -227,7 +227,7 @@ export const QUESTS: QuestDef[] = [
     id: "atto3-futuro-boss",
     title: "IL SEGRETARIO DEL DOMANI",
     desc: "Affronta FUTURORSO e chiudi l'assemblea del partito che non c'era.",
-    hint: "Dopo la scelta, il palco in fondo alla SEDE DEL DOMANI è aperto.",
+    hint: "A apre il dossier del Segretario, B lo rinvia. Per recuperare PV e PP puoi tornare al medico nel Campo: scelta e leve restano salvate.",
     step: "Sconfiggi il SEGRETARIO DEL DOMANI.",
     isDone: (s) => Boolean(s.flags.futureResolved),
     target: { mapId: "futuro_sede", x: 8, y: 1 }

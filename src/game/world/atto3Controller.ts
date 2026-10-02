@@ -2,6 +2,7 @@ import type { WorldContext } from "./worldContext";
 import type { AllyId } from "../coalition";
 import { districtActionCount } from "../districtCampaign";
 import { CAMPO_VOICES } from "../../data/campo";
+import { futureAccountLines } from "../futureChapter";
 
 // Punto d'ingresso deliberatamente piccolo per R1. La logica Atto 3 vivrà qui
 // e restituirà comandi dichiarativi; WorldScene resterà l'adattatore UI.
@@ -118,23 +119,42 @@ export function createAtto3Controller(): Atto3Controller {
       }
       if (npcId === "future-reception") {
         if (!context.state.flags["future-badge-received"]) context.dispatch({ kind: "setFlag", flag: "future-badge-received" });
-        context.dispatch({ kind: "say", lines: ["RECEPTION: ecco il BADGE PROVVISORIO DEFINITIVO.", "IL TAVOLO SUL PROGRAMMA ASPETTA IL TAVOLO SUL NOME.", "INTANTO ABBIAMO APPROVATO IL CARATTERE TIPOGRAFICO.", "RUOTA ENTRAMBI I MANIFESTI. POI DICHIARA DA CHE PARTE STAI."] });
+        context.dispatch({ kind: "say", lines: ["ACCREDITO VALIDO FINO AL PROSSIMO NOME. ABBIAMO LASCIATO SPAZIO SUL BADGE.", "IN SEDE: SCISSIONE A SINISTRA, REBRANDING A DESTRA. LEGGI I VERBALI, POI RUOTA LE DUE LEVE.", "TESORERIA IN FONDO A DESTRA: PORTA I CONTI DEL CAMPO. IL TAVOLO CENTRALE MOSTRA TRE SCELTE PRIMA DI FIRMARE.", "IL SEGRETARIO HA UN DOSSIER: A LO APRE, B RINVIA. PER PV E PP TORNA DAL MEDICO AL CAMPO."] });
+        return true;
+      }
+      if (npcId === "future-split-clerk" || npcId === "future-brand-clerk") {
+        const split = npcId === "future-split-clerk";
+        context.dispatch({ kind: "setFlag", flag: split ? "future-split-reviewed" : "future-brand-reviewed" });
+        context.dispatch({ kind: "say", lines: split
+          ? ["ABBIAMO DIVISO LE SCRIVANIE. IL MUTUO È RIMASTO SU UN UNICO PIEDISTALLO.", "NEL VERBALE SCRIVIAMO CHI SI SEPARA. I PATTI DEL CAMPO RESTANO FINCHÉ UNA SCELTA NON LI VIOLA.", "TORNA ALLA LEVA DI SINISTRA: ORA PUOI AUTORIZZARE IL TRASLOCO, NON LA CANCELLAZIONE DEGLI IMPEGNI."]
+          : ["DUE LOGHI UGUALI. UNO COSTA DI PIÙ: HA GIÀ VINTO IL BANDO PER LA NOVITÀ.", "POSSIAMO RUOTARE LA SEDIA SUL MANIFESTO. CHI ASPETTA UN AUTOBUS CONTINUA A STARE IN PIEDI.", "TORNA ALLA LEVA DI DESTRA. LA GRAFICA È APPROVATA; AL CENTRO DECIDI CHI NE PAGA LE CONSEGUENZE."] });
+        return true;
+      }
+      if (npcId === "future-treasurer" || npcId === "future-money-clerk") {
+        context.dispatch({ kind: "say", lines: ["IL BILANCIO È PREVISIONALE. LE USCITE HANNO UN OTTIMO SENSO DEL PRESENTE.", ...futureAccountLines(context.state)] });
         return true;
       }
       if (npcId === "future-lever-a" || npcId === "future-lever-b") {
         const own = npcId === "future-lever-a" ? "future-lever-a-on" : "future-lever-b-on";
         const other = npcId === "future-lever-a" ? "future-lever-b-on" : "future-lever-a-on";
+        const reviewed = npcId === "future-lever-a" ? "future-split-reviewed" : "future-brand-reviewed";
+        if (!context.state.flags[own] && !context.state.flags[reviewed]) {
+          context.dispatch({ kind: "say", lines: ["PRIMA LEGGI IL VERBALE.", npcId === "future-lever-a" ? "SALA SCISSIONE, PORTA A SINISTRA. IL TRASLOCO NON ESTINGUE I DEBITI." : "SALA REBRANDING, PRIMA PORTA A DESTRA. APPROVARE UN LOGO NON È SCEGLIERE UN ALLEATO."] });
+          return true;
+        }
         if (!context.state.flags[own]) context.dispatch({ kind: "setFlag", flag: own });
         if (context.state.flags[other]) {
           context.dispatch({ kind: "setFlag", flag: "future-shortcut-open" });
-          context.dispatch({ kind: "say", lines: ["I DUE MANIFESTI COINCIDONO.", "PER LA PRIMA VOLTA, ALMENO GRAFICAMENTE.", "IL CORRIDOIO CENTRALE È APERTO."] });
+          context.dispatch({ kind: "say", lines: ["VERBALI LETTI, MANIFESTI ALLINEATI. LA SEDIA È SEMPRE QUELLA.", "AL TAVOLO CENTRALE: ALLEANZA, DISTANZA O CONTRASTO. LEGGI EFFETTI E PATTI PRIMA DI CONFERMARE."] });
         } else {
           context.dispatch({ kind: "say", lines: ["MANIFESTO RUOTATO.", "ORA MANCA L'ALTRA VERSIONE DELLA STESSA IDEA."] });
         }
         return true;
       }
       if (npcId === "future-choice-desk") {
-        if (context.state.flags["future-choice-complete"]) {
+        if (context.state.flags.futureResolved) {
+          context.dispatch({ kind: "say", lines: ["ASSEMBLEA CHIUSA. IL VERBALE NON HA UNA GOMMA.", ...futureAccountLines(context.state), "IL PRATO A EST ORA RECLUTA VANNACCIX LV43-46. IL CIRCOLO NEL RETROPALCO LIBERA UN POSTO.", "USA SUBITO TESSERA FUTURO SU VANNACCIX: RAMO FUTURORSO. AL PROSSIMO LIVELLO DIVENTA GENERORSO.", "DALLA PIAZZA, NAVETTA A OVEST PER IL VERTICE. LE CURE AL CAMPO RESTANO DISPONIBILI."] });
+        } else if (context.state.flags["future-choice-complete"]) {
           context.dispatch({ kind: "say", lines: ["SCELTA REGISTRATA.", "IL SEGRETARIO DEL DOMANI TI ASPETTA SUL PALCO."] });
         } else {
           context.dispatch({ kind: "openFutureChoice" });

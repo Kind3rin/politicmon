@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { addAlly, newCoalitionState } from "../../src/game/coalition.ts";
-import { futureRewardPatch, resolveFutureChoice } from "../../src/game/futureChapter.ts";
+import { futureAccountLines, futureRewardPatch, resolveFutureChoice } from "../../src/game/futureChapter.ts";
+import { newGameState } from "../../src/game/state.ts";
 
 function coalition(...ids: Array<"campo_secretary" | "quantum_centrist" | "civic_mayor">) {
   let state = newCoalitionState();
@@ -46,4 +47,15 @@ test("P5-T02: errori non producono patch e reward è one-shot", () => {
   assert.deepEqual(resolveFutureChoice({ choice: "distance", coalition: coalition(), money: 0, sondaggi: 50, flags: { "future-choice-complete": true } }), { ok: false, error: "already_resolved" });
   assert.equal(futureRewardPatch({})?.["feed-dossier-nord"], true);
   assert.equal(futureRewardPatch({ futureResolved: true }), null);
+});
+
+test("Future accounting names civic repairs at their actual overdue price and never settles them", () => {
+  const state = newGameState();
+  state.morale.trust = 36;
+  state.morale.promises = [{ id: "bus", status: "broken", dueAt: 3 }];
+  const before = structuredClone(state);
+  const lines = futureAccountLines(state).join(" ");
+  assert.match(lines, /FIDUCIA 36/);
+  assert.match(lines, /CORSA DEL BORGO: DA RIPARARE, 270€/);
+  assert.deepEqual(state, before);
 });

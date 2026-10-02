@@ -91,10 +91,12 @@ export interface PickupDef {
 }
 
 export interface EncounterEntry {
+  anyVersion?: boolean; // earned chapter recruitment can cross the early split
   speciesId: string;
   weight: number;
   minLv: number;
   maxLv: number;
+  requiresFlag?: string;
 }
 
 export interface EdgeDef {
@@ -126,4 +128,5 @@ export interface MapDef {
   tileOverrides?: Record<string, string>;
   buildingOverrides?: Record<string, string>; // roof family -> complete footprint PNG
   objectOverrides?: Record<string, string>; // overlay char -> anchored prop PNG
+  objectSizes?: Record<string, number>; // target pixels for a map's own prop
 }

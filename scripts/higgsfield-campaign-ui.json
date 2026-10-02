@@ -33,7 +33,8 @@
       "status": "completed",
       "model": "nano_banana_2",
       "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_75989f21-15ff-4a6b-a000-4a74e10d3991.png",
-      "sourceSha256": "b40a43723e8dedf2481a162be2a8c9db933cac400be7f40d367fc8d7666e5a5d"
+      "sourceSha256": "b40a43723e8dedf2481a162be2a8c9db933cac400be7f40d367fc8d7666e5a5d",
+      "supersededBy": "scripts/higgsfield-future.json:future"
     },
     {
       "index": 2,

@@ -158,3 +158,7 @@ lotte, focus tastiera e salvataggio verificati su Chromium e WebKit.
 [Offshore: il registro e la ricevuta](docs/OFFSHORE-REGISTRO.md): spiaggia, Lido a conchiglia, palme e Tesoriere con quattro viste. Tre nuove sfide illustrate e volontarie, negozio sull’isola e morale conservato al finale. Tre campagne riprese da salvataggi giocati superano il boss; porte, ritorno e viaggio a Bruxelles verificati in Chromium/WebKit. Redesign completo ancora in corso.
 
 [Bruxelles: tre tavoli, un lampione](docs/BRUXELLES-VERBALE.md): palazzo e caffè distinti, cast direzionale, cinque dossier volontari e finale personale del morale. Tre campagne da salvataggi giocati vincono la Commissione; porte, ritorni, cure e accesso al Campo Largo verificati nei due motori. Redesign completo ancora in corso.
+
+[Campo Largo: cornice e contratti](docs/CAMPO-CORNICE.md): cast, dossier volontari, retropalco e reclutamento con crescita realmente schierata.
+
+[Futuro Anteriore: il conto del nuovo logo](docs/FUTURO-VERBALE.md): sede e tre uffici, sette personaggi, verbali prima delle leve, scelte con patti e debiti reali. Cinque percorsi guadagnati superano il Segretario; il vivaio permette di usare la Tessera vinta per evolvere un Vannaccix appena reclutato in Futurorso. 44 risorse, 39 crediti, Chromium/WebKit e offline verificati. Il redesign completo prosegue verso il vertice diplomatico.

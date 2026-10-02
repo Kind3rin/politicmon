@@ -180,8 +180,7 @@ const WORLD_OBJECT_TARGET_PX: Record<string, number> = {
   ,"8": 96
 };
 
-function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, dx: number, dy: number): void {
-  const target = WORLD_OBJECT_TARGET_PX[ch] ?? TILE;
+function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, dx: number, dy: number, target = WORLD_OBJECT_TARGET_PX[ch] ?? TILE): void {
   const b = screen.imageBounds(img);
   const scale = target / Math.max(b.w, b.h);
   const dw = b.w * scale;
@@ -413,10 +412,10 @@ export class WorldScene implements Scene {
   // mapId -> giorno in cui l'annuncio del MOSTRO DEL GIORNO è già uscito (sessione).
   private spawnBannerShown = new Map<string, string>();
 
-  // Tabella incontri effettiva: senza le specie ESCLUSIVE dell'altra versione
-  // (GOVERNO/OPPOSIZIONE via browserSeed pari/dispari).
+  // Respect chapter gates and early version exclusives. An explicitly earned
+  // cross-version recruitment is available to both browser versions.
   private effectiveEncounters() {
-    return (this.map.encounters ?? []).filter((e) => speciesAvailable(e.speciesId, this.state.browserSeed));
+    return (this.map.encounters ?? []).filter((e) => (!e.requiresFlag || this.state.flags[e.requiresFlag]) && (e.anyVersion || speciesAvailable(e.speciesId, this.state.browserSeed)));
   }
 
   // Specie "avvistata" oggi in questa zona (weight x4), null se non ci sono incontri.
@@ -3239,7 +3238,7 @@ export class WorldScene implements Scene {
           // tile (la chioma sborda verso l'alto).
           const obj = this.objectPng(ch);
           if (obj) {
-            drawWorldObjectPng(screen, ch, obj, dx, dy);
+            drawWorldObjectPng(screen, ch, obj, dx, dy, this.map.objectSizes?.[ch]);
           }
         } else {
           const objImg = this.objectPng(ch);
@@ -3251,7 +3250,7 @@ export class WorldScene implements Scene {
             if (baseImg2) {
               drawWorldTilePng(screen, baseImg2, dx, dy);
             }
-            drawWorldObjectPng(screen, ch, objImg, dx, dy);
+            drawWorldObjectPng(screen, ch, objImg, dx, dy, this.map.objectSizes?.[ch]);
           } else {
             // Terreno del ponte (impalcato `j`) sopra l'acqua: prima l'acqua,
             // poi l'impalcato — così i bordi trasparenti del deck mostrano il mare.

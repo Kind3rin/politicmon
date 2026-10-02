@@ -1,6 +1,6 @@
 import { ALLY_NAMES, reconcileAlly, type AllyId, type CoalitionState } from "./coalition";
 import { resolvePhotoEvent } from "./photoEvent";
-import { resolveFutureChoice } from "./futureChapter";
+import { futureAccountLines, resolveFutureChoice } from "./futureChapter";
 import { resolveDiplomacyChoice } from "./diplomacyChapter";
 import { changeMorale } from "./morale";
 import type { ElectionState } from "./election";
@@ -14,8 +14,8 @@ export const CAMPAIGN_CHOICES = {
   },
   future: {
     title: "FUTURO ANTERIORE", keys: ["alliance", "distance", "opposition"], labels: ["ALLEANZA", "DISTANZA", "CONTRASTO"],
-    stories: ["GENERORSO entra nel programma dalla porta delle spese di rappresentanza.", "Il comitato paga per il tuo silenzio. La fattura lo chiama consulenza strategica.", "Il palco offre due punti di consenso. Il conto arriva alle sedie accanto."],
-    closing: "Il manifesto ha trovato un futuro. Ora deve convivere con il presente."
+    stories: ["GENERORSO chiede una sedia. Gli offri il programma; preferisce un posto con rimborso.", "Ti pagano per non salire sul palco. Sei l'unico consulente il cui lavoro si vede quando manca.", "Denunci la copia del vecchio partito. Il pubblico applaude; un alleato controlla di non essere nella fotocopia."],
+    closing: "La delibera cambia la coalizione. Le promesse civiche hanno ancora il tuo nome."
   },
   diplomacy: {
     title: "TEMPTATION DIPLOMACY", keys: ["loyalty", "autonomy", "home"], labels: ["FEDELTÀ", "AUTONOMIA", "CONSENSO"],
@@ -64,6 +64,7 @@ export function previewCampaignDecision(state: Readonly<GameState>, kind: Campai
   if (!cost && !repairTarget) lines.push("NESSUN PATTO VIOLATO.");
   if (kind === "future" && index === 0) lines.push(state.coalition.members.some(m => m.allyId === "generorso")
     ? "PATTO CON GENERORSO CONFERMATO." : "GENERORSO ENTRA NELLA COALIZIONE.");
+  if (kind === "future") lines.push(...futureAccountLines(state));
   if (kind === "diplomacy" && index === 0) lines.push("PASS PER IL VERTICE OTTENUTO.");
   if (cohesionDelta) lines.push("DA 70 COE: EXP +8%. SOTTO 30: EXP -8%. SOLO CAMPAGNA.");
   return { ok: true, patch, moneyDelta, pollsDelta, localDelta, cohesionDelta, repairTarget, lines };

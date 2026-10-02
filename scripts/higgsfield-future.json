@@ -1,0 +1,715 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 561.22,
+  "estimatedCredits": 39,
+  "assets": [
+    {
+      "id": "futuro-anteriore",
+      "kind": "briefing",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Finished full-bleed 21:9 panoramic illustration, centered vertically for a native 224x78 crop with quiet top and bottom edges. A fictional violet waistcoated party secretary in a freshly renovated convention office solemnly presents two large ivory framed diagrams that have the SAME navy chair silhouette, one frame rotated. Below, a long brass conveyor of unpaid folders circles back into the same inbox. A tiny municipal bench waits outside the glass doors. Original satire of founding a new party by changing the frame while old liabilities remain. Clear single speaker, simple wide shapes. The attached reference is a four-view sheet of the MAIN SECRETARY. The central person must be this SAME fictional grey-haired middle-aged male secretary, identical angular grey haircut, violet waistcoat over ivory rolled sleeves, navy trousers, square brass signet, two pale folded manifestos. One single view of him in the scene, no sprite-sheet grid. Do not use a young woman or dark/violet hair. Preserve mature masculine face and silver grey hair, plain blank wall banners with no emblems. Rest of environment as described. Secretary cropped at waist behind conveyor, centered.",
+      "path": "public/sprites/ui/boss/futuro-anteriore.png",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "cropTop": 54,
+      "jobId": "877a264a-7b69-4618-b730-9f98cc78b30b",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_102133_877a264a-7b69-4618-b730-9f98cc78b30b.png",
+      "sourceSha256": "cba011165537557e9d955e78788220c6f6b297d113cc6089fe3da217b32acbb0",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/futuro-anteriore.png": "f3a701d416bf09c0f183f23f45b1890b6b153465739f4d8611f456b406c2037a"
+      },
+      "cropBox": [
+        0,
+        54,
+        1344,
+        522
+      ],
+      "replacement": {
+        "jobId": "877a264a-7b69-4618-b730-9f98cc78b30b",
+        "status": "completed",
+        "reason": "Match the main secretary's inspected grey-haired cast design",
+        "referenceJobId": "f274e073-9066-4efa-9dfb-6053387d5a4c"
+      },
+      "supersededSource": {
+        "jobId": "94d6c8cb-1e48-454a-9df7-ab1aa91f54a6",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101042_94d6c8cb-1e48-454a-9df7-ab1aa91f54a6.png",
+        "sourceSha256": "fb9e95bc0bb45461fd59856774d08efebcba5224ae86c71a1a44c0d73f3e235a",
+        "outputSha256s": {
+          "public/sprites/ui/boss/futuro-anteriore.png": "c7f5df0e8a720cdf790483664da3087d28c0d5edabce59a40c9e0af556493c9a"
+        },
+        "sourceSize": [
+          1344,
+          576
+        ],
+        "cropBox": [
+          0,
+          54,
+          1344,
+          522
+        ],
+        "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Finished full-bleed 21:9 panoramic illustration, centered vertically for a native 224x78 crop with quiet top and bottom edges. A fictional violet waistcoated party secretary in a freshly renovated convention office solemnly presents two large ivory framed diagrams that have the SAME navy chair silhouette, one frame rotated. Below, a long brass conveyor of unpaid folders circles back into the same inbox. A tiny municipal bench waits outside the glass doors. Original satire of founding a new party by changing the frame while old liabilities remain. Clear single speaker, simple wide shapes."
+      }
+    },
+    {
+      "id": "future",
+      "kind": "backdrop",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Finished full-bleed 4:3 backdrop for a political-choice game interface cropped to 240x163. At the LEFT third a large polished navy office chair has TWO detachable differently colored backrests, teal and violet, both attached to the same old scuffed base. A gold binder of unpaid invoices is tied beneath the chair. An empty ivy-colored seat beside it has no backrest at all. CENTER and RIGHT calm ivory/petrol negative space for opaque UI cards. No people or text. Original satire of rebranding without changing who bears the cost.",
+      "path": "public/sprites/ui/campaign/future.png",
+      "aspectRatio": "4:3",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "cropTop": 36,
+      "jobId": "9c58e414-1df0-45cc-935a-da13b25a0e36",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101042_9c58e414-1df0-45cc-935a-da13b25a0e36.png",
+      "sourceSha256": "05eaed6cb8f8fab14a85628c646d22edde4d41cb89efcb88c7d3a30e509d40f0",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/future.png": "ca3dd4f677caf7801fd966f5f0beb30948e321f421aefe961b4a91c40d6318c7"
+      },
+      "cropBox": [
+        0,
+        36,
+        1168,
+        829
+      ]
+    },
+    {
+      "id": "hq",
+      "kind": "building",
+      "width": 128,
+      "height": 48,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. A complete isolated WIDE low convention headquarters facade. Width exactly EIGHT THIRDS of height. Ivory flat panels, navy base, violet glass clerestory, teal folded-paper roof that appears like two matching folded manifest sheets. Central DARK NAVY DOUBLE DOOR at the BOTTOM, combined width ONE QUARTER the entire building width, each leaf one eighth, gold edges. Door bottom exactly at silhouette base. Four symmetrical large windows on each side. No stairs. Perfectly flat front, no visible sides, full building fits inside silhouette.",
+      "path": "public/sprites/tiles/future_hq.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "989c93ed-0f49-4142-a89d-4d20ca58b300",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101042_989c93ed-0f49-4142-a89d-4d20ca58b300.png",
+      "sourceSha256": "30ad03e077b6f9bc4e04461582cdd941edc0aa2a3aac324f6612743cf7848cc9",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_hq.png": "0bec086be414796c9a8b8af2beb93cb8d87e9caa6bf790d2054943599493745b"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "path",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Full-frame seamless flat repeating square pixel texture: petrol teal polished outdoor paving with a single subtle gold seam, restrained wear, quiet flat surface. Uniform subtle pattern readable at 16x16. No perspective, background filled opaque.",
+      "path": "public/sprites/tiles/future_path.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "badadeb2-398d-4014-9b02-7fd995f1af2f",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101042_badadeb2-398d-4014-9b02-7fd995f1af2f.png",
+      "sourceSha256": "147e5077769272349469da037a34b985a1ea85ec7ef184bf8dabde031ae94cf7",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_path.png": "2d0b356ff6f551a3c052294233b89472c03a877480f9d2c339ea9c5ba990d343"
+      }
+    },
+    {
+      "id": "floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON RPG game terrain asset, crisp pixel art. A single square material swatch designed to become ONE 16x16 tile repeated many times. Quiet flat warm IVORY convention carpet, nearly uniform cream color, four VERY faint short grey-blue thread flecks total in the WHOLE image. No grid, no borders, no frame, no gold, no teal, no dots, no ornaments, no floral pattern, no repeating units inside image, no emblem, no shadow, no perspective, no objects, no letters. Large calm opaque cream material, deliberately understated to keep characters and menus readable.",
+      "path": "public/sprites/tiles/future_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "ca11c5a7-045d-47a5-811c-c86d7cf91272",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_102512_ca11c5a7-045d-47a5-811c-c86d7cf91272.png",
+      "sourceSha256": "01aa7b7f5bf8ad2804258ddf82972cfe6d891a8292ec83ca32a3d08884bf86a4",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_floor.png": "94f775612f8be2db85a7b9a777f3ee3e811592efc670c8435cb61c520216ffcc"
+      },
+      "replacement": {
+        "jobId": "ca11c5a7-045d-47a5-811c-c86d7cf91272",
+        "status": "completed",
+        "reason": "Quiet single-material tile after native 240x180 legibility inspection"
+      },
+      "supersededSource": {
+        "jobId": "3e755fe8-ad28-4f6c-a0d4-a34bd56fb9e2",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101042_3e755fe8-ad28-4f6c-a0d4-a34bd56fb9e2.png",
+        "sourceSha256": "f5e75e74b6e975e06d22d84d0b8bf6e5d7bf059c8ca63f506aaead86ae2f5d69",
+        "outputSha256s": {
+          "public/sprites/tiles/future_floor.png": "27e03404d2a95a54b2a627a911ea6feb00b68cacd99a616d529d19c073cc1a5d"
+        },
+        "sourceSize": [
+          1024,
+          1024
+        ],
+        "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Full-frame seamless flat repeating square pixel texture: ivory large convention carpet squares with a very faint violet edge, no objects. Uniform subtle pattern readable at 16x16. No perspective, background filled opaque."
+      }
+    },
+    {
+      "id": "split_floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Full-frame seamless flat repeating square pixel texture: muted violet carpet with one straight gold seam, flat seamless texture, no literal gap or objects. Uniform subtle pattern readable at 16x16. No perspective, background filled opaque.",
+      "path": "public/sprites/tiles/future_split_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "22d990ec-56f0-4b57-8799-58e413a5b2a2",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101042_22d990ec-56f0-4b57-8799-58e413a5b2a2.png",
+      "sourceSha256": "481a762a32cbf740b12f7b709ae2b30ec050eabdfaa8c155e381af5079282f3c",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_split_floor.png": "40d306dee79bde31b8470b34e93d7cea9808ee58199f55a4ca0a03150ee4f876"
+      }
+    },
+    {
+      "id": "brand_floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Full-frame seamless flat repeating square pixel texture: cool petrol teal ceramic flooring with subtle pale grid seams, no objects. Uniform subtle pattern readable at 16x16. No perspective, background filled opaque.",
+      "path": "public/sprites/tiles/future_brand_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "cd337741-8dd5-4d8c-a989-2753db8620d7",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101145_cd337741-8dd5-4d8c-a989-2753db8620d7.png",
+      "sourceSha256": "6a8cbc071083dfff03b2e9d69690763af646a3c045c7377627f3ac1c7fdbec98",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_brand_floor.png": "0b6b80e40bde6fe077c9d988839b2b2909da7b4da4fc5f2729d42bb74f02f7d5"
+      }
+    },
+    {
+      "id": "money_floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Full-frame seamless flat repeating square pixel texture: deep midnight navy flooring with soft ivory paper-like grain, no objects. Uniform subtle pattern readable at 16x16. No perspective, background filled opaque.",
+      "path": "public/sprites/tiles/future_money_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "618593f1-4b31-43df-8d58-da945ca83540",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101145_618593f1-4b31-43df-8d58-da945ca83540.png",
+      "sourceSha256": "60f6c727fce37abc797d639716012c29a7d5d248b3579e25787a00854273d074",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_money_floor.png": "9e1ee8b4916322149dd4f31fa0cf153f6226573ab2c6610a42ac43f8f4eec7a5"
+      }
+    },
+    {
+      "id": "wall",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON RPG game terrain asset, crisp pixel art. A single square material swatch designed to become ONE 16x16 tile repeated many times. Quiet flat dark PETROL NAVY convention wall swatch. ONE very thin muted VIOLET horizontal seam across image at its lower edge, occupying under one twentieth of height. Rest is calm uniform navy, at most two faint pixel flecks. No grid, no multiple panels, no vertical stripes, no gold, no cream, no border frames, no ornaments, no pattern repeats within image, no shadows, no perspective, no objects, no letters. Opaque restrained dark wall material contrasts with ivory floors and grey-haired characters.",
+      "path": "public/sprites/tiles/future_wall.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "b7409a79-df86-49de-966b-61573ad63007",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_102719_b7409a79-df86-49de-966b-61573ad63007.png",
+      "sourceSha256": "e7beafad64ec4306d548a94f1d0c8b4f3f6b999b2f5e36394a05261851cc811b",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_wall.png": "ed3f6fceb480d9e4b9b2ed112e7c4021212ba8ce10c3ffbaa5c876c4d8056056"
+      },
+      "replacement": {
+        "jobId": "520f9501-dd6c-49b7-b2bd-1734b3439c1a",
+        "status": "failed",
+        "reason": "Quiet single-material tile after native 240x180 legibility inspection",
+        "retryJobId": "b7409a79-df86-49de-966b-61573ad63007",
+        "retryStatus": "completed"
+      },
+      "supersededSource": {
+        "jobId": "1a0b9268-a4c8-4a1d-97dc-12dbc1a53a63",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101146_1a0b9268-a4c8-4a1d-97dc-12dbc1a53a63.png",
+        "sourceSha256": "a0e5cea755d25483a1181f1b34750cbfa1a22bc0e9b290b3b9cfc0ea9facc577",
+        "outputSha256s": {
+          "public/sprites/tiles/future_wall.png": "20a60154a539f498beb8163cc35cdb5c249387f4bf8c919cb5894a95e441948c"
+        },
+        "sourceSize": [
+          1024,
+          1024
+        ],
+        "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Full-frame seamless flat repeating square pixel texture: ivory convention wall panels with a violet narrow trim and small dark seam, flat texture no objects. Uniform subtle pattern readable at 16x16. No perspective, background filled opaque."
+      }
+    },
+    {
+      "id": "stage",
+      "kind": "object",
+      "width": 64,
+      "height": 40,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. A small low violet convention dais with a navy lectern and two big identical ivory manifest sheets on matching gold frames. Left sheet perfectly vertical, right tilted sideways. One empty gold chair between them. No microphone wires or people. Wide frontal silhouette.",
+      "path": "public/sprites/tiles/future_stage.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "418aa5d8-5227-40c1-8cc3-3e380112fd27",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101145_418aa5d8-5227-40c1-8cc3-3e380112fd27.png",
+      "sourceSha256": "b91cd0dc538092cf75ce03e8045cd27dd3f2905c71c34156e5817deb9f0e5bfe",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_stage.png": "236f480338bfdffee540a6a8cf712b62fc6b443b6d119a88211774726585005f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "lever_a",
+      "kind": "object",
+      "width": 32,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. An isolated small ivory swivel manifesto stand with a big navy chair silhouette on the board, brass pivot pin, teal turning handle pointing left, violet square pedestal. Broad simple shapes.",
+      "path": "public/sprites/tiles/future_lever_a.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "b88970b5-81ef-4d01-afc5-e36b8ac9d2b6",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101146_b88970b5-81ef-4d01-afc5-e36b8ac9d2b6.png",
+      "sourceSha256": "77838a383c34ebdbd0b37814f1735aae8c7abde19accf885a5b9ee244f5d1ebd",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_lever_a.png": "83fcde1d05820f930d77929ac01163722614d9bcffadee71c3d0e749f0fa152e"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "lever_b",
+      "kind": "object",
+      "width": 32,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. An isolated small ivory swivel manifesto stand with a big navy chair silhouette on the board, brass pivot pin, violet turning handle pointing right, teal square pedestal. Broad simple shapes.",
+      "path": "public/sprites/tiles/future_lever_b.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "ba314e50-506b-42b0-bd4b-9ef0461f09b5",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101145_ba314e50-506b-42b0-bd4b-9ef0461f09b5.png",
+      "sourceSha256": "465425eee428303843f48685ec588470b0aad9a33ec07cd1aa4baa576dbce0ba",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_lever_b.png": "573bb65a1683d1e95abe7bda3500d8d7b74eb538643463f540d4751ed43b01be"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "split_desk",
+      "kind": "object",
+      "width": 48,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. An isolated wide bureaucratic desk cleanly split into TWO desk halves. Both halves have a violet briefcase and ivory folder, each half firmly bolted onto the same navy base. One gold latch spans the split. Broad frontal office silhouette, no person.",
+      "path": "public/sprites/tiles/future_split_desk.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "d9eb4846-74bb-40f9-a43e-82ef479aff70",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101242_d9eb4846-74bb-40f9-a43e-82ef479aff70.png",
+      "sourceSha256": "87a205064571fe28808b7a255cb1fc64fef40b91e7068ad707e9f304bef16666",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_split_desk.png": "6429f0ba8f24b5908b05f25af2a90876d56514814a104014fecf3a5450af7a57"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "brand_desk",
+      "kind": "object",
+      "width": 48,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. An isolated low teal design studio table supporting two large blank square logo mockup boards. Both show the same simple dark navy chair silhouette, one board slightly rotated. Violet paint pot and gold brush at the side, no person. Strong readable forms.",
+      "path": "public/sprites/tiles/future_brand_desk.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "ea1ce430-375a-4307-a845-58f9db8894f6",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101242_ea1ce430-375a-4307-a845-58f9db8894f6.png",
+      "sourceSha256": "dacb22ba647ae120a27acb6516faf42e90f3551a91a64acb88eb98a6e02d7a25",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_brand_desk.png": "527f323ee994732a5e535e4393527172114460b5918b7ad564ac47831d234d62"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "money_desk",
+      "kind": "object",
+      "width": 48,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. An isolated navy accountant counter with a wide OPEN EMPTY safe underneath. On top a neat tall ivory pile of unpaid folders and a gold hourglass completely empty in its upper bulb. Violet tray receives one blank bill. Large simple silhouette, no person.",
+      "path": "public/sprites/tiles/future_money_desk.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "cc464cc6-8971-44a6-81aa-01ee121555a1",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101242_cc464cc6-8971-44a6-81aa-01ee121555a1.png",
+      "sourceSha256": "02c214a74102235ba81166bd2e142260014cc106e3081fa7b7d1bb5dd067e26d",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_money_desk.png": "4024a5129eeb5535464636899d26221c8ad842f9fe23d9c768009941e688a35a"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "navetta",
+      "kind": "object",
+      "width": 48,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. One isolated complete game asset on fully transparent clean alpha background, no ground plane, shadow, matte or glow. Orthographic straight frontal RPG view. An isolated short navy diplomatic shuttle boarding shelter, teal glass roof and a single gold empty seat behind violet rope. A plain ivory folded ticket hangs at one side. No vehicle, no text, no people. Wide clear silhouette.",
+      "path": "public/sprites/tiles/future_navetta.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "4842a498-bae6-4bd0-a83c-9ede0c65773d",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101242_4842a498-bae6-4bd0-a83c-9ede0c65773d.png",
+      "sourceSha256": "18eb92b0c4c2aba55615f698beffe142e9203a16c9dbd8851aa5cff17f598a58",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/future_navetta.png": "2223607c69f427532adb8b61150fa86242c73756d8c8fca8a417fc590a6819db"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "reception",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional short-haired auburn female accreditation clerk in ivory jacket, teal trousers, violet lanyard, holding a huge blank gold-edged temporary badge. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-reception_south.png",
+        "public/sprites/chars/npc_future-reception_north.png",
+        "public/sprites/chars/npc_future-reception_west.png",
+        "public/sprites/chars/npc_future-reception_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "f02791df-80b4-4b63-99e0-a85c8693c7d3",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101242_f02791df-80b4-4b63-99e0-a85c8693c7d3.png",
+      "sourceSha256": "b31706ef78fa1e27f2d44fde062a1e263ec44262f78eebb4af7e02bdf9e437f1",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-reception_south.png": "c9448132e8457131441ff3ade937fce626fe5bcda5687e1a25001fe7d0bb0a01",
+        "public/sprites/chars/npc_future-reception_north.png": "2b0eaaa18cfbccf42ce74bce80af7aadad6c85813aa3e04bd5e39c2bc863a768",
+        "public/sprites/chars/npc_future-reception_west.png": "6d950d5ede17ead55565e53daf6c525c0dbc8ec96cbdc60b5d79783900d1d010",
+        "public/sprites/chars/npc_future-reception_east.png": "ba86199ac561a2296b0133b3cd4b278742339b42b916f0b02a0228c51ed54814"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "reporter",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional curly-haired dark-skinned male reporter in teal jacket and ivory trousers, holding a short navy microphone and violet notebook. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-reporter_south.png",
+        "public/sprites/chars/npc_future-reporter_north.png",
+        "public/sprites/chars/npc_future-reporter_west.png",
+        "public/sprites/chars/npc_future-reporter_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "eafddb28-ec28-45aa-853e-b396683c145e",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101242_eafddb28-ec28-45aa-853e-b396683c145e.png",
+      "sourceSha256": "f615bea6022ed25e28bd7122edf38e7e64c5909e64a1d317242f4800193fa4a4",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-reporter_south.png": "e5d5246e60fb87ec31d549176a68f8752bc15e2f8d8f59afa02a39dbc467f323",
+        "public/sprites/chars/npc_future-reporter_north.png": "94f398c1248036be8b28137e8831cdf1024b64ce5c18d542871afb330d834f9f",
+        "public/sprites/chars/npc_future-reporter_west.png": "6fde6ceab40dc5916256c1dda58d97f09915386e8f387901de68eea220c4c3d5",
+        "public/sprites/chars/npc_future-reporter_east.png": "dcdb021f4231cd94fcb2823c364b2948e8f7d74787af1576cd24983a6257d4b2"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "treasurer",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional elderly female accountant with round brass glasses, navy bob haircut, violet cardigan, holding a wide ivory folder with one blank gold receipt sticking out. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-treasurer_south.png",
+        "public/sprites/chars/npc_future-treasurer_north.png",
+        "public/sprites/chars/npc_future-treasurer_west.png",
+        "public/sprites/chars/npc_future-treasurer_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "7befc211-b068-4c5c-a218-a1e6d8457fd7",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101331_7befc211-b068-4c5c-a218-a1e6d8457fd7.png",
+      "sourceSha256": "e2a134686dd331010aa358d872342362765de2d925cd855ce6d42e463091e505",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-treasurer_south.png": "fc11410dfb747b444106d10e45543b39da2bc0a6dd913edb3ef50b196616dd91",
+        "public/sprites/chars/npc_future-treasurer_north.png": "dd00498a85c1da84a184335549e1ee202d4e289278ceee0e5b2d6c54649043ed",
+        "public/sprites/chars/npc_future-treasurer_west.png": "36e33d10e8d27edace201eb5f390d4db6900c6695e404d9113ce1046a2dff4ce",
+        "public/sprites/chars/npc_future-treasurer_east.png": "9b6e70f5b889e6250b603e8e2ca5f157bea11d4f6df5e49e1be03b59fc29ea6f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "secretary",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional middle-aged male convention secretary with angular grey hair, violet waistcoat, ivory rolled sleeves, navy trousers and a square brass signet; holds two identical pale folded manifestos. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-secretary_south.png",
+        "public/sprites/chars/npc_future-secretary_north.png",
+        "public/sprites/chars/npc_future-secretary_west.png",
+        "public/sprites/chars/npc_future-secretary_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "f274e073-9066-4efa-9dfb-6053387d5a4c",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101331_f274e073-9066-4efa-9dfb-6053387d5a4c.png",
+      "sourceSha256": "fc5acaea3634404c9484df9ccc27bb70bf6edae030d3f3180997cd76b70b5744",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-secretary_south.png": "b87065520f66d0dd15bea816ee18e4012808230725d6c5fe8bd1d1152d2a3347",
+        "public/sprites/chars/npc_future-secretary_north.png": "db65234a0202de7a1bac726902171b3bc1a2355829c7946069bbf95b2fef8fd9",
+        "public/sprites/chars/npc_future-secretary_west.png": "da237a68c1f04466c631660011671088f57f8df304265af50cb50ad1df5ab698",
+        "public/sprites/chars/npc_future-secretary_east.png": "f6f7cedaefefa2f7e37d691456398271d86ffe70c5f625d6783d79dba12d2544"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "guard",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional stocky female convention usher with short dark hair, navy jacket, teal sash and violet square clipboard, calm unamused expression. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-guard_south.png",
+        "public/sprites/chars/npc_future-guard_north.png",
+        "public/sprites/chars/npc_future-guard_west.png",
+        "public/sprites/chars/npc_future-guard_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "1d637154-783d-46e0-8138-bd559f0a02e0",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101332_1d637154-783d-46e0-8138-bd559f0a02e0.png",
+      "sourceSha256": "f7e41e0ed8e74e0b98ce10f48f0bdf24f295d18b07cd08ee48833e4c428a4038",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-guard_south.png": "289cf0443681f255f3687fa6ba33c727d0296d2da9c8f5d111397ae444efb4dd",
+        "public/sprites/chars/npc_future-guard_north.png": "495071d5214122511a013447f7277f8985d7194acff0065d2f3d73370140244c",
+        "public/sprites/chars/npc_future-guard_west.png": "ac6cb37efa05015f3857815b6b8a9d26abcbe51774c66d4ca3c747262f5de3f2",
+        "public/sprites/chars/npc_future-guard_east.png": "d2adcf2d57fcba32310147e1cfae40f9068335d0d4f02d457beb463a4dd97348"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "split",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional bald male archive clerk with tiny round glasses, violet overshirt, navy trousers, holding TWO matching ivory briefcases. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-split_south.png",
+        "public/sprites/chars/npc_future-split_north.png",
+        "public/sprites/chars/npc_future-split_east.png",
+        "public/sprites/chars/npc_future-split_west.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "29b5d91d-b2a8-4540-be10-d34463607ae0",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101331_29b5d91d-b2a8-4540-be10-d34463607ae0.png",
+      "directionCorrection": "Source bottom-left faces east; bottom-right west. Labelled by inspected direction.",
+      "sourceSha256": "c034bc215194391c91b9d2a520469c9fbd4ef682e42c318fe5f13088db82981c",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-split_south.png": "c877d9057922773f2b79148710438f8deb1c29ee5a09040b539d2478e0f241a8",
+        "public/sprites/chars/npc_future-split_north.png": "32f0744a8c2b5a9efc9f8881d0fc5436ef49e05d4b4d11ffe906608e578e2c49",
+        "public/sprites/chars/npc_future-split_east.png": "882938ea0ec71cc44721fabc92fa65077c97ea9002d83c3b3d6d365464dbf436",
+        "public/sprites/chars/npc_future-split_west.png": "42c6d042fc69419a741d222805b564241bd9a31ccbc65e511bd8c3335f2fde99"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "brand",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG. Deliberate crisp pixel art, bold simple silhouettes readable at tiny native game scale. Restrained ivory, midnight navy, petrol teal, violet and brass gold palette, cool convention lighting. No text, letters, numbers, brands, emblems, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism, blurry painting or isometric angle. Transparent PNG sprite sheet with a strict TWO BY TWO grid of four separate full-body sprites of the SAME a fictional young female graphic designer with short violet hair, teal jumpsuit and ivory sneakers, carrying a large plain gold frame. Top-left faces SOUTH/front, top-right NORTH/back, bottom-left WEST/left profile, bottom-right EAST/right profile. Each body centered within its own quadrant, generous transparent gutter, identical clothes and proportions all four views, feet fully visible, no panel borders, no props extending between quadrants, no shadows. Deliberate chunky RPG pixels and enlarged head, readable in 24x32.",
+      "outputs": [
+        "public/sprites/chars/npc_future-brand_south.png",
+        "public/sprites/chars/npc_future-brand_north.png",
+        "public/sprites/chars/npc_future-brand_west.png",
+        "public/sprites/chars/npc_future-brand_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "jobId": "93d82e82-b421-45cb-82b3-27e175389d75",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_101331_93d82e82-b421-45cb-82b3-27e175389d75.png",
+      "sourceSha256": "390f45fb21b1fc9b1d7990e55c3d4a2023d7955fc1956c84b7cb792af05861ee",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_future-brand_south.png": "3ff12b2b69f563fb1333e88b54e339f24d4c9181a799ac4e8960929a81b6bb61",
+        "public/sprites/chars/npc_future-brand_north.png": "ef50eb9a325b6e048ceb5a558942478759457e7a1757ec303f8f98f738d95fec",
+        "public/sprites/chars/npc_future-brand_west.png": "08311523675609faf04ea4a49ea90c2dd31c941722da91616c9e8179f058ae72",
+        "public/sprites/chars/npc_future-brand_east.png": "196abfb82d1f423995b8633212c935a0a9838111bcf7c749dd01ee9dcb0f17d8"
+      },
+      "alphaCutoff": 128
+    }
+  ],
+  "creditsSpent": 39,
+  "balanceAfter": 522.22,
+  "initialEstimatedCredits": 34.5,
+  "generationAttempts": 27,
+  "completedGenerations": 26,
+  "failedRefundedGenerations": 1
+}

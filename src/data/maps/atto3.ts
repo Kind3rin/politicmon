@@ -41,15 +41,15 @@ const FUTURO_PLAZA_TILES = [
   "TT....ffffffffff..TT",
   "TT....f====1===f..TT",
   "TT....f========f..TT",
-  "TT....ffff==ffff..TT",
+  "TT....ffff==ffff~~TT",
   "TT........==......TT",
   "TT..3.....==....3.TT",
   "TT........==......TT",
-  "TT....ffff==ffff..TT",
-  "TT....f===8====f..TT",
-  "TT....f===dd===f..TT",
-  "TT....ffff==ffff..TT",
-  "TT........==......TT",
+  "TT....fvvvvvvvvf..TT",
+  "TT.7..fvvvvvvvvf..TT",
+  "TT....fmmmddmmmf..TT",
+  "TT....ffff==ffff~~TT",
+  "TT........==....~~TT",
   "TTTTTTTTTT==TTTTTTTT"
 ];
 
@@ -59,10 +59,10 @@ const FUTURO_HQ_TILES = [
   "AppppppppppppppppA",
   "AppppppppppppppppA",
   "AppppppppppppppppA",
-  "AppppppppppppppppA",
+  "App4ppppppppp5pppA",
   "AppPpppppppppppPpA",
   "AppppppppppppppppA",
-  "ApppphhhhhhhhppppA",
+  "AppppppppppppppppA",
   "AppppppppppppppppA",
   "AppppppppppppppppA",
   "ApppppppccpppppppA",
@@ -78,6 +78,39 @@ const FUTURO_SIDE_ROOM_TILES = [
   "AppppppppA",
   "ApppccpppA",
   "AAAAAAAAAA"
+];
+
+const FUTURO_SPLIT_TILES = [
+  "AAAAAAAAAA",
+  "AbbbpppppA",
+  "AppppppppA",
+  "Apppppp6pA",
+  "AppppppppA",
+  "AbppppppbA",
+  "ApppccpppA",
+  "AAAAAAAAAA",
+];
+
+const FUTURO_BRAND_TILES = [
+  "AAAAAAAAAA",
+  "AppppppppA",
+  "AppPpppppA",
+  "Apppppp6pA",
+  "AppppppppA",
+  "AppppPpppA",
+  "ApppccpppA",
+  "AAAAAAAAAA",
+];
+
+const FUTURO_MONEY_TILES = [
+  "AAAAAAAAAA",
+  "AbbppppbbA",
+  "AppppppppA",
+  "Apppppp6pA",
+  "AppppppppA",
+  "AppPpppppA",
+  "ApppccpppA",
+  "AAAAAAAAAA",
 ];
 
 const DIPLOMACY_LOBBY_TILES = [
@@ -296,10 +329,13 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     id: "futuro_piazza",
     name: "FUTURO ANTERIORE",
     tiles: FUTURO_PLAZA_TILES,
+    tileOverrides: { "=": "tiles/future_path.png" },
+    buildingOverrides: { v: "tiles/future_hq.png" },
+    objectOverrides: { "1": "tiles/future_stage.png", "7": "tiles/future_navetta.png" },
     outdoor: true,
     allowWanderers: false,
-    encounterRate: 0,
-    encounters: [],
+    encounterRate: 0.14,
+    encounters: [{ speciesId: "vannaccix", weight: 100, minLv: 43, maxLv: 46, requiresFlag: "futureResolved", anyVersion: true }],
     music: "social_tension",
     warps: [
       { x: 10, y: 10, toMap: "futuro_sede", toX: 8, toY: 10, facing: "up" },
@@ -308,26 +344,27 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       { x: 11, y: 13, toMap: "campo_largo", toX: 20, toY: 9, facing: "down" }
       ,{
         x: 2, y: 8, toMap: "diplomacy_lobby", toX: 9, toY: 10, facing: "up",
-        requiresFlag: "futureResolved", confirm: "PARTI PER IL VERTICE TEMPTATION DIPLOMACY?"
+        requiresFlag: "futureResolved", markerLabel: "VERTICE", lockedLines: ["NAVETTA SOSPESA.", "LEGGI LE DUE SALE, AZIONA LE LEVE E REGISTRA UNA SCELTA. POI SFIDA IL SEGRETARIO DAL SUO DOSSIER."], confirm: "PARTI PER IL VERTICE TEMPTATION DIPLOMACY?"
       }
     ],
     signs: [
       { x: 5, y: 5, lines: ["FUTURO ANTERIORE.", "IL NOME DEFINITIVO SARÀ ANNUNCIATO DOMANI."] },
+      { x: 15, y: 12, lines: ["VIVAIO DELLE CORRENTI: APRE DOPO IL SEGRETARIO.", "RECLUTA VANNACCIX, USA SUBITO TESSERA FUTURO. IL CIRCOLO AL CAMPO LIBERA UN POSTO."] },
       { x: 15, y: 5, lines: ["CONVENTION APERTA.", "L'USCITA DAL VECCHIO PARTITO È RISERVATA AGLI ISCRITTI."] }
     ],
     pickups: [],
     npcs: [
       {
-        id: "future-reception", pal: "aide", x: 9, y: 6, facing: "down",
-        lines: ["RECEPTION: ecco il BADGE PROVVISORIO DEFINITIVO.", "ENTRA NELLA SEDE. IL FUTURO HA GIÀ CAMBIATO SALA."]
+        id: "future-reception", spriteSet: "future-reception", wander: false, pal: "aide", x: 9, y: 6, facing: "down",
+        lines: []
       },
       {
-        id: "future-reporter", pal: "journalist", x: 4, y: 8, facing: "right",
-        lines: ["È UNA SCISSIONE?", "NO: È UN AVANZAMENTO SEPARATO, MA IL TITOLO È PIÙ LUNGO."]
+        id: "future-reporter", spriteSet: "future-reporter", wander: false, pal: "journalist", x: 4, y: 8, facing: "right",
+        lines: ["HO CHIESTO COSA CAMBIA. MI HANNO MANDATO DUE LOGHI E UN PREVENTIVO.", "DALLA PIAZZA PUOI TORNARE AL MEDICO DEL CAMPO. I PP NON SI RIGENERANO CAMBIANDO CORRENTE."]
       },
       {
-        id: "future-treasurer", pal: "aide", x: 16, y: 8, facing: "left",
-        lines: ["TESORERIA DEL DOMANI.", "IL SALDO ARRIVA DOPODOMANI."]
+        id: "future-treasurer", spriteSet: "future-treasurer", wander: false, pal: "aide", x: 16, y: 8, facing: "left",
+        lines: []
       }
     ]
   },
@@ -335,6 +372,9 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     id: "futuro_sede",
     name: "SEDE DEL DOMANI",
     tiles: FUTURO_HQ_TILES,
+    tileOverrides: { p: "tiles/future_floor.png", A: "tiles/future_wall.png" },
+    objectOverrides: { "4": "tiles/future_lever_a.png", "5": "tiles/future_lever_b.png" },
+    objectSizes: { "5": 32 },
     outdoor: false,
     music: "social_tension",
     warps: [
@@ -345,48 +385,54 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       { x: 15, y: 4, toMap: "futuro_tesoreria", toX: 4, toY: 5, facing: "up" }
     ],
     signs: [
-      { x: 2, y: 1, lines: ["MANIFESTO A:", "TRADIZIONE DEL FUTURO, EDIZIONE RIVEDUTA."] },
-      { x: 15, y: 1, lines: ["MANIFESTO B:", "NOVITÀ DEL PASSATO, VERSIONE DEFINITIVA."] }
+      { x: 2, y: 1, lines: ["PORTA SCISSIONE A SINISTRA.", "IL VERBALE PRECEDE LA LEVA DI SINISTRA."] },
+      { x: 15, y: 1, lines: ["REBRANDING A DESTRA, TESORERIA IN FONDO.", "LEGGI IL PROGETTO, POI LA LEVA DI DESTRA. I CONTI NON CAMBIANO FONT."] }
     ],
     pickups: [],
     npcs: [
-      { id: "future-lever-a", pal: "aide", x: 4, y: 6, facing: "right", lines: [] },
-      { id: "future-lever-b", pal: "aide", x: 14, y: 6, facing: "left", lines: [] },
+      { id: "future-lever-a", spriteSet: "future-split", wander: false, pal: "aide", x: 4, y: 6, facing: "right", lines: [] },
+      { id: "future-lever-b", spriteSet: "future-brand", wander: false, pal: "aide", x: 14, y: 6, facing: "left", lines: [] },
       {
-        id: "future-barrier", pal: "guard", x: 8, y: 5, facing: "down", hideIfFlag: "future-shortcut-open",
-        lines: ["DUE MANIFESTI, DUE LEVE.", "FINCHÉ NON COINCIDONO, IL CENTRO RESTA CHIUSO."]
+        id: "future-barrier", spriteSet: "future-guard", wander: false, pal: "guard", x: 8, y: 5, facing: "down", hideIfFlag: "future-shortcut-open",
+        lines: ["DUE MANIFESTI, DUE LEVE.", "LEGGI SCISSIONE E REBRANDING, POI AZIONA LE LEVE. IL TAVOLO CENTRALE APRIRÀ."]
       },
       {
-        id: "future-choice-desk", pal: "boss", x: 8, y: 3, facing: "down", showIfFlag: "future-shortcut-open",
+        id: "future-choice-desk", spriteSet: "future-secretary", wander: false, pal: "boss", x: 8, y: 3, facing: "down", showIfFlag: "future-shortcut-open",
         lines: []
       },
       {
-        id: "future-boss", pal: "boss", x: 8, y: 1, facing: "down", trainerId: "futuro-anteriore",
-        sightRange: 2, showIfFlag: "future-choice-complete",
-        lines: ["DOMANI PRESENTEREMO IL NOME DEFINITIVO DI DOMANI."]
+        id: "future-boss", spriteSet: "future-secretary", wander: false, pal: "boss", x: 8, y: 1, facing: "down", trainerId: "futuro-anteriore",
+        showIfFlag: "future-choice-complete",
+        lines: ["IL FUTURO HA VINTO. IL RIMBORSO CHIEDE ANCORA LA RICEVUTA."]
       }
     ]
   },
   futuro_scissione: {
-    id: "futuro_scissione", name: "SALA SCISSIONE", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "futuro_scissione", name: "SALA SCISSIONE", tiles: FUTURO_SPLIT_TILES,
+    tileOverrides: { p: "tiles/future_split_floor.png", A: "tiles/future_wall.png" },
+    objectOverrides: { "6": "tiles/future_split_desk.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }],
+    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 3, toY: 5, facing: "down" }],
     signs: [{ x: 1, y: 1, lines: ["VERBALE DI SEPARAZIONE.", "MOTIVO: TROPPA UNITÀ NELLA STESSA DIREZIONE."] }], pickups: [],
-    npcs: [{ id: "future-split-clerk", pal: "aide", x: 4, y: 3, facing: "down", lines: ["NON È UNA SCISSIONE.", "ABBIAMO SOLO SMESSO DI ESSERE INSIEME CONTEMPORANEAMENTE."] }]
+    npcs: [{ id: "future-split-clerk", spriteSet: "future-split", wander: false, pal: "aide", x: 4, y: 3, facing: "down", lines: [] }]
   },
   futuro_rebrand: {
-    id: "futuro_rebrand", name: "SALA REBRANDING", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "futuro_rebrand", name: "SALA REBRANDING", tiles: FUTURO_BRAND_TILES,
+    tileOverrides: { p: "tiles/future_brand_floor.png", A: "tiles/future_wall.png" },
+    objectOverrides: { "6": "tiles/future_brand_desk.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }],
+    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 13, toY: 5, facing: "down" }],
     signs: [{ x: 1, y: 1, lines: ["BOZZA LOGO 47-B.", "COME IL PRECEDENTE, MA RIVOLTO VERSO DOMANI."] }], pickups: [],
-    npcs: [{ id: "future-brand-clerk", pal: "influencer", x: 4, y: 3, facing: "down", lines: ["IL NOME È PROVVISORIO.", "IL FONT, INVECE, È GIÀ STATO RIELETTO ALL'UNANIMITÀ."] }]
+    npcs: [{ id: "future-brand-clerk", spriteSet: "future-brand", wander: false, pal: "influencer", x: 4, y: 3, facing: "down", lines: [] }]
   },
   futuro_tesoreria: {
-    id: "futuro_tesoreria", name: "TESORERIA FUTURA", tiles: FUTURO_SIDE_ROOM_TILES,
+    id: "futuro_tesoreria", name: "TESORERIA FUTURA", tiles: FUTURO_MONEY_TILES,
+    tileOverrides: { p: "tiles/future_money_floor.png", A: "tiles/future_wall.png" },
+    objectOverrides: { "6": "tiles/future_money_desk.png" },
     outdoor: false, music: "social_tension",
-    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }],
+    warps: [{ x: 4, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }, { x: 5, y: 6, toMap: "futuro_sede", toX: 15, toY: 5, facing: "down" }],
     signs: [{ x: 1, y: 1, lines: ["BILANCIO PREVISIONALE.", "ENTRATE: DOMANI. USCITE: GIÀ OGGI."] }], pickups: [],
-    npcs: [{ id: "future-money-clerk", pal: "aide", x: 4, y: 3, facing: "down", lines: ["LA CASSA È VUOTA, MA MOLTO MODERNA.", "ACCETTIAMO FINANZIAMENTI IN TEMPO FUTURO."] }]
+    npcs: [{ id: "future-money-clerk", spriteSet: "future-treasurer", wander: false, pal: "aide", x: 4, y: 3, facing: "down", lines: [] }]
   },
   diplomacy_lobby: {
     id: "diplomacy_lobby", name: "HOTEL DIPLOMATICO", tiles: DIPLOMACY_LOBBY_TILES,

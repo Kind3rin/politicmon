@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "balanceBefore": 617.97,
+  "estimatedCredits": 0.25,
+  "assets": [
+    {
+      "id": "stagista",
+      "path": "public/sprites/ui/boss/stagista.png",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON, original satirical Italian political RPG. Finished modern pixel art panorama, readable when reduced to 224 by 78 pixels. Navy, ivory, mint, burgundy with restrained gold, chunky crisp pixels, strong silhouettes, theatrical lighting, no readable letters, no words, no numbers, no logos, no interface. A young fictional TV production intern with short dark bob hair, rolled sleeves, mint lanyard, burgundy trousers, holding a plain ivory clipboard. She stands confidently beside a disconnected studio camera and two mismatched debate stools; she is checking a microphone while a huge glamorous gold stage is visible far behind the practical backstage work lights. Character centered and readable, full upper body, not a portrait of a real person. Horizontal composition, all content inside safe middle 80%, a quiet dark band at top for runtime title overlay. The joke is that the backstage technician is the only person doing actual preparation.",
+      "model": "gpt_image_2_5",
+      "jobId": "fa22c028-2678-4fd6-a607-1f69dbef0ef3",
+      "backendModel": "gpt_image_2_5",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_014637_fa22c028-2678-4fd6-a607-1f69dbef0ef3.png",
+      "crop": "top panorama, original width; height = width * 78 / 224; native nearest resize",
+      "sourceSha256": "3c73cb16f7afc23239561b6e3c7b9cfd5c4392f9c66f4e4a9f34406e8a1bce79",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "outputSha256": "b79e4aece7420ca1767a9a598a6bbce78048ba5b5a5a99e77a16f7fe158e2050"
+    }
+  ],
+  "balanceAfter": 617.72,
+  "creditsSpent": 0.25
+}

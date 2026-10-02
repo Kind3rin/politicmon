@@ -62,20 +62,26 @@ try {
       const foe = createMonster("renzino", 20);
       const battle = new BattleScene(stack, input, { state: battleState, foeTeam: [foe], onEnd: () => {} });
       const steps = battle.foeFaintedSteps();
-      const expected = Math.floor(expYield(foe, false) * multiplier);
+      const expected = Math.floor(expYield(foe, false, battleState.party[0].level) * multiplier);
       if (!steps.some((step) => step.text?.includes(`guadagna ${expected} PUNTI`))) throw new Error("Coesione non applicata al premio PVE");
     }
     const socialState = newGameState(); socialState.party = [createMonster("giorgetta", 20)]; socialState.money = 5000;
     socialState.morale.trust = 80; socialState.sondaggi = 80;
     capture("negozio-fiducia", new ShopScene(stack, input, socialState));
     const mafia = new MafiaScene(stack, input, socialState);
-    capture("favore-anteprima", mafia); press(mafia, "down"); press(mafia, "a"); drain(mafia);
+    capture("favore-anteprima", mafia); press(mafia, "down"); press(mafia, "a");
+    const beforeFavour = JSON.stringify(socialState);
+    for (let i = 0; mafia.pending && i < 30; i++) press(mafia, "a");
+    if (mafia.pending || beforeFavour === JSON.stringify(socialState)) throw new Error("Dossier favore non confermato");
+    drain(mafia);
     if (socialState.morale.trust !== 74 || socialState.morale.cohesion !== 57) throw new Error("Raccomandazione senza costo morale");
     socialState.coalition = addAlly(socialState.coalition, "campo_secretary").state;
     socialState.coalition = addAlly(socialState.coalition, "quantum_centrist").state;
     for (const id of ["campo_secretary", "quantum_centrist", "civic_mayor"]) socialState.flags[`coalition-candidate-seen:${id}`] = true;
     const photo = new PhotoChoiceScene(stack, input, socialState); capture("foto-rischio", photo);
     press(photo, "down"); press(photo, "a");
+    for (let i = 0; !photo.result && i < 30; i++) press(photo, "a");
+    if (!photo.result) throw new Error("Dossier foto non confermato");
     if (socialState.morale.cohesion !== 49) throw new Error("Linea rossa senza costo di coesione");
     capture("foto-conseguenza", photo);
     // Lo stesso percorso chiamato dal mondo: scena soltanto con uno starter,
@@ -127,9 +133,9 @@ try {
     state.election = { ...base, phase: "resolved", result: calculateElectionResult(base.districts.map((district) => ({ ...district, localConsensus: 70 })), true) };
     state.morale.trust = 80; state.morale.cohesion = 85;
     let finishCalls = 0; const ending = new Atto3EndingScene(stack, input, state, () => { finishCalls++; });
-    for (let page = 0; page < 5; page++) { capture(`epilogo-${page}`, ending); if (page < 4) press(ending, "a"); }
+    for (let page = 0; page < ending.pages.length; page++) { capture(`epilogo-${page}`, ending); if (page < ending.pages.length - 1) press(ending, "a"); }
     const moneyBefore = state.money; press(ending, "a"); press(ending, "a");
-    if (state.money !== moneyBefore + 2500 || finishCalls !== 2) throw new Error("Ricompensa epilogo duplicata");
+    if (state.money !== moneyBefore + 2500 || finishCalls !== 1) throw new Error("Ricompensa epilogo duplicata");
     state.morale.trust = 10; state.morale.cohesion = 10;
     const badEnding = new Atto3EndingScene(stack, input, state, () => {}); badEnding.page = 2; capture("epilogo-sfiducia", badEnding);
     const weekly = new WeeklyCampaignScene(stack, input, state, () => {});

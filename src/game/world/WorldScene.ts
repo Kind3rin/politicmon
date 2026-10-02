@@ -1,6 +1,7 @@
 import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { drawMonsterSprite } from "../../art/monsters";
+import { approach } from "../battle/view";
 import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
 import { CIVIC_EVENTS, CIVIC_NPCS } from "../../data/civicEvents";
@@ -190,17 +191,6 @@ function drawWorldObjectPng(screen: Screen, ch: string, img: HTMLImageElement, d
 
 function drawWorldTilePng(screen: Screen, img: HTMLImageElement, dx: number, dy: number): void {
   screen.imageSprite(img, dx, dy, { scaleX: TILE / img.width, scaleY: TILE / img.height });
-}
-
-// Avvicina `current` a `target` di al più `delta` (lerp clampato per le barre).
-function approachWorld(current: number, target: number, delta: number): number {
-  if (current < target) {
-    return Math.min(target, current + delta);
-  }
-  if (current > target) {
-    return Math.max(target, current - delta);
-  }
-  return current;
 }
 
 export class WorldScene implements Scene {
@@ -2359,10 +2349,11 @@ export class WorldScene implements Scene {
       const nx = pos.x + d.dx;
       const ny = pos.y + d.dy;
       const tile = TILES[this.tileAt(nx, ny)];
-      if (!tile || tile.solid) {
+      if (!tile || tile.water || this.isBlocked(nx, ny)) {
         continue;
       }
-      if (this.npcs.some((n) => n.x === nx && n.y === ny)) {
+      // Optional challengers must never occupy a door, exit or its approach.
+      if (this.map.warps.some(w => w.x === nx && (w.y === ny || (this.isOutdoorDoorWarp(w) && w.y + 1 === ny)))) {
         continue;
       }
       return { x: nx, y: ny, facing: opp[dir] };
@@ -2914,7 +2905,7 @@ export class WorldScene implements Scene {
         this.sondDelta = { text: `${diff > 0 ? "+" : ""}${diff}`, t: 1.4, up: diff > 0 };
         this.sondPulse = 0.5;
       }
-      this.displaySondaggi = approachWorld(this.displaySondaggi, this.state.sondaggi, dt * 28);
+      this.displaySondaggi = approach(this.displaySondaggi, this.state.sondaggi, dt * 28);
     }
 
     // Dissolvenza d'uscita prima di un warp: a nero completo esegue il cambio
@@ -2934,7 +2925,7 @@ export class WorldScene implements Scene {
       this.healFx = Math.max(0, this.healFx - dt);
       this.updateHealSparks(dt);
       for (const s of this.healSnapshot) {
-        s.disp = approachWorld(s.disp, s.to, dt * 60);
+        s.disp = approach(s.disp, s.to, dt * 60);
       }
       if (this.healFx === 0 && this.afterHeal) {
         const f = this.afterHeal;

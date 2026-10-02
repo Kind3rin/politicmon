@@ -40,8 +40,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     [
       {
         id: "gym1-allievo", pal: "journalist", x: 2, y: 4, facing: "right",
-        trainerId: "stagista", sightRange: 3,
-        lines: ["Lo stage dura da undici anni. Ma sono in onda!"]
+        trainerId: "stagista", nameplate: "PROVA A",
+        lines: ["Il backstage ha ascoltato. Il conduttore ha preso appunti su come interromperti.", "Puoi uscire dal tappeto a sud e curarti al bar prima della diretta."]
       },
       {
         id: "gym1-capo", pal: "boss", x: 4, y: 1, facing: "down",

@@ -3,6 +3,7 @@ import type { AiProfile } from "./sim";
 export type AiStyle = "balanced" | "pressure" | "rush" | "control" | "fortress" | "setup";
 export interface TrainerStyle { style: AiStyle; label: string; hints: readonly string[]; art?: string; }
 const STYLES: Record<string, TrainerStyle> = {
+  stagista: { style: "balanced", label: "PROVA MICROFONO", art: "stagista", hints: ["Prova facoltativa: A inizia, B torna in studio. Avversari diversi richiedono risposte diverse.", "Dopo il KO di un avversario il rimpasto è gratuito. Il bar recupera PV e PP prima della diretta."] },
   emittenza: { style: "pressure", label: "PRIMA SERATA", art: "emittenza", hints: ["Punta su attacchi e status. Una difesa solida vale più del volume della voce.", "Gli status non passano attraverso TEFLON o GARANZIA."] },
   ladydirettiva: { style: "control", label: "PROTOCOLLO", art: "ladydirettiva", hints: ["Cerca di ridurre le statistiche. POLTRONA SALDA protegge dai cali.", "Alterna attacchi e controllo: preparati a cambiare il leader."] },
   tycoon: { style: "rush", label: "ACQUISIZIONE OSTILE", art: "tycoon", hints: ["Privilegia il danno immediato. Anche una mossa debole può chiudere un KO.", "Un attacco prioritario può ribaltare l'ordine. Controlla il dossier."] },
@@ -20,6 +21,7 @@ export const BOSS_ART_IDS = Object.values(STYLES).flatMap((s) => s.art ? [s.art]
 export function trainerAi(id: string, badge: boolean, hard: boolean, badges: number): AiProfile {
   // The first lesson teaches moves and types, before introducing enemy healing.
   if (id === "rival1") return { whiff: hard ? .15 : .33, canHeal: false, finisher: hard, style: "balanced" };
+  if (id === "stagista") return { whiff: hard ? .22 : .4, canHeal: false, finisher: hard, style: "balanced" };
   const boss = (!badge && Boolean(STYLES[id])) || ["ilcapitano", "tesoriere", "campo-photographer"].includes(id) || id.startsWith("rival");
   const profile: AiProfile = boss ? { whiff: hard ? .1 : .2, canHeal: true, finisher: true }
     : badge ? { whiff: hard ? .15 : .28, canHeal: true, finisher: true }

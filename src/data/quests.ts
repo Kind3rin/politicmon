@@ -47,11 +47,27 @@ export const QUESTS: QuestDef[] = [
     isDone: (s) => Boolean(s.flags["dex-received"])
   },
   {
+    id: "recruit", title: "UNA SQUADRA, DUE VOCI",
+    desc: "Recluta un secondo candidato. Costruire una squadra dà anche esperienza.",
+    hint: "Erba nel PERCORSO 1; BORSA > SCHEDA. Indebolisci senza KO. Il tipografo di Borgo ne regala cinque.",
+    step: "Recluta nel Percorso 1.",
+    isDone: (s) => s.party.length + s.boxed.length >= 2 || s.badges.includes("auditel"),
+    target: { mapId: "route1", x: 19, y: 13 }
+  },
+  {
+    id: "share", title: "IL FONDALE VUOLE CRESCERE",
+    desc: "DIVISA EQUA: metà EXP alla panchina viva, senza toglierla al leader.",
+    hint: "Il sindacalista è a nord della piazza di Mediopoli. La Divisa è passiva; i KO non crescono.",
+    step: "Ritira la Divisa Equa a Mediopoli.",
+    isDone: (s) => (s.bag.divisa ?? 0) > 0 || s.badges.includes("auditel"),
+    target: { mapId: "mediopoli", x: 15, y: 7 }
+  },
+  {
     id: "gym1",
     title: "MEDAGLIA AUDITEL",
     desc: "Sconfiggi SUA EMITTENZA nello STUDIO 5 di MEDIOPOLI.",
-    hint: "Mediopoli è a nord di Borgo Urne. La palestra ha il tetto giallo.",
-    step: "Vai a nord fino a Mediopoli e cerca Studio 5.",
+    hint: "Studio 5, tetto giallo. Mara offre una prova facoltativa; il bar cura PV e PP. Il briefing annuncia i livelli.",
+    step: "Prova la squadra con Mara, poi sfida Sua Emittenza.",
     isDone: (s) => s.badges.includes("auditel"),
     target: { mapId: "mediopoli", x: 6, y: 10 }
   },

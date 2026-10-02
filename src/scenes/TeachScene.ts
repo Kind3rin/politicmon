@@ -66,7 +66,7 @@ export class TeachScene implements Scene {
     if (this.confirm || this.inspect) {
       screen.panel(6, 24, 228, 141, "card");
       screen.text(this.confirm ? "CONFERMI LA NUOVA LINEA?" : ["MOSSA NUOVA", "MOSSA ATTUALE", "COSA CAMBIA"][this.page], 14, 31, "#8c5b12");
-      const lines = this.confirm ? ["IMPARA:", ...wrapText(move.name, 35), ...(this.old ? ["CANCELLA:", ...wrapText(MOVES[this.old.id].name, 35)] : ["OCCUPA UNO SLOT LIBERO."]), "NUOVI PP AL MASSIMO.", "ALTRE MOSSE INVARIATE."] : this.lines();
+      const lines = this.confirm ? [`${speciesOf(this.mon).name} L${this.mon.level}`, "IMPARA:", ...wrapText(move.name, 35), ...(this.old ? ["CANCELLA:", ...wrapText(MOVES[this.old.id].name, 35)] : ["OCCUPA UNO SLOT LIBERO."]), "NUOVI PP AL MASSIMO.", "ALTRE MOSSE INVARIATE."] : this.lines();
       lines.slice(this.confirm ? 0 : this.scroll, (this.confirm ? 0 : this.scroll) + 9).forEach((line, i) => screen.text(line, 14, 45 + i * 10, INK));
       if (!this.confirm) screen.text(`SU/GIU: ${this.scroll + 1}/${Math.max(1, lines.length - 8)}`, 14, 151, GREY);
       screen.text(this.confirm ? "A:CONFERMA B:RIPENSA" : "◄►:PAGINA A:SCEGLI B:LISTA", 8, 169, "#fff3cc");

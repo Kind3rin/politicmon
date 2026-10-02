@@ -90,7 +90,9 @@
     "shot:arena": "node scripts/shot-arena.mjs",
     "shot:desk": "node scripts/shot-desk.mjs",
     "shot:shell": "node scripts/shot-shell.mjs",
-    "check:shell:release": "node scripts/check-shell-release.mjs"
+    "check:shell:release": "node scripts/check-shell-release.mjs",
+    "playtest:campaign:native": "node scripts/play-campaign-native.mjs",
+    "check:first-campaign": "node scripts/check-first-campaign.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

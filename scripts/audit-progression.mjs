@@ -1,5 +1,6 @@
 import { ITEMS } from "../src/data/items.ts";
 import { SPECIES } from "../src/data/species.ts";
+import { MAPS } from "../src/data/maps.ts";
 import { catchChance } from "../src/game/battle/sim.ts";
 import { createMonster, expForLevel, expYield, LEVEL_CAP } from "../src/game/monster.ts";
 
@@ -17,13 +18,21 @@ console.log("PROGRESSIONE EXP");
 let worstWild = 0;
 let fastestTrainer = Number.POSITIVE_INFINITY;
 for (let level = 5; level < LEVEL_CAP; level += 5) {
-  const mon = createMonster(representative.id, level);
+  // A median across the complete roster invents evolved foes at Lv5.
+  // Use the actual encounter roster at that level for the opening tiers.
+  const available = level < 20 ? [...new Set(Object.values(MAPS).flatMap(map => map.encounters ?? [])
+    .filter(entry => entry.minLv <= level && entry.maxLv >= level).map(entry => entry.speciesId))]
+    .map(id => SPECIES[id]).sort((a, b) => a.expYield - b.expYield) : [];
+  const reference = level < 20 ? available[Math.floor(available.length / 2)] : representative;
+  if (!reference) { fail(`no encounter reference at level ${level}`); continue; }
+  const mon = createMonster(reference.id, level);
   const required = expForLevel(level + 1) - expForLevel(level);
-  const wildKos = required / expYield(mon, false);
-  const trainerKos = required / expYield(mon, true);
+  const wildKos = required / expYield(mon, false, level);
+  const trainerKos = required / expYield(mon, true, level);
+  if (!Number.isFinite(wildKos) || !Number.isFinite(trainerKos)) fail(`invalid EXP estimate at level ${level}`);
   worstWild = Math.max(worstWild, wildKos);
   fastestTrainer = Math.min(fastestTrainer, trainerKos);
-  console.log(`LV ${String(level).padStart(2)} -> ${level + 1}: ${wildKos.toFixed(1)} KO wild | ${trainerKos.toFixed(1)} KO trainer`);
+  console.log(`LV ${String(level).padStart(2)} -> ${level + 1} (${reference.name}): ${wildKos.toFixed(1)} KO wild | ${trainerKos.toFixed(1)} KO trainer`);
 }
 if (worstWild > 5) fail(`dead zone EXP: servono ${worstWild.toFixed(1)} KO per un livello`);
 if (fastestTrainer < 0.5) fail(`power spike EXP: un KO concede oltre due livelli (${fastestTrainer.toFixed(1)})`);

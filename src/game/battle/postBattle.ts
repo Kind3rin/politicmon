@@ -44,9 +44,8 @@ export function buildTrainerVictoryPlan(
   const coalition = coalitionBonuses(state.coalition);
   const payout = Math.round(trainer.money * (economyBonus ? 1.25 : 1) * (spotBonus ? 1.5 : 1) * moneyMalus(state)
     * (1 + (coalition.bonus.funds + coalition.malus.funds) / 100));
-  const introLines = [`Hai sconfitto ${trainer.name}!`, ...trainer.defeat, `Ricevi ${payout}€ di rimborso elettorale!`];
-  if (economyBonus) introLines.push("Il MIN. ECONOMIA ha trovato la copertura: +25%!");
-  if (spotBonus) introLines.push("Lo SPOT IN PRIME TIME riempie le casse: +50% fondi!");
+  // Story only: the battle adds the receipt when committing its payout.
+  const introLines = [`Hai sconfitto ${trainer.name}!`, ...trainer.defeat];
 
   const badgeLead: string[] = [];
   if (trainer.badge && !state.badges.includes(trainer.badge) && state.badges.length === 0) {

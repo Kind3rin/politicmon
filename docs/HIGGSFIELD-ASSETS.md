@@ -1,5 +1,13 @@
 # Politicmon: risorse Higgsfield
 
+Quattordicesimo blocco: backstage illustrato per la prova facoltativa di Mara.
+Un job `gpt_image_2_5`, **0,25 crediti**, saldo **617,97 → 617,72**,
+cumulativo **268,25**. Prompt, job e checksum in
+`higgsfield-first-campaign.json`; ritaglio tecnico con
+`prepare-first-campaign-assets.py`. [PRIMO-ATTO-GAMEPLAY.md](PRIMO-ATTO-GAMEPLAY.md)
+documenta crescita, catture, apprendimento della panchina e tre partite nuove
+fino ad Auditel. Il credito residuo resta disponibile per il redesign.
+
 Tredicesimo blocco: quattro ambienti per onboarding, pausa e scorta.
 Quattro richieste `nano_banana_2`, backend registrato `nano_banana_flash`,
 **8 crediti**, saldo **625,97 → 617,97**, cumulativo **268**. Provenienza e

@@ -78,9 +78,8 @@ export function statsOf(mon: Monster): Stats {
 // Runtime, NON nel save: cappa solo la crescita in gainExp/expRatio.
 export const LEVEL_CAP = 55;
 
-// Curva "medio-veloce": più dolce della cubica pura (lv³) nella fascia 5-25,
-// dove il giocatore prima si stancava di salire. Resta crescente e mai banale.
-// Regge fino al cap 55 (0.8·55³+10·55²=163.075, ben dentro i Number sicuri).
+// Keep the saved EXP thresholds stable. Early pacing is adjusted in expYield,
+// so existing candidates retain their level and progress within that level.
 export function expForLevel(level: number): number {
   return Math.floor((4 * level * level * level) / 5 + 10 * level * level);
 }
@@ -165,11 +164,11 @@ export function createMonster(speciesId: string, level: number): Monster {
   return mon;
 }
 
-export function expYield(foe: Monster, isTrainer: boolean): number {
+export function expYield(foe: Monster, isTrainer: boolean, learnerLevel: number): number {
   const base = speciesOf(foe).expYield;
-  // Divisore 5.5: l'EXP è più generosa per tenere il passo coi trainer
-  // obbligatori (il giocatore reale arrivava sotto-livello alle palestre).
-  const amount = Math.floor((base * foe.level) / 5.5);
+  // The learner receives x2 through Lv10, tapering to x1 at Lv20. Saved EXP
+  // thresholds and advanced growth remain stable; stronger foes always pay more.
+  const amount = Math.floor((base * foe.level) / 5.5 * Math.max(1, 2 - Math.max(0, learnerLevel - 10) / 10));
   return Math.max(1, Math.floor(amount * (isTrainer ? 1.5 : 1)));
 }
 

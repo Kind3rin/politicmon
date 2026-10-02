@@ -35,7 +35,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       },
       {
         x: 7, y: 8,
-        lines: ["CAMPAGNA ELETTORALE NORD", "Attenti ai candidati selvatici nell'erba alta.", "Dicono che nei vicoli più sperduti qualcuno nasconda 'fondi neri'... esplora gli angoli!", "A nord: MEDIOPOLI, la città che decide cosa pensi."]
+        lines: ["CAMPAGNA ELETTORALE NORD", "Attenti ai candidati selvatici nell'erba alta.", "Dicono che nei vicoli più sperduti qualcuno nasconda 'fondi neri'... esplora gli angoli!", "Prima di MEDIOPOLI: recluta nel PERCORSO 1. Lo STUDIO 5 non offre corsi di recupero."]
       },
       {
         x: 24, y: 12,
@@ -68,24 +68,21 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         id: "granny", pal: "granny", x: 10, y: 17, facing: "down",
         lines: [
-          "Ai miei tempi i politici si catturavano col televoto.",
-          "Ora servono le SCHEDE ELETTORALI: indebolisci il candidato e lanciagliela!"
+          "In TV basta dire: siamo una squadra. Qui serve un secondo candidato.",
+          "Indeboliscilo senza KO, poi usa una SCHEDA. Reclutare dà anche esperienza."
         ]
       },
       {
         id: "egg-pensionato", pal: "granny", x: 10, y: 7, facing: "down",
         lines: [
-          "Una poltrona? Io ne ho viste cadere centinaia.",
-          "C'è chi dice che se cammini abbastanza nell'erba alta...",
-          "...prima o poi sbuca pure il PRESIDENTE OMBRA in persona. Leggende da bar."
+          "Il sondaggio mi conta se rispondo. Il bus mi serve anche quando non rispondo.",
+          "Al laboratorio misurano il primo. Al bar aspettano il secondo."
         ]
       },
       {
         id: "egg-complotto", pal: "aide", x: 18, y: 9, facing: "down",
         lines: [
-          "Lo sai che le SCIE delle promesse non svaniscono mai?",
-          "Restano lì, nell'atmosfera. Per questo l'aria è irrespirabile a Roma.",
-          "Sveglia, pecorella elettorale!"
+          "Il documento è pubblico. Per trovarlo servono tre uffici e il cognome di chi lo ha caricato."
         ]
       },
       {
@@ -97,21 +94,21 @@ export const BASE_MAPS: Record<string, MapDef> = {
         gift: {
           itemId: "scheda", qty: 5, flag: "gift-tipografo",
           lines: [
-            "Psst! Stampo schede elettorali. Tutte regolari, giuro.",
-            "Tieni: 5 SCHEDE ELETTORALI omaggio. Ricordati di me al ministero."
+            "Stampo su carta riciclata: le promesse hanno già fatto un mandato.",
+            "5 SCHEDE: un candidato in più vale più di cinque ristampe dello stesso slogan."
           ]
         },
         lines: ["Le ristampe costano. Torna dopo le elezioni."]
       },
       {
         id: "tr-aide", pal: "aide", x: 9, y: 6, facing: "right",
-        trainerId: "aide", sightRange: 3,
-        lines: ["I miei SALVINOTT non mollano mai. Purtroppo."]
+        trainerId: "aide", nameplate: "DIBATTITO A",
+        lines: ["Ho detto al capo che mi hai ascoltato. Non ha chiesto chi ha vinto."]
       },
       {
         id: "tr-journalist", pal: "journalist", x: 20, y: 3, facing: "left",
-        trainerId: "journalist", sightRange: 3,
-        lines: ["Il pezzo era già scritto, mancavano solo i fatti."]
+        trainerId: "journalist", nameplate: "INTERVISTA A",
+        lines: ["Il titolo sul pieno resta in archivio. La domanda adesso la faccio prima della risposta."]
       },
       {
         // VERSIONE ESCLUSIVA: testo dinamico gestito in WorldScene.interactNpc
@@ -119,53 +116,9 @@ export const BASE_MAPS: Record<string, MapDef> = {
         id: "sondaggista-versioni", pal: "aide", x: 13, y: 17, facing: "down",
         lines: ["SONDAGGISTA: campiono l'erba alta, un comizio alla volta."]
       },
-      {
-        // LUCA — guida ufficiale del gioco. Targhetta sopra la testa + menù di
-        // domande a scelta (npc.guide, gestito in WorldScene.interactNpc).
-        id: "luca-guida", pal: "professor", x: 17, y: 8, facing: "down",
-        nameplate: "LUCA - GUIDA",
-        guide: {
-          intro: [
-            "Ciao, sono LUCA! La guida ufficiale di BORGO URNE.",
-            "Sono sempre qui: chiedimi quello che vuoi."
-          ],
-          prompt: "SU COSA TI SERVE UNA MANO?",
-          topics: [
-            {
-              label: "COME SI GIOCA",
-              lines: [
-                "Cammini nell'erba alta: sbucano CANDIDATI selvatici.",
-                "Indeboliscili in lotta, poi lancia una SCHEDA ELETTORALE per catturarli.",
-                "Metti insieme una squadra e diventa PRESIDENTE OMBRA."
-              ]
-            },
-            {
-              label: "DOVE VADO ORA",
-              lines: [
-                "Punta a NORD: attraversa il PERCORSO 1 fino a MEDIOPOLI.",
-                "Lì c'è la prima PALESTRA: battila per la tua prima MEDAGLIA.",
-                "Attiva la GUIDA nel menu (freccia gialla) se ti perdi."
-              ]
-            },
-            {
-              label: "I SONDAGGI",
-              lines: [
-                "I SONDAGGI (0-100) sono il tuo consenso: la barra in alto.",
-                "Salgono con vittorie e catture, scendono con sconfitte e fughe.",
-                "Alti sbloccano EVOLUZIONI speciali e più EXP. Tienili su!"
-              ]
-            },
-            {
-              label: "GIOCARE ONLINE",
-              lines: [
-                "Menu PAUSA -> ONLINE: vedi gli altri giocatori nella tua zona.",
-                "Puoi usare la CHAT DI ZONA, scambiare e sfidare chi ti è accanto.",
-                "Tutto peer-to-peer: niente account, niente attese."
-              ]
-            }
-          ]
-        }
-      }
+      lucaGuide("BORGO URNE", 17, 8,
+        ["Il tipografo regala SCHEDE. Piero e Rita accettano sfide con A; puoi prepararti prima."],
+        ["Recluta nel PERCORSO 1, poi chiedi la DIVISA EQUA al sindacalista di MEDIOPOLI.", "Il bar cura PV, PP e status gratis. Studio 5: prima la prova con Mara, poi la diretta."])
     ]
   },
 
@@ -204,8 +157,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-route1", pal: "kid", x: 20, y: 9, facing: "left",
-        trainerId: "aide", sightRange: 3,
-        lines: ["Mi alleno tra le due città. Tu dove credi di andare?"]
+        trainerId: "praticante", nameplate: "PRATICA A",
+        lines: ["Pratica chiusa. Sono ancora in fila, ma per la macchinetta del caffè."]
       },
       {
         id: "viandante-r1", pal: "granny", x: 9, y: 8, facing: "right", nameplate: "UMARELL",
@@ -380,13 +333,12 @@ export const BASE_MAPS: Record<string, MapDef> = {
       lucaGuide(
         "MEDIOPOLI", 15, 10,
         [
-          "MEDIOPOLI: la città che decide cosa pensi, in onda dal 1980.",
-          "Media, talk-show e comizi h24. Occhio: qui i candidati selvatici sono più agguerriti.",
-          "La FONTANA DELLO SHARE zampilla solo se fai ascolti."
+          "Mara prepara lo studio. Il conduttore prepara la copertina.",
+          "I selvatici della città sono più forti: il PERCORSO 1 serve a reclutare prima della diretta."
         ],
         [
-          "La PALESTRA TV STUDIO 5 ti aspetta: batti SUA EMITTENZA per la medaglia AUDITEL.",
-          "Serve la prima medaglia per proseguire a nord verso EUROTOWN."
+          "Il sindacalista offre la DIVISA EQUA: metà EXP anche alla panchina viva.",
+          "Studio 5: prova Mara, curati al bar e torna per SUA EMITTENZA. AUDITEL apre EUROTOWN."
         ]
       ),
       {
@@ -395,14 +347,13 @@ export const BASE_MAPS: Record<string, MapDef> = {
       },
       {
         id: "tr-influencer", pal: "influencer", x: 10, y: 12, facing: "right",
-        trainerId: "influencer", sightRange: 3,
-        lines: ["Questa sconfitta finisce nelle storie in evidenza."]
+        trainerId: "influencer", nameplate: "SPONSOR A",
+        lines: ["Ho reso visibile la scritta sponsor. Il marchio ha chiesto di togliere il video."]
       },
       {
         id: "fan-tv", pal: "granny", x: 18, y: 14, facing: "left",
         lines: [
-          "SUA EMITTENZA non perde da quarant'anni.",
-          "Dicono che il suo BERLUSCONIX sia immune alla par condicio."
+          "Mara ti lascia provare prima della diretta. Il conduttore ti lascia spiegare dopo la pubblicità."
         ]
       },
       {
@@ -410,12 +361,12 @@ export const BASE_MAPS: Record<string, MapDef> = {
         gift: {
           itemId: "divisa", qty: 1, flag: "gift-divisa",
           lines: [
-            "Sindacato dei POLITICMON in panchina: anche loro vogliono crescere!",
-            "Tieni la DIVISA EQUA: spartisce i PUNTI CONSENSO con tutta la squadra.",
-            "Equità prima di tutto. Almeno a parole."
+            "Il capo chiama squadra chi gli regge il fondale. Noi abbiamo chiesto una quota.",
+            "DIVISA EQUA: metà EXP alla panchina viva. Il leader tiene tutto.",
+            "Vale per KO e catture. Il nuovo arrivato comincia dal prossimo incontro."
           ]
         },
-        lines: ["La DIVISA EQUA ce l'hai. Ora nessuno resta indietro... in teoria."]
+        lines: ["La DIVISA è passiva. I KO non crescono: il bar serve anche a chi regge il fondale."]
       },
       {
         id: "rider-monopattino", pal: "kid", x: 15, y: 16, facing: "down",
@@ -431,8 +382,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         id: "talkshow-fan", pal: "journalist", x: 3, y: 7, facing: "right",
         lines: [
-          "Stasera tre talk show in contemporanea, stessi ospiti su ogni canale.",
-          "Cambio rete, stessa faccia. Cambio idea, stessa faccia. Magia della TV."
+          "La regia voleva un'opinione diversa. Mi ha dato la risposta per essere sicura."
         ]
       }
     ]

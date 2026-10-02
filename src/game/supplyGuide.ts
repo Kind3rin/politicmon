@@ -55,14 +55,14 @@ export function supplyNotes(state: GameState, item: Item, page: number, inBattle
   const notes = [item.desc];
   if (item.kind === "heal") notes.push("RECUPERA PV, NON PP. NON RIANIMA I KO.");
   if (item.kind === "cure") notes.push("TOGLIE GLI STATUS; NON RECUPERA PV O PP.");
-  if (item.kind === "ball") notes.push(`BONUS RECLUTAMENTO x${item.ballBonus}. NON È LA PROBABILITÀ FINALE.`, "SOLO SELVATICI: INDEBOLISCI SENZA METTERE KO. IL DOSSIER DI LOTTA MOSTRA LA CHANCE.");
+  if (item.kind === "ball") notes.push(`BONUS RECLUTAMENTO x${item.ballBonus}. NON È LA PROBABILITÀ FINALE.`, "SOLO SELVATICI: INDEBOLISCI SENZA METTERE KO. IL DOSSIER MOSTRA LA CHANCE. RECLUTARE DÀ ESPERIENZA.");
   if (["heal", "cure", "ball"].includes(item.kind)) notes.push("IN LOTTA CONSUMA UN OGGETTO E UN TURNO; IL RIVALE PUÒ RISPONDERE.");
   else notes.push("USO FUORI LOTTA.");
   if (item.kind === "hold") notes.push("RESTA EQUIPAGGIATO; NON SI CONSUMA. NEL DUELLO GLI OGGETTI NON SONO ATTIVI.");
   if (item.id === "caffettiera") notes.push("A FINE TURNO: +1/16 DEI PV MAX, MINIMO 1, SOLO SE ANCORA IN PIEDI.");
   if (item.kind === "evo") notes.push("PRIMA CONFRONTI LA CARRIERA. SI CONSUMA SOLO SE ACCETTI.");
   if (item.kind === "key") notes.push("PASSIVO: BASTA POSSEDERLO.");
-  if (item.kind === "boost") notes.push(item.id === "manifesti" ? "SCALA SU VITTORIA PER KO, NON CATTURA." : item.id === "spotprimetime" ? "SCALA SOLO SUI RIVALI: ESCLUDE I REMATCH." : "SCALA SUI RIVALI, ANCHE NEI REMATCH.", `GIÀ ATTIVO: ${state[item.boost!.field]}. USARLO AGGIUNGE ${item.boost!.battles} CARICHE.`);
+  if (item.kind === "boost") notes.push(item.id === "manifesti" ? "SCALA SU KO O RECLUTAMENTO RIUSCITO." : item.id === "spotprimetime" ? "SCALA SOLO SUI RIVALI: ESCLUDE I REMATCH." : "SCALA SUI RIVALI, ANCHE NEI REMATCH.", `GIÀ ATTIVO: ${state[item.boost!.field]}. USARLO AGGIUNGE ${item.boost!.battles} CARICHE.`);
   if (item.moveId) notes.push("RIUTILIZZABILE: NON SI CONSUMA.", ...moveNotes(undefined, item.moveId));
   return notes;
 }

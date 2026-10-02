@@ -52,7 +52,7 @@ export default defineConfig({
   plugins: [stampServiceWorker()],
   build: {
     minify: "terser",
-    terserOptions: { compress: { passes: 2 } }
+    terserOptions: { compress: { passes: 3 } }
   },
   server: {
     port: 5173,

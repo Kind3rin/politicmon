@@ -104,23 +104,23 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   aide: {
     id: "aide", name: "PORTABORSE PIERO", pal: "aide",
-    team: [["salvinott", 4], ["salvinott", 5]],
-    intro: ["Porto tre borse, due telefoni e zero idee!", "Ma i miei SALVINOTT fanno comizi pure nel sonno!"],
-    defeat: ["Le borse... sono pesanti... mi arrendo."],
+    team: [["salvinott", 4], ["grillix", 4]],
+    intro: ["Il capo mi ha chiesto un confronto aperto. Ho chiuso la porta per evitare equivoci.", "Due candidati, due tipi: il secondo non ascolta il discorso del primo."],
+    defeat: ["Segno la sconfitta come ascolto del territorio. La voce rimborso resta uguale."],
     money: 200, reward: { itemId: "caffe", qty: 1 }
   },
   journalist: {
     id: "journalist", name: "GIORNALISTA RITA", pal: "journalist",
     team: [["tajanide", 7]],
-    intro: ["Una domanda secca: favorevole o contrario?", "Risposta sbagliata! Intervista a colpi di TAJANIDE!"],
-    defeat: ["Domani titolo: 'CLAMOROSA SCONFITTA'. Comunque bravo."],
+    intro: ["La benzina sale, lo sconto si dimezza. Il titolo deve dire: buona notizia.", "Se hai una domanda, falla breve. Ho già esportato la risposta."],
+    defeat: ["Titolo corretto: il territorio risponde. Il direttore voleva soltanto la foto del pieno."],
     money: 280, reward: { itemId: "scheda", qty: 2 }
   },
   influencer: {
     id: "influencer", name: "INFLUENCER CHIARA", pal: "influencer",
     team: [["vannaccix", 9], ["bojoon", 9]],
-    intro: ["Sto facendo una storia, fermo lì!", "I miei fanno numeri PAZZESCHI. Al contrario, ma li fanno."],
-    defeat: ["Questa sconfitta... la posto lo stesso. ENGAGEMENT!"],
+    intro: ["Lo sponsor paga la trasparenza. Ho messo la scritta in bianco su sfondo bianco.", "Tu sei l'avversario spontaneo. Ti ho mandato la liberatoria ieri."],
+    defeat: ["La campagna ha raggiunto il pubblico sbagliato: quello che legge le clausole."],
     money: 360, reward: { itemId: "spritz", qty: 1 }
   },
   lobbista: {
@@ -132,10 +132,17 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   stagista: {
     id: "stagista", name: "STAGISTA TV MARA", pal: "journalist",
-    team: [["tajanide", 11], ["contemorfo", 11]],
-    intro: ["Stage non pagato, undicesimo anno!", "Ma so reggere un gobbo e un dibattito!"],
-    defeat: ["Ok, torno a reggere il gobbo..."],
+    team: [["tajanide", 8], ["contemorfo", 9]],
+    intro: ["Sono MARA. In onda il lavoro è di squadra. Nei titoli di coda diventa del conduttore.", "Facciamo la prova: quando cambio ospite puoi cambiare candidato senza perdere il turno."],
+    defeat: ["Il microfono funziona. Ti hanno sentito anche senza la sigla.", "Prima della diretta passa al bar: io posso cambiare il gobbo, non restituirti i PP."],
     money: 440
+  },
+  praticante: {
+    id: "praticante", name: "PRATICANTE NINO", pal: "kid",
+    team: [["contemorfo", 6], ["calendauro", 7]],
+    intro: ["Lo sportello è unico. La password cambia a ogni ufficio.", "Mi alleno qui: almeno la fila avanza quando perdiamo un candidato."],
+    defeat: ["Pratica chiusa. Non serve un altro modulo per riconoscere che hai vinto."],
+    money: 260, reward: { itemId: "scheda", qty: 3 }
   },
   // ---- PERCORSO 2 (Mediopoli-Eurotown) ----
   opinionista: {
@@ -428,7 +435,7 @@ export const GYM_LEADER_IDS = ["emittenza", "ladydirettiva", "tycoon"];
 // a passi. ESCLUSI (gating storia su defeatedTrainers/flag): boss, garante,
 // giudice1/2/3, ilcapitano, rival-*, wander:*, daily:*.
 export const REMATCHABLE_TRAINERS = new Set([
-  "aide", "journalist", "influencer", "lobbista", "stagista", "funzionario",
+  "aide", "journalist", "praticante", "influencer", "lobbista", "stagista", "funzionario",
   "diplomatico", "oligarca", "bunkerista", "djpapeete", "citofonista",
   "noponte", "geometra",
   // Percorsi 2/3 + grotta2

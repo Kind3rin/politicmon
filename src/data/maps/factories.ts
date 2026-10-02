@@ -636,8 +636,8 @@ export function lucaGuide(
     nameplate: "LUCA - GUIDA",
     guide: {
       intro: [
-        `Ciao, sono LUCA! Ci becchiamo di nuovo, stavolta a ${cityName}.`,
-        "Sono la guida ufficiale: chiedimi pure quello che ti serve."
+        `LUCA: benvenuto a ${cityName}.`,
+        "La guida segue le MISSIONI. Qui trovi consigli sul territorio."
       ],
       prompt: "SU COSA TI SERVE UNA MANO?",
       topics: [
@@ -646,7 +646,7 @@ export function lucaGuide(
         {
           label: "COME SI GIOCA",
           lines: [
-            "Indebolisci i CANDIDATI in lotta, poi lancia una SCHEDA ELETTORALE per catturarli.",
+            "Indebolisci senza KO, poi lancia una SCHEDA: reclutare dà anche EXP.",
             "Tieni d'occhio i SONDAGGI (barra in alto): salgono con le vittorie e sbloccano evoluzioni.",
             "Attiva la GUIDA nel menu (freccia gialla) se non sai dove andare."
           ]

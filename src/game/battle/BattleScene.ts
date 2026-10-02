@@ -272,7 +272,7 @@ export class BattleScene implements Scene {
         // non c'era). Il contatore è già clampato >=0 dal parseState.
         //  - MANIFESTI (EXP): l'EXP arriva da OGNI foe KO (foeFaintedSteps),
         //    wild e trainer → consuma su qualunque vittoria per KO ("win").
-        //    Sulla cattura non c'è EXP, quindi non scala.
+        //    Recruitment now awards EXP too and consumes one charge.
         //  - SPOT (fondi) e COMIZIO (SONDAGGI ×2): il payout e il raddoppio
         //    sondaggi vivono SOLO nel ramo trainer di afterFoeDown → consumano
         //    solo battendo un TRAINER.
@@ -280,7 +280,7 @@ export class BattleScene implements Scene {
         recordBattleResult(this.state, result);
         const coppa = this.trainer?.id.startsWith("coppa:") ?? false;
         // Tournament EXP belongs to the temporary team, not the campaign team.
-        if (won && !coppa && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
+        if ((won || result === "caught") && !coppa && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
         if (won && this.trainer) {
           // R42: lo SPOT non si applica ai rematch → non bruciare la carica lì
           // (altrimenti si sprecherebbe un uso senza bonus). Il COMIZIO
@@ -683,8 +683,13 @@ export class BattleScene implements Scene {
       },
       { text: `Il nemico ${this.foeName()} si ritira dalla corsa!` }
     ];
+    return [...steps, ...this.consensusSteps(() => this.afterFoeDown())];
+  }
+
+  private consensusSteps(after: () => void): Step[] {
+    const steps: Step[] = [];
     const istruzione = hasMinistro(this.state, "istruzione");
-    const base = expYield(this.foe.mon, Boolean(this.trainer));
+    const base = expYield(this.foe.mon, Boolean(this.trainer), this.player.mon.level);
     // ONDA DEL CONSENSO (feature originale): l'EXP scala coi SONDAGGI.
     // Popolarità alta = i tuoi crescono in fretta; impopolarità = penalità.
     // MODALITÀ DIFFICILE: l'onda è DISATTIVATA (wave neutro, nessun bonus EXP).
@@ -723,13 +728,14 @@ export class BattleScene implements Scene {
         if (hasShare) {
           const shared = Math.max(1, Math.floor(gained / 2));
           for (const mon of this.state.party) {
-            if (mon === this.player.mon || mon.hp <= 0) {
+            if (mon === this.player.mon || mon === this.foe.mon || mon.hp <= 0) {
               continue;
             }
             const ev = gainExp(mon, shared, this.state.sondaggi);
             if (ev.length > 0) {
               followUp.push({ text: `${speciesOf(mon).name} cresce in panchina: ora è L${mon.level}!` });
             }
+            for (const event of ev) for (const moveId of event.learnableMoves) followUp.push(...this.learnMoveSteps(moveId, mon));
             const target = ev.find((event) => event.evolvesTo)?.evolvesTo ?? levelEvolution(mon, this.state.sondaggi);
             if (target) {
               followUp.push({ text: `${speciesOf(mon).name} è pronto per il salto di carriera!` });
@@ -757,16 +763,16 @@ export class BattleScene implements Scene {
             followUp.push(...this.evolveStepsFor(this.player.mon, target));
           }
         }
-        followUp.push({ run: () => this.afterFoeDown() });
+        followUp.push({ run: after });
         this.pushFront(followUp);
       }
     });
     return steps;
   }
 
-  private learnMoveSteps(moveId: string): Step[] {
+  private learnMoveSteps(moveId: string, mon: Monster = this.player.mon): Step[] {
     return [{ run: () => {
-      this.stack.push(new TeachScene(this.stack, this.input, this.player.mon, moveId,
+      this.stack.push(new TeachScene(this.stack, this.input, mon, moveId,
         () => saveGame(this.state), { source: "level" }));
     } }];
   }
@@ -853,7 +859,7 @@ export class BattleScene implements Scene {
       const trainer = this.trainer;
       const plan = buildTrainerVictoryPlan(this.state, trainer, this.isRematch);
       steps.push({ run: () => audio.victory() });
-      for (const line of plan.introLines.slice(0, -1 - Number(plan.economyBonus) - Number(plan.spotBonus))) steps.push({ text: line });
+      for (const line of plan.introLines) steps.push({ text: line });
       steps.push({
         text: `Ricevi ${plan.payout}€ di rimborso elettorale!`,
         run: () => {
@@ -1269,6 +1275,7 @@ export class BattleScene implements Scene {
       },
       { text: `I dati di ${this.foeName()} sono nel POLITICDEX.` }
     ];
+    steps.push(...this.consensusSteps(() => {}));
     this.endBattle("caught");
     return steps;
   }

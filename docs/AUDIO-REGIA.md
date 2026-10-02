@@ -109,3 +109,15 @@ copre precache, primo utilizzo e ripresa del salvataggio.
 Il redesign completo resta attivo: percorsi e scrittura delle zone
 successive, campagna in difficoltà alta, seed diversi, partite degli atti
 successivi e prove su dispositivi reali richiedono ancora lavoro.
+
+## Pubblicazione verificata
+
+Commit `1c2f0926d901b80212af1edf8c6ee32a28d3a483`,
+[CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36974727124)
+e tre deploy Vercel riusciti. Sul [gioco pubblico](https://politicmon.vercel.app/)
+sono verificati 434 checksum PNG e 20 audio/catalogo, input reali della
+regia nei due motori, 543 asset Higgsfield e 19 AAC al primo uso offline.
+Il reload offline resta verificato solo in Chromium. Sei configurazioni
+della cornice esterna verificano layout, pausa sotto guida e focus.
+
+<img src="img/audio-regia-public.png" width="390" alt="Regia audio realmente aperta sul sito pubblico: musica 40%, effetti 60%">

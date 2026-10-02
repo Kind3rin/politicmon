@@ -682,5 +682,101 @@
       "parseMeanMs": 0.0313,
       "serializeMeanMs": 0.0178
     }
+  },
+  "publicRelease": {
+    "commit": "1c2f0926d901b80212af1edf8c6ee32a28d3a483",
+    "url": "https://politicmon.vercel.app/",
+    "ci": {
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/36974727124"
+    },
+    "vercel": [
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon/6Yc2XKGY8uKCA6yomnsU35E48Lb2"
+      },
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-link-check/BqCdY9qWYc14L36URSgkp5fkdD2z"
+      },
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-test-link/88Ebf4ZW1vfAMruUYs88z1aNyW9x"
+      }
+    ],
+    "checks": {
+      "pngChecksums": 434,
+      "audioAndCatalogChecksums": 20,
+      "pwaHiggsAssets": 543,
+      "pwaAacDecodedOffline": 19,
+      "pwaEngines": [
+        "chromium",
+        "webkit"
+      ],
+      "offlineReload": "chromium only",
+      "shellConfigurations": 6
+    },
+    "input": {
+      "chromium": {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "loops": [
+          {
+            "duration": 17.179854166666665,
+            "channels": 2,
+            "loopEnd": 17.142857142857142
+          },
+          {
+            "duration": 17.179854166666665,
+            "channels": 2,
+            "loopEnd": 17.142857142857142
+          }
+        ],
+        "persisted": {
+          "enabled": true,
+          "music": 40,
+          "effects": 60
+        },
+        "checks": [
+          "no music before gesture",
+          "real title input opens mixer",
+          "independent sliders",
+          "mute/unmute title loop",
+          "reload preferences and gesture"
+        ]
+      },
+      "webkit": {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "loops": [
+          {
+            "duration": 17.142854166666666,
+            "channels": 2,
+            "loopEnd": 17.142854166666666
+          },
+          {
+            "duration": 17.142854166666666,
+            "channels": 2,
+            "loopEnd": 17.142854166666666
+          }
+        ],
+        "persisted": {
+          "enabled": true,
+          "music": 40,
+          "effects": 60
+        },
+        "checks": [
+          "no music before gesture",
+          "real title input opens mixer",
+          "independent sliders",
+          "mute/unmute title loop",
+          "reload preferences and gesture"
+        ]
+      }
+    }
   }
 }

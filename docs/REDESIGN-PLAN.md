@@ -278,3 +278,9 @@ CPU ×4 con musica attiva: p95 17,6 ms, bundle 183,4/348,9 KiB entro i
 limiti invariati. 434 checksum PNG e 20 audio/catalogo locali; 543 asset
 Higgsfield e 19 AAC decodificati offline in Chromium/WebKit. Reload
 offline solo Chromium. Ascolto e FPS su dispositivi fisici restano aperti.
+
+Round audio pubblicato in `1c2f092`: CI e tre deploy Vercel riusciti;
+434 checksum PNG e 20 audio/catalogo sul dominio pubblico, mixer
+percorso con input reali nei due motori, 543 risorse Higgsfield e 19 AAC
+decodificati offline. Sei configurazioni della cornice esterna riuscite.
+Reload offline solo Chromium. Il redesign integrale resta attivo.

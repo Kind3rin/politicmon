@@ -33,15 +33,15 @@ export const TRAINERS: Record<string, TrainerDef> = {
   "campo-debate": {
     id: "campo-debate", name: "MODERATORE DI PIAZZA", pal: "journalist",
     team: [["mediocrate", 49], ["contemorfo", 50]],
-    intro: ["DUE MINUTI A TESTA.", "IO, PER SICUREZZA, PARLO PER TUTTI."],
-    defeat: ["IL TEMPO È FINITO. SOPRATTUTTO IL MIO."],
+    intro: ["IL TASTO ROSSO MI DÀ LA PAROLA. QUELLO BLU ME LA RESTITUISCE.", "DUE MINUTI A TESTA. IL CRONOMETRO PARTE QUANDO FINISCO IO."],
+    defeat: ["IL MICROFONO DEGLI OSPITI ERA RIVOLTO VERSO LA MIA REPLICA."],
     money: 1200, reward: { itemId: "schedona", qty: 1 }
   },
   "campo-claque": {
     id: "campo-claque", name: "CAPO CLAQUE UNITARIA", pal: "influencer",
     team: [["vannaccix", 48], ["bojoon", 49], ["tajanide", 49]],
-    intro: ["APPLAUDIAMO TUTTI INSIEME.", "SU CHI APPLAUDIRE, PERÒ, DECIDO IO."],
-    defeat: ["APPLAUSO FINALE. ERA NEL CONTRATTO."],
+    intro: ["IL PUBBLICO È AUTONOMO: SCEGLIE TRA I MIEI DUE CARTELLI.", "IL PROGRAMMA NON SI SENTE, MA IL TEMPO DEGLI APPLAUSI È PERFETTO."],
+    defeat: ["HO STACCATO L'AUDIO DEL PROGRAMMA. LE MANI HANNO CONTINUATO DA SOLE."],
     money: 1100, reward: { itemId: "caffe", qty: 3 }
   },
   "campo-photographer": {
@@ -51,8 +51,8 @@ export const TRAINERS: Record<string, TrainerDef> = {
       ["gianimago", 51, ["exit_poll", "voto_disgiunto", "piazza_aperta", "fiducia"]],
       ["salistrobo", 52, ["festival", "diretta_social", "giravolta", "smentita_flash"]]
     ],
-    intro: ["STRINGETEVI. ANCORA. ANCORA UN PO'.", "SE RESTA FUORI QUALCUNO, LO AGGIUNGIAMO IN POST."],
-    defeat: ["PERFETTA.", "NESSUNO È D'ACCORDO, MA TUTTI SONO A FUOCO."],
+    intro: ["IL PROGRAMMA OCCUPA UN POSTO. POSSIAMO TENERLO NOI FINO A DOPO LE ELEZIONI?", "NON CHIEDO UN ACCORDO. MI BASTANO DUE SPALLE ALLA STESSA ALTEZZA."],
+    defeat: ["SCATTO ARCHIVIATO. IL METRO HA FINITO IL SUO LAVORO.", "I PATTI SONO RIMASTI QUELLI ACCETTATI. PER RIPARARLI SERVE PIÙ DI UNA CORNICE."],
     money: 1800, reward: { itemId: "schedona", qty: 1 }
   },
   "futuro-anteriore": {

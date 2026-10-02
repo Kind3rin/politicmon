@@ -1,10 +1,11 @@
 import type { MapDef } from "./types";
+import { CAMPO_VOICES } from "../campo";
 
 const CAMPO_LARGO_TILES = [
   "TTTTTTTTTTTTTTTTTTTTTTTT",
   "TT...ffffffffff.......TT",
   "TT...f========f.......TT",
-  "TT...f==YY=1==f.......TT",
+  "TT...f=====1==f.......TT",
   "TT...ffff==ffff.......TT",
   "TT...s...==...s.......TT",
   "TT...2...==..3f.......TT",
@@ -24,8 +25,8 @@ const CAMPO_LARGO_TILES = [
 const RETROPALCO_CAMPO_TILES = [
   "AAAAAAAAAAAAAAAA",
   "AbbbpppppppppbbA",
-  "ApppppttttpppppA",
-  "ApppppttttpppppA",
+  "ApppptpppptppppA",
+  "AppppppppppppppA",
   "AppppppppppppppA",
   "AppPppppppppPppA",
   "ApppphhhhppppppA",
@@ -193,12 +194,15 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     id: "campo_largo",
     name: "CAMPO LARGO",
     tiles: CAMPO_LARGO_TILES,
+    tileOverrides: { "=": "tiles/campo_path.png" },
+    buildingOverrides: { v: "tiles/campo_backstage.png" },
+    objectOverrides: { "1": "tiles/campo_stage.png", "2": "tiles/campo_gazebo.png", "3": "tiles/campo_poster.png", "6": "tiles/campo_camera.png" },
     outdoor: true,
     allowWanderers: false,
     encounterRate: 0.10,
     encounters: [
-      { speciesId: "salistrobo", weight: 65, minLv: 28, maxLv: 31 },
-      { speciesId: "fratocorno", weight: 35, minLv: 28, maxLv: 31 }
+      { speciesId: "salistrobo", weight: 65, minLv: 43, maxLv: 46 },
+      { speciesId: "fratocorno", weight: 35, minLv: 43, maxLv: 46 }
     ],
     music: "campo_largo",
     warps: [
@@ -219,37 +223,38 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       }
     ],
     signs: [
-      { x: 5, y: 5, lines: ["CAMPO LARGO.", "TRE GAZEBO, DUE POSTI E UN SOLO FOTOGRAFO."] },
+      { x: 5, y: 5, lines: ["CAMPO LARGO.", "TRE CANDIDATI, DUE POSTI. IL PROGRAMMA NON HA IL PASS."] },
       { x: 13, y: 5, lines: ["PALCO UNITARIO.", "LE OPINIONI RESTANO RIGOROSAMENTE SEPARATE."] },
-      { x: 4, y: 14, lines: ["USCITA SICURA A SUD.", "NESSUNA SCELTA VIENE PERSA ABBANDONANDO L'AREA."] }
+      { x: 4, y: 14, lines: ["USCITA SICURA A SUD.", "NESSUNA SCELTA VIENE PERSA ABBANDONANDO L'AREA."] },
+      { x: 16, y: 15, lines: ["RECLUTAMENTO TRA LE QUINTE: LV 43-46.", "IL CIRCOLO NEL RETROPALCO LIBERA UN POSTO. IL MEDICO RECUPERA PV E PP."] }
     ],
     pickups: [
       { id: "pk-campo-dossier", x: 20, y: 7, itemId: "schedona", qty: 1, hidden: true }
     ],
     decoratives: [
       { x: 8, y: 3, lines: ["PRIMO SEGNO PER LA FOTO.", "QUALCUNO HA GIÀ PRENOTATO IL CENTRO."] },
-      { x: 9, y: 3, lines: ["SECONDO SEGNO PER LA FOTO.", "IL TERZO È IN COMMISSIONE."] },
+      { x: 9, y: 3, lines: ["SECONDO SEGNO PER LA FOTO.", "IL TERZO POSTO È RISERVATO AL DISACCORDO."] },
       { x: 5, y: 11, lines: ["SEDIA DEL TAVOLO LARGO.", "IL TAVOLO, PER ORA, NON C'È."] }
     ],
     npcs: [
       {
-        id: "campo-capo-campagna", pal: "aide", x: 10, y: 15, facing: "up",
-        lines: ["TRE CANDIDATI. DUE POSTI IN FOTO.", "PARLA CON TUTTI, POI DECIDI IL PERIMETRO NEL RETROPALCO."]
+        id: "campo-capo-campagna", pal: "aide", wander: false, x: 10, y: 15, facing: "up",
+        lines: ["TRE CANDIDATI. DUE POSTI IN FOTO.", "LE CARTE DEI CANDIDATI COMPONGONO IL PATTO. IL RETROPALCO GESTISCE LA SQUADRA; IL FOTOGRAFO MOSTRA IL COSTO DELLA CORNICE."]
       },
       {
-        id: "campo-secretary", pal: "boss", x: 4, y: 7, facing: "right",
-        lines: ["PORTO TERRITORIO.", "MA SE IL CAMPO CAMBIA DIREZIONE, IO RESTO FERMA."]
+        id: "campo-secretary", pal: "boss", spriteSet: "campo-secretary", wander: false, x: 4, y: 7, facing: "right",
+        lines: CAMPO_VOICES.campo_secretary
       },
       {
-        id: "quantum-centrist", pal: "aide", x: 16, y: 7, facing: "left",
-        lines: ["SONO AL CENTRO DI OGNI IPOTESI.", "SOPRATTUTTO DI QUELLE OPPOSTE."]
+        id: "quantum-centrist", pal: "aide", spriteSet: "quantum-centrist", wander: false, x: 16, y: 7, facing: "left",
+        lines: CAMPO_VOICES.quantum_centrist
       },
       {
-        id: "civic-mayor", pal: "granny", x: 4, y: 9, facing: "right",
-        lines: ["NEL MIO COMUNE FUNZIONA TUTTO.", "IL COMUNE È QUESTO GAZEBO, MA È UN INIZIO."]
+        id: "civic-mayor", pal: "granny", spriteSet: "civic-mayor", wander: false, x: 4, y: 9, facing: "right",
+        lines: CAMPO_VOICES.civic_mayor
       },
       {
-        id: "campo-fotografo", pal: "journalist", x: 10, y: 2, facing: "down",
+        id: "campo-fotografo", pal: "journalist", spriteSet: "campo-photographer", wander: false, x: 10, y: 2, facing: "down",
         lines: ["FERMI TUTTI!", "PRIMA DELLA FOTO SERVE UN'IDEA ABBASTANZA LARGA DA ENTRARE NEL FRAME."]
       },
       {
@@ -258,12 +263,12 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       },
       {
         id: "campo-tr-debate", pal: "journalist", x: 8, y: 7, facing: "right",
-        trainerId: "campo-debate", sightRange: 2, showIfFlag: "campo-photo-choice-complete",
+        trainerId: "campo-debate", showIfFlag: "campo-photo-choice-complete",
         lines: ["IL DIBATTITO È CHIUSO. LE REPLICHE, PURTROPPO, NO."]
       },
       {
         id: "campo-tr-claque", pal: "influencer", x: 12, y: 9, facing: "up",
-        trainerId: "campo-claque", sightRange: 2, showIfFlag: "campo-photo-choice-complete",
+        trainerId: "campo-claque", showIfFlag: "campo-photo-choice-complete",
         lines: ["LA CLAQUE HA FINITO I GETTONI."]
       }
     ]
@@ -272,6 +277,8 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
     id: "retropalco_campo",
     name: "RETROPALCO DEL CAMPO",
     tiles: RETROPALCO_CAMPO_TILES,
+    tileOverrides: { p: "tiles/campo_floor.png", A: "tiles/campo_wall.png" },
+    objectOverrides: { t: "tiles/campo_table.png" },
     outdoor: false,
     music: "interior",
     warps: [
@@ -279,11 +286,11 @@ export const ATTO3_MAPS: Record<string, MapDef> = {
       { x: 8, y: 9, toMap: "campo_largo", toX: 18, toY: 13, facing: "down" }
     ],
     signs: [
-      { x: 2, y: 1, lines: ["ORDINE DEL GIORNO:", "1. STARE INSIEME. 2. DEFINIRE COSA SIGNIFICA."] },
-      { x: 13, y: 1, lines: ["CARTELLINA RISERVATA.", "CONTENUTO: LA PREVIEW CHE TUTTI AVEVANO GIÀ LETTO."] }
+      { x: 2, y: 1, lines: ["ORDINE DEL GIORNO:", "IL METRO MISURA LA CORNICE. PER LE DISTANZE POLITICHE SERVE IL DOSSIER."] },
+      { x: 13, y: 1, lines: ["CARTELLINA RISERVATA.", "IL PROGRAMMA È QUI. NELLA FOTO OCCUPAVA IL POSTO DI UN LOGO."] }
     ],
     pickups: [],
-    npcs: []
+    npcs: [{ id: "campo-circolo", pal: "professor", x: 8, y: 5, facing: "up", wander: false, box: true }]
   },
   futuro_piazza: {
     id: "futuro_piazza",

@@ -11,7 +11,7 @@ export type WorldCommand =
   | { kind: "say"; lines: string[] }
   | { kind: "setFlag"; flag: string }
   | { kind: "openScene"; scene: WorldSceneId }
-  | { kind: "openCoalition"; focus: AllyId }
+  | { kind: "openCoalition"; focus: AllyId; intro?: string[] }
   | { kind: "openPhotoChoice" }
   | { kind: "openFutureChoice" }
   | { kind: "openDiplomacyChoice"; initial: DiplomacyChoice }

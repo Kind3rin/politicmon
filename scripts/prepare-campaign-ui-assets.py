@@ -38,6 +38,8 @@ proof.save(base/'proof.png')
 manifest['outputs']=outputs
 manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
 if args.install:
+    superseded = {asset['path'] for asset in manifest['assets'] if asset.get('supersededBy')}
     for output in outputs:
+        if output['path'] in superseded: continue
         dest=ROOT/output['path'];dest.parent.mkdir(parents=True,exist_ok=True);copy2(base/'staged'/output['path'],dest)
 print(f"Prepared {len(outputs)} PNGs; {'installed' if args.install else 'staged'}.")

@@ -1,0 +1,492 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 586.72,
+  "estimatedCredits": 25.5,
+  "assets": [
+    {
+      "id": "campo-debate",
+      "kind": "briefing",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Finished 21:9 full bleed panoramic illustration. Main subjects centered vertically with quiet upper/lower edges, designed for a native 224x78 crop. A small fictional debate moderator stands at a narrow lectern. Three microphones all bend toward the moderator's mouth while two guest chairs have microphones facing away. A brass two-button console in front routes both colored cables to the SAME loudspeaker. Behind them a neat party photo frame holds only the moderator's silhouette. Original visual satire of controlling the reply while declaring equal speaking time; make one speaker and reversed microphones very clear.",
+      "path": "public/sprites/ui/boss/campo-debate.png",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "2d54f388-0a4d-4141-9b3b-7dd9e8beaf0c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090049_2d54f388-0a4d-4141-9b3b-7dd9e8beaf0c.png",
+      "sourceSha256": "6a8583f7d66589be6661f4526821931f2a00177b4a93b3c5e3225c317ea725d5",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/campo-debate.png": "811d3238fde4b88fb3e1b633eecd61260c5917d3b9d424a9c86fc9d5003e4702"
+      },
+      "cropBox": [
+        0,
+        54,
+        1344,
+        522
+      ]
+    },
+    {
+      "id": "campo-claque",
+      "kind": "briefing",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Finished 21:9 full bleed panoramic illustration. Main subjects centered vertically with quiet upper/lower edges, designed for a native 224x78 crop. Fictional rally backstage. A cheerful burgundy-jacket applause director holds two huge different colored cue paddles while a row of mechanical ivory gloves on teal poles all clap toward a gold camera light, not toward a lonely speaker with an empty folder. One unplugged cable leaves the speaker unheard while applause rhythm stays precise. Original satire of perfectly coordinated support without listening; simple shapes and empty space, no dangerous scene.",
+      "path": "public/sprites/ui/boss/campo-claque.png",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "cdca5b0b-59c6-4ff1-90ec-48a2c5e5fd05",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090049_cdca5b0b-59c6-4ff1-90ec-48a2c5e5fd05.png",
+      "sourceSha256": "9fd0a1b9b39262645c2ec4cbd8789f7b2f6ccd7859c72717ecf7692c1b1682ea",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/campo-claque.png": "f5df680bf37ef36b01fe4e9d39d653e50c1d5a93bf440fa06201b5f26d309fd3"
+      },
+      "cropBox": [
+        0,
+        54,
+        1344,
+        522
+      ]
+    },
+    {
+      "id": "campo-photographer",
+      "kind": "briefing",
+      "width": 224,
+      "height": 78,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Finished 21:9 full bleed panoramic illustration. Main subjects centered vertically with quiet upper/lower edges, designed for a native 224x78 crop. One fictional official photographer with navy waistcoat and a large gold-framed vintage camera measures the width of a party photo with a brass ruler. Two fictional adults in contrasting teal/burgundy jackets are squeezed neatly into a small ivory frame; a large empty blank programme folder sits outside the frame at the right, held by an unpictured third arm. A wider frame waits on the floor but a frayed burgundy ribbon ties one ally's wrist to the small frame. Clear satire of coalition agreement versus photo width. No text on folders, no real faces.",
+      "path": "public/sprites/ui/boss/campo-photographer.png",
+      "aspectRatio": "21:9",
+      "background": "opaque",
+      "cropTop": 54,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "0c70c0ea-903c-4aa2-8fa7-9f2b84c91443",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090049_0c70c0ea-903c-4aa2-8fa7-9f2b84c91443.png",
+      "sourceSha256": "176ff97f3dfb6c567f4f3537d06a61b26f42e546d44fdf3211302c7be4a34003",
+      "sourceSize": [
+        1344,
+        576
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/boss/campo-photographer.png": "88af3a958602e2c9943cc39d1a638c3346e04f45d28041b4efa476be633553ae"
+      },
+      "cropBox": [
+        0,
+        54,
+        1344,
+        522
+      ]
+    },
+    {
+      "id": "campo-backstage",
+      "kind": "building",
+      "width": 64,
+      "height": 48,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One isolated complete game asset on a fully transparent clean alpha background; no ground plane, cast shadow, matte glow or background. Orthographic straight frontal RPG view, no isometric angle. A complete isolated small temporary campaign photo backstage pavilion façade, width exactly FOUR THIRDS of height. Ivory painted panel walls, navy structural metal, burgundy rolled side curtains, teal upper skylight and a thin gold lighting rail. Central DARK NAVY DOUBLE entrance at the BOTTOM, combined width HALF the building width, two leaf doors edged gold. A plain empty photo frame hangs over the entrance, no emblems, no lettering. Perfectly flat front view, sides fit inside silhouette.",
+      "path": "public/sprites/tiles/campo_backstage.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "8a4d2beb-6e70-445a-ab12-eb06ba779dc5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090049_8a4d2beb-6e70-445a-ab12-eb06ba779dc5.png",
+      "sourceSha256": "50a6cc7e5897a679f84aac3b058ca462588c2df8950e3a4c2f2e189d8f38b354",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_backstage.png": "fe886617ece17e1d5de12c2a58b84f6bb6d329609902058e5dd45e750d42df35"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "campo-gazebo",
+      "kind": "object",
+      "width": 40,
+      "height": 40,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One isolated complete game asset on a fully transparent clean alpha background; no ground plane, cast shadow, matte glow or background. Orthographic straight frontal RPG view, no isometric angle. One small campaign gazebo: low broad teal fabric canopy on four slim navy posts, burgundy short bunting without symbols, brass corner fittings and one simple ivory counter. Empty opening faces forward, no characters, plain surfaces. Slightly overhead frontal game asset, compact silhouette roughly square, no floor or baseplate outside footprint. Very large simple canopy, clear empty space below.",
+      "path": "public/sprites/tiles/campo_gazebo.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "da0b38b6-1a2b-4e89-8f24-61804c0d7d11",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090049_da0b38b6-1a2b-4e89-8f24-61804c0d7d11.png",
+      "sourceSha256": "1c039bf34d14d154ea4b8467a508f6820e44c026765e47c2fc1b7e71c2ebeda7",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_gazebo.png": "11b0f88d19023c1a7c9d5d399e7e3564cbf6b55c9b19282a77025243e0813886"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "campo-stage",
+      "kind": "object",
+      "width": 64,
+      "height": 40,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One isolated complete game asset on a fully transparent clean alpha background; no ground plane, cast shadow, matte glow or background. Orthographic straight frontal RPG view, no isometric angle. One complete low campaign photo riser for two adults. A wide rectangular navy platform with ONE ivory front step, burgundy velvet top. Two plain brass circles mark standing places on top. A minimal thin gold rectangular photo backdrop frame rises behind it with no fill; no chairs, speakers, people, banners or ground. Overall width much greater than height, simple front view, readable at 64x40.",
+      "path": "public/sprites/tiles/campo_stage.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "ecab215e-44c5-49b5-b1c9-8f3c561be4f9",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090049_ecab215e-44c5-49b5-b1c9-8f3c561be4f9.png",
+      "sourceSha256": "746d68370bb2352fd42ad14ad4cd4dfb61ce12ff597a313133f2922a0409b3a5",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_stage.png": "333f986ccca586d180e8dac4da3e06328cb55afabba61cf0160010614ab6662f"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "campo-poster",
+      "kind": "object",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One isolated complete game asset on a fully transparent clean alpha background; no ground plane, cast shadow, matte glow or background. Orthographic straight frontal RPG view, no isometric angle. One compact freestanding poster board: square blank ivory poster in thick navy frame, two oversized simple ribbons teal and burgundy pulling opposite directions from the same central brass pin, navy short pedestal. No lettering or arrows or logos. Iconic metaphor of opposite programmes joined only at the centre, square compact game icon.",
+      "path": "public/sprites/tiles/campo_poster.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "f0e4a0df-567c-4745-810e-ed18c5fa629a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090143_f0e4a0df-567c-4745-810e-ed18c5fa629a.png",
+      "sourceSha256": "dd87be1165e42b385e491892bf7abf1c7a820c19cbb65acd2242d19a65674310",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_poster.png": "566a4c3d28f56de292fd8b10299a77b4ef8b6a61eb7fbfb2806513dbf40f7a81"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "campo-camera",
+      "kind": "object",
+      "width": 48,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One isolated complete game asset on a fully transparent clean alpha background; no ground plane, cast shadow, matte glow or background. Orthographic straight frontal RPG view, no isometric angle. One complete fictional official photo camera on a stout navy tripod. Large ivory camera body, oversized round teal lens in thick brass ring, small burgundy cable coiled at one side. Front view, no human, no light beam, no flash, no scenery. Wide compact silhouette, legs all visible, very simple readable pixel shapes.",
+      "path": "public/sprites/tiles/campo_camera.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "484b2508-babf-48c6-bf0e-3cc543241b4e",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090143_484b2508-babf-48c6-bf0e-3cc543241b4e.png",
+      "sourceSha256": "568f83042714bc6f39df216952ac5732645e8a78ac0bb09c665f2509c4f864b4",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_camera.png": "b5b567e4a9f89c96c67ea7cfc3b7924e2a09a301b7ac818f75067db2c9588cce"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "campo-path",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One seamless flat repeating overhead ground texture, warm pale ivory temporary event walkway panels with very subtle tan joints and faint teal edge hints. Low contrast, no objects, perspective, border, shadow, lettering or motifs; opposite edges repeat. Designed to downsample to one 16x16 pixel tile.",
+      "path": "public/sprites/tiles/campo_path.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "7a1508d3-0134-4dc8-9807-e5624628c818",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090143_7a1508d3-0134-4dc8-9807-e5624628c818.png",
+      "sourceSha256": "3497907aaae87332136a1717f3f8dd54b7b5dce5d0851e9548dfbe168689c2cd",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_path.png": "7a796671215358aade371efbf8d2a5e1dba5024f4bc3f94d33db42de9e83e2fc"
+      }
+    },
+    {
+      "id": "campo-floor",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One seamless flat repeating overhead floor texture, pale warm ivory backstage lino panels with extremely faint burgundy-grey joints. Matte large simple shapes, low contrast supports actors. No objects, perspective, border, shadow, lettering or motifs; opposite edges repeat. Designed for one 16x16 pixel tile.",
+      "path": "public/sprites/tiles/campo_floor.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "d0fd31c8-1367-473a-b3d4-8b646b218260",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090143_d0fd31c8-1367-473a-b3d4-8b646b218260.png",
+      "sourceSha256": "bcb78c4aae2bac1e9326547324f0302cc865969fedc0918316897f904e14ee83",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_floor.png": "536245d067701c072ec6ac69b9ad887b68adf170d167f872d7447790fff9480f"
+      }
+    },
+    {
+      "id": "campo-wall",
+      "kind": "texture",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One seamless flat repeating backstage wall material, deep navy temporary acoustic fabric panels and one desaturated teal structural seam. Quiet low contrast, no objects, perspective, border, shadow, lettering or motifs; opposite edges repeat. Designed for one 16x16 pixel tile.",
+      "path": "public/sprites/tiles/campo_wall.png",
+      "aspectRatio": "1:1",
+      "background": "opaque",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "862aa08d-ed65-4b72-8d3d-22d28338ba59",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090143_862aa08d-ed65-4b72-8d3d-22d28338ba59.png",
+      "sourceSha256": "37e3c3a709f3ec5f5fd035f40aecbbe6e05cc65c3952c4f8ec4b99d68fd6b1eb",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_wall.png": "a7afa1528913f04654b064672a67a5dd021ecaacd4f9bebd3d861af2e49b37b2"
+      }
+    },
+    {
+      "id": "campo-table",
+      "kind": "object",
+      "width": 16,
+      "height": 16,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. One isolated complete game asset on a fully transparent clean alpha background; no ground plane, cast shadow, matte glow or background. Orthographic straight frontal RPG view, no isometric angle. One compact simple campaign backstage work table. Ivory rectangular top, two navy legs, one plain closed burgundy programme folder and one brass tape measure resting on top. Slightly overhead front RPG object, very large readable shapes at 16x16, no chairs or ground.",
+      "path": "public/sprites/tiles/campo_table.png",
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "abee17f9-ee3d-4a7c-965f-09066edd81c1",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090143_abee17f9-ee3d-4a7c-965f-09066edd81c1.png",
+      "sourceSha256": "4172324b573c1dddbeaa292f2c9297363cbf8a0af5d5092d9edf1b841331e0e6",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/tiles/campo_table.png": "243c2188b7bbf1f1ba4be19b71c992d0a505f578362c943cbedac72dd8383580"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "photo",
+      "kind": "backdrop",
+      "width": 240,
+      "height": 163,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Finished full-bleed 4:3 backdrop for a photo-choice game interface cropped to 240x163. Original satirical outdoor photo set under warm ivory/teal gazebo. At the LEFT third a large vintage navy and brass camera and a narrow empty gold picture frame; behind it a wider unoccupied frame sits on a burgundy riser. At the far lower left a huge plain empty folder has fallen OUTSIDE both frames. The CENTER and RIGHT are calm teal/ivory negative space for opaque UI cards, no tiny details needed there. No people, no text, no emblems. Big clear difference between narrow and wide frames.",
+      "path": "public/sprites/ui/campaign/photo.png",
+      "aspectRatio": "4:3",
+      "background": "opaque",
+      "cropTop": 36,
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "bcb51fff-4ac1-4e8d-8f66-aea5ea75df71",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090336_bcb51fff-4ac1-4e8d-8f66-aea5ea75df71.png",
+      "sourceSha256": "8069797a438e5e33dbd0e83efd41e9c1ef86638174f83ba89c06b38717d6356e",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "outputSha256s": {
+        "public/sprites/ui/campaign/photo.png": "8a67e5af8510fffd7029201ce0dfa155770b920de42507d422fc4e14ae36a821"
+      },
+      "cropBox": [
+        0,
+        36,
+        1168,
+        829
+      ]
+    },
+    {
+      "id": "campo-secretary",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Clean 2 by 2 reference sheet with FOUR complete views of the EXACT SAME fictional chibi character. Top-left FRONT facing SOUTH, top-right BACK facing NORTH, bottom-left literal profile facing WEST left, bottom-right literal profile facing EAST right. Each equal quadrant one full upright body, equal scale with feet at same relative height, generous transparent separation; no divider, no movement streaks. Navy/ivory/teal/burgundy/brass palette. Clear simple clothing and silhouette, large head small body, designed for native 24x32. Clean transparent alpha, no ground shadows or glow. Fictional territorial party secretary: composed middle-aged woman, short dark charcoal bob, teal structured jacket, ivory blouse, navy straight trousers, plain burgundy rolled map held in one hand. One simple gold brooch shaped like a square, not a logo. Same hair and clothing in all four views, no real person's likeness.",
+      "path": "public/sprites/chars/npc_campo-secretary_south.png",
+      "outputs": [
+        "public/sprites/chars/npc_campo-secretary_south.png",
+        "public/sprites/chars/npc_campo-secretary_north.png",
+        "public/sprites/chars/npc_campo-secretary_west.png",
+        "public/sprites/chars/npc_campo-secretary_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "8ae3751c-3291-463e-a2db-af683f793195",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090336_8ae3751c-3291-463e-a2db-af683f793195.png",
+      "sourceSha256": "f8d6552224907a427d7b3ee38db653324d9fd876c0014c7fc173ae6dbea077d0",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_campo-secretary_south.png": "66f80317f880b7170019d62acd1b82d46707505a0486733e342779530267d8d0",
+        "public/sprites/chars/npc_campo-secretary_north.png": "ce3cd0497ebce9b74abbc3e6231a896cfe4819db214876ade68c6af5737c4856",
+        "public/sprites/chars/npc_campo-secretary_west.png": "517a40e951e2ef26fc9f48d882e0af7456da893717e11018066c387fe1cafbab",
+        "public/sprites/chars/npc_campo-secretary_east.png": "4c2a4e3f513545d2f71907b1e9e78393e5f319d137d7bf90a6d5f9f2c9d4de31"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "quantum-centrist",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Clean 2 by 2 reference sheet with FOUR complete views of the EXACT SAME fictional chibi character. Top-left FRONT facing SOUTH, top-right BACK facing NORTH, bottom-left literal profile facing WEST left, bottom-right literal profile facing EAST right. Each equal quadrant one full upright body, equal scale with feet at same relative height, generous transparent separation; no divider, no movement streaks. Navy/ivory/teal/burgundy/brass palette. Clear simple clothing and silhouette, large head small body, designed for native 24x32. Clean transparent alpha, no ground shadows or glow. Fictional indecisive centrist organiser: small adult man, neat silver side-parted hair, brass round glasses, ivory jacket with opposite teal and burgundy lapels, navy trousers, plain tiny two-sided folder held close. No facial likeness to real politicians. Literal distinct front/back and opposite profiles with consistent lapels.",
+      "path": "public/sprites/chars/npc_quantum-centrist_south.png",
+      "outputs": [
+        "public/sprites/chars/npc_quantum-centrist_south.png",
+        "public/sprites/chars/npc_quantum-centrist_north.png",
+        "public/sprites/chars/npc_quantum-centrist_west.png",
+        "public/sprites/chars/npc_quantum-centrist_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "e1116dc7-7cc0-4c93-bc0a-3a7b452eb2d8",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090336_e1116dc7-7cc0-4c93-bc0a-3a7b452eb2d8.png",
+      "sourceSha256": "6ec8246bde2e10721edcbf85074a516c1626cd49ea4f9db7366f3a3e181667b2",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_quantum-centrist_south.png": "1faf2aa4d18473d500d0df61a0560699901513cfbc63b2620d39ebbb7e47a5e2",
+        "public/sprites/chars/npc_quantum-centrist_north.png": "a3b24bd96e7c0cf8fcabdd95ea796b7ca4b2d06d1fb8d29a4081004415bb5e1c",
+        "public/sprites/chars/npc_quantum-centrist_west.png": "f732abb96c0397796709e0f6e0932ec4b5782dbd5e41f4bbff8af41cf62c84a8",
+        "public/sprites/chars/npc_quantum-centrist_east.png": "275163ca2873cf1a205bba9f321f08cc93c73381acd38b00a806763089cf7b93"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "civic-mayor",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Clean 2 by 2 reference sheet with FOUR complete views of the EXACT SAME fictional chibi character. Top-left FRONT facing SOUTH, top-right BACK facing NORTH, bottom-left literal profile facing WEST left, bottom-right literal profile facing EAST right. Each equal quadrant one full upright body, equal scale with feet at same relative height, generous transparent separation; no divider, no movement streaks. Navy/ivory/teal/burgundy/brass palette. Clear simple clothing and silhouette, large head small body, designed for native 24x32. Clean transparent alpha, no ground shadows or glow. Fictional practical civic mayor: adult woman with warm brown curly hair tied in a small low bun, ivory rolled-sleeve blouse, burgundy waistcoat, teal trousers, one plain navy toolbox in one hand. NO tricolour sash, badges, logo or text. Same compact silhouette all four directions, feet complete and equal scale.",
+      "path": "public/sprites/chars/npc_civic-mayor_south.png",
+      "outputs": [
+        "public/sprites/chars/npc_civic-mayor_south.png",
+        "public/sprites/chars/npc_civic-mayor_north.png",
+        "public/sprites/chars/npc_civic-mayor_west.png",
+        "public/sprites/chars/npc_civic-mayor_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "8823377a-1264-4ca5-801a-4612f12d4dfe",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090336_8823377a-1264-4ca5-801a-4612f12d4dfe.png",
+      "sourceSha256": "4295043455de2d99902f8b5387f8ba69fa1301ca64a2225c2449ca75124890f2",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_civic-mayor_south.png": "cda132345f1893ff396bbb226d0d52c314362eb5a07f8cabbd17b1c2c70c8c94",
+        "public/sprites/chars/npc_civic-mayor_north.png": "2d6265500108b505a5adc9dca5f2a07f200607797edc0c5e3390930aa9166607",
+        "public/sprites/chars/npc_civic-mayor_west.png": "79a9489350b592b9bc29128976bbc4b496b0c405be8b4132f9c5b0a7e4c23455",
+        "public/sprites/chars/npc_civic-mayor_east.png": "21278b9532733718fefa579f35dcf240b00a4d2ea176d770ece56b547b418425"
+      },
+      "alphaCutoff": 128
+    },
+    {
+      "id": "campo-photographer-directions",
+      "kind": "directions",
+      "width": 24,
+      "height": 32,
+      "prompt": "POLITICMON original modern satirical civic fantasy RPG, deliberate crisp pixel art, bold simple shapes readable at tiny native game scale. Restrained warm ivory, navy, teal, burgundy and brass gold palette with warm outdoor evening light. No text, letters, numbers, brands, logos, watermarks, flags, real people or recognizable politicians. No smooth 3D, photorealism or blurry painting. Clean 2 by 2 reference sheet with FOUR complete views of the EXACT SAME fictional chibi character. Top-left FRONT facing SOUTH, top-right BACK facing NORTH, bottom-left literal profile facing WEST left, bottom-right literal profile facing EAST right. Each equal quadrant one full upright body, equal scale with feet at same relative height, generous transparent separation; no divider, no movement streaks. Navy/ivory/teal/burgundy/brass palette. Clear simple clothing and silhouette, large head small body, designed for native 24x32. Clean transparent alpha, no ground shadows or glow. Fictional official photographer: adult man with curly dark hair and a short plain navy cap, ivory rolled-sleeve shirt, navy waistcoat, burgundy trousers, small brass and teal camera on chest strap and a plain ivory folded reflector tucked under arm. No recognizable face. Literal opposite profiles and back of cap/camera strap, no camera flash.",
+      "path": "public/sprites/chars/npc_campo-photographer_south.png",
+      "outputs": [
+        "public/sprites/chars/npc_campo-photographer_south.png",
+        "public/sprites/chars/npc_campo-photographer_north.png",
+        "public/sprites/chars/npc_campo-photographer_west.png",
+        "public/sprites/chars/npc_campo-photographer_east.png"
+      ],
+      "aspectRatio": "1:1",
+      "background": "transparent",
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "status": "completed",
+      "jobId": "ba969427-1ebb-4409-98fe-9628028048a8",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_090336_ba969427-1ebb-4409-98fe-9628028048a8.png",
+      "sourceSha256": "6508466cb878585f24be6e6538fe6184096a332195bb600148584b2bcd40f729",
+      "sourceSize": [
+        1024,
+        1024
+      ],
+      "outputSha256s": {
+        "public/sprites/chars/npc_campo-photographer_south.png": "a2a7503850e6c39dd9872fec46628f222e299693f3a7146fc2aee510a504b206",
+        "public/sprites/chars/npc_campo-photographer_north.png": "dc35b19f9f510c299275bd44bf9e161f244e38e7e6ab891199c4a02d2ac8ec5f",
+        "public/sprites/chars/npc_campo-photographer_west.png": "589d3cf84c4a8e3ac4f867d731a4735db7dc74be7b314bec64aa89afd22198fd",
+        "public/sprites/chars/npc_campo-photographer_east.png": "afdb1253b713dc192fec035fe09176a1c015a60f5f2de804442255fe13b5ddc9"
+      },
+      "alphaCutoff": 128
+    }
+  ],
+  "creditsSpent": 25.5,
+  "balanceAfter": 561.22
+}

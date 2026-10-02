@@ -1,4 +1,6 @@
-# Campo Largo: la foto deve diventare una decisione giocata
+# Campo Largo: audit storico prima della nuova cornice
+
+Implementazione e prove del round successivo sono in [CAMPO-CORNICE.md](CAMPO-CORNICE.md). I livelli 28–31, i due automatismi da campo visivo e il cast generico descritti sotto sono lo stato precedente; oggi il reclutamento è LV 43–46, i dossier sono manuali e quattro attori hanno direzioni proprie.
 
 Audit del 2 ottobre 2026 dopo Bruxelles. Non certifica un redesign concluso del Campo. Le viste campione `artifacts/screens/world-redesign/bruxelles/campo_largo-*.png` e `retropalco_campo-*.png` mostrano ancora terreno e recinti condivisi, pannello generico, casa standard per il retropalco, pavimento in legno e otto tavoli ripetuti. I PNG condivisi sono rinnovati; manca un ambiente specifico per questo capitolo. L'HUD delle viste campione usa una fixture sintetica e non prova lo stato missione di una campagna entrata da Bruxelles.
 

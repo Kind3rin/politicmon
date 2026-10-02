@@ -1,6 +1,7 @@
 import type { WorldContext } from "./worldContext";
 import type { AllyId } from "../coalition";
 import { districtActionCount } from "../districtCampaign";
+import { CAMPO_VOICES } from "../../data/campo";
 
 // Punto d'ingresso deliberatamente piccolo per R1. La logica Atto 3 vivrà qui
 // e restituirà comandi dichiarativi; WorldScene resterà l'adattatore UI.
@@ -142,7 +143,12 @@ export function createAtto3Controller(): Atto3Controller {
       }
       if (npcId === "campo-fotografo") {
         if (context.state.flags["campo-photo-complete"]) {
-          context.dispatch({ kind: "say", lines: ["A FUOCO!", "NESSUNO È D'ACCORDO, MA TUTTI SI VEDONO BENISSIMO.", "IL DOSSIER FUTURO ANTERIORE È ORA DISPONIBILE."] });
+          const tense = context.state.coalition.members.filter(m => m.status === "strained").length;
+          context.dispatch({ kind: "say", lines: [
+            context.state.flags["atto3-photo-choice:panoramica"] ? "OBIETTIVO LARGO: 800 FONDI. IL PROGRAMMA È ANCORA SUL TAVOLO." : "FOTO STRETTA: IL PROGRAMMA È RIMASTO FUORI. RISPARMIO PERFETTAMENTE A FUOCO.",
+            `${tense} PATTI IN TENSIONE. COESIONE: ${context.state.morale.cohesion}. LA CORNICE NON RIPARA ACCORDI.`,
+            "FUTURO ANTERIORE È APERTO. PORTA ANCHE CIÒ CHE NON SI VEDE IN FOTO."
+          ] });
         } else if (context.state.flags["campo-debate-resolved"]) {
           context.dispatch({ kind: "startTrainer", trainerId: "campo-photographer", rematch: false });
         } else if (context.state.flags["campo-photo-choice-complete"]) {
@@ -155,8 +161,9 @@ export function createAtto3Controller(): Atto3Controller {
       const allyId = CANDIDATE_BY_NPC[npcId];
       if (!allyId) return false;
       const seenFlag = `coalition-candidate-seen:${allyId}`;
-      if (!context.state.flags[seenFlag]) context.dispatch({ kind: "setFlag", flag: seenFlag });
-      context.dispatch({ kind: "openCoalition", focus: allyId });
+      const first = !context.state.flags[seenFlag];
+      if (first) context.dispatch({ kind: "setFlag", flag: seenFlag });
+      context.dispatch({ kind: "openCoalition", focus: allyId, ...(first ? { intro: CAMPO_VOICES[allyId] } : {}) });
       return true;
     }
   };

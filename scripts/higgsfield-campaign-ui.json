@@ -17,7 +17,8 @@
       "status": "completed",
       "model": "nano_banana_2",
       "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_223447_3955155e-57e4-4fcf-931f-a8362ab93668.png",
-      "sourceSha256": "3e0a51844fbacb771b908ae35d66f7400c42dda16b180ca0b5680aab04a2dde3"
+      "sourceSha256": "3e0a51844fbacb771b908ae35d66f7400c42dda16b180ca0b5680aab04a2dde3",
+      "supersededBy": "scripts/higgsfield-campo.json:photo"
     },
     {
       "index": 1,

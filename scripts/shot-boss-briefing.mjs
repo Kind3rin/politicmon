@@ -71,7 +71,7 @@ try {
   if(stack.top!==dossier||dossier.page!==0||JSON.stringify(state)!==before||ended)throw Error('Dossier spent state or started fight');
   press(dossier,'left');press(dossier,'b');
   if(stack.top!==world||JSON.stringify(state)!==before||ended||mp.duelBusy)throw Error('Dossier cancel changed state');
-  for(const id of ['giudice1','giudice2','giudice3','garante','ilcapitano','djpapeete','citofonista','noponte','geometra','commercialista','prestanome','tesoriere','eu-relatore','eu-eurodeputato','eu-commissario','eu-lobby','commissione']){
+  for(const id of ['giudice1','giudice2','giudice3','garante','ilcapitano','djpapeete','citofonista','noponte','geometra','commercialista','prestanome','tesoriere','eu-relatore','eu-eurodeputato','eu-commissario','eu-lobby','commissione','campo-debate','campo-claque','campo-photographer']){
     world.startTrainerBattle(TRAINERS[id],()=>ended++);
     for(let i=0;i<40&&stack.top===world;i++)world.update(.1);
     if(stack.top?.constructor.name!=='BossBriefingScene')throw Error('Missing court briefing '+id);

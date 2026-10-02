@@ -17,7 +17,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
-| Boss e prove | Ventotto illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
+| Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
@@ -40,15 +40,20 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Stretto | Cinque nuovi briefing, satira rendering/collaudo, ritorno prima della sfida e Tessera evolutiva; prove manuali anche dopo il Capitano | Tre partite nuove con preparazione diversa fino al Garante; confronto Giorgetta senza kit e accessi in due motori |
 | Offshore | Lido a conchiglia, palme, Tesoriere direzionale, tre dossier e negozio; satire originali e morale conservato | Tre campagne riprese da salvataggi giocati, porte/ritorno/Bruxelles in due motori; OFFSHORE-REGISTRO |
 | Bruxelles | Palazzo e caffè propri, materiali, cast direzionale, cinque dossier e verbale del morale | Tre campagne normali, percorsi nativi e accesso al Campo Largo nei due motori; BRUXELLES-VERBALE |
+| Campo Largo | Set e retropalco propri, quattro cast, foto con conseguenze, Circolo e reclutamento LV 43–46 | Quattro segmenti guadagnati, foto alternative e 16 direzioni nei due motori; CAMPO-CORNICE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker compilato | 188.237 byte gzip iniziali, checksum e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 566 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 188.412 byte gzip iniziali, 626 risorse di installazione e prova PWA |
+| PWA | Precache e primo utilizzo offline dei 594 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 586,72; spesa cumulativa 299,25 crediti. Non sono stati attivati acquisti
+verificato: 561,22; spesa cumulativa 324,75 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: Bruxelles
+## Ultimo round: Campo Largo
+
+[CAMPO-CORNICE.md](CAMPO-CORNICE.md): 17 job, 29 PNG, 25,5 crediti. Tre dossier manuali, quattro attori, patti/cohesione con conseguenze osservate, Circolo e crescita di un reclutamento realmente schierato. Quattro segmenti guadagnati vincono in normale; 286 test, 12.551 layout dei dossier per motore, 486 checksum PNG e 594 risorse offline. L’inventario PWA è un dato JSON versionato: 626 risorse di build verificate senza esclusioni. I percorsi nativi della produzione locale verificano retropalco, varco bloccato e accesso guadagnato a Futuro nei due motori. Saldo 561,22. Pubblicazione e provenienza sono registrate nel verbale; il prossimo tratto è [FUTURO-ANTERIORE-AUDIT.md](FUTURO-ANTERIORE-AUDIT.md). Il goal generale resta attivo.
+
+## Round precedente: Bruxelles
 
 [BRUXELLES-VERBALE.md](BRUXELLES-VERBALE.md): dodici job, quindici PNG, 18 crediti. Cinque sfide volontarie, preparazione sul posto e finale che conserva le promesse reali. Tre segmenti da salvataggi guadagnati vincono in normale; 286 test e 11.222 layout per motore. Porte, cure, ritorni e accesso guadagnato al Campo Largo verificati in Chromium/WebKit. Bundle 357.884 byte gzip, 458 checksum PNG, 566 risorse PWA. Il deploy `6d58cb0` ha CI 36984334435 e tre Vercel riusciti; checksum pubblici e PWA nei due motori verificati. La hostess è ora ferma al molo dopo un ostacolo incontrato nella prova pubblica. Il follow-up `9a5a78a` ha CI 36985613752 e tre Vercel riusciti; i percorsi pubblici al caffè e al Campo Largo passano nei due motori. Il goal generale resta attivo; [CAMPO-LARGO-AUDIT.md](CAMPO-LARGO-AUDIT.md) documenta il prossimo capitolo.
 

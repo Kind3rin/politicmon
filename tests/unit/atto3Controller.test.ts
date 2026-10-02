@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createAtto3Controller } from "../../src/game/world/atto3Controller.ts";
 import { newGameState } from "../../src/game/state.ts";
 import type { WorldCommand } from "../../src/game/world/worldContext.ts";
+import { CAMPO_VOICES } from "../../src/data/campo.ts";
 
 test("atto3 controller: candidato emette flag visto e apertura card", () => {
   const state = newGameState();
@@ -11,7 +12,7 @@ test("atto3 controller: candidato emette flag visto e apertura card", () => {
   assert.equal(handled, true);
   assert.deepEqual(commands, [
     { kind: "setFlag", flag: "coalition-candidate-seen:campo_secretary" },
-    { kind: "openCoalition", focus: "campo_secretary" }
+    { kind: "openCoalition", focus: "campo_secretary", intro: CAMPO_VOICES.campo_secretary }
   ]);
 });
 

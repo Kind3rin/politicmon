@@ -10,6 +10,7 @@
 // stamp-service-worker): ogni deploy = nome cache nuovo, l'activate cancella
 // le cache delle build precedenti. Niente più bump manuali.
 const CACHE = "politicmon-__APP_BUILD_ID__";
+const RUNTIME_MANIFEST = "./precache-runtime-__APP_BUILD_ID__.json";
 const PRECACHE = [
   "./",
   "./index.html",
@@ -18,8 +19,7 @@ const PRECACHE = [
   "./icon-512.png",
   "./icon-maskable-512.png",
   "./apple-touch-icon.png",
-  "./politicmon-icon.svg",
-  ...__PRECACHE_RUNTIME_ASSETS__
+  "./politicmon-icon.svg"
 ];
 
 // La precache salva i PNG canonici; il registry li richiede con ?v=BUILD_ID.
@@ -37,7 +37,17 @@ async function matchCurrentBuild(request) {
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)));
+  event.waitUntil((async () => {
+    // The asset inventory is versioned data. Read it only during installation;
+    // an installed worker needs no network request to reconstruct its cache.
+    const response = await fetch(RUNTIME_MANIFEST, { cache: "reload" });
+    if (!response.ok) throw new Error("Precache inventory unavailable");
+    const groups = await response.clone().json();
+    const runtime = groups.flatMap(([dir, ext, names]) => names.split("|").map(name => dir + name + ext));
+    const cache = await caches.open(CACHE);
+    await cache.addAll([...PRECACHE, ...runtime]);
+    await cache.put(RUNTIME_MANIFEST, response);
+  })());
 });
 
 // La pagina (main.ts) invia SKIP_WAITING quando un SW nuovo è pronto: attivalo.

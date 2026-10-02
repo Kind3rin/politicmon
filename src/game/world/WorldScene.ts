@@ -355,7 +355,7 @@ export class WorldScene implements Scene {
       this.say([
         "CAPO CAMPAGNA: benvenuto a CAMPO LARGO.",
         "TRE CANDIDATI, DUE POSTI: parla con ciascuno e leggi VANTAGGIO, COSTO e LINEA ROSSA.",
-        "Quando hai deciso, entra nel RETROPALCO a est. Puoi cambiare idea prima della foto."
+        "Il RETROPALCO a est ospita il CIRCOLO. Quando hai due alleati, torna dal FOTOGRAFO a nord: il dossier precede la conferma."
       ]);
     }
     this.fadeT = 0.35; // breve dissolvenza d'ingresso nella nuova mappa
@@ -1375,7 +1375,9 @@ export class WorldScene implements Scene {
       return;
     }
     if (command.kind === "openCoalition") {
-      this.stack.push(new CoalitionScene(this.stack, this.input, this.state, command.focus));
+      const open = () => this.stack.push(new CoalitionScene(this.stack, this.input, this.state, command.focus));
+      if (command.intro) this.say(command.intro, open);
+      else open();
       return;
     }
     if (command.kind === "openPhotoChoice") {

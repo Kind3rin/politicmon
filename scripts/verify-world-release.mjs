@@ -29,9 +29,10 @@ const strettoPaths = JSON.parse(readFileSync('scripts/higgsfield-stretto.json','
 const audioPaths = JSON.parse(readFileSync('scripts/higgsfield-audio.json','utf8')).assets.map(a=>a.path.replace(/^public\//,''));
 const offshorePaths = JSON.parse(readFileSync('scripts/higgsfield-offshore.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const bruxellesPaths = JSON.parse(readFileSync('scripts/higgsfield-bruxelles.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
+const campoPaths = JSON.parse(readFileSync('scripts/higgsfield-campo.json','utf8')).assets.flatMap(a=>a.outputs??[a.path]).map(p=>p.replace(/^public\//,''));
 const music = JSON.parse(readFileSync('public/audio/catalog.json','utf8'));
 const musicPaths = ['audio/catalog.json', ...Object.values(music).map(a=>a.file)];
-const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths])];
+const paths = [...new Set([...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...firstCampaignPaths, ...eurotownPaths, ...capitalPaths, ...courtPaths, ...archivePaths, ...strettoPaths, ...audioPaths, ...offshorePaths, ...bruxellesPaths, ...campoPaths])];
 const releasePaths = [...paths, ...musicPaths];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {

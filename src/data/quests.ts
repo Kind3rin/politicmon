@@ -191,10 +191,10 @@ export const QUESTS: QuestDef[] = [
     id: "atto3-foto-scelta",
     title: "TUTTI NEL FRAME",
     desc: "Conosci i tre candidati e scegli i due nomi della prima coalizione.",
-    hint: "Parla con tutti nel campo. Poi entra nel RETROPALCO a est e torna dal fotografo.",
+    hint: "Parla con tutti e scegli due alleati nelle loro carte. Il RETROPALCO gestisce la squadra; il FOTOGRAFO a nord apre la scelta.",
     step: "Componi la coalizione e decidi la foto.",
     isDone: (s) => Boolean(s.flags["campo-photo-choice-complete"]),
-    target: { mapId: "campo_largo", x: 17, y: 12 }
+    target: { mapId: "campo_largo", x: 10, y: 2 }
   },
   {
     id: "atto3-foto-finale",

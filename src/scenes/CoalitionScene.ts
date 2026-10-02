@@ -7,6 +7,7 @@ import { redeemCoalitionRepair, signed } from "../game/campaignDecisions";
 import { saveGame, type GameState } from "../game/state";
 import { coalitionChannelLabel, drawScreenHeader, wrapText } from "../ui/widgets";
 import { drawCampaignBackdrop } from "../ui/campaignArt";
+import { sceneImage } from "../engine/assets";
 
 const R1_CANDIDATES: readonly AllyId[] = ["campo_secretary", "quantum_centrist", "civic_mayor"];
 const LABELS: Readonly<Record<AllyId, { lineRed: string }>> = {
@@ -117,6 +118,11 @@ export class CoalitionScene implements Scene {
     const seen = Boolean(member || this.state.flags[`coalition-candidate-seen:${allyId}`]);
     screen.panel(8, 25, 224, 20, "card");
     screen.text(seen ? ALLY_NAMES[allyId] : "CANDIDATO NON INCONTRATO", 16, 32, "#17243d");
+    const cast = ({ campo_secretary: "campo-secretary", quantum_centrist: "quantum-centrist", civic_mayor: "civic-mayor" } as Partial<Record<AllyId, string>>)[allyId];
+    if (seen && cast) {
+      const portrait = sceneImage(`campo:${cast}`, `chars/npc_${cast}_south.png`);
+      if (portrait) screen.image(portrait, 20, 66, 48, 64);
+    }
     screen.panel(86, 51, 146, 106, "card");
     const status = !seen ? "PARLACI NEL CAMPO" : !member ? "CANDIDATO LIBERO" : member.status === "strained"
       ? "PATTO TESO" : member.status === "reconciled" ? "PATTO RIPARATO" : "PATTO ATTIVO";

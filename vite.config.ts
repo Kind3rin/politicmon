@@ -44,10 +44,9 @@ function stampServiceWorker(): Plugin {
           assetGroups.set(key, [...(assetGroups.get(key) ?? []), name]);
         }
         const encodedAssets = [...assetGroups].map(([key, names]) => [...JSON.parse(key), names.join("|")]);
-        const runtimeExpression = `${JSON.stringify(encodedAssets)}.flatMap(([dir,ext,names])=>names.split("|").map(name=>dir+name+ext))`;
+        writeFileSync(resolve(distRoot, `precache-runtime-${BUILD_ID}.json`), JSON.stringify(encodedAssets));
         const stamped = src
-            .replaceAll("__APP_BUILD_ID__", BUILD_ID)
-            .replace("__PRECACHE_RUNTIME_ASSETS__", runtimeExpression);
+            .replaceAll("__APP_BUILD_ID__", BUILD_ID);
         const result = await minify(stamped, { compress: { passes: 3 }, format: { comments: false } });
         if (!result.code) throw new Error("Service worker compilation produced no code");
         writeFileSync(swPath, result.code);

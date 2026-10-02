@@ -15,17 +15,19 @@ const strettoPlan=process.env.STRETTO_PLAN??'skip';
 const kitPlan=process.env.KIT_PLAN??'skip';
 const offshorePlan=process.env.OFFSHORE_PLAN??'direct';
 const bruxPlan=process.env.BRUX_PLAN??'direct';
+const photoPlan=process.env.PHOTO_PLAN??'stringetevi';
+const campoPlan=process.env.CAMPO_PLAN??'prepared';
 const resumePath=process.env.RESUME_REPORT;
 const resumeReport=resumePath?JSON.parse(readFileSync(resumePath,'utf8')):null;
 const resumeStage=process.env.RESUME_STAGE??'garante-result-1';
 const resumeCode=resumeReport?.codes[resumeStage]??null;
 if(resumePath){assert.ok(resumeCode,'Earned milestone save missing');assert.equal(resumeReport.id,id,'Starter does not match earned save');}
-assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione'].includes(endAt),'Unknown campaign endpoint');
+assert.ok(['auditel','spread','dazio','capitano','boss','garante','tesoriere','commissione','photographer'].includes(endAt),'Unknown campaign endpoint');
 const page=await browser.newPage({viewport:{width:390,height:844},reducedMotion:'reduce'}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));
 try{
  await page.goto(`${process.env.BASE_URL??'http://127.0.0.1:5188'}/scripts/perf-harness.html`);
- const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,resumeCode})=>{
+ const result=await page.evaluate(async({id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,resumeCode})=>{
   const {WorldScene}=await import('/src/game/world/WorldScene.ts'),{newGameState,importSaveCode,exportSaveCode,saveGame}=await import('/src/game/state.ts');
   const {Screen}=await import('/src/engine/screen.ts'),{Input}=await import('/src/engine/input.ts'),{SceneStack}=await import('/src/engine/scene.ts');
   const {MOVES}=await import('/src/data/moves.ts'),{ITEMS}=await import('/src/data/items.ts'),{MAPS,STARTER_SPOTS}=await import('/src/data/maps.ts');
@@ -38,7 +40,7 @@ try{
   const state=resumeCode?importSaveCode(resumeCode):newGameState();
   if(!state||(resumeCode&&!state.flags['garante-beaten']))throw Error('Resume must be an earned post-Garante save');
   const world=new WorldScene(stack,input,state);stack.push(world);
-  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
+  const events=[],milestones=[],shots={},battles=new Map(),codes={},lessons=new Map(),briefChosen=new WeakSet();let boxPending=null;let frames=0,itemPending=null,shopping=[],archivePending=null,rewardPending=null;
   const narrative=[],say=world.say.bind(world);world.say=(lines,...rest)=>{narrative.push({map:state.pos.mapId,lines:[...lines],trust:state.morale.trust,cohesion:state.morale.cohesion});return say(lines,...rest);};
   const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
   const trace=(type,detail)=>events.push({type,detail,steps:state.stepsTotal,map:state.pos.mapId,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp})),money:state.money});
@@ -47,9 +49,10 @@ try{
    if(button)document.dispatchEvent(new KeyboardEvent('keydown',{code:code[button],bubbles:true,cancelable:true}));
    const top=stack.top;
    if(top?.constructor.name==='BattleScene'&&!battles.has(top)){
-    const record={trainer:top.trainer?.id??null,foes:top.foeTeam.map(m=>({id:m.speciesId,level:m.level,exp:m.exp,uid:m.uid})),before:{party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,uid:m.uid})),bag:{...state.bag},money:state.money},outcome:null};battles.set(top,record);trace('battle-start',record);
+    const record={trainer:top.trainer?.id??null,foes:top.foeTeam.map(m=>({id:m.speciesId,level:m.level,exp:m.exp,uid:m.uid})),deployed:[],before:{party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,uid:m.uid})),bag:{...state.bag},money:state.money},outcome:null};battles.set(top,record);trace('battle-start',record);
     const end=top.onEnd;top.onEnd=result=>{record.outcome=result;record.recipientUid=top.player.mon.uid;record.after={party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,uid:m.uid})),bag:{...state.bag},money:state.money};trace('battle-end',{trainer:record.trainer,outcome:result});end(result);};
    }
+   if(top?.constructor.name==='BattleScene'){const record=battles.get(top),mon=top.player.mon;if(!record.deployed.some(m=>m.uid===mon.uid))record.deployed.push({uid:mon.uid,id:mon.speciesId,level:mon.level});}
    stack.update(.1);tickRunStats(state,.1,true);input.endFrame();
    if(button)document.dispatchEvent(new KeyboardEvent('keyup',{code:code[button],bubbles:true,cancelable:true}));
    if(frames%50===0)stack.draw(screen);
@@ -90,7 +93,8 @@ try{
      const balls=['scheda','schedona'].filter(i=>state.bag[i]>0),heal=['spritz','caffe','mojito'].find(i=>state.bag[i]>0);
      const damage=bestMove(s),hpMax=statsOf(s.player.mon).hp;
      const islandRecruit=offshorePlan==='prepared'&&state.pos.mapId==='offshore'&&s.foe.mon.level>=33;
-     const teamLimit=islandRecruit?6:euroPlan==='tactical'&&state.badges.includes('auditel')?4:3;
+     const campoRecruit=campoPlan==='recruit'&&state.pos.mapId==='campo_largo';
+     const teamLimit=islandRecruit||campoRecruit?6:euroPlan==='tactical'&&state.badges.includes('auditel')?4:3;
      const wantCatch=!s.trainer&&state.party.length<teamLimit&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
      const wantHeal=s.player.mon.hp<hpMax*.35&&heal;
      itemPending=wantHeal?heal:wantCatch?balls[0]:null;grid(s.mainMenu,itemPending?1:0);return true;
@@ -146,11 +150,30 @@ try{
    if(name==='BossBriefingScene'&&euroPlan==='tactical'&&state.badges.includes('auditel')&&!briefChosen.has(s)){
     if(s.page===0)press('start');
     else{
-     const target=bestCandidate(makeCombatant(s.team[0]));if(target<0)throw Error('No briefing leader');
+     const recruitUid=campoPlan==='recruit'&&s.trainer.id==='campo-photographer'?[...battles.values()].find(b=>b.outcome==='caught'&&b.foes[0].level>=43)?.foes[0].uid:null;
+     const target=recruitUid?state.party.findIndex(m=>m.uid===recruitUid):bestCandidate(makeCombatant(s.team[0]));if(target<0)throw Error('No briefing leader');
      if(s.index!==target)press('down');
      else{trace('leader-selection',{trainer:s.trainer.id,uid:state.party[target].uid,species:state.party[target].speciesId});press('a');briefChosen.add(s);}
     }
     return true;
+   }
+   if(name==='BoxScene'){
+    if(s.msg.isOpen){press('a');return true;}
+    if(!boxPending||!state.party.some(m=>m.uid===boxPending)){press('b');return true;}
+    const target=state.party.findIndex(m=>m.uid===boxPending);
+    if(s.side!=='party')press('left');else if(s.index!==target)press('down');else{trace('campo-deposit',{uid:boxPending,species:state.party[target].speciesId});press('a');}return true;
+   }
+   if(name==='CoalitionScene'){
+    if(s.candidates[s.index]==='quantum_centrist'&&campoPlan==='civic') {press('b');return true;}
+    const target=campoPlan==='civic'?['campo_secretary','civic_mayor']:['campo_secretary','quantum_centrist'];
+    const focus=s.candidates[s.index];
+    if(target.includes(focus)&&!state.coalition.members.some(m=>m.allyId===focus)){trace('coalition-add',{id:focus});press('a');}else press('b');return true;
+   }
+   if(name==='PhotoChoiceScene'){
+    const target=photoPlan==='panoramica'?1:0;
+    if(s.error)throw Error('Photo rejected: '+s.error);
+    if(!s.reviewing&&!s.result&&s.index!==target)press('down');
+    else{if(!s.reviewing&&!s.result)trace('photo-dossier',{choice:photoPlan,money:state.money,coalition:state.coalition});press('a');}return true;
    }
    if(name==='CivicScene'){
     if(s.msg.isOpen)press('a');
@@ -223,6 +246,7 @@ try{
    }
    if(state.pos.mapId==='stretto'&&!state.flags['ponte-beaten'])enterMap('capitale');
    if(['route1','route2','route3'].includes(state.pos.mapId))cross('up');
+   if(state.pos.mapId==='campo_largo'){const healer=world.visibleNpcs().find(n=>n.healer);interact(healer.x,healer.y);return;}
    const bar={borgo:'bar-borgo',mediopoli:'bar-medio',eurotown:'bar-euro',capitale:'bar-cap',stretto:'bar-stretto',offshore:'bar-offshore',bruxelles:'bar-bruxelles'}[state.pos.mapId];
    if(!bar)throw Error('No planned healer for '+state.pos.mapId);enterMap(bar);
    const healer=world.visibleNpcs().find(n=>n.healer);interact(healer.x,healer.y);walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();
@@ -366,7 +390,7 @@ try{
     }
     await milestone('spread-result');
    }
-   if(['dazio','capitano','boss','garante','tesoriere','commissione'].includes(endAt)&&state.badges.includes('spread')){
+   if(['dazio','capitano','boss','garante','tesoriere','commissione','photographer'].includes(endAt)&&state.badges.includes('spread')){
     if(state.pos.mapId==='gymue'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
     heal();
     if(capitalPlan==='prepared'){
@@ -391,13 +415,13 @@ try{
     await milestone('dazio-result');
    }
    if((strettoPlan==='prepared'||endAt==='capitano')&&state.badges.includes('dazio'))await visitStretto();
-   if(['boss','garante','tesoriere','commissione'].includes(endAt)&&state.badges.includes('dazio')){
+   if(['boss','garante','tesoriere','commissione','photographer'].includes(endAt)&&state.badges.includes('dazio')){
     if(courtPlan==='prepared')supplies();else heal();prepareArchive();enterMap('palazzo');
     for(let attempt=1;attempt<=2&&!state.flags['boss-beaten'];attempt++){
      if(state.pos.mapId!=='palazzo'){heal();enterMap('palazzo');}
      const npc=world.visibleNpcs().find(n=>n.trainerId==='boss');interact(npc.x,npc.y);await milestone(`palazzo-result-${attempt}`);
     }
-    if(['garante','tesoriere','commissione'].includes(endAt)&&state.flags['boss-beaten']){
+    if(['garante','tesoriere','commissione','photographer'].includes(endAt)&&state.flags['boss-beaten']){
      heal();enterMap('palazzo');enterMap('colle');await milestone('colle');
      if(courtPlan==='prepared')for(const trainerId of ['giudice1','giudice2','giudice3']){
       const npc=world.visibleNpcs().find(n=>n.trainerId===trainerId);
@@ -412,7 +436,7 @@ try{
     }
    }
    }
-   if(['tesoriere','commissione'].includes(endAt)&&state.flags['garante-beaten']&&!state.flags['offshore-beaten']){
+   if(['tesoriere','commissione','photographer'].includes(endAt)&&state.flags['garante-beaten']&&!state.flags['offshore-beaten']){
     await milestone('earned-resume');supplies();prepareArchive();
     if(!state.flags['veh-traghetto'])interact(4,19);
     enterMap('stretto');enterMap('offshore');await milestone('offshore-arrival');heal();
@@ -437,7 +461,7 @@ try{
     }
    }
 
-   if(endAt==='commissione'&&state.flags['garante-beaten']){
+   if(['commissione','photographer'].includes(endAt)&&state.flags['garante-beaten']&&!state.flags['ue-beaten']){
     await milestone('earned-brux-resume');settle();
     if(state.pos.mapId==='commissione'){const exit=world.map.warps.find(w=>w.toMap==='bruxelles');walkTo(exit.x,exit.y);settle();}
     if(state.pos.mapId!=='offshore'&&state.pos.mapId!=='bruxelles')throw Error('Brussels segment needs earned maritime arrival');
@@ -456,9 +480,38 @@ try{
      heal();enterMap('commissione');const npc=world.visibleNpcs().find(n=>n.trainerId==='commissione');interact(npc.x,npc.y);await milestone(`commissione-result-${attempt}`);
     }
    }
+   if(endAt==='photographer'&&state.flags['ue-beaten']){
+    await milestone('earned-campo-resume');settle();
+    if(state.pos.mapId==='commissione') {const exit=world.map.warps.find(w=>w.toMap==='bruxelles');walkTo(exit.x,exit.y);settle();}
+    if(state.pos.mapId==='bruxelles'){if(campoPlan!=='direct'){supplies();prepareArchive();prepareKit();}else heal();enterMap('campo_largo');}
+    if(state.pos.mapId!=='campo_largo')throw Error('Campo segment requires earned Commissione route');
+    const campoCare=()=>{heal();if(state.pos.mapId==='bruxelles'){enterMap('campo_largo');heal();}if(state.pos.mapId!=='campo_largo')throw Error('Recovery did not return to Campo');};
+    await milestone('campo-arrival');campoCare();
+    for(const [npcId,allyId] of [['campo-secretary','campo_secretary'],['quantum-centrist','quantum_centrist'],['civic-mayor','civic_mayor']]){for(let visit=0;visit<12&&!state.flags[`coalition-candidate-seen:${allyId}`];visit++){const npc=world.visibleNpcs().find(n=>n.id===npcId);interact(npc.x,npc.y);}}
+    if(state.coalition.members.length!==2)throw Error('Real coalition selection did not complete');
+    enterMap('retropalco_campo');await milestone('campo-retropalco');
+    if(campoPlan==='recruit'&&state.party.length===6){boxPending=[...state.party].sort((a,b)=>a.level-b.level)[0].uid;const clerk=world.visibleNpcs().find(n=>n.box);interact(clerk.x,clerk.y);if(state.party.length!==5)throw Error('Actual Campo deposit did not finish');boxPending=null;}
+    const exit=world.map.warps[0];walkTo(exit.x,exit.y);settle();
+    if(campoPlan==='recruit'){
+     const captures=state.runStats.captures;
+     for(let n=0;n<500&&state.runStats.captures===captures;n++){
+      const lead=state.party[0];if(lead.hp<statsOf(lead).hp*.5||!lead.moves.some(s=>s.pp>0&&MOVES[s.id].power>0))campoCare();
+      const cells=world.map.tiles.flatMap((row,y)=>[...row].flatMap((ch,x)=>TILES[ch]?.encounter&&!world.isBlocked(x,y)?[{x,y,path:pathTo(x,y)}]:[])).filter(c=>c.path?.length).sort((a,b)=>a.path.length-b.path.length);
+      if(!cells.length)throw Error('No reachable Campo recruitment grass');walkTo(cells[0].x,cells[0].y);
+     }
+     if(state.runStats.captures===captures||state.party.length!==6)throw Error('Campo recruitment did not complete');await milestone('campo-recruitment');campoCare();prepareArchive();
+    }
+    const photographer=world.visibleNpcs().find(n=>n.id==='campo-fotografo');interact(photographer.x,photographer.y);await milestone('campo-photo-choice');
+    if(!state.flags['campo-photo-choice-complete'])throw Error('Photo choice not saved');
+    // Challenges are voluntary; a resolved debate can be a win or a loss.
+    for(let attempt=1;attempt<=2&&!state.flags['campo-debate-resolved'];attempt++){campoCare();const npc=world.visibleNpcs().find(n=>n.trainerId==='campo-debate');interact(npc.x,npc.y);await milestone(`campo-debate-${attempt}`);}
+    if(campoPlan==='prepared')for(let attempt=1;attempt<=2&&!state.defeatedTrainers.includes('campo-claque');attempt++){campoCare();const npc=world.visibleNpcs().find(n=>n.trainerId==='campo-claque');interact(npc.x,npc.y);await milestone(`campo-claque-${attempt}`);}
+    for(let attempt=1;attempt<=2&&!state.flags['campo-photo-complete'];attempt++){campoCare();const npc=world.visibleNpcs().find(n=>n.id==='campo-fotografo');interact(npc.x,npc.y);await milestone(`campo-photographer-${attempt}`);}
+   }
+    if(state.flags['campo-photo-complete']){const npc=world.visibleNpcs().find(n=>n.id==='campo-fotografo');interact(npc.x,npc.y);await milestone('campo-verbale');}
   }catch(e){failure=e.message;trace('failure',{message:failure,pos:{...state.pos},npcs:world.visibleNpcs().map(n=>({id:n.id,x:n.x,y:n.y,canWander:n.canWander})),tiles:world.map.tiles});}
-  return {id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
- },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,resumeCode});
+  return {id,seed,plan,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,bruxPlan,photoPlan,campoPlan,narrative,frames,steps:state.stepsTotal,events,milestones,lessons:[...lessons.values()],battles:[...battles.values()],failure,final:{map:state.pos.mapId,money:state.money,badges:state.badges,flags:state.flags,morale:state.morale,coalition:state.coalition,election:state.election,defeatedTrainers:state.defeatedTrainers,party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,heldItem:m.heldItem??null,moves:m.moves})),bag:state.bag,runStats:state.runStats},codes,shots};
+ },{id,seed,plan,practice,endAt,euroPlan,capitalPlan,courtPlan,civicPlan,archivePlan,strettoPlan,kitPlan,offshorePlan,bruxPlan,photoPlan,campoPlan,resumeCode});
  result.resume=resumePath?{report:resumePath,stage:resumeStage,parentId:resumeReport.id,parentSeed:resumeReport.seed}:null;result.offshorePlan=offshorePlan;
  assert.deepEqual(errors,[]);
  if(process.env.CHECK_GROWTH!=='0')for(const b of result.battles.filter(b=>b.outcome==='caught')){
@@ -473,7 +526,7 @@ try{
  for(const [name,data]of Object.entries(result.shots))writeFileSync(`artifacts/screens/campaign-native/${label}-${id}-${plan}-${name}.png`,Buffer.from(data.split(',')[1],'base64'));
  delete result.shots;writeFileSync(`artifacts/campaign-native/${label}-${id}-${plan}-${seed}.json`,JSON.stringify(result,null,2));
  if(process.env.EXPECT_BADGE==='1')assert.ok(result.final.badges.includes(endAt),`Campaign did not earn ${endAt}`);
- if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
+ if(process.env.EXPECT_COMPLETE==='1')assert.ok(result.final.flags[endAt==='capitano'?'ponte-beaten':endAt==='tesoriere'?'offshore-beaten':endAt==='commissione'?'ue-beaten':endAt==='photographer'?'campo-photo-complete':`${endAt}-beaten`],`Campaign did not defeat ${endAt}`);
  console.log(JSON.stringify({id,seed,plan,failure:result.failure,milestones:result.milestones,final:result.final,battles:result.battles.map(b=>({trainer:b.trainer,outcome:b.outcome,foes:b.foes}))},null,2));
  if(result.failure)process.exitCode=1;
 }finally{await browser.close();}

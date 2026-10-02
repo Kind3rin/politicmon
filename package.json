@@ -68,6 +68,8 @@
     "shot:world-redesign": "node scripts/shot-world-redesign.mjs",
     "check:civic-bridge": "node scripts/check-civic-bridge.mjs",
     "shot:hq": "node scripts/shot-hq.mjs",
+    "shot:government": "node scripts/shot-government.mjs",
+    "check:government:release": "node --import tsx scripts/check-government-release.mjs",
     "check:duel": "node scripts/check-duel.mjs",
     "smoke:campaign": "node scripts/smoke-campaign.mjs",
     "smoke:pwa:release": "node scripts/smoke-pwa-release.mjs",

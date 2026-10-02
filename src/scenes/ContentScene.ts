@@ -3,7 +3,8 @@ import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import { audio } from "../engine/audio";
 import type { GameState } from "../game/state";
-import { drawScreenHeader, wrapText } from "../ui/widgets";
+import { drawScreenHeader } from "../ui/widgets";
+import { dossierPages, drawDossierPage } from "../ui/dossier";
 
 export interface ContentEntry {
   readonly title: string;
@@ -28,34 +29,29 @@ export const CONTENT_CATALOG: readonly ContentEntry[] = [
 export class ContentScene implements Scene {
   readonly transparent = false;
   private index = 0;
+  private page = 0;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {}
 
   update(): void {
     if (this.input.wasPressed("b")) { audio.cancel(); this.stack.pop(); return; }
-    if (this.input.wasPressed("up")) { this.index = (this.index - 1 + CONTENT_CATALOG.length) % CONTENT_CATALOG.length; audio.cursor(); }
-    if (this.input.wasPressed("down")) { this.index = (this.index + 1) % CONTENT_CATALOG.length; audio.cursor(); }
+    if (this.input.wasPressed("up") || this.input.wasPressed("down")) {
+      this.index = (this.index + (this.input.wasPressed("up") ? CONTENT_CATALOG.length - 1 : 1)) % CONTENT_CATALOG.length;
+      this.page = 0; audio.cursor();
+    }
+    const count = this.pages().length;
+    if (this.input.wasPressed("left")) this.page = Math.max(0, this.page - 1);
+    if (this.input.wasPressed("right") || this.input.wasPressed("a")) this.page = (this.page + 1) % count;
+  }
+
+  private pages() {
+    const entry = CONTENT_CATALOG[this.index];
+    return dossierPages([entry.unlocked(this.state) ? "DISPONIBILE NEL TUO SALVATAGGIO." : `DA SBLOCCARE: ${entry.requirement}`, entry.description], 9);
   }
 
   draw(screen: Screen): void {
     screen.clear("#101827");
-    const entry = CONTENT_CATALOG[this.index];
-    const open = entry.unlocked(this.state);
     drawScreenHeader(screen, "CONTENUTI", `${this.index + 1}/${CONTENT_CATALOG.length}`);
-    screen.text("TUTTI I MODULI SONO NELLA BUILD", 10, 25, "#7ad858");
-    screen.panel(8, 40, 224, 111, "card");
-    screen.textFit(entry.title, 17, 51, 206, "#10141f");
-    const status = open ? "DISPONIBILE" : "DA SBLOCCARE";
-    screen.rect(16, 65, status.length * 6 + 8, 11, open ? "#26745d" : "#a46b12");
-    screen.text(status, 20, 67, "#fffaf0");
-    let y = 83;
-    for (const line of wrapText(entry.description, 34).slice(0, 3)) { screen.text(line, 17, y, "#253752"); y += 10; }
-    screen.text("REQUISITO", 17, 116, "#68758a");
-    let ry = 128;
-    for (const line of wrapText(open ? "GIÀ SBLOCCATO NEL TUO SALVATAGGIO." : entry.requirement, 34).slice(0, 2)) {
-      screen.text(line, 17, ry, open ? "#26745d" : "#a0443e");
-      ry += 10;
-    }
-    screen.text("SU/GIÙ: SFOGLIA   B: INDIETRO", 10, 163, "#ffe38a");
+    this.page = drawDossierPage(screen, this.pages(), this.page, CONTENT_CATALOG[this.index].title, false, "SU/GIU CAPITOLI", "B ESCI");
   }
 }

@@ -19,6 +19,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Battaglie | Sfondi per ambiente, effetti per tipo, dossier e cambio consultabile; IA con statistiche e sei stili | `shot:gameplay-guide`, `shot:switch-guide`, simulazioni boss |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
+| Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
 | Schede squadra | Sei pagine, archivio recuperabile, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
@@ -43,15 +44,22 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Campo Largo | Set e retropalco propri, quattro cast, foto con conseguenze, Circolo e reclutamento LV 43–46 | Quattro segmenti guadagnati, foto alternative e 16 direzioni nei due motori; CAMPO-CORNICE |
 | Futuro Anteriore | Sede e tre sale proprie, sette cast, verbali prima delle leve, dossier manuale e vivaio guadagnato | Cinque segmenti normali fino al vertice, riparazioni ed evoluzione reali; FUTURO-VERBALE |
 | Hotel Diplomatico | Cinque mappe, cinque cast, tre suite, patti/debiti reali e Partner manuale | Cinque segmenti normali guadagnati fino al Tour; DIPLOMACY-VERBALE |
+| Tour e Palazzo dei Feed | Cinque collegi, quattro archivi e studio con cast/materiali propri, quiz e sigillo esplicito | TOUR-VERBALE, PALAZZO-VERBALE; due campagne nuove complete in CONTROLLI-CAMPAGNE-VERBALE |
 | Audio | 19 nuove composizioni stereo, mixer da titolo/pausa, feedback e preferenze indipendenti dai save | `shot:audio`, `check:audio-runtime`, `check:audio-release`; CPU ×4 con musica attiva |
-| Avvio | Nomi degli slot separati dalle mappe, catalogo fondali separato dalla selezione, worker con inventario JSON versionato | 187713 byte gzip iniziali, 721 risorse di installazione e prova PWA |
-| PWA | Precache e primo utilizzo offline dei 689 asset Higgsfield e 19 tracce AAC; salvataggio conservato | `smoke:pwa:release` |
+| Avvio | Nuovo filmato illustrato silenzioso, salto con focus/input protetti, fallback e movimento ridotto; inventario JSON versionato | OPENING-VERBALE e CONTROLLI-CAMPAGNE-VERBALE: 46 casi nei due motori |
+| PWA | Scocca Android rivista, 20 layout/sei rotazioni; release locale con 798 asset Higgsfield e 19 tracce AAC offline | MOBILE-PWA-LAYOUT, GOVERNO-VERBALE; `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 466,72; spesa cumulativa 419,25 crediti. Non sono stati attivati acquisti
+verificato: 352,97; spesa cumulativa 533,00 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: Genova
+## Ultimo round: Governo Ombra
+
+[GOVERNO-VERBALE.md](GOVERNO-VERBALE.md): sala dedicata Higgsfield, incarichi leggibili, benefici e costi completi, firma prima di cambiare la squadra di governo, effetti della Salute descritti correttamente. Catalogo dei capitoli coerente con i dossier. 0,25 crediti; saldo 352,97. 92 viste nei due motori e percorsi touch della produzione locale dal finale guadagnato di Giorgetta; dettagli e stato del deploy nel proof del round.
+
+Il round precedente [Comandi e campagne nuove](CONTROLLI-CAMPAGNE-VERBALE.md) corregge l'autorepeat e completa due nuove campagne ininterrotte: Giorgetta normale e Renzino difficile, con cinque dossier, quattro archivi, finale e ritorno al mondo. La prova usa classi reali e input, con tempo virtuale, senza assegnare risorse o vittorie. Il nuovo filmato e gli interni sono documentati in [OPENING-VERBALE.md](OPENING-VERBALE.md) e [WORLD-INTERIORS-VERBALE.md](WORLD-INTERIORS-VERBALE.md). L'anteprima è distinta dalla PWA principale finché la quota Vercel impedisce il suo deploy.
+
+## Round storico: Genova
 
 [GENOVA-VERBALE.md](GENOVA-VERBALE.md): porto e tre cast propri, sequenza visibile, feedback distinto, allenamento riaperto dal DJ e contabile con debiti reali. Dodici job, 21 PNG, 18 crediti; 296 test, otto percorsi pubblici nativi a tempo/senza timer dai salvataggi guadagnati e 214 viste per motore. Offline e budget mantenuti; prove dettagliate e pubblicazione nel [proof](genova-proof.json). Tour e Palazzo restano da ridisegnare; goal attivo.
 
@@ -88,7 +96,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
    Verificare campagne preparate e improvvisate, consumabili e combinazioni,
    senza affidare il bilanciamento al solo tasso di vittoria di una fixture.
    La campagna normale fino al Garante è percorsa tramite input con tutti e tre gli starter, con diverse preparazioni;
-   restano difficoltà alta, atti successivi e combinazioni alternative.
+   due ulteriori campagne nuove arrivano ora al finale in normale e difficile. Restano ritmo umano della preparazione e combinazioni alternative; la vittoria di due percorsi non prova ogni strategia.
 3. **Interfaccia completa.** Titolo, box, missioni e archivio hanno ricevuto una
    revisione con dossier e prove delle azioni. Epiloghi, tessera, monumenti,
    Genova, retrobottega, casinò e Coppa sono ora rivisti. Onboarding, pausa e trasporto stradale hanno ricevuto una revisione con dossier e prove delle azioni.
@@ -106,7 +114,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 6. **Verifica integrale.** Campagna reale dall'inizio al finale, postgame,
    evoluzioni e percorsi alternativi, import/export dei save, offline e
    dispositivi. Duello e scambio su relay raggiungibili sono riusciti nel round rete.
-   Restano chat reale, dispositivi e reti diverse: due browser testati non
+   Le due campagne nuove complete sono documentate nel round comandi. Restano chat reale, dispositivi e reti diverse: due browser testati non
    certificano ogni condizione di NAT o rete mobile.
 
 ## Regole di produzione

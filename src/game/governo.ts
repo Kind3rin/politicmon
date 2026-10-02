@@ -100,7 +100,6 @@ export type MinisteroId =
   | "propaganda";
 
 export interface MinisteroDef {
-  id: MinisteroId;
   name: string;
   desc: string;
   // Round 40: ogni incarico ha ANCHE un costo (malus lieve, coerente col ruolo).
@@ -111,34 +110,34 @@ export interface MinisteroDef {
 
 export const MINISTERI: Record<MinisteroId, MinisteroDef> = {
   economia: {
-    id: "economia", name: "MIN. ECONOMIA",
-    desc: "Rimborsi elettorali +25%. Trova sempre la copertura, nessuno sa dove.",
-    malus: "Ma i tagli alla formazione costano: Punti Consenso -8%."
+    name: "MIN. ECONOMIA",
+    desc: "Rimborsi elettorali +25%. La copertura è nel cassetto delle fotocopie.",
+    malus: "Formazione tagliata: Punti Consenso -8%."
   },
   interno: {
-    id: "interno", name: "MIN. INTERNO",
-    desc: "Meno candidati selvatici tra i piedi: incontri nell'erba -35%.",
-    malus: "Ma la sicurezza si paga: +10% sui prezzi del Discount."
+    name: "MIN. INTERNO",
+    desc: "Incontri selvatici -35%. Il controllo ha controllato l'erba.",
+    malus: "Più controlli, stesso scontrino: prezzi del Discount +10%."
   },
   esteri: {
-    id: "esteri", name: "MIN. ESTERI",
-    desc: "Accordi commerciali: -20% sui prezzi del Discount Elettorale.",
-    malus: "Ma i vertici all'estero pesano: rimborsi elettorali -8%."
+    name: "MIN. ESTERI",
+    desc: "Prezzi del Discount -20%. Il protocollo compra all'ingrosso.",
+    malus: "Il vertice presenta il conto: rimborsi elettorali -8%."
   },
   istruzione: {
-    id: "istruzione", name: "MIN. ISTRUZIONE",
-    desc: "Squadra più preparata: Punti Consenso guadagnati +15%.",
-    malus: "Ma le borse di studio svuotano le casse: rimborsi -6%."
+    name: "MIN. ISTRUZIONE",
+    desc: "Punti Consenso +15%. Stavolta le slide hanno una fonte.",
+    malus: "Borse di studio finanziate: rimborsi elettorali -6%."
   },
   salute: {
-    id: "salute", name: "MIN. SALUTE",
-    desc: "Sanità di prossimità: la squadra recupera 1 PV ogni 6 passi.",
-    malus: "Ma la squadra si adagia nelle terme: Punti Consenso -5%."
+    name: "MIN. SALUTE",
+    desc: "Ogni 6 passi: +3% dei PV massimi arrotondato (minimo 1). Esclusi i KO.",
+    malus: "Riunione alle terme: Punti Consenso -5%."
   },
   propaganda: {
-    id: "propaganda", name: "MIN. PROPAGANDA",
-    desc: "Manifesti ovunque: probabilità di reclutamento +25%.",
-    malus: "Ma la carta e la colla costano: +12% sui prezzi del Discount."
+    name: "MIN. PROPAGANDA",
+    desc: "Reclutamento +25%. Manifesti nuovi; colla sul vecchio programma.",
+    malus: "Toner a carico tuo: prezzi del Discount +12%."
   }
 };
 

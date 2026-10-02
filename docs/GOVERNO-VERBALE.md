@@ -1,0 +1,27 @@
+# Governo Ombra: le sedie e il conto
+
+Round del 2 ottobre 2026, dopo [comandi e campagne nuove](CONTROLLI-CAMPAGNE-VERBALE.md). [Proof](government-proof.json) e [provenienza Higgsfield](../scripts/higgsfield-government.json). Il redesign completo resta attivo.
+
+La vecchia schermata mostrava sei incarichi in righe strette, con benefici verdi poco leggibili sulla carta chiara e descrizioni limitate a due righe. Scegliere un candidato applicava subito nomina, trasferimento o sfiducia. La Salute prometteva 1 PV ogni sei passi, mentre la logica recupera il 3% dei PV massimi arrotondato, minimo 1, escludendo i KO.
+
+Ora tre schede per pagina mostrano incarico e titolare, con selezione visibile e navigazione circolare fra i sei ministeri. KO e assenza dalla squadra sono distinti dalla vacanza dell'incarico. A apre un dossier completo: beneficio, costo, titolare, sospensione di entrambi gli effetti e regola di un solo incarico per candidato. La selezione dalla squadra prepara una firma e conserva lo stato. Il dossier di firma dichiara anche quale vecchio ministero viene lasciato e se il candidato è KO. B annulla; l'ultimo A firma e salva. Riselezionare il titolare propone la sfiducia, senza eseguirla prima della firma.
+
+La consultazione non scrive più il flag di guida al primo accesso e non salva. Le chiavi e il formato dei salvataggi restano invariati. Gli effetti numerici dei ministeri non cambiano: viene corretta la descrizione della Salute. I sei identificativi restano le chiavi della tabella e del salvataggio; il campo `id` duplicato e privo di utenti nelle definizioni interne viene rimosso. Costi, prezzi, PV, consensi e morale restano quelli della campagna durante lettura e annullamento.
+
+Il catalogo dei contenuti usa ora gli stessi dossier: descrizioni e requisiti completi, stato di sblocco del salvataggio, capitoli con Su/Giù e pagine con A o destra/sinistra. Viene tolto il messaggio tecnico «TUTTI I MODULI SONO NELLA BUILD». I dieci contenuti e le condizioni di accesso non cambiano.
+
+## Satira e immagine
+
+La ricerca considera la [raccolta Sky sui meme del cambio di governo del 2019](https://tg24.sky.it/politica/2019/09/04/governo-ministri-meme-social), in particolare il rito del passaggio della campanella allo stesso premier. Non è presentata come notizia attuale. Una ricerca Reddit sulle poltrone restituisce uno spunto storico, ma l'apertura del thread fallisce: non viene usata come fonte letta. Il gioco introduce una scena originale: sedie con rotelle, una schiena dorata su gambe di legno, fasce abbandonate e campanella. «Le sedie cambiano. Il conto resta.» I testi dei sei incarichi collegano la gag al costo realmente applicato: tagli alla formazione, conto del vertice, riunione alle terme e toner a carico del giocatore.
+
+Un job `gpt_image_2_5` concluso, spesa effettiva **0,25 crediti**, saldo verificato **352,97**. Sorgente 1168×880, revisione visiva prima dell'integrazione, ridimensionamento nearest-neighbor a 240×163 per il renderer esistente. Il PNG pesa 53743 byte; nessuna scritta generata, voce o nuova animazione. Il fondo neutro protegge il caricamento senza ripristinare la vecchia schermata. Prompt, URL, job e checksum sono nel manifest.
+
+## Verifiche
+
+Nei due motori passano **46 viste per motore**: sei dossier ministeriali completi, lettura pura, firma richiesta, annullamento dalla squadra e dalla firma, sfiducia, trasferimento senza doppi incarichi, caricamento della nomina salvata, sospensione per KO/riserva, recupero passivo e venti stati del catalogo fra nuova partita e finale guadagnato. La verifica usa Input reale; alcune condizioni limite di KO/riserva sono costruite esplicitamente dopo le azioni, non presentate come nuove vittorie. Nessun testo esce dal canvas nelle viste controllate.
+
+La build compilata usa i pulsanti mobile da un codice del finale guadagnato di Giorgetta: lista, dossier, scelta della squadra, candidato proposto, firma, trasferimento, catalogo e riapertura. Leggere o annullare conserva risorse, morale, coalizione e scrutinio. La prima prova di riapertura fallisce perché lo script reinietta la fixture ad ogni navigazione; il salvataggio veniva sovrascritto dal verificatore. La reiniezione viene limitata al primo accesso e la prova completa passa poi in Chromium e WebKit. Il gioco non viene cambiato per questo errore dello script. Il POCO fisico non è certificato.
+
+Passano **320 test**, validator dei contenuti, contratti input e audit di leggibilità. Il censimento statico associa script screenshot a 50/50 scene e trova zero clipping automatico; da solo non certifica tutte le scene visivamente. L'inventario PWA contiene **830 risorse esatte**. Chromium verifica aggiornamento, reload offline e ripresa dal background con **798 asset Higgsfield e 19 tracce AAC**, incluso il nuovo PNG. Il codice completo misura **358397/358400 byte gzip**, mondo incluso: 3 byte di margine, limite invariato. Le prime build superavano il limite; riuso dei dossier nel catalogo e rimozione dei dati duplicati recuperano spazio senza eliminare contenuti o cambiare effetti. Ulteriori espansioni richiedono altro margine.
+
+La pubblicazione viene registrata nel proof dopo il commit. Restano flussi meno frequenti, ritmo delle campagne e ascolto/prova della PWA su dispositivi fisici; questo round migliora Governo e catalogo, senza dichiarare completato il redesign integrale.

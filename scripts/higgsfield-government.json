@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 353.22,
+  "balanceAfter": 352.97,
+  "spentCredits": 0.25,
+  "assets": [
+    {
+      "id": "government",
+      "path": "public/sprites/ui/campaign/government.png",
+      "width": 240,
+      "height": 163,
+      "jobId": "f244c39a-f577-4ba2-83d8-0b259b2616bf",
+      "model": "gpt_image_2_5",
+      "prompt": "Production background for POLITICMON, a satirical Italian fantasy political monster handheld game, coherent crisp 16-bit pixel art with a deliberately low logical resolution of 240x180 and clean hard square pixels, flat two-tone shading, restrained navy #17243d, ivory #fffaf0, mint #55a889, coral and mustard palette. A tiny midnight cabinet room in a fictional town hall, six EMPTY office chairs on caster wheels around a small horseshoe table, one of the chairs has a luxurious golden backrest but comically tiny worn wooden legs, another still has a folded moving blanket. A brass handbell rests at far left on a narrow cabinet, a coat rack at far right holds six identical abandoned blank campaign sashes. Along the room sides are folders tied with red string and an unplugged press microphone. Satire of transferring office chairs instead of solving problems. No people, no creatures, no real politician portraits, no words or letters or numbers, no logos or watermark. Broad central 70 percent of the image remains quiet deep navy wall and floor with sparse objects, because readable game-rendered ministerial appointment cards will cover it. Architectural framing and chairs on the outer edges and the bottom. Landscape 4:3, full opaque artwork, no screenshot, no embedded UI, polished consistent videogame pixel environment, no photographic texture or gradients.",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_204500_f244c39a-f577-4ba2-83d8-0b259b2616bf.png",
+      "sourceSha256": "43401f14e93dc953a4c4200045b68065144bd7b4c223f54fd28ff0e96b6d84f5",
+      "sha256": "dbab15afa628f1d3aa66eea73343fff7bcbcf3c9ddea79d464aeff8c908f9820",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "processing": "Nearest-neighbor resize to existing campaign backdrop dimensions, no generated typography"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "public/sprites/ui/campaign/government.png",
+      "sha256": "dbab15afa628f1d3aa66eea73343fff7bcbcf3c9ddea79d464aeff8c908f9820"
+    }
+  ]
+}

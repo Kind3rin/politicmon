@@ -1,127 +1,72 @@
-import { audio } from "../engine/audio";
-import type { Input } from "../engine/input";
-import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import {
-  assegnaMinistro, MINISTERI, MINISTERO_ORDER, ministroDi, rimuoviMinistro,
-  sondaggiColor, sondaggiLabel
-} from "../game/governo";
-import { speciesOf } from "../game/monster";
-import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader, wrapText, MessageBox, GREY, INK } from "../ui/widgets";
-import { PartyScene } from "./PartyScene";
+import {audio} from '../engine/audio';
+import type {Input} from '../engine/input';
+import type {Scene,SceneStack} from '../engine/scene';
+import type {Screen} from '../engine/screen';
+import {assegnaMinistro,MINISTERI,MINISTERO_ORDER,ministroDi,rimuoviMinistro} from '../game/governo';
+import {speciesOf,type Monster} from '../game/monster';
+import {saveGame,type GameState} from '../game/state';
+import {drawScreenHeader} from '../ui/widgets';
+import {drawCampaignBackdrop} from '../ui/campaignArt';
+import {dossierPages,drawDossierPage} from '../ui/dossier';
+import {PartyScene} from './PartyScene';
 
-// Il GOVERNO OMBRA: ogni Politicmon può ricoprire un ministero con bonus
-// passivo. Se il ministro va KO, l'incarico resta ma il bonus si sospende.
-export class GovScene implements Scene {
-  private index = 0;
-  private msg = new MessageBox();
-
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
-    // Prima apertura in assoluto: riga guida che spiega la meccanica (hint UX).
-    if (!this.state.flags["hint-governo"]) {
-      this.state.flags["hint-governo"] = true;
-      saveGame(this.state);
-      this.msg.show([
-        "GOVERNO OMBRA: nomina un POLITICMON della squadra a ogni ministero.",
-        "Ogni incarico dà un BONUS passivo ma anche un piccolo COSTO: valuta il netto.",
-        "Se il ministro va KO l'effetto si sospende. Rinomina lo stesso = lo sfiduci."
-      ]);
-    }
+export class GovScene implements Scene{
+ private index=0;
+ private page=-1;
+ private pending:Monster|null=null;
+ private notice='';
+ constructor(private stack:SceneStack,private input:Input,private state:GameState){}
+ private selected(){return MINISTERO_ORDER[this.index];}
+ private status(id=this.selected()){
+  const mon=ministroDi(this.state,id);
+  return mon?`${speciesOf(mon).name}: ${mon.hp>0?'ATTIVO':'KO'}`:this.state.ministri[id]?'FUORI SQUADRA':'INCARICO VACANTE';
+ }
+ private pages(){
+  const id=this.selected(),def=MINISTERI[id],mon=this.pending;
+  const paragraphs=[def.desc,def.malus,this.status(), 'BENEFICI E COSTI SOSPESI PER KO O FUORI SQUADRA.'];
+  if(mon){
+   const old=MINISTERO_ORDER.find(key=>this.state.ministri[key]===mon.uid);
+   paragraphs.push(this.state.ministri[id]===mon.uid?`SFIDUCI ${speciesOf(mon).name}. L'INCARICO TORNA VACANTE.`:`NOMINI ${speciesOf(mon).name}.${old?` LASCIA ${MINISTERI[old].name}.`:''}${mon.hp<=0?' È KO.':''}`);
+  }else paragraphs.push('UN INCARICO PER CANDIDATO. SCEGLI IL TITOLARE PER SFIDUCIARLO. FIRMA PER APPLICARE.');
+  return dossierPages(paragraphs,9);
+ }
+ update():void{
+  if(this.page>=0){
+   if(this.input.wasPressed('b')){this.page=-1;this.pending=null;audio.cancel();return;}
+   const count=this.pages().length;
+   if(this.input.wasPressed('left')||this.input.wasPressed('up'))this.page=Math.max(0,this.page-1);
+   if(this.input.wasPressed('right')||this.input.wasPressed('down'))this.page=Math.min(count-1,this.page+1);
+   if(!this.input.wasPressed('a'))return;
+   if(this.page<count-1){this.page++;audio.cursor();return;}
+   const id=this.selected();
+   if(this.pending){
+    if(this.state.ministri[id]===this.pending.uid)rimuoviMinistro(this.state,id);
+    else assegnaMinistro(this.state,id,this.pending);
+    saveGame(this.state);this.pending=null;this.page=-1;this.notice='INCARICO REGISTRATO.';audio.confirm();
+   }else if(this.state.party.length){
+    this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:'use-item',title:'SCEGLI IL CANDIDATO',onChoose:mon=>{this.pending=mon;this.page=0;}}));
+   }else{this.notice='PRIMA RECLUTA UN POLITICMON.';this.page=-1;audio.cancel();}
+   return;
   }
-
-  update(dt = 0): void {
-    // Riga guida iniziale: fino a che è aperta, blocca il resto.
-    if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
-      return;
-    }
-    if (this.input.wasPressed("up")) {
-      this.index = (this.index + MINISTERO_ORDER.length - 1) % MINISTERO_ORDER.length;
-      audio.cursor();
-    }
-    if (this.input.wasPressed("down")) {
-      this.index = (this.index + 1) % MINISTERO_ORDER.length;
-      audio.cursor();
-    }
-    if (this.input.wasPressed("b")) {
-      audio.cancel();
-      saveGame(this.state);
-      this.stack.pop();
-      return;
-    }
-    if (this.input.wasPressed("a")) {
-      if (this.state.party.length === 0) {
-        audio.cancel();
-        return;
-      }
-      audio.confirm();
-      const ministero = MINISTERO_ORDER[this.index];
-      this.stack.push(
-        new PartyScene(this.stack, this.input, this.state, {
-          mode: "use-item",
-          title: `Chi nomini ${MINISTERI[ministero].name}?`,
-          onChoose: (mon) => {
-            // Riselezionare il ministro in carica equivale a sfiduciarlo.
-            if (this.state.ministri[ministero] === mon.uid) {
-              rimuoviMinistro(this.state, ministero);
-            } else {
-              assegnaMinistro(this.state, ministero, mon);
-            }
-            saveGame(this.state);
-          }
-        })
-      );
-    }
+  if(this.input.wasPressed('b')){audio.cancel();this.stack.pop();return;}
+  if(this.input.wasPressed('up')){this.index=(this.index+5)%6;audio.cursor();}
+  if(this.input.wasPressed('down')){this.index=(this.index+1)%6;audio.cursor();}
+  if(this.input.wasPressed('a')){this.page=0;audio.confirm();}
+ }
+ draw(screen:Screen):void{
+  drawCampaignBackdrop(screen,'government');
+  drawScreenHeader(screen,'GOVERNO OMBRA',`${this.index+1}/6`);
+  if(this.page>=0){this.page=drawDossierPage(screen,this.pages(),this.page,this.pending?'FIRMA INCARICO':'DOSSIER INCARICO',false,this.pending?'A FIRMA':'A SQUADRA','B ANNULLA');return;}
+  screen.text('LE SEDIE CAMBIANO. IL CONTO RESTA.',8,25,'#ffe38a');
+  const start=Math.floor(this.index/3)*3;
+  for(let i=start;i<start+3;i++){
+   const id=MINISTERO_ORDER[i],y=43+(i-start)*34;
+   screen.panel(8,y,224,31,'card');
+   if(i===this.index)screen.rect(13,y+4,214,10,'#f4d34a');
+   screen.text(MINISTERI[id].name,18,y+6,'#10141f');
+   screen.textFit(this.status(id),18,y+19,204,this.state.ministri[id]&&!ministroDi(this.state,id)?.hp?'#a0443e':'#26745d');
   }
-
-  draw(screen: Screen): void {
-    screen.clear("#e5eee2");
-    const sond = this.state.sondaggi;
-    drawScreenHeader(screen, "GOVERNO OMBRA", `SONDAGGI ${sond}%`, sondaggiColor(sond));
-
-    screen.panel(4, 18, VIEW_W - 8, 99, "card");
-    for (let i = 0; i < MINISTERO_ORDER.length; i += 1) {
-      const id = MINISTERO_ORDER[i];
-      const def = MINISTERI[id];
-      const mon = ministroDi(this.state, id);
-      const y = 22 + i * 15;
-      if (i === this.index) {
-        screen.rect(8, y - 3, VIEW_W - 16, 12, "#fff0bd");
-        screen.rect(8, y - 3, 2, 12, "#e0a92f");
-        screen.text("►", 10, y, "#8c5b12");
-      }
-      screen.text(def.name, 18, y, INK);
-      if (mon) {
-        const ko = mon.hp <= 0;
-        screen.textRight(`${speciesOf(mon).name}${ko ? " KO" : ""}`, VIEW_W - 14, y, ko ? "#d04848" : "#2a6a3a");
-      } else {
-        screen.textRight("---", VIEW_W - 14, y, GREY);
-      }
-    }
-
-    const selected = MINISTERI[MINISTERO_ORDER[this.index]];
-    screen.panel(4, 119, VIEW_W - 8, 40, "card");
-    // BONUS (verde) + MALUS (rosso): la scelta del ministero è un compromesso.
-    const bonus = wrapText(selected.desc, 36);
-    const malus = wrapText(selected.malus, 36);
-    let ly = 125;
-    for (let i = 0; i < Math.min(2, bonus.length); i += 1) {
-      screen.text(bonus[i], 12, ly, "#7ad858");
-      ly += 8;
-    }
-    for (let i = 0; i < Math.min(2, malus.length); i += 1) {
-      screen.text(malus[i], 12, ly, "#e08a6a");
-      ly += 8;
-    }
-
-    const selectedMinister = ministroDi(this.state, MINISTERO_ORDER[this.index]);
-    if (selectedMinister && selectedMinister.hp <= 0) {
-      screen.text("BONUS SOSPESO: MINISTRO KO", 8, VIEW_H - 18, "#d04848");
-    } else {
-      screen.text(`LINEA: ${sondaggiLabel(sond)}`, 8, VIEW_H - 18, GREY);
-    }
-    screen.text("A: nomina/sfiducia  B: chiudi", 8, VIEW_H - 9, GREY);
-    this.msg.draw(screen);
-  }
+  screen.textFit(this.notice,8,150,224,'#fffaf0');
+  screen.text('SU/GIU SFOGLIA · A DOSSIER · B ESCI',8,167,'#ffe38a');
+ }
 }

@@ -1,5 +1,12 @@
 # Politicmon: risorse Higgsfield
 
+Dodicesimo blocco: casinò, club, Coppa, dieci emblemi e sette ritratti.
+Sette job compresa la correzione dei fantasmi: **14 crediti**, saldo
+**639,97 → 625,97**, cumulativo **260**. Venti PNG; un vecchio cabinet
+rimosso. Provenienza in `higgsfield-arena.json`, conversione ripetibile con
+`prepare-arena-assets.py`. [CASINO-COPPA.md](CASINO-COPPA.md): 272 test,
+842 viste, persistenza durante il torneo e transazioni con dossier.
+
 Undicesimo blocco: sette ambienti del postgame, quattro souvenir e quattro
 statue. Nove job Nano Banana Pro, **18 crediti**, saldo **657,97 → 639,97**,
 cumulativo **246**. Prompt, job e SHA-256 in `higgsfield-epilogue.json`;

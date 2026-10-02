@@ -13,9 +13,9 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--download', action='store_true')
 parser.add_argument('--install', action='store_true')
 args = parser.parse_args()
-base = ROOT/'artifacts/core-ui'
+base = ROOT/'artifacts/arena'
 base.mkdir(parents=True, exist_ok=True)
-manifest_path = ROOT/'scripts/higgsfield-core-ui.json'
+manifest_path = ROOT/'scripts/higgsfield-arena.json'
 manifest = json.loads(manifest_path.read_text())
 outputs = []
 
@@ -58,7 +58,15 @@ for asset in manifest['assets']:
         for i,name in enumerate(asset['items']):
             c,r=i%asset['cols'],i//asset['cols']
             cell=image.crop((c*image.width//asset['cols'],r*image.height//asset['rows'],(c+1)*image.width//asset['cols'],(r+1)*image.height//asset['rows']))
-            parts.append((f'public/sprites/ui/{name}.png',cutout(cell,(32,32))))
+            # Generated cosmetic sheet has separator lines, clear of every object.
+            # Trim only cell margins before flood-filling the white background.
+            if asset['id']=='ghosts':
+                # Reviewed white gutters fall outside the nominal thirds.
+                # Retain the remote/megaphone rays without picking up a neighbor.
+                edges=[0,746,1405,2048]
+                cell=image.crop((edges[c]*image.width//2048,r*image.height//3,edges[c+1]*image.width//2048,(r+1)*image.height//3))
+            else: cell=cell.crop((16,16,cell.width-16,cell.height-16))
+            parts.append((f'public/sprites/ui/arena/{name}.png',cutout(cell,(asset['width'],asset['height']))))
     elif asset['kind']=='object':
         parts=[(asset['path'],cutout(image,(asset['width'],asset['height'])))]
     else:
@@ -79,6 +87,5 @@ manifest['outputs']=outputs
 manifest_path.write_text(json.dumps(manifest,indent=2)+'\n')
 if args.install:
     for output in outputs:
-        if output['path'] in manifest.get('retiredPaths', []): continue
         dest=ROOT/output['path'];dest.parent.mkdir(parents=True,exist_ok=True);copy2(base/'staged'/output['path'],dest)
 print(f"Prepared {len(outputs)} PNGs; {'installed' if args.install else 'staged'}.")

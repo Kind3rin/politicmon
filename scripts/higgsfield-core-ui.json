@@ -209,5 +209,9 @@
     "count": 1,
     "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
     "use_unlim": false
-  }
+  },
+  "retiredPaths": [
+    "public/sprites/ui/slot_cabinet.png"
+  ],
+  "retirementReason": "CasinoScene now uses ui/arena/casino.png and five arena symbols; unused cabinet removed in arena round."
 }

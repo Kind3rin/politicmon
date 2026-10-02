@@ -278,12 +278,14 @@ export class BattleScene implements Scene {
         //    solo battendo un TRAINER.
         const won = result === "win";
         recordBattleResult(this.state, result);
-        if (won && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
+        const coppa = this.trainer?.id.startsWith("coppa:") ?? false;
+        // Tournament EXP belongs to the temporary team, not the campaign team.
+        if (won && !coppa && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
         if (won && this.trainer) {
           // R42: lo SPOT non si applica ai rematch → non bruciare la carica lì
           // (altrimenti si sprecherebbe un uso senza bonus). Il COMIZIO
           // (SONDAGGI ×2) vale anche sui rematch, quindi si consuma comunque.
-          if (!this.isRematch && this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
+          if (!this.isRematch && !coppa && this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
           if (this.state.boostSondBattles > 0) this.state.boostSondBattles -= 1;
         }
         audio.playMusic(null);

@@ -1,93 +1,95 @@
+import { drawMonsterSprite } from "../art/monsters";
+import { MOVES } from "../data/moves";
+import { SPECIES } from "../data/species";
+import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import type { GameState } from "../game/state";
-import {
-  playerOpponent, roundLabel, COPPA_PLAYER_NAME, COPPA_TITLE, type TournamentState
-} from "../game/tournament";
-import type { CoppaRule } from "../game/tournament";
-import { audio } from "../engine/audio";
-import { GREY, INK, PAPER } from "../ui/widgets";
+import type { Screen } from "../engine/screen";
+import { movesAtLevel, speciesOf } from "../game/monster";
+import { saveGame, type GameState } from "../game/state";
+import { coppaOpponentDef, coppaRule, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, playerOpponent, prepareCoppaParty, roundLabel, type CoppaRule, type TournamentState } from "../game/tournament";
+import { drawScreenHeader } from "../ui/widgets";
+import { drawEpiloguePage, epiloguePages } from "../ui/epilogueArt";
+import { drawArenaBackdrop, drawArenaIcon } from "../ui/arenaArt";
 
-// COPPA DELLE POLTRONE — schermata del TABELLONE. Puramente informativa: mostra
-// il round corrente, i partecipanti ancora in gara e chi affronti tu. Premendo
-// A (COMBATTI) si chiude e la WorldScene avvia il match del round (callback
-// `next`). Con B si esce dal torneo (rinuncia): la tassa resta persa.
 export class TournamentScene implements Scene {
-  readonly transparent = true;
-  private time = 0;
-
-  constructor(
-    private stack: SceneStack,
-    private input: Input,
-    private state: GameState,
-    private tourney: TournamentState,
-    private next: () => void,
-    private abort: () => void,
-    private rule?: CoppaRule
-  ) {}
-
-  update(dt: number): void {
-    this.time += dt;
-    if (this.input.wasPressed("a")) {
-      audio.confirm();
-      this.stack.pop();
-      this.next();
-      return;
-    }
-    if (this.input.wasPressed("b")) {
-      // Rinuncia: chiude solo la schermata; il torneo resta "in corso" ma senza
-      // avanzare — la WorldScene lo abbandona alla prossima interazione. Per non
-      // lasciare uno stato ambiguo, trattiamo B come "esci dal torneo".
-      audio.cancel();
-      this.stack.pop();
-      this.abort();
-      return;
-    }
+ readonly transparent=false;
+ private tab=0;
+ private index=0;
+ private detail=0;
+ private dossierPage=0;
+ private closed=false;
+ private modal:"abort"|"start"|null=null;
+ private page=0;
+ private rule:CoppaRule;
+ constructor(private stack:SceneStack,private input:Input,private state:GameState,private tourney:TournamentState,private next:()=>void,private abort:()=>void,rule?:CoppaRule){this.rule=rule??coppaRule(tourney.dateKey);}
+ private close(abort:boolean):void {if(this.closed)return;this.closed=true;this.stack.pop();abort?this.abort():this.next();}
+ update():void {
+  if(this.closed)return;
+  if(this.modal){
+   if(this.input.wasPressed("b")){this.modal=null;this.page=0;return;}
+   if(!this.input.wasPressed("a"))return;
+   if(this.modal==="start"&&!prepareCoppaParty(this.state.party,this.rule).ok){this.modal=null;return;}
+   if(this.page<this.modalPages().length-1){this.page++;return;}
+   this.close(this.modal==="abort");return;
   }
-
-  draw(screen: Screen): void {
-    screen.dim(0.62);
-    screen.panel(10, 8, VIEW_W - 20, VIEW_H - 16);
-    screen.textCenter("COPPA DELLE POLTRONE", VIEW_W / 2, 14, "#f4d34a");
-    screen.textCenter(roundLabel(this.tourney), VIEW_W / 2, 24, PAPER);
-    if (this.rule) screen.textCenter(`REGOLA: ${this.rule.name}`, VIEW_W / 2, 31, "#7ad858");
-    screen.rect(18, 38, VIEW_W - 36, 1, GREY);
-
-    // Elenco dei partecipanti ancora in gara. Il giocatore è evidenziato.
-    const entries = this.tourney.alive;
-    const opp = playerOpponent(this.tourney);
-    let y = 43;
-    screen.text("IN GARA:", 18, y, INK);
-    y += 12;
-    const col2 = VIEW_W / 2 + 4;
-    for (let i = 0; i < entries.length; i += 1) {
-      const e = entries[i];
-      const name = e.isPlayer ? COPPA_PLAYER_NAME : e.ghost?.name ?? "?";
-      const x = i % 2 === 0 ? 22 : col2;
-      const row = Math.floor(i / 2);
-      const ry = y + row * 11;
-      const color = e.isPlayer ? "#7ad858" : INK;
-      // Puntino: verde per te, grigio per i fantasmi.
-      screen.rect(x - 6, ry + 1, 3, 3, e.isPlayer ? "#7ad858" : GREY);
-      screen.text(name.slice(0, 16), x, ry, color);
-    }
-    y += Math.ceil(entries.length / 2) * 11 + 6;
-
-    // Il tuo avversario del round.
-    if (opp) {
-      screen.rect(18, y, VIEW_W - 36, 1, GREY);
-      y += 6;
-      // Battito lampeggiante per attirare l'occhio sul match imminente.
-      const blink = Math.floor(this.time * 2) % 2 === 0;
-      screen.text("IL TUO MATCH:", 18, y, INK);
-      screen.text(`${COPPA_PLAYER_NAME} vs ${opp.name}`.slice(0, 26), 18, y + 11, blink ? "#f4d34a" : PAPER);
-    }
-
-    // Titolo già conquistato in precedenza.
-    if (this.state.coppaWins > 0) {
-      screen.text(`${COPPA_TITLE}: ${this.state.coppaWins}`.slice(0, 34), 18, VIEW_H - 36, GREY);
-    }
-    screen.textCenter("A COMBATTI   B RINUNCIA", VIEW_W / 2, VIEW_H - 24, GREY);
+  if(this.input.wasPressed("b")){if(this.tab){this.tab=0;this.index=0;this.dossierPage=0;}else this.modal="abort";return;}
+  if(this.input.wasPressed("left")||this.input.wasPressed("right")){this.tab=(this.tab+(this.input.wasPressed("left")?2:1))%3;this.index=0;this.detail=0;this.dossierPage=0;return;}
+  const prepared=prepareCoppaParty(this.state.party,this.rule);
+  const count=this.tab===1?3:this.tab===2&&prepared.ok?prepared.party.length:1;
+  const delta=this.input.wasPressed("down")?1:this.input.wasPressed("up")?-1:0;
+  if(delta){this.index=(this.index+delta+count)%count;this.dossierPage=0;}
+  if(this.input.wasPressed("start")){if(this.tab===1)this.dossierPage=(this.dossierPage+1)%this.dossierPages().length;else {this.tab=1;this.index=0;this.dossierPage=0;}return;}
+  if(!this.input.wasPressed("a"))return;
+  if(this.tab===2&&prepared.ok){
+   const leader=prepared.party[this.index],index=this.state.party.findIndex(m=>m.uid===leader.uid);
+   if(index>=0){const [mon]=this.state.party.splice(index,1);this.state.party.unshift(mon);saveGame(this.state);audio.confirm();}
+   this.index=0;this.tab=0;return;
   }
+  if(this.tab===1){this.detail=1-this.detail;this.dossierPage=0;return;}
+  this.modal="start";this.page=0;
+ }
+ private dossierPages():string[][] {
+  const opp=playerOpponent(this.tourney),def=coppaOpponentDef(this.tourney,this.rule);
+  if(!opp||!def)return [["NESSUN AVVERSARIO."]];
+  const [id,level]=def.team[this.index];
+  return epiloguePages(this.detail?[SPECIES[id].name.toUpperCase(),...movesAtLevel(id,level).map(m=>MOVES[m.id].name.toUpperCase())]:[SPECIES[id].name.toUpperCase(),SPECIES[id].types.join(" / "),...opp.intro],25,4);
+ }
+ private modalPages():string[][] {
+  if(this.modal==="abort")return epiloguePages(["RINUNCI ALLA COPPA?", "LA QUOTA DI 1500€ È GIÀ PAGATA E NON VIENE RESTITUITA. IL TABELLONE DI QUESTA SESSIONE VA PERSO.", "LA SQUADRA DELLA STORIA RESTA TUA. B TI RIPORTA AL TORNEO."]);
+  const prepared=prepareCoppaParty(this.state.party,this.rule),prize=this.state.coppaWins?COPPA_REPEAT_PRIZE:COPPA_FIRST_PRIZE;
+  return epiloguePages([this.rule.description,prepared.ok?`APERTURA: ${speciesOf(prepared.party[0]).name}. ${prepared.party.length} IDONEI, CURATI PER QUESTO MATCH.`:prepared.reason,"LIVELLI, EXP E PP DELLA SQUADRA ORIGINALE SONO CONSERVATI. GLI OGGETTI DI CURA USATI IN MATCH RESTANO SPESI.","SE PERDI, SEI ELIMINATO. NESSUNA MULTA O TELETRASPORTO NELLA CAMPAGNA.",`PREMIO FINALE: ${prize.money}€ E ${prize.qty} ${prize.itemId==="tessera"?"TESSERA DORATA":"SCHEDE BLINDATE"}. LA QUOTA È GIÀ PAGATA.`,"A AVVIA IL MATCH. B TORNA A PREPARARTI."]);
+ }
+ draw(screen:Screen):void {
+  drawArenaBackdrop(screen,"tournament");
+  drawScreenHeader(screen,"COPPA DELLE POLTRONE",["QUARTI","SEMI","FINALE"][this.tourney.round]??"COPPA");
+  if(this.modal){drawEpiloguePage(screen,this.modalPages()[this.page]);screen.text(this.page<this.modalPages().length-1?"A: AVANTI   B: ANNULLA":this.modal==="abort"?"A: RINUNCIA   B: RESTA":"A: COMBATTI   B: ANNULLA",12,167,"#fffaf0");return;}
+  screen.rect(0,17,240,14,"#17243d");screen.text(["► TABELLONE / DOSSIER / LEADER","TABELLONE / ► DOSSIER / LEADER","TABELLONE / DOSSIER / ► LEADER"][this.tab],8,21,"#fffaf0");
+  if(this.tab===0){
+   for(let i=0;i<this.tourney.alive.length;i+=2){
+    const y=36+i/2*25;screen.panel(8,y,224,23,"card");
+    screen.text(this.tourney.alive[i].isPlayer?"TU":this.tourney.alive[i].ghost!.name,16,y+8,"#17243d");
+    screen.text("VS",113,y+8,"#68758a");screen.text(this.tourney.alive[i+1]?.ghost?.name??"BYE",135,y+8,"#17243d");
+   }
+   screen.rect(0,140,240,20,"#17243d");screen.text(`${roundLabel(this.tourney)} / ${this.state.coppaWins} TRIONFI`,12,149,"#fffaf0");
+   screen.text("SIN/DES: PAGINA  A: VIA  B: RINUNCIA",12,167,"#fffaf0");return;
+  }
+  const prepared=prepareCoppaParty(this.state.party,this.rule);
+  if(this.tab===2){
+   if(!prepared.ok){drawEpiloguePage(screen,epiloguePages([prepared.reason])[0]);screen.text("SIN/DES: PAGINA  B: TABELLONE",12,167,"#fffaf0");return;}
+   prepared.party.forEach((mon,i)=>{
+    const y=35+i*18;screen.rect(8,y,224,16,i===this.index?"#fff0bd":"#fffaf0");screen.text(i===this.index?"►":"",12,y+5,"#17243d");screen.text(speciesOf(mon).name,24,y+5,"#17243d");screen.textRight(`LV${mon.level}`,224,y+5,"#68758a");
+   });
+   screen.rect(0,146,240,14,"#17243d");screen.text("A SCEGLIE IL LEADER, POI TORNI.",12,150,"#fffaf0");screen.text("SU/GIU: LEADER  A: SCEGLI",12,163,"#fffaf0");screen.text("SIN/DES: PAGINA  B: TABELLONE",12,173,"#fffaf0");return;
+  }
+  const opp=playerOpponent(this.tourney),def=coppaOpponentDef(this.tourney,this.rule);
+  if(!opp||!def)return;
+  const [species,level]=def.team[this.index];
+  drawArenaIcon(screen,opp.id,8,34,48,56);drawArenaIcon(screen,this.rule.id,27,92);
+  screen.panel(63,34,169,122,"card");
+  screen.text(opp.name,71,43,"#17243d");screen.text(this.rule.name,71,56,"#68758a");
+  drawMonsterSprite(screen,species,72,68,48,32);screen.text(`LV ${level}`,130,72,"#17243d");screen.text(`${this.index+1}/3`,130,84,"#68758a");
+  this.dossierPages()[this.dossierPage].forEach((line,i)=>screen.text(line,71,106+i*10,"#17243d"));
+  screen.text("SU/GIU: MON  A: MOSSE",12,163,"#fffaf0");screen.text("START: TESTO  B: TABELLONE",12,173,"#fffaf0");
+ }
 }

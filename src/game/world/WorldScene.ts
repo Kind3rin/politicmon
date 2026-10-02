@@ -35,7 +35,7 @@ import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion, wrapText } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
-import { markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
+import { beginTemporaryParty, markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
 import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
@@ -76,8 +76,8 @@ import { SliceEndingScene } from "../../scenes/SliceEndingScene";
 import { StarterPreviewScene } from "../../scenes/StarterPreviewScene";
 import { TournamentScene } from "../../scenes/TournamentScene";
 import {
-  advanceAfterPlayerWin, ghostTrainerDef, initTournament, playerOpponent, roundLabel,
-  coppaRule, prepareCoppaParty, COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE,
+  advanceAfterPlayerWin, initTournament, playerOpponent, roundLabel,
+  coppaOpponentDef, coppaRule, prepareCoppaParty, COPPA_FEE, COPPA_FIRST_PRIZE, COPPA_REPEAT_PRIZE, COPPA_TITLE,
   type CoppaRule, type TournamentState
 } from "../tournament";
 import { buildTrainerTeam, recordNewTrainerVictory, shouldPersistTrainerVictory } from "./battleCoordinator";
@@ -239,7 +239,7 @@ export class WorldScene implements Scene {
   // COPPA DELLE POLTRONE: stato del torneo in corso (SESSIONE SINGOLA, mai salvato).
   private coppa: TournamentState | null = null;
   private coppaRuleActive: CoppaRule | null = null;
-  private coppaOriginalParty: Monster[] | null = null;
+  private coppaRestoreParty: (() => void) | null = null;
 
   // ---- Effetto di CURA (BAR SPORT, risveglio, raccomandazione mafia) ----
   private healFx = 0; // durata residua dell'animazione di cura
@@ -977,7 +977,7 @@ export class WorldScene implements Scene {
               this.wanderNpc = null;
               this.wanderTrainer = null;
             }
-            this.onBattleEnd(result);
+            this.onBattleEnd(result, def.id.startsWith("coppa:"));
             if (promiseNotices.length) this.say(promiseNotices, () => after?.(result));
             else after?.(result);
           }
@@ -1016,7 +1016,7 @@ export class WorldScene implements Scene {
     return TRAINERS[trainerId];
   }
 
-  private onBattleEnd(result: BattleResult): void {
+  private onBattleEnd(result: BattleResult, exhibition = false): void {
     this.stack.pop();
     mp.duelBusy = false;
     audio.playMusic(this.map.music ?? "borgo");
@@ -1028,7 +1028,7 @@ export class WorldScene implements Scene {
       bumpDailyQuest(this.state, "catch1");
     }
     saveGame(this.state);
-    if (result === "loss") {
+    if (result === "loss" && !exhibition) {
       if (!this.state.flags["dex-received"]) {
         for (const mon of this.state.party) {
           healMonster(mon);
@@ -1658,25 +1658,24 @@ export class WorldScene implements Scene {
       this.coppa = null;
       return;
     }
-    const ghostIndex = t.alive.findIndex((e, i) => i > 0 && e.ghost?.id === opp.id);
-    const def = ghostTrainerDef(opp, t.seed, ghostIndex >= 0 ? ghostIndex : 1);
     const rule = this.coppaRuleActive ?? coppaRule(t.dateKey);
+    const def = coppaOpponentDef(t,rule)!;
     const prepared = prepareCoppaParty(this.state.party, rule);
     if (!prepared.ok) { this.say([prepared.reason]); this.coppa = null; this.coppaRuleActive = null; return; }
     this.say([`${roundLabel(t)}: contro ${opp.name}!`, `REGOLA ${rule.name}.`], () => {
-      this.coppaOriginalParty = this.state.party;
-      this.state.party = prepared.party;
+      this.coppaRestoreParty = beginTemporaryParty(this.state, prepared.party);
       this.startTrainerBattle(def, (result) => {
-        if (this.coppaOriginalParty) this.state.party = this.coppaOriginalParty;
-        this.coppaOriginalParty = null;
+        this.coppaRestoreParty?.();
+        this.coppaRestoreParty = null;
+        saveGame(this.state);
         if (result !== "win") {
-          // Eliminato: fine torneo (nessun premio, tassa già persa). Il messaggio
-          // di sconfitta/respawn è già gestito da onBattleEnd: qui solo cleanup.
+          // Tournament losses cost the entry fee, with no campaign respawn or fine.
           this.coppa = null;
           this.coppaRuleActive = null;
+          this.say(["ELIMINATO DALLA COPPA. LA QUOTA RESTA AL BANCO.", "NESSUNA ALTRA MULTA. LA SQUADRA DELLA CAMPAGNA È CONSERVATA.", "IL BANDITORE CHIEDE UN APPLAUSO. È L'UNICO PREMIO CHE NON DEVE PAGARE."]);
           return;
         }
-        const { champion, results } = advanceAfterPlayerWin(t);
+        const { champion, results } = advanceAfterPlayerWin(t,rule);
         const lines = results.length > 0 ? ["Intanto negli altri match:", ...results] : [];
         if (champion) {
           this.awardTournament();

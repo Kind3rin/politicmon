@@ -370,10 +370,10 @@ export class PauseScene implements Scene {
     const souvenir = earned.length ? ENDING_SOUVENIRS[earned[this.souvenirIndex % earned.length]] : null;
     if (this.cardAwards) {
       screen.panel(8, 28, 224, 128, "card");
-      const lines = ["RICORDI DELLA CAMPAGNA", souvenir ? souvenir.name : "NESSUN SOUVENIR DELL'EPILOGO.", this.state.monumentLevel === 3 ? MONUMENT_TITLE : `MONUMENTO: LIVELLO ${this.state.monumentLevel}/3.`, "SOLO COSMETICI, NESSUN BONUS."];
+      const lines = ["RICORDI DELLA CAMPAGNA", souvenir ? souvenir.name : "NESSUN SOUVENIR DELL'EPILOGO.", this.state.monumentLevel === 3 ? MONUMENT_TITLE : `MONUMENTO: LIVELLO ${this.state.monumentLevel}/3.`, ...(this.state.coppaWins > 0 ? [`PORTAVOCE DEL POPOLO: ${this.state.coppaWins} TRIONFI.`] : []), "SOLO COSMETICI, NESSUN BONUS."];
       let y = 39;
       for (const paragraph of lines) { for (const line of wrapText(paragraph, 34)) { screen.text(line, 16, y, "#17243d"); y += 10; } y += 5; }
-      if (souvenir) { const icon = sceneImage(`epilogue:${souvenir.image}`, `ui/epilogue/${souvenir.image}.png`); if (icon) screen.image(icon, 192, 118, 32, 32); }
+      if (souvenir) { const icon = sceneImage(`epilogue:${souvenir.image}`, `ui/epilogue/${souvenir.image}.png`); if (icon) screen.image(icon, 192, 34, 32, 32); }
       screen.text("SIN/DES: RICORDO  START: TESSERA", 12, 167, "#fffaf0");
       return;
     }

@@ -1,3 +1,4 @@
+import { arenaAssetPaths } from "./arena-asset-paths.mjs";
 import { epilogueAssetPaths } from "./epilogue-asset-paths.mjs";
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
@@ -15,10 +16,10 @@ assert.equal(hqPaths.length, 9);
 const fallbackPaths = nativeFallbackPaths();
 assert.equal(fallbackPaths.length, 62);
 const corePaths = coreUiPaths();
-assert.equal(corePaths.length, 11);
+assert.equal(corePaths.length, 10);
 const campaignPaths = campaignUiPaths();
 assert.equal(campaignPaths.length, 5);
-const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths()];
+const paths = [...worldPaths, ...hqPaths, ...fallbackPaths, ...corePaths, ...campaignPaths, ...epilogueAssetPaths(), ...arenaAssetPaths()];
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 async function fetchBytes(path) {
  const response = await fetch(new URL(path, base), { signal: AbortSignal.timeout(15000) });
@@ -45,4 +46,8 @@ assert.ok(source.includes('EFFETTI REALI'), 'campaign decision previews missing 
 assert.ok(source.includes('RIPARATO ORA'), 'diplomacy repair missing from deployed bundles');
 assert.ok(source.includes('CHI RESTA AL TAVOLO'), 'personal campaign epilogue missing');
 assert.ok(source.includes('ASPETTA LA ZONA VERDE'), 'timing gameplay missing');
+assert.ok(source.includes('TRE RULLI INDIPENDENTI'), 'casino odds dossier missing');
+assert.ok(source.includes('casino-club:'), 'daily club limit missing');
+assert.ok(source.includes('NESSUNA MULTA O TELETRASPORTO'), 'tournament loss contract missing');
+assert.ok(source.includes('Temporary party already active'), 'temporary party serialization guard missing');
 console.log(`PASS: ${paths.length} deployed PNG checksums and civic dialogue/bridge code at ${base.origin}.`);

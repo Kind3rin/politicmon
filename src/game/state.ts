@@ -403,7 +403,7 @@ export function parseGameState(
     parsed.bulldozed = Array.isArray(parsed.bulldozed) ? parsed.bulldozed : [];
     parsed.vehicle = parsed.vehicle ?? null;
     parsed.rivalWins = typeof parsed.rivalWins === "number" ? parsed.rivalWins : 0;
-    parsed.chips = typeof parsed.chips === "number" ? parsed.chips : 0;
+    parsed.chips = typeof parsed.chips === "number" && Number.isFinite(parsed.chips) ? Math.max(0,Math.min(999999,Math.floor(parsed.chips))) : 0;
     parsed.boxed = Array.isArray(parsed.boxed) ? parsed.boxed : [];
     parsed.lastBar = typeof parsed.lastBar === "string" ? parsed.lastBar : "borgo";
     parsed.zoneRewardsClaimed = Array.isArray(parsed.zoneRewardsClaimed) ? parsed.zoneRewardsClaimed : [];
@@ -523,8 +523,18 @@ function parseState(raw: string | null): GameState | null {
   return parseGameState(raw, { reduceMotionDefault: prefersReducedMotion() });
 }
 
+// Tournament copies must never replace campaign monsters in lifecycle saves.
+const temporaryParties = new WeakMap<GameState, Monster[]>();
+export function beginTemporaryParty(state: GameState, party: Monster[]): () => void {
+  if (temporaryParties.has(state)) throw new Error("Temporary party already active");
+  const original = state.party;
+  temporaryParties.set(state,original);state.party = party;
+  let active = true;
+  return () => { if (!active) return; active = false; state.party = original;temporaryParties.delete(state); };
+}
 export function serializeGameState(state: GameState): string {
-  return JSON.stringify(state);
+  const original = temporaryParties.get(state);
+  return JSON.stringify(original ? { ...state, party: original } : state);
 }
 
 // browserSeed=0 (save pre-v11 o campo assente): genera e persisti subito,

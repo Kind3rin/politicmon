@@ -34,11 +34,11 @@ export const COPPA_TITLE = "PORTAVOCE DEL POPOLO";
 export type CoppaRuleId = "monotype" | "level50" | "team3" | "noitems" | "oneheal";
 export interface CoppaRule { readonly id: CoppaRuleId; readonly name: string; readonly description: string; readonly maxHealingItems: number | null; }
 export const COPPA_RULES: readonly CoppaRule[] = [
-  { id: "monotype", name: "MONOTIPO", description: "LA SQUADRA USA UN SOLO TIPO COMUNE. MINIMO 3 IDONEI.", maxHealingItems: null },
+  { id: "monotype", name: "MONOTIPO", description: "LA TUA SQUADRA USA UN SOLO TIPO COMUNE. MINIMO 3 IDONEI.", maxHealingItems: null },
   { id: "level50", name: "LIVELLO 50", description: "TUTTI I POLITICMON ENTRANO FRESCHI AL LIVELLO 50.", maxHealingItems: null },
   { id: "team3", name: "SQUADRA 3", description: "SOLO I PRIMI 3 POLITICMON DELLA SQUADRA.", maxHealingItems: null },
-  { id: "noitems", name: "NIENTE OGGETTI", description: "LA BORSA È CHIUSA PER TUTTO IL TORNEO.", maxHealingItems: 0 },
-  { id: "oneheal", name: "UNA SOLA CURA", description: "UNA SOLA CURA DALLA BORSA PER OGNI MATCH.", maxHealingItems: 1 }
+  { id: "noitems", name: "NIENTE OGGETTI", description: "LA TUA BORSA È CHIUSA PER TUTTO IL TORNEO.", maxHealingItems: 0 },
+  { id: "oneheal", name: "UNA SOLA CURA", description: "UNA SOLA CURA DALLA TUA BORSA PER OGNI MATCH.", maxHealingItems: 1 }
 ];
 
 export function coppaRule(dateKey = localDateKey()): CoppaRule {
@@ -84,44 +84,44 @@ const GHOSTS: GhostArchetype[] = [
   {
     id: "ghost-emittenza", name: "SUA EMITTENZA", pal: "boss",
     species: ["tajanide", "telecrate", "berlusconix"],
-    intro: ["Ah, la COPPA! Il mio share qui è garantito."],
-    defeat: ["Mandiamo la pubblicità. Anzi, i titoli di coda."]
+    intro: ["Ho comprato i diritti della finale. Se perdi adesso, devi almeno farlo in fascia protetta."],
+    defeat: ["Un momento: nel contratto la sconfitta era prevista solo durante la pubblicità."]
   },
   {
     id: "ghost-tycoon", name: "MR. TYCOON", pal: "boss",
     species: ["bojoon", "generorso", "trumpon"],
-    intro: ["Il torneo più grande di sempre. E io lo vinco. Enorme."],
-    defeat: ["Truccato! Chiedo il riconteggio dei voti. E delle poltrone."]
+    intro: ["Questa poltrona vale dieci miliardi. L’ho valutata io. Anche il perito ero io."],
+    defeat: ["Non è una sconfitta: è una fusione. Il trofeo va a te, i debiti restano qui."]
   },
   {
     id: "ghost-ladydirettiva", name: "LADY DIRETTIVA", pal: "granny",
     species: ["macronfox", "calendrone", "ursulax"],
-    intro: ["Regolamento alla mano: articolo uno, vinco io."],
-    defeat: ["Faccio ricorso. In tre gradi. E in tre lingue."]
+    intro: ["La sedia supera i controlli. Il candidato no. Fortunatamente oggi certifichiamo le sedie."],
+    defeat: ["Hai vinto. Per ritirare il premio allega il certificato che dimostra che hai già ritirato il premio."]
   },
   {
     id: "ghost-tesoriere", name: "IL TESORIERE", pal: "boss",
     species: ["telecrate", "conteblob", "muskrat"],
-    intro: ["I conti del torneo? Li custodisco io. Non registrati, ovvio."],
-    defeat: ["Metto la sconfitta in un conto offshore. Sparisce."]
+    intro: ["Il trofeo è a bilancio come materiale d’ufficio. Per questo ha le ruote."],
+    defeat: ["Perdere non era preventivato. Lo imputo alla voce: ascolto del territorio."]
   },
   {
     id: "ghost-capitano", name: "IL CAPITANO", pal: "boss",
     species: ["salvinator", "vannaccix", "capitanone"],
-    intro: ["Prima le poltrone italiane. Poi il resto. Forse."],
-    defeat: ["Rinvio l'inaugurazione del trofeo. DI NUOVO."]
+    intro: ["Ho inaugurato la poltrona tre volte. Per sedermi aspetto che finiscano i collaudi."],
+    defeat: ["La coppa non c’è, ma il nastro l’ho tagliato. Nessuno può togliermi quel mezzo metro."]
   },
   {
     id: "ghost-giudice", name: "GIUDICE SUPREMA", pal: "journalist",
     species: ["xipanda", "putingrad", "draghimon"],
-    intro: ["Ultimo grado di giudizio: la tua eliminazione."],
-    defeat: ["Sentenza sospesa. Deposito le motivazioni tra nove anni."]
+    intro: ["Qui si decide chi resta seduto. Chi sta in piedi può presentare ricorso. Sempre in piedi."],
+    defeat: ["La vittoria è tua. Il timbro è mio. Non confondiamo i poteri."]
   },
   {
     id: "ghost-rivale", name: "GIANNI VETERANO", pal: "rival",
     species: ["grillix", "contemorfo", "renzilla"],
-    intro: ["Anche alla COPPA ci sono io. Sei tu che mi insegui, ricordi?"],
-    defeat: ["Zero a mille per te. Vengo a fare campagna PER te, va'."]
+    intro: ["Ho cambiato sette liste. Questa volta resto fino alla fine: mi hanno tolto le porte."],
+    defeat: ["Mi hai battuto. Posso entrare nel tuo comitato? Ho ancora il cartello CONTRO, giro il cartone."]
   }
 ];
 
@@ -160,8 +160,8 @@ function ghostLevel(index: number, seed: number): number {
 }
 
 // Squadra (Monster[]) di un fantasma per il bracket del giorno.
-export function buildGhostTeam(ghost: GhostArchetype, top: number): Monster[] {
-  return ghost.species.map((sp, i) => createMonster(sp, Math.max(48, top - (ghost.species.length - 1 - i) * 2)));
+export function buildGhostTeam(ghost: GhostArchetype, top: number, level50 = false): Monster[] {
+  return ghost.species.map((sp, i) => createMonster(sp, level50 ? 50 : Math.max(48, top - (ghost.species.length - 1 - i) * 2)));
 }
 
 // TrainerDef del fantasma per una BattleScene: team lv 50-55.
@@ -213,7 +213,7 @@ export function roundLabel(t: TournamentState): string {
 // Il giocatore ha appena VINTO il suo match del round: risolve gli altri match
 // del round con duelsim (fantasma-vs-fantasma) e forma il round successivo.
 // Ritorna true se il giocatore ha VINTO IL TORNEO (era la finale).
-export function advanceAfterPlayerWin(t: TournamentState): { champion: boolean; results: string[] } {
+export function advanceAfterPlayerWin(t: TournamentState, rule = coppaRule(t.dateKey)): { champion: boolean; results: string[] } {
   const results: string[] = [];
   const survivors: BracketEntry[] = [t.alive[0]]; // il giocatore prosegue
   // Match del round: (0,1) è il giocatore (già vinto), poi (2,3),(4,5),(6,7)...
@@ -224,7 +224,7 @@ export function advanceAfterPlayerWin(t: TournamentState): { champion: boolean; 
       survivors.push(a);
       continue;
     }
-    const winner = simulateGhostMatch(a, b, t.seed + i, ghostLevel(i, t.seed), ghostLevel(i + 1, t.seed));
+    const winner = simulateGhostMatch(a, b, t.seed + i, ghostLevel(i, t.seed), ghostLevel(i + 1, t.seed), rule.id === "level50");
     survivors.push(winner);
     const wName = winner.ghost?.name ?? "?";
     const lName = (winner === a ? b : a).ghost?.name ?? "?";
@@ -246,12 +246,13 @@ function simulateGhostMatch(
   b: BracketEntry,
   seed: number,
   topA: number,
-  topB: number
+  topB: number,
+  level50 = false
 ): BracketEntry {
   if (!a.ghost) return a;
   if (!b.ghost) return b;
   const rng = seededRng(seed >>> 0);
-  const sim = makeDuelSim(buildGhostTeam(a.ghost, topA), buildGhostTeam(b.ghost, topB));
+  const sim = makeDuelSim(buildGhostTeam(a.ghost, topA, level50), buildGhostTeam(b.ghost, topB, level50));
   // Fino a 200 turni (guardia anti-loop); poi vince chi ha più mostri vivi.
   for (let turn = 0; turn < 200; turn += 1) {
     if (aliveCount(sim.host) === 0 || aliveCount(sim.guest) === 0) {
@@ -297,4 +298,11 @@ function pickGhostCmd(sim: DuelSim, side: DuelSide, rng: Rng): DuelCmd {
     }
   }
   return { kind: "move", moveId: best };
+}
+
+export function coppaOpponentDef(t: TournamentState, rule: CoppaRule): TrainerDef | null {
+  const opp=playerOpponent(t);if(!opp)return null;
+  const def=ghostTrainerDef(opp,t.seed,1);
+  if(rule.id==="level50") def.team=def.team.map(([id])=>[id,50]);
+  return def;
 }

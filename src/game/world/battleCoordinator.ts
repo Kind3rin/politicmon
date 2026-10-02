@@ -14,7 +14,8 @@ export type TrainerBattleResult = "win" | "loss" | "caught" | "run";
 
 export function buildTrainerTeam(state: GameState, def: TrainerDef, options: TrainerTeamOptions): Monster[] {
   if (def.team.length === 0) return options.fallbackTeam();
-  const noHard = def.id.startsWith("daily:");
+  // Coppa dossiers show the exact match levels, including the level-50 rule.
+  const noHard = def.id.startsWith("daily:") || def.id.startsWith("coppa:");
   const team = def.team.map(([id, level, moveIds, heldItem]) => {
     const bonus = noHard ? 0 : hardModeLevelBonus(state, level);
     const mon = createMonster(id, Math.min(60, level + bonus));

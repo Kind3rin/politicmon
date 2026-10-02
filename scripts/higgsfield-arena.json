@@ -1,0 +1,325 @@
+{
+  "version": 1,
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 639.97,
+  "estimatedCredits": 14,
+  "assets": [
+    {
+      "id": "casino",
+      "kind": "background",
+      "path": "public/sprites/ui/arena/casino.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. A fictional lavish Italian political casino, an empty gilt parliamentary chair converted into a slot machine, five blank political tokens on velvet, a cashier hatch, paper receipts on a desk. Cinematic lighting, focus upper-left quarter, lower half quiet dark navy, no HUD or UI.",
+      "index": 0,
+      "jobId": "a45e142f-ea07-4ab8-82c9-430568e9af67",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_233748_a45e142f-ea07-4ab8-82c9-430568e9af67.png",
+      "sourceSha256": "58721e3519dece306a6a2bcbd3407486ac22f85d3f1f6d1e893bc08079f908d2"
+    },
+    {
+      "id": "club",
+      "kind": "background",
+      "path": "public/sprites/ui/arena/club.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. A fictional Italian exclusive donor reception. Burgundy velvet rope splits a long corridor into a public waiting area and tiny reserved lounge. Empty tables, a microphone hidden in a flower vase, blank name cards, espresso and gold spoons. Warm theatrical lights, focus upper-left quarter, lower half calm dark navy, no UI.",
+      "index": 1,
+      "jobId": "86bc4e1c-c7cc-45b4-90af-c4c3181a0559",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_233748_86bc4e1c-c7cc-45b4-90af-c4c3181a0559.png",
+      "sourceSha256": "086054b400a8cc1ca19e068a7af9cfad054c60392d80fc9b98b7f84527f5920b"
+    },
+    {
+      "id": "tournament",
+      "kind": "background",
+      "path": "public/sprites/ui/arena/tournament.png",
+      "width": 240,
+      "height": 163,
+      "aspect_ratio": "16:9",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. A grand fictional Italian political tournament arena. A single absurd gilt parliamentary armchair on a mint spotlight dais, seven empty smaller rival chairs, formal draped curtains, a gold trophy shaped like a chair. Crisp grand cinematic geometry. Focus upper-left quarter, lower half dark navy negative space, no HUD or UI.",
+      "index": 2,
+      "jobId": "9c7be77d-7785-405a-ab1c-58a3740c0de4",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_233748_9c7be77d-7785-405a-ab1c-58a3740c0de4.png",
+      "sourceSha256": "67ca1261117bd07b0250371abfe06f375e6b7d2cf28ca3c2528ca77706d26450"
+    },
+    {
+      "id": "reels",
+      "kind": "icons",
+      "items": [
+        "vote",
+        "chair",
+        "seat",
+        "envelope",
+        "star"
+      ],
+      "cols": 3,
+      "rows": 2,
+      "width": 24,
+      "height": 24,
+      "aspect_ratio": "3:2",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. Precise 3 columns by 2 rows sprite sheet on pure white, every object centered and fully contained with generous white margins. Top-left ivory ballot paper with a mint tick and no text; top-center tiny gilt parliamentary chair; top-right burgundy swivel executive chair; bottom-left sealed ivory envelope stuffed with a few gold coins; bottom-center gold eight-point star; bottom-right EMPTY WHITE. Equal optical size, no borders, no shadows reaching cell edges.",
+      "index": 3,
+      "jobId": "dc648743-02b1-4562-b68b-18bad5a9c1b3",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_233748_dc648743-02b1-4562-b68b-18bad5a9c1b3.png",
+      "sourceSha256": "a1f04522eb524a871ec41a1960a958c95444082ac0e934acdf322c1d618c0915"
+    },
+    {
+      "id": "rules",
+      "kind": "icons",
+      "items": [
+        "monotype",
+        "level50",
+        "team3",
+        "noitems",
+        "oneheal"
+      ],
+      "cols": 3,
+      "rows": 2,
+      "width": 24,
+      "height": 24,
+      "aspect_ratio": "3:2",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. Precise 3 columns by 2 rows sprite sheet on pure white, centered completely contained objects with wide white margins. Top-left three mint gems of SAME color; top-center balanced gold scale with identical ivory weights; top-right exactly three small burgundy parliamentary chairs; bottom-left firmly closed ivory medical case with burgundy lock; bottom-center one mint medicine ampoule inside a gold ring; bottom-right EMPTY WHITE. Equal optical sizes, no numbers or writing, no borders or line separators.",
+      "index": 4,
+      "jobId": "60702556-aecb-456d-8eb5-b13524500f33",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_233748_60702556-aecb-456d-8eb5-b13524500f33.png",
+      "sourceSha256": "f5e402641b743e501064e7a3e9e6a838b6974f283c960233ad39b4dd548ff803"
+    },
+    {
+      "id": "ghosts",
+      "kind": "icons",
+      "items": [
+        "ghost-emittenza",
+        "ghost-tycoon",
+        "ghost-ladydirettiva",
+        "ghost-tesoriere",
+        "ghost-capitano",
+        "ghost-giudice",
+        "ghost-rivale"
+      ],
+      "cols": 3,
+      "rows": 3,
+      "width": 48,
+      "height": 56,
+      "aspect_ratio": "1:1",
+      "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. Precise evenly spaced 3x3 sprite sheet on pure white, SEVEN fictional fully contained front-facing upper-body character portraits, each unique clear silhouette, large white margins. Row1: jovial elderly TV mogul with remote controller and gold tie; orange-haired property tycoon with oversized mint tie and smug eyebrows; strict silver-haired regulatory lady holding thick burgundy binder. Row2: discreet round accountant hiding calculator under ivory pocket square; gruff nautical captain with short salt beard and navy cap holding miniature bridge; stern middle-aged female constitutional judge in navy robe holding tiny gold gavel. Row3 left: energetic young black-haired veteran campaign rival with burgundy track jacket and mint megaphone; row3 center and right EMPTY WHITE. No real person likeness, no text, no connecting objects, no borders or cell lines.\nCRITICAL CORRECTION: each portrait must be a SMALL head-and-shoulders MEDALLION inside an identical closed ivory hexagonal shield with a gold outline. No torso outside the shield. Nine cells form a rigid uniform 3x3 grid. The seven medallions occupy only the central 60% of each cell: continuous generous WHITE padding above, below, left and right EVERY shield, including the bottom-left cell. Show all bottom edges fully; no shield touches a cell boundary or image edge. Last two cells entirely white. Keep faces and distinct handheld symbols simple and readable.",
+      "index": 6,
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e",
+      "status": "completed",
+      "model": "nano_banana_2",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_234642_bec8dd2c-9827-4bab-a649-009998ee2d6e.png",
+      "reviewAttempts": [
+        {
+          "jobId": "498c159b-e835-47d9-83a4-552e5e750d9a",
+          "prompt": "POLITICMON, original satirical Italian political RPG. Crisp modern pixel art with large forms readable at 240x180, navy/ivory/mint/burgundy and gold. No letters, words, numbers or logos. Precise evenly spaced 3x3 sprite sheet on pure white, SEVEN fictional fully contained front-facing upper-body character portraits, each unique clear silhouette, large white margins. Row1: jovial elderly TV mogul with remote controller and gold tie; orange-haired property tycoon with oversized mint tie and smug eyebrows; strict silver-haired regulatory lady holding thick burgundy binder. Row2: discreet round accountant hiding calculator under ivory pocket square; gruff nautical captain with short salt beard and navy cap holding miniature bridge; stern middle-aged female constitutional judge in navy robe holding tiny gold gavel. Row3 left: energetic young black-haired veteran campaign rival with burgundy track jacket and mint megaphone; row3 center and right EMPTY WHITE. No real person likeness, no text, no connecting objects, no borders or cell lines.",
+          "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261001_233748_498c159b-e835-47d9-83a4-552e5e750d9a.png",
+          "status": "completed",
+          "review": "Rejected: flat portrait bottoms touch cell boundaries; veteran reaches image edge.",
+          "sourceSha256": "4f57d55e8bb7eef043547041411a958065b8a8a637ac78ca27f63d8946848ee9"
+        }
+      ],
+      "columnEdges2048": [
+        0,
+        746,
+        1405,
+        2048
+      ],
+      "sourceSha256": "b90fddeac745516c842a83d4a1dcedca98b23734289e2812cd19c217ce200318"
+    }
+  ],
+  "balanceAfter": 625.97,
+  "creditsSpent": 14,
+  "outputs": [
+    {
+      "path": "public/sprites/ui/arena/casino.png",
+      "sha256": "9d233ea8feb038df1ff254c1412ed602c4726fdd755575f8104ce47b827ae958",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "a45e142f-ea07-4ab8-82c9-430568e9af67"
+    },
+    {
+      "path": "public/sprites/ui/arena/club.png",
+      "sha256": "3017b66c3d8be33fb79d54ca182d82d597fcad375c87acda38a4932f76376055",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "86bc4e1c-c7cc-45b4-90af-c4c3181a0559"
+    },
+    {
+      "path": "public/sprites/ui/arena/tournament.png",
+      "sha256": "a9030f102c5cfad57cacc92ca50424b3fddbd5442b36f16d9af1f2f7a5b8c6ae",
+      "size": [
+        240,
+        163
+      ],
+      "jobId": "9c7be77d-7785-405a-ab1c-58a3740c0de4"
+    },
+    {
+      "path": "public/sprites/ui/arena/vote.png",
+      "sha256": "e26df6a5bc23f8bde0ac5006a85f22ba464eaad8d87d6d333db687bdfea52df8",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "dc648743-02b1-4562-b68b-18bad5a9c1b3"
+    },
+    {
+      "path": "public/sprites/ui/arena/chair.png",
+      "sha256": "4f038cbacb9150d16680eddd725edf81170625a5d2c75f9b01d8945c208f8890",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "dc648743-02b1-4562-b68b-18bad5a9c1b3"
+    },
+    {
+      "path": "public/sprites/ui/arena/seat.png",
+      "sha256": "ddddd3a0ea357c6d8dd21eeabb4de26b9296c6e042b2a906cc72a5a08cc2e293",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "dc648743-02b1-4562-b68b-18bad5a9c1b3"
+    },
+    {
+      "path": "public/sprites/ui/arena/envelope.png",
+      "sha256": "7e60485d769451a5c5eff8b4808f30524358331ee80276791a159106fd06f005",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "dc648743-02b1-4562-b68b-18bad5a9c1b3"
+    },
+    {
+      "path": "public/sprites/ui/arena/star.png",
+      "sha256": "b399db5dc80b03f54ba0d0c0311913fbb782478a764e09e4c674ca900106475b",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "dc648743-02b1-4562-b68b-18bad5a9c1b3"
+    },
+    {
+      "path": "public/sprites/ui/arena/monotype.png",
+      "sha256": "bd83d5804529e8676a0b7d3d457e990d334e713982ff71ca45bfc382f28ef25f",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "60702556-aecb-456d-8eb5-b13524500f33"
+    },
+    {
+      "path": "public/sprites/ui/arena/level50.png",
+      "sha256": "aef472a27eaccb21ec6f8b83c140d516622cf80acd63f0162714dc6918669627",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "60702556-aecb-456d-8eb5-b13524500f33"
+    },
+    {
+      "path": "public/sprites/ui/arena/team3.png",
+      "sha256": "42eb9488003f57123de24253bdca2e41f399ffc181a39e9e26f42e17fdd7d4f5",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "60702556-aecb-456d-8eb5-b13524500f33"
+    },
+    {
+      "path": "public/sprites/ui/arena/noitems.png",
+      "sha256": "b17fba244ef86b335ac0d40be8b18d6c636606d75ed0c5e6ece5986d28c0fd02",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "60702556-aecb-456d-8eb5-b13524500f33"
+    },
+    {
+      "path": "public/sprites/ui/arena/oneheal.png",
+      "sha256": "09ca718bb43a86114207ea9fd1fa1b1618be47d8d34465e2cf3eac8e40c64e30",
+      "size": [
+        24,
+        24
+      ],
+      "jobId": "60702556-aecb-456d-8eb5-b13524500f33"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-emittenza.png",
+      "sha256": "41afebbad21f9f11e6cf37e4804ec56a77627be30ec7284867ff24202a7ba8df",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-tycoon.png",
+      "sha256": "e894c47471001727078a68b51e98eb9304d4d8909450237a0997ccf21587e8ab",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-ladydirettiva.png",
+      "sha256": "24fbabb5bde699dd62b9adf52f3943cb5957120b6e3cf8aba5abb041fd9157ce",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-tesoriere.png",
+      "sha256": "04405be2dfc64a2b3c63146442e645479bef3f340ae91df39338204e88af9b3d",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-capitano.png",
+      "sha256": "757459d9c53b8ac713111bf0d64220aece921a7094bb3a483ee7b7a4fc2b0c7b",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-giudice.png",
+      "sha256": "701dd9d805565c66ae0a6b4a9d4520c9afefe99c26ef55b6861929c8f2e24976",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    },
+    {
+      "path": "public/sprites/ui/arena/ghost-rivale.png",
+      "sha256": "7489dfb83d680f0d062b4962bae839baa68307f78aae029a6271db58a69358ba",
+      "size": [
+        48,
+        56
+      ],
+      "jobId": "bec8dd2c-9827-4bab-a649-009998ee2d6e"
+    }
+  ],
+  "review": "Approved at native resolution: three distinct backgrounds, ten readable tokens, seven complete portraits. Original ghost sheet rejected for clipped silhouettes; repaired medallions accepted."
+}

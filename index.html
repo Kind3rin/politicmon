@@ -21,8 +21,10 @@
   <body>
     <script>if(matchMedia("(pointer: coarse)").matches)document.body.classList.add("touch");</script>
     <!-- Intro loads only on playback; never competes with startup assets. -->
-    <div id="intro-overlay" hidden>
-      <video id="intro-video" playsinline preload="none" src="./intro.mp4"></video>
+    <div id="intro-overlay" role="dialog" aria-modal="true" aria-label="Introduzione a Politicmon" hidden>
+      <video id="intro-video" playsinline preload="none" src="./intro.mp4?v=2" aria-hidden="true"></video>
+      <strong id="intro-brand">POLITICMON</strong>
+      <p id="intro-line">Il voto è tuo.<br>Il merito lo prendono loro.</p>
       <button id="intro-skip" type="button">SALTA ▶</button>
     </div>
     <div id="app">
@@ -66,16 +68,16 @@
     <dialog id="shell-guide" aria-labelledby="shell-guide-title">
       <div class="guide-heading"><span class="guide-eyebrow">MANUALE DEL CANDIDATO</span><button id="shell-guide-close" type="button" autofocus aria-label="Chiudi la guida">✕</button></div>
       <h1 id="shell-guide-title">Il consenso non si conquista da fermo.</h1>
-      <p>Muoviti, leggi le mosse e scegli dove impegnarti. Mondo e lotte locali si fermano mentre leggi. Nei duelli online non fermi l’avversario.</p>
+      <p>Esplora e scegli le mosse. Questa guida mette in pausa mondo e lotte locali; i duelli online continuano.</p>
       <dl class="guide-controls">
         <div><dt>Muovi / scegli</dt><dd><kbd>↑ ↓ ← →</kbd> oppure <kbd>W A S D</kbd></dd></div>
         <div><dt>Parla / conferma</dt><dd><kbd>Z</kbd> <kbd>K</kbd> <kbd>INVIO</kbd> <kbd>SPAZIO</kbd> · touch: A</dd></div>
         <div><dt>Torna / annulla</dt><dd><kbd>X</kbd> <kbd>J</kbd> <kbd>ESC</kbd> <kbd>⌫</kbd> · touch: B</dd></div>
         <div><dt>Quartier generale</dt><dd><kbd>P</kbd> · pulsante POLITICMON / MENU</dd></div>
       </dl>
-      <p><strong>Sul telefono</strong> puoi anche toccare una voce sullo schermo: il primo tocco la seleziona, il secondo la apre nei menu. Trascina sulla croce per cambiare direzione senza sollevare il dito; il centro ferma il movimento. Puoi tenere una direzione con un dito e premere A/B con l’altro. Il pulsante ✥ in alto alterna croce e levetta. In OPZIONI scegli effetti ridotti e ritmo delle lotte.</p>
-      <p><strong>Nelle lotte</strong> START/MENU apre il dossier tattico dal menu LOTTA. Consultarlo non consuma il turno.</p>
-      <p><strong>Per ripartire</strong> usa SALVA nel quartier generale. EXTRA → GUIDA CAMPAGNA mostra la prossima meta e il significato della morale.</p>
+      <p><strong>Touch</strong> Nei menu, tocca una voce per selezionarla e ritocca per aprirla. Trascina sulla croce; il centro ferma il movimento. Muovi con un dito e premi A/B con l’altro. ✥ alterna croce e levetta. OPZIONI regola effetti e ritmo delle lotte.</p>
+      <p><strong>Lotte</strong> START/MENU apre il dossier dal menu LOTTA, senza consumare il turno.</p>
+      <p><strong>Ripresa</strong> SALVA nel quartier generale. EXTRA → GUIDA CAMPAGNA spiega prossima meta e morale.</p>
       <p class="guide-note">TAB passa fra i controlli della pagina. ESC chiude questa guida.</p>
       <button id="shell-guide-resume" type="button">TORNA ALLA CAMPAGNA →</button>
     </dialog>

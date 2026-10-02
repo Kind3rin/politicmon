@@ -1,0 +1,855 @@
+{
+  "date": "2026-10-02",
+  "status": "local_verified_publication_pending",
+  "goal": "active; full redesign not completed",
+  "sourceSha256": {
+    "src/engine/intro.ts": "4ad64b4ce14ce761fdd0323a793264af934d87af5102d0e29f07a5b94761dc08",
+    "src/styles.css": "85c099c539d5e73153d205d7e6a09b249f62be267b426fece8a08be614fcbe55",
+    "src/scenes/TitleScene.ts": "c875b4732e4f469364e6618dc205bdcaadbc365e5d58f58fed7bbca1f80edf96",
+    "src/main.ts": "7729bbce219f330b9f9ce07c0a4e11680d1b48f6c4942bcde195bf47dc0174f1",
+    "index.html": "0d396623f6f3766be58b7977535774f996c6baeed5370442237b105504f6a760",
+    "public/intro.mp4": "c4898a3a94268935e963c43771720276c89d47bd0f9e5eecd7e7cc734b550bb0",
+    "scripts/check-opening-release.mjs": "f2ecb062baa8acb39cd8818b9cd39454842b370f4e538faac073a8cfed3f3783",
+    "scripts/higgsfield-opening.json": "3e4a251dc932dcaf82167da4c7342dcaf9dd5387cb1e6281ee77b7dbed8014ac",
+    "package.json": "e52e4d9e4c7acc15c12f44cf6a7f7054d2d482b588c8af48f97163b1409d8796"
+  },
+  "generation": {
+    "version": 1,
+    "date": "2026-10-02",
+    "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+    "balanceBefore": 382.72,
+    "balanceAfter": 353.22,
+    "actualCredits": 29.5,
+    "assets": [
+      {
+        "id": "opening-key-art",
+        "kind": "reference",
+        "jobId": "103e3cd0-d887-4277-917b-16fbacb14d5e",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_194357_103e3cd0-d887-4277-917b-16fbacb14d5e.png",
+        "params": {
+          "prompt": "Opening key art for POLITICMON, an original Italian political satire monster adventure. Premium handcrafted 16-bit illustrated game art, chunky clean pixel shapes, midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, restrained violet. Landscape 4:3. A whimsical miniature circular parliamentary debating chamber, seen at a low three-quarter angle as a tiny theatrical diorama. CENTRAL FOCAL GAG: an oversized ivory ballot box on a mint plinth, a mustard ballot halfway in its slot. Three distinct small original fantasy creatures around it, whole bodies clear: left a stubborn blue wolf in a rumpled green jacket holds a rolled manifesto; right a mustard crocodile in navy waistcoat fusses with a miniature microphone; back a coral firebird with a navy sash watches the ballot. Their eyes all focus on the box, comic campaign tension and sincere adventure, no aggressive faces. Tiny voting slips flutter overhead like confetti and neatly fold into a miniature paper crown above the ballot box. Rich readable depth, large simple silhouettes, no dense detail. Curved ivory chamber seats in the background and navy shadowed wall, warm spotlight on ballot box. Keep the top quarter and bottom fifth quiet, navy and slate background for game text later. Crisp hard pixel edges, flat opaque color, no photorealism, gradients, lens glow, blur, live-action humans, real politicians, real party logos, readable lettering, captions, watermarks, UI or game title. This should feel like the actual modern pixel RPG rather than a political commercial. No text anywhere.",
+          "aspect_ratio": "4:3",
+          "quality": "high",
+          "resolution": "1k"
+        },
+        "usedBy": "intro-video",
+        "runtimeImage": false,
+        "sourceSha256": "87f5566cfebc3c392c841f5812571ca88dc9c8cef40366a984e60e884bf2b681",
+        "bytes": 1130471
+      },
+      {
+        "id": "intro-video",
+        "kind": "video",
+        "jobId": "64ae152a-a961-4539-924a-6c7a07ee7f03",
+        "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_194622_64ae152a-a961-4539-924a-6c7a07ee7f03.mp4",
+        "path": "public/intro.mp4",
+        "params": {
+          "model": "seedance_2_5",
+          "mode": "omni_reference",
+          "duration": 4,
+          "aspect_ratio": "4:3",
+          "resolution": "720p",
+          "generate_audio": false,
+          "bitrate_mode": "standard",
+          "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+          "count": 1,
+          "use_unlim": false,
+          "prompt": "Animate this exact opening illustration for the POLITICMON political satire pixel RPG. Four seconds, one continuous fixed shot in 4:3. Preserve the original three fantasy creatures, their clothing, exact anatomical silhouettes, ballot box, circular parliamentary chamber, palette and chunky hard pixel art. No added characters, text, logo, watermarks or photorealism. Main simple comic action: the yellow voting slip drops fully into the ballot slot in the first second. A few tiny colored paper confetti pieces gently settle, not an endless particle storm. The small white paper crown above the ballot box slowly drifts to the mustard crocodile's head at the right in the second and third seconds. The crocodile proudly lifts the microphone a tiny amount as if claiming credit for everybody's vote; the blue wolf at the left gives a restrained eye-roll and the coral firebird behind the box tilts its head in amused disbelief. End on this readable comic pose by four seconds. Keep whole bodies fully visible, no camera cuts, shake, flashing, exaggerated elastic distortion, morphing faces, rearranged room or new background. Flat clean opaque colors and crisp handmade pixel motion. No speech and no generated audio. Quiet navy top and bottom margins remain empty for game typography added later. The gag must read at phone size.",
+          "medias": [
+            {
+              "role": "start_image",
+              "value": "103e3cd0-d887-4277-917b-16fbacb14d5e"
+            }
+          ]
+        },
+        "excludedFromPrecache": true,
+        "sourceSha256": "c4898a3a94268935e963c43771720276c89d47bd0f9e5eecd7e7cc734b550bb0",
+        "bytes": 242210,
+        "runtimeSha256": "c4898a3a94268935e963c43771720276c89d47bd0f9e5eecd7e7cc734b550bb0",
+        "width": 1112,
+        "height": 834,
+        "durationSeconds": 4.041667,
+        "audioStreams": 0,
+        "transcoded": false
+      }
+    ],
+    "notes": [
+      "Reference art plus a silent four-second animation; no duplicate fallback sprite jobs.",
+      "No forced opening for reduced motion or already-seen session; missing video falls through to title.",
+      "The video is an original satirical vignette, not a promise that these creatures are the three selectable starters."
+    ]
+  },
+  "localOpening": {
+    "base": "http://127.0.0.1:4184/",
+    "physicalDevice": false,
+    "engines": [
+      {
+        "engine": "chromium",
+        "layouts": [
+          {
+            "name": "portrait",
+            "width": 412,
+            "height": 915,
+            "safe": {
+              "top": 28,
+              "bottom": 24,
+              "left": 0,
+              "right": 0
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 12,
+                  "y": 28,
+                  "right": 400,
+                  "bottom": 49,
+                  "w": 388,
+                  "h": 21
+                },
+                {
+                  "id": "intro-video",
+                  "x": 12,
+                  "y": 59,
+                  "right": 400,
+                  "bottom": 776.625,
+                  "w": 388,
+                  "h": 717.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 12,
+                  "y": 786.625,
+                  "right": 400,
+                  "bottom": 823,
+                  "w": 388,
+                  "h": 36.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 304.859375,
+                  "y": 833,
+                  "right": 398,
+                  "bottom": 877,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.041667,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          },
+          {
+            "name": "compact",
+            "width": 320,
+            "height": 568,
+            "safe": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 12,
+                  "y": 16,
+                  "right": 308,
+                  "bottom": 37,
+                  "w": 296,
+                  "h": 21
+                },
+                {
+                  "id": "intro-video",
+                  "x": 12,
+                  "y": 47,
+                  "right": 308,
+                  "bottom": 453.625,
+                  "w": 296,
+                  "h": 406.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 12,
+                  "y": 463.625,
+                  "right": 308,
+                  "bottom": 500,
+                  "w": 296,
+                  "h": 36.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 212.859375,
+                  "y": 510,
+                  "right": 306,
+                  "bottom": 554,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.041667,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          },
+          {
+            "name": "landscape",
+            "width": 915,
+            "height": 412,
+            "safe": {
+              "top": 0,
+              "bottom": 24,
+              "left": 36,
+              "right": 0
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 36,
+                  "y": 16,
+                  "right": 903,
+                  "bottom": 51,
+                  "w": 867,
+                  "h": 35
+                },
+                {
+                  "id": "intro-video",
+                  "x": 36,
+                  "y": 61,
+                  "right": 903,
+                  "bottom": 259.625,
+                  "w": 867,
+                  "h": 198.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 36,
+                  "y": 269.625,
+                  "right": 903,
+                  "bottom": 320,
+                  "w": 867,
+                  "h": 50.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 807.859375,
+                  "y": 330,
+                  "right": 901,
+                  "bottom": 374,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.041667,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          },
+          {
+            "name": "compact-landscape",
+            "width": 568,
+            "height": 320,
+            "safe": {
+              "top": 0,
+              "bottom": 16,
+              "left": 44,
+              "right": 44
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 44,
+                  "y": 16,
+                  "right": 524,
+                  "bottom": 43,
+                  "w": 480,
+                  "h": 27
+                },
+                {
+                  "id": "intro-video",
+                  "x": 44,
+                  "y": 53,
+                  "right": 524,
+                  "bottom": 189.625,
+                  "w": 480,
+                  "h": 136.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 44,
+                  "y": 199.625,
+                  "right": 524,
+                  "bottom": 236,
+                  "w": 480,
+                  "h": 36.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 416.859375,
+                  "y": 246,
+                  "right": 510,
+                  "bottom": 290,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.041667,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          }
+        ],
+        "routes": [
+          {
+            "route": "keyboard",
+            "key": "Enter",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "Escape",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "Space",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "z",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "x",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "k",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "j",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "Backspace",
+            "passed": true
+          },
+          {
+            "route": "natural-end",
+            "passed": true,
+            "introRequests": 2
+          },
+          {
+            "route": "tap",
+            "passed": true,
+            "introRequests": 2
+          },
+          {
+            "route": "reduced-motion",
+            "passed": true,
+            "introRequests": 0
+          },
+          {
+            "route": "seen",
+            "passed": true,
+            "introRequests": 0
+          },
+          {
+            "route": "missing-video",
+            "passed": true,
+            "introRequests": 2
+          },
+          {
+            "route": "autoplay-rejected",
+            "passed": true,
+            "introRequests": 1
+          },
+          {
+            "route": "stalled-download",
+            "passed": true,
+            "introRequests": 2
+          }
+        ]
+      },
+      {
+        "engine": "webkit",
+        "layouts": [
+          {
+            "name": "portrait",
+            "width": 412,
+            "height": 915,
+            "safe": {
+              "top": 28,
+              "bottom": 24,
+              "left": 0,
+              "right": 0
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 12,
+                  "y": 28,
+                  "right": 400,
+                  "bottom": 49,
+                  "w": 388,
+                  "h": 21
+                },
+                {
+                  "id": "intro-video",
+                  "x": 12,
+                  "y": 59,
+                  "right": 400,
+                  "bottom": 776.625,
+                  "w": 388,
+                  "h": 717.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 12,
+                  "y": 786.625,
+                  "right": 400,
+                  "bottom": 823,
+                  "w": 388,
+                  "h": 36.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 304.859375,
+                  "y": 833,
+                  "right": 398,
+                  "bottom": 877,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.042,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          },
+          {
+            "name": "compact",
+            "width": 320,
+            "height": 568,
+            "safe": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 12,
+                  "y": 16,
+                  "right": 308,
+                  "bottom": 37,
+                  "w": 296,
+                  "h": 21
+                },
+                {
+                  "id": "intro-video",
+                  "x": 12,
+                  "y": 47,
+                  "right": 308,
+                  "bottom": 453.625,
+                  "w": 296,
+                  "h": 406.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 12,
+                  "y": 463.625,
+                  "right": 308,
+                  "bottom": 500,
+                  "w": 296,
+                  "h": 36.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 212.859375,
+                  "y": 510,
+                  "right": 306,
+                  "bottom": 554,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.042,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          },
+          {
+            "name": "landscape",
+            "width": 915,
+            "height": 412,
+            "safe": {
+              "top": 0,
+              "bottom": 24,
+              "left": 36,
+              "right": 0
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 36,
+                  "y": 16,
+                  "right": 903,
+                  "bottom": 51,
+                  "w": 867,
+                  "h": 35
+                },
+                {
+                  "id": "intro-video",
+                  "x": 36,
+                  "y": 61,
+                  "right": 903,
+                  "bottom": 259.625,
+                  "w": 867,
+                  "h": 198.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 36,
+                  "y": 269.625,
+                  "right": 903,
+                  "bottom": 320,
+                  "w": 867,
+                  "h": 50.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 807.859375,
+                  "y": 330,
+                  "right": 901,
+                  "bottom": 374,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.042,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          },
+          {
+            "name": "compact-landscape",
+            "width": 568,
+            "height": 320,
+            "safe": {
+              "top": 0,
+              "bottom": 16,
+              "left": 44,
+              "right": 44
+            },
+            "geometry": {
+              "boxes": [
+                {
+                  "id": "intro-brand",
+                  "x": 44,
+                  "y": 16,
+                  "right": 524,
+                  "bottom": 43,
+                  "w": 480,
+                  "h": 27
+                },
+                {
+                  "id": "intro-video",
+                  "x": 44,
+                  "y": 53,
+                  "right": 524,
+                  "bottom": 189.625,
+                  "w": 480,
+                  "h": 136.625
+                },
+                {
+                  "id": "intro-line",
+                  "x": 44,
+                  "y": 199.625,
+                  "right": 524,
+                  "bottom": 236,
+                  "w": 480,
+                  "h": 36.375
+                },
+                {
+                  "id": "intro-skip",
+                  "x": 416.859375,
+                  "y": 246,
+                  "right": 510,
+                  "bottom": 290,
+                  "w": 93.140625,
+                  "h": 44
+                }
+              ],
+              "video": {
+                "width": 1112,
+                "height": 834,
+                "duration": 4.042,
+                "muted": true
+              },
+              "inert": true,
+              "focus": "intro-skip"
+            }
+          }
+        ],
+        "routes": [
+          {
+            "route": "keyboard",
+            "key": "Enter",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "Escape",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "Space",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "z",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "x",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "k",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "j",
+            "passed": true
+          },
+          {
+            "route": "keyboard",
+            "key": "Backspace",
+            "passed": true
+          },
+          {
+            "route": "natural-end",
+            "passed": true,
+            "introRequests": 2
+          },
+          {
+            "route": "tap",
+            "passed": true,
+            "introRequests": 2
+          },
+          {
+            "route": "reduced-motion",
+            "passed": true,
+            "introRequests": 0
+          },
+          {
+            "route": "seen",
+            "passed": true,
+            "introRequests": 0
+          },
+          {
+            "route": "missing-video",
+            "passed": true,
+            "introRequests": 1
+          },
+          {
+            "route": "autoplay-rejected",
+            "passed": true,
+            "introRequests": 0
+          },
+          {
+            "route": "stalled-download",
+            "passed": true,
+            "introRequests": 1
+          }
+        ]
+      }
+    ]
+  },
+  "localBundle": {
+    "base": "http://127.0.0.1:4184/",
+    "sizes": [
+      {
+        "url": "http://127.0.0.1:4184/",
+        "bytes": 2122
+      },
+      {
+        "url": "http://127.0.0.1:4184/sw.js",
+        "bytes": 887
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/index-AOgR0cwR.js",
+        "bytes": 182651
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/index-M61wk0N5.css",
+        "bytes": 2996
+      },
+      {
+        "url": "http://127.0.0.1:4184/assets/WorldScene-CJjbbjOv.js",
+        "bytes": 169608
+      }
+    ],
+    "total": 358264,
+    "budget": 358400,
+    "margin": 136
+  },
+  "tests": 320,
+  "shellCases": 10,
+  "before": {
+    "videoBytes": 2598848,
+    "videoAspect": "16:9",
+    "videoDuration": 4,
+    "videoAudioStreams": 1,
+    "subject": "Photorealistic bridge and real politician banner"
+  },
+  "review": {
+    "sampledFrames": 4,
+    "wholeVideoDecoded": true,
+    "decodedFrames": 97,
+    "newBytes": 242210,
+    "newAspect": "4:3",
+    "newAudioStreams": 0,
+    "referenceArtUsedForVideoNotRuntimeImage": true,
+    "gag": "Vote drops into box; paper crown lands on microphone-holding crocodile",
+    "webkitLayoutBugFoundAndFixed": "Video percentage height overlapped caption; explicit automatic height and grid stretch fixes actual geometry",
+    "unusedTitleMessageBoxRemoved": "No show/open call existed for diffMsg; normal and hard selector paths retained",
+    "guideShortenedWithSameControlInstructions": true
+  },
+  "localLogs": {
+    "build": {
+      "path": "/tmp/politicmon-opening-build.log",
+      "sha256": "21ae805f4471f6d3c8f672139d268dc63e4c551a14a52c49386ded429830be69",
+      "text": "\n> politicmon@1.0.0 build\n> tsc --noEmit && vite build\n\nvite v6.4.3 building for production...\ntransforming...\n✓ 195 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                       5.23 kB │ gzip:   2.12 kB\ndist/assets/index-M61wk0N5.css       10.04 kB │ gzip:   3.00 kB\ndist/assets/WorldScene-CJjbbjOv.js  477.41 kB │ gzip: 169.61 kB\ndist/assets/index-AOgR0cwR.js       587.50 kB │ gzip: 182.65 kB\n\n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n✓ built in 4.45s\n"
+    },
+    "tests": {
+      "path": "/tmp/politicmon-opening-tests.log",
+      "sha256": "4419127699b8d5adc178b416177af01473e91cf9968878d23d3125947b79a22b",
+      "text": " ---\n  duration_ms: 0.117875\n  type: 'test'\n  ...\n# Subtest: sondaggiMoveMult: consenso basso potenzia i tipi anti-establishment\nok 297 - sondaggiMoveMult: consenso basso potenzia i tipi anti-establishment\n  ---\n  duration_ms: 0.242292\n  type: 'test'\n  ...\n# Subtest: sondaggiMoveMult: in banda neutra (41-69) nessun bonus\nok 298 - sondaggiMoveMult: in banda neutra (41-69) nessun bonus\n  ---\n  duration_ms: 0.040666\n  type: 'test'\n  ...\n# Subtest: sondaggiMoveMult: senza contesto (duello PvP) sempre 1\nok 299 - sondaggiMoveMult: senza contesto (duello PvP) sempre 1\n  ---\n  duration_ms: 0.026042\n  type: 'test'\n  ...\n# Subtest: slice ending: coalizione senza tensioni produce finale stabile\nok 300 - slice ending: coalizione senza tensioni produce finale stabile\n  ---\n  duration_ms: 0.690333\n  type: 'test'\n  ...\n# Subtest: slice ending: una linea rossa tesa produce finale fratturato\nok 301 - slice ending: una linea rossa tesa produce finale fratturato\n  ---\n  duration_ms: 0.172917\n  type: 'test'\n  ...\n# Subtest: P6-T06: crediti coprono ogni evento con titolo, fonte e HTTPS\nok 302 - P6-T06: crediti coprono ogni evento con titolo, fonte e HTTPS\n  ---\n  duration_ms: 0.505083\n  type: 'test'\n  ...\n# Subtest: P6-T06: il link si apre solo tramite chiamata esplicita e rifiuta HTTP\nok 303 - P6-T06: il link si apre solo tramite chiamata esplicita e rifiuta HTTP\n  ---\n  duration_ms: 0.640875\n  type: 'test'\n  ...\n# Subtest: all inventory items are reachable, including the clean special SINISTRA directive\nok 304 - all inventory items are reachable, including the clean special SINISTRA directive\n  ---\n  duration_ms: 1.210041\n  type: 'test'\n  ...\n# Subtest: quotes recheck live funds, reusable stock and quantities; rejected commits are pure\nok 305 - quotes recheck live funds, reusable stock and quantities; rejected commits are pure\n  ---\n  duration_ms: 0.402084\n  type: 'test'\n  ...\n# Subtest: price breakdown includes every active minister cost and matches the charged unit price\nok 306 - price breakdown includes every active minister cost and matches the charged unit price\n  ---\n  duration_ms: 0.304167\n  type: 'test'\n  ...\n# Subtest: reading supply tactics leaves HP, PP, held items, funds and inventory intact\nok 307 - reading supply tactics leaves HP, PP, held items, funds and inventory intact\n  ---\n  duration_ms: 0.974125\n  type: 'test'\n  ...\n# Subtest: trasporti: senza progressi offre solo Borgo e mai la mappa corrente\nok 308 - trasporti: senza progressi offre solo Borgo e mai la mappa corrente\n  ---\n  duration_ms: 1.067834\n  type: 'test'\n  ...\n# Subtest: trasporti: le medaglie sbloccano destinazioni senza saltare la progressione\nok 309 - trasporti: le medaglie sbloccano destinazioni senza saltare la progressione\n  ---\n  duration_ms: 0.129334\n  type: 'test'\n  ...\n# Subtest: triangolo degli starter chiuso (DESTRA>SINISTRA>CENTRO>DESTRA)\nok 310 - triangolo degli starter chiuso (DESTRA>SINISTRA>CENTRO>DESTRA)\n  ---\n  duration_ms: 0.431417\n  type: 'test'\n  ...\n# Subtest: DESTRA resiste MEDIA (la sua unica resistenza)\nok 311 - DESTRA resiste MEDIA (la sua unica resistenza)\n  ---\n  duration_ms: 0.052375\n  type: 'test'\n  ...\n# Subtest: moltiplicatore compresso (2x -> 1.7, mai one-shot fuori scala)\nok 312 - moltiplicatore compresso (2x -> 1.7, mai one-shot fuori scala)\n  ---\n  duration_ms: 0.051708\n  type: 'test'\n  ...\n# Subtest: tipo neutro = 1\nok 313 - tipo neutro = 1\n  ---\n  duration_ms: 0.070916\n  type: 'test'\n  ...\n# Subtest: resistenza compressa a 0.6, non 0.5\nok 314 - resistenza compressa a 0.6, non 0.5\n  ---\n  duration_ms: 0.034459\n  type: 'test'\n  ...\n# Subtest: P6-T01: ISO week e schedule sono deterministici con 5 eventi, 3 dibattiti e finale\nok 315 - P6-T01: ISO week e schedule sono deterministici con 5 eventi, 3 dibattiti e finale\n  ---\n  duration_ms: 4.873125\n  type: 'test'\n  ...\n# Subtest: P6-T01: campagna si interrompe/riprende e ogni stage avanza una volta\nok 316 - P6-T01: campagna si interrompe/riprende e ogni stage avanza una volta\n  ---\n  duration_ms: 0.346666\n  type: 'test'\n  ...\n# Subtest: P6-T01: una nuova settimana crea una run nuova senza toccare la precedente in input\nok 317 - P6-T01: una nuova settimana crea una run nuova senza toccare la precedente in input\n  ---\n  duration_ms: 0.074667\n  type: 'test'\n  ...\n# Subtest: P6-T01: premio ha tre fasce ed è reclamabile una sola volta\nok 318 - P6-T01: premio ha tre fasce ed è reclamabile una sola volta\n  ---\n  duration_ms: 0.088042\n  type: 'test'\n  ...\n# Subtest: camera: stanze piccole centrate e stabili anche durante il movimento\nok 319 - camera: stanze piccole centrate e stabili anche durante il movimento\n  ---\n  duration_ms: 0.420792\n  type: 'test'\n  ...\n# Subtest: camera: mappe grandi conservano tracking, limiti e coordinate intere\nok 320 - camera: mappe grandi conservano tracking, limiti e coordinate intere\n  ---\n  duration_ms: 1.708666\n  type: 'test'\n  ...\n1..320\n# tests 320\n# suites 0\n# pass 320\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1990.008\n"
+    },
+    "opening": {
+      "path": "/tmp/politicmon-opening-release.log",
+      "sha256": "8916738072f9a69866e5c91216657105bd03fe42498280843766c54820fa0606",
+      "text": "\n> politicmon@1.0.0 check:opening:release\n> node scripts/check-opening-release.mjs\n\nPASS chromium opening layout portrait\nPASS chromium opening layout compact\nPASS chromium opening layout landscape\nPASS chromium opening layout compact-landscape\nPASS chromium opening natural-end\nPASS chromium opening tap\nPASS chromium opening reduced-motion\nPASS chromium opening seen\nPASS chromium opening missing-video\nPASS chromium opening autoplay-rejected\nPASS chromium opening stalled-download\nPASS webkit opening layout portrait\nPASS webkit opening layout compact\nPASS webkit opening layout landscape\nPASS webkit opening layout compact-landscape\nPASS webkit opening natural-end\nPASS webkit opening tap\nPASS webkit opening reduced-motion\nPASS webkit opening seen\nPASS webkit opening missing-video\nPASS webkit opening autoplay-rejected\nPASS webkit opening stalled-download\nPASS compiled opening: both engines, safe-area layouts, input isolation, reduced motion, repeat suppression, natural end and failure recovery\n"
+    },
+    "firstOpeningFailure": {
+      "path": "/tmp/politicmon-opening-release-before-webkit-fix.log",
+      "sha256": "94ad59ce3167a4d459090c251367a5f7a9141d95a131d541d36de542f8141978",
+      "text": "\n> politicmon@1.0.0 check:opening:release\n> node scripts/check-opening-release.mjs\n\nPASS chromium opening layout portrait\nPASS chromium opening layout compact\nPASS chromium opening layout landscape\nPASS chromium opening layout compact-landscape\nPASS chromium opening natural-end\nPASS chromium opening tap\nPASS chromium opening reduced-motion\nPASS chromium opening seen\nPASS chromium opening missing-video\nPASS chromium opening autoplay-rejected\nPASS chromium opening stalled-download\nnode:internal/modules/run_main:123\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: intro copy or skip covers the video\n    at file:///Users/tiengo/Progetti/politicmon/scripts/check-opening-release.mjs:53:56\n    at runNextTicks (node:internal/process/task_queues:64:5)\n    at process.processImmediate (node:internal/timers:452:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17) {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v22.23.3\n"
+    },
+    "shell": {
+      "path": "/tmp/politicmon-opening-shell.log",
+      "sha256": "2eedc3fd570e34e5db5bf058024d0726e4330bce22946f582967d239af0eabba",
+      "text": "\n> politicmon@1.0.0 check:shell:release\n> node scripts/check-shell-release.mjs\n\nPASS public shell chromium 320x568: layout, frozen title, native focus and resume\nPASS public shell chromium 390x844: layout, frozen title, native focus and resume\nPASS public shell chromium 568x320: layout, frozen title, native focus and resume\nPASS public shell chromium 844x390: layout, frozen title, native focus and resume\nPASS public shell chromium 1280x800: layout, frozen title, native focus and resume\nPASS public shell webkit 320x568: layout, frozen title, native focus and resume\nPASS public shell webkit 390x844: layout, frozen title, native focus and resume\nPASS public shell webkit 568x320: layout, frozen title, native focus and resume\nPASS public shell webkit 844x390: layout, frozen title, native focus and resume\nPASS public shell webkit 1280x800: layout, frozen title, native focus and resume\n"
+    },
+    "content": {
+      "path": "/tmp/politicmon-opening-content.log",
+      "sha256": "4dc450b44b3757e86fbffd333a1a8daccb4e9aa569690e3c8153e077b1a8d1ad",
+      "text": "\n> politicmon@1.0.0 validate:content\n> node --import tsx scripts/validate-content.mjs\n\nOK — contenuti validi: 52 specie, 78 mosse, 49 trainer, 66 mappe, 49 quest, 8 meme event.\n"
+    },
+    "input": {
+      "path": "/tmp/politicmon-opening-input.log",
+      "sha256": "3c3fe6de7be7660d2466905af0f085440c31c4fcdfd77e28e6d77fea5e078494",
+      "text": "\n> politicmon@1.0.0 audit:input-contracts\n> node scripts/audit-input-contracts.mjs\n\nInput contracts: 38 scene direzionali con conferma\nOK src/game/battle/BattleScene.ts focus=true A=true B=true\nOK src/game/battle/PvpBattleScene.ts focus=true A=true B=true\nOK src/scenes/AchievementsScene.ts focus=true A=true B=true\nOK src/scenes/AudioScene.ts focus=true A=true B=true\nOK src/scenes/BackupScene.ts focus=true A=true B=true\nOK src/scenes/BagScene.ts focus=true A=true B=true\nOK src/scenes/BattleIntelScene.ts focus=true A=true B=true\nOK src/scenes/BossBriefingScene.ts focus=true A=true B=true\nOK src/scenes/BoxScene.ts focus=true A=true B=true\nOK src/scenes/CasinoScene.ts focus=true A=true B=true\nOK src/scenes/CivicScene.ts focus=true A=true B=true\nOK src/scenes/CoalitionScene.ts focus=true A=true B=true\nOK src/scenes/DexScene.ts focus=true A=true B=true\nOK src/scenes/DuelLobbyScene.ts focus=true A=true B=true\nOK src/scenes/EvolutionScene.ts focus=true A=true B=true\nOK src/scenes/GenovaTechnoScene.ts focus=true A=true B=true\nOK src/scenes/GovScene.ts focus=true A=true B=true\nOK src/scenes/MafiaScene.ts focus=true A=true B=true\nOK src/scenes/MoraleScene.ts focus=true A=true B=true\nOK src/scenes/NicknameScene.ts focus=true A=true B=true\nOK src/scenes/PalaceArchiveScene.ts focus=true A=true B=true\nOK src/scenes/PartyScene.ts focus=true A=true B=true\nOK src/scenes/PauseScene.ts focus=true A=true B=true\nOK src/scenes/QuestScene.ts focus=true A=true B=true\nOK src/scenes/RecallScene.ts focus=true A=true B=true\nOK src/scenes/ShopScene.ts focus=true A=true B=true\nOK src/scenes/SlotScene.ts focus=true A=true B=true\nOK src/scenes/SourcesScene.ts focus=true A=true B=true\nOK src/scenes/TalkScene.ts focus=true A=true B=true\nOK src/scenes/TeachScene.ts focus=true A=true B=true\nOK src/scenes/TitleScene.ts focus=true A=true B=true\nOK src/scenes/TournamentScene.ts focus=true A=true B=true\nOK src/scenes/TradeScene.ts focus=true A=true B=true\nOK src/scenes/TransportScene.ts focus=true A=true B=true\nOK src/scenes/TypesScene.ts focus=true A=true B=true\nOK src/scenes/WeeklyCampaignScene.ts focus=true A=true B=true\nOK src/scenes/WorldMapScene.ts focus=true A=true B=true\nOK src/ui/campaignChoices.ts focus=true A=true B=true\n"
+    },
+    "precache": {
+      "path": "/tmp/politicmon-opening-precache.log",
+      "sha256": "09d00fc148eb52d753dfa9a8e13fc72e78af6484eab90001d08ade057e1e3de5",
+      "text": "PASS: 829 exact build resources, one inventory request, unavailable/malformed inventory rejects installation.\n"
+    },
+    "bundle": {
+      "path": "/tmp/politicmon-opening-bundle.log",
+      "sha256": "4691ec6a27e059ef9c25b5416b615feea05633e1f376926e791e5786ea69a7ae",
+      "text": "PASS deployed bundle: 358264/358400 gzip bytes, 136 margin, 5 files including lazy chunks.\n"
+    },
+    "videoDecode": {
+      "path": "/tmp/politicmon-opening-video-decode.log",
+      "sha256": "bf3d56d7731001a97d3cd04db871a95f6e89564e0dcc1b9efa27a43249179500",
+      "text": "Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'public/intro.mp4':\n  Metadata:\n    major_brand     : isom\n    minor_version   : 512\n    compatible_brands: isomiso2avc1mp41\n    encoder         : Lavf58.76.100\n  Duration: 00:00:04.04, start: 0.000000, bitrate: 479 kb/s\n  Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(progressive), 1112x834, 432 kb/s, 24 fps, 24 tbr, 12288 tbn (default)\n      Metadata:\n        handler_name    : VideoHandler\n        vendor_id       : [0][0][0][0]\nStream mapping:\n  Stream #0:0 -> #0:0 (h264 (native) -> wrapped_avframe (native))\nPress [q] to stop, [?] for help\nOutput #0, null, to 'pipe:':\n  Metadata:\n    major_brand     : isom\n    minor_version   : 512\n    compatible_brands: isomiso2avc1mp41\n    encoder         : Lavf61.7.100\n  Stream #0:0(und): Video: wrapped_avframe, yuv420p(progressive), 1112x834, q=2-31, 200 kb/s, 24 fps, 24 tbn (default)\n      Metadata:\n        handler_name    : VideoHandler\n        vendor_id       : [0][0][0][0]\n        encoder         : Lavc61.19.100 wrapped_avframe\n[out#0/null @ 0x13a3045d0] video:42KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: unknown\nframe=   97 fps=0.0 q=-0.0 Lsize=N/A time=00:00:04.04 bitrate=N/A speed= 298x    \n"
+    },
+    "pwa": {
+      "path": "/tmp/politicmon-opening-pwa-local.log",
+      "sha256": "c3ab3fd7a553ad89e9eca38fd155f2627c9b98776093b89a4cad22cb903ea23a",
+      "text": "\n> politicmon@1.0.0 smoke:pwa:release\n> node scripts/smoke-pwa-release.mjs\n\n[pwa-smoke] apertura online\n[pwa-smoke] attesa service worker\nService worker pronto in 460ms.\n[pwa-smoke] verifica precache\n[pwa-smoke] pulizia cache obsoleta\n[pwa-smoke] aggiornamento service worker\n[pwa-smoke] reload online\n[pwa-smoke] reload offline\n[pwa-smoke] verifica campagna offline\nPrimo utilizzo offline: 797 asset Higgsfield.\nPrimo utilizzo offline: 19 tracce AAC stereo e catalogo decodificati.\n[pwa-smoke] resume dopo background\nPWA SMOKE OK (chromium/Pixel 7): installazione, runtime, sprite, cache, update, riavvio offline e resume.\n"
+    }
+  },
+  "scope": {
+    "physicalDevice": false,
+    "fullCampaignBalanceVerifiedThisRound": false,
+    "assetCacheCountUnchanged": true,
+    "sameSaveAndSessionKeys": true,
+    "remaining": [
+      "additional uninterrupted campaign starters/seeds",
+      "higher difficulty campaign playthrough",
+      "physical device and audio comfort verification"
+    ]
+  },
+  "publication": {
+    "pending": true,
+    "primaryPreviouslyRateLimited": true,
+    "noQuotaWorkaround": true
+  },
+  "localPwa": {
+    "passed": true,
+    "engine": "chromium",
+    "offlineReload": true,
+    "backgroundResume": true,
+    "higgsfieldAssets": 797,
+    "aacTracks": 19
+  }
+}

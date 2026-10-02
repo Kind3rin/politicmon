@@ -9,7 +9,7 @@ import { hasAnySave, loadGame, newGameState, type GameState } from "../game/stat
 import { BackupScene } from "./BackupScene";
 import { mp } from "../net/mp";
 import { hasNick, loadNick } from "../net/profile";
-import { Menu, MessageBox, wrapText, GREY, PAPER } from "../ui/widgets";
+import { Menu, wrapText, GREY, PAPER } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
 import { createMonster } from "../game/monster";
@@ -53,7 +53,6 @@ export class TitleScene implements Scene {
   private menuTapGeom: { x: number; y: number; w: number; rowH: number } | null = null;
   // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
   private difficultyMenu: Menu | null = null;
-  private diffMsg = new MessageBox();
   private starting = false;
 
   constructor(private stack: SceneStack, private input: Input) {
@@ -85,10 +84,6 @@ export class TitleScene implements Scene {
     if (this.starting) return;
     // Selettore DIFFICOLTÀ in primo piano: gestiscilo prima di tutto il resto.
     if (this.difficultyMenu) {
-      if (this.diffMsg.isOpen) {
-        this.diffMsg.update(dt, this.input);
-        return;
-      }
       const a = this.difficultyMenu.update(this.input);
       if (a === "cancel") {
         audio.cancel();
@@ -313,23 +308,16 @@ export class TitleScene implements Scene {
     for (let i = 0; i < lines.length; i += 1) {
       screen.textCenter(lines[i], VIEW_W / 2, y + 54 + i * 9, GREY);
     }
-    this.diffMsg.draw(screen);
   }
 
   private drawTitleFallback(screen: Screen): void {
-    screen.clear("#10141f");
-    screen.rect(0, 0, VIEW_W, VIEW_H, "#141c2f");
-    screen.rect(0, 116, VIEW_W, 64, "#2f6f3c");
-    screen.rect(18, 112, 204, 4, "#f0d068");
-    screen.rect(42, 82, 156, 34, "#d8d2c0");
-    screen.rect(42, 78, 156, 4, "#f4ead0");
-    for (let x = 55; x <= 179; x += 24) {
-      screen.rect(x, 86, 7, 30, "#b9af92");
-      screen.rect(x + 2, 86, 2, 30, "#eee6d0");
+    screen.clear("#17243d");
+    screen.rect(0, 116, VIEW_W, 64, "#101c30");
+    screen.rect(36, 78, 168, 4, "#fffaf0");
+    screen.rect(36, 112, 168, 4, "#55a889");
+    for (let x = 48; x <= 192; x += 24) {
+      screen.rect(x, 82, 8, 30, "#c4d1d8");
     }
-    screen.rect(84, 72, 24, 44, "#2f9a4c");
-    screen.rect(108, 72, 24, 44, "#f4f4ec");
-    screen.rect(132, 72, 24, 44, "#d23c3c");
   }
 
   // ---- Logo con ombra netta e bandiera tricolore sotto. ----

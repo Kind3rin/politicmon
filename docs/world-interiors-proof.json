@@ -4537,8 +4537,76 @@
         ]
       }
     },
-    "documentationOnlySkipPubliclyVerified": false,
+    "documentationOnlySkipPubliclyVerified": true,
     "automaticDeploymentAttemptOnly": true,
-    "paidUpgradeOrQuotaWorkaround": false
+    "paidUpgradeOrQuotaWorkaround": false,
+    "documentationReceipt": {
+      "documentationCommit": "f997def54c9fb1287736e2953628c872a5fcee77",
+      "documentationProofRecordsEvidenceAvailableBeforeThisCommit": true,
+      "runtimeCommit": "7dffc3c2665c82971d273667c78ce45069709a62",
+      "deployments": {
+        "sha": "f997def54c9fb1287736e2953628c872a5fcee77",
+        "statuses": [
+          {
+            "context": "Vercel – politicmon",
+            "description": "Deployment rate limited — retry in 24 hours.",
+            "state": "failure",
+            "target_url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+          },
+          {
+            "context": "Vercel – politicmon-test-link",
+            "description": "Deployment rate limited — retry in 24 hours.",
+            "state": "failure",
+            "target_url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+          },
+          {
+            "context": "Vercel – politicmon-link-check",
+            "description": "Canceled by Ignored Build Step",
+            "state": "success",
+            "target_url": "https://vercel.com/kind3rins-projects/politicmon-link-check/5LVuoBRJfGq39yLw6QBPKpEof2YY"
+          }
+        ]
+      },
+      "docsOnlySkipConfirmedContexts": [
+        "Vercel – politicmon-link-check"
+      ],
+      "rateLimitContexts": [
+        "Vercel – politicmon",
+        "Vercel – politicmon-test-link"
+      ],
+      "fingerprints": {
+        "https://politicmon.vercel.app/": {
+          "htmlSha256": "3a244934f76a8916c017bf98320526ebf85cfc2c17de55f548b2e06c27f5ded9",
+          "swSha256": "811171f2791e9dae987bef12ead2c3adf232587a642941b7f4b1e1250de5bf30",
+          "scripts": [
+            "./assets/index-SXEeniu_.js"
+          ]
+        },
+        "https://politicmon-test-link.vercel.app/": {
+          "htmlSha256": "4fb9dd96eba5383dc7396258217181ed8a18d94529364dd2530a308346cdbc8d",
+          "swSha256": "f2b6df07b1a2d563cdd6360104adc8b5780c28cf60d73a92461915dbafc6419d",
+          "scripts": [
+            "./assets/index-DJNu9rlo.js"
+          ]
+        },
+        "https://politicmon-link-check.vercel.app/": {
+          "htmlSha256": "4fb9dd96eba5383dc7396258217181ed8a18d94529364dd2530a308346cdbc8d",
+          "swSha256": "f2b6df07b1a2d563cdd6360104adc8b5780c28cf60d73a92461915dbafc6419d",
+          "scripts": [
+            "./assets/index-DJNu9rlo.js"
+          ]
+        }
+      },
+      "unchanged": true,
+      "mainInteriorsDeployed": false,
+      "previewInteriorsDeployed": true,
+      "physicalDevice": false,
+      "fullGoalComplete": false
+    },
+    "documentationCi": {
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37055509562",
+      "status": "completed",
+      "conclusion": "success"
+    }
   }
 }

@@ -176,10 +176,10 @@ if (import.meta.env.DEV) {
 stack.push(new TitleScene(stack, input));
 
 // Splash video iniziale: un overlay HTML che copre il canvas sopra la TitleScene
-// finché il video non finisce (o l'utente lo salta). L'audio del gioco resta
-// bloccato finché non c'è un gesto utente, quindi il tema del titolo non si
-// accavalla col jingle del video. Non blocca nulla: se l'intro è già stata vista
-// o non è disponibile, l'overlay si chiude subito e si vede il titolo.
+// finché il video non finisce (o l'utente lo salta). Il filmato è muto;
+// il tema del titolo rispetta preferenze e sblocco audio del gioco.
+// Con movimento ridotto, sessione già vista o video non disponibile,
+// resta subito il titolo.
 void playIntro();
 
 // L'audio si può attivare solo dopo il primo input utente.

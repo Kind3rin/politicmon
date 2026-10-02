@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "date": "2026-10-02",
+  "folderId": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+  "balanceBefore": 382.72,
+  "balanceAfter": 353.22,
+  "actualCredits": 29.5,
+  "assets": [
+    {
+      "id": "opening-key-art",
+      "kind": "reference",
+      "jobId": "103e3cd0-d887-4277-917b-16fbacb14d5e",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_194357_103e3cd0-d887-4277-917b-16fbacb14d5e.png",
+      "params": {
+        "prompt": "Opening key art for POLITICMON, an original Italian political satire monster adventure. Premium handcrafted 16-bit illustrated game art, chunky clean pixel shapes, midnight navy outlines #17243d, warm ivory #fffaf0, mint #55a889, mustard #f4d34a, coral #d76458, restrained violet. Landscape 4:3. A whimsical miniature circular parliamentary debating chamber, seen at a low three-quarter angle as a tiny theatrical diorama. CENTRAL FOCAL GAG: an oversized ivory ballot box on a mint plinth, a mustard ballot halfway in its slot. Three distinct small original fantasy creatures around it, whole bodies clear: left a stubborn blue wolf in a rumpled green jacket holds a rolled manifesto; right a mustard crocodile in navy waistcoat fusses with a miniature microphone; back a coral firebird with a navy sash watches the ballot. Their eyes all focus on the box, comic campaign tension and sincere adventure, no aggressive faces. Tiny voting slips flutter overhead like confetti and neatly fold into a miniature paper crown above the ballot box. Rich readable depth, large simple silhouettes, no dense detail. Curved ivory chamber seats in the background and navy shadowed wall, warm spotlight on ballot box. Keep the top quarter and bottom fifth quiet, navy and slate background for game text later. Crisp hard pixel edges, flat opaque color, no photorealism, gradients, lens glow, blur, live-action humans, real politicians, real party logos, readable lettering, captions, watermarks, UI or game title. This should feel like the actual modern pixel RPG rather than a political commercial. No text anywhere.",
+        "aspect_ratio": "4:3",
+        "quality": "high",
+        "resolution": "1k"
+      },
+      "usedBy": "intro-video",
+      "runtimeImage": false,
+      "sourceSha256": "87f5566cfebc3c392c841f5812571ca88dc9c8cef40366a984e60e884bf2b681",
+      "bytes": 1130471
+    },
+    {
+      "id": "intro-video",
+      "kind": "video",
+      "jobId": "64ae152a-a961-4539-924a-6c7a07ee7f03",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_194622_64ae152a-a961-4539-924a-6c7a07ee7f03.mp4",
+      "path": "public/intro.mp4",
+      "params": {
+        "model": "seedance_2_5",
+        "mode": "omni_reference",
+        "duration": 4,
+        "aspect_ratio": "4:3",
+        "resolution": "720p",
+        "generate_audio": false,
+        "bitrate_mode": "standard",
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "count": 1,
+        "use_unlim": false,
+        "prompt": "Animate this exact opening illustration for the POLITICMON political satire pixel RPG. Four seconds, one continuous fixed shot in 4:3. Preserve the original three fantasy creatures, their clothing, exact anatomical silhouettes, ballot box, circular parliamentary chamber, palette and chunky hard pixel art. No added characters, text, logo, watermarks or photorealism. Main simple comic action: the yellow voting slip drops fully into the ballot slot in the first second. A few tiny colored paper confetti pieces gently settle, not an endless particle storm. The small white paper crown above the ballot box slowly drifts to the mustard crocodile's head at the right in the second and third seconds. The crocodile proudly lifts the microphone a tiny amount as if claiming credit for everybody's vote; the blue wolf at the left gives a restrained eye-roll and the coral firebird behind the box tilts its head in amused disbelief. End on this readable comic pose by four seconds. Keep whole bodies fully visible, no camera cuts, shake, flashing, exaggerated elastic distortion, morphing faces, rearranged room or new background. Flat clean opaque colors and crisp handmade pixel motion. No speech and no generated audio. Quiet navy top and bottom margins remain empty for game typography added later. The gag must read at phone size.",
+        "medias": [
+          {
+            "role": "start_image",
+            "value": "103e3cd0-d887-4277-917b-16fbacb14d5e"
+          }
+        ]
+      },
+      "excludedFromPrecache": true,
+      "sourceSha256": "c4898a3a94268935e963c43771720276c89d47bd0f9e5eecd7e7cc734b550bb0",
+      "bytes": 242210,
+      "runtimeSha256": "c4898a3a94268935e963c43771720276c89d47bd0f9e5eecd7e7cc734b550bb0",
+      "width": 1112,
+      "height": 834,
+      "durationSeconds": 4.041667,
+      "audioStreams": 0,
+      "transcoded": false
+    }
+  ],
+  "notes": [
+    "Reference art plus a silent four-second animation; no duplicate fallback sprite jobs.",
+    "No forced opening for reduced motion or already-seen session; missing video falls through to title.",
+    "The video is an original satirical vignette, not a promise that these creatures are the three selectable starters."
+  ]
+}

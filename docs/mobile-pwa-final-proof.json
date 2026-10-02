@@ -4420,6 +4420,26 @@
       "path": "artifacts/pwa-final/bundle-production-local.json",
       "bytes": 557,
       "sha256": "e696a1a1853ce74b3055f3cb4b75d8a15c576a01bfde2a9d945e5d022a2f3b49"
+    },
+    {
+      "path": "artifacts/pwa-final/mobile-preview.json",
+      "bytes": 87668,
+      "sha256": "ca1a4a5a348bd7c215e8f41dff2ada92d48f058c655c4729e743472632f6acba"
+    },
+    {
+      "path": "artifacts/pwa-final/shell-preview.json",
+      "bytes": 6943,
+      "sha256": "56b30dcf290163eaa54f81e70891ebe4c493762494bb3e6dfa681da965a9fbdf"
+    },
+    {
+      "path": "artifacts/pwa-final/government-preview.json",
+      "bytes": 1373,
+      "sha256": "35219096c0cd3c172536de82c6448b84ad0d643a2ee369d1a5a3170061306005"
+    },
+    {
+      "path": "artifacts/pwa-final/bundle-preview.json",
+      "bytes": 666,
+      "sha256": "42798e587ab3a72b98cb5480eb66e98eaae9fec70ff0d5665cf213284a678408"
     }
   ],
   "logs": [
@@ -4482,9 +4502,4709 @@
       "path": "/tmp/politicmon-pwa-content-final.log",
       "bytes": 179,
       "sha256": "4dc450b44b3757e86fbffd333a1a8daccb4e9aa569690e3c8153e077b1a8d1ad"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-ci.json",
+      "bytes": 3699,
+      "sha256": "19e34e00b88d86b3d6d3a92e6a291254f28a52e31a83174ae932761c0df470eb"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-deploy.json",
+      "bytes": 683,
+      "sha256": "40303205b432700378102c5dd8cc0d3dbce6a25c3124b1f56600ea84367b2e61"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-final-mobile-preview.log",
+      "bytes": 860,
+      "sha256": "fe0c02fcc1ac074b46bf2cf87e7ff05602b7655db2c5e8d2d0335432d60137dc"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-final-shell-preview.log",
+      "bytes": 812,
+      "sha256": "aa7fb537d701deff2ed95b5dc95652df5b582dfc17cb181ffff8bcd850d7040a"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-final-government-preview.log",
+      "bytes": 236,
+      "sha256": "e697a4b4c8dc021c24c03ba08a3e78ecdd57c0e8968abdef3f81309516ddf31a"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-final-bundle-preview.log",
+      "bytes": 91,
+      "sha256": "25061206883bf2f3171cdd60892874737543e8531ab51f9aeb54de10dee3e0a3"
+    },
+    {
+      "path": "/tmp/politicmon-pwa-final-offline-preview.log",
+      "bytes": 550,
+      "sha256": "372d43c688509a653d0c97c4acd46fbe7486f8360ca28819d21ef5c3a7f605ad"
     }
   ],
   "publication": {
-    "status": "awaiting follow-up commit and CI"
+    "runtimeCommit": "785654f6d9a31b780dc80016cc816231db988ca2",
+    "ci": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "completedAt": "2026-10-02T21:27:44Z",
+          "conclusion": "success",
+          "databaseId": 111036855454,
+          "name": "build",
+          "startedAt": "2026-10-02T21:26:52Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-02T21:26:53Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-02T21:26:52Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:26:54Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v5",
+              "number": 2,
+              "startedAt": "2026-10-02T21:26:53Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:26:55Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v5",
+              "number": 3,
+              "startedAt": "2026-10-02T21:26:54Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:26:57Z",
+              "conclusion": "success",
+              "name": "Run npm ci",
+              "number": 4,
+              "startedAt": "2026-10-02T21:26:55Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:02Z",
+              "conclusion": "success",
+              "name": "Run npm run typecheck",
+              "number": 5,
+              "startedAt": "2026-10-02T21:26:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:15Z",
+              "conclusion": "success",
+              "name": "Run npm run test:unit",
+              "number": 6,
+              "startedAt": "2026-10-02T21:27:02Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:15Z",
+              "conclusion": "success",
+              "name": "Run npm run test:integration",
+              "number": 7,
+              "startedAt": "2026-10-02T21:27:15Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:18Z",
+              "conclusion": "success",
+              "name": "Run npm run test:content",
+              "number": 8,
+              "startedAt": "2026-10-02T21:27:15Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:18Z",
+              "conclusion": "success",
+              "name": "Run npm run test:regression",
+              "number": 9,
+              "startedAt": "2026-10-02T21:27:18Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:18Z",
+              "conclusion": "success",
+              "name": "Run npm run validate:content",
+              "number": 10,
+              "startedAt": "2026-10-02T21:27:18Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:19Z",
+              "conclusion": "success",
+              "name": "Run npm run validate:meme-packs",
+              "number": 11,
+              "startedAt": "2026-10-02T21:27:18Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:19Z",
+              "conclusion": "success",
+              "name": "Run npm run audit:professional:visual:strict",
+              "number": 12,
+              "startedAt": "2026-10-02T21:27:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:19Z",
+              "conclusion": "success",
+              "name": "Run npm run audit:text-legibility",
+              "number": 13,
+              "startedAt": "2026-10-02T21:27:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:19Z",
+              "conclusion": "success",
+              "name": "Run npm run audit:input-contracts",
+              "number": 14,
+              "startedAt": "2026-10-02T21:27:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:20Z",
+              "conclusion": "success",
+              "name": "Run node scripts/check-evolutions.mjs",
+              "number": 15,
+              "startedAt": "2026-10-02T21:27:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:42Z",
+              "conclusion": "success",
+              "name": "Run npm run build",
+              "number": 16,
+              "startedAt": "2026-10-02T21:27:20Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:42Z",
+              "conclusion": "success",
+              "name": "Run node scripts/check-precache-build.mjs",
+              "number": 17,
+              "startedAt": "2026-10-02T21:27:42Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:43Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v5",
+              "number": 33,
+              "startedAt": "2026-10-02T21:27:42Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:43Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v5",
+              "number": 34,
+              "startedAt": "2026-10-02T21:27:43Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-02T21:27:43Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 35,
+              "startedAt": "2026-10-02T21:27:43Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/Kind3rin/politicmon/actions/runs/37066878061/job/111036855454"
+        }
+      ],
+      "status": "completed",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/37066878061"
+    },
+    "deploy": {
+      "sha": "785654f6d9a31b780dc80016cc816231db988ca2",
+      "statuses": [
+        {
+          "context": "Vercel – politicmon",
+          "description": "Deployment rate limited — retry in 24 hours.",
+          "state": "failure",
+          "target_url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+        },
+        {
+          "context": "Vercel – politicmon-link-check",
+          "description": "Deployment rate limited — retry in 24 hours.",
+          "state": "failure",
+          "target_url": "https://vercel.com/kind3rins-projects?upgradeToPro=build-rate-limit"
+        },
+        {
+          "context": "Vercel – politicmon-test-link",
+          "description": "Deployment has completed",
+          "state": "success",
+          "target_url": "https://vercel.com/kind3rins-projects/politicmon-test-link/GWV3za8CXmDxXQ1eHw4f4A7ZxUAX"
+        }
+      ]
+    },
+    "previewUrl": "https://politicmon-test-link.vercel.app/",
+    "mainUrl": "https://politicmon.vercel.app/",
+    "mainRuntime": "dc4db987717347a94375213185f64c4d08b37465",
+    "mainUpdate": "blocked by daily Vercel deployment quota; no manual redeploy loop or upgrade",
+    "previewBundle": {
+      "base": "https://politicmon-test-link.vercel.app/",
+      "sizes": [
+        {
+          "url": "https://politicmon-test-link.vercel.app/",
+          "bytes": 2120
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/sw.js",
+          "bytes": 885
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/index-4gwuTepB.js",
+          "bytes": 182654
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/index-BB-m9fpt.css",
+          "bytes": 2782
+        },
+        {
+          "url": "https://politicmon-test-link.vercel.app/assets/WorldScene-Bm70mfLO.js",
+          "bytes": 169734
+        }
+      ],
+      "total": 358175,
+      "budget": 358400,
+      "margin": 225
+    },
+    "previewTurn": "dedicated TURN configuration absent on this project; production-variant local measurement remains separate",
+    "mobile": {
+      "base": "https://politicmon-test-link.vercel.app/",
+      "physicalDevice": false,
+      "standaloneDetectionEmulated": true,
+      "layouts": [
+        {
+          "engine": "chromium",
+          "name": "compact",
+          "width": 320,
+          "height": 568,
+          "dpr": 2,
+          "safe": {
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 320,
+              "height": 568
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 110,
+              "w": 277.328125,
+              "h": 207.984375,
+              "right": 298.65625,
+              "bottom": 317.984375
+            },
+            "move": {
+              "x": 18,
+              "y": 392,
+              "w": 144,
+              "h": 144,
+              "right": 162,
+              "bottom": 536
+            },
+            "actions": {
+              "x": 174,
+              "y": 392,
+              "w": 128,
+              "h": 144,
+              "right": 302,
+              "bottom": 536
+            },
+            "top": {
+              "x": 12,
+              "y": 12,
+              "w": 296,
+              "h": 44,
+              "right": 308,
+              "bottom": 56
+            },
+            "backing": {
+              "width": 720,
+              "height": 540
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 12,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 56
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 164,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 208,
+                "bottom": 56
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 214,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 258,
+                "bottom": 56
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 264,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 308,
+                "bottom": 56
+              },
+              {
+                "label": "Muovi su",
+                "x": 66,
+                "y": 392,
+                "w": 48,
+                "h": 48,
+                "right": 114,
+                "bottom": 440
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 18,
+                "y": 440,
+                "w": 48,
+                "h": 48,
+                "right": 66,
+                "bottom": 488
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 114,
+                "y": 440,
+                "w": 48,
+                "h": 48,
+                "right": 162,
+                "bottom": 488
+              },
+              {
+                "label": "Muovi giù",
+                "x": 66,
+                "y": 488,
+                "w": 48,
+                "h": 48,
+                "right": 114,
+                "bottom": 536
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 174,
+                "y": 424,
+                "w": 56,
+                "h": 56,
+                "right": 230,
+                "bottom": 480
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 238,
+                "y": 392,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 456
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 186,
+                "y": 492,
+                "w": 104,
+                "h": 44,
+                "right": 290,
+                "bottom": 536
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "android-pwa",
+          "width": 412,
+          "height": 915,
+          "dpr": 3,
+          "safe": {
+            "top": 28,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 915
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 251,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 527.984375
+            },
+            "move": {
+              "x": 24,
+              "y": 721,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 877
+            },
+            "actions": {
+              "x": 238,
+              "y": 727,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 871
+            },
+            "top": {
+              "x": 12,
+              "y": 28,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 72
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 28,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 72
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 256,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 300,
+                "bottom": 72
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 306,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 72
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 356,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 72
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 721,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 773
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 825,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 877
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 751,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 815
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 727,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 803
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 827,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 871
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "android-large",
+          "width": 430,
+          "height": 932,
+          "dpr": 3,
+          "safe": {
+            "top": 32,
+            "bottom": 32,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 430,
+              "height": 932
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 250.75,
+              "w": 387.328125,
+              "h": 290.484375,
+              "right": 408.65625,
+              "bottom": 541.234375
+            },
+            "move": {
+              "x": 24,
+              "y": 730,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 886
+            },
+            "actions": {
+              "x": 256,
+              "y": 736,
+              "w": 150,
+              "h": 144,
+              "right": 406,
+              "bottom": 880
+            },
+            "top": {
+              "x": 12,
+              "y": 32,
+              "w": 406,
+              "h": 44,
+              "right": 418,
+              "bottom": 76
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 32,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 76
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 274,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 318,
+                "bottom": 76
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 324,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 368,
+                "bottom": 76
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 374,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 418,
+                "bottom": 76
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 730,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 782
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 782,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 834
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 782,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 834
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 834,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 886
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 256,
+                "y": 760,
+                "w": 64,
+                "h": 64,
+                "right": 320,
+                "bottom": 824
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 330,
+                "y": 736,
+                "w": 76,
+                "h": 76,
+                "right": 406,
+                "bottom": 812
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 279,
+                "y": 836,
+                "w": 104,
+                "h": 44,
+                "right": 383,
+                "bottom": 880
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "android-wide",
+          "width": 480,
+          "height": 1040,
+          "dpr": 3,
+          "safe": {
+            "top": 32,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 480,
+              "height": 1040
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 290,
+              "w": 437.328125,
+              "h": 327.984375,
+              "right": 458.65625,
+              "bottom": 617.984375
+            },
+            "move": {
+              "x": 24,
+              "y": 846,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 1002
+            },
+            "actions": {
+              "x": 306,
+              "y": 852,
+              "w": 150,
+              "h": 144,
+              "right": 456,
+              "bottom": 996
+            },
+            "top": {
+              "x": 12,
+              "y": 32,
+              "w": 456,
+              "h": 44,
+              "right": 468,
+              "bottom": 76
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 32,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 76
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 324,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 368,
+                "bottom": 76
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 374,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 418,
+                "bottom": 76
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 424,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 468,
+                "bottom": 76
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 846,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 898
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 898,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 950
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 898,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 950
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 950,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 1002
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 306,
+                "y": 876,
+                "w": 64,
+                "h": 64,
+                "right": 370,
+                "bottom": 940
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 380,
+                "y": 852,
+                "w": 76,
+                "h": 76,
+                "right": 456,
+                "bottom": 928
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 329,
+                "y": 952,
+                "w": 104,
+                "h": 44,
+                "right": 433,
+                "bottom": 996
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "android-fractional-density",
+          "width": 915,
+          "height": 412,
+          "dpr": 2.4,
+          "safe": {
+            "top": 0,
+            "bottom": 24,
+            "left": 36,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 915,
+              "height": 412
+            },
+            "overflow": false,
+            "screen": {
+              "x": 262.828125,
+              "y": 62,
+              "w": 429.328125,
+              "h": 321.984375,
+              "right": 692.15625,
+              "bottom": 383.984375
+            },
+            "move": {
+              "x": 36,
+              "y": 58,
+              "w": 144,
+              "h": 330,
+              "right": 180,
+              "bottom": 388
+            },
+            "actions": {
+              "x": 775,
+              "y": 151,
+              "w": 128,
+              "h": 144,
+              "right": 903,
+              "bottom": 295
+            },
+            "top": {
+              "x": 36,
+              "y": 6,
+              "w": 867,
+              "h": 44,
+              "right": 903,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 36,
+                "y": 6,
+                "w": 136.84375,
+                "h": 44,
+                "right": 172.84375,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 701.265625,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 745.265625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 751.265625,
+                "y": 6,
+                "w": 101.734375,
+                "h": 44,
+                "right": 853,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 859,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 903,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 84,
+                "y": 151,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 199
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 36,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 84,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 132,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 180,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi giù",
+                "x": 84,
+                "y": 247,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 295
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 775,
+                "y": 183,
+                "w": 56,
+                "h": 56,
+                "right": 831,
+                "bottom": 239
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 839,
+                "y": 151,
+                "w": 64,
+                "h": 64,
+                "right": 903,
+                "bottom": 215
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 787,
+                "y": 251,
+                "w": 104,
+                "h": 44,
+                "right": 891,
+                "bottom": 295
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "browser-bars",
+          "width": 412,
+          "height": 700,
+          "dpr": 3,
+          "safe": {
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 700
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 141.5,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 418.484375
+            },
+            "move": {
+              "x": 24,
+              "y": 518,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 674
+            },
+            "actions": {
+              "x": 238,
+              "y": 524,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 668
+            },
+            "top": {
+              "x": 12,
+              "y": 12,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 56
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 12,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 56
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 256,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 300,
+                "bottom": 56
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 306,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 56
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 356,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 56
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 518,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 570
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 570,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 622
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 570,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 622
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 622,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 674
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 548,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 612
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 524,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 600
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 624,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 668
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "compact-landscape",
+          "width": 568,
+          "height": 320,
+          "dpr": 2,
+          "safe": {
+            "top": 0,
+            "bottom": 16,
+            "left": 44,
+            "right": 44
+          },
+          "geometry": {
+            "viewport": {
+              "width": 568,
+              "height": 320
+            },
+            "overflow": false,
+            "screen": {
+              "x": 204,
+              "y": 115,
+              "w": 176,
+              "h": 132,
+              "right": 380,
+              "bottom": 247
+            },
+            "move": {
+              "x": 44,
+              "y": 58,
+              "w": 144,
+              "h": 246,
+              "right": 188,
+              "bottom": 304
+            },
+            "actions": {
+              "x": 396,
+              "y": 109,
+              "w": 128,
+              "h": 144,
+              "right": 524,
+              "bottom": 253
+            },
+            "top": {
+              "x": 44,
+              "y": 6,
+              "w": 480,
+              "h": 44,
+              "right": 524,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 480,
+              "height": 360
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 44,
+                "y": 6,
+                "w": 118.53125,
+                "h": 44,
+                "right": 162.53125,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 380,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 424,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 430,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 474,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 480,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 524,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 92,
+                "y": 109,
+                "w": 48,
+                "h": 48,
+                "right": 140,
+                "bottom": 157
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 44,
+                "y": 157,
+                "w": 48,
+                "h": 48,
+                "right": 92,
+                "bottom": 205
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 140,
+                "y": 157,
+                "w": 48,
+                "h": 48,
+                "right": 188,
+                "bottom": 205
+              },
+              {
+                "label": "Muovi giù",
+                "x": 92,
+                "y": 205,
+                "w": 48,
+                "h": 48,
+                "right": 140,
+                "bottom": 253
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 396,
+                "y": 141,
+                "w": 56,
+                "h": 56,
+                "right": 452,
+                "bottom": 197
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 460,
+                "y": 109,
+                "w": 64,
+                "h": 64,
+                "right": 524,
+                "bottom": 173
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 408,
+                "y": 209,
+                "w": 104,
+                "h": 44,
+                "right": 512,
+                "bottom": 253
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "android-landscape",
+          "width": 915,
+          "height": 412,
+          "dpr": 3,
+          "safe": {
+            "top": 0,
+            "bottom": 24,
+            "left": 36,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 915,
+              "height": 412
+            },
+            "overflow": false,
+            "screen": {
+              "x": 262.828125,
+              "y": 62,
+              "w": 429.328125,
+              "h": 321.984375,
+              "right": 692.15625,
+              "bottom": 383.984375
+            },
+            "move": {
+              "x": 36,
+              "y": 58,
+              "w": 144,
+              "h": 330,
+              "right": 180,
+              "bottom": 388
+            },
+            "actions": {
+              "x": 775,
+              "y": 151,
+              "w": 128,
+              "h": 144,
+              "right": 903,
+              "bottom": 295
+            },
+            "top": {
+              "x": 36,
+              "y": 6,
+              "w": 867,
+              "h": 44,
+              "right": 903,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 36,
+                "y": 6,
+                "w": 136.84375,
+                "h": 44,
+                "right": 172.84375,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 701.265625,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 745.265625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 751.265625,
+                "y": 6,
+                "w": 101.734375,
+                "h": 44,
+                "right": 853,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 859,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 903,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 84,
+                "y": 151,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 199
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 36,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 84,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 132,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 180,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi giù",
+                "x": 84,
+                "y": 247,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 295
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 775,
+                "y": 183,
+                "w": 56,
+                "h": 56,
+                "right": 831,
+                "bottom": 239
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 839,
+                "y": 151,
+                "w": 64,
+                "h": 64,
+                "right": 903,
+                "bottom": 215
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 787,
+                "y": 251,
+                "w": 104,
+                "h": 44,
+                "right": 891,
+                "bottom": 295
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "wide-landscape",
+          "width": 1040,
+          "height": 480,
+          "dpr": 3,
+          "safe": {
+            "top": 0,
+            "bottom": 24,
+            "left": 0,
+            "right": 36
+          },
+          "geometry": {
+            "viewport": {
+              "width": 1040,
+              "height": 480
+            },
+            "overflow": false,
+            "screen": {
+              "x": 256,
+              "y": 62,
+              "w": 520,
+              "h": 390,
+              "right": 776,
+              "bottom": 452
+            },
+            "move": {
+              "x": 16,
+              "y": 58,
+              "w": 144,
+              "h": 398,
+              "right": 160,
+              "bottom": 456
+            },
+            "actions": {
+              "x": 872,
+              "y": 185,
+              "w": 128,
+              "h": 144,
+              "right": 1000,
+              "bottom": 329
+            },
+            "top": {
+              "x": 16,
+              "y": 6,
+              "w": 984,
+              "h": 44,
+              "right": 1000,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1680,
+              "height": 1260
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 16,
+                "y": 6,
+                "w": 136.84375,
+                "h": 44,
+                "right": 152.84375,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 798.265625,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 842.265625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 848.265625,
+                "y": 6,
+                "w": 101.734375,
+                "h": 44,
+                "right": 950,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 956,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 1000,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 185,
+                "w": 48,
+                "h": 48,
+                "right": 112,
+                "bottom": 233
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 16,
+                "y": 233,
+                "w": 48,
+                "h": 48,
+                "right": 64,
+                "bottom": 281
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 112,
+                "y": 233,
+                "w": 48,
+                "h": 48,
+                "right": 160,
+                "bottom": 281
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 281,
+                "w": 48,
+                "h": 48,
+                "right": 112,
+                "bottom": 329
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 872,
+                "y": 217,
+                "w": 56,
+                "h": 56,
+                "right": 928,
+                "bottom": 273
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 936,
+                "y": 185,
+                "w": 64,
+                "h": 64,
+                "right": 1000,
+                "bottom": 249
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 884,
+                "y": 285,
+                "w": 104,
+                "h": 44,
+                "right": 988,
+                "bottom": 329
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "chromium",
+          "name": "tablet-landscape",
+          "width": 1024,
+          "height": 768,
+          "dpr": 2,
+          "safe": {
+            "top": 24,
+            "bottom": 20,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "overflow": false,
+            "screen": {
+              "x": 180,
+              "y": 157,
+              "w": 680,
+              "h": 510,
+              "right": 860,
+              "bottom": 667
+            },
+            "move": {
+              "x": 20,
+              "y": 76,
+              "w": 144,
+              "h": 672,
+              "right": 164,
+              "bottom": 748
+            },
+            "actions": {
+              "x": 876,
+              "y": 340,
+              "w": 128,
+              "h": 144,
+              "right": 1004,
+              "bottom": 484
+            },
+            "top": {
+              "x": 20,
+              "y": 24,
+              "w": 984,
+              "h": 44,
+              "right": 1004,
+              "bottom": 68
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 20,
+                "y": 24,
+                "w": 136.84375,
+                "h": 44,
+                "right": 156.84375,
+                "bottom": 68
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 802.265625,
+                "y": 24,
+                "w": 44,
+                "h": 44,
+                "right": 846.265625,
+                "bottom": 68
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 852.265625,
+                "y": 24,
+                "w": 101.734375,
+                "h": 44,
+                "right": 954,
+                "bottom": 68
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 960,
+                "y": 24,
+                "w": 44,
+                "h": 44,
+                "right": 1004,
+                "bottom": 68
+              },
+              {
+                "label": "Muovi su",
+                "x": 68,
+                "y": 340,
+                "w": 48,
+                "h": 48,
+                "right": 116,
+                "bottom": 388
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 20,
+                "y": 388,
+                "w": 48,
+                "h": 48,
+                "right": 68,
+                "bottom": 436
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 388,
+                "w": 48,
+                "h": 48,
+                "right": 164,
+                "bottom": 436
+              },
+              {
+                "label": "Muovi giù",
+                "x": 68,
+                "y": 436,
+                "w": 48,
+                "h": 48,
+                "right": 116,
+                "bottom": 484
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 876,
+                "y": 372,
+                "w": 56,
+                "h": 56,
+                "right": 932,
+                "bottom": 428
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 940,
+                "y": 340,
+                "w": 64,
+                "h": 64,
+                "right": 1004,
+                "bottom": 404
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 888,
+                "y": 440,
+                "w": 104,
+                "h": 44,
+                "right": 992,
+                "bottom": 484
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "compact",
+          "width": 320,
+          "height": 568,
+          "dpr": 2,
+          "safe": {
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 320,
+              "height": 568
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 110,
+              "w": 277.328125,
+              "h": 207.984375,
+              "right": 298.65625,
+              "bottom": 317.984375
+            },
+            "move": {
+              "x": 18,
+              "y": 392,
+              "w": 144,
+              "h": 144,
+              "right": 162,
+              "bottom": 536
+            },
+            "actions": {
+              "x": 174,
+              "y": 392,
+              "w": 128,
+              "h": 144,
+              "right": 302,
+              "bottom": 536
+            },
+            "top": {
+              "x": 12,
+              "y": 12,
+              "w": 296,
+              "h": 44,
+              "right": 308,
+              "bottom": 56
+            },
+            "backing": {
+              "width": 720,
+              "height": 540
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 12,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 56
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 214,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 258,
+                "bottom": 56
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 264,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 308,
+                "bottom": 56
+              },
+              {
+                "label": "Muovi su",
+                "x": 66,
+                "y": 392,
+                "w": 48,
+                "h": 48,
+                "right": 114,
+                "bottom": 440
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 18,
+                "y": 440,
+                "w": 48,
+                "h": 48,
+                "right": 66,
+                "bottom": 488
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 114,
+                "y": 440,
+                "w": 48,
+                "h": 48,
+                "right": 162,
+                "bottom": 488
+              },
+              {
+                "label": "Muovi giù",
+                "x": 66,
+                "y": 488,
+                "w": 48,
+                "h": 48,
+                "right": 114,
+                "bottom": 536
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 174,
+                "y": 424,
+                "w": 56,
+                "h": 56,
+                "right": 230,
+                "bottom": 480
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 238,
+                "y": 392,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 456
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 186,
+                "y": 492,
+                "w": 104,
+                "h": 44,
+                "right": 290,
+                "bottom": 536
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "android-pwa",
+          "width": 412,
+          "height": 915,
+          "dpr": 3,
+          "safe": {
+            "top": 28,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 915
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 251,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 527.984375
+            },
+            "move": {
+              "x": 24,
+              "y": 721,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 877
+            },
+            "actions": {
+              "x": 238,
+              "y": 727,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 871
+            },
+            "top": {
+              "x": 12,
+              "y": 28,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 72
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 28,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 72
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 306,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 72
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 356,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 72
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 721,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 773
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 825,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 877
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 751,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 815
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 727,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 803
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 827,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 871
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "android-large",
+          "width": 430,
+          "height": 932,
+          "dpr": 3,
+          "safe": {
+            "top": 32,
+            "bottom": 32,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 430,
+              "height": 932
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 250.75,
+              "w": 387.328125,
+              "h": 290.484375,
+              "right": 408.65625,
+              "bottom": 541.234375
+            },
+            "move": {
+              "x": 24,
+              "y": 730,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 886
+            },
+            "actions": {
+              "x": 256,
+              "y": 736,
+              "w": 150,
+              "h": 144,
+              "right": 406,
+              "bottom": 880
+            },
+            "top": {
+              "x": 12,
+              "y": 32,
+              "w": 406,
+              "h": 44,
+              "right": 418,
+              "bottom": 76
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 32,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 76
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 324,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 368,
+                "bottom": 76
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 374,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 418,
+                "bottom": 76
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 730,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 782
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 782,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 834
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 782,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 834
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 834,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 886
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 256,
+                "y": 760,
+                "w": 64,
+                "h": 64,
+                "right": 320,
+                "bottom": 824
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 330,
+                "y": 736,
+                "w": 76,
+                "h": 76,
+                "right": 406,
+                "bottom": 812
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 279,
+                "y": 836,
+                "w": 104,
+                "h": 44,
+                "right": 383,
+                "bottom": 880
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "android-wide",
+          "width": 480,
+          "height": 1040,
+          "dpr": 3,
+          "safe": {
+            "top": 32,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 480,
+              "height": 1040
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 290,
+              "w": 437.328125,
+              "h": 327.984375,
+              "right": 458.65625,
+              "bottom": 617.984375
+            },
+            "move": {
+              "x": 24,
+              "y": 846,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 1002
+            },
+            "actions": {
+              "x": 306,
+              "y": 852,
+              "w": 150,
+              "h": 144,
+              "right": 456,
+              "bottom": 996
+            },
+            "top": {
+              "x": 12,
+              "y": 32,
+              "w": 456,
+              "h": 44,
+              "right": 468,
+              "bottom": 76
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 32,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 76
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 374,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 418,
+                "bottom": 76
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 424,
+                "y": 32,
+                "w": 44,
+                "h": 44,
+                "right": 468,
+                "bottom": 76
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 846,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 898
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 898,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 950
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 898,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 950
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 950,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 1002
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 306,
+                "y": 876,
+                "w": 64,
+                "h": 64,
+                "right": 370,
+                "bottom": 940
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 380,
+                "y": 852,
+                "w": 76,
+                "h": 76,
+                "right": 456,
+                "bottom": 928
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 329,
+                "y": 952,
+                "w": 104,
+                "h": 44,
+                "right": 433,
+                "bottom": 996
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "android-fractional-density",
+          "width": 915,
+          "height": 412,
+          "dpr": 2.4,
+          "safe": {
+            "top": 0,
+            "bottom": 24,
+            "left": 36,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 915,
+              "height": 412
+            },
+            "overflow": false,
+            "screen": {
+              "x": 262.609375,
+              "y": 61.828125,
+              "w": 429.78125,
+              "h": 322.328125,
+              "right": 692.390625,
+              "bottom": 384.15625
+            },
+            "move": {
+              "x": 36,
+              "y": 58,
+              "w": 144,
+              "h": 330,
+              "right": 180,
+              "bottom": 388
+            },
+            "actions": {
+              "x": 775,
+              "y": 151,
+              "w": 128,
+              "h": 144,
+              "right": 903,
+              "bottom": 295
+            },
+            "top": {
+              "x": 36,
+              "y": 6,
+              "w": 867,
+              "h": 44,
+              "right": 903,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 36,
+                "y": 6,
+                "w": 132.0625,
+                "h": 44,
+                "right": 168.0625,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 751.625,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 795.625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 801.625,
+                "y": 6,
+                "w": 101.375,
+                "h": 44,
+                "right": 903,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 84,
+                "y": 151,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 199
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 36,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 84,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 132,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 180,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi giù",
+                "x": 84,
+                "y": 247,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 295
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 775,
+                "y": 183,
+                "w": 56,
+                "h": 56,
+                "right": 831,
+                "bottom": 239
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 839,
+                "y": 151,
+                "w": 64,
+                "h": 64,
+                "right": 903,
+                "bottom": 215
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 787,
+                "y": 251,
+                "w": 104,
+                "h": 44,
+                "right": 891,
+                "bottom": 295
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "browser-bars",
+          "width": 412,
+          "height": 700,
+          "dpr": 3,
+          "safe": {
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 700
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 141.5,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 418.484375
+            },
+            "move": {
+              "x": 24,
+              "y": 518,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 674
+            },
+            "actions": {
+              "x": 238,
+              "y": 524,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 668
+            },
+            "top": {
+              "x": 12,
+              "y": 12,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 56
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 12,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 56
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 306,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 56
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 356,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 56
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 518,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 570
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 570,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 622
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 570,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 622
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 622,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 674
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 548,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 612
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 524,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 600
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 624,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 668
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "compact-landscape",
+          "width": 568,
+          "height": 320,
+          "dpr": 2,
+          "safe": {
+            "top": 0,
+            "bottom": 16,
+            "left": 44,
+            "right": 44
+          },
+          "geometry": {
+            "viewport": {
+              "width": 568,
+              "height": 320
+            },
+            "overflow": false,
+            "screen": {
+              "x": 204,
+              "y": 115,
+              "w": 176,
+              "h": 132,
+              "right": 380,
+              "bottom": 247
+            },
+            "move": {
+              "x": 44,
+              "y": 58,
+              "w": 144,
+              "h": 246,
+              "right": 188,
+              "bottom": 304
+            },
+            "actions": {
+              "x": 396,
+              "y": 109,
+              "w": 128,
+              "h": 144,
+              "right": 524,
+              "bottom": 253
+            },
+            "top": {
+              "x": 44,
+              "y": 6,
+              "w": 480,
+              "h": 44,
+              "right": 524,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 480,
+              "height": 360
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 44,
+                "y": 6,
+                "w": 113.75,
+                "h": 44,
+                "right": 157.75,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 430,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 474,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 480,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 524,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 92,
+                "y": 109,
+                "w": 48,
+                "h": 48,
+                "right": 140,
+                "bottom": 157
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 44,
+                "y": 157,
+                "w": 48,
+                "h": 48,
+                "right": 92,
+                "bottom": 205
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 140,
+                "y": 157,
+                "w": 48,
+                "h": 48,
+                "right": 188,
+                "bottom": 205
+              },
+              {
+                "label": "Muovi giù",
+                "x": 92,
+                "y": 205,
+                "w": 48,
+                "h": 48,
+                "right": 140,
+                "bottom": 253
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 396,
+                "y": 141,
+                "w": 56,
+                "h": 56,
+                "right": 452,
+                "bottom": 197
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 460,
+                "y": 109,
+                "w": 64,
+                "h": 64,
+                "right": 524,
+                "bottom": 173
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 408,
+                "y": 209,
+                "w": 104,
+                "h": 44,
+                "right": 512,
+                "bottom": 253
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "android-landscape",
+          "width": 915,
+          "height": 412,
+          "dpr": 3,
+          "safe": {
+            "top": 0,
+            "bottom": 24,
+            "left": 36,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 915,
+              "height": 412
+            },
+            "overflow": false,
+            "screen": {
+              "x": 262.828125,
+              "y": 62,
+              "w": 429.328125,
+              "h": 321.984375,
+              "right": 692.15625,
+              "bottom": 383.984375
+            },
+            "move": {
+              "x": 36,
+              "y": 58,
+              "w": 144,
+              "h": 330,
+              "right": 180,
+              "bottom": 388
+            },
+            "actions": {
+              "x": 775,
+              "y": 151,
+              "w": 128,
+              "h": 144,
+              "right": 903,
+              "bottom": 295
+            },
+            "top": {
+              "x": 36,
+              "y": 6,
+              "w": 867,
+              "h": 44,
+              "right": 903,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 36,
+                "y": 6,
+                "w": 132.0625,
+                "h": 44,
+                "right": 168.0625,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 751.28125,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 795.28125,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 801.28125,
+                "y": 6,
+                "w": 101.71875,
+                "h": 44,
+                "right": 903,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 84,
+                "y": 151,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 199
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 36,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 84,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 132,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 180,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi giù",
+                "x": 84,
+                "y": 247,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 295
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 775,
+                "y": 183,
+                "w": 56,
+                "h": 56,
+                "right": 831,
+                "bottom": 239
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 839,
+                "y": 151,
+                "w": 64,
+                "h": 64,
+                "right": 903,
+                "bottom": 215
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 787,
+                "y": 251,
+                "w": 104,
+                "h": 44,
+                "right": 891,
+                "bottom": 295
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "wide-landscape",
+          "width": 1040,
+          "height": 480,
+          "dpr": 3,
+          "safe": {
+            "top": 0,
+            "bottom": 24,
+            "left": 0,
+            "right": 36
+          },
+          "geometry": {
+            "viewport": {
+              "width": 1040,
+              "height": 480
+            },
+            "overflow": false,
+            "screen": {
+              "x": 256,
+              "y": 62,
+              "w": 520,
+              "h": 390,
+              "right": 776,
+              "bottom": 452
+            },
+            "move": {
+              "x": 16,
+              "y": 58,
+              "w": 144,
+              "h": 398,
+              "right": 160,
+              "bottom": 456
+            },
+            "actions": {
+              "x": 872,
+              "y": 185,
+              "w": 128,
+              "h": 144,
+              "right": 1000,
+              "bottom": 329
+            },
+            "top": {
+              "x": 16,
+              "y": 6,
+              "w": 984,
+              "h": 44,
+              "right": 1000,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1680,
+              "height": 1260
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 16,
+                "y": 6,
+                "w": 132.0625,
+                "h": 44,
+                "right": 148.0625,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 848.28125,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 892.28125,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 898.28125,
+                "y": 6,
+                "w": 101.71875,
+                "h": 44,
+                "right": 1000,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 64,
+                "y": 185,
+                "w": 48,
+                "h": 48,
+                "right": 112,
+                "bottom": 233
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 16,
+                "y": 233,
+                "w": 48,
+                "h": 48,
+                "right": 64,
+                "bottom": 281
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 112,
+                "y": 233,
+                "w": 48,
+                "h": 48,
+                "right": 160,
+                "bottom": 281
+              },
+              {
+                "label": "Muovi giù",
+                "x": 64,
+                "y": 281,
+                "w": 48,
+                "h": 48,
+                "right": 112,
+                "bottom": 329
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 872,
+                "y": 217,
+                "w": 56,
+                "h": 56,
+                "right": 928,
+                "bottom": 273
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 936,
+                "y": 185,
+                "w": 64,
+                "h": 64,
+                "right": 1000,
+                "bottom": 249
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 884,
+                "y": 285,
+                "w": 104,
+                "h": 44,
+                "right": 988,
+                "bottom": 329
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        },
+        {
+          "engine": "webkit",
+          "name": "tablet-landscape",
+          "width": 1024,
+          "height": 768,
+          "dpr": 2,
+          "safe": {
+            "top": 24,
+            "bottom": 20,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "overflow": false,
+            "screen": {
+              "x": 180,
+              "y": 157,
+              "w": 680,
+              "h": 510,
+              "right": 860,
+              "bottom": 667
+            },
+            "move": {
+              "x": 20,
+              "y": 76,
+              "w": 144,
+              "h": 672,
+              "right": 164,
+              "bottom": 748
+            },
+            "actions": {
+              "x": 876,
+              "y": 340,
+              "w": 128,
+              "h": 144,
+              "right": 1004,
+              "bottom": 484
+            },
+            "top": {
+              "x": 20,
+              "y": 24,
+              "w": 984,
+              "h": 44,
+              "right": 1004,
+              "bottom": 68
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 20,
+                "y": 24,
+                "w": 132.0625,
+                "h": 44,
+                "right": 152.0625,
+                "bottom": 68
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 852.28125,
+                "y": 24,
+                "w": 44,
+                "h": 44,
+                "right": 896.28125,
+                "bottom": 68
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 902.28125,
+                "y": 24,
+                "w": 101.71875,
+                "h": 44,
+                "right": 1004,
+                "bottom": 68
+              },
+              {
+                "label": "Muovi su",
+                "x": 68,
+                "y": 340,
+                "w": 48,
+                "h": 48,
+                "right": 116,
+                "bottom": 388
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 20,
+                "y": 388,
+                "w": 48,
+                "h": 48,
+                "right": 68,
+                "bottom": 436
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 116,
+                "y": 388,
+                "w": 48,
+                "h": 48,
+                "right": 164,
+                "bottom": 436
+              },
+              {
+                "label": "Muovi giù",
+                "x": 68,
+                "y": 436,
+                "w": 48,
+                "h": 48,
+                "right": 116,
+                "bottom": 484
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 876,
+                "y": 372,
+                "w": 56,
+                "h": 56,
+                "right": 932,
+                "bottom": 428
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 940,
+                "y": 340,
+                "w": 64,
+                "h": 64,
+                "right": 1004,
+                "bottom": 404
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 888,
+                "y": 440,
+                "w": 104,
+                "h": 44,
+                "right": 992,
+                "bottom": 484
+              }
+            ]
+          },
+          "quickControlSwitch": true,
+          "preferenceRetained": true
+        }
+      ],
+      "rotation": [
+        {
+          "engine": "chromium",
+          "width": 915,
+          "height": 412,
+          "insets": {
+            "top": 0,
+            "bottom": 24,
+            "left": 36,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 915,
+              "height": 412
+            },
+            "overflow": false,
+            "screen": {
+              "x": 262.828125,
+              "y": 62,
+              "w": 429.328125,
+              "h": 321.984375,
+              "right": 692.15625,
+              "bottom": 383.984375
+            },
+            "move": {
+              "x": 36,
+              "y": 58,
+              "w": 144,
+              "h": 330,
+              "right": 180,
+              "bottom": 388
+            },
+            "actions": {
+              "x": 775,
+              "y": 151,
+              "w": 128,
+              "h": 144,
+              "right": 903,
+              "bottom": 295
+            },
+            "top": {
+              "x": 36,
+              "y": 6,
+              "w": 867,
+              "h": 44,
+              "right": 903,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 36,
+                "y": 6,
+                "w": 136.84375,
+                "h": 44,
+                "right": 172.84375,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 701.265625,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 745.265625,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 751.265625,
+                "y": 6,
+                "w": 101.734375,
+                "h": 44,
+                "right": 853,
+                "bottom": 50
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 859,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 903,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 84,
+                "y": 151,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 199
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 36,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 84,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 132,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 180,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi giù",
+                "x": 84,
+                "y": 247,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 295
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 775,
+                "y": 183,
+                "w": 56,
+                "h": 56,
+                "right": 831,
+                "bottom": 239
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 839,
+                "y": 151,
+                "w": 64,
+                "h": 64,
+                "right": 903,
+                "bottom": 215
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 787,
+                "y": 251,
+                "w": 104,
+                "h": 44,
+                "right": 891,
+                "bottom": 295
+              }
+            ]
+          }
+        },
+        {
+          "engine": "chromium",
+          "width": 412,
+          "height": 700,
+          "insets": {
+            "top": 0,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 700
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 135.5,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 412.484375
+            },
+            "move": {
+              "x": 24,
+              "y": 506,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 662
+            },
+            "actions": {
+              "x": 238,
+              "y": 512,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 656
+            },
+            "top": {
+              "x": 12,
+              "y": 12,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 56
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 12,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 56
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 256,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 300,
+                "bottom": 56
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 306,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 56
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 356,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 56
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 506,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 558
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 558,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 610
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 558,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 610
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 610,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 662
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 536,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 600
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 512,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 588
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 612,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 656
+              }
+            ]
+          }
+        },
+        {
+          "engine": "chromium",
+          "width": 412,
+          "height": 915,
+          "insets": {
+            "top": 28,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 915
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 251,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 527.984375
+            },
+            "move": {
+              "x": 24,
+              "y": 721,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 877
+            },
+            "actions": {
+              "x": 238,
+              "y": 727,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 871
+            },
+            "top": {
+              "x": 12,
+              "y": 28,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 72
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 28,
+                "w": 118.53125,
+                "h": 44,
+                "right": 130.53125,
+                "bottom": 72
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 256,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 300,
+                "bottom": 72
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 306,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 72
+              },
+              {
+                "label": "Apri a schermo intero",
+                "x": 356,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 72
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 721,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 773
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 825,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 877
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 751,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 815
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 727,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 803
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 827,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 871
+              }
+            ]
+          }
+        },
+        {
+          "engine": "webkit",
+          "width": 915,
+          "height": 412,
+          "insets": {
+            "top": 0,
+            "bottom": 24,
+            "left": 36,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 915,
+              "height": 412
+            },
+            "overflow": false,
+            "screen": {
+              "x": 262.828125,
+              "y": 62,
+              "w": 429.328125,
+              "h": 321.984375,
+              "right": 692.15625,
+              "bottom": 383.984375
+            },
+            "move": {
+              "x": 36,
+              "y": 58,
+              "w": 144,
+              "h": 330,
+              "right": 180,
+              "bottom": 388
+            },
+            "actions": {
+              "x": 775,
+              "y": 151,
+              "w": 128,
+              "h": 144,
+              "right": 903,
+              "bottom": 295
+            },
+            "top": {
+              "x": 36,
+              "y": 6,
+              "w": 867,
+              "h": 44,
+              "right": 903,
+              "bottom": 50
+            },
+            "backing": {
+              "width": 1440,
+              "height": 1080
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 36,
+                "y": 6,
+                "w": 132.0625,
+                "h": 44,
+                "right": 168.0625,
+                "bottom": 50
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 751.28125,
+                "y": 6,
+                "w": 44,
+                "h": 44,
+                "right": 795.28125,
+                "bottom": 50
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 801.28125,
+                "y": 6,
+                "w": 101.71875,
+                "h": 44,
+                "right": 903,
+                "bottom": 50
+              },
+              {
+                "label": "Muovi su",
+                "x": 84,
+                "y": 151,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 199
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 36,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 84,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 132,
+                "y": 199,
+                "w": 48,
+                "h": 48,
+                "right": 180,
+                "bottom": 247
+              },
+              {
+                "label": "Muovi giù",
+                "x": 84,
+                "y": 247,
+                "w": 48,
+                "h": 48,
+                "right": 132,
+                "bottom": 295
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 775,
+                "y": 183,
+                "w": 56,
+                "h": 56,
+                "right": 831,
+                "bottom": 239
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 839,
+                "y": 151,
+                "w": 64,
+                "h": 64,
+                "right": 903,
+                "bottom": 215
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 787,
+                "y": 251,
+                "w": 104,
+                "h": 44,
+                "right": 891,
+                "bottom": 295
+              }
+            ]
+          }
+        },
+        {
+          "engine": "webkit",
+          "width": 412,
+          "height": 700,
+          "insets": {
+            "top": 0,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 700
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 135.5,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 412.484375
+            },
+            "move": {
+              "x": 24,
+              "y": 506,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 662
+            },
+            "actions": {
+              "x": 238,
+              "y": 512,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 656
+            },
+            "top": {
+              "x": 12,
+              "y": 12,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 56
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 12,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 56
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 306,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 56
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 356,
+                "y": 12,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 56
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 506,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 558
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 558,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 610
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 558,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 610
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 610,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 662
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 536,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 600
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 512,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 588
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 612,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 656
+              }
+            ]
+          }
+        },
+        {
+          "engine": "webkit",
+          "width": 412,
+          "height": 915,
+          "insets": {
+            "top": 28,
+            "bottom": 24,
+            "left": 0,
+            "right": 0
+          },
+          "geometry": {
+            "viewport": {
+              "width": 412,
+              "height": 915
+            },
+            "overflow": false,
+            "screen": {
+              "x": 21.328125,
+              "y": 251,
+              "w": 369.328125,
+              "h": 276.984375,
+              "right": 390.65625,
+              "bottom": 527.984375
+            },
+            "move": {
+              "x": 24,
+              "y": 721,
+              "w": 156,
+              "h": 156,
+              "right": 180,
+              "bottom": 877
+            },
+            "actions": {
+              "x": 238,
+              "y": 727,
+              "w": 150,
+              "h": 144,
+              "right": 388,
+              "bottom": 871
+            },
+            "top": {
+              "x": 12,
+              "y": 28,
+              "w": 388,
+              "h": 44,
+              "right": 400,
+              "bottom": 72
+            },
+            "backing": {
+              "width": 1200,
+              "height": 900
+            },
+            "targets": [
+              {
+                "label": "Politicmon: apri il quartier generale",
+                "x": 12,
+                "y": 28,
+                "w": 113.75,
+                "h": 44,
+                "right": 125.75,
+                "bottom": 72
+              },
+              {
+                "label": "Usa la levetta direzionale",
+                "x": 306,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 350,
+                "bottom": 72
+              },
+              {
+                "label": "Apri la guida ai comandi",
+                "x": 356,
+                "y": 28,
+                "w": 44,
+                "h": 44,
+                "right": 400,
+                "bottom": 72
+              },
+              {
+                "label": "Muovi su",
+                "x": 76,
+                "y": 721,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 773
+              },
+              {
+                "label": "Muovi a sinistra",
+                "x": 24,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 76,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi a destra",
+                "x": 128,
+                "y": 773,
+                "w": 52,
+                "h": 52,
+                "right": 180,
+                "bottom": 825
+              },
+              {
+                "label": "Muovi giù",
+                "x": 76,
+                "y": 825,
+                "w": 52,
+                "h": 52,
+                "right": 128,
+                "bottom": 877
+              },
+              {
+                "label": "B: torna o annulla",
+                "x": 238,
+                "y": 751,
+                "w": 64,
+                "h": 64,
+                "right": 302,
+                "bottom": 815
+              },
+              {
+                "label": "A: conferma o parla",
+                "x": 312,
+                "y": 727,
+                "w": 76,
+                "h": 76,
+                "right": 388,
+                "bottom": 803
+              },
+              {
+                "label": "Apri il quartier generale",
+                "x": 261,
+                "y": 827,
+                "w": 104,
+                "h": 44,
+                "right": 365,
+                "bottom": 871
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "shell": [
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "chromium",
+        "width": 320,
+        "height": 568,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 21.328125,
+            "y": 116.5,
+            "right": 298.65625,
+            "bottom": 324.484375
+          },
+          "#touch-move": {
+            "x": 18,
+            "y": 370,
+            "right": 162,
+            "bottom": 514
+          },
+          "#touch-buttons": {
+            "x": 174,
+            "y": 370,
+            "right": 302,
+            "bottom": 514
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 308,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "chromium",
+        "width": 390,
+        "height": 844,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 21.328125,
+            "y": 228.25,
+            "right": 368.65625,
+            "bottom": 488.734375
+          },
+          "#touch-move": {
+            "x": 24,
+            "y": 640,
+            "right": 180,
+            "bottom": 796
+          },
+          "#touch-buttons": {
+            "x": 216,
+            "y": 646,
+            "right": 366,
+            "bottom": 790
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 378,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "chromium",
+        "width": 568,
+        "height": 320,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 204,
+            "y": 115,
+            "right": 380,
+            "bottom": 247
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 58,
+            "right": 188,
+            "bottom": 304
+          },
+          "#touch-buttons": {
+            "x": 396,
+            "y": 109,
+            "right": 524,
+            "bottom": 253
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 524,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "chromium",
+        "width": 844,
+        "height": 390,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 224.671875,
+            "y": 62,
+            "right": 635.328125,
+            "bottom": 369.984375
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 58,
+            "right": 188,
+            "bottom": 374
+          },
+          "#touch-buttons": {
+            "x": 672,
+            "y": 144,
+            "right": 800,
+            "bottom": 288
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 800,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "chromium",
+        "width": 1280,
+        "height": 800,
+        "bounds": {
+          "x": 190.671875,
+          "y": 75,
+          "width": 898.65625,
+          "height": 673.984375
+        }
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "webkit",
+        "width": 320,
+        "height": 568,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 21.328125,
+            "y": 116.5,
+            "right": 298.65625,
+            "bottom": 324.484375
+          },
+          "#touch-move": {
+            "x": 18,
+            "y": 370,
+            "right": 162,
+            "bottom": 514
+          },
+          "#touch-buttons": {
+            "x": 174,
+            "y": 370,
+            "right": 302,
+            "bottom": 514
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 308,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "webkit",
+        "width": 390,
+        "height": 844,
+        "safe": {
+          "left": 0,
+          "right": 0,
+          "top": 47,
+          "bottom": 34
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 21.328125,
+            "y": 228.25,
+            "right": 368.65625,
+            "bottom": 488.734375
+          },
+          "#touch-move": {
+            "x": 24,
+            "y": 640,
+            "right": 180,
+            "bottom": 796
+          },
+          "#touch-buttons": {
+            "x": 216,
+            "y": 646,
+            "right": 366,
+            "bottom": 790
+          },
+          "#console-top": {
+            "x": 12,
+            "y": 47,
+            "right": 378,
+            "bottom": 91
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "webkit",
+        "width": 568,
+        "height": 320,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 204,
+            "y": 115,
+            "right": 380,
+            "bottom": 247
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 58,
+            "right": 188,
+            "bottom": 304
+          },
+          "#touch-buttons": {
+            "x": 396,
+            "y": 109,
+            "right": 524,
+            "bottom": 253
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 524,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "webkit",
+        "width": 844,
+        "height": 390,
+        "safe": {
+          "left": 44,
+          "right": 44,
+          "top": 0,
+          "bottom": 16
+        },
+        "geometry": {
+          "#screen-frame": {
+            "x": 224.671875,
+            "y": 62,
+            "right": 635.328125,
+            "bottom": 369.984375
+          },
+          "#touch-move": {
+            "x": 44,
+            "y": 58,
+            "right": 188,
+            "bottom": 374
+          },
+          "#touch-buttons": {
+            "x": 672,
+            "y": 144,
+            "right": 800,
+            "bottom": 288
+          },
+          "#console-top": {
+            "x": 44,
+            "y": 6,
+            "right": 800,
+            "bottom": 50
+          }
+        },
+        "drag": true,
+        "capture": true,
+        "independentKeyHold": true,
+        "physicalDevice": false
+      },
+      {
+        "base": "https://politicmon-test-link.vercel.app/",
+        "engine": "webkit",
+        "width": 1280,
+        "height": 800,
+        "bounds": {
+          "x": 190.671875,
+          "y": 75,
+          "width": 898.65625,
+          "height": 673.984375
+        }
+      }
+    ],
+    "government": [
+      {
+        "engine": "chromium",
+        "base": "https://politicmon-test-link.vercel.app/",
+        "stages": [
+          "list",
+          "dossier",
+          "party",
+          "candidate-cancel",
+          "nomination-review",
+          "economia-active",
+          "dismissal-cancel",
+          "transfer-review",
+          "esteri-active",
+          "content-earned",
+          "content-meme",
+          "reopened-government"
+        ],
+        "assets": [
+          "/sprites/ui/campaign/government.png"
+        ],
+        "physicalDevice": false,
+        "fixture": "earned normal campaign ending, no adjusted resources",
+        "cancelPure": true,
+        "nominationSaved": true,
+        "transferSaved": true,
+        "catalogPure": true,
+        "reopenPreserved": true
+      },
+      {
+        "engine": "webkit",
+        "base": "https://politicmon-test-link.vercel.app/",
+        "stages": [
+          "list",
+          "dossier",
+          "party",
+          "candidate-cancel",
+          "nomination-review",
+          "economia-active",
+          "dismissal-cancel",
+          "transfer-review",
+          "esteri-active",
+          "content-earned",
+          "content-meme",
+          "reopened-government"
+        ],
+        "assets": [
+          "/sprites/ui/campaign/government.png"
+        ],
+        "physicalDevice": false,
+        "fixture": "earned normal campaign ending, no adjusted resources",
+        "cancelPure": true,
+        "nominationSaved": true,
+        "transferSaved": true,
+        "catalogPure": true,
+        "reopenPreserved": true
+      }
+    ],
+    "pwa": {
+      "browser": "chromium",
+      "passed": true,
+      "images": 798,
+      "aac": 19,
+      "update": true,
+      "offlineReload": true,
+      "backgroundResume": true
+    }
   }
 }

@@ -1991,7 +1991,14 @@
       "margin": -164,
       "status": "failed; dedicated TURN configuration was absent from the initial local measurement"
     },
-    "followup": "Mobile shell, build margin and audit fix in progress; results in MOBILE-PWA-FINALE.md"
+    "followup": {
+      "runtimeCommit": "785654f6d9a31b780dc80016cc816231db988ca2",
+      "ci": "https://github.com/Kind3rin/politicmon/actions/runs/37066878061",
+      "ciConclusion": "success",
+      "preview": "https://politicmon-test-link.vercel.app/",
+      "mainUpdate": "daily deployment quota",
+      "proof": "mobile-pwa-final-proof.json"
+    }
   },
   "scope": "Government appointments and content catalog; no battle/statistics/pricing effects changed; complete redesign remains active",
   "auditCorrection": {

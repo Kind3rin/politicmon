@@ -259,3 +259,7 @@ la vittoria. 1,25 crediti, saldo 613,97; 283 test, 8.449 briefing per motore,
 105 viste HQ, 433 checksum locali e 542 risorse PWA. Obiettivo attivo:
 restano audio, scrittura e ritmo delle zone successive, altri seed e
 campagna completa in difficoltà elevata.
+
+Round Stretto pubblicato in `83badd5`: CI e tre deploy Vercel riusciti,
+433 checksum sul dominio pubblico, 542 risorse PWA nei due motori e sei
+configurazioni della cornice esterna. Reload offline solo Chromium.

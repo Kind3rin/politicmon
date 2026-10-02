@@ -145,3 +145,15 @@ ritmo dei percorsi e campagna integrale in difficoltà elevata richiedono
 ancora lavoro e verifiche. L'audit statico delle 48 scene non prova tutti
 gli stati del gioco; solo 10 delle 52 specie hanno un PNG d'azione dedicato,
 oltre ai fogli con quattro pose già verificati per il roster completo.
+
+## Pubblicazione verificata
+
+Round pubblicato in `83badd5d8f9ef26469a5e86db9510e6a9aed46a3`.
+[CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36970819993),
+tutti e tre gli stati Vercel riusciti. Su
+[politicmon.vercel.app](https://politicmon.vercel.app/) sono verificati
+433 checksum PNG, i nuovi dialoghi/briefing nel codice, 542 risorse
+Higgsfield al primo uso offline in Chromium e WebKit, aggiornamento della
+cache, salvataggio/ripresa e sei configurazioni della cornice esterna.
+Il reload offline è provato solo in Chromium. La pubblicazione conferma
+questo round, non il completamento del redesign integrale.

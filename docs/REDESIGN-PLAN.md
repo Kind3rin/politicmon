@@ -51,7 +51,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round: Campo Largo
 
-[CAMPO-CORNICE.md](CAMPO-CORNICE.md): 17 job, 29 PNG, 25,5 crediti. Tre dossier manuali, quattro attori, patti/cohesione con conseguenze osservate, Circolo e crescita di un reclutamento realmente schierato. Quattro segmenti guadagnati vincono in normale; 286 test, 12.551 layout dei dossier per motore, 486 checksum PNG e 594 risorse offline. L’inventario PWA è un dato JSON versionato: 626 risorse di build verificate senza esclusioni. I percorsi nativi della produzione locale verificano retropalco, varco bloccato e accesso guadagnato a Futuro nei due motori. Saldo 561,22. Pubblicazione e provenienza sono registrate nel verbale; il prossimo tratto è [FUTURO-ANTERIORE-AUDIT.md](FUTURO-ANTERIORE-AUDIT.md). Il goal generale resta attivo.
+[CAMPO-CORNICE.md](CAMPO-CORNICE.md): 17 job, 29 PNG, 25,5 crediti. Tre dossier manuali, quattro attori, patti/cohesione con conseguenze osservate, Circolo e crescita di un reclutamento realmente schierato. Quattro segmenti guadagnati vincono in normale; 286 test, 12.551 layout dei dossier per motore, 486 checksum PNG e 594 risorse offline. L’inventario PWA è un dato JSON versionato: 626 risorse di build verificate senza esclusioni. I percorsi nativi della produzione locale verificano retropalco, varco bloccato e accesso guadagnato a Futuro nei due motori. Saldo 561,22. Il commit `044516d` ha CI 36992112395 e tre deploy Vercel riusciti; checksum, PWA e sei percorsi nativi pubblici passano nei due motori. Provenienza nel verbale; il prossimo tratto è [FUTURO-ANTERIORE-AUDIT.md](FUTURO-ANTERIORE-AUDIT.md). Il goal generale resta attivo.
 
 ## Round precedente: Bruxelles
 

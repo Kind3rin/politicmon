@@ -29,3 +29,4 @@ jobs:
       - run: npm run audit:input-contracts
       - run: node scripts/check-evolutions.mjs
       - run: npm run build
+      - run: node scripts/check-precache-build.mjs

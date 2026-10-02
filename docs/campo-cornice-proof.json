@@ -5456,5 +5456,252 @@
       ]
     }
   ],
-  "publicVerification": []
+  "publicVerification": [
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/campo-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "3b1555c048f91ec35a1a1fd0d4237769e88cf8a4a82d573315c8a35e7428eb9b",
+      "stage": "campo-arrival",
+      "target": "retropalco_campo",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/tiles/campo_gazebo.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/audio/campo_largo.m4a?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_path.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_poster.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_backstage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_camera.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_east.png?v=2026-10-02T09-51-44"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "future gate blocked before victory or crossed after earned win",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/campo-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "741303920c6799180043bd72447157b7cda4cf83e9618f5fc148c7da82715b2e",
+      "stage": "campo-photo-choice",
+      "target": "campo_largo",
+      "assets": [
+        "https://politicmon.vercel.app/audio/campo_largo.m4a?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_stage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_path.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_poster.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_gazebo.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_camera.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_backstage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_west.png?v=2026-10-02T09-51-44"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "future gate blocked before victory or crossed after earned win",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "chromium",
+      "sourceReport": "artifacts/campaign-native/campo-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "ce5b8d7776a50d6503ca45462142aaaa04887834a1a226edb062dce24fe02f56",
+      "stage": "campo-verbale",
+      "target": "futuro_piazza",
+      "assets": [
+        "https://politicmon.vercel.app/audio/campo_largo.m4a?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_path.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_stage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_gazebo.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_poster.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_camera.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_backstage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_east.png?v=2026-10-02T09-51-44"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "future gate blocked before victory or crossed after earned win",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/campo-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "3b1555c048f91ec35a1a1fd0d4237769e88cf8a4a82d573315c8a35e7428eb9b",
+      "stage": "campo-arrival",
+      "target": "retropalco_campo",
+      "assets": [
+        "https://politicmon.vercel.app/audio/campo_largo.m4a?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_camera.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_gazebo.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_path.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_backstage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_poster.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_north.png?v=2026-10-02T09-51-44"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "future gate blocked before victory or crossed after earned win",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/campo-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "741303920c6799180043bd72447157b7cda4cf83e9618f5fc148c7da82715b2e",
+      "stage": "campo-photo-choice",
+      "target": "campo_largo",
+      "assets": [
+        "https://politicmon.vercel.app/audio/campo_largo.m4a?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_camera.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_gazebo.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_path.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_backstage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_stage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_poster.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_east.png?v=2026-10-02T09-51-44"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "future gate blocked before victory or crossed after earned win",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    },
+    {
+      "base": "https://politicmon.vercel.app/",
+      "engine": "webkit",
+      "sourceReport": "artifacts/campaign-native/campo-final-ellyna-direct-20261002.json",
+      "sourceSaveCodeSha256": "ce5b8d7776a50d6503ca45462142aaaa04887834a1a226edb062dce24fe02f56",
+      "stage": "campo-verbale",
+      "target": "futuro_piazza",
+      "assets": [
+        "https://politicmon.vercel.app/sprites/tiles/campo_path.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_stage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_backstage.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_gazebo.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_camera.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/audio/campo_largo.m4a?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/tiles/campo_poster.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_south.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_quantum-centrist_north.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-secretary_west.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_campo-photographer_east.png?v=2026-10-02T09-51-44",
+        "https://politicmon.vercel.app/sprites/chars/npc_civic-mayor_south.png?v=2026-10-02T09-51-44"
+      ],
+      "checks": [
+        "earned save imported without edits",
+        "native slot/continue/map/warp keys",
+        "new artwork loaded",
+        "future gate blocked before victory or crossed after earned win",
+        "travel leaves money/party/morale/coalition/election intact"
+      ]
+    }
+  ],
+  "publication": {
+    "sourceCommit": "044516de0715454187e05460d3798dd2fe3fbee4",
+    "ciRunId": 36992112395,
+    "ciConclusion": "success",
+    "ciUrl": "https://github.com/Kind3rin/politicmon/actions/runs/36992112395",
+    "deploys": [
+      {
+        "context": "Vercel – politicmon-test-link",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-test-link/9yMNSaABJPNtLKtS3iCeYySFrrZr"
+      },
+      {
+        "context": "Vercel – politicmon-link-check",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon-link-check/FEYSVfzC2BpbCea3W37AYKcg5xrH"
+      },
+      {
+        "context": "Vercel – politicmon",
+        "state": "success",
+        "url": "https://vercel.com/kind3rins-projects/politicmon/DWXsaWsEHtjx9kkJU5qNQ1ayQiPA"
+      }
+    ]
+  },
+  "publicAssets": {
+    "pngChecksums": 486,
+    "audioCatalogChecksums": 20,
+    "offlineHiggsfieldResources": 594,
+    "aacTracksDecoded": 19,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "fullOfflineReload": [
+      "chromium"
+    ]
+  },
+  "publicLogsSha256": {
+    "/tmp/politicmon-campo-public-checksums.log": "3e6bd292b08b492f68f5c884659aca754e40041170636d8b6043be3e83b01731",
+    "/tmp/politicmon-campo-public-pwa.log": "a670552f770b5bf12886a9a2fa171f66162bbb728458d056c2ce15e418a649cf",
+    "/tmp/politicmon-campo-public-pwa-webkit.log": "defb0abfd6395fc1cce8d414b310ef17f1337dbb01ad563f9e32a29fe2616e8c",
+    "/tmp/politicmon-campo-public-native.log": "45484c1806210a3cdb9cfb02ea126ad3a0905cdeef19721f03bd1bbec2410237"
+  }
 }

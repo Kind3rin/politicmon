@@ -1058,5 +1058,53 @@
     "offlineAacTracksPerEngine": 19,
     "offlineReload": "Chromium only"
   },
-  "publicRelease": null
+  "publicRelease": {
+    "sourceCommit": "817fbb2492d97be8da1762d5d774c6253d2d25c6",
+    "ci": {
+      "runId": 36979312017,
+      "conclusion": "success",
+      "url": "https://github.com/Kind3rin/politicmon/actions/runs/36979312017"
+    },
+    "vercel": {
+      "politicmon": "success",
+      "politicmon-link-check": "success",
+      "politicmon-test-link": "success"
+    },
+    "pngChecksums": 443,
+    "audioAndCatalogChecksums": 20,
+    "pwaHiggsfieldAssetsPerEngine": 552,
+    "aacOfflinePerEngine": 19,
+    "offlineReload": "Chromium only",
+    "publicShellConfigurations": 6,
+    "nativeOffshore": {
+      "chromium": {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "chromium",
+        "sourceReport": "artifacts/campaign-native/offshore-final-ellyna-direct-20261002.json",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/tiles/offshore_bar.png?v=2026-10-02T07-36-11"
+        ],
+        "checks": [
+          "continue and slot via native keys",
+          "earned arrival save unchanged",
+          "walk to new Lido and enter actual door",
+          "no money/morale/party mutation on travel"
+        ]
+      },
+      "webkit": {
+        "base": "https://politicmon.vercel.app/",
+        "engine": "webkit",
+        "sourceReport": "artifacts/campaign-native/offshore-final-ellyna-direct-20261002.json",
+        "assets": [
+          "https://politicmon.vercel.app/sprites/tiles/offshore_bar.png?v=2026-10-02T07-36-11"
+        ],
+        "checks": [
+          "continue and slot via native keys",
+          "earned arrival save unchanged",
+          "walk to new Lido and enter actual door",
+          "no money/morale/party mutation on travel"
+        ]
+      }
+    }
+  }
 }

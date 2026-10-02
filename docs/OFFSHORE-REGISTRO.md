@@ -132,3 +132,11 @@ verificato solo in Chromium, precache e ripresa in WebKit. Restano
 campagne in difficoltà alta, seed diversi, Bruxelles e altri atti,
 identità degli interni e delle zone, animazioni dedicate mancanti e
 prove su dispositivi fisici. Il redesign completo rimane attivo.
+
+## Pubblicazione
+
+Commit `817fbb2492d97be8da1762d5d774c6253d2d25c6`, [CI riuscita](https://github.com/Kind3rin/politicmon/actions/runs/36979312017) e tre deploy Vercel riusciti. Il [gioco pubblico](https://politicmon.vercel.app/) passa i 443 checksum PNG e 20 audio/catalogo, il primo uso offline di 552 risorse e 19 AAC nei due motori, e sei configurazioni dei controlli esterni. Reload offline verificato in Chromium; WebKit copre precache e ripresa. Il prossimo intervento è descritto in [BRUXELLES-AUDIT.md](BRUXELLES-AUDIT.md).
+
+La build pubblica riprende anche il save guadagnato di Ellyna: CONTINUA, scelta slot, chiusura del messaggio d’arrivo, cammino fino al lido e ingresso tramite tastiera, in entrambi i motori. Denaro, squadra e morale restano identici al save importato. Prova ripetibile con `PREVIEW_URL=https://politicmon.vercel.app/ npm run check:offshore:release`; richiede il report locale indicato nel proof, o `RESUME_REPORT` equivalente con lo stesso punto d’arrivo.
+
+<img src="img/offshore-lido-public.png" width="480" alt="Il Lido Cayman nel sito pubblico, raggiunto con input nativi da un salvataggio giocato">

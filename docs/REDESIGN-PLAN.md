@@ -99,7 +99,7 @@ né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gio
 
 ## Ultimo round
 
-[OFFSHORE-REGISTRO.md](OFFSHORE-REGISTRO.md): nuova identità dell’isola, edificio, palme e Tesoriere; tre dossier volontari, negozio e morale letto al finale. Sei job Higgsfield, nove PNG, 9 crediti; saldo 604,72. Tre salvataggi realmente giocati superano le prove e il boss in normale, con reclutamenti diversi. 286 test, 9.724 briefing per motore, ritorno e viaggio a Bruxelles verificati senza Tesoriere o Sherpa. Build 357.916 byte gzip, margine 484; 443 checksum PNG, 20 audio/catalogo e 552 risorse PWA. Difficoltà alta, altri seed e atti successivi restano aperti.
+[OFFSHORE-REGISTRO.md](OFFSHORE-REGISTRO.md): nuova identità dell’isola, edificio, palme e Tesoriere; tre dossier volontari, negozio e morale letto al finale. Sei job Higgsfield, nove PNG, 9 crediti; saldo 604,72. Tre salvataggi realmente giocati superano le prove e il boss in normale, con reclutamenti diversi. 286 test, 9.724 briefing per motore, ritorno e viaggio a Bruxelles verificati senza Tesoriere o Sherpa. Build 357.916 byte gzip, margine 484; 443 checksum PNG, 20 audio/catalogo e 552 risorse PWA. Difficoltà alta, altri seed e atti successivi restano aperti. Pubblicazione `817fbb2`: CI 36979312017 e tre deploy Vercel riusciti; checksum e PWA pubblica verificati nei due motori. [BRUXELLES-AUDIT.md](BRUXELLES-AUDIT.md) registra ambienti, sfide e scrittura ancora da rivedere.
 
 ### Round precedente: archivio
 

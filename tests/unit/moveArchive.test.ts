@@ -28,7 +28,7 @@ test("preparation reads actual immunities, PP and defense boosts without consumi
     assert.match(preparationNotes(state, foe).join(" "), /DOPO Voto di fiducia/);
     assert.match(preparationNotes(state, foe).join(" "), /KO, PRIMA TORNA AL BAR/);
     assert.equal(JSON.stringify({ state, foe }), before);
-    assert.match(preparationNotes(state, final).join(" "), /GARANZIA/);
+    assert.match(preparationNotes(state, final).join(" "), /Garanzia/);
     assert.match(preparationNotes(state, final).join(" "), /GILET/);
     for (const slot of state.party[0].moves) slot.pp = 0;
     assert.match(preparationNotes(state, final).join(" "), /NESSUN ATTACCO CON PP/);

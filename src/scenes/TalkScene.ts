@@ -5,7 +5,7 @@ import type {Screen} from '../engine/screen';
 import {mp} from '../net/mp';
 import {TALK_INVITE_TIMEOUT,type DuelMsg} from '../net/duelproto';
 import {loadNick} from '../net/profile';
-import {PHRASES} from '../ui/kit/communication';
+import {GROUPED_PHRASES} from '../ui/kit/communication';
 import type {UiPanel,UiBlock} from '../ui/kit';
 import {readableCopy} from '../ui/kit/copy';
 export interface TalkOptions {peerId:string;peerNick:string;talkId:string;role:'host'|'guest';}
@@ -67,7 +67,7 @@ export class TalkScene implements Scene {
   const blocks:UiBlock[]=messages.length?messages.map(line=>({title:line.me?'Tu':this.opts.peerNick,body:line.text})):[{title:'La conversazione',body:'La riunione ha finalmente un tu.'}];
   const tabs=['Frasi rapide','Scrivi','Cronologia'].map((label,index)=>({label,run:()=>{if(!live())return;this.tab=index;this.input.reset();audio.cursor();}}));
   if(tab===1)return {title:'Confronto',subtitle:this.opts.peerNick,tabs,selectedTab:tab,blocks,field:{label:'Messaggio',value:this.draft,singleLine:true,maxLength:60,autofocus:true,placeholder:'Scrivi al giocatore',onChange:value=>{if(live())this.draft=value;},onSubmit:()=>this.send(this.draft,tab)},actions:[{label:'Invia',disabled:!this.draft.trim(),run:()=>this.send(this.draft,tab)}],primary:0,back};
-  return {title:tab===2?'Cronologia del confronto':'Confronto',subtitle:this.opts.peerNick,tabs,selectedTab:tab,blocks,actions:tab===2?[]:PHRASES.map(text=>({label:readableCopy(text),hint:'Invia al giocatore del confronto.',run:()=>this.send(readableCopy(text),tab)})),back};
+  return {title:tab===2?'Cronologia del confronto':'Confronto',subtitle:this.opts.peerNick,tabs,selectedTab:tab,blocks,actions:tab===2?[]:GROUPED_PHRASES.map(({text,group})=>({group,label:readableCopy(text),hint:'Invia al giocatore del confronto.',run:()=>this.send(readableCopy(text),tab)})),back};
  }
  draw(screen:Screen):void {screen.clear('#17243d');}
 }

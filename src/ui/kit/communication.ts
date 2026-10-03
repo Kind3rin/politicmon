@@ -7,10 +7,16 @@ export const PHRASES = [
   "DOVE SEI?",
   "ARRIVO!",
   "BELLA SQUADRA!",
-  "GG!",
+  "BELLA PARTITA!",
   "DEVO ANDARE",
   "A DOPO!"
 ];
+
+export const GROUPED_PHRASES = [
+  { group: "Saluti", indices: [0, 1, 6, 7] },
+  { group: "Organizzarsi", indices: [2, 3, 4, 5] },
+  { group: "Congedarsi", indices: [8, 9] }
+].flatMap(({ group, indices }) => indices.map(index => ({ group, text: PHRASES[index] })));
 
 export const EMOTES: Array<{ ch: string; label: string }> = [
   { ch: "!", label: "CIAO" },
@@ -19,8 +25,8 @@ export const EMOTES: Array<{ ch: string; label: string }> = [
   { ch: "♪", label: "FESTA" },
   { ch: "▲", label: "SU" },
   { ch: "▼", label: "GIÙ" },
-  { ch: "GG", label: "GG" },
-  { ch: "OK", label: "OK" },
+  { ch: "GG", label: "BELLA PARTITA" },
+  { ch: "OK", label: "VA BENE" },
   { ch: "NO", label: "NO" },
   { ch: "€", label: "RICCO" },
   { ch: "!!", label: "WOW" }

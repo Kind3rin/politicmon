@@ -140,7 +140,7 @@ export const kit = {
     if (block.facts) card.append(kit.facts(block.facts));
     return card;
   },
-  button(action: TouchAction, run: () => void, primary = false): HTMLButtonElement {
+  button(action: TouchAction, run: () => void, primary = false, isDisabled = () => Boolean(action.disabled)): HTMLButtonElement {
     const button = element("button", primary ? "ui-button ui-primary" : "ui-button");
     if (action.route) button.classList.add(`ui-route-${action.route}`);
     button.type = "button";
@@ -176,7 +176,7 @@ export const kit = {
     }
     button.onclick = () => {
       cancelHold();if(inspected){inspected=false;return;}
-      if (!button.disabled && !action.disabled) {
+      if (!button.disabled && !isDisabled()) {
         haptics.tap(); run();
         button.closest<HTMLElement>("#game-ui, #game-dialog, #world-ui")?.focus({ preventScroll: true });
       }
@@ -465,6 +465,8 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
   if (worldContext && worldRun) {
     worldContext.querySelector("strong")!.textContent = world.context.label;
     worldContext.disabled = Boolean(world.context.disabled);
+    if (world.context.disabled) worldContext.setAttribute("aria-disabled", "true");
+    else worldContext.removeAttribute("aria-disabled");
     worldRun.querySelector("strong")!.textContent = world.run.label;
     worldRun.setAttribute("aria-pressed",String(world.running));
   }
@@ -473,7 +475,8 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
   const nav = element("nav", "ui-world-nav"); nav.setAttribute("aria-label", "Accessi rapidi");
   world.actions.forEach((action,i) => nav.append(kit.button(action, () => worldCurrent?.actions[i]?.run())));
   const controls = element("div", "ui-world-controls");
-  worldContext = kit.button(world.context, () => worldCurrent?.context.run(),true);
+  worldContext = kit.button(world.context, () => worldCurrent?.context.run(),true,
+    () => !worldCurrent || Boolean(worldCurrent.context.disabled));
   controls.append(worldContext);
   const run = worldRun = kit.button(world.run, () => worldCurrent?.run.run());
   run.setAttribute("aria-pressed", String(world.running)); controls.append(run);

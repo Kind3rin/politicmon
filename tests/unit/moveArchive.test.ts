@@ -25,7 +25,7 @@ test("preparation reads actual immunities, PP and defense boosts without consumi
   const final = createMonster("mattarellux", 32); final.heldItem = "gilet";
   const original = Math.random; Math.random = () => { throw Error("Preview consumed live RNG"); };
   try {
-    assert.match(preparationNotes(state, foe).join(" "), /DOPO VOTO DI FIDUCIA/);
+    assert.match(preparationNotes(state, foe).join(" "), /DOPO Voto di fiducia/);
     assert.match(preparationNotes(state, foe).join(" "), /KO, PRIMA TORNA AL BAR/);
     assert.equal(JSON.stringify({ state, foe }), before);
     assert.match(preparationNotes(state, final).join(" "), /GARANZIA/);

@@ -28,7 +28,7 @@ export class ChatScene implements Scene {
    field:{label:'Messaggio',value:this.draft,singleLine:true,maxLength:60,autofocus:true,placeholder:'Scrivi un messaggio',onChange:value=>{if(live())this.draft=value;},onSubmit:()=>this.send(this.draft,tab)},
    actions:[{label:'Invia',disabled:!mp.connected||!this.draft.trim(),run:()=>this.send(this.draft,tab)}],primary:0,back};
   return {title:'Chat di zona',tabs,selectedTab:tab,blocks,
-   actions:tab===0?PHRASES.map(text=>({label:readableCopy(text),hint:'Invia questa frase nella chat.',disabled:!mp.connected,run:()=>this.send(text,tab)})):EMOTES.map(emote=>({label:`${emote.ch} · ${readableCopy(emote.label)}`,hint:'Mostra un fumetto sulla mappa.',disabled:!mp.connected,run:()=>{if(!live()||!mp.connected)return;this.input.reset();mp.sendEmote(emote.ch);audio.confirm();this.notice=mp.connected?'Emote inviata: appare sulla mappa.':'Sei offline: nessuna emote inviata agli altri giocatori.';}})),back};
+   actions:tab===0?PHRASES.map(text=>({label:readableCopy(text),hint:'Invia questa frase nella chat.',disabled:!mp.connected,run:()=>this.send(readableCopy(text),tab)})):EMOTES.map(emote=>({label:`${emote.ch} · ${readableCopy(emote.label)}`,hint:'Mostra un fumetto sulla mappa.',disabled:!mp.connected,run:()=>{if(!live()||!mp.connected)return;this.input.reset();mp.sendEmote(emote.ch);audio.confirm();this.notice=mp.connected?'Emote inviata: appare sulla mappa.':'Sei offline: nessuna emote inviata agli altri giocatori.';}})),back};
  }
  update():void {}
  draw(screen:Screen):void {screen.clear('#17243d');}

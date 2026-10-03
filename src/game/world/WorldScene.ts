@@ -488,13 +488,13 @@ export class WorldScene implements Scene {
   get uiPanel():UiPanel|undefined {
     if (this.remoteMenu) {
       const menu=this.remoteMenu;
-      return {title:"Giocatore online",subtitle:this.askLabel,selected:menu.index,
+      return {title:"Giocatore online",subtitle:readableCopy(this.askLabel),selected:menu.index,
         actions:menu.items.slice(0,4).map((item,i)=>({label:item.label.charAt(0)+item.label.slice(1).toLocaleLowerCase("it"),run:()=>{if(this.remoteMenu===menu)this.chooseRemote(i);}})),
         back:{label:"Indietro",run:()=>{if(this.remoteMenu===menu)this.chooseRemote();}}};
     }
     if (this.askMenu) {
       const menu = this.askMenu;
-      return {title:"Scegli",subtitle:this.askLabel,selected:menu.index,
+      return {title:"Scegli",subtitle:readableCopy(this.askLabel),selected:menu.index,
         actions:menu.items.map((item,i) => ({label:item.label.charAt(0)+item.label.slice(1).toLocaleLowerCase("it"),disabled:item.disabled,run:() => {if(this.askMenu===menu)this.chooseAsk(i);}})),
         back:{label:"Indietro",run:() => {if(this.askMenu===menu)this.chooseAsk();}}};
     }
@@ -1260,7 +1260,7 @@ export class WorldScene implements Scene {
         { label: "PARLA" }, { label: "ISPEZIONA" }, { label: "SCAMBIA" }, { label: "SFIDA" }, { label: "ANNULLA" }
       ]);
       this.remoteMenuPeerId = remote.id;
-      this.askLabel = `${remote.nick.slice(0, 10)}: CHE FAI?`;
+      this.askLabel = `${remote.nick}: Cosa vuoi fare?`;
       return;
     }
 

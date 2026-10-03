@@ -16,7 +16,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Area | Stato attuale | Prova |
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
-| Battaglie | Polemica, Fuorionda, virale senza schede, intento onesto, eventi al turno 2 e ricompense riunite | Apertura completa rigiocata via touch: due catture, Ellyna → Schleinix e Gianni; 374 test, carta conservata nel virale |
+| Battaglie | Polemica, Fuorionda, virale senza schede e Gianni con copione/scudo interrompibile; crescita introduttiva garantita dopo Nino | Renzino → Renzilla, Gianni vinto in sei turni via touch; 378 test, danni 2–3 → 5–6 giocati, incontri iniziali corretti dopo un KO reale |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |

@@ -112,3 +112,22 @@ test('Starter touch choice is explicit, details are pure and old taps cannot rec
  const choice=scene.touchActions[0];choice.run();choice.run();
  assert.equal(choices,1);assert.equal(stack.top,world);oldChoice.run();assert.equal(choices,1);
 });
+
+test('Second opening recruitment earns starter evolution through ordinary EXP; other allies and chapters keep their yields',async()=>{
+ const {openingRecruitmentExp}=await import('../../src/game/firstCampaign.ts');
+ for(const id of ['ellyna','giorgetta','renzino']){
+  const state=newGameState(),mon=createMonster(id,7);state.starterId=id;state.flags['opening-v2']=true;
+  state.defeatedTrainers=['praticante'];state.runStats.captures=1;
+  const before=structuredClone(mon),exp=openingRecruitmentExp(state,mon,15,true);
+  assert.deepEqual(mon,before);assert.ok(exp>=15);
+  gainExp(mon,exp,state.sondaggi);assert.equal(mon.level,8);
+  assert.equal(openingRecruitmentExp(state,mon,15,true),15);
+  const untouched=createMonster(id,6);
+  assert.equal(openingRecruitmentExp(state,untouched,15,false),15);
+  assert.equal(openingRecruitmentExp(state,createMonster('salvinott',6),15,true),15);
+  state.runStats.captures=0;assert.equal(openingRecruitmentExp(state,untouched,15,true),15);
+  state.runStats.captures=1;state.defeatedTrainers=[];assert.equal(openingRecruitmentExp(state,untouched,15,true),15);
+  state.defeatedTrainers=['praticante'];delete state.flags['opening-v2'];assert.equal(openingRecruitmentExp(state,untouched,15,true),15);
+  state.flags['opening-v2']=true;state.flags['rival1-beaten']=true;assert.equal(openingRecruitmentExp(state,untouched,15,true),15);
+ }
+});

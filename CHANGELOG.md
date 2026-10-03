@@ -2,6 +2,10 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Gianni: copione con scudo al 50% per due turni; preparazione riuscita rompe scudo e Grinta, intento e danni onesti. Nuovo atlante Higgsfield (1,5 crediti), sei turni giocati con Renzilla.
+- Apertura: incontri introduttivi fino al LV5 prima dell’evoluzione; secondo reclutamento dopo Nino dà slancio allo starter fino al LV8, salvataggi precedenti invariati.
+- Movimento: cambio direzione e passo nello stesso tocco; pareti, NPC e porte mantengono i blocchi.
+
 - Cattura virale: 3 Polemica, zero schede; disponibile anche senza carta, probabilità e costi visibili, atlante Higgsfield dedicato (1,5 crediti).
 - Vittorie: fondi, sondaggi e oggetti in un riepilogo; bonus conservati, premi dello stesso tipo sommati e jackpot celebrato separatamente.
 

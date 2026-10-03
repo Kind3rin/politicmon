@@ -70,3 +70,13 @@ test("sfida vagante: disabilitata o già presente non consuma cooldown né RNG",
   assert.equal(planWanderingChallenge(state, cadence, true, true, () => null, random), null);
   assert.equal(calls, 0);
 });
+
+
+test("opening recruits remain introductory until earned evolution, then restore all wild levels", () => {
+  const state = newGameState(); state.pos.mapId = "route1"; state.flags["opening-v2"] = true;
+  state.flags["ach:first-catch"] = true; state.starterId = "renzino"; state.party = [createMonster("renzino", 7)];
+  assert.equal(firstRecruitLevel(state, 8), 5); assert.equal(firstRecruitLevel(state, 3), 3);
+  state.dex.renzilla = "caught"; assert.equal(firstRecruitLevel(state, 8), 8);
+  delete state.dex.renzilla; state.flags["rival1-beaten"] = true; assert.equal(firstRecruitLevel(state, 8), 8);
+  delete state.flags["rival1-beaten"]; state.pos.mapId = "route2"; assert.equal(firstRecruitLevel(state, 8), 8);
+});

@@ -1,4 +1,5 @@
 import { TeachScene } from "../../scenes/TeachScene";
+import { openingRecruitmentExp } from "../firstCampaign";
 import { healingQuote } from "../supplyGuide";
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_NAMES, moveSummary, type Move } from "../../data/moves";
@@ -109,6 +110,8 @@ export class BattleScene implements Scene {
   private recruitMenu = new Menu([]);
   private recruitBall = "";
   private battery = 3;
+  private copione = false;
+  private copioneFxT = 0;
   private field?: BattleField;
   private fieldTurn = 0;
   private fieldResolved = false;
@@ -158,6 +161,8 @@ export class BattleScene implements Scene {
     this.backdrop = battleBackdropForMap(opts.state.pos.mapId);
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
+    this.copione = opts.trainer?.id === "rival1" && Boolean(this.state.flags["opening-v2"]);
+    if (this.copione) { this.battery = 2; sceneImage("battle:copione", "ui/battle/copione.png"); }
     this.isRematch = opts.isRematch ?? false;
     this.isLegendary = opts.legendary ?? false;
     this.electionDoctrine = opts.electionDoctrine ?? "none";
@@ -165,7 +170,7 @@ export class BattleScene implements Scene {
     this.onEnd = opts.onEnd;
     if (!this.trainer) sceneImage("battle:viral", "ui/battle/viral.png");
     recordBattleStarted(this.state);
-    if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary) {
+    if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary && !this.copione) {
       this.field = chooseFieldEvent(this.state.runStats.battles);
       this.push({ text: `AL SECONDO TURNO: ${this.field.name}.\n${this.field.rule}` });
       sceneImage("battle:field-events", "ui/battle/field-events.png");
@@ -185,6 +190,7 @@ export class BattleScene implements Scene {
     const lead = this.state.party.find((m) => m.hp > 0) ?? this.state.party[0];
     this.player = makeCombatant(lead);
     this.foe = makeCombatant(this.foeTeam[0]);
+    if (this.copione) this.foe.stages.atk = 2;
     this.displayHp.player = lead.hp;
     this.displayHp.foe = this.foe.mon.hp;
     this.displayExp = this.expRatio();
@@ -436,14 +442,31 @@ export class BattleScene implements Scene {
   }
 
   private drainBattery(): void {
-    if (this.trainer?.id === "rival1" && --this.battery === 0) {
+    if (!this.copione && this.trainer?.id === "rival1" && --this.battery === 0) {
       this.foe.stages.atk = Math.max(-6, this.foe.stages.atk - 1);
       this.pushFront([{ text: "BATTERIA 0%! Copione perso: GRINTA -1." }]);
     }
   }
 
+  private breakCopione(): void {
+    if (!this.copione || this.battery <= 0) return;
+    this.battery = 0;
+    this.foe.stages.atk = Math.max(-6, this.foe.stages.atk - 3);
+    this.copioneFxT = this.state.reduceEffects ? 0 : .6;
+    this.pushFront([{ pause: this.state.reduceEffects ? .12 : .6 }, { text: "FUORI COPIONE! SCUDO VIA. GRINTA -3." }]);
+  }
+
+  private copioneDamage(damage: number, move: Move): number {
+    return this.copione && this.battery > 0 && move.id !== FUORIONDA.id && damage > 0 ? Math.max(1, Math.floor(damage / 2)) : damage;
+  }
+
+  private pickFoeIntent(): Move {
+    if (this.copione && this.battery > 0 && this.foe.mon.moves.some(slot => slot.id === "comizio" && slot.pp > 0)) return MOVES.comizio;
+    return chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
+  }
+
   private takeFoeIntent(): Move {
-    const move = this.foeIntent ?? chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
+    const move = this.foeIntent ?? this.pickFoeIntent();
     this.foeIntent = null;
     return move;
   }
@@ -499,9 +522,9 @@ export class BattleScene implements Scene {
     }
     if (move.power > 0) {
       const range = damageRange(player, foe, move, { sondaggi: this.state.sondaggi });
-      return `DANNI ${range.min}-${range.max} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P`;
+      return `DANNI ${this.copioneDamage(range.min, move)}-${this.copioneDamage(range.max, move)} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P${this.copione && this.battery > 0 ? " · SCUDO ×½" : ""}`;
     }
-    return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P`;
+    return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P${this.copione && this.battery > 0 && stat ? " · ROMPE COPIONE" : ""}`;
   }
 
   private moveSteps(
@@ -564,7 +587,7 @@ export class BattleScene implements Scene {
         : calcDamage(attacker, defender, move, Math.random, { sondaggi: this.state.sondaggi });
       const civicFavored = this.electionDoctrine === "lista_civica" && side === "foe"
         && ((this.electionTurn % 2 === 1 && move.category === "fisico") || (this.electionTurn % 2 === 0 && move.category === "speciale"));
-      const appliedDamage = civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
+      const appliedDamage = side === "player" ? this.copioneDamage(result.damage, move) : civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
       steps.push({
         run: () => {
           defender.mon.hp = Math.max(0, defender.mon.hp - appliedDamage);
@@ -760,6 +783,7 @@ export class BattleScene implements Scene {
       const changed = defender.mon.hp < before.hp || defender.mon.status !== before.status || defender.gaffeTurns !== before.gaffe ||
         (Object.keys(before.own) as Array<keyof typeof before.own>).some(key => attacker.stages[key] !== before.own[key] || defender.stages[key] !== before.foe[key]);
       if (this.polemica.reward(move, changed) > 0) audio.cursor();
+      if (changed && move.power === 0 && !move.effect?.healRatio && !move.effect?.cureStatus) this.breakCopione();
     } });
 
     // KO del BERSAGLIO (colpito dalla mossa).
@@ -808,7 +832,7 @@ export class BattleScene implements Scene {
     return [...steps, ...this.consensusSteps(() => this.afterFoeDown())];
   }
 
-  private consensusSteps(after: () => void): Step[] {
+  private consensusSteps(after: () => void, recruit = false): Step[] {
     const steps: Step[] = [];
     const istruzione = hasMinistro(this.state, "istruzione");
     const base = expYield(this.foe.mon, Boolean(this.trainer), this.player.mon.level);
@@ -819,10 +843,10 @@ export class BattleScene implements Scene {
     const wave = this.state.hardMode ? 1 : sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.92;
     // MANIFESTI OVUNQUE (boost campagna): +30% EXP finché restano battaglie.
     const manifestiBonus = this.state.boostExpBattles > 0 ? 1.3 : 1;
-    const gained = Math.max(
+    const gained = openingRecruitmentExp(this.state, this.player.mon, Math.max(
       1,
       Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state) * moraleExpMultiplier(this.state.morale))
-    );
+    ), recruit);
     steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
     const teamwork = moraleExpMultiplier(this.state.morale);
     if (teamwork !== 1) steps.push({ text: teamwork > 1 ? "La squadra si fida di te: crescita +8%." : "La squadra non si sente ascoltata: crescita -8%." });
@@ -1147,7 +1171,11 @@ export class BattleScene implements Scene {
         }
       }];
     };
-    return [...apply(this.player, this.playerName()), ...apply(this.foe, `Il nemico ${this.foeName()}`)];
+    return [...apply(this.player, this.playerName()), ...apply(this.foe, `Il nemico ${this.foeName()}`), { run: () => {
+      if (this.copione && this.battery > 0 && this.foe.mon.hp > 0 && this.player.mon.hp > 0) {
+        if (this.battery === 1) this.breakCopione(); else this.battery -= 1;
+      }
+    } }];
   }
 
   // ---- Oggetti ----
@@ -1307,7 +1335,7 @@ export class BattleScene implements Scene {
       },
       { text: `I dati di ${this.foeName()} sono nel POLITICDEX.` }
     ];
-    steps.push(...this.consensusSteps(() => {}));
+    steps.push(...this.consensusSteps(() => {}, true));
     this.endBattle("caught");
     return steps;
   }
@@ -1334,7 +1362,7 @@ export class BattleScene implements Scene {
     ));
     if (mode === "menu") return this.mainMenu.items.map((item, index) => action(
       index === 1 && !this.trainer ? "CATTURA" : index === 4 && !this.trainer ? "RISERVE" : item.label, () => this.chooseMainAction(index),
-      index === 2 ? "Scegli chi entra · nemico risponde" : index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
+      index === 2 ? "Scegli chi entra · nemico risponde" : index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.copione && this.battery > 0 ? `Scudo ×½ · prepara o resisti ${this.battery} ${this.battery === 1 ? "turno" : "turni"}` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
       index === 2 && !this.hasBenchAlive() || index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
     ));
     if (mode === "fight") return [
@@ -1371,6 +1399,7 @@ export class BattleScene implements Scene {
     }
     dt *= this.state.battleSpeed === 2 ? 2 : 1;
     this.finisherT = Math.max(0, this.finisherT - dt);
+    this.copioneFxT = Math.max(0, this.copioneFxT - dt);
     this.fieldFxT = Math.max(0, this.fieldFxT - dt);
     this.legendBanner = Math.max(0, this.legendBanner - dt);
     this.firstSeenBanner = Math.max(0, this.firstSeenBanner - dt);
@@ -1431,7 +1460,7 @@ export class BattleScene implements Scene {
           // A blocked Click Day expires with its round; no retroactive bonus.
           if (this.field?.id === "click" && this.fieldTurn >= 2) this.fieldResolved = true;
           this.mainMenu.index = 0;
-          this.foeIntent ??= chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
+          this.foeIntent ??= this.pickFoeIntent();
           this.mode = "menu";
         }
         return;
@@ -1849,6 +1878,10 @@ export class BattleScene implements Scene {
     // restano fermi (l'UI non deve "ballare" sotto le dita).
     ctx.restore();
 
+    if (this.copione) {
+      screen.panel(132, 6, 102, 17, "card");
+      screen.textFit(this.battery > 0 ? `COPIONE ${this.battery} 50%` : "COPIONE OFF", 138, 11, 90, this.battery > 0 ? "#8c5b12" : "#26745d");
+    }
     // Riquadro testo.
     screen.panel(2, VIEW_H - 44, VIEW_W - 4, 42, "dialog");
     if (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit") {
@@ -1965,6 +1998,12 @@ export class BattleScene implements Scene {
       }
     }
     this.msg.draw(screen);
+    if (this.copioneFxT > 0) {
+      const atlas = sceneImage("battle:copione", "ui/battle/copione.png");
+      const frame = Math.min(3, Math.floor((.6 - this.copioneFxT) / .15));
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
+      screen.textCenter("DOMANDA NON PREVISTA!", 120, 119, "#fffaf0");
+    }
     if (this.finisherT > 0) {
       const atlas = sceneImage("battle:fuorionda", "ui/battle/fuorionda.png");
       const frame = Math.min(3, Math.floor((.8 - this.finisherT) / .2));

@@ -1,6 +1,7 @@
 import type { Facing } from "../../art/characters";
 import { pickWanderer, wandererLevel, type WanderingDef } from "../../data/encounters";
 import type { TrainerDef } from "../../data/trainers";
+import { firstEvolutionDone } from "../firstCampaign";
 import type { GameState } from "../state";
 
 export const MIN_FREE_STEPS = 8;
@@ -9,9 +10,10 @@ export const WANDERER_CHANCE = 0.02;
 
 /** The first recruit teaches risk without outlevelling the only party member. */
 export function firstRecruitLevel(state: GameState, rolled: number): number {
-  if ((state.pos.mapId !== "route1" && !(state.pos.mapId === "borgo" && state.flags["opening-v2"])) || state.flags["ach:first-catch"]) return rolled;
+  if (state.pos.mapId !== "route1" && !(state.pos.mapId === "borgo" && state.flags["opening-v2"])) return rolled;
   const lead = state.party.find(mon => mon.hp > 0);
-  return lead ? Math.min(rolled, lead.level) : rolled;
+  if (state.flags["opening-v2"] && !state.flags["rival1-beaten"] && !firstEvolutionDone(state)) return Math.min(rolled, lead?.level ?? 5, 5);
+  return !state.flags["ach:first-catch"] && lead ? Math.min(rolled, lead.level) : rolled;
 }
 
 export interface WandererCadence {

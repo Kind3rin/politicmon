@@ -414,6 +414,36 @@
       "balanceBefore": 351.97,
       "balanceAfter": 350.47,
       "sha256": "2cbb7a68e101a6f119e3ef10a8cd1f37180d0fa8771e1673c2bdac3f5735e98e"
+    },
+    {
+      "id": "battle-copione",
+      "kind": "battle-animation",
+      "jobId": "2cb68c8c-7ee2-497c-8761-79af03fb025e",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_055903_2cb68c8c-7ee2-497c-8761-79af03fb025e.png",
+      "path": "public/sprites/ui/battle/copione.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Game battle effect atlas for POLITICMON, playful Italian political satire RPG. Strict crisp 16-bit pixel art designed for low-resolution handheld screen, limited palette navy teal mint amber cream, no gradients no blur. One 16:9 sheet divided into exactly four equal rectangular frames in 2 columns by 2 rows, no gutters and no drawn borders. Each frame repeats one centered generic unbranded smartphone with the same scale and position, full opaque dark navy background, generous quiet margins. Phone viewed head-on, cream paper script with simple horizontal lines displayed on its screen; no legible letters or words anywhere. Upper left frame: lit teal screen with tiny green battery bars and a small luminous shield surrounding phone. Upper right: script slips off screen in three cream rectangular scraps and shield begins to crack. Lower left: amber geometric pixel burst, shield breaking into big clean square pieces, phone intact with dim screen. Lower right: screen completely dark and phone intact, broken shield scraps falling away, last few amber particles. No people, no real logos, no emoji, no interface labels, no text. Clear graphic visual metaphor for a politician losing their prewritten script when an unexpected question breaks the performance. Neutral in-game visual, not explosion of a real device. Distinct readable silhouettes and consistent phone shape across all four frames."
+      },
+      "width": 480,
+      "height": 270,
+      "model": "gpt_image_2_5",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "sourceSha256": "5aed8b132b2062241f0d9cb0a4fcd040898ef78c69f2e80575974a457f207149",
+      "sha256": "ffba2cb23dade7cc3f24c35f827a630b51279e8e2a8efa3ddb1ed4fa3577268f",
+      "processing": "Nearest-neighbor 480x270 delivery resize, 48-color palette; four equal 240x135 frames, 2x2 atlas.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 350.47,
+      "balanceAfter": 348.97
     }
   ]
 }

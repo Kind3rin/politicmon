@@ -358,3 +358,50 @@ test("failed viral recruitment keeps paper and gives the foe its response", () =
   thrown[2].run(); battle.queue.forEach((step: any) => step.run?.());
   assert.equal(counters, 1); assert.equal(battle.state.bag.scheda, 5); assert.equal(battle.polemica.value, 0);
 });
+
+test("copione shields real damage and its preview; successful setup removes it without changing announced intent", () => {
+  const fixture = (shield: boolean) => {
+    const b = Object.create(BattleScene.prototype) as any;
+    b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 9));
+    b.state = { sondaggi: 50, reduceEffects: true }; b.copione = shield; b.battery = 2; b.foe.stages.atk = shield ? 2 : 0;
+    b.polemica = new Polemica(); b.koCheckSteps = () => []; b.pushFront = () => {}; b.fx = { onHit() {} };
+    return b;
+  };
+  const apply = (b: any, move: typeof MOVES.comizio) => {
+    const before = b.foe.mon.hp;
+    for (const step of b.moveSteps("player", b.player, b.foe, move, "ELLYNA", true)) step.run?.();
+    return before - b.foe.mon.hp;
+  };
+  const random = Math.random; Math.random = () => .5;
+  try {
+    const normal = fixture(false), shield = fixture(true);
+    assert.match(shield.moveHint(MOVES.corteo), /SCUDO ×½/);
+    const damage = apply(normal, MOVES.corteo);
+    assert.equal(apply(shield, MOVES.corteo), Math.max(1, Math.floor(damage / 2)));
+    assert.equal(shield.copioneDamage(0, MOVES.comizio), 0);
+    assert.equal(shield.copioneDamage(15, FUORIONDA), 15);
+    shield.foeIntent = shield.pickFoeIntent(); assert.equal(shield.foeIntent.id, "comizio");
+    assert.match(shield.moveHint(MOVES.ztl), /ROMPE COPIONE/);
+    apply(shield, MOVES.ztl);
+    assert.equal(shield.battery, 0); assert.equal(shield.foe.stages.atk, -1); assert.equal(shield.copioneFxT, 0);
+    assert.equal(shield.takeFoeIntent().id, "comizio"); assert.doesNotMatch(shield.moveHint(MOVES.corteo), /SCUDO/);
+    shield.breakCopione(); assert.equal(shield.foe.stages.atk, -1);
+  } finally { Math.random = random; }
+});
+
+test("failed and capped preparations cannot break the script; battery lasts two complete consuming turns", () => {
+  const b = Object.create(BattleScene.prototype) as any;
+  b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("tajanide", 9));
+  b.state = { reduceEffects: true }; b.copione = true; b.battery = 2; b.foe.stages.atk = 2;
+  b.polemica = new Polemica(); b.koCheckSteps = () => []; const messages: string[] = [];
+  b.pushFront = (steps: any[]) => messages.push(...steps.flatMap(s => s.text ? [s.text] : []));
+  const apply = () => { for (const s of b.moveSteps("player", b.player, b.foe, MOVES.ztl, "ELLYNA", true)) s.run?.(); };
+  apply(); assert.equal(b.battery, 2); assert.doesNotMatch(b.moveHint(MOVES.ztl), /ROMPE/);
+  b.foe = makeCombatant(createMonster("giorgetta", 9)); b.foe.stages.atk = 2; b.foe.stages.spd = -6;
+  apply(); assert.equal(b.battery, 2);
+  b.drainBattery(); assert.equal(b.battery, 2); // legacy start-of-turn call does nothing
+  const finishTurn = () => { for (const s of b.endOfTurnSteps()) s.run?.(); };
+  finishTurn(); assert.equal(b.battery, 1); assert.equal(b.foe.stages.atk, 2);
+  finishTurn(); assert.equal(b.battery, 0); assert.equal(b.foe.stages.atk, -1);
+  finishTurn(); assert.equal(b.foe.stages.atk, -1); assert.equal(messages.filter(s => s.includes("FUORI COPIONE")).length, 1);
+});

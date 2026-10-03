@@ -2189,7 +2189,7 @@ export class WorldScene implements Scene {
   private startFirstDebate(): void {
     const id=this.state.starterId,rivalStarterId=RIVAL_COUNTER[id];
     if(!rivalStarterId || this.state.flags["rival1-beaten"]) return;
-    const def:TrainerDef={id:"rival1",name:"RIVALE GIANNI",pal:"rival",team:[[rivalStarterId,this.state.flags["opening-v2"] ? 9 : 4,this.tutorialRivalMoves(rivalStarterId)]],intro:["SQUADRE CURATE. TELEFONO AL 2%.\nIL MIO PROGRAMMA È LÌ DENTRO."],defeat:["IL CONSULENTE DICE CHE DEVO CAMBIARE TONO. HO SOLO IL VIVAVOCE."],money:150};
+    const def:TrainerDef={id:"rival1",name:"RIVALE GIANNI",pal:"rival",team:[[rivalStarterId,this.state.flags["opening-v2"] ? 9 : 4,this.tutorialRivalMoves(rivalStarterId)]],intro:[this.state.flags["opening-v2"] ? "IL COPIONE MI PROTEGGE.\nLE DOMANDE NON ERANO PREVISTE." : "SQUADRE CURATE. TELEFONO AL 2%.\nIL MIO PROGRAMMA È LÌ DENTRO."],defeat:["IL CONSULENTE DICE CHE DEVO CAMBIARE TONO. HO SOLO IL VIVAVOCE."],money:150};
       this.startTrainerBattle(def,(result)=>{
         if(result!=="win"){
           this.say([this.state.flags["opening-v2"] ? "GIANNI: LA DIRETTA ERA SPENTA.\nRIPROVIAMO QUANDO VUOI." : "QUIRINO: RIPROVA DAL LABORATORIO.\nLA SQUADRA È CURATA."]);
@@ -3045,10 +3045,7 @@ export class WorldScene implements Scene {
       return;
     }
     const facing = dir as Facing;
-    if (pos.facing !== facing) {
-      pos.facing = facing;
-      return;
-    }
+    pos.facing = facing;
     const delta = DIR_DELTA[facing];
     const nx = pos.x + delta.dx;
     const ny = pos.y + delta.dy;

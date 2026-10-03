@@ -432,7 +432,7 @@ export function currentQuest(state: GameState): QuestDef | null {
     const opening = OPENING_QUEST_ORDER.map(id => QUESTS.find(q => q.id === id)!).find(q => !q.isDone(state));
     if (opening?.id === "grow") {
       if (state.party.some(mon => mon.speciesId === state.starterId && mon.level >= 8)) return { ...opening, target: undefined, step: "Squadra: scegli EVOLVI per la nuova forma." };
-      if (state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, step: "Erba a sud di Nino: raggiungi LV8.", hint: "Pratica vinta: vinci nell'erba a sud di Nino. Usa un caffè se i PV sono bassi; al livello 8 scegli EVOLVI." };
+      if (state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, step: "Recluta a sud di Nino: slancio LV8.", hint: "Recluta un altro alleato nell'erba a sud di Nino: lo starter riceve slancio fino al livello 8. Usa un caffè se i PV sono bassi, poi scegli EVOLVI." };
     }
     if (opening) return opening;
   }

@@ -1,5 +1,8 @@
 # Politicmon: risorse Higgsfield
 
+Copione di Gianni: atlante 480×270, quattro fasi viste e giocate; job `2cb68c8c-7ee2-497c-8761-79af03fb025e`.
+**1,5 crediti**, saldo **350,47 → 348,97**; sorgente, prompt, SHA e conversione selettiva nel manifest esistente.
+
 Cattura virale: atlante 480×270, quattro fasi; job `4b4b188c-061a-4e9d-867d-0e9daac6ee85`, `gpt_image_2_5` high.
 **1,5 crediti**, saldo **351,97 → 350,47**; fonte/SHA e conversione ripetibile in `higgsfield-assets.json` e `prepare-higgsfield-assets.py --asset battle-viral`.
 

@@ -25,6 +25,7 @@
   },
   "processing": {
     "dimensions": {
+      "evolution-portrait": [480, 720],
       "battle-portrait": [240, 360],
       "battle": [
         240,
@@ -529,6 +530,33 @@
       "sourceSize": [688, 1024],
       "sourceSha256": "46902b53316c2c1fcd4d132078bcedb36724397a135dc1d04a4c930a82f5bc92",
       "sha256": "2e06640d03f385a1ea714581437cf477b9043ef499c9a08b17a0b19e4a2dcb83"
+    },
+    {
+      "id": "evolution-portrait",
+      "kind": "evolution-portrait",
+      "jobId": "32b70d2e-5248-468e-89cf-46592e69f7ff",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_125418_32b70d2e-5248-468e-89cf-46592e69f7ff.png",
+      "path": "public/sprites/ui/evolution-portrait.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "aspect_ratio": "2:3",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production sprite animation atlas for POLITICMON, an Italian political satire monster RPG. Crisp coherent 16-bit pixel art, limited deep navy #101b32, dark teal, warm cream, amber gold and jade palette. An opaque PORTRAIT 2:3 atlas divided into EXACTLY FOUR equal panels, 2 columns and 2 rows, NO gutters, borders or writing. Each panel is independently PORTRAIT 2:3, repeats the SAME live television studio career-unveiling stage at exactly identical alignment. Empty circular amber podium centered horizontally at 58 percent of panel height. Empty quiet navy space ABOVE the platform from 20 to 54 percent for a runtime monster sprite. Two narrow vertical teal studio curtains at the outermost left and right edges, small unbranded television cameras in the extreme upper corners, a blank cream placard on the far upper rear wall. Upper 15 percent and lower 30 percent of EACH panel completely quiet dark navy for runtime text overlay. No people, creatures, silhouettes, letters, digits, symbols of real parties, gradients or blur. Upper-left: podium dim outline and curtains almost closed at outer edges; upper-right: geometric amber light rays from BEHIND the still EMPTY podium, three square paper confetti at far left; lower-left: warm gold spotlight strongest, six sparse square confetti kept at edges outside runtime sprite area; lower-right: podium settles into jade-and-gold outline, sparse static confetti at outer edges, cameras point at the EMPTY podium. A satirical television reveal of a political rebrand, restrained and theatrical. Keep every important feature inside each cell and the entire character/text zones empty. Must read at 240x360 pixels per panel. Four panels, no characters or UI baked into the artwork."
+      },
+      "width": 480,
+      "height": 720,
+      "model": "gpt_image_2_5",
+      "processing": "Nearest-neighbor 480x720 delivery resize; 48-color palette, four equal 240x360 frames.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 344.47,
+      "balanceAfter": 342.97,
+      "sourceSize": [688, 1024],
+      "sourceSha256": "b52443db7e39d2072d5f6bf4381c3bb603a551e55ff8d454cc20e66c6080e674",
+      "sha256": "14218b8230d6360697a9057a8f01301ccf61364491d837cf44cbc6195f34faf9"
     }
   ]
 }

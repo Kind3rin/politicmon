@@ -96,3 +96,30 @@ test("Squad card opens an earned evolution directly; mirror parties cannot chang
  const mirror=new PartyScene(stack,input,state,{mode:'view',partyOverride:state.party});stack.push(mirror);keys.add('a');mirror.update();
  assert.equal(mirror.touchActions![0].disabled,true);mirror.touchActions![0].run();assert.equal(stack.top,mirror);
 });
+
+test("Career details keep direct tabs and stale review commands cannot accept a covered choice",()=>{
+ const mon=createMonster('ellyna',8),before=JSON.stringify(mon),stack=new SceneStack();let accepted=0;
+ const input={wasPressed:()=>false,reset:()=>{}} as unknown as Input;
+ const scene=new EvolutionScene(stack,input,'ellyna','schleinix',()=>accepted++,{mon});stack.push(scene);
+ const review=scene.touchActions!;review[2].run();review[0].run();
+ assert.equal(accepted,0);assert.ok(scene.touchActions!.some(a=>a.label==='MOSSE'));
+ const tabs=scene.touchActions!;tabs.find(a=>a.label==='MOSSE')!.run();tabs.find(a=>a.label==='EVOLVI')!.run();
+ assert.equal(JSON.stringify(mon),before);assert.ok(scene.touchActions!.some(a=>a.label==='VALORI'));
+ const accept=scene.touchActions!.find(a=>a.label==='EVOLVI')!;stack.push({update(){},draw(){}});accept.run();assert.equal(accepted,0);stack.pop();
+ accept.run();const skip=scene.touchActions![0];assert.equal(skip.label,'SALTA');skip.run();skip.run();
+ const proceed=scene.touchActions![0];assert.equal(proceed.label,'CONTINUA');proceed.run();proceed.run();scene.update(100);
+ assert.equal(accepted,1);assert.equal(stack.top,undefined);
+});
+
+test("Direct squad move inspection is read-only, keeps actual PP and rejects stale candidate commands",()=>{
+ const state=newGameState(),stack=new SceneStack(),input={wasPressed:()=>false,reset:()=>{}} as unknown as Input;
+ const mon=createMonster('giorgiagon',9);mon.hp=4;mon.status='scandalo';mon.moves[0].pp=0;
+ state.party=[mon,createMonster('salvinott',5)];const before=JSON.stringify(state);
+ const scene=new PartyScene(stack,input,state,{mode:'view'});stack.push(scene);scene.touchActions![0].run();
+ scene.touchActions!.find(a=>a.label==='MOSSE')!.run();const moves=scene.touchActions!;
+ assert.match(moves[0].hint!,/PP 0\//);moves[1].run();assert.equal(JSON.stringify(state),before);
+ assert.ok(scene.touchActions!.some(a=>a.label==='SCORRI'));
+ moves.find(a=>a.label==='PROFILO')!.run();moves[0].run();assert.ok(scene.touchActions!.some(a=>a.label==='DIFESE'));
+ scene.touchActions!.find(a=>a.label==='SQUADRA')!.run();scene.touchActions![1].run();moves[0].run();
+ assert.equal(JSON.stringify(state),before);assert.ok(scene.touchActions!.some(a=>a.label==='MOSSE'));
+});

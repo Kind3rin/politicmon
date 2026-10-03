@@ -1,5 +1,8 @@
 # Politicmon: risorse Higgsfield
 
+Palco verticale di carriera: atlante 480×720, 125.322 B; job `32b70d2e-5248-468e-89cf-46592e69f7ff`, originale visto e reclutamento/crescita giocati. Renderer riallinea di 35 px nativi le due fasi inferiori.
+**1,5 crediti**, saldo **344,47 → 342,97**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
+
 Prato verticale del Percorso 1: 240×360, 44.196 B; job `50e472d0-f0ed-413c-9608-33c2db789dd6`, originale visto e campo giocato fino a Gianni.
 **1,5 crediti**, saldo **345,97 → 344,47**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
 

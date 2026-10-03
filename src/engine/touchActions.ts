@@ -11,9 +11,10 @@ let signature = "";
 let current: readonly TouchAction[] = [];
 
 /** Scene-owned commands: native buttons at thumb height, never synthetic input. */
-export function renderTouchActions(actions?: readonly TouchAction[], layout?: "battle"): void {
+export function renderTouchActions(actions?: readonly TouchAction[], layout?: "battle" | "growth"): void {
   if (!document.body.classList.contains("touch")) return;
   document.body.classList.toggle("battle-arena", layout === "battle");
+  document.body.classList.toggle("growth-stage", layout === "growth");
   current = actions ?? [];
   document.body.classList.toggle("battle-touch", current.length > 0);
   document.body.classList.toggle("battle-moves", current.some(action => action.order));

@@ -1,5 +1,6 @@
 import { TeachScene } from "../../scenes/TeachScene";
 import { drawMonsterSprite } from "../../art/monsters";
+import { drawCareerStage, careerPodiumY } from "../../ui/careerStage";
 import { openingRecruitmentExp } from "../firstCampaign";
 import { healingQuote } from "../supplyGuide";
 import { ITEMS } from "../../data/items";
@@ -1829,6 +1830,7 @@ export class BattleScene implements Scene {
     this.fx.viewHeight = screen.height;
     const g = battleGeometry(screen.height);
     if (this.recruitReceipt || this.growthReceipt) {
+      if (screen.height > VIEW_H) { this.drawPortraitReceipt(screen); return; }
       screen.clear("#101b29");
       ctx.save();
       ctx.translate(0, Math.round((screen.height - VIEW_H) / 2));
@@ -2112,6 +2114,38 @@ export class BattleScene implements Scene {
     screen.textFit(receipt.growth, 8, 141, 224, INK);
     screen.textFit(receipt.levels, 8, 151, 224, "#26745d");
     wrapText(receipt.modifiers.join(" · "), 36).slice(0, 2).forEach((line, i) => screen.text(line, 8, 161 + i * 8, "#8c5b12"));
+  }
+
+  private drawPortraitReceipt(screen: Screen): void {
+    const recruit = this.recruitReceipt, growth = this.growthReceipt, elapsed = recruit?.elapsed ?? growth!.elapsed;
+    const mon = recruit ? this.foe.mon : this.player.mon;
+    drawCareerStage(screen, this.state.reduceEffects ? 3 : Math.min(3, Math.floor(elapsed / .3)));
+    screen.rect(0, 0, 240, 19, "#17243d");
+    screen.text(recruit ? "RECLUTATO!" : "CRESCITA!", 8, 6, recruit ? "#67e2b4" : "#ffe38a");
+    screen.textRight(`LV${mon.level}`, 232, 6, "#fffaf0");
+    screen.textCenter(recruit ? this.foeName() : this.playerName(), 120, 26, "#fffaf0");
+    const bottom = careerPodiumY(screen.height), size = Math.min(140, bottom - 45);
+    drawMonsterSprite(screen, mon.speciesId, 120 - size / 2, bottom - size * .85, size, size * .85, { memeFormId: mon.memeFormId, animationTime: this.state.reduceEffects ? 0 : elapsed });
+    const y = screen.height - 90;
+    screen.panel(6, y, 228, 42, "card");
+    if (recruit) {
+      screen.text(recruit.destination, 14, y + 7, "#26745d");
+      screen.text(recruit.newDex ? "DEX +1" : "DEX GIA' NOTO", 14, y + 19, INK);
+      screen.textRight(`SONDAGGI +${recruit.polls}`, 224, y + 31, "#8c5b12");
+    } else {
+      screen.text(`+${growth!.gained} CONSENSO`, 14, y + 7, "#26745d");
+      screen.text(`LV${growth!.previousLevel} > ${mon.level}`, 14, y + 19, INK);
+      const exp = growth!.previousExp + growth!.gained * (this.state.reduceEffects ? 1 : Math.min(1, elapsed / .8));
+      let level = growth!.previousLevel;
+      while (level < LEVEL_CAP && exp >= expForLevel(level + 1)) level++;
+      const ratio = level >= LEVEL_CAP ? 1 : (exp - expForLevel(level)) / (expForLevel(level + 1) - expForLevel(level));
+      screen.rect(14, y + 31, 84, 5, "#293b50");
+      screen.rect(14, y + 31, Math.round(84 * Math.max(0, Math.min(1, ratio))), 5, "#67e2b4");
+      screen.textRight(mon.level >= LEVEL_CAP ? "MASSIMO" : `PROSSIMO LV${mon.level + 1}`, 224, y + 31, "#8c5b12");
+    }
+    screen.panel(2, screen.height - 44, 236, 42, "card");
+    const lines = recruit ? [recruit.growth, recruit.levels, ...wrapText(recruit.modifiers.join(" · "), 36)] : [...wrapText(growth!.modifiers.join(" · ") || "CONSENSO OTTENUTO", 36), growth!.shared];
+    lines.filter(Boolean).slice(0, 4).forEach((line, i) => screen.textFit(line, 8, screen.height - 37 + i * 8, 224, i === 1 ? "#26745d" : INK));
   }
 
   private drawGrowthReceipt(screen: Screen): void {

@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Progressione PWA verticale: evoluzione, reclutamento e crescita occupano lo schermo con un palco comune; confronto, salto e ritorno mantengono i comandi al pollice. Atlante Higgsfield: 1,5 crediti.
+- Squadra e apprendimento: quattro fatti distinti, mosse con PP reali direttamente toccabili, confronto nuova/sostituita a tutta altezza e dettagli senza perdere i pulsanti. Schleinix LV9/Articolo 1 riaperti offline con gli altri PP conservati.
+
 - Prime lotte del Percorso 1 in PWA verticale: arena a tutta altezza, personaggi/colpi/PV ancorati e controlli stabili tra scelta e azione; menu duplicati sostituiti dalla regola di campo o dall’intento nemico, con bersaglio e potenza corretti. Fondale Higgsfield verticale: 1,5 crediti.
 - Eventi di campo: tolti annuncio iniziale e schermata separata; avviso breve nell’arena, recupero PV effettivo e pausa di 0,25 s. Click Day, Par Condicio e sondaggio conservano effetti e applicazione unica.
 

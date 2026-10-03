@@ -16,26 +16,26 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Area | Stato attuale | Prova |
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
-| Reclutamento | Riepilogo automatico di 1,8 s; starter vivo conserva lo slancio dalla panchina, dati salvati prima di Continua | Salvinott recluta, Renzino7→8→Renzilla; Gianni sei turni; mosse/evoluzione verificate; KO esclusi dallo slancio, 398 test |
+| Reclutamento | Riepilogo automatico di 1,8 s, palco verticale condiviso; crescita dello starter vivo in panchina e salvataggio prima di Continua | Salvinott5 reclutato, Schleinix8→9; quattro candidati e PP riaperti offline; 404 test |
 | Battaglie | Arena verticale del Percorso 1, intento/bersaglio corretti, campo senza pagina aggiuntiva; Polemica/cattura/crescita conservate | Giorgiagon8 batte Gianni in sei turni; sondaggio +2 PV reali, evoluzione dalla panchina; 402 test |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia/coesione e promesse con scadenza; scelte civiche in un tocco, costi visibili e risultato persistente | Bus giocato: 1560→1380€, fiducia50→62, coesione60→66; 394 test, blocco doppio pagamento e annullamento |
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Quattro fatti, volti avvistati, filtri diretti e dettagli habitat/evoluzioni su richiesta | Schede note/ignote, filtri e due rami evolutivi giocati via touch |
-| Schede squadra | Quattro fatti iniziali; evoluzione diretta, mosse/dati/difese/archivio su richiesta | Partita touch su squadra guadagnata e unit test |
-| Evoluzioni | Prima forma al LV8, prossima mossa LV9; quattro fatti, confronto facoltativo, animazione Higgsfield e ritorno automatico | Ellyna → Schleinix giocata, unit test; saldo 352,47 |
+| Schede squadra | Quattro fatti in carte distinte, mosse con PP reali direttamente toccabili; evoluzione/dati/difese/archivio su richiesta | Schleinix9: PP 17/15/24/19 riaperti offline; consultazione senza mutazioni e comandi obsoleti protetti |
+| Evoluzioni | Prima forma al LV8, prossima mossa LV9; confronto verticale facoltativo con schede touch persistenti, palco e salto diretto | Ellyna → Schleinix giocata offline, PP conservati; tre formati touch, 404 test |
 | Borsa/negozio | Cura in due scelte, PV effettivi e ritorno automatico; filtri e dettagli facoltativi | Caffè giocato: 17 → 27 PV, quantità 6 → 5 |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 105 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
 | Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 153 viste, unit test e prove di rete |
-| Apprendimento | Scelta touch in due tocchi, nuova/sostituita insieme, dettagli facoltativi; archivio diretto e rinuncia senza perdita | Giorgiagon LV9: Fiammatricolore recuperata e giocata, LV10 e 9 PP riaperti offline; 369 test e sei formati senza overflow |
+| Apprendimento | Scelta touch in due tocchi, nuova/sostituita insieme a tutta altezza, dettagli facoltativi e ritorno automatico | Articolo 1 guadagnata al LV9, Ripensa annulla; sostituzione e riavvio offline con altri PP invariati; 360×640/412×915/915×412 |
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Titolo/slot/starter diretti, scheda starter con quattro fatti, pausa con sei azioni, cure con oggetto/scorta/PV anticipati e ritorno automatico | Prova touch: cura 13→21 PV, caffè 6→5; slot protetti; 360 test |
 | Riserve e direzione iniziale | Borsa di lotta touch, PV/status/scorte e contrattacco visibili; blocco sprechi/Coppa; obiettivi concreti dopo Nino | Cura giocata 20→30/31, caffè 6→5; 363 test; Renzilla/Gianni giocati, cura 34→39 PV e caffè 5→4; sei formati |
 | Cambio in lotta | Tutte le riserve direttamente toccabili, costo anticipato, cambio gratuito senza sì/no; lista con palette coerente | Salvinott schierato in due tocchi, annullamento e vittoria giocati; 366 test, mirror/KO/contrattacco; sei formati senza overflow |
-| Cornice esterna | Mondo a tutta altezza e prime lotte verticali con controlli stabili, due righe per quattro azioni; orizzontale conserva i comandi laterali | 412×915 arena361; 360×640 vista220 e 915×412 vista180 senza overflow DOM; POCO fisico non disponibile |
+| Cornice esterna | Mondo, prime lotte e progressione verticali; controlli stabili tra scelta/dettagli/animazione, orizzontale con comandi laterali | 412×915 vista361; 360×640 vista220 e 915×412 vista180 senza overflow DOM; POCO fisico non disponibile |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |
 | Capitale | Percorso 3 e prove della Tower volontari, satira di foto/conto/agenda, guida ai rifornimenti e veicoli | Tre partite nuove fino a Dazio; briefing nativi nei due motori |
@@ -53,14 +53,14 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | PWA | Scocca Android rivista, 20 layout/sei rotazioni; release locale con 798 asset Higgsfield e 19 tracce AAC offline | MOBILE-PWA-LAYOUT, GOVERNO-VERBALE; `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 345,97; spesa cumulativa 540,00 crediti. Non sono stati attivati acquisti
+verificato: 342,97; spesa cumulativa 543,00 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: crescita nella squadra
+## Ultimo round: carriera verticale
 
-Renzino evoluto in panchina dopo il reclutamento con Salvinott; vittoria su Gianni in sei turni. Crescita KO riunita in 1,6 s, scelta Stai Sereno conservata e mossa giocata.
-398 test, build e salvataggio offline (Renzilla9, Stai Sereno 8 PP); 838 risorse precache; atlante Higgsfield 1,5 crediti, saldo 345,97. Nessuna dichiarazione di prova sul POCO fisico.
-Piacevolezza umana della slice e vuoto verticale delle lotte restano aperti; il progetto continua.
+Campagna touch guadagnata: due catture → Ellyna8/Schleinix → Gianni vinto in quattro turni → Salvinott → Articolo 1 LV9. Palco verticale e consultazione senza cambiare i comandi.
+404 test, build e riavvio offline (quattro candidati, PP 17/15/24/19); 840 risorse precache; Higgsfield 1,5 crediti, saldo 342,97. Tre formati emulati, POCO fisico non provato. Codice completo gzip 369.178 B: 4.634 B oltre il budget, da recuperare.
+Piacevolezza umana della slice resta da verificare; notifica starter e carriera della forma finale hanno ancora attriti. Il progetto continua.
 
 ## Round precedente: prima crescita
 
@@ -154,7 +154,7 @@ Il round precedente [Comandi e campagne nuove](CONTROLLI-CAMPAGNE-VERBALE.md) co
   ma un vecchio asset presente non deve essere considerato un redesign finito.
 - Conservare salvataggi e stato durante la consultazione; pagamenti, PP e
   ricompense avvengono nelle azioni che li dichiarano.
-- Rispettare i budget misurati: iniziale ≤250 KiB gzip, totale ≤350 KiB, p95 ≤33,4 ms
+- Rispettare i budget correnti: iniziale ≤250 KiB gzip, totale ≤356 KiB (limite già adottato per Dex/eventi), p95 ≤33,4 ms
   sotto CPU Chromium ×4. Le nuove funzioni richiedono rimozione di codice morto
   o caricamento modulare, non l'aumento silenzioso dei limiti.
 - Aggiornare le guide alla fine di ogni round, distinguendo prove eseguite e

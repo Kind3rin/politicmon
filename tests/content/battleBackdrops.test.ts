@@ -44,4 +44,7 @@ test("il fondale verticale della slice è nativo e resta leggero per il precache
   const png = readFileSync(new URL("../../public/sprites/ui/battle/prato-portrait.png", import.meta.url));
   assert.equal(png.readUInt32BE(16), 240); assert.equal(png.readUInt32BE(20), 360);
   assert.ok(png.length < 60000);
+  const stage = readFileSync(new URL("../../public/sprites/ui/evolution-portrait.png", import.meta.url));
+  assert.equal(stage.readUInt32BE(16), 480); assert.equal(stage.readUInt32BE(20), 720);
+  assert.ok(stage.length < 150000);
 });

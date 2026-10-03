@@ -7,8 +7,11 @@ import type { Screen } from "../engine/screen";
 import { speciesOf, type Monster } from "../game/monster";
 import { moveNotes } from "../game/supplyGuide";
 import { drawScreenHeader, Menu, MessageBox, wrapText, INK } from "../ui/widgets";
+import { drawMonsterSprite } from "../art/monsters";
 
 export class TeachScene implements Scene {
+  readonly expandedViewport = true;
+  readonly touchLayout = "growth" as const;
   private menu: Menu;
   private msg = new MessageBox();
   private done = false;
@@ -16,6 +19,7 @@ export class TeachScene implements Scene {
   private inspect = false;
   private page = 0;
   private scroll = 0;
+  private viewHeight = 180;
   private replacement?: Monster["moves"][number];
   constructor(private stack: SceneStack, private input: Input, private mon: Monster, private moveId: string,
     private onLearned: () => void, private options: { source?: "level" | "directive" | "archive" } = {}) {
@@ -64,7 +68,7 @@ export class TeachScene implements Scene {
     })), action("DETTAGLI", "Tutti gli effetti", () => info(0)), action("RINUNCIA", "Nessuna perdita", () => this.close())];
   }
   update(dt: number): void {
-    if (this.msg.isOpen) { this.msg.update(dt, this.input); return; }
+    if (this.msg.isOpen) { this.msg.update(dt, this.input, this.viewHeight); return; }
     if (this.done) return;
     if (this.inspect) {
       if (this.input.wasPressed("b") || this.input.wasPressed("start")) { this.inspect = false; return; }
@@ -80,24 +84,28 @@ export class TeachScene implements Scene {
     const action = this.mon.moves.length >= 4 ? this.menu.update(this.input) : this.input.wasPressed("a") ? "select" : this.input.wasPressed("b") ? "cancel" : null;
     if (action === "cancel") this.close(); if (action === "select") this.choose();
   }
-  private card(screen: Screen, id: string, pp: number, y: number, label: string): void {
-    const move = MOVES[id]; screen.panel(6, y, 228, 62, "card");
+  private card(screen: Screen, id: string, pp: number, y: number, label: string, h = 62): void {
+    const move = MOVES[id]; screen.panel(6, y, 228, h, "card");
     screen.text(`${label}: ${move.name}`, 14, y + 6, INK);
     screen.text(`${move.type} / PP ${pp}/${move.pp} / ${move.accuracy}%`, 14, y + 19, "#59657d");
     wrapText(moveSummary(move).replace(/^DANNO /, "POTENZA "), 35).slice(0, 3).forEach((line, i) => screen.text(line, 14, y + 32 + i * 9, INK));
   }
   draw(screen: Screen): void {
+    this.viewHeight = screen.height;
     screen.clear("#101b32");
     drawScreenHeader(screen, `${speciesOf(this.mon).name} LV${this.mon.level}`, this.options.source === "archive" ? "ARCHIVIO" : this.options.source === "level" ? "LIVELLO" : "DIRETTIVA");
-    if (this.msg.isOpen) { this.msg.draw(screen); return; }
+    const extra = screen.height - 180, heroH = Math.round(extra * .4), top = 23 + heroH, cardH = 62 + Math.round(extra * .2);
+    if (heroH > 0) drawMonsterSprite(screen, this.mon.speciesId, 80, 21, 80, heroH - 5);
+    if (this.msg.isOpen) { this.card(screen, this.moveId, MOVES[this.moveId].pp, top, "APPRESA", cardH); this.msg.draw(screen); return; }
     if (this.inspect) {
-      screen.panel(6, 24, 228, 141, "card"); this.lines().slice(this.scroll, this.scroll + 9).forEach((line, i) => screen.text(line, 14, 34 + i * 12, INK));
+      screen.panel(6, top, 228, screen.height - top - 15, "card"); this.lines().slice(this.scroll, this.scroll + 9).forEach((line, i) => screen.text(line, 14, top + 10 + i * 12, INK));
     } else {
-      this.card(screen, this.moveId, MOVES[this.moveId].pp, 23, "NUOVA");
-      if (this.confirm && this.old) this.card(screen, this.old.id, this.old.pp, 89, "SCARTI");
-      else if (this.mon.moves.length >= 4) { screen.text("QUALE MOSSA SOSTITUISCI?", 14, 89, "#fff3cc"); this.menu.draw(screen, 6, 101, 228, 14, 4); }
-      else { screen.text("SLOT LIBERO", 14, 111, "#80d1b0"); screen.text("NESSUNA PERDITA", 14, 128, "#fff3cc"); }
+      this.card(screen, this.moveId, MOVES[this.moveId].pp, top, "NUOVA", cardH);
+      if (this.confirm && this.old) this.card(screen, this.old.id, this.old.pp, top + cardH + 4, "SCARTI", cardH);
+      else if (this.mon.moves.length >= 4) { screen.text("QUALE MOSSA SOSTITUISCI?", 14, top + cardH + 4, "#fff3cc"); this.menu.draw(screen, 6, top + cardH + 16, 228, 14 + Math.round(extra * .04), 4); }
+      else { screen.text("SLOT LIBERO", 14, top + cardH + 26, "#80d1b0"); screen.text("NESSUNA PERDITA", 14, top + cardH + 43, "#fff3cc"); }
     }
-    screen.text(this.inspect ? "◄►:MOSSA START/B:TORNA" : this.confirm ? "A:IMPARA B:RIPENSA" : "A:SCEGLI START:INFO B:RINUNCIA", 8, 169, "#fff3cc");
+    const hint = screen.height > 180 ? this.inspect ? "EFFETTI DELLA MOSSA" : this.confirm ? "CONFERMA LA SOSTITUZIONE" : "SCEGLI QUI SOTTO" : this.inspect ? "◄►:MOSSA START/B:TORNA" : this.confirm ? "A:IMPARA B:RIPENSA" : "A:SCEGLI START:INFO B:RINUNCIA";
+    screen.text(hint, 8, screen.height - 11, "#fff3cc");
   }
 }

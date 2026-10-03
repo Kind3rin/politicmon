@@ -32,6 +32,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Titolo/slot/starter diretti, scheda starter con quattro fatti, pausa con sei azioni, cure con oggetto/scorta/PV anticipati e ritorno automatico | Prova touch: cura 13→21 PV, caffè 6→5; slot protetti; 360 test |
+| Riserve e direzione iniziale | Borsa di lotta touch, PV/status/scorte e contrattacco visibili; blocco sprechi/Coppa; obiettivi concreti dopo Nino | Cura giocata 20→30/31, caffè 6→5; 363 test; Renzilla/Gianni giocati, cura 34→39 PV e caffè 5→4; sei formati |
 | Cornice esterna | Blocco verticale compatto; pulsanti contestuali grandi nelle lotte, con danni/PP/costi e due tocchi per mossa | Prova touch reale e sette viewport senza overflow; POCO fisico non disponibile |
 | Primo atto | Reclutamento con EXP, crescita iniziale, mosse della panchina, sfide volontarie e accessi protetti | `playtest:campaign:native`: tre starter fino ad Auditel; `check:first-campaign` |
 | Eurotown | Ospiti e Hans volontari, cura rapida e veritiera, satira della scelta precompilata, guida al leader | Tre partite tattiche nuove fino a Spread; `check:first-campaign` |

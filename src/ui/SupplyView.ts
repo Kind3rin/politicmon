@@ -49,7 +49,7 @@ export class SupplyView {
     if (input.wasPressed("a")) return "select";
     return null;
   }
-  draw(screen: Screen): void {
+  draw(screen: Screen, battleHint?: string): void {
     screen.clear("#101b32");
     const bg = this.shop ? sceneImage("ui:shop", "ui/shop.png") : null;
     if (bg) screen.image(bg);
@@ -76,7 +76,7 @@ export class SupplyView {
     if (item) {
       this.menu.draw(screen, 6, 60, 228, 14, 4);
       screen.panel(6, 133, 228, 32, "card");
-      wrapText(item.desc, 35).slice(0, 2).forEach((line, i) => screen.text(line, 14, 138 + i * 9, INK));
+      wrapText(battleHint ?? item.desc, 35).slice(0, 2).forEach((line, i) => screen.text(line, 14, 138 + i * 9, INK));
     } else {
       screen.panel(6, 60, 228, 105, "card");
       screen.text("NESSUN OGGETTO IN QUESTA CATEGORIA.", 14, 87, INK);

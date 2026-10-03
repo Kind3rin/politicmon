@@ -51,7 +51,7 @@ export const QUESTS: QuestDef[] = [
   {
     id: "recruit", title: "UNA SQUADRA, DUE VOCI",
     desc: "Recluta un secondo candidato. Costruire una squadra dà anche esperienza.",
-    hint: "Erba di Borgo e PERCORSO 1; CATTURA > SCHEDA. Indebolisci senza KO. Il tipografo di Borgo ne regala cinque.",
+    hint: "Da Borgo esci a NORD: erba del PERCORSO 1; CATTURA > SCHEDA. Indebolisci senza KO. Il tipografo di Borgo ne regala cinque.",
     step: "Recluta nel Percorso 1.",
     isDone: (s) => s.party.length + s.boxed.length >= 2 || s.badges.includes("auditel"),
     target: { mapId: "route1", x: 19, y: 13 }
@@ -430,7 +430,10 @@ export const QUESTS: QuestDef[] = [
 export function currentQuest(state: GameState): QuestDef | null {
   if (state.flags["opening-v2"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {
     const opening = OPENING_QUEST_ORDER.map(id => QUESTS.find(q => q.id === id)!).find(q => !q.isDone(state));
-    if (opening?.id === "grow" && state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, hint: "Pratica vinta: vinci nell'erba a sud di Nino. Usa un caffè se i PV sono bassi; al livello 8 scegli EVOLVI." };
+    if (opening?.id === "grow") {
+      if (state.party.some(mon => mon.speciesId === state.starterId && mon.level >= 8)) return { ...opening, target: undefined, step: "Squadra: scegli EVOLVI per la nuova forma." };
+      if (state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, step: "Erba a sud di Nino: raggiungi LV8.", hint: "Pratica vinta: vinci nell'erba a sud di Nino. Usa un caffè se i PV sono bassi; al livello 8 scegli EVOLVI." };
+    }
     if (opening) return opening;
   }
   if (!state.flags["opening-v2"] && state.flags["starter-chosen"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {

@@ -18,6 +18,9 @@
 - Pausa: squadra, cure, Dex e morale diretti; borsa/salva/mappa/opzioni nella prima pagina secondaria. Cura rapida mostra oggetto, scorta e PV effettivi e ritorna automaticamente.
 - Apertura: laboratorio indicato a nord-ovest, starter diretti e scheda con quattro fatti; Dex/schede e avviso del praticante senza conferme aggiuntive. Salvataggi conservati.
 
+- Riserve in lotta: comandi touch con recupero effettivo, rischio di contrattacco e scorta; cure senza effetto, schede contro allenatori e limiti Coppa bloccati prima della spesa. RISERVE diretto nei selvatici, campagna accessibile dalla borsa.
+- Primo percorso: HUD indica l’uscita nord del Borgo, l’erba a sud di Nino e l’evoluzione al livello 8.
+
 ## 1.0.0-rc.2 — 2026-07-12
 
 - Attivati in produzione tutti i moduli: Atto 3, Coalizione, Territori, Eventi Meme e Campagna Settimanale.

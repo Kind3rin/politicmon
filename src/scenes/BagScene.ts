@@ -18,7 +18,9 @@ import { EvolutionScene } from "./EvolutionScene";
 export interface BagOptions {
   inBattle: boolean;
   quickHeal?: boolean;
+  battleItem?: (itemId: string) => { hint: string; disabled: boolean };
   onUse?: (itemId: string) => void;
+  onCampaign?: () => void;
 }
 
 export class BagScene implements Scene {
@@ -48,6 +50,20 @@ export class BagScene implements Scene {
     return mon.hp <= 0 ? "KO: cura al bar" : mon.hp >= statsOf(mon).hp ? "PV pieni" : "Nessuna cura in borsa";
   }
   get touchActions(): readonly TouchAction[] | undefined {
+    if (this.opts.inBattle && this.opts.battleItem) {
+      this.refresh();
+      const ids = this.view.ids.slice(Math.floor(this.view.menu.index / 3) * 3, Math.floor(this.view.menu.index / 3) * 3 + 3);
+      const page = Math.floor(this.view.menu.index / 3);
+      const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled, run: () => {
+        if (disabled || this.stack.top !== this || this.msg.isOpen || Math.floor(this.view.menu.index / 3) !== page) return;
+        this.input.reset(); run();
+      } });
+      return [...ids.map(id => { const info = this.opts.battleItem!(id); return action(ITEMS[id].name, `x${this.state.bag[id]} · ${info.hint}`, () => this.useBattleItem(id), info.disabled); }),
+        ...Array.from({ length: 3 - ids.length }, () => action("—", "Nessun oggetto", () => {}, true)),
+        action("ALTRI", "Altre riserve", () => { this.view.menu.index = (page + 1) * 3 < this.view.ids.length ? (page + 1) * 3 : 0; audio.cursor(); }, this.view.ids.length <= 3),
+        action("CAMPAGNA", "Azioni che spendono sondaggi", () => { this.stack.pop(); this.opts.onCampaign?.(); }, !this.opts.onCampaign),
+        action("INDIETRO", "Nessun oggetto o turno consumato", () => this.stack.pop())];
+    }
     if (!this.quick) return undefined;
     const page = this.quickPage;
     const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled, run: () => {
@@ -64,6 +80,10 @@ export class BagScene implements Scene {
         else this.opts.quickHeal = false;
         audio.cursor();
       }, this.msg.isOpen), action("INDIETRO", "Torna alla pausa", () => this.stack.pop(), this.msg.isOpen)];
+  }
+  private useBattleItem(itemId: string): void {
+    if (this.stack.top !== this || !this.view.ids.includes(itemId) || (this.state.bag[itemId] ?? 0) < 1 || this.opts.battleItem?.(itemId).disabled) { audio.cancel(); return; }
+    this.stack.pop(); this.opts.onUse?.(itemId);
   }
   private healQuick(mon: Monster, quote: HealingQuote): void {
     if (!useHealingSupply(this.state, mon, quote)) return;
@@ -140,13 +160,7 @@ export class BagScene implements Scene {
     }
     const item = ITEMS[itemId];
     if (this.opts.inBattle) {
-      // I boost campagna si attivano dal mondo, non in battaglia: bloccali qui.
-      if (!["ball", "heal", "cure"].includes(item.kind)) {
-        this.msg.show(["Il kit si prepara prima dei riflettori.", "In lotta puoi usare solo cure e schede di reclutamento."]);
-        return;
-      }
-      this.stack.pop();
-      this.opts.onUse?.(itemId);
+      this.useBattleItem(itemId);
       return;
     }
     // Uso fuori battaglia.
@@ -349,7 +363,7 @@ export class BagScene implements Scene {
   }
 
   private refresh(): void {
-    this.view.sync(BAG_ORDER.filter((id) => (this.state.bag[id] ?? 0) > 0), (id) => `x${this.state.bag[id]}`);
+    this.view.sync(BAG_ORDER.filter((id) => (this.state.bag[id] ?? 0) > 0 && (!this.opts.inBattle || ["ball", "heal", "cure"].includes(ITEMS[id].kind))), (id) => `x${this.state.bag[id]}`);
   }
 
   private consume(itemId: string): void {
@@ -368,7 +382,7 @@ export class BagScene implements Scene {
       return;
     }
     if (this.quick) this.drawQuick(screen);
-    else this.view.draw(screen);
+    else this.view.draw(screen, this.opts.battleItem?.(this.view.selected ?? "").hint);
     if (this.msg.isOpen) this.msg.draw(screen);
   }
 }

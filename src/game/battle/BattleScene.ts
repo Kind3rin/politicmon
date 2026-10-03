@@ -1,4 +1,5 @@
 import { TeachScene } from "../../scenes/TeachScene";
+import { healingQuote } from "../supplyGuide";
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_NAMES, moveSummary, type Move } from "../../data/moves";
 import { TYPE_COLORS } from "../../data/poltypes";
@@ -461,10 +462,30 @@ export class BattleScene implements Scene {
     return recruitmentChance(catchChance(this.foe.mon, itemId, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0), this.catchBoost, viral);
   }
 
+  private supplyInfo(itemId: string): { hint: string; disabled: boolean } {
+    const item = ITEMS[itemId], qty = this.state.bag[itemId] ?? 0;
+    const blocked = (hint: string) => ({ hint, disabled: true });
+    if (!item || qty < 1) return blocked("Scorta esaurita");
+    if (item.kind === "ball") return this.trainer ? blocked("Allenatore: non reclutabile") : { hint: `${Math.round(this.catchEstimate(itemId) * 100)}% · se fallisce, risponde`, disabled: this.foe.mon.hp <= 0 };
+    if (!["heal", "cure"].includes(item.kind)) return blocked("Si prepara fuori dalla lotta");
+    if (this.maxBattleHealingItems !== null && this.battleHealingItemsUsed >= this.maxBattleHealingItems) return blocked("Limite cure raggiunto");
+    if (this.player.mon.hp <= 0) return blocked("KO: serve un cambio");
+    if (item.kind === "heal") {
+      const quote = healingQuote(this.state, this.player.mon, itemId);
+      return quote ? { hint: `PV ${quote.before} → ${quote.after}/${quote.max} · nemico risponde`, disabled: false } : blocked("PV pieni");
+    }
+    const status = this.player.mon.status;
+    return status || this.player.gaffeTurns > 0 ? { hint: `${status ? STATUS_NAMES[status] : "GAFFE"}${status && this.player.gaffeTurns > 0 ? " + GAFFE" : ""} via · nemico risponde`, disabled: false } : blocked("Nessuno status da curare");
+  }
+
+  private openBag(): void {
+    this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, battleItem: id => this.supplyInfo(id), onCampaign: () => this.openCampaignMenu(), onUse: id => this.useItem(id) }));
+  }
+
   private openRecruit(): void {
     this.recruitBall = Object.keys(this.state.bag).find(id => this.state.bag[id] > 0 && ITEMS[id]?.kind === "ball") ?? "";
     if (!this.recruitBall) {
-      this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, onUse: id => this.useItem(id) }));
+      this.openBag();
       return;
     }
     this.recruitMenu = new Menu([
@@ -1198,53 +1219,24 @@ export class BattleScene implements Scene {
 
   useItem(itemId: string): void {
     const item = ITEMS[itemId];
-    if (!item) {
-      return;
-    }
+    if (!item || this.finished || this.stack.top !== this || this.mode !== "menu" || this.supplyInfo(itemId).disabled) return;
     if (item.kind === "ball") {
       this.throwBall(itemId);
-      return;
-    }
-    if (item.kind === "evo") {
-      this.pushFront([
-        { text: "Le tessere si firmano in segreteria, non in diretta TV!" }
-      ]);
-      this.mode = "queue";
-      return;
-    }
-    if (item.kind === "hold" || item.kind === "tm" || item.kind === "key") {
-      this.pushFront([
-        { text: "Con calma: si equipaggia fuori dai riflettori, dalla BORSA." }
-      ]);
-      this.mode = "queue";
-      return;
-    }
-    if (item.kind === "field") {
-      this.pushFront([
-        { text: "Non ora! In diretta non si scappa a colpi di spray e rimborsi." }
-      ]);
-      this.mode = "queue";
-      return;
-    }
-    if ((item.kind === "heal" || item.kind === "cure") && this.maxBattleHealingItems !== null && this.battleHealingItemsUsed >= this.maxBattleHealingItems) {
-      this.pushFront([{ text: this.maxBattleHealingItems === 0 ? "REGOLA COPPA: BORSA CHIUSA!" : "REGOLA COPPA: HAI GIÀ USATO L'UNICA CURA!" }]);
-      this.mode = "queue";
       return;
     }
     if (item.kind === "heal" || item.kind === "cure") {
       this.battleHealingItemsUsed += 1;
       recordHealingItemUsed(this.state);
     }
+    const recovery = item.kind === "heal" ? healingQuote(this.state, this.player.mon, itemId)! : null;
     this.state.bag[itemId] = Math.max(0, (this.state.bag[itemId] ?? 0) - 1);
     bumpDailyQuest(this.state, "item1"); // missione "USA 1 OGGETTO IN LOTTA"
     const steps: Step[] = [];
     if (item.kind === "heal") {
       steps.push({
-        text: `Usi ${item.name} su ${this.playerName()}!`,
+        text: `${item.name}: +${recovery!.after - recovery!.before} PV.`,
         run: () => {
-          const max = statsOf(this.player.mon).hp;
-          const heal = item.percent != null ? Math.ceil(max * item.percent) : (item.amount ?? 20);
-          this.player.mon.hp = Math.min(max, this.player.mon.hp + heal);
+          this.player.mon.hp = recovery!.after;
           audio.heal();
         },
         waitHp: true
@@ -1422,7 +1414,7 @@ export class BattleScene implements Scene {
       index !== 5 || !this.msg.isOpen
     ));
     if (mode === "menu") return this.mainMenu.items.map((item, index) => action(
-      index === 1 && !this.trainer ? "CATTURA" : item.label, () => this.chooseMainAction(index),
+      index === 1 && !this.trainer ? "CATTURA" : index === 4 && !this.trainer ? "RISERVE" : item.label, () => this.chooseMainAction(index),
       index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
       index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
     ));
@@ -1443,7 +1435,7 @@ export class BattleScene implements Scene {
       action(this.recruitMenu.items[1].label, () => this.throwBall(this.recruitBall, true), "Costa 3 Polemica", this.polemica.value < 3),
       action("BORSA", () => {
         back();
-        this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, onUse: id => this.useItem(id) }));
+        this.openBag();
       }),
       action("INDIETRO", back)
     ];
@@ -1555,7 +1547,7 @@ export class BattleScene implements Scene {
         if (this.recruitMenu.index < 2) this.throwBall(this.recruitBall, this.recruitMenu.index === 1);
         else {
           this.mode = "menu";
-          this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: true, onUse: id => this.useItem(id) }));
+          this.openBag();
         }
       }
       return;
@@ -1628,12 +1620,7 @@ export class BattleScene implements Scene {
     } else if (result === 1 && !this.trainer) {
       this.openRecruit();
     } else if (result === 1) {
-      this.stack.push(
-        new BagScene(this.stack, this.input, this.state, {
-          inBattle: true,
-          onUse: (itemId) => this.useItem(itemId)
-        })
-      );
+      this.openBag();
     } else if (result === 2) {
       this.stack.push(
         new PartyScene(this.stack, this.input, this.state, {
@@ -1647,7 +1634,7 @@ export class BattleScene implements Scene {
       if (this.polemica.value >= 3) this.useFuorionda();
       else audio.cancel();
     } else if (result === 4) {
-      this.openCampaignMenu();
+      if (this.trainer) this.openCampaignMenu(); else this.openBag();
     } else if (result === 5) {
       this.tryRun();
     }
@@ -2308,7 +2295,7 @@ export class BattleScene implements Scene {
   }
 
   private drawMainMenu(screen: Screen): void {
-    const labels = ["LOTTA", this.trainer ? "BORSA" : "CATTURA", "SQUADRA", "FUORIONDA", "CAMPAGNA", "FUGA"];
+    const labels = ["LOTTA", this.trainer ? "BORSA" : "CATTURA", "SQUADRA", "FUORIONDA", this.trainer ? "CAMPAGNA" : "RISERVE", "FUGA"];
     const rows = Math.ceil(labels.length / 2);
     const h = 12 + rows * 16;
     const w = 148;

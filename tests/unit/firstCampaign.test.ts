@@ -80,7 +80,8 @@ test('New opening earns capture and first evolution before the rival; old saves 
  state.boxed=[createMonster('salvinott',5)];assert.equal(currentQuest(state)?.id,'grow');
  state.defeatedTrainers=['praticante'];assert.equal(currentQuest(state)?.target?.y,12);
  assert.match(currentQuest(state)!.hint,/caffè/);
- state.party[0].level=8;assert.equal(levelEvolution(state.party[0],state.sondaggi),'schleinix');
+ assert.match(currentQuest(state)!.step,/sud di Nino/);
+ state.party[0].level=8;assert.match(currentQuest(state)!.step,/EVOLVI/);assert.equal(currentQuest(state)?.target,undefined);assert.equal(levelEvolution(state.party[0],state.sondaggi),'schleinix');
  assert.equal(firstRivalReady(state),false); // Reaching the level is not accepting the evolution.
  state.dex.schleinix='caught';assert.equal(firstRivalReady(state),true);
  const restored=parseGameState(serializeGameState(state))!;

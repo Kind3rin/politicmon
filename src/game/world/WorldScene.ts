@@ -3634,7 +3634,8 @@ export class WorldScene implements Scene {
     if (quest && !this.msg.isOpen && !this.askMenu && !this.remoteMenu && this.map.outdoor) {
       // Obiettivo: testo INTERO, mandato a capo su più righe invece di troncarlo
       // con "..." (prima si perdeva la fine dello step). Il box cresce verso l'alto.
-      const lines = wrapText(`► ${quest.step}`, 38);
+      const direction = this.map.id === "borgo" && quest.target?.mapId === "route1" ? "Esci a NORD. " : "";
+      const lines = wrapText(`► ${direction}${quest.step}`, 38);
       const boxH = lines.length * 9 + 5;
       screen.rect(2, VIEW_H - boxH - 2, VIEW_W - 4, boxH, "rgba(16,20,31,0.92)");
       for (let i = 0; i < lines.length; i += 1) {

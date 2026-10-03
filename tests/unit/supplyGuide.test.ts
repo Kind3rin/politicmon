@@ -82,3 +82,55 @@ test("quick cure scene blocks duplicate and stale taps, then returns automatical
   for (let i = 0; i < 5 && stack.top === bag; i++) bag.update(1);
   assert.equal(stack.top, pause); tap.run(); assert.equal(JSON.stringify(state), after);
 });
+
+test("battle supply preview rejects waste, trainer captures and cup limits without consuming a turn", async () => {
+  const { BattleScene } = await import("../../src/game/battle/BattleScene");
+  const { makeCombatant } = await import("../../src/game/battle/sim");
+  const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(), mon = createMonster("renzino", 6); state.party = [mon]; state.bag = { caffe: 2, maalox: 1, scheda: 2, spray: 1 };
+  const battle = Object.create(BattleScene.prototype) as any;
+  Object.assign(battle, { state, player: makeCombatant(mon), foe: makeCombatant(createMonster("contemorfo", 5)), trainer: { id: "praticante" }, mode: "menu", finished: false, queue: [], maxBattleHealingItems: null, battleHealingItemsUsed: 0, stack: new SceneStack() });
+  battle.stack.push(battle);
+  Object.assign(battle, { mainMenu: { items: ["LOTTA", "BORSA", "SQUADRA", "FUORIONDA", "CAMPAGNA", "FUGA"].map(label => ({ label })) }, polemica: { value: 0 }, input: { reset() {} } });
+  const trainer = battle.trainer; battle.trainer = undefined;
+  const reserve = battle.touchActions[4]; assert.equal(reserve.label, "RISERVE"); reserve.run();
+  assert.notEqual(battle.stack.top, battle); battle.stack.top.touchActions.find((a: any) => a.label === "INDIETRO").run(); assert.equal(battle.stack.top, battle); battle.trainer = trainer;
+  const untouched = JSON.stringify(state);
+  for (const id of ["caffe", "maalox", "scheda", "spray", "bogus"]) { assert.equal(battle.supplyInfo(id).disabled, true); battle.useItem(id); }
+  assert.equal(JSON.stringify(state), untouched); assert.equal(battle.mode, "menu"); assert.equal(battle.queue.length, 0);
+  mon.hp -= 3; const before = mon.hp; assert.match(battle.supplyInfo("caffe").hint, new RegExp(`PV ${before} → ${before + 3}`));
+  battle.maxBattleHealingItems = 0; assert.equal(battle.supplyInfo("caffe").disabled, true); battle.useItem("caffe"); assert.equal(state.bag.caffe, 2);
+  battle.maxBattleHealingItems = 1; battle.foeCounterStep = () => ({ text: "COUNTER" }); battle.endOfTurnSteps = () => [];
+  const pp = mon.moves.map(s => s.pp); battle.useItem("caffe"); battle.useItem("caffe");
+  assert.equal(state.bag.caffe, 1); assert.equal(battle.battleHealingItemsUsed, 1); assert.equal(battle.queue.filter((s: any) => s.text === "COUNTER").length, 1);
+  assert.match(battle.queue[0].text, /\+3 PV/); battle.queue[0].run(); assert.equal(mon.hp, statsOf(mon).hp); assert.deepEqual(mon.moves.map(s => s.pp), pp);
+  battle.mode = "menu"; mon.status = "scandalo"; battle.player.gaffeTurns = 2; assert.equal(battle.supplyInfo("maalox").disabled, true);
+  battle.maxBattleHealingItems = null; assert.match(battle.supplyInfo("maalox").hint, /GAFFE/); battle.queue = []; battle.useItem("maalox"); battle.queue[0].run();
+  assert.equal(mon.status, null); assert.equal(battle.player.gaffeTurns, 0); assert.equal(state.bag.maalox, 0);
+});
+
+test("battle bag uses the selected stock once, rejects stale taps and cancel spends nothing", async () => {
+  const { BagScene } = await import("../../src/scenes/BagScene"); const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(); state.bag = { caffe: 2, maalox: 1, scheda: 3, spray: 1 };
+  const stack = new SceneStack(), input = { reset() {} }, battle = { update() {}, draw() {} }; stack.push(battle);
+  const used: string[] = []; const options = { inBattle: true, battleItem: (id: string) => ({ hint: id === "caffe" ? "PV 1 → 9 · nemico risponde" : "Nessuno status", disabled: id !== "caffe" }), onUse: (id: string) => { used.push(id); state.bag[id]--; } };
+  const bag = new BagScene(stack, input as never, state, options); stack.push(bag);
+  const commands = bag.touchActions!; assert.ok(commands.find(c => c.label === ITEMS.maalox.name)?.disabled); assert.ok(!commands.some(c => c.label === ITEMS.spray.name));
+  const use = commands.find(c => c.label === ITEMS.caffe.name)!; use.run(); use.run(); assert.deepEqual(used, ["caffe"]); assert.equal(stack.top, battle); assert.equal(state.bag.caffe, 1);
+  const staleBag = new BagScene(stack, input as never, state, options); stack.push(staleBag); const stale = staleBag.touchActions!.find(c => c.label === ITEMS.caffe.name)!;
+  state.bag.caffe = 0; stale.run(); assert.equal(stack.top, staleBag); assert.deepEqual(used, ["caffe"]);
+  const before = JSON.stringify(state); staleBag.touchActions!.find(c => c.label === "INDIETRO")!.run(); assert.equal(JSON.stringify(state), before); assert.equal(stack.top, battle);
+});
+
+test("battle inventory pages and campaign remain reachable; old page taps cannot spend stock", async () => {
+  const { BagScene } = await import("../../src/scenes/BagScene"); const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(); state.bag = { scheda: 1, caffe: 2, spritz: 1, maalox: 1 };
+  const stack = new SceneStack(), input = { reset() {} }, battle = { update() {}, draw() {} }; stack.push(battle);
+  let campaigns = 0, uses = 0;
+  const bag = new BagScene(stack, input as never, state, { inBattle: true, battleItem: () => ({ hint: "LIVE", disabled: false }), onUse: () => uses++, onCampaign: () => campaigns++ }); stack.push(bag);
+  const initial = bag.touchActions!, old = initial.find(a => a.label === ITEMS.caffe.name)!;
+  initial.find(a => a.label === "ALTRI")!.run(); old.run(); assert.equal(uses, 0); assert.equal(stack.top, bag);
+  assert.ok(bag.touchActions!.some(a => a.label === ITEMS.maalox.name));
+  const campaign = bag.touchActions!.find(a => a.label === "CAMPAGNA")!; const before = JSON.stringify(state); campaign.run(); campaign.run();
+  assert.equal(campaigns, 1); assert.equal(stack.top, battle); assert.equal(JSON.stringify(state), before);
+});

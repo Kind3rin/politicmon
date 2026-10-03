@@ -7,6 +7,7 @@ import { TeachScene } from "../../src/scenes/TeachScene.ts";
 import { SceneStack } from "../../src/engine/scene.ts";
 import { BattleScene } from "../../src/game/battle/BattleScene.ts";
 import { createMonster } from "../../src/game/monster.ts";
+import { newGameState } from "../../src/game/state.ts";
 import { makeCombatant } from "../../src/game/battle/sim.ts";
 
 test("a successful setup followed by a different attack unlocks one finisher", () => {
@@ -309,4 +310,51 @@ test("Click Day awards only the first valid action and never exceeds three Polem
   assert.match(foeSteps[0].text, /FONDI FINITI/); assert.equal(battle.polemica.value, 0);
   battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", false);
   assert.equal(battle.polemica.value, 0);
+});
+
+function recruitmentBattle(balls: number, polemica = 3) {
+  const battle = Object.create(BattleScene.prototype) as any;
+  battle.state = newGameState(); battle.state.bag.scheda = balls;
+  battle.stack = { top: battle }; battle.mode = "menu"; battle.finished = false;
+  battle.input = { reset() {} }; battle.polemica = new Polemica();
+  battle.polemica.value = polemica;
+  battle.foe = makeCombatant(createMonster("salvinott", 5));
+  battle.catchBoost = true;
+  battle.catchEstimate = (id: string, viral: boolean) => { assert.equal(id, "scheda"); return viral ? .95 : .6; };
+  battle.queue = []; battle.pushFront = (steps: any[]) => battle.queue.push(...steps);
+  return battle;
+}
+
+test("viral recruitment spends Polemica without paper; stale touch cannot spend twice", () => {
+  const battle = recruitmentBattle(0);
+  battle.openRecruit();
+  assert.equal(battle.touchActions[0].disabled, true);
+  const viral = battle.touchActions[1]; assert.equal(viral.disabled, false);
+  viral.run(); viral.run();
+  assert.equal(battle.state.bag.scheda, 0);
+  assert.equal(battle.polemica.value, 0);
+  assert.equal(battle.catchBoost, false);
+  assert.equal(battle.queue.length, 3);
+  assert.deepEqual(battle.state.dailyQuestsDone, []);
+  battle.queue[1].run(); assert.equal(battle.ballAnim.viral, true);
+});
+
+test("normal recruitment requires paper and viral recruitment needs three Polemica", () => {
+  const battle = recruitmentBattle(0, 2);
+  battle.throwBall("scheda"); battle.throwBall("scheda", true); battle.throwBall("schedona", true);
+  assert.equal(battle.queue.length, 0); assert.equal(battle.polemica.value, 2);
+  battle.state.bag.scheda = 2;
+  battle.throwBall("scheda");
+  assert.equal(battle.state.bag.scheda, 1); assert.equal(battle.polemica.value, 2);
+  battle.queue[1].run(); assert.equal(battle.ballAnim.viral, false);
+});
+
+test("failed viral recruitment keeps paper and gives the foe its response", () => {
+  const battle = recruitmentBattle(5);
+  battle.catchEstimate = () => 0;
+  let counters = 0; battle.foeCounterStep = () => ({ run: () => counters++ }); battle.endOfTurnSteps = () => [];
+  battle.throwBall("scheda", true);
+  const thrown = battle.queue.splice(0); thrown[1].run(); assert.equal(battle.ballAnim.success, false);
+  thrown[2].run(); battle.queue.forEach((step: any) => step.run?.());
+  assert.equal(counters, 1); assert.equal(battle.state.bag.scheda, 5); assert.equal(battle.polemica.value, 0);
 });

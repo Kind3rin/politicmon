@@ -8,12 +8,16 @@ from PIL import Image
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--download", action="store_true", help="Scarica gli originali mancanti dagli URL del manifest")
+parser.add_argument("--asset", help="Normalizza solo questa risorsa del manifest")
 args = parser.parse_args()
 root = Path(__file__).resolve().parent.parent
 manifest = json.loads((root / "scripts/higgsfield-assets.json").read_text())
 source_dir = root / "artifacts/higgsfield"
 source_dir.mkdir(parents=True, exist_ok=True)
-for asset in manifest["assets"]:
+assets = [asset for asset in manifest["assets"] if not args.asset or asset["id"] == args.asset]
+if not assets:
+    raise SystemExit(f"Risorsa sconosciuta: {args.asset}")
+for asset in assets:
     source = source_dir / f'{asset["id"]}-source.png'
     if not source.exists():
         if not args.download:

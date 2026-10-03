@@ -6,7 +6,7 @@
     "project_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
     "default_folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
     "workspace_id": "39323ead-1405-4bd9-a5ea-83a2d2d1ceb6",
-    "name": "Politicmon — ambienti di battaglia"
+    "name": "Politicmon \u2014 ambienti di battaglia"
   },
   "credits": {
     "before": 885.97,
@@ -394,6 +394,26 @@
       "creditsSpent": 0.25,
       "balanceBefore": 352.22,
       "balanceAfter": 351.97
+    },
+    {
+      "id": "battle-viral",
+      "kind": "battle-animation",
+      "path": "public/sprites/ui/battle/viral.png",
+      "width": 480,
+      "height": 270,
+      "jobId": "4b4b188c-061a-4e9d-867d-0e9daac6ee85",
+      "model": "gpt_image_2_5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_045320_4b4b188c-061a-4e9d-867d-0e9daac6ee85.png",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "sourceSha256": "b13b91019275236f55713ec878eaf4a67b32845ef2eaf6ec676238182667131e",
+      "processing": "Nearest-neighbor 480x270 delivery resize, 48-color palette; four equal 240x135 frames, 2x2 atlas.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 351.97,
+      "balanceAfter": 350.47,
+      "sha256": "2cbb7a68e101a6f119e3ef10a8cd1f37180d0fa8771e1673c2bdac3f5735e98e"
     }
   ]
 }

@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Cattura virale: 3 Polemica, zero schede; disponibile anche senza carta, probabilità e costi visibili, atlante Higgsfield dedicato (1,5 crediti).
+- Vittorie: fondi, sondaggi e oggetti in un riepilogo; bonus conservati, premi dello stesso tipo sommati e jackpot celebrato separatamente.
+
 - Apprendimento: quattro mosse toccabili, confronto nuova/sostituita nella stessa vista e conferma in due tocchi; dettagli completi facoltativi, PP delle altre mosse conservati.
 - Archivio: mosse guadagnate selezionabili direttamente, recupero gratuito e pagine touch; pulsante disabilitato nella squadra quando non ci sono mosse da recuperare.
 

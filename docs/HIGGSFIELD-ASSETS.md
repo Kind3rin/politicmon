@@ -1,5 +1,8 @@
 # Politicmon: risorse Higgsfield
 
+Cattura virale: atlante 480×270, quattro fasi; job `4b4b188c-061a-4e9d-867d-0e9daac6ee85`, `gpt_image_2_5` high.
+**1,5 crediti**, saldo **351,97 → 350,47**; fonte/SHA e conversione ripetibile in `higgsfield-assets.json` e `prepare-higgsfield-assets.py --asset battle-viral`.
+
 Venticinquesimo blocco: Hotel Diplomatico, lobby, tre suite, terrazza, padiglione a vetri e cinque cast direzionali. 25 job `gpt_image_2_5` high completati, incluse cinque correzioni; 11 invii respinti per rate limit senza job. **35 PNG runtime**, 33 percorsi nuovi, **37,5 crediti**, saldo **522,22 → 484,72**, cumulativo **401,25**. Due vecchi panorami sono sostituiti e i manifest precedenti marcati superseded. Profilo sinistro del delegato generato separatamente, nessuna specchiatura. Provenienza in `higgsfield-diplomacy.json`, conversione ripetibile in `prepare-diplomacy-assets.py`. [DIPLOMACY-VERBALE.md](DIPLOMACY-VERBALE.md) documenta cinque campagne guadagnate, morale, dossier e offline.
 
 Ventiquattresimo blocco: Futuro Anteriore, sede a manifesti piegati, tre uffici, sette cast direzionali, scelte e Segretario. 27 tentativi `gpt_image_2_5` high: 26 completati, uno fallito rimborsato. 23 sorgenti finali, **44 PNG runtime**, 42 percorsi nuovi, **39 crediti**, saldo **561,22 → 522,22**, cumulativo **363,75**. Tre rigenerazioni correggono identità del cast e leggibilità dei materiali. Provenienza in `higgsfield-future.json`; [FUTURO-VERBALE.md](FUTURO-VERBALE.md) documenta firme, morale, cinque campagne, vivaio ed evoluzione realmente guadagnata.

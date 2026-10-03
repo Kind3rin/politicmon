@@ -140,7 +140,7 @@ export class BattleScene implements Scene {
   private battleHealingItemsUsed = 0;
   private runAttempts = 0;
   private finished = false;
-  private ballAnim: { t: number; shakes: number; success: boolean } | null = null;
+  private ballAnim: { t: number; shakes: number; success: boolean; viral: boolean } | null = null;
   private captured = false; // il nemico è stato reclutato: niente più sprite in campo
   private stepTimer = 0;
   private introT = 0; // apertura a cerchio + slide degli sprite
@@ -163,6 +163,7 @@ export class BattleScene implements Scene {
     this.electionDoctrine = opts.electionDoctrine ?? "none";
     this.maxBattleHealingItems = opts.maxBattleHealingItems ?? null;
     this.onEnd = opts.onEnd;
+    if (!this.trainer) sceneImage("battle:viral", "ui/battle/viral.png");
     recordBattleStarted(this.state);
     if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary) {
       this.field = chooseFieldEvent(this.state.runStats.battles);
@@ -479,14 +480,10 @@ export class BattleScene implements Scene {
   }
 
   private openRecruit(): void {
-    this.recruitBall = Object.keys(this.state.bag).find(id => this.state.bag[id] > 0 && ITEMS[id]?.kind === "ball") ?? "";
-    if (!this.recruitBall) {
-      this.openBag();
-      return;
-    }
+    this.recruitBall = Object.keys(this.state.bag).find(id => this.state.bag[id] > 0 && ITEMS[id]?.kind === "ball") ?? "scheda";
     this.recruitMenu = new Menu([
-      { label: `SCHEDA: ${Math.round(this.catchEstimate(this.recruitBall) * 100)}%`, rightLabel: `x${this.state.bag[this.recruitBall]}` },
-      { label: `VIRALE: ${Math.round(this.catchEstimate(this.recruitBall, true) * 100)}%`, rightLabel: "-3 POLEMICA", disabled: this.polemica.value < 3 },
+      { label: `SCHEDA: ${Math.round(this.catchEstimate(this.recruitBall) * 100)}%`, rightLabel: `x${this.state.bag[this.recruitBall] ?? 0}`, disabled: !this.state.bag[this.recruitBall] },
+      { label: `VIRALE: ${Math.round(this.catchEstimate("scheda", true) * 100)}%`, rightLabel: "-3 P / 0 SCHEDE", disabled: this.polemica.value < 3 },
       { label: "ALTRE SCHEDE / BORSA" }
     ]);
     this.mode = "recruit";
@@ -964,31 +961,21 @@ export class BattleScene implements Scene {
       const trainer = this.trainer;
       const plan = buildTrainerVictoryPlan(this.state, trainer, this.isRematch);
       steps.push({ run: () => audio.victory() });
-      for (const line of plan.introLines) steps.push({ text: line });
-      steps.push({
-        text: `Ricevi ${plan.payout}€ di rimborso elettorale!`,
-        run: () => {
-          this.state.money += plan.payout;
-        }
-      });
-      if (plan.economyBonus) {
-        steps.push({ text: "Il MIN. ECONOMIA ha trovato la copertura: +25%!" });
-      }
-      if (plan.spotBonus) {
-        steps.push({ text: "Lo SPOT IN PRIME TIME riempie le casse: +50% fondi!" });
-      }
-      steps.push({
-        run: () => {
-          // COMIZIO OCEANICO (boost campagna): guadagno SONDAGGI raddoppiato.
-          const { value, milestone } = bumpSondaggi(this.state, plan.sondaggiGain);
-          const lines: Step[] = [{ text: `I SONDAGGI ti premiano: gradimento al ${value}%!` }];
-          if (milestone) {
-            // Notifica gamificata quando superi una soglia chiave.
-            lines.push({ text: milestone, run: () => audio.catchJingle() });
-          }
-          this.pushFront(lines);
-        }
-      });
+      for (const line of trainer.defeat) steps.push({ text: line });
+      let paid = false;
+      steps.push({ run: () => {
+        if (paid) return;
+        paid = true;
+        this.state.money += plan.payout;
+        const { value, milestone } = bumpSondaggi(this.state, plan.sondaggiGain);
+        const rewards = new Map<string, number>();
+        if (trainer.reward) rewards.set(trainer.reward.itemId, trainer.reward.qty);
+        if (plan.loot) rewards.set(plan.loot.id, (rewards.get(plan.loot.id) ?? 0) + plan.loot.qty);
+        for (const [id, qty] of rewards) this.state.bag[id] = (this.state.bag[id] ?? 0) + qty;
+        if (milestone || plan.loot && !plan.loot.jackpot) audio.catchJingle();
+        const items = [...rewards].map(([id, qty]) => `${ITEMS[id].name} x${qty}`).join(" / ");
+        this.pushFront([{ text: `+${plan.payout}€ / SONDAGGI ${value}%${items ? " / " + items : ""}` }]);
+      } });
       if (trainer.badge) {
         const badgeName = trainer.badge.toUpperCase();
         steps.push({ run: () => audio.badgeFanfare() });
@@ -1006,15 +993,6 @@ export class BattleScene implements Scene {
             if (lead.length > 0) {
               this.pushFront(lead);
             }
-          }
-        });
-      }
-      if (trainer.reward) {
-        const item = ITEMS[trainer.reward.itemId];
-        steps.push({
-          text: `Ottieni ${item.name} x${trainer.reward.qty}!`,
-          run: () => {
-            this.state.bag[item.id] = (this.state.bag[item.id] ?? 0) + trainer.reward!.qty;
           }
         });
       }
@@ -1046,20 +1024,7 @@ export class BattleScene implements Scene {
               }
             }
           });
-          steps.push({
-            text: `JACKPOT! È uscita una rarissima ${ITEMS[drop.id].name}!`,
-            run: () => {
-              this.state.bag[drop.id] = (this.state.bag[drop.id] ?? 0) + drop.qty;
-            }
-          });
-        } else {
-          steps.push({ run: () => audio.catchJingle() });
-          steps.push({
-            text: `BUSTA A SORPRESA! Dentro c'è: ${ITEMS[drop.id].name} x${drop.qty}!`,
-            run: () => {
-              this.state.bag[drop.id] = (this.state.bag[drop.id] ?? 0) + drop.qty;
-            }
-          });
+          steps.push({ text: `JACKPOT! È uscita una rarissima ${ITEMS[drop.id].name}!` });
         }
       }
     } else {
@@ -1238,25 +1203,21 @@ export class BattleScene implements Scene {
       this.mode = "queue";
       return;
     }
-    if ((this.state.bag[itemId] ?? 0) <= 0 || this.foe.mon.hp <= 0 || (viral && this.polemica.value < 3)) {
+    if (!item || item.kind !== "ball" || (viral && itemId !== "scheda") || (!viral && (this.state.bag[itemId] ?? 0) <= 0) || this.foe.mon.hp <= 0 || (viral && this.polemica.value < 3)) {
       audio.cancel();
       return;
     }
     const chance = this.catchEstimate(itemId, viral);
     if (viral) this.polemica.spend();
     this.catchBoost = false;
-    this.state.bag[itemId] -= 1;
-    bumpDailyQuest(this.state, "item1");
+    if (!viral) { this.state.bag[itemId] -= 1; bumpDailyQuest(this.state, "item1"); }
     const success = Math.random() < chance;
     const shakes = success ? 3 : Math.min(2, Math.floor(chance * 4 * Math.random()));
-    const pct = Math.round(chance * 100);
-    const verdict = pct >= 60 ? "alta" : pct >= 30 ? "media" : "bassa";
     this.pushFront([
-      { text: `Probabilità di reclutamento: ${pct}% (${verdict}).` },
-      { text: `Lanci una ${item.name}!`, run: () => audio.ballThrow() },
+      { text: viral ? "VIRALE! LA TESSERA LA STAMPIAMO DOPO." : `Lanci una ${item.name}!`, run: () => audio.ballThrow() },
       {
         run: () => {
-          this.ballAnim = { t: 0, shakes, success };
+          this.ballAnim = { t: 0, shakes, success, viral };
         },
         pause: 1.2 + shakes * 0.55
       },
@@ -1389,8 +1350,8 @@ export class BattleScene implements Scene {
       action("DOSSIER", () => this.openFightIntel(), "Tipi, effetti e avversario", this.fightFallback)
     ];
     if (mode === "recruit") return [
-      action(this.recruitMenu.items[0].label, () => this.throwBall(this.recruitBall), `${this.state.bag[this.recruitBall]} schede · Se fallisce, risponde`),
-      action(this.recruitMenu.items[1].label, () => this.throwBall(this.recruitBall, true), "Costa 3 Polemica", this.polemica.value < 3),
+      action(this.recruitMenu.items[0].label, () => this.throwBall(this.recruitBall), `${this.state.bag[this.recruitBall] ?? 0} schede · Se fallisce, risponde`, !this.state.bag[this.recruitBall]),
+      action(this.recruitMenu.items[1].label, () => this.throwBall("scheda", true), "3 Polemica · nessuna scheda", this.polemica.value < 3),
       action("BORSA", () => {
         back();
         this.openBag();
@@ -1502,7 +1463,7 @@ export class BattleScene implements Scene {
       const action = this.recruitMenu.update(this.input);
       if (action === "cancel") this.mode = "menu";
       else if (action === "select") {
-        if (this.recruitMenu.index < 2) this.throwBall(this.recruitBall, this.recruitMenu.index === 1);
+        if (this.recruitMenu.index < 2) this.throwBall(this.recruitMenu.index === 1 ? "scheda" : this.recruitBall, this.recruitMenu.index === 1);
         else {
           this.mode = "menu";
           this.openBag();
@@ -2162,6 +2123,13 @@ export class BattleScene implements Scene {
       return;
     }
     const anim = this.ballAnim;
+    if (anim.viral) {
+      const atlas = sceneImage("battle:viral", "ui/battle/viral.png");
+      const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(anim.t / .55));
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
+      else screen.textCenter("VIRALE", 120, 60, "#80d1b0");
+      return;
+    }
     let x = 168;
     let y = 44;
     if (!this.state.reduceEffects && anim.t < 0.5) {

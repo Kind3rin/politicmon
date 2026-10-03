@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Rimpasto: scelta touch diretta di tutte le cinque riserve, PV e costo del turno anticipati; KO e candidato attivo esclusi, annullamento gratuito. Anche i mirror PvP conservano la squadra originale.
+- Tra due avversari la scelta gratuita si apre senza un secondo sì/no; tolta la spiegazione ripetuta dopo il cambio. Elenco squadra allineato alla palette delle schede.
+
 - Lotte: Polemica premia mosse diverse e riuscite; Fuorionda o cattura virale, intento avversario visibile e telefono del primo rivale che perde il copione.
 - Mobile: pulsanti di lotta grandi con danni, PP e costi; due tocchi per scegliere una mossa, blocco verticale compatto e comandi laterali in orizzontale, fermi durante i colpi.
 - Avvio: nome/briefing facoltativi, slot vuoto automatico, scelta starter compatta; notifiche di lotta automatiche, traguardi senza interruzioni e apprendimento immediato con slot libero.

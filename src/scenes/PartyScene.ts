@@ -46,7 +46,16 @@ export class PartyScene implements Scene {
     private input: Input,
     private state: GameState,
     private opts: PartyOptions
-  ) {}
+  ) {
+    if (opts.mode === "battle-switch" || opts.mode === "forced-switch") {
+      this.index = Math.max(0, (opts.partyOverride ?? state.party).findIndex(mon => mon.hp > 0 && mon.uid !== opts.currentUid));
+    }
+  }
+
+  private chooseSwitch(mon: Monster): void {
+    if (this.stack.top !== this || !(this.opts.partyOverride ?? this.state.party).includes(mon) || mon.hp <= 0 || mon.uid === this.opts.currentUid) return;
+    this.input.reset(); audio.confirm(); this.stack.pop(); this.opts.onChoose?.(mon);
+  }
 
   private openEvolution(mon: Monster): void {
     const target = levelEvolution(mon, this.state.sondaggi);
@@ -57,6 +66,17 @@ export class PartyScene implements Scene {
   }
   get touchActions(): readonly TouchAction[] | undefined {
     const mon = this.summary;
+    if (!mon && (this.opts.mode === "battle-switch" || this.opts.mode === "forced-switch")) {
+      const bench = (this.opts.partyOverride ?? this.state.party).filter(target => target.uid !== this.opts.currentUid);
+      return [...Array.from({ length: 5 }, (_, i): TouchAction => {
+        const target = bench[i];
+        return { label: target ? speciesOf(target).name : "—", hint: target ? `LV${target.level} · PV ${target.hp}/${statsOf(target).hp} · ${target.hp <= 0 ? "KO" : (this.opts.freeSwitch || this.opts.mode === "forced-switch") ? "rimpasto gratis" : "nemico risponde"}` : "Nessun candidato",
+          disabled: !target || target.hp <= 0, run: () => { if (target) this.chooseSwitch(target); } };
+      }), { label: "INDIETRO", hint: this.opts.mode === "forced-switch" ? "Scegli chi continua la lotta" : "Resti in campo · nessun turno speso", disabled: this.opts.mode === "forced-switch", run: () => {
+        if (this.stack.top !== this || this.opts.mode === "forced-switch") return;
+        this.input.reset(); audio.cancel(); this.stack.pop();
+      } }];
+    }
     if (!mon && this.opts.mode === "view") {
       const party = this.opts.partyOverride ?? this.state.party, page = Math.floor(this.index / 4);
       const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled, run: () => {
@@ -170,13 +190,7 @@ export class PartyScene implements Scene {
         return;
       }
       if (this.opts.mode === "battle-switch" || this.opts.mode === "forced-switch") {
-        if (mon.hp <= 0 || mon.uid === this.opts.currentUid) {
-          audio.cancel();
-          return;
-        }
-        audio.confirm();
-        this.stack.pop();
-        this.opts.onChoose?.(mon);
+        this.chooseSwitch(mon);
         return;
       }
       if (this.opts.mode === "use-item") {
@@ -188,7 +202,7 @@ export class PartyScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    screen.clear("#e3ebef");
+    screen.clear("#101b32");
     if (this.summary) {
       this.drawSummary(screen, this.summary);
       return;
@@ -207,7 +221,7 @@ export class PartyScene implements Scene {
       const y = 16 + i * 23;
       const selected = i === this.index;
       const picked = i === this.moveFrom;
-      screen.rect(4, y, VIEW_W - 8, 22, selected ? "#fff0bd" : "#fffaf0");
+      screen.rect(4, y, VIEW_W - 8, 22, selected ? "#fff0bd" : "#263954");
       screen.rect(4, y, 3, 22, selected ? "#e0a92f" : "#7aa2b8");
       if (picked) {
         // Slot "preso" per lo scambio: cornice gialla evidente.
@@ -218,7 +232,7 @@ export class PartyScene implements Scene {
       }
       // Mini-sprite nello slot lista (box 26x21, ancorato in basso).
       drawMonsterSprite(screen, mon.speciesId, 6, y + 1, 26, 21, { memeFormId: mon.memeFormId });
-      const ink = INK;
+      const ink = selected ? INK : "#fff3cc";
       screen.text(speciesOf(mon).name, 36, y + 3, ink);
       screen.textRight(`L${mon.level}`, VIEW_W - 64, y + 3, ink);
       drawHpBar(screen, 50, y + 13, 70, mon.hp, statsOf(mon).hp);
@@ -239,7 +253,7 @@ export class PartyScene implements Scene {
     }
     if (this.opts.onInspect) {
       const mon = party[this.index];
-      screen.text(mon?.uid === this.opts.currentUid ? "GIA IN CAMPO" : mon?.hp === 0 ? "CANDIDATO KO" : this.opts.freeSwitch ? "RIMPASTO GRATIS" : "CAMBIO: TURNO AL NEMICO", 8, 156, INK);
+      screen.text(mon?.uid === this.opts.currentUid ? "GIA IN CAMPO" : mon?.hp === 0 ? "CANDIDATO KO" : (this.opts.freeSwitch || this.opts.mode === "forced-switch") ? "RIMPASTO GRATIS" : "CAMBIO: TURNO AL NEMICO", 8, 156, "#fff3cc");
       screen.text(this.opts.mode === "forced-switch" ? "A: CAMBIA START: DOSSIER" : "A: CAMBIA START: DOSSIER B: TORNA", 8, VIEW_H - 10, "#59657d");
       return;
     }

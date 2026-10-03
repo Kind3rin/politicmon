@@ -167,3 +167,54 @@ test("an unobserved Dex entry opens its habitat directly with A", async () => {
   const scene = Object.assign(Object.create(DexScene.prototype), { state: newGameState(), reachable: new Set(["borgo"]), index: 0, filter: "all", typeFilter: null, detail: true, page: -1, time: 0, input: { consumeTap: () => null, wasPressed: (key: string) => key === "a" } });
   scene.update(); assert.equal(scene.page, 3);
 });
+
+test("switch buttons reach every reserve and reject KO, replaced parties and stale taps", async () => {
+  const { PartyScene } = await import("../../src/scenes/PartyScene");
+  const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(), stack = new SceneStack(), input = { reset() {}, wasPressed() { return false; } };
+  state.party = ["renzino", "ellyna", "salvinott", "grillix", "giorgetta", "vannaccix"].map(id => createMonster(id, 8));
+  state.party[1].hp = 0;
+  const parent = { update() {}, draw() {} }; stack.push(parent);
+  const chosen: string[] = [], options = { mode: "battle-switch" as const, currentUid: state.party[0].uid, onChoose: (mon: typeof state.party[number]) => chosen.push(mon.uid) };
+  const scene = new PartyScene(stack, input as never, state, options); stack.push(scene);
+  const before = JSON.stringify(state), commands = scene.touchActions!;
+  assert.equal(commands.length, 6); assert.equal(commands[0].disabled, true); commands[0].run();
+  assert.equal(stack.top, scene); assert.equal(JSON.stringify(state), before);
+  for (const action of commands.slice(1, 5)) assert.match(action.hint!, /nemico risponde/);
+  const last = commands[4]; last.run(); last.run();
+  assert.deepEqual(chosen, [state.party[5].uid]); assert.equal(stack.top, parent); assert.equal(JSON.stringify(state), before);
+  const reopened = new PartyScene(stack, input as never, state, options); stack.push(reopened);
+  const stale = reopened.touchActions![1]; state.party[2].hp = 0; stale.run(); assert.equal(stack.top, reopened);
+  state.party[2] = createMonster("salvinott", 8); stale.run(); assert.equal(stack.top, reopened);
+  reopened.touchActions![5].run(); assert.equal(stack.top, parent); assert.equal(chosen.length, 1);
+});
+
+test("forced and mirror switches preserve ownership and cannot cancel after a KO", async () => {
+  const { PartyScene } = await import("../../src/scenes/PartyScene");
+  const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(), stack = new SceneStack(), input = { reset() {}, wasPressed(key: string) { return key === "b"; } };
+  state.party = [createMonster("renzino", 8)]; const before = JSON.stringify(state);
+  const mirror = [createMonster("giorgetta", 10), createMonster("ellyna", 10)]; mirror[0].hp = 0;
+  let choice: typeof mirror[number] | undefined;
+  const scene = new PartyScene(stack, input as never, state, { mode: "forced-switch", currentUid: mirror[0].uid, partyOverride: mirror, onChoose: mon => { choice = mon; } }); stack.push(scene);
+  const commands = scene.touchActions!; assert.match(commands[0].hint!, /rimpasto gratis/);
+  assert.equal(commands[5].disabled, true); commands[5].run(); scene.update(); assert.equal(stack.top, scene);
+  commands[0].run(); assert.equal(choice, mirror[1]); assert.equal(stack.top, undefined); assert.equal(JSON.stringify(state), before);
+});
+
+test("battle switches charge one counter only; next foe opens a free choice without a confirmation", async () => {
+  const { BattleScene } = await import("../../src/game/battle/BattleScene");
+  const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(); state.party = [createMonster("renzino", 8), createMonster("ellyna", 8)];
+  const battle = Object.assign(Object.create(BattleScene.prototype), { state, input: { reset() {} }, stack: new SceneStack(), player: makeCombatant(state.party[0]), foe: makeCombatant(createMonster("grillix", 5)), queue: [], mode: "menu", displayHp: {}, finished: false,
+    foeCounterStep: () => ({ text: "COUNTER" }), endOfTurnSteps: () => [{ text: "END" }] }); battle.stack.push(battle);
+  const before = JSON.stringify(state); battle.openParty(false); battle.stack.top.touchActions[5].run(); assert.equal(JSON.stringify(state), before); assert.equal(battle.queue.length, 0);
+  battle.openParty(false); const choose = battle.stack.top.touchActions[0]; choose.run(); choose.run();
+  assert.equal(battle.player.mon, state.party[1]); assert.equal(battle.queue.filter((step: any) => step.text === "COUNTER").length, 1);
+  assert.equal(battle.queue.filter((step: any) => step.text === "END").length, 1);
+  battle.queue = []; battle.trainer = { id: "trainer", name: "Rivale" }; battle.foeTeam = [battle.foe.mon, createMonster("salvinott", 6)]; battle.foeIndex = 0;
+  battle.afterFoeDown(); for (const step of [...battle.queue]) step.run?.();
+  const free = battle.stack.top; assert.notEqual(free, battle); assert.match(free.touchActions[0].hint, /rimpasto gratis/);
+  battle.queue = []; free.touchActions[0].run(); assert.equal(battle.player.mon, state.party[0]);
+  assert.ok(!battle.queue.some((step: any) => step.text === "COUNTER" || step.text === "END"));
+});

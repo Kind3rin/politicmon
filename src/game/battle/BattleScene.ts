@@ -102,7 +102,7 @@ export class BattleScene implements Scene {
   private ai!: AiProfile; // profilo di difficoltà, calcolato dal contesto
 
   private queue: Step[] = [];
-  private mode: "queue" | "menu" | "fight" | "ask" | "campaign" | "recruit" = "queue";
+  private mode: "queue" | "menu" | "fight" | "campaign" | "recruit" = "queue";
   private msg = new MessageBox();
   private polemica = new Polemica();
   private foeIntent: Move | null = null;
@@ -125,10 +125,6 @@ export class BattleScene implements Scene {
   private fightEff: Array<"super" | "weak" | "immune" | null> = [];
   // true quando il menu LOTTA mostra il solo COMIZIO di riserva (tutte le mosse a 0 PP).
   private fightFallback = false;
-  private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
-  private askText = "";
-  private askYes: (() => void) | null = null;
-  private askNo: (() => void) | null = null;
 
   private displayHp = { player: 0, foe: 0 };
   private displayExp = 0;
@@ -951,33 +947,12 @@ export class BattleScene implements Scene {
         this.foe.stages.def = Math.max(-6, this.foe.stages.def - 1);
         entry.push({ text: "SCISSIONE: riserva immediata, ATTACCO +1 e DIFESA -1!" });
       }
-      // Come in Pokémon: dopo che l'avversario schiera il prossimo, chiedi se
-      // vuoi cambiare il tuo (utile per adattarsi al nuovo tipo in campo). Solo
-      // se hai almeno un altro POLITICMON sano in panchina.
+      // La scelta contiene già INDIETRO: nessuna conferma prima del rimpasto.
       if (this.hasBenchAlive()) {
         entry.push({
           run: () => {
-            this.ask(
-              `Rimpasto? ${this.playerName()} molla la poltrona?`,
-              () => {
-                this.mode = "queue";
-                this.stack.push(
-                  new PartyScene(this.stack, this.input, this.state, {
-                    mode: "battle-switch",
-                    currentUid: this.player.mon.uid,
-                    freeSwitch: true,
-                    onInspect: (mon) => this.openSwitchIntel(mon, true),
-                    // afterFaint=false → il cambio è "gratis" qui (turno nuovo),
-                    // ma switchTo(false) fa contrattaccare: passiamo true così il
-                    // nemico appena schierato NON attacca subito (come nei Pokémon).
-                    onChoose: (mon) => this.switchTo(mon, true)
-                  })
-                );
-              },
-              () => {
-                this.mode = "queue";
-              }
-            );
+            this.mode = "queue";
+            this.openParty(true);
           }
         });
       }
@@ -1120,14 +1095,7 @@ export class BattleScene implements Scene {
             this.endBattle("loss");
             return;
           }
-          this.stack.push(
-            new PartyScene(this.stack, this.input, this.state, {
-              mode: "forced-switch",
-              freeSwitch: true,
-              onInspect: (mon) => this.openSwitchIntel(mon, true),
-              onChoose: (mon) => this.switchTo(mon, true)
-            })
-          );
+          this.openParty(true, true);
         }
       }
     ];
@@ -1138,18 +1106,20 @@ export class BattleScene implements Scene {
     return this.state.party.some((m) => m.hp > 0 && m.uid !== this.player.mon.uid);
   }
 
+  private openParty(free: boolean, forced = false): void {
+    this.stack.push(new PartyScene(this.stack, this.input, this.state, {
+      mode: forced ? "forced-switch" : "battle-switch", currentUid: this.player.mon.uid, freeSwitch: free,
+      onInspect: mon => this.openSwitchIntel(mon, free), onChoose: mon => this.switchTo(mon, free)
+    }));
+  }
+
   private switchTo(mon: Monster, afterFaint: boolean): void {
+    if (this.finished || this.stack.top !== this || !this.state.party.includes(mon) || mon.hp <= 0 || mon.uid === this.player.mon.uid) return;
     this.player = makeCombatant(mon);
     this.displayHp.player = mon.hp;
     this.displayExp = this.expRatio();
     const steps: Step[] = [];
-    // Avviso one-shot: al PRIMO cambio volontario (non forzato da KO) spiega che
-    // il cambio lascia campo libero all'avversario. Un neofita altrimenti cambia
-    // "per guardare" e si becca un colpo gratis senza capire perché.
-    if (!afterFaint && !this.state.flags["seen-switch-tip"]) {
-      this.state.flags["seen-switch-tip"] = true;
-      steps.push({ text: "Cambiare candidato lascia campo libero all'avversario: perdi il turno!" });
-    }
+    if (!afterFaint) this.state.flags["seen-switch-tip"] = true;
     steps.push({ text: `Tocca a te, ${this.playerName()}!` });
     if (abilityOf(mon)?.id === "voltagabbana") {
       steps.push({ text: `${this.playerName()} cambia casacca al volo: OPPORTUNISMO sale!` });
@@ -1381,18 +1351,6 @@ export class BattleScene implements Scene {
     return steps;
   }
 
-  // ---- Ask (sì/no) ----
-
-  private ask(question: string, yes: () => void, no: () => void): void {
-    this.askText = question;
-    this.askMenu.index = 0;
-    this.askYes = yes;
-    this.askNo = no;
-    this.mode = "ask";
-  }
-
-
-
   // ---- Update ----
 
   get touchActions(): readonly TouchAction[] | undefined {
@@ -1415,8 +1373,8 @@ export class BattleScene implements Scene {
     ));
     if (mode === "menu") return this.mainMenu.items.map((item, index) => action(
       index === 1 && !this.trainer ? "CATTURA" : index === 4 && !this.trainer ? "RISERVE" : item.label, () => this.chooseMainAction(index),
-      index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
-      index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
+      index === 2 ? "Scegli chi entra · nemico risponde" : index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
+      index === 2 && !this.hasBenchAlive() || index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
     ));
     if (mode === "fight") return [
       ...this.fightMenu.items.map((item, index) => {
@@ -1592,17 +1550,6 @@ export class BattleScene implements Scene {
       return;
     }
 
-    if (this.mode === "ask") {
-      const action = this.askMenu.update(this.input);
-      if (action === "select") {
-        const handler = this.askMenu.index === 0 ? this.askYes : this.askNo;
-        this.mode = "queue";
-        handler?.();
-      } else if (action === "cancel") {
-        this.mode = "queue";
-        this.askNo?.();
-      }
-    }
   }
 
   private openFightIntel(): void {
@@ -1622,14 +1569,7 @@ export class BattleScene implements Scene {
     } else if (result === 1) {
       this.openBag();
     } else if (result === 2) {
-      this.stack.push(
-        new PartyScene(this.stack, this.input, this.state, {
-          mode: "battle-switch",
-          currentUid: this.player.mon.uid,
-          onInspect: (mon) => this.openSwitchIntel(mon, false),
-          onChoose: (mon) => this.switchTo(mon, false)
-        })
-      );
+      if (this.hasBenchAlive()) this.openParty(false);
     } else if (result === 3) {
       if (this.polemica.value >= 3) this.useFuorionda();
       else audio.cancel();
@@ -2062,12 +2002,6 @@ export class BattleScene implements Scene {
           screen.text(lines[1], 10, y + 33, GREY);
         }
       }
-    } else if (this.mode === "ask") {
-      const lines = wrapText(this.askText, 28);
-      for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-        screen.text(lines[i], 10, VIEW_H - 34 + i * 13, INK);
-      }
-      this.askMenu.draw(screen, VIEW_W - 58, VIEW_H - 42, 50, 11);
     }
     this.msg.draw(screen);
     if (this.finisherT > 0) {

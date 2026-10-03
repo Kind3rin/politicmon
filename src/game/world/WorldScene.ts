@@ -1275,21 +1275,13 @@ export class WorldScene implements Scene {
 
     if (route.kind === "healer") {
       recordHealerVisit(this.state);
-      const lines = [...(npc.lines ?? [])];
-      // Primo BAR SPORT: spiega che qui si cura GRATIS, quando serve.
-      if (!this.state.flags["heal-hint"]) {
-        this.state.flags["heal-hint"] = true;
-        lines.push(
-          "Il bar cura PV, PP, status e KO gratis. Non cambia i SONDAGGI.",
-          "RIVINCITE: gli sfidanti si allenano. Con il '!' dorato accettano una nuova sfida."
-        );
-      }
-      this.say(lines, () => {
-        this.playHealFx(() => {
-          saveGame(this.state);
-          this.say(["PV E PP RECUPERATI; STATUS E KO CURATI. IL CONTO RESTA A ZERO."]);
-        });
+      this.state.flags["heal-hint"] = true;
+      this.playHealFx(() => {
+        this.showBanner("CURA, NON COMIZI", "PV / PP / STATUS / KO: GRATIS", "#79ddba");
       });
+      // La cura è immediata anche nei dati: un reload durante l'effetto
+      // conserva PV, PP e visite, senza una ricevuta da confermare.
+      saveGame(this.state);
       return;
     }
 

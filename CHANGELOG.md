@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- PWA verticale: console a tutta altezza, barra in alto e controlli vicini al bordo sicuro inferiore; nessun taglio nei formati touch provati, schermo 4:3 conservato.
+- Bar Sport: cura gratuita con un tocco, salvataggio immediato e ricevuta automatica; IA evita rallentamenti e potenziamenti di velocità quando è già prima, senza perdere effetti dannosi delle mosse.
+
 - Gianni: copione con scudo al 50% per due turni; preparazione riuscita rompe scudo e Grinta, intento e danni onesti. Nuovo atlante Higgsfield (1,5 crediti), sei turni giocati con Renzilla.
 - Apertura: incontri introduttivi fino al LV5 prima dell’evoluzione; secondo reclutamento dopo Nino dà slancio allo starter fino al LV8, salvataggi precedenti invariati.
 - Movimento: cambio direzione e passo nello stesso tocco; pareti, NPC e porte mantengono i blocchi.

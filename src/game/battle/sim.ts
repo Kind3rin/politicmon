@@ -313,7 +313,9 @@ export function foeMoveScore(foe: Combatant, target: Combatant, move: Move, ai: 
     const s = effect.stat, c = s.target === "self" ? foe : target;
     const delta = Math.max(-6, Math.min(6, c.stages[s.key] + s.stages)) - c.stages[s.key];
     const attackCategory = s.key === "atk" ? "fisico" : "speciale";
-    const irrelevant = (s.key === "atk" || s.key === "spc") && !c.mon.moves.some((slot) => slot.pp > 0 && MOVES[slot.id]?.power > 0 && MOVES[slot.id]?.category === attackCategory);
+    const irrelevant = s.key === "spd"
+      ? effectiveStat(foe, "spd") > effectiveStat(target, "spd")
+      : (s.key === "atk" || s.key === "spc") && !c.mon.moves.some((slot) => slot.pp > 0 && MOVES[slot.id]?.power > 0 && MOVES[slot.id]?.category === attackCategory);
     const blocked = s.target === "foe" && s.stages < 0 && statDropBlockReason(target.mon);
     if (delta && !blocked && !irrelevant) {
       const benefit = s.target === "self" ? delta : -delta;

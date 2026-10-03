@@ -65,6 +65,34 @@ test("IA: PP esauriti esclusi anche in una scelta subottimale", () => {
   assert.equal(chooseFoeMove(foe,target,deliberate,()=>0).id,"comizio");
 });
 
+test("IA: ZTL non si ripete quando il rivale è già più veloce", () => {
+  const foe=makeCombatant(createMonster("ellyna",9)), target=makeCombatant(createMonster("renzilla",8));
+  foe.mon.moves=[{id:"ztl",pp:20},{id:"comizio",pp:35}];
+  target.stages.spd=-6;
+  assert.equal(foeMoveScore(foe,target,MOVES.ztl,deliberate),0);
+  for (const whiff of [0,1]) {
+    for (const random of [0,.999]) {
+      assert.equal(chooseFoeMove(foe,target,{...deliberate,whiff},()=>random).id,"comizio");
+    }
+  }
+  target.stages.spd=2;
+  assert.ok(foeMoveScore(foe,target,MOVES.ztl,deliberate)>0);
+});
+
+test("IA: velocità utile nelle parità, status e danno della mossa restano considerati", () => {
+  const foe=makeCombatant(createMonster("ellyna",9));
+  const target=makeCombatant({...foe.mon,moves:foe.mon.moves.map(s=>({...s}))});
+  assert.ok(foeMoveScore(foe,target,MOVES.ztl,deliberate)>0);
+  target.mon.status="indagato";
+  assert.equal(foeMoveScore(foe,target,MOVES.ztl,deliberate),0);
+  const damagingSlow={...MOVES.comizio,effect:MOVES.ztl.effect};
+  assert.ok(foeMoveScore(foe,target,damagingSlow,deliberate)>0);
+  const speedUp={...MOVES.ztl,effect:{stat:{key:"spd" as const,stages:1,target:"self" as const}}};
+  assert.equal(foeMoveScore(foe,target,speedUp,deliberate),0);
+  foe.mon.status="indagato";target.mon.status=null;
+  assert.ok(foeMoveScore(foe,target,speedUp,deliberate)>0);
+});
+
 test("IA: tutte le specie e le mosse producono punteggi finiti", () => {
   for(const id of DEX_ORDER) {
     const foe=makeCombatant(createMonster(id,45)), target=makeCombatant(createMonster("draghimon",45));

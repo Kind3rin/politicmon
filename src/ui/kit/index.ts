@@ -123,7 +123,7 @@ export const kit = {
     const list = element("dl", "ui-facts");
     for (const fact of facts) {
       const row = element("div", "ui-fact");
-      if(fact.value.length>18)row.classList.add("ui-fact-wide");
+      if(facts.length===1||fact.value.length>18)row.classList.add("ui-fact-wide");
       const label=element("dt","ui-note"),value=element("dd","ui-value");
       if(fact.label in TYPE_COLORS)label.append(kit.tag(fact.label as PolType));else label.textContent=fact.label;
       const types=fact.value.split(' · ');

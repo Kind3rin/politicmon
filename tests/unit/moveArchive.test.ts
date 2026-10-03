@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { archivedMoves } from "../../src/game/moveArchive";
 import { createMonster } from "../../src/game/monster";
-import { preparationNotes } from "../../src/game/battle/preparation";
+import { preparationForecasts } from "../../src/game/battle/preparation";
 import { newGameState } from "../../src/game/state";
 
 test("archive excludes future, current and other-branch moves without changing the candidate", () => {
@@ -18,20 +18,26 @@ test("archive excludes future, current and other-branch moves without changing t
   mon.level = 28;
   assert.ok(archivedMoves(mon).includes("pienipoteri"));
 });
-test("preparation reads actual immunities, PP and defense boosts without consuming state or RNG", () => {
+test("preparation reads held-item mitigation, PP and defense boosts without consuming state or RNG", () => {
   const state = newGameState(); state.party = [createMonster("salvinator", 30), createMonster("renzilla", 30)];
   state.party[1].hp = 0;
   const foe = createMonster("draghimon", 30), before = JSON.stringify({ state, foe });
   const final = createMonster("mattarellux", 32); final.heldItem = "gilet";
   const original = Math.random; Math.random = () => { throw Error("Preview consumed live RNG"); };
   try {
-    assert.match(preparationNotes(state, foe).join(" "), /DOPO Voto di fiducia/);
-    assert.match(preparationNotes(state, foe).join(" "), /KO, PRIMA TORNA AL BAR/);
+    const forecasts = preparationForecasts(state, foe);
+    assert.equal(forecasts[0].mon.uid, state.party[0].uid);
+    assert.equal(forecasts[0].afterDefense?.move.id, "fiducia");
+    assert.ok(forecasts[0].afterDefense!.range.max < forecasts[0].best!.range.max);
+    assert.equal(forecasts[1].unavailable, "ko");
+    assert.equal(forecasts[1].best, undefined);
     assert.equal(JSON.stringify({ state, foe }), before);
-    assert.match(preparationNotes(state, final).join(" "), /Garanzia/);
-    assert.match(preparationNotes(state, final).join(" "), /GILET/);
+    const protectedRange = preparationForecasts(state, final)[0].best!.range;
+    const withoutItem = { ...final, heldItem: undefined };
+    const unprotectedRange = preparationForecasts(state, withoutItem)[0].best!.range;
+    assert.ok(protectedRange.max < unprotectedRange.max);
     for (const slot of state.party[0].moves) slot.pp = 0;
-    assert.match(preparationNotes(state, final).join(" "), /NESSUN ATTACCO CON PP/);
+    assert.equal(preparationForecasts(state, final)[0].unavailable, "no-pp");
   } finally { Math.random = original; }
 });
 

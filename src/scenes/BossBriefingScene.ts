@@ -10,10 +10,11 @@ import type { Screen } from "../engine/screen";
 import { abilityOf, speciesOf, statsOf, type Monster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
 import { trainerStyle, type TrainerStyle } from "../game/battle/trainerStyle";
-import { preparationNotes } from "../game/battle/preparation";
-import type { UiPanel } from "../ui/kit";
+import { preparationForecasts } from "../game/battle/preparation";
+import type { UiBlock, UiPanel } from "../ui/kit";
 import { readableCopy } from "../ui/kit/copy";
 import { moveDescription } from "../ui/kit/moveContent";
+import { companionPosition } from "../ui/kit/companionContent";
 
 // Reading never changes combatants. Only an explicit leader choice reorders the party.
 export class BossBriefingScene implements Scene {
@@ -55,22 +56,21 @@ export class BossBriefingScene implements Scene {
     const back = { label: "Indietro", run: () => this.leave() };
     if (this.foe) {
       const foe = this.foe, index = this.team.indexOf(foe);
-      const notes = preparationNotes(this.state, foe);
       const ability = abilityOf(foe), item = ITEMS[foe.heldItem ?? ""];
-      const estimateStart = notes.indexOf("LA TUA SQUADRA: STIMA AL RIMPASTO, SENZA CRITICO.");
-      const estimates = notes.slice(estimateStart + 1, -2);
-      let estimateCursor = 0;
-      const partyEstimates = this.state.party.map(mon => {
-        const name = speciesOf(mon).name;
-        const start = estimates.findIndex((line, index) => index >= estimateCursor && line.startsWith(`${name}:`));
-        if (start < 0) return { title: name, body: "Stima non disponibile." };
-        let end = start + 1;
-        while (end < estimates.length && !this.state.party.some(other => estimates[end].startsWith(`${speciesOf(other).name}:`))) end++;
-        estimateCursor = end;
-        const forecasts = estimates.slice(start, end).filter(line => !line.startsWith("PREPARAZIONE:")).map(readableCopy);
-        const preparation = mon.moves.filter(slot => slot.pp > 0 && MOVES[slot.id].effect?.stat?.target === "self")
-          .map(slot => `${readableCopy(MOVES[slot.id].name)}. ${moveDescription(MOVES[slot.id])}`);
-        return { title: `Stima · ${name}`, body: [...forecasts, ...preparation].join("\n\n") };
+      const partyEstimates = preparationForecasts(this.state, foe).flatMap(({ mon, unavailable, best, afterDefense, preparations }): UiBlock[] => {
+        const title = `${companionPosition(mon, this.state.party)} · ${speciesOf(mon).name}`;
+        if (unavailable === "ko") return [{ title, body: "È KO. Curarlo al bar permette di usarlo nella sfida." }];
+        const blocks: UiBlock[] = best ? [{ title, facts: [
+          { label: "Mossa", value: best.move.name }, { label: "PP", value: `${best.pp} di ${best.move.pp}` },
+          { label: "Danno se colpisce", value: `${best.range.min}–${best.range.max} PV` },
+          { label: "Precisione", value: `${best.move.accuracy}%` }
+        ] }] : [{ title, body: "Nessun attacco dannoso ha PP disponibili. Recupera i PP al bar." }];
+        if (best && afterDefense) blocks.push({ title: `Se usa ${afterDefense.move.name}`, body: "Stima della stessa mossa dopo il potenziamento della difesa avversaria.",
+          facts: [{ label: "Danno prima → dopo", value: `${best.range.min}–${best.range.max} → ${afterDefense.range.min}–${afterDefense.range.max} PV` }] });
+        blocks.push(...preparations.map(({ move, pp }) => ({ title: `Preparazione · ${move.name}`, body: moveDescription(move),
+          facts: [{ label: "Tipo", value: move.type }, { label: "PP", value: `${pp} di ${move.pp}` },
+            { label: "Precisione", value: `${move.accuracy}%` }] })));
+        return blocks;
       });
       return { title: speciesOf(foe).name, subtitle: `Avversario ${index + 1} di ${this.team.length}. Stime prima della sfida, senza consumare turni o PP.`,
         portrait: { src: `/sprites/monsters/${foe.speciesId}.png`, label: speciesOf(foe).name },
@@ -82,7 +82,7 @@ export class BossBriefingScene implements Scene {
             facts: [{ label: "Tipo", value: move.type }, { label: "Categoria", value: move.category },
               { label: "Potenza", value: String(move.power) }, { label: "PP", value: `${slot.pp} di ${move.pp}` },
               { label: "Precisione", value: `${move.accuracy}%` }] }; }),
-          { title: "Le stime della tua squadra", body: "Danno al cambio, senza colpi critici. Non è un risultato garantito: la mossa deve colpire e status o potenziamenti possono cambiarlo." },
+          { title: "Le stime della tua squadra", body: "Per ogni compagno: l’attacco con il danno minimo più alto, entrando in campo ora.\n\nStime senza colpi critici. La mossa deve colpire; status e potenziamenti possono cambiare il risultato." },
           ...partyEstimates,
           { title: "Riprendi una mossa", body: "Squadra → compagno → Archivio mosse. Il confronto è gratuito; sono disponibili solo le mosse già imparate." }], actions: [], back };
     }

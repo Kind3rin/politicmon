@@ -179,3 +179,5 @@ body.ui-feedback-open.ui-world-open .ui-world-hud{visibility:hidden}
 
 body.ui-world-pending #touch-ui{visibility:hidden}
 #touch-buttons{display:none!important}
+
+@media(orientation:landscape) and (max-height:540px){.ui-header:has(.ui-avatar){grid-template-columns:minmax(0,1fr)}.ui-header:has(.ui-avatar) .ui-avatar{grid-column:1;grid-row:1}.ui-header:has(.ui-avatar) .ui-title{grid-column:1;grid-row:2}.ui-header:has(.ui-avatar) .ui-body{grid-column:1;grid-row:auto}}

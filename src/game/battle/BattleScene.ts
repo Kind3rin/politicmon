@@ -43,6 +43,7 @@ import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
 import { switchPreview, damageRange } from "./tactics";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
+import { chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
 import type { TouchAction } from "../../engine/touchActions";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
@@ -107,6 +108,10 @@ export class BattleScene implements Scene {
   private recruitMenu = new Menu([]);
   private recruitBall = "";
   private battery = 3;
+  private field?: BattleField;
+  private fieldTurn = 0;
+  private fieldResolved = false;
+  private fieldFxT = 0;
   private finisherT = 0;
   private mainMenu = new Menu([
     { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUORIONDA" }, { label: "CAMPAGNA" }, { label: "FUGA" }
@@ -162,6 +167,11 @@ export class BattleScene implements Scene {
     this.maxBattleHealingItems = opts.maxBattleHealingItems ?? null;
     this.onEnd = opts.onEnd;
     recordBattleStarted(this.state);
+    if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary) {
+      this.field = chooseFieldEvent(this.state.runStats.battles);
+      this.push({ text: `AL SECONDO TURNO: ${this.field.name}.\n${this.field.rule}` });
+      sceneImage("battle:field-events", "ui/battle/field-events.png");
+    }
     // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
     // (screen-shake) e la usa la scena per i lampi (KO/level/cattura/leggendario).
     this.fx.reduceEffects = this.state.reduceEffects;
@@ -303,6 +313,7 @@ export class BattleScene implements Scene {
   // ---- Turn building ----
 
   private startTurn(playerMove: Move): void {
+    this.advanceField();
     this.electionTurn += 1;
     this.drainBattery();
     if (this.electionDoctrine === "destra_competitiva" && !this.electionDoctrineTriggered && this.electionTurn >= 7) {
@@ -405,11 +416,25 @@ export class BattleScene implements Scene {
     return {
       run: () => {
         if (this.foe.mon.hp > 0) {
+          const saved = this.queue;
+          this.queue = [];
+          this.advanceField();
+          const event = this.queue;
+          this.queue = saved;
           this.pushMoveNow("foe", this.takeFoeIntent());
+          this.pushFront(event);
           this.drainBattery();
         }
       }
     };
+  }
+
+  private advanceField(): void {
+    this.fieldTurn += 1;
+    if (!this.field || this.fieldTurn !== 2 || this.field.id === "click") return;
+    this.fieldResolved = true;
+    this.fieldFxT = this.state.reduceEffects ? 0 : .8;
+    this.push({ text: applyFieldEvent(this.field, this.player, this.foe), waitHp: true });
   }
 
   private drainBattery(): void {
@@ -451,14 +476,15 @@ export class BattleScene implements Scene {
   }
 
   private moveHint(move: Move): string {
+    const [player, foe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
     const stat = move.effect?.stat;
     if (stat) {
-      const target = stat.target === "self" ? this.player : this.foe;
+      const target = stat.target === "self" ? player : foe;
       if (move.power === 0 && stat.target === "foe" && stat.stages < 0 && statDropBlockReason(target.mon)) return `BLOCCATA: ${statDropBlockReason(target.mon) === "garanzia" ? "GARANZIA" : "POLTRONA SALDA"}`;
       if (target.stages[stat.key] === (stat.stages > 0 ? 6 : -6)) return "STATISTICA GIÀ AL LIMITE";
     }
     if (move.power > 0) {
-      const range = damageRange(this.player, this.foe, move, { sondaggi: this.state.sondaggi });
+      const range = damageRange(player, foe, move, { sondaggi: this.state.sondaggi });
       return `DANNI ${range.min}-${range.max} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P`;
     }
     return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P`;
@@ -474,6 +500,13 @@ export class BattleScene implements Scene {
   ): Step[] {
     const defenderName = side === "player" ? `Il nemico ${this.foeName()}` : this.playerName();
     const steps: Step[] = [];
+    if (this.field?.id === "click" && this.fieldTurn === 2 && !this.fieldResolved) {
+      this.fieldResolved = true;
+      this.fieldFxT = this.state.reduceEffects ? 0 : .8;
+      const gain = side === "player" && this.polemica.value < 3;
+      if (gain) this.polemica.value += 1;
+      steps.push({ text: side === "player" ? `CLICK DAY: DOMANDA ACCETTATA.\nPOLEMICA +${gain ? 1 : 0}.` : "CLICK DAY: IL NEMICO ERA PRIMO.\nFONDI FINITI. POLEMICA +0." });
+    }
     const before = {
       hp: defender.mon.hp, status: defender.mon.status, gaffe: defender.gaffeTurns,
       own: { ...attacker.stages }, foe: { ...defender.stages }
@@ -1390,7 +1423,7 @@ export class BattleScene implements Scene {
     ));
     if (mode === "menu") return this.mainMenu.items.map((item, index) => action(
       index === 1 && !this.trainer ? "CATTURA" : item.label, () => this.chooseMainAction(index),
-      index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : undefined,
+      index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
       index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
     ));
     if (mode === "fight") return [
@@ -1427,6 +1460,7 @@ export class BattleScene implements Scene {
     }
     dt *= this.state.battleSpeed === 2 ? 2 : 1;
     this.finisherT = Math.max(0, this.finisherT - dt);
+    this.fieldFxT = Math.max(0, this.fieldFxT - dt);
     this.legendBanner = Math.max(0, this.legendBanner - dt);
     this.firstSeenBanner = Math.max(0, this.firstSeenBanner - dt);
     this.legendIntroFlash = Math.max(0, this.legendIntroFlash - dt);
@@ -1483,6 +1517,8 @@ export class BattleScene implements Scene {
       const step = this.queue[0];
       if (!step) {
         if (hpSettled) {
+          // A blocked Click Day expires with its round; no retroactive bonus.
+          if (this.field?.id === "click" && this.fieldTurn >= 2) this.fieldResolved = true;
           this.mainMenu.index = 0;
           this.foeIntent ??= chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
           this.mode = "menu";
@@ -1928,10 +1964,22 @@ export class BattleScene implements Scene {
     // Riquadro testo.
     screen.panel(2, VIEW_H - 44, VIEW_W - 4, 42, "dialog");
     if (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit") {
-      screen.panel(6, 42, 116, 27, "card");
+      screen.panel(6, 42, 116, this.field ? 39 : 27, "card");
       screen.text(`POLEMICA ${this.polemica.value}/3`, 12, 47, this.polemica.value === 3 ? "#26745d" : INK);
       const intent = this.foeIntent;
       screen.textFit(intent ? `ARRIVA: ${intent.name}` : "", 12, 59, 104, "#8c5b12");
+    }
+    if (this.field && (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit")) {
+      const name = this.field.id === "poll" ? "SONDAGGIO" : this.field.name;
+      screen.textFit(`${this.fieldResolved ? "OK" : "T2"}: ${name}`, 12, 71, 104, "#26745d");
+    }
+    if (this.field && this.fieldFxT > 0) {
+      const art = sceneImage("battle:field-events", "ui/battle/field-events.png");
+      if (art) screen.ctx.drawImage(art, (this.field.frame % 2) * 240, Math.floor(this.field.frame / 2) * 180, 240, 180, 0, 0, 240, 180);
+      screen.panel(6, 6, 228, 20, "card"); screen.textCenter(this.field.name, 120, 12, INK);
+      screen.panel(6, 148, 228, 25, "card");
+      wrapText(this.field.rule, 35).forEach((line, i) => screen.text(line, 12, 154 + i * 8, INK));
+      return;
     }
     if (this.mode === "menu") {
       this.drawMainMenu(screen);
@@ -2227,7 +2275,7 @@ export class BattleScene implements Scene {
     // Se il badge c'è, il nome slitta a destra così la scheda non copre "PV"
     // (prima la scheda finiva sulla riga della barra e mangiava la scritta PV).
     drawCombatantBox(screen, this.foe.mon, this.displayHp.foe, {
-      ...FOE_BOX,
+      ...FOE_BOX, hpW: 38, inlineHp: true,
       nameInset: ballotImg ? 14 : 0
     });
     if (ballotImg) {

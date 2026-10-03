@@ -44,6 +44,10 @@
       "evolution-animation": [
         480,
         360
+      ],
+      "battle-field-animation": [
+        480,
+        360
       ]
     },
     "resampling": "nearest",
@@ -346,6 +350,24 @@
       ],
       "sourceSha256": "49bbe8cd98d402eea4820052798ee4755569070693ffb35c2e64fcdec1d8f1a2",
       "sha256": "58852a0e2786bc2b96665c6f524795bb14ef80861561d99ae6de3df8debbe558",
+      "processing": "Nearest-neighbor delivery resize, 48-color palette; four equal 240x180 frames, 2x2 atlas.",
+      "creditsSpent": 0.25
+    },
+    {
+      "id": "battle-field-events",
+      "kind": "battle-field-animation",
+      "path": "public/sprites/ui/battle/field-events.png",
+      "width": 480,
+      "height": 360,
+      "jobId": "97757873-4c43-4f81-8eb3-a34c0561b622",
+      "model": "gpt_image_2_5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_010216_97757873-4c43-4f81-8eb3-a34c0561b622.png",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "sourceSha256": "44dde29ceeeac04e5cdf00fd6b17a4f0fa047423e506faa4ff44793d97f8d4fe",
+      "sha256": "7371dca7196e77e2830111e718de22ec061c7fdfe375a8a9fc242365b6ec6ae7",
       "processing": "Nearest-neighbor delivery resize, 48-color palette; four equal 240x180 frames, 2x2 atlas.",
       "creditsSpent": 0.25
     }

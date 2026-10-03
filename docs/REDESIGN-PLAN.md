@@ -16,12 +16,12 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Area | Stato attuale | Prova |
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
-| Battaglie | Polemica, Fuorionda/cattura virale, intento onesto e copione del rivale; notifiche automatiche | Prova touch reale: prima vittoria e cattura; unit test |
+| Battaglie | Polemica, Fuorionda/cattura virale, intento onesto, tre eventi iniziali al turno 2 e PV numerici | Prova touch reale: prima vittoria e cattura; unit test |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
-| Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
+| Politicdex | Quattro fatti, volti avvistati, filtri diretti e dettagli habitat/evoluzioni su richiesta | Schede note/ignote, filtri e due rami evolutivi giocati via touch |
 | Schede squadra | Quattro fatti iniziali; evoluzione diretta, mosse/dati/difese/archivio su richiesta | Partita touch su squadra guadagnata e unit test |
 | Evoluzioni | Prima forma al LV8, prossima mossa LV9; quattro fatti, confronto facoltativo, animazione Higgsfield e ritorno automatico | Ellyna → Schleinix giocata, unit test; saldo 352,47 |
 | Borsa/negozio | Cura in due scelte, PV effettivi e ritorno automatico; filtri e dettagli facoltativi | Caffè giocato: 17 → 27 PV, quantità 6 → 5 |
@@ -50,10 +50,16 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | PWA | Scocca Android rivista, 20 layout/sei rotazioni; release locale con 798 asset Higgsfield e 19 tracce AAC offline | MOBILE-PWA-LAYOUT, GOVERNO-VERBALE; `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 352,47; spesa cumulativa 533,50 crediti. Non sono stati attivati acquisti
+verificato: 352,22; spesa cumulativa 533,75 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: prima crescita
+## Ultimo round: collezione ed eventi
+
+Politicdex giocato con quattro fatti e dettagli diretti; tre eventi di campo provati negli incontri del Percorso 1, cattura di Grillix e Articolo 1 al LV9 e crescita fino al LV10.
+354 test, build, sei formati senza overflow e salvataggio riaperto offline (quattro membri); 833 risorse precache; atlante Higgsfield 0,25 crediti, saldo 352,22. Budget totale 356 KiB, iniziale 250 KiB invariato.
+Il titolo e i menu del mondo rallentano ancora il ritmo; valutazione umana della slice e verifica sul POCO fisico restano aperte.
+
+## Round precedente: prima crescita
 
 Campagna nuova giocata con input touch: cattura → pratica → due selvatici → Ellyna LV8/Schleinix → Gianni LV9 vinto in quattro turni.
 Quattro fatti nella squadra, confronto di evoluzione facoltativo e cure senza conferma finale; salvataggio riaperto offline con 1560€ e sondaggi 69%.

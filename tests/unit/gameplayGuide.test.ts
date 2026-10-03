@@ -129,3 +129,41 @@ test("battle speed migration accepts only supported presentation speeds", () => 
   for (const value of [0, -1, "2", 200, null]) assert.equal(parseGameState(JSON.stringify({ ...legacy, battleSpeed: value }))!.battleSpeed, 1);
   assert.equal(parseGameState(JSON.stringify({ ...legacy, battleSpeed: 2 }))!.battleSpeed, 2);
 });
+
+test("the compact Dex exposes four facts and keeps unobserved traits hidden", async () => {
+  const { dexSummary } = await import("../../src/game/dexGuide.ts");
+  const state = newGameState(); state.pos.mapId = "route1";
+  const before = JSON.stringify(state);
+  for (const id of Object.keys(SPECIES)) {
+    const facts = dexSummary(id, state); assert.equal(facts.length, 4);
+    assert.equal(facts[0], "TIPI: DA AVVISTARE"); assert.equal(facts[1], "ABILITÀ: DA AVVISTARE");
+    assert.equal(facts[3], "EVOLUZIONE: DA AVVISTARE");
+  }
+  assert.equal(JSON.stringify(state), before);
+  state.dex.salvinott = "seen";
+  assert.match(dexSummary("salvinott", state)[2], /PERCORSO 1: LV 4-6/);
+  assert.match(dexSummary("salvinott", state)[3], /2 STRADE/);
+  state.dex.ellyna = "caught";
+  assert.match(dexSummary("ellyna", state)[3], /SCHLEINIX: LIVELLO 8/);
+});
+
+test("Dex canvas rows select then open, direct habitat is guarded and B restores the compact card", async () => {
+  const { DexScene } = await import("../../src/scenes/DexScene.ts");
+  const { SceneStack } = await import("../../src/engine/scene.ts");
+  const state = newGameState(); state.dex.ellyna = "caught"; state.dex.salvinott = "seen";
+  let tap: { x: number; y: number } | null = { x: 70, y: 49 }, back = false;
+  const input = { consumeTap: () => tap, clearTap: () => { tap = null; }, wasPressed: (key: string) => key === "b" && back, reset: () => {} } as any;
+  const stack = new SceneStack(), scene = Object.assign(Object.create(DexScene.prototype), { stack, input, state, reachable: new Set(["borgo", "route1"]), index: 0, filter: "seen", typeFilter: null, scroll: 0, time: 0, detail: false, page: -1, textScroll: 0 });
+  scene.selectFirst(); stack.push(scene);
+  scene.update(); assert.equal(scene.detail, false);
+  tap = { x: 70, y: 49 }; scene.update(); assert.equal(scene.detail, true); assert.equal(scene.page, -1);
+  const habitat = scene.touchActions[0]; habitat.run(); assert.equal(scene.page, 3);
+  back = true; scene.update(); assert.equal(scene.page, -1); assert.equal(scene.detail, true);
+  back = false; stack.push({ update() {}, draw() {} }); habitat.run(); assert.equal(scene.page, -1);
+});
+
+test("an unobserved Dex entry opens its habitat directly with A", async () => {
+  const { DexScene } = await import("../../src/scenes/DexScene.ts");
+  const scene = Object.assign(Object.create(DexScene.prototype), { state: newGameState(), reachable: new Set(["borgo"]), index: 0, filter: "all", typeFilter: null, detail: true, page: -1, time: 0, input: { consumeTap: () => null, wasPressed: (key: string) => key === "a" } });
+  scene.update(); assert.equal(scene.page, 3);
+});

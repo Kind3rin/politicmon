@@ -208,3 +208,74 @@ test("replacing a move still lets the player cancel before losing its PP", () =>
   assert.equal(learned, 0);
   assert.deepEqual(mon.moves, before);
 });
+
+test("opening field events rotate and a forecast cannot remove real bonuses", async () => {
+  const { chooseFieldEvent, fieldPreview, FIELD_EVENTS } = await import("../../src/game/battle/fieldEvents.ts");
+  assert.deepEqual(Array.from({ length: 6 }, (_, i) => chooseFieldEvent(i + 1).id), ["click", "equal", "poll", "click", "equal", "poll"]);
+  const player = makeCombatant(createMonster("ellyna", 8)), foe = makeCombatant(createMonster("salvinott", 5));
+  player.stages.atk = 3; player.stages.spd = -2; foe.stages.def = 4;
+  const before = JSON.stringify([player, foe]);
+  const [p, f] = fieldPreview(FIELD_EVENTS[1], 1, player, foe);
+  assert.equal(p.stages.atk, 0); assert.equal(p.stages.spd, -2); assert.equal(f.stages.def, 0);
+  assert.equal(JSON.stringify([player, foe]), before);
+  assert.equal(fieldPreview(FIELD_EVENTS[1], 0, player, foe)[0], player);
+});
+
+test("the flash poll helps the lower percentage, never heals KO or cures status", async () => {
+  const { applyFieldEvent, FIELD_EVENTS } = await import("../../src/game/battle/fieldEvents.ts");
+  const { statsOf } = await import("../../src/game/monster.ts");
+  const player = makeCombatant(createMonster("ellyna", 8)), foe = makeCombatant(createMonster("salvinott", 5));
+  player.mon.hp = 12; foe.mon.hp = 20; player.mon.status = "scandalo";
+  applyFieldEvent(FIELD_EVENTS[2], player, foe);
+  assert.equal(player.mon.hp, 12 + Math.floor(statsOf(player.mon).hp * .1));
+  assert.equal(foe.mon.hp, 20); assert.equal(player.mon.status, "scandalo");
+  player.mon.hp = 0;
+  applyFieldEvent(FIELD_EVENTS[2], player, foe);
+  assert.equal(player.mon.hp, 0);
+  player.mon.hp = statsOf(player.mon).hp; foe.mon.hp = statsOf(foe.mon).hp;
+  assert.match(applyFieldEvent(FIELD_EVENTS[2], player, foe), /PARITÀ/);
+});
+
+test("a field event happens once on the second consuming action, not again after switching", async () => {
+  const { FIELD_EVENTS } = await import("../../src/game/battle/fieldEvents.ts");
+  const battle = Object.create(BattleScene.prototype) as any;
+  battle.field = FIELD_EVENTS[1]; battle.fieldTurn = 0; battle.fieldResolved = false; battle.state = { reduceEffects: true };
+  battle.player = makeCombatant(createMonster("ellyna", 8)); battle.foe = makeCombatant(createMonster("salvinott", 5));
+  battle.player.stages.atk = 2; battle.foe.stages.spd = -3; const messages: string[] = [];
+  battle.push = (step: any) => messages.push(step.text);
+  battle.advanceField(); assert.equal(battle.player.stages.atk, 2);
+  battle.advanceField(); assert.equal(battle.player.stages.atk, 0); assert.equal(battle.foe.stages.spd, -3);
+  battle.player.stages.atk = 1; battle.advanceField();
+  assert.equal(battle.player.stages.atk, 1); assert.equal(messages.length, 1); assert.equal(battle.fieldFxT, 0);
+});
+
+test("field notification precedes the counterattack after a non-move action", async () => {
+  const { FIELD_EVENTS } = await import("../../src/game/battle/fieldEvents.ts");
+  const battle = Object.create(BattleScene.prototype) as any;
+  battle.field = FIELD_EVENTS[1]; battle.fieldTurn = 1; battle.state = { reduceEffects: true };
+  battle.player = makeCombatant(createMonster("ellyna", 8)); battle.foe = makeCombatant(createMonster("salvinott", 5));
+  battle.queue = [{ text: "AFTER" }]; battle.foe.stages.atk = 2;
+  battle.takeFoeIntent = () => MOVES.comizio; battle.drainBattery = () => {};
+  battle.pushMoveNow = () => battle.queue.unshift({ text: "ATTACK" });
+  battle.foeCounterStep().run();
+  assert.match(battle.queue[0].text, /PAR CONDICIO/);
+  assert.equal(battle.queue[1].text, "ATTACK"); assert.equal(battle.queue[2].text, "AFTER");
+  assert.equal(battle.foe.stages.atk, 0);
+});
+
+test("Click Day awards only the first valid action and never exceeds three Polemica", async () => {
+  const { FIELD_EVENTS } = await import("../../src/game/battle/fieldEvents.ts");
+  const battle = Object.create(BattleScene.prototype) as any;
+  battle.field = FIELD_EVENTS[0]; battle.fieldTurn = 2; battle.state = { reduceEffects: true };
+  battle.player = makeCombatant(createMonster("ellyna", 8)); battle.foe = makeCombatant(createMonster("salvinott", 5));
+  battle.polemica = new Polemica(); battle.polemica.value = 2;
+  const steps = battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", true);
+  assert.match(steps[0].text, /POLEMICA \+1/); assert.equal(battle.polemica.value, 3);
+  battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", false);
+  assert.equal(battle.polemica.value, 3);
+  battle.fieldResolved = false; battle.polemica.value = 0;
+  const foeSteps = battle.moveSteps("foe", battle.foe, battle.player, MOVES.comizio, "SALVINOTT", true);
+  assert.match(foeSteps[0].text, /FONDI FINITI/); assert.equal(battle.polemica.value, 0);
+  battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", false);
+  assert.equal(battle.polemica.value, 0);
+});

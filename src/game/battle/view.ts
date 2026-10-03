@@ -541,6 +541,7 @@ export interface CombatantBoxOpts {
   hpY: number; // offset verticale della barra HP dentro il box
   hpW: number;
   showHpText: boolean; // solo il box del "player" mostra i PV numerici
+  inlineHp?: boolean;
   nameInset?: number; // sposta il nome a destra per fare spazio a un badge
 }
 
@@ -576,7 +577,7 @@ export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number
     // l'UNICO segnale di "quasi KO" (accessibilità). Allineata al bordo del box,
     // sulla stessa riga della barra HP.
     const pct = maxHp > 0 ? Math.max(0, Math.min(100, Math.round((displayHp / maxHp) * 100))) : 0;
-    screen.textRight(`${pct}%`, x + w - pad, y + opts.hpY, INK);
+    screen.textRight(opts.inlineHp ? `${Math.round(displayHp)}/${maxHp}` : `${pct}%`, x + w - pad, y + opts.hpY, INK);
   }
   if (mon.status) {
     const sy = opts.showHpText ? y + 25 : y + 16;

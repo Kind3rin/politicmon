@@ -1,3 +1,4 @@
+import { ABILITIES } from "../data/abilities";
 import { MAPS } from "../data/maps";
 import { SPECIES, STARTERS, type EvolutionRule } from "../data/species";
 import { ITEMS } from "../data/items";
@@ -88,4 +89,15 @@ export function dexAcquisitionNotes(id: string, state: GameState, reachable = re
 
 export function defensiveMatchups(id: string) {
   return TYPE_ORDER.map((type) => ({ type, mult: typeMultiplier(type, SPECIES[id].types) }));
+}
+
+
+export function dexSummary(id: string, state: GameState, reachable = reachableDexMaps(state)): string[] {
+  const species = SPECIES[id], seen = Boolean(state.dex[id]);
+  const habitat = dexHabitats(id, state, reachable)[0], rule = species.evolutions?.[0];
+  const place = habitat ? `${habitat.name}: LV ${habitat.minLv}-${habitat.maxLv}` : dexAcquisitionNotes(id, state, reachable)[0];
+  return [seen ? `TIPI: ${species.types.join(" / ")}` : "TIPI: DA AVVISTARE",
+    seen ? `ABILITÀ: ${species.ability ? ABILITIES[species.ability].name : "NESSUNA"}` : "ABILITÀ: DA AVVISTARE",
+    `DOVE: ${place}`,
+    !seen ? "EVOLUZIONE: DA AVVISTARE" : (species.evolutions?.length ?? 0) > 1 ? `EVOLUZIONE: ${species.evolutions!.length} STRADE / VEDI DETTAGLI` : rule ? `${SPECIES[rule.id].name}: ${evolutionCondition(rule)}` : "FORMA FINALE"];
 }

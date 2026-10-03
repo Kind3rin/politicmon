@@ -286,3 +286,6 @@ Quattro fotogrammi visti e integrati nella finale di Polemica; atlante 480×270,
 
 Lotto evoluzione — saldo **352,72 → 352,47** (0,25 crediti), job `4c462345-8203-4cd7-b325-f494b3a065b9`.
 Quattro fasi viste e giocate nel cambio Ellyna → Schleinix; atlante 480×360 da 97,6 kB, provenienza/checksum nel manifest esistente.
+
+Lotto eventi di campo — saldo **352,47 → 352,22** (0,25 crediti), job `97757873-4c43-4f81-8eb3-a34c0561b622`.
+Atlante 480×360 con quattro vignette viste; Click Day, Par condicio e Sondaggio integrati negli incontri iniziali, provenienza/checksum nel manifest.

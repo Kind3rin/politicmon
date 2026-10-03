@@ -10,6 +10,8 @@ import { createMonster, expForLevel, expYield } from "../../src/game/monster.ts"
 import { newGameState, parseGameState } from "../../src/game/state.ts";
 import { makeCombatant } from "../../src/game/battle/sim.ts";
 import { FIELD_EVENTS } from "../../src/game/battle/fieldEvents.ts";
+import { CivicScene } from "../../src/scenes/CivicScene.ts";
+import { CIVIC_EVENTS } from "../../src/data/civicEvents.ts";
 
 function withSaveStorage(check: (saved: Map<string,string>) => void): void {
   const previous = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
@@ -18,6 +20,39 @@ function withSaveStorage(check: (saved: Map<string,string>) => void): void {
   try { check(saved); }
   finally { if(previous)Object.defineProperty(globalThis,"localStorage",previous);else delete (globalThis as any).localStorage; }
 }
+
+test("civic touch choices commit costs, promises and morale once before the result can close", () => withSaveStorage(saved => {
+  const state = newGameState(); state.money = 1000;
+  let popped = 0;
+  const scene = new CivicScene({ pop: () => popped++ } as any, idle, state, CIVIC_EVENTS.bus);
+  const pay = scene.touchActions[0];
+  assert.equal(pay.hint, "180€ S-2 F+12 C+6");
+  assert.match(scene.touchActions[1].hint!, /3SF/);
+  pay.run();
+  assert.equal(state.money, 820); assert.equal(state.morale.trust, 62); assert.equal(state.morale.cohesion, 66);
+  assert.equal(state.morale.promises[0].status, "kept");
+  const restored = [...saved.values()].map(value => parseGameState(value)).find(s => s?.morale.decisions.includes("bus:pay"));
+  assert.ok(restored); assert.equal(restored.money, 820);
+  pay.run(); assert.equal(state.money, 820); assert.equal(popped, 0);
+  for (let i = 0; i < 8 && scene.touchActions[0].label === "CONTINUA"; i++) scene.touchActions[0].run();
+  assert.equal(popped, 1);
+}));
+
+test("civic canvas taps select the touched choice while leaving cancels and unaffordable options safe", () => withSaveStorage(() => {
+  const state = newGameState(); state.money = 0;
+  let popped = 0;
+  const input = { wasPressed: () => false, tapInRect: (_x: number, y: number) => y === 139 } as any;
+  const scene = new CivicScene({ pop: () => popped++ } as any, input, state, CIVIC_EVENTS.bus);
+  assert.equal(scene.touchActions[0].disabled, true);
+  scene.update(.01);
+  assert.ok(state.morale.decisions.includes("bus:crop"));
+  assert.equal(state.money, 0); assert.equal(state.morale.trust, 38);
+  const fresh = newGameState();
+  const cancel = new CivicScene({ pop: () => popped++ } as any, idle, fresh, CIVIC_EVENTS.bus);
+  const before = JSON.stringify(fresh);
+  cancel.touchActions[3].run();
+  assert.equal(JSON.stringify(fresh), before); assert.equal(popped, 1);
+}));
 
 test("result commitment consumes only applied campaign boosts once, including rematches and tournaments",()=>{
   const cases=[
@@ -247,6 +282,22 @@ test("battle notifications advance on their own while world dialogue stays manua
   world.update(5, idle);
   world.update(5, idle);
   assert.equal(world.isOpen, true);
+});
+
+test("portrait world dialogue draws and accepts taps at the expanded bottom edge", () => {
+  const box = new MessageBox();
+  box.show(["IL COMUNICATO."]);
+  box.update(1, idle, 410);
+  let tapY = 160;
+  const input = { wasPressed: () => false, tapInRect: (_x: number, y: number, _w: number, h: number) => tapY >= y && tapY < y + h } as any;
+  box.update(.01, input, 410);
+  assert.equal(box.isOpen, true, "tapping the old bottom must not advance a portrait dialogue");
+  let panelY = 0;
+  box.draw({ height: 410, panel: (_x: number, y: number) => { panelY = y; }, text: () => {} } as any);
+  assert.equal(panelY, 366);
+  tapY = 390;
+  box.update(.01, input, 410);
+  assert.equal(box.isOpen, false);
 });
 
 test("each timed page has its own reading interval and A accelerates without dropping choices", () => {

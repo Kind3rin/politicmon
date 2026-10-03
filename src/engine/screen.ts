@@ -1,4 +1,5 @@
 import { CHAR_W, GLYPH_H, GLYPH_W, getGlyph } from "./font";
+import { worldViewportHeight } from "./worldCamera";
 
 export const VIEW_W = 240;
 export const VIEW_H = 180;
@@ -17,9 +18,12 @@ export interface ImageBounds {
 
 export type PanelStyle = "default" | "dialog" | "menu" | "combat" | "card";
 
-// Renderer pixel-perfect su canvas 240x180, con cache degli sprite.
+// Renderer a pixel interi, largo 240; il mondo può mostrare più righe su mobile.
 export class Screen {
   readonly ctx: CanvasRenderingContext2D;
+  private expandedViewport = false;
+  private viewHeight = VIEW_H;
+  get height(): number { return this.viewHeight; }
   private spriteCache = new Map<string, HTMLCanvasElement>();
   private imageBoundsCache = new WeakMap<HTMLImageElement, ImageBounds>();
   private glyphCache = new Map<string, HTMLCanvasElement>();
@@ -39,26 +43,37 @@ export class Screen {
     if (stage) new ResizeObserver(refit).observe(stage);
   }
 
+  configureViewport(expanded: boolean): void {
+    if (this.expandedViewport === expanded) return;
+    this.expandedViewport = expanded;
+    this.fitToWindow();
+  }
+
   private fitToWindow(): void {
     // CSS owns the available stage, including safe areas and controller columns.
     // Measuring it also handles installed PWAs, browser bars and rotation.
     const viewport = window.visualViewport;
     document.documentElement.style.setProperty('--app-height', `${viewport?.scale === 1 ? viewport.height : window.innerHeight}px`);
+    const stage = document.querySelector<HTMLElement>('#screen-stage');
+    this.viewHeight = worldViewportHeight(stage?.clientWidth ?? 0, stage?.clientHeight ?? 0,
+      this.expandedViewport && document.body.classList.contains('touch') && window.matchMedia('(orientation: portrait)').matches);
+    document.querySelector<HTMLElement>('#screen-frame')?.style.setProperty('--view-height', String(this.viewHeight));
+    this.canvas.dataset.viewHeight = String(this.viewHeight);
     const rawScale = this.canvas.getBoundingClientRect().width / VIEW_W;
 
     // Backing store ad alta densità: senza tener conto di devicePixelRatio, su
     // ogni schermo HiDPI/Retina (tutti i telefoni moderni) il browser sfoca il
     // bitmap 240x180. Disegniamo a risoluzione fisica e teniamo le coordinate
-    // logiche a 240x180 via setTransform.
+    // logiche del viewport via setTransform.
     const dpr = Math.max(1, window.devicePixelRatio || 1);
 
-    // Il backing store resta un multiplo INTERO di 240x180 (pixel del bitmap
+    // Il backing store resta un multiplo INTERO del viewport (pixel del bitmap
     // tutti uguali, niente shimmer). Per la nitidezza lo teniamo denso: arrotonda
     // per ECCESSO la scala * dpr, così il buffer fisico è sempre >= della box CSS
     // e il browser fa un downscale pulito (non un upscale nearest sfocato).
     const backScale = Math.max(1, Math.ceil(rawScale * dpr));
     const bw = VIEW_W * backScale;
-    const bh = VIEW_H * backScale;
+    const bh = this.viewHeight * backScale;
     if (this.canvas.width !== bw || this.canvas.height !== bh) {
       this.canvas.width = bw;
       this.canvas.height = bh;
@@ -70,7 +85,7 @@ export class Screen {
 
   clear(color: string): void {
     this.ctx.fillStyle = color;
-    this.ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    this.ctx.fillRect(0, 0, VIEW_W, this.viewHeight);
   }
 
   rect(x: number, y: number, w: number, h: number, color: string): void {
@@ -345,7 +360,7 @@ export class Screen {
 
   dim(alpha: number): void {
     this.ctx.fillStyle = `rgba(8, 10, 18, ${alpha})`;
-    this.ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    this.ctx.fillRect(0, 0, VIEW_W, this.viewHeight);
   }
 
   // Disegna un'immagine bitmap (es. splash AI della title) coprendo l'area data
@@ -355,7 +370,7 @@ export class Screen {
     x = 0,
     y = 0,
     w = VIEW_W,
-    h = VIEW_H
+    h = this.viewHeight
   ): void {
     this.ctx.drawImage(img, Math.round(x), Math.round(y), w, h);
   }

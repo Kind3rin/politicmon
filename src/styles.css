@@ -15,7 +15,7 @@ button[hidden],[hidden]{display:none!important}
 .console-tools .tool-label{font-size:10px;letter-spacing:.09em}
 .console-tools button:hover,.console-brand:hover{color:var(--gold)}
 #screen-stage{container-type:size;display:grid;place-items:center;min-width:0;min-height:0;background:#070e19;border:1px solid #34455f;border-radius:12px;padding:6px}
-#screen-frame{position:relative;width:min(100cqw,calc(100cqh * 4 / 3),960px);aspect-ratio:4/3;line-height:0;border-radius:4px;background:#000;overflow:hidden}
+#screen-frame{position:relative;width:min(100cqw,calc(100cqh * 240 / var(--view-height,180)),960px);aspect-ratio:240/var(--view-height,180);line-height:0;border-radius:4px;background:#000;overflow:hidden}
 #game-canvas{display:block;width:100%;height:100%;background:#000;image-rendering:pixelated;touch-action:none}
 #shell-hint{color:var(--muted);font-size:11px;text-align:center;line-height:1.4;max-width:100%;padding:2px 8px}
 #touch-ui{display:none}

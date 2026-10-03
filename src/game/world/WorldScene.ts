@@ -197,6 +197,8 @@ function drawWorldTilePng(screen: Screen, img: HTMLImageElement, dx: number, dy:
 }
 
 export class WorldScene implements Scene {
+  readonly expandedViewport = true;
+  private viewHeight = VIEW_H;
   private readonly atto3Controller: Atto3Controller = createAtto3Controller();
   private map!: MapDef;
   private npcs: RuntimeNpc[] = [];
@@ -2723,7 +2725,7 @@ export class WorldScene implements Scene {
     for (let i = 0; i < n; i += 1) {
       this.healSparks.push({
         x: VIEW_W / 2 + (Math.random() - 0.5) * 28,
-        y: VIEW_H / 2 + 6 + (Math.random() - 0.5) * 18,
+        y: this.viewHeight / 2 + 6 + (Math.random() - 0.5) * 18,
         vx: (Math.random() - 0.5) * 24,
         vy: -30 - Math.random() * 40, // salgono verso l'alto
         life: 0,
@@ -2957,7 +2959,7 @@ export class WorldScene implements Scene {
     }
 
     if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
+      this.msg.update(dt, this.input, this.viewHeight);
       return;
     }
 
@@ -3085,6 +3087,7 @@ export class WorldScene implements Scene {
   // ---- Draw ----
 
   draw(screen: Screen): void {
+    this.viewHeight = screen.height;
     const pos = this.state.pos;
     const mapW = this.map.tiles[0].length * TILE;
     const mapH = this.map.tiles.length * TILE;
@@ -3096,7 +3099,7 @@ export class WorldScene implements Scene {
     const playerPy = this.moving ? py : pos.y * TILE;
 
     let camX = worldCameraAxis(playerPx + TILE / 2,mapW,VIEW_W);
-    let camY = worldCameraAxis(playerPy + TILE / 2,mapH,VIEW_H);
+    let camY = worldCameraAxis(playerPy + TILE / 2,mapH,this.viewHeight);
     // Scossone (RUSPA): sposta la camera di qualche pixel, dà peso all'impatto.
     if (this.shake > 0 && !this.state.reduceEffects) {
       const amp = this.shake * 4;
@@ -3108,7 +3111,7 @@ export class WorldScene implements Scene {
 
     const x0 = Math.floor(camX / TILE);
     const y0 = Math.floor(camY / TILE);
-    for (let ty = y0; ty <= y0 + Math.ceil(VIEW_H / TILE); ty += 1) {
+    for (let ty = y0; ty <= y0 + Math.ceil(this.viewHeight / TILE); ty += 1) {
       for (let tx = x0; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
         const ch = this.tileAt(tx, ty);
         const def = TILES[ch];
@@ -3204,7 +3207,7 @@ export class WorldScene implements Scene {
     // PixelLab caricati dal preload: niente vecchie pixmap di recupero in world.
     const tall: Array<{ baseY: number; draw: () => void }> = [];
 
-    for (let ty = y0 - 4; ty <= y0 + Math.ceil(VIEW_H / TILE) + 1; ty += 1) {
+    for (let ty = y0 - 4; ty <= y0 + Math.ceil(this.viewHeight / TILE) + 1; ty += 1) {
       for (let tx = x0 - 10; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
         const ch = this.tileAt(tx, ty);
         if (!isRoof(ch)) {
@@ -3329,7 +3332,7 @@ export class WorldScene implements Scene {
       const sx = Math.round(r.dispX) - camX;
       const sy = Math.round(r.dispY) - camY - 1;
       // Salta chi è troppo fuori schermo (perf + pulizia).
-      if (sx < -20 || sx > VIEW_W + 20 || sy < -20 || sy > VIEW_H + 20) {
+      if (sx < -20 || sx > VIEW_W + 20 || sy < -20 || sy > this.viewHeight + 20) {
         continue;
       }
       // Avatar remoto: stesso PNG del player (4 viste + walk); il nickname sopra
@@ -3481,7 +3484,7 @@ export class WorldScene implements Scene {
       }
       const wx = warp.x * TILE - camX;
       const wy = warp.y * TILE - camY;
-      if (wx < -TILE || wx > VIEW_W || wy < -TILE || wy > VIEW_H) {
+      if (wx < -TILE || wx > VIEW_W || wy < -TILE || wy > this.viewHeight) {
         continue;
       }
       const pulse = this.state.reduceEffects || Math.floor(this.time * 3) % 2 === 0;
@@ -3624,9 +3627,9 @@ export class WorldScene implements Scene {
       const direction = this.map.id === "borgo" && quest.target?.mapId === "route1" ? "Esci a NORD. " : "";
       const lines = wrapText(`► ${direction}${quest.step}`, 38);
       const boxH = lines.length * 9 + 5;
-      screen.rect(2, VIEW_H - boxH - 2, VIEW_W - 4, boxH, "rgba(16,20,31,0.92)");
+      screen.rect(2, this.viewHeight - boxH - 2, VIEW_W - 4, boxH, "rgba(16,20,31,0.92)");
       for (let i = 0; i < lines.length; i += 1) {
-        screen.text(lines[i], 6, VIEW_H - boxH + 1 + i * 9, "#e8c84a");
+        screen.text(lines[i], 6, this.viewHeight - boxH + 1 + i * 9, "#e8c84a");
       }
     }
 
@@ -3647,19 +3650,19 @@ export class WorldScene implements Scene {
     }
 
     if (this.askMenu) {
-      screen.panel(0, VIEW_H - 44, VIEW_W, 44);
-      screen.textFit(this.askLabel, 10, VIEW_H - 32, VIEW_W - 20, INK);
+      screen.panel(0, this.viewHeight - 44, VIEW_W, 44);
+      screen.textFit(this.askLabel, 10, this.viewHeight - 32, VIEW_W - 20, INK);
       // Larghezza auto sul label più lungo (min 56 = SÌ/NO), clampata al bordo.
       // Prima era fissa a 56px → le voci lunghe del menù GUIDA venivano troncate.
       const aw = Math.min(VIEW_W - 8, Math.max(56, this.askMenu.measureWidth() + 8));
-      this.askMenu.draw(screen, VIEW_W - 4 - aw, VIEW_H - 44 - this.askMenu.measureHeight(), aw);
+      this.askMenu.draw(screen, VIEW_W - 4 - aw, this.viewHeight - 44 - this.askMenu.measureHeight(), aw);
     }
 
     if (this.remoteMenu) {
-      screen.panel(0, VIEW_H - 44, VIEW_W, 44);
-      screen.textFit(this.askLabel, 10, VIEW_H - 32, VIEW_W - 20, INK);
+      screen.panel(0, this.viewHeight - 44, VIEW_W, 44);
+      screen.textFit(this.askLabel, 10, this.viewHeight - 32, VIEW_W - 20, INK);
       const rw = Math.min(VIEW_W - 8, Math.max(96, this.remoteMenu.measureWidth() + 8));
-      this.remoteMenu.draw(screen, VIEW_W - 4 - rw, VIEW_H - 44 - this.remoteMenu.measureHeight(), rw);
+      this.remoteMenu.draw(screen, VIEW_W - 4 - rw, this.viewHeight - 44 - this.remoteMenu.measureHeight(), rw);
     }
 
     this.msg.draw(screen);
@@ -3678,7 +3681,7 @@ export class WorldScene implements Scene {
       this.state.party.length === 0 &&
       this.map.id === "borgo"
     ) {
-      screen.text("Vai al laboratorio col tetto BLU!", 8, VIEW_H - 26, GREY);
+      screen.text("Vai al laboratorio col tetto BLU!", 8, this.viewHeight - 26, GREY);
     }
 
     // Dissolvenza d'ingresso nella nuova mappa (più dolce dei cambi secchi).
@@ -3705,11 +3708,11 @@ export class WorldScene implements Scene {
     const ctx = screen.ctx;
     const prog = this.healFx / 1.6; // 1 -> 0 mentre l'effetto svanisce
     const cx = VIEW_W / 2;
-    const cy = VIEW_H / 2 + 6;
+    const cy = this.viewHeight / 2 + 6;
 
     // 1) Velo verde che si accende e svanisce.
     ctx.fillStyle = `rgba(122,216,88,${0.26 * prog})`;
-    ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    ctx.fillRect(0, 0, VIEW_W, this.viewHeight);
 
     // 2) Anelli curativi che si stringono verso il centro.
     ctx.save();
@@ -3741,7 +3744,7 @@ export class WorldScene implements Scene {
       const panelW = 224;
       const rowH = 15;
       const panelH = 18 + rows * rowH;
-      const py = VIEW_H - panelH - 4;
+      const py = this.viewHeight - panelH - 4;
       screen.panel(panelX, py, panelW, panelH);
       screen.text("PV RECUPERATI", panelX + 8, py + 5, INK);
       for (let i = 0; i < rows; i += 1) {
@@ -3775,7 +3778,7 @@ export class WorldScene implements Scene {
     if (this.bannerFlash > 0 && !this.state.reduceEffects) {
       const ctx = screen.ctx;
       ctx.fillStyle = `rgba(255,240,180,${0.5 * (this.bannerFlash / 0.4)})`;
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.fillRect(0, 0, VIEW_W, this.viewHeight);
     }
     // Entrata a molla: toast compatto sotto l'HUD, non un cartellone sopra la mappa.
     const dur = 2.4;

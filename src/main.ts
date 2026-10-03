@@ -261,6 +261,7 @@ function frame(now: number): void {
     }
     if(!shellGuideOpen())stack.update(dt);
     renderTouchActions(stack.top?.touchActions);
+    screen.configureViewport(Boolean(stack.top?.expandedViewport));
     stack.draw(screen);
     input.endFrame();
     if (firstReadyFrame) {

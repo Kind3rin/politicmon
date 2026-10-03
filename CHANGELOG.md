@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Esplorazione PWA verticale: la mappa riempie lo spazio disponibile mostrando più mondo, con personaggi alla stessa scala; dialoghi, obiettivi e tocchi seguono il bordo inferiore. Lotte e menu conservano il formato attuale.
+- Morale: scelte civiche direttamente toccabili sul canvas e nei pulsanti del telefono; costi/conseguenze prima della scelta, opzioni senza fondi disabilitate e risultato salvato una sola volta.
+
 - Lotte: nome, danno effettivo, critico ed efficacia nello stesso colpo; tolte le pagine duplicate e la carica nemica separata. Colpi super efficaci da 1,7 riconosciuti anche con effetti ridotti; annuncio mancato senza una nuova schermata.
 
 - Reclutamento: candidato visibile, Dex/destinazione/crescita in un riepilogo automatico di 1,8 s; dati e conteggi salvati insieme, Continua a tutta larghezza in verticale, mosse/evoluzione dirette. Atlante Higgsfield: 1,5 crediti.

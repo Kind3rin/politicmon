@@ -81,7 +81,7 @@ export class Input {
   }
 
   // Tocco diretto sullo schermo di gioco: traduce le coordinate del puntatore
-  // sul canvas in coordinate interne 240x180, così le scene possono fare
+  // sul canvas nelle coordinate del viewport, così le scene possono fare
   // hit-test su voci di menu, pulsanti a schermo e box di dialogo. Un "tap" è
   // un tocco che si solleva senza essere trascinato troppo (non è uno swipe).
   private bindCanvas(): void {
@@ -97,7 +97,7 @@ export class Input {
     const toInternal = (clientX: number, clientY: number): ScreenPoint => {
       const rect = canvas.getBoundingClientRect();
       const x = ((clientX - rect.left) / rect.width) * VIEW_W;
-      const y = ((clientY - rect.top) / rect.height) * VIEW_H;
+      const y = ((clientY - rect.top) / rect.height) * (Number(canvas.dataset.viewHeight) || VIEW_H);
       return { x, y };
     };
 

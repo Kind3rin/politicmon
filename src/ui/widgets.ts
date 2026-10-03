@@ -240,12 +240,12 @@ export class MessageBox {
     }
   }
 
-  update(dt: number, input: Input): void {
+  update(dt: number, input: Input, viewHeight = VIEW_H): void {
     if (!this.isOpen) {
       return;
     }
     // Toccare il box di dialogo avanza/completa la pagina (come premere A).
-    const boxY = VIEW_H - 44;
+    const boxY = viewHeight - 44;
     const tapped = input.tapInRect(0, boxY, VIEW_W, 44);
     this.autoElapsed += Math.max(0, dt);
     const advance = input.wasPressed("a") || input.wasPressed("b") || tapped ||
@@ -291,7 +291,7 @@ export class MessageBox {
       return;
     }
     this.blink += 1;
-    const boxY = VIEW_H - 44;
+    const boxY = (screen.height ?? VIEW_H) - 44;
     screen.panel(2, boxY, VIEW_W - 4, 42, "dialog");
     const page = this.pages[this.pageIndex];
     let remaining = Math.floor(this.chars);

@@ -471,6 +471,36 @@
       "creditsSpent": 1.5,
       "balanceBefore": 348.97,
       "balanceAfter": 347.47
+    },
+    {
+      "id": "battle-growth",
+      "kind": "battle-animation",
+      "jobId": "9c42c16e-7338-41c6-b3a8-ec45119db0c4",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_104904_9c42c16e-7338-41c6-b3a8-ec45119db0c4.png",
+      "path": "public/sprites/ui/battle/growth.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production game animation atlas for POLITICMON, an Italian political satire creature RPG. Strict crisp 16-bit pixel art, limited navy #101b29, deep teal, warm cream #fffaf0, amber gold #ffe38a and jade. No gradients, blur, letters, numbers, logos or people. One opaque 16:9 sheet divided into EXACTLY four equal panels in a 2 by 2 grid, no gutters or panel borders. Every panel repeats the SAME empty rank-promotion podium scene at identical scale and alignment. In each frame: an amber elliptical podium centered at 28 percent width, 61 percent height; the entire area above podium EMPTY quiet navy so a runtime creature sprite can be overlaid. Small decorative cream paper certificate with a gold circular blank seal, at 83 percent width and 21 percent height, only abstract dark dashes, never text. All of the right half below the certificate quiet dark navy, free of decorations for runtime growth text. Leave upper 15 percent and lower 10 percent empty navy for overlay. Upper-left frame: podium dim amber outline, two tiny golden square lights awaken near left edge. Upper-right frame: short clean golden rays open from BEHIND empty podium, restrained squares rising along LEFT outer edge. Lower-left frame: rays peak as a big geometric golden five-point rank star appears at 46 percent width, 20 percent height, away from creature area; certificate seal glows. Lower-right frame: rays settle, golden rank star stays small at 46 percent width, 20 percent height, and sparse golden squares at left edge. Celebration reads clearly at 240x135 pixels per frame. Distinct progression of earned promotion; empty platform is essential, no creature or person in the artwork. Clean restrained comic satire of a career promotion certificate."
+      },
+      "width": 480,
+      "height": 270,
+      "model": "gpt_image_2_5",
+      "processing": "Nearest-neighbor 480x270 delivery resize, 48-color palette; four equal 240x135 frames, 2x2 atlas.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 347.47,
+      "balanceAfter": 345.97,
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "sourceSha256": "58388690d61a5b4c0e78f908c85f5cabc8c1ac8b8d70ad8e63e95e5ca92efa07",
+      "sha256": "55b743af95fa115612ee148fd34bd9d0ae2e9f181e1048465eb12f9997a9d642"
     }
   ]
 }

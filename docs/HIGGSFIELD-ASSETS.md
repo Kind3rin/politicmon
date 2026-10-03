@@ -1,5 +1,8 @@
 # Politicmon: risorse Higgsfield
 
+Crescita dopo KO: atlante 480×270, quattro fasi del podio e candidato runtime; job `9c42c16e-7338-41c6-b3a8-ec45119db0c4`, visto e giocato.
+**1,5 crediti**, saldo **347,47 → 345,97**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
+
 Reclutamento riuscito: atlante 480×270, quattro fasi del timbro e candidato runtime; job `0181211c-00d6-4fbe-b364-830b7a56b25a`, visto e giocato.
 **1,5 crediti**, saldo **348,97 → 347,47**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
 

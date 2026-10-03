@@ -99,6 +99,79 @@ test("recruitment saves capture and growth before the skippable receipt, then ke
     assert.ok(choices.includes("evolve:ellyna:schleinix"));assert.ok(choices.some(c=>c.startsWith("salvinott:")));
 }));
 
+test("an ally's opening recruitment boosts the living bench starter and saves its evolution without sharing twice", () => withSaveStorage(saved => {
+  for (const share of [0, 1]) {
+    const b:any=Object.create(BattleScene.prototype), state=newGameState();
+    const lead=createMonster("salvinott",5), starter=createMonster("renzino",6), other=createMonster("grillix",5), foe=createMonster("calendauro",5);
+    state.party=[lead,starter,other];state.starterId="renzino";state.bag.divisa=share;
+    state.flags["opening-v2"]=true;state.defeatedTrainers=["praticante"];state.runStats.captures=1;
+    Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),queue:[],mode:"queue",input:{reset(){}},onEnd() {},finished:false});
+    b.stack={top:b};const choices:string[]=[];
+    b.learnMoveSteps=(id:string,mon=lead)=>[{run:()=>{assert.equal(b.recruitReceipt,null);choices.push(`${mon.speciesId}:${id}`);}}];
+    b.evolveStepsFor=(mon:any,id:string)=>[{run:()=>{assert.equal(b.recruitReceipt,null);choices.push(`evolve:${mon.speciesId}:${id}`);}}];
+    b.captureSteps()[0].run();
+    assert.equal(starter.level,8);assert.equal(starter.exp,expForLevel(8));assert.equal(foe.exp,expForLevel(5));
+    const leadExp=lead.exp-expForLevel(5);assert.ok(leadExp>0);assert.equal(other.exp-expForLevel(5),share?Math.max(1,Math.floor(leadExp/2)):0);
+    assert.match(b.recruitReceipt.levels,/RENZINO LV6 > 8/);assert.match(b.recruitReceipt.levels,/SLANCIO/);
+    const restored=[...saved.values()].map(v=>parseGameState(v)).find(s=>s?.party[1].uid===starter.uid)!;
+    assert.equal(restored.party[1].level,8);assert.equal(restored.runStats.captures,2);
+    b.stepTimer=1.8;b.touchActions[0].run();while(b.queue.length)b.queue.shift().run?.();
+    assert.equal(choices.filter(c=>c==="evolve:renzino:renzilla").length,1);
+  }
+}));
+
+test("opening bench momentum never revives a KO starter or affects an old campaign", () => withSaveStorage(() => {
+  for (const oldCampaign of [false,true]) {
+    const b:any=Object.create(BattleScene.prototype),state=newGameState();
+    const lead=createMonster("salvinott",5),starter=createMonster("renzino",6),foe=createMonster("calendauro",5);
+    if(!oldCampaign)starter.hp=0;
+    state.party=[lead,starter];state.starterId="renzino";state.bag.divisa=0;
+    state.flags["opening-v2"]=!oldCampaign;state.defeatedTrainers=["praticante"];state.runStats.captures=1;
+    Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),queue:[],recruitReceipt:{modifiers:[]}});
+    const before=structuredClone(starter);b.consensusSteps(()=>{},true)[0].run();
+    assert.deepEqual(starter,before);assert.doesNotMatch(b.recruitReceipt.levels,/SLANCIO/);
+  }
+}));
+
+test("KO growth has one skippable receipt with real bonuses and preserves bench lessons, evolution and the next foe", () => {
+  const b:any=Object.create(BattleScene.prototype),state=newGameState();
+  const lead=createMonster("ellyna",7),bench=createMonster("salvinott",6),dead=createMonster("grillix",5),foe=createMonster("calendauro",8);
+  lead.exp=expForLevel(8)-1;bench.exp=expForLevel(7)-1;dead.hp=0;foe.hp=0;
+  state.party=[lead,bench,dead];state.bag.divisa=1;state.sondaggi=80;state.morale.cohesion=80;state.boostExpBattles=2;
+  state.ministri={istruzione:lead.uid,economia:lead.uid,salute:lead.uid};
+  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),trainer:{id:"rival1"},queue:[],mode:"queue",input:{reset(){}},fx:{}});b.stack={top:b};
+  const choices:string[]=[];let nextFoe=0;
+  b.afterFoeDown=()=>nextFoe++;
+  b.learnMoveSteps=(id:string,mon=lead)=>[{run:()=>{assert.equal(b.growthReceipt,null);choices.push(`${mon.speciesId}:${id}`);}}];
+  b.evolveStepsFor=(mon:any,id:string)=>[{run:()=>{assert.equal(b.growthReceipt,null);choices.push(`evolve:${mon.speciesId}:${id}`);}}];
+  const before=lead.exp,benchBefore=bench.exp,steps=b.foeFaintedSteps();
+  assert.ok(steps.every((s:any)=>!s.text));const apply=steps[1];apply.run();
+  const gained=Math.max(1,Math.floor(expYield(foe,true,7)*1.25*1.3*1.15*.87*1.08));
+  assert.equal(lead.exp-before,gained);assert.equal(bench.exp-benchBefore,Math.max(1,Math.floor(gained/2)));assert.equal(dead.exp,expForLevel(5));
+  assert.equal(b.growthReceipt.gained,gained);assert.equal(b.growthReceipt.previousLevel,7);
+  assert.match(b.growthReceipt.shared,/DIVISA 1 ALLEATI/);assert.equal(b.growthReceipt.modifiers.length,5);
+  assert.equal(wrapText(b.growthReceipt.modifiers.join(" · "),36).length,2);
+  assert.ok(b.queue.every((s:any)=>!s.text));assert.equal(b.queue.filter((s:any)=>s.pause).length,1);
+  const committed=JSON.stringify(state);apply.run();assert.equal(JSON.stringify(state),committed);
+  b.stepTimer=1.6;const skip=b.touchActions[0];skip.run();skip.run();assert.equal(b.stepTimer,0);assert.equal(nextFoe,0);
+  while(b.queue.length)b.queue.shift().run?.();
+  assert.equal(nextFoe,1);assert.equal(state.runStats.wins,0);assert.equal(state.boostExpBattles,2);
+  assert.ok(choices.some(c=>c.startsWith("salvinott:")));assert.ok(choices.includes("evolve:ellyna:schleinix"));
+});
+
+test("a capped squad skips empty KO growth while preserving pending evolutions and the next foe", () => {
+  const b:any=Object.create(BattleScene.prototype),state=newGameState();
+  const lead=createMonster("ellyna",55),bench=createMonster("salvinott",55),foe=createMonster("calendauro",5);
+  state.party=[lead,bench];state.bag.divisa=1;
+  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),queue:[],growthReceipt:null});
+  let evolution=0,next=0;b.evolveStepsFor=()=>[{run:()=>evolution++}];
+  const before=JSON.stringify(state);b.consensusSteps(()=>next++)[0].run();
+  assert.equal(JSON.stringify(state),before);assert.equal(b.growthReceipt,null);
+  assert.ok(b.queue.every((s:any)=>!s.text&&!s.pause));
+  while(b.queue.length)b.queue.shift().run?.();
+  assert.equal(evolution,2);assert.equal(next,1);
+});
+
 test("a duplicate goes to the full-party box, restores traded zone credit and pays the zone once", () => withSaveStorage(() => {
   const b:any=Object.create(BattleScene.prototype),state=newGameState();
   state.party=Array.from({length:6},()=>createMonster("ellyna",7));state.sondaggi=100;

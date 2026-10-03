@@ -16,8 +16,8 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Area | Stato attuale | Prova |
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
-| Reclutamento | Nuovo compagno visibile, Dex/squadra/box/EXP in un riepilogo automatico di 1,8 s; crescita, conteggi e boost salvati prima del salto | Calendauro catturato: evoluzione disponibile 6,5 s dal lancio; Schleinix/Gianni quattro turni; Continua con Renzino; offline e 387 test |
-| Battaglie | Polemica/Fuorionda/virale e copione interrompibile; ordine previsto; nome, danno e critico/efficacia nello stesso colpo, senza pagine duplicate | Turno ordinario osservato 4,66 s prima e 2,59 s dopo, stessi input ma livelli diversi; evento/preparazione 5 s dopo; 390 test |
+| Reclutamento | Riepilogo automatico di 1,8 s; starter vivo conserva lo slancio dalla panchina, dati salvati prima di Continua | Salvinott recluta, Renzino7→8→Renzilla; Gianni sei turni; mosse/evoluzione verificate; KO esclusi dallo slancio, 398 test |
+| Battaglie | Polemica/Fuorionda/virale e copione; colpo compatto e ricompensa KO da 1,6 s, livello/bonus/Divisa insieme | Gianni battuto con Renzilla8, Stai Sereno appresa e giocata; +200 Consenso/Onda25% visibili a 3,8 s dal colpo, 398 test |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia/coesione e promesse con scadenza; scelte civiche in un tocco, costi visibili e risultato persistente | Bus giocato: 1560→1380€, fiducia50→62, coesione60→66; 394 test, blocco doppio pagamento e annullamento |
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |
@@ -53,14 +53,14 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | PWA | Scocca Android rivista, 20 layout/sei rotazioni; release locale con 798 asset Higgsfield e 19 tracce AAC offline | MOBILE-PWA-LAYOUT, GOVERNO-VERBALE; `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 352,22; spesa cumulativa 533,75 crediti. Non sono stati attivati acquisti
+verificato: 345,97; spesa cumulativa 540,00 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: collezione ed eventi
+## Ultimo round: crescita nella squadra
 
-Politicdex giocato con quattro fatti e dettagli diretti; tre eventi di campo provati negli incontri del Percorso 1, cattura di Grillix e Articolo 1 al LV9 e crescita fino al LV10.
-354 test, build, sei formati senza overflow e salvataggio riaperto offline (quattro membri); 833 risorse precache; atlante Higgsfield 0,25 crediti, saldo 352,22. Budget totale 356 KiB, iniziale 250 KiB invariato.
-Il titolo e i menu del mondo rallentano ancora il ritmo; valutazione umana della slice e verifica sul POCO fisico restano aperte.
+Renzino evoluto in panchina dopo il reclutamento con Salvinott; vittoria su Gianni in sei turni. Crescita KO riunita in 1,6 s, scelta Stai Sereno conservata e mossa giocata.
+398 test, build e salvataggio offline (Renzilla9, Stai Sereno 8 PP); 838 risorse precache; atlante Higgsfield 1,5 crediti, saldo 345,97. Nessuna dichiarazione di prova sul POCO fisico.
+Piacevolezza umana della slice e vuoto verticale delle lotte restano aperti; il progetto continua.
 
 ## Round precedente: prima crescita
 

@@ -150,6 +150,7 @@ export class BattleScene implements Scene {
   private ballAnim: { t: number; shakes: number; success: boolean; viral: boolean } | null = null;
   private captured = false; // il nemico è stato reclutato: niente più sprite in campo
   private recruitReceipt: { elapsed: number; destination: string; newDex: boolean; polls: number; growth: string; levels: string; modifiers: string[]; saved: boolean } | null = null;
+  private growthReceipt: { elapsed: number; previousLevel: number; previousExp: number; gained: number; shared: string; modifiers: string[] } | null = null;
   private stepTimer = 0;
   private introT = 0; // apertura a cerchio + slide degli sprite
   // Effetti visivi condivisi (shake, affondi, particelle, banner, telegrafia):
@@ -163,6 +164,7 @@ export class BattleScene implements Scene {
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
     this.state = opts.state;
+    sceneImage("battle:growth", "ui/battle/growth.png");
     this.backdrop = battleBackdropForMap(opts.state.pos.mapId);
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
@@ -819,8 +821,7 @@ export class BattleScene implements Scene {
           this.fx.faintT.foe = 0.55;
         },
         pause: 0.15
-      },
-      { text: `Il nemico ${this.foeName()} si ritira dalla corsa!` }
+      }
     ];
     return [...steps, ...this.consensusSteps(() => this.afterFoeDown())];
   }
@@ -840,47 +841,44 @@ export class BattleScene implements Scene {
       1,
       Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state) * moraleExpMultiplier(this.state.morale))
     ), recruit);
-    if (!recruit) steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
     const teamwork = moraleExpMultiplier(this.state.morale);
-    if (!recruit && teamwork !== 1) steps.push({ text: teamwork > 1 ? "La squadra si fida di te: crescita +8%." : "La squadra non si sente ascoltata: crescita -8%." });
-    if (!recruit && wave > 1) {
-      steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
-    } else if (!recruit && wave < 1) {
-      steps.push({ text: `Sondaggi a terra (${sond}%): l'entusiasmo scarseggia (-8%).` });
-    }
-    if (!recruit && manifestiBonus > 1) {
-      steps.push({ text: "I MANIFESTI OVUNQUE gonfiano l'entusiasmo: +30% CONSENSO!" });
-    }
-    if (!recruit && istruzione) {
-      steps.push({ text: "Il MIN. ISTRUZIONE ha preparato la squadra: bonus del 15%!" });
-    }
-    // DIVISA EQUA: condivide metà EXP con il resto della squadra viva.
+    const modifiers = [
+      ...(teamwork !== 1 ? [teamwork > 1 ? "COESIONE +8%" : "COESIONE -8%"] : []),
+      ...(wave !== 1 ? [wave > 1 ? "ONDA +25%" : "ONDA -8%"] : []),
+      ...(manifestiBonus > 1 ? ["MANIFESTI +30%"] : []),
+      ...(istruzione ? ["ISTRUZ.+15%"] : []),
+      ...(expMalus(this.state) < 1 ? [`MIN.-${Math.round((1 - expMalus(this.state)) * 100)}%`] : [])
+    ];
     const hasShare = (this.state.bag["divisa"] ?? 0) > 0;
-    if (!recruit && hasShare) {
-      steps.push({ text: "La DIVISA EQUA spartisce il consenso con tutta la squadra!" });
-    }
+    // Opening momentum belongs to the living starter even when an ally recruits.
+    const benchStarter = this.state.party.find(mon => mon !== this.player.mon && mon !== this.foe.mon && mon.hp > 0 && openingRecruitmentExp(this.state, mon, 0, recruit) > 0);
+    let applied = false;
     steps.push({
       run: () => {
+        if (applied) return;
+        applied = true;
         const followUp: Step[] = recruit ? [{ pause: 1.8 }, { run: () => { this.recruitReceipt = null; } }] : [];
-        let sharedRecipients = 0;
+        let sharedRecipients = 0, sharedExp = 0;
+        let starterGrowth = "";
+        let benchLevelled = false;
         // EXP condivisa (silenziosa) agli altri membri vivi, prima del lead
         // così i loro level-up non interrompono l'animazione del protagonista.
-        if (hasShare) {
-          const shared = Math.max(1, Math.floor(gained / 2));
+        if (hasShare || benchStarter) {
+          const shared = hasShare ? Math.max(1, Math.floor(gained / 2)) : 0;
           for (const mon of this.state.party) {
             if (mon === this.player.mon || mon === this.foe.mon || mon.hp <= 0) {
               continue;
             }
-            const before = mon.exp;
-            const ev = gainExp(mon, shared, this.state.sondaggi);
-            if (mon.exp > before) sharedRecipients += 1;
-            if (!recruit && ev.length > 0) {
-              followUp.push({ text: `${speciesOf(mon).name} cresce in panchina: ora è L${mon.level}!` });
-            }
+            const amount = mon === benchStarter ? openingRecruitmentExp(this.state, mon, shared, recruit) : shared;
+            if (amount <= 0) continue;
+            const before = mon.exp, beforeLevel = mon.level;
+            const ev = gainExp(mon, amount, this.state.sondaggi);
+            if (mon.exp > before) { sharedRecipients += 1; sharedExp += mon.exp - before; }
+            if (ev.length) benchLevelled = true;
+            if (mon === benchStarter && mon.level > beforeLevel) starterGrowth = `${speciesOf(mon).name.toUpperCase()} LV${beforeLevel} > ${mon.level}`;
             for (const event of ev) for (const moveId of event.learnableMoves) followUp.push(...this.learnMoveSteps(moveId, mon));
             const target = ev.find((event) => event.evolvesTo)?.evolvesTo ?? levelEvolution(mon, this.state.sondaggi);
             if (target) {
-              if (!recruit) followUp.push({ text: `${speciesOf(mon).name} è pronto per il salto di carriera!` });
               followUp.push(...this.evolveStepsFor(mon, target));
             }
           }
@@ -891,25 +889,24 @@ export class BattleScene implements Scene {
         if (recruit && this.recruitReceipt) {
           const receipt = this.recruitReceipt;
           receipt.growth = `${this.playerName()} +${this.player.mon.exp - previousExp} CONSENSO`;
-          receipt.levels = `LV${previousLevel}${this.player.mon.level > previousLevel ? ` > ${this.player.mon.level}` : ""}${sharedRecipients ? ` · DIVISA ${sharedRecipients}x${Math.max(1, Math.floor(gained / 2))}` : ""}`;
-          receipt.modifiers = [
-            ...(teamwork !== 1 ? [teamwork > 1 ? "COESIONE +8%" : "COESIONE -8%"] : []),
-            ...(wave !== 1 ? [wave > 1 ? "ONDA +25%" : "ONDA -8%"] : []),
-            ...(manifestiBonus > 1 ? ["MANIFESTI +30%"] : []),
-            ...(istruzione ? ["ISTRUZ.+15%"] : []),
-            ...(expMalus(this.state) < 1 ? [`MIN.-${Math.round((1 - expMalus(this.state)) * 100)}%`] : [])
-          ];
-          if (events.length) audio.levelUp();
+          receipt.levels = `LV${previousLevel}${this.player.mon.level > previousLevel ? ` > ${this.player.mon.level}` : ""}${starterGrowth ? ` · SLANCIO ${starterGrowth}` : sharedRecipients ? ` · DIVISA ${sharedRecipients}x${Math.max(1, Math.floor(gained / 2))}` : ""}`;
+          receipt.modifiers = modifiers;
+          if (events.length || benchLevelled) audio.levelUp();
           // Recruitment and growth are durable before the receipt can be skipped.
           this.recordResult("caught");
           receipt.saved = saveGame(this.state);
         }
+        if (!recruit && (this.player.mon.exp > previousExp || sharedRecipients > 0)) {
+          this.growthReceipt = {
+            elapsed: 0, previousLevel, previousExp, gained: this.player.mon.exp - previousExp,
+            shared: sharedRecipients ? `DIVISA ${sharedRecipients} ALLEATI +${sharedExp}` : "",
+            modifiers
+          };
+          if (events.length || benchLevelled) audio.levelUp();
+          followUp.unshift({ pause: 1.6, waitHp: true }, { run: () => { this.growthReceipt = null; } });
+        }
         let queuedEvolution = false;
         for (const event of events) {
-          if (!recruit) {
-            followUp.push({ run: () => { audio.levelUp(); this.fx.levelFlash = 0.6; } });
-            followUp.push({ text: `${this.playerName()} sale al livello ${event.newLevel}!`, waitHp: true });
-          }
           for (const moveId of event.learnableMoves) {
             followUp.push(...this.learnMoveSteps(moveId));
           }
@@ -921,7 +918,6 @@ export class BattleScene implements Scene {
         if (!queuedEvolution) {
           const target = levelEvolution(this.player.mon, this.state.sondaggi);
           if (target) {
-            if (!recruit) followUp.push({ text: `${this.playerName()} ha abbastanza consenso per evolversi!` });
             followUp.push(...this.evolveStepsFor(this.player.mon, target));
           }
         }
@@ -1358,6 +1354,13 @@ export class BattleScene implements Scene {
         this.stepTimer = 0;
       }, receipt.saved ? "Reclutamento e crescita salvati" : "Reclutamento e crescita ottenuti", !receipt.growth || this.stepTimer <= 0)];
     }
+    if (mode === "queue" && this.growthReceipt) {
+      const receipt = this.growthReceipt;
+      return [action("CONTINUA", () => {
+        if (this.growthReceipt !== receipt) return;
+        this.stepTimer = 0;
+      }, `+${receipt.gained} Consenso · ${receipt.shared || `LV${this.player.mon.level}`}`, this.stepTimer <= 0)];
+    }
     if (mode === "queue") return this.mainMenu.items.map((item, index) => action(
       index === 5 ? "ACCELERA" : item.label,
       () => this.msg.advance(),
@@ -1403,6 +1406,7 @@ export class BattleScene implements Scene {
     }
     dt *= this.state.battleSpeed === 2 ? 2 : 1;
     if (this.recruitReceipt) this.recruitReceipt.elapsed += dt;
+    if (this.growthReceipt) this.growthReceipt.elapsed += dt;
     this.finisherT = Math.max(0, this.finisherT - dt);
     this.copioneFxT = Math.max(0, this.copioneFxT - dt);
     this.fieldFxT = Math.max(0, this.fieldFxT - dt);
@@ -1453,7 +1457,7 @@ export class BattleScene implements Scene {
         return;
       }
       if (this.stepTimer > 0) {
-        if (this.recruitReceipt?.growth && (this.input.wasPressed("a") || this.input.wasPressed("b"))) this.stepTimer = 0;
+        if ((this.recruitReceipt?.growth || this.growthReceipt) && (this.input.wasPressed("a") || this.input.wasPressed("b"))) this.stepTimer = 0;
         this.stepTimer -= dt;
         return;
       }
@@ -1818,6 +1822,10 @@ export class BattleScene implements Scene {
       this.drawRecruitReceipt(screen);
       return;
     }
+    if (this.growthReceipt) {
+      this.drawGrowthReceipt(screen);
+      return;
+    }
     const ctx = screen.ctx;
     // SCREEN-SHAKE PIENO: tutto il frame (sfondo, sprite, box, banner) trasla
     // insieme su super-efficace/crit. Prima solo il nemico tremava.
@@ -2094,6 +2102,31 @@ export class BattleScene implements Scene {
     screen.textFit(receipt.growth, 8, 141, 224, INK);
     screen.textFit(receipt.levels, 8, 151, 224, "#26745d");
     wrapText(receipt.modifiers.join(" · "), 36).slice(0, 2).forEach((line, i) => screen.text(line, 8, 161 + i * 8, "#8c5b12"));
+  }
+
+  private drawGrowthReceipt(screen: Screen): void {
+    const receipt = this.growthReceipt!;
+    screen.clear("#101b29");
+    const atlas = sceneImage("battle:growth", "ui/battle/growth.png");
+    const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(receipt.elapsed / .25));
+    if (atlas) screen.imageRegion(atlas, frame % 2 * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
+    screen.rect(0, 0, 240, 19, "#17243d");
+    screen.text("CRESCITA!", 8, 6, "#ffe38a");
+    drawMonsterSprite(screen, this.player.mon.speciesId, 53, 27, 82, 66, { memeFormId: this.player.mon.memeFormId, animationTime: this.state.reduceEffects ? 0 : receipt.elapsed });
+    screen.textFit(this.playerName(), 8, 113, 128, "#fffaf0");
+    screen.text(`+${receipt.gained}`, 145, 36, "#ffe38a");
+    screen.text("CONSENSO", 145, 49, "#fffaf0");
+    screen.text(`LV${receipt.previousLevel}${this.player.mon.level > receipt.previousLevel ? ` > ${this.player.mon.level}` : ""}`, 145, 68, "#67e2b4");
+    const exp = receipt.previousExp + receipt.gained * (this.state.reduceEffects ? 1 : Math.min(1, receipt.elapsed / .8));
+    let level = receipt.previousLevel;
+    while (level < LEVEL_CAP && exp >= expForLevel(level + 1)) level++;
+    const ratio = level >= LEVEL_CAP ? 1 : (exp - expForLevel(level)) / (expForLevel(level + 1) - expForLevel(level));
+    screen.rect(145, 85, 84, 6, "#293b50");
+    screen.rect(145, 85, Math.round(84 * Math.max(0, Math.min(1, ratio))), 6, "#67e2b4");
+    screen.text(this.player.mon.level >= LEVEL_CAP ? "LIVELLO MASSIMO" : `PROSSIMO LV${this.player.mon.level + 1}`, 145, 101, "#fffaf0");
+    screen.panel(2, 136, 236, 42, "card");
+    wrapText(receipt.modifiers.join(" · ") || "CONSENSO OTTENUTO", 36).slice(0, 2).forEach((line, i) => screen.text(line, 8, 142 + i * 9, INK));
+    if (receipt.shared) screen.textFit(receipt.shared, 8, 166, 224, "#26745d");
   }
 
   // Velo colorato del "meteo politico": tinge lievemente lo sfondo battaglia

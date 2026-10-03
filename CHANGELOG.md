@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Crescita dopo KO: consenso effettivo, livello, bonus e Divisa in un riepilogo automatico di 1,6 s; apprendimento/evoluzione seguono direttamente. Nessun riepilogo vuoto al livello massimo; atlante Higgsfield 1,5 crediti.
+- Prima evoluzione: reclutare con un alleato conserva lo slancio dello starter vivo in panchina; crescita salvata prima di Continua, KO esclusi e Divisa applicata una volta.
+
 - Esplorazione PWA verticale: la mappa riempie lo spazio disponibile mostrando più mondo, con personaggi alla stessa scala; dialoghi, obiettivi e tocchi seguono il bordo inferiore. Lotte e menu conservano il formato attuale.
 - Morale: scelte civiche direttamente toccabili sul canvas e nei pulsanti del telefono; costi/conseguenze prima della scelta, opzioni senza fondi disabilitate e risultato salvato una sola volta.
 

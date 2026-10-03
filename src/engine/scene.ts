@@ -3,6 +3,7 @@ import type { TouchAction } from "./touchActions";
 
 export interface Scene {
   readonly expandedViewport?: boolean;
+  readonly touchLayout?: "battle";
   readonly touchActions?: readonly TouchAction[];
   update(dt: number): void;
   draw(screen: Screen): void;

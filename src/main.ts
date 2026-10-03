@@ -260,7 +260,7 @@ function frame(now: number): void {
       syncRunCheckpoints(active);
     }
     if(!shellGuideOpen())stack.update(dt);
-    renderTouchActions(stack.top?.touchActions);
+    renderTouchActions(stack.top?.touchActions, stack.top?.touchLayout);
     screen.configureViewport(Boolean(stack.top?.expandedViewport));
     stack.draw(screen);
     input.endFrame();

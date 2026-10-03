@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Prime lotte del Percorso 1 in PWA verticale: arena a tutta altezza, personaggi/colpi/PV ancorati e controlli stabili tra scelta e azione; menu duplicati sostituiti dalla regola di campo o dall’intento nemico, con bersaglio e potenza corretti. Fondale Higgsfield verticale: 1,5 crediti.
+- Eventi di campo: tolti annuncio iniziale e schermata separata; avviso breve nell’arena, recupero PV effettivo e pausa di 0,25 s. Click Day, Par Condicio e sondaggio conservano effetti e applicazione unica.
+
 - Crescita dopo KO: consenso effettivo, livello, bonus e Divisa in un riepilogo automatico di 1,6 s; apprendimento/evoluzione seguono direttamente. Nessun riepilogo vuoto al livello massimo; atlante Higgsfield 1,5 crediti.
 - Prima evoluzione: reclutare con un alleato conserva lo slancio dello starter vivo in panchina; crescita salvata prima di Continua, KO esclusi e Divisa applicata una volta.
 

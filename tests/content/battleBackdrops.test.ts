@@ -38,3 +38,10 @@ test("gli sfondi hanno chiavi distinte, PNG nativi e un peso adatto all'offline 
   }
   assert.ok(generatedBytes < 150_000, `${generatedBytes} byte di nuovi sfondi`);
 });
+
+
+test("il fondale verticale della slice è nativo e resta leggero per il precache", () => {
+  const png = readFileSync(new URL("../../public/sprites/ui/battle/prato-portrait.png", import.meta.url));
+  assert.equal(png.readUInt32BE(16), 240); assert.equal(png.readUInt32BE(20), 360);
+  assert.ok(png.length < 60000);
+});

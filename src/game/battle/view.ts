@@ -20,14 +20,18 @@ import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "../../ar
 
 // Stesso renderer in PVE e PVP. Se il tema non è ancora pronto o manca,
 // il prato Higgsfield evita campi vuoti; senza immagini bastano due colori.
-export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop): void {
-  const themed = sceneImage(backdrop.spriteId, backdrop.path);
+export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop, height = VIEW_H): void {
+  const portrait = height > VIEW_H && backdrop === BATTLE_BACKDROPS.prato ? sceneImage("battle:bg:prato-portrait", "ui/battle/prato-portrait.png") : null;
+  const themed = portrait ?? sceneImage(backdrop.spriteId, backdrop.path);
   const fallback = themed ?? sceneImage(BATTLE_BACKDROPS.prato.spriteId, BATTLE_BACKDROPS.prato.path);
   if (fallback) {
-    screen.image(fallback, 0, 0, VIEW_W, VIEW_H - 44);
+    if (height > VIEW_H) {
+      const scale = Math.max(VIEW_W / fallback.width, (height - 44) / fallback.height);
+      screen.image(fallback, (VIEW_W - fallback.width * scale) / 2, (height - 44 - fallback.height * scale) / 2, fallback.width * scale, fallback.height * scale);
+    } else screen.image(fallback, 0, 0, VIEW_W, VIEW_H - 44);
   } else {
     screen.rect(0, 0, VIEW_W, 76, backdrop.sky);
-    screen.rect(0, 76, VIEW_W, VIEW_H - 76 - 44, backdrop.ground);
+    screen.rect(0, 76, VIEW_W, height - 76 - 44, backdrop.ground);
   }
 }
 
@@ -57,8 +61,14 @@ export interface DamageNumber {
 }
 
 // Centro approssimativo dello sprite di un combattente (per le particelle).
-export function monsterCenter(who: BattleSide): { x: number; y: number } {
-  return who === "foe" ? { x: 162, y: 50 } : { x: 56, y: 100 };
+export function battleGeometry(height = VIEW_H): { foeBase: number; playerBase: number; size: number } {
+  const extra = Math.max(0, height - VIEW_H);
+  return { foeBase: 66 + Math.round(extra / 4), playerBase: 116 + extra, size: Math.min(76, 56 + Math.round(extra / 6)) };
+}
+
+export function monsterCenter(who: BattleSide, height = VIEW_H): { x: number; y: number } {
+  const g = battleGeometry(height);
+  return who === "foe" ? { x: 162, y: g.foeBase - 16 } : { x: 56, y: g.playerBase - 16 };
 }
 
 export function approach(current: number, target: number, delta: number): number {
@@ -82,6 +92,7 @@ export function drawEllipse(screen: Screen, cx: number, cy: number, rx: number, 
 // frame e onHit() quando un colpo va a segno; hitStop è gestito dalla scena
 // (congela la coda, non gli effetti cosmetici).
 export class BattleFx {
+  viewHeight = VIEW_H;
   time = 0;
   shake = 0;
   // Accessibilità (RIDUCI EFFETTI): quando true azzera lo screen-shake. Le scene
@@ -176,7 +187,7 @@ export class BattleFx {
   // l'efficacia: super = giallo abbondante, poco efficace = grigio sparso,
   // critico = bianco intenso.
   spawnImpact(defSide: BattleSide, typeMult: number, crit: boolean): void {
-    const c = monsterCenter(defSide);
+    const c = monsterCenter(defSide, this.viewHeight);
     const superHit = typeMult > 1;
     const weak = typeMult > 0 && typeMult < 1;
     const count = superHit ? 16 : weak ? 6 : crit ? 14 : 10;
@@ -236,8 +247,8 @@ export class BattleFx {
   drawMoveFx(screen: Screen): void {
     const fx = this.moveFx;
     if (!fx || this.reduceEffects) return;
-    const from = monsterCenter(fx.side);
-    const to = monsterCenter(fx.side === "player" ? "foe" : "player");
+    const from = monsterCenter(fx.side, this.viewHeight);
+    const to = monsterCenter(fx.side === "player" ? "foe" : "player", this.viewHeight);
     const progress = 1 - fx.t / .4;
     const ctx = screen.ctx;
     ctx.save();
@@ -300,7 +311,7 @@ export class BattleFx {
 
   // Numero di danno flottante: parte dal punto colpito, sale, svanisce.
   spawnDamageNumber(defSide: BattleSide, damage: number, superHit: boolean, crit: boolean): void {
-    const c = monsterCenter(defSide);
+    const c = monsterCenter(defSide, this.viewHeight);
     this.damageNumbers.push({
       x: c.x + (Math.random() - 0.5) * 10,
       y: c.y - 6,
@@ -413,7 +424,8 @@ export function drawBattleMonster(
   by: number,
   lungeT: number,
   flipX: boolean,
-  who: BattleSide
+  who: BattleSide,
+  size = 56
 ): void {
   const speciesId = comb.mon.speciesId;
   if (!MONSTERS_WITH_PNG.has(speciesId)) return;
@@ -482,12 +494,12 @@ export function drawBattleMonster(
   screen.ctx.save();
   if (faintProgress > 0) screen.ctx.globalAlpha = Math.max(0.08, 1 - faintProgress);
   if (frames) {
-    drawW = 56 * sx; drawH = 56 * sy;
+    drawW = size * sx; drawH = size * sy;
     x = cx - drawW / 2 + dx;
     y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
     drawMonsterFrame(screen, frames, monsterPoseFrame(fx.time + (who === "foe" ? 1.3 : 0), lungeT, fx.reduceEffects), x, y, drawW, drawH, flipX);
   } else if (png) {
-    const pngScale = 56 / png.height; // altezza target ~56px
+    const pngScale = size > 56 ? Math.min(size / png.height, (who === "foe" ? 132 : 88) / png.width) : size / png.height;
     drawW = png.width * pngScale * sx;
     drawH = png.height * pngScale * sy;
     x = cx - drawW / 2 + dx;

@@ -25,6 +25,7 @@
   },
   "processing": {
     "dimensions": {
+      "battle-portrait": [240, 360],
       "battle": [
         240,
         136
@@ -501,6 +502,33 @@
       ],
       "sourceSha256": "58388690d61a5b4c0e78f908c85f5cabc8c1ac8b8d70ad8e63e95e5ca92efa07",
       "sha256": "55b743af95fa115612ee148fd34bd9d0ae2e9f181e1048465eb12f9997a9d642"
+    },
+    {
+      "id": "battle-prato-portrait",
+      "kind": "battle-portrait",
+      "jobId": "50e472d0-f0ed-413c-9608-33c2db789dd6",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_114509_50e472d0-f0ed-413c-9608-33c2db789dd6.png",
+      "path": "public/sprites/ui/battle/prato-portrait.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "2:3",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production-ready PORTRAIT 2:3 battle backdrop for POLITICMON, a satirical Italian political creature RPG. Crisp authentic 16-bit pixel art in restrained jade green, teal, warm cream, ochre and midnight navy. One continuous landscape, no panels. Composition for a 240 by 360 pixel portrait game arena: distant tiny Italian hillside village and a quiet rural road with one roadside noticeboard full of tiny blank colorful torn paper rectangles at the upper quarter only; tree line and low rolling hills form the horizon at about 28 percent of height. Warm clear sky occupies top fifth. Most of the image below the horizon is a clean open grassy field with a gentle winding pale dirt path. Perspective looks slightly down at ground in foreground. Right upper middle and left lower middle must be completely empty for runtime creature sprites and their oval platforms; never draw platforms yourself. Keep the very center visually quiet for short runtime announcements and projectiles. Details confined to far horizon, outer field edges, a few tufts of grass and little discarded plain blank campaign flyers near the edges. Rich but low contrast foreground, chunky clean pixel clusters, no gradients, no blur. NO characters, people, creatures, portraits, text, letters, numbers, logos, borders, UI, symbols or watermark. High craft retro game art, readable at 240x360, coherent calm battlefield rather than illustration poster."
+      },
+      "width": 240,
+      "height": 360,
+      "model": "gpt_image_2_5",
+      "processing": "Nearest-neighbor 240x360 delivery resize; 48-color palette, continuous portrait field.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 345.97,
+      "balanceAfter": 344.47,
+      "sourceSize": [688, 1024],
+      "sourceSha256": "46902b53316c2c1fcd4d132078bcedb36724397a135dc1d04a4c930a82f5bc92",
+      "sha256": "2e06640d03f385a1ea714581437cf477b9043ef499c9a08b17a0b19e4a2dcb83"
     }
   ]
 }

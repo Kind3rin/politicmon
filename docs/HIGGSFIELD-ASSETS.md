@@ -1,5 +1,8 @@
 # Politicmon: risorse Higgsfield
 
+Prato verticale del Percorso 1: 240×360, 44.196 B; job `50e472d0-f0ed-413c-9608-33c2db789dd6`, originale visto e campo giocato fino a Gianni.
+**1,5 crediti**, saldo **345,97 → 344,47**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
+
 Crescita dopo KO: atlante 480×270, quattro fasi del podio e candidato runtime; job `9c42c16e-7338-41c6-b3a8-ec45119db0c4`, visto e giocato.
 **1,5 crediti**, saldo **347,47 → 345,97**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
 
@@ -300,7 +303,7 @@ Lotto evoluzione — saldo **352,72 → 352,47** (0,25 crediti), job `4c462345-8
 Quattro fasi viste e giocate nel cambio Ellyna → Schleinix; atlante 480×360 da 97,6 kB, provenienza/checksum nel manifest esistente.
 
 Lotto eventi di campo — saldo **352,47 → 352,22** (0,25 crediti), job `97757873-4c43-4f81-8eb3-a34c0561b622`.
-Atlante 480×360 con quattro vignette viste; Click Day, Par condicio e Sondaggio integrati negli incontri iniziali, provenienza/checksum nel manifest.
+Atlante 480×360 con quattro vignette viste; vignette conservate nel manifest; gli eventi iniziali ora usano avvisi compatti nell’arena, senza la schermata separata.
 
 Lotto titolo — saldo **352,22 → 351,97** (0,25 crediti), job `48e93be5-9b8e-4c21-9a3e-ad05942887c2`.
 Piazza del dibattito vista e integrata dietro gli starter: 480×270, 48 colori; provenienza e checksum nel manifest.

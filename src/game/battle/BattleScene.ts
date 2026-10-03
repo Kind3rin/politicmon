@@ -32,7 +32,7 @@ import {
 import { festivalScandaloChance } from "./atto3MoveEffects";
 import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, FOE_BOX, PLAYER_BOX
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, battleGeometry, FOE_BOX, PLAYER_BOX
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
@@ -119,6 +119,11 @@ export class BattleScene implements Scene {
   private fieldTurn = 0;
   private fieldResolved = false;
   private fieldFxT = 0;
+  private fieldNotice = "";
+  private viewHeight = VIEW_H;
+
+  get touchLayout(): "battle" | undefined { return this.state.pos.mapId === "route1" ? "battle" : undefined; }
+  get expandedViewport(): boolean { return this.touchLayout === "battle"; }
   private finisherT = 0;
   private mainMenu = new Menu([
     { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUORIONDA" }, { label: "CAMPAGNA" }, { label: "FUGA" }
@@ -166,6 +171,7 @@ export class BattleScene implements Scene {
     this.state = opts.state;
     sceneImage("battle:growth", "ui/battle/growth.png");
     this.backdrop = battleBackdropForMap(opts.state.pos.mapId);
+    if (this.expandedViewport) sceneImage("battle:bg:prato-portrait", "ui/battle/prato-portrait.png");
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
     this.copione = opts.trainer?.id === "rival1" && Boolean(this.state.flags["opening-v2"]);
@@ -182,8 +188,6 @@ export class BattleScene implements Scene {
     recordBattleStarted(this.state);
     if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary && !this.copione) {
       this.field = chooseFieldEvent(this.state.runStats.battles);
-      this.push({ text: `AL SECONDO TURNO: ${this.field.name}.\n${this.field.rule}` });
-      sceneImage("battle:field-events", "ui/battle/field-events.png");
     }
     // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
     // (screen-shake) e la usa la scena per i lampi (KO/level/cattura/leggendario).
@@ -435,8 +439,9 @@ export class BattleScene implements Scene {
     this.fieldTurn += 1;
     if (!this.field || this.fieldTurn !== 2 || this.field.id === "click") return;
     this.fieldResolved = true;
-    this.fieldFxT = this.state.reduceEffects ? 0 : .8;
-    this.push({ text: applyFieldEvent(this.field, this.player, this.foe), waitHp: true });
+    this.fieldNotice = applyFieldEvent(this.field, this.player, this.foe);
+    this.fieldFxT = 1.4;
+    this.push({ pause: .25, waitHp: true });
   }
 
   private drainBattery(): void {
@@ -546,10 +551,11 @@ export class BattleScene implements Scene {
     const steps: Step[] = [];
     if (this.field?.id === "click" && this.fieldTurn === 2 && !this.fieldResolved) {
       this.fieldResolved = true;
-      this.fieldFxT = this.state.reduceEffects ? 0 : .8;
+      this.fieldFxT = 1.4;
       const gain = side === "player" && this.polemica.value < 3;
       if (gain) this.polemica.value += 1;
-      steps.push({ text: side === "player" ? `CLICK DAY: DOMANDA ACCETTATA.\nPOLEMICA +${gain ? 1 : 0}.` : "CLICK DAY: IL NEMICO ERA PRIMO.\nFONDI FINITI. POLEMICA +0." });
+      this.fieldNotice = side === "player" ? `DOMANDA ACCETTATA. POLEMICA +${gain ? 1 : 0}.` : "IL NEMICO ERA PRIMO.\nFONDI FINITI. POLEMICA +0.";
+      steps.push({ pause: .25 });
     }
     const before = {
       hp: defender.mon.hp, status: defender.mon.status, gaffe: defender.gaffeTurns,
@@ -1043,7 +1049,7 @@ export class BattleScene implements Scene {
             run: () => {
               audio.victory();
               this.fx.catchFlash = 0.9;
-              const c = monsterCenter("foe");
+              const c = monsterCenter("foe", this.viewHeight);
               for (let i = 0; i < 26; i += 1) {
                 const ang = (Math.PI * 2 * i) / 26 + 0.2;
                 const speed = 80 * (0.6 + Math.random() * 0.9);
@@ -1415,7 +1421,7 @@ export class BattleScene implements Scene {
     this.legendIntroFlash = Math.max(0, this.legendIntroFlash - dt);
     // I leggendari spruzzano scintille dorate di continuo: aura "viva".
     if (this.isLegendary && !this.state.reduceEffects && this.foe.mon.hp > 0 && Math.random() < 0.25) {
-      const c = monsterCenter("foe");
+      const c = monsterCenter("foe", this.viewHeight);
       const ang = Math.random() * Math.PI * 2;
       this.fx.particles.push({
         x: c.x + Math.cos(ang) * 22,
@@ -1452,7 +1458,7 @@ export class BattleScene implements Scene {
     }
 
     if (this.mode === "queue") {
-      this.msg.update(dt, this.input);
+      this.msg.update(dt, this.input, this.viewHeight);
       if (this.msg.isOpen) {
         return;
       }
@@ -1584,8 +1590,8 @@ export class BattleScene implements Scene {
 
   private menuGridUpdate(): number | null {
     const tap = this.input.consumeTap();
-    if (tap && tap.x >= 92 && tap.x < 240 && tap.y >= 120 && tap.y < 180) {
-      const row = Math.floor((tap.y - 120) / 16);
+    if (tap && tap.x >= 92 && tap.x < 240 && tap.y >= (this.viewHeight ?? VIEW_H) - 60 && tap.y < (this.viewHeight ?? VIEW_H)) {
+      const row = Math.floor((tap.y - ((this.viewHeight ?? VIEW_H) - 60)) / 16);
       const col = tap.x < 166 ? 0 : 1;
       const target = row * 2 + col;
       this.input.clearTap();
@@ -1647,7 +1653,7 @@ export class BattleScene implements Scene {
     // Il Menu standard lo fa già, ma questa lista ha un renderer custom e quindi
     // non possiede la geometria registrata da Menu.draw().
     const tap = this.input.consumeTap();
-    const tapped = tap ? fightMenuTapIndex(tap, n) : null;
+    const tapped = tap ? fightMenuTapIndex(tap, n, this.viewHeight) : null;
     if (tapped !== null) {
       this.input.clearTap();
       if (tapped !== this.fightMenu.index) {
@@ -1818,22 +1824,26 @@ export class BattleScene implements Scene {
   // ---- Draw ----
 
   draw(screen: Screen): void {
-    if (this.recruitReceipt) {
-      this.drawRecruitReceipt(screen);
-      return;
-    }
-    if (this.growthReceipt) {
-      this.drawGrowthReceipt(screen);
-      return;
-    }
     const ctx = screen.ctx;
+    this.viewHeight = screen.height;
+    this.fx.viewHeight = screen.height;
+    const g = battleGeometry(screen.height);
+    if (this.recruitReceipt || this.growthReceipt) {
+      screen.clear("#101b29");
+      ctx.save();
+      ctx.translate(0, Math.round((screen.height - VIEW_H) / 2));
+      if (this.recruitReceipt) this.drawRecruitReceipt(screen);
+      else this.drawGrowthReceipt(screen);
+      ctx.restore();
+      return;
+    }
     // SCREEN-SHAKE PIENO: tutto il frame (sfondo, sprite, box, banner) trasla
     // insieme su super-efficace/crit. Prima solo il nemico tremava.
     const shake = this.fx.shakeOffset();
     ctx.save();
     ctx.translate(shake.x, shake.y);
     screen.clear("#f0f0e0");
-    drawBattleBackdrop(screen, this.backdrop);
+    drawBattleBackdrop(screen, this.backdrop, screen.height);
 
     // TINT SFONDO METEO (sondaggi-meteo): velo colorato leggero sullo sfondo
     // quando il gradimento attiva il modificatore. Caldo/dorato col GOVERNO in
@@ -1848,25 +1858,25 @@ export class BattleScene implements Scene {
     const playerSlide = Math.round((1 - slide) * -90);
 
     // Piattaforme.
-    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, this.backdrop.foePlatform);
-    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, this.backdrop.playerPlatform);
+    drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, 64, 14, this.backdrop.foePlatform);
+    drawEllipse(screen, 56 + playerSlide, g.playerBase - 2, 76, 16, this.backdrop.playerPlatform);
 
     // Aura dorata pulsante attorno al leggendario: alone "sacro" che lo
     // distingue da un mostro qualsiasi per tutta la durata dello scontro.
     if (this.isLegendary && this.foe.mon.hp > 0 && !this.ballAnim) {
-      this.drawLegendaryAura(screen, 162 + foeSlide, 52);
+      this.drawLegendaryAura(screen, 162 + foeSlide, g.foeBase - 14);
     }
 
     // Telegrafia: aura pulsante dietro il nemico che sta per attaccare.
     if (this.fx.telegraph && this.fx.telegraph.side === "foe" && this.foe.mon.hp > 0 && !this.ballAnim) {
-      this.fx.drawTelegraph(screen, 162 + foeSlide, 50);
+      this.fx.drawTelegraph(screen, 162 + foeSlide, g.foeBase - 16);
     }
 
     // Nemico: animazione idle (respiro), affondo all'attacco, blink se colpito.
     // Se è stato reclutato (captured) non si disegna più: è dentro la tessera.
     const foeBlink = this.fx.flashT.foe > 0 && Math.floor(this.fx.flashT.foe * 16) % 2 === 0;
     if ((this.foe.mon.hp > 0 || this.fx.faintT.foe > 0) && !this.ballAnim && !foeBlink && !this.captured) {
-      drawBattleMonster(screen, this.fx, this.foe, 162 + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
+      drawBattleMonster(screen, this.fx, this.foe, 162 + foeSlide, g.foeBase, this.fx.lungeT.foe, false, "foe", g.size);
     }
     if (this.ballAnim) {
       this.drawBall(screen);
@@ -1875,7 +1885,7 @@ export class BattleScene implements Scene {
     // Player (di spalle: specchiato e più grande).
     const playerBlink = this.fx.flashT.player > 0 && Math.floor(this.fx.flashT.player * 16) % 2 === 0;
     if ((this.player.mon.hp > 0 || this.fx.faintT.player > 0) && !playerBlink) {
-      drawBattleMonster(screen, this.fx, this.player, 56 + playerSlide, 116, this.fx.lungeT.player, true, "player");
+      drawBattleMonster(screen, this.fx, this.player, 56 + playerSlide, g.playerBase, this.fx.lungeT.player, true, "player", g.size);
     }
 
     // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
@@ -1902,7 +1912,7 @@ export class BattleScene implements Scene {
       screen.textFit(this.battery > 0 ? `COPIONE ${this.battery} 50%` : "COPIONE OFF", 138, 11, 90, this.battery > 0 ? "#8c5b12" : "#26745d");
     }
     // Riquadro testo.
-    screen.panel(2, VIEW_H - 44, VIEW_W - 4, 42, "dialog");
+    screen.panel(2, screen.height - 44, VIEW_W - 4, 42, "dialog");
     if (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit") {
       screen.panel(6, 42, 116, this.field ? 39 : 27, "card");
       screen.text(`POLEMICA ${this.polemica.value}/3`, 12, 47, this.polemica.value === 3 ? "#26745d" : INK);
@@ -1910,29 +1920,23 @@ export class BattleScene implements Scene {
       screen.textFit(intent ? `ARRIVA: ${intent.name}` : "", 12, 59, 104, "#8c5b12");
     }
     if (this.field && (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit")) {
-      const name = this.field.id === "poll" ? "SONDAGGIO" : this.field.name;
+      const name = !this.fieldResolved && screen.height === VIEW_H ? this.field.cue : this.field.id === "poll" ? "SONDAGGIO" : this.field.name;
       screen.textFit(`${this.fieldResolved ? "OK" : "T2"}: ${name}`, 12, 71, 104, "#26745d");
     }
-    if (this.field && this.fieldFxT > 0) {
-      const art = sceneImage("battle:field-events", "ui/battle/field-events.png");
-      if (art) screen.ctx.drawImage(art, (this.field.frame % 2) * 240, Math.floor(this.field.frame / 2) * 180, 240, 180, 0, 0, 240, 180);
-      screen.panel(6, 6, 228, 20, "card"); screen.textCenter(this.field.name, 120, 12, INK);
-      screen.panel(6, 148, 228, 25, "card");
-      wrapText(this.field.rule, 35).forEach((line, i) => screen.text(line, 12, 154 + i * 8, INK));
-      return;
-    }
-    if (this.mode === "menu") {
+    if (screen.height > VIEW_H && ["menu", "fight", "recruit"].includes(this.mode)) {
+      this.drawPortraitPrompt(screen);
+    } else if (this.mode === "menu") {
       this.drawMainMenu(screen);
     } else if (this.mode === "recruit") {
-      screen.panel(8, 113, 226, 21, "card");
-      screen.textFit("FALLISCE? IL NEMICO RISPONDE.", 14, 117, 208, INK);
-      screen.textFit("A: LANCIA  B: LOTTA", 14, 126, 208, GREY);
-      this.recruitMenu.draw(screen, 6, 138, 228, 12);
+      screen.panel(8, screen.height - 67, 226, 21, "card");
+      screen.textFit("FALLISCE? IL NEMICO RISPONDE.", 14, screen.height - 63, 208, INK);
+      screen.textFit("A: LANCIA  B: LOTTA", 14, screen.height - 54, 208, GREY);
+      this.recruitMenu.draw(screen, 6, screen.height - 42, 228, 12);
     } else if (this.mode === "fight") {
       // Quattro righe a larghezza piena: le mosse arrivano a 22 caratteri e
       // nella vecchia griglia 2x2 venivano compresse fino al 69%.
       const items = this.fightMenu.items;
-      const y = VIEW_H - 44;
+      const y = screen.height - 44;
       for (let i = 0; i < items.length; i += 1) {
         const cx = 8;
         const cy = y + 4 + i * 9;
@@ -1969,30 +1973,30 @@ export class BattleScene implements Scene {
         const move = MOVES[slot.id];
         // Striscia info sopra il pannello: nome, tipo e riepilogo meccanico
         // restano separati dai PP mostrati a destra di ogni riga.
-        screen.panel(8, 113, 226, 21, "card");
+        screen.panel(8, screen.height - 67, 226, 21, "card");
         // La barra colore del tipo resta sotto il nome (segnale visivo compatto).
         const nameW = Math.min(move.name.length * 6, 150);
-        screen.textFit(move.name, 14, 117, 150, INK);
-        screen.rect(14, 125, nameW, 1, TYPE_COLORS[move.type]);
+        screen.textFit(move.name, 14, screen.height - 63, 150, INK);
+        screen.rect(14, screen.height - 55, nameW, 1, TYPE_COLORS[move.type]);
         // L'ordine tiene conto dell'intento annunciato e del prossimo evento.
-        screen.textRight(this.orderLabel(move)?.replace("AGISCI ", "") ?? "START:INFO", 226, 117, GREY);
+        screen.textRight(this.orderLabel(move)?.replace("AGISCI ", "") ?? "START:INFO", 226, screen.height - 63, GREY);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.textFit(this.moveHint(move), 14, 126, 208, INK);
+        screen.textFit(this.moveHint(move), 14, screen.height - 54, 208, INK);
       }
     } else if (this.mode === "campaign") {
       // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)
       // e hanno il costo % a fianco: colonna 118px, nome clippato con spazio
       // riservato al costo, così non si sovrappongono più.
       const items = this.campaignMenu.items;
-      const y = VIEW_H - 44;
+      const y = screen.height - 44;
       // Striscia in alto: SOND a destra + COSTO in punti dell'azione selezionata
       // a sinistra (il costo esce dalle celle così i NOMI hanno tutta la colonna
       // e non vengono più troncati con "...").
-      screen.panel(8, 117, 226, 17);
-      screen.textRight(`SOND ${this.state.sondaggi}%`, 228, 122, "#7ad858");
+      screen.panel(8, screen.height - 63, 226, 17);
+      screen.textRight(`SOND ${this.state.sondaggi}%`, 228, screen.height - 58, "#7ad858");
       const sel = CAMPAIGN_ACTIONS[this.campaignMenu.index];
       if (sel) {
-        screen.text(`COSTO ${sel.cost}%`, 14, 122, "#d86868");
+        screen.text(`COSTO ${sel.cost}%`, 14, screen.height - 58, "#d86868");
       }
       for (let i = 0; i < items.length; i += 1) {
         const cx = 8 + (i % 2) * 116;
@@ -2017,22 +2021,28 @@ export class BattleScene implements Scene {
       }
     }
     if (this.mode === "queue" && this.actionCaption && !this.msg.isOpen) {
-      screen.textFit(this.actionCaption.actor, 10, 141, 220, "#526176");
-      screen.textFit(this.actionCaption.move, 10, 151, 220, INK);
-      screen.textFit(this.actionCaption.result, 10, 165, 220, "#26745d");
+      screen.textFit(this.actionCaption.actor, 10, screen.height - 39, 220, "#526176");
+      screen.textFit(this.actionCaption.move, 10, screen.height - 29, 220, INK);
+      screen.textFit(this.actionCaption.result, 10, screen.height - 15, 220, "#26745d");
     }
     this.msg.draw(screen);
+    if (this.field && this.fieldFxT > 0) {
+      const y = Math.round((g.foeBase + g.playerBase) / 2) - 18;
+      screen.panel(6, y, 228, 34, "card");
+      screen.textFit(this.field.name, 12, y + 5, 216, "#26745d");
+      wrapText(this.fieldNotice, 35).slice(0, 2).forEach((line, i) => screen.text(line, 12, y + 16 + i * 8, INK));
+    }
     if (this.copioneFxT > 0) {
       const atlas = sceneImage("battle:copione", "ui/battle/copione.png");
       const frame = Math.min(3, Math.floor((.6 - this.copioneFxT) / .15));
-      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
-      screen.textCenter("DOMANDA NON PREVISTA!", 120, 119, "#fffaf0");
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 44 - 135) / 2), 240, 135);
+      screen.textCenter("DOMANDA NON PREVISTA!", 120, Math.round((screen.height - 44 - 135) / 2) + 119, "#fffaf0");
     }
     if (this.finisherT > 0) {
       const atlas = sceneImage("battle:fuorionda", "ui/battle/fuorionda.png");
       const frame = Math.min(3, Math.floor((.8 - this.finisherT) / .2));
-      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
-      screen.textCenter("MICROFONO APERTO!", 120, 119, "#fffaf0");
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 44 - 135) / 2), 240, 135);
+      screen.textCenter("MICROFONO APERTO!", 120, Math.round((screen.height - 44 - 135) / 2) + 119, "#fffaf0");
     }
 
     // Bagliore dorato al level-up + raggi che pulsano dallo sprite del player.
@@ -2042,7 +2052,7 @@ export class BattleScene implements Scene {
       const a = this.fx.levelFlash / 0.6;
       ctx.save();
       ctx.fillStyle = `rgba(244, 211, 74, ${0.35 * a})`;
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.fillRect(0, 0, VIEW_W, screen.height);
       ctx.restore();
     }
 
@@ -2053,7 +2063,7 @@ export class BattleScene implements Scene {
       const a = this.fx.catchFlash / 0.7;
       ctx.save();
       ctx.fillStyle = `rgba(255, 246, 200, ${0.55 * a})`;
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.fillRect(0, 0, VIEW_W, screen.height);
       ctx.restore();
     }
 
@@ -2065,21 +2075,21 @@ export class BattleScene implements Scene {
       const a = this.fx.koFlash / 0.5;
       ctx.save();
       ctx.fillStyle = `rgba(255, 255, 255, ${0.6 * a})`;
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.fillRect(0, 0, VIEW_W, screen.height);
       ctx.restore();
     }
 
     // Apertura a cerchio in stile Game Boy.
     if (this.introT < 0.55) {
       const ctx = screen.ctx;
-      const radius = (this.introT / 0.55) * 160;
+      const radius = (this.introT / 0.55) * Math.hypot(VIEW_W, screen.height) / 2;
       ctx.save();
       ctx.beginPath();
-      ctx.rect(0, 0, VIEW_W, VIEW_H);
-      ctx.arc(VIEW_W / 2, VIEW_H / 2, Math.max(1, radius), 0, Math.PI * 2);
+      ctx.rect(0, 0, VIEW_W, screen.height);
+      ctx.arc(VIEW_W / 2, screen.height / 2, Math.max(1, radius), 0, Math.PI * 2);
       ctx.clip("evenodd");
       ctx.fillStyle = "#10141f";
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.fillRect(0, 0, VIEW_W, screen.height);
       ctx.restore();
     }
   }
@@ -2145,7 +2155,7 @@ export class BattleScene implements Scene {
 
   private drawTintGradient(screen: Screen, rgb: string, alpha: number, fromBottom = false): void {
     const ctx = screen.ctx;
-    const h = VIEW_H - 44; // solo sopra il box azioni
+    const h = screen.height - 44; // solo sopra il box azioni
     const grad = fromBottom
       ? ctx.createLinearGradient(0, h, 0, 0)
       : ctx.createLinearGradient(0, 0, 0, h);
@@ -2193,7 +2203,7 @@ export class BattleScene implements Scene {
     if (this.legendIntroFlash > 0) {
       ctx.save();
       ctx.fillStyle = `rgba(255, 246, 200, ${0.7 * this.legendIntroFlash})`;
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+      ctx.fillRect(0, 0, VIEW_W, screen.height);
       ctx.restore();
     }
     if (this.legendBanner > 0) {
@@ -2233,17 +2243,18 @@ export class BattleScene implements Scene {
     if (anim.viral) {
       const atlas = sceneImage("battle:viral", "ui/battle/viral.png");
       const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(anim.t / .55));
-      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
-      else screen.textCenter("VIRALE", 120, 60, "#80d1b0");
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 44 - 135) / 2), 240, 135);
+      else screen.textCenter("VIRALE", 120, screen.height / 2, "#80d1b0");
       return;
     }
     let x = 168;
-    let y = 44;
+    const g = battleGeometry(screen.height);
+    let y = g.foeBase - 22;
     if (!this.state.reduceEffects && anim.t < 0.5) {
       // Parabola di lancio.
       const p = anim.t / 0.5;
       x = 40 + p * 128;
-      y = 70 - Math.sin(p * Math.PI) * 52 - p * 26;
+      y = (g.playerBase - 46) * (1 - p) + (g.foeBase - 22) * p - Math.sin(p * Math.PI) * 52;
     } else {
       const shakePhase = Math.floor((anim.t - 0.7) / 0.55);
       if (!this.state.reduceEffects && anim.t > 0.7 && shakePhase < anim.shakes) {
@@ -2284,9 +2295,10 @@ export class BattleScene implements Scene {
   }
 
   private drawPlayerBox(screen: Screen): void {
-    const { x, y } = PLAYER_BOX;
+    const box = { ...PLAYER_BOX, y: PLAYER_BOX.y + screen.height - VIEW_H };
+    const { x, y } = box;
     const mon = this.player.mon;
-    drawCombatantBox(screen, mon, this.displayHp.player, PLAYER_BOX);
+    drawCombatantBox(screen, mon, this.displayHp.player, box);
     // Badge DIVISA EQUA: segnala a colpo d'occhio che l'EXP è condivisa con la
     // panchina (la feature prima era invisibile finché non finiva la lotta).
     // Sulla riga PV (y+25), a SINISTRA del testo PV (bordo sx 182): sta dopo il
@@ -2309,7 +2321,7 @@ export class BattleScene implements Scene {
     const h = 12 + rows * 16;
     const w = 148;
     const x = VIEW_W - w;
-    const y = VIEW_H - h;
+    const y = screen.height - h;
     const padX = 10;
     const colW = Math.floor((w - padX * 2) / 2);
     screen.panel(x, y, w, h, "menu");
@@ -2326,9 +2338,19 @@ export class BattleScene implements Scene {
     // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
     // Ancorati al pannello testo (VIEW_H-44), non al box menu: con la cornice
     // chiara il testo che sborda sopra il bordo si nota subito.
-    const panelY = VIEW_H - 44;
+    const panelY = screen.height - 44;
     screen.text(this.mainMenu.index === 3 ? "COSTO 3 P" : "VARIA LE", 12, panelY + 9, INK);
     screen.text(this.mainMenu.index === 3 ? "40% PV" : "MOSSE!", 12, panelY + 22, "#26745d");
+  }
+
+  private drawPortraitPrompt(screen: Screen): void {
+    const upcoming = this.field && !this.fieldResolved;
+    const scripted = this.copione && this.battery > 0;
+    const title = upcoming ? `T2: ${this.field!.name}` : scripted ? `COPIONE: ${this.battery} TURNI` : `ARRIVA: ${this.foeIntent?.name ?? ""}`;
+    const rule = upcoming ? this.field!.rule : scripted ? "PREPARAZIONE RIUSCITA: SCUDO VIA." : this.foeIntent ? moveSummary(this.foeIntent, "foe") : "";
+    const y = screen.height - 44;
+    screen.textFit(title, 10, y + 5, 220, "#8c5b12");
+    wrapText(rule, 36).slice(0, 2).forEach((line, i) => screen.text(line, 10, y + 19 + i * 9, INK));
   }
 }
 

@@ -94,3 +94,26 @@ test("tutte le 78 mosse hanno un effetto runtime supportato e feedback meccanico
     assert.ok(move.pp > 0, `${move.id}: PP massimi invalidi`);
   }
 });
+
+
+test("portrait battle taps follow the bottom list after resizing, never the old rows", () => {
+  for (const height of [237, 354, 480]) {
+    const input = new FakeInput(), battle = subject(input); battle.viewHeight = height;
+    input.tap = { x: 120, y: 145 };
+    assert.equal(battle.fightGridUpdate(), null); assert.equal(battle.fightMenu.index, 0);
+    input.tap = { x: 120, y: height - 42 + 2 * 9 + 4 };
+    assert.equal(battle.fightGridUpdate(), null); assert.equal(battle.fightMenu.index, 2);
+    input.tap = { x: 120, y: height - 42 + 2 * 9 + 4 };
+    assert.equal(battle.fightGridUpdate(), "select");
+  }
+});
+
+test("l'intento nemico indica il bersaglio dal punto di vista del giocatore e distingue la potenza dai PV", () => {
+  const attack = Object.values(MOVES).find(m => m.effect?.stat?.target === "foe")!;
+  const setup = Object.values(MOVES).find(m => m.effect?.stat?.target === "self")!;
+  assert.match(moveSummary(attack, "foe"), /TUO/);
+  assert.match(moveSummary(setup, "foe"), /NEMICO/);
+  assert.match(moveSummary(attack), /NEMICO/);
+  assert.match(moveSummary(setup), /TUO/);
+  assert.match(moveSummary(MOVES.comizio, "foe"), /POTENZA 40/);
+});

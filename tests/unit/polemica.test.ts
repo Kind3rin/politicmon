@@ -522,7 +522,7 @@ test("the flash poll helps the lower percentage, never heals KO or cures status"
   const { statsOf } = await import("../../src/game/monster.ts");
   const player = makeCombatant(createMonster("ellyna", 8)), foe = makeCombatant(createMonster("salvinott", 5));
   player.mon.hp = 12; foe.mon.hp = 20; player.mon.status = "scandalo";
-  applyFieldEvent(FIELD_EVENTS[2], player, foe);
+  assert.ok(applyFieldEvent(FIELD_EVENTS[2], player, foe).includes(`PV +${Math.floor(statsOf(player.mon).hp * .1)}`));
   assert.equal(player.mon.hp, 12 + Math.floor(statsOf(player.mon).hp * .1));
   assert.equal(foe.mon.hp, 20); assert.equal(player.mon.status, "scandalo");
   player.mon.hp = 0;
@@ -537,12 +537,14 @@ test("a field event happens once on the second consuming action, not again after
   const battle = Object.create(BattleScene.prototype) as any;
   battle.field = FIELD_EVENTS[1]; battle.fieldTurn = 0; battle.fieldResolved = false; battle.state = { reduceEffects: true };
   battle.player = makeCombatant(createMonster("ellyna", 8)); battle.foe = makeCombatant(createMonster("salvinott", 5));
-  battle.player.stages.atk = 2; battle.foe.stages.spd = -3; const messages: string[] = [];
-  battle.push = (step: any) => messages.push(step.text);
+  battle.player.stages.atk = 2; battle.foe.stages.spd = -3; const messages: any[] = [];
+  battle.push = (step: any) => messages.push(step);
   battle.advanceField(); assert.equal(battle.player.stages.atk, 2);
   battle.advanceField(); assert.equal(battle.player.stages.atk, 0); assert.equal(battle.foe.stages.spd, -3);
   battle.player.stages.atk = 1; battle.advanceField();
-  assert.equal(battle.player.stages.atk, 1); assert.equal(messages.length, 1); assert.equal(battle.fieldFxT, 0);
+  assert.equal(battle.player.stages.atk, 1); assert.equal(messages.length, 1); assert.equal(battle.fieldFxT, 1.4);
+  assert.equal(messages[0].text, undefined); assert.equal(messages[0].pause, .25);
+  assert.equal(messages[0].waitHp, true); assert.match(battle.fieldNotice, /BONUS AZZERATI/);
 });
 
 test("field notification precedes the counterattack after a non-move action", async () => {
@@ -554,7 +556,8 @@ test("field notification precedes the counterattack after a non-move action", as
   battle.takeFoeIntent = () => MOVES.comizio; battle.drainBattery = () => {};
   battle.pushMoveNow = () => battle.queue.unshift({ text: "ATTACK" });
   battle.foeCounterStep().run();
-  assert.match(battle.queue[0].text, /PAR CONDICIO/);
+  assert.match(battle.fieldNotice, /BONUS AZZERATI/);
+  assert.equal(battle.queue[0].text, undefined); assert.equal(battle.queue[0].pause, .25);
   assert.equal(battle.queue[1].text, "ATTACK"); assert.equal(battle.queue[2].text, "AFTER");
   assert.equal(battle.foe.stages.atk, 0);
 });
@@ -566,12 +569,12 @@ test("Click Day awards only the first valid action and never exceeds three Polem
   battle.player = makeCombatant(createMonster("ellyna", 8)); battle.foe = makeCombatant(createMonster("salvinott", 5));
   battle.polemica = new Polemica(); battle.polemica.value = 2;
   const steps = battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", true);
-  assert.match(steps[0].text, /POLEMICA \+1/); assert.equal(battle.polemica.value, 3);
+  assert.match(battle.fieldNotice, /POLEMICA \+1/); assert.equal(steps[0].text, undefined); assert.equal(steps[0].pause, .25); assert.equal(battle.polemica.value, 3);
   battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", false);
   assert.equal(battle.polemica.value, 3);
   battle.fieldResolved = false; battle.polemica.value = 0;
   const foeSteps = battle.moveSteps("foe", battle.foe, battle.player, MOVES.comizio, "SALVINOTT", true);
-  assert.match(foeSteps[0].text, /FONDI FINITI/); assert.equal(battle.polemica.value, 0);
+  assert.match(battle.fieldNotice, /FONDI FINITI/); assert.equal(foeSteps[0].text, undefined); assert.equal(battle.polemica.value, 0);
   battle.moveSteps("player", battle.player, battle.foe, MOVES.ztl, "ELLYNA", false);
   assert.equal(battle.polemica.value, 0);
 });

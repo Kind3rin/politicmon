@@ -57,10 +57,10 @@ export function moveKindLabel(move: Move): string {
 // Spiega a colpo d'occhio cosa fa una mossa: danno e/o effetti, buff/debuff,
 // cure, status. Restituisce una riga compatta per il menu di lotta.
 // Le frecce "▲"/"▼" esistono nel bitmap font (src/engine/font.ts).
-export function moveSummary(move: Move): string {
+export function moveSummary(move: Move, perspective: "player" | "foe" = "player"): string {
   const parts: string[] = [];
   if (move.power > 0) {
-    parts.push(`DANNO ${move.power}`);
+    parts.push(`${perspective === "foe" ? "POTENZA" : "DANNO"} ${move.power}`);
   }
   const fx = move.effect;
   if (fx) {
@@ -78,7 +78,7 @@ export function moveSummary(move: Move): string {
     }
     if (fx.stat) {
       const arrow = fx.stat.stages > 0 ? "▲" : "▼";
-      const who = fx.stat.target === "self" ? "TUO" : "NEMICO";
+      const who = (fx.stat.target === "self") === (perspective === "player") ? "TUO" : "NEMICO";
       const arrows = arrow.repeat(Math.min(2, Math.abs(fx.stat.stages)));
       parts.push(`${STAT_SHORT[fx.stat.key]} ${who} ${arrows}`);
     }

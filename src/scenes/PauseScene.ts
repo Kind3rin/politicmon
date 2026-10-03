@@ -4,24 +4,20 @@ import { FieldGuideScene } from "./FieldGuideScene";
 import { welcomeGuide } from "../game/onboarding";
 import { currentQuest } from "../data/quests";
 import type { TouchAction } from "../engine/touchActions";
-import { statsOf } from "../game/monster";
-import { epiloguePages } from "../ui/epilogueArt";
-import { wrapText } from "../ui/widgets";
-import { sceneImage } from "../engine/assets";
+import type { UiPanel } from "../ui/kit";
 import { AudioScene } from "./AudioScene";
 import { audio } from "../engine/audio";
-import { isGuideOn, loadControlMode, toggleControlMode, toggleGuide } from "../engine/controls";
+import { isGuideOn, loadControlMode, toggleControlMode, toggleGuide, loadTextSpeed, toggleTextSpeed } from "../engine/controls";
 import { haptics } from "../engine/haptics";
 import { ownedVehicles, VEHICLES, type VehicleId } from "../game/vehicles";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
-import { sondaggiColor } from "../game/governo";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
 import { canPromptInstall, installHint, isAppInstalled, promptInstall } from "../engine/pwa";
-import { drawScreenHeader, Menu, MessageBox, setReduceMotion } from "../ui/widgets";
+import { Menu, MessageBox, setReduceMotion } from "../ui/widgets";
 import { BackupScene } from "./BackupScene";
 import { BagScene } from "./BagScene";
 import { ChatScene } from "./ChatScene";
@@ -52,7 +48,8 @@ export class PauseScene implements Scene {
   private menu: Menu;
   private more = false;
   private primaryIndex = 0;
-  private readonly primary = ["SQUADRA", "CURA", "POLITICDEX", "MORALE", "ALTRO", "GIOCA"];
+  private moreIndex = 0;
+  private readonly primary = ["SQUADRA", "BORSA", "MISSIONI", "MAPPA", "POLITICDEX", "ALTRO"];
   private entries: string[] = [];
   private msg = new MessageBox();
   private showCard = false;
@@ -66,6 +63,57 @@ export class PauseScene implements Scene {
     this.menu = this.buildMenu();
   }
 
+  get uiPanel(): UiPanel | undefined {
+    if (this.msg.isOpen) return { title: "La tua campagna", blocks: [{ title: "Avviso", body: this.msg.pageText }], actions: [{ label: "Continua", run: () => { if (this.stack.top === this && this.msg.isOpen) { this.input.reset(); this.msg.advancePage(); } } }], primary: 0, back:{label:"Indietro",run:()=>{if(this.stack.top!==this)return;this.input.reset();this.msg.close();audio.cancel();}} };
+    if (this.showCard) {
+      const earned = earnedEndingSouvenirs(this.state);
+      const souvenir = earned.length ? ENDING_SOUVENIRS[earned[this.souvenirIndex % earned.length]] : undefined;
+      return { title: this.cardAwards ? "Ricordi della campagna" : "Tessera candidato", blocks: [{ title: loadNick() || "Onorevole", facts: [{ label: "Sondaggi", value: `${this.state.sondaggi}%` }, { label: "Medaglie", value: `${this.state.badges.length}/3` }] }, { title: souvenir?.name ?? "I ricordi si conquistano giocando", body: this.state.monumentLevel === 3 ? MONUMENT_TITLE : `Monumento: livello ${this.state.monumentLevel} di 3.` }], actions: [], back: { label: "Indietro", run: () => { if (this.stack.top === this) { this.input.reset(); this.showCard = false; } } } };
+    }
+    const sub = this.sub, more = this.more;
+    const labels: Record<string, string> = { SQUADRA: "Squadra", BORSA: "Borsa", MISSIONI: "Missioni", MAPPA: "Mappa", POLITICDEX: "Politicdex", ALTRO: "Altro", SALVA: "Salva partita", CURA: "Cura squadra", MORALE: "Morale", OPZIONI: "Opzioni", TESSERA: "Tessera", ONLINE: "Gioco online", EXTRA: "Guide e archivi", GOVERNO: "Governo ombra", COALIZIONE: "Coalizione", CHIUDI: "Torna al gioco" };
+    const action = (label: string, run: () => void, disabled = false, hint?: string): TouchAction => ({ label, hint, disabled, run: () => {
+      if (this.stack.top !== this || this.msg.isOpen || this.showCard || this.sub !== sub || this.more !== more || disabled) return;
+      this.input.reset(); audio.confirm(); run();
+    } });
+    const menu = sub?.menu ?? this.menu;
+    const primary = !this.more && !sub;
+    const icons = ["team", "bag", "missions", "map", "dex", "more"];
+    let actions = primary ? this.primary.map((label, i) => ({ ...action(labels[label], () => { this.primaryIndex = i; this.handleMain(label); }, label === "POLITICDEX" && !this.state.flags["dex-received"], this.primaryHint(i)), icon: `/sprites/ui/kit/${icons[i]}.png` }))
+      : menu.items.filter(item => item.label !== "INDIETRO" && item.label !== "CHIUDI").map(item => action(labels[item.label] ?? item.label.charAt(0) + item.label.slice(1).toLocaleLowerCase("it"), () => {
+        menu.index = menu.items.indexOf(item);
+        if (sub) this.handleSub(sub, item.label); else this.handleMain(item.label);
+      }, Boolean(item.disabled), item.rightLabel));
+    if (this.more && !sub) {
+      const names: Record<string, string> = { "GUIDA CAMPAGNA": "Come giocare", CONTENUTI: "Contenuti della campagna", TRAGUARDI: "Traguardi", "GUIDA TIPI": "Efficacia dei tipi", "FONTI SATIRA": "Fonti della satira", "CHAT DI ZONA": "Chat di zona", "DUELLO PVP": "Duello online", BACKUP: "Esporta e importa salvataggi", "INSTALLA APP": "Installa app" };
+      const extras = this.menu.items.filter(item => !["OPZIONI", "ONLINE", "EXTRA", "CHIUDI"].includes(item.label));
+      actions = extras.map(item => ({ ...action(item.label.startsWith("VEICOLO") ? "Mezzo di trasporto" : labels[item.label] ?? item.label, () => { this.moreIndex = extras.indexOf(item); this.handleMain(item.label); }), group: "Campagna",
+        hint: item.label === "SALVA" ? "Salva i progressi nello slot attuale." : item.label === "CURA" ? "Scegli il compagno e controlla la cura." : undefined,
+        facts: item.label === "MORALE" ? [{ label: "Fiducia", value: String(this.state.morale.trust) }, { label: "Coesione", value: String(this.state.morale.cohesion) }] : item.label === "COALIZIONE" ? [{ label: "Alleati", value: `${this.state.coalition.members.length} di 2` }] : item.label.startsWith("VEICOLO") ? [{ label: "Attuale", value: this.state.vehicle ? VEHICLES[this.state.vehicle as VehicleId].name : "A piedi" }] : undefined }));
+      for (const section of [this.buildOptionsMenu(), this.buildOnlineMenu(), this.buildExtraMenu()]) {
+        for (const item of section.menu.items.filter(item => item.label !== "INDIETRO")) {
+          const raw = item.label, split = raw.indexOf(":"), prefix = split >= 0 ? raw.slice(0, split) : raw;
+          const settingNames: Record<string, string> = { TESTO: "Velocità del testo", GUIDA: "Guida sul campo", AUDIO: "Audio e volume", "RITMO LOTTE": "Ritmo delle lotte", "RIDUCI EFFETTI": "Riduci effetti", VIBRA: "Vibrazione", TASTI: "Comandi di movimento" };
+          const values: Record<string, string> = { "SÌ": "Attiva", NO: "Disattiva", ISTANTANEO: "Istantaneo", NORMALE: "Normale", RAPIDO: "Rapido", LEVETTA: "Leva virtuale", CROCE: "Croce fissa" };
+          const index = actions.length;
+          actions.push({ ...action(settingNames[prefix] ?? names[raw] ?? raw, () => { this.moreIndex = index; this.handleSub(section, raw); }, !!item.disabled, prefix === "AUDIO" ? "Musica, effetti e volumi." : item.disabled ? "Serve un altro giocatore connesso." : undefined),
+            group: section.kind === "opzioni" ? "Impostazioni e salvataggi" : section.kind === "online" ? "Gioco online" : "Guide e archivi",
+            facts: split >= 0 && prefix !== "AUDIO" ? [{ label: "Impostazione", value: values[raw.slice(split + 1).trim()] ?? raw.slice(split + 1).trim() }] : undefined });
+        }
+      }
+    }
+    const quest = currentQuest(this.state);
+    const landscape = window.matchMedia("(orientation: landscape) and (max-height: 540px)").matches;
+    return { title: sub ? (sub.kind === "opzioni" ? "Opzioni" : sub.kind === "online" ? "Gioco online" : "Guide e archivi") : this.more ? "Altro" : "Menu",
+      subtitle: primary && landscape ? quest?.step : undefined,
+      blocks: primary && !landscape ? [{ title: "La tua campagna", body: quest?.step ?? "La campagna continua.", facts: [{ label: "Fondi", value: `${this.state.money} €` }, { label: "Sondaggi", value: `${this.state.sondaggi}%` }] }] : undefined,
+      actions, columns: primary ? 2 : 1, selected: primary ? this.primaryIndex : !sub ? this.moreIndex : menu.index,
+      back: action("Indietro", () => { if (this.sub) this.sub = null; else if (this.more) this.more = false; else {
+        if(this.state.flags["controls-intro"]&&!this.state.flags["controls-returned"]){this.state.flags["controls-returned"]=true;saveGame(this.state);}
+        this.stack.pop();
+      } }) };
+  }
+
   // Menu principale: le azioni di gioco quotidiane in cima, poi i gruppi
   // ONLINE (chat/duelli) ed EXTRA (tessera/traguardi/guida tipi), VEICOLO,
   // OPZIONI, CHIUDI. Prima era un muro di 13-15 voci piatte.
@@ -76,14 +124,13 @@ export class PauseScene implements Scene {
       this.entries.push(label);
       items.push({ label, rightLabel });
     };
-    push("BORSA"); push("SALVA"); push("MAPPA"); push("OPZIONI"); push("TESSERA");
+    push("SALVA"); push("CURA"); push("MORALE"); push("OPZIONI"); push("TESSERA");
     if (this.state.badges.length > 0) {
       push("GOVERNO");
     }
     if (this.state.flags["coalition-menu-unlocked"]) {
       push("COALIZIONE", `${this.state.coalition.members.length}/2`);
     }
-    push("MISSIONI");
     // Badge "N ONLINE" sulla voce: rende visibile che c'è gente senza aprirla.
     push("ONLINE", mp.isEnabled() && mp.connected ? `${mp.onlineCount + 1} ON` : undefined);
     push("EXTRA");
@@ -101,6 +148,7 @@ export class PauseScene implements Scene {
     const entries = [
       `GUIDA: ${isGuideOn() ? "SÌ" : "NO"}`,
       `AUDIO: ${audio.enabled ? "SÌ" : "NO"}`,
+      `TESTO: ${loadTextSpeed() === "instant" ? "ISTANTANEO" : loadTextSpeed() === "fast" ? "RAPIDO" : "NORMALE"}`,
       `RITMO LOTTE: ${this.state.battleSpeed === 2 ? "RAPIDO" : "NORMALE"}`,
       `RIDUCI EFFETTI: ${this.state.reduceEffects ? "SÌ" : "NO"}`
     ];
@@ -138,28 +186,9 @@ export class PauseScene implements Scene {
     return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
-  get touchActions(): readonly TouchAction[] | undefined {
-    if (this.showCard) return undefined;
-    const more = this.more, sub = this.sub, menu = sub?.menu ?? this.menu;
-    const page = Math.floor(menu.index / 4);
-    const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled: disabled || this.msg.isOpen, run: () => {
-      if (disabled || this.stack.top !== this || this.showCard || this.msg.isOpen || this.more !== more || this.sub !== sub || Math.floor(menu.index / 4) !== page) return;
-      this.input.reset(); audio.cursor(); run();
-    } });
-    if (!more && !sub) return this.primary.map((label, i) => action(label, this.primaryHint(i), () => { this.primaryIndex = i; this.handleMain(label); }, label === "POLITICDEX" && !this.state.flags["dex-received"]));
-    return [...Array.from({ length: 4 }, (_, i) => {
-      const index = page * 4 + i, item = menu.items[index];
-      return action(item?.label ?? "—", item?.rightLabel ?? "Apri direttamente", () => {
-        if (!item) return; menu.index = index;
-        if (sub) this.handleSub(sub, item.label); else this.handleMain(item.label);
-      }, !item || !!item.disabled);
-    }), action("ALTRE", "Altre voci", () => { menu.index = ((page + 1) * 4) % menu.items.length; this.notePage = 0; }, menu.items.length <= 4),
-      action("INDIETRO", "Torna alla pausa", () => { if (this.sub) this.sub = null; else this.more = false; })];
-  }
+  get touchActions(): readonly TouchAction[] | undefined { return this.uiPanel?.actions; }
   private primaryHint(index: number): string {
-    const hints = [`${this.state.party.length} candidati · ${this.state.party.filter((mon) => mon.hp < statsOf(mon).hp).length} da curare`,
-      "Scegli il candidato e recupera PV", "Collezione, habitat e crescita", `Fiducia ${this.state.morale.trust} · coesione ${this.state.morale.cohesion}`,
-      "Borsa, salva, mappa e opzioni", "Riprendi la campagna"];
+    const hints = [`${this.state.party.length} ${this.state.party.length===1?"compagno":"compagni"}`, "Cure, schede e oggetti", "Obiettivo e ricompense", "Luoghi e prossima meta", "Specie, habitat e crescita", "Salvataggi e impostazioni"];
     return hints[index];
   }
 
@@ -191,15 +220,11 @@ export class PauseScene implements Scene {
       if (this.input.wasPressed("up") || this.input.wasPressed("down")) {
         this.primaryIndex = (this.primaryIndex + (this.input.wasPressed("up") ? 5 : 1)) % 6; audio.cursor();
       }
-      const tap = this.input.consumeTap();
-      if (tap && tap.x >= 8 && tap.x < 232 && tap.y >= 76 && tap.y < 160) {
-        this.primaryIndex = Math.floor((tap.y - 76) / 28) * 2 + (tap.x >= 120 ? 1 : 0);
-        this.handleMain(this.primary[this.primaryIndex]);
-      } else if (this.input.wasPressed("a")) this.handleMain(this.primary[this.primaryIndex]);
+      if (this.input.wasPressed("a")) this.handleMain(this.primary[this.primaryIndex]);
       return;
     }
     if(this.input.wasPressed("left")||this.input.wasPressed("right")){
-      const count=this.helpPages().length;
+      const count=1;
       this.notePage=(this.notePage+(this.input.wasPressed("left")?count-1:1))%count;
     }
     if(this.input.wasPressed("up")||this.input.wasPressed("down"))this.notePage=0;
@@ -362,9 +387,12 @@ export class PauseScene implements Scene {
       }
       return;
     }
+    const flat = !this.sub;
     const index = this.sub?.menu.index ?? 0;
     if (label.startsWith("GUIDA")) {
       toggleGuide();
+    } else if (label.startsWith("TESTO")) {
+      toggleTextSpeed();
     } else if (label.startsWith("TASTI")) {
       toggleControlMode();
     } else if (label.startsWith("VIBRA")) {
@@ -382,13 +410,12 @@ export class PauseScene implements Scene {
       saveGame(this.state);
     } else if (label.startsWith("AUDIO")) {
       this.stack.push(new AudioScene(this.stack, this.input, () => {
-        this.sub = this.buildOptionsMenu(); this.sub.menu.index = index;
+        if (!flat) { this.sub = this.buildOptionsMenu(); this.sub.menu.index = index; }
       }));
       return;
     }
     audio.confirm();
-    this.sub = this.buildOptionsMenu();
-    this.sub.menu.index = index;
+    if (!flat) { this.sub = this.buildOptionsMenu(); this.sub.menu.index = index; }
   }
 
   // Cicla: a piedi -> primo veicolo -> ... -> a piedi. Il TRAGHETTO è escluso:
@@ -402,119 +429,5 @@ export class PauseScene implements Scene {
     saveGame(this.state);
   }
 
-  draw(screen: Screen): void {
-    if (this.showCard) {
-      this.drawCard(screen);
-      return;
-    }
-    screen.clear("#17243d");
-    drawScreenHeader(screen, this.sub?.title ?? (this.more ? "ALTRO" : "PAUSA"));
-    screen.rect(0,17,240,13,"#263954");screen.text(`${this.state.money}€`,8,21,"#fffaf0");screen.textRight(`SOND ${this.state.sondaggi}%`,232,21,"#fffaf0");
-    if (!this.more && !this.sub) {
-      screen.rect(8, 36, 224, 32, "#fff3cc");
-      const quest = currentQuest(this.state);
-      wrapText(quest?.step ?? "La campagna continua.", 34).slice(0, 2).forEach((line, i) => screen.text(line, 15, 43 + i * 11, "#17243d"));
-      this.primary.forEach((label, i) => {
-        const x = 8 + (i % 2) * 116, y = 76 + Math.floor(i / 2) * 28, selected = i === this.primaryIndex;
-        screen.rect(x, y, 108, 24, selected ? "#fff3cc" : "#263954");
-        screen.text(label, x + 7, y + 8, selected ? "#17243d" : "#fffaf0");
-      });
-      screen.text("MENO MODULI. PIÙ CAMPAGNA.", 12, 169, "#80d1b0");
-    } else {
-      const menu = this.sub?.menu ?? this.menu, start = Math.floor(menu.index / 4) * 4;
-      for (let i = start; i < Math.min(start + 4, menu.items.length); i++) {
-        const item = menu.items[i], y = 38 + (i - start) * 19, selected = i === menu.index;
-        screen.rect(8, y, 224, 17, selected ? "#fff3cc" : "#263954");
-        screen.textFit(item.label, 15, y + 5, 210, item.disabled ? "#8594a7" : selected ? "#17243d" : "#fffaf0");
-      }
-      const pages = this.helpPages(); this.notePage %= pages.length;
-      screen.panel(8, 120, 224, 40, "card"); pages[this.notePage].forEach((line, i) => screen.text(line, 16, 128 + i * 10, "#17243d"));
-      screen.text(`INFO ${this.notePage + 1}/${pages.length}  A:APRI  B:PAUSA`, 12, 169, "#fffaf0");
-    }
-    this.msg.draw(screen);
-  }
-
-  private helpPages():string[][]{
-    const menu=this.sub?.menu??this.menu,label=this.sub?.entries[menu.index]??this.entries[menu.index]??"";
-    const quest=currentQuest(this.state);
-    let note="A APRE LA SEZIONE. B TORNA AL QUARTIER GENERALE.";
-    if(label==="SALVA")note="REGISTRA LA PARTITA NELLO SLOT ATTIVO. IL MESSAGGIO CONFERMA SE LA SCRITTURA RIESCE.";
-    else if(label==="MISSIONI")note=quest?`${quest.title}. ${quest.step}`:"MISSIONI PRINCIPALI CONCLUSE. CONSULTA ANCHE LE STORIE DI QUARTIERE.";
-    else if(label==="MORALE")note=`FIDUCIA ${this.state.morale.trust}, COESIONE ${this.state.morale.cohesion}. APRI PROMESSE, SCADENZE E VERBALE DELLE SCELTE.`;
-    else if(label==="SQUADRA")note="CONSULTA MOSSE E CRESCITA, SCEGLI IL LEADER E GLI OGGETTI TENUTI.";
-    else if(label.startsWith("VEICOLO"))note="A CAMBIA MEZZO TERRESTRE. IL TRAGHETTO SI ATTIVA SULL’ACQUA, SE POSSEDUTO.";
-    else if(label.startsWith("RIDUCI EFFETTI"))note="RIDUCE MOVIMENTO, SCOSSE E LAMPI. LA SCELTA SI SALVA E PREVALE SUL DEFAULT DEL DISPOSITIVO.";
-    else if(label.startsWith("RITMO LOTTE"))note="ACCELERA I MESSAGGI DELLE LOTTE; REGOLE E TURNI RESTANO GLI STESSI.";
-    else if(label==="DUELLO PVP"&&!(mp.isEnabled()&&mp.connected&&mp.onlineCount>0))note="SERVE UN ALTRO GIOCATORE CONNESSO PER AVVIARE IL DUELLO.";
-    else if(label==="BACKUP")note="ESPORTA O IMPORTA IL CODICE PARTITA. VERIFICA LO SLOT PRIMA DI SOSTITUIRLO.";
-    else if(label==="GUIDA CAMPAGNA")note="RILEGGI CONTROLLI, PROSSIMA META E SIGNIFICATO DELLA MORALE.";
-    return epiloguePages([label,note],34,3);
-  }
-
-  private drawCard(screen: Screen): void {
-    screen.rect(0, 0, VIEW_W, VIEW_H, "#101827");
-    drawScreenHeader(screen, "TESSERA CANDIDATO", "A/B CHIUDI");
-    const earned = earnedEndingSouvenirs(this.state);
-    const souvenir = earned.length ? ENDING_SOUVENIRS[earned[this.souvenirIndex % earned.length]] : null;
-    if (this.cardAwards) {
-      screen.panel(8, 28, 224, 128, "card");
-      const lines = ["RICORDI DELLA CAMPAGNA", souvenir ? souvenir.name : "NESSUN SOUVENIR DELL'EPILOGO.", this.state.monumentLevel === 3 ? MONUMENT_TITLE : `MONUMENTO: LIVELLO ${this.state.monumentLevel}/3.`, ...(this.state.coppaWins > 0 ? [`PORTAVOCE DEL POPOLO: ${this.state.coppaWins} TRIONFI.`] : []), "SOLO COSMETICI, NESSUN BONUS."];
-      let y = 39;
-      for (const paragraph of lines) { for (const line of wrapText(paragraph, 34)) { screen.text(line, 16, y, "#17243d"); y += 10; } y += 5; }
-      if (souvenir) { const icon = sceneImage(`epilogue:${souvenir.image}`, `ui/epilogue/${souvenir.image}.png`); if (icon) screen.image(icon, 192, 34, 32, 32); }
-      screen.text("SIN/DES: RICORDO  START: TESSERA", 12, 167, "#fffaf0");
-      return;
-    }
-    const title = this.state.flags["garante-beaten"]
-      ? "CAMPIONE COSTITUZIONALE"
-      : this.state.flags["boss-beaten"]
-        ? "CAMPIONE DI PALAZZOPOLI"
-        : "GIOVANE PROMESSA";
-
-    // Documento unico, non un mockup affiancato a un pannello statistiche.
-    screen.rect(9, 23, 222, 146, "#f8f1dc");
-    screen.frame(9, 23, 222, 146, "#d6aa3d");
-    screen.frame(12, 26, 216, 140, "#203552");
-    screen.rect(13, 27, 214, 18, "#203552");
-    screen.text("REPUBBLICA DELL'ITALIETTA", 20, 32, "#fff5ce");
-    screen.rect(20, 47, 200, 2, "#d6aa3d");
-
-    // Foto tessera integrata nel documento.
-    screen.rect(20, 55, 55, 67, "#e8ddc2");
-    screen.frame(20, 55, 55, 67, "#203552");
-    screen.rect(23, 58, 49, 61, "#cdd9d2");
-    const avatar = sceneImage("ui:candidate-avatar", "chars/player_south.png");
-    if (avatar) {
-      const avatarBounds = screen.imageBounds(avatar);
-      screen.imageRegion(avatar, avatarBounds.x, avatarBounds.y, avatarBounds.w,
-        avatarBounds.h, 27, 65, 41, 49);
-    }
-
-    if (souvenir) {
-      const icon = sceneImage(`epilogue:${souvenir.image}`, `ui/epilogue/${souvenir.image}.png`);
-      if (icon) screen.image(icon, 51, 96, 24, 24);
-    }
-    screen.text("CANDIDATO", 84, 55, "#68758a");
-    screen.textFit(loadNick() || "ONOREVOLE", 84, 66, 132, "#17243d");
-    screen.text("QUALIFICA", 84, 80, "#68758a");
-    screen.textFit(title, 84, 91, 132, "#17243d");
-    screen.text("N. TESSERA", 84, 105, "#68758a");
-    const code = `IT-${String(this.state.stepsTotal).padStart(5, "0")}-${this.state.badges.length}`;
-    screen.text(code, 84, 116, "#17243d");
-
-    const sond = this.state.sondaggi;
-    const caught = Object.values(this.state.dex).filter((v) => v === "caught").length;
-    screen.rect(20, 128, 200, 1, "#c7b991");
-    screen.text("CONSENSO", 20, 136, "#68758a");
-    screen.frame(69, 136, 58, 8, "#203552");
-    screen.rect(70, 137, Math.round(56 * sond / 100), 6, sondaggiColor(sond));
-    screen.textRight(`${sond}%`, 151, 137, sondaggiColor(sond));
-    screen.text("ELETTI", 161, 136, "#68758a");
-    screen.textRight(String(caught), 218, 137, "#17243d");
-    screen.text("FONDI", 20, 151, "#68758a");
-    screen.text(`${this.state.money}€`, 56, 151, "#17243d");
-    screen.text("MEDAGLIE", 116, 151, "#68758a");
-    screen.textRight(`${this.state.badges.length}/3`, 218, 151, "#17243d");
-    screen.text("START: RICONOSCIMENTI", 12, 172, "#fffaf0");
-  }
+  draw(screen: Screen): void { screen.clear("#101c30"); }
 }

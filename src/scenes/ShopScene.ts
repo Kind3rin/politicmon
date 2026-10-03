@@ -1,69 +1,79 @@
+import { MOVES } from "../data/moves";
+import { moveDescription } from "../ui/kit/moveContent";
 import { ITEMS } from "../data/items";
-import { drawItemIcon } from "../art/items";
+import { itemIconPath } from "../art/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
-import { shopPrice } from "../game/governo";
-import { buySupplies, purchaseLimit, shopStock } from "../game/supplyGuide";
-import { SupplyView } from "../ui/SupplyView";
-import { drawScreenHeader, MessageBox, wrapText, INK } from "../ui/widgets";
-const GREY = "#59657d";
+import { shopAdjustments, shopPrice } from "../game/governo";
+import { buySupplies, purchaseLimit, shopStock, supplyMatches, supplyNotes } from "../game/supplyGuide";
+import type { UiPanel, UiBlock } from "../ui/kit";
+import { readableCopy } from "../ui/kit/copy";
+
+const FILTERS = ["Tutti", "Cure", "Reclutamento", "Direttive", "Kit"];
 
 export class ShopScene implements Scene {
-  private view: SupplyView;
-  private msg = new MessageBox();
-  private quote: { id: string; quantity: number } | null = null;
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
-    this.view = new SupplyView(state, true);
-    this.refresh();
+  private filter = 0;
+  private selectedId = "";
+  private receiptBody: string | undefined;
+  private receiptFacts:NonNullable<UiBlock["facts"]>=[];
+  private quote: { id: string; quantity: number; price: number } | null = null;
+  constructor(private stack: SceneStack, private input: Input, private state: GameState, private greeting?: string) {}
+
+  private openQuote(id: string): void {
+    if (this.stack.top !== this || this.quote || this.receiptBody!==undefined || !shopStock(this.state).includes(id)) return;
+    this.selectedId = id; this.input.reset(); audio.confirm();
+    this.quote = {id,quantity:1,price:shopPrice(this.state,ITEMS[id])};
   }
-  private refresh(): void {
-    this.view.sync(shopStock(this.state), (id) => ITEMS[id].reusable && (this.state.bag[id] ?? 0) > 0 ? "GIÀ TUA" : `${shopPrice(this.state, ITEMS[id])}€`);
-  }
-  update(dt: number): void {
-    if (this.msg.isOpen) { this.msg.update(dt, this.input); return; }
-    if (this.quote) {
-      const quote = this.quote, item = ITEMS[quote.id], max = purchaseLimit(this.state, item);
-      if (this.input.wasPressed("b")) { this.quote = null; audio.cancel(); return; }
-      const delta = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : this.input.wasPressed("up") ? 10 : this.input.wasPressed("down") ? -10 : 0;
-      quote.quantity = Math.max(1, Math.min(Math.max(1, max), quote.quantity + delta));
-      if (delta) audio.cursor();
-      if (this.input.wasPressed("a")) {
-        this.quote = null;
-        if (!buySupplies(this.state, quote.id, quote.quantity)) { audio.cancel(); this.msg.show(["Preventivo scaduto: controlla fondi e disponibilità."]); return; }
-        saveGame(this.state); this.refresh(); audio.confirm();
-        this.msg.show([`${quote.quantity} x ${item.name} in borsa.`, "Lo scontrino è lungo. Almeno questa promessa è misurabile."]);
-      }
-      return;
+
+  private buy(quote: NonNullable<ShopScene["quote"]>): void {
+    if (this.stack.top !== this || this.quote !== quote || this.receiptBody!==undefined) return;
+    const before={money:this.state.money,stock:this.state.bag[quote.id]??0};
+    this.quote = null; this.input.reset();this.receiptFacts=[];
+    if (shopPrice(this.state,ITEMS[quote.id]) !== quote.price || !buySupplies(this.state,quote.id,quote.quantity)) {
+      audio.cancel(); this.receiptBody="Preventivo scaduto. Controlla fondi e disponibilità."; return;
     }
-    this.refresh();
-    const action = this.view.update(this.input); this.refresh();
-    if (action === "cancel") { this.stack.pop(); return; }
-    const id = this.view.selected;
-    if (action !== "select" || !id) return;
-    const item = ITEMS[id];
-    if (!purchaseLimit(this.state, item)) {
-      audio.cancel();
-      this.msg.show([item.reusable && (this.state.bag[id] ?? 0) > 0 ? "Direttiva già in archivio: puoi riusarla dalla borsa." : "Fondi insufficienti. Il POS non legge i programmi elettorali."]);
-      return;
+    saveGame(this.state); audio.confirm();
+    this.receiptFacts=[{label:"Fondi",value:`${before.money} → ${this.state.money} €`},{label:"In borsa",value:`${before.stock} → ${this.state.bag[quote.id]}`}];
+    this.receiptBody=`${quote.quantity} × ${readableCopy(ITEMS[quote.id].name)} in borsa. Lo scontrino è lungo. Almeno questa promessa è misurabile.`;
+  }
+
+  get uiPanel(): UiPanel {
+    const back = {label:"Indietro",run:()=>{if(this.stack.top!==this)return;this.input.reset();audio.cancel();if(this.receiptBody!==undefined)this.receiptBody=undefined;else if(this.quote)this.quote=null;else this.stack.pop();}};
+    if(this.receiptBody!==undefined)return {title:"Scontrino",blocks:[{title:"Discount elettorale",body:this.receiptBody,facts:this.receiptFacts}],
+      actions:[{label:"Continua",run:()=>{if(this.stack.top===this)this.receiptBody=undefined;}}],selected:0,primary:0,back:back};
+    const quote=this.quote;
+    if(quote){
+      const item=ITEMS[quote.id], max=purchaseLimit(this.state,item), total=quote.quantity*quote.price;
+      const adjust=(delta:number)=>{if(this.stack.top!==this||this.quote!==quote)return;quote.quantity=Math.max(1,Math.min(Math.max(1,purchaseLimit(this.state,item)),quote.quantity+delta));audio.cursor();};
+      return {title:readableCopy(item.name),subtitle:item.desc,
+        blocks:[{title:"Il tuo acquisto",body:item.reusable?"Una copia basta. La direttiva si può riutilizzare.":"Il prezzo unitario resta uguale per ogni quantità.",facts:[
+          {label:"Quantità",value:String(quote.quantity)},{label:"Prezzo unitario",value:`${quote.price} €`},
+          {label:"Totale",value:`${total} €`},{label:"Fondi dopo",value:total<=this.state.money?`${this.state.money} → ${this.state.money-total} €`:"Fondi insufficienti"},
+          {label:"In borsa dopo",value:`${this.state.bag[item.id]??0} → ${(this.state.bag[item.id]??0)+quote.quantity}`} ]},
+          {title:"Effetto e utilizzo",body:(item.moveId?["La direttiva è riutilizzabile. Non si consuma."]:supplyNotes(this.state,item,0,false).slice(1)).map(readableCopy).join("\n\n")},
+          ...(item.moveId?[{title:readableCopy(MOVES[item.moveId].name),body:moveDescription(MOVES[item.moveId]),facts:[
+            {label:"Tipo",value:MOVES[item.moveId].type},{label:"Potenza",value:String(MOVES[item.moveId].power)},
+            {label:"PP",value:String(MOVES[item.moveId].pp)},{label:"Precisione",value:`${MOVES[item.moveId].accuracy}%`}]}]:[]),
+          {title:"Come si forma il prezzo",body:"Le variazioni si sommano al prezzo base. Il totale unitario è arrotondato a 10 €.",facts:[
+            {label:"Prezzo base",value:`${item.price} €`},...shopAdjustments(this.state).map(entry=>({label:readableCopy(entry.label),value:`${entry.percent>0?"+":""}${entry.percent}%`}))]}],
+        actions:[{label:`Compra ${quote.quantity}`,hint:max<quote.quantity?(item.reusable&&(this.state.bag[item.id]??0)>0?"Direttiva già tua: riusala dalla borsa.":"Non hai fondi sufficienti."):undefined,disabled:max<quote.quantity,run:()=>this.buy(quote)},
+          {label:"Una in meno",disabled:quote.quantity<=1,run:()=>adjust(-1)},
+          {label:"Una in più",disabled:quote.quantity>=max,run:()=>adjust(1)},
+          {label:"Dieci in più",disabled:quote.quantity>=max,run:()=>adjust(10)}],selected:0,primary:0,back:back};
     }
-    this.quote = { id, quantity: 1 };
+    const ids=shopStock(this.state).filter(id=>supplyMatches(ITEMS[id],this.filter));
+    return {title:"Discount elettorale",positioned:true,subtitle:this.greeting ?? "Prezzi piccoli. Scontrini lunghi.",
+      blocks:[{title:"Fondi disponibili",facts:[{label:"Fondi",value:`${this.state.money} €`}]},
+        ...(!ids.length?[{title:"Nessun prodotto",body:"Scegli un’altra categoria per vedere le scorte."}]:[])],
+      tabs:FILTERS.map((label,i)=>({label,run:()=>{if(this.stack.top!==this||this.quote||this.receiptBody!==undefined)return;this.filter=i;audio.cursor();}})),selectedTab:this.filter,
+      actions:ids.map(id=>({label:readableCopy(ITEMS[id].name),icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,hint:ITEMS[id].desc,group:"Prodotti disponibili",
+        facts:[{label:"Prezzo unitario",value:`${shopPrice(this.state,ITEMS[id])} €`},{label:"In borsa",value:String(this.state.bag[id]??0)}],
+        run:()=>this.openQuote(id)})),selected:Math.max(0,ids.indexOf(this.selectedId)),back:back};
   }
-  draw(screen: Screen): void {
-    if (this.msg.isOpen) { screen.clear("#101b32"); this.msg.draw(screen); return; }
-    if (!this.quote) { this.refresh(); this.view.draw(screen); return; }
-    const { id, quantity } = this.quote, item = ITEMS[id], price = shopPrice(this.state, item), total = price * quantity;
-    screen.clear("#101b32"); drawScreenHeader(screen, "PREVENTIVO", `${this.state.money}€`);
-    screen.panel(6, 24, 228, 141, "card"); drawItemIcon(screen, id, 188, 28, 32);
-    wrapText(item.name, 27).forEach((line, i) => screen.text(line, 14, 32 + i * 9, INK));
-    screen.text(`QUANTITÀ: ${quantity}/${purchaseLimit(this.state, item)}`, 14, 65, INK);
-    screen.text(`UNITARIO: ${price} EURO`, 14, 78, GREY);
-    screen.text(`TOTALE: ${total} EURO`, 14, 94, "#8c5b12");
-    screen.text(`RESTANO: ${this.state.money - total} EURO`, 14, 107, INK);
-    screen.text(`GIÀ IN BORSA: ${this.state.bag[id] ?? 0}`, 14, 120, GREY);
-    screen.text(item.reusable ? "RIUSABILE: UNA COPIA BASTA." : "NESSUNO SCONTO PER QUANTITÀ.", 14, 140, GREY);
-    screen.text("◄►:1 SU/GIU:10 A:COMPRA B:INDIETRO", 8, 169, "#fff3cc");
-  }
+
+  update(_dt:number):void {}
+  draw(screen:Screen):void {screen.clear("#101c30");}
 }

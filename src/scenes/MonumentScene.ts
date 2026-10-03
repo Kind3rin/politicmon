@@ -3,9 +3,7 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
 import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader } from "../ui/widgets";
-import { sceneImage } from "../engine/assets";
-import { drawEpilogueBackdrop, drawEpiloguePage, epiloguePages } from "../ui/epilogueArt";
+import type { UiPanel, UiBlock } from "../ui/kit";
 
 // MONUMENTO AL CANDIDATO — money-sink TERMINALE (R42 economia, LOTTO 3). Dopo la
 // Coppa/UE i soldi non servono più: qui si bruciano in un monumento a sé stessi,
@@ -25,19 +23,19 @@ export const MONUMENT_TITLE = "PADRE DELLA PATRIA (AUTOPROCLAMATO)";
 // Descrizione satirica di ogni stadio (index = livello raggiunto, 0 = niente).
 const MONUMENT_STAGES = [
   [
-    "Un basamento vuoto con una targa: 'QUI SORGERÀ QUALCOSA DI GRANDIOSO'.",
-    "L'ARCHITETTO DI CORTE attende solo il tuo generoso finanziamento."
+    "Un basamento vuoto con una targa: «Qui sorgerà qualcosa di grandioso».",
+    "L’architetto di corte attende il tuo generoso finanziamento."
   ],
   [
-    "Un busto in bronzo con lo sguardo statista rivolto ai SONDAGGI.",
-    "Sotto, la scritta: 'AL SERVIZIO DEL PAESE (E DI SÉ)'."
+    "Un busto in bronzo con lo sguardo statista rivolto ai sondaggi.",
+    "Sotto, la scritta: «Al servizio del Paese. E di sé»."
   ],
   [
     "Una statua equestre: tu a cavallo, il dito puntato verso il futuro.",
     "Il cavallo, però, guarda l'uscita. Anche lui ha i suoi sondaggi."
   ],
   [
-    "Un COLOSSO alto tre piani: mano sul cuore, altra mano sul portafoglio.",
+    "Un colosso di tre piani. Una mano sul cuore, l’altra sul portafoglio.",
     "Fontane di champagne, fuochi d'artificio a orario continuato, un coro assunto.",
     "I turisti scattano selfie. I contabili, invece, piangono in silenzio."
   ]
@@ -59,60 +57,48 @@ export function buyMonumentLevel(state: GameState, expectedLevel: number): boole
 }
 
 export class MonumentScene implements Scene {
-  readonly transparent = false;
-  private mode: "view" | "review" | "story" = "view";
-  private page = 0;
-  private pages: string[][] = [];
+  private mode: "view" | "review" = "view";
   private expectedLevel = 0;
-  private notice = "";
+  private notice?: UiBlock;
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {}
-  update(): void {
-    if (this.input.wasPressed("b")) {
-      if (this.mode !== "view") { this.mode = "view"; this.page = 0; }
-      else this.stack.pop();
-      return;
+  private purchase(): void {
+    if (this.stack.top !== this || this.mode !== "review") return;
+    const level = this.expectedLevel, funds = this.state.money;
+    // Clear the quote before mutation: a stale confirmation cannot spend twice.
+    this.mode = "view"; this.input.reset();
+    if (!buyMonumentLevel(this.state, level)) {
+      audio.cancel(); this.notice = { title: "Spesa non effettuata", body: "I fondi o il livello sono cambiati. Nessun addebito: controlla il nuovo preventivo." }; return;
     }
-    if (this.mode === "view") {
-      const level = this.state.monumentLevel;
-      if (this.input.wasPressed("start")) {
-        this.mode = "story"; this.page = 0;
-        this.pages = epiloguePages([...MONUMENT_STAGES[level], ...(level === 3 ? [MONUMENT_TITLE, "IL TITOLO È VISIBILE NELLA TESSERA. È INTERAMENTE AUTOPROCLAMATO."] : [])]);
-      } else if (this.input.wasPressed("a") && level < MONUMENT_MAX) {
-        this.expectedLevel = level; this.mode = "review"; this.page = 0;
-        this.pages = epiloguePages([`LIVELLO ${level + 1}: COSTO ${MONUMENT_COSTS[level]}€.`, ...MONUMENT_STAGES[level + 1], "SPESA COSMETICA CON I TUOI FONDI. NESSUN BONUS ALLE LOTTE O AI SONDAGGI.", "LA CERIMONIA È FACOLTATIVA. LA FATTURA NO. A ALLA FINE CONFERMA; B ANNULLA."]);
-      }
-      return;
-    }
-    if (!this.input.wasPressed("a")) return;
-    if (this.page < this.pages.length - 1) { this.page++; return; }
-    if (this.mode === "review") {
-      if (buyMonumentLevel(this.state, this.expectedLevel)) {
-        saveGame(this.state); audio.badgeFanfare(); this.notice = `INAUGURATO: LIVELLO ${this.state.monumentLevel}.`;
-      } else { audio.cancel(); this.notice = "FONDI O LIVELLO NON DISPONIBILI."; }
-    }
-    this.mode = "view"; this.page = 0;
+    saveGame(this.state); audio.badgeFanfare();
+    this.notice = { title: "Monumento inaugurato", body: "La cerimonia è facoltativa. La fattura no.",
+      facts: [{ label: "Fondi personali", value: `${funds} → ${this.state.money} €` },
+        { label: "Livello", value: `${level} → ${this.state.monumentLevel} di ${MONUMENT_MAX}` }] };
   }
-  draw(screen: Screen): void {
-    drawEpilogueBackdrop(screen, "monument");
-    const level = this.mode === "review" ? this.expectedLevel + 1 : this.state.monumentLevel;
-    drawScreenHeader(screen, "MONUMENTO AL CANDIDATO", this.mode === "view" ? `${level}/3` : `${this.page + 1}/${this.pages.length}`);
-    const image = sceneImage(`epilogue:monument_${level}`, `ui/epilogue/monument_${level}.png`);
-    if (this.mode !== "view") {
-      if (image) screen.image(image, 10, 20, 32, 38);
-      drawEpiloguePage(screen, this.pages[this.page]);
-      screen.text(this.mode === "review" && this.page === this.pages.length - 1 ? "A: PAGA   B: ANNULLA" : "A: AVANTI   B: INDIETRO", 12, 167, "#fffaf0");
-      return;
-    }
-    if (image) screen.image(image, 9, 27, 64, 76);
-    screen.panel(83, 29, 149, 73, "card");
-    screen.text("FONDI PERSONALI", 92, 40, "#68758a");
-    screen.text(`${this.state.money}€`, 92, 53, "#17243d");
-    screen.text(level < 3 ? "PROSSIMO LIVELLO" : "COLLEZIONE COMPLETA", 92, 70, "#68758a");
-    screen.text(level < 3 ? `${MONUMENT_COSTS[level]}€` : "TITOLO NELLA TESSERA", 92, 83, "#17243d");
-    screen.panel(8, 109, 224, 47, "dialog");
-    screen.text(this.notice || "UN SELFIE NON PAGA LA FATTURA.", 16, 119, "#17243d");
-    screen.text("START: LEGGI TUTTA LA STORIA.", 16, 132, "#17243d");
-    screen.text("SOLO COSMETICO. NESSUN BONUS.", 16, 144, "#17243d");
-    screen.text(level < 3 ? "A: ANTEPRIMA   B: ESCI" : "START: STORIA   B: ESCI", 12, 167, "#fffaf0");
+  get uiPanel(): UiPanel {
+    const current = this.state.monumentLevel, quote = this.mode === "review";
+    const level = quote ? this.expectedLevel + 1 : current, cost = MONUMENT_COSTS[this.expectedLevel];
+    const stages = MONUMENT_STAGES[Math.max(0, Math.min(MONUMENT_MAX, level))];
+    const available = quote && current === this.expectedLevel && cost !== undefined && this.state.money >= cost;
+    return { title: "Monumento al candidato", subtitle: quote ? "Controlla il costo prima di pagare." : "Un selfie non paga la fattura.",
+      image: `/sprites/ui/epilogue/monument_${level}.png`, imageHeight: 160,
+      blocks: [...(!quote && this.notice ? [this.notice] : []),
+        { title: quote ? "Il prossimo monumento" : "Il tuo monumento", body: stages.join("\n\n"),
+          facts: [{ label: "Livello", value: quote ? `${current} → ${level} di ${MONUMENT_MAX}` : `${current} di ${MONUMENT_MAX}` }] },
+        { title: quote ? "Preventivo" : "Fondi personali", body: "Spesa cosmetica con i tuoi fondi. Nessun bonus alle lotte o ai sondaggi.",
+          facts: [{ label: "Fondi disponibili", value: `${this.state.money} €` },
+            ...(quote ? [{ label: "Costo", value: `${cost} €` }, { label: "Fondi dopo la spesa", value: available ? `${this.state.money - cost} €` : "Spesa non disponibile" }]
+              : current < MONUMENT_MAX ? [{ label: "Prossimo livello", value: `${MONUMENT_COSTS[current]} €` }] : [])] },
+        ...(level === MONUMENT_MAX ? [{ title: "Titolo nella tessera", body: "Padre della patria (autoproclamato). Il titolo è interamente autoproclamato." }] : [])],
+      actions: quote ? [{ label: "Paga e inaugura", disabled: !available,
+        hint: !available ? current !== this.expectedLevel ? "Il livello è cambiato. Torna al monumento." : "Fondi insufficienti." : undefined,
+        run: () => this.purchase() }] : current < MONUMENT_MAX ? [{ label: "Anteprima del prossimo livello", run: () => {
+          if (this.stack.top !== this || this.mode !== "view" || this.state.monumentLevel !== current) return;
+          this.expectedLevel = current; this.mode = "review"; this.input.reset(); audio.cursor();
+        } }] : [], primary: quote || current < MONUMENT_MAX ? 0 : undefined,
+      back: { label: "Indietro", run: () => { if (this.stack.top !== this || (this.mode === "review") !== quote) return;
+        this.input.reset(); audio.cancel(); if (quote) this.mode = "view"; else this.stack.pop();
+      } } };
   }
+  update(): void {}
+  draw(screen: Screen): void { screen.clear("#112037"); }
 }

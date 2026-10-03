@@ -14,6 +14,11 @@ export function inputContract(source){
  const directional=['up','down','left','right'].some(key=>keys.includes(key));
  const confirms=keys.includes('a'),menuDriven=source.includes('.update(this.input)')&&source.includes('new Menu(');
  if(!(directional&&confirms)&&!menuDriven)return null;
+ // Native kit panels expose selection and a named back action instead of
+ // drawing keyboard instructions into the pixel canvas. Keyboard bindings
+ // remain in Menu.update and the common shell guide.
+ if(source.includes('get uiPanel()')&&/\bselected\s*:/.test(source)&&/\bactions\s*:/.test(source)&&/\bback\s*:/.test(source))
+   return {focus:true,aHint:true,bHint:true};
  // Starter dossiers have no choice list: the visible current tab and page
  // counter identify what left/right and up/down are changing. A renderer
  // alone is insufficient; both visible labels must accompany it.

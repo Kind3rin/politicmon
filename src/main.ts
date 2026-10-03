@@ -14,6 +14,7 @@ import { syncRunCheckpoints, tickRunStats } from "./game/runstats";
 import { Input } from "./engine/input";
 import { initShell } from "./engine/shell";
 import { renderTouchActions } from "./engine/touchActions";
+import { beginUiFrame, endUiFrame, renderUiPanel, renderUiWorld,renderUiFeedback, updateUiInput } from "./ui/kit";
 import { SceneStack } from "./engine/scene";
 import { Screen } from "./engine/screen";
 import { getSpriteImage } from "./engine/assets";
@@ -22,6 +23,7 @@ import { preloadCoreSprites } from "./engine/preload";
 import { setTypeIconLoader } from "./data/poltypes";
 import { TitleScene } from "./scenes/TitleScene";
 import "./styles.css";
+import "./ui/kit/kit.css";
 import { inject } from "@vercel/analytics";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
@@ -38,10 +40,11 @@ if (import.meta.env.PROD && !localPreview) {
   injectSpeedInsights();
 }
 
-// Mostra i controlli touch sui dispositivi senza mouse.
-if (window.matchMedia("(pointer: coarse)").matches) {
-  document.body.classList.add("touch");
-}
+// Compact windows use the mobile controls too, including a phone with a
+// Bluetooth mouse. Input hints still follow the device actually used.
+const syncControlLayout = () => document.body.classList.toggle("touch", window.matchMedia("(pointer: coarse), (max-width: 600px)").matches);
+syncControlLayout();
+window.addEventListener("resize", syncControlLayout);
 
 // Applica la preferenza dei controlli di movimento (levetta vs d-pad).
 applyControlMode(loadControlMode());
@@ -254,15 +257,24 @@ function frame(now: number): void {
     return;
   }
   try {
+    input.pollGamepads();
+    const guideOpen = shellGuideOpen();
     const active = getActiveState();
-    if (active&&!shellGuideOpen()) {
+    if (active&&!guideOpen) {
       tickRunStats(active, dt, !document.hidden);
       syncRunCheckpoints(active);
     }
-    if(!shellGuideOpen())stack.update(dt);
-    renderTouchActions(stack.top?.touchActions, stack.top?.touchLayout);
+    if(!guideOpen)updateUiInput(stack.top?.uiPanel,input);
+    if(!guideOpen||stack.top?.continueWhenGuideOpen)stack.update(dt);
+    beginUiFrame();
+    const panel=stack.top?.uiPanel;
+    const nativePanel = renderUiPanel(panel);
+    renderUiFeedback(nativePanel ? undefined : stack.top?.uiFeedback);
+    renderUiWorld(nativePanel ? undefined : stack.top?.uiWorld, !nativePanel && Boolean(stack.top?.uiWorldPending));
+    renderTouchActions(nativePanel ? undefined : stack.top?.touchActions, nativePanel ? undefined : stack.top?.touchLayout);
     screen.configureViewport(Boolean(stack.top?.expandedViewport));
-    stack.draw(screen);
+    if (!nativePanel || panel?.arena) stack.draw(screen);
+    endUiFrame();
     input.endFrame();
     if (firstReadyFrame) {
       firstReadyFrame = false;

@@ -5,9 +5,10 @@ import { audio } from "../engine/audio";
 import { ALLY_CATALOG, ALLY_NAMES, addAlly, coalitionBonuses, removeAlly, type AllyId } from "../game/coalition";
 import { redeemCoalitionRepair, signed } from "../game/campaignDecisions";
 import { saveGame, type GameState } from "../game/state";
-import { coalitionChannelLabel, drawScreenHeader, wrapText } from "../ui/widgets";
-import { drawCampaignBackdrop } from "../ui/campaignArt";
-import { sceneImage } from "../engine/assets";
+import type { UiPanel, UiBlock } from "../ui/kit";
+import { readableCopy } from "../ui/kit/copy";
+const CHANNELS=["funds","sondaggiGain","territoryGain","shopPrice"] as const;
+const CHANNEL_LABELS={funds:"Fondi",sondaggiGain:"Guadagno nei sondaggi",territoryGain:"Guadagno nei collegi",shopPrice:"Prezzi dei negozi"};
 
 const R1_CANDIDATES: readonly AllyId[] = ["campo_secretary", "quantum_centrist", "civic_mayor"];
 const LABELS: Readonly<Record<AllyId, { lineRed: string }>> = {
@@ -23,7 +24,7 @@ export class CoalitionScene implements Scene {
   private index: number;
   private candidates: readonly AllyId[];
   private totals = false;
-  private notice = "A: SCEGLI  B: ESCI";
+  private notice = "";
   private pendingRemove: AllyId | null = null;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState, focus: AllyId) {
@@ -31,123 +32,58 @@ export class CoalitionScene implements Scene {
     this.index = Math.max(0, this.candidates.indexOf(focus));
   }
 
-  update(): void {
-    if (this.input.wasPressed("start")) { this.totals = !this.totals; audio.cursor(); return; }
-    if (this.totals) { if (this.input.wasPressed("a") || this.input.wasPressed("b")) this.totals = false; return; }
-    if (this.input.wasPressed("left") || this.input.wasPressed("up")) {
-      this.index = (this.index + this.candidates.length - 1) % this.candidates.length;
-      this.pendingRemove = null;
-      audio.cursor();
-    }
-    if (this.input.wasPressed("right") || this.input.wasPressed("down")) {
-      this.index = (this.index + 1) % this.candidates.length;
-      this.pendingRemove = null;
-      audio.cursor();
-    }
-    if (this.input.wasPressed("b")) {
-      audio.cancel();
-      if (this.pendingRemove) { this.pendingRemove = null; this.notice = "RIMOZIONE ANNULLATA"; return; }
-      this.stack.pop();
-      return;
-    }
-    if (!this.input.wasPressed("a")) return;
-    const allyId = this.candidates[this.index];
-    if (redeemCoalitionRepair(this.state, allyId)) {
-      saveGame(this.state); audio.confirm(); this.notice = "BUONO USATO: PATTO RIPARATO"; return;
-    }
-    if (!this.state.flags[`coalition-candidate-seen:${allyId}`] && !this.state.coalition.members.some(m => m.allyId === allyId)) {
-      audio.cancel();
-      this.notice = "PARLACI PRIMA NEL CAMPO";
-      return;
-    }
-    const selected = this.state.coalition.members.some((member) => member.allyId === allyId);
-    if (selected) {
-      if (this.pendingRemove !== allyId) {
-        this.pendingRemove = allyId;
-        audio.cursor();
-        this.notice = "A ANCORA: RIMUOVI  B: ANNULLA";
-        return;
-      }
-      const result = removeAlly(this.state.coalition, allyId);
-      if (result.ok) {
-        this.state.coalition = result.state;
-        this.pendingRemove = null;
-        saveGame(this.state);
-        audio.cancel();
-        this.notice = "CANDIDATO RIMOSSO";
-      }
-      return;
-    }
-    if (this.state.coalition.members.length >= 2) {
-      audio.cancel();
-      this.notice = "R1: MASSIMO DUE POSTI";
-      return;
-    }
-    const result = addAlly(this.state.coalition, allyId);
-    if (!result.ok) {
-      audio.cancel();
-      this.notice = result.error.toUpperCase();
-      return;
-    }
-    this.state.coalition = result.state;
-    saveGame(this.state);
-    audio.confirm();
-    this.notice = "CANDIDATO INSERITO";
+  private live(allyId:AllyId):boolean {return this.stack.top===this&&this.candidates[this.index]===allyId;}
+  private repairAvailable(allyId:AllyId):boolean {
+    const m=this.state.coalition.members.find(member=>member.allyId===allyId);
+    const key=m?`${allyId}:v${m.violationCount}`:'';
+    return Boolean(m?.status==='strained'&&!m.reconciliationSpent&&this.state.flags[`reconcile-token:${key}`]&&!this.state.flags[`reconcile-used:${key}`]);
   }
-
-  draw(screen: Screen): void {
-    drawCampaignBackdrop(screen, "coalition");
-    drawScreenHeader(screen, "TAVOLO DELLE ALLEANZE", `${this.state.coalition.members.length} ALLEATI`);
-    if (this.totals) {
-      const values = coalitionBonuses(this.state.coalition);
-      screen.panel(8, 25, 224, 132, "card");
-      screen.text("EFFETTI NETTI DELLA COALIZIONE", 18, 36, "#17243d");
-      const channels = ["funds", "sondaggiGain", "territoryGain", "shopPrice"] as const;
-      channels.forEach((channel, i) => {
-        const net = values.bonus[channel] + values.malus[channel];
-        screen.text(coalitionChannelLabel(channel), 18, 56 + i * 16, "#17243d");
-        screen.textRight(`${signed(channel === "shopPrice" ? -net : net)}%`, 220, 56 + i * 16, "#26745d");
-      });
-      screen.text("INCLUSO IL BONUS DELL'ASSETTO.", 18, 124, "#17243d");
-      screen.text("COE: EXP +8% A 70, -8% SOTTO 30.", 18, 139, "#17243d");
-      screen.text("A/B TORNA · START CHIUDI", 8, 167, "#ffe38a");
-      return;
+  private apply(allyId:AllyId,operation:'add'|'remove'|'repair'):void {
+    if(!this.live(allyId)||this.totals)return;
+    this.input.reset();
+    if(operation==='repair'){
+      if(!this.repairAvailable(allyId)||!redeemCoalitionRepair(this.state,allyId))return;
+      saveGame(this.state);audio.confirm();this.notice='Buono usato: patto riparato.';return;
     }
-    const allyId = this.candidates[this.index], definition = ALLY_CATALOG[allyId];
-    const member = this.state.coalition.members.find(m => m.allyId === allyId);
-    const seen = Boolean(member || this.state.flags[`coalition-candidate-seen:${allyId}`]);
-    screen.panel(8, 25, 224, 20, "card");
-    screen.text(seen ? ALLY_NAMES[allyId] : "CANDIDATO NON INCONTRATO", 16, 32, "#17243d");
-    const cast = ({ campo_secretary: "campo-secretary", quantum_centrist: "quantum-centrist", civic_mayor: "civic-mayor" } as Partial<Record<AllyId, string>>)[allyId];
-    if (seen && cast) {
-      const portrait = sceneImage(`campo:${cast}`, `chars/npc_${cast}_south.png`);
-      if (portrait) screen.image(portrait, 20, 66, 48, 64);
-    }
-    screen.panel(86, 51, 146, 106, "card");
-    const status = !seen ? "PARLACI NEL CAMPO" : !member ? "CANDIDATO LIBERO" : member.status === "strained"
-      ? "PATTO TESO" : member.status === "reconciled" ? "PATTO RIPARATO" : "PATTO ATTIVO";
-    screen.text(status, 94, 60, member?.status === "strained" ? "#a0443e" : "#26745d");
-    if (seen) {
-      const power = member?.status === "strained" ? 5 : member?.status === "reconciled" ? 7.5 : 10;
-      const bonus = `${coalitionChannelLabel(definition.bonus)} ${definition.bonus === "shopPrice" ? "-" : "+"}${power}%`;
-      const cost = `${coalitionChannelLabel(definition.malus)} ${definition.malus === "shopPrice" ? "+" : "-"}6%`;
-      screen.text("CONTRIBUTO PERSONALE", 94, 76, "#17243d");
-      screen.text(bonus, 94, 89, "#26745d");
-      screen.text(cost, 94, 102, "#a0443e");
-      screen.text("NON ACCETTA:", 94, 118, "#70470e");
-      wrapText(LABELS[allyId].lineRed, 21).forEach((line, i) => screen.text(line, 94, 131 + i * 10, "#70470e"));
-    }
-    screen.rect(8, 141, 73, 16, "#17243d");
-    screen.text(`${this.index + 1}/${this.candidates.length} ◄ ►`, 14, 145, "#fffaf0");
-    const pending = this.pendingRemove === allyId;
-    const m = member, key = m ? `${allyId}:v${m.violationCount}` : "";
-    const repair = m?.status === "strained" && !m.reconciliationSpent && this.state.flags[`reconcile-token:${key}`] && !this.state.flags[`reconcile-used:${key}`];
-    if (this.notice !== "A: SCEGLI  B: ESCI" && !pending) {
-      screen.panel(8, 137, 224, 20, "card");
-      screen.text(this.notice, 16, 144, "#17243d");
-    }
-    const footer = pending ? "A RIMUOVI · B ANNULLA" : repair ? "A USA BUONO · B ESCI"
-      : member ? "A RIMUOVI · B ESCI" : "A SCEGLI · B ESCI";
-    screen.text(`${footer} · START EFFETTI`, 8, 167, pending ? "#ffb0a8" : "#ffe38a");
+    if(operation==='remove'&&this.pendingRemove!==allyId){this.pendingRemove=allyId;audio.cursor();return;}
+    if(operation==='add'&&(!this.state.flags[`coalition-candidate-seen:${allyId}`]||this.state.coalition.members.length>=2))return;
+    const result=operation==='remove'?removeAlly(this.state.coalition,allyId):addAlly(this.state.coalition,allyId);
+    this.pendingRemove=null;
+    if(!result.ok){this.notice=result.error==='locked'?'La coalizione è bloccata.':result.error==='full'?'Non ci sono posti liberi.':'La composizione è cambiata. Rileggi il patto.';audio.cancel();return;}
+    this.state.coalition=result.state;saveGame(this.state);audio.confirm();this.notice=operation==='remove'?'Candidato rimosso.':'Candidato inserito.';
   }
+  private back():void {
+    if(this.stack.top!==this)return;
+    this.input.reset();audio.cancel();
+    if(this.totals){this.totals=false;return;}
+    if(this.pendingRemove){this.pendingRemove=null;this.notice='Rimozione annullata.';return;}
+    this.stack.pop();
+  }
+  get uiPanel():UiPanel {
+    const allyId=this.candidates[this.index],definition=ALLY_CATALOG[allyId];
+    const member=this.state.coalition.members.find(m=>m.allyId===allyId);
+    const seen=Boolean(member||this.state.flags[`coalition-candidate-seen:${allyId}`]);
+    const repair=this.repairAvailable(allyId);
+    const back={label:'Indietro',run:()=>this.back()};
+    if(this.totals){
+      const values=coalitionBonuses(this.state.coalition);
+      return {title:'Effetti della coalizione',blocks:[{title:'Effetti netti',facts:CHANNELS.map(channel=>({label:CHANNEL_LABELS[channel],value:`${signed(channel==='shopPrice'?-(values.bonus[channel]+values.malus[channel]):values.bonus[channel]+values.malus[channel])}%`}))},
+        {title:'Come si applicano',body:'I valori includono il bonus dell’assetto. I fondi e i guadagni di consenso cambiano quando una regola li assegna: non sono accrediti immediati.'},
+        {title:'Coesione ed esperienza',body:'Da 70 di coesione: esperienza +8%. Sotto 30: esperienza −8%.',facts:[{label:'Coesione attuale',value:`${this.state.morale.cohesion} di 100`}]}],actions:[],back};
+    }
+    const power=member?.status==='strained'?5:member?.status==='reconciled'?7.5:10;
+    const blocks:UiBlock[]=[{title:seen?readableCopy(ALLY_NAMES[allyId]):'Candidato non incontrato',body:!seen?'Parlaci prima nel Campo.':!member?'Candidato libero.':member.status==='strained'?'Patto teso. Il contributo positivo è dimezzato.':member.status==='reconciled'?'Patto riparato. Un altro strappo lo esclude.':'Patto attivo.',facts:[{label:'Alleati',value:`${this.state.coalition.members.length} di 2`}]}];
+    if(seen)blocks.push({title:'Contributo personale',facts:[{label:CHANNEL_LABELS[definition.bonus],value:`${definition.bonus==='shopPrice'?'-':'+'}${power}%`},{label:CHANNEL_LABELS[definition.malus],value:`${definition.malus==='shopPrice'?'+':'-'}6%`}],body:`Non accetta: ${readableCopy(LABELS[allyId].lineRed).toLocaleLowerCase('it')}.`});
+    if(this.notice)blocks.push({title:'Registro',body:this.notice});
+    const pending=this.pendingRemove===allyId;
+    if(pending)blocks.push({title:'Rimuovere l’alleato?',body:`${readableCopy(ALLY_NAMES[allyId])} uscirà dalla coalizione. Il suo bonus e il suo malus smetteranno di applicarsi. Indietro annulla.`});
+    const operation=pending?'remove':repair?'repair':member?'remove':'add';
+    const disabled=this.state.coalition.locked&&!repair||!member&&(!seen||this.state.coalition.members.length>=2);
+    return {title:'Tavolo delle alleanze',subtitle:this.state.coalition.locked?'Composizione bloccata.':'Leggi il contributo e la linea rossa prima di scegliere.',blocks,
+      tabs:pending?undefined:this.candidates.map((id,index)=>({label:readableCopy(ALLY_NAMES[id]),run:()=>{if(this.stack.top!==this||this.pendingRemove||this.totals)return;this.index=index;this.notice='';this.input.reset();audio.cursor();}})),selectedTab:this.index,
+      actions:[{label:pending?'Conferma la rimozione':repair?'Usa il buono di riparazione':member?'Rimuovi dalla coalizione':'Aggiungi alla coalizione',disabled,run:()=>{if((this.pendingRemove===allyId)!==pending)return;this.apply(allyId,operation);}},
+        ...(pending?[]:[{label:'Effetti complessivi',hint:'Leggi i bonus netti e l’effetto della coesione.',run:()=>{if(!this.live(allyId)||this.pendingRemove)return;this.totals=true;this.input.reset();audio.cursor();}}])],primary:0,back};
+  }
+  update():void {}
+  draw(screen:Screen):void {screen.clear('#17243d');}
 }

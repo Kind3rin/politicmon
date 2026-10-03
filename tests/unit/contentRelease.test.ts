@@ -12,11 +12,11 @@ test("release completa: il catalogo espone tutti i sistemi e requisiti leggibili
 
 test("release completa: il catalogo segue i progressi di un save esistente", () => {
   const state = newGameState();
-  assert.equal(CONTENT_CATALOG.find((entry) => entry.title.startsWith("ATTO 3"))?.unlocked(state), false);
+  assert.equal(CONTENT_CATALOG.find((entry) => entry.title.startsWith("Atto 3"))?.unlocked(state), false);
   state.flags["ue-beaten"] = true;
-  assert.equal(CONTENT_CATALOG.find((entry) => entry.title.startsWith("ATTO 3"))?.unlocked(state), true);
+  assert.equal(CONTENT_CATALOG.find((entry) => entry.title.startsWith("Atto 3"))?.unlocked(state), true);
   state.flags.atto3Complete = true;
-  assert.equal(CONTENT_CATALOG.find((entry) => entry.title === "CAMPAGNA SETTIMANALE")?.unlocked(state), true);
+  assert.equal(CONTENT_CATALOG.find((entry) => entry.title === "Campagna settimanale")?.unlocked(state), true);
 });
 
 test("eventi meme: applicano effetti reali e rifiutano costi non coperti", () => {

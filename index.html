@@ -66,20 +66,22 @@
       </div>
     </div>
     <dialog id="shell-guide" aria-labelledby="shell-guide-title">
-      <div class="guide-heading"><span class="guide-eyebrow">MANUALE DEL CANDIDATO</span><button id="shell-guide-close" type="button" autofocus aria-label="Chiudi la guida">✕</button></div>
+      <div class="guide-heading"><span class="guide-eyebrow">Comandi</span><button id="shell-guide-close" type="button" autofocus aria-label="Chiudi la guida">✕</button></div>
       <h1 id="shell-guide-title">Il consenso non si conquista da fermo.</h1>
       <p>Esplora e scegli le mosse. Questa guida mette in pausa mondo e lotte locali; i duelli online continuano.</p>
       <dl class="guide-controls">
-        <div><dt>Muovi / scegli</dt><dd><kbd>↑ ↓ ← →</kbd> oppure <kbd>W A S D</kbd></dd></div>
-        <div><dt>Parla / conferma</dt><dd><kbd>Z</kbd> <kbd>K</kbd> <kbd>INVIO</kbd> <kbd>SPAZIO</kbd> · touch: A</dd></div>
-        <div><dt>Torna / annulla</dt><dd><kbd>X</kbd> <kbd>J</kbd> <kbd>ESC</kbd> <kbd>⌫</kbd> · touch: B</dd></div>
-        <div><dt>Quartier generale</dt><dd><kbd>P</kbd> · pulsante POLITICMON / MENU</dd></div>
+        <div><dt>Muoversi</dt><dd data-guide-command="move">Frecce o <kbd>WASD</kbd>. Sul telefono, trascina la leva o tocca una casella della mappa.</dd></div>
+        <div><dt>Confermare e interagire</dt><dd data-guide-command="confirm">Tocca il personaggio o l’oggetto. Il pulsante in basso dice cosa farà. Tastiera: <kbd>Z</kbd> o <kbd>Invio</kbd>.</dd></div>
+        <div><dt>Tornare indietro</dt><dd data-guide-command="back">Pulsante Indietro. Tastiera: <kbd>X</kbd> o <kbd>Esc</kbd>. Chiude un livello del menù.</dd></div>
+        <div><dt>Aprire il menù</dt><dd data-guide-command="menu">Pulsante Menu o <kbd>P</kbd>. Squadra e Mappa hanno accessi diretti.</dd></div>
+        <div><dt>Dettaglio delle mosse</dt><dd data-guide-command="inspect">Tieni premuta una scheda mossa, oppure premi I sulla tastiera.</dd></div>
       </dl>
-      <p><strong>Touch</strong> In lotta i pulsanti grandi eseguono la scelta con un tocco. Negli altri menu, tocca una voce per selezionarla e ritocca per aprirla. Trascina sulla croce; il centro ferma il movimento. ✥ alterna croce e levetta.</p>
-      <p><strong>Lotte</strong> START/MENU apre il dossier dal menu LOTTA, senza consumare il turno.</p>
-      <p><strong>Ripresa</strong> SALVA nel quartier generale. EXTRA → GUIDA CAMPAGNA spiega prossima meta e morale.</p>
+      <p><strong>Esplorazione</strong> Corri attiva la corsa con un tocco. Cammina la disattiva. ✥ alterna croce e leva.</p>
+      <p><strong>Leva libera</strong> Appoggia il pollice nella metà sinistra della mappa e trascina. Rilascia per fermarti.</p>
+      <p><strong>Menù e dialoghi</strong> Un tocco apre una voce. Mostra tutto completa il testo; Continua passa alla pagina successiva.</p>
+      <p><strong>Ripresa</strong> Salva è direttamente nell’esplorazione; lo trovi anche in Menu → Altro. Missioni mostra la prossima tappa.</p>
       <p class="guide-note">TAB passa fra i controlli della pagina. ESC chiude questa guida.</p>
-      <button id="shell-guide-resume" type="button">TORNA ALLA CAMPAGNA →</button>
+      <button id="shell-guide-resume" type="button">Torna alla campagna</button>
     </dialog>
     <script type="module" src="/src/main.ts"></script>
   </body>

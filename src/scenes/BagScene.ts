@@ -1,22 +1,27 @@
+import { companionHint, companionPosition } from "../ui/kit/companionContent";
 import type { TouchAction } from "../engine/touchActions";
 import { healingQuote, useHealingSupply, type HealingQuote } from "../game/supplyGuide";
 import { BAG_ORDER, ITEMS } from "../data/items";
-import { MOVES } from "../data/moves";
+import { MOVES, STATUS_LABELS } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
-import { canLearnMove, evolve, heldItemOf, itemEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
+import { canLearnMove, learnMoveIntoSlot, evolve, heldItemOf, itemEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame, type GameState } from "../game/state";
 import { BAR_RESPAWN } from "../data/maps";
-import { Menu, MessageBox, wrapText, INK } from "../ui/widgets";
+import { MessageBox } from "../ui/widgets";
+import {itemIconPath} from "../art/items";
+import type {UiPanel} from "../ui/kit";
 import { SupplyView } from "../ui/SupplyView";
-import { PartyScene } from "./PartyScene";
-import { TeachScene } from "./TeachScene";
+import { evolutionPreview } from "../game/evolutionGuide";
+import { ABILITIES } from "../data/abilities";
+import { moveDescription } from "../ui/kit/moveContent";
 import { EvolutionScene } from "./EvolutionScene";
 
 export interface BagOptions {
   inBattle: boolean;
+  fromWorld?: boolean;
   quickHeal?: boolean;
   battleItem?: (itemId: string) => { hint: string; disabled: boolean };
   onUse?: (itemId: string) => void;
@@ -29,9 +34,6 @@ export class BagScene implements Scene {
   private quickIndex = 0;
   private quickDone = false;
   private msg = new MessageBox();
-  // Conferma SÌ/NO per lo swap di un hold item già equipaggiato.
-  private ask: { text: string; yes: () => void } | null = null;
-  private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
 
   constructor(
     private stack: SceneStack,
@@ -88,7 +90,7 @@ export class BagScene implements Scene {
   private healQuick(mon: Monster, quote: HealingQuote): void {
     if (!useHealingSupply(this.state, mon, quote)) return;
     audio.heal(); saveGame(this.state); this.quickDone = true;
-    this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${quote.max}.`], undefined, true);
+    this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${quote.max}.`], undefined, true, companionPosition(mon,this.state.party) || "Politicmon");
   }
   private updateQuick(): void {
     if (this.input.wasPressed("b")) { this.stack.pop(); return; }
@@ -109,21 +111,6 @@ export class BagScene implements Scene {
       if (mon && quote) this.healQuick(mon, quote);
     }
   }
-  private drawQuick(screen: Screen): void {
-    screen.clear("#17243d"); screen.text("CURA RAPIDA", 12, 8, "#fffaf0", 2);
-    screen.text("PV, NON PROMESSE.", 12, 27, "#80d1b0");
-    this.targets().forEach((mon, i) => {
-      const quote = healingQuote(this.state, mon), y = 38 + i * 28;
-      screen.rect(8, y, 224, 25, i === this.quickIndex ? "#fff3cc" : "#263954");
-      const color = i === this.quickIndex ? "#17243d" : "#fffaf0";
-      screen.text(speciesOf(mon).name, 15, y + 4, color);
-      screen.textRight(`${mon.hp}/${statsOf(mon).hp} PV`, 224, y + 4, color);
-      const note = quote ? `${ITEMS[quote.id].name} x${quote.quantity}: +${quote.after - quote.before} PV` : this.quickHint(mon, quote);
-      screen.textFit(note, 15, y + 15, 209, color);
-    });
-    screen.text("NON RECUPERA PP O STATUS. KO: AL BAR.", 12, 155, "#fffaf0");
-    screen.text("A:CURA  START:BORSA  B:PAUSA", 12, 170, "#80d1b0");
-  }
 
   update(dt: number): void {
     if (this.msg.isOpen) {
@@ -132,18 +119,6 @@ export class BagScene implements Scene {
       return;
     }
     if (this.quick) { this.updateQuick(); return; }
-    if (this.ask) {
-      const a = this.askMenu.update(this.input);
-      if (a === "select") {
-        const yes = this.askMenu.index === 0 ? this.ask.yes : null;
-        this.ask = null;
-        yes?.();
-      } else if (a === "cancel") {
-        audio.cancel();
-        this.ask = null;
-      }
-      return;
-    }
     this.refresh();
     const action = this.view.update(this.input);
     this.refresh();
@@ -158,152 +133,38 @@ export class BagScene implements Scene {
     if (!itemId) {
       return;
     }
-    const item = ITEMS[itemId];
-    if (this.opts.inBattle) {
-      this.useBattleItem(itemId);
-      return;
-    }
-    // Uso fuori battaglia.
-    if (item.kind === "ball") {
-      this.msg.show(["Qui non c'è nessuno da reclutare.", "Prova nell'erba alta, dove i candidati sono allo stato brado."]);
-      return;
-    }
-    // Oggetti chiave: passivi, non si "usano" — spiega l'effetto.
-    if (item.kind === "key") {
-      this.msg.show(["È sempre attivo, basta possederlo.", item.desc]);
-      return;
-    }
-    // HOLD ITEM: scegli il POLITICMON che lo terrà (1 slot; swap con conferma).
-    if (item.kind === "hold") {
-      this.stack.push(
-        new PartyScene(this.stack, this.input, this.state, {
-          mode: "use-item",
-          title: `A chi affidi ${item.name}?`,
-          onChoose: (mon) => this.equipHold(mon, itemId)
-        })
-      );
-      return;
-    }
-    // OGGETTI DA CAMPO: repellente e teletrasporto al bar.
-    if (item.kind === "field") {
-      this.useFieldItem(itemId);
-      return;
-    }
-    // CAMPAGNA ELETTORALE: attiva un buff a tempo (contatore battaglie nel save).
-    if (item.kind === "boost") {
-      this.useBoostItem(itemId);
-      return;
-    }
-    // DIRETTIVE DI PARTITO: insegnano una mossa a chi è del tipo giusto.
-    if (item.kind === "tm") {
-      const moveId = item.moveId;
-      if (!moveId) {
-        return;
-      }
-      this.stack.push(
-        new PartyScene(this.stack, this.input, this.state, {
-          mode: "use-item",
-          title: `Direttiva ${MOVES[moveId].name} (tipo ${MOVES[moveId].type}):`,
-          directiveMoveId: moveId,
-          onChoose: (mon) => {
-            if (!canLearnMove(mon, moveId)) {
-              const has = mon.moves.some((slot) => slot.id === moveId);
-              this.msg.show(
-                has
-                  ? [`${speciesOf(mon).name} segue già questa linea.`]
-                  : [`${speciesOf(mon).name} non ha la tessera giusta.`, "Questa direttiva è per un'altra corrente."]
-              );
-              return;
-            }
-            this.stack.push(
-              new TeachScene(this.stack, this.input, mon, moveId, () => {
-                this.state.flags["used-directive"] = true;
-                markSeen(this.state, mon.speciesId);
-                saveGame(this.state); // le direttive non si consumano
-              })
-            );
-          }
-        })
-      );
-      return;
-    }
-    this.stack.push(
-      new PartyScene(this.stack, this.input, this.state, {
-        mode: "use-item",
-        title: item.kind === "evo" ? "A chi consegni la tessera?" : undefined,
-        onChoose: (mon) => {
-          if (item.kind === "evo") {
-            const targetId = itemEvolution(mon, itemId);
-            if (!targetId) {
-              this.msg.show(["Annusa la tessera, la restituisce.", "Questa carriera non fa per lui."]);
-              return;
-            }
-            const fromId = mon.speciesId;
-            // Scena dedicata con animazione; l'evoluzione si applica al termine.
-            this.stack.push(
-              new EvolutionScene(this.stack, this.input, fromId, targetId, () => {
-                this.consume(itemId);
-                evolve(mon, targetId);
-                markSeen(this.state, targetId);
-                markCaught(this.state, targetId);
-                saveGame(this.state);
-              }, { mon, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed })
-            );
-            return;
-          }
-          if (item.kind === "heal") {
-            const quote = healingQuote(this.state, mon, itemId);
-            if (!quote || !useHealingSupply(this.state, mon, quote)) {
-              this.msg.show(["Non avrebbe alcun effetto."]); return;
-            }
-            audio.heal(); this.refresh(); saveGame(this.state);
-            this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${quote.max}.`], undefined, true);
-          } else {
-            if (!mon.status) {
-              this.msg.show(["Nessuno scandalo da insabbiare, per ora."]);
-              return;
-            }
-            mon.status = null;
-            audio.heal();
-            this.consume(itemId);
-            saveGame(this.state);
-            this.msg.show(["Tutto archiviato. Non se ne parla più."], undefined, true);
-          }
-        }
-      })
-    );
+    this.activate(itemId);
   }
 
-  // Equipaggia un hold item: se il mostro ne tiene già uno, chiede lo swap
-  // (il vecchio torna nella borsa). Parse difensivo via heldItemOf.
-  private equipHold(mon: Monster, itemId: string): void {
+  private activate(itemId: string, mon?: Monster, expectedHeld?: string): void {
+    if (this.stack.top !== this || this.msg.isOpen || (this.state.bag[itemId] ?? 0) < 1) return;
     const item = ITEMS[itemId];
-    const current = heldItemOf(mon);
-    if (current?.id === itemId) {
-      this.msg.show([`${speciesOf(mon).name} tiene già ${item.name}.`]);
-      return;
+    if (this.opts.inBattle) { this.useBattleItem(itemId); return; }
+    if (item.kind === "ball") {
+      this.msg.show(["Qui non c’è nessuno da reclutare.", "Usa la scheda in una lotta contro un candidato selvatico."]); return;
     }
-    const doEquip = () => {
-      if (current) {
-        this.state.bag[current.id] = (this.state.bag[current.id] ?? 0) + 1;
-      }
-      mon.heldItem = itemId;
-      this.consume(itemId);
+    if (item.kind === "key") { this.msg.show(["È sempre attivo, basta possederlo.", item.desc]); return; }
+    if (item.kind === "field") { this.useFieldItem(itemId); return; }
+    if (item.kind === "boost") { this.useBoostItem(itemId); return; }
+    if (!mon || !this.state.party.includes(mon)) return;
+    if (item.kind === "hold") {
+      const current = heldItemOf(mon);
+      if (current?.id !== expectedHeld || current?.id === itemId) return;
+      if (current) this.state.bag[current.id] = (this.state.bag[current.id] ?? 0) + 1;
+      mon.heldItem = itemId; this.consume(itemId); audio.confirm(); saveGame(this.state);
+      this.msg.show([`${speciesOf(mon).name} ora tiene ${item.name}.`,
+        ...(current ? [`${current.name} torna nella borsa.`] : [])], undefined, true); return;
+    }
+    if (item.kind === "evo") {
+      const targetId = itemEvolution(mon, itemId);
+      if (!targetId) return;
+      const fromId = mon.speciesId;
       audio.confirm();
-      saveGame(this.state);
-      this.msg.show([
-        `${speciesOf(mon).name} ora tiene ${item.name}!`,
-        ...(current ? [`${current.name} torna nella borsa.`] : [])
-      ]);
-    };
-    if (current) {
-      this.askMenu.index = 0;
-      this.ask = {
-        text: `${speciesOf(mon).name} tiene già ${current.name}. Scambiare con ${item.name}?`,
-        yes: doEquip
-      };
-    } else {
-      doEquip();
+      this.stack.push(new EvolutionScene(this.stack, this.input, fromId, targetId, () => {
+        if (!this.state.party.includes(mon) || mon.speciesId !== fromId || (this.state.bag[itemId] ?? 0) < 1
+          || itemEvolution(mon, itemId) !== targetId) return;
+        this.consume(itemId); evolve(mon, targetId); markSeen(this.state, targetId); markCaught(this.state, targetId); saveGame(this.state);
+      }, {mon,reviewed:true,reduceEffects:this.state.reduceEffects,battleSpeed:this.state.battleSpeed}));
     }
   }
 
@@ -336,7 +197,7 @@ export class BagScene implements Scene {
       // Chiude BORSA e MENU PAUSA: la WorldScene sottostante rileva il cambio
       // di mappa (riconciliazione in update) e ricarica la destinazione.
       this.stack.pop(); // BagScene
-      this.stack.pop(); // PauseScene
+      if (!this.opts.fromWorld) this.stack.pop(); // Optional pause beneath the bag
       return;
     }
     this.msg.show(["Non succede niente. Sospetto."]);
@@ -371,18 +232,123 @@ export class BagScene implements Scene {
     this.refresh();
   }
 
-  draw(screen: Screen): void {
-    this.refresh();
-    if (this.ask) {
-      screen.clear("#101b32");
-      screen.panel(6, 24, 228, 140, "dialog");
-      wrapText(this.ask.text, 35).forEach((line, i) => screen.text(line, 14, 32 + i * 10, INK));
-      this.askMenu.draw(screen, 142, 120, 84, 12);
-      screen.text("A:SCEGLI B:ANNULLA", 8, 169, "#fff3cc");
-      return;
-    }
-    if (this.quick) this.drawQuick(screen);
-    else this.view.draw(screen, this.opts.battleItem?.(this.view.selected ?? "").hint);
-    if (this.msg.isOpen) this.msg.draw(screen);
+  /** Show the recipient and the dose together: selecting a cure is the use,
+   * rather than opening another roster. The quote is checked again at commit. */
+  private fieldActions(ids: readonly string[]): TouchAction[] {
+    const ordered = [...ids.filter(id => ["heal", "cure"].includes(ITEMS[id].kind)),
+      ...ids.filter(id => !["heal", "cure"].includes(ITEMS[id].kind))];
+    return ordered.flatMap(id => {
+      const item = ITEMS[id];
+      const name = item.name.charAt(0) + item.name.slice(1).toLocaleLowerCase("it");
+      const description = item.desc.replace(/^Da tenere: /,'');
+      const icon = itemIconPath(id) ? `/sprites/${itemIconPath(id)}` : undefined;
+      if (["heal", "cure"].includes(item.kind) && this.state.party.length) {
+        return this.state.party.map(mon => {
+          const quote = item.kind === "heal" ? healingQuote(this.state, mon, id) : null;
+          const status = mon.status;
+          const disabled = item.kind === "heal" ? !quote : !status;
+          return {
+            group: name, groupHint:item.desc, label: `Cura ${speciesOf(mon).name}`, icon,
+            hint: companionHint(mon, this.state.party, item.kind === "heal" ? quote ? "Non cambia PP o stato." : this.quickHint(mon, null)
+              : status ? "Rimuove lo stato. Non recupera PV o PP." : "In forma. Nessun consumo."),
+            facts: [
+              {label: "In borsa", value: String(this.state.bag[id])},
+              {label: item.kind === "heal" ? "PV" : "Stato", value: item.kind === "heal"
+                ? quote ? `${quote.before} → ${quote.after} di ${quote.max}` : `${mon.hp} di ${statsOf(mon).hp}`
+                : status ? `${STATUS_LABELS[status]} → In forma` : "In forma"},
+              {label: "Consumo", value: disabled ? "Nessuno" : "1 dose"}
+            ], disabled,
+            run: () => {
+              if (this.stack.top !== this || this.msg.isOpen || disabled
+                || !this.state.party.includes(mon) || (this.state.bag[id] ?? 0) < 1) return;
+              if (item.kind === "heal") {
+                if (!quote || !useHealingSupply(this.state, mon, quote)) return;
+              } else {
+                if (!status || mon.status !== status) return;
+                mon.status = null; this.consume(id);
+              }
+              this.input.reset(); audio.heal(); this.refresh(); saveGame(this.state);
+              this.msg.show([item.kind === "heal" ? `${speciesOf(mon).name}: PV ${mon.hp}/${statsOf(mon).hp}.`
+                : `${speciesOf(mon).name}: stato rimosso.`], undefined, true, companionPosition(mon, this.state.party) || "Politicmon");
+            }
+          };
+        });
+      }
+      if (item.kind === "tm" && item.moveId && this.state.party.length) {
+        const moveId=item.moveId,move=MOVES[moveId];
+        return this.state.party.flatMap<TouchAction>(mon => {
+          const ready=canLearnMove(mon,moveId),slots=mon.moves.length>=4?mon.moves:[undefined];
+          const group=`${name} · ${speciesOf(mon).name} · ${companionPosition(mon,this.state.party)}`;
+          const common={group,groupHint:`Nuova mossa: ${move.name}.\n\n${moveDescription(move)}\n\nIl tocco applica la sostituzione. Le altre mosse e i loro PP restano.`,icon,
+            groupFacts:[{label:"Tipo nuovo",value:move.type},{label:"Potenza nuova",value:String(move.power)},
+              {label:"PP nuovi",value:String(move.pp)},{label:"Precisione",value:`${move.accuracy}%`}]};
+          if(!ready)return [{...common,label:`${speciesOf(mon).name}: non disponibile`,
+            hint:mon.moves.some(slot=>slot.id===moveId)?"Conosce già questa mossa.":"Il tipo non è compatibile.",disabled:true,run:()=>{}}];
+          return slots.map(slot => ({...common,
+            label:slot?`${speciesOf(mon).name}: ${MOVES[slot.id].name} → ${move.name}`:`Insegna ${move.name} a ${speciesOf(mon).name}`,
+            hint:slot?moveDescription(MOVES[slot.id]):"Un posto libero. Le mosse attuali e i loro PP restano.",
+            facts:[...(slot?[{label:"Tipo prima",value:MOVES[slot.id].type},{label:"Tipo dopo",value:move.type},
+              {label:"Potenza",value:`${MOVES[slot.id].power} → ${move.power}`},
+              {label:"PP",value:`${slot.pp} → ${move.pp}`}]:[]),{label:"Consumo",value:"Direttiva riutilizzabile"}],
+            run:()=>{
+              if(this.stack.top!==this||this.msg.isOpen||!this.state.party.includes(mon)||(this.state.bag[id]??0)<1
+                ||!canLearnMove(mon,moveId)||!learnMoveIntoSlot(mon,moveId,slot))return;
+              this.input.reset();this.state.flags["used-directive"]=true;markSeen(this.state,mon.speciesId);saveGame(this.state);audio.levelUp();
+              this.msg.show([`${speciesOf(mon).name} adotta ${move.name}.`],undefined,true);
+            }
+          }));
+        });
+      }
+      if (["hold", "evo"].includes(item.kind) && this.state.party.length) {
+        return this.state.party.map(mon => {
+          const held = heldItemOf(mon);
+          const target = item.kind === "evo" ? itemEvolution(mon, id) : undefined;
+          const preview = target ? evolutionPreview(mon,target) : undefined;
+          const before=statsOf(mon),after=preview?statsOf(preview):undefined,previewHp=mon.hp;
+          const from=speciesOf(mon),to=preview?speciesOf(preview):undefined;
+          const ability=to?.ability?ABILITIES[to.ability]:undefined;
+          const disabled = item.kind === "hold" ? held?.id === id
+            : !target;
+          return {
+            group:name, groupHint:description.charAt(0).toLocaleUpperCase('it')+description.slice(1), icon, label:`${item.kind === "hold" ? "Affida a" : "Evolvi"} ${speciesOf(mon).name}`,
+            hint:companionHint(mon, this.state.party, item.kind === "hold" ? disabled ? "Tiene già questo oggetto. Nessuno scambio."
+              : held ? "Il vecchio oggetto torna nella borsa." : "Un solo oggetto per compagno."
+              : target ? `Il tocco avvia l’evoluzione.\n\nMosse, PP, stato e oggetto restano. La forma meme si azzera.\n\n${ability?.name ?? "Nessuna abilità"}: ${ability?.desc ?? "nessuna passiva."}` : "Non evolve con questa tessera."),
+            facts:[{label:"In borsa",value:String(this.state.bag[id])},
+              ...(item.kind === "hold" ? [{label:"Oggetto tenuto",value:`${held?.name ?? "Nessuno"} → ${name}`}]
+                : target&&after&&to ? [
+                  {label:"Nuova forma",value:to.name},
+                  ...(["hp","atk","def","spc","spd"] as const).map((key,i)=>({label:["PV massimi","Grinta","Faccia tosta","Retorica","Opportunismo"][i],value:`${before[key]} → ${after[key]}`})),
+                  {label:"PV attuali",value:`${mon.hp} → ${preview!.hp}`},{label:"Tipo prima",value:from.types.join(" · ")},
+                  {label:"Tipo dopo",value:to.types.join(" · ")}]:[{label:"Nuova forma",value:"Nessuna"}]),
+              {label:"Consumo",value:disabled ? "Nessuno" : item.kind === "evo" ? "1 tessera" : "Spostato dalla borsa"}],
+            disabled, run:() => {
+              if (this.stack.top !== this || this.msg.isOpen || disabled || !this.state.party.includes(mon)
+                || (item.kind === "hold" && heldItemOf(mon)?.id !== held?.id)
+                || (item.kind === "evo" && (itemEvolution(mon,id) !== target || JSON.stringify(statsOf(mon)) !== JSON.stringify(before) || mon.hp !== previewHp))) return;
+              this.input.reset(); this.activate(id,mon,held?.id);
+            }
+          };
+        });
+      }
+      return [{group: "Oggetti e preparazione", label: name, icon, hint: item.desc,
+        facts: [{label: "Quantità", value: String(this.state.bag[id])}], run: () => {
+          if (this.stack.top !== this || this.msg.isOpen) return;
+          this.input.reset(); this.view.menu.index = this.view.ids.indexOf(id); this.activate(id);
+        }}];
+    });
   }
+
+  get uiPanel():UiPanel|undefined {
+    if(this.msg.isOpen)return undefined;
+    const back:TouchAction={label:'Indietro',run:()=>{if(this.stack.top!==this)return;this.input.reset();audio.cancel();if(this.view.inspect)this.view.inspect=false;else this.stack.pop();}};
+    if(this.quick)return {title:'Cura rapida',subtitle:'Recupera PV usando le cure in borsa. Per PP, status e KO vai al bar.',actions:this.state.party.map(mon=>{const quote=healingQuote(this.state,mon);return {label:speciesOf(mon).name,hint:quote?`${ITEMS[quote.id].name}: ${quote.quantity} dosi.`:this.quickHint(mon,null),facts:quote?[{label:'PV',value:`${quote.before} → ${quote.after}`},{label:'PV massimi',value:String(quote.max)}]:[{label:'PV',value:`${mon.hp} di ${statsOf(mon).hp}`}],disabled:!quote,run:()=>{if(this.stack.top!==this||!this.quick||this.msg.isOpen||!this.state.party.includes(mon)||!quote)return;this.input.reset();this.healQuick(mon,quote);}};}),back};
+    this.refresh();
+    const ids=this.view.ids,selected=this.view.selected;
+    if(this.view.inspect&&selected){const item=ITEMS[selected];return {title:item.name,blocks:[{title:'Effetto',body:item.desc,facts:[{label:'In borsa',value:String(this.state.bag[selected]??0)}]}],actions:[{label:this.opts.inBattle?'Usa in lotta':'Usa oggetto',hint:this.opts.battleItem?.(selected).hint,disabled:this.opts.battleItem?.(selected).disabled,run:()=>{this.input.reset();this.activate(selected);}}],primary:0,back};}
+    if (!this.opts.inBattle) return {title:'La tua borsa',subtitle:ids.length ? 'Scegli oggetto e compagno insieme. Effetto e consumo sono indicati prima del tocco.' : 'La borsa è vuota.',actions:this.fieldActions(ids),back};
+    return {title:this.opts.inBattle?'Borsa in lotta':'La tua borsa',subtitle:ids.length?`${ids.length} oggetti disponibili. Scegli cosa usare.`:'La borsa è vuota.',
+      actions:[...ids.map(id=>{const item=ITEMS[id],info=this.opts.inBattle?this.opts.battleItem?.(id):undefined;return {label:item.name.charAt(0)+item.name.slice(1).toLocaleLowerCase("it"),icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,hint:info?.hint??item.desc,disabled:info?.disabled,facts:[{label:'Quantità',value:String(this.state.bag[id])}],run:()=>{if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();this.view.menu.index=this.view.ids.indexOf(id);this.activate(id);}};}),...(this.opts.inBattle&&this.opts.onCampaign?[{label:'Campagna',hint:'Azioni che spendono sondaggi.',run:()=>{if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();audio.confirm();this.stack.pop();this.opts.onCampaign?.();}}]:[])],selected:this.view.menu.index,back};
+  }
+  draw(screen:Screen):void {screen.clear('#101b32');if(this.msg.isOpen)this.msg.draw(screen);}
 }

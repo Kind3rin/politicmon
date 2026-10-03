@@ -6,15 +6,10 @@ export type ControlMode = "stick" | "dpad";
 
 const KEY = "politicmon-control";
 
-// DEFAULT = d-pad a croce (le frecce si controllano meglio del joystick su
-// touch). Chi ha scelto esplicitamente in passato conserva la sua preferenza:
-// leggiamo il valore salvato, e SOLO in sua assenza cadiamo su "dpad".
+// New players get the floating lever. An explicitly saved cross stays active.
 export function loadControlMode(): ControlMode {
-  try {
-    return localStorage.getItem(KEY) === "stick" ? "stick" : "dpad";
-  } catch {
-    return "dpad";
-  }
+  try { return localStorage.getItem(KEY) === "dpad" ? "dpad" : "stick"; }
+  catch { return "stick"; }
 }
 
 export function applyControlMode(mode: ControlMode): void {
@@ -56,4 +51,22 @@ export function toggleGuide(): boolean {
     // localStorage non disponibile: vale per la sessione
   }
   return next;
+}
+
+// Reading preference belongs to the device, not to a campaign slot.
+export type TextSpeed = "normal" | "fast" | "instant";
+let textSpeed: TextSpeed | undefined;
+export function loadTextSpeed(): TextSpeed {
+  if (textSpeed) return textSpeed;
+  try {
+    const saved = localStorage.getItem("politicmon-text-speed");
+    textSpeed = saved === "fast" || saved === "instant" ? saved : "normal";
+  } catch { textSpeed = "normal"; }
+  return textSpeed;
+}
+export function toggleTextSpeed(): TextSpeed {
+  const current = loadTextSpeed();
+  textSpeed = current === "normal" ? "fast" : current === "fast" ? "instant" : "normal";
+  try { localStorage.setItem("politicmon-text-speed", textSpeed); } catch { /* Session preference remains usable offline. */ }
+  return textSpeed;
 }

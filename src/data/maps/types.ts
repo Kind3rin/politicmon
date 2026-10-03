@@ -4,6 +4,7 @@ import type { FeatureId } from "../../game/features";
 export interface NpcDef {
   spriteSet?: string; // optional directional appearance, independent of gameplay role
   id: string;
+  dialogueName?: string; // Speaker label, independent of floating world signs.
   pal: string;
   x: number;
   y: number;

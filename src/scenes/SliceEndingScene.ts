@@ -3,9 +3,10 @@ import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import { audio } from "../engine/audio";
 import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader, wrapText } from "../ui/widgets";
+import type { UiPanel } from "../ui/kit";
+import { readableCopy } from "../ui/kit/copy";
 
-import { drawCampaignBackdrop } from "../ui/campaignArt";
+
 
 export type SliceEnding = "stable" | "fractured";
 
@@ -26,9 +27,9 @@ export class SliceEndingScene implements Scene {
       : ["FOTO DI COALIZIONE: FRATTURATA.", "SONO TUTTI NEL FRAME, MA QUALCUNO HA GIÀ CHIESTO IL RITAGLIO.", "LA LINEA ROSSA RESTA VISIBILE ANCHE IN BIANCO E NERO."];
   }
 
-  update(): void {
-    if (this.finished) return;
-    if (!this.input.wasPressed("a") && !this.input.wasPressed("b")) return;
+  private finish(): void {
+    if (this.finished||this.stack.top!==this) return;
+    this.input.reset();
     this.finished = true;
     this.state.flags[`campo-slice-ending:${this.ending}`] = true;
     this.state.flags["campo-photo-complete"] = true;
@@ -39,18 +40,13 @@ export class SliceEndingScene implements Scene {
     this.onFinish();
   }
 
-  draw(screen: Screen): void {
-    drawCampaignBackdrop(screen, "photo");
-    drawScreenHeader(screen, "DOPO LA FOTO", this.ending === "stable" ? "COESA" : "TESA");
-    screen.panel(8, 30, 224, 116, "dialog");
-    let y = 45;
-    for (const paragraph of this.lines) {
-      for (const line of wrapText(paragraph, 34)) {
-        screen.text(line, 16, y, "#10141f");
-        y += 11;
-      }
-      y += 5;
-    }
-    screen.text("A: TORNA A BRUXELLES", 16, 157, "#ffe38a");
+  get uiPanel():UiPanel {
+    return {title:'Dopo la foto',subtitle:this.ending==='stable'?'Coalizione stabile':'Coalizione fratturata',image:'/sprites/ui/campaign/photo.png',
+      blocks:[{title:'Il campo largo',body:this.lines.map(readableCopy).join('\n\n')}],
+      actions:[{label:'Torna a Bruxelles',run:()=>this.finish()}],primary:0,
+      back:{label:'Indietro',hint:'Torna a Bruxelles.',run:()=>this.finish()}
+    };
   }
+  update():void {}
+  draw(screen:Screen):void {screen.clear('#17243d');}
 }

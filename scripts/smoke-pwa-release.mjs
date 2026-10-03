@@ -2,7 +2,7 @@ import { deskAssetPaths } from "./desk-asset-paths.mjs";
 import { arenaAssetPaths } from "./arena-asset-paths.mjs";
 import { epilogueAssetPaths } from "./epilogue-asset-paths.mjs";
 import { chromium, devices, webkit } from "playwright";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { worldAssetPaths } from "./world-asset-paths.mjs";
 import { hqAssetPaths } from "./hq-asset-paths.mjs";
@@ -30,6 +30,10 @@ const dossierArtPaths = [
 ];
 const worldArtPaths = [...worldAssetPaths(), ...hqAssetPaths(), ...nativeFallbackPaths(), ...coreUiPaths(), ...campaignUiPaths(), ...epilogueAssetPaths(), ...arenaAssetPaths(), ...deskAssetPaths(), ...["archive", "audio"].flatMap(name => JSON.parse(readFileSync(`scripts/higgsfield-${name}.json`, "utf8")).assets.map((a) => a.path.replace(/^public\//, "")))];
 const firstUsePaths = [...new Set([...monsterFramePaths,...bossArtPaths,...dossierArtPaths,...worldArtPaths,...offshorePaths,...bruxellesPaths, ...campoPaths, ...futurePaths, ...diplomacyPaths, ...genovaPaths, ...tourPaths, ...palacePaths])];
+const nativeKitPaths = [
+  ...readdirSync("public/fonts").filter(path => path.endsWith(".woff2")).map(path => `fonts/${path}`),
+  ...readdirSync("public/sprites/ui/kit").filter(path => path.endsWith(".png")).map(path => `sprites/ui/kit/${path}`)
+];
 const base = process.env.PREVIEW_URL ?? "http://127.0.0.1:4180";
 const browserName = process.env.PWA_BROWSER === "webkit" ? "webkit" : "chromium";
 const browserType = browserName === "webkit" ? webkit : chromium;
@@ -110,6 +114,16 @@ if (browserName !== "webkit") {
 }
 const offline = await page.locator("#game-canvas").count() === 1;
 if (!offline) throw new Error("PWA non riparte offline");
+await page.locator("#game-ui h1, #game-ui h2").first().waitFor({ state: "visible" });
+const nativeKitOffline = await page.evaluate(async paths => {
+  for (const path of paths) {
+    const response = await fetch(new URL(path, location.href));
+    if (!response.ok || !(await response.arrayBuffer()).byteLength) throw new Error(`Kit offline assente: ${path}`);
+  }
+  await document.fonts.ready;
+  return paths.length;
+}, nativeKitPaths);
+console.log(`Kit nativo offline: ${nativeKitOffline} font e icone, intestazione visibile.`);
 stage("verifica campagna offline");
 const backdropEvidence = await page.evaluate(async (monsterFrames) => {
   const keys = await caches.keys();

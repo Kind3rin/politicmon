@@ -357,16 +357,16 @@ export const BASE_MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        id: "sindacalista", pal: "barista", x: 15, y: 7, facing: "down",
+        id: "sindacalista", dialogueName: "Sindacalista", pal: "barista", x: 15, y: 7, facing: "down",
         gift: {
           itemId: "divisa", qty: 1, flag: "gift-divisa",
           lines: [
             "Il capo chiama squadra chi gli regge il fondale. Noi abbiamo chiesto una quota.",
-            "DIVISA EQUA: metà EXP alla panchina viva. Il leader tiene tutto.",
+            "La Divisa Equa dà metà esperienza anche alle riserve vive. Il capofila conserva tutta la sua quota.",
             "Vale per KO e catture. Il nuovo arrivato comincia dal prossimo incontro."
           ]
         },
-        lines: ["La DIVISA è passiva. I KO non crescono: il bar serve anche a chi regge il fondale."]
+        lines: ["La Divisa Equa funziona da sola. I compagni KO non crescono: il bar cura anche le riserve."]
       },
       {
         id: "rider-monopattino", pal: "kid", x: 15, y: 16, facing: "down",

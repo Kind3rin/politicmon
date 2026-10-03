@@ -1,3 +1,4 @@
+import { companionHint } from "../ui/kit/companionContent";
 import { MOVES } from "../data/moves";
 import type { TouchAction } from "../engine/touchActions";
 import { audio } from "../engine/audio";
@@ -7,7 +8,10 @@ import type { Screen } from "../engine/screen";
 import { archivedMoves } from "../game/moveArchive";
 import { speciesOf, type Monster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { drawScreenHeader, Menu } from "../ui/widgets";
+import { Menu } from "../ui/widgets";
+import type { UiPanel } from "../ui/kit";
+import { moveDescription } from "../ui/kit/moveContent";
+import { readableCopy } from "../ui/kit/copy";
 import { TeachScene } from "./TeachScene";
 
 export class RecallScene implements Scene {
@@ -20,9 +24,9 @@ export class RecallScene implements Scene {
     this.menu.index = Math.min(this.menu.index, Math.max(0, this.ids.length - 1));
   }
   private open(id: string): void {
-    if (this.stack.top !== this || !archivedMoves(this.mon).includes(id)) return;
+    if (this.stack.top !== this || !this.state.party.includes(this.mon) || !archivedMoves(this.mon).includes(id)) return;
     this.input.reset(); audio.confirm();
-    this.stack.push(new TeachScene(this.stack, this.input, this.mon, id, () => { saveGame(this.state); this.refresh(); }, { source: "archive" }));
+    this.stack.push(new TeachScene(this.stack, this.input, this.mon, id, () => { saveGame(this.state); this.refresh(); }, { source: "archive", party: this.state.party }));
   }
   get touchActions(): readonly TouchAction[] {
     this.refresh(); const page = Math.floor(this.menu.index / 4);
@@ -36,19 +40,26 @@ export class RecallScene implements Scene {
     }), action("ALTRI", "Altre mosse disponibili", () => { this.menu.index = (page + 1) * 4 < this.ids.length ? (page + 1) * 4 : 0; }, this.ids.length <= 4),
       action("INDIETRO", "Torna alla squadra", () => this.stack.pop())];
   }
-  update(): void {
+  get uiPanel(): UiPanel {
     this.refresh();
-    if (this.input.wasPressed("b")) { audio.cancel(); this.stack.pop(); return; }
-    if (!this.ids.length) return;
-    if (this.menu.update(this.input) !== "select") return;
-    this.open(this.ids[this.menu.index]);
+    return {
+      title: `${speciesOf(this.mon).name}: archivio`,
+      subtitle: companionHint(this.mon, this.state.party, "Riprendi gratis una mossa già sbloccata. Le mosse attuali cambiano solo dopo la scelta successiva."),
+      blocks: this.ids.length ? [] : [{ title: "Nessuna mossa da recuperare", body: "Le mosse sbloccate di questa forma sono già nel repertorio. Qui compaiono quelle sbloccate che non stai usando." }],
+      actions: this.ids.map(id => {
+        const move = MOVES[id];
+        return { label: readableCopy(move.name), group: "Mosse recuperabili", hint: moveDescription(move),
+          icon: `/sprites/ui/type_${move.type.toLocaleLowerCase('it')}.png`,
+          facts: [{ label: "Tipo", value: move.type }, { label: "Potenza", value: move.power ? String(move.power) : "—" },
+            { label: "PP", value: String(move.pp) }, { label: "Precisione", value: `${move.accuracy}%` }],
+          run: () => this.open(id) };
+      }), selected: this.menu.index,
+      back: { label: "Indietro", hint: "Torna alla scheda del compagno.", run: () => {
+        if (this.stack.top !== this) return;
+        this.input.reset(); audio.cancel(); this.stack.pop();
+      } }
+    };
   }
-  draw(screen: Screen): void {
-    screen.clear("#101b32");
-    drawScreenHeader(screen, `${speciesOf(this.mon).name} LV${this.mon.level}`, "ARCHIVIO");
-    if (this.ids.length) this.menu.draw(screen, 6, 30, 228, 15, 4);
-    else screen.text("NESSUNA MOSSA.", 14, 49, "#fff3cc");
-    screen.text("TRITACARTE SPENTO.", 8, 152, "#b7cedc");
-    screen.text("A:CONFRONTA B:SQUADRA", 8, 169, "#fff3cc");
-  }
+  update(): void {}
+  draw(screen: Screen): void { screen.clear("#112037"); }
 }

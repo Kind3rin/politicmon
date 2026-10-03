@@ -1,7 +1,7 @@
 import type { Move } from "../../data/moves";
 import { STATUS_NAMES } from "../../data/moves";
 import { abilityOf, statsOf, type Monster } from "../monster";
-import { calcDamage, effectiveStat, makeCombatant, statName, type Combatant, type DamageContext } from "./sim";
+import { calcDamage, effectiveStat, makeCombatant, moveOrder, statName, type Combatant, type DamageContext } from "./sim";
 import { resolveEntryAbility, statDropBlockReason, statusBlockReason } from "./effectContract";
 
 function snapshot(c: Combatant): Combatant { return { ...c, stages: { ...c.stages }, mon: { ...c.mon, moves: c.mon.moves.map((m) => ({ ...m })) } }; }
@@ -24,6 +24,20 @@ export function damageRange(attacker: Combatant, defender: Combatant, move: Move
     return calcDamage(snapshot(attacker), snapshot(defender), move, () => calls++ === 0 ? .999999 : variance, ctx);
   });
   return { min: Math.min(...results.map((r) => r.damage)), max: Math.max(...results.map((r) => r.damage)), typeMult: results[0].typeMult };
+}
+
+/** Announced reply, without a critical. Only guaranteed, earlier preparation
+ * changes the preview; inspection never applies effects to the live battle. */
+export function replyRange(player: Combatant, foe: Combatant, intent: Move, preparation?: Move, ctx?: DamageContext): ReturnType<typeof damageRange> {
+  player = snapshot(player); foe = snapshot(foe);
+  const stat = preparation?.effect?.stat;
+  if (preparation?.power === 0 && stat && (stat.chance ?? 100) === 100 &&
+      (stat.target === "self" || preparation.accuracy === 100) && moveOrder(player, foe, preparation, intent) === "player") {
+    const target = stat.target === "self" ? player : foe;
+    if (!(stat.target === "foe" && stat.stages < 0 && statDropBlockReason(target.mon)))
+      target.stages[stat.key] = Math.max(-6, Math.min(6, target.stages[stat.key] + stat.stages));
+  }
+  return damageRange(foe, player, intent, ctx);
 }
 
 export function moveTactics(attacker: Combatant, defender: Combatant, move: Move, ctx?: DamageContext): string[] {

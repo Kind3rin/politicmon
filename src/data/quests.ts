@@ -51,7 +51,7 @@ export const QUESTS: QuestDef[] = [
   {
     id: "recruit", title: "UNA SQUADRA, DUE VOCI",
     desc: "Recluta un secondo candidato. Costruire una squadra dà anche esperienza.",
-    hint: "Da Borgo esci a NORD: erba del PERCORSO 1; CATTURA > SCHEDA. Indebolisci senza KO. Il tipografo di Borgo ne regala cinque.",
+    hint: "Da Borgo esci a nord e cerca nell’erba del Percorso 1. Indebolisci senza KO, poi scegli Recluta e Scheda. Il tipografo di Borgo regala cinque schede.",
     step: "Recluta nel Percorso 1.",
     isDone: (s) => s.party.length + s.boxed.length >= 2 || s.badges.includes("auditel"),
     target: { mapId: "route1", x: 19, y: 13 }
@@ -89,7 +89,7 @@ export const QUESTS: QuestDef[] = [
     side: true,
     title: "TOTOMINISTRI",
     desc: "Forma il GOVERNO OMBRA: assegna almeno un ministero a un tuo POLITICMON.",
-    hint: "Menu (START) -> GOVERNO. Ogni ministero dà un bonus passivo alla campagna.",
+    hint: "Apri Menu, poi Altro e Governo ombra. Ogni ministero dà un bonus passivo alla campagna.",
     step: "Assegna un ministero dal menu GOVERNO.",
     isDone: (s) => Object.keys(s.ministri).length > 0
   },
@@ -143,7 +143,7 @@ export const QUESTS: QuestDef[] = [
     id: "garante",
     title: "LA CONTROFIRMA",
     desc: "Sconfiggi IL GARANTE SUPREMO e fatti controfirmare il mandato.",
-    hint: "Porta dorata. START cambia leader. Prima rifornisci le cure dall'ambulante e recupera i PP al bar.",
+    hint: "Porta dorata. Cambia il capofila dalla Squadra. Prima fai scorta di cure dall’ambulante e recupera i PP al bar.",
     step: "Sconfiggi IL GARANTE SUPREMO.",
     isDone: (s) => Boolean(s.flags["garante-beaten"])
   },
@@ -431,13 +431,18 @@ export function currentQuest(state: GameState): QuestDef | null {
   if (state.flags["opening-v2"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {
     const opening = OPENING_QUEST_ORDER.map(id => QUESTS.find(q => q.id === id)!).find(q => !q.isDone(state));
     if (opening?.id === "grow") {
-      if (state.party.some(mon => mon.speciesId === state.starterId && mon.level >= 8)) return { ...opening, target: undefined, step: "Squadra: scegli EVOLVI per la nuova forma." };
-      if (state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, step: "Recluta a sud di Nino: slancio LV8.", hint: "Recluta un altro alleato nell'erba a sud di Nino: lo starter riceve slancio fino al livello 8. Usa un caffè se i PV sono bassi, poi scegli EVOLVI." };
+      if (state.party.some(mon => mon.speciesId === state.starterId && mon.level >= 8)) return { ...opening, target: undefined, step: "Apri Squadra e scegli Evolvi per la nuova forma." };
+      if (state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, step: "Recluta ancora nell’erba a sud di Nino.", hint: "Recluta un altro alleato nell’erba a sud di Nino. Il primo compagno, se non è KO, raggiunge il livello 8. Poi apri Squadra e scegli Evolvi. Se i PV sono bassi, usa il caffè dalla Borsa." };
     }
     if (opening) return opening;
   }
   if (!state.flags["opening-v2"] && state.flags["starter-chosen"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {
     return { ...QUESTS.find(q => q.id === "rival1")!, hint: "Quirino nel laboratorio propone di riprovare Gianni.", step: "Parla con Quirino nel laboratorio.", target: { mapId: "lab", x: 5, y: 3 } };
   }
-  return QUESTS.find((q) => !q.side && !q.isDone(state)) ?? null;
+  const current = QUESTS.find((q) => !q.side && !q.isDone(state)) ?? null;
+  if (current?.id === "gym1" && state.defeatedTrainers.includes("stagista")) return {
+    ...current, step: "Sfida Sua Emittenza nello Studio 5.",
+    hint: "La prova di Mara è conclusa. Il bar di Mediopoli recupera PV e PP gratis. Poi torna nello Studio 5 e parla con Sua Emittenza in fondo alla sala."
+  };
+  return current;
 }

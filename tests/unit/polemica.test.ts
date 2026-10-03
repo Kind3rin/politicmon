@@ -13,6 +13,15 @@ import { FIELD_EVENTS } from "../../src/game/battle/fieldEvents.ts";
 import { CivicScene } from "../../src/scenes/CivicScene.ts";
 import { CIVIC_EVENTS } from "../../src/data/civicEvents.ts";
 
+function nativeActions(b:any) {
+  b.msg ??= new MessageBox(); b.polemica ??= new Polemica(); b.fx ??= {damageNumbers:[],effFx:null};
+  b.state ??= newGameState(); b.state.party ??= b.player?[b.player.mon]:[]; b.state.bag ??= {};
+  b.player ??= makeCombatant(createMonster("ellyna",5)); b.foe ??= makeCombatant(createMonster("giorgetta",4));
+  b.displayHp ??= {player:b.player.mon.hp,foe:b.foe.mon.hp};
+  b.fightMenu ??= {index:0,items:[]};
+  return b.uiPanel.actions;
+}
+
 function withSaveStorage(check: (saved: Map<string,string>) => void): void {
   const previous = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
   const saved = new Map<string,string>();
@@ -21,37 +30,39 @@ function withSaveStorage(check: (saved: Map<string,string>) => void): void {
   finally { if(previous)Object.defineProperty(globalThis,"localStorage",previous);else delete (globalThis as any).localStorage; }
 }
 
-test("civic touch choices commit costs, promises and morale once before the result can close", () => withSaveStorage(saved => {
+test("civic native choices commit costs, promises and morale once before the result can close", () => withSaveStorage(saved => {
   const state = newGameState(); state.money = 1000;
-  let popped = 0;
-  const scene = new CivicScene({ pop: () => popped++ } as any, idle, state, CIVIC_EVENTS.bus);
-  const pay = scene.touchActions[0];
-  assert.equal(pay.hint, "180€ S-2 F+12 C+6");
-  assert.match(scene.touchActions[1].hint!, /3SF/);
+  const stack = new SceneStack();
+  const scene = new CivicScene(stack, idle, state, CIVIC_EVENTS.bus); stack.push(scene);
+  const pay = scene.uiPanel!.actions[0];
+  assert.deepEqual(pay.facts!.slice(0,2),[{label:"Costo",value:"180 €"},{label:"Fondi dopo",value:"1000 → 820 €"}]);
+  assert.ok(scene.uiPanel!.actions[1].facts!.some(f=>f.label==="Scadenza"&&f.value==="3 nuove vittorie"));
   pay.run();
   assert.equal(state.money, 820); assert.equal(state.morale.trust, 62); assert.equal(state.morale.cohesion, 66);
   assert.equal(state.morale.promises[0].status, "kept");
   const restored = [...saved.values()].map(value => parseGameState(value)).find(s => s?.morale.decisions.includes("bus:pay"));
   assert.ok(restored); assert.equal(restored.money, 820);
-  pay.run(); assert.equal(state.money, 820); assert.equal(popped, 0);
-  for (let i = 0; i < 8 && scene.touchActions[0].label === "CONTINUA"; i++) scene.touchActions[0].run();
-  assert.equal(popped, 1);
+  pay.run(); assert.equal(state.money, 820); assert.equal(stack.top,scene);
+  for(let i=0;i<8&&stack.top===scene;i++)scene.uiPanel!.actions[0].run();
+  assert.equal(stack.top,undefined);
+  pay.run(); assert.equal(state.money,820);
 }));
 
-test("civic canvas taps select the touched choice while leaving cancels and unaffordable options safe", () => withSaveStorage(() => {
+test("civic native rows leave cancels and unaffordable options safe", () => withSaveStorage(() => {
   const state = newGameState(); state.money = 0;
-  let popped = 0;
-  const input = { wasPressed: () => false, tapInRect: (_x: number, y: number) => y === 139 } as any;
-  const scene = new CivicScene({ pop: () => popped++ } as any, input, state, CIVIC_EVENTS.bus);
-  assert.equal(scene.touchActions[0].disabled, true);
-  scene.update(.01);
+  const stack = new SceneStack();
+  const scene = new CivicScene(stack,idle,state,CIVIC_EVENTS.bus);stack.push(scene);
+  assert.equal(scene.uiPanel!.actions[0].disabled,true);
+  scene.uiPanel!.actions[0].run();
+  assert.equal(state.money,0);assert.deepEqual(state.morale.decisions,[]);
+  while(scene.uiPanel?.title==="La decisione")scene.uiPanel.actions[0].run();
+  scene.uiPanel!.actions[2].run();
   assert.ok(state.morale.decisions.includes("bus:crop"));
-  assert.equal(state.money, 0); assert.equal(state.morale.trust, 38);
-  const fresh = newGameState();
-  const cancel = new CivicScene({ pop: () => popped++ } as any, idle, fresh, CIVIC_EVENTS.bus);
-  const before = JSON.stringify(fresh);
-  cancel.touchActions[3].run();
-  assert.equal(JSON.stringify(fresh), before); assert.equal(popped, 1);
+  assert.equal(state.money,0);assert.equal(state.morale.trust,38);
+  const fresh = newGameState(), cancel = new CivicScene(stack,idle,fresh,CIVIC_EVENTS.bus);stack.push(cancel);
+  const before=JSON.stringify(fresh);
+  cancel.uiPanel!.back!.run();
+  assert.equal(JSON.stringify(fresh),before);assert.equal(stack.top,scene);
 }));
 
 test("result commitment consumes only applied campaign boosts once, including rematches and tournaments",()=>{
@@ -92,7 +103,7 @@ test("recruitment saves capture and growth before the skippable receipt, then ke
     const restored=[...saved.values()].map(v=>parseGameState(v)).find(s=>s?.party[0].level===8)!;
     assert.ok(restored);assert.equal(restored.party.length,4);assert.equal(restored.dex.calendauro,"caught");
     assert.equal(restored.runStats.captures,2);assert.equal(restored.boostExpBattles,1);
-    b.stepTimer=1.8;const skip=b.touchActions[0];skip.run();assert.equal(b.stepTimer,0);
+    b.stepTimer=1.8;const skip=nativeActions(b)[0];skip.run();assert.equal(b.stepTimer,0);
     const after=JSON.stringify(state);skip.run();assert.equal(JSON.stringify(state),after);
     while(b.queue.length)b.queue.shift().run?.();
     assert.equal(state.runStats.captures,2);assert.equal(state.boostExpBattles,1);
@@ -115,7 +126,7 @@ test("an ally's opening recruitment boosts the living bench starter and saves it
     assert.match(b.recruitReceipt.levels,/RENZINO LV6 > 8/);assert.match(b.recruitReceipt.levels,/SLANCIO/);
     const restored=[...saved.values()].map(v=>parseGameState(v)).find(s=>s?.party[1].uid===starter.uid)!;
     assert.equal(restored.party[1].level,8);assert.equal(restored.runStats.captures,2);
-    b.stepTimer=1.8;b.touchActions[0].run();while(b.queue.length)b.queue.shift().run?.();
+    b.stepTimer=1.8;nativeActions(b)[0].run();while(b.queue.length)b.queue.shift().run?.();
     assert.equal(choices.filter(c=>c==="evolve:renzino:renzilla").length,1);
   }
 }));
@@ -153,7 +164,7 @@ test("KO growth has one skippable receipt with real bonuses and preserves bench 
   assert.equal(wrapText(b.growthReceipt.modifiers.join(" · "),36).length,2);
   assert.ok(b.queue.every((s:any)=>!s.text));assert.equal(b.queue.filter((s:any)=>s.pause).length,1);
   const committed=JSON.stringify(state);apply.run();assert.equal(JSON.stringify(state),committed);
-  b.stepTimer=1.6;const skip=b.touchActions[0];skip.run();skip.run();assert.equal(b.stepTimer,0);assert.equal(nextFoe,0);
+  b.stepTimer=1.6;const skip=nativeActions(b)[0];skip.run();skip.run();assert.equal(b.stepTimer,0);assert.equal(nextFoe,0);
   while(b.queue.length)b.queue.shift().run?.();
   assert.equal(nextFoe,1);assert.equal(state.runStats.wins,0);assert.equal(state.boostExpBattles,2);
   assert.ok(choices.some(c=>c.startsWith("salvinott:")));assert.ok(choices.includes("evolve:ellyna:schleinix"));
@@ -297,7 +308,7 @@ test("touch commands cannot spend PP twice or act behind another scene", () => {
   battle.input = { reset: () => {} };
   let turns = 0;
   battle.startTurn = () => turns++;
-  const move = battle.touchActions[0];
+  const move = nativeActions(battle)[0];
   move.run();
   move.run();
   assert.equal(turns, 1);
@@ -306,8 +317,8 @@ test("touch commands cannot spend PP twice or act behind another scene", () => {
   move.run();
   assert.equal(turns, 1);
   battle.stack.top = battle;
-  battle.fightMenu.items[0].disabled = true;
-  battle.touchActions[0].run();
+  battle.player.mon.moves[0].pp = 0;
+  nativeActions(battle)[0].run();
   assert.equal(turns, 1);
 });
 
@@ -323,23 +334,22 @@ test("recruitment preparation cannot waste consensus against someone else's cand
   assert.equal(battle.mode, "campaign");
 });
 
-const idle = { wasPressed: () => false, tapInRect: () => false } as any;
+const idle = { wasPressed: () => false, tapInRect: () => false, reset() {} } as any;
 
 test("animated turns keep the command layout and only accelerate visible notifications", () => {
   const battle = Object.create(BattleScene.prototype) as any;
   battle.stack = { top: battle }; battle.mode = "queue";
   battle.mainMenu = { items: ["LOTTA", "BORSA", "SQUADRA", "FUORIONDA", "CAMPAGNA", "FUGA"].map(label => ({ label })) };
   battle.input = { reset: () => {} }; battle.msg = new MessageBox();
-  assert.equal(battle.touchActions.length, 6);
-  assert.ok(battle.touchActions.every((action: any) => action.disabled));
+  const moves=nativeActions(battle).slice(0,battle.uiPanel.arena.moveCount);
+  assert.ok(moves.every((action:any)=>action.disabled));
   let completed = 0;
   battle.msg.show(["COLPO!"], () => completed++, true);
-  assert.ok(battle.touchActions.slice(0, 5).every((action: any) => action.disabled));
-  const accelerate = battle.touchActions[5];
+  const accelerate = nativeActions(battle).at(-1)!;
   assert.equal(accelerate.disabled, false);
   accelerate.run(); accelerate.run();
   assert.equal(completed, 1);
-  assert.equal(battle.touchActions[5].disabled, true);
+  assert.equal(nativeActions(battle).at(-1)!.disabled, true);
 });
 test("battle notifications advance on their own while world dialogue stays manual", () => {
   const battle = new MessageBox();
@@ -357,7 +367,7 @@ test("battle notifications advance on their own while world dialogue stays manua
   assert.equal(world.isOpen, true);
 });
 
-test("portrait world dialogue draws and accepts taps at the expanded bottom edge", () => {
+test("portrait world dialogue preserves taps while rendering text outside the pixel canvas", () => {
   const box = new MessageBox();
   box.show(["IL COMUNICATO."]);
   box.update(1, idle, 410);
@@ -367,7 +377,8 @@ test("portrait world dialogue draws and accepts taps at the expanded bottom edge
   assert.equal(box.isOpen, true, "tapping the old bottom must not advance a portrait dialogue");
   let panelY = 0;
   box.draw({ height: 410, panel: (_x: number, y: number) => { panelY = y; }, text: () => {} } as any);
-  assert.equal(panelY, 366);
+  assert.equal(panelY, 0, "dialogue text and panels belong to the native kit");
+  assert.equal(box.visibleText, "IL COMUNICATO.");
   tapY = 390;
   box.update(.01, input, 410);
   assert.equal(box.isOpen, false);
@@ -385,6 +396,16 @@ test("each timed page has its own reading interval and A accelerates without dro
   box.show(["ANCORA."], undefined, true);
   box.update(.01, { wasPressed: (key: string) => key === "a", tapInRect: () => false } as any);
   assert.equal(box.isOpen, false);
+});
+
+test("walking dismisses a whole automatic notification once, preserving manual conversations and callbacks", () => {
+  const box = new MessageBox(); let completed = 0;
+  box.show(["DEX OTTENUTO.", "ORA RECLUTA."], () => { completed++; box.show(["UNA SCELTA VERA."]); }, true);
+  assert.equal(box.dismissNotification(), true);
+  assert.equal(completed, 1); assert.equal(box.isOpen, true);
+  assert.equal(box.dismissNotification(), false);
+  assert.equal(completed, 1); assert.equal(box.isOpen, true);
+  box.close(); assert.equal(box.dismissNotification(), false);
 });
 
 test("the live move pipeline rewards changed stages, but not immunity or a capped stage", () => {
@@ -595,8 +616,8 @@ function recruitmentBattle(balls: number, polemica = 3) {
 test("viral recruitment spends Polemica without paper; stale touch cannot spend twice", () => {
   const battle = recruitmentBattle(0);
   battle.openRecruit();
-  assert.equal(battle.touchActions[0].disabled, true);
-  const viral = battle.touchActions[1]; assert.equal(viral.disabled, false);
+  assert.equal(nativeActions(battle)[0].disabled, true);
+  const viral = nativeActions(battle)[1]; assert.equal(viral.disabled, false);
   viral.run(); viral.run();
   assert.equal(battle.state.bag.scheda, 0);
   assert.equal(battle.polemica.value, 0);

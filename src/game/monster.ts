@@ -262,6 +262,18 @@ export function canLearnMove(mon: Monster, moveId: string): boolean {
   return species.types.includes(move.type);
 }
 
+/** Learning changes one slot only. A retained quote must still refer to the
+ * outgoing slot; a free-slot quote cannot overwrite a newly full roster. */
+export function learnMoveIntoSlot(mon: Monster, moveId: string, replacement?: MoveSlot): boolean {
+  const move = MOVES[moveId];
+  if (!move || mon.moves.some(slot => slot.id === moveId)) return false;
+  const index = replacement ? mon.moves.indexOf(replacement) : -1;
+  if (replacement ? index < 0 || mon.moves.length < 4 : mon.moves.length >= 4) return false;
+  const slot = {id:moveId,pp:move.pp};
+  if(replacement)mon.moves[index]=slot;else mon.moves.push(slot);
+  return true;
+}
+
 export function evolve(mon: Monster, targetId: string): void {
   if (!SPECIES[targetId]) {
     return;

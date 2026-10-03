@@ -1,169 +1,89 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { exportSaveCode, importSaveCode, saveGame, type GameState } from "../game/state";
-import { Menu, MessageBox, INK } from "../ui/widgets";
+import type { Screen } from "../engine/screen";
+import { exportSaveCode, importSaveCode, saveGame, setActiveState, type GameState } from "../game/state";
+import { getActiveSlot } from "../game/state";
+import { MAP_NAMES } from "../data/maps/names";
+import type { UiPanel } from "../ui/kit";
 
-// BACKUP del salvataggio: esporta/importa un "CODICE SALVATAGGIO" (btoa del
-// JSON). La copia usa navigator.clipboard con fallback a un overlay HTML con
-// testo selezionato; l'incolla usa sempre un overlay HTML (unico modo per
-// ricevere testo lungo su canvas, anche su mobile).
+/** Export and import share the game's native form and back contract. */
 export class BackupScene implements Scene {
-  readonly transparent = true;
-  private menu: Menu;
-  private entries = ["COME FUNZIONA?", "COPIA CODICE", "INCOLLA CODICE", "INDIETRO"];
-  private msg = new MessageBox();
-  private overlay: HTMLDivElement | null = null;
-  private pendingImport: GameState | null = null;
+  private mode:"main"|"guide"|"copy"|"paste"="main";
+  private draft="";
+  private exported="";
+  private notice="";
+  private pendingImport:GameState|null=null;
+  private request=0;
+  constructor(private stack:SceneStack,private input:Input,private state:GameState) {}
 
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
-    this.menu = new Menu(this.entries.map((label) => ({ label })));
+  private back():void {
+    if(this.stack.top!==this)return;
+    this.request++;this.input.reset();audio.cancel();this.notice="";
+    if(this.pendingImport)this.pendingImport=null;
+    else if(this.mode!=="main")this.mode="main";
+    else this.stack.pop();
   }
 
-  update(dt: number): void {
-    if (this.overlay) {
-      return; // input gestito dal DOM finché l'overlay è aperto
-    }
-    if (this.pendingImport) {
-      // Conferma sovrascrittura: A = importa (e ricarica), B = annulla.
-      if (this.input.wasPressed("a")) {
-        saveGame(this.pendingImport);
-        location.reload();
-        return;
-      }
-      if (this.input.wasPressed("b")) {
-        audio.cancel();
-        this.pendingImport = null;
-      }
-      return;
-    }
-    if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
-      return;
-    }
-    const action = this.menu.update(this.input);
-    if (action === "cancel") {
-      this.stack.pop();
-      return;
-    }
-    if (action !== "select") {
-      return;
-    }
-    switch (this.entries[this.menu.index]) {
-      case "COME FUNZIONA?":
-        audio.confirm();
-        this.msg.show([
-          "I salvataggi restano nel BROWSER da cui giochi.",
-          "Instagram, Chrome e l'app installata sono separati: non si passano i dati.",
-          "Per spostare la partita: COPIA CODICE da un browser...",
-          "...poi apri l'altro browser e usa INCOLLA CODICE.",
-          "Copia SEMPRE tutto il codice, è lungo!"
-        ]);
-        break;
-      case "COPIA CODICE":
-        this.copyCode();
-        break;
-      case "INCOLLA CODICE":
-        this.openOverlay("");
-        break;
-      case "INDIETRO":
-        this.stack.pop();
-        break;
+  private async copy():Promise<void> {
+    if(this.stack.top!==this)return;
+    const request=++this.request;
+    this.exported=exportSaveCode(this.state);this.mode="copy";this.notice="";
+    this.input.reset();audio.confirm();
+    try {
+      if(!navigator.clipboard?.writeText)throw new Error("Copia manuale");
+      await navigator.clipboard.writeText(this.exported);
+      if(this.stack.top===this&&request===this.request)this.notice="Codice copiato negli appunti.";
+    } catch {
+      if(this.stack.top===this&&request===this.request)this.notice="Seleziona tutto il codice e copialo.";
     }
   }
 
-  private copyCode(): void {
-    const code = exportSaveCode(this.state);
-    audio.confirm();
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard
-        .writeText(code)
-        .then(() => this.msg.show(["CODICE COPIATO NEGLI APPUNTI!", "Conservalo in un posto sicuro."]))
-        .catch(() => this.openOverlay(code));
-    } else {
-      this.openOverlay(code);
-    }
+  private review():void {
+    if(this.stack.top!==this||this.mode!=="paste"||this.pendingImport)return;
+    const imported=importSaveCode(this.draft);
+    this.input.reset();
+    if(!imported){audio.cancel();this.notice="Codice non valido. Controlla di averlo incollato per intero.";return;}
+    this.notice="";this.pendingImport=imported;audio.confirm();
   }
 
-  // Overlay HTML: textarea (con il codice per la copia manuale, o vuota per
-  // l'incolla) + bottoni OK/ANNULLA. I tasti dentro la textarea non devono
-  // arrivare al gioco (stopPropagation).
-  private openOverlay(code: string): void {
-    const isImport = code === "";
-    const wrap = document.createElement("div");
-    wrap.style.cssText =
-      "position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;font-family:monospace";
-    const label = document.createElement("div");
-    label.textContent = isImport ? "INCOLLA QUI IL CODICE SALVATAGGIO:" : "CODICE SALVATAGGIO (copialo tutto):";
-    label.style.cssText = "color:#e8c84a;font-size:14px;text-align:center";
-    const ta = document.createElement("textarea");
-    ta.value = code;
-    ta.readOnly = !isImport;
-    ta.style.cssText = "width:min(90vw,480px);height:40vh;background:#10141f;color:#eee;border:2px solid #e8c84a;padding:8px;font-size:11px";
-    ta.addEventListener("keydown", (e) => e.stopPropagation());
-    ta.addEventListener("keyup", (e) => e.stopPropagation());
-    const row = document.createElement("div");
-    row.style.cssText = "display:flex;gap:12px";
-    const mkBtn = (text: string) => {
-      const b = document.createElement("button");
-      b.textContent = text;
-      b.style.cssText = "background:#e8c84a;color:#10141f;border:0;padding:8px 18px;font-family:monospace;font-size:14px;cursor:pointer";
-      return b;
-    };
-    const ok = mkBtn(isImport ? "IMPORTA" : "OK");
-    const cancel = mkBtn("ANNULLA");
-    ok.addEventListener("click", () => {
-      const text = ta.value;
-      this.closeOverlay();
-      if (isImport) {
-        const imported = importSaveCode(text);
-        if (!imported) {
-          audio.cancel();
-          this.msg.show(["CODICE NON VALIDO.", "Controlla di averlo incollato tutto."]);
-        } else {
-          audio.confirm();
-          this.pendingImport = imported;
-        }
-      }
-    });
-    cancel.addEventListener("click", () => {
-      this.closeOverlay();
-      audio.cancel();
-    });
-    if (isImport) {
-      row.append(ok, cancel);
-    } else {
-      row.append(ok);
-    }
-    wrap.append(label, ta, row);
-    document.body.appendChild(wrap);
-    this.overlay = wrap;
-    ta.focus();
-    if (!isImport) {
-      ta.select();
-    }
+  private import(imported:GameState):void {
+    if(this.stack.top!==this||this.pendingImport!==imported)return;
+    this.input.reset();
+    if(!saveGame(imported)){this.pendingImport=null;this.notice="Non è stato possibile salvare. Libera spazio e riprova.";return;}
+    // pagehide saves the active world. Point it at the imported campaign before
+    // reloading, so lifecycle persistence cannot put the old campaign back.
+    setActiveState(imported);this.pendingImport=null;location.reload();
   }
 
-  private closeOverlay(): void {
-    this.overlay?.remove();
-    this.overlay = null;
+  get uiPanel():UiPanel {
+    const back={label:"Indietro",run:()=>this.back()};
+    const imported=this.pendingImport;
+    if(imported)return {title:"Sostituisci la campagna?",subtitle:`Il codice sostituirà la campagna ${getActiveSlot()+1}.`,
+      blocks:[{title:"Prima e dopo",facts:[
+        {label:"Luogo",value:`${MAP_NAMES[this.state.pos.mapId]??this.state.pos.mapId} → ${MAP_NAMES[imported.pos.mapId]??imported.pos.mapId}`},
+        {label:"Compagni",value:`${this.state.party.length} → ${imported.party.length}`},
+        {label:"Medaglie",value:`${this.state.badges.length} → ${imported.badges.length}`},
+        {label:"Fondi",value:`${this.state.money} → ${imported.money} €`}]},
+        {title:"Ripresa",body:"Il gioco si ricarica e riparte dalla campagna importata. Indietro conserva la partita attuale."}],
+      actions:[{label:"Importa e riprendi",run:()=>this.import(imported)}],selected:0,primary:0,back:back};
+    if(this.mode==="guide")return {title:"Spostare la campagna",blocks:[
+      {title:"Dove resta la partita",body:"I progressi restano nel browser o nell’app da cui giochi. Un altro browser può avere salvataggi diversi."},
+      {title:"Da qui",body:"Usa Copia codice. Conserva il codice completo: una parte sola non basta."},
+      {title:"Sul nuovo dispositivo",body:"Apri Politicmon e usa Incolla codice. Controlla il confronto prima di importare."}],actions:[],selected:0,back:back};
+    if(this.mode==="copy")return {title:"Copia la campagna",subtitle:this.notice||"Il codice contiene i tuoi progressi.",
+      field:{label:"Codice salvataggio",value:this.exported,readOnly:true,autofocus:true},
+      actions:[{label:"Copia di nuovo",run:()=>{void this.copy();}}],selected:0,back:back};
+    if(this.mode==="paste")return {title:"Incolla la campagna",subtitle:"Incolla tutto il codice. Prima di sostituire la partita vedrai un confronto.",
+      blocks:this.notice?[{title:"Controlla il codice",body:this.notice}]:[],
+      field:{label:"Codice salvataggio",value:this.draft,placeholder:"Incolla qui il codice completo",autofocus:true,onChange:value=>{if(this.stack.top===this&&this.mode==="paste")this.draft=value;}},
+      actions:[{label:"Controlla il codice",run:()=>this.review()}],selected:0,primary:0,back:back};
+    return {title:"Salvataggi",subtitle:`Campagna ${getActiveSlot()+1}. Copia i progressi per conservarli o spostarli.`,
+      actions:[{label:"Copia codice",hint:"Copia questa campagna negli appunti.",run:()=>{void this.copy();}},
+        {label:"Incolla codice",hint:"Controlla una campagna prima di importarla.",run:()=>{if(this.stack.top!==this)return;this.input.reset();this.mode="paste";this.notice="";}},
+        {label:"Come funziona",hint:"Salvataggi, browser e altri dispositivi.",run:()=>{if(this.stack.top===this)this.mode="guide";}}],selected:0,back:back};
   }
-
-  draw(screen: Screen): void {
-    // Fondo quasi opaco: la scena è transparent (titolo dietro) e a 0.5 il
-    // logo/slogan traspariva sotto il pannello rendendolo poco leggibile.
-    screen.dim(0.82);
-    screen.panel(24, 30, VIEW_W - 48, VIEW_H - 60);
-    screen.text("BACKUP SALVATAGGIO", 34, 38, INK);
-    if (this.pendingImport) {
-      screen.text("SOVRASCRIVERE IL", 34, 58, INK);
-      screen.text("SALVATAGGIO ATTUALE?", 34, 68, INK);
-      screen.text("A: SÌ   B: NO", 34, 88, "#526279");
-    } else {
-      this.menu.draw(screen, 34, 52, VIEW_W - 68);
-      screen.text("B: indietro", 34, VIEW_H - 42, "#526279");
-    }
-    this.msg.draw(screen);
-  }
+  onExit():void {this.request++;}
+  update(_dt:number):void {}
+  draw(screen:Screen):void {screen.clear("#101c30");}
 }

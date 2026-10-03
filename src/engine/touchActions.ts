@@ -1,8 +1,16 @@
 export interface TouchAction {
+  command?: "a" | "b" | "start" | "inspect";
   label: string;
+  icon?: string;
+  group?: string;
+  groupHint?: string;
+  groupFacts?: readonly { label: string; value: string }[];
+  route?: "main" | "branch";
   hint?: string;
+  facts?: readonly { label: string; value: string }[];
   order?: "AGISCI PRIMA" | "AGISCI DOPO" | "PARITÀ: 50%";
   disabled?: boolean;
+  onInspect?: () => void;
   run: () => void;
 }
 

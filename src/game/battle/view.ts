@@ -7,12 +7,9 @@ import {
   MONSTERS_WITH_ACTION_PNG, MONSTERS_WITH_PNG, monsterImage, drawMonsterLoading
 } from "../../art/monsters";
 import { memeForm } from "../memeForms";
-import { STATUS_LABELS } from "../../data/moves";
 import { audio } from "../../engine/audio";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import { speciesOf, statsOf, type Monster } from "../monster";
 import type { Combatant } from "./sim";
-import { drawHpBar, INK, PAPER } from "../../ui/widgets";
 import { sceneImage } from "../../engine/assets";
 import { BATTLE_BACKDROPS, type BattleBackdrop } from "./backdrop";
 import { TYPE_COLORS, type PolType } from "../../data/poltypes";
@@ -20,18 +17,18 @@ import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "../../ar
 
 // Stesso renderer in PVE e PVP. Se il tema non è ancora pronto o manca,
 // il prato Higgsfield evita campi vuoti; senza immagini bastano due colori.
-export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop, height = VIEW_H): void {
+export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop, height = VIEW_H, reservedUiHeight = 44): void {
   const portrait = height > VIEW_H && backdrop === BATTLE_BACKDROPS.prato ? sceneImage("battle:bg:prato-portrait", "ui/battle/prato-portrait.png") : null;
   const themed = portrait ?? sceneImage(backdrop.spriteId, backdrop.path);
   const fallback = themed ?? sceneImage(BATTLE_BACKDROPS.prato.spriteId, BATTLE_BACKDROPS.prato.path);
   if (fallback) {
     if (height > VIEW_H) {
-      const scale = Math.max(VIEW_W / fallback.width, (height - 44) / fallback.height);
-      screen.image(fallback, (VIEW_W - fallback.width * scale) / 2, (height - 44 - fallback.height * scale) / 2, fallback.width * scale, fallback.height * scale);
-    } else screen.image(fallback, 0, 0, VIEW_W, VIEW_H - 44);
+      const scale = Math.max(VIEW_W / fallback.width, (height - reservedUiHeight) / fallback.height);
+      screen.image(fallback, (VIEW_W - fallback.width * scale) / 2, (height - reservedUiHeight - fallback.height * scale) / 2, fallback.width * scale, fallback.height * scale);
+    } else screen.image(fallback, 0, 0, VIEW_W, VIEW_H - reservedUiHeight);
   } else {
     screen.rect(0, 0, VIEW_W, 76, backdrop.sky);
-    screen.rect(0, 76, VIEW_W, height - 76 - 44, backdrop.ground);
+    screen.rect(0, 76, VIEW_W, height - 76 - reservedUiHeight, backdrop.ground);
   }
 }
 
@@ -336,56 +333,6 @@ export class BattleFx {
     this.damageNumbers = this.damageNumbers.filter((d) => d.life < d.max);
   }
 
-  drawDamageNumbers(screen: Screen): void {
-    for (const d of this.damageNumbers) {
-      const prog = d.life / d.max;
-      // Pop iniziale (0→1 in fretta) poi fade nell'ultimo terzo.
-      const fade = prog > 0.66 ? 1 - (prog - 0.66) / 0.34 : 1;
-      const size = d.crit || d.super ? 2 : 1;
-      const color = d.crit ? "#ff5a5a" : d.super ? "#ffd23c" : "#f4f4e8";
-      const ctx = screen.ctx;
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, fade);
-      const label = `${d.val}`;
-      // Ombra scura per stacco su qualsiasi sfondo, poi il numero colorato.
-      screen.textCenter(label, Math.round(d.x) + 1, Math.round(d.y) + 1, "rgba(16,20,31,0.8)", size);
-      screen.textCenter(label, Math.round(d.x), Math.round(d.y), color, size);
-      ctx.restore();
-    }
-  }
-
-  // Banner d'efficacia che entra "a molla", resta, poi svanisce.
-  drawEffFx(screen: Screen): void {
-    if (!this.effFx) {
-      return;
-    }
-    const { kind, t } = this.effFx;
-    const label = kind === "super" ? "SUPER EFFICACE!" : kind === "weak" ? "POCO EFFICACE" : "CRITICO!";
-    const color = kind === "super" ? "#ffd23c" : kind === "weak" ? "#9aa0b8" : "#ff6a6a";
-    // Entrata: il primo terzo del tempo ingrandisce; poi sta; ultimo terzo sfuma.
-    const total = kind === "super" ? 0.9 : kind === "weak" ? 0.7 : 0.8;
-    const prog = 1 - t / total;
-    const pop = this.reduceEffects ? 1 : Math.min(1, prog / 0.25);
-    const fade = prog > 0.7 ? 1 - (prog - 0.7) / 0.3 : 1;
-    const ctx = screen.ctx;
-    ctx.save();
-    ctx.globalAlpha = Math.max(0, fade);
-    // Leggera oscillazione verticale per "vivacità". Posizionato sotto le
-    // barre HP del nemico per non coprirle.
-    const wob = this.reduceEffects ? 0 : Math.sin(prog * 14) * (kind === "super" ? 2 : 1) * (1 - prog);
-    const y = 40 + (1 - pop) * -8 + wob;
-    const scale = kind === "weak" ? 1 : 1 + (1 - pop) * 0.6;
-    // Ombra + testo centrato, scalato.
-    const drawScaled = (txt: string, oy: number, col: string) => {
-      // Sfrutta textCenter con dimensione intera; per "scale" usiamo size 1..2.
-      const size = scale >= 1.5 ? 2 : 1;
-      screen.textCenter(txt, VIEW_W / 2, y + oy, col, size);
-    };
-    drawScaled(label, 2, "rgba(16,20,31,0.7)");
-    drawScaled(label, 0, color);
-    ctx.restore();
-  }
-
   // Aura di "carica" della mossa nemica: anelli concentrici che pulsano nel
   // colore della categoria (rosso fisico / blu speciale / viola status).
   drawTelegraph(screen: Screen, cx: number, cy: number): void {
@@ -520,7 +467,6 @@ export function drawBattleMonster(
   const form = memeForm(comb.mon.memeFormId);
   if (form && form.speciesId === speciesId) {
     screen.frame(Math.round(x - 2), Math.round(y - 2), Math.ceil(drawW + 4), Math.ceil(drawH + 4), form.accent);
-    screen.text("F", Math.round(x + drawW - 4), Math.round(y - 7), form.accent);
   }
 
   // Velo rosso pulsante sopra il mostro logorato dallo SCANDALO.
@@ -533,69 +479,6 @@ export function drawBattleMonster(
     ctx.restore();
   }
 
-  // Simbolo fluttuante dello status sopra la testa (oltre all'icona nel box).
-  if (lunge < 0.1) {
-    const sym = status === "indagato" ? "!" : status === "scandalo" ? "$" : comb.gaffeTurns > 0 ? "?" : "";
-    if (sym) {
-      const symColor = status === "scandalo" ? "#ffd23c" : status === "indagato" ? "#e8e8e8" : "#b86ad8";
-      const floatY = y - 8 + (fx.reduceEffects ? 0 : Math.sin(fx.time * 3 + (who === "foe" ? 0 : 1.5)) * 2);
-      screen.text(sym, Math.round(cx) - 2, Math.round(floatY), symColor);
-    }
-  }
-}
-
-// Geometrie dei due box HP (identiche al layout storico di BattleScene).
-export interface CombatantBoxOpts {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  hpY: number; // offset verticale della barra HP dentro il box
-  hpW: number;
-  showHpText: boolean; // solo il box del "player" mostra i PV numerici
-  inlineHp?: boolean;
-  nameInset?: number; // sposta il nome a destra per fare spazio a un badge
-}
-
-export const FOE_BOX: CombatantBoxOpts = { x: 6, y: 8, w: 104, h: 30, hpY: 17, hpW: 46, showHpText: false };
-export const PLAYER_BOX: CombatantBoxOpts = { x: 126, y: 78, w: 110, h: 38, hpY: 16, hpW: 76, showHpText: true };
-
-// Box HP di un combattente (fusione di drawFoeBox/drawPlayerBox). La barra EXP
-// resta fuori (solo PVE, disegnata dalla BattleScene).
-export function drawCombatantBox(screen: Screen, mon: Monster, displayHp: number, opts: CombatantBoxOpts): void {
-  const { x, y, w, h } = opts;
-  screen.panel(x, y, w, h, "combat");
-  // Margine interno: la cornice del panel "mangia" ~3px, quindi 8px di margine
-  // dal bordo del box danno un'aria uniforme e niente testo attaccato (audit UI).
-  const pad = 8;
-  // Il nome slitta a destra se il chiamante disegna un badge (es. la SCHEDA
-  // "già eletto" nel box nemico): evita che il badge copra nome/PV.
-  const nameX = x + pad + (opts.nameInset ?? 0);
-  const levelText = `L${mon.level}`;
-  // Il livello è compatto a destra: 2px di separazione bastano col font bitmap.
-  // Conserva per intero nomi da 12 caratteri come QUASIMAGIANI senza ellissi.
-  const rightPad = 4;
-  const maxNameW = x + w - rightPad - levelText.length * 6 - 1 - nameX;
-  screen.textFit(speciesOf(mon).name, nameX, y + 6, maxNameW, INK);
-  screen.textRight(levelText, x + w - rightPad, y + 6, INK);
-  const maxHp = statsOf(mon).hp;
-  drawHpBar(screen, x + 22, y + opts.hpY, opts.hpW, displayHp, maxHp);
-  if (opts.showHpText) {
-    // Box del giocatore: PV precisi n/max. Allineato al bordo destro (robusto
-    // alla larghezza del box, prima era un offset fisso x+98).
-    screen.textRight(`${Math.round(displayHp)}/${maxHp}`, x + w - pad, y + 25, INK);
-  } else {
-    // Box del nemico: percentuale PV a fianco della barra, così il colore non è
-    // l'UNICO segnale di "quasi KO" (accessibilità). Allineata al bordo del box,
-    // sulla stessa riga della barra HP.
-    const pct = maxHp > 0 ? Math.max(0, Math.min(100, Math.round((displayHp / maxHp) * 100))) : 0;
-    screen.textRight(opts.inlineHp ? `${Math.round(displayHp)}/${maxHp}` : `${pct}%`, x + w - pad, y + opts.hpY, INK);
-  }
-  if (mon.status) {
-    const sy = opts.showHpText ? y + 25 : y + 16;
-    screen.rect(x + 6, sy, 16, 9, "#b04848");
-    screen.text(STATUS_LABELS[mon.status], x + 7, sy + 1, PAPER);
-  }
 }
 
 // Riesportato per comodità delle scene (VIEW_H serve al pannello testo).

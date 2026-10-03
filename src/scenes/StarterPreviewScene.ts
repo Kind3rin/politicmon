@@ -1,59 +1,59 @@
-import {drawMonsterSprite} from '../art/monsters';
-import {SPECIES} from '../data/species';
+import {SPECIES,RIVAL_COUNTER} from '../data/species';
 import {audio} from '../engine/audio';
 import type {Input} from '../engine/input';
 import type {Scene,SceneStack} from '../engine/scene';
 import type {Screen} from '../engine/screen';
-import {starterDossier} from '../game/onboarding';
-import {epiloguePages,drawEpiloguePage} from '../ui/epilogueArt';
 import type {TouchAction} from '../engine/touchActions';
 import {ABILITIES} from '../data/abilities';
-import {MOVES} from '../data/moves';
+import {MOVES,moveKindLabel} from '../data/moves';
+import {TYPE_ORDER,typeMultiplier} from '../data/poltypes';
 import {movesAtLevel} from '../game/monster';
-import {drawScreenHeader} from '../ui/widgets';
+import {evolutionCondition} from '../game/dexGuide';
+import type {UiPanel,UiBlock} from '../ui/kit';
+import {moveDescription} from '../ui/kit/moveContent';
 
 export class StarterPreviewScene implements Scene{
- private time=0;
+ readonly expandedViewport=true;
  private tab=0;
- private page=0;
  private closed=false;
- constructor(private stack:SceneStack,private input:Input,private speciesId:string,private onConfirm:()=>void,private reduceEffects=false){}
- private pages():string[][]{
-  const id=this.speciesId;
-  if(this.tab===0){
-   const species=SPECIES[id],attack=movesAtLevel(id,5).map(slot=>MOVES[slot.id]).find(move=>move.power>0&&species.types.includes(move.type));
-   return [[`TIPO: ${species.types.join(' / ')}.`, `ABILITÀ: ${ABILITIES[species.ability??'']?.name??'NESSUNA'}.`,
-    `ATTACCO: ${attack?.name??'COMIZIO'}.`, `CRESCITA: LV${species.evolutions?.[0]?.level??'—'}.`]];
-  }
-  return epiloguePages(starterDossier(id,this.tab),34,6);
- }
+ constructor(private stack:SceneStack,private input:Input,private speciesId:string,private onConfirm:()=>void,_reduceEffects=false){}
  private choose():void{if(this.closed)return;this.closed=true;this.stack.pop();audio.confirm();this.onConfirm();}
- get touchActions():readonly TouchAction[]{
-  const tab=this.tab,page=this.page;
-  const action=(label:string,hint:string,run:()=>void,disabled=false):TouchAction=>({label,hint,disabled,run:()=>{
-   if(disabled||this.closed||this.stack.top!==this||this.tab!==tab||this.page!==page)return;this.input.reset();run();
-  }});
-  const inspect=(tab:number)=>{this.tab=tab;this.page=0;audio.cursor();};
-  const last=page+1>=this.pages().length;
-  return [action('SCEGLI','Entra al LV5 · le altre schede si chiudono',()=>this.choose()),action('ALTRE SCHEDE','Torna ai tre candidati',()=>{this.closed=true;this.stack.pop();}),
-   action('MOSSE','Effetti, PP e potenza',()=>inspect(1)),action('DIFESE','Tipi e primo rivale',()=>inspect(2)),action('CRESCITA','Forme e condizioni',()=>inspect(3)),
-   action(last?'SCHEDA':'ALTRA PAGINA',`Pagina ${page+1}/${this.pages().length}`,()=>{if(last)inspect(0);else this.page++;},tab===0)];
+ private back():void{if(this.tab!==0){this.tab=0;audio.cancel();return;}this.closed=true;this.stack.pop();}
+ private action(label:string,hint:string,run:()=>void):TouchAction{
+  const tab=this.tab;
+  return {label,hint,run:()=>{if(this.closed||this.stack.top!==this||this.tab!==tab)return;this.input.reset();run();}};
  }
- update(dt:number):void{
-  if(this.closed)return;if(!this.reduceEffects)this.time+=Math.max(0,Math.min(.25,dt));
-  if(this.input.wasPressed('b')){this.closed=true;this.stack.pop();return;}
-  if(this.input.wasPressed('left')||this.input.wasPressed('right')){this.tab=(this.tab+(this.input.wasPressed('left')?3:1))%4;this.page=0;audio.cursor();}
-  if(this.input.wasPressed('up')||this.input.wasPressed('down'))this.page=(this.page+(this.input.wasPressed('up')?this.pages().length-1:1))%this.pages().length;
-  if(this.input.wasPressed('a'))this.choose();
+ get uiPanel():UiPanel{
+  const species=SPECIES[this.speciesId],ability=ABILITIES[species.ability??''];
+  const moves=movesAtLevel(this.speciesId,5).map(slot=>MOVES[slot.id]);
+  const rival=SPECIES[RIVAL_COUNTER[this.speciesId]];
+  const blocks:UiBlock[]=[];
+  if(this.tab===0){
+   const gag:Record<string,string>={giorgetta:'Radici profonde. Il vaso è su rotelle.',ellyna:'Riunione aperta. Conclusione rinviata.',renzino:'Non cambia idea. Cambia maggioranza.'};
+   blocks.push({title:'Identità',body:gag[this.speciesId],facts:[{label:'Tipo',value:species.types.join(' · ')},{label:'Livello iniziale',value:'5'}]});
+   blocks.push({title:ability?.name??'Abilità passiva',body:ability?.desc??'Nessuna abilità passiva. Il risultato dipende dalle mosse che scegli.'});
+  }else if(this.tab===1){
+   for(const move of moves)blocks.push({title:move.name,body:moveDescription(move),facts:[{label:'Tipo',value:move.type},{label:'Categoria',value:moveKindLabel(move)},{label:'Potenza',value:move.power?String(move.power):'—'},{label:'Precisione',value:`${move.accuracy}%`},{label:'PP',value:String(move.pp)}]});
+  }else if(this.tab===2){
+   blocks.push({title:'Il primo rivale',body:`Gianni sceglierà ${rival.name}. Una mossa efficace aiuta, ma il danno dipende anche dalle statistiche.`,facts:moves.filter(move=>move.power>0).map(move=>({label:move.name,value:`Efficacia ×${typeMultiplier(move.type,rival.types)}`}))});
+   blocks.push({title:'Danno ricevuto',body:'Il moltiplicatore indica quanto pesa il tipo di una mossa avversaria.',facts:TYPE_ORDER.map(type=>({label:type,value:`×${typeMultiplier(type,species.types)}`}))});
+  }else{
+   for(const [i,rule] of (species.evolutions??[]).entries())blocks.push({title:SPECIES[rule.id].name,body:evolutionCondition(rule,species.evolutions?.slice(0,i)).replace(/LIVELLO/g,'Livello').replace(/SONDAGGI/g,'sondaggi')});
+   if(!blocks.length)blocks.push({title:'Forma finale',body:'Questo compagno non evolve.'});
+  }
+  return {title:species.name,subtitle:['Scegli il tuo primo compagno','Mosse iniziali','Difese e primo rivale','Evoluzioni'][this.tab],
+   image:this.tab===0?'/sprites/ui/starter-stage.png':undefined,
+   portraits:this.tab===0?[{src:`/sprites/monsters/${this.speciesId}.png`,label:species.name}]:undefined,
+   blocks,actions:this.tab===0?[this.action('Scegli questo compagno','Entrerà nella squadra al livello 5.',()=>this.choose()),
+    ...['Mosse','Difese','Evoluzioni'].map((label,i)=>this.action(label,['Effetti, potenza e PP.','Tipi e confronto con Gianni.','Forme e condizioni.'][i],()=>{this.tab=i+1;audio.cursor();}))]:[],
+   selected:0,primary:this.tab===0?0:undefined,back:this.action('Indietro',this.tab===0?'Torna ai tre candidati.':'Torna alla scheda del compagno.',()=>this.back())};
  }
- draw(screen:Screen):void{
-  screen.clear('#17243d');drawScreenHeader(screen,'PRIMA SCHEDA',SPECIES[this.speciesId].name);
-  drawMonsterSprite(screen,this.speciesId,12,27,48,32,{animationTime:this.time});
-  const gag=({giorgetta:['RADICI PROFONDE.','IL VASO È SU ROTELLE.'],ellyna:['RIUNIONE APERTA.','CONCLUSIONE RINVIATA.'],renzino:['NON CAMBIA IDEA.','CAMBIA MAGGIORANZA.']} as Record<string,string[]>)[this.speciesId];
-  if(this.tab===0)gag.forEach((line,i)=>screen.text(line,70,29+i*11,'#80d1b0'));
-  else{screen.text(['IDENTITÀ','MOSSE AL LIVELLO 5','TIPI E PRIMO RIVALE','CRESCITA'][this.tab],70,29,'#fffaf0');screen.text(`${this.page+1}/${this.pages().length}`,70,44,'#80d1b0');}
-  drawEpiloguePage(screen,this.pages()[this.page]);
-  screen.text('SIN/DES: DETTAGLI  SU/GIU: TESTO',12,163,'#fffaf0');
-  screen.text('A: SCEGLI  B: ALTRE SCHEDE',12,173,'#fffaf0');
+ get touchActions():readonly TouchAction[]{return this.uiPanel.actions;}
+ update(_dt:number):void{
+  if(this.closed)return;
+  if(this.input.wasPressed('b')){this.back();return;}
+  if(this.input.wasPressed('left')||this.input.wasPressed('right')){this.tab=(this.tab+(this.input.wasPressed('left')?3:1))%4;audio.cursor();}
+  if(this.input.wasPressed('a')){if(this.tab===0)this.choose();else this.tab=0;}
  }
+ draw(screen:Screen):void{screen.clear('#101b32');}
 }

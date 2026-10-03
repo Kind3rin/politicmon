@@ -4,6 +4,9 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   exportSaveCode,
+  flushActiveState,
+  getActiveState,
+  setActiveState,
   importSaveCode,
   loadGame,
   parseGameState,
@@ -89,11 +92,33 @@ test("serialize/parse: round-trip v13 conserva il checkpoint UE", () => {
   assert.deepEqual(roundTrip, original);
 });
 
-test("codice salvataggio: round-trip conserva testo Unicode", () => {
+test("codice salvataggio: migrazione Unicode e importazione resistono al salvataggio di lifecycle", async () => {
   const state = parseGameState(JSON.stringify(fixtureState("v13-post-medaglie.json")));
   assert.ok(state);
   state.flags["città-già-vista"] = true;
-  assert.deepEqual(importSaveCode(exportSaveCode(state)), state);
+  const code=exportSaveCode(state);
+  assert.deepEqual(importSaveCode(code),state);
+  const {BackupScene}=await import("../../src/scenes/BackupScene");
+  const {SceneStack}=await import("../../src/engine/scene");
+  const old=structuredClone(state);old.money=77;saveGame(old);
+  const previousActive=getActiveState(),previousLocation=Object.getOwnPropertyDescriptor(globalThis,"location");
+  let reloads=0;
+  Object.defineProperty(globalThis,"location",{configurable:true,value:{reload(){reloads++;flushActiveState();}}});
+  setActiveState(old);
+  try{
+    const stack=new SceneStack(),scene=new BackupScene(stack,{reset(){}} as never,old);stack.push(scene);
+    scene.uiPanel.actions.find(action=>action.label==="Incolla codice")!.run();
+    scene.uiPanel.field!.onChange!(code);scene.uiPanel.actions[0].run();
+    assert.equal(scene.uiPanel.title,"Sostituisci la campagna?");assert.equal(loadGame()!.money,77);
+    scene.uiPanel.back!.run();assert.equal(loadGame()!.money,77);
+    scene.uiPanel.actions[0].run();const confirm=scene.uiPanel.actions[0];confirm.run();
+    assert.equal(reloads,1);assert.deepEqual(loadGame(),state);
+    assert.deepEqual(getActiveState(),state);
+    confirm.run();assert.equal(reloads,1);
+  }finally{
+    setActiveState(previousActive);
+    if(previousLocation)Object.defineProperty(globalThis,"location",previousLocation);else Reflect.deleteProperty(globalThis,"location");
+  }
 });
 
 test("multi-slot: ogni slot carica e riassume il proprio checkpoint", () => {

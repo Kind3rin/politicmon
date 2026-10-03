@@ -23,7 +23,7 @@ export function epiloguePages(paragraphs: readonly string[], width = 34, height 
   return pages;
 }
 
-export function drawEpiloguePage(screen: Screen, lines: readonly string[]): void {
-  screen.panel(8, 60, 224, 96, "dialog");
+export function drawEpiloguePage(screen: Screen, lines: readonly string[], height = 96): void {
+  screen.panel(8, 60, 224, height, "dialog");
   lines.forEach((line, i) => screen.text(line, 16, 68 + i * 10, "#17243d"));
 }

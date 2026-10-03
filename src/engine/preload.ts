@@ -66,6 +66,7 @@ function deferredSpriteEntries(): Record<string, string> {
   entries["ui:evolution"] = "ui/evolution.png";
   entries["ui:evolution-stage"] = "ui/evolution-stage.png";
   entries["ui:career-portrait"] = "ui/evolution-portrait.png";
+  entries["ui:starter-stage"] = "ui/starter-stage.png";
   entries["ui:dossier"] = "ui/dossier.png";
   for (const id of ["bag", "shop", "teach"]) entries[`ui:${id}`] = `ui/${id}.png`;
 

@@ -81,7 +81,7 @@ test('New opening earns capture and first evolution before the rival; old saves 
  state.defeatedTrainers=['praticante'];assert.equal(currentQuest(state)?.target?.y,12);
  assert.match(currentQuest(state)!.hint,/caffè/);
  assert.match(currentQuest(state)!.step,/sud di Nino/);
- state.party[0].level=8;assert.match(currentQuest(state)!.step,/EVOLVI/);assert.equal(currentQuest(state)?.target,undefined);assert.equal(levelEvolution(state.party[0],state.sondaggi),'schleinix');
+ state.party[0].level=8;assert.match(currentQuest(state)!.step,/evolvi/i);assert.equal(currentQuest(state)?.target,undefined);assert.equal(levelEvolution(state.party[0],state.sondaggi),'schleinix');
  assert.equal(firstRivalReady(state),false); // Reaching the level is not accepting the evolution.
  state.dex.schleinix='caught';assert.equal(firstRivalReady(state),true);
  const restored=parseGameState(serializeGameState(state))!;
@@ -106,9 +106,9 @@ test('Starter touch choice is explicit, details are pure and old taps cannot rec
  const stack=new SceneStack(),input={reset(){}};let choices=0;
  const world={update(){},draw(){}};stack.push(world);
  const scene=new StarterPreviewScene(stack,input as never,'renzino',()=>choices++);stack.push(scene);
- const oldChoice=scene.touchActions[0];scene.touchActions.find(a=>a.label==='MOSSE')!.run();
+ const oldChoice=scene.touchActions[0];scene.touchActions.find(a=>a.label==='Mosse')!.run();
  oldChoice.run();assert.equal(choices,0);
- scene.touchActions.find(a=>a.label==='SCHEDA')?.run();
+ scene.uiPanel.back!.run();
  const choice=scene.touchActions[0];choice.run();choice.run();
  assert.equal(choices,1);assert.equal(stack.top,world);oldChoice.run();assert.equal(choices,1);
 });

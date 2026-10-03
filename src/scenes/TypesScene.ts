@@ -1,73 +1,48 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen } from "../engine/screen";
-import { TYPE_COLORS, typeLabelColor, TYPE_ORDER, typeRelations, typeIcon, type PolType } from "../data/poltypes";
-import { drawScreenHeader, PAPER } from "../ui/widgets";
+import type { Screen } from "../engine/screen";
+import { TYPE_ORDER, typeMultiplier } from "../data/poltypes";
+import type { UiPanel } from "../ui/kit";
 
-// GUIDA TIPI: spiega il sistema politico di efficacia (chi batte chi). Scegli
-// un tipo attaccante col d-pad; vedi contro chi è FORTE e contro chi è DEBOLE.
 export class TypesScene implements Scene {
   private index = 0;
+  private detail = false;
+  constructor(private stack: SceneStack, private input: Input) {}
 
-  constructor(
-    private stack: SceneStack,
-    private input: Input
-  ) {}
+  get uiPanel(): UiPanel {
+    const attack = TYPE_ORDER[this.index];
+    const close = () => {
+      if (this.stack.top !== this) return;
+      this.input.reset(); audio.cancel();
+      if (this.detail) this.detail = false;
+      else this.stack.pop();
+    };
+    if (!this.detail) return {
+      title: "Efficacia dei tipi",
+      subtitle: "Scegli il tipo della mossa per vedere quali avversari favorisce.",
+      blocks: [{ title: "La mossa e il bersaglio", body: "Conta il tipo della mossa usata, non solo quello del compagno che attacca." }],
+      actions: TYPE_ORDER.map((type, index) => ({ label: type, icon: `/sprites/ui/type_${type.toLocaleLowerCase('it')}.png`, group: "Tipo della mossa", run: () => {
+        if (this.stack.top !== this || this.detail) return;
+        this.input.reset(); this.index = index; this.detail = true; audio.confirm();
+      } })), selected: this.index, back: { label: "Indietro", run: close }
+    };
+    const facts = (types: typeof TYPE_ORDER) => types.map(type => ({ label: type, value: `×${typeMultiplier(attack, [type]).toLocaleString('it')}` }));
+    const strong = TYPE_ORDER.filter(type => typeMultiplier(attack, [type]) > 1);
+    const weak = TYPE_ORDER.filter(type => typeMultiplier(attack, [type]) < 1);
+    const neutral = TYPE_ORDER.filter(type => typeMultiplier(attack, [type]) === 1);
+    return { title: attack, subtitle: `${this.index + 1} di ${TYPE_ORDER.length} · Tipo della mossa`,
+      blocks: [
+        { title: "Danno aumentato", body: strong.length ? "Il tipo ti dà un vantaggio." : "Nessun vantaggio di tipo singolo.", facts: facts(strong) },
+        { title: "Danno ridotto", body: weak.length ? "Questi avversari resistono alla mossa." : "Nessuna resistenza di tipo singolo.", facts: facts(weak) },
+        { title: "Danno normale", facts: facts(neutral) },
+        { title: "Avversari con due tipi", body: "Entrambi i tipi contano. Consulta la scheda del compagno per le sue difese complete." },
+        { title: "Il tipo è un fattore", body: "I valori sono quelli usati in lotta. Potenza, statistiche, abilità e oggetti modificano il danno finale." }
+      ], actions: [], back: { label: "Indietro", hint: "Scegli un altro tipo.", run: close } };
+  }
 
   update(): void {
-    if (this.input.wasPressed("b") || this.input.wasPressed("a")) {
-      audio.cancel();
-      this.stack.pop();
-      return;
-    }
-    if (this.input.wasPressed("up")) {
-      this.index = (this.index + TYPE_ORDER.length - 1) % TYPE_ORDER.length;
-      audio.cursor();
-    }
-    if (this.input.wasPressed("down")) {
-      this.index = (this.index + 1) % TYPE_ORDER.length;
-      audio.cursor();
-    }
+    if (this.input.wasPressed("b")) { audio.cancel(); if (this.detail) this.detail = false; else this.stack.pop(); }
   }
-
-  private chip(screen: Screen, label: PolType, x: number, y: number): number {
-    const icon = typeIcon(label);
-    const iconW = icon ? 11 : 0;
-    const w = label.length * 6 + 6 + iconW;
-    screen.rect(x, y, w, 11, TYPE_COLORS[label]);
-    if (icon) {
-      screen.imageSprite(icon, x + 1, y + 1, { scaleX: 9 / icon.width, scaleY: 9 / icon.height });
-    }
-    screen.text(label, x + 3 + iconW, y + 2, typeLabelColor(label));
-    return w;
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#112037");
-    drawScreenHeader(screen, "GUIDA AI TIPI", `${this.index + 1}/${TYPE_ORDER.length}`);
-    screen.text("SCEGLI IL TIPO DELLA MOSSA", 8, 23, PAPER);
-    for (let i = 0; i < TYPE_ORDER.length; i += 1) {
-      const y = 36 + i * 14;
-      const selected = i === this.index;
-      if (selected) {
-        screen.rect(4, y - 1, 97, 13, "#263a51");
-        screen.frame(4, y - 1, 97, 13, "#e6b944");
-      }
-      this.chip(screen, TYPE_ORDER[i], 8, y);
-    }
-    const rel = typeRelations(TYPE_ORDER[this.index]);
-    screen.panel(105, 34, 129, 121, "card");
-    screen.text("DANNO x2", 112, 41, "#23654e");
-    let y = 53;
-    if (!rel.strong.length) screen.text("NESSUNO", 112, y, "#526279");
-    for (const type of rel.strong) { this.chip(screen, type, 112, y); y += 13; }
-    y = Math.max(82, y + 7);
-    screen.text("DANNO x0,5", 112, y, "#8c3544");
-    y += 12;
-    if (!rel.weak.length) screen.text("NESSUNO", 112, y, "#526279");
-    for (const type of rel.weak) { this.chip(screen, type, 112, y); y += 13; }
-    screen.text("GLI ALTRI TIPI: DANNO x1", 8, 158, PAPER);
-    screen.text("SU/GIU: SCEGLI   A/B: CHIUDI", 8, 170, "#a9b9ca");
-  }
+  draw(screen: Screen): void { screen.clear("#112037"); }
 }

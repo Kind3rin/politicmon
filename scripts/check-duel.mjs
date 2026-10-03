@@ -13,11 +13,15 @@
 // 5) check statico di validateWireTeam (team illegali respinti).
 // Se i relay MQTT non connettono entro 60s -> SKIP dell'e2e (exit 0), non FAIL.
 import { chromium } from "playwright";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { randomUUID } from "node:crypto";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const BASE = process.env.BASE_URL ?? "http://127.0.0.1:5179";
 mkdirSync("artifacts/screens", { recursive: true });
 const browser = await chromium.launch();
+const testRoom = `qa-duel-${randomUUID()}`;
+const indexSource = readFileSync("index.html", "utf8");
+const shellMarkup = indexSource.slice(indexSource.indexOf('<div id="app">'), indexSource.indexOf('<dialog id="shell-guide"'));
 
 async function boot(nick, x, team) {
   const ctx = await browser.newContext({ viewport: { width: 480, height: 720 } });
@@ -26,7 +30,10 @@ async function boot(nick, x, team) {
   // e scrive un salvataggio estraneo al duello durante le conferme.
   await page.goto(`${BASE}/scripts/perf-harness.html`, { waitUntil: "networkidle" });
   await page.waitForTimeout(400);
-  await page.evaluate(async ({ nk, px, tm }) => {
+  await page.evaluate(async ({ nk, px, tm, shellMarkup, roomId }) => {
+    document.body.innerHTML = shellMarkup; document.body.classList.add("touch");
+    await Promise.all([import("/src/styles.css"), import("/src/ui/kit/kit.css")]);
+    const kit = await import("/src/ui/kit/index.ts");
     const { Screen } = await import("/src/engine/screen.ts");
     const { Input } = await import("/src/engine/input.ts");
     const { SceneStack } = await import("/src/engine/scene.ts");
@@ -39,11 +46,11 @@ async function boot(nick, x, team) {
     // Unico grafo di moduli e unico loop, senza avviare main.ts.
     const { mp } = await import("/src/net/mp.ts");
     mp.setIdentity(nk, "player");
-    const canvas = document.createElement("canvas");
-    canvas.width = 240; canvas.height = 180;
-    document.body.appendChild(canvas);
-    canvas.id = "shotcanvas";
-    canvas.style.cssText = "position:fixed;left:0;top:0;width:960px;height:720px;image-rendering:pixelated;z-index:9999";
+    // Keep all QA profiles and invitations inside a fresh room, including
+    // the world's onEnter join and the return from the battle.
+    const joinMap = mp.joinMap.bind(mp);
+    mp.joinMap = (_mapId, x, y, facing) => joinMap(roomId, x, y, facing);
+    const canvas = document.querySelector("#game-canvas");
     const screen = new Screen(canvas);
     const input = new Input();
     const stack = new SceneStack();
@@ -54,7 +61,12 @@ async function boot(nick, x, team) {
     stack.push(new WorldScene(stack, input, state));
     window.__t = { stack, input, state, mp, DuelLobbyScene };
     window.__tick = () => {
-      stack.update(1 / 30); stack.draw(screen); input.endFrame();
+      input.pollGamepads(); kit.updateUiInput(stack.top?.uiPanel, input); stack.update(1 / 30);
+      kit.beginUiFrame(); const panel = stack.top?.uiPanel;
+      const native = kit.renderUiPanel(panel); kit.renderUiWorld(native ? undefined : stack.top?.uiWorld);
+      screen.configureViewport(Boolean(stack.top?.expandedViewport));
+      if (!native || panel?.arena) stack.draw(screen);
+      kit.endUiFrame(); input.endFrame();
       // Il debug della scena viene emesso prima dell'update. Aggiorna il
       // campione dopo il frame: una coda appena svuotata non deve far premere
       // A nel menu successivo all'automazione.
@@ -73,7 +85,7 @@ async function boot(nick, x, team) {
       for (let i = 0; i < 3; i++) window.__tick();
     };
     for (let i = 0; i < 8; i++) window.__tick();
-  }, { nk: nick, px: x, tm: team });
+  }, { nk: nick, px: x, tm: team, shellMarkup, roomId: testRoom });
   return page;
 }
 
@@ -272,10 +284,8 @@ if (inDuelA && inDuelB) {
   const menuB = await waitFor(B, () => window.__duel?.mode === "menu", 30000, "menu su B", true);
   check(menuA && menuB, "intro completata: menu azioni su entrambe");
 
-  // Turno 1: entrambe scelgono LOTTA -> prima mossa.
-  await pressA(A); // LOTTA
-  await pressA(A); // prima mossa
-  await pressA(B);
+  // Turno 1: una sola conferma sceglie la prima mossa visibile.
+  await pressA(A);
   await pressA(B);
   const turnA = await waitFor(A, () => window.__duel?.turn === 2 && window.__duel?.mode === "menu", 40000, "turno 1 su A", true);
   const turnB = await waitFor(B, () => window.__duel?.turn === 2 && window.__duel?.mode === "menu", 40000, "turno 1 su B", true);
@@ -287,14 +297,13 @@ if (inDuelA && inDuelB) {
     JSON.stringify(duelA.host) === JSON.stringify(duelB.host) &&
     JSON.stringify(duelA.guest) === JSON.stringify(duelB.guest);
   check(mirror, `HP speculari sulle due pagine (host=${JSON.stringify(duelA.host)} guest=${JSON.stringify(duelA.guest)})`);
-  writeFileSync("artifacts/screens/duel.png", await A.locator("#shotcanvas").screenshot());
+  writeFileSync("artifacts/screens/duel.png", await A.locator("#console-shell").screenshot());
   console.log("salvato duel.png");
 
-  // Resa da B: menu -> giù x2 -> RESA -> conferma SÌ.
-  await pressKey(B, "ArrowDown");
-  await pressKey(B, "ArrowDown");
-  await pressA(B); // RESA
-  await pressA(B); // conferma SÌ
+  // The secondary action must be a visible native command, not a canvas hitbox.
+  await B.getByRole("button", { name: "Resa", exact: true }).click();
+  await tick(1);
+  await B.getByRole("button", { name: "Conferma la resa", exact: true }).click();
   const endedA = await waitFor(A, () => window.__duel?.finished === true, 30000, "fine duello su A", true);
   const endedB = await waitFor(B, () => window.__duel?.finished === true, 30000, "fine duello su B", true);
   check(endedA && endedB, "resa: il duello si chiude su entrambe");

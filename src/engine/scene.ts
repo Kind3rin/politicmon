@@ -1,8 +1,14 @@
 import type { Screen } from "./screen";
 import type { TouchAction } from "./touchActions";
+import type { UiPanel, UiWorld, UiBlock } from "../ui/kit";
 
 export interface Scene {
+  readonly uiPanel?: UiPanel;
+  readonly uiWorld?: UiWorld;
+  readonly uiWorldPending?: boolean;
+  readonly uiFeedback?: readonly UiBlock[];
   readonly expandedViewport?: boolean;
+  readonly continueWhenGuideOpen?: boolean;
   readonly touchLayout?: "battle" | "growth";
   readonly touchActions?: readonly TouchAction[];
   update(dt: number): void;

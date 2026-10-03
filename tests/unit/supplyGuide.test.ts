@@ -91,9 +91,10 @@ test("battle supply preview rejects waste, trainer captures and cup limits witho
   const battle = Object.create(BattleScene.prototype) as any;
   Object.assign(battle, { state, player: makeCombatant(mon), foe: makeCombatant(createMonster("contemorfo", 5)), trainer: { id: "praticante" }, mode: "menu", finished: false, queue: [], maxBattleHealingItems: null, battleHealingItemsUsed: 0, stack: new SceneStack() });
   battle.stack.push(battle);
-  Object.assign(battle, { mainMenu: { items: ["LOTTA", "BORSA", "SQUADRA", "FUORIONDA", "CAMPAGNA", "FUGA"].map(label => ({ label })) }, polemica: { value: 0 }, input: { reset() {} } });
+  Object.assign(battle, { mainMenu: { items: ["LOTTA", "BORSA", "SQUADRA", "FUORIONDA", "CAMPAGNA", "FUGA"].map(label => ({ label })) }, polemica: { value: 0, gainFor:()=>0 }, input: { reset() {} } });
   const trainer = battle.trainer; battle.trainer = undefined;
-  const reserve = battle.touchActions[4]; assert.equal(reserve.label, "RISERVE"); reserve.run();
+  battle.displayHp={player:mon.hp,foe:battle.foe.mon.hp}; battle.msg={isOpen:false}; battle.fx={damageNumbers:[],effFx:null}; battle.fightMenu={index:0};
+  const reserve = battle.uiPanel.actions.find((a:any)=>a.label==="Borsa"); reserve.run();
   assert.notEqual(battle.stack.top, battle); battle.stack.top.touchActions.find((a: any) => a.label === "INDIETRO").run(); assert.equal(battle.stack.top, battle); battle.trainer = trainer;
   const untouched = JSON.stringify(state);
   for (const id of ["caffe", "maalox", "scheda", "spray", "bogus"]) { assert.equal(battle.supplyInfo(id).disabled, true); battle.useItem(id); }

@@ -2,25 +2,13 @@ import { ITEMS } from "../data/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import type { Screen } from "../engine/screen";
 import { addSondaggi } from "../game/governo";
 import { healMonster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
-import { Menu, MessageBox, wrapText } from "../ui/widgets";
-import { drawEpilogueBackdrop, drawEpiloguePage, epiloguePages } from "../ui/epilogueArt";
-import { drawScreenHeader } from "../ui/widgets";
 import { changeMorale } from "../game/morale";
-
-// RETROBOTTEGA DEL PADRINO — la "famiglia" come satira bonaria del clientelismo
-// e delle raccomandazioni. NIENTE violenza/apologia: qui si comprano favori
-// sottobanco che AIUTANO ma COMPROMETTONO (costano SONDAGGI, la rispettabilità).
-//
-//  - MERCATO NERO: DIRETTIVE rare a metà prezzo, ma -3 sondaggi a botta.
-//  - RACCOMANDAZIONE: cura la squadra + un regalo, in cambio di fondi e sondaggi.
-//  - PROTEZIONE (il "PIZZO"): paghi una volta e i candidati selvatici ti
-//    disturbano di meno (flag mafia-protezione). Satira sul "ci pensiamo noi".
-//  - SCOMMESSA CLANDESTINA: punti fondi su un cavallo truccato. Payout alto,
-//    rischio alto.
+import type { UiPanel, UiBlock } from "../ui/kit";
+import { readableCopy } from "../ui/kit/copy";
 
 interface BlackItem {
   itemId: string;
@@ -60,270 +48,126 @@ export function mafiaOptionDetails(index: number, protectionActive: boolean): st
 }
 
 export class MafiaScene implements Scene {
-  private menu: Menu;
-  private marketMenu: Menu;
-  private msg = new MessageBox();
   private mode: Mode = "menu";
-  private time = 0;
-  private pending: { market: boolean; index: number; pages: string[][] } | null = null;
-  private page = 0;
+  private pending: { market: boolean; index: number } | null = null;
+  private receipt: UiBlock[] | null = null;
 
+  constructor(private stack: SceneStack, private input: Input, private state: GameState) {}
+
+  private live(): boolean { return this.stack.top === this; }
+  private back(): void {
+    if (!this.live()) return;
+    this.input.reset(); audio.cancel();
+    if (this.receipt) this.receipt = null;
+    else if (this.pending) this.pending = null;
+    else if (this.mode === "market") this.mode = "menu";
+    else this.stack.pop();
+  }
   private review(market: boolean, index: number): void {
-    const deal = market ? BLACK_MARKET[index] : null;
-    const alreadyProtected = !market && index === 2 && Boolean(this.state.flags["mafia-protezione"]);
-    const cost = alreadyProtected ? 0 : deal?.price ?? [0, RACCOMANDAZIONE_COST, PROTEZIONE_COST, BET_MIN][index];
-    const loss = alreadyProtected ? 0 : deal ? -deal.sondaggi : [0, 2, 5, 0][index];
-    const trust = alreadyProtected ? 0 : deal ? 5 : [0, 6, 10, 0][index], cohesion = alreadyProtected ? 0 : deal ? 2 : [0, 3, 5, 0][index];
-    const paragraphs = deal ? [(ITEMS[deal.itemId]?.desc ?? "DIRETTIVA RISERVATA.").toUpperCase(), `ACQUISTO: ${ITEMS[deal.itemId]?.name}.`] : mafiaOptionDetails(index, Boolean(this.state.flags["mafia-protezione"]));
-    this.pending = { market, index, pages: epiloguePages([...paragraphs,
-      `COSTO ${cost}€. FONDI ATTUALI ${this.state.money}€.`,
-      `PERDITA REALE: SOND ${Math.min(this.state.sondaggi, loss)}, FID ${Math.min(this.state.morale.trust, trust)}, COE ${Math.min(this.state.morale.cohesion, cohesion)}.`,
-      index === 3 && !market ? "INCASSI LORDI: 600€, 200€ O 0€. IL BANCO TRATTIENE IN MEDIA 6€ SU OGNI PUNTATA." : "LA FILA RESTA FUORI. LA PORTA LATERALE NON EMETTE UN NUMERO DI ATTESA.",
-      "A ALLA FINE CONFERMA. B ANNULLA."])};
-    this.page = 0;
+    if (!this.live() || this.pending || this.receipt) return;
+    this.pending = { market, index }; this.input.reset(); audio.confirm();
   }
-
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
-    this.menu = this.buildMenu();
-    this.marketMenu = this.buildMarketMenu();
+  private terms(choice: NonNullable<MafiaScene["pending"]>) {
+    const deal = choice.market ? BLACK_MARKET[choice.index] : undefined;
+    return {
+      deal,
+      cost: deal?.price ?? [0, RACCOMANDAZIONE_COST, PROTEZIONE_COST, BET_MIN][choice.index],
+      polls: deal ? -deal.sondaggi : [0, 2, 5, 0][choice.index],
+      trust: deal ? 5 : [0, 6, 10, 0][choice.index],
+      cohesion: deal ? 2 : [0, 3, 5, 0][choice.index]
+    };
   }
-
-  private buildMenu(): Menu {
-    const protezione = this.state.flags["mafia-protezione"]
-      ? "PROTEZIONE: ATTIVA"
-      : `PROTEZIONE (PIZZO)`;
-    return new Menu([
-      { label: "MERCATO NERO" },
-      { label: "RACCOMANDAZIONE", rightLabel: `${RACCOMANDAZIONE_COST}€` },
-      { label: protezione, rightLabel: this.state.flags["mafia-protezione"] ? "" : `${PROTEZIONE_COST}€` },
-      { label: "SCOMMESSA CLANDESTINA", rightLabel: `${BET_MIN}€+` },
-      { label: "ESCI" }
-    ]);
+  private unavailable(choice: NonNullable<MafiaScene["pending"]>): string | undefined {
+    const { deal, cost } = this.terms(choice);
+    if (choice.market && !deal) return "Questa direttiva non è disponibile.";
+    if (!choice.market && choice.index === 2 && this.state.flags["mafia-protezione"]) return "Protezione già attiva. Non devi pagare di nuovo.";
+    if (deal && ITEMS[deal.itemId]?.reusable && (this.state.bag[deal.itemId] ?? 0) > 0) return "Direttiva già tua: puoi riutilizzarla dalla borsa.";
+    if (this.state.money < cost) return `Mancano ${cost - this.state.money} €.`;
+    return undefined;
   }
-
-  private buildMarketMenu(): Menu {
-    const items = BLACK_MARKET.map((b) => ({
-      label: ITEMS[b.itemId]?.name ?? b.itemId,
-      rightLabel: `${b.price}€`
-    }));
-    items.push({ label: "INDIETRO", rightLabel: "" });
-    return new Menu(items);
-  }
-
-  update(dt: number): void {
-    this.time += dt;
-    if (this.msg.isOpen) {
-      this.msg.update(dt, this.input);
-      return;
-    }
-    if (this.pending) {
-      if (this.input.wasPressed("b")) { this.pending = null; return; }
-      if (!this.input.wasPressed("a")) return;
-      if (this.page < this.pending.pages.length - 1) { this.page++; return; }
-      const selected = this.pending; this.pending = null;
-      if (selected.market) this.buyMarket(selected.index);
-      else if (selected.index === 1) this.raccomandazione();
-      else if (selected.index === 2) this.protezione();
-      else this.scommessa();
-      return;
-    }
-    if (this.mode === "market") {
-      this.updateMarket();
-      return;
-    }
-    const action = this.menu.update(this.input);
-    if (action === "cancel") {
-      this.stack.pop();
-      return;
-    }
-    if (action !== "select") {
-      return;
-    }
-    switch (this.menu.index) {
-      case 0:
-        this.marketMenu.index = 0;
-        this.mode = "market";
-        break;
-      case 1:
-        this.review(false, 1);
-        break;
-      case 2:
-        this.review(false, 2);
-        break;
-      case 3:
-        this.review(false, 3);
-        break;
-      default:
-        this.stack.pop();
-    }
-  }
-
-  // ---- MERCATO NERO ----
-
-  private updateMarket(): void {
-    const action = this.marketMenu.update(this.input);
-    if (action === "cancel" || (action === "select" && this.marketMenu.index === BLACK_MARKET.length)) {
-      this.mode = "menu";
-      return;
-    }
-    if (action !== "select") {
-      return;
-    }
-    this.review(true, this.marketMenu.index);
-  }
-
-  private buyMarket(index: number): void {
-    const deal = BLACK_MARKET[index];
-    if (!deal) {
-      return;
-    }
-    const item = ITEMS[deal.itemId];
-    if (item?.reusable && (this.state.bag[deal.itemId] ?? 0) > 0) {
-      audio.cancel();
-      this.msg.show(["Quella DIRETTIVA ce l'hai già.", "La famiglia non fa il bis sugli stessi affari."]);
-      return;
-    }
-    if (this.state.money < deal.price) {
-      audio.cancel();
-      this.msg.show(["Fondi insufficienti.", "Il PADRINO non fa credito. Torna quando hai i contanti."]);
-      return;
-    }
-    this.state.money -= deal.price;
-    this.state.bag[deal.itemId] = (this.state.bag[deal.itemId] ?? 0) + 1;
-    const beforeSond = this.state.sondaggi;
-    const now = addSondaggi(this.state, deal.sondaggi);
-    changeMorale(this.state, "FAVORE SOTTOBANCO", -5, -2);
-    audio.confirm();
-    saveGame(this.state);
-    this.msg.show([
-      `Affare fatto: ${item?.name ?? deal.itemId}.`,
-      `Ma certi giri si pagano: ${now - beforeSond} sondaggi (ora ${now}%).`,
-      this.moraleReceipt()
-    ]);
-  }
-
-  // ---- RACCOMANDAZIONE ----
-
-  private moraleReceipt(): string {
-    const record = this.state.morale.history.at(-1)!;
-    return `Fiducia ${record.trust}, coesione ${record.cohesion}. La fila ha visto la porta laterale.`;
-  }
-
-  private raccomandazione(): void {
-    if (this.state.money < RACCOMANDAZIONE_COST) {
-      audio.cancel();
-      this.msg.show(["Servono contanti per certe cortesie.", `Costo: ${RACCOMANDAZIONE_COST}€.`]);
-      return;
-    }
-    this.state.money -= RACCOMANDAZIONE_COST;
-    for (const mon of this.state.party) {
-      healMonster(mon);
-    }
-    this.state.bag.schedona = (this.state.bag.schedona ?? 0) + 2;
-    const beforeSond = this.state.sondaggi;
-    const now = addSondaggi(this.state, -2);
-    changeMorale(this.state, "RACCOMANDAZIONE", -6, -3);
-    audio.heal();
-    saveGame(this.state);
-    this.msg.show([
-      "Una telefonata giusta e tutto si sistema.",
-      "Squadra rimessa a nuovo e 2 SCHEDE BLINDATE in omaggio.",
-      `La rispettabilità però scende: ${now - beforeSond} sondaggi (ora ${now}%).`,
-      this.moraleReceipt()
-    ]);
-  }
-
-  // ---- PROTEZIONE (PIZZO) ----
-
-  private protezione(): void {
-    if (this.state.flags["mafia-protezione"]) {
-      audio.cancel();
-      this.msg.show(["Sei già sotto la nostra ala.", "I candidati molesti sanno che sei dei nostri."]);
-      return;
-    }
-    if (this.state.money < PROTEZIONE_COST) {
-      audio.cancel();
-      this.msg.show(["Il PIZZO è il PIZZO.", `Servono ${PROTEZIONE_COST}€. Niente sconti, è una questione di principio.`]);
-      return;
-    }
-    this.state.money -= PROTEZIONE_COST;
-    this.state.flags["mafia-protezione"] = true;
-    const beforeSond = this.state.sondaggi;
-    const now = addSondaggi(this.state, -5);
-    changeMorale(this.state, "PROTEZIONE PRIVATA", -10, -5);
-    audio.confirm();
-    saveGame(this.state);
-    this.menu = this.buildMenu();
-    this.msg.show([
-      "Da oggi sei sotto PROTEZIONE: meno seccatori per strada.",
-      "I candidati selvatici ti danno tregua.",
-      `Ma la cosa si sa: ${now - beforeSond} sondaggi (ora ${now}%).`,
-      this.moraleReceipt()
-    ]);
-  }
-
-  // ---- SCOMMESSA CLANDESTINA ----
-
-  private scommessa(): void {
-    if (this.state.money < BET_MIN) {
-      audio.cancel();
-      this.msg.show(["Per giocare ci vogliono almeno " + BET_MIN + "€.", "Niente fiches qui: solo contanti."]);
-      return;
-    }
-    this.state.money -= BET_MIN;
-    // 25% vinci 3x lordo (=+2x netto), 22% pari, 53% perdi tutto → EV ~0.97
-    // (il banco vince di poco). Prima era 40/25/35 = EV 1.45, money infinito.
-    const roll = Math.random();
-    let text: string[];
-    if (roll < 0.25) {
-      const win = BET_MIN * 3;
-      this.state.money += win;
-      audio.catchJingle();
-      text = ["Il cavallo giusto! La corsa era... orientata.", `Incassi ${win}€. Non chiedere come.`];
-    } else if (roll < 0.47) {
-      this.state.money += BET_MIN;
-      audio.cursor();
-      text = ["Fotofinish: ti ridanno la posta.", "Stavolta è andata in pari. Tira un sospiro."];
+  private commit(choice: NonNullable<MafiaScene["pending"]>): void {
+    if (!this.live() || this.pending !== choice || this.receipt) return;
+    this.pending = null; this.input.reset();
+    const reason = this.unavailable(choice);
+    if (reason) { audio.cancel(); this.receipt = [{ title: "Affare non concluso", body: reason }]; return; }
+    const before = { money: this.state.money, polls: this.state.sondaggi, trust: this.state.morale.trust, cohesion: this.state.morale.cohesion };
+    const { deal, cost, polls, trust, cohesion } = this.terms(choice);
+    this.state.money -= cost;
+    let title: string, body: string;
+    if (deal) {
+      this.state.bag[deal.itemId] = (this.state.bag[deal.itemId] ?? 0) + 1;
+      title = "Direttiva in borsa"; body = `${readableCopy(ITEMS[deal.itemId].name)} acquisita. La fattura arriverà quando il commercialista troverà un sinonimo di favore.`;
+      changeMorale(this.state, "FAVORE SOTTOBANCO", -trust, -cohesion); audio.confirm();
+    } else if (choice.index === 1) {
+      for (const mon of this.state.party) healMonster(mon);
+      this.state.bag.schedona = (this.state.bag.schedona ?? 0) + 2;
+      title = "Raccomandazione ottenuta"; body = "Squadra curata: PV, PP e condizioni ripristinati. Due schede blindate in borsa. Il centralino non rispondeva; al numero privato è bastato uno squillo.";
+      changeMorale(this.state, "RACCOMANDAZIONE", -trust, -cohesion); audio.heal();
+    } else if (choice.index === 2) {
+      this.state.flags["mafia-protezione"] = true;
+      title = "Protezione attiva"; body = "Gli incontri selvatici sono ridotti in modo permanente. Sul contratto c’è scritto libertà di circolazione. La firma è già la tua.";
+      changeMorale(this.state, "PROTEZIONE PRIVATA", -trust, -cohesion); audio.confirm();
     } else {
-      audio.cancel();
-      text = ["Il tuo cavallo si è fermato a metà pista.", `Persi ${BET_MIN}€. La casa vince, sempre.`];
+      const roll = Math.random();
+      title = "Risultato della scommessa";
+      if (roll < 0.25) { this.state.money += BET_MIN * 3; audio.catchJingle(); body = "Incasso lordo: 600 €. Il cavallo ha vinto. Il fantino ringrazia la cabina di regia."; }
+      else if (roll < 0.47) { this.state.money += BET_MIN; audio.cursor(); body = "Incasso lordo: 200 €. Puntata restituita. La commissione ha dichiarato vincitori tutti, tranne chi aspettava un premio."; }
+      else { audio.cancel(); body = "Incasso lordo: 0 €. Persi 200 €. Il cavallo si è fermato a metà pista: attende il decreto attuativo."; }
     }
+    if (polls) addSondaggi(this.state, -polls);
     saveGame(this.state);
-    this.msg.show(text);
+    this.receipt = [{ title, body }, { title: "Effetti registrati", facts: [
+      { label: "Fondi", value: `${before.money} → ${this.state.money} €` },
+      { label: "Sondaggi", value: `${before.polls} → ${this.state.sondaggi}%` },
+      { label: "Fiducia", value: `${before.trust} → ${this.state.morale.trust}` },
+      { label: "Coesione", value: `${before.cohesion} → ${this.state.morale.cohesion}` }
+    ] }];
   }
 
-  // ---- Draw ----
-
-  draw(screen: Screen): void {
-    drawEpilogueBackdrop(screen, "mafia");
-    drawScreenHeader(screen, "RETROBOTTEGA DEL PADRINO", `${this.state.money}€`);
-    if (this.pending) {
-      drawEpiloguePage(screen, this.pending.pages[this.page]);
-      screen.text(this.page === this.pending.pages.length - 1 ? "A: CONFERMA   B: ANNULLA" : "A: AVANTI   B: ANNULLA", 12, 167, "#fffaf0");
-      return;
+  get uiPanel(): UiPanel {
+    const back = { label: "Indietro", run: () => this.back() };
+    if (this.receipt) return { title: "Retrobottega", blocks: this.receipt,
+      actions: [{ label: "Continua", run: () => { if (this.live() && this.receipt) { this.receipt = null; this.input.reset(); } } }], primary: 0, back };
+    const choice = this.pending;
+    if (choice) {
+      const { deal, cost, polls, trust, cohesion } = this.terms(choice), reason = this.unavailable(choice);
+      const betting = !choice.market && choice.index === 3;
+      const title = deal ? readableCopy(ITEMS[deal.itemId].name) : ["", "Raccomandazione", "Protezione", "Scommessa clandestina"][choice.index];
+      const body = deal ? ITEMS[deal.itemId].desc : choice.index === 1
+        ? "Ripristina PV, PP e condizioni di tutta la squadra. Ricevi anche due schede blindate."
+        : choice.index === 2 ? "Riduce gli incontri selvatici in modo permanente. Si paga una sola volta."
+        : "Puntata fissa di 200 €. Il risultato è casuale: nessun incasso è garantito.";
+      return { title, blocks: [{ title: "Cosa ottieni", body },
+        { title: "Costo e conseguenze", facts: [
+          { label: "Costo", value: `${cost} €` },
+          { label: "Fondi dopo", value: this.state.money >= cost ? `${this.state.money} → ${this.state.money - cost} €` : "Fondi insufficienti" },
+          { label: "Sondaggi", value: `${this.state.sondaggi} → ${Math.max(0, this.state.sondaggi - polls)}%` },
+          { label: "Fiducia", value: `${this.state.morale.trust} → ${Math.max(0, this.state.morale.trust - trust)}` },
+          { label: "Coesione", value: `${this.state.morale.cohesion} → ${Math.max(0, this.state.morale.cohesion - cohesion)}` }
+        ] }, betting ? { title: "Possibili incassi", facts: [
+          { label: "25% dei casi", value: "600 € lordi · +400 € netti" },
+          { label: "22% dei casi", value: "200 € lordi · in pari" },
+          { label: "53% dei casi", value: "0 € · perdi 200 €" }
+        ], body: "Il banco trattiene in media 6 € per puntata." }
+        : { title: "Il prezzo del favore", body: "La fila resta fuori. La porta laterale non emette un numero di attesa. Meno fiducia può rincarare i negozi; meno coesione può rallentare l’esperienza della squadra." }],
+        actions: [{ label: betting ? "Punta 200 €" : "Concludi l’affare", disabled: Boolean(reason), hint: reason, run: () => this.commit(choice) }], primary: 0, back };
     }
-    screen.rect(0, 17, VIEW_W, 13, "#17243d");
-    screen.text(`SOND ${this.state.sondaggi}%`, 8, 20, "#fffaf0");
-
-    if (this.mode === "market") {
-      this.marketMenu.draw(screen, 14, 34, VIEW_W - 28);
-      const deal = BLACK_MARKET[this.marketMenu.index];
-      if (deal) {
-        const item = ITEMS[deal.itemId];
-        screen.panel(10, 103, VIEW_W - 20, 57, "card");
-        const details = wrapText((item?.desc ?? "DIRETTIVA RISERVATA.").toUpperCase(), 34).slice(0, 3);
-        details.forEach((line, i) => screen.text(line, 14, 107 + i * 9, "#10141f"));
-        screen.text(`COSTO ${deal.price}€ / ${deal.sondaggi} SOND`, 14, 139, "#d04848");
-        screen.text("FIDUCIA -5 / COESIONE -2", 14, 150, "#d04848");
-      }
-      screen.text("A: DOSSIER  B: INDIETRO", 8, VIEW_H - 13, "#fffaf0");
-    } else {
-      this.menu.draw(screen, 14, 34, VIEW_W - 28);
-      screen.panel(10, 114, VIEW_W - 20, 46, "card");
-      const details = mafiaOptionDetails(this.menu.index, Boolean(this.state.flags["mafia-protezione"]));
-      details.forEach((line, i) => screen.text(line, 14, 118 + i * 9, i === details.length - 1 ? "#99531e" : "#10141f"));
-      screen.text("A: DOSSIER  B: ESCI", 8, VIEW_H - 13, "#fffaf0");
-    }
-    this.msg.draw(screen);
+    const wallet: UiBlock = { title: "La tua situazione", facts: [
+      { label: "Fondi", value: `${this.state.money} €` }, { label: "Sondaggi", value: `${this.state.sondaggi}%` },
+      { label: "Fiducia", value: String(this.state.morale.trust) }, { label: "Coesione", value: String(this.state.morale.cohesion) }
+    ] };
+    if (this.mode === "market") return { title: "Mercato nero", subtitle: "Direttive rare. Il prezzo sul cartellino è solo una parte del costo.", blocks: [wallet], positioned: true,
+      actions: BLACK_MARKET.map((deal, index) => ({ label: readableCopy(ITEMS[deal.itemId].name), hint: ITEMS[deal.itemId].desc,
+        facts: [{ label: "Prezzo", value: `${deal.price} €` }, { label: "Sondaggi", value: String(deal.sondaggi) }],
+        run: () => this.review(true, index) })), back };
+    return { title: "Retrobottega del Padrino", subtitle: "Qui il merito ha un ingresso riservato.", blocks: [wallet], positioned: true,
+      actions: [
+        { label: "Mercato nero", hint: "Tre direttive rare. Ogni acquisto costa anche sondaggi, fiducia e coesione.", run: () => { if (this.live() && !this.pending && !this.receipt) { this.mode = "market"; this.input.reset(); } } },
+        { label: "Raccomandazione", hint: "Cura la squadra e ricevi due schede blindate.", facts: [{ label: "Costo", value: "400 €" }], run: () => this.review(false, 1) },
+        { label: "Protezione", hint: this.state.flags["mafia-protezione"] ? "Già attiva: incontri selvatici ridotti. Nessun altro pagamento." : "Meno incontri selvatici, in modo permanente.", disabled: Boolean(this.state.flags["mafia-protezione"]), facts: [{ label: "Costo", value: this.state.flags["mafia-protezione"] ? "Già pagato" : "1200 €" }], run: () => this.review(false, 2) },
+        { label: "Scommessa clandestina", hint: "25% vinci, 22% in pari, 53% perdi la puntata.", facts: [{ label: "Puntata fissa", value: "200 €" }], run: () => this.review(false, 3) }
+      ], back };
   }
+  update(_dt: number): void {}
+  draw(screen: Screen): void { screen.clear("#101c30"); }
 }

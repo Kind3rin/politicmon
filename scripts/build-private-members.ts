@@ -9,7 +9,7 @@ import type {Plugin} from 'vite';
 export function compactPrivateMembers(root:string):Plugin{
  let program:ts.Program,checker:ts.TypeChecker;
  const names=new Map<ts.Symbol,string>();
- const engineFiles:Record<string,string>={Screen:'engine/screen.ts',Input:'engine/input.ts',SceneStack:'engine/scene.ts',AudioEngine:'engine/audio.ts',Menu:'ui/widgets.ts',MessageBox:'ui/widgets.ts',Haptics:'engine/haptics.ts',Composer:'ui/composer.ts',SupplyView:'ui/SupplyView.ts'};
+ const engineFiles:Record<string,string>={Screen:'engine/screen.ts',Input:'engine/input.ts',SceneStack:'engine/scene.ts',AudioEngine:'engine/audio.ts',Menu:'ui/widgets.ts',MessageBox:'ui/widgets.ts',Haptics:'engine/haptics.ts',SupplyView:'ui/SupplyView.ts'};
  return{
   name:'compact-private-members',apply:'build',enforce:'pre',
   buildStart(){

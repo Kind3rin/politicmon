@@ -1,9 +1,10 @@
+import {readableCopy} from "../../ui/kit/copy";
+import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
 import {FieldGuideScene} from "../../scenes/FieldGuideScene";
-import {welcomeGuide} from "../onboarding";
+import {welcomeGuide, controlLesson} from "../onboarding";
 import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
 import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
-import { drawMonsterSprite } from "../../art/monsters";
 import { approach } from "../battle/view";
 import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
 import { sceneImage, getSpriteImage } from "../../engine/assets";
@@ -38,11 +39,11 @@ import type { Scene, SceneStack } from "../../engine/scene";
 import type { TouchAction } from "../../engine/touchActions";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import {worldCameraAxis} from "../../engine/worldCamera";
-import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion, wrapText } from "../../ui/widgets";
+import { Menu, MessageBox, INK, setReduceMotion } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { beginTemporaryParty, markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
-import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro, sondaggiColor, sondaggiLabelShort } from "../governo";
+import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro } from "../governo";
 import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
 import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, localDateKey, prevDateKey, DAILY_BOOST_MULT } from "../daily";
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
@@ -55,7 +56,10 @@ import { gameVersion, speciesAvailable, VERSION_EXCLUSIVES } from "../version";
 import { checkAchievements } from "../achievements";
 import { bulldozedKey, isBulldozed, unlockVehicle, VEHICLES, type VehicleId } from "../vehicles";
 import { isGuideOn } from "../../engine/controls";
+import { PartyScene } from "../../scenes/PartyScene";
+import { WorldMapScene } from "../../scenes/WorldMapScene";
 import { PauseScene } from "../../scenes/PauseScene";
+import { BagScene } from "../../scenes/BagScene";
 import { TradeScene } from "../../scenes/TradeScene";
 import { DuelLobbyScene } from "../../scenes/DuelLobbyScene";
 import { PvpBattleScene } from "../battle/PvpBattleScene";
@@ -103,7 +107,6 @@ import { resolveWeeklyStage } from "../weeklyCampaign";
 import type { WorldCommand } from "./worldContext";
 
 const STEP_TIME = 0.18;
-const CHAT_OVERLAY_TTL = 6000; // ms di vita di una riga chat nell'overlay del mondo
 const RUN_FACTOR = 1.85;
 const SCOOTER_FACTOR = 2.5; // il MONOPATTINO deve battere la corsa, non pareggiarla
 const AUTO_FACTOR = 3.0; // l'AUTO BLU è il mezzo più rapido all'aperto
@@ -207,6 +210,14 @@ export class WorldScene implements Scene {
   private afterMsg: (() => void) | null = null;
 
   private moving = false;
+  private runToggled = false;
+  private hudInset = 0;
+  private tapRoute: {x:number;y:number}[] = [];
+  private tapTarget: {x:number;y:number;npcId?:string} | undefined;
+  private npcTapAreas: {id:string;x:number;y:number;width:number;height:number}[] = [];
+  private tapCamera = {x:0,y:0};
+  private tapNotice: {text:string;until:number} | undefined;
+
   // Offset di centratura sulla porta, INTERPOLATO. Prima l'offset saltava da ±8
   // a 0 nell'istante in cui partivi (era gated su !moving), causando lo "scatto
   // laterale" appena ti muovevi. Ora insegue il target con un lerp per-frame, così
@@ -303,6 +314,7 @@ export class WorldScene implements Scene {
   onEnter(): void {
     if (!this.state.flags["intro-done"]) {
       this.state.flags["intro-done"] = true;
+      this.state.flags["controls-intro"] = true;
       saveGame(this.state);
     }
   }
@@ -320,7 +332,182 @@ export class WorldScene implements Scene {
       action("ESPLORA", "Cammina e parla nel laboratorio", () => { this.starterDeck = false; })];
   }
 
+  private canUseWorldControls(): boolean {
+    return this.stack.top === this && !this.msg.isOpen && !this.askMenu && !this.remoteMenu &&
+      !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.exclaimNpc && !this.healFx;
+  }
+
+  private contextLabel(): string | undefined {
+    const pos = this.state.pos, delta = DIR_DELTA[pos.facing];
+    const x = pos.x + delta.dx, y = pos.y + delta.dy;
+    if (this.visibleNpcs().some(n => n.x === x && n.y === y) || mp.remotePlayers().some(n => n.x === x && n.y === y)) return "Parla";
+    if (this.map.id === "lab" && STARTER_SPOTS.some(n => n.x === x && n.y === y)) return "Apri scheda";
+    if (this.map.signs.some(n => n.x === x && n.y === y)) return "Leggi";
+    if (this.map.decoratives?.some(n => n.x === x && n.y === y)) return "Esamina";
+    if (this.map.pickups.some(n => !n.hidden && n.x === x && n.y === y && !this.state.pickedItems.includes(n.id))) return "Raccogli";
+    if (this.tileAt(x,y) === "T" && this.state.vehicle === "ruspa") return "Abbatti";
+    if (this.map.warps.some(n => n.x === x && n.y === y && (!this.isOutdoorDoorWarp(n) || pos.facing === "up")) && !this.isBlocked(x,y)) return "Entra";
+    return undefined;
+  }
+
+  get uiWorldPending(): boolean {
+    return this.stack.top === this && !this.msg.isOpen && !this.askMenu && !this.remoteMenu &&
+      !this.touchActions && !this.canUseWorldControls();
+  }
+
+  get uiFeedback(): readonly UiBlock[] | undefined {
+    if (this.healFx > 0 && this.healSnapshot.length) return [{
+      title: "Squadra curata",
+      body: "PV e PP recuperati. Gli stati sono rimossi.",
+      facts: this.healSnapshot.map(s => ({label: SPECIES[s.mon.speciesId].name, value: `${s.from} → ${s.to} PV`}))
+    }];
+    if (this.banner && !this.msg.isOpen) return [{title:this.banner.text,body:this.banner.sub}];
+    return undefined;
+  }
+
+  get uiWorld(): UiWorld | undefined {
+    if (!this.canUseWorldControls() || this.touchActions) return undefined;
+    const command = (label: string, run: () => void, icon?: string, preserveRoute = false): TouchAction => ({label,icon,run: () => {
+      if (!this.canUseWorldControls()) return;
+      if (!preserveRoute) this.stopTapRoute(); this.input.reset(); audio.confirm(); run();
+    }});
+    const followingRoute = this.tapRoute.length > 0 || Boolean(this.tapTarget);
+    const context = followingRoute ? "Fermati" : this.contextLabel();
+    const quest=currentQuest(this.state);
+    const facts=[...(this.state.party.length?[{label:"Sondaggi",value:`${this.state.sondaggi}%`}]:[]),
+      ...(this.state.vehicle?[{label:"Mezzo",value:VEHICLES[this.state.vehicle as VehicleId].name}]:[])];
+    if(mp.isEnabled()&&mp.onlineCount>0)facts.push({label:"Online",value:String(mp.onlineCount+1)});
+    if((this.map.id==="campo_largo"||this.map.id==="retropalco_campo")&&this.state.election.phase!=="inactive")facts.push({label:"Consenso locale",value:`${this.state.election.districts.find(d=>d.id==="centro")?.localConsensus??38}%`});
+    return {
+      notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:undefined,
+      messages:mp.chat.filter(c=>performance.now()-c.t<6000).slice(-2).map(c=>`${mp.chatNick(c)}: ${c.text}`),
+      lesson:controlLesson(this.state,context),
+      location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it"),facts,
+      objective:quest?`${this.map.id==="borgo"&&quest.target?.mapId==="route1"?"Esci a nord. ":""}${quest.step}`:this.state.party.length?undefined:"Vai al laboratorio con il tetto blu.",
+      actions: [command("Squadra", () => this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:"view"})),"/sprites/ui/kit/team.png"),
+        command("Borsa", () => this.stack.push(new BagScene(this.stack,this.input,this.state,{inBattle:false,fromWorld:true})),"/sprites/ui/kit/bag.png"),
+        command("Mappa", () => this.stack.push(new WorldMapScene(this.stack,this.input,this.state)),"/sprites/ui/kit/map.png"),
+        {...command("Menu", () => this.stack.push(new PauseScene(this.stack,this.input,this.state)),"/sprites/ui/kit/more.png"),command:"start"}],
+      context: {...command(context ?? "Avvicinati", () => { if (!followingRoute && !this.moving) this.interact(); }), disabled: !context || (this.moving && !followingRoute)},
+      run: command(this.runToggled ? "Cammina" : "Corri", () => { this.runToggled = !this.runToggled; },undefined,true), running: this.runToggled,
+      save: command("Salva", () => {
+        const saved=saveGame(this.state);
+        this.tapNotice={text:saved?"Partita salvata nello slot attuale.":"Salvataggio non riuscito. Riprova o esporta una copia dal menu.",until:this.time+4};
+      })
+    };
+  }
+
+  private stopTapRoute(): void { this.tapRoute = []; this.tapTarget = undefined; }
+
+  /** Search uses the same collisions as a manual step. Intermediate doors
+   * cannot divert the player onto another map before reaching the destination. */
+  private planTapRoute(x:number,y:number,npcId?:string): void {
+    this.stopTapRoute(); this.tapNotice = undefined;
+    const width = this.map.tiles[0].length, height = this.map.tiles.length;
+    // A road reaching the map border remains a destination. The final step
+    // uses the normal zone transition, including its badge/locked-road gate.
+    const exit = x>=0 && x<width && !npcId &&
+      (y===-1 && this.map.edges?.north || y===height && this.map.edges?.south)
+      ? {x,y} : undefined;
+    if (exit) y=Math.max(0,Math.min(height-1,y));
+    if (x<0 || y<0 || x>=width || y>=height) {this.tapNotice={text:"Tocca un punto dentro la mappa.",until:this.time+2.5};return;}
+    const npc = this.visibleNpcs().find(n=>npcId?n.id===npcId:n.x===x&&n.y===y);
+    if(npc){x=npc.x;y=npc.y;}
+    const target = Boolean(npc) ||
+      this.map.signs.some(n=>n.x===x&&n.y===y) || this.map.decoratives?.some(n=>n.x===x&&n.y===y) ||
+      this.map.pickups.some(n=>!n.hidden&&n.x===x&&n.y===y&&!this.state.pickedItems.includes(n.id)) ||
+      (this.map.id==="lab"&&STARTER_SPOTS.some(n=>n.x===x&&n.y===y)) ||
+      mp.remotePlayers().some(n=>n.x===x&&n.y===y);
+    const start = {x:this.state.pos.x,y:this.state.pos.y};
+    const key = (point:{x:number;y:number})=>point.y*width+point.x;
+    const queue = [start], parents = new Map<number,{x:number;y:number}>();
+    const visited = new Set([key(start)]);
+    let found: {x:number;y:number} | undefined;
+    for (let i=0;i<queue.length;i++) {
+      const point = queue[i];
+      if (target ? Math.abs(point.x-x)+Math.abs(point.y-y)===1 : point.x===x&&point.y===y) {found=point;break;}
+      for (const direction of FACINGS) {
+        const delta=DIR_DELTA[direction], next={x:point.x+delta.dx,y:point.y+delta.dy};
+        if(next.x<0||next.y<0||next.x>=width||next.y>=height||visited.has(key(next))||this.isBlocked(next.x,next.y))continue;
+        const warp=this.map.warps.find(w=>w.x===next.x&&w.y===next.y);
+        if(warp&&(target||next.x!==x||next.y!==y||(this.isOutdoorDoorWarp(warp)&&direction!=="up")))continue;
+        visited.add(key(next));parents.set(key(next),point);queue.push(next);
+      }
+    }
+    if (!found) {this.tapNotice={text:"Non c’è un percorso libero verso quel punto.",until:this.time+2.5};return;}
+    const route:{x:number;y:number}[]=[];
+    for(let point=found;key(point)!==key(start);point=parents.get(key(point))!)route.push(point);
+    this.tapRoute=route.reverse();
+    if(exit)this.tapRoute.push(exit);
+    if(target)this.tapTarget={x,y,npcId:npc?.id};
+  }
+
+  private tapDirection(): Facing | undefined {
+    if(this.tapTarget?.npcId){
+      const target=this.tapTarget,npc=this.visibleNpcs().find(n=>n.id===target.npcId);
+      if(!npc){this.stopTapRoute();return;}
+      if(npc.x!==target.x||npc.y!==target.y)this.planTapRoute(npc.x,npc.y,npc.id);
+    }
+    if(this.tapRoute.length){
+      const next=this.tapRoute[0], pos=this.state.pos;
+      const edgeStep=next.x>=0&&next.x<this.map.tiles[0].length&&
+        (next.y===-1&&this.map.edges?.north || next.y===this.map.tiles.length&&this.map.edges?.south);
+      if(!edgeStep&&this.isBlocked(next.x,next.y)){this.stopTapRoute();this.tapNotice={text:"Passaggio occupato. Tocca una nuova destinazione.",until:this.time+2.5};return;}
+      const dir=FACINGS.find(f=>pos.x+DIR_DELTA[f].dx===next.x&&pos.y+DIR_DELTA[f].dy===next.y);
+      if(!dir){this.stopTapRoute();return;}
+      this.tapRoute.shift();return dir;
+    }
+    if(this.tapTarget){
+      const target=this.tapTarget;this.tapTarget=undefined;
+      const pos=this.state.pos;
+      const facing=FACINGS.find(f=>pos.x+DIR_DELTA[f].dx===target.x&&pos.y+DIR_DELTA[f].dy===target.y);
+      if(facing){pos.facing=facing;this.interact();}
+    }
+    return undefined;
+  }
+
+  private chooseRemote(index?: number): void {
+    if(!this.remoteMenu || this.stack.top!==this)return;
+    const peerId=this.remoteMenuPeerId;
+    this.remoteMenu=null;this.input.reset();
+    if(index===0)this.talkWithRemote(peerId);
+    else if(index===1)this.inspectRemote(peerId);
+    else if(index===2)this.startTradeWithRemote(peerId);
+    else if(index===3)this.challengeRemote(peerId);
+  }
+
+  private chooseAsk(index?: number): void {
+    const menu = this.askMenu;
+    if (!menu || this.stack.top !== this || (index !== undefined && menu.items[index]?.disabled)) return;
+    const pick = this.askPick, handler = index === 0 ? this.askYes : this.askNo;
+    this.askMenu = null; this.askPick = null; this.askYes = null; this.askNo = null;
+    this.input.reset();
+    if (index !== undefined && pick) pick(index); else handler?.();
+  }
+
+  get uiPanel():UiPanel|undefined {
+    if (this.remoteMenu) {
+      const menu=this.remoteMenu;
+      return {title:"Giocatore online",subtitle:this.askLabel,selected:menu.index,
+        actions:menu.items.slice(0,4).map((item,i)=>({label:item.label.charAt(0)+item.label.slice(1).toLocaleLowerCase("it"),run:()=>{if(this.remoteMenu===menu)this.chooseRemote(i);}})),
+        back:{label:"Indietro",run:()=>{if(this.remoteMenu===menu)this.chooseRemote();}}};
+    }
+    if (this.askMenu) {
+      const menu = this.askMenu;
+      return {title:"Scegli",subtitle:this.askLabel,selected:menu.index,
+        actions:menu.items.map((item,i) => ({label:item.label.charAt(0)+item.label.slice(1).toLocaleLowerCase("it"),disabled:item.disabled,run:() => {if(this.askMenu===menu)this.chooseAsk(i);}})),
+        back:{label:"Indietro",run:() => {if(this.askMenu===menu)this.chooseAsk();}}};
+    }
+    const commands=this.touchActions;
+    if(!commands)return undefined;
+    return {title:'Il primo compagno',subtitle:'Quirino: le promesse si somigliano. Le mosse no. Apri una scheda prima di scegliere.',
+      image:'/sprites/ui/starter-stage.png',portraits:STARTERS.map(id=>({src:`/sprites/monsters/${id}.png`,label:SPECIES[id].name})),
+      actions:commands.slice(0,3).map((action,i)=>({...action,hint:'Apri la scheda: non scegli ancora.',facts:[{label:'Tipo',value:SPECIES[STARTERS[i]].types.join(' · ')},{label:'Livello iniziale',value:'5'}]})),selected:0,
+      back:{...commands[4],label:'Indietro',hint:'Esplora il laboratorio. Potrai scegliere parlando con Quirino.'}};
+  }
+
   private loadMap(mapId: string): void {
+    this.stopTapRoute();
     // Hardening: un save importato/manomesso con un mapId inesistente farebbe
     // crashare qui (this.map.npcs su undefined). Ricadi su "borgo" (mappa iniziale,
     // sempre presente) invece di brickare lo slot.
@@ -750,18 +937,27 @@ export class WorldScene implements Scene {
   }
 
   private say(lines: string[], after?: () => void, auto = false): void {
+    this.stopTapRoute();
+    const facing = DIR_DELTA[this.state.pos.facing];
+    const speaker = this.visibleNpcs().find(npc => npc.x === this.state.pos.x + facing.dx && npc.y === this.state.pos.y + facing.dy);
+    const name = auto ? "Notifica" : speaker?.id === "professor" ? "Prof. Quirino" : speaker?.id === "opening-rival" ? "Gianni" : speaker?.dialogueName ?? (speaker?.trainerId ? TRAINERS[speaker.trainerId]?.name : speaker?.nameplate);
+    const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : undefined;
+    const caption = name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? "Abitante" : "Politicmon");
+    const stripped = prefix ? lines[0].slice(prefix[0].length) : "";
+    const text = prefix ? [stripped.charAt(0).toLocaleUpperCase("it") + stripped.slice(1), ...lines.slice(1)].filter(Boolean) : lines;
     this.afterMsg = after ?? null;
-    this.msg.show(lines, () => {
+    this.msg.show(text, () => {
       const callback = this.afterMsg;
       this.afterMsg = null;
       callback?.();
-    }, auto);
+    }, auto, caption);
   }
 
   // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il
   // plumbing askMenu/askYes/askNo/askLabel: il draw esiste già, e il tasto B
   // chiama onNo (ramo cancel del blocco askMenu in update).
   private askYesNo(label: string, onYes: () => void, onNo?: () => void): void {
+    this.stopTapRoute();
     this.askLabel = label;
     this.askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
     this.askYes = onYes;
@@ -775,6 +971,7 @@ export class WorldScene implements Scene {
     onPick: (index: number) => void,
     onCancel?: () => void
   ): void {
+    this.stopTapRoute();
     this.askLabel = label;
     this.askMenu = new Menu(options.map((label) => ({ label })));
     this.askPick = onPick;
@@ -811,6 +1008,7 @@ export class WorldScene implements Scene {
   // ---- Battles ----
 
   private queueBattle(start: () => void): void {
+    this.stopTapRoute();
     // Lampeggio in stile Game Boy prima della battaglia.
     audio.encounterSting();
     this.encounterFlash = 0.55;
@@ -1124,10 +1322,18 @@ export class WorldScene implements Scene {
         audio.confirm();
         this.say([`Trovi ${ITEMS[pickup.itemId].name} x${pickup.qty}!`]);
       }
+      return;
+    }
+    const warp = this.map.warps.find(w => w.x === tx && w.y === ty);
+    if (warp && !this.isBlocked(tx,ty) && (!this.isOutdoorDoorWarp(warp) || pos.facing === "up")) {
+      this.fromX = pos.x; this.fromY = pos.y;
+      pos.x = tx; pos.y = ty; this.moving = true; this.moveT = 0;
+      this.running = false;
     }
   }
 
   private interactNpc(npc: RuntimeNpc): void {
+    if(this.state.flags["controls-intro"])this.state.flags["controls-interacted"]=true;
     if (npc.id === "opening-rival") {
       if (!firstRivalReady(this.state)) {
         this.say(["GIANNI: DUE VOCI E UN SIMBOLO NUOVO.\nPRIMA ALLENATI, POI MI TAGGHI."]);
@@ -1171,10 +1377,10 @@ export class WorldScene implements Scene {
       const mine = Object.keys(VERSION_EXCLUSIVES).filter((id) => VERSION_EXCLUSIVES[id] === ver);
       const theirs = Object.keys(VERSION_EXCLUSIVES).filter((id) => VERSION_EXCLUSIVES[id] !== ver);
       this.say([
-        `SONDAGGISTA: dati alla mano, questa è la VERSIONE ${ver}.`,
+        `SONDAGGISTA: questa è la versione ${ver.toLocaleLowerCase("it")}.`,
         `Da queste parti circolano ${mine.map((id) => SPECIES[id].name).join(" e ")}.`,
-        `${theirs.map((id) => SPECIES[id].name).join(" e ")}? Mai visti da noi: girano solo nell'altra versione.`,
-        "Per completare il POLITICDEX serve uno SCAMBIO online. Il mercato delle vacche non dorme mai."
+        `${theirs.map((id) => SPECIES[id].name).join(" e ")}? Sono nell’altra versione.`,
+        "Per completare il Politicdex, scambia online. Il mercato delle vacche non dorme mai."
       ]);
       return;
     }
@@ -1234,18 +1440,10 @@ export class WorldScene implements Scene {
     }
 
     if (route.kind === "openScene" && route.scene === "shop") {
-      // Primo accesso a un negozio: spiega cosa sono le DIRETTIVE (le "MT").
-      const lines = [...(npc.lines ?? [])];
-      if (!this.state.flags["tm-hint"]) {
-        this.state.flags["tm-hint"] = true;
-        lines.push(
-          "Occhio alle DIRETTIVE: insegnano una mossa nuova a un POLITICMON dello stesso schieramento.",
-          "Si riusano all'infinito. Le impari dalla BORSA, fuori dalla lotta."
-        );
-      }
-      this.say(lines, () => {
-        this.stack.push(new ShopScene(this.stack, this.input, this.state));
-      });
+      // Product cards explain effects and reusable directives in context.
+      this.state.flags["tm-hint"] = true;
+      this.input.reset();
+      this.stack.push(new ShopScene(this.stack, this.input, this.state, npc.lines?.[0]));
       return;
     }
 
@@ -1257,9 +1455,8 @@ export class WorldScene implements Scene {
     }
 
     if (route.kind === "openScene" && route.scene === "box") {
-      this.say(npc.lines ?? [], () => {
-        this.stack.push(new BoxScene(this.stack, this.input, this.state));
-      });
+      this.input.reset();
+      this.stack.push(new BoxScene(this.stack, this.input, this.state));
       return;
     }
 
@@ -1281,7 +1478,7 @@ export class WorldScene implements Scene {
       recordHealerVisit(this.state);
       this.state.flags["heal-hint"] = true;
       this.playHealFx(() => {
-        this.showBanner("CURA, NON COMIZI", "PV / PP / STATUS / KO: GRATIS", "#79ddba");
+        this.showBanner("Squadra pronta", "Cure gratuite: PV e PP pieni, stati rimossi e compagni KO rianimati.", "#79ddba");
       });
       // La cura è immediata anche nei dati: un reload durante l'effetto
       // conserva PV, PP e visite, senza una ricevuta da confermare.
@@ -2747,7 +2944,7 @@ export class WorldScene implements Scene {
 
   // Mostra un banner "evento" (traguardo, breaking news) con entrata a molla.
   private showBanner(text: string, sub: string, color: string): void {
-    this.banner = { text, sub, t: 0, color };
+    this.banner = { text:readableCopy(text), sub:readableCopy(sub), t: 0, color };
     this.bannerFlash = 0.4;
     // Buzz breve sui banner rilevanti (BREAKING NEWS, traguardi, avvistamenti).
     haptics.event();
@@ -2804,6 +3001,7 @@ export class WorldScene implements Scene {
     this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
     if (this.banner) {
       this.banner.t += dt;
+      if (this.banner.t > 2.4) this.banner = null;
     } else {
       // Toast MISSIONE COMPLETATA in coda (accumulati anche in battaglia/casinò).
       const toast = consumeDailyToast();
@@ -2889,7 +3087,7 @@ export class WorldScene implements Scene {
     }
 
     if (this.encounterFlash > 0) {
-      this.encounterFlash -= dt;
+      this.encounterFlash = Math.max(0, this.encounterFlash - dt);
       if (this.encounterFlash <= 0 && this.pendingBattle) {
         const start = this.pendingBattle;
         this.pendingBattle = null;
@@ -2899,7 +3097,7 @@ export class WorldScene implements Scene {
     }
 
     if (this.exclaimT > 0) {
-      this.exclaimT -= dt;
+      this.exclaimT = Math.max(0, this.exclaimT - dt);
       if (this.exclaimT <= 0 && this.pendingTrainer) {
         const def = this.pendingTrainer;
         this.pendingTrainer = null;
@@ -2911,56 +3109,26 @@ export class WorldScene implements Scene {
 
     if (this.remoteMenu) {
       const action = this.remoteMenu.update(this.input);
-      if (action === "select") {
-        const idx = this.remoteMenu.index;
-        const peerId = this.remoteMenuPeerId;
-        this.remoteMenu = null;
-        if (idx === 0) {
-          this.talkWithRemote(peerId);
-        } else if (idx === 1) {
-          this.inspectRemote(peerId);
-        } else if (idx === 2) {
-          this.startTradeWithRemote(peerId);
-        } else if (idx === 3) {
-          this.challengeRemote(peerId);
-        }
-        // idx 4 = ANNULLA: chiudi e basta.
-      } else if (action === "cancel") {
-        this.remoteMenu = null;
-      }
+      if (action === "select") this.chooseRemote(this.remoteMenu.index);
+      else if (action === "cancel") this.chooseRemote();
       return;
     }
 
     if (this.askMenu) {
       const action = this.askMenu.update(this.input);
-      if (action === "select") {
-        const index = this.askMenu.index;
-        const pick = this.askPick;
-        const handler = index === 0 ? this.askYes : this.askNo;
-        this.askMenu = null;
-        this.askYes = null;
-        this.askNo = null;
-        this.askPick = null;
-        // Menù a scelta multipla: onPick(index). Altrimenti fallback SÌ/NO.
-        if (pick) {
-          pick(index);
-        } else {
-          handler?.();
-        }
-      } else if (action === "cancel") {
-        const handler = this.askNo;
-        this.askMenu = null;
-        this.askYes = null;
-        this.askNo = null;
-        this.askPick = null;
-        handler?.();
-      }
+      if (action === "select") this.chooseAsk(this.askMenu.index);
+      else if (action === "cancel") this.chooseAsk();
       return;
     }
 
+    let dir = this.input.heldDirection() ?? (["up", "down", "left", "right"] as const).find(key => this.input.wasPressed(key));
     if (this.msg.isOpen) {
-      this.msg.update(dt, this.input, this.viewHeight);
-      return;
+      if (!dir || !this.msg.dismissNotification()) {
+        this.msg.update(dt, this.input, this.viewHeight);
+        return;
+      }
+      // A notification callback may start a scene or a manual conversation.
+      if (this.stack.top !== this || this.msg.isOpen || this.askMenu || this.remoteMenu) return;
     }
 
     // Traguardi: valutati quando il giocatore ha il controllo libero (così
@@ -2989,7 +3157,7 @@ export class WorldScene implements Scene {
       // in cui il giocatore NON sta già premendo una direzione (chi arriva sulla
       // porta e continua verso un warp non deve vederli scattare al posto del
       // passo). Hint one-shot + CRISI DI GOVERNO.
-      if (this.justEnteredMap && this.input.heldDirection() === null) {
+      if (this.justEnteredMap && !dir) {
         this.justEnteredMap = false;
         if (this.showMapEntryHint()) {
           return;
@@ -3001,6 +3169,16 @@ export class WorldScene implements Scene {
     }
 
     const pos = this.state.pos;
+
+    const tap = this.input.consumeTap();
+    if (dir || this.input.wasPressed("b")) this.stopTapRoute();
+    else if (tap) {
+      this.input.clearTap();
+      const hit=this.npcTapAreas.filter(area=>tap.x>=area.x&&tap.x<area.x+area.width&&tap.y>=area.y&&tap.y<area.y+area.height).sort((a,b)=>b.y-a.y)[0];
+      const npc=hit?this.visibleNpcs().find(n=>n.id===hit.id):undefined;
+      if(npc)this.planTapRoute(npc.x,npc.y,npc.id);
+      else this.planTapRoute(Math.floor((tap.x+this.tapCamera.x)/TILE),Math.floor((tap.y+this.tapCamera.y)/TILE));
+    }
 
     if (this.moving) {
       // Monopattino e auto sono più veloci della semplice corsa (B): si sente.
@@ -3018,24 +3196,25 @@ export class WorldScene implements Scene {
         this.moving = false;
         this.moveT = 0;
         this.onStepComplete();
+        if (!this.canUseWorldControls()) this.stopTapRoute();
       }
       return;
     }
 
     if (this.input.wasPressed("start")) {
+      this.stopTapRoute();
       audio.confirm();
       this.stack.push(new PauseScene(this.stack, this.input, this.state));
       return;
     }
     if (this.input.wasPressed("a")) {
+      this.stopTapRoute();
       this.interact();
       return;
     }
 
-    const dir = this.input.heldDirection() ?? (["up", "down", "left", "right"] as const).find(key => this.input.wasPressed(key));
-    if (!dir) {
-      return;
-    }
+    if (!dir) dir = this.tapDirection();
+    if (!dir || !this.canUseWorldControls()) return;
     const facing = dir as Facing;
     pos.facing = facing;
     const delta = DIR_DELTA[facing];
@@ -3075,7 +3254,7 @@ export class WorldScene implements Scene {
     // Con MONOPATTINO o AUTO si va sempre veloci all'aperto; B resta la corsa.
     const onVehicle =
       (this.state.vehicle === "monopattino" || this.state.vehicle === "auto") && this.map.outdoor;
-    this.running = this.input.isHeld("b") || onVehicle;
+    this.running = this.runToggled || this.input.isHeld("b") || onVehicle;
     this.fromX = pos.x;
     this.fromY = pos.y;
     pos.x = nx;
@@ -3098,8 +3277,18 @@ export class WorldScene implements Scene {
     const playerPx = this.moving ? px : pos.x * TILE;
     const playerPy = this.moving ? py : pos.y * TILE;
 
+    // Reserve the native HUD's space: entering a short map from the north
+    // must not place the player beneath its mission card. Retain the inset
+    // during dialogue/healing so hiding commands does not move the world.
+    if (typeof document !== "undefined") {
+      const hud=document.querySelector<HTMLElement>(".ui-world-hud");
+      if (hud && !hud.hidden) {
+        const frame=screen.ctx.canvas.getBoundingClientRect();
+        if (frame.height>0) this.hudInset=Math.max(0,Math.min(Math.floor(this.viewHeight*.4),Math.ceil((hud.getBoundingClientRect().bottom-frame.top+12)*this.viewHeight/frame.height)));
+      }
+    }
     let camX = worldCameraAxis(playerPx + TILE / 2,mapW,VIEW_W);
-    let camY = worldCameraAxis(playerPy + TILE / 2,mapH,this.viewHeight);
+    let camY = worldCameraAxis(playerPy + TILE / 2,mapH,this.viewHeight-this.hudInset)-this.hudInset;
     // Scossone (RUSPA): sposta la camera di qualche pixel, dà peso all'impatto.
     if (this.shake > 0 && !this.state.reduceEffects) {
       const amp = this.shake * 4;
@@ -3107,6 +3296,8 @@ export class WorldScene implements Scene {
       camY += Math.round((Math.random() - 0.5) * amp);
     }
 
+    this.tapCamera = {x:camX,y:camY};
+    this.npcTapAreas = [];
     screen.clear("#10141f");
 
     const x0 = Math.floor(camX / TILE);
@@ -3313,7 +3504,7 @@ export class WorldScene implements Scene {
       // LEGGENDARIO ancora disponibile: aura + cartello per renderlo SPECIALE e
       // inconfondibile (evita di sfidarlo per sbaglio, vedi conferma SÌ/NO).
       const legendaryReady = Boolean(npc.legendary) && !this.state.flags[npc.legendary!.flag];
-      tall.push(buildNpcDrawCommand({
+      const command=buildNpcDrawCommand({
         screen,
         npc,
         camX,
@@ -3324,7 +3515,9 @@ export class WorldScene implements Scene {
         rematchReady,
         legendaryReady,
         drawShadow: (x, y) => this.drawShadow(screen, x, y)
-      }));
+      });
+      if(command.hitBox)this.npcTapAreas.push({id:npc.id,...command.hitBox});
+      tall.push(command);
     }
 
     // Altri giocatori online sulla mia stessa mappa (interpolati).
@@ -3521,117 +3714,7 @@ export class WorldScene implements Scene {
       screen.rect(rx + 6, ry + 13 + phase, 3, 2, "#3f8a2a");
     }
 
-    // Nome zona.
-    screen.rect(2, 2, this.map.name.length * 6 + 8, 12, "rgba(16,20,31,0.92)");
-    screen.text(this.map.name, 6, 4, PAPER);
-
-    // Conteggio giocatori online sulla mappa (presence multiplayer).
-    if (mp.isEnabled() && mp.onlineCount > 0) {
-      const label = `ONLINE ${mp.onlineCount + 1}`;
-      screen.rect(2, 15, label.length * 6 + 8, 11, "rgba(16,20,31,0.92)");
-      screen.text(label, 6, 17, "#7ad858");
-    }
-
-    // Overlay chat: ultime 2 righe sotto il nome zona, ma solo se RECENTI —
-    // decadono dopo CHAT_OVERLAY_TTL, così un "Luca: Ciao!" non resta in alto
-    // a sinistra a tempo indefinito. Lo storico completo vive nella ChatScene.
-    if (!this.msg.isOpen && !this.askMenu && mp.chat.length > 0) {
-      const now = performance.now();
-      const recent = mp.chat.filter((c) => now - c.t < CHAT_OVERLAY_TTL).slice(-2);
-      for (let i = 0; i < recent.length; i += 1) {
-        const c = recent[i];
-        const line = `${mp.chatNick(c)}: ${c.text}`.slice(0, 34);
-        const y = 28 + i * 11;
-        screen.rect(2, y, line.length * 6 + 6, 10, "rgba(16,20,31,0.7)");
-        screen.text(line, 5, y + 1, "#cfe6ff");
-      }
-    }
-
-    // Sondaggi in tempo reale: barra colorata + etichetta del momento politico,
-    // così il giocatore "legge" il suo consenso a colpo d'occhio (non solo un numero).
-    // AUTO-FADE: l'HUD è OPACO (ben leggibile) di norma; sfuma solo quando il
-    // giocatore gli finisce dietro (angolo alto-destra), così non nasconde la
-    // mappa proprio dove sei. La semitrasparenza fissa rendeva SOND illeggibile.
-    const playerScreenX = Math.round(playerPx - camX);
-    const playerScreenY = Math.round(playerPy) - camY;
-    const inHudArea = (sx: number, sy: number) => sx > VIEW_W - 90 && sy < 44;
-    // L'HUD sfuma se il player OPPURE un NPC con targhetta/aura (LUCA, un
-    // LEGGENDARIO) finisce nell'angolo alto-destra: la loro etichetta non resta
-    // mezza nascosta sotto SOND.
-    const npcUnderHud = this.npcs.some(
-      (n) =>
-        (n.nameplate || (n.legendary && !this.state.flags[n.legendary.flag])) &&
-        inHudArea(Math.round(n.dispX) - camX, Math.round(n.dispY) - camY)
-    );
-    const behindHud = inHudArea(playerScreenX, playerScreenY) || npcUnderHud;
-    const hudAlpha = behindHud ? 0.35 : 1;
-    let hudBottom = 2;
-    if (this.state.party.length > 0) {
-      const sond = this.state.sondaggi;
-      // Valore mostrato: insegue quello reale (barra che ticchetta, non salta).
-      const shown = this.displaySondaggi < 0 ? sond : Math.round(this.displaySondaggi);
-      const col = sondaggiColor(sond);
-      const panelW = 80;
-      const px = VIEW_W - panelW - 2;
-      // Flash colore sulla cornice quando il consenso cambia (verde su / rosso giù).
-      const pulse = this.sondPulse > 0 && Math.floor(this.sondPulse * 16) % 2 === 0;
-      const bg = pulse
-        ? (this.sondDelta?.up ? "rgba(122,216,88,0.85)" : "rgba(208,72,72,0.85)")
-        : `rgba(16,20,31,${0.92 * hudAlpha})`;
-      screen.rect(px, 2, panelW, 22, bg);
-      screen.text(`SOND ${shown}%`, px + 4, 4, col);
-      // Barra di riempimento (segue il valore animato).
-      const barW = panelW - 8;
-      screen.rect(px + 4, 12, barW, 4, "rgba(255,255,255,0.15)");
-      screen.rect(px + 4, 12, Math.max(1, Math.round((barW * shown) / 100)), 4, col);
-      // Etichetta del momento (PLEBISCITO, OPPOSIZIONE, ...): troncata se serve.
-      // Larghezza interna panelW-8=72px → max 12 char a 6px l'uno (niente overflow a 240px).
-      screen.textFit(sondaggiLabelShort(sond), px + 4, 17, 72, "#cfe6ff");
-      // Delta flottante (+8 / -2) che sale e svanisce accanto alla barra.
-      // Sale da y=17 (sotto l'etichetta) verso l'alto, ma clampato a ≥2 così non
-      // esce mai sopra il bordo schermo (prima dy arrivava a -5 = invisibile).
-      if (this.sondDelta) {
-        const dy = Math.max(2, Math.round(17 - (1.4 - this.sondDelta.t) * 10));
-        screen.text(this.sondDelta.text, px - 18, dy, this.sondDelta.up ? "#7ad858" : "#d04848");
-      }
-      hudBottom = 26;
-    }
-
-    // Campo Largo: il consenso del collegio resta numerico e visibile mentre
-    // esplori. Non sostituisce SONDAGGI nazionale e non dipende solo dal colore.
-    if ((this.map.id === "campo_largo" || this.map.id === "retropalco_campo") && this.state.election.phase !== "inactive") {
-      const local = this.state.election.districts.find((district) => district.id === "centro")?.localConsensus ?? 38;
-      const label = `CENTRO ${local}%`;
-      const w = 76;
-      const x = VIEW_W - w - 2;
-      screen.rect(x, hudBottom, w, 19, `rgba(16,20,31,${0.92 * hudAlpha})`);
-      screen.text(label, x + 4, hudBottom + 3, local >= 50 ? "#e8c84a" : "#cfe6ff");
-      screen.rect(x + 4, hudBottom + 12, w - 8, 4, "rgba(255,255,255,0.15)");
-      screen.rect(x + 4, hudBottom + 12, Math.max(1, Math.round((w - 8) * local / 100)), 4, local > 50 ? "#55a889" : local === 50 ? "#e6b944" : "#d76458");
-      hudBottom += 21;
-    }
-
-    // Veicolo attivo: piccola targhetta sotto i sondaggi.
-    if (this.state.vehicle) {
-      const vlabel = VEHICLES[this.state.vehicle as VehicleId].name;
-      const w = vlabel.length * 6 + 8;
-      screen.rect(VIEW_W - w - 2, hudBottom, w, 12, `rgba(16,20,31,${0.92 * hudAlpha})`);
-      screen.text(vlabel, VIEW_W - w + 2, hudBottom + 2, "#9cc8e8");
-    }
-
-    // Obiettivo corrente in basso (solo all'aperto e a schermo libero).
     const quest = currentQuest(this.state);
-    if (quest && !this.msg.isOpen && !this.askMenu && !this.remoteMenu && this.map.outdoor) {
-      // Obiettivo: testo INTERO, mandato a capo su più righe invece di troncarlo
-      // con "..." (prima si perdeva la fine dello step). Il box cresce verso l'alto.
-      const direction = this.map.id === "borgo" && quest.target?.mapId === "route1" ? "Esci a NORD. " : "";
-      const lines = wrapText(`► ${direction}${quest.step}`, 38);
-      const boxH = lines.length * 9 + 5;
-      screen.rect(2, this.viewHeight - boxH - 2, VIEW_W - 4, boxH, "rgba(16,20,31,0.92)");
-      for (let i = 0; i < lines.length; i += 1) {
-        screen.text(lines[i], 6, this.viewHeight - boxH + 1 + i * 9, "#e8c84a");
-      }
-    }
 
     // Modalità guidata: freccia gialla che punta verso l'obiettivo. La
     // nascondiamo quando siamo in un INTERNO (es. il LAB) ma il target è la
@@ -3649,22 +3732,6 @@ export class WorldScene implements Scene {
       this.drawGuideArrow(screen, quest.target, playerPx, playerPy, camX, camY);
     }
 
-    if (this.askMenu) {
-      screen.panel(0, this.viewHeight - 44, VIEW_W, 44);
-      screen.textFit(this.askLabel, 10, this.viewHeight - 32, VIEW_W - 20, INK);
-      // Larghezza auto sul label più lungo (min 56 = SÌ/NO), clampata al bordo.
-      // Prima era fissa a 56px → le voci lunghe del menù GUIDA venivano troncate.
-      const aw = Math.min(VIEW_W - 8, Math.max(56, this.askMenu.measureWidth() + 8));
-      this.askMenu.draw(screen, VIEW_W - 4 - aw, this.viewHeight - 44 - this.askMenu.measureHeight(), aw);
-    }
-
-    if (this.remoteMenu) {
-      screen.panel(0, this.viewHeight - 44, VIEW_W, 44);
-      screen.textFit(this.askLabel, 10, this.viewHeight - 32, VIEW_W - 20, INK);
-      const rw = Math.min(VIEW_W - 8, Math.max(96, this.remoteMenu.measureWidth() + 8));
-      this.remoteMenu.draw(screen, VIEW_W - 4 - rw, this.viewHeight - 44 - this.remoteMenu.measureHeight(), rw);
-    }
-
     this.msg.draw(screen);
 
     if (this.encounterFlash > 0 && !this.state.reduceEffects) {
@@ -3672,16 +3739,6 @@ export class WorldScene implements Scene {
       if (phase === 0) {
         screen.dim(0.85);
       }
-    }
-
-    if (
-      !quest &&
-      !this.msg.isOpen &&
-      !this.askMenu &&
-      this.state.party.length === 0 &&
-      this.map.id === "borgo"
-    ) {
-      screen.text("Vai al laboratorio col tetto BLU!", 8, this.viewHeight - 26, GREY);
     }
 
     // Dissolvenza d'ingresso nella nuova mappa (più dolce dei cambi secchi).
@@ -3705,6 +3762,7 @@ export class WorldScene implements Scene {
   }
 
   private drawHealOverlay(screen: Screen): void {
+    if (this.state.reduceEffects) return;
     const ctx = screen.ctx;
     const prog = this.healFx / 1.6; // 1 -> 0 mentre l'effetto svanisce
     const cx = VIEW_W / 2;
@@ -3736,37 +3794,6 @@ export class WorldScene implements Scene {
     }
     ctx.globalAlpha = 1;
 
-    // 4) Pannello party: ritratti + barre HP dedicate. Non usa drawHpBar:
-    // quella utility stampa "PV" a sinistra e qui finiva sopra i ritratti.
-    const rows = this.healSnapshot.length;
-    if (rows > 0) {
-      const panelX = 8;
-      const panelW = 224;
-      const rowH = 15;
-      const panelH = 18 + rows * rowH;
-      const py = this.viewHeight - panelH - 4;
-      screen.panel(panelX, py, panelW, panelH);
-      screen.text("PV RECUPERATI", panelX + 8, py + 5, INK);
-      for (let i = 0; i < rows; i += 1) {
-        const s = this.healSnapshot[i];
-        const ry = py + 17 + i * rowH;
-        drawMonsterSprite(screen, s.mon.speciesId, panelX + 8, ry - 1, 14, 13);
-        this.drawHealHpRow(screen, panelX + 27, ry + 3, 122, s.disp, s.to);
-        screen.textRight(`${Math.round(s.disp)}/${s.to}`, panelX + panelW - 24, ry + 2, INK);
-      }
-    }
-  }
-
-  private drawHealHpRow(screen: Screen, x: number, y: number, width: number, current: number, max: number): void {
-    const ratio = Math.max(0, Math.min(1, current / Math.max(1, max)));
-    const fillW = Math.round((width - 4) * ratio);
-    const color = ratio > 0.5 ? "#48b848" : ratio > 0.2 ? "#d8b838" : "#d04848";
-    screen.frame(x, y, width, 8, INK);
-    screen.rect(x + 2, y + 2, width - 4, 4, "#d8d8c8");
-    if (fillW > 0) {
-      screen.rect(x + 2, y + 2, fillW, 4, color);
-    }
-    screen.rect(x + 2, y + 6, width - 4, 1, "rgba(0,0,0,0.22)");
   }
 
   private drawBanner(screen: Screen): void {
@@ -3779,36 +3806,6 @@ export class WorldScene implements Scene {
       const ctx = screen.ctx;
       ctx.fillStyle = `rgba(255,240,180,${0.5 * (this.bannerFlash / 0.4)})`;
       ctx.fillRect(0, 0, VIEW_W, this.viewHeight);
-    }
-    // Entrata a molla: toast compatto sotto l'HUD, non un cartellone sopra la mappa.
-    const dur = 2.4;
-    const t = b.t;
-    let y: number;
-    if (t < 0.3) {
-      const p = t / 0.3;
-      y = -22 + 50 * p; // entra fino a y=28 con leggero overshoot
-    } else if (t > dur - 0.3) {
-      const p = (t - (dur - 0.3)) / 0.3;
-      y = 26 - 48 * p; // esce verso l'alto
-    } else {
-      y = 26 - Math.sin((t - 0.3) * 6) * 1; // oscilla appena
-    }
-    // Box auto-largo sul testo più lungo (prima era fisso 156px e il sub veniva
-    // troncato con "...", es. "SFIDA DEL GIORNO IN PIAZZA"). Clampato a VIEW_W.
-    // Clip a 38 char: oltre, il box è già al max (VIEW_W-4) e il testo centrato
-    // sforerebbe i bordi (textCenter non clippa da sé).
-    const bText = b.text.slice(0, 38);
-    const bSub = b.sub.slice(0, 38);
-    const longest = Math.max(bText.length, bSub.length);
-    const w = Math.min(VIEW_W - 4, Math.max(156, longest * 6 + 12));
-    const x = Math.round((VIEW_W - w) / 2);
-    screen.rect(x, Math.round(y), w, 18, "rgba(16,20,31,0.94)");
-    screen.rect(x, Math.round(y), w, 2, b.color);
-    screen.rect(x, Math.round(y) + 16, w, 2, b.color);
-    screen.textCenter(bText, VIEW_W / 2, Math.round(y) + 3, b.color);
-    screen.textCenter(bSub, VIEW_W / 2, Math.round(y) + 10, "#cfe6ff");
-    if (t > dur) {
-      this.banner = null;
     }
   }
 }

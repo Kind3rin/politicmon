@@ -19,6 +19,7 @@ export interface RuntimeNpc extends NpcDef {
 
 export interface NpcDrawCommand {
   baseY: number;
+  hitBox?: {x:number;y:number;width:number;height:number};
   draw: () => void;
 }
 
@@ -59,8 +60,11 @@ export function buildNpcDrawCommand(options: {
   const direction = { down: "south", up: "north", left: "west", right: "east" }[npc.currentFacing];
   const image = (npc.spriteSet && getSpriteImage(`npc:${npc.spriteSet}:${direction}`, `chars/npc_${npc.spriteSet}_${direction}.png`)) || npcImage(npc.pal, npc.currentFacing, walkCycle, moving);
 
+  const bounds=image?screen.imageBounds(image):undefined;
+  const width=bounds?bounds.w*22/bounds.h:0;
   return {
     baseY: npc.dispY + 16,
+    hitBox:image?{x:nx+8-width/2,y:ny-6,width,height:22}:undefined,
     draw: () => {
       drawShadow(nx + 8, ny + 15);
       if (legendaryReady) {
@@ -74,10 +78,8 @@ export function buildNpcDrawCommand(options: {
         }
       }
       if (image) {
-        const bounds = screen.imageBounds(image);
-        const scale = 22 / bounds.h;
-        const width = bounds.w * scale;
-        screen.imageSpriteCropped(image, nx + 8 - width / 2, ny + 16 - bounds.h * scale, { scaleX: scale, scaleY: scale });
+        const scale = 22 / bounds!.h;
+        screen.imageSpriteCropped(image, nx + 8 - width / 2, ny - 6, { scaleX: scale, scaleY: scale });
       }
       if (legendaryReady) {
         const label = "LEGGENDARIO";

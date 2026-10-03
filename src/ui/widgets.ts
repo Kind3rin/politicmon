@@ -1,7 +1,10 @@
+import { dialoguePages, renderUiDialog } from "./kit";
+import { readableCopy } from "./kit/copy";
 import type { Input } from "../engine/input";
-import { CHAR_W, LINE_H } from "../engine/font";
+import { CHAR_W } from "../engine/font";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { audio } from "../engine/audio";
+import { loadTextSpeed } from "../engine/controls";
 import { getSpriteImage } from "../engine/assets";
 
 function drawTextFit(screen: Screen, value: string, x: number, y: number, maxWidth: number, color: string): void {
@@ -133,9 +136,8 @@ export function drawScreenHeader(
 // dialogo restano ROSSE e MAIUSCOLE (l'enfasi/informazione resta) ma NON tremano.
 // Flag di modulo perché MessageBox è istanziato in decine di scene senza stato:
 // lo si aggiorna una volta al load/toggle con setReduceMotion.
-let reduceMotion = false;
 export function setReduceMotion(on: boolean): void {
-  reduceMotion = on;
+  if (typeof document !== "undefined") document.body.classList.toggle("ui-reduce-effects", on);
 }
 
 // Tronca una stringa perché stia in `maxWidth` px (font 5x7), aggiungendo "…"
@@ -187,6 +189,7 @@ export function wrapText(text: string, maxChars: number): string[] {
 
 // Box messaggi in stile Pokémon con effetto macchina da scrivere.
 export class MessageBox {
+  speaker = "Politicmon";
   private pages: string[][] = [];
   private pageIndex = 0;
   private chars = 0;
@@ -199,19 +202,39 @@ export class MessageBox {
     return this.pages.length > 0;
   }
 
+  get visibleText(): string {
+    if (!this.isOpen) return "";
+    let remaining = Math.floor(this.chars);
+    return this.pages[this.pageIndex].map(line => {
+      const visible = line.slice(0, Math.max(0, remaining));
+      remaining -= line.length;
+      return visible;
+    }).filter(Boolean).join(" ");
+  }
+
+  get pageText():string {return this.pages[this.pageIndex]?.join(' ')??'';}
+
+  // Short menu feedback is fully visible immediately, with one press per page.
+  advancePage():void {if(!this.isOpen)return;this.chars=Infinity;this.advance();}
+
+  // Movement may dismiss an informational toast, never a conversation.
+  dismissNotification(): boolean {
+    if (!this.isOpen || !this.autoAdvance) return false;
+    const callback = this.onFinished;
+    this.onFinished = null;
+    this.close();
+    callback?.();
+    return true;
+  }
+
   // Accoda messaggi; ogni stringa diventa una o più pagine da 2 righe.
-  show(messages: string[], onFinished?: () => void, autoAdvance = false): void {
-    this.pages = [];
-    for (const message of messages) {
-      const lines = wrapText(message, 36);
-      for (let i = 0; i < lines.length; i += 2) {
-        this.pages.push(lines.slice(i, i + 2));
-      }
-    }
+  show(messages: string[], onFinished?: () => void, autoAdvance = false, speaker = "Politicmon"): void {
+    this.speaker = speaker;
+    this.pages = dialoguePages(messages);
     this.pageIndex = 0;
     this.autoAdvance = autoAdvance;
     this.autoElapsed = 0;
-    this.chars = autoAdvance ? Infinity : 0;
+    this.chars = autoAdvance || loadTextSpeed() === "instant" ? Infinity : 0;
     this.done = this.pages.length === 0;
     this.onFinished = onFinished ?? null;
     if (this.done) {
@@ -231,7 +254,7 @@ export class MessageBox {
     audio.cursor();
     if (this.pageIndex < this.pages.length - 1) {
       this.pageIndex += 1;
-      this.chars = this.autoAdvance ? Infinity : 0;
+      this.chars = this.autoAdvance || loadTextSpeed() === "instant" ? Infinity : 0;
       this.autoElapsed = 0;
     } else {
       const callback = this.onFinished;
@@ -254,7 +277,7 @@ export class MessageBox {
     const total = page.join("").length;
     if (this.chars < total) {
       const before = Math.floor(this.chars);
-      this.chars = Math.min(total, this.chars + dt * 60);
+      this.chars = loadTextSpeed() === "instant" ? total : Math.min(total, this.chars + dt * (loadTextSpeed() === "fast" ? 120 : 60));
       if (advance) {
         this.chars = total;
       } else {
@@ -271,70 +294,13 @@ export class MessageBox {
   }
 
   // Tempo per far lampeggiare l'indicatore "continua" e agitare le urla.
-  private blink = 0;
 
-  // Una parola "urlata" (BREAKING NEWS!, SUPER EFFICACE!): tutta MAIUSCOLA e
-  // seguita da "!". Riceve un micro-tremolio per dare enfasi.
-  private static isShout(word: string): boolean {
-    const bare = word.replace(/[!]+$/, "");
-    return word.endsWith("!") && bare.length >= 2 && /[A-ZÀÈÉÌÒÙ]/.test(bare) && bare === bare.toUpperCase();
+  draw(_screen: Screen): void {
+    if (!this.isOpen) return;
+    const total = this.pages[this.pageIndex].join("").length;
+    renderUiDialog(readableCopy(this.visibleText), () => { if (this.isOpen) this.advance(); }, this.chars >= total, this.speaker);
   }
 
-  // La riga contiene almeno una parola urlata? (evita il render token-per-token
-  // quando non serve).
-  private static hasShout(line: string): boolean {
-    return line.split(" ").some((w) => MessageBox.isShout(w));
-  }
-
-  draw(screen: Screen): void {
-    if (!this.isOpen) {
-      return;
-    }
-    this.blink += 1;
-    const boxY = (screen.height ?? VIEW_H) - 44;
-    screen.panel(2, boxY, VIEW_W - 4, 42, "dialog");
-    const page = this.pages[this.pageIndex];
-    let remaining = Math.floor(this.chars);
-    for (let i = 0; i < page.length; i += 1) {
-      const line = page[i];
-      const shown = Math.max(0, remaining);
-      const visible = line.slice(0, shown);
-      const lineY = boxY + 9 + i * (LINE_H + 4);
-      // Rende la riga token per token: le parole URLATE! tremano leggermente,
-      // il resto è testo normale (nessun costo se la riga non ha urla).
-      if (MessageBox.hasShout(line)) {
-        let cx = 12;
-        let idx = 0; // indice carattere nella riga completa
-        const words = line.split(" ");
-        for (let w = 0; w < words.length; w += 1) {
-          const word = words[w] + (w < words.length - 1 ? " " : "");
-          const wordVisible = word.slice(0, Math.max(0, shown - idx));
-          if (wordVisible.length > 0) {
-            const shout = MessageBox.isShout(words[w]);
-            // RIDUCI EFFETTI: niente tremolio (testo statico), colore ed enfasi restano.
-            const jx = shout && !reduceMotion ? Math.round(Math.sin(this.blink * 0.9 + w) * 1) : 0;
-            const jy = shout && !reduceMotion ? Math.round(Math.cos(this.blink * 1.1 + w) * 1) : 0;
-            screen.text(wordVisible, cx + jx, lineY + jy, shout ? "#d84848" : INK);
-          }
-          cx += word.length * CHAR_W;
-          idx += word.length;
-        }
-      } else {
-        screen.text(visible, 12, lineY, INK);
-      }
-      remaining -= line.length;
-    }
-    const total = page.join("").length;
-    if (this.chars >= total) {
-      // Freccia lampeggiante: segnala chiaramente che si può proseguire.
-      if (Math.floor(this.blink / 20) % 2 === 0) {
-        screen.text("▼", VIEW_W - 16, boxY + 30, INK);
-      }
-      // Hint discreto: come avanzare (utile per i nuovi giocatori).
-      const more = this.pageIndex < this.pages.length - 1;
-      screen.text(this.autoAdvance ? "A: ACCELERA" : more ? "A: AVANTI" : "A: OK", 12, boxY + 33, GREY);
-    }
-  }
 }
 
 export interface MenuItem {

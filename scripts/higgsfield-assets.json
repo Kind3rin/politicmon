@@ -6,7 +6,7 @@
     "project_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
     "default_folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
     "workspace_id": "39323ead-1405-4bd9-a5ea-83a2d2d1ceb6",
-    "name": "Politicmon \u2014 ambienti di battaglia"
+    "name": "Politicmon — ambienti di battaglia"
   },
   "credits": {
     "before": 885.97,
@@ -25,8 +25,14 @@
   },
   "processing": {
     "dimensions": {
-      "evolution-portrait": [480, 720],
-      "battle-portrait": [240, 360],
+      "evolution-portrait": [
+        480,
+        720
+      ],
+      "battle-portrait": [
+        240,
+        360
+      ],
       "battle": [
         240,
         136
@@ -54,6 +60,14 @@
       "title-stage": [
         480,
         270
+      ],
+      "starter-stage": [
+        240,
+        360
+      ],
+      "ui-icon-atlas": [
+        288,
+        192
       ]
     },
     "resampling": "nearest",
@@ -449,7 +463,10 @@
     },
     {
       "id": "battle-recruited",
-      "sourceSize": [1344, 752],
+      "sourceSize": [
+        1344,
+        752
+      ],
       "sourceSha256": "6c228ea236ab6d6e65956166e04af0890f999c7a6ae22a0f140c59bbc847f4f8",
       "sha256": "3d4f0ec8395e2dacdcd49745f204616e420aeb051bf5ab7b608c0a08acca8e3f",
       "kind": "battle-animation",
@@ -527,7 +544,10 @@
       "creditsSpent": 1.5,
       "balanceBefore": 345.97,
       "balanceAfter": 344.47,
-      "sourceSize": [688, 1024],
+      "sourceSize": [
+        688,
+        1024
+      ],
       "sourceSha256": "46902b53316c2c1fcd4d132078bcedb36724397a135dc1d04a4c930a82f5bc92",
       "sha256": "2e06640d03f385a1ea714581437cf477b9043ef499c9a08b17a0b19e4a2dcb83"
     },
@@ -554,9 +574,127 @@
       "creditsSpent": 1.5,
       "balanceBefore": 344.47,
       "balanceAfter": 342.97,
-      "sourceSize": [688, 1024],
+      "sourceSize": [
+        688,
+        1024
+      ],
       "sourceSha256": "b52443db7e39d2072d5f6bf4381c3bb603a551e55ff8d454cc20e66c6080e674",
       "sha256": "14218b8230d6360697a9057a8f01301ccf61364491d837cf44cbc6195f34faf9"
+    },
+    {
+      "id": "starter-stage",
+      "params": {
+        "model": "gpt_image_2_5",
+        "aspect_ratio": "2:3",
+        "quality": "high",
+        "resolution": "1k",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background for POLITICMON, an Italian political satire creature RPG. A single portrait 2:3 image, crisp restrained 16-bit pixel art in deep navy #101b32, dark teal, jade, cream and amber gold. Professor's small Italian civic laboratory, a satirical electoral workshop: two narrow desks along the far left and right walls holding unbranded microphone, little paper ballot box and a tiny plant. Thin glowing teal outlines of storage cabinets at the outer edges. A broad EMPTY elliptical jade platform centered horizontally at 48 percent height, perfectly empty for overlaying a creature sprite, quiet dark navy between 15 and 46 percent height. No people, creatures or silhouettes. Uppermost 15 percent and bottom 45 percent almost completely EMPTY deep navy; runtime interface will cover them. A small blank cream board high on rear wall near top edge, no writing. No letters, numbers, real party symbols, gradients, photorealism or blur. Symmetrical but cozy, restrained comic satire of choosing a first candidate; the hero area is empty and immediately readable at 240x360. Do not make a grid or multiple panels."
+      },
+      "kind": "starter-stage",
+      "jobId": "be16e697-34f3-4f73-b433-d311ab09c14c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_143557_be16e697-34f3-4f73-b433-d311ab09c14c.png",
+      "path": "public/sprites/ui/starter-stage.png",
+      "width": 240,
+      "height": 360,
+      "model": "gpt_image_2_5",
+      "processing": "Nearest-neighbor 240x360, 48 colors; empty hero laboratory stage.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 342.97,
+      "balanceAfter": 341.47,
+      "sourceSize": [
+        688,
+        1024
+      ],
+      "sourceSha256": "f7737a6a353d5ea399451b3ffc8221690e1ff2462fa0c7739c802b96ddbb1c22",
+      "sha256": "58c2452df0576342d599899194eb1cdb790eaba363f95993ab87b401cb5eccb1"
+    },
+    {
+      "id": "m2-menu-icons",
+      "kind": "ui-icon-atlas",
+      "jobId": "998d9de2-e21e-4db3-bed1-fea11dd75118",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_153251_998d9de2-e21e-4db3-bed1-fea11dd75118.png",
+      "path": "artifacts/m2/menu-icons-runtime.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "3:2",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Generate a production-ready transparent sprite sheet of EXACTLY SIX separate menu icons for Politicmon, using the attached art-direction reference. Preserve its clean navy outline, cream/jade/mustard/terracotta palette and north-west lighting. STRICT layout: image is a 3 columns by 2 rows grid of equal square cells, icons centered exactly at each cell center, with generous identical empty transparent padding of 25% cell width on every side; no icon touches cell edges and no strokes connect different cells. Order left to right: TOP ROW 1 a friendly original trio of tiny fantastical political creatures (team), 2 a leather satchel (inventory), 3 a cream mission notebook with a small checked jade square (missions). BOTTOM ROW 4 a folded map with mustard route and terracotta location marker (map), 5 a jade creature field-guide book with a simple original creature head silhouette on the cover (dex), 6 jade/mustard/blue settings sliders (more). Strong simplified readable silhouettes, flat illustrated miniature game pictograms, very few interior details, all six same visual weight and scale. No shields on these six icons. Real transparent alpha background, NOT a checkerboard painted into the image. No text, labels, words, numbers, letters, borders, cell lines, political logos, or real people. This is a reusable UI atlas; exactly one completed icon per cell.",
+        "background": "transparent",
+        "medias": [
+          {
+            "role": "image",
+            "value": "4240b27d-6f5a-4ff7-9ad3-047d7aef2cb3"
+          }
+        ]
+      },
+      "grid": [
+        3,
+        2
+      ],
+      "outputs": [
+        {
+          "id": "team",
+          "path": "public/sprites/ui/kit/team.png",
+          "sha256": "1073b25e064648ee86420973d90f83e9329cf779c0a4f5556f697ffd4001439a",
+          "bytes": 2875
+        },
+        {
+          "id": "bag",
+          "path": "public/sprites/ui/kit/bag.png",
+          "sha256": "65554d34cb806a35c924b5d45f3d563066a11ae72dfefb027cb26c53242560b6",
+          "bytes": 2494
+        },
+        {
+          "id": "missions",
+          "path": "public/sprites/ui/kit/missions.png",
+          "sha256": "29c229aa564e681068cd4d98ef67ccebba293d4095fddc0c5a1b152e34e43f0b",
+          "bytes": 2604
+        },
+        {
+          "id": "map",
+          "path": "public/sprites/ui/kit/map.png",
+          "sha256": "5bc24f142a1438acc1ed20655aafaa387e6a3334f6c901699f4b80dc303a5aac",
+          "bytes": 2660
+        },
+        {
+          "id": "dex",
+          "path": "public/sprites/ui/kit/dex.png",
+          "sha256": "e8c7fecaf5044c6cf38a12f71d0df197622f0ee242a066b45ce3e1091e202553",
+          "bytes": 2605
+        },
+        {
+          "id": "more",
+          "path": "public/sprites/ui/kit/more.png",
+          "sha256": "fdd5a4a4845c93ef47c9c27d0a57b2d8f29853d42e35926f2f112d70e53efa43",
+          "bytes": 1704
+        }
+      ],
+      "sourceSha256": "cc8fb9c7a23c97ce32a9dfc2fb02d0f0a3a197c318b4e7f1537716fb0ff74fa7",
+      "sha256": "e115b9468e18e44bb6b5ea0098a02d9c786f7eeea6353a799baea2062f2618b6",
+      "bytes": 12440
     }
-  ]
+  ],
+  "m2StyleReference": {
+    "jobId": "4240b27d-6f5a-4ff7-9ad3-047d7aef2cb3",
+    "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_153029_4240b27d-6f5a-4ff7-9ad3-047d7aef2cb3.png",
+    "path": "artifacts/m2/style-reference.png",
+    "params": {
+      "model": "gpt_image_2_5",
+      "quality": "high",
+      "resolution": "1k",
+      "aspect_ratio": "1:1",
+      "count": 1,
+      "use_unlim": false,
+      "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+      "prompt": "Create the definitive original visual art direction reference sheet for POLITICMON, a witty Italian political satire monster RPG. This is a production reference sheet, NOT a UI screenshot. Unified palette: deep navy #101c30, warm cream #fffaf0, jade #79ddba, mustard #e6b944, muted terracotta, moss green, sky blue. Crisp outlined illustrated pixel game art, readable silhouettes, restrained tactile shading, light consistently from NORTH WEST with cast shadows to SOUTH EAST. Modern, humorous, handcrafted Italian provincial atmosphere, never photorealistic or glossy 3D. A beautifully composed square sheet on plain navy, with clearly separated groups and generous gutters: top strip of eight large blank shield badges using unique motifs: megaphone, circuit, torch, red rose, compass, broadcast antenna, classical column, leaf; middle group of six flat clear menu icons: friendly creature team, satchel, mission notebook, folded map, field guide book, settings sliders; lower group miniature provincial hillside streetscape with cafe and civic building, tree trunk and canopy, varied grass and cobblestone, stairs and small stream bridge; bottom corner a tiny original cartoon monster battle vignette with expressive action pose and cream/jade display panels with NO TEXT. Focus on coherent outlines and readable symbolic shapes that will survive tiny game sizes. No words, letters, numbers, political party logos, flags, photographs, watermarks or real politician likenesses. Show ample empty space around each motif. High quality art direction sheet to be used as a visual reference for subsequent separately generated game assets."
+    },
+    "sha256": "c25021748656553b87dd8eaccd4e2bcf3081b2e30daa76db825a67ac27760122"
+  }
 }

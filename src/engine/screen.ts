@@ -41,6 +41,8 @@ export class Screen {
     window.visualViewport?.addEventListener("resize", refit);
     const stage = document.querySelector('#screen-stage');
     if (stage) new ResizeObserver(refit).observe(stage);
+    const frame=document.querySelector("#screen-frame");
+    if(frame)new ResizeObserver(refit).observe(frame);
   }
 
   configureViewport(expanded: boolean): void {
@@ -54,7 +56,7 @@ export class Screen {
     // Measuring it also handles installed PWAs, browser bars and rotation.
     const viewport = window.visualViewport;
     document.documentElement.style.setProperty('--app-height', `${viewport?.scale === 1 ? viewport.height : window.innerHeight}px`);
-    const stage = document.querySelector<HTMLElement>('#screen-stage');
+    const stage = document.querySelector<HTMLElement>(document.body.classList.contains('ui-arena-open')?'.ui-arena-view':'#screen-stage');
     this.viewHeight = worldViewportHeight(stage?.clientWidth ?? 0, stage?.clientHeight ?? 0,
       this.expandedViewport && document.body.classList.contains('touch') && window.matchMedia('(orientation: portrait)').matches);
     document.querySelector<HTMLElement>('#screen-frame')?.style.setProperty('--view-height', String(this.viewHeight));

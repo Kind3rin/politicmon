@@ -1,20 +1,22 @@
-import { drawMonsterSprite } from "../art/monsters";
+import { companionHint } from "../ui/kit/companionContent";
 import { MOVES, STATUS_LABELS, moveSummary } from "../data/moves";
 import { ITEMS } from "../data/items";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import type {Screen} from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, evolve, levelEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame } from "../game/state";
 import type { TouchAction } from "../engine/touchActions";
 import { careerNotes } from "../game/evolutionGuide";
-import { defensiveMatchups } from "../game/dexGuide";
+import { evolutionCondition, defensiveMatchups } from "../game/dexGuide";
 import { EvolutionScene } from "./EvolutionScene";
 import { RecallScene } from "./RecallScene";
 import { archivedMoves } from "../game/moveArchive";
 import type { GameState } from "../game/state";
-import { drawHpBar, drawScreenHeader, wrapText, GREY, INK, PAPER } from "../ui/widgets";
+import {wrapText} from "../ui/widgets";
+import type {UiPanel,UiBlock} from "../ui/kit";
+import {moveDescription} from "../ui/kit/moveContent";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -26,6 +28,8 @@ export interface PartyOptions {
   // questa lista invece di state.party, che resta intoccato.
   partyOverride?: Monster[];
   onInspect?: (mon: Monster) => void;
+  switchHint?: (mon: Monster) => string;
+  itemPreview?: (mon: Monster) => { hint: string; facts?: TouchAction["facts"]; disabled?: boolean };
   freeSwitch?: boolean;
   onChoose?: (mon: Monster) => void;
 }
@@ -41,7 +45,6 @@ export class PartyScene implements Scene {
   private detailIndex = 0;
   private summaryPage = 0;
   private summaryScroll = 0;
-  private time = 0;
   private visibleLines = 7;
 
   constructor(
@@ -57,6 +60,12 @@ export class PartyScene implements Scene {
 
   private chooseSwitch(mon: Monster): void {
     if (this.stack.top !== this || !(this.opts.partyOverride ?? this.state.party).includes(mon) || mon.hp <= 0 || mon.uid === this.opts.currentUid) return;
+    this.input.reset(); audio.confirm(); this.stack.pop(); this.opts.onChoose?.(mon);
+  }
+
+  private chooseItem(mon: Monster): void {
+    if (this.stack.top !== this || this.opts.mode !== "use-item" || !(this.opts.partyOverride ?? this.state.party).includes(mon) ||
+      this.opts.itemPreview?.(mon).disabled || (this.opts.directiveMoveId && !canLearnMove(mon, this.opts.directiveMoveId))) return;
     this.input.reset(); audio.confirm(); this.stack.pop(); this.opts.onChoose?.(mon);
   }
 
@@ -76,30 +85,37 @@ export class PartyScene implements Scene {
     const mon = this.summary;
     if (!mon && (this.opts.mode === "battle-switch" || this.opts.mode === "forced-switch")) {
       const bench = (this.opts.partyOverride ?? this.state.party).filter(target => target.uid !== this.opts.currentUid);
-      return [...Array.from({ length: 5 }, (_, i): TouchAction => {
-        const target = bench[i];
-        return { label: target ? speciesOf(target).name : "—", hint: target ? `LV${target.level} · PV ${target.hp}/${statsOf(target).hp} · ${target.hp <= 0 ? "KO" : (this.opts.freeSwitch || this.opts.mode === "forced-switch") ? "rimpasto gratis" : "nemico risponde"}` : "Nessun candidato",
-          disabled: !target || target.hp <= 0, run: () => { if (target) this.chooseSwitch(target); } };
+      return [...bench.map((target): TouchAction => {
+        return { label: target ? speciesOf(target).name : "—", hint: target ? companionHint(target, this.opts.partyOverride ?? this.state.party, `${target.hp <= 0 ? "KO" : (this.opts.freeSwitch || this.opts.mode === "forced-switch") ? "rimpasto gratis" : this.opts.switchHint?.(target) ?? "Il nemico risponde dopo il cambio."}`) : "Nessun candidato",
+          facts:target?[{label:"Livello",value:String(target.level)},{label:"PV",value:`${target.hp} di ${statsOf(target).hp}`}]:undefined, disabled: !target || target.hp <= 0, run: () => { if (target) this.chooseSwitch(target); } };
       }), { label: "INDIETRO", hint: this.opts.mode === "forced-switch" ? "Scegli chi continua la lotta" : "Resti in campo · nessun turno speso", disabled: this.opts.mode === "forced-switch", run: () => {
         if (this.stack.top !== this || this.opts.mode === "forced-switch") return;
         this.input.reset(); audio.cancel(); this.stack.pop();
       } }];
     }
     if (!mon && this.opts.mode === "view") {
-      const party = this.opts.partyOverride ?? this.state.party, page = Math.floor(this.index / 4);
+      const party = this.opts.partyOverride ?? this.state.party, page = 0;
       const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled, run: () => {
-        if (disabled || this.stack.top !== this || this.summary || this.opts.mode !== "view" || Math.floor(this.index / 4) !== page) return;
+        if (disabled || this.stack.top !== this || this.summary || this.opts.mode !== "view" || page !== 0) return;
         this.input.reset(); audio.confirm(); run();
       } });
-      return [...Array.from({ length: 4 }, (_, i) => {
-        const index = page * 4 + i, target = party[index];
-        return action(target ? speciesOf(target).name : "—", target ? `LV${target.level} · PV ${target.hp}/${statsOf(target).hp}` : "Nessun candidato", () => {
+      return [...party.map((target, index) => {
+        const command=action(target ? speciesOf(target).name : "—", target ? companionHint(target, party, `Livello ${target.level}. ${index===0?"Capofila":"Riserva"}.`) : "Nessun candidato", () => {
           this.index = index; this.summary = target; this.summaryPage = 0; this.summaryScroll = 0;
         }, !target);
-      }), action("ALTRI", "Altra pagina della squadra", () => { this.index = ((page + 1) * 4) % party.length; }, party.length <= 4),
+        return {...command,icon:`/sprites/monsters/${target.speciesId}.png`,facts:target?[{label:"PV",value:`${target.hp} di ${statsOf(target).hp}`},{label:"Tipo",value:speciesOf(target).types.join(" · ")}]:undefined};
+      }),
         action("ESCI", "Torna alla pausa", () => this.stack.pop())];
     }
-    if (!mon) return undefined;
+    if (!mon) return (this.opts.partyOverride ?? this.state.party).map(target => {
+      const preview = this.opts.itemPreview?.(target);
+      const incompatible = !!this.opts.directiveMoveId && !canLearnMove(target, this.opts.directiveMoveId);
+      return { label: speciesOf(target).name, icon: `/sprites/monsters/${target.speciesId}.png`,
+        hint: companionHint(target, this.opts.partyOverride ?? this.state.party, preview?.hint ?? (this.opts.directiveMoveId ? incompatible ? 'Non può imparare questa mossa.' : 'Può imparare questa direttiva.' : `Livello ${target.level}`)),
+        facts: preview?.facts ?? [{ label: 'PV', value: `${target.hp} di ${statsOf(target).hp}` }],
+        disabled: !!preview?.disabled || incompatible,
+        run: () => this.chooseItem(target) };
+    });
     const page = this.summaryPage, party = this.opts.partyOverride ?? this.state.party;
     const action = (label: string, run: () => void, disabled = false, hint?: string): TouchAction => ({ label, hint, disabled, run: () => {
       if (disabled || this.stack.top !== this || this.summary !== mon || this.summaryPage !== page) return;
@@ -121,11 +137,11 @@ export class PartyScene implements Scene {
       action("DIFESE", () => { this.summaryPage = 4; }), action("SQUADRA", () => { this.summary = null; })];
   }
   update(dt = 0): void {
-    if (!this.state.reduceEffects) this.time += dt;
+    void dt;
     const party = this.opts.partyOverride ?? this.state.party;
     if (this.summary) {
       const mon = this.summary;
-      if (this.input.wasPressed("b")) { audio.cancel(); this.summary = null; return; }
+      if (this.input.wasPressed("b")) { audio.cancel(); if(this.summaryPage)this.summaryPage=0;else this.summary=null; return; }
       if (this.input.wasPressed("a")) { this.summaryPage = (this.summaryPage + 1) % 6; this.summaryScroll = 0; audio.cursor(); return; }
       const dir = this.input.wasPressed("right") ? 1 : this.input.wasPressed("left") ? -1 : 0;
       if (dir && party.length > 1) {
@@ -213,79 +229,52 @@ export class PartyScene implements Scene {
         return;
       }
       if (this.opts.mode === "use-item") {
-        audio.confirm();
-        this.stack.pop();
-        this.opts.onChoose?.(mon);
+        this.chooseItem(mon);
       }
     }
   }
 
-  draw(screen: Screen): void {
-    screen.clear("#101b32");
-    if (this.summary) {
-      this.drawSummary(screen, this.summary);
-      return;
+  get uiPanel():UiPanel {
+    const party=this.opts.partyOverride??this.state.party,mon=this.summary;
+    const actions=this.touchActions??[];
+    if(!mon){
+      return {title:this.opts.title??(this.opts.mode==='forced-switch'?'Scegli chi continua':this.opts.mode==='use-item'?'Scegli un compagno':'La tua squadra'),
+        subtitle:this.opts.mode==='view'?`${party.length} di 6 compagni. Il capofila entra per primo in lotta.`:this.opts.mode==='forced-switch'?'Il compagno in campo è KO. Serve una riserva.':this.opts.mode==='use-item'?'Controlla l’effetto prima di scegliere. I compagni incompatibili sono disattivati.':'Scegli chi entra in campo. Il costo del cambio è indicato sotto il nome.',
+        blocks:party.length?undefined:[{title:'Squadra vuota',body:'Vai da Quirino nel laboratorio per scegliere il primo compagno.'}],
+        actions:actions.filter(action=>!['INDIETRO','ESCI','ALTRI'].includes(action.label)).map(action=>({...action,label:action.label==='—'?'Nessun compagno':action.label})),
+        selected:this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?Math.max(0,party.filter(target=>target.uid!==this.opts.currentUid).indexOf(party[this.index])):this.index,back:{label:'Indietro',disabled:this.opts.mode==='forced-switch',run:()=>{if(this.stack.top!==this||this.opts.mode==='forced-switch')return;this.input.reset();audio.cancel();this.stack.pop();}}};
     }
-    drawScreenHeader(screen,
-      this.opts.title ??
-        (this.opts.mode === "forced-switch"
-          ? "Scegli il prossimo candidato!"
-          : this.opts.mode === "use-item"
-            ? "Su chi lo usi?"
-            : "LA TUA SQUADRA")
-    );
-    const party = this.opts.partyOverride ?? this.state.party;
-    const rowH = this.opts.mode === "view" ? Math.min(72, Math.floor((screen.height - 34) / Math.max(4, party.length))) : 23;
-    for (let i = 0; i < party.length; i += 1) {
-      const mon = party[i];
-      const y = 16 + i * rowH, h = rowH - 1;
-      const selected = i === this.index;
-      const picked = i === this.moveFrom;
-      screen.rect(4, y, VIEW_W - 8, h, selected ? "#fff0bd" : "#263954");
-      screen.rect(4, y, 3, h, selected ? "#e0a92f" : "#7aa2b8");
-      if (picked) {
-        // Slot "preso" per lo scambio: cornice gialla evidente.
-        screen.frame(4, y, VIEW_W - 8, h, "#f0c040");
-        screen.frame(5, y + 1, VIEW_W - 10, h - 2, "#f0c040");
-      } else if (selected) {
-        screen.frame(4, y, VIEW_W - 8, h, this.moveFrom !== null ? "#f0c040" : INK);
-      }
-      // Mini-sprite nello slot lista (box 26x21, ancorato in basso).
-      const portraitW = rowH > 30 ? 48 : 26, nameX = portraitW + 10;
-      drawMonsterSprite(screen, mon.speciesId, 6, y + 1, portraitW, h - 2, { memeFormId: mon.memeFormId });
-      const ink = selected ? INK : "#fff3cc";
-      screen.text(speciesOf(mon).name, nameX, y + 3, ink);
-      screen.textRight(`L${mon.level}`, VIEW_W - 64, y + 3, ink);
-      drawHpBar(screen, nameX, y + h - 9, 70, mon.hp, statsOf(mon).hp);
-      screen.textRight(`${mon.hp}/${statsOf(mon).hp}`, VIEW_W - 14, y + h - 9, ink);
-      if (rowH > 30) screen.textFit(levelEvolution(mon, this.state.sondaggi) ? "EVOLUZIONE PRONTA" : speciesOf(mon).types.join("/"), nameX, y + 17, 150, selected ? "#26745d" : "#b7cedc");
-      // Compatibilità con la direttiva in uso: chi può impararla è evidenziato.
-      if (this.opts.directiveMoveId) {
-        const ok = canLearnMove(mon, this.opts.directiveMoveId);
-        const tag = ok ? "OK" : "NO";
-        screen.rect(VIEW_W - 32, y + 2, 17, 9, ok ? "#3a8c4a" : "#5a5a5a");
-        screen.text(tag, VIEW_W - 30, y + 3, PAPER);
-      } else if (mon.status) {
-        screen.rect(VIEW_W - 32, y + 2, 17, 9, "#b04848");
-        screen.text(STATUS_LABELS[mon.status], VIEW_W - 31, y + 3, PAPER);
-      }
-      if (mon.hp <= 0) {
-        screen.text("KO", VIEW_W - 56, y + 3, "#d04848");
-      }
+    const species=speciesOf(mon),stats=statsOf(mon),ability=abilityOf(mon),held=heldItemOf(mon),blocks:UiBlock[]=[];
+    if(this.summaryPage===0)blocks.push({title:'Pronto per la lotta',facts:[{label:'Livello',value:String(mon.level)},{label:'PV',value:`${mon.hp} di ${stats.hp}`},{label:'Tipo',value:species.types.join(' · ')},{label:'Stato',value:mon.hp<=0?'KO':mon.status??'In forma'}]});
+    if(this.summaryPage===1)for(const slot of mon.moves){const move=MOVES[slot.id];blocks.push({title:move.name,body:moveDescription(move),facts:[{label:'Tipo',value:move.type},{label:'PP',value:`${slot.pp} di ${move.pp}`},{label:'Potenza',value:move.power?String(move.power):'—'},{label:'Precisione',value:`${move.accuracy}%`}]});}
+    if(this.summaryPage===0||this.summaryPage===2){
+      blocks.push({title:ability?.name??'Abilità passiva',body:ability?.desc??'Nessuna abilità passiva.'});
+      if(this.summaryPage===2)blocks.push({title:'Statistiche',facts:[{label:'Grinta',value:String(stats.atk)},{label:'Faccia tosta',value:String(stats.def)},{label:'Retorica',value:String(stats.spc)},{label:'Opportunismo',value:String(stats.spd)},{label:'Esperienza',value:String(mon.exp)}]});
+      blocks.push({title:'Oggetto tenuto',body:held?.desc??'Nessun oggetto equipaggiato.',facts:held?[{label:'Oggetto',value:held.name}]:undefined});
     }
-    if (this.opts.onInspect) {
-      const mon = party[this.index];
-      screen.text(mon?.uid === this.opts.currentUid ? "GIA IN CAMPO" : mon?.hp === 0 ? "CANDIDATO KO" : (this.opts.freeSwitch || this.opts.mode === "forced-switch") ? "RIMPASTO GRATIS" : "CAMBIO: TURNO AL NEMICO", 8, 156, "#fff3cc");
-      screen.text(this.opts.mode === "forced-switch" ? "A: CAMBIA START: DOSSIER" : "A: CAMBIA START: DOSSIER B: TORNA", 8, VIEW_H - 10, "#59657d");
-      return;
+    if(this.summaryPage===3){
+      const rules=species.evolutions??[];
+      blocks.push({title:'Sondaggi attuali',facts:[{label:'Gradimento',value:`${this.state.sondaggi}%`}]});
+      for(const [i,rule] of rules.entries()){
+        const condition=evolutionCondition(rule,rules.slice(0,i));
+        blocks.push({title:speciesOf({...mon,speciesId:rule.id}).name,body:condition.charAt(0)+condition.slice(1).toLocaleLowerCase('it')});
+      }
+      if(!rules.length)blocks.push({title:'Forma finale',body:'Questo compagno non evolve.'});
+      blocks.push({title:'La scelta resta tua',body:this.opts.partyOverride?'Le evoluzioni si gestiscono nella squadra originale.':'Puoi rinviare e tornare qui. Le condizioni vengono rivalutate quando scegli.'});
     }
-    const hint = this.opts.mode !== "view"
-      ? "A: scegli"
-      : this.moveFrom !== null
-        ? "START: scambia qui  B: annulla"
-        : "A: dettagli  START: sposta  B: chiudi";
-    screen.text(screen.height > 180 ? "SCEGLI CHI PREPARARE" : hint, 8, screen.height - 10, GREY);
+    if(this.summaryPage===4)blocks.push({title:'Danno ricevuto',body:'×2 indica debolezza, ×0,5 resistenza. Abilità e oggetti possono modificare il risultato.',facts:defensiveMatchups(mon.speciesId).map(match=>({label:match.type,value:`×${match.mult}`}))});
+    if(this.summaryPage===5)blocks.push({title:'Archivio delle mosse',body:'Puoi riprendere gratuitamente le mosse della forma attuale fino al tuo livello.',facts:archivedMoves(mon).map(id=>({label:'Mossa disponibile',value:MOVES[id].name}))});
+    const visible=this.summaryPage===1?[]:actions.filter(action=>!['SCORRI','SQUADRA','PROFILO'].includes(action.label)&&!action.disabled);
+    if(this.summaryPage===0)visible.push({label:'Crescita',hint:'Evoluzioni e condizioni, anche prima di raggiungerle.',run:()=>{if(this.stack.top!==this||this.summary!==mon||this.summaryPage!==0)return;this.input.reset();this.summaryPage=3;audio.cursor();}});
+    if(this.summaryPage===0&&!this.opts.partyOverride){
+      if(party.length>1)visible.push({label:'Metti in testa',hint:'Diventa il primo compagno a entrare in lotta.',disabled:party[0]===mon,run:()=>{if(this.stack.top!==this||this.summary!==mon||!party.includes(mon))return;party.splice(party.indexOf(mon),1);party.unshift(mon);this.index=0;saveGame(this.state);audio.confirm();}});
+      if(held)visible.push({label:'Riprendi oggetto',hint:`${held.name} torna nella borsa.`,run:()=>{if(this.stack.top!==this||this.summary!==mon||heldItemOf(mon)?.id!==held.id)return;delete mon.heldItem;this.state.bag[held.id]=(this.state.bag[held.id]??0)+1;saveGame(this.state);audio.confirm();}});
+    }
+    return {title:species.name,portrait:{src:`/sprites/monsters/${mon.speciesId}.png`,label:species.name},subtitle:`${this.index+1} di ${party.length} · ${['Profilo','Mosse','Statistiche e oggetto','Carriera','Difese','Archivio'][this.summaryPage]}`,
+      blocks,actions:visible.map(action=>({...action,label:action.label==='DATI'?'Statistiche':action.label.charAt(0)+action.label.slice(1).toLocaleLowerCase('it')})),primary:levelEvolution(mon,this.state.sondaggi)&&!this.opts.partyOverride?visible.findIndex(action=>action.label==='EVOLVI'):undefined,
+      back:{label:'Indietro',hint:this.summaryPage?'Torna al profilo.':'Torna alla squadra.',run:()=>{if(this.stack.top!==this||this.summary!==mon)return;this.input.reset();audio.cancel();if(this.summaryPage)this.summaryPage=0;else this.summary=null;}}};
   }
+  draw(screen:Screen):void {screen.clear('#101b32');}
 
   private profileFacts(mon: Monster): string[] {
     const stats = statsOf(mon), target = levelEvolution(mon, this.state.sondaggi), ability = abilityOf(mon);
@@ -314,39 +303,4 @@ export class PartyScene implements Scene {
     return notes.flatMap((line) => wrapText(line, 35));
   }
 
-  private drawSummary(screen: Screen, mon: Monster): void {
-    const species = speciesOf(mon), party = this.opts.partyOverride ?? this.state.party;
-    screen.clear("#101b32");
-
-    drawScreenHeader(screen, "LA TUA SQUADRA");
-    const heroH = 59 + Math.round((screen.height - 180) * .45), panelY = 23 + heroH, panelH = screen.height - panelY - 15;
-    screen.rect(6, 20, 228, heroH, "#101b32");
-    screen.frame(6, 20, 228, heroH, "#d3a745");
-    const size = Math.min(100, heroH - 14);
-    drawMonsterSprite(screen, mon.speciesId, 10, 29, size, heroH - 14, { memeFormId: mon.memeFormId, animationTime: this.time });
-    const textX = size + 18;
-    screen.textFit(species.name, textX, 25, 232 - textX, "#fff3cc");
-    screen.text(`L${mon.level}  ${this.index + 1}/${party.length}`, textX, 38, "#b7cedc");
-    species.types.forEach((type, i) => screen.text(type, textX, 51 + i * 11, "#fff3cc"));
-    if (this.summaryPage === 0) {
-      const facts = this.profileFacts(mon), rowH = panelH / 4;
-      facts.forEach((fact, i) => {
-        const y = panelY + i * rowH;
-        screen.panel(6, y, 228, rowH - 3, "card");
-        const parts = wrapText(fact, 35).slice(0, 2);
-        parts.forEach((line, j) => screen.text(line, 14, y + (rowH - parts.length * 8) / 2 + j * 8, INK));
-      });
-      screen.text(screen.height > 180 ? "EVOLUZIONE E MOSSE SONO QUI SOTTO" : "A: MOSSE  MENU: OGGETTO  B: LISTA", 8, screen.height - 11, "#fff3cc");
-      return;
-    }
-    screen.panel(6, panelY, 228, panelH, "card");
-    screen.text(["PROFILO", "MOSSE", "ABILITÀ/OGGETTO", "CARRIERA", "DIFESE", "ARCHIVIO DELLE LINEE"][this.summaryPage], 14, panelY + 6, "#8c5b12");
-    const lines = this.summaryLines(mon);
-    const lineH = screen.height > 180 ? Math.min(18, (panelH - 27) / Math.max(1, Math.min(8, lines.length))) : 8;
-    this.visibleLines = Math.floor((panelH - 27) / lineH);
-    this.summaryScroll = Math.min(this.summaryScroll, Math.max(0, lines.length - this.visibleLines));
-    lines.slice(this.summaryScroll, this.summaryScroll + this.visibleLines).forEach((line, i) => screen.text(line, 14, panelY + 15 + i * lineH, INK));
-    screen.text(`TESTO ${this.summaryScroll + 1}/${Math.max(1, lines.length - this.visibleLines + 1)}`, 14, screen.height - 26, "#59657d");
-    screen.text(screen.height > 180 ? this.summaryPage === 1 ? "TOCCA UNA MOSSA PER GLI EFFETTI" : "PROFILO E MOSSE QUI SOTTO" : "A:PAGINA MENU:MOSSA B:LISTA", 8, screen.height - 11, "#fff3cc");
-  }
 }

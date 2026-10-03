@@ -26,6 +26,22 @@ for asset in assets:
     kind = asset.get("kind", "title" if asset["id"] == "title" else "battle")
     dimensions = tuple(manifest["processing"]["dimensions"][kind])
     with Image.open(source) as original:
+        if kind == "ui-icon-atlas":
+            image = original.convert("RGBA").resize(dimensions, Image.Resampling.NEAREST)
+            image = image.quantize(colors=128, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
+            target = root / asset["path"]
+            target.parent.mkdir(parents=True, exist_ok=True)
+            image.save(target, optimize=True)
+            columns, rows = asset["grid"]
+            width, height = dimensions[0] // columns, dimensions[1] // rows
+            for index, output in enumerate(asset["outputs"]):
+                x, y = index % columns * width, index // columns * height
+                icon = image.crop((x, y, x + width, y + height))
+                path = root / output["path"]
+                path.parent.mkdir(parents=True, exist_ok=True)
+                icon.save(path, optimize=True)
+                print(f'{output["id"]}: {width}×{height}, {path.stat().st_size} byte')
+            continue
         image = original.convert("RGB").resize(dimensions, Image.Resampling.NEAREST)
         image = image.quantize(colors=manifest["processing"]["paletteColors"], method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
         target = root / asset["path"]

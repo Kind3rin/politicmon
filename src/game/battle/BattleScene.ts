@@ -1,11 +1,9 @@
+import {memeForm} from "../memeForms";
 import { TeachScene } from "../../scenes/TeachScene";
-import { drawMonsterSprite } from "../../art/monsters";
-import { drawCareerStage, careerPodiumY } from "../../ui/careerStage";
 import { openingRecruitmentExp } from "../firstCampaign";
 import { healingQuote } from "../supplyGuide";
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_NAMES, moveSummary, type Move } from "../../data/moves";
-import { TYPE_COLORS } from "../../data/poltypes";
 import type { TrainerDef } from "../../data/trainers";
 import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
@@ -21,7 +19,6 @@ import {
   abilityOf, evolve, expForLevel, expYield, gainExp, healMonster, LEVEL_CAP, levelEvolution, speciesOf,
   statsOf, type Monster
 } from "../monster";
-import { typeMultiplier } from "../../data/poltypes";
 import {
   calcDamage, catchChance, chooseFoeMove, makeCombatant, moveOrder, runChance, statName,
   type AiProfile, type Combatant, type OffensiveTrigger
@@ -31,24 +28,26 @@ import {
   resolveKoAbility, resolvePreMove, statDropBlockReason, statusBlockReason
 } from "./effectContract";
 import { festivalScandaloChance } from "./atto3MoveEffects";
-import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
+import { Menu, MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawCombatantBox, drawEllipse, monsterCenter, battleGeometry, FOE_BOX, PLAYER_BOX
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
 import { EvolutionScene } from "../../scenes/EvolutionScene";
 import { DOCTRINE_LABEL, type ElectionDoctrine } from "../electionDoctrine";
 import { buildTrainerVictoryPlan } from "./postBattle";
-import { fightMenuTapIndex } from "./fightMenuInput";
 import { battleBackdropForMap, type BattleBackdrop } from "./backdrop";
 import { moraleExpMultiplier } from "../morale";
 import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
-import { switchPreview, damageRange } from "./tactics";
+import { switchPreview, damageRange, replyRange } from "./tactics";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
 import { chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
 import type { TouchAction } from "../../engine/touchActions";
+import type { UiPanel } from "../../ui/kit";
+import { readableCopy } from "../../ui/kit/copy";
+import { moveDescription, moveCardDescription } from "../../ui/kit/moveContent";
 
 export type BattleResult = "win" | "loss" | "caught" | "run";
 
@@ -111,7 +110,6 @@ export class BattleScene implements Scene {
   private actionCaption: { actor: string; move: string; result: string } | null = null;
   private polemica = new Polemica();
   private foeIntent: Move | null = null;
-  private recruitMenu = new Menu([]);
   private recruitBall = "";
   private battery = 3;
   private copione = false;
@@ -124,7 +122,7 @@ export class BattleScene implements Scene {
   private viewHeight = VIEW_H;
 
   get touchLayout(): "battle" | undefined { return this.state.pos.mapId === "route1" ? "battle" : undefined; }
-  get expandedViewport(): boolean { return this.touchLayout === "battle"; }
+  get expandedViewport(): boolean { return true; }
   private finisherT = 0;
   private mainMenu = new Menu([
     { label: "LOTTA" }, { label: "BORSA" }, { label: "SQUADRA" }, { label: "FUORIONDA" }, { label: "CAMPAGNA" }, { label: "FUGA" }
@@ -134,9 +132,7 @@ export class BattleScene implements Scene {
   private fightMenu = new Menu([]);
   // Efficacia per mossa (allineata a fightMenu.items): colora le label nel
   // menu LOTTA se la specie avversaria è già nel Dex.
-  private fightEff: Array<"super" | "weak" | "immune" | null> = [];
   // true quando il menu LOTTA mostra il solo COMIZIO di riserva (tutte le mosse a 0 PP).
-  private fightFallback = false;
 
   private displayHp = { player: 0, foe: 0 };
   private displayExp = 0;
@@ -172,7 +168,7 @@ export class BattleScene implements Scene {
     this.state = opts.state;
     sceneImage("battle:growth", "ui/battle/growth.png");
     this.backdrop = battleBackdropForMap(opts.state.pos.mapId);
-    if (this.expandedViewport) sceneImage("battle:bg:prato-portrait", "ui/battle/prato-portrait.png");
+    if (this.backdrop.path === "ui/battle_bg.png") sceneImage("battle:bg:prato-portrait", "ui/battle/prato-portrait.png");
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
     this.copione = opts.trainer?.id === "rival1" && Boolean(this.state.flags["opening-v2"]);
@@ -508,11 +504,6 @@ export class BattleScene implements Scene {
 
   private openRecruit(): void {
     this.recruitBall = Object.keys(this.state.bag).find(id => this.state.bag[id] > 0 && ITEMS[id]?.kind === "ball") ?? "scheda";
-    this.recruitMenu = new Menu([
-      { label: `SCHEDA: ${Math.round(this.catchEstimate(this.recruitBall) * 100)}%`, rightLabel: `x${this.state.bag[this.recruitBall] ?? 0}`, disabled: !this.state.bag[this.recruitBall] },
-      { label: `VIRALE: ${Math.round(this.catchEstimate("scheda", true) * 100)}%`, rightLabel: "-3 P / 0 SCHEDE", disabled: this.polemica.value < 3 },
-      { label: "ALTRE SCHEDE / BORSA" }
-    ]);
     this.mode = "recruit";
   }
 
@@ -537,7 +528,14 @@ export class BattleScene implements Scene {
       const range = damageRange(player, foe, move, { sondaggi: this.state.sondaggi });
       return `STIMA ${this.copioneDamage(range.min, move)}-${this.copioneDamage(range.max, move)} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P${this.copione && this.battery > 0 ? " · SCUDO ×½" : ""}`;
     }
-    return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P${this.copione && this.battery > 0 && stat ? " · ROMPE COPIONE" : ""}`;
+    return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P${this.copione && this.battery > 0 && stat ? " · ROMPE COPIONE" : this.foeIntent?.power ? ` · RISPOSTA ${this.replyDamage(move)} PV` : ""}`;
+  }
+
+  private replyDamage(preparation?: Move): string {
+    if (!this.foeIntent) return "—";
+    const [player, foe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
+    const range = replyRange(player, foe, this.foeIntent, preparation, { sondaggi: this.state.sondaggi });
+    return `${range.min}-${range.max}`;
   }
 
   private moveSteps(
@@ -938,7 +936,7 @@ export class BattleScene implements Scene {
   private learnMoveSteps(moveId: string, mon: Monster = this.player.mon): Step[] {
     return [{ run: () => {
       this.stack.push(new TeachScene(this.stack, this.input, mon, moveId,
-        () => saveGame(this.state), { source: "level" }));
+        () => saveGame(this.state), { source: "level", party: this.state.party }));
     } }];
   }
 
@@ -1117,6 +1115,13 @@ export class BattleScene implements Scene {
   private openParty(free: boolean, forced = false): void {
     this.stack.push(new PartyScene(this.stack, this.input, this.state, {
       mode: forced ? "forced-switch" : "battle-switch", currentUid: this.player.mon.uid, freeSwitch: free,
+      switchHint: mon => {
+        if (!this.foeIntent) return "nemico risponde";
+        const preview = switchPreview(mon, this.foe);
+        const [player, foe] = fieldPreview(this.field, this.fieldTurn, preview.entrant, preview.opponent);
+        const range = replyRange(player, foe, this.foeIntent, undefined, { sondaggi: this.state.sondaggi });
+        return this.foeIntent.power ? `risposta stimata ${range.min}-${range.max} PV, senza critico` : `risponde: ${this.foeIntent.name}`;
+      },
       onInspect: mon => this.openSwitchIntel(mon, free), onChoose: mon => this.switchTo(mon, free)
     }));
   }
@@ -1342,69 +1347,82 @@ export class BattleScene implements Scene {
 
   // ---- Update ----
 
-  get touchActions(): readonly TouchAction[] | undefined {
+  get uiPanel(): UiPanel {
     const mode = this.mode;
-    const action = (label: string, run: () => void, hint?: string, disabled = false): TouchAction => ({
-      label, hint, disabled,
-      run: () => {
-        if (disabled || this.stack.top !== this || this.mode !== mode || this.finished) return;
-        this.input.reset();
-        audio.confirm();
-        run();
+    const ready = mode === "menu" || mode === "fight";
+    const action = (label:string, run:()=>void, hint?:string, disabled=false):TouchAction => ({
+      label,hint,disabled,run:()=>{
+        if(disabled || this.stack.top!==this || this.mode!==mode || this.finished)return;
+        this.input.reset();audio.confirm();run();
       }
     });
-    const back = () => { this.mode = "menu"; };
-    if (mode === "queue" && this.recruitReceipt) {
-      const receipt = this.recruitReceipt;
-      return [action("CONTINUA", () => {
-        if (this.recruitReceipt !== receipt) return;
-        this.stepTimer = 0;
-      }, receipt.saved ? "Reclutamento e crescita salvati" : "Reclutamento e crescita ottenuti", !receipt.growth || this.stepTimer <= 0)];
+    const back = action("Indietro",()=>{this.mode="menu";},"Torna alle mosse.");
+    const recruit=this.recruitReceipt, growth=this.growthReceipt;
+    if(recruit || growth){
+      const receipt=recruit??growth!;
+      return {
+        title:recruit?"Reclutamento riuscito":"Consenso ottenuto",subtitle:recruit?this.foeName():this.playerName(),
+        blocks:recruit?[
+          {title:"Nuovo compagno",facts:[{label:"Destinazione",value:readableCopy(recruit.destination)},{label:"Politicdex",value:recruit.newDex?"Nuova specie":"Già conosciuta"},{label:"Sondaggi",value:`+${recruit.polls} punti`}]},
+          {title:"Crescita",body:readableCopy([recruit.growth,recruit.levels,...recruit.modifiers].filter(Boolean).join("\n\n"))}
+        ]:[
+          {title:"Crescita",facts:[{label:"Consenso",value:`+${growth!.gained}`},{label:"Livello",value:`${growth!.previousLevel} → ${this.player.mon.level}`}],body:readableCopy([growth!.shared,...growth!.modifiers].filter(Boolean).join("\n\n"))}
+        ],
+        actions:[action("Continua",()=>{if((this.recruitReceipt??this.growthReceipt)===receipt)this.stepTimer=0;},recruit?.saved?"Progressi salvati.":undefined,Boolean(recruit&&!recruit.growth)||this.stepTimer<=0)],primary:0
+      };
     }
-    if (mode === "queue" && this.growthReceipt) {
-      const receipt = this.growthReceipt;
-      return [action("CONTINUA", () => {
-        if (this.growthReceipt !== receipt) return;
-        this.stepTimer = 0;
-      }, `+${receipt.gained} Consenso · ${receipt.shared || `LV${this.player.mon.level}`}`, this.stepTimer <= 0)];
-    }
-    if (mode === "queue") return this.mainMenu.items.map((item, index) => action(
-      index === 5 ? "ACCELERA" : item.label,
-      () => this.msg.advance(),
-      index === 5 ? "Le notifiche scorrono da sole" : undefined,
-      index !== 5 || !this.msg.isOpen
-    ));
-    if (mode === "menu") return this.mainMenu.items.map((item, index) => action(
-      index === 1 && !this.trainer ? "CATTURA" : index === 4 && !this.trainer ? "RISERVE" : item.label, () => this.chooseMainAction(index),
-      index === 2 ? "Scegli chi entra · nemico risponde" : index === 3 ? `${this.polemica.value}/3 Polemica · 40% PV` : index === 0 && this.copione && this.battery > 0 ? `Scudo ×½ · prepara o resisti ${this.battery} ${this.battery === 1 ? "turno" : "turni"}` : index === 0 && this.field && !this.fieldResolved ? `T2 · ${this.field.rule}` : undefined,
-      index === 2 && !this.hasBenchAlive() || index === 3 && this.polemica.value < 3 || index === 5 && Boolean(this.trainer)
-    ));
-    if (mode === "fight") return [
-      ...this.fightMenu.items.map((item, index) => {
-        const slot = this.player.mon.moves[index];
-        const move = this.fightFallback ? MOVES.comizio : MOVES[slot.id];
-        return { ...action(move.name, () => {
-          this.mode = "queue";
-          this.startTurn(move);
-        }, `${this.moveHint(move)}${this.fightFallback ? "" : ` · ${slot.pp} PP`}`, item.disabled), order: this.orderLabel(move) };
-      }),
-      action("INDIETRO", back),
-      action("DOSSIER", () => this.openFightIntel(), "Tipi, effetti e avversario", this.fightFallback)
-    ];
-    if (mode === "recruit") return [
-      action(this.recruitMenu.items[0].label, () => this.throwBall(this.recruitBall), `${this.state.bag[this.recruitBall] ?? 0} schede · Se fallisce, risponde`, !this.state.bag[this.recruitBall]),
-      action(this.recruitMenu.items[1].label, () => this.throwBall("scheda", true), "3 Polemica · nessuna scheda", this.polemica.value < 3),
-      action("BORSA", () => {
-        back();
-        this.openBag();
-      }),
-      action("INDIETRO", back)
-    ];
-    if (mode === "campaign") return [
-      ...this.campaignMenu.items.map((item, index) => action(item.label, () => this.useCampaign(CAMPAIGN_ACTIONS[index]), `${CAMPAIGN_ACTIONS[index].cost}% sondaggi · ${["Cura 30% PV e status", "Grinta +2", "Ignora la difesa", "Prossima cattura x2"][index]}`, item.disabled)),
-      action("INDIETRO", back)
-    ];
-    return undefined;
+    if(mode==="campaign")return {
+      title:"Campagna",subtitle:"L’avversario risponde dopo l’azione.",
+      blocks:[{title:"Risorsa disponibile",facts:[{label:"Sondaggi",value:`${this.state.sondaggi}%`}]}],
+      actions:CAMPAIGN_ACTIONS.map((item,index)=>({...action(readableCopy(item.label),()=>this.useCampaign(item),readableCopy(item.desc),Boolean(this.campaignMenu.items[index]?.disabled)),facts:[{label:"Costo",value:`${item.cost} punti`},{label:"Dopo",value:`${this.state.sondaggi-item.cost}%`},{label:"Soglia",value:`${item.minSond}%`}]})),back
+    };
+    if(mode==="recruit")return {
+      title:"Recluta",subtitle:"Se il tentativo fallisce, l’avversario risponde.",
+      blocks:[{title:this.foeName(),body:"Ridurre i PV e infliggere uno status aiuta il reclutamento. Un avversario KO non può essere reclutato."}],
+      actions:[
+        {...action(readableCopy(ITEMS[this.recruitBall]?.name??"Scheda"),()=>this.throwBall(this.recruitBall),"Consuma una scheda.",!this.state.bag[this.recruitBall]||this.foe.mon.hp<=0),facts:[{label:"Probabilità",value:`${Math.round(this.catchEstimate(this.recruitBall)*100)}%`},{label:"Scorte",value:String(this.state.bag[this.recruitBall]??0)}]},
+        {...action("Reclutamento virale",()=>this.throwBall("scheda",true),"Consuma 3 Polemica; nessuna scheda.",this.polemica.value<3||this.foe.mon.hp<=0),facts:[{label:"Probabilità",value:`${Math.round(this.catchEstimate("scheda",true)*100)}%`},{label:"Polemica",value:`${this.polemica.value} di 3`}]},
+        action("Borsa",()=>{this.mode="menu";this.openBag();},"Scegli un’altra scheda.")
+      ],back
+    };
+    const fallback=this.player.mon.moves.every(slot=>slot.pp<=0);
+    const slots=fallback?[{id:"comizio",pp:0}]:this.player.mon.moves;
+    const moves=slots.map((slot,index):TouchAction=>{
+      const move=MOVES[slot.id];
+      const [player,foe]=fieldPreview(this.field,this.fieldTurn,this.player,this.foe);
+      const estimate=damageRange(player,foe,move,{sondaggi:this.state.sondaggi});
+      const tactical=this.moveHint(move);
+      const blocked=/^(BLOCCATA|STATISTICA)/.test(tactical);
+      const hint=blocked?readableCopy(tactical):move.power?`Danno stimato: ${this.copioneDamage(estimate.min,move)}–${this.copioneDamage(estimate.max,move)} PV.`:moveCardDescription(move);
+      return {...action(readableCopy(move.name),()=>{
+        if(!fallback && (this.player.mon.moves[index]!==slot || slot.pp<=0))return;
+        this.fightMenu.index=index;this.mode="queue";this.startTurn(move);
+      },hint,!ready||(!fallback&&slot.pp<=0)),
+        facts:[{label:"Tipo",value:move.type},{label:"Potenza",value:move.power?String(move.power):"—"},{label:"PP",value:fallback?"Riserva":`${slot.pp}/${move.pp}`},{label:"Efficacia",value:blocked?"No":move.power?`×${estimate.typeMult}`:"—"}],
+        order:ready?this.orderLabel(move):undefined,
+        onInspect:ready&&!fallback?()=>{if(this.stack.top!==this||this.mode!==mode||this.finished)return;this.fightMenu.index=index;this.openFightIntel();}:undefined
+      };
+    });
+    while(moves.length<4)moves.push({label:"Spazio libero",hint:"Impara una nuova mossa.",disabled:true,run:()=>{}});
+    const secondary:TouchAction[]=ready?[
+      action("Cambio",()=>this.openParty(false),"Il nemico risponde.",!this.hasBenchAlive()),
+      action("Borsa",()=>this.openBag()),
+      ...(!this.trainer?[action("Recluta",()=>this.openRecruit())]:[]),
+      action("Fuorionda",()=>this.useFuorionda(),`${this.polemica.value} di 3 Polemica`,this.polemica.value<3),
+      ...(this.trainer?[action("Campagna",()=>this.openCampaignMenu())]:[]),
+      action("Dossier",()=>this.openFightIntel(),"Leggi mosse e campo.",fallback),
+      ...(!this.trainer?[action("Fuga",()=>this.tryRun())]:[])
+    ]:[action(this.msg.isOpen?"Continua":"Turno in corso",()=>this.msg.advance(),undefined,!this.msg.isOpen)];
+    const intent=this.foeIntent;
+    const title=this.msg.isOpen?"In lotta":this.actionCaption?`${readableCopy(this.actionCaption.actor)}: ${readableCopy(this.actionCaption.move)}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
+    const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
+    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":`Polemica: ${this.polemica.value} di 3${this.copione?(this.battery>0?` · Copione: ${this.battery} turni`:" · Copione rotto"):""}${this.field?` · ${readableCopy(this.field.name)}${this.fieldResolved?"":" al turno 2"}`:""}`;
+    return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...secondary],arena:{
+      impacts:this.fx.damageNumbers.map(d=>({label:`−${d.val}`,x:d.x/VIEW_W*100,y:d.y/this.viewHeight*100,opacity:this.state.reduceEffects?1:Math.min(1,Math.max(0,(1-d.life/d.max)/.34)),kind:d.crit?"crit":d.super?"super":"normal"})),
+      player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
+      foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
+      message:{title,body},notice,moveCount:moves.length
+    }};
   }
 
   update(dt: number): void {
@@ -1497,67 +1515,6 @@ export class BattleScene implements Scene {
       return;
     }
 
-    if (this.mode === "menu") {
-      const result = this.menuGridUpdate();
-      if (result === null) {
-        return;
-      }
-      this.chooseMainAction(result);
-      return;
-    }
-
-    if (this.mode === "recruit") {
-      const action = this.recruitMenu.update(this.input);
-      if (action === "cancel") this.mode = "menu";
-      else if (action === "select") {
-        if (this.recruitMenu.index < 2) this.throwBall(this.recruitMenu.index === 1 ? "scheda" : this.recruitBall, this.recruitMenu.index === 1);
-        else {
-          this.mode = "menu";
-          this.openBag();
-        }
-      }
-      return;
-    }
-
-    if (this.mode === "campaign") {
-      const action = this.campaignMenu.update(this.input);
-      if (action === "select") {
-        this.useCampaign(CAMPAIGN_ACTIONS[this.campaignMenu.index]);
-      } else if (action === "cancel") {
-        audio.cancel();
-        this.mode = "menu";
-      }
-      return;
-    }
-
-    if (this.mode === "fight") {
-      if (!this.fightFallback && this.input.wasPressed("start")) {
-        this.openFightIntel();
-        audio.confirm();
-        return;
-      }
-      const action = this.fightGridUpdate();
-      if (action === "select") {
-        if (this.fightFallback) {
-          // COMIZIO di riserva a PP esauriti: non consuma PP (il mon non ha lo
-          // slot COMIZIO, quindi startTurn non decrementa nulla).
-          this.mode = "queue";
-          this.startTurn(MOVES.comizio);
-          return;
-        }
-        const slot = this.player.mon.moves[this.fightMenu.index];
-        if (!slot || slot.pp <= 0) {
-          audio.cancel();
-          return;
-        }
-        this.mode = "queue";
-        this.startTurn(MOVES[slot.id]);
-      } else if (action === "cancel") {
-        this.mode = "menu";
-      }
-      return;
-    }
-
   }
 
   private openFightIntel(): void {
@@ -1567,160 +1524,6 @@ export class BattleScene implements Scene {
       return `${ITEMS[id].name}: ${Math.round(chance * 100)}% (${qty} IN BORSA).`;
     }), "INDEBOLIRE E APPLICARE UNO STATUS AIUTA. METTERLO KO IMPEDISCE LA CATTURA.", ...(this.catchBoost ? ["APPELLO AL VOTO ATTIVO: PROSSIMA SCHEDA x2."] : [])];
     this.stack.push(new BattleIntelScene(this.stack, this.input, this.player, this.foe, this.fightMenu.index, { sondaggi: this.state.sondaggi }, (index) => { this.fightMenu.index = index; }, recruitment, this.trainer ? [`STILE: ${trainerStyle(this.trainer.id).label}.`, ...trainerStyle(this.trainer.id).hints] : []));
-  }
-
-  private chooseMainAction(result: number): void {
-    if (result === 0) {
-      this.openFightMenu();
-    } else if (result === 1 && !this.trainer) {
-      this.openRecruit();
-    } else if (result === 1) {
-      this.openBag();
-    } else if (result === 2) {
-      if (this.hasBenchAlive()) this.openParty(false);
-    } else if (result === 3) {
-      if (this.polemica.value >= 3) this.useFuorionda();
-      else audio.cancel();
-    } else if (result === 4) {
-      if (this.trainer) this.openCampaignMenu(); else this.openBag();
-    } else if (result === 5) {
-      this.tryRun();
-    }
-  }
-
-
-  private menuGridUpdate(): number | null {
-    const tap = this.input.consumeTap();
-    if (tap && tap.x >= 92 && tap.x < 240 && tap.y >= (this.viewHeight ?? VIEW_H) - 60 && tap.y < (this.viewHeight ?? VIEW_H)) {
-      const row = Math.floor((tap.y - ((this.viewHeight ?? VIEW_H) - 60)) / 16);
-      const col = tap.x < 166 ? 0 : 1;
-      const target = row * 2 + col;
-      this.input.clearTap();
-      if (target < this.mainMenu.items.length) {
-        if (target === this.mainMenu.index) return target;
-        this.mainMenu.index = target;
-        audio.cursor();
-      }
-      return null;
-    }
-    // Two columns, matching the six visible action cells.
-    const n = this.mainMenu.items.length;
-    const idx = this.mainMenu.index;
-    const set = (target: number) => {
-      const clamped = Math.max(0, Math.min(n - 1, target));
-      if (clamped !== this.mainMenu.index) {
-        this.mainMenu.index = clamped;
-        audio.cursor();
-      }
-    };
-    if (this.input.wasPressed("left")) {
-      if (idx % 2 === 1) set(idx - 1);
-    }
-    if (this.input.wasPressed("right")) {
-      if (idx % 2 === 0 && idx + 1 < n) set(idx + 1);
-    }
-    if (this.input.wasPressed("up")) {
-      set(idx - 2);
-    }
-    if (this.input.wasPressed("down")) {
-      set(idx + 2);
-    }
-    if (this.input.wasPressed("a")) {
-      audio.confirm();
-      return this.mainMenu.index;
-    }
-    return null;
-  }
-
-  // Il menu mosse è una lista verticale a quattro righe: SU/GIÙ scorrono una
-  // mossa alla volta. SINISTRA/DESTRA restano alias per accessibilità, ma non
-  // saltano più righe come nella vecchia griglia 2x2.
-  private fightGridUpdate(): "select" | "cancel" | null {
-    const n = this.fightMenu.items.length;
-    const move = (target: number) => {
-      if (target >= 0 && target < n && target !== this.fightMenu.index) {
-        this.fightMenu.index = target;
-        audio.cursor();
-      }
-    };
-    if (this.input.wasPressed("left") || this.input.wasPressed("up")) {
-      move(this.fightMenu.index - 1);
-    }
-    if (this.input.wasPressed("right") || this.input.wasPressed("down")) {
-      move(this.fightMenu.index + 1);
-    }
-
-    // Tap diretto: primo tap evidenzia, secondo tap sulla stessa riga conferma.
-    // Il Menu standard lo fa già, ma questa lista ha un renderer custom e quindi
-    // non possiede la geometria registrata da Menu.draw().
-    const tap = this.input.consumeTap();
-    const tapped = tap ? fightMenuTapIndex(tap, n, this.viewHeight) : null;
-    if (tapped !== null) {
-      this.input.clearTap();
-      if (tapped !== this.fightMenu.index) {
-        move(tapped);
-        return null;
-      }
-      if (this.fightMenu.items[tapped]?.disabled) {
-        audio.cancel();
-        return null;
-      }
-      audio.confirm();
-      return "select";
-    }
-    if (this.input.wasPressed("a")) {
-      if (this.fightMenu.items[this.fightMenu.index]?.disabled) {
-        audio.cancel();
-        return null;
-      }
-      audio.confirm();
-      return "select";
-    }
-    if (this.input.wasPressed("b")) {
-      audio.cancel();
-      return "cancel";
-    }
-    return null;
-  }
-
-  private openFightMenu(): void {
-    // Suggerimento matchup sempre visibile (▲ super / ▼ poco efficace): è il
-    // modo principale per imparare il sistema dei tipi senza tentativi a vuoto.
-    // La GUIDA TIPI nel menu pausa è il riferimento completo.
-    const foeTypes = speciesOf(this.foe.mon).types;
-    this.fightEff = [];
-    // STRUGGLE/COMIZIO di riserva: se TUTTE le mosse sono a 0 PP, senza un
-    // fallback il giocatore non potrebbe agire (mosse disabled, fuga vietata vs
-    // trainer) → soft-lock. L'IA nemica ha già COMIZIO gratis (sim.ts chooseFoeMove);
-    // qui pareggiamo l'asimmetria. Compare SOLO quando serve.
-    this.fightFallback = this.player.mon.moves.every((s) => s.pp <= 0);
-    if (this.fightFallback) {
-      this.fightEff.push(null);
-      this.fightMenu = new Menu([
-        { label: "COMIZIO", rightLabel: "PP —", disabled: false }
-      ]);
-      this.mode = "fight";
-      return;
-    }
-    this.fightMenu = new Menu(
-      this.player.mon.moves.map((slot) => {
-        const move = MOVES[slot.id];
-        let marker = "";
-        let eff: "super" | "weak" | "immune" | null = null;
-        if (move.power > 0) {
-          const mult = typeMultiplier(move.type, foeTypes);
-          marker = mult === 0 ? "X " : mult >= 2 ? "▲ " : mult < 1 ? "▼ " : "";
-          eff = mult === 0 ? "immune" : mult >= 2 ? "super" : mult < 1 ? "weak" : null;
-        }
-        this.fightEff.push(eff);
-        return {
-          label: move.name,
-          rightLabel: `${marker}PP ${slot.pp}/${move.pp}`,
-          disabled: slot.pp <= 0
-        };
-      })
-    );
-    this.mode = "fight";
   }
 
   private openCampaignMenu(): void {
@@ -1829,23 +1632,13 @@ export class BattleScene implements Scene {
     this.viewHeight = screen.height;
     this.fx.viewHeight = screen.height;
     const g = battleGeometry(screen.height);
-    if (this.recruitReceipt || this.growthReceipt) {
-      if (screen.height > VIEW_H) { this.drawPortraitReceipt(screen); return; }
-      screen.clear("#101b29");
-      ctx.save();
-      ctx.translate(0, Math.round((screen.height - VIEW_H) / 2));
-      if (this.recruitReceipt) this.drawRecruitReceipt(screen);
-      else this.drawGrowthReceipt(screen);
-      ctx.restore();
-      return;
-    }
     // SCREEN-SHAKE PIENO: tutto il frame (sfondo, sprite, box, banner) trasla
     // insieme su super-efficace/crit. Prima solo il nemico tremava.
     const shake = this.fx.shakeOffset();
     ctx.save();
     ctx.translate(shake.x, shake.y);
     screen.clear("#f0f0e0");
-    drawBattleBackdrop(screen, this.backdrop, screen.height);
+    drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
 
     // TINT SFONDO METEO (sondaggi-meteo): velo colorato leggero sullo sfondo
     // quando il gradimento attiva il modificatore. Caldo/dorato col GOVERNO in
@@ -1894,13 +1687,9 @@ export class BattleScene implements Scene {
     this.fx.drawMoveFx(screen);
     this.fx.drawParticles(screen);
     // Numeri di danno flottanti (sopra le scintille, sotto le barre HP).
-    this.fx.drawDamageNumbers(screen);
 
-    this.drawFoeBox(screen);
-    this.drawPlayerBox(screen);
 
     // Banner "SUPER EFFICACE / POCO EFFICACE / CRITICO".
-    this.fx.drawEffFx(screen);
 
     // Lampo d'apertura + banner "LEGGENDARIO!" per l'incontro epico.
     this.drawLegendIntro(screen);
@@ -1909,142 +1698,15 @@ export class BattleScene implements Scene {
     // restano fermi (l'UI non deve "ballare" sotto le dita).
     ctx.restore();
 
-    if (this.copione) {
-      screen.panel(132, 6, 102, 17, "card");
-      screen.textFit(this.battery > 0 ? `COPIONE ${this.battery} 50%` : "COPIONE OFF", 138, 11, 90, this.battery > 0 ? "#8c5b12" : "#26745d");
-    }
-    // Riquadro testo.
-    screen.panel(2, screen.height - 44, VIEW_W - 4, 42, "dialog");
-    if (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit") {
-      screen.panel(6, 42, 116, this.field ? 39 : 27, "card");
-      screen.text(`POLEMICA ${this.polemica.value}/3`, 12, 47, this.polemica.value === 3 ? "#26745d" : INK);
-      const intent = this.foeIntent;
-      screen.textFit(intent ? `ARRIVA: ${intent.name}` : "", 12, 59, 104, "#8c5b12");
-    }
-    if (this.field && (this.mode === "menu" || this.mode === "fight" || this.mode === "recruit")) {
-      const name = !this.fieldResolved && screen.height === VIEW_H ? this.field.cue : this.field.id === "poll" ? "SONDAGGIO" : this.field.name;
-      screen.textFit(`${this.fieldResolved ? "OK" : "T2"}: ${name}`, 12, 71, 104, "#26745d");
-    }
-    if (screen.height > VIEW_H && ["menu", "fight", "recruit"].includes(this.mode)) {
-      this.drawPortraitPrompt(screen);
-    } else if (this.mode === "menu") {
-      this.drawMainMenu(screen);
-    } else if (this.mode === "recruit") {
-      screen.panel(8, screen.height - 67, 226, 21, "card");
-      screen.textFit("FALLISCE? IL NEMICO RISPONDE.", 14, screen.height - 63, 208, INK);
-      screen.textFit("A: LANCIA  B: LOTTA", 14, screen.height - 54, 208, GREY);
-      this.recruitMenu.draw(screen, 6, screen.height - 42, 228, 12);
-    } else if (this.mode === "fight") {
-      // Quattro righe a larghezza piena: le mosse arrivano a 22 caratteri e
-      // nella vecchia griglia 2x2 venivano compresse fino al 69%.
-      const items = this.fightMenu.items;
-      const y = screen.height - 44;
-      for (let i = 0; i < items.length; i += 1) {
-        const cx = 8;
-        const cy = y + 4 + i * 9;
-        // Colore: grigio se senza PP, altrimenti tinta d'efficacia — verde super,
-        // rosso ruggine poco efficace, grigio scuro immune. Il calcolo è
-        // INCONDIZIONATO (sempre noto, non serve aver visto il tipo nel Dex).
-        const eff = this.fightEff[i];
-        const color = items[i].disabled
-          ? GREY
-          : eff === "super"
-            ? "#2f9a4c"
-            : eff === "weak"
-              ? "#c06030"
-              : eff === "immune"
-                ? "#8a8a98"
-                : INK;
-        if (this.fightMenu.index === i) {
-          screen.rect(cx - 2, cy - 2, 226, 9, "#fff0bd");
-          screen.rect(cx - 2, cy - 2, 2, 9, "#e0a92f");
-          screen.text("►", cx, cy, "#8c5b12");
-        }
-        // Marker d'efficacia PRIMA del nome (▲ super / ▼ poco eff. / X immune):
-        // il segnale non è più solo il colore (accessibilità daltonici).
-        const marker = eff === "super" ? "▲" : eff === "weak" ? "▼" : eff === "immune" ? "X" : "";
-        const nameX = marker ? cx + 15 : cx + 8;
-        if (marker) {
-          screen.text(marker, cx + 8, cy, color);
-        }
-        screen.textFit(items[i].label, nameX, cy, marker ? 166 : 173, color);
-        screen.textRight(items[i].rightLabel ?? "", 228, cy, items[i].disabled ? GREY : INK);
-      }
-      const slot = this.player.mon.moves[this.fightMenu.index];
-      if (slot) {
-        const move = MOVES[slot.id];
-        // Striscia info sopra il pannello: nome, tipo e riepilogo meccanico
-        // restano separati dai PP mostrati a destra di ogni riga.
-        screen.panel(8, screen.height - 67, 226, 21, "card");
-        // La barra colore del tipo resta sotto il nome (segnale visivo compatto).
-        const nameW = Math.min(move.name.length * 6, 150);
-        screen.textFit(move.name, 14, screen.height - 63, 150, INK);
-        screen.rect(14, screen.height - 55, nameW, 1, TYPE_COLORS[move.type]);
-        // L'ordine tiene conto dell'intento annunciato e del prossimo evento.
-        screen.textRight(this.orderLabel(move)?.replace("AGISCI ", "") ?? "START:INFO", 226, screen.height - 63, GREY);
-        // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
-        screen.textFit(this.moveHint(move), 14, screen.height - 54, 208, INK);
-      }
-    } else if (this.mode === "campaign") {
-      // Azioni da campagna in GRIGLIA 2x2. I nomi sono lunghi (fino a 18 char)
-      // e hanno il costo % a fianco: colonna 118px, nome clippato con spazio
-      // riservato al costo, così non si sovrappongono più.
-      const items = this.campaignMenu.items;
-      const y = screen.height - 44;
-      // Striscia in alto: SOND a destra + COSTO in punti dell'azione selezionata
-      // a sinistra (il costo esce dalle celle così i NOMI hanno tutta la colonna
-      // e non vengono più troncati con "...").
-      screen.panel(8, screen.height - 63, 226, 17);
-      screen.textRight(`SOND ${this.state.sondaggi}%`, 228, screen.height - 58, "#7ad858");
-      const sel = CAMPAIGN_ACTIONS[this.campaignMenu.index];
-      if (sel) {
-        screen.text(`COSTO ${sel.cost}%`, 14, screen.height - 58, "#d86868");
-      }
-      for (let i = 0; i < items.length; i += 1) {
-        const cx = 8 + (i % 2) * 116;
-        const cy = y + 3 + Math.floor(i / 2) * 10;
-        const color = items[i].disabled ? GREY : INK;
-        if (this.campaignMenu.index === i) {
-          screen.text("►", cx, cy, INK);
-        }
-        // Nome a piena colonna (costo spostato nella striscia sopra): entra
-        // anche "SONDAGGIO FARLOCCO" senza ellissi.
-        screen.textFit(items[i].label, cx + 8, cy, 108, color);
-      }
-      if (sel) {
-        // Descrizione su 2 righe sotto la griglia. wrapText a 36 char (come il
-        // MessageBox) sta nella larghezza; y+24/+33 tiene la 2ª riga staccata
-        // dal bordo inferiore.
-        const lines = wrapText(sel.desc, 36).slice(0, 2);
-        screen.text(lines[0] ?? "", 10, y + 24, GREY);
-        if (lines[1]) {
-          screen.text(lines[1], 10, y + 33, GREY);
-        }
-      }
-    }
-    if (this.mode === "queue" && this.actionCaption && !this.msg.isOpen) {
-      screen.textFit(this.actionCaption.actor, 10, screen.height - 39, 220, "#526176");
-      screen.textFit(this.actionCaption.move, 10, screen.height - 29, 220, INK);
-      screen.textFit(this.actionCaption.result, 10, screen.height - 15, 220, "#26745d");
-    }
-    this.msg.draw(screen);
-    if (this.field && this.fieldFxT > 0) {
-      const y = Math.round((g.foeBase + g.playerBase) / 2) - 18;
-      screen.panel(6, y, 228, 34, "card");
-      screen.textFit(this.field.name, 12, y + 5, 216, "#26745d");
-      wrapText(this.fieldNotice, 35).slice(0, 2).forEach((line, i) => screen.text(line, 12, y + 16 + i * 8, INK));
-    }
     if (this.copioneFxT > 0) {
       const atlas = sceneImage("battle:copione", "ui/battle/copione.png");
       const frame = Math.min(3, Math.floor((.6 - this.copioneFxT) / .15));
-      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 44 - 135) / 2), 240, 135);
-      screen.textCenter("DOMANDA NON PREVISTA!", 120, Math.round((screen.height - 44 - 135) / 2) + 119, "#fffaf0");
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 135) / 2), 240, 135);
     }
     if (this.finisherT > 0) {
       const atlas = sceneImage("battle:fuorionda", "ui/battle/fuorionda.png");
       const frame = Math.min(3, Math.floor((.8 - this.finisherT) / .2));
-      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 44 - 135) / 2), 240, 135);
-      screen.textCenter("MICROFONO APERTO!", 120, Math.round((screen.height - 44 - 135) / 2) + 119, "#fffaf0");
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 135) / 2), 240, 135);
     }
 
     // Bagliore dorato al level-up + raggi che pulsano dallo sprite del player.
@@ -2096,83 +1758,6 @@ export class BattleScene implements Scene {
     }
   }
 
-  private drawRecruitReceipt(screen: Screen): void {
-    const receipt = this.recruitReceipt!;
-    screen.clear("#101b29");
-    const atlas = sceneImage("battle:recruited", "ui/battle/recruited.png");
-    const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(receipt.elapsed / .3));
-    if (atlas) screen.imageRegion(atlas, frame % 2 * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
-    screen.rect(0, 0, 240, 19, "#17243d");
-    screen.text("RECLUTATO!", 8, 6, "#67e2b4");
-    screen.textRight(`LV${this.foe.mon.level}`, 232, 6, "#fffaf0");
-    drawMonsterSprite(screen, this.foe.mon.speciesId, 27, 27, 82, 66, { memeFormId: this.foe.mon.memeFormId, animationTime: this.state.reduceEffects ? 0 : receipt.elapsed });
-    screen.textFit(this.foeName(), 8, 113, 100, "#fffaf0");
-    screen.textFit(receipt.destination, 120, 82, 112, "#67e2b4");
-    screen.text(receipt.newDex ? "DEX +1" : "DEX GIA' NOTO", 120, 97, "#fffaf0");
-    screen.text(`SONDAGGI +${receipt.polls}`, 120, 112, "#ffe38a");
-    screen.panel(2, 136, 236, 42, "card");
-    screen.textFit(receipt.growth, 8, 141, 224, INK);
-    screen.textFit(receipt.levels, 8, 151, 224, "#26745d");
-    wrapText(receipt.modifiers.join(" · "), 36).slice(0, 2).forEach((line, i) => screen.text(line, 8, 161 + i * 8, "#8c5b12"));
-  }
-
-  private drawPortraitReceipt(screen: Screen): void {
-    const recruit = this.recruitReceipt, growth = this.growthReceipt, elapsed = recruit?.elapsed ?? growth!.elapsed;
-    const mon = recruit ? this.foe.mon : this.player.mon;
-    drawCareerStage(screen, this.state.reduceEffects ? 3 : Math.min(3, Math.floor(elapsed / .3)));
-    screen.rect(0, 0, 240, 19, "#17243d");
-    screen.text(recruit ? "RECLUTATO!" : "CRESCITA!", 8, 6, recruit ? "#67e2b4" : "#ffe38a");
-    screen.textRight(`LV${mon.level}`, 232, 6, "#fffaf0");
-    screen.textCenter(recruit ? this.foeName() : this.playerName(), 120, 26, "#fffaf0");
-    const bottom = careerPodiumY(screen.height), size = Math.min(140, bottom - 45);
-    drawMonsterSprite(screen, mon.speciesId, 120 - size / 2, bottom - size * .85, size, size * .85, { memeFormId: mon.memeFormId, animationTime: this.state.reduceEffects ? 0 : elapsed });
-    const y = screen.height - 90;
-    screen.panel(6, y, 228, 42, "card");
-    if (recruit) {
-      screen.text(recruit.destination, 14, y + 7, "#26745d");
-      screen.text(recruit.newDex ? "DEX +1" : "DEX GIA' NOTO", 14, y + 19, INK);
-      screen.textRight(`SONDAGGI +${recruit.polls}`, 224, y + 31, "#8c5b12");
-    } else {
-      screen.text(`+${growth!.gained} CONSENSO`, 14, y + 7, "#26745d");
-      screen.text(`LV${growth!.previousLevel} > ${mon.level}`, 14, y + 19, INK);
-      const exp = growth!.previousExp + growth!.gained * (this.state.reduceEffects ? 1 : Math.min(1, elapsed / .8));
-      let level = growth!.previousLevel;
-      while (level < LEVEL_CAP && exp >= expForLevel(level + 1)) level++;
-      const ratio = level >= LEVEL_CAP ? 1 : (exp - expForLevel(level)) / (expForLevel(level + 1) - expForLevel(level));
-      screen.rect(14, y + 31, 84, 5, "#293b50");
-      screen.rect(14, y + 31, Math.round(84 * Math.max(0, Math.min(1, ratio))), 5, "#67e2b4");
-      screen.textRight(mon.level >= LEVEL_CAP ? "MASSIMO" : `PROSSIMO LV${mon.level + 1}`, 224, y + 31, "#8c5b12");
-    }
-    screen.panel(2, screen.height - 44, 236, 42, "card");
-    const lines = recruit ? [recruit.growth, recruit.levels, ...wrapText(recruit.modifiers.join(" · "), 36)] : [...wrapText(growth!.modifiers.join(" · ") || "CONSENSO OTTENUTO", 36), growth!.shared];
-    lines.filter(Boolean).slice(0, 4).forEach((line, i) => screen.textFit(line, 8, screen.height - 37 + i * 8, 224, i === 1 ? "#26745d" : INK));
-  }
-
-  private drawGrowthReceipt(screen: Screen): void {
-    const receipt = this.growthReceipt!;
-    screen.clear("#101b29");
-    const atlas = sceneImage("battle:growth", "ui/battle/growth.png");
-    const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(receipt.elapsed / .25));
-    if (atlas) screen.imageRegion(atlas, frame % 2 * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
-    screen.rect(0, 0, 240, 19, "#17243d");
-    screen.text("CRESCITA!", 8, 6, "#ffe38a");
-    drawMonsterSprite(screen, this.player.mon.speciesId, 53, 27, 82, 66, { memeFormId: this.player.mon.memeFormId, animationTime: this.state.reduceEffects ? 0 : receipt.elapsed });
-    screen.textFit(this.playerName(), 8, 113, 128, "#fffaf0");
-    screen.text(`+${receipt.gained}`, 145, 36, "#ffe38a");
-    screen.text("CONSENSO", 145, 49, "#fffaf0");
-    screen.text(`LV${receipt.previousLevel}${this.player.mon.level > receipt.previousLevel ? ` > ${this.player.mon.level}` : ""}`, 145, 68, "#67e2b4");
-    const exp = receipt.previousExp + receipt.gained * (this.state.reduceEffects ? 1 : Math.min(1, receipt.elapsed / .8));
-    let level = receipt.previousLevel;
-    while (level < LEVEL_CAP && exp >= expForLevel(level + 1)) level++;
-    const ratio = level >= LEVEL_CAP ? 1 : (exp - expForLevel(level)) / (expForLevel(level + 1) - expForLevel(level));
-    screen.rect(145, 85, 84, 6, "#293b50");
-    screen.rect(145, 85, Math.round(84 * Math.max(0, Math.min(1, ratio))), 6, "#67e2b4");
-    screen.text(this.player.mon.level >= LEVEL_CAP ? "LIVELLO MASSIMO" : `PROSSIMO LV${this.player.mon.level + 1}`, 145, 101, "#fffaf0");
-    screen.panel(2, 136, 236, 42, "card");
-    wrapText(receipt.modifiers.join(" · ") || "CONSENSO OTTENUTO", 36).slice(0, 2).forEach((line, i) => screen.text(line, 8, 142 + i * 9, INK));
-    if (receipt.shared) screen.textFit(receipt.shared, 8, 166, 224, "#26745d");
-  }
-
   // Velo colorato del "meteo politico": tinge lievemente lo sfondo battaglia
   // quando i SONDAGGI attivano il modificatore (>=70 governo / <=40 opposizione),
   // così il banner testuale iniziale ha anche un riscontro visivo persistente.
@@ -2189,7 +1774,7 @@ export class BattleScene implements Scene {
 
   private drawTintGradient(screen: Screen, rgb: string, alpha: number, fromBottom = false): void {
     const ctx = screen.ctx;
-    const h = screen.height - 44; // solo sopra il box azioni
+    const h = screen.height; // la superficie nativa contiene solo la grafica
     const grad = fromBottom
       ? ctx.createLinearGradient(0, h, 0, 0)
       : ctx.createLinearGradient(0, 0, 0, h);
@@ -2240,33 +1825,6 @@ export class BattleScene implements Scene {
       ctx.fillRect(0, 0, VIEW_W, screen.height);
       ctx.restore();
     }
-    if (this.legendBanner > 0) {
-      const prog = 1 - this.legendBanner / 2.4;
-      const pop = this.state.reduceEffects ? 1 : Math.min(1, prog / 0.2);
-      const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
-      const y = 34 + (1 - pop) * -10;
-      const size = pop >= 1 ? 2 : 1;
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, fade);
-      // Pannello scuro dietro per stacco.
-      const label = "LEGGENDARIO!";
-      screen.textCenter(label, VIEW_W / 2 + 1, y + 1, "rgba(16,20,31,0.8)", size);
-      screen.textCenter(label, VIEW_W / 2, y, "#ffd23c", size);
-      ctx.restore();
-    }
-    // La scoperta lascia visibili il candidato e i suoi PV.
-    if (this.firstSeenBanner > 0) {
-      const prog = 1 - this.firstSeenBanner / 2.2;
-      const pop = this.state.reduceEffects ? 1 : Math.min(1, prog / 0.2);
-      const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
-      const y = 10 + (1 - pop) * -10;
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, fade);
-      screen.rect(134, y, 110, 17, "#101c30");
-      screen.rect(134, y, 110, 2, "#79ddba");
-      screen.textCenter("NUOVO NEL DEX", 189, y + 6, "#79ddba");
-      ctx.restore();
-    }
   }
 
   private drawBall(screen: Screen): void {
@@ -2277,8 +1835,7 @@ export class BattleScene implements Scene {
     if (anim.viral) {
       const atlas = sceneImage("battle:viral", "ui/battle/viral.png");
       const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(anim.t / .55));
-      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 44 - 135) / 2), 240, 135);
-      else screen.textCenter("VIRALE", 120, screen.height / 2, "#80d1b0");
+      if (atlas) screen.imageRegion(atlas, (frame % 2) * 240, Math.floor(frame / 2) * 135, 240, 135, 0, Math.round((screen.height - 135) / 2), 240, 135);
       return;
     }
     let x = 168;
@@ -2308,84 +1865,6 @@ export class BattleScene implements Scene {
     screen.imageSprite(ballotImg, x - (ballotImg.width * s) / 2, y - (ballotImg.height * s) / 2, { scaleX: s, scaleY: s });
   }
 
-  private drawFoeBox(screen: Screen): void {
-    // "GIÀ ELETTO": nei combattimenti SELVATICI, se la specie è già catturata nel
-    // Dex, mostra la SCHEDA come badge — così sai a colpo d'occhio se ti serve.
-    const owned = !this.trainer && this.state.dex[this.foe.mon.speciesId] === "caught";
-    const ballotImg = owned ? sceneImage("item:scheda", "items/scheda.png") : null;
-    // Se il badge c'è, il nome slitta a destra così la scheda non copre "PV"
-    // (prima la scheda finiva sulla riga della barra e mangiava la scritta PV).
-    drawCombatantBox(screen, this.foe.mon, this.displayHp.foe, {
-      ...FOE_BOX, hpW: 38, inlineHp: true,
-      nameInset: ballotImg ? 14 : 0
-    });
-    if (ballotImg) {
-      const size = 11;
-      const s = Math.min(size / ballotImg.width, size / ballotImg.height);
-      // Angolo ALTO-sinistra, sulla riga del nome (non su quella della barra):
-      // occupa lo spazio liberato dall'inset del nome.
-      screen.imageSprite(ballotImg, FOE_BOX.x + 6, FOE_BOX.y + 4, { scaleX: s, scaleY: s });
-    }
-  }
-
-  private drawPlayerBox(screen: Screen): void {
-    const box = { ...PLAYER_BOX, y: PLAYER_BOX.y + screen.height - VIEW_H };
-    const { x, y } = box;
-    const mon = this.player.mon;
-    drawCombatantBox(screen, mon, this.displayHp.player, box);
-    // Badge DIVISA EQUA: segnala a colpo d'occhio che l'EXP è condivisa con la
-    // panchina (la feature prima era invisibile finché non finiva la lotta).
-    // Sulla riga PV (y+25), a SINISTRA del testo PV (bordo sx 182): sta dopo il
-    // badge stato se presente (che finisce a x+22=148), altrimenti a x+6.
-    // Range 148..173 (con stato) o 132..157: sempre < 182, niente collisione con
-    // i PV anche a 3 cifre (prima invadeva i PV di ~9px).
-    if ((this.state.bag["divisa"] ?? 0) > 0) {
-      const bx = mon.status ? x + 22 : x + 6;
-      screen.rect(bx, y + 25, 25, 8, "#b8901a");
-      screen.text("EXP+", bx + 1, y + 26, "#fff0a0");
-    }
-    // Barra esperienza (solo PVE: nel PvP non c'è EXP).
-    screen.rect(x + 6, y + 34, 98, 2, "#c8c8c0");
-    screen.rect(x + 6, y + 34, Math.round(98 * this.displayExp), 2, "#4878d8");
-  }
-
-  private drawMainMenu(screen: Screen): void {
-    const labels = ["LOTTA", this.trainer ? "BORSA" : "CATTURA", "SQUADRA", "FUORIONDA", this.trainer ? "CAMPAGNA" : "RISERVE", "FUGA"];
-    const rows = Math.ceil(labels.length / 2);
-    const h = 12 + rows * 16;
-    const w = 148;
-    const x = VIEW_W - w;
-    const y = screen.height - h;
-    const padX = 10;
-    const colW = Math.floor((w - padX * 2) / 2);
-    screen.panel(x, y, w, h, "menu");
-    for (let i = 0; i < labels.length; i += 1) {
-      const cx = x + padX + (i % 2) * colW;
-      const cy = y + 8 + Math.floor(i / 2) * 16;
-      if (this.mainMenu.index === i) {
-        screen.rect(cx - 5, cy - 3, colW - 2, 13, "#fff0bd");
-        screen.rect(cx - 5, cy - 3, 2, 13, "#e0a92f");
-        screen.text("►", cx - 2, cy, "#8c5b12");
-      }
-      screen.textFit(labels[i], cx + 6, cy, colW - 8, i === 3 && this.polemica.value < 3 ? GREY : INK);
-    }
-    // Prompt + consenso disponibile (così sai se puoi permetterti la CAMPAGNA).
-    // Ancorati al pannello testo (VIEW_H-44), non al box menu: con la cornice
-    // chiara il testo che sborda sopra il bordo si nota subito.
-    const panelY = screen.height - 44;
-    screen.text(this.mainMenu.index === 3 ? "COSTO 3 P" : "VARIA LE", 12, panelY + 9, INK);
-    screen.text(this.mainMenu.index === 3 ? "40% PV" : "MOSSE!", 12, panelY + 22, "#26745d");
-  }
-
-  private drawPortraitPrompt(screen: Screen): void {
-    const upcoming = this.field && !this.fieldResolved;
-    const scripted = this.copione && this.battery > 0;
-    const title = upcoming ? `T2: ${this.field!.name}` : scripted ? `COPIONE: ${this.battery} TURNI` : `ARRIVA: ${this.foeIntent?.name ?? ""}`;
-    const rule = upcoming ? this.field!.rule : scripted ? "PREPARAZIONE RIUSCITA: SCUDO VIA." : this.foeIntent ? moveSummary(this.foeIntent, "foe") : "";
-    const y = screen.height - 44;
-    screen.textFit(title, 10, y + 5, 220, "#8c5b12");
-    wrapText(rule, 36).slice(0, 2).forEach((line, i) => screen.text(line, 10, y + 19 + i * 9, INK));
-  }
 }
 
 // Testo d'annuncio per ogni TRIGGER OFFENSIVO (R42): mostrato una volta per

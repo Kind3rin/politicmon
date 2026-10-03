@@ -1,5 +1,11 @@
 # Politicmon: risorse Higgsfield
 
+M2, sei icone della pausa: job `998d9de2-e21e-4db3-bed1-fea11dd75118`, riferimento del lotto precedente, alpha verificato; 6 PNG 96×96 / 14.942 B totali. **1,5 crediti**, saldo **339,97 → 338,47**, sorgente/parametri/SHA nel manifest e conversione selettiva esistente.
+
+M2, riferimento di stile visto: `4240b27d-6f5a-4ff7-9ad3-047d7aef2cb3`, originale in `artifacts/m2/style-reference.png`; allegato al lotto icone successivo. **1,5 crediti**, saldo verificato **341,47 → 339,97**.
+
+Laboratorio starter verticale: `be16e697-34f3-4f73-b433-d311ab09c14c`, 240×360 / 35.212 B, originale visto e starter provati. **1,5 crediti**, saldo **342,97 → 341,47**; provenance e conversione nel manifest.
+
 Palco verticale di carriera: atlante 480×720, 125.322 B; job `32b70d2e-5248-468e-89cf-46592e69f7ff`, originale visto e reclutamento/crescita giocati. Renderer riallinea di 35 px nativi le due fasi inferiori.
 **1,5 crediti**, saldo **344,47 → 342,97**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
 

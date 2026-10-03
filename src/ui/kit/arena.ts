@@ -1,0 +1,77 @@
+import { kit, type UiPanel } from './index';
+
+export interface UiArenaCombatant { name:string; level:number; hp:number; maxHp:number; status?:string; form?:string; exp?:number }
+export interface UiArena {
+  player:UiArenaCombatant;
+  foe:UiArenaCombatant;
+  message?:{title:string;body:string};
+  notice?:string;
+  moveCount:number;
+  impacts?:readonly {label:string;x:number;y:number;opacity:number;kind:"normal"|"super"|"crit"}[];
+}
+let owner:HTMLElement|undefined;
+let controlSignature='';
+let live:UiPanel|undefined;
+let generation=0;
+const node=(tag:string,cls:string)=>{const el=document.createElement(tag);el.className=cls;return el;};
+function combatant(label:string):HTMLElement {
+  const card=node('section','ui-card ui-combatant');card.setAttribute('aria-label',label);
+  const heading=node('div','ui-combatant-heading');heading.append(node('h2','ui-subtitle'),node('span','ui-note'));
+  const values=node('div','ui-combatant-values');values.append(node('span','ui-body'),node('span','ui-note'));
+  const bar=node('div','ui-bar');bar.setAttribute('role','progressbar');bar.setAttribute('aria-label',`PV ${label}`);bar.append(node('div','ui-bar-fill'));
+  card.append(heading,values,bar,node('p','ui-note ui-form'));return card;
+}
+function refreshCombatant(card:HTMLElement,data:UiArenaCombatant):void {
+  const set=(selector:string,text:string)=>{const el=card.querySelector(selector)!;if(el.textContent!==text)el.textContent=text;};
+  set('h2',data.name);set('.ui-combatant-heading .ui-note',`LV ${data.level}`);
+  set('.ui-combatant-values .ui-body',`PV ${Math.max(0,Math.round(data.hp))} di ${data.maxHp}`);
+  set('.ui-combatant-values .ui-note',data.status??'');
+  const form=card.querySelector<HTMLElement>('.ui-form')!;form.hidden=!data.form;form.textContent=data.form?`Forma: ${data.form}`:'';
+  const bar=card.querySelector<HTMLElement>('.ui-bar')!;bar.setAttribute('aria-valuemin','0');bar.setAttribute('aria-valuemax',String(data.maxHp));bar.setAttribute('aria-valuenow',String(Math.max(0,Math.round(data.hp))));
+  bar.querySelector<HTMLElement>('.ui-bar-fill')!.style.width=`${Math.max(0,Math.min(100,data.hp/data.maxHp*100))}%`;
+}
+/** The art surface stays mounted while counters and callbacks change. */
+export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void {
+  live=panel;const arena=panel.arena!;
+  if(owner!==root||!root.classList.contains('ui-arena')){
+    owner=root;controlSignature='';root.className='ui-panel ui-arena';
+    const hud=node('header','ui-arena-hud');hud.append(combatant('Avversario'),combatant('Il tuo compagno'));
+    const view=node('div','ui-arena-view');const frame=document.querySelector('#screen-frame');if(frame)view.append(frame);
+    const notice=node('div','ui-arena-notice ui-note');
+    const impacts=node('div','ui-arena-impacts');impacts.setAttribute("aria-hidden","true");view.append(impacts,notice);
+    const caption=node('section','ui-arena-caption');caption.append(node('h2','ui-subtitle'),node('p','ui-body'));
+    const deck=node('div','ui-arena-deck');deck.append(node('div','ui-arena-moves'),node('div','ui-arena-secondary'));
+    root.replaceChildren(hud,view,caption,deck);
+  }
+  root.setAttribute('aria-label',panel.title);
+  const cards=root.querySelectorAll<HTMLElement>('.ui-combatant');refreshCombatant(cards[0],arena.foe);refreshCombatant(cards[1],arena.player);
+  const caption=root.querySelector<HTMLElement>('.ui-arena-caption')!;caption.hidden=!arena.message;
+  if(arena.message){caption.querySelector('h2')!.textContent=arena.message.title;caption.querySelector('p')!.textContent=arena.message.body;}
+  const notice=root.querySelector<HTMLElement>('.ui-arena-notice')!;notice.hidden=!arena.notice;notice.textContent=arena.notice??'';
+  const layer=root.querySelector<HTMLElement>('.ui-arena-impacts')!;
+  const impacts=arena.impacts??[];
+  while(layer.children.length>impacts.length)layer.lastElementChild?.remove();
+  impacts.forEach((impact,index)=>{
+    let el=layer.children[index] as HTMLElement|undefined;
+    if(!el){el=node('span','ui-arena-impact ui-title');layer.append(el);}
+    el.textContent=impact.label;el.dataset.kind=impact.kind;el.style.left=`${impact.x}%`;el.style.top=`${impact.y}%`;el.style.opacity=String(impact.opacity);
+  });
+  const sig=JSON.stringify([panel.actions,selected],(_key,value)=>typeof value==='function'?undefined:value);
+  if(sig===controlSignature)return;
+  controlSignature=sig;const version=++generation;
+  const invoke=(index:number,inspect=false)=>()=>{const action=live?.actions[index];if(version!==generation||!action)return;if(inspect)action.onInspect?.();else if(!action.disabled)action.run();};
+  const buttons=panel.actions.map((action,index)=>{
+    const button=kit.button({...action,onInspect:action.onInspect?invoke(index,true):undefined},invoke(index));
+    button.dataset.uiIndex=String(index+(panel.tabs?.length??0));
+    button.classList.add(index<arena.moveCount?'ui-move-card':'ui-secondary-action');
+    button.setAttribute('aria-current',String(index===selected));return button;
+  });
+  root.querySelector('.ui-arena-moves')!.replaceChildren(...buttons.slice(0,arena.moveCount));
+  root.querySelector('.ui-arena-secondary')!.replaceChildren(...buttons.slice(arena.moveCount));
+}
+/** Keep the canvas outside a menu before removing an arena subtree. */
+export function leaveArena(root?:HTMLElement):void {
+  if(!root?.classList.contains('ui-arena'))return;
+  const frame=root.querySelector('#screen-frame');if(frame)document.querySelector('#screen-stage')?.prepend(frame);
+  root.className='ui-panel';owner=undefined;controlSignature='';generation++;
+}

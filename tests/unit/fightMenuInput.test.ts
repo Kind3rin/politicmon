@@ -1,84 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { MOVES, moveSummary } from "../../src/data/moves.ts";
-import { BattleScene } from "../../src/game/battle/BattleScene.ts";
-import {
-  FIGHT_LIST_LEFT,
-  FIGHT_LIST_RIGHT,
-  FIGHT_LIST_ROW_H,
-  FIGHT_LIST_TOP,
-  fightMenuTapIndex
-} from "../../src/game/battle/fightMenuInput.ts";
-
-class FakeInput {
-  pressed = new Set<string>();
-  tap: { x: number; y: number } | null = null;
-
-  wasPressed(button: string): boolean {
-    return this.pressed.has(button);
-  }
-
-  consumeTap(): { x: number; y: number } | null {
-    return this.tap;
-  }
-
-  clearTap(): void {
-    this.tap = null;
-  }
-}
-
-function subject(input: FakeInput, disabled: number[] = []): any {
-  const battle = Object.create(BattleScene.prototype) as any;
-  battle.input = input;
-  battle.fightMenu = {
-    index: 0,
-    items: Array.from({ length: 4 }, (_, index) => ({ label: `MOSSA ${index}`, disabled: disabled.includes(index) }))
-  };
-  return battle;
-}
-
-test("menu mosse: SU/GIU percorrono tutte le quattro righe nell'ordine visivo", () => {
-  const input = new FakeInput();
-  const battle = subject(input);
-  for (let expected = 1; expected < 4; expected += 1) {
-    input.pressed = new Set(["down"]);
-    assert.equal(battle.fightGridUpdate(), null);
-    assert.equal(battle.fightMenu.index, expected);
-  }
-  for (let expected = 2; expected >= 0; expected -= 1) {
-    input.pressed = new Set(["up"]);
-    assert.equal(battle.fightGridUpdate(), null);
-    assert.equal(battle.fightMenu.index, expected);
-  }
-});
-
-test("menu mosse: le hitbox touch coincidono con le quattro righe disegnate", () => {
-  for (let row = 0; row < 4; row += 1) {
-    const y = FIGHT_LIST_TOP + row * FIGHT_LIST_ROW_H + FIGHT_LIST_ROW_H / 2;
-    assert.equal(fightMenuTapIndex({ x: 120, y }, 4), row);
-  }
-  assert.equal(fightMenuTapIndex({ x: FIGHT_LIST_LEFT - 0.01, y: FIGHT_LIST_TOP }, 4), null);
-  assert.equal(fightMenuTapIndex({ x: FIGHT_LIST_RIGHT, y: FIGHT_LIST_TOP }, 4), null);
-  assert.equal(fightMenuTapIndex({ x: 120, y: FIGHT_LIST_TOP - 0.01 }, 4), null);
-  assert.equal(fightMenuTapIndex({ x: 120, y: FIGHT_LIST_TOP + 4 * FIGHT_LIST_ROW_H }, 4), null);
-});
-
-test("menu mosse: primo tap focalizza, secondo conferma, PP zero resta bloccato", () => {
-  const input = new FakeInput();
-  const battle = subject(input, [3]);
-  input.tap = { x: 120, y: FIGHT_LIST_TOP + 2 * FIGHT_LIST_ROW_H + 4 };
-  assert.equal(battle.fightGridUpdate(), null);
-  assert.equal(battle.fightMenu.index, 2);
-  assert.equal(input.tap, null);
-
-  input.tap = { x: 120, y: FIGHT_LIST_TOP + 2 * FIGHT_LIST_ROW_H + 4 };
-  assert.equal(battle.fightGridUpdate(), "select");
-
-  battle.fightMenu.index = 3;
-  input.tap = { x: 120, y: FIGHT_LIST_TOP + 3 * FIGHT_LIST_ROW_H + 4 };
-  assert.equal(battle.fightGridUpdate(), null);
-});
-
 test("tutte le 78 mosse hanno un effetto runtime supportato e feedback meccanico", () => {
   const supported = new Set([
     "status", "stat", "healRatio", "drainRatio", "recoilRatio",
@@ -95,18 +17,6 @@ test("tutte le 78 mosse hanno un effetto runtime supportato e feedback meccanico
   }
 });
 
-
-test("portrait battle taps follow the bottom list after resizing, never the old rows", () => {
-  for (const height of [237, 354, 480]) {
-    const input = new FakeInput(), battle = subject(input); battle.viewHeight = height;
-    input.tap = { x: 120, y: 145 };
-    assert.equal(battle.fightGridUpdate(), null); assert.equal(battle.fightMenu.index, 0);
-    input.tap = { x: 120, y: height - 42 + 2 * 9 + 4 };
-    assert.equal(battle.fightGridUpdate(), null); assert.equal(battle.fightMenu.index, 2);
-    input.tap = { x: 120, y: height - 42 + 2 * 9 + 4 };
-    assert.equal(battle.fightGridUpdate(), "select");
-  }
-});
 
 test("l'intento nemico indica il bersaglio dal punto di vista del giocatore e distingue la potenza dai PV", () => {
   const attack = Object.values(MOVES).find(m => m.effect?.stat?.target === "foe")!;

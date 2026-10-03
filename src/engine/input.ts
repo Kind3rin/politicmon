@@ -1,6 +1,7 @@
 import { VIEW_H, VIEW_W } from "./screen";
+import { setInputDevice, refreshInputHints } from "./inputDevice";
 
-export type Button = "up" | "down" | "left" | "right" | "a" | "b" | "start";
+export type Button = "up" | "down" | "left" | "right" | "a" | "b" | "start" | "inspect";
 
 const KEY_MAP: Record<string, Button> = {
   ArrowUp: "up",
@@ -19,17 +20,18 @@ const KEY_MAP: Record<string, Button> = {
   KeyJ: "b",
   Escape: "b",
   Backspace: "b",
+  KeyI: "inspect",
   KeyP: "start"
 };
 
 // Native controls and modal guides own their keyboard activation.
-function isNativeControlTarget(target: EventTarget | null): boolean {
+function isNativeControlTarget(target: EventTarget | null, code: string): boolean {
   const el = target as HTMLElement | null;
   if (!el || !el.tagName) {
     return false;
   }
   const tag = el.tagName.toLowerCase();
-  return tag === "input" || tag === "textarea" || tag === "button" || tag === "select" || tag === "a" || el.isContentEditable === true || Boolean(document.querySelector('dialog[open]'));
+  return tag === "input" || tag === "textarea" || (tag === "button" && !(el.closest("#game-ui, #world-ui, #game-dialog") && code !== "Enter" && code !== "Space")) || tag === "select" || tag === "a" || el.isContentEditable === true || Boolean(document.querySelector('dialog[open]'));
 }
 
 // Punto in coordinate interne dello schermo (240x180).
@@ -48,14 +50,23 @@ export class Input {
   private tapNow: ScreenPoint | null = null;
   private releaseStick:()=>void=()=>{};
   private releaseCanvas:()=>void=()=>{};
+  private stickDragged = false;
+  // Physical pad state survives reset: a held confirmation cannot fire again
+  // when a scene changes or a menu consumes its first press.
+  private gamepadState = new Map<string, Button>();
+  private focused = true;
 
   constructor() {
+    setInputDevice(window.matchMedia("(pointer: coarse)").matches ? "touch" : "keyboard");
+    refreshInputHints();
+    document.addEventListener("pointerdown", () => setInputDevice("touch"), { passive: true });
     document.addEventListener("keydown", (event) => {
+      setInputDevice("keyboard");
       // Se il focus è su un campo di testo (la tastiera NATIVA del telefono,
       // vedi nativeInput.ts), i tasti appartengono a quel campo, NON al gioco:
       // altrimenti Invio/Spazio venivano mappati su "A" e chiudevano la scena
       // mentre l'utente scriveva. Il campo gestisce input/Enter da sé.
-      if (isNativeControlTarget(event.target)) {
+      if (isNativeControlTarget(event.target,event.code)) {
         return;
       }
       const button = KEY_MAP[event.code];
@@ -76,7 +87,8 @@ export class Input {
     this.bindTouch();
     this.bindStick();
     this.bindCanvas();
-    window.addEventListener('blur',()=>this.reset());
+    window.addEventListener('blur',()=>{this.focused=false;this.reset();});
+    window.addEventListener('focus',()=>{this.focused=true;this.reset();});
     document.addEventListener('visibilitychange',()=>{if(document.hidden)this.reset();});
   }
 
@@ -102,6 +114,7 @@ export class Input {
     };
 
     canvas.addEventListener("pointerdown", (event) => {
+      this.stickDragged = false;
       downId = event.pointerId;
       downClientX = event.clientX;
       downClientY = event.clientY;
@@ -114,7 +127,7 @@ export class Input {
       const rect = canvas.getBoundingClientRect();
       // Soglia swipe proporzionale alla scala del canvas (~ mezza cella font).
       const threshold = (rect.width / VIEW_W) * 6;
-      if (moved <= threshold) {
+      if (moved <= threshold && !this.stickDragged) {
         this.tapNow = toInternal(event.clientX, event.clientY);
       }
       downId = null;
@@ -222,12 +235,15 @@ export class Input {
       // Asse dominante -> direzione cardinale (no diagonali).
       const dir: Button =
         Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : dy > 0 ? "down" : "up";
+      this.stickDragged = true;
       setDir(dir);
       moveCap(dx, dy);
     };
 
     const release = () => {
       pointerId = null;
+      stick.classList.remove("floating-stick");
+      stick.style.removeProperty("left"); stick.style.removeProperty("top");
       setDir(null);
       if (cap) {
         cap.style.transform = "translate(0px, 0px)";
@@ -264,6 +280,49 @@ export class Input {
     stick.addEventListener("pointercancel", end);
     stick.addEventListener("lostpointercapture", end);
     stick.addEventListener("contextmenu", (event) => event.preventDefault());
+    const canvas = document.querySelector<HTMLCanvasElement>("#game-canvas");
+    canvas?.addEventListener("pointerdown", event => {
+      if (event.pointerType !== "touch" || pointerId !== null || !document.body.classList.contains("ui-world-open") ||
+          !document.body.classList.contains("ctrl-stick") || document.querySelector('dialog[open]')) return;
+      const rect = canvas.getBoundingClientRect();
+      if (event.clientX >= rect.left + rect.width / 2) return;
+      event.preventDefault(); pointerId = event.pointerId;
+      originX = event.clientX; originY = event.clientY;
+      stick.classList.add("floating-stick");
+      stick.style.left = `${originX}px`; stick.style.top = `${originY}px`;
+      canvas.setPointerCapture(event.pointerId);
+    });
+    canvas?.addEventListener("pointermove", event => {
+      if (event.pointerId !== pointerId) return;
+      event.preventDefault(); onMove(event.clientX,event.clientY);
+    });
+    canvas?.addEventListener("pointerup",end);
+    canvas?.addEventListener("pointercancel",end);
+    canvas?.addEventListener("lostpointercapture",end);
+  }
+
+  /** Standard mapping only: unknown layouts must not guess the confirm key. */
+  pollGamepads(): void {
+    const next = new Map<string, Button>();
+    let pads: readonly (Gamepad | null)[] = [];
+    try { pads = navigator.getGamepads?.() ?? []; } catch { /* Unavailable browser API. */ }
+    for (const pad of pads) {
+      if (!pad?.connected || pad.mapping !== "standard") continue;
+      const prefix = `gamepad${pad.index}:`;
+      const mappings: readonly [number, Button][] = [[0,"a"],[1,"b"],[2,"inspect"],[9,"start"],[12,"up"],[13,"down"],[14,"left"],[15,"right"]];
+      for (const [index, button] of mappings) if (pad.buttons[index]?.pressed) next.set(`${prefix}${index}`, button);
+      const x = pad.axes[0] ?? 0, y = pad.axes[1] ?? 0;
+      const previous = this.gamepadState.get(`${prefix}stick`);
+      const magnitude = Math.max(Math.abs(x), Math.abs(y));
+      // Hysteresis avoids repeated navigation near the edge of the dead zone.
+      if (magnitude > (previous ? .2 : .35)) next.set(`${prefix}stick`, Math.abs(x) > Math.abs(y) ? x > 0 ? "right" : "left" : y > 0 ? "down" : "up");
+      if ([...next.keys()].some(key => key.startsWith(prefix) && next.get(key) !== this.gamepadState.get(key))) setInputDevice("controller", pad.id);
+    }
+    for (const source of this.gamepadState.keys()) if (!next.has(source)) this.setSource(source, null);
+    for (const [source, button] of next) {
+      if (this.gamepadState.get(source) !== button && !document.hidden && this.focused) this.setSource(source, button);
+    }
+    this.gamepadState = next;
   }
 
   isHeld(button: Button): boolean {

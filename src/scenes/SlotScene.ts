@@ -2,7 +2,7 @@ import { audio } from "../engine/audio";
 import { MAP_NAMES } from "../data/maps/names";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen } from "../engine/screen";
 import {
   clearSlot,
   hasSaveInSlot,
@@ -13,8 +13,9 @@ import {
   type GameState,
   type SlotSummary
 } from "../game/state";
-import { drawScreenHeader, Menu, MessageBox, INK } from "../ui/widgets";
+import { Menu, MessageBox } from "../ui/widgets";
 import type { TouchAction } from "../engine/touchActions";
+import type { UiPanel } from "../ui/kit";
 
 type SlotMode = "load" | "new";
 
@@ -24,6 +25,19 @@ type SlotMode = "load" | "new";
 //  - "load": onPick(state) con la partita caricata dallo slot.
 //  - "new":  onPick(null) dopo aver fissato lo slot attivo (ripulito se serviva).
 export class SlotScene implements Scene {
+  get uiPanel(): UiPanel {
+    if (this.msg.isOpen) return { title: "Salvataggio illeggibile", blocks: [{ title: "La partita non si può aprire", body: this.msg.pageText }], actions: [{ label: "Continua", run: () => { if (this.stack.top === this && this.msg.isOpen) { this.input.reset(); this.msg.advancePage(); } } }], back:{label:"Indietro",run:()=>{if(this.stack.top!==this)return;this.input.reset();this.msg.close();audio.cancel();}} };
+    const pending = this.pendingOverwrite >= 0 || this.pendingDelete >= 0;
+    const slot = this.pendingOverwrite >= 0 ? this.pendingOverwrite : this.pendingDelete;
+    const actions = this.touchActions.filter(action => action.label !== "INDIETRO" && action.label !== "ANNULLA").map((action, i) => ({ ...action,
+      label: pending ? "Conferma" : action.label === "CANCELLA" ? "Gestisci campagne" : `${this.deleting ? "Cancella " : "Campagna "}${i + 1}`,
+      hint: pending ? undefined : i < SLOT_COUNT ? (this.summaries[i].exists ? MAP_NAMES[this.summaries[i].mapId] : "Nessuna partita salvata") : "Scegli quale eliminare",
+      facts: !pending && i < SLOT_COUNT && this.summaries[i].exists ? [{ label: "Livello", value: String(this.summaries[i].level) }, { label: "Medaglie", value: String(this.summaries[i].badges) }] : undefined
+    }));
+    return { title: pending ? "Conferma la scelta" : this.deleting ? "Gestisci campagne" : "Le tue campagne", subtitle: pending ? `La campagna ${slot + 1} sarà ${this.pendingDelete >= 0 ? "cancellata" : "sostituita"}. Il salvataggio attuale andrà perso.` : "Tre campagne. Il quarto mandato non c’è.", actions, selected: this.menu.index,
+      back: { label: "Indietro", run: () => { if (this.stack.top !== this) return; this.input.reset(); audio.cancel(); if (pending) { this.pendingOverwrite = -1; this.pendingDelete = -1; } else if (this.deleting) this.deleting = false; else this.stack.pop(); } }
+    };
+  }
   private menu: Menu;
   private msg = new MessageBox();
   private summaries: SlotSummary[] = [];
@@ -105,17 +119,7 @@ export class SlotScene implements Scene {
       }
       return;
     }
-    // CANCELLA lo slot evidenziato con il tasto "start" (solo se pieno).
-    if (this.input.wasPressed("start")) {
-      const idx = this.menu.index;
-      if (idx < SLOT_COUNT && this.summaries[idx]?.exists) {
-        this.pendingDelete = idx;
-        audio.confirm();
-      }
-      return;
-    }
-    const tapAction = this.handleSlotTap();
-    const action = tapAction === undefined ? this.menu.update(this.input) : tapAction;
+    const action = this.menu.update(this.input);
     if (action === "cancel") {
       audio.cancel();
       if (this.deleting) { this.deleting = false; return; }
@@ -163,20 +167,6 @@ export class SlotScene implements Scene {
     this.commitNew(idx);
   }
 
-  private handleSlotTap(): "select" | null | undefined {
-    const tap = this.input.consumeTap();
-    if (!tap || tap.x < 5 || tap.x >= VIEW_W - 5) return undefined;
-    const row = tap.y >= 50 && tap.y < 50 + SLOT_COUNT * 29
-      ? Math.floor((tap.y - 50) / 29) : tap.y >= 141 && tap.y < 154 ? SLOT_COUNT : -1;
-    if (row < 0) return undefined;
-    this.menu.index = row;
-    if (this.menu.items[row].disabled) {
-      audio.cancel();
-      return null;
-    }
-    return "select";
-  }
-
   // Fissa lo slot attivo per una nuova campagna (ripulendolo se era pieno) e
   // restituisce il controllo al chiamante, che creerà lo stato iniziale.
   private commitNew(slot: number): void {
@@ -189,45 +179,5 @@ export class SlotScene implements Scene {
     this.onPick(null);
   }
 
-  draw(screen: Screen): void {
-    screen.clear("#17243d");
-    drawScreenHeader(screen, this.deleting ? "SCEGLI LO SLOT DA CANCELLARE" : this.mode === "load" ? "ARCHIVIO CAMPAGNE" : "NUOVA CAMPAGNA");
-    screen.rect(4, 34, VIEW_W - 8, 12, "rgba(16,20,31,0.82)");
-    screen.text("TRE SLOT. IL QUARTO MANDATO NON C'È.", 8, 37, "#fffaf0");
-    for (let i = 0; i < SLOT_COUNT; i++) {
-      const sum = this.summaries[i];
-      const selected = this.menu.index === i;
-      const y = 50 + i * 29;
-      screen.panel(5, y, VIEW_W - 10, 27, "card");
-      if (selected) screen.frame(6, y + 1, VIEW_W - 12, 25, "#e6b944");
-
-      screen.text(`${selected ? ">" : " "} SLOT ${i + 1}`, 15, y + 6, INK);
-      screen.textRight(sum.exists ? this.summaryTag(sum) : "LIBERO", VIEW_W - 12, y + 6, sum.exists ? "#497b65" : "#526279");
-      screen.textFit(sum.exists ? MAP_NAMES[sum.mapId] ?? sum.mapId
-        : this.mode === "load" ? "Nessuna campagna da riprendere" : "La prima promessa parte qui",
-        15, y + 16, VIEW_W - 30, INK);
-    }
-    const sum = this.summaries[this.menu.index];
-    screen.textFit(sum?.exists ? `FONDI ${sum.money}€ / SONDAGGI ${sum.sondaggi}%`
-      : this.menu.index === SLOT_COUNT ? "> INDIETRO" : "SLOT LIBERO", 8, 143, VIEW_W - 16, "#fffaf0");
-    screen.text(this.mode === "load" ? "A CARICA  B INDIETRO" : "A SCEGLI  B INDIETRO", 8, 158, "#ffe38a");
-    screen.text("START CANCELLA LO SLOT SELEZIONATO", 8, 170, "#fffaf0");
-    if (this.pendingOverwrite >= 0) {
-      this.drawConfirm(screen, `SOVRASCRIVERE SLOT ${this.pendingOverwrite + 1}?`);
-    } else if (this.pendingDelete >= 0) {
-      this.drawConfirm(screen, `CANCELLARE SLOT ${this.pendingDelete + 1}?`);
-    }
-    this.msg.draw(screen);
-  }
-
-  private drawConfirm(screen: Screen, question: string): void {
-    const w = 168;
-    const h = 34;
-    const x = Math.round((VIEW_W - w) / 2);
-    const y = Math.round((VIEW_H - h) / 2);
-    screen.dim(0.7);
-    screen.panel(x, y, w, h, "dialog");
-    screen.textFit(question, x + 8, y + 6, w - 16, INK);
-    screen.text("A CONFERMA - B ANNULLA", x + 8, y + 18, "#526279");
-  }
+  draw(screen: Screen): void { screen.clear("#101c30"); }
 }

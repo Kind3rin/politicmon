@@ -1,90 +1,35 @@
-import { audio } from "../engine/audio";
-import type { Input } from "../engine/input";
-import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
-import { mp } from "../net/mp";
-import { Composer } from "../ui/composer";
-import { GREY, INK } from "../ui/widgets";
-
-// Chat di zona. In alto lo storico dei messaggi della mappa, sotto il Composer
-// condiviso (FRASI rapide di default, TASTIERA per il testo libero, EMOTE).
-// Inviare NON chiude la scena: si resta in chat a leggere le risposte
-// (prima frasi/emote chiudevano subito — pessimo per conversare). Si esce con
-// START, o con B a testo vuoto.
+import {audio} from '../engine/audio';
+import type {Input} from '../engine/input';
+import type {Scene,SceneStack} from '../engine/scene';
+import type {Screen} from '../engine/screen';
+import {mp} from '../net/mp';
+import {PHRASES,EMOTES} from '../ui/kit/communication';
+import type {UiPanel,UiBlock} from '../ui/kit';
+import {readableCopy} from '../ui/kit/copy';
 export class ChatScene implements Scene {
-  private composer = new Composer(true);
-  private time = 0;
-  private toast = "";
-  private toastT = 0;
-
-  constructor(private stack: SceneStack, private input: Input) {}
-
-  onExit(): void {
-    this.composer.dispose(); // chiude la tastiera di sistema se aperta
-  }
-
-  update(dt: number): void {
-    this.time += dt;
-    if (this.toastT > 0) {
-      this.toastT = Math.max(0, this.toastT - dt);
-    }
-    if (this.input.wasPressed("start")) {
-      audio.cancel();
-      this.stack.pop();
-      return;
-    }
-    if (this.input.wasPressed("b")) {
-      if (!this.composer.backspace()) {
-        audio.cancel();
-        this.stack.pop();
-      }
-      return;
-    }
-    const ev = this.composer.update(this.input);
-    if (!ev) {
-      return;
-    }
-    if (ev.kind === "emote") {
-      mp.sendEmote(ev.emote);
-      // L'emote appare come fumetto in mappa, non in chat: feedback locale.
-      this.toast = "EMOTE INVIATA!";
-      this.toastT = 1.5;
-    } else {
-      // Frase rapida o testo composto: sendChat fa già l'eco locale in mp.chat.
-      mp.sendChat(ev.text);
-    }
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#16203a");
-    screen.text("CHAT DI ZONA", 8, 5, "#f4d34a");
-    if (this.toastT > 0) {
-      screen.text(this.toast, 90, 5, "#7ad858");
-    } else {
-      screen.textRight(mp.connected ? `ONLINE ${mp.onlineCount + 1}` : "OFFLINE", VIEW_W - 8, 5,
-        mp.connected ? "#7ad858" : GREY);
-    }
-
-    // Storico messaggi recenti (4 righe). Chiuso a y=51 per lasciare un gap
-    // netto dalla riga di composizione del composer (prima le due cornici
-    // 9-slice si toccavano e la riga del testo digitato risultava illeggibile).
-    screen.panel(4, 13, VIEW_W - 8, 38);
-    const lines = mp.chat.slice(-4);
-    for (let i = 0; i < lines.length; i += 1) {
-      const l = lines[i];
-      // Nick risolto al disegno (non congelato): una riga arrivata prima del
-      // profilo del peer non resta "???". Troncato a 8 char per lasciare spazio
-      // al testo del messaggio nei 37 char che stanno nel pannello.
-      const rawNick = mp.chatNick(l);
-      const nick = rawNick.length > 8 ? rawNick.slice(0, 8) : rawNick;
-      const text = `${nick}: ${l.text}`.slice(0, 37);
-      screen.text(text, 9, 18 + i * 8, INK);
-    }
-    if (lines.length === 0) {
-      screen.text("NESSUN MESSAGGIO. ROMPI IL GHIACCIO!", 9, 18, GREY);
-    }
-
-    this.composer.draw(screen, 60, this.time);
-    screen.text("A:SCEGLI  B:CANC.  START:ESCI", 6, VIEW_H - 8, GREY);
-  }
+ private tab=0;
+ private draft='';
+ private notice='';
+ constructor(private stack:SceneStack,private input:Input){}
+ private send(text:string,tab:number):void {
+  if(this.stack.top!==this||this.tab!==tab)return;
+  const message=text.trim().slice(0,60);if(!message)return;
+  if(!mp.connected){this.notice='Sei offline: il messaggio non è stato inviato.';audio.cancel();return;}
+  this.input.reset();mp.sendChat(message);audio.confirm();if(tab===1)this.draft='';this.notice='Messaggio inviato.';
+ }
+ get uiPanel():UiPanel {
+  const tab=this.tab,live=()=>this.stack.top===this&&this.tab===tab;
+  const blocks:UiBlock[]=[{title:mp.connected?'Nella zona':'Offline',body:mp.connected?`${mp.onlineCount+1} giocatori nella zona. I messaggi sono visibili nella mappa attuale.`:'Sei offline: i messaggi e le emote non possono essere inviati.'},
+   ...(mp.chat.length?mp.chat.slice(-40).map(line=>({title:mp.chatNick(line),body:line.text})):[{title:'Conversazione',body:'Nessun messaggio nella zona.'}]),
+   ...(this.notice?[{title:'Invio',body:this.notice}]:[])];
+  const tabs=['Frasi rapide','Scrivi','Emote'].map((label,index)=>({label,run:()=>{if(!live())return;this.tab=index;this.notice='';this.input.reset();audio.cursor();}}));
+  const back={label:'Indietro',hint:'Chiudi la chat.',run:()=>{if(!live())return;this.input.reset();audio.cancel();this.stack.pop();}};
+  if(tab===1)return {title:'Chat di zona',tabs,selectedTab:tab,blocks,
+   field:{label:'Messaggio',value:this.draft,singleLine:true,maxLength:60,autofocus:true,placeholder:'Scrivi un messaggio',onChange:value=>{if(live())this.draft=value;},onSubmit:()=>this.send(this.draft,tab)},
+   actions:[{label:'Invia',disabled:!mp.connected||!this.draft.trim(),run:()=>this.send(this.draft,tab)}],primary:0,back};
+  return {title:'Chat di zona',tabs,selectedTab:tab,blocks,
+   actions:tab===0?PHRASES.map(text=>({label:readableCopy(text),hint:'Invia questa frase nella chat.',disabled:!mp.connected,run:()=>this.send(text,tab)})):EMOTES.map(emote=>({label:`${emote.ch} · ${readableCopy(emote.label)}`,hint:'Mostra un fumetto sulla mappa.',disabled:!mp.connected,run:()=>{if(!live()||!mp.connected)return;this.input.reset();mp.sendEmote(emote.ch);audio.confirm();this.notice=mp.connected?'Emote inviata: appare sulla mappa.':'Sei offline: nessuna emote inviata agli altri giocatori.';}})),back};
+ }
+ update():void {}
+ draw(screen:Screen):void {screen.clear('#17243d');}
 }

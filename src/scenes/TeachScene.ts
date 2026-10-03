@@ -1,13 +1,15 @@
-import { MOVES, moveSummary } from "../data/moves";
+import { companionHint, companionPosition } from "../ui/kit/companionContent";
+import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import type { TouchAction } from "../engine/touchActions";
 import type { Screen } from "../engine/screen";
-import { speciesOf, type Monster } from "../game/monster";
+import { learnMoveIntoSlot, speciesOf, type Monster } from "../game/monster";
 import { moveNotes } from "../game/supplyGuide";
-import { drawScreenHeader, Menu, MessageBox, wrapText, INK } from "../ui/widgets";
-import { drawMonsterSprite } from "../art/monsters";
+import { Menu, MessageBox, wrapText } from "../ui/widgets";
+import type {UiPanel,UiBlock} from "../ui/kit";
+import {moveDescription} from "../ui/kit/moveContent";
 
 export class TeachScene implements Scene {
   readonly expandedViewport = true;
@@ -22,7 +24,7 @@ export class TeachScene implements Scene {
   private viewHeight = 180;
   private replacement?: Monster["moves"][number];
   constructor(private stack: SceneStack, private input: Input, private mon: Monster, private moveId: string,
-    private onLearned: () => void, private options: { source?: "level" | "directive" | "archive" } = {}) {
+    private onLearned: () => void, private options: { party?: readonly Monster[]; source?: "level" | "directive" | "archive" } = {}) {
     this.menu = new Menu(mon.moves.map(slot => ({ label: MOVES[slot.id].name, rightLabel: `PP ${slot.pp}` })));
   }
   private get old() { return this.mon.moves.length >= 4 ? this.mon.moves[this.menu.index] : undefined; }
@@ -37,10 +39,9 @@ export class TeachScene implements Scene {
     if (this.done || this.stack.top !== this) return;
     if (this.confirm && this.old !== this.replacement) { this.confirm = false; return; }
     if (this.mon.moves.some(slot => slot.id === this.moveId)) { this.close(); return; }
-    const slot = { id: this.moveId, pp: MOVES[this.moveId].pp };
-    if (this.old) this.mon.moves[this.menu.index] = slot; else this.mon.moves.push(slot);
+    if (!learnMoveIntoSlot(this.mon, this.moveId, this.old)) return;
     this.done = true; this.onLearned(); audio.levelUp();
-    this.msg.show([`${speciesOf(this.mon).name} adotta ${MOVES[this.moveId].name}.`], () => { if (this.stack.top === this) this.stack.pop(); }, true);
+    this.msg.show([`${speciesOf(this.mon).name} adotta ${MOVES[this.moveId].name}.`], () => { if (this.stack.top === this) this.stack.pop(); }, true, companionPosition(this.mon, this.options.party) || "Politicmon");
   }
   private choose(): void {
     if (this.old) { this.replacement = this.old; this.confirm = true; this.inspect = false; }
@@ -84,28 +85,34 @@ export class TeachScene implements Scene {
     const action = this.mon.moves.length >= 4 ? this.menu.update(this.input) : this.input.wasPressed("a") ? "select" : this.input.wasPressed("b") ? "cancel" : null;
     if (action === "cancel") this.close(); if (action === "select") this.choose();
   }
-  private card(screen: Screen, id: string, pp: number, y: number, label: string, h = 62): void {
-    const move = MOVES[id]; screen.panel(6, y, 228, h, "card");
-    screen.text(`${label}: ${move.name}`, 14, y + 6, INK);
-    screen.text(`${move.type} / PP ${pp}/${move.pp} / ${move.accuracy}%`, 14, y + 19, "#59657d");
-    wrapText(moveSummary(move).replace(/^DANNO /, "POTENZA "), 35).slice(0, 3).forEach((line, i) => screen.text(line, 14, y + 32 + i * 9, INK));
+  private moveCard(id:string,pp:number,title:string):UiBlock {
+    const move=MOVES[id];
+    return {title:`${title}: ${move.name}`,body:moveDescription(move),facts:[{label:'Tipo',value:move.type},{label:'Potenza',value:move.power?String(move.power):'—'},{label:'PP',value:`${pp} di ${move.pp}`},{label:'Precisione',value:`${move.accuracy}%`}]};
   }
-  draw(screen: Screen): void {
-    this.viewHeight = screen.height;
-    screen.clear("#101b32");
-    drawScreenHeader(screen, `${speciesOf(this.mon).name} LV${this.mon.level}`, this.options.source === "archive" ? "ARCHIVIO" : this.options.source === "level" ? "LIVELLO" : "DIRETTIVA");
-    const extra = screen.height - 180, heroH = Math.round(extra * .4), top = 23 + heroH, cardH = 62 + Math.round(extra * .2);
-    if (heroH > 0) drawMonsterSprite(screen, this.mon.speciesId, 80, 21, 80, heroH - 5);
-    if (this.msg.isOpen) { this.card(screen, this.moveId, MOVES[this.moveId].pp, top, "APPRESA", cardH); this.msg.draw(screen); return; }
-    if (this.inspect) {
-      screen.panel(6, top, 228, screen.height - top - 15, "card"); this.lines().slice(this.scroll, this.scroll + 9).forEach((line, i) => screen.text(line, 14, top + 10 + i * 12, INK));
-    } else {
-      this.card(screen, this.moveId, MOVES[this.moveId].pp, top, "NUOVA", cardH);
-      if (this.confirm && this.old) this.card(screen, this.old.id, this.old.pp, top + cardH + 4, "SCARTI", cardH);
-      else if (this.mon.moves.length >= 4) { screen.text("QUALE MOSSA SOSTITUISCI?", 14, top + cardH + 4, "#fff3cc"); this.menu.draw(screen, 6, top + cardH + 16, 228, 14 + Math.round(extra * .04), 4); }
-      else { screen.text("SLOT LIBERO", 14, top + cardH + 26, "#80d1b0"); screen.text("NESSUNA PERDITA", 14, top + cardH + 43, "#fff3cc"); }
+  get uiPanel():UiPanel|undefined {
+    if(this.msg.isOpen)return undefined;
+    const phase=this.phase,old=this.old;
+    const blocks=[this.moveCard(this.moveId,MOVES[this.moveId].pp,'Nuova mossa')];
+    if(this.confirm&&old)blocks.push(this.moveCard(old.id,old.pp,'Mossa sostituita'));
+    if(this.inspect&&this.page===1&&old)blocks.splice(0,1,this.moveCard(old.id,old.pp,'Mossa attuale'));
+    let actions=this.touchActions.filter(action=>!['RINUNCIA','RIPENSA','INDIETRO','SU','GIÙ'].includes(action.label)).map(action=>({...action,label:action.label==='APPRENDI'?'Impara la mossa':action.label.charAt(0)+action.label.slice(1).toLocaleLowerCase('it'),hint:action.hint?.replace('Gli altri PP restano','Le altre mosse mantengono i loro PP.').replace('Nessuna perdita','Le mosse attuali restano.')}));
+    // The native list is itself the comparison: the outgoing move and its
+    // remaining PP are shown before the decision, so no second approval page.
+    if(!this.inspect&&!this.confirm&&this.mon.moves.length>=4){
+      actions=this.mon.moves.map((slot,index)=>({
+        label:`Sostituisci ${MOVES[slot.id].name}`,hint:moveDescription(MOVES[slot.id]),
+        facts:[{label:'Tipo',value:MOVES[slot.id].type},{label:'Potenza',value:MOVES[slot.id].power ? String(MOVES[slot.id].power) : "—"},
+          {label:'PP persi',value:`${slot.pp} di ${MOVES[slot.id].pp}`}],disabled:this.done,
+        run:()=>{
+          if(this.done||this.stack.top!==this||phase!==this.phase||this.mon.moves[index]!==slot)return;
+          this.input.reset();this.menu.index=index;this.replacement=slot;this.confirm=true;this.learn();
+        }
+      }));
     }
-    const hint = screen.height > 180 ? this.inspect ? "EFFETTI DELLA MOSSA" : this.confirm ? "CONFERMA LA SOSTITUZIONE" : "SCEGLI QUI SOTTO" : this.inspect ? "◄►:MOSSA START/B:TORNA" : this.confirm ? "A:IMPARA B:RIPENSA" : "A:SCEGLI START:INFO B:RINUNCIA";
-    screen.text(hint, 8, screen.height - 11, "#fff3cc");
+    return {title:`${speciesOf(this.mon).name}: ${MOVES[this.moveId].name}`,
+      subtitle:companionHint(this.mon, this.options.party ?? [], this.inspect?`Leggi gli effetti prima di scegliere. ${this.options.source==='archive'?'Archivio gratuito.':this.options.source==='level'?'Appresa salendo di livello.':'Direttiva riutilizzabile.'}`:this.confirm?'Perderai solo la mossa indicata sotto.':this.mon.moves.length>=4?'Scegli quale mossa sostituire. Il tocco applica la scelta; le altre mosse e i loro PP restano.':'C’è un posto libero. Non perdi nessuna mossa.'),
+      blocks,actions:actions,selected:this.confirm||this.inspect?0:this.menu.index,primary:this.confirm||this.mon.moves.length<4?0:undefined,
+      back:{label:'Indietro',hint:this.confirm?'Scegli un’altra mossa.':this.inspect?'Torna alla scelta.':'Rinuncia: nessuna mossa cambia.',run:()=>{if(this.done||this.stack.top!==this||phase!==this.phase||old!==this.old)return;this.input.reset();audio.cancel();if(this.inspect)this.inspect=false;else if(this.confirm)this.confirm=false;else this.close();}}};
   }
+  draw(screen:Screen):void {screen.clear('#101b32');if(this.msg.isOpen)this.msg.draw(screen);}
 }

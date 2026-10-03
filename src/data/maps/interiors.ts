@@ -38,12 +38,12 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     "gymtv", "STUDIO 5 - PALESTRA TV", "mediopoli", 6, 11,
     [
       {
-        id: "gym1-allievo", pal: "journalist", x: 2, y: 4, facing: "right",
+        id: "gym1-allievo", dialogueName: "Mara", pal: "journalist", x: 2, y: 4, facing: "right",
         trainerId: "stagista", nameplate: "PROVA A",
         lines: ["Il backstage ha ascoltato. Il conduttore ha preso appunti su come interromperti.", "Puoi uscire dal tappeto a sud e curarti al bar prima della diretta."]
       },
       {
-        id: "gym1-capo", pal: "boss", x: 4, y: 1, facing: "down",
+        id: "gym1-capo", dialogueName: "Sua Emittenza", pal: "boss", x: 4, y: 1, facing: "down",
         trainerId: "emittenza",
         lines: ["Torna quando vuoi: la pubblicità paga comunque."]
       },

@@ -1,7 +1,5 @@
 import { AudioScene } from "./AudioScene";
 import { audio } from "../engine/audio";
-import { drawMonsterSprite } from "../art/monsters";
-import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
@@ -9,18 +7,26 @@ import { hasAnySave, hasSaveInSlot, setActiveSlot, SLOT_COUNT, loadGame, newGame
 import { BackupScene } from "./BackupScene";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
-import { Menu, wrapText } from "../ui/widgets";
+import { Menu } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
-import { sceneImage } from "../engine/assets";
 import type { TouchAction } from "../engine/touchActions";
+import type { UiPanel } from "../ui/kit";
 
 export class TitleScene implements Scene {
+  get uiPanel(): UiPanel {
+    const labels: Record<string, string> = { CONTINUA: "Continua", "NUOVA CAMPAGNA": "Nuova campagna", NOME: "Nome online", AUDIO: "Audio", "SPOSTA SAVE": "Salvataggi", NORMALE: "Normale", DIFFICILE: "Difficile", INDIETRO: "Indietro" };
+    const actions = this.touchActions.map(action => ({ ...action, label: labels[action.label] ?? action.label }));
+    const back = this.difficultyMenu ? actions.pop() : undefined;
+    return {
+      title: this.difficultyMenu ? "Scegli la sfida" : "Politicmon",
+      subtitle: this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato.",
+      image: this.difficultyMenu ? undefined : "/sprites/ui/title-stage.png",
+      portraits: this.difficultyMenu ? undefined : ["giorgetta", "ellyna", "renzino"].map(id => ({ src: `/sprites/monsters/${id}.png`, label: id.charAt(0).toUpperCase() + id.slice(1) })),
+      actions:actions, back:back, primary: 0, selected: this.difficultyMenu?.index ?? this.menu.index
+    };
+  }
   private menu: Menu;
-  private time = 0;
-  private reduceEffects = hasAnySave() ? Boolean(loadGame()?.reduceEffects)
-    : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  private menuRects: Array<{ x: number; y: number; w: number; h: number }> = [];
   // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
   private difficultyMenu: Menu | null = null;
   private starting = false;
@@ -59,8 +65,7 @@ export class TitleScene implements Scene {
     return this.menu.items.map(({ label }) => action(label, label === "CONTINUA" ? "Riprendi uno slot salvato" : label.startsWith("NUOVA") ? "Scegli la sfida e parti" : label === "SPOSTA SAVE" ? "Importa o esporta la campagna" : label === "NOME" ? "Facoltativo · identità online" : "Musica, effetti e volume", () => this.choose(label)));
   }
 
-  update(dt: number): void {
-    this.time += this.reduceEffects ? 0 : dt;
+  update(_dt: number): void {
     if (this.starting) return;
     // Selettore DIFFICOLTÀ in primo piano: gestiscilo prima di tutto il resto.
     if (this.difficultyMenu) {
@@ -77,9 +82,8 @@ export class TitleScene implements Scene {
       }
       return;
     }
-    const tapAction = this.handleMenuTap();
     // Online identity is optional: first play must not require a keyboard.
-    const action = tapAction ?? this.menu.update(this.input);
+    const action = this.menu.update(this.input);
     if (action !== "select") {
       return;
     }
@@ -179,49 +183,5 @@ export class TitleScene implements Scene {
     }
   }
 
-  private handleMenuTap(): "select" | undefined {
-    const tap = this.input.consumeTap();
-    if (!tap) return undefined;
-    const row = this.menuRects.findIndex((r) => tap.x >= r.x && tap.x < r.x + r.w && tap.y >= r.y && tap.y < r.y + r.h);
-    if (row < 0) return undefined;
-    this.menu.index = row; audio.confirm(); return "select";
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#17243d");
-    const stage = sceneImage("ui:title-stage", "ui/title-stage.png");
-    if (stage) screen.image(stage, 0, 18, 240, 135);
-    screen.rect(0, 0, 240, 43, "#17243d");
-    screen.textCenter("POLITICMON", 120, 6, "#fff3cc", 2);
-    wrapText("IL PROGRAMMA È IN ALLEGATO. MANCA L'ALLEGATO.", 36).forEach((line, i) => screen.textCenter(line, 120, 27 + i * 9, "#80d1b0"));
-    STARTERS.forEach((id, i) => drawMonsterSprite(screen, id, 49 + i * 51, 48 + Math.round(Math.sin(this.time * 2 + i) * 2), 42, 40));
-    if (this.starting) { screen.rect(8, 105, 224, 28, "#fff3cc"); screen.textCenter("APERTURA CAMPAGNA", 120, 115, "#17243d"); return; }
-    if (this.difficultyMenu) { this.drawDifficulty(screen); return; }
-    this.drawMenu(screen);
-  }
-
-  private drawDifficulty(screen: Screen): void {
-    screen.rect(0, 43, 240, 137, "#17243d");
-    screen.text("SCEGLI LA SFIDA", 12, 48, "#80d1b0");
-    const descriptions = [["Prima campagna consigliata.", "Percorso normale al Palazzo."], ["Avversari +livelli. Niente ONDA.", "Rivincite più lente."]];
-    this.difficultyMenu!.items.forEach((item, i) => {
-      const y = 65 + i * 44, selected = this.difficultyMenu!.index === i;
-      screen.rect(8, y, 224, 38, selected ? "#fff3cc" : "#263954");
-      const color = selected ? "#17243d" : "#fffaf0";
-      screen.text(i === 0 ? "NORMALE" : item.label, 15, y + 5, color);
-      descriptions[i].forEach((line, j) => screen.text(line, 15, y + 17 + j * 9, color));
-    });
-    screen.text("LA SCELTA VALE PER TUTTA LA PARTITA.", 12, 158, "#fffaf0");
-    screen.text("A:PARTI  B:INDIETRO", 12, 171, "#80d1b0");
-  }
-
-  private drawMenu(screen: Screen): void {
-    this.menuRects = this.menu.items.map((_, i) => i === 0 ? { x: 8, y: 104, w: 224, h: 25 } : { x: 8 + ((i - 1) % 2) * 116, y: 134 + Math.floor((i - 1) / 2) * 19, w: 108, h: 17 });
-    screen.rect(0, 100, 240, 80, "#17243d");
-    this.menu.items.forEach((item, i) => {
-      const r = this.menuRects[i], selected = i === this.menu.index;
-      screen.rect(r.x, r.y, r.w, r.h, selected ? "#fff3cc" : "#263954");
-      screen.textFit(item.label, r.x + 7, r.y + (i === 0 ? 9 : 5), r.w - 14, selected ? "#17243d" : "#fffaf0");
-    });
-  }
+  draw(screen: Screen): void { screen.clear("#101c30"); }
 }

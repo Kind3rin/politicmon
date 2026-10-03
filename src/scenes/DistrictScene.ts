@@ -7,78 +7,75 @@ import {DISTRICT_CONTENT,districtActionCount} from '../game/districtCampaign';
 import {commitDistrictDecision,previewDistrictDecision,type DistrictChoice,type DistrictPreview} from '../game/districtDecisions';
 import type {DistrictId} from '../game/election';
 import {saveGame,type GameState} from '../game/state';
-import {drawScreenHeader} from '../ui/widgets';
-import {drawCampaignBackdrop} from '../ui/campaignArt';
-import {dossierPages,drawDossierPage} from '../ui/dossier';
+import type {UiPanel,UiBlock} from '../ui/kit';
+import {readableCopy} from '../ui/kit/copy';
 
-const CHOICES:readonly DistrictChoice[]=['debate','prudent','risky','endorsement'];
-export class DistrictScene implements Scene{
+const copy=(text:string)=>readableCopy(text).replace(/\bCOE\b/gi,'coesione');
+type Choice={choice:DistrictChoice;ally?:AllyId};
+export class DistrictScene implements Scene {
  readonly transparent=false;
- private index=0;
- private allyIndex=0;
  private mode:'menu'|'review'|'result'|'history'='menu';
- private page=0;
- private notice='';
- private pending:{choice:DistrictChoice;ally?:AllyId}|null=null;
+ private pending:Choice|null=null;
  private result:DistrictPreview|null=null;
+ private before:{local:number;money:number;cohesion:number}|null=null;
+ private notice='';
+ private committing=false;
  constructor(private stack:SceneStack,private input:Input,private state:GameState,private districtId:DistrictId,private onDebate:()=>void){}
- private allies(){return this.state.coalition.members.map(m=>m.allyId);}
- private selected(){return {choice:CHOICES[this.index],ally:this.allies()[this.allyIndex]};}
- private preview(){const p=this.pending??this.selected();return this.result??previewDistrictDecision(this.state,this.districtId,p.choice,p.ally);}
- private pages():string[][]{
+ private back():void {
+  if(this.stack.top!==this||this.committing)return;
+  this.input.reset();audio.cancel();
+  if(this.mode==='menu'){this.stack.pop();return;}
+  this.mode='menu';this.pending=null;this.result=null;this.before=null;this.notice='';
+ }
+ private review(pending:Choice):void {
+  if(this.stack.top!==this||this.mode!=='menu'||this.committing)return;
+  const preview=previewDistrictDecision(this.state,this.districtId,pending.choice,pending.ally);
+  this.input.reset();
+  if(!preview.ok){this.notice=copy(preview.error);audio.cancel();return;}
+  this.pending=pending;this.mode='review';this.notice='';audio.cursor();
+ }
+ private commit(pending:Choice):void {
+  if(this.stack.top!==this||this.mode!=='review'||this.pending!==pending||this.committing)return;
+  this.committing=true;this.input.reset();
   const district=this.state.election.districts.find(d=>d.id===this.districtId)!;
-  const preview=this.preview();
-  const paragraphs=this.mode==='history'?[
-   `CONSENSO LOCALE ${district.localConsensus}%. ${district.outcomes.length}/2 AZIONI.`,
-   ...district.outcomes.map(o=>o.action==='debate'?`DIBATTITO: ${o.variant==='win'?'VITTORIA':'SCONFITTA'}.`:o.action==='promise'?`PROMESSA: ${o.variant==='risky'?'RISCHIOSA':'PRUDENTE'}.`:`SOSTEGNO: ${o.allyId?ALLY_NAMES[o.allyId]:'REGISTRATO'}.`),
-   district.outcomes.length===2?'DOSSIER CHIUSO. LA TERZA AZIONE RESTA ESCLUSA.':`PUOI SCEGLIERE ANCORA ${2-district.outcomes.length} AZIONI.`
-  ]:preview.ok?preview.lines:[preview.error];
-  return dossierPages(paragraphs,5);
+  const before={local:district.localConsensus,money:this.state.money,cohesion:this.state.morale.cohesion};
+  const result=commitDistrictDecision(this.state,this.districtId,pending.choice,pending.ally);
+  if(!result.ok){this.notice=copy(result.error);this.committing=false;audio.cancel();return;}
+  if(pending.choice==='debate'){this.stack.pop();this.onDebate();return;}
+  this.before=before;this.result=result;this.mode='result';saveGame(this.state);this.committing=false;audio.confirm();
  }
- update():void{
-  if(this.mode!=='menu'){
-   const count=this.pages().length;
-   if(this.input.wasPressed('left')||this.input.wasPressed('up'))this.page=Math.max(0,this.page-1);
-   if(this.input.wasPressed('right')||this.input.wasPressed('down'))this.page=Math.min(count-1,this.page+1);
-   if(this.input.wasPressed('b')){this.back();return;}
-   if(!this.input.wasPressed('a'))return;
-   if(this.page<count-1){this.page++;audio.cursor();return;}
-   if(this.mode!=='review'){this.back();return;}
-   const pending=this.pending!;
-   const result=commitDistrictDecision(this.state,this.districtId,pending.choice,pending.ally);
-   if(!result.ok){this.back();this.notice=result.error;audio.cancel();return;}
-   if(pending.choice==='debate'){this.stack.pop();this.onDebate();return;}
-   this.result=result;this.mode='result';this.page=0;saveGame(this.state);audio.confirm();return;
-  }
-  if(this.input.wasPressed('b')){this.stack.pop();return;}
-  if(this.input.wasPressed('start')){this.mode='history';this.page=0;return;}
-  if(this.input.wasPressed('up')){this.index=(this.index+3)%4;this.notice='';audio.cursor();}
-  if(this.input.wasPressed('down')){this.index=(this.index+1)%4;this.notice='';audio.cursor();}
-  const allies=this.allies();
-  if(this.index===3&&allies.length&&(this.input.wasPressed('left')||this.input.wasPressed('right'))){this.allyIndex=(this.allyIndex+(this.input.wasPressed('left')?allies.length-1:1))%allies.length;this.notice='';audio.cursor();}
-  if(!this.input.wasPressed('a'))return;
-  const pending=this.selected(),preview=previewDistrictDecision(this.state,this.districtId,pending.choice,pending.ally);
-  if(!preview.ok){this.notice=preview.error;audio.cancel();return;}
-  this.pending=pending;this.mode='review';this.page=0;audio.cursor();
- }
- private back(){this.mode='menu';this.page=0;this.pending=null;this.result=null;}
- draw(screen:Screen):void{
-  drawCampaignBackdrop(screen,`district-${this.districtId}`);
+ get uiPanel():UiPanel {
   const content=DISTRICT_CONTENT[this.districtId],district=this.state.election.districts.find(d=>d.id===this.districtId)!;
-  drawScreenHeader(screen,content.name,`${district.localConsensus}% · ${districtActionCount(this.state.election,this.districtId)}/2`);
-  if(this.mode!=='menu'){
-   this.page=drawDossierPage(screen,this.pages(),this.page,this.mode==='review'?'DOSSIER SCELTA':this.mode==='result'?'SCELTA REGISTRATA':'VERBALE COLLEGIO',this.mode==='result',this.mode==='review'?'A CONFERMA':'A MENU',this.mode==='review'?'B ANNULLA':'B MENU',77);return;
+  const back={label:'Indietro',hint:this.mode==='menu'?'Torna alla campagna.':'Torna alle azioni del collegio.',run:()=>this.back()};
+  const summary:UiBlock={title:'Collegio',facts:[{label:'Consenso locale',value:`${district.localConsensus}%`},{label:'Azioni svolte',value:`${districtActionCount(this.state.election,this.districtId)} di 2`}]};
+  if(this.mode==='menu'){
+   const choices:Choice[]=[{choice:'debate'},{choice:'prudent'},{choice:'risky'},...this.state.coalition.members.map(m=>({choice:'endorsement' as const,ally:m.allyId}))];
+   if(!this.state.coalition.members.length)choices.push({choice:'endorsement'});
+   return {title:copy(content.name),subtitle:copy(content.problem),blocks:[summary,{title:'Due azioni per collegio',body:'Dibattito, promessa o sostegno: puoi sceglierne due. Una promessa prudente e una rischiosa occupano lo stesso tipo di azione.'},...(this.notice?[{title:'Azione non disponibile',body:this.notice}]:[])],
+    actions:[...choices.map(pending=>{
+     const p=previewDistrictDecision(this.state,this.districtId,pending.choice,pending.ally);
+     const label=pending.choice==='debate'?'Dibattito':pending.choice==='prudent'?copy(content.prudent):pending.choice==='risky'?copy(content.risky):pending.ally?`Sostegno: ${ALLY_NAMES[pending.ally]}`:'Sostegno';
+     const hint=!p.ok?copy(p.error):pending.choice==='debate'?`Lotta manuale. In caso di vittoria: +${p.localDelta} punti di consenso locale.`:`Consenso locale ${p.localDelta>=0?'+':''}${p.localDelta} punti. Costo ${-p.moneyDelta} €. Coesione ${p.cohesionDelta} punti.`;
+     return {label,hint,disabled:!p.ok,run:()=>this.review(pending)};
+    }),{label:'Verbale del collegio',hint:'Rileggi le azioni già registrate.',run:()=>{if(this.stack.top!==this||this.mode!=='menu')return;this.mode='history';this.input.reset();audio.cursor();}}],back};
   }
-  screen.rect(8,45,224,12,'#17243d');screen.text(content.problem,10,48,'#ffe38a');
-  const labels=['DIBATTITO',content.prudent,content.risky,'SOSTEGNO ◄►'],ally=this.allies()[this.allyIndex];
-  CHOICES.forEach((choice,i)=>{
-   const p=previewDistrictDecision(this.state,this.districtId,choice,ally),y=59+i*24;
-   screen.panel(8,y,224,23,'card');if(this.index===i)screen.rect(12,y+3,216,10,'#f4d34a');
-   screen.text(labels[i],15,y+5,p.ok?'#10141f':'#68758a');
-   const value=!p.ok?p.error:choice==='debate'?`VITTORIA +${p.localDelta} · LOTTA MANUALE`:choice==='endorsement'?`${ally?ALLY_NAMES[ally]:'NESSUNO'} ${p.localDelta>=0?'+':''}${p.localDelta}`:`+${p.localDelta} LOC. · ${-p.moneyDelta}€ · COE ${p.cohesionDelta}`;
-   screen.textFit(value,15,y+16,210,p.ok?i===2?'#a0443e':'#26745d':'#68758a');
-  });
-  screen.rect(0,154,240,26,'#17243d');screen.textFit(this.notice||'DUE AZIONI SU TRE · MENU: VERBALE',8,156,224,'#fffaf0');
-  screen.text('SU/GIU SCEGLI · A DOSSIER · B ESCI',8,169,'#ffe38a');
+  if(this.mode==='history')return {title:'Verbale del collegio',subtitle:copy(content.name),blocks:[summary,
+   ...district.outcomes.map(o=>({title:o.action==='debate'?'Dibattito':o.action==='promise'?'Promessa':'Sostegno',body:o.action==='debate'?o.variant==='win'?'Vittoria.':'Sconfitta.':o.action==='promise'?o.variant==='risky'?'Promessa rischiosa.':'Promessa prudente.':o.allyId?ALLY_NAMES[o.allyId]:'Registrato.'})),
+   {title:district.outcomes.length===2?'Dossier chiuso':'Azioni disponibili',body:district.outcomes.length===2?'La terza azione resta esclusa.':`Puoi scegliere ancora ${2-district.outcomes.length} azioni.`}],actions:[],back};
+  const pending=this.pending!;
+  const preview=this.result??previewDistrictDecision(this.state,this.districtId,pending.choice,pending.ally);
+  const blocks:UiBlock[]=[];
+  if(preview.ok){
+   if(pending.choice!=='debate'){
+    const before=this.before??{local:district.localConsensus,money:this.state.money,cohesion:this.state.morale.cohesion};
+    blocks.push({title:this.result?'Variazioni registrate':'Conseguenze previste',facts:[{label:'Consenso locale',value:`${before.local} → ${before.local+preview.localDelta}%`},{label:'Fondi',value:`${before.money} → ${before.money+preview.moneyDelta} €`},{label:'Coesione',value:`${before.cohesion} → ${before.cohesion+preview.cohesionDelta} di 100`}]});
+   }
+   blocks.push({title:pending.choice==='debate'?'Prima del dibattito':'Dossier della scelta',body:preview.lines.map(copy).join('\n\n')});
+  }else blocks.push({title:'Azione non disponibile',body:copy(preview.error)});
+  if(this.notice)blocks.push({title:'La scelta non è stata registrata',body:this.notice});
+  return {title:this.result?'Scelta registrata':'Esamina la scelta',subtitle:copy(content.name),blocks,
+   actions:[{label:this.result?'Torna al collegio':pending.choice==='debate'?'Inizia il dibattito':'Conferma la scelta',disabled:!preview.ok||this.committing,run:()=>this.result?this.back():this.commit(pending)}],primary:0,back};
  }
+ update():void {}
+ draw(screen:Screen):void {screen.clear('#17243d');}
 }

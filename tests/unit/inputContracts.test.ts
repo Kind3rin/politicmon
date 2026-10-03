@@ -20,9 +20,9 @@ test('shared dossier focus still requires visible A/B hints',()=>{
  assert.deepEqual(inputContract(input),{focus:true,aHint:false,bHint:false});
  assert.deepEqual(inputContract(`${input} screen.text('A PAGINE B ESCI');`),{focus:true,aHint:true,bHint:true});
 });
-test('starter pager requires both the current tab title and page indicator',()=>{
+test('native starter panel requires a selected action and named back command',()=>{
  const source=readFileSync(new URL('../../src/scenes/StarterPreviewScene.ts',import.meta.url),'utf8');
  assert.deepEqual(inputContract(source),{focus:true,aHint:true,bHint:true});
- assert.equal(inputContract(source.replace('][this.tab]',']'))?.focus,false);
- assert.equal(inputContract(source.replace('${this.page+1}/${this.pages().length}','PAGINA'))?.focus,false);
+ assert.equal(inputContract(source.replace('selected:0','selection:0'))?.focus,false);
+ assert.equal(inputContract(source.replace('back:this.action','exit:this.action'))?.focus,false);
 });

@@ -94,3 +94,13 @@ body.battle-touch #touch-ui{display:block;padding:0}
 .pwa-banner-install{border:0;border-radius:8px;min-height:44px;padding:8px 12px;font-weight:800;font-size:11px;color:#101c30;background:#e6b944}
 .pwa-banner-close{border:1px solid #586b85;border-radius:8px;width:44px;height:44px;flex-shrink:0;color:#fffaf0;background:#243751}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+
+/* The commands guide follows the same four text levels as game panels. */
+#shell-guide{font-family:PoliticmonBody,system-ui,sans-serif;font-size:16px;line-height:1.4}
+#shell-guide h1{font-family:PoliticmonTitle,system-ui,sans-serif;font-size:28px;line-height:1.15}
+#shell-guide p{font-size:16px;line-height:1.4;margin:12px 0;max-width:45ch}
+#shell-guide .guide-controls>div{font-size:16px;line-height:1.4;grid-template-columns:160px minmax(0,1fr)}
+#shell-guide .guide-controls dd{font-size:16px;max-width:45ch}
+#shell-guide .guide-eyebrow,#shell-guide .guide-note{font-size:13px}
+#shell-guide-resume{font-family:PoliticmonBody,system-ui,sans-serif;font-size:18px;min-height:48px}
+@media(max-width:440px){#shell-guide .guide-controls>div{grid-template-columns:1fr;gap:8px}}

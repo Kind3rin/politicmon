@@ -6,7 +6,7 @@ import { MAPS } from "../../src/data/maps";
 import { createMonster } from "../../src/game/monster";
 import { newGameState, parseGameState } from "../../src/game/state";
 import { defensiveMatchups, dexAcquisitionNotes, dexHabitats, dexMatches, evolutionCondition, reachableDexMaps } from "../../src/game/dexGuide";
-import { damageRange, fieldTactics, moveTactics, switchPreview } from "../../src/game/battle/tactics";
+import { damageRange, fieldTactics, moveTactics, switchPreview, replyRange } from "../../src/game/battle/tactics";
 import { calcDamage, catchChance, makeCombatant } from "../../src/game/battle/sim";
 
 test("temporary GAFFE boosts capture like persistent statuses, without stacking twice", () => {
@@ -61,6 +61,26 @@ test("status and stat forecasts report immunity and stage caps", () => {
   assert.match(moveTactics(a, d, MOVES.slogan).join(" "), /FACCIA TOSTA \+0/);
   d.gaffeTurns = 3;
   assert.match(moveTactics(d, a, MOVES.comizio).join(" "), /33%/);
+});
+
+test("announced replies distinguish special attacks from Grinta and preview only guaranteed earlier preparation", () => {
+  const player = makeCombatant(createMonster("renzino", 8)), foe = makeCombatant(createMonster("giorgetta", 8));
+  player.stages.spd = 6;
+  const before = JSON.stringify([player, foe]);
+  const random = Math.random; Math.random = () => { throw Error("Reply inspection consumed RNG"); };
+  try {
+    const specialMove = Object.values(MOVES).find(move => move.category === "speciale" && move.power > 0)!;
+    const special = replyRange(player, foe, specialMove);
+    assert.deepEqual(replyRange(player, foe, specialMove, MOVES.promessa), special);
+    const physical = replyRange(player, foe, MOVES.radici);
+    assert.ok(replyRange(player, foe, MOVES.radici, MOVES.promessa).max < physical.max);
+    player.stages.spd = -6; foe.stages.spd = 6;
+    assert.deepEqual(replyRange(player, foe, MOVES.radici, MOVES.promessa), replyRange(player, foe, MOVES.radici));
+    player.stages.spd = 6; foe.stages.spd = -6; foe.stages.atk = -6;
+    assert.deepEqual(replyRange(player, foe, MOVES.radici, MOVES.promessa), replyRange(player, foe, MOVES.radici));
+  } finally { Math.random = random; }
+  player.stages.spd = 6; foe.stages.spd = 0; foe.stages.atk = 0;
+  assert.equal(JSON.stringify([player, foe]), before);
 });
 
 test("switch inspection applies entry abilities on snapshots without changing the party or live foe", () => {
@@ -197,8 +217,8 @@ test("forced and mirror switches preserve ownership and cannot cancel after a KO
   const mirror = [createMonster("giorgetta", 10), createMonster("ellyna", 10)]; mirror[0].hp = 0;
   let choice: typeof mirror[number] | undefined;
   const scene = new PartyScene(stack, input as never, state, { mode: "forced-switch", currentUid: mirror[0].uid, partyOverride: mirror, onChoose: mon => { choice = mon; } }); stack.push(scene);
-  const commands = scene.touchActions!; assert.match(commands[0].hint!, /rimpasto gratis/);
-  assert.equal(commands[5].disabled, true); commands[5].run(); scene.update(); assert.equal(stack.top, scene);
+  const commands = scene.touchActions!; assert.match(commands[0].hint!, /rimpasto gratis/i);
+  assert.equal(commands.at(-1)!.disabled, true); commands.at(-1)!.run(); scene.update(); assert.equal(stack.top, scene);
   commands[0].run(); assert.equal(choice, mirror[1]); assert.equal(stack.top, undefined); assert.equal(JSON.stringify(state), before);
 });
 
@@ -208,13 +228,13 @@ test("battle switches charge one counter only; next foe opens a free choice with
   const state = newGameState(); state.party = [createMonster("renzino", 8), createMonster("ellyna", 8)];
   const battle = Object.assign(Object.create(BattleScene.prototype), { state, input: { reset() {} }, stack: new SceneStack(), player: makeCombatant(state.party[0]), foe: makeCombatant(createMonster("grillix", 5)), queue: [], mode: "menu", displayHp: {}, finished: false,
     foeCounterStep: () => ({ text: "COUNTER" }), endOfTurnSteps: () => [{ text: "END" }] }); battle.stack.push(battle);
-  const before = JSON.stringify(state); battle.openParty(false); battle.stack.top.touchActions[5].run(); assert.equal(JSON.stringify(state), before); assert.equal(battle.queue.length, 0);
+  const before = JSON.stringify(state); battle.openParty(false); battle.stack.top.touchActions.at(-1).run(); assert.equal(JSON.stringify(state), before); assert.equal(battle.queue.length, 0);
   battle.openParty(false); const choose = battle.stack.top.touchActions[0]; choose.run(); choose.run();
   assert.equal(battle.player.mon, state.party[1]); assert.equal(battle.queue.filter((step: any) => step.text === "COUNTER").length, 1);
   assert.equal(battle.queue.filter((step: any) => step.text === "END").length, 1);
   battle.queue = []; battle.trainer = { id: "trainer", name: "Rivale" }; battle.foeTeam = [battle.foe.mon, createMonster("salvinott", 6)]; battle.foeIndex = 0;
   battle.afterFoeDown(); for (const step of [...battle.queue]) step.run?.();
-  const free = battle.stack.top; assert.notEqual(free, battle); assert.match(free.touchActions[0].hint, /rimpasto gratis/);
+  const free = battle.stack.top; assert.notEqual(free, battle); assert.match(free.touchActions[0].hint, /rimpasto gratis/i);
   battle.queue = []; free.touchActions[0].run(); assert.equal(battle.player.mon, state.party[0]);
   assert.ok(!battle.queue.some((step: any) => step.text === "COUNTER" || step.text === "END"));
 });

@@ -1,6 +1,5 @@
-import { drawMonsterSprite } from "../art/monsters";
 import { TYPE_ORDER, type PolType } from "../data/poltypes";
-import { DEX_ORDER, SPECIES, STARTERS } from "../data/species";
+import { DEX_ORDER, SPECIES } from "../data/species";
 import { ABILITIES } from "../data/abilities";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
@@ -9,16 +8,18 @@ import type { TouchAction } from "../engine/touchActions";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { drawScreenHeader, wrapText, GREY, INK } from "../ui/widgets";
+import { wrapText } from "../ui/widgets";
 import { zoneProgress } from "../data/dexzones";
 import { formsForSpecies } from "../game/memeForms";
 import { runtimeFeatures } from "../game/features";
-import { defensiveMatchups, dexAcquisitionNotes, dexSummary, dexMatches, DEX_FILTERS, DEX_FILTER_LABELS, evolutionCondition, reachableDexMaps, type DexFilter } from "../game/dexGuide";
+import { defensiveMatchups, dexHabitats, dexAcquisitionNotes, dexSummary, dexMatches, DEX_FILTERS, DEX_FILTER_LABELS, evolutionCondition, reachableDexMaps, type DexFilter } from "../game/dexGuide";
 
-const PAGES = ["BIO", "STAT", "TIPI", "DOVE", "EVO"];
+import type { UiPanel, UiBlock } from "../ui/kit";
+import { moveDescription } from "../ui/kit/moveContent";
 export class DexScene implements Scene {
   private index = 0;
   private detail = false;
+  private filterOpen = false;
   private scroll = 0;
   private page = -1;
   private textScroll = 0;
@@ -149,57 +150,67 @@ export class DexScene implements Scene {
     return notes.flatMap((note) => note ? wrapText(note, 35) : [""]);
   }
 
-  draw(screen: Screen): void {
-    screen.clear("#101b32");
-    if (this.detail) { this.drawDetail(screen); return; }
-    const seen = DEX_ORDER.filter((id) => this.state.dex[id]).length;
-    const caught = DEX_ORDER.filter((id) => this.state.dex[id] === "caught").length;
-    const target = DEX_ORDER.length - STARTERS.filter((s) => s !== this.state.starterId).length;
-    drawScreenHeader(screen, "POLITICDEX", `VISTI ${seen}  ELETTI ${caught}/${target}`);
-    screen.panel(4, 18, 232, 158, "card");
-    screen.text(`◄ ${DEX_FILTER_LABELS[this.filter]} ►`, 12, 24, "#8c5b12");
-    screen.textRight(this.typeFilter ?? "OGNI TIPO", 226, 24, GREY);
-    const ids = this.ids();
-    for (let row = 0; row < 7; row++) {
-      const id = ids[this.scroll + row]; if (!id) break;
-      const s = SPECIES[id]; const status = this.state.dex[id]; const y = 39 + row * 12;
-      if (id === DEX_ORDER[this.index]) { screen.rect(8, y - 2, 224, 11, "#fff0bd"); screen.text("►", 10, y, "#8c5b12"); }
-      screen.text(`N.${String(s.dexNum).padStart(2, "0")}`, 20, y, GREY);
-      screen.textFit(status ? s.name : "??????????", 54, y, 153, status ? INK : GREY);
-      screen.text(status === "caught" ? "★" : status === "seen" ? "•" : "?", 218, y, status === "caught" ? "#b04848" : GREY);
-    }
-    if (!ids.length) { screen.text("NESSUNA SPECIE NEL FILTRO", 18, 68, GREY); screen.text("START: CAMBIA IL TIPO", 18, 82, GREY); }
-    const zones = zoneProgress(this.state.dex, this.state.flags, this.state.browserSeed);
-    const here = zones.find((p) => p.zone.id === this.state.pos.mapId);
-    screen.textFit(here ? `${here.zone.name}: ${here.caught}/${here.total}  PREMIO ${here.zone.reward.money}€` : `ZONE COMPLETE ${zones.filter((p) => p.done).length}/${zones.length}`, 12, 129, 214, "#26745d");
-    screen.textFit(`${ids.length} SPECIE  •  ${this.typeFilter ? "TIPI GIÀ AVVISTATI" : "DOVE MOSTRA I PERCORSI APERTI"}`, 12, 142, 214, GREY);
-    screen.text("A: SCHEDA   START: FILTRA TIPO", 12, 155, INK);
-    screen.text("◄►: FILTRO   SU/GIU: LISTA   B: ESCI", 12, 166, GREY);
+  private readable(value:string):string {
+    let text=value.charAt(0)+value.slice(1).toLocaleLowerCase("it");
+    for(const species of Object.values(SPECIES))text=text.replaceAll(species.name.toLocaleLowerCase("it"),species.name);
+    return text.replace(/\bpv\b/gi,"PV").replace(/\bpp\b/gi,"PP");
   }
 
-  private drawDetail(screen: Screen): void {
-    const id = DEX_ORDER[this.index], species = SPECIES[id], seen = Boolean(this.state.dex[id]);
-    const form = formsForSpecies(id, this.state.unlockedMemeForms)[this.page - 5];
-    drawScreenHeader(screen, "POLITICDEX");
-    screen.rect(6, 20, 228, 59, "#101b32"); screen.frame(6, 20, 228, 59, "#d3a745");
-    if (seen) drawMonsterSprite(screen, id, 10, 29, 54, 45, { memeFormId: form?.id, animationTime: this.time });
-    else screen.text("?", 30, 38, "#b7cedc", 3);
-    screen.textFit(`N.${String(species.dexNum).padStart(2, "0")} ${seen ? species.name : "DA SCOPRIRE"}`, 76, 30, 150, "#fff3cc");
-    screen.text(this.state.dex[id] === "caught" ? "★ ELETTO" : seen ? "• AVVISTATO" : "? MAI VISTO", 76, 49, "#79ddba");
-    screen.panel(6, 82, 228, 83, "card");
-    if (this.page < 0) {
-      dexSummary(id, this.state, this.reachable).forEach((line, i) => wrapText(line, 35).slice(0, 2).forEach((part, j) => screen.text(part, 14, 89 + i * 18 + j * 8, INK)));
-      screen.text(seen ? "A: STORIA  ◄►: SPECIE  B: LISTA" : "A: HABITAT  ◄►: SPECIE  B: LISTA", 8, 169, "#fff3cc");
-      return;
+  get uiPanel():UiPanel {
+    const id=DEX_ORDER[this.index],species=SPECIES[id],seen=!!this.state.dex[id],ids=this.ids(),page=this.page,detail=this.detail,filterOpen=this.filterOpen;
+    const action=(label:string,run:()=>void,disabled=false,hint?:string):TouchAction=>({label,hint,disabled,run:()=>{
+      if(disabled||this.stack.top!==this||this.detail!==detail||this.page!==page||this.filterOpen!==filterOpen||DEX_ORDER[this.index]!==id)return;
+      this.input.reset();audio.confirm();run();
+    }});
+    const back=action("Indietro",()=>{if(this.filterOpen)this.filterOpen=false;else if(this.detail&&this.page>=0)this.page=-1;else if(this.detail)this.detail=false;else this.stack.pop();});
+    if(this.filterOpen)return {title:"Tipo da cercare",subtitle:"Il filtro per tipo include solo le specie già avvistate.",
+      actions:[action("Ogni tipo",()=>{this.typeFilter=null;this.selectFirst();this.filterOpen=false;}),...TYPE_ORDER.map(type=>({...action(type,()=>{this.typeFilter=type;this.selectFirst();this.filterOpen=false;}),icon:`/sprites/ui/type_${type.toLocaleLowerCase('it')}.png`,group:"Tipi avvistati"}))],selected:this.typeFilter?TYPE_ORDER.indexOf(this.typeFilter)+1:0,back:back};
+    if(!detail){
+      const seenCount=DEX_ORDER.filter(candidate=>this.state.dex[candidate]).length,caught=DEX_ORDER.filter(candidate=>this.state.dex[candidate]==="caught").length,target=DEX_ORDER.length;
+      const zones=zoneProgress(this.state.dex,this.state.flags,this.state.browserSeed),here=zones.find(progress=>progress.zone.id===this.state.pos.mapId);
+      return {title:"Politicdex",subtitle:ids.length?`${ids.length} specie nel filtro. Tocca una voce per aprire la scheda.`:this.filter==="here"?"Qui non ci sono incontri selvatici.":"Il filtro non contiene specie.",
+        tabs:[...DEX_FILTERS.map(filter=>action(this.readable(DEX_FILTER_LABELS[filter]),()=>{this.filter=filter;this.selectFirst();})),action("Tipo",()=>{this.filterOpen=true;},false,this.typeFilter??"Ogni tipo")],selectedTab:DEX_FILTERS.indexOf(this.filter),
+        blocks:[{title:"La collezione",facts:[{label:"Avvistati",value:String(seenCount)},{label:"Eletti",value:`${caught} di ${target}`} ]},
+          ...(here?[{title:this.readable(here.zone.name),facts:[{label:"Eletti nella zona",value:`${here.caught} di ${here.total}`},{label:"Premio",value:`${here.zone.reward.money} €`}]}]:[{title:"Zone completate",facts:[{label:"Progressi",value:`${zones.filter(progress=>progress.done).length} di ${zones.length}`}]}]),
+          ...(!ids.length?[{title:"Nessuna specie nel filtro",body:"Scegli Tutti o rimuovi il filtro per tipo."}]:[])],
+        actions:ids.map(candidate=>{
+          const known=!!this.state.dex[candidate],entry=SPECIES[candidate];
+          return {...action(known?entry.name:"Da scoprire",()=>{this.index=DEX_ORDER.indexOf(candidate);this.detail=true;this.page=-1;},false,this.state.dex[candidate]==="caught"?"Eletto nella tua collezione":known?"Avvistato":"Consulta l’habitat per cercarlo."),
+            icon:known?`/sprites/monsters/${candidate}.png`:undefined,group:"Specie",facts:[{label:"Numero",value:String(entry.dexNum).padStart(2,"0")},...(known?[{label:"Tipo",value:entry.types.join(" · ")}]:[])]};
+        }),selected:Math.max(0,ids.indexOf(id)),back:back};
     }
-    for (const [i, label] of PAGES.entries()) {
-      if (this.page === i) screen.rect(12 + i * 43, 65, 40, 11, "#fff0bd");
-      screen.text(label, 15 + i * 43, 67, this.page === i ? INK : "#b7cedc");
+    const blocks:UiBlock[]=[];
+    const inspect=(next:number)=>{this.page=next;this.textScroll=0;};
+    if(page<0){
+      blocks.push({title:"Scheda",facts:[{label:"Numero",value:String(species.dexNum).padStart(2,"0")},{label:"Collezione",value:this.state.dex[id]==="caught"?"Eletto":seen?"Avvistato":"Da scoprire"},...(seen?[{label:"Tipo",value:species.types.join(" · ")}]:[])]});
+      if(seen){const ability=species.ability?ABILITIES[species.ability]:undefined;blocks.push({title:ability?.name??"Abilità passiva",body:ability?.desc??"Nessuna abilità passiva."});}
+      const habitat=dexHabitats(id,this.state,this.reachable)[0];
+      blocks.push({title:"Dove cercare",body:habitat?`${this.readable(habitat.name)}. Livelli ${habitat.minLv}–${habitat.maxLv}.`:this.readable(dexAcquisitionNotes(id,this.state,this.reachable)[0])});
+    }else if(!seen&&page!==3)blocks.push({title:"Dossier da aprire",body:"Avvista questa specie per scoprirne le caratteristiche. L’habitat ti aiuta a cercarla."});
+    else if(page===0)blocks.push({title:"Storia",body:species.dexLine});
+    else if(page===1){
+      blocks.push({title:"Valori base della specie",body:"Il livello e la crescita cambiano i valori del singolo compagno.",facts:[{label:"PV",value:String(species.base.hp)},{label:"Grinta",value:String(species.base.atk)},{label:"Faccia tosta",value:String(species.base.def)},{label:"Retorica",value:String(species.base.spc)},{label:"Opportunismo",value:String(species.base.spd)}]});
+      blocks.push({title:"Difesa dalle mosse speciali",body:species.specialDefense===undefined?"Usa Faccia tosta anche contro gli attacchi speciali.":"Questa specie ha una difesa speciale fissa.",facts:species.specialDefense===undefined?undefined:[{label:"Difesa speciale",value:String(species.specialDefense)}]});
+    }else if(page===2)blocks.push({title:"Danno ricevuto per tipo",body:"Più di ×1 significa debolezza; meno di ×1 significa resistenza. Abilità e oggetti possono cambiare il risultato.",facts:defensiveMatchups(id).map(match=>({label:match.type,value:`×${match.mult.toLocaleString('it')}`}))});
+    else if(page===3){
+      const habitats=dexHabitats(id,this.state,this.reachable),notes=dexAcquisitionNotes(id,this.state,this.reachable);
+      if(habitats.length)blocks.push({title:"Incontri accessibili",body:"La rarità indica la presenza tra i selvatici della zona, non la probabilità di incontrarlo a ogni passo."});
+      for(const habitat of habitats)blocks.push({title:this.readable(habitat.name),facts:[{label:"Livelli",value:`${habitat.minLv}–${habitat.maxLv}`},{label:"Rarità",value:habitat.share<.05?"Rarissimo":habitat.share<.15?"Raro":habitat.share<.3?"Regolare":"Comune"}]});
+      for(const note of notes.slice(habitats.length?habitats.length+2:0))blocks.push({title:"Come trovarlo",body:this.readable(note)});
+    }else if(page===4){
+      for(const [i,rule] of (species.evolutions??[]).entries())blocks.push({title:SPECIES[rule.id].name,body:this.readable(evolutionCondition(rule,species.evolutions?.slice(0,i)))});
+      if(!species.evolutions?.length)blocks.push({title:"Forma finale",body:"Questa specie non evolve."});
+      for(const [level,moveId] of species.learnset){const move=MOVES[moveId];blocks.push({title:`Livello ${level} · ${this.readable(move.name)}`,body:moveDescription(move),facts:[{label:"Tipo",value:move.type},{label:"Potenza",value:move.power?String(move.power):"—"},{label:"PP massimi",value:String(move.pp)},{label:"Precisione",value:`${move.accuracy}%`}]});}
+    }else{
+      const labels={atk:"Grinta",def:"Faccia tosta",spc:"Retorica",spd:"Opportunismo"};
+      for(const form of formsForSpecies(id,this.state.unlockedMemeForms))blocks.push({title:this.readable(form.name),body:this.readable(form.provenance),facts:[{label:"Stagione",value:this.readable(form.season)},{label:labels[form.stat],value:`+${form.statPercent}%`} ]});
+      blocks.push({title:"Stessa specie",body:"Le forme meme conservano lo stesso numero nel Politicdex."});
     }
-    const lines = this.lines();
-    lines.slice(this.textScroll, this.textScroll + 7).forEach((line, i) => screen.text(line, 14, 89 + i * 9, INK));
-    screen.text(lines.length > 7 ? `SU/GIU: TESTO ${this.textScroll + 1}/${lines.length - 6}` : "DETTAGLI SU RICHIESTA", 14, 153, GREY);
-    screen.textRight(`${this.page + 1}/${this.pageCount()}`, 226, 153, "#8c5b12");
-    screen.text("A: PAGINA  ◄►: SPECIE  B: SCHEDA", 8, 169, "#fff3cc");
+    const forms=formsForSpecies(id,this.state.unlockedMemeForms);
+    return {title:seen?species.name:"Da scoprire",portrait:seen?{src:`/sprites/monsters/${id}.png`,label:species.name}:undefined,
+      subtitle:page<0?"Politicdex":["Storia","Statistiche","Difese","Habitat","Evoluzioni e mosse"][page]??"Forme meme",blocks,
+      actions:page>=0?[]:[action("Habitat",()=>inspect(3),false,"Luoghi aperti e modi per reclutarlo."),action("Storia",()=>inspect(0),!seen),action("Statistiche",()=>inspect(1),!seen),action("Difese",()=>inspect(2),!seen),action("Evoluzioni e mosse",()=>inspect(4),!seen),...(forms.length?[action("Forme meme",()=>inspect(5))]:[])],selected:0,back:back};
   }
+
+  draw(screen:Screen):void{screen.clear("#101b32");}
 }

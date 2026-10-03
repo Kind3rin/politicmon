@@ -1,16 +1,18 @@
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_W } from "../engine/screen";
+import type { Screen } from "../engine/screen";
 import type { GameState } from "../game/state";
-import { GREY, INK } from "../ui/widgets";
+import type { UiPanel } from "../ui/kit";
+import { currentQuest } from "../data/quests";
+import { MAPS } from "../data/maps";
+import { MAP_NAMES } from "../data/maps/names";
+import { reachableDexMaps } from "../game/dexGuide";
+import { runtimeFeatures } from "../game/features";
 
 interface MapNode {
   id: string;
   label: string;
-  shortLabel: string;
-  x: number;
-  y: number;
   maps: readonly string[];
   unlocked?: (state: GameState) => boolean;
   optional?: boolean;
@@ -23,64 +25,55 @@ interface MapPage {
 }
 
 const ITALIETTA_NODES: readonly MapNode[] = [
-  { id: "borgo", label: "BORGO", shortLabel: "BORGO", x: 20, y: 72, maps: ["borgo", "home", "lab", "bar"] },
-  { id: "route1", label: "PERCORSO 1", shortLabel: "1", x: 44, y: 72, maps: ["route1"] },
-  { id: "grotta1", label: "GROTTA DELLE PROMESSE", shortLabel: "GROTTA", x: 44, y: 112, maps: ["grotta1"], optional: true },
-  { id: "mediopoli", label: "MEDIOPOLI", shortLabel: "MEDIO", x: 68, y: 72, maps: ["mediopoli", "market", "gym", "bar-medio"] },
-  { id: "route2", label: "PERCORSO 2", shortLabel: "2", x: 92, y: 72, maps: ["route2"] },
-  { id: "eurotown", label: "EUROTOWN", shortLabel: "EURO", x: 116, y: 72, maps: ["eurotown", "gymue", "market2", "lobbystudio", "bistrot", "bar-euro"] },
-  { id: "route3", label: "PERCORSO 3", shortLabel: "3", x: 140, y: 72, maps: ["route3"] },
-  { id: "grotta2", label: "ARCHIVIO DI STATO", shortLabel: "ARCH.", x: 140, y: 112, maps: ["grotta2"], optional: true },
-  { id: "capitale", label: "CAPUT MUNDI", shortLabel: "CAPUT", x: 164, y: 72, maps: ["capitale", "casino", "market3", "gymca", "palazzo"] },
+  { id: "borgo", label: "BORGO", maps: ["borgo", "home", "lab", "bar"] },
+  { id: "route1", label: "PERCORSO 1", maps: ["route1"] },
+  { id: "grotta1", label: "GROTTA DEL CONSENSO", maps: ["grotta1"], optional: true },
+  { id: "mediopoli", label: "MEDIOPOLI", maps: ["mediopoli", "market", "gymtv", "bar-medio"] },
+  { id: "route2", label: "PERCORSO 2", maps: ["route2"] },
+  { id: "eurotown", label: "EUROTOWN", maps: ["eurotown", "gymue", "market2", "lobbystudio", "bistrot", "bar-euro"] },
+  { id: "route3", label: "PERCORSO 3", maps: ["route3"] },
+  { id: "grotta2", label: "ARCHIVIO DI STATO", maps: ["grotta2"], optional: true },
+  { id: "capitale", label: "CAPUT MUNDI", maps: ["capitale", "casino", "market3", "gymca", "palazzo"] },
   {
-    id: "colle", label: "IL COLLE", shortLabel: "COLLE", x: 212, y: 72, maps: ["colle"],
+    id: "colle", label: "IL COLLE", maps: ["colle"],
     unlocked: (state) => Boolean(state.flags["boss-beaten"])
   }
 ];
 
 const ROTTE_NODES: readonly MapNode[] = [
   {
-    id: "stretto", label: "STRETTO DI MESSINA", shortLabel: "STRETTO", x: 38, y: 78,
-    maps: ["stretto", "chiosco"], unlocked: (state) => state.badges.length >= 3
+    id: "stretto", label: "STRETTO DI MESSINA", maps: ["stretto", "chiosco"], unlocked: (state) => state.badges.length >= 3
   },
   {
-    id: "offshore", label: "PARADISO OFFSHORE", shortLabel: "OFFSHORE", x: 120, y: 78,
-    maps: ["offshore", "bar-offshore"], unlocked: (state) => Boolean(state.flags["garante-beaten"])
+    id: "offshore", label: "PARADISO OFFSHORE", maps: ["offshore", "bar-offshore"], unlocked: (state) => Boolean(state.flags["garante-beaten"])
   },
   {
-    id: "bruxelles", label: "BRUXELLES", shortLabel: "BRUXELLES", x: 202, y: 78,
-    maps: ["bruxelles", "commissione", "bar-bruxelles"], unlocked: (state) => Boolean(state.flags["garante-beaten"])
+    id: "bruxelles", label: "BRUXELLES", maps: ["bruxelles", "commissione", "bar-bruxelles"], unlocked: (state) => Boolean(state.flags["garante-beaten"])
   }
 ];
 
 const ATTO3_NODES: readonly MapNode[] = [
   {
-    id: "campo", label: "CAMPO LARGO", shortLabel: "CAMPO", x: 25, y: 72,
-    maps: ["campo_largo", "retropalco_campo"], unlocked: (state) => Boolean(state.flags["ue-beaten"])
+    id: "campo", label: "CAMPO LARGO", maps: ["campo_largo", "retropalco_campo"], unlocked: (state) => Boolean(state.flags["ue-beaten"])
   },
   {
-    id: "futuro", label: "PARTITO DEL FUTURO", shortLabel: "FUTURO", x: 72, y: 72,
-    maps: ["futuro_piazza", "futuro_sede", "futuro_scissione", "futuro_rebrand", "futuro_tesoreria"],
+    id: "futuro", label: "PARTITO DEL FUTURO", maps: ["futuro_piazza", "futuro_sede", "futuro_scissione", "futuro_rebrand", "futuro_tesoreria"],
     unlocked: (state) => Boolean(state.flags["campo-photo-complete"])
   },
   {
-    id: "diplomacy", label: "HOTEL DIPLOMATICO", shortLabel: "HOTEL", x: 119, y: 72,
-    maps: ["diplomacy_lobby", "diplomacy_loyalty", "diplomacy_autonomy", "diplomacy_home", "diplomacy_terrace"],
+    id: "diplomacy", label: "HOTEL DIPLOMATICO", maps: ["diplomacy_lobby", "diplomacy_loyalty", "diplomacy_autonomy", "diplomacy_home", "diplomacy_terrace"],
     unlocked: (state) => Boolean(state.flags.futureResolved)
   },
   {
-    id: "tour", label: "TOUR DEL FEED", shortLabel: "TOUR", x: 166, y: 72,
-    maps: ["tour_feed", "district_nord", "district_centro", "district_sud", "district_isole", "district_feed"],
+    id: "tour", label: "TOUR DEL FEED", maps: ["tour_feed", "district_nord", "district_centro", "district_sud", "district_isole", "district_feed"],
     unlocked: (state) => Boolean(state.flags["diplomacyComplete"])
   },
   {
-    id: "palazzo-feed", label: "PALAZZO DEI FEED", shortLabel: "PALAZZO", x: 213, y: 72,
-    maps: ["palazzo_feed", "palazzo_algoritmo", "palazzo_factcheck", "palazzo_talkshow", "palazzo_silenzio", "palazzo_feed_studio", "palazzo_feed_terrazza"],
+    id: "palazzo-feed", label: "PALAZZO DEI FEED", maps: ["palazzo_feed", "palazzo_algoritmo", "palazzo_factcheck", "palazzo_talkshow", "palazzo_silenzio", "palazzo_feed_studio", "palazzo_feed_terrazza"],
     unlocked: (state) => Boolean(state.flags.tourComplete)
   },
   {
-    id: "genova", label: "GENOVA TECHNO", shortLabel: "GENOVA", x: 72, y: 112,
-    maps: ["genova_techno"], unlocked: (state) => Boolean(state.flags.diplomacyComplete), optional: true
+    id: "genova", label: "GENOVA TECHNO", maps: ["genova_techno"], unlocked: (state) => Boolean(state.flags.diplomacyComplete), optional: true
   }
 ];
 
@@ -97,8 +90,11 @@ export function worldMapPageFor(mapId: string): MapPage["id"] {
 export class WorldMapScene implements Scene {
   private pageIndex: number;
   private selectedId: string;
+  private detail = false;
+  private reachable: Set<string>;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
+    this.reachable = reachableDexMaps(state, runtimeFeatures());
     const pageId = worldMapPageFor(state.pos.mapId);
     this.pageIndex = Math.max(0, PAGES.findIndex((page) => page.id === pageId));
     this.selectedId = this.currentNode()?.id ?? this.selectableNodes()[0]?.id ?? PAGES[this.pageIndex].nodes[0].id;
@@ -132,7 +128,7 @@ export class WorldMapScene implements Scene {
   }
 
   private isUnlocked(node: MapNode): boolean {
-    return !node.unlocked || node.unlocked(this.state);
+    return (!node.unlocked || node.unlocked(this.state)) && node.maps.some(id=>this.reachable.has(id));
   }
 
   private currentNode(): MapNode | undefined {
@@ -162,110 +158,35 @@ export class WorldMapScene implements Scene {
     audio.cursor();
   }
 
-  private drawTabs(screen: Screen): void {
-    const widths = [82, 66, 84];
-    const labels = ["ITALIETTA", "ROTTE", "ATTO 3"];
-    let x = 4;
-    for (let index = 0; index < PAGES.length; index += 1) {
-      const selected = index === this.pageIndex;
-      const width = widths[index];
-      screen.rect(x, 20, width, 12, selected ? "#f4cf49" : "#223451");
-      screen.frame(x, 20, width, 12, selected ? "#fff2a0" : "#4d6585");
-      const tx = Math.round(x + (width - labels[index].length * 6) / 2);
-      screen.text(labels[index], tx, 23, selected ? INK : "#cfe6ff");
-      x += width + 2;
-    }
+  private connections(node: MapNode): MapNode[] {
+    const destinations = new Set(node.maps.flatMap(id => {
+      const map = MAPS[id];
+      return map ? [...map.warps.map(warp => warp.toMap), ...Object.values(map.edges ?? {}).map(edge => edge.toMap)] : [];
+    }));
+    return PAGES.flatMap(page=>page.nodes).filter(candidate=>candidate.id!==node.id&&candidate.maps.some(id=>destinations.has(id)));
   }
 
-  private drawRouteLine(screen: Screen, from: MapNode, to: MapNode): void {
-    const x = Math.min(from.x, to.x) + 6;
-    const width = Math.abs(to.x - from.x) - 12;
-    screen.rect(x, from.y - 1, width, 3, "#7893ad");
-    screen.text("►", Math.round((from.x + to.x) / 2) - 3, from.y - 4, "#ffe38a");
+  private routeNodes(): MapNode[] {
+    const main = this.page.nodes.filter(node=>!node.optional);
+    return main.flatMap(node=>[node,...this.page.nodes.filter(branch=>branch.optional&&this.connections(branch).some(parent=>parent.id===node.id))]);
   }
 
-  private drawRouteNode(screen: Screen, node: MapNode): void {
-    const current = this.currentNode()?.id === node.id;
-    const selected = this.selectedId === node.id;
-    const unlocked = this.isUnlocked(node);
-    const fill = current ? "#f4cf49" : unlocked ? "#69c85a" : "#526176";
-    if (selected) screen.frame(node.x - 8, node.y - 8, 17, 17, "#62bdd4");
-    screen.rect(node.x - 5, node.y - 5, 11, 11, "#17243d");
-    screen.frame(node.x - 5, node.y - 5, 11, 11, fill);
-    screen.rect(node.x - 2, node.y - 2, 5, 5, fill);
-    if (current) screen.textCenter("TU", node.x, node.y - 18, "#ffe38a");
-    screen.textCenter(unlocked ? node.shortLabel : "???", node.x, node.y + 10, unlocked ? "#fffaf0" : GREY);
-    if (node.optional) screen.textCenter("OPZ.", node.x, node.y + 20, "#62bdd4");
+  get uiPanel(): UiPanel {
+    const page=this.page,nodes=this.routeNodes(),selected=this.page.nodes.find(node=>node.id===this.selectedId)??this.page.nodes[0],current=this.currentNode();
+    const name=(value:string)=>value.charAt(0)+value.slice(1).toLocaleLowerCase("it");
+    const close=()=>{if(this.stack.top!==this)return;this.input.reset();audio.cancel();if(this.detail)this.detail=false;else this.stack.pop();};
+    if(this.detail)return {title:name(selected.label),subtitle:selected.id===current?.id?"Sei qui":"Tappa della campagna",
+      blocks:[{title:"Collegamenti",facts:this.connections(selected).map(node=>({label:"Luogo collegato",value:name(node.label)}))},
+        {title:"Passaggio",body:this.isUnlocked(selected)?selected.optional?"Deviazione facoltativa. Non serve per proseguire la storia.":"Segui i passaggi nel mondo. La cartina non consuma risorse.":"Il passaggio si apre proseguendo la campagna."},
+        ...(selected.id===current?.id?[{title:"Prossimo passo",body:currentQuest(this.state)?.step??"Esplora le attività rimaste."}]:[])],
+      actions:[],back:{label:"Indietro",hint:"Torna alla cartina.",run:close}};
+    return {title:"Mappa",subtitle:`Sei a ${name(MAP_NAMES[this.state.pos.mapId]??current?.label??"Italietta")}.`,
+      tabs:PAGES.map((region,index)=>({label:name(region.tab),run:()=>{if(this.stack.top!==this||this.detail)return;this.input.reset();this.pageIndex=index;this.selectedId=this.currentNode()?.id??region.nodes[0].id;if(!region.nodes.some(node=>node.id===this.selectedId))this.selectedId=region.nodes[0].id;audio.cursor();}})),selectedTab:this.pageIndex,
+      blocks:[{title:"Prossima tappa",body:currentQuest(this.state)?.step??"La campagna continua."}],
+      actions:nodes.map(node=>({label:name(node.label),group:"Percorso della campagna",route:node.optional?"branch":"main",hint:node.id===current?.id?"Sei qui":node.optional?"Deviazione facoltativa":undefined,
+        facts:!this.isUnlocked(node)?[{label:"Passaggio",value:"Da sbloccare"}]:undefined,run:()=>{if(this.stack.top!==this||this.detail||this.page!==page)return;this.input.reset();this.selectedId=node.id;this.detail=true;audio.confirm();}})),
+      selected:Math.max(0,nodes.findIndex(node=>node.id===this.selectedId)),back:{label:"Indietro",run:close}};
   }
 
-  private drawItalietta(screen: Screen): void {
-    screen.rect(2, 34, VIEW_W - 4, 108, "#142137");
-    screen.frame(2, 34, VIEW_W - 4, 108, "#4d6585");
-    screen.text("PERCORSO PRINCIPALE", 8, 39, "#cfe6ff");
-    screen.textRight("SU/GIU: TAPPE", 232, 39, GREY);
-    const mainIds = ["borgo", "route1", "mediopoli", "route2", "eurotown", "route3", "capitale", "colle"];
-    const main = mainIds.map((id) => this.page.nodes.find((node) => node.id === id)).filter((node): node is MapNode => Boolean(node));
-    for (let index = 0; index < main.length - 1; index += 1) this.drawRouteLine(screen, main[index], main[index + 1]);
-    screen.rect(42, 78, 3, 24, "#7893ad");
-    screen.text("▼", 41, 94, "#62bdd4");
-    screen.rect(138, 78, 3, 24, "#7893ad");
-    screen.text("▼", 137, 94, "#62bdd4");
-    for (const node of this.page.nodes) this.drawRouteNode(screen, node);
-  }
-
-  private drawRotte(screen: Screen): void {
-    screen.rect(2, 34, VIEW_W - 4, 108, "#12263b");
-    screen.frame(2, 34, VIEW_W - 4, 108, "#4d6585");
-    screen.text("ROTTA DEL TRAGHETTO", 8, 39, "#cfe6ff");
-    screen.textRight("SU/GIU: TAPPE", 232, 39, GREY);
-    this.drawRouteLine(screen, this.page.nodes[0], this.page.nodes[1]);
-    this.drawRouteLine(screen, this.page.nodes[1], this.page.nodes[2]);
-    for (const node of this.page.nodes) this.drawRouteNode(screen, node);
-    screen.textCenter("VARCHI SEGNALATI ANCHE NEL MONDO", VIEW_W / 2, 126, "#ffe38a");
-  }
-
-  private drawAtto3(screen: Screen): void {
-    screen.rect(2, 34, VIEW_W - 4, 108, "#1b2038");
-    screen.frame(2, 34, VIEW_W - 4, 108, "#4d6585");
-    screen.text("CAMPAGNA NAZIONALE", 8, 39, "#cfe6ff");
-    screen.textRight("SU/GIU: TAPPE", 232, 39, GREY);
-    const main = this.page.nodes.slice(0, 5);
-    for (let index = 0; index < main.length - 1; index += 1) this.drawRouteLine(screen, main[index], main[index + 1]);
-    screen.rect(70, 78, 3, 24, "#7893ad");
-    screen.text("▼", 69, 94, "#62bdd4");
-    for (const node of this.page.nodes) this.drawRouteNode(screen, node);
-  }
-
-  private connectionLabel(node: MapNode | undefined): string {
-    if (!node) return "NESSUNA TAPPA";
-    if (this.page.id === "rotte") {
-      if (node.id === "stretto") return "VERSO: PARADISO OFFSHORE";
-      if (node.id === "offshore") return "COLLEGA: STRETTO E BRUXELLES";
-      return "RITORNO: PARADISO OFFSHORE";
-    }
-    if (this.page.id === "atto3") return node.optional ? "DEVIAZIONE FACOLTATIVA" : "TAPPA DELLA CAMPAGNA";
-    return node.optional ? "AREA FACOLTATIVA" : "PERCORSO PRINCIPALE";
-  }
-
-  draw(screen: Screen): void {
-    screen.clear("#101827");
-    if (this.page.id === "italietta") this.drawItalietta(screen);
-    else if (this.page.id === "rotte") this.drawRotte(screen);
-    else this.drawAtto3(screen);
-
-    // Header e tab per ultimi: gli asset PNG possono avere un fondale opaco e
-    // non devono mai coprire i controlli della cartina.
-    screen.rect(0, 0, VIEW_W, 17, "#17243d");
-    screen.rect(0, 15, VIEW_W, 2, "#e6b944");
-    screen.text("CARTINA", 8, 5, "#fffaf0");
-    screen.textRight("B: CHIUDI", VIEW_W - 8, 5, "#ffe38a");
-    this.drawTabs(screen);
-
-    const current = this.currentNode();
-    const selected = this.page.nodes.find((node) => node.id === this.selectedId);
-    screen.panel(4, 144, VIEW_W - 8, 32, "dialog");
-    screen.text(selected?.id === current?.id ? "SEI QUI" : "TAPPA", 11, 150, "#a46b12");
-    screen.textFit(selected?.label ?? "NESSUNA", 62, 150, 166, INK);
-    screen.textFit(this.connectionLabel(selected), 11, 162, 218, selected && this.isUnlocked(selected) ? "#3f7f83" : GREY);
-  }
+  draw(screen: Screen): void { screen.clear("#101827"); }
 }

@@ -1,3 +1,4 @@
+import {memeForm} from "../memeForms";
 // DUELLO PvP host-autoritativo. La scena presenta il duello riusando la
 // presentazione estratta in view.ts (BattleFx, sprite, box HP) e la sim pura
 // di duelsim.ts. Due sim:
@@ -20,7 +21,7 @@ import type { Scene, SceneStack } from "../../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import { battleBackdropForMap, type BattleBackdrop } from "./backdrop";
 import type { GameState } from "../state";
-import { abilityOf, speciesOf, type Monster } from "../monster";
+import { abilityOf, speciesOf, statsOf, type Monster } from "../monster";
 import { statName } from "./sim";
 import {
   applyEvent, applySwitch, aliveCount, makeDuelSim, otherSide, resolveTurn, usableMoves, type DuelSim
@@ -30,10 +31,14 @@ import {
   type DuelCmd, type DuelEndReason, type DuelEvent, type DuelMsg, type DuelSide, type WireMon
 } from "../../net/duelproto";
 import { mp } from "../../net/mp";
-import { Menu, MessageBox, wrapText, GREY, INK } from "../../ui/widgets";
+import { MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawCombatantBox, drawEllipse, FOE_BOX, PLAYER_BOX
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry
 } from "./view";
+import type { UiPanel } from "../../ui/kit";
+import type { TouchAction } from "../../engine/touchActions";
+import { readableCopy } from "../../ui/kit/copy";
+import { moveDescription, moveCardDescription } from "../../ui/kit/moveContent";
 import { PartyScene } from "../../scenes/PartyScene";
 
 interface Step {
@@ -67,14 +72,12 @@ export class PvpBattleScene implements Scene {
   private auth: DuelSim | null = null; // solo host
 
   private queue: Step[] = [];
-  private mode: "queue" | "menu" | "fight" | "ask" | "wait" = "queue";
+  private mode: "queue" | "menu" | "ask" | "wait" = "queue";
   private msg = new MessageBox();
-  private mainMenu = new Menu([{ label: "LOTTA" }, { label: "SQUADRA" }, { label: "RESA" }]);
-  private fightMenu = new Menu([]);
-  private fightEff: Array<"super" | "weak" | "immune" | null> = [];
-  private askMenu = new Menu([{ label: "SÌ" }, { label: "NO" }]);
-  private askText = "";
-  private askYes: (() => void) | null = null;
+  private inspection: string | null = null;
+  private viewHeight = VIEW_H;
+  get expandedViewport(): boolean { return true; }
+  readonly continueWhenGuideOpen = true;
 
   private fx = new BattleFx();
   private introT = 0;
@@ -220,6 +223,7 @@ export class PvpBattleScene implements Scene {
   // ---- Flusso di turno ----
 
   private submitCmd(cmd: DuelCmd): void {
+    this.inspection = null;
     this.mode = "wait";
     this.waitTimer = DUEL_TURN_TIMEOUT;
     if (this.mySide === "guest") {
@@ -466,6 +470,7 @@ export class PvpBattleScene implements Scene {
       return;
     }
     this.done = true;
+    this.inspection = null;
     const nick = this.opts.opponentNick.slice(0, 12);
     const lines: string[] = [];
     if (info.winner === null) {
@@ -511,7 +516,7 @@ export class PvpBattleScene implements Scene {
     dt *= this.opts.state.battleSpeed === 2 ? 2 : 1;
     this.exposeDebug();
     if (this.done) {
-      this.msg.update(dt, this.input);
+      this.msg.update(dt, this.input, this.viewHeight);
       return;
     }
     this.fx.update(dt);
@@ -538,7 +543,7 @@ export class PvpBattleScene implements Scene {
     }
 
     if (this.mode === "queue") {
-      this.msg.update(dt, this.input);
+      this.msg.update(dt, this.input, this.viewHeight);
       if (this.msg.isOpen) {
         return;
       }
@@ -570,48 +575,6 @@ export class PvpBattleScene implements Scene {
       return;
     }
 
-    if (this.mode === "menu") {
-      const action = this.mainMenu.update(this.input);
-      if (action === "select") {
-        const idx = this.mainMenu.index;
-        if (idx === 0) {
-          this.openFightMenu();
-        } else if (idx === 1) {
-          this.openSwitchMenu(false);
-        } else {
-          this.askText = "CONFERMI LA RESA? IL SEGGIO VERRÀ ASSEGNATO ALL'AVVERSARIO.";
-          this.askMenu.index = 0;
-          this.askYes = () => this.forfeit();
-          this.mode = "ask";
-        }
-      }
-      return;
-    }
-
-    if (this.mode === "fight") {
-      const action = this.fightMenu.update(this.input);
-      if (action === "select") {
-        const slot = usableMoves(this.mine.active.mon)[this.fightMenu.index];
-        const moveId = slot?.id ?? "comizio";
-        this.submitCmd({ kind: "move", moveId });
-      } else if (action === "cancel") {
-        this.mode = "menu";
-      }
-      return;
-    }
-
-    if (this.mode === "ask") {
-      const action = this.askMenu.update(this.input);
-      if (action === "select") {
-        const yes = this.askMenu.index === 0;
-        this.mode = "menu";
-        if (yes) {
-          this.askYes?.();
-        }
-      } else if (action === "cancel") {
-        this.mode = "menu";
-      }
-    }
   }
 
   // Coda svuotata: fine duello, switch forzati o nuovo turno.
@@ -638,31 +601,7 @@ export class PvpBattleScene implements Scene {
     }
     // Nuovo turno.
     this.forcedSent = false;
-    this.mainMenu.index = 0;
     this.mode = "menu";
-  }
-
-  private openFightMenu(): void {
-    const foeTypes = speciesOf(this.theirs.active.mon).types;
-    const usable = usableMoves(this.mine.active.mon);
-    this.fightEff = [];
-    const items =
-      usable.length > 0
-        ? usable.map((slot) => {
-            const move = MOVES[slot.id];
-            let marker = "";
-            let eff: "super" | "weak" | "immune" | null = null;
-            if (move.power > 0) {
-              const mult = typeMultiplier(move.type, foeTypes);
-              marker = mult === 0 ? "X " : mult >= 2 ? "▲ " : mult < 1 ? "▼ " : "";
-              eff = mult === 0 ? "immune" : mult >= 2 ? "super" : mult < 1 ? "weak" : null;
-            }
-            this.fightEff.push(eff);
-            return { label: move.name, rightLabel: `${marker}PP ${slot.pp}/${move.pp}` };
-          })
-        : [{ label: MOVES.comizio.name, rightLabel: "GRATIS" }];
-    this.fightMenu = new Menu(items);
-    this.mode = "fight";
   }
 
   // Cambio: PartyScene sui MIRROR (partyOverride) — il party reale resta
@@ -718,131 +657,80 @@ export class PvpBattleScene implements Scene {
     };
   }
 
-  // ---- Draw ----
+  get uiPanel(): UiPanel {
+    if (!this.view || this.finished) return { title: "Duello concluso", actions: [] };
+    const mode = this.mode, turn = this.turn;
+    const action = (label: string, run: () => void, hint?: string, disabled = false): TouchAction => ({
+      label, hint, disabled, run: () => {
+        if (disabled || this.stack.top !== this || this.mode !== mode || this.turn !== turn || this.finished) return;
+        this.input.reset(); audio.confirm(); run();
+      }
+    });
+    const back = action("Indietro", () => { this.inspection = null; this.mode = "menu"; });
+    if (this.inspection && mode === "menu" && !this.done) {
+      const move = MOVES[this.inspection];
+      return { title: readableCopy(move.name), blocks: [{ title: "Effetto", body: moveDescription(move), facts: [
+        { label: "Tipo", value: move.type }, { label: "Potenza", value: move.power ? String(move.power) : "—" },
+        { label: "Precisione", value: `${move.accuracy}%` }, { label: "Priorità", value: String(move.effect?.priority ?? 0) }
+      ] }], actions: [], back };
+    }
+    if (mode === "ask" && !this.done) return { title: "Ritirarsi dal duello?", blocks: [
+      { title: "Esito", body: "L’avversario vincerà per resa. La squadra della campagna conserva PV e PP; fondi e sondaggi restano invariati." }
+    ], actions: [action("Conferma la resa", () => this.forfeit())], primary: 0, back };
+    const ready = mode === "menu" && !this.done;
+    const fallback = usableMoves(this.mine.active.mon).length === 0;
+    const slots = fallback ? [{ id: "comizio", pp: 0 }] : this.mine.active.mon.moves;
+    const moves: TouchAction[] = slots.map(slot => {
+      const move = MOVES[slot.id], mult = typeMultiplier(move.type, speciesOf(this.theirs.active.mon).types);
+      return { ...action(readableCopy(move.name), () => {
+        if (this.done || this.inspection || (!fallback && (!this.mine.active.mon.moves.includes(slot) || slot.pp <= 0))) return;
+        this.submitCmd({ kind: "move", moveId: slot.id });
+      }, moveCardDescription(move), !ready || (!fallback && slot.pp <= 0)), facts: [
+        { label: "Tipo", value: move.type }, { label: "Potenza", value: move.power ? String(move.power) : "—" },
+        { label: "PP", value: fallback ? "Riserva" : `${slot.pp}/${move.pp}` },
+        { label: "Efficacia", value: move.power ? `×${mult}` : "—" }
+      ], onInspect: ready ? () => {
+        if (this.stack.top !== this || this.mode !== mode || this.turn !== turn || this.done || this.finished) return;
+        this.inspection = slot.id; this.input.reset();
+      } : undefined };
+    });
+    while (moves.length < 4) moves.push({ label: "Spazio libero", disabled: true, run: () => {} });
+    const secondary = ready ? [
+      action("Cambio", () => this.openSwitchMenu(false), "Usa il turno. Il nemico sceglie contemporaneamente.", !this.mine.party.some(mon => mon !== this.mine.active.mon && mon.hp > 0)),
+      action("Resa", () => { this.mode = "ask"; }, "Ritirarsi assegna la vittoria all’avversario.")
+    ] : [action(this.msg.isOpen ? "Continua" : "In attesa", () => this.msg.advance(), undefined, !this.msg.isOpen)];
+    const combatant = (mon: Monster, hp: number) => ({ name: speciesOf(mon).name, level: mon.level, hp, maxHp: statsOf(mon).hp,
+      form:memeForm(mon.memeFormId)?.name,status: mon.status ? readableCopy(STATUS_NAMES[mon.status]) : undefined });
+    return { title: "Duello in rete", actions: [...moves, ...secondary], arena: {
+      player: combatant(this.mine.active.mon, this.displayHp.player), foe: combatant(this.theirs.active.mon, this.displayHp.foe),
+      notice: this.fx.effFx ? ({super: "Super efficace", weak: "Poco efficace", crit: "Colpo critico"}[this.fx.effFx.kind]) : `${this.opts.opponentNick.slice(0, 12)} · Turno ${this.turn} · Riserve: ${aliveCount(this.mine)} / ${aliveCount(this.theirs)}`,
+      message: { title: this.done ? "Esito del duello" : mode === "wait" ? "Scelta inviata" : "Duello",
+        body: this.msg.isOpen ? readableCopy(this.msg.visibleText) : mode === "wait"
+          ? `In attesa dell’avversario. Tempo rimasto: ${Math.max(0, Math.ceil(this.waitTimer))} secondi.`
+          : ready ? "Scegli una mossa. Le scelte sono simultanee; tieni premuta una scheda per leggere il dettaglio." : "Il turno è in corso." },
+      moveCount: moves.length,
+      impacts: this.fx.damageNumbers.map(d => ({ label: `−${d.val}`, x: d.x / VIEW_W * 100, y: d.y / this.viewHeight * 100,
+        opacity: this.opts.state.reduceEffects ? 1 : Math.min(1, Math.max(0, (1 - d.life / d.max) / .34)), kind: d.crit ? "crit" : d.super ? "super" : "normal" }))
+    } };
+  }
 
   draw(screen: Screen): void {
-    if (this.finished) {
-      return;
+    if (this.finished || !this.view) return;
+    this.viewHeight = screen.height; this.fx.viewHeight = screen.height;
+    const ctx = screen.ctx, shake = this.fx.shakeOffset(), g = battleGeometry(screen.height);
+    ctx.save(); ctx.translate(shake.x, shake.y);
+    screen.clear("#f0f0e0"); drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
+    const slide = this.fx.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - .25) / .6));
+    const foeSlide = Math.round((1 - slide) * 90), playerSlide = Math.round((1 - slide) * -90);
+    drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, 64, 14, this.backdrop.foePlatform);
+    drawEllipse(screen, 56 + playerSlide, g.playerBase - 2, 76, 16, this.backdrop.playerPlatform);
+    for (const side of ["foe", "player"] as const) {
+      const c = side === "foe" ? this.theirs.active : this.mine.active;
+      const blink = this.fx.flashT[side] > 0 && Math.floor(this.fx.flashT[side] * 16) % 2 === 0;
+      if ((c.mon.hp > 0 || this.fx.faintT[side] > 0) && !blink)
+        drawBattleMonster(screen, this.fx, c, side === "foe" ? 162 + foeSlide : 56 + playerSlide,
+          side === "foe" ? g.foeBase : g.playerBase, this.fx.lungeT[side], side === "player", side);
     }
-    const ctx = screen.ctx;
-    // SCREEN-SHAKE PIENO anche nel duello (come in BattleScene): tutto il frame
-    // trasla su super-efficace/crit; il box azioni resta fermo (restore prima).
-    const shake = this.fx.shakeOffset();
-    ctx.save();
-    ctx.translate(shake.x, shake.y);
-    screen.clear("#f0f0e0");
-    drawBattleBackdrop(screen, this.backdrop);
-
-    const slide = this.fx.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - 0.25) / 0.6));
-    const foeSlide = Math.round((1 - slide) * 90);
-    const playerSlide = Math.round((1 - slide) * -90);
-
-    drawEllipse(screen, 162 + foeSlide, 64, 64, 14, this.backdrop.foePlatform);
-    drawEllipse(screen, 56 + playerSlide, 114, 76, 16, this.backdrop.playerPlatform);
-
-    const foeC = this.theirs.active;
-    const myC = this.mine.active;
-    const foeBlink = this.fx.flashT.foe > 0 && Math.floor(this.fx.flashT.foe * 16) % 2 === 0;
-    if ((foeC.mon.hp > 0 || this.fx.faintT.foe > 0) && !foeBlink) {
-      drawBattleMonster(screen, this.fx, foeC, 162 + foeSlide, 66, this.fx.lungeT.foe, false, "foe");
-    }
-    const playerBlink = this.fx.flashT.player > 0 && Math.floor(this.fx.flashT.player * 16) % 2 === 0;
-    if ((myC.mon.hp > 0 || this.fx.faintT.player > 0) && !playerBlink) {
-      drawBattleMonster(screen, this.fx, myC, 56 + playerSlide, 116, this.fx.lungeT.player, true, "player");
-    }
-
-    this.fx.drawMoveFx(screen);
-    this.fx.drawParticles(screen);
-    this.fx.drawDamageNumbers(screen);
-    drawCombatantBox(screen, foeC.mon, this.displayHp.foe, FOE_BOX);
-    drawCombatantBox(screen, myC.mon, this.displayHp.player, PLAYER_BOX);
-    // Targhetta avversario + riserve (pallini squadra) sotto il suo box.
-    const nick = this.opts.opponentNick.slice(0, 10);
-    screen.rect(FOE_BOX.x, FOE_BOX.y + FOE_BOX.h + 1, nick.length * 6 + 22, 9, "rgba(16,20,31,0.8)");
-    screen.text(`DI ${nick}`, FOE_BOX.x + 2, FOE_BOX.y + FOE_BOX.h + 2, "#9cd8e8");
-    this.drawTeamDots(screen, this.theirs.party, FOE_BOX.x + 2, FOE_BOX.y + FOE_BOX.h + 13);
-    this.drawTeamDots(screen, this.mine.party, PLAYER_BOX.x + 2, PLAYER_BOX.y - 7);
-
-    this.fx.drawEffFx(screen);
-
-    // Fine screen-shake: menu/box e cerchio d'apertura restano stabili.
-    ctx.restore();
-
-    screen.panel(0, VIEW_H - 44, VIEW_W, 44);
-    if (this.mode === "menu") {
-      this.drawMainMenu(screen);
-    } else if (this.mode === "fight") {
-      this.drawFightMenu(screen);
-    } else if (this.mode === "ask") {
-      const lines = wrapText(this.askText, 28);
-      for (let i = 0; i < Math.min(2, lines.length); i += 1) {
-        screen.text(lines[i], 10, VIEW_H - 34 + i * 13, INK);
-      }
-      this.askMenu.draw(screen, VIEW_W - 58, VIEW_H - 42, 50, 11);
-    } else if (this.mode === "wait") {
-      screen.text("IN ATTESA DELL'AVVERSARIO...", 10, VIEW_H - 32, INK);
-      if (this.waitTimer <= 10) {
-        screen.text(`RISPONDE ENTRO ${Math.max(0, Math.ceil(this.waitTimer))}S O PERDE A TAVOLINO`, 10, VIEW_H - 20, GREY);
-      }
-    }
-    this.msg.draw(screen);
-
-    if (this.introT < 0.55) {
-      const ctx = screen.ctx;
-      const radius = (this.introT / 0.55) * 160;
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, 0, VIEW_W, VIEW_H);
-      ctx.arc(VIEW_W / 2, VIEW_H / 2, Math.max(1, radius), 0, Math.PI * 2);
-      ctx.clip("evenodd");
-      ctx.fillStyle = "#10141f";
-      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
-      ctx.restore();
-    }
-  }
-
-  private drawTeamDots(screen: Screen, party: Monster[], x: number, y: number): void {
-    for (let i = 0; i < party.length; i += 1) {
-      const alive = party[i].hp > 0;
-      screen.rect(x + i * 7, y, 5, 5, alive ? "#48b848" : "#5a5a5a");
-    }
-  }
-
-  private drawMainMenu(screen: Screen): void {
-    const labels = ["LOTTA", "SQUADRA", "RESA"];
-    const w = 100;
-    const x = VIEW_W - w;
-    const y = VIEW_H - 44;
-    screen.panel(x, y, w, 44);
-    for (let i = 0; i < labels.length; i += 1) {
-      const cy = y + 6 + i * 12;
-      if (this.mainMenu.index === i) {
-        screen.text("►", x + 8, cy, INK);
-      }
-      screen.text(labels[i], x + 16, cy, INK);
-    }
-    screen.text("AZIONE?", 16, y + 8, INK);
-    screen.text(`TURNO ${this.turn}`, 8, y + 21, GREY);
-  }
-
-  private drawFightMenu(screen: Screen): void {
-    const items = this.fightMenu.items;
-    const y = VIEW_H - 44;
-    screen.rect(184, y - 11, 52, 9, "rgba(16,20,31,0.88)");
-    screen.text("B: ESCI", 190, y - 9, GREY);
-    for (let i = 0; i < items.length; i += 1) {
-      const cx = 8;
-      const cy = y + 4 + i * 9;
-      const eff = this.fightEff[i];
-      const color =
-        eff === "super" ? "#2f9a4c" : eff === "weak" ? "#c06030" : eff === "immune" ? "#8a8a98" : INK;
-      if (this.fightMenu.index === i) {
-        screen.rect(cx - 2, cy - 2, 226, 9, "#fff0bd");
-        screen.rect(cx - 2, cy - 2, 2, 9, "#e0a92f");
-        screen.text("►", cx, cy, "#8c5b12");
-      }
-      screen.textFit(items[i].label, cx + 8, cy, 173, color);
-      screen.textRight(items[i].rightLabel ?? "", 228, cy, INK);
-    }
+    this.fx.drawMoveFx(screen); this.fx.drawParticles(screen); ctx.restore();
   }
 }

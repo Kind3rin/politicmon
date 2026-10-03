@@ -107,6 +107,7 @@ export class BattleScene implements Scene {
   private queue: Step[] = [];
   private mode: "queue" | "menu" | "fight" | "campaign" | "recruit" = "queue";
   private msg = new MessageBox();
+  private actionCaption: { actor: string; move: string; result: string } | null = null;
   private polemica = new Polemica();
   private foeIntent: Move | null = null;
   private recruitMenu = new Menu([]);
@@ -553,23 +554,20 @@ export class BattleScene implements Scene {
       own: { ...attacker.stages }, foe: { ...defender.stages }
     };
 
-    // Telegrafia: il nemico "carica" la mossa con un'aura colorata per categoria,
-    // così il giocatore può leggere se sarà fisica, speciale o di status.
-    if (side === "foe") {
-      const color =
-        move.category === "fisico" ? "#e85a5a" : move.category === "speciale" ? "#5a9ae8" : "#b86ad8";
-      steps.push({
-        run: () => {
-          this.fx.telegraph = { side: "foe", color, t: 0.5, max: 0.5 };
-        },
-        pause: 0.5
-      });
-    }
-
     if (move.id === FUORIONDA.id) steps.push({
       run: () => { this.finisherT = this.state.reduceEffects ? 0 : .8; audio.hitSuper(); }, pause: this.state.reduceEffects ? .12 : .8
     });
-    steps.push({ text: `${side === "player" ? this.playerName() : this.foeName()}: ${move.name}!` });
+    // Name and wind-up share the impact's caption instead of a separate page.
+    steps.push({
+      run: () => {
+        this.actionCaption = { actor: `${side === "player" ? "TU" : "NEMICO"} · ${side === "player" ? this.playerName() : this.foeName()}`, move: move.name, result: "" };
+        if (side === "foe") {
+          const color = move.category === "fisico" ? "#e85a5a" : move.category === "speciale" ? "#5a9ae8" : "#b86ad8";
+          this.fx.telegraph = { side, color, t: .35, max: .35 };
+        }
+      },
+      pause: .18
+    });
 
     if (side === "foe") {
       const slot = attacker.mon.moves.find((s) => s.id === move.id);
@@ -580,7 +578,7 @@ export class BattleScene implements Scene {
 
     const selfTargeted = move.power === 0 && !move.effect?.status && move.effect?.stat?.target !== "foe";
     if (!selfTargeted && Math.random() * 100 >= move.accuracy) {
-      steps.push({ text: "Ma manca il bersaglio! La piazza fischia." });
+      steps.push({ run: () => { this.actionCaption!.result = "ANNUNCIO A VUOTO · MANCATO"; }, pause: .85 });
       return steps;
     }
 
@@ -594,13 +592,19 @@ export class BattleScene implements Scene {
       const appliedDamage = side === "player" ? this.copioneDamage(result.damage, move) : civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
       steps.push({
         run: () => {
+          const lost = Math.min(defender.mon.hp, appliedDamage);
           defender.mon.hp = Math.max(0, defender.mon.hp - appliedDamage);
-          this.fx.onHit(side, result.typeMult, result.crit, appliedDamage, move.type);
+          const efficacy = result.typeMult === 0 ? "IMMUNE" : result.typeMult > 1
+            ? move.type === "SINISTRA" && speciesOf(defender.mon).types.includes("SINISTRA") ? `SCISSIONE x${result.typeMult}` : "SUPER EFFICACE"
+            : result.typeMult < 1 ? "POCO EFFICACE" : "";
+          this.actionCaption!.result = [`-${lost} PV`, result.crit ? "CRITICO" : "", efficacy].filter(Boolean).join(" · ");
+          this.fx.onHit(side, result.typeMult, result.crit, lost, move.type);
         },
         waitHp: true,
-        pause: 0.25
+        pause: .85
       });
       steps.push({
+        waitHp: true,
         run: () => {
           if (side === "player" && !this.electionDoctrineTriggered && this.electionDoctrine === "campo_largo" && this.foe.mon.hp > 0 && this.foe.mon.hp <= statsOf(this.foe.mon).hp / 2) {
             this.electionDoctrineTriggered = true;
@@ -638,26 +642,11 @@ export class BattleScene implements Scene {
       if (result.pollEstimate) {
         steps.push({ text: `FORCHETTA SONDAGGI: STIMA ${result.pollEstimate === "high" ? "ALTA" : "BASSA"}!` });
       }
-      if (result.crit) {
-        steps.push({ text: "Colpo critico! I retroscenisti impazziscono!" });
-      }
       if (result.lodo) {
         steps.push({
           text: `Il LODO protegge ${defenderName}: primo colpo dimezzato!`,
           run: () => audio.holdGuard()
         });
-      }
-      if (result.typeMult === 0) {
-        steps.push({ text: "Non ha alcun effetto..." });
-      } else if (result.typeMult >= 2) {
-        steps.push({
-          text:
-            move.type === "SINISTRA" && speciesOf(defender.mon).types.includes("SINISTRA")
-              ? "È super efficace! La SINISTRA è fortissima contro se stessa!"
-              : "È super efficace!"
-        });
-      } else if (result.typeMult < 1) {
-        steps.push({ text: "Non è molto efficace..." });
       }
       if (move.effect?.drainRatio) {
         const healed = Math.max(1, Math.floor(result.damage * move.effect.drainRatio));
@@ -1478,6 +1467,7 @@ export class BattleScene implements Scene {
           if (this.field?.id === "click" && this.fieldTurn >= 2) this.fieldResolved = true;
           this.mainMenu.index = 0;
           this.foeIntent ??= this.pickFoeIntent();
+          this.actionCaption = null;
           this.mode = "menu";
         }
         return;
@@ -2017,6 +2007,11 @@ export class BattleScene implements Scene {
           screen.text(lines[1], 10, y + 33, GREY);
         }
       }
+    }
+    if (this.mode === "queue" && this.actionCaption && !this.msg.isOpen) {
+      screen.textFit(this.actionCaption.actor, 10, 141, 220, "#526176");
+      screen.textFit(this.actionCaption.move, 10, 151, 220, INK);
+      screen.textFit(this.actionCaption.result, 10, 165, 220, "#26745d");
     }
     this.msg.draw(screen);
     if (this.copioneFxT > 0) {

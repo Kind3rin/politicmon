@@ -146,7 +146,7 @@ export class BattleFx {
     const defSide: BattleSide = attacker === "player" ? "foe" : "player";
     this.lungeT[attacker] = this.reduceEffects ? 0 : 0.3;
     this.flashT[defSide] = this.reduceEffects ? 0 : 0.45;
-    const superHit = typeMult >= 2;
+    const superHit = typeMult > 1;
     // Lo shake e il contraccolpo scalano col "peso" del colpo.
     this.shake = superHit || crit ? 0.42 : attacker === "foe" ? 0.22 : 0.16;
     this.hitStop = this.reduceEffects ? 0 : superHit || crit ? 0.09 : 0.05;
@@ -156,7 +156,7 @@ export class BattleFx {
       if (moveType) this.moveFx = { side: attacker, type: moveType, t: .4 };
     }
     if (damage > 0) {
-      this.spawnDamageNumber(defSide, damage, typeMult >= 2, crit);
+      this.spawnDamageNumber(defSide, damage, typeMult > 1, crit);
     }
     if (superHit) {
       this.effFx = { kind: "super", t: 0.9 };
@@ -177,7 +177,7 @@ export class BattleFx {
   // critico = bianco intenso.
   spawnImpact(defSide: BattleSide, typeMult: number, crit: boolean): void {
     const c = monsterCenter(defSide);
-    const superHit = typeMult >= 2;
+    const superHit = typeMult > 1;
     const weak = typeMult > 0 && typeMult < 1;
     const count = superHit ? 16 : weak ? 6 : crit ? 14 : 10;
     const palette = superHit

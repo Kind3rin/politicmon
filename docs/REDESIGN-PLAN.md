@@ -17,7 +17,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
 | Reclutamento | Nuovo compagno visibile, Dex/squadra/box/EXP in un riepilogo automatico di 1,8 s; crescita, conteggi e boost salvati prima del salto | Calendauro catturato: evoluzione disponibile 6,5 s dal lancio; Schleinix/Gianni quattro turni; Continua con Renzino; offline e 387 test |
-| Battaglie | Polemica, Fuorionda, virale senza schede e copione interrompibile; ordine previsto con priorità/status/campo, avvio diretto dei selvatici e scoperta compatta | Renzilla e Giorgiagon contro Gianni in sei turni; 383 test; otto formati, pulsanti e testi senza tagli; cura 36→42 PV giocata |
+| Battaglie | Polemica/Fuorionda/virale e copione interrompibile; ordine previsto; nome, danno e critico/efficacia nello stesso colpo, senza pagine duplicate | Turno ordinario osservato 4,66 s prima e 2,59 s dopo, stessi input ma livelli diversi; evento/preparazione 5 s dopo; 390 test |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |

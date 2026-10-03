@@ -2,6 +2,8 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Lotte: nome, danno effettivo, critico ed efficacia nello stesso colpo; tolte le pagine duplicate e la carica nemica separata. Colpi super efficaci da 1,7 riconosciuti anche con effetti ridotti; annuncio mancato senza una nuova schermata.
+
 - Reclutamento: candidato visibile, Dex/destinazione/crescita in un riepilogo automatico di 1,8 s; dati e conteggi salvati insieme, Continua a tutta larghezza in verticale, mosse/evoluzione dirette. Atlante Higgsfield: 1,5 crediti.
 - Borgo: sondaggista fuori dal tragitto iniziale; nuova campagna giocata da Ellyna a Schleinix e alla vittoria su Gianni, senza saltare catture o crescita.
 

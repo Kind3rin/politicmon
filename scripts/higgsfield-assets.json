@@ -48,6 +48,10 @@
       "battle-field-animation": [
         480,
         360
+      ],
+      "title-stage": [
+        480,
+        270
       ]
     },
     "resampling": "nearest",
@@ -370,6 +374,26 @@
       "sha256": "7371dca7196e77e2830111e718de22ec061c7fdfe375a8a9fc242365b6ec6ae7",
       "processing": "Nearest-neighbor delivery resize, 48-color palette; four equal 240x180 frames, 2x2 atlas.",
       "creditsSpent": 0.25
+    },
+    {
+      "id": "title-stage",
+      "kind": "title-stage",
+      "path": "public/sprites/ui/title-stage.png",
+      "width": 480,
+      "height": 270,
+      "jobId": "48e93be5-9b8e-4c21-9a3e-ad05942887c2",
+      "model": "gpt_image_2_5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_015007_48e93be5-9b8e-4c21-9a3e-ad05942887c2.png",
+      "sourceSize": [
+        1344,
+        752
+      ],
+      "sourceSha256": "cb560b3935e6151e6ebdeb56522e326d52949660d7877a0cf056c4feac1ba8d2",
+      "sha256": "72f29f417394c0b479fdb497910b1ea2715402ece2517d792680a2cd433da190",
+      "processing": "Nearest-neighbor 480x270 delivery resize, 48-color palette, no dither; runtime text and existing starter sprites overlaid.",
+      "creditsSpent": 0.25,
+      "balanceBefore": 352.22,
+      "balanceAfter": 351.97
     }
   ]
 }

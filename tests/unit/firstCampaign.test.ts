@@ -97,3 +97,17 @@ test('Changing the starter form cannot masquerade as the first wild recruitment'
  assert.equal(achievement.done(state),false);
  state.runStats.captures=1;assert.equal(achievement.done(state),true);
 });
+
+
+test('Starter touch choice is explicit, details are pure and old taps cannot recruit twice',async()=>{
+ const {StarterPreviewScene}=await import('../../src/scenes/StarterPreviewScene');
+ const {SceneStack}=await import('../../src/engine/scene');
+ const stack=new SceneStack(),input={reset(){}};let choices=0;
+ const world={update(){},draw(){}};stack.push(world);
+ const scene=new StarterPreviewScene(stack,input as never,'renzino',()=>choices++);stack.push(scene);
+ const oldChoice=scene.touchActions[0];scene.touchActions.find(a=>a.label==='MOSSE')!.run();
+ oldChoice.run();assert.equal(choices,0);
+ scene.touchActions.find(a=>a.label==='SCHEDA')?.run();
+ const choice=scene.touchActions[0];choice.run();choice.run();
+ assert.equal(choices,1);assert.equal(stack.top,world);oldChoice.run();assert.equal(choices,1);
+});

@@ -1,3 +1,5 @@
+import {FieldGuideScene} from "../../scenes/FieldGuideScene";
+import {welcomeGuide} from "../onboarding";
 import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
 import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
@@ -26,13 +28,14 @@ function drawBallot(screen: Screen, dx: number, dy: number): void {
 import { ITEMS } from "../../data/items";
 import { BAR_RESPAWN, MAPS, STARTER_SPOTS, type MapDef, type NpcDef } from "../../data/maps";
 import { currentQuest } from "../../data/quests";
-import { RIVAL_COUNTER, SPECIES } from "../../data/species";
+import { RIVAL_COUNTER, SPECIES, STARTERS } from "../../data/species";
 import { buildRivalStageTeam, RIVAL_STAGES, rivalStageFor } from "../../data/rival";
 import { TRAINERS, type TrainerDef } from "../../data/trainers";
 import { audio } from "../../engine/audio";
 import { haptics } from "../../engine/haptics";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
+import type { TouchAction } from "../../engine/touchActions";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import {worldCameraAxis} from "../../engine/worldCamera";
 import { Menu, MessageBox, GREY, INK, PAPER, setReduceMotion, wrapText } from "../../ui/widgets";
@@ -198,6 +201,7 @@ export class WorldScene implements Scene {
   private map!: MapDef;
   private npcs: RuntimeNpc[] = [];
   private msg = new MessageBox();
+  private starterDeck = true;
   private afterMsg: (() => void) | null = null;
 
   private moving = false;
@@ -303,6 +307,17 @@ export class WorldScene implements Scene {
 
   // ---- Setup ----
 
+  get touchActions(): readonly TouchAction[] | undefined {
+    if (!this.starterDeck || this.state.pos.mapId !== "lab" || this.state.flags["starter-chosen"] || this.state.party.length || this.msg.isOpen || this.askMenu || this.remoteMenu) return undefined;
+    const action = (label: string, hint: string, run: () => void): TouchAction => ({ label, hint, run: () => {
+      if (this.stack.top !== this || !this.starterDeck || this.state.pos.mapId !== "lab" || this.state.flags["starter-chosen"] || this.msg.isOpen || this.askMenu || this.remoteMenu) return;
+      this.input.reset(); run();
+    } });
+    return [...STARTERS.map((id) => action(SPECIES[id].name, `${SPECIES[id].types.join(" / ")} · apri la scheda`, () => this.interactStarter(id))),
+      action("GUIDA", "Mosse, Polemica e prossima meta", () => this.stack.push(new FieldGuideScene(this.stack, this.input, "PRIMA CAMPAGNA", welcomeGuide(this.state)))),
+      action("ESPLORA", "Cammina e parla nel laboratorio", () => { this.starterDeck = false; })];
+  }
+
   private loadMap(mapId: string): void {
     // Hardening: un save importato/manomesso con un mapId inesistente farebbe
     // crashare qui (this.map.npcs su undefined). Ricadi su "borgo" (mappa iniziale,
@@ -313,6 +328,7 @@ export class WorldScene implements Scene {
       this.state.pos.mapId = "borgo";
     }
     this.map = MAPS[mapId];
+    this.starterDeck = true;
     this.justEnteredMap = true;
     // ENCORE di BERLUSCONIX: il flag che mostra l'NPC magnate-encore va
     // RICALCOLATO a ogni ingresso al casinò (se nel frattempo l'hai eletto
@@ -731,13 +747,13 @@ export class WorldScene implements Scene {
     }
   }
 
-  private say(lines: string[], after?: () => void): void {
+  private say(lines: string[], after?: () => void, auto = false): void {
     this.afterMsg = after ?? null;
     this.msg.show(lines, () => {
       const callback = this.afterMsg;
       this.afterMsg = null;
       callback?.();
-    });
+    }, auto);
   }
 
   // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il
@@ -2141,7 +2157,7 @@ export class WorldScene implements Scene {
           ]);
         }
       }, isRematch);
-    });
+    }, def.id === "praticante");
   }
 
   private interactStarter(speciesId: string): void {
@@ -2202,7 +2218,7 @@ export class WorldScene implements Scene {
     this.say([
       "QUIRINO: DEX E CINQUE SCHEDE.\nIL PROGRAMMA LO TROVI NELL’ERBA.",
       this.state.flags["opening-v2"] ? "RECLUTA, CRESCI. GIANNI TI ASPETTA\nSULLA STRADA DEL PERCORSO 1." : "ADESSO RECLUTA.\nGLI ALLEATI NON CADONO DAL CIELO."
-    ]);
+    ], undefined, true);
   }
 
   // ---- Trainer line-of-sight ----

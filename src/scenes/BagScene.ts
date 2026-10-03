@@ -1,3 +1,5 @@
+import type { TouchAction } from "../engine/touchActions";
+import { healingQuote, useHealingSupply, type HealingQuote } from "../game/supplyGuide";
 import { BAG_ORDER, ITEMS } from "../data/items";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
@@ -15,11 +17,15 @@ import { EvolutionScene } from "./EvolutionScene";
 
 export interface BagOptions {
   inBattle: boolean;
+  quickHeal?: boolean;
   onUse?: (itemId: string) => void;
 }
 
 export class BagScene implements Scene {
   private view: SupplyView;
+  private quickPage = 0;
+  private quickIndex = 0;
+  private quickDone = false;
   private msg = new MessageBox();
   // Conferma SÌ/NO per lo swap di un hold item già equipaggiato.
   private ask: { text: string; yes: () => void } | null = null;
@@ -35,11 +41,77 @@ export class BagScene implements Scene {
     this.refresh();
   }
 
+  private get quick(): boolean { return !!this.opts.quickHeal && !this.opts.inBattle; }
+  private targets(): Monster[] { return this.state.party.slice(this.quickPage * 4, this.quickPage * 4 + 4); }
+  private quickHint(mon: Monster, quote: HealingQuote | null): string {
+    if (quote) return `${ITEMS[quote.id].name} x${quote.quantity} · PV ${quote.before} → ${quote.after}/${quote.max}`;
+    return mon.hp <= 0 ? "KO: cura al bar" : mon.hp >= statsOf(mon).hp ? "PV pieni" : "Nessuna cura in borsa";
+  }
+  get touchActions(): readonly TouchAction[] | undefined {
+    if (!this.quick) return undefined;
+    const page = this.quickPage;
+    const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled, run: () => {
+      if (disabled || this.stack.top !== this || !this.quick || this.msg.isOpen || this.quickPage !== page) return;
+      this.input.reset(); run();
+    } });
+    const targets = this.targets();
+    return [...targets.map((mon) => {
+      const quote = healingQuote(this.state, mon);
+      return action(speciesOf(mon).name, this.quickHint(mon, quote), () => { if (quote) this.healQuick(mon, quote); }, !quote || this.msg.isOpen);
+    }), ...Array.from({ length: 4 - targets.length }, () => action("—", "Nessun candidato", () => {}, true)),
+      action(this.state.party.length > 4 ? "ALTRI" : "BORSA", this.state.party.length > 4 ? "Altra pagina della squadra" : "Status, schede e altri oggetti", () => {
+        if (this.state.party.length > 4) { this.quickPage = (page + 1) % Math.ceil(this.state.party.length / 4); this.quickIndex = 0; }
+        else this.opts.quickHeal = false;
+        audio.cursor();
+      }, this.msg.isOpen), action("INDIETRO", "Torna alla pausa", () => this.stack.pop(), this.msg.isOpen)];
+  }
+  private healQuick(mon: Monster, quote: HealingQuote): void {
+    if (!useHealingSupply(this.state, mon, quote)) return;
+    audio.heal(); saveGame(this.state); this.quickDone = true;
+    this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${quote.max}.`], undefined, true);
+  }
+  private updateQuick(): void {
+    if (this.input.wasPressed("b")) { this.stack.pop(); return; }
+    const targets = this.targets(), tap = this.input.consumeTap();
+    if (this.input.wasPressed("up") || this.input.wasPressed("down")) {
+      this.quickIndex = (this.quickIndex + (this.input.wasPressed("up") ? targets.length - 1 : 1)) % Math.max(1, targets.length); audio.cursor();
+    }
+    if (this.input.wasPressed("start")) { this.opts.quickHeal = false; return; }
+    if (this.input.wasPressed("right") || this.input.wasPressed("left")) {
+      this.quickPage = (this.quickPage + 1) % Math.max(1, Math.ceil(this.state.party.length / 4)); this.quickIndex = 0; return;
+    }
+    if (tap && tap.x >= 8 && tap.x < 232 && tap.y >= 38 && tap.y < 150) {
+      this.quickIndex = Math.floor((tap.y - 38) / 28);
+      const mon = targets[this.quickIndex], quote = mon && healingQuote(this.state, mon);
+      if (mon && quote) this.healQuick(mon, quote);
+    } else if (this.input.wasPressed("a")) {
+      const mon = targets[this.quickIndex], quote = mon && healingQuote(this.state, mon);
+      if (mon && quote) this.healQuick(mon, quote);
+    }
+  }
+  private drawQuick(screen: Screen): void {
+    screen.clear("#17243d"); screen.text("CURA RAPIDA", 12, 8, "#fffaf0", 2);
+    screen.text("PV, NON PROMESSE.", 12, 27, "#80d1b0");
+    this.targets().forEach((mon, i) => {
+      const quote = healingQuote(this.state, mon), y = 38 + i * 28;
+      screen.rect(8, y, 224, 25, i === this.quickIndex ? "#fff3cc" : "#263954");
+      const color = i === this.quickIndex ? "#17243d" : "#fffaf0";
+      screen.text(speciesOf(mon).name, 15, y + 4, color);
+      screen.textRight(`${mon.hp}/${statsOf(mon).hp} PV`, 224, y + 4, color);
+      const note = quote ? `${ITEMS[quote.id].name} x${quote.quantity}: +${quote.after - quote.before} PV` : this.quickHint(mon, quote);
+      screen.textFit(note, 15, y + 15, 209, color);
+    });
+    screen.text("NON RECUPERA PP O STATUS. KO: AL BAR.", 12, 155, "#fffaf0");
+    screen.text("A:CURA  START:BORSA  B:PAUSA", 12, 170, "#80d1b0");
+  }
+
   update(dt: number): void {
     if (this.msg.isOpen) {
       this.msg.update(dt, this.input);
+      if (!this.msg.isOpen && this.quickDone) this.stack.pop();
       return;
     }
+    if (this.quick) { this.updateQuick(); return; }
     if (this.ask) {
       const a = this.askMenu.update(this.input);
       if (a === "select") {
@@ -166,17 +238,12 @@ export class BagScene implements Scene {
             return;
           }
           if (item.kind === "heal") {
-            const max = statsOf(mon).hp;
-            if (mon.hp >= max || mon.hp <= 0) {
-              this.msg.show(["Non avrebbe alcun effetto."]);
-              return;
+            const quote = healingQuote(this.state, mon, itemId);
+            if (!quote || !useHealingSupply(this.state, mon, quote)) {
+              this.msg.show(["Non avrebbe alcun effetto."]); return;
             }
-            const heal = item.percent != null ? Math.ceil(max * item.percent) : (item.amount ?? 20);
-            mon.hp = Math.min(max, mon.hp + heal);
-            audio.heal();
-            this.consume(itemId);
-            saveGame(this.state);
-            this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${max}.`], undefined, true);
+            audio.heal(); this.refresh(); saveGame(this.state);
+            this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${quote.max}.`], undefined, true);
           } else {
             if (!mon.status) {
               this.msg.show(["Nessuno scandalo da insabbiare, per ora."]);
@@ -300,7 +367,8 @@ export class BagScene implements Scene {
       screen.text("A:SCEGLI B:ANNULLA", 8, 169, "#fff3cc");
       return;
     }
-    this.view.draw(screen);
+    if (this.quick) this.drawQuick(screen);
+    else this.view.draw(screen);
     if (this.msg.isOpen) this.msg.draw(screen);
   }
 }

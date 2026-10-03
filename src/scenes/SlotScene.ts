@@ -14,7 +14,7 @@ import {
   type SlotSummary
 } from "../game/state";
 import { drawScreenHeader, Menu, MessageBox, INK } from "../ui/widgets";
-import { drawHqBackdrop, drawHqIcon } from "../ui/hqArt";
+import type { TouchAction } from "../engine/touchActions";
 
 type SlotMode = "load" | "new";
 
@@ -30,6 +30,7 @@ export class SlotScene implements Scene {
   // Slot in attesa di conferma sovrascrittura/cancellazione (modalità "new"/delete).
   private pendingOverwrite = -1;
   private pendingDelete = -1;
+  private deleting = false;
 
   constructor(
     private stack: SceneStack,
@@ -62,6 +63,23 @@ export class SlotScene implements Scene {
     return `LV${sum.level} - ${sum.badges}M${hard}`;
   }
 
+  get touchActions(): readonly TouchAction[] {
+    const overwrite = this.pendingOverwrite, deletion = this.pendingDelete, selected = this.menu.index, deleting = this.deleting;
+    const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled: disabled || this.msg.isOpen, run: () => {
+      if (disabled || this.msg.isOpen || this.stack.top !== this || this.pendingOverwrite !== overwrite || this.pendingDelete !== deletion || this.menu.index !== selected || this.deleting !== deleting) return;
+      this.input.reset(); run();
+    } });
+    if (overwrite >= 0 || deletion >= 0) return [action("CONFERMA", `Lo slot ${(overwrite >= 0 ? overwrite : deletion) + 1} sarà sostituito o cancellato`, () => this.confirmPending()),
+      action("ANNULLA", "Conserva la campagna", () => { this.pendingOverwrite = -1; this.pendingDelete = -1; this.deleting = false; })];
+    return [...this.summaries.map((sum, index) => action(`${deleting ? "CANCELLA " : ""}SLOT ${index + 1}`, sum.exists ? `${MAP_NAMES[sum.mapId] ?? sum.mapId} · ${this.summaryTag(sum)}` : "Vuoto", () => { if (deleting) this.pendingDelete = index; else this.pick(index); }, (this.mode === "load" || deleting) && !sum.exists)),
+      action(deleting ? "ANNULLA" : "CANCELLA", deleting ? "Conserva tutte le campagne" : "Scegli uno slot · chiede conferma", () => { this.deleting = !deleting; }),
+      action("INDIETRO", "Torna al titolo", () => this.stack.pop())];
+  }
+  private confirmPending(): void {
+    if (this.pendingOverwrite >= 0) { const slot = this.pendingOverwrite; this.pendingOverwrite = -1; this.commitNew(slot); }
+    else if (this.pendingDelete >= 0) { const slot = this.pendingDelete; this.pendingDelete = -1; this.deleting = false; clearSlot(slot); audio.confirm(); this.menu = this.buildMenu(); }
+  }
+
   update(dt: number): void {
     if (this.msg.isOpen) {
       this.msg.update(dt, this.input);
@@ -70,9 +88,7 @@ export class SlotScene implements Scene {
     // In attesa di conferma sovrascrittura (nuova campagna su slot pieno).
     if (this.pendingOverwrite >= 0) {
       if (this.input.wasPressed("a")) {
-        const slot = this.pendingOverwrite;
-        this.pendingOverwrite = -1;
-        this.commitNew(slot);
+        this.confirmPending();
       } else if (this.input.wasPressed("b")) {
         audio.cancel();
         this.pendingOverwrite = -1;
@@ -82,11 +98,7 @@ export class SlotScene implements Scene {
     // In attesa di conferma cancellazione (SELECT/tasto su slot pieno in "load").
     if (this.pendingDelete >= 0) {
       if (this.input.wasPressed("a")) {
-        const slot = this.pendingDelete;
-        this.pendingDelete = -1;
-        clearSlot(slot);
-        audio.confirm();
-        this.menu = this.buildMenu();
+        this.confirmPending();
       } else if (this.input.wasPressed("b")) {
         audio.cancel();
         this.pendingDelete = -1;
@@ -106,13 +118,19 @@ export class SlotScene implements Scene {
     const action = tapAction === undefined ? this.menu.update(this.input) : tapAction;
     if (action === "cancel") {
       audio.cancel();
+      if (this.deleting) { this.deleting = false; return; }
       this.stack.pop();
       return;
     }
     if (action !== "select") {
       return;
     }
-    const idx = this.menu.index;
+    this.pick(this.menu.index);
+  }
+
+  private pick(idx: number): void {
+    this.menu.index = idx;
+    if (this.deleting && idx < SLOT_COUNT) { if (this.summaries[idx].exists) this.pendingDelete = idx; return; }
     if (idx >= SLOT_COUNT) {
       // INDIETRO.
       audio.cancel();
@@ -151,11 +169,7 @@ export class SlotScene implements Scene {
     const row = tap.y >= 50 && tap.y < 50 + SLOT_COUNT * 29
       ? Math.floor((tap.y - 50) / 29) : tap.y >= 141 && tap.y < 154 ? SLOT_COUNT : -1;
     if (row < 0) return undefined;
-    if (row !== this.menu.index) {
-      this.menu.index = row;
-      audio.cursor();
-      return null;
-    }
+    this.menu.index = row;
     if (this.menu.items[row].disabled) {
       audio.cancel();
       return null;
@@ -176,8 +190,8 @@ export class SlotScene implements Scene {
   }
 
   draw(screen: Screen): void {
-    drawHqBackdrop(screen, "saves");
-    drawScreenHeader(screen, this.mode === "load" ? "ARCHIVIO CAMPAGNE" : "NUOVA CAMPAGNA");
+    screen.clear("#17243d");
+    drawScreenHeader(screen, this.deleting ? "SCEGLI LO SLOT DA CANCELLARE" : this.mode === "load" ? "ARCHIVIO CAMPAGNE" : "NUOVA CAMPAGNA");
     screen.rect(4, 34, VIEW_W - 8, 12, "rgba(16,20,31,0.82)");
     screen.text("TRE SLOT. IL QUARTO MANDATO NON C'È.", 8, 37, "#fffaf0");
     for (let i = 0; i < SLOT_COUNT; i++) {
@@ -186,12 +200,12 @@ export class SlotScene implements Scene {
       const y = 50 + i * 29;
       screen.panel(5, y, VIEW_W - 10, 27, "card");
       if (selected) screen.frame(6, y + 1, VIEW_W - 12, 25, "#e6b944");
-      drawHqIcon(screen, "backup", 10, y + 4, 20);
-      screen.text(`${selected ? ">" : " "} SLOT ${i + 1}`, 34, y + 6, INK);
+
+      screen.text(`${selected ? ">" : " "} SLOT ${i + 1}`, 15, y + 6, INK);
       screen.textRight(sum.exists ? this.summaryTag(sum) : "LIBERO", VIEW_W - 12, y + 6, sum.exists ? "#497b65" : "#526279");
       screen.textFit(sum.exists ? MAP_NAMES[sum.mapId] ?? sum.mapId
         : this.mode === "load" ? "Nessuna campagna da riprendere" : "La prima promessa parte qui",
-        34, y + 16, VIEW_W - 47, INK);
+        15, y + 16, VIEW_W - 30, INK);
     }
     const sum = this.summaries[this.menu.index];
     screen.textFit(sum?.exists ? `FONDI ${sum.money}€ / SONDAGGI ${sum.sondaggi}%`

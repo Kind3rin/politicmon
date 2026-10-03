@@ -66,3 +66,22 @@ export function supplyNotes(state: GameState, item: Item, page: number, inBattle
   if (item.moveId) notes.push("RIUTILIZZABILE: NON SI CONSUMA.", ...moveNotes(undefined, item.moveId));
   return notes;
 }
+
+export interface HealingQuote { id: string; before: number; after: number; max: number; quantity: number }
+export function healingQuote(state: GameState, mon: Monster, itemId?: string): HealingQuote | null {
+  const max = statsOf(mon).hp;
+  if (!state.party.includes(mon) || mon.hp <= 0 || mon.hp >= max) return null;
+  const id = itemId ?? BAG_ORDER.find((id) => ITEMS[id].kind === "heal" && (state.bag[id] ?? 0) > 0);
+  const item = ITEMS[id ?? ""], quantity = state.bag[id ?? ""] ?? 0;
+  if (!id || !item || item.kind !== "heal" || quantity < 1) return null;
+  const amount = item.percent != null ? Math.ceil(max * item.percent) : item.amount ?? 20;
+  return { id, before: mon.hp, after: Math.min(max, mon.hp + amount), max, quantity };
+}
+// A stale quote must never consume a different item or heal a different target.
+export function useHealingSupply(state: GameState, mon: Monster, quote: HealingQuote): boolean {
+  const live = healingQuote(state, mon, quote.id);
+  if (!live || live.before !== quote.before || live.after !== quote.after || live.max !== quote.max || live.quantity !== quote.quantity) return false;
+  mon.hp = live.after;
+  state.bag[live.id] = live.quantity - 1;
+  return true;
+}

@@ -228,3 +228,29 @@ test("matrice P7-T03: forma meme v18 sopravvive a round-trip e backup", () => {
   assert.equal(loaded.party[0].memeFormId, "salvinator_spiaggia");
   assert.deepEqual(loaded.unlockedMemeForms, ["salvinator_spiaggia"]);
 });
+
+test("touch slot loading is direct, preserves other campaigns and ignores taps after leaving", async () => {
+  const { SlotScene } = await import("../../src/scenes/SlotScene");
+  const { SceneStack } = await import("../../src/engine/scene");
+  const state = parseGameState(JSON.stringify(fixtureState("v13-new.json")))!;
+  state.money = 731; setActiveSlot(0); saveGame(state);
+  state.money = 1249; setActiveSlot(1); saveGame(state);
+  const stack = new SceneStack(), input = { reset() {} }; let picked: GameState | null = null, picks = 0;
+  const scene = new SlotScene(stack, input as never, "load", (state) => { picked = state; picks++; }); stack.push(scene);
+  const tap = scene.touchActions[0]; assert.equal(scene.touchActions[2].disabled, true); tap.run();
+  assert.equal((picked as GameState | null)?.money, 731); assert.equal(slotSummary(1).money, 1249);
+  tap.run(); assert.equal(picks, 1); assert.equal(stack.top, undefined);
+});
+test("touch slot deletion and overwriting stay pending until explicit confirmation", async () => {
+  const { SlotScene } = await import("../../src/scenes/SlotScene");
+  const { SceneStack } = await import("../../src/engine/scene");
+  const state = parseGameState(JSON.stringify(fixtureState("v13-new.json")))!; saveGame(state);
+  const stack = new SceneStack(), input = { reset() {} }; let picks = 0;
+  const scene = new SlotScene(stack, input as never, "new", () => picks++); stack.push(scene);
+  scene.touchActions[0].run(); assert.equal(picks, 0); assert.equal(slotSummary(0).exists, true);
+  scene.touchActions.find((a) => a.label === "ANNULLA")!.run(); assert.equal(slotSummary(0).exists, true);
+  scene.touchActions.find((a) => a.label === "CANCELLA")!.run(); assert.equal(slotSummary(0).exists, true);
+  scene.touchActions.find((a) => a.label === "CANCELLA SLOT 1")!.run(); assert.equal(slotSummary(0).exists, true);
+  scene.touchActions.find((a) => a.label === "ANNULLA")!.run(); assert.equal(slotSummary(0).exists, true);
+  assert.equal(picks, 0);
+});

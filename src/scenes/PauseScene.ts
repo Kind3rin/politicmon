@@ -3,7 +3,8 @@ import { MONUMENT_TITLE } from "./MonumentScene";
 import { FieldGuideScene } from "./FieldGuideScene";
 import { welcomeGuide } from "../game/onboarding";
 import { currentQuest } from "../data/quests";
-import { drawDeskBackdrop } from "../ui/deskArt";
+import type { TouchAction } from "../engine/touchActions";
+import { statsOf } from "../game/monster";
 import { epiloguePages } from "../ui/epilogueArt";
 import { wrapText } from "../ui/widgets";
 import { sceneImage } from "../engine/assets";
@@ -49,6 +50,9 @@ interface SubMenu {
 export class PauseScene implements Scene {
   readonly transparent = false;
   private menu: Menu;
+  private more = false;
+  private primaryIndex = 0;
+  private readonly primary = ["SQUADRA", "CURA", "POLITICDEX", "MORALE", "ALTRO", "GIOCA"];
   private entries: string[] = [];
   private msg = new MessageBox();
   private showCard = false;
@@ -72,16 +76,7 @@ export class PauseScene implements Scene {
       this.entries.push(label);
       items.push({ label, rightLabel });
     };
-    // SALVA in cima: il salvataggio manuale dev'essere la voce più scopribile.
-    push("SALVA");
-    // È un elemento identitario, non un extra da nascondere dietro un sotto-menu.
-    push("TESSERA");
-    push("SQUADRA");
-    push("MORALE", `${this.state.morale.trust}/${this.state.morale.cohesion}`);
-    push("BORSA");
-    if (this.state.flags["dex-received"]) {
-      push("POLITICDEX");
-    }
+    push("BORSA"); push("SALVA"); push("MAPPA"); push("OPZIONI"); push("TESSERA");
     if (this.state.badges.length > 0) {
       push("GOVERNO");
     }
@@ -89,7 +84,6 @@ export class PauseScene implements Scene {
       push("COALIZIONE", `${this.state.coalition.members.length}/2`);
     }
     push("MISSIONI");
-    push("MAPPA");
     // Badge "N ONLINE" sulla voce: rende visibile che c'è gente senza aprirla.
     push("ONLINE", mp.isEnabled() && mp.connected ? `${mp.onlineCount + 1} ON` : undefined);
     push("EXTRA");
@@ -98,7 +92,6 @@ export class PauseScene implements Scene {
       const v = this.state.vehicle ? VEHICLES[this.state.vehicle as VehicleId].name : "A PIEDI";
       push(`VEICOLO: ${v}`);
     }
-    push("OPZIONI");
     push("CHIUDI");
     return new Menu(items);
   }
@@ -145,6 +138,31 @@ export class PauseScene implements Scene {
     return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
+  get touchActions(): readonly TouchAction[] | undefined {
+    if (this.showCard) return undefined;
+    const more = this.more, sub = this.sub, menu = sub?.menu ?? this.menu;
+    const page = Math.floor(menu.index / 4);
+    const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled: disabled || this.msg.isOpen, run: () => {
+      if (disabled || this.stack.top !== this || this.showCard || this.msg.isOpen || this.more !== more || this.sub !== sub || Math.floor(menu.index / 4) !== page) return;
+      this.input.reset(); audio.cursor(); run();
+    } });
+    if (!more && !sub) return this.primary.map((label, i) => action(label, this.primaryHint(i), () => { this.primaryIndex = i; this.handleMain(label); }, label === "POLITICDEX" && !this.state.flags["dex-received"]));
+    return [...Array.from({ length: 4 }, (_, i) => {
+      const index = page * 4 + i, item = menu.items[index];
+      return action(item?.label ?? "—", item?.rightLabel ?? "Apri direttamente", () => {
+        if (!item) return; menu.index = index;
+        if (sub) this.handleSub(sub, item.label); else this.handleMain(item.label);
+      }, !item || !!item.disabled);
+    }), action("ALTRE", "Altre voci", () => { menu.index = ((page + 1) * 4) % menu.items.length; this.notePage = 0; }, menu.items.length <= 4),
+      action("INDIETRO", "Torna alla pausa", () => { if (this.sub) this.sub = null; else this.more = false; })];
+  }
+  private primaryHint(index: number): string {
+    const hints = [`${this.state.party.length} candidati · ${this.state.party.filter((mon) => mon.hp < statsOf(mon).hp).length} da curare`,
+      "Scegli il candidato e recupera PV", "Collezione, habitat e crescita", `Fiducia ${this.state.morale.trust} · coesione ${this.state.morale.cohesion}`,
+      "Borsa, salva, mappa e opzioni", "Riprendi la campagna"];
+    return hints[index];
+  }
+
   update(dt: number): void {
     const moraleIndex=this.entries.indexOf("MORALE"),coalitionIndex=this.entries.indexOf("COALIZIONE"),onlineIndex=this.entries.indexOf("ONLINE");
     if(moraleIndex>=0)this.menu.items[moraleIndex].rightLabel=`${this.state.morale.trust}/${this.state.morale.cohesion}`;
@@ -166,6 +184,18 @@ export class PauseScene implements Scene {
         audio.cancel();
         this.showCard = false;
       }
+      return;
+    }
+    if (!this.more && !this.sub) {
+      if (this.input.wasPressed("b") || this.input.wasPressed("start")) { this.stack.pop(); return; }
+      if (this.input.wasPressed("up") || this.input.wasPressed("down")) {
+        this.primaryIndex = (this.primaryIndex + (this.input.wasPressed("up") ? 5 : 1)) % 6; audio.cursor();
+      }
+      const tap = this.input.consumeTap();
+      if (tap && tap.x >= 8 && tap.x < 232 && tap.y >= 76 && tap.y < 160) {
+        this.primaryIndex = Math.floor((tap.y - 76) / 28) * 2 + (tap.x >= 120 ? 1 : 0);
+        this.handleMain(this.primary[this.primaryIndex]);
+      } else if (this.input.wasPressed("a")) this.handleMain(this.primary[this.primaryIndex]);
       return;
     }
     if(this.input.wasPressed("left")||this.input.wasPressed("right")){
@@ -192,20 +222,23 @@ export class PauseScene implements Scene {
     }
     const action = this.menu.update(this.input);
     if (action === "cancel") {
-      this.stack.pop();
+      this.more = false;
       return;
     }
     if (action !== "select") {
       return;
     }
-    const label = this.entries[this.menu.index];
+    this.handleMain(this.entries[this.menu.index]);
+  }
+
+  private handleMain(label: string): void {
     switch (label) {
       case "SALVA":
         audio.confirm();
         this.msg.show(
           saveGame(this.state)
             ? ["Partita salvata!", "A differenza delle riforme, questa resta."]
-            : ["Errore di salvataggio..."]
+            : ["Errore di salvataggio..."], undefined, true
         );
         break;
       case "TESSERA":
@@ -214,6 +247,7 @@ export class PauseScene implements Scene {
         this.cardAwards = false;
         break;
       case "POLITICDEX":
+        if (!this.state.flags["dex-received"]) break;
         this.stack.push(new DexScene(this.stack, this.input, this.state));
         break;
       case "SQUADRA":
@@ -221,6 +255,15 @@ export class PauseScene implements Scene {
         break;
       case "MORALE":
         this.stack.push(new MoraleScene(this.stack, this.input, this.state));
+        break;
+      case "CURA":
+        this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: false, quickHeal: true }));
+        break;
+      case "ALTRO":
+        this.more = true;
+        break;
+      case "GIOCA":
+        this.stack.pop();
         break;
       case "BORSA":
         this.stack.push(new BagScene(this.stack, this.input, this.state, { inBattle: false }));
@@ -364,15 +407,30 @@ export class PauseScene implements Scene {
       this.drawCard(screen);
       return;
     }
-    drawDeskBackdrop(screen,"pause");
-    drawScreenHeader(screen,this.sub?.title??"QUARTIER GENERALE");
-    screen.rect(0,17,240,13,"#17243d");screen.text(`${this.state.money}€`,8,21,"#fffaf0");screen.textRight(`SOND ${this.state.sondaggi}%`,232,21,"#fffaf0");
-    const menu=this.sub?.menu??this.menu;
-    menu.draw(screen,56,32,176,12,6);
-    const pages=this.helpPages();this.notePage%=pages.length;
-    screen.panel(8,120,224,40,"card");pages[this.notePage].forEach((line,i)=>screen.text(line,16,128+i*10,"#17243d"));
-    screen.text(this.sub?"SU/GIU: SCELTA  A: APRI  B: QG":"SU/GIU: SCELTA  A: APRI  B: CHIUDI",12,163,"#fffaf0");
-    screen.text(`SIN/DES: INFO ${this.notePage+1}/${pages.length}`,12,173,"#fffaf0");
+    screen.clear("#17243d");
+    drawScreenHeader(screen, this.sub?.title ?? (this.more ? "ALTRO" : "PAUSA"));
+    screen.rect(0,17,240,13,"#263954");screen.text(`${this.state.money}€`,8,21,"#fffaf0");screen.textRight(`SOND ${this.state.sondaggi}%`,232,21,"#fffaf0");
+    if (!this.more && !this.sub) {
+      screen.rect(8, 36, 224, 32, "#fff3cc");
+      const quest = currentQuest(this.state);
+      wrapText(quest?.step ?? "La campagna continua.", 34).slice(0, 2).forEach((line, i) => screen.text(line, 15, 43 + i * 11, "#17243d"));
+      this.primary.forEach((label, i) => {
+        const x = 8 + (i % 2) * 116, y = 76 + Math.floor(i / 2) * 28, selected = i === this.primaryIndex;
+        screen.rect(x, y, 108, 24, selected ? "#fff3cc" : "#263954");
+        screen.text(label, x + 7, y + 8, selected ? "#17243d" : "#fffaf0");
+      });
+      screen.text("MENO MODULI. PIÙ CAMPAGNA.", 12, 169, "#80d1b0");
+    } else {
+      const menu = this.sub?.menu ?? this.menu, start = Math.floor(menu.index / 4) * 4;
+      for (let i = start; i < Math.min(start + 4, menu.items.length); i++) {
+        const item = menu.items[i], y = 38 + (i - start) * 19, selected = i === menu.index;
+        screen.rect(8, y, 224, 17, selected ? "#fff3cc" : "#263954");
+        screen.textFit(item.label, 15, y + 5, 210, item.disabled ? "#8594a7" : selected ? "#17243d" : "#fffaf0");
+      }
+      const pages = this.helpPages(); this.notePage %= pages.length;
+      screen.panel(8, 120, 224, 40, "card"); pages[this.notePage].forEach((line, i) => screen.text(line, 16, 128 + i * 10, "#17243d"));
+      screen.text(`INFO ${this.notePage + 1}/${pages.length}  A:APRI  B:PAUSA`, 12, 169, "#fffaf0");
+    }
     this.msg.draw(screen);
   }
 

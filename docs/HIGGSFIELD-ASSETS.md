@@ -289,3 +289,6 @@ Quattro fasi viste e giocate nel cambio Ellyna → Schleinix; atlante 480×360 d
 
 Lotto eventi di campo — saldo **352,47 → 352,22** (0,25 crediti), job `97757873-4c43-4f81-8eb3-a34c0561b622`.
 Atlante 480×360 con quattro vignette viste; Click Day, Par condicio e Sondaggio integrati negli incontri iniziali, provenienza/checksum nel manifest.
+
+Lotto titolo — saldo **352,22 → 351,97** (0,25 crediti), job `48e93be5-9b8e-4c21-9a3e-ad05942887c2`.
+Piazza del dibattito vista e integrata dietro gli starter: 480×270, 48 colori; provenienza e checksum nel manifest.

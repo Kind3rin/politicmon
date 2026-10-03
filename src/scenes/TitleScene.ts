@@ -4,60 +4,29 @@ import { drawMonsterSprite } from "../art/monsters";
 import { STARTERS } from "../data/species";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
-import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
+import { Screen } from "../engine/screen";
 import { hasAnySave, hasSaveInSlot, setActiveSlot, SLOT_COUNT, loadGame, newGameState, type GameState } from "../game/state";
 import { BackupScene } from "./BackupScene";
 import { mp } from "../net/mp";
 import { loadNick } from "../net/profile";
-import { Menu, wrapText, GREY, PAPER } from "../ui/widgets";
+import { Menu, wrapText } from "../ui/widgets";
 import { NicknameScene } from "./NicknameScene";
 import { SlotScene } from "./SlotScene";
-import { createMonster } from "../game/monster";
-import { FEATURE_OVERRIDE_KEY } from "../game/features";
-import { APP_BUILD_ID } from "../engine/build";
-import { drawHqIcon, type HqIcon } from "../ui/hqArt";
-
-// Slogan rotanti sotto il logo: uno alla volta, niente sovrapposizioni.
-const SLOGANS = [
-  "IL PROGRAMMA È IN ALLEGATO. MANCA L'ALLEGATO.",
-  "OGNI PROMESSA HA UN COSTO. ANCHE IL NASTRO.",
-  "I SONDAGGI SALGONO. L'ASCENSORE È GUASTO.",
-  "RACCOGLI CANDIDATI. POI TROVA CHI LAVORA."
-];
-
-// Splash AI di sfondo (generato con Higgsfield, in stile pixel coerente col
-// gioco). Caricato una volta sola e condiviso tra le istanze della TitleScene.
-// Se manca o non carica, si ricade sullo sfondo procedurale: niente crash.
-let bgImage: HTMLImageElement | null = null;
-let bgReady = false;
-function loadTitleBg(): void {
-  if (bgImage) {
-    return;
-  }
-  const img = new Image();
-  img.onload = () => {
-    bgReady = true;
-  };
-  img.onerror = () => {
-    bgReady = false;
-  };
-  img.src = `${import.meta.env.BASE_URL}title-bg.png?v=${APP_BUILD_ID}`;
-  bgImage = img;
-}
+import { sceneImage } from "../engine/assets";
+import type { TouchAction } from "../engine/touchActions";
 
 export class TitleScene implements Scene {
   private menu: Menu;
   private time = 0;
   private reduceEffects = hasAnySave() ? Boolean(loadGame()?.reduceEffects)
     : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  private menuTapGeom: { x: number; y: number; w: number; rowH: number } | null = null;
+  private menuRects: Array<{ x: number; y: number; w: number; h: number }> = [];
   // Selettore DIFFICOLTÀ mostrato alla NUOVA CAMPAGNA (null = non attivo).
   private difficultyMenu: Menu | null = null;
   private starting = false;
 
   constructor(private stack: SceneStack, private input: Input) {
     this.menu = this.buildMenu();
-    loadTitleBg();
     audio.playMusic("title");
   }
 
@@ -75,8 +44,19 @@ export class TitleScene implements Scene {
     // i salvataggi (localStorage è isolato per browser/webview: Instagram ≠ Chrome
     // ≠ PWA). Da qui può incollare il codice esportato dall'altro browser.
     items.push({ label: "SPOSTA SAVE" });
-    if (import.meta.env.DEV) items.push({ label: "PLAYTEST ATTO 3" });
     return new Menu(items);
+  }
+
+  get touchActions(): readonly TouchAction[] {
+    const difficulty = this.difficultyMenu;
+    const action = (label: string, hint: string, run: () => void): TouchAction => ({ label, hint, disabled: this.starting, run: () => {
+      if (this.starting || this.stack.top !== this || this.difficultyMenu !== difficulty) return;
+      this.input.reset(); audio.confirm(); run();
+    } });
+    if (difficulty) return [action("NORMALE", "Consigliata alla prima campagna", () => { this.difficultyMenu = null; this.beginNewCampaign(false); }),
+      action("DIFFICILE", "Avversari più forti · scelta permanente", () => { this.difficultyMenu = null; this.beginNewCampaign(true); }),
+      action("INDIETRO", "Torna al titolo", () => { this.difficultyMenu = null; })];
+    return this.menu.items.map(({ label }) => action(label, label === "CONTINUA" ? "Riprendi uno slot salvato" : label.startsWith("NUOVA") ? "Scegli la sfida e parti" : label === "SPOSTA SAVE" ? "Importa o esporta la campagna" : label === "NOME" ? "Facoltativo · identità online" : "Musica, effetti e volume", () => this.choose(label)));
   }
 
   update(dt: number): void {
@@ -103,7 +83,10 @@ export class TitleScene implements Scene {
     if (action !== "select") {
       return;
     }
-    const label = this.menu.items[this.menu.index].label;
+    this.choose(this.menu.items[this.menu.index].label);
+  }
+
+  private choose(label: string): void {
     if (label.startsWith("CONTINUA")) {
       audio.confirm();
       // Selettore SLOT: apre lo slot scelto (o torna indietro senza caricare).
@@ -133,9 +116,6 @@ export class TitleScene implements Scene {
       // altrimenti uno stato nuovo: l'IMPORT (il caso d'uso qui) non usa lo stato.
       const existing = hasAnySave() ? loadGame() : null;
       this.stack.push(new BackupScene(this.stack, this.input, existing ?? newGameState()));
-    } else if (label.startsWith("PLAYTEST ATTO 3")) {
-      audio.confirm();
-      this.startAtto3Playtest();
     } else if (label.startsWith("NOME")) {
       this.openNickname();
     } else if (label.startsWith("AUDIO")) {
@@ -144,46 +124,6 @@ export class TitleScene implements Scene {
         this.menu = this.buildMenu(); this.menu.index = Math.min(index, this.menu.items.length - 1);
       }));
     }
-  }
-
-  // Checkpoint esclusivamente DEV: evita di chiedere ai tester di completare
-  // l'intera campagna o manipolare localStorage dalla console. Non viene mai
-  // incluso nel menu della build di produzione.
-  private startAtto3Playtest(): void {
-    try {
-      localStorage.setItem(FEATURE_OVERRIDE_KEY, JSON.stringify({ atto3: true, coalition: true }));
-    } catch {
-      // Il WorldScene degrada comunque senza crash; in browser normali lo storage
-      // è disponibile e abilita la slice.
-    }
-    const state = newGameState();
-    state.party = [
-      createMonster("giorgiagon", 52),
-      createMonster("renzilla", 51),
-      createMonster("salvinator", 51),
-      createMonster("grillix", 50),
-      createMonster("conteblob", 50),
-      createMonster("draghimon", 50)
-    ];
-    state.starterId = "giorgetta";
-    state.money = 5000;
-    state.bag = { ...state.bag, caffe: 10, spritz: 6, maalox: 4, schedona: 3 };
-    state.badges = ["auditel", "spread", "dazio"];
-    state.flags["boss-beaten"] = true;
-    state.flags["garante-beaten"] = true;
-    state.flags["ue-beaten"] = true;
-    state.flags["starter-chosen"] = true;
-    state.flags["rival1-beaten"] = true;
-    state.flags["dex-received"] = true;
-    state.flags["hint-offshore"] = true;
-    state.flags["offshore-beaten"] = true;
-    state.flags["hint-brux-arrivo"] = true;
-    state.flags["dev-playtest-atto3"] = true;
-    state.defeatedTrainers = ["giudice1", "giudice2", "giudice3", "boss", "garante", "tesoriere", "commissione"];
-    for (const mon of state.party) state.dex[mon.speciesId] = "caught";
-    state.pos = { mapId: "campo_largo", x: 10, y: 16, facing: "up" };
-    state.lastBar = "bruxelles";
-    this.start(state);
   }
 
   // Empty slots need no selection. Full archives keep explicit overwrite choice.
@@ -239,180 +179,49 @@ export class TitleScene implements Scene {
     }
   }
 
-  private handleMenuTap(): "select" | null | undefined {
-    const geom = this.menuTapGeom;
+  private handleMenuTap(): "select" | undefined {
     const tap = this.input.consumeTap();
-    if (!geom || !tap) {
-      return undefined;
-    }
-    const h = this.menu.items.length * geom.rowH;
-    if (tap.x < geom.x || tap.x >= geom.x + geom.w || tap.y < geom.y || tap.y >= geom.y + h) {
-      return undefined;
-    }
-    this.input.clearTap();
-    const row = Math.floor((tap.y - geom.y) / geom.rowH);
-    if (row < 0 || row >= this.menu.items.length) {
-      return null;
-    }
-    if (row === this.menu.index) {
-      audio.confirm();
-      return "select";
-    }
-    this.menu.index = row;
-    audio.cursor();
-    return null;
+    if (!tap) return undefined;
+    const row = this.menuRects.findIndex((r) => tap.x >= r.x && tap.x < r.x + r.w && tap.y >= r.y && tap.y < r.y + r.h);
+    if (row < 0) return undefined;
+    this.menu.index = row; audio.confirm(); return "select";
   }
 
   draw(screen: Screen): void {
-    if (bgReady && bgImage) {
-      screen.image(bgImage);
-    } else {
-      this.drawTitleFallback(screen);
-    }
-    screen.rect(0, 0, VIEW_W, 43, "rgba(6,8,16,0.58)");
-    screen.rect(0, 43, VIEW_W, 12, "rgba(6,8,16,0.24)");
-    this.drawLogo(screen);
-    this.drawStarterShowcase(screen);
-    if (this.starting) {
-      screen.rect(24, 142, 192, 20, "rgba(6,8,16,0.92)");
-      screen.frame(24, 142, 192, 20, "#f4d34a");
-      screen.textCenter("APERTURA CAMPAGNA", VIEW_W / 2, 148, "#f4d34a");
-      return;
-    }
-    if (this.difficultyMenu) {
-      this.drawDifficulty(screen);
-      return;
-    }
+    screen.clear("#17243d");
+    const stage = sceneImage("ui:title-stage", "ui/title-stage.png");
+    if (stage) screen.image(stage, 0, 18, 240, 135);
+    screen.rect(0, 0, 240, 43, "#17243d");
+    screen.textCenter("POLITICMON", 120, 6, "#fff3cc", 2);
+    wrapText("IL PROGRAMMA È IN ALLEGATO. MANCA L'ALLEGATO.", 36).forEach((line, i) => screen.textCenter(line, 120, 27 + i * 9, "#80d1b0"));
+    STARTERS.forEach((id, i) => drawMonsterSprite(screen, id, 49 + i * 51, 48 + Math.round(Math.sin(this.time * 2 + i) * 2), 42, 40));
+    if (this.starting) { screen.rect(8, 105, 224, 28, "#fff3cc"); screen.textCenter("APERTURA CAMPAGNA", 120, 115, "#17243d"); return; }
+    if (this.difficultyMenu) { this.drawDifficulty(screen); return; }
     this.drawMenu(screen);
   }
 
-  // Pannello DIFFICOLTÀ: due voci + spiegazione della modalità difficile.
   private drawDifficulty(screen: Screen): void {
-    screen.rect(0, 44, VIEW_W, VIEW_H - 44, "rgba(6,8,16,0.82)");
-    const w = 188;
-    const h = 114;
-    const x = Math.round((VIEW_W - w) / 2);
-    const y = 46;
-    screen.rect(x, y, w, h, "rgba(16,20,31,0.96)");
-    screen.frame(x, y, w, h, "#f4d34a");
-    screen.textCenter("SCEGLI LA SFIDA", VIEW_W / 2, y + 6, "#f4d34a");
-    this.difficultyMenu!.draw(screen, x + 8, y + 18, w - 16, 12);
-    const hard = this.difficultyMenu!.index === 1;
-    const lines = hard
-      ? ["Avversari +livelli, niente", "ONDA DEL CONSENSO,", "rivincite piu lente.", "NON si cambia dopo: è per", "tutta la partita."]
-      : ["CONSIGLIATA alla prima corsa.", "Percorso classico al PALAZZO,", "pacing equilibrato.", "NON si cambia dopo: è per", "tutta la partita."];
-    for (let i = 0; i < lines.length; i += 1) {
-      screen.textCenter(lines[i], VIEW_W / 2, y + 54 + i * 9, GREY);
-    }
+    screen.rect(0, 43, 240, 137, "#17243d");
+    screen.text("SCEGLI LA SFIDA", 12, 48, "#80d1b0");
+    const descriptions = [["Prima campagna consigliata.", "Percorso normale al Palazzo."], ["Avversari +livelli. Niente ONDA.", "Rivincite più lente."]];
+    this.difficultyMenu!.items.forEach((item, i) => {
+      const y = 65 + i * 44, selected = this.difficultyMenu!.index === i;
+      screen.rect(8, y, 224, 38, selected ? "#fff3cc" : "#263954");
+      const color = selected ? "#17243d" : "#fffaf0";
+      screen.text(i === 0 ? "NORMALE" : item.label, 15, y + 5, color);
+      descriptions[i].forEach((line, j) => screen.text(line, 15, y + 17 + j * 9, color));
+    });
+    screen.text("LA SCELTA VALE PER TUTTA LA PARTITA.", 12, 158, "#fffaf0");
+    screen.text("A:PARTI  B:INDIETRO", 12, 171, "#80d1b0");
   }
 
-  private drawTitleFallback(screen: Screen): void {
-    screen.clear("#17243d");
-    screen.rect(0, 116, VIEW_W, 64, "#101c30");
-    screen.rect(36, 78, 168, 4, "#fffaf0");
-    screen.rect(36, 112, 168, 4, "#55a889");
-    for (let x = 48; x <= 192; x += 24) {
-      screen.rect(x, 82, 8, 30, "#c4d1d8");
-    }
-  }
-
-  // ---- Logo con ombra netta e bandiera tricolore sotto. ----
-  private drawLogo(screen: Screen): void {
-    // Titolo con doppia ombra per staccarsi dallo sfondo (nero + blu scuro).
-    screen.textCenter("POLITICMON", VIEW_W / 2 + 1, 8, "#06080f", 2);
-    screen.textCenter("POLITICMON", VIEW_W / 2, 6, "#f4d34a", 2);
-    // Filetto tricolore sotto il titolo, centrato e largo quanto il logo.
-    const tw = 120;
-    const tx = Math.round(VIEW_W / 2 - tw / 2);
-    screen.rect(tx, 23, Math.round(tw / 3), 2, "#2f9a4c");
-    screen.rect(tx + Math.round(tw / 3), 23, Math.round(tw / 3), 2, "#f0f0e8");
-    screen.rect(tx + Math.round(tw / 3) * 2, 23, tw - Math.round(tw / 3) * 2, 2, "#d23c3c");
-    // Slogan rotante (indice sempre valido, anche se this.time è NaN/negativo).
-    const t = Number.isFinite(this.time) ? this.time : 0;
-    const slogan = SLOGANS[Math.abs(Math.floor(t / 3)) % SLOGANS.length] ?? SLOGANS[0];
-    // Slogan INTERO su max 2 righe centrate (prima clipToWidth lo troncava con
-    // "...", es. "DAL BORGO AL PALAZZO A COLPI DI COM..."). 36 char/riga a 6px.
-    const lines = wrapText(slogan, 36);
-    const y0 = lines.length > 1 ? 27 : 30;
-    for (let i = 0; i < lines.length; i += 1) {
-      const line = lines[i];
-      const y = y0 + i * 9;
-      // Backing scuro dietro ogni riga: lo slogan bianco finiva sopra la bandiera
-      // dello sfondo AI (tricolore chiaro) e diventava illeggibile. La striscia
-      // semitrasparente lo stacca dal fondo su qualunque splash.
-      const w = line.length * 6 - 1;
-      screen.rect(Math.round(VIEW_W / 2 - w / 2) - 3, y - 1, w + 6, 9, "rgba(12,15,25,0.62)");
-      // Ombra netta sotto il testo, poi il testo chiaro sopra.
-      screen.textCenter(line, VIEW_W / 2 + 1, y + 1, "#06080f");
-      screen.textCenter(line, VIEW_W / 2, y, PAPER);
-    }
-  }
-
-  private drawStarterShowcase(screen: Screen): void {
-    const slots = [
-      { x: 20, color: "#d23c3c", flip: false },
-      { x: 94, color: "#3f9a5c", flip: false },
-      { x: 168, color: "#d8a830", flip: true }
-    ];
-    screen.rect(0, 50, VIEW_W, 54, "rgba(6,8,16,0.22)");
-    for (let i = 0; i < STARTERS.length; i += 1) {
-      const id = STARTERS[i];
-      const slot = slots[i];
-      const bob = Math.round(Math.sin(this.time * 2 + i * 1.7) * 2);
-      const cx = slot.x + 26;
-      screen.rect(cx - 22, 94, 44, 4, "rgba(0,0,0,0.34)");
-      screen.rect(cx - 18, 90, 36, 4, slot.color);
-      screen.rect(cx - 18, 94, 12, 2, "#2f9a4c");
-      screen.rect(cx - 6, 94, 12, 2, "#f4f4ec");
-      screen.rect(cx + 6, 94, 12, 2, "#d23c3c");
-      screen.frame(cx - 19, 89, 38, 8, "#10141f");
-      drawMonsterSprite(screen, id, slot.x + 5, 52 + bob, 42, 40, { flipX: slot.flip });
-    }
-  }
-
-  private menuIcon(label: string): HqIcon {
-    return label.startsWith("NOME") ? "identity" : label.startsWith("AUDIO") ? "audio"
-      : label.startsWith("SPOSTA") ? "backup" : "campaign";
-  }
-
-  private drawMenuPreview(screen: Screen, x: number, y: number, w: number, h: number): void {
-    screen.rect(x, y, w, h, "rgba(16,20,31,0.92)");
-    screen.frame(x, y, w, h, "#e6b944");
-    const size = Math.min(48, w - 8, h - 8);
-    drawHqIcon(screen, this.menuIcon(this.menu.items[this.menu.index]?.label ?? ""),
-      x + (w - size) / 2, y + (h - size) / 2, size);
-  }
-
-  // ---- Menu compatto: comandi a sinistra, anteprima visuale a destra. ----
   private drawMenu(screen: Screen): void {
-    const rowH = 12;
-    const menuH = this.menu.items.length * rowH;
-    const w = Math.min(128, Math.max(116, this.menu.measureWidth() + 10));
-    const footerH = 12;
-    const x = 8;
-    const y = VIEW_H - menuH - footerH - 6;
-    this.menuTapGeom = { x, y, w, rowH };
-
-    screen.rect(0, y - 6, VIEW_W, menuH + footerH + 12, "rgba(6,8,16,0.58)");
-    screen.rect(x - 3, y - 3, w + 6, menuH + 6, "rgba(16,20,31,0.92)");
-    screen.frame(x - 3, y - 3, w + 6, menuH + 6, "#f4d34a");
-    for (let i = 0; i < this.menu.items.length; i += 1) {
-      const item = this.menu.items[i];
-      const rowY = y + i * rowH;
-      const selected = i === this.menu.index;
-      if (selected) {
-        screen.rect(x, rowY + 1, w, rowH - 2, "#f4d34a");
-        screen.rect(x + 2, rowY + 3, 3, rowH - 6, "#10141f");
-      }
-      const color = selected ? "#10141f" : PAPER;
-      const rightW = item.rightLabel ? item.rightLabel.length * 6 + 6 : 0;
-      drawHqIcon(screen, this.menuIcon(item.label), x + 6, rowY + 1, 11);
-      screen.textFit(item.label, x + 20, rowY + 3, w - 30 - rightW, color);
-      if (item.rightLabel) {
-        screen.textRight(item.rightLabel, x + w - 8, rowY + 3, selected ? "#10141f" : "#cfe6ff");
-      }
-    }
-    this.drawMenuPreview(screen, x + w + 10, y, VIEW_W - x - w - 18, menuH);
-    screen.textCenter("A SCEGLI   B INDIETRO   SATIRA", VIEW_W / 2, VIEW_H - 8, GREY);
+    this.menuRects = this.menu.items.map((_, i) => i === 0 ? { x: 8, y: 104, w: 224, h: 25 } : { x: 8 + ((i - 1) % 2) * 116, y: 134 + Math.floor((i - 1) / 2) * 19, w: 108, h: 17 });
+    screen.rect(0, 100, 240, 80, "#17243d");
+    this.menu.items.forEach((item, i) => {
+      const r = this.menuRects[i], selected = i === this.menu.index;
+      screen.rect(r.x, r.y, r.w, r.h, selected ? "#fff3cc" : "#263954");
+      screen.textFit(item.label, r.x + 7, r.y + (i === 0 ? 9 : 5), r.w - 14, selected ? "#17243d" : "#fffaf0");
+    });
   }
 }

@@ -51,7 +51,7 @@ export class SupplyView {
   }
   draw(screen: Screen): void {
     screen.clear("#101b32");
-    const id = this.shop ? "shop" : "bag", bg = sceneImage(`ui:${id}`, `ui/${id}.png`);
+    const bg = this.shop ? sceneImage("ui:shop", "ui/shop.png") : null;
     if (bg) screen.image(bg);
     drawScreenHeader(screen, this.shop ? "DISCOUNT ELETTORALE" : "RISERVE DI CAMPAGNA", this.shop ? `${this.state.money}€` : this.inBattle ? "IN LOTTA" : "BORSA");
     const item = ITEMS[this.selected ?? ""];

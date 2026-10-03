@@ -14,6 +14,10 @@
 - Lotte iniziali: Click Day premia la prima azione, Par condicio elimina i bonus e Sondaggio lampo cura chi ha meno PV%; evento annunciato al secondo turno e PV avversari numerici. Atlante Higgsfield: 0,25 crediti.
 - Budget codice totale 356 KiB (+4 KiB per Dex ed eventi); limite iniziale invariato a 250 KiB.
 
+- Titolo e slot: comandi diretti, nuova piazza Higgsfield (0,25 crediti), caricamento in due tocchi; cancellazione e sostituzione con conferma.
+- Pausa: squadra, cure, Dex e morale diretti; borsa/salva/mappa/opzioni nella prima pagina secondaria. Cura rapida mostra oggetto, scorta e PV effettivi e ritorna automaticamente.
+- Apertura: laboratorio indicato a nord-ovest, starter diretti e scheda con quattro fatti; Dex/schede e avviso del praticante senza conferme aggiuntive. Salvataggi conservati.
+
 ## 1.0.0-rc.2 — 2026-07-12
 
 - Attivati in produzione tutti i moduli: Atto 3, Coalizione, Territori, Eventi Meme e Campagna Settimanale.

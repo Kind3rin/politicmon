@@ -26,8 +26,8 @@ export const QUESTS: QuestDef[] = [
     id: "starter",
     title: "UN CANDIDATO TUTTO TUO",
     desc: "Scegli il tuo primo POLITICMON nel Laboratorio del Consenso.",
-    hint: "Il laboratorio è l'edificio col tetto blu a BORGO URNE.",
-    step: "Entra nel laboratorio col tetto blu.",
+    hint: "Il laboratorio è a NORD-OVEST: cerca il tetto blu a BORGO URNE.",
+    step: "Laboratorio a nord-ovest: tetto blu.",
     isDone: (s) => Boolean(s.flags["starter-chosen"]),
     target: { mapId: "borgo", x: 7, y: 12 }
   },

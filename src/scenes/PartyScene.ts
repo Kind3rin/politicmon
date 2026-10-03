@@ -57,6 +57,20 @@ export class PartyScene implements Scene {
   }
   get touchActions(): readonly TouchAction[] | undefined {
     const mon = this.summary;
+    if (!mon && this.opts.mode === "view") {
+      const party = this.opts.partyOverride ?? this.state.party, page = Math.floor(this.index / 4);
+      const action = (label: string, hint: string, run: () => void, disabled = false): TouchAction => ({ label, hint, disabled, run: () => {
+        if (disabled || this.stack.top !== this || this.summary || this.opts.mode !== "view" || Math.floor(this.index / 4) !== page) return;
+        this.input.reset(); audio.confirm(); run();
+      } });
+      return [...Array.from({ length: 4 }, (_, i) => {
+        const index = page * 4 + i, target = party[index];
+        return action(target ? speciesOf(target).name : "—", target ? `LV${target.level} · PV ${target.hp}/${statsOf(target).hp}` : "Nessun candidato", () => {
+          this.index = index; this.summary = target; this.summaryPage = 0; this.summaryScroll = 0;
+        }, !target);
+      }), action("ALTRI", "Altra pagina della squadra", () => { this.index = ((page + 1) * 4) % party.length; }, party.length <= 4),
+        action("ESCI", "Torna alla pausa", () => this.stack.pop())];
+    }
     if (!mon || this.summaryPage !== 0) return undefined;
     const action = (label: string, run: () => void, disabled = false): TouchAction => ({ label, disabled, run: () => {
       if (disabled || this.stack.top !== this || this.summary !== mon || this.summaryPage !== 0) return;

@@ -7,6 +7,9 @@
 - Avvio: nome/briefing facoltativi, slot vuoto automatico, scelta starter compatta; notifiche di lotta automatiche, traguardi senza interruzioni e apprendimento immediato con slot libero.
 - Primo allenamento: un avversario, squadra curata e nuova prova senza perdere fondi; prima cattura più equilibrata; animazione Fuorionda Higgsfield (0,25 crediti). Budget codice totale 352 KiB (+2 KiB per i comandi accessibili); salvataggi conservati.
 
+- Prima crescita: starter evolvibili al livello 8, prossima mossa della nuova forma al 9; nuove campagne con Dex/schede prima della cattura e Gianni dopo la crescita. Salvataggi precedenti conservano l’ordine storico.
+- Squadra: quattro fatti e accesso diretto all’evoluzione; confronto facoltativo, sequenza breve con ritorno automatico, nuovo atlante Higgsfield (0,25 crediti). Cure con PV effettivi e messaggio automatico.
+
 ## 1.0.0-rc.2 — 2026-07-12
 
 - Attivati in produzione tutti i moduli: Atto 3, Coalizione, Territori, Eventi Meme e Campagna Settimanale.

@@ -1,7 +1,11 @@
+import {PartyScene} from '../../src/scenes/PartyScene';
+import {EvolutionScene} from '../../src/scenes/EvolutionScene';
+import {SceneStack} from '../../src/engine/scene';
+import type {Input} from '../../src/engine/input';
 import assert from "node:assert/strict";
 import test from "node:test";
 import { createMonster, evolve, statsOf, levelEvolution } from "../../src/game/monster";
-import { careerNotes, evolutionComparison, evolutionPreview } from "../../src/game/evolutionGuide";
+import { careerNotes, evolutionComparison, evolutionPreview, evolutionSummary } from "../../src/game/evolutionGuide";
 import { newGameState, parseGameState } from "../../src/game/state";
 import { resolveCivicChoice, civicNpcReply } from "../../src/game/civicChoices";
 import { shopPrice } from "../../src/game/governo";
@@ -49,4 +53,46 @@ test("fuel signage is a persistent tradeoff and cannot be farmed for polls or mo
   assert.match(civicNpcReply(restored, "benzinaio-r3")!.join(" "), /prezzo/);
   const after = JSON.stringify(restored);
   assert.equal(resolveCivicChoice(restored, "pompa", 0).ok, false); assert.equal(JSON.stringify(restored), after);
+});
+
+
+test("Opening evolution gives four facts without changing the earned monster", () => {
+  for (const [id, target] of [["giorgetta", "giorgiagon"], ["ellyna", "schleinix"], ["renzino", "renzilla"]]) {
+    const mon=createMonster(id,8);mon.hp=3;mon.moves[0].pp=0;
+    const before=JSON.stringify(mon),facts=evolutionSummary(mon,target);
+    assert.equal(facts.length,4);assert.match(facts[3],/^LV 9:/);
+    assert.equal(JSON.stringify(mon),before);
+  }
+});
+
+test("Evolution accepts once, returns automatically, and stale thumb commands cannot decline it",()=>{
+ const stack=new SceneStack(),keys=new Set<string>();let accepted=0,declined=0;
+ const input={wasPressed:(key:string)=>keys.delete(key),reset:()=>keys.clear()} as Input;
+ const scene=new EvolutionScene(stack,input,'ellyna','schleinix',()=>accepted++,{mon:createMonster('ellyna',8),onDecline:()=>declined++});
+ stack.push(scene);const commands=scene.touchActions!;
+ commands[2].run();keys.add('b');scene.update(.1);assert.equal(declined,0);
+ scene.touchActions![0].run();commands[1].run();
+ for(let i=0;i<60;i++)scene.update(.1);
+ assert.equal(accepted,1);assert.equal(declined,0);assert.equal(stack.top,undefined);
+ scene.update(100);assert.equal(accepted,1);
+});
+
+test("Declining a reduced-effects evolution preserves the monster and permits a later attempt",()=>{
+ const stack=new SceneStack(),mon=createMonster('renzino',8),before=JSON.stringify(mon);let declined=0;
+ const input={wasPressed:()=>false,reset:()=>{}} as unknown as Input;
+ const scene=new EvolutionScene(stack,input,'renzino','renzilla',()=>assert.fail('declined'),{mon,reduceEffects:true,onDecline:()=>declined++});
+ stack.push(scene);scene.touchActions![1].run();scene.update(100);
+ assert.equal(declined,1);assert.equal(JSON.stringify(mon),before);assert.equal(stack.top,undefined);
+});
+
+
+test("Squad card opens an earned evolution directly; mirror parties cannot change ownership",()=>{
+ const state=newGameState(),stack=new SceneStack(),keys=new Set<string>();state.party=[createMonster('ellyna',8)];
+ const input={wasPressed:(key:string)=>keys.delete(key),reset:()=>keys.clear()} as Input;
+ const party=new PartyScene(stack,input,state,{mode:'view'});stack.push(party);keys.add('a');party.update();
+ const commands=party.touchActions!;assert.equal(commands[0].disabled,false);commands[0].run();
+ const evolution=stack.top;assert.ok(evolution instanceof EvolutionScene);commands[0].run();assert.equal(stack.top,evolution);
+ evolution.touchActions![1].run();assert.equal(state.party[0].speciesId,'ellyna');assert.equal(stack.top,party);
+ const mirror=new PartyScene(stack,input,state,{mode:'view',partyOverride:state.party});stack.push(mirror);keys.add('a');mirror.update();
+ assert.equal(mirror.touchActions![0].disabled,true);mirror.touchActions![0].run();assert.equal(stack.top,mirror);
 });

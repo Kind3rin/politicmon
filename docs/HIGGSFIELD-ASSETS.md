@@ -283,3 +283,6 @@ Politicdex, dossier, ritmo delle lotte e controlli sono documentati in
 
 Lotto lotte — Fuorionda: saldo **352,97 → 352,72** (0,25 crediti), job `50580beb-1fcf-4ac5-9131-6e50a6069c3c`.
 Quattro fotogrammi visti e integrati nella finale di Polemica; atlante 480×270, sorgente e checksum nel manifest esistente.
+
+Lotto evoluzione — saldo **352,72 → 352,47** (0,25 crediti), job `4c462345-8203-4cd7-b325-f494b3a065b9`.
+Quattro fasi viste e giocate nel cambio Ellyna → Schleinix; atlante 480×360 da 97,6 kB, provenienza/checksum nel manifest esistente.

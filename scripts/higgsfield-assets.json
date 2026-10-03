@@ -40,6 +40,10 @@
       "battle-animation": [
         480,
         270
+      ],
+      "evolution-animation": [
+        480,
+        360
       ]
     },
     "resampling": "nearest",
@@ -325,6 +329,24 @@
       "sha256": "40e4ba8fe7f662cc75e99aefd4a81c842bb9aef74ecad183690ea71e45bac425",
       "kind": "battle-animation",
       "processing": "Nearest-neighbor delivery resize; four equal 240x135 frames, 2x2 atlas.",
+      "creditsSpent": 0.25
+    },
+    {
+      "id": "evolution-stage",
+      "kind": "evolution-animation",
+      "path": "public/sprites/ui/evolution-stage.png",
+      "width": 480,
+      "height": 360,
+      "jobId": "4c462345-8203-4cd7-b325-f494b3a065b9",
+      "model": "gpt_image_2_5",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261002_234357_4c462345-8203-4cd7-b325-f494b3a065b9.png",
+      "sourceSize": [
+        1168,
+        880
+      ],
+      "sourceSha256": "49bbe8cd98d402eea4820052798ee4755569070693ffb35c2e64fcdec1d8f1a2",
+      "sha256": "58852a0e2786bc2b96665c6f524795bb14ef80861561d99ae6de3df8debbe558",
+      "processing": "Nearest-neighbor delivery resize, 48-color palette; four equal 240x180 frames, 2x2 atlas.",
       "creditsSpent": 0.25
     }
   ]

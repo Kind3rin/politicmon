@@ -864,6 +864,7 @@ export class BattleScene implements Scene {
               evolve(mon, targetId);
               markSeen(this.state, mon.speciesId);
               markCaught(this.state, mon.speciesId);
+              saveGame(this.state);
             }, { mon, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed })
           );
         }

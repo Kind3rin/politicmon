@@ -16,15 +16,26 @@ export function evolutionComparison(mon: Monster, targetId: string, page: number
   if (page === 0) {
     const before = statsOf(mon), after = statsOf(preview);
     const keys = ["hp", "atk", "def", "spc", "spd"] as const;
-    const labels = ["PV MASSIMI", "GRINTA", "FACCIA TOSTA", "RETORICA", "OPPORTUNISMO"];
+    const labels = ["PV MASSIMI", "GRINTA", "FACCIA TOSTA", "RETORICA", "VELOCITÀ"];
     return ["STESSO LIVELLO, CAMBIA LA SPECIE.", ...keys.map((key, i) => `${labels[i]}: ${before[key]} > ${after[key]} (${after[key] - before[key] >= 0 ? "+" : ""}${after[key] - before[key]}).`), `PV ATTUALI: ${mon.hp} > ${preview.hp}.`, "STATUS, OGGETTO E PP RESTANO.", "LA FORMA MEME STAGIONALE SI AZZERA."];
   }
   if (page === 1) {
     const old = from.ability ? ABILITIES[from.ability] : undefined;
     const next = to.ability ? ABILITIES[to.ability] : undefined;
-    return [`TIPI: ${from.types.join("/")} > ${to.types.join("/")}.`, `PRIMA: ${old?.name ?? "NESSUNA ABILITÀ"}. ${old?.desc ?? ""}`, `DOPO: ${next?.name ?? "NESSUNA ABILITÀ"}. ${next?.desc ?? ""}`, "LA PASSIVA CAMBIA CON LA SPECIE. GLI EFFETTI D'INGRESSO RICHIEDONO UN NUOVO INGRESSO IN CAMPO."];
+    return [`TIPI: ${from.types.join("/")} > ${to.types.join("/")}.`, `PRIMA: ${old?.name ?? "NESSUNA ABILITÀ"}. ${old?.desc ?? ""}`, `DOPO: ${next?.name ?? "NESSUNA ABILITÀ"}. ${next?.desc ?? ""}`, "LA PASSIVA CAMBIA. GLI EFFETTI D'INGRESSO RICHIEDONO UN NUOVO INGRESSO."];
   }
-  return ["LE QUATTRO MOSSE ATTUALI RESTANO: NON SI RICARICANO I PP.", ...mon.moves.map((slot) => `${MOVES[slot.id].name}: ${slot.pp}/${MOVES[slot.id].pp} PP.`), "LA NUOVA SPECIE NON IMPARA AUTOMATICAMENTE LE MOSSE DEI LIVELLI PASSATI.", "PROSSIME MOSSE DELLA NUOVA FORMA:", ...to.learnset.filter(([level]) => level > mon.level).map(([level, id]) => `LV ${level}: ${MOVES[id].name}.`)];
+  return ["MOSSE E PP RESTANO.", ...mon.moves.map((slot) => `${MOVES[slot.id].name}: ${slot.pp}/${MOVES[slot.id].pp} PP.`), "NON IMPARA AUTOMATICAMENTE MOSSE PASSATE.", "PROSSIME MOSSE:", ...to.learnset.filter(([level]) => level > mon.level).map(([level, id]) => `LV ${level}: ${MOVES[id].name}.`)];
+}
+
+export function evolutionSummary(mon: Monster, targetId: string): string[] {
+  const before = statsOf(mon), after = statsOf(evolutionPreview(mon, targetId)), to = SPECIES[targetId];
+  const next = to.learnset.find(([level]) => level > mon.level);
+  return [
+    `PV ${before.hp} > ${after.hp} / GRINTA ${before.atk} > ${after.atk}`,
+    `TIPO: ${to.types.join("/")}`,
+    `ABILITÀ: ${to.ability ? ABILITIES[to.ability].name : "NESSUNA"}`,
+    next ? `LV ${next[0]}: ${MOVES[next[1]].name}` : "MOSSE E PP RESTANO CON TE"
+  ];
 }
 
 export function careerNotes(mon: Monster, polls: number): string[] {

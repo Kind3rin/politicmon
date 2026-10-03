@@ -5,6 +5,9 @@ import {newGameState, parseGameState, serializeGameState} from '../../src/game/s
 import {currentQuest} from '../../src/data/quests.ts';
 import {TRAINERS} from '../../src/data/trainers.ts';
 import {buildTrainerTeam, preparePractice, recordNewTrainerVictory} from '../../src/game/world/battleCoordinator.ts';
+import {firstRivalReady} from '../../src/game/firstCampaign.ts';
+import {ACHIEVEMENTS} from '../../src/game/achievements.ts';
+import {levelEvolution} from '../../src/game/monster.ts';
 import {MAPS} from '../../src/data/maps.ts';
 
 test('Early learning accelerates recruitment; advanced yields remain unchanged and stronger foes pay more',()=>{
@@ -65,4 +68,32 @@ test('First practice repairs the earned party without changing progress; complet
  mon.hp=1;state.defeatedTrainers.push('praticante');
  assert.equal(preparePractice(state,'praticante'),false);assert.equal(mon.hp,1);
  assert.equal(preparePractice(state,'auditel'),false);assert.equal(mon.hp,1);
+});
+
+
+test('New opening earns capture and first evolution before the rival; old saves keep their chapter',()=>{
+ const state=newGameState();state.flags['opening-v2']=true;
+ assert.equal(currentQuest(state)?.id,'starter');
+ state.flags['starter-chosen']=true;state.starterId='ellyna';state.party=[createMonster('ellyna',5)];
+ assert.equal(currentQuest(state)?.id,'dex');
+ state.flags['dex-received']=true;assert.equal(currentQuest(state)?.id,'recruit');
+ state.boxed=[createMonster('salvinott',5)];assert.equal(currentQuest(state)?.id,'grow');
+ state.defeatedTrainers=['praticante'];assert.equal(currentQuest(state)?.target?.y,12);
+ assert.match(currentQuest(state)!.hint,/caffè/);
+ state.party[0].level=8;assert.equal(levelEvolution(state.party[0],state.sondaggi),'schleinix');
+ assert.equal(firstRivalReady(state),false); // Reaching the level is not accepting the evolution.
+ state.dex.schleinix='caught';assert.equal(firstRivalReady(state),true);
+ const restored=parseGameState(serializeGameState(state))!;
+ assert.equal(currentQuest(restored)?.id,'rival1');assert.equal(firstRivalReady(restored),true);
+ delete restored.flags['opening-v2'];
+ assert.equal(currentQuest(restored)?.target?.mapId,'lab');
+ restored.badges=['auditel'];assert.equal(currentQuest(restored)?.id,'gym2');
+});
+
+test('Changing the starter form cannot masquerade as the first wild recruitment',()=>{
+ const state=newGameState();state.starterId='ellyna';state.party=[createMonster('schleinix',8)];
+ state.dex.ellyna='caught';state.dex.schleinix='caught';
+ const achievement=ACHIEVEMENTS.find(a=>a.id==='first-catch')!;
+ assert.equal(achievement.done(state),false);
+ state.runStats.captures=1;assert.equal(achievement.done(state),true);
 });

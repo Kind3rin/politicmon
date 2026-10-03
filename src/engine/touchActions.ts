@@ -23,7 +23,7 @@ export function renderTouchActions(actions?: readonly TouchAction[]): void {
     deck = document.createElement("div");
     deck.id = "battle-actions";
     deck.setAttribute("role", "group");
-    deck.setAttribute("aria-label", "Azioni della lotta");
+    deck.setAttribute("aria-label", "Azioni del gioco");
     document.querySelector("#touch-ui")?.append(deck);
   }
   deck.hidden = false;

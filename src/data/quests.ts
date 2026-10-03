@@ -1,5 +1,6 @@
 import type { GameState } from "../game/state";
 import type { BranchingQuestDef } from "../game/questFlow";
+import { firstEvolutionDone, OPENING_QUEST_ORDER } from "../game/firstCampaign";
 
 export interface QuestDef {
   id: string;
@@ -34,25 +35,34 @@ export const QUESTS: QuestDef[] = [
     id: "rival1",
     title: "PRIMO DIBATTITO",
     desc: "Vinci il confronto con il RIVALE GIANNI.",
-    hint: "Ti aspetta nel laboratorio, con un ingresso a effetto.",
-    step: "Scegli uno starter e batti Gianni.",
-    isDone: (s) => Boolean(s.flags["rival1-beaten"])
+    hint: "Gianni aspetta sulla strada del PERCORSO 1. Cura la squadra e studia il suo intento.",
+    step: "Sfida Gianni nel Percorso 1.",
+    isDone: (s) => Boolean(s.flags["rival1-beaten"]) || s.badges.includes("auditel"),
+    target: { mapId: "route1", x: 15, y: 5 }
   },
   {
     id: "dex",
     title: "IL POLITICDEX",
     desc: "Ricevi il POLITICDEX dal Professor Quirino.",
-    hint: "Lo consegna dopo il tuo primo dibattito vinto.",
+    hint: "Quirino lo consegna insieme alle prime schede dopo la scelta dello starter.",
     step: "Parla col Professor Quirino nel laboratorio.",
     isDone: (s) => Boolean(s.flags["dex-received"])
   },
   {
     id: "recruit", title: "UNA SQUADRA, DUE VOCI",
     desc: "Recluta un secondo candidato. Costruire una squadra dà anche esperienza.",
-    hint: "Erba nel PERCORSO 1; BORSA > SCHEDA. Indebolisci senza KO. Il tipografo di Borgo ne regala cinque.",
+    hint: "Erba di Borgo e PERCORSO 1; CATTURA > SCHEDA. Indebolisci senza KO. Il tipografo di Borgo ne regala cinque.",
     step: "Recluta nel Percorso 1.",
     isDone: (s) => s.party.length + s.boxed.length >= 2 || s.badges.includes("auditel"),
     target: { mapId: "route1", x: 19, y: 13 }
+  },
+  {
+    id: "grow", title: "IL SIMBOLO NON BASTA",
+    desc: "Fai evolvere lo starter: la prima nuova forma è disponibile al livello 8.",
+    hint: "Nino offre una pratica breve a est del PERCORSO 1. Puoi riprendere l'evoluzione dalla SQUADRA.",
+    step: "Allena lo starter fino al livello 8 ed evolvilo.",
+    isDone: (s) => !s.flags["opening-v2"] || firstEvolutionDone(s) || Boolean(s.flags["rival1-beaten"]) || s.badges.includes("auditel"),
+    target: { mapId: "route1", x: 20, y: 9 }
   },
   {
     id: "share", title: "IL FONDALE VUOLE CRESCERE",
@@ -418,5 +428,13 @@ export const QUESTS: QuestDef[] = [
 
 // L'obiettivo dell'HUD segue solo le missioni principali (non le secondarie).
 export function currentQuest(state: GameState): QuestDef | null {
+  if (state.flags["opening-v2"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {
+    const opening = OPENING_QUEST_ORDER.map(id => QUESTS.find(q => q.id === id)!).find(q => !q.isDone(state));
+    if (opening?.id === "grow" && state.defeatedTrainers.includes("praticante")) return { ...opening, target: { mapId: "route1", x: 20, y: 12 }, hint: "Pratica vinta: vinci nell'erba a sud di Nino. Usa un caffè se i PV sono bassi; al livello 8 scegli EVOLVI." };
+    if (opening) return opening;
+  }
+  if (!state.flags["opening-v2"] && state.flags["starter-chosen"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {
+    return { ...QUESTS.find(q => q.id === "rival1")!, hint: "Quirino nel laboratorio propone di riprovare Gianni.", step: "Parla con Quirino nel laboratorio.", target: { mapId: "lab", x: 5, y: 3 } };
+  }
   return QUESTS.find((q) => !q.side && !q.isDone(state)) ?? null;
 }

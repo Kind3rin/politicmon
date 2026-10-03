@@ -30,7 +30,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: "first-catch", name: "PRIMA TESSERA",
     desc: "Recluta il tuo primo POLITICMON selvatico.",
     reward: 200,
-    done: (s) => caughtCount(s) >= 2 // lo starter + 1
+    done: (s) => s.runStats.captures > 0 || s.party.length + s.boxed.length >= 2
   },
   {
     id: "collector", name: "LISTA CIVICA",

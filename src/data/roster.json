@@ -1090,7 +1090,7 @@
       "evolutions": [
         {
           "id": "giorgiagon",
-          "level": 16
+          "level": 8
         }
       ],
       "dexLine": "ORA IL LEGGIO È SUO. CONTINUA A PRESENTARSI COME OSPITE: COSÌ LE DOMANDE SUL CONTO VANNO ALLA REGIA."
@@ -1125,7 +1125,7 @@
           "iosonogiorgia"
         ],
         [
-          16,
+          9,
           "fiammatricolore"
         ],
         [
@@ -1201,7 +1201,7 @@
       "evolutions": [
         {
           "id": "schleinix",
-          "level": 16
+          "level": 8
         }
       ],
       "dexLine": "PORTA UNA PALETTE A OGNI RIUNIONE. L'UNICO COLORE SU CUI TUTTI CONCORDANO È QUELLO DELLA PROPRIA SEDIA."
@@ -1237,7 +1237,7 @@
           "ztl"
         ],
         [
-          16,
+          9,
           "articolouno"
         ],
         [
@@ -1305,7 +1305,7 @@
       "evolutions": [
         {
           "id": "renzilla",
-          "level": 16
+          "level": 8
         }
       ],
       "ability": "voltagabbana",
@@ -1341,7 +1341,7 @@
           "promessa"
         ],
         [
-          16,
+          9,
           "staisereno"
         ],
         [

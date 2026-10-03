@@ -20,6 +20,11 @@ test("first recruitment stays at the living lead's level, then releases the enco
   state.flags["ach:first-catch"] = true;
   assert.equal(firstRecruitLevel(state, 7), 7);
   delete state.flags["ach:first-catch"];
+  state.pos.mapId = "borgo";
+  state.flags["opening-v2"] = true;
+  assert.equal(firstRecruitLevel(state, 7), 5);
+  delete state.flags["opening-v2"];
+  assert.equal(firstRecruitLevel(state, 7), 7);
   state.pos.mapId = "route2";
   assert.equal(firstRecruitLevel(state, 7), 7);
 });

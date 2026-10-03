@@ -27,9 +27,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       {
         id: "professor", pal: "professor", x: 9, y: 4, facing: "left",
         lines: [
-          "QUIRINO: studio il consenso. Ho un grafico per ogni cosa, tranne chi torna dopo il comizio.",
-          "Sul tavolo ci sono tre SCHEDE STARTER: avvicinati a una e premi A per esaminarla.",
-          "Ne scegli SOLO una: sarà il tuo primo POLITICMON. Le altre? Le prenderà chi viene dopo di te..."
+          "QUIRINO: TRE SCHEDE. UN POSTO.\nIL GRAFICO LO FACCIAMO DOPO.",
+          "SCEGLI UNA SCHEDA SUL TAVOLO.\nA CONFERMA, B TI FA RIPENSARE."
         ]
       }
     ]

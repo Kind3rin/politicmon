@@ -9,7 +9,7 @@ export const WANDERER_CHANCE = 0.02;
 
 /** The first recruit teaches risk without outlevelling the only party member. */
 export function firstRecruitLevel(state: GameState, rolled: number): number {
-  if (state.pos.mapId !== "route1" || state.flags["ach:first-catch"]) return rolled;
+  if ((state.pos.mapId !== "route1" && !(state.pos.mapId === "borgo" && state.flags["opening-v2"])) || state.flags["ach:first-catch"]) return rolled;
   const lead = state.party.find(mon => mon.hp > 0);
   return lead ? Math.min(rolled, lead.level) : rolled;
 }

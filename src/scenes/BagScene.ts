@@ -176,7 +176,7 @@ export class BagScene implements Scene {
             audio.heal();
             this.consume(itemId);
             saveGame(this.state);
-            this.msg.show([`${item.name} ridà fiato alla campagna!`]);
+            this.msg.show([`${speciesOf(mon).name}: PV ${mon.hp}/${max}.`], undefined, true);
           } else {
             if (!mon.status) {
               this.msg.show(["Nessuno scandalo da insabbiare, per ora."]);
@@ -186,7 +186,7 @@ export class BagScene implements Scene {
             audio.heal();
             this.consume(itemId);
             saveGame(this.state);
-            this.msg.show(["Tutto archiviato. Non se ne parla più."]);
+            this.msg.show(["Tutto archiviato. Non se ne parla più."], undefined, true);
           }
         }
       })
@@ -300,7 +300,7 @@ export class BagScene implements Scene {
       screen.text("A:SCEGLI B:ANNULLA", 8, 169, "#fff3cc");
       return;
     }
-    if (this.msg.isOpen) { screen.clear("#101b32"); this.msg.draw(screen); return; }
     this.view.draw(screen);
+    if (this.msg.isOpen) this.msg.draw(screen);
   }
 }

@@ -7,7 +7,7 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen, VIEW_H, VIEW_W } from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, evolve, levelEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame } from "../game/state";
-import { sceneImage } from "../engine/assets";
+import type { TouchAction } from "../engine/touchActions";
 import { careerNotes } from "../game/evolutionGuide";
 import { defensiveMatchups } from "../game/dexGuide";
 import { EvolutionScene } from "./EvolutionScene";
@@ -48,6 +48,25 @@ export class PartyScene implements Scene {
     private opts: PartyOptions
   ) {}
 
+  private openEvolution(mon: Monster): void {
+    const target = levelEvolution(mon, this.state.sondaggi);
+    if (!target || this.opts.partyOverride) return;
+    this.stack.push(new EvolutionScene(this.stack, this.input, mon.speciesId, target, () => {
+      evolve(mon, target); markSeen(this.state, target); markCaught(this.state, target); saveGame(this.state); this.summaryScroll = 0;
+    }, { mon, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed }));
+  }
+  get touchActions(): readonly TouchAction[] | undefined {
+    const mon = this.summary;
+    if (!mon || this.summaryPage !== 0) return undefined;
+    const action = (label: string, run: () => void, disabled = false): TouchAction => ({ label, disabled, run: () => {
+      if (disabled || this.stack.top !== this || this.summary !== mon || this.summaryPage !== 0) return;
+      this.input.reset(); audio.confirm(); run();
+    } });
+    return [action("EVOLVI", () => this.openEvolution(mon), !levelEvolution(mon, this.state.sondaggi) || !!this.opts.partyOverride),
+      action("MOSSE", () => { this.summaryPage = 1; }), action("DATI", () => { this.summaryPage = 2; }),
+      action("ARCHIVIO", () => this.stack.push(new RecallScene(this.stack, this.input, this.state, mon)), this.opts.mode !== "view" || !!this.opts.partyOverride),
+      action("DIFESE", () => { this.summaryPage = 4; }), action("SQUADRA", () => { this.summary = null; })];
+  }
   update(dt = 0): void {
     if (!this.state.reduceEffects) this.time += dt;
     const party = this.opts.partyOverride ?? this.state.party;
@@ -68,13 +87,7 @@ export class PartyScene implements Scene {
         }
         if (this.summaryPage === 1) { this.detailIndex = (this.detailIndex + 1) % Math.max(1, mon.moves.length); this.summaryScroll = 0; audio.cursor(); return; }
         if (this.summaryPage === 3 && !this.opts.partyOverride) {
-          const target = levelEvolution(mon, this.state.sondaggi);
-          if (target) {
-            this.stack.push(new EvolutionScene(this.stack, this.input, mon.speciesId, target, () => {
-              evolve(mon, target); markSeen(this.state, target); markCaught(this.state, target); saveGame(this.state); this.summaryScroll = 0;
-            }, { mon, reduceEffects: this.state.reduceEffects, battleSpeed: this.state.battleSpeed }));
-            audio.confirm(); return;
-          }
+          this.openEvolution(mon); return;
         }
         if (this.summaryPage === 0 && !this.opts.partyOverride) {
           const held = heldItemOf({ ...mon });
@@ -228,16 +241,17 @@ export class PartyScene implements Scene {
     const species = speciesOf(mon), stats = statsOf(mon), held = ITEMS[mon.heldItem ?? ""];
     let notes: string[];
     if (this.summaryPage === 0) {
-      notes = [held?.kind === "hold" && !this.opts.partyOverride ? "START: RIPRENDI L'OGGETTO." : "LEGGERE NON CAMBIA LA SQUADRA.", species.category,
-        `PV: ${mon.hp}/${stats.hp}. STATUS: ${mon.status ? STATUS_LABELS[mon.status] : "NESSUNO"}.`,
-        `GRINTA ${stats.atk}. FACCIA TOSTA ${stats.def}. RETORICA ${stats.spc}. OPPORTUNISMO ${stats.spd}.`,
-        `OGGETTO: ${held?.kind === "hold" ? held.name : "NESSUNO"}.`, `ESPERIENZA TOTALE: ${mon.exp}.`, "MOSSE DIMENTICATE? A FINO AD ARCHIVIO.", species.dexLine];
+      const target = levelEvolution(mon, this.state.sondaggi), ability = abilityOf(mon);
+      notes = [`PV ${mon.hp}/${stats.hp} / ${mon.status ? STATUS_LABELS[mon.status] : "STATUS OK"}`,
+        `GRINTA ${stats.atk} / RETORICA ${stats.spc}`,
+        `ABILITÀ: ${ability?.name ?? "NESSUNA"}`,
+        target ? `EVOLUZIONE PRONTA: ${speciesOf({ ...mon, speciesId: target }).name}` : `OGGETTO: ${held?.name ?? "NESSUNO"}`];
     } else if (this.summaryPage === 1) {
       const slot = mon.moves[this.detailIndex] ?? mon.moves[0], move = slot ? MOVES[slot.id] : undefined;
       notes = move && slot ? ["START: PROSSIMA MOSSA.", `${this.detailIndex + 1}/${mon.moves.length}: ${move.name}.`, `PP ${slot.pp}/${move.pp}. TIPO ${move.type}.`, moveSummary(move), `PRIORITÀ ${move.effect?.priority ?? 0}.`, slot.pp === 0 ? "PP ESAURITI: NON DISPONIBILE IN LOTTA." : "I PP SI CONSUMANO SOLO USANDO LA MOSSA."] : ["NESSUNA MOSSA."];
     } else if (this.summaryPage === 2) {
       const ability = abilityOf(mon);
-      notes = [ability ? `${ability.name}. ${ability.desc}` : "NESSUNA ABILITÀ PASSIVA.", held?.kind === "hold" ? `${held.name}. ${held.desc}` : "NESSUN OGGETTO TENUTO."];
+      notes = [ability ? `${ability.name}. ${ability.desc}` : "NESSUNA ABILITÀ PASSIVA.", `FACCIA TOSTA ${stats.def}. VELOCITÀ ${stats.spd}. EXP ${mon.exp}.`, held?.kind === "hold" ? `${held.name}. ${held.desc}` : "NESSUN OGGETTO TENUTO.", species.dexLine];
     } else if (this.summaryPage === 3) {
       notes = careerNotes(mon, this.state.sondaggi).map((line) => line.replace("A APRE IL CONFRONTO", "START APRE IL CONFRONTO"));
       if (this.opts.partyOverride) notes.unshift("MIRROR: LE EVOLUZIONI SI GESTISCONO NELLA SQUADRA ORIGINALE.");
@@ -249,9 +263,8 @@ export class PartyScene implements Scene {
   private drawSummary(screen: Screen, mon: Monster): void {
     const species = speciesOf(mon), party = this.opts.partyOverride ?? this.state.party;
     screen.clear("#101b32");
-    const bg = sceneImage("ui:dossier", "ui/dossier.png");
-    if (bg) screen.image(bg, 0, 0, 240, 180);
-    drawScreenHeader(screen, "DOSSIER DI SQUADRA");
+
+    drawScreenHeader(screen, "LA TUA SQUADRA");
     screen.rect(6, 20, 228, 59, "#101b32");
     screen.frame(6, 20, 228, 59, "#d3a745");
     drawMonsterSprite(screen, mon.speciesId, 10, 29, 54, 45, { memeFormId: mon.memeFormId, animationTime: this.time });
@@ -259,6 +272,11 @@ export class PartyScene implements Scene {
     screen.text(`L${mon.level}  ${this.index + 1}/${party.length}`, 76, 38, "#b7cedc");
     species.types.forEach((type, i) => screen.text(type, 76, 51 + i * 11, "#fff3cc"));
     screen.panel(6, 82, 228, 83, "card");
+    if (this.summaryPage === 0) {
+      this.summaryLines(mon).slice(0, 7).forEach((line, i) => screen.text(line, 14, 90 + i * 9, INK));
+      screen.text("A: MOSSE  MENU: OGGETTO  B: LISTA", 8, 169, "#fff3cc");
+      return;
+    }
     screen.text(["PROFILO", "MOSSE", "ABILITÀ/OGGETTO", "CARRIERA", "DIFESE", "ARCHIVIO DELLE LINEE"][this.summaryPage], 14, 88, "#8c5b12");
     const lines = this.summaryLines(mon);
     this.summaryScroll = Math.min(this.summaryScroll, Math.max(0, lines.length - 7));

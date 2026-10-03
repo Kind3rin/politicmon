@@ -15,7 +15,6 @@ export interface RuntimeNpc extends NpcDef {
   stepFrom: { x: number; y: number } | null;
   stepT: number;
   canWander: boolean;
-  path?: Array<{ x: number; y: number }>;
 }
 
 export interface NpcDrawCommand {

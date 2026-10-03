@@ -8,7 +8,7 @@ sono superate dalla richiesta attuale.
 
 ## Baseline verificata
 
-52 specie, 78 mosse, 49 allenatori, 66 mappe, 49 quest, 8 eventi meme classici.
+52 specie, 78 mosse, 49 allenatori, 66 mappe, 50 quest, 8 eventi meme classici.
 Salvataggi v18 con migrazione v13 verificata. Il deploy esistente è
 [politicmon.vercel.app](https://politicmon.vercel.app/); master attiva CI e Vercel.
 Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblicazione.
@@ -22,9 +22,9 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Governo Ombra | Sala propria, sei dossier completi, firma per nomina/sfiducia/trasferimento; costi e benefici sospesi per KO o riserva | `shot:government`, `check:government:release`; GOVERNO-VERBALE |
 | Mondo | 294 nuovi PNG per personaggi, veicoli, edifici, terreni e arredi; matrice delle 66 mappe | `shot:world-redesign`, controlli di ingombri/porte e prova del ponte |
 | Politicdex | Cinque pagine, filtri, habitat, condizioni e forme meme | `shot:gameplay-guide` |
-| Schede squadra | Sei pagine, archivio recuperabile, descrizioni complete, oggetti e difese | `shot:evolution-dossier` |
-| Evoluzioni | Confronto, rinvio, ripresa al cap, soglie aggiornate, tessera dopo conferma, presentazione accessibile | `shot:evolution-dossier`, unit test |
-| Borsa/negozio | Filtri, tre pagine tattiche, preventivi, quantità e 30 nuove icone | `shot:supplies` |
+| Schede squadra | Quattro fatti iniziali; evoluzione diretta, mosse/dati/difese/archivio su richiesta | Partita touch su squadra guadagnata e unit test |
+| Evoluzioni | Prima forma al LV8, prossima mossa LV9; quattro fatti, confronto facoltativo, animazione Higgsfield e ritorno automatico | Ellyna → Schleinix giocata, unit test; saldo 352,47 |
+| Borsa/negozio | Cura in due scelte, PV effettivi e ritorno automatico; filtri e dettagli facoltativi | Caffè giocato: 17 → 27 PV, quantità 6 → 5 |
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 105 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
 | Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 153 viste, unit test e prove di rete |
@@ -50,10 +50,16 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | PWA | Scocca Android rivista, 20 layout/sei rotazioni; release locale con 798 asset Higgsfield e 19 tracce AAC offline | MOBILE-PWA-LAYOUT, GOVERNO-VERBALE; `smoke:pwa:release` |
 
 Credito osservato all'inizio dei round Higgsfield: 885,97. Saldo attuale
-verificato: 352,72; spesa cumulativa 533,25 crediti. Non sono stati attivati acquisti
+verificato: 352,47; spesa cumulativa 533,50 crediti. Non sono stati attivati acquisti
 né abbonamenti. Il credito residuo è autorizzato per ulteriori risorse del gioco.
 
-## Ultimo round: lotte e ritmo della prima zona
+## Ultimo round: prima crescita
+
+Campagna nuova giocata con input touch: cattura → pratica → due selvatici → Ellyna LV8/Schleinix → Gianni LV9 vinto in quattro turni.
+Quattro fatti nella squadra, confronto di evoluzione facoltativo e cure senza conferma finale; salvataggio riaperto offline con 1560€ e sondaggi 69%.
+346 test, build e sette formati senza overflow; Higgsfield 0,25 crediti, saldo 352,47. Verifica sul POCO fisico ancora necessaria.
+
+## Round precedente: lotte e ritmo della prima zona
 
 Avvio e starter abbreviati, Polemica/cattura rapida e pulsanti mobili giocati nel browser.
 Ellyna ha vinto il rivale e reclutato Vannaccix; la prima evoluzione e l'ordine della slice

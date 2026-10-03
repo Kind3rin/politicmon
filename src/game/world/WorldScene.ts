@@ -85,6 +85,7 @@ import {
   type CoppaRule, type TournamentState
 } from "../tournament";
 import { buildTrainerTeam, preparePractice, recordNewTrainerVictory, shouldPersistTrainerVictory } from "./battleCoordinator";
+import { firstRivalReady } from "../firstCampaign";
 import { routeNpcInteraction } from "./npcInteraction";
 import { createAtto3Controller, type Atto3Controller } from "./atto3Controller";
 import { isFeatureEnabled } from "../features";
@@ -322,6 +323,9 @@ export class WorldScene implements Scene {
       );
     }
     this.npcs = this.map.npcs.map((npc) => this.makeRuntimeNpc(npc));
+    if (mapId === "route1" && this.state.flags["opening-v2"] && !this.state.flags["rival1-beaten"]) {
+      this.npcs.push(this.makeRuntimeNpc({ id: "opening-rival", pal: "rival", wander: false, x: 15, y: 5, facing: "down", nameplate: "GIANNI", lines: [] }));
+    }
     // Cambiando mappa la vecchia lista NPC viene sostituita: scarta il ref allo
     // sprite del PG vagante (altrimenti puntereebbe a un NPC non più disegnato).
     this.wanderNpc = null;
@@ -484,56 +488,6 @@ export class WorldScene implements Scene {
     npc.stepT = 0;
     npc.x = nx;
     npc.y = ny;
-  }
-
-  // Sceglie la prima cella candidata libera (no player, no NPC, calpestabile).
-  // Fallback all'ultima se tutte occupate.
-  private firstFreeLabSpot(candidates: Array<{ x: number; y: number }>): { x: number; y: number } {
-    for (const c of candidates) {
-      const tile = TILES[this.tileAt(c.x, c.y)];
-      const free =
-        tile && !tile.solid &&
-        !(this.state.pos.x === c.x && this.state.pos.y === c.y) &&
-        !this.npcs.some((n) => n.id !== "rival-lab-cameo" && n.x === c.x && n.y === c.y);
-      if (free) {
-        return c;
-      }
-    }
-    return candidates[candidates.length - 1];
-  }
-
-  // Avvia un cammino scriptato: l'NPC seguirà i waypoint uno dopo l'altro.
-  private scriptedWalk(npc: RuntimeNpc, path: Array<{ x: number; y: number }>): void {
-    npc.path = [...path];
-  }
-
-  // Avanza un NPC lungo il suo percorso scriptato, interpolando ogni passo.
-  private advanceScriptedWalk(npc: RuntimeNpc, dt: number): void {
-    const next = npc.path![0];
-    if (!npc.stepFrom) {
-      // Imposta direzione e parti verso il prossimo waypoint.
-      const dx = Math.sign(next.x - npc.x);
-      const dy = Math.sign(next.y - npc.y);
-      npc.currentFacing = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down";
-      npc.stepFrom = { x: npc.x, y: npc.y };
-      npc.stepT = 0;
-      npc.x = next.x;
-      npc.y = next.y;
-    }
-    npc.stepT += dt / 0.22; // andatura un po' svelta: "ingresso a effetto"
-    if (npc.stepT >= 1) {
-      npc.stepT = 0;
-      npc.stepFrom = null;
-      npc.dispX = npc.x * TILE;
-      npc.dispY = npc.y * TILE;
-      npc.path!.shift();
-      if (npc.path!.length === 0) {
-        npc.path = undefined;
-      }
-    } else {
-      npc.dispX = (npc.stepFrom.x + (npc.x - npc.stepFrom.x) * npc.stepT) * TILE;
-      npc.dispY = (npc.stepFrom.y + (npc.y - npc.stepFrom.y) * npc.stepT) * TILE;
-    }
   }
 
   // Una cella è agibile per un NPC se: tile calpestabile, non c'è il player, né
@@ -897,6 +851,8 @@ export class WorldScene implements Scene {
   private startTrainerBattle(def: TrainerDef, after?: (result: BattleResult) => void, isRematch = false, doctrine?: ElectionDoctrine, maxHealingItems?: number | null): void {
     this.queueBattle(() => {
       const practice = preparePractice(this.state, def.id);
+      const firstRival = def.id === "rival1" && Boolean(this.state.flags["opening-v2"]) && !this.state.flags["rival1-beaten"];
+      if (firstRival) this.state.party.forEach(healMonster);
       const team = buildTrainerTeam(this.state, def, {
         fallbackTeam: () => this.buildRivalTeam(),
         bossTrainerIds: BOSS_TRAINER_IDS
@@ -969,11 +925,11 @@ export class WorldScene implements Scene {
               this.wanderNpc = null;
               this.wanderTrainer = null;
             }
-            if (practice && result === "loss") {
+            if ((practice || firstRival) && result === "loss") {
               this.state.party.forEach(healMonster);
               this.showBanner("PRATICA", "SQUADRA CURATA: RIPROVA.", "#79ddba");
             }
-            this.onBattleEnd(result, practice || def.id.startsWith("coppa:"));
+            this.onBattleEnd(result, practice || firstRival || def.id.startsWith("coppa:"));
             if (promiseNotices.length) this.say(promiseNotices, () => after?.(result));
             else after?.(result);
           }
@@ -1152,6 +1108,14 @@ export class WorldScene implements Scene {
   }
 
   private interactNpc(npc: RuntimeNpc): void {
+    if (npc.id === "opening-rival") {
+      if (!firstRivalReady(this.state)) {
+        this.say(["GIANNI: DUE VOCI E UN SIMBOLO NUOVO.\nPRIMA ALLENATI, POI MI TAGGHI."]);
+        return;
+      }
+      this.startFirstDebate();
+      return;
+    }
     if(npc.id==="professor" && this.state.flags["starter-chosen"] && !this.state.flags["dex-received"]){
       if(this.state.flags["rival1-beaten"])this.giveDex();
       else this.askYesNo("RIPROVI GIANNI?",()=>this.startFirstDebate());
@@ -2202,45 +2166,21 @@ export class WorldScene implements Scene {
     audio.catchJingle();
     saveGame(this.state);
 
-    const rivalStarterId = RIVAL_COUNTER[speciesId];
-    markSeen(this.state, rivalStarterId);
-
-    // Gianni ENTRA in scena dalla porta del lab (5,7) e si piazza al centro,
-    // così non è solo testo: lo si vede arrivare di corsa. Evita la cella del
-    // player: si ferma in una libera, accanto a lui.
-    const gianni = this.makeRuntimeNpc({
-      id: "rival-lab-cameo", pal: "rival", x: 5, y: 7, facing: "up",
-      lines: []
-    });
-    gianni.canWander = false;
-    this.npcs.push(gianni);
-    const target = this.firstFreeLabSpot([{ x: 6, y: 5 }, { x: 7, y: 5 }, { x: 6, y: 4 }, { x: 5, y: 5 }]);
-    this.scriptedWalk(gianni, [{ x: 5, y: 6 }, { x: 5, y: 5 }, target]);
-
-    this.say(
-      [
-        `QUIRINO: ${SPECIES[speciesId].name} è con te. Il microfono non perdona.`,
-        "GIANNI: scelgo il tuo contrario. Mi risparmia un programma."
-      ],
-      () => this.startFirstDebate()
-    );
+    this.state.flags["opening-v2"] = true;
+    this.giveDex();
   }
 
   private startFirstDebate(): void {
     const id=this.state.starterId,rivalStarterId=RIVAL_COUNTER[id];
     if(!rivalStarterId || this.state.flags["rival1-beaten"]) return;
-    const begin=()=>{
-      const def:TrainerDef={id:"rival1",name:"RIVALE GIANNI",pal:"rival",team:[[rivalStarterId,4,this.tutorialRivalMoves(rivalStarterId)]],intro:["HO SCRITTO IL DISCORSO SUL TELEFONO. IL TELEFONO È AL DUE PER CENTO."],defeat:["IL CONSULENTE DICE CHE DEVO CAMBIARE TONO. HO SOLO IL VIVAVOCE."],money:150};
+    const def:TrainerDef={id:"rival1",name:"RIVALE GIANNI",pal:"rival",team:[[rivalStarterId,this.state.flags["opening-v2"] ? 9 : 4,this.tutorialRivalMoves(rivalStarterId)]],intro:["SQUADRE CURATE. TELEFONO AL 2%.\nIL MIO PROGRAMMA È LÌ DENTRO."],defeat:["IL CONSULENTE DICE CHE DEVO CAMBIARE TONO. HO SOLO IL VIVAVOCE."],money:150};
       this.startTrainerBattle(def,(result)=>{
-        this.npcs=this.npcs.filter(n=>n.id!=="rival-lab-cameo");
         if(result!=="win"){
-          this.say(["QUIRINO: UN DIBATTITO PERSO NON È UNA CARRIERA PERSA.","PARLAMI PER RIPROVARE GIANNI. MOSSE E TIPI SONO NELLA GUIDA."]);
+          this.say([this.state.flags["opening-v2"] ? "GIANNI: LA DIRETTA ERA SPENTA.\nRIPROVIAMO QUANDO VUOI." : "QUIRINO: RIPROVA DAL LABORATORIO.\nLA SQUADRA È CURATA."]);
           return;
         }
-        this.state.flags["rival1-beaten"]=true;this.state.rivalWins=Math.max(1,this.state.rivalWins);saveGame(this.state);this.giveDex();
+        this.state.flags["rival1-beaten"]=true;this.state.rivalWins=Math.max(1,this.state.rivalWins);saveGame(this.state);if(this.state.flags["opening-v2"])this.loadMap(this.state.pos.mapId);else this.giveDex();
       });
-    };
-    begin();
   }
 
   private tutorialRivalMoves(speciesId: string): string[] {
@@ -2260,8 +2200,8 @@ export class WorldScene implements Scene {
     saveGame(this.state);
     audio.catchJingle();
     this.say([
-      "GIANNI: nel video taglio prima del KO. Nella rivincita taglio meno.",
-      "QUIRINO: Dex e 5 schede, tieni. Nell'erba scegli chi reclutare."
+      "QUIRINO: DEX E CINQUE SCHEDE.\nIL PROGRAMMA LO TROVI NELL’ERBA.",
+      this.state.flags["opening-v2"] ? "RECLUTA, CRESCI. GIANNI TI ASPETTA\nSULLA STRADA DEL PERCORSO 1." : "ADESSO RECLUTA.\nGLI ALLEATI NON CADONO DAL CIELO."
     ]);
   }
 
@@ -2721,7 +2661,7 @@ export class WorldScene implements Scene {
       if (
         this.map.encounters &&
         this.state.party.some((m) => m.hp > 0) &&
-        Math.random() < rate
+        (this.state.flags["opening-v2"] && !this.state.flags["opening-encountered"] || Math.random() < rate)
       ) {
         // Tabella filtrata per versione + MOSTRO DEL GIORNO con weight x4.
         const table = this.effectiveEncounters();
@@ -2734,6 +2674,7 @@ export class WorldScene implements Scene {
           roll -= weightOf(entry);
           if (roll <= 0) {
             this.interruptCooldown = MIN_FREE_STEPS;
+            this.state.flags["opening-encountered"] = true;
             let level = entry.minLv + Math.floor(Math.random() * (entry.maxLv - entry.minLv + 1));
             // Modificatore d'incontro (~22%): rompe la monotonia dei selvatici.
             // A SONDAGGI alti compaiono più "VIP" (tosti); a SONDAGGI bassi più
@@ -2881,11 +2822,6 @@ export class WorldScene implements Scene {
     const talking = this.msg.isOpen || Boolean(this.askMenu) || Boolean(this.remoteMenu);
     if (!talking) {
       for (const npc of this.npcs) {
-        // Percorso scriptato (es. Gianni che entra nel lab): ha la precedenza.
-        if (npc.path && npc.path.length > 0) {
-          this.advanceScriptedWalk(npc, dt);
-          continue;
-        }
         if (npc.trainerId || npc.healer) {
           continue;
         }
@@ -3088,7 +3024,7 @@ export class WorldScene implements Scene {
       return;
     }
 
-    const dir = this.input.heldDirection();
+    const dir = this.input.heldDirection() ?? (["up", "down", "left", "right"] as const).find(key => this.input.wasPressed(key));
     if (!dir) {
       return;
     }

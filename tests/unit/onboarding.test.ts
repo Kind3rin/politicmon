@@ -13,7 +13,7 @@ test('Starter dossiers retain the whole Dex story, every actual starting move an
   const identity=starterDossier(id,0).join(' ');assert.ok(identity.includes(SPECIES[id].dexLine));
   const moves=starterDossier(id,1).join(' '),types=starterDossier(id,2).join(' ');
   for(const slot of movesAtLevel(id,5)){const m=MOVES[slot.id];assert.ok(moves.includes(m.name));assert.ok(moves.includes(m.flavor));if(m.power>0)assert.ok(types.includes(`${m.name} CONTRO GIANNI: ×${typeMultiplier(m.type,SPECIES[RIVAL_COUNTER[id]].types)}`));}
-  assert.ok(starterDossier(id,3).join(' ').includes('LIVELLO 16'));
+  assert.ok(starterDossier(id,3).join(' ').includes('LIVELLO 8'));
  }
 });
 test('Guides are read-only, follow the current mission and disclose the hard tutorial level',()=>{

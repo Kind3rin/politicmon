@@ -444,6 +444,33 @@
       "creditsSpent": 1.5,
       "balanceBefore": 350.47,
       "balanceAfter": 348.97
+    },
+    {
+      "id": "battle-recruited",
+      "sourceSize": [1344, 752],
+      "sourceSha256": "6c228ea236ab6d6e65956166e04af0890f999c7a6ae22a0f140c59bbc847f4f8",
+      "sha256": "3d4f0ec8395e2dacdcd49745f204616e420aeb051bf5ab7b608c0a08acca8e3f",
+      "kind": "battle-animation",
+      "jobId": "0181211c-00d6-4fbe-b364-830b7a56b25a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261003_075820_0181211c-00d6-4fbe-b364-830b7a56b25a.png",
+      "path": "public/sprites/ui/battle/recruited.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Create a production-ready 16-bit pixel-art animation atlas for the Italian satirical monster-recruitment game POLITICMON. One opaque 16:9 sheet divided into exactly four equal panels in a strict 2 by 2 grid, no gutters, no panel borders. Every panel is the SAME membership celebration scene at the same scale and alignment. Color palette dark navy #101b29, deep teal, bright jade, warm cream and amber, crisp large pixels, no blur, no gradients, no lettering, no logos, no people or creatures. Left half: a circular teal lit podium centered at 29 percent of panel width and 56 percent of panel height; completely EMPTY above it, leave ample empty navy space for runtime monster sprite. Right half: a stylized cream membership card with three short abstract dark lines and a blank round seal at upper right, kept as small decoration at 83 percent width, 28 percent height. Keep the right half below the card quiet dark navy for runtime reward text. Top left: a small cream blank tab, no text. Frame upper left: soft geometric jade rays emerge around empty podium. Frame upper right: a chunky amber rubber stamp enters above the small card. Frame lower left: stamp hits round seal with a few large square amber particles. Frame lower right: stamp retracts, jade circular check mark on seal and sparse celebratory jade and amber squares around empty podium. Clean silhouette, consistent layout in all frames, restrained party-membership satire, reads at 240x135 pixels per frame. No text anywhere."
+      },
+      "width": 480,
+      "height": 270,
+      "model": "gpt_image_2_5",
+      "processing": "Nearest-neighbor 480x270 delivery resize, 48-color palette; four equal 240x135 frames, 2x2 atlas.",
+      "creditsSpent": 1.5,
+      "balanceBefore": 348.97,
+      "balanceAfter": 347.47
     }
   ]
 }

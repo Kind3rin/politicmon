@@ -1,4 +1,5 @@
 import { TeachScene } from "../../scenes/TeachScene";
+import { drawMonsterSprite } from "../../art/monsters";
 import { openingRecruitmentExp } from "../firstCampaign";
 import { healingQuote } from "../supplyGuide";
 import { ITEMS } from "../../data/items";
@@ -144,8 +145,10 @@ export class BattleScene implements Scene {
   private battleHealingItemsUsed = 0;
   private runAttempts = 0;
   private finished = false;
+  private resultRecorded = false;
   private ballAnim: { t: number; shakes: number; success: boolean; viral: boolean } | null = null;
   private captured = false; // il nemico è stato reclutato: niente più sprite in campo
+  private recruitReceipt: { elapsed: number; destination: string; newDex: boolean; polls: number; growth: string; levels: string; modifiers: string[]; saved: boolean } | null = null;
   private stepTimer = 0;
   private introT = 0; // apertura a cerchio + slide degli sprite
   // Effetti visivi condivisi (shake, affondi, particelle, banner, telegrafia):
@@ -169,7 +172,10 @@ export class BattleScene implements Scene {
     this.electionDoctrine = opts.electionDoctrine ?? "none";
     this.maxBattleHealingItems = opts.maxBattleHealingItems ?? null;
     this.onEnd = opts.onEnd;
-    if (!this.trainer) sceneImage("battle:viral", "ui/battle/viral.png");
+    if (!this.trainer) {
+      sceneImage("battle:viral", "ui/battle/viral.png");
+      sceneImage("battle:recruited", "ui/battle/recruited.png");
+    }
     recordBattleStarted(this.state);
     if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary && !this.copione) {
       this.field = chooseFieldEvent(this.state.runStats.battles);
@@ -287,32 +293,26 @@ export class BattleScene implements Scene {
     this.push({
       run: () => {
         this.finished = true;
-        // Boost campagna: una carica si consuma SOLO nelle battaglie dove il
-        // rispettivo bonus è davvero applicato (R42, audit: prima ogni win —
-        // wild inclusi — bruciava tutti e tre i contatori anche quando il bonus
-        // non c'era). Il contatore è già clampato >=0 dal parseState.
-        //  - MANIFESTI (EXP): l'EXP arriva da OGNI foe KO (foeFaintedSteps),
-        //    wild e trainer → consuma su qualunque vittoria per KO ("win").
-        //    Recruitment now awards EXP too and consumes one charge.
-        //  - SPOT (fondi) e COMIZIO (SONDAGGI ×2): il payout e il raddoppio
-        //    sondaggi vivono SOLO nel ramo trainer di afterFoeDown → consumano
-        //    solo battendo un TRAINER.
-        const won = result === "win";
-        recordBattleResult(this.state, result);
-        const coppa = this.trainer?.id.startsWith("coppa:") ?? false;
-        // Tournament EXP belongs to the temporary team, not the campaign team.
-        if ((won || result === "caught") && !coppa && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
-        if (won && this.trainer) {
-          // R42: lo SPOT non si applica ai rematch → non bruciare la carica lì
-          // (altrimenti si sprecherebbe un uso senza bonus). Il COMIZIO
-          // (SONDAGGI ×2) vale anche sui rematch, quindi si consuma comunque.
-          if (!this.isRematch && !coppa && this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
-          if (this.state.boostSondBattles > 0) this.state.boostSondBattles -= 1;
-        }
+        this.recordResult(result);
         audio.playMusic(null);
         this.onEnd(result);
       }
     });
+  }
+
+  private recordResult(result: BattleResult): void {
+    if (this.resultRecorded) return;
+    this.resultRecorded = true;
+    recordBattleResult(this.state, result);
+    const won = result === "win";
+    const coppa = this.trainer?.id.startsWith("coppa:") ?? false;
+    // EXP: KO and recruitment; tournament EXP belongs to its temporary team.
+    if ((won || result === "caught") && !coppa && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;
+    if (won && this.trainer) {
+      // Funds exclude rematches/tournaments; their polling boost still applies.
+      if (!this.isRematch && !coppa && this.state.boostMoneyBattles > 0) this.state.boostMoneyBattles -= 1;
+      if (this.state.boostSondBattles > 0) this.state.boostSondBattles -= 1;
+    }
   }
 
   // ---- Turn building ----
@@ -851,28 +851,29 @@ export class BattleScene implements Scene {
       1,
       Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state) * moraleExpMultiplier(this.state.morale))
     ), recruit);
-    steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
+    if (!recruit) steps.push({ text: `${this.playerName()} guadagna ${gained} PUNTI CONSENSO!` });
     const teamwork = moraleExpMultiplier(this.state.morale);
-    if (teamwork !== 1) steps.push({ text: teamwork > 1 ? "La squadra si fida di te: crescita +8%." : "La squadra non si sente ascoltata: crescita -8%." });
-    if (wave > 1) {
+    if (!recruit && teamwork !== 1) steps.push({ text: teamwork > 1 ? "La squadra si fida di te: crescita +8%." : "La squadra non si sente ascoltata: crescita -8%." });
+    if (!recruit && wave > 1) {
       steps.push({ text: `ONDA DEL CONSENSO! I sondaggi al ${sond}% gonfiano l'esperienza (+25%)!` });
-    } else if (wave < 1) {
+    } else if (!recruit && wave < 1) {
       steps.push({ text: `Sondaggi a terra (${sond}%): l'entusiasmo scarseggia (-8%).` });
     }
-    if (manifestiBonus > 1) {
+    if (!recruit && manifestiBonus > 1) {
       steps.push({ text: "I MANIFESTI OVUNQUE gonfiano l'entusiasmo: +30% CONSENSO!" });
     }
-    if (istruzione) {
+    if (!recruit && istruzione) {
       steps.push({ text: "Il MIN. ISTRUZIONE ha preparato la squadra: bonus del 15%!" });
     }
     // DIVISA EQUA: condivide metà EXP con il resto della squadra viva.
     const hasShare = (this.state.bag["divisa"] ?? 0) > 0;
-    if (hasShare) {
+    if (!recruit && hasShare) {
       steps.push({ text: "La DIVISA EQUA spartisce il consenso con tutta la squadra!" });
     }
     steps.push({
       run: () => {
-        const followUp: Step[] = [];
+        const followUp: Step[] = recruit ? [{ pause: 1.8 }, { run: () => { this.recruitReceipt = null; } }] : [];
+        let sharedRecipients = 0;
         // EXP condivisa (silenziosa) agli altri membri vivi, prima del lead
         // così i loro level-up non interrompono l'animazione del protagonista.
         if (hasShare) {
@@ -881,23 +882,45 @@ export class BattleScene implements Scene {
             if (mon === this.player.mon || mon === this.foe.mon || mon.hp <= 0) {
               continue;
             }
+            const before = mon.exp;
             const ev = gainExp(mon, shared, this.state.sondaggi);
-            if (ev.length > 0) {
+            if (mon.exp > before) sharedRecipients += 1;
+            if (!recruit && ev.length > 0) {
               followUp.push({ text: `${speciesOf(mon).name} cresce in panchina: ora è L${mon.level}!` });
             }
             for (const event of ev) for (const moveId of event.learnableMoves) followUp.push(...this.learnMoveSteps(moveId, mon));
             const target = ev.find((event) => event.evolvesTo)?.evolvesTo ?? levelEvolution(mon, this.state.sondaggi);
             if (target) {
-              followUp.push({ text: `${speciesOf(mon).name} è pronto per il salto di carriera!` });
+              if (!recruit) followUp.push({ text: `${speciesOf(mon).name} è pronto per il salto di carriera!` });
               followUp.push(...this.evolveStepsFor(mon, target));
             }
           }
         }
+        const previousLevel = this.player.mon.level;
+        const previousExp = this.player.mon.exp;
         const events = gainExp(this.player.mon, gained, this.state.sondaggi);
+        if (recruit && this.recruitReceipt) {
+          const receipt = this.recruitReceipt;
+          receipt.growth = `${this.playerName()} +${this.player.mon.exp - previousExp} CONSENSO`;
+          receipt.levels = `LV${previousLevel}${this.player.mon.level > previousLevel ? ` > ${this.player.mon.level}` : ""}${sharedRecipients ? ` · DIVISA ${sharedRecipients}x${Math.max(1, Math.floor(gained / 2))}` : ""}`;
+          receipt.modifiers = [
+            ...(teamwork !== 1 ? [teamwork > 1 ? "COESIONE +8%" : "COESIONE -8%"] : []),
+            ...(wave !== 1 ? [wave > 1 ? "ONDA +25%" : "ONDA -8%"] : []),
+            ...(manifestiBonus > 1 ? ["MANIFESTI +30%"] : []),
+            ...(istruzione ? ["ISTRUZ.+15%"] : []),
+            ...(expMalus(this.state) < 1 ? [`MIN.-${Math.round((1 - expMalus(this.state)) * 100)}%`] : [])
+          ];
+          if (events.length) audio.levelUp();
+          // Recruitment and growth are durable before the receipt can be skipped.
+          this.recordResult("caught");
+          receipt.saved = saveGame(this.state);
+        }
         let queuedEvolution = false;
         for (const event of events) {
-          followUp.push({ run: () => { audio.levelUp(); this.fx.levelFlash = 0.6; } });
-          followUp.push({ text: `${this.playerName()} sale al livello ${event.newLevel}!`, waitHp: true });
+          if (!recruit) {
+            followUp.push({ run: () => { audio.levelUp(); this.fx.levelFlash = 0.6; } });
+            followUp.push({ text: `${this.playerName()} sale al livello ${event.newLevel}!`, waitHp: true });
+          }
           for (const moveId of event.learnableMoves) {
             followUp.push(...this.learnMoveSteps(moveId));
           }
@@ -909,7 +932,7 @@ export class BattleScene implements Scene {
         if (!queuedEvolution) {
           const target = levelEvolution(this.player.mon, this.state.sondaggi);
           if (target) {
-            followUp.push({ text: `${this.playerName()} ha abbastanza consenso per evolversi!` });
+            if (!recruit) followUp.push({ text: `${this.playerName()} ha abbastanza consenso per evolversi!` });
             followUp.push(...this.evolveStepsFor(this.player.mon, target));
           }
         }
@@ -1275,32 +1298,15 @@ export class BattleScene implements Scene {
   }
 
   private captureSteps(): Step[] {
+    const zoneAnnouncements: Step[] = [];
+    // Snapshot modifiers before the capture's polling rewards, as for KO EXP.
+    const growth = this.consensusSteps(() => {}, true);
     const steps: Step[] = [
       {
         run: () => {
           audio.catchJingle();
-          // Celebrazione: lampo dorato a schermo + scintille dal punto del nemico.
-          this.fx.catchFlash = 0.7;
-          const c = monsterCenter("foe");
-          for (let i = 0; i < 22; i += 1) {
-            const ang = (Math.PI * 2 * i) / 22 + 0.2;
-            const speed = 70 * (0.6 + Math.random() * 0.8);
-            this.fx.particles.push({
-              x: c.x + (Math.random() - 0.5) * 12,
-              y: c.y + (Math.random() - 0.5) * 12,
-              vx: Math.cos(ang) * speed,
-              vy: Math.sin(ang) * speed - 30,
-              life: 0,
-              max: 0.5 + Math.random() * 0.4,
-              color: ["#ffe98a", "#ffd23c", "#fff4c0"][i % 3],
-              size: 2
-            });
-          }
-        }
-      },
-      { text: `Fatto! ${this.foeName()} è stato eletto nella tua squadra!` },
-      {
-        run: () => {
+          const newDex = this.state.dex[this.foe.mon.speciesId] !== "caught";
+          const polls = this.state.sondaggi;
           markCaught(this.state, this.foe.mon.speciesId);
           // Catturato sul campo: se era arrivato solo via scambio, ora conta
           // anche per i gate di zona (si toglie l'esclusione C10).
@@ -1312,10 +1318,12 @@ export class BattleScene implements Scene {
             // Squadra piena: lo si conserva nel box (CIRCOLO DI PARTITO) invece
             // di perderlo. Prima il box non esisteva e il mostro spariva.
             this.state.boxed.push(this.foe.mon);
-            this.pushFront([
-              { text: "La squadra è piena: viene spedito al CIRCOLO DI PARTITO (resta nel box)." }
-            ]);
           }
+          this.recruitReceipt = {
+            elapsed: 0, newDex, polls: this.state.sondaggi - polls,
+            destination: this.state.party.includes(this.foe.mon) ? `SQUADRA ${this.state.party.length}/6` : "NEL BOX: CIRCOLO",
+            growth: "", levels: "", modifiers: [], saved: false
+          };
           // Ricompensa di completamento ZONA: se questa cattura riempie il
           // roster di una zona (e non l'hai già riscossa), premio + annuncio.
           for (const p of zoneProgress(this.state.dex, this.state.flags, this.state.browserSeed)) {
@@ -1328,18 +1336,14 @@ export class BattleScene implements Scene {
               }
               addSondaggi(this.state, 5);
               const moneyTxt = r.money > 0 ? ` e ${r.money} FONDI` : "";
-              this.pushFront([
-                { text: `ZONA ${p.zone.name} COMPLETATA! Tutti i candidati schedati.` },
-                { text: `Ricompensa: ${r.qty}x ${ITEMS[r.itemId].name}${moneyTxt}!` }
-              ]);
+              zoneAnnouncements.push({ text: `ZONA ${p.zone.name} COMPLETATA! ${r.qty}x ${ITEMS[r.itemId].name}${moneyTxt}!` });
             }
           }
-          saveGame(this.state);
+          for (const step of growth) step.run?.();
         }
-      },
-      { text: `I dati di ${this.foeName()} sono nel POLITICDEX.` }
+      }
     ];
-    steps.push(...this.consensusSteps(() => {}, true));
+    steps.push({ run: () => this.pushFront(zoneAnnouncements) });
     this.endBattle("caught");
     return steps;
   }
@@ -1358,6 +1362,13 @@ export class BattleScene implements Scene {
       }
     });
     const back = () => { this.mode = "menu"; };
+    if (mode === "queue" && this.recruitReceipt) {
+      const receipt = this.recruitReceipt;
+      return [action("CONTINUA", () => {
+        if (this.recruitReceipt !== receipt) return;
+        this.stepTimer = 0;
+      }, receipt.saved ? "Reclutamento e crescita salvati" : "Reclutamento e crescita ottenuti", !receipt.growth || this.stepTimer <= 0)];
+    }
     if (mode === "queue") return this.mainMenu.items.map((item, index) => action(
       index === 5 ? "ACCELERA" : item.label,
       () => this.msg.advance(),
@@ -1402,6 +1413,7 @@ export class BattleScene implements Scene {
       return;
     }
     dt *= this.state.battleSpeed === 2 ? 2 : 1;
+    if (this.recruitReceipt) this.recruitReceipt.elapsed += dt;
     this.finisherT = Math.max(0, this.finisherT - dt);
     this.copioneFxT = Math.max(0, this.copioneFxT - dt);
     this.fieldFxT = Math.max(0, this.fieldFxT - dt);
@@ -1452,6 +1464,7 @@ export class BattleScene implements Scene {
         return;
       }
       if (this.stepTimer > 0) {
+        if (this.recruitReceipt?.growth && (this.input.wasPressed("a") || this.input.wasPressed("b"))) this.stepTimer = 0;
         this.stepTimer -= dt;
         return;
       }
@@ -1811,6 +1824,10 @@ export class BattleScene implements Scene {
   // ---- Draw ----
 
   draw(screen: Screen): void {
+    if (this.recruitReceipt) {
+      this.drawRecruitReceipt(screen);
+      return;
+    }
     const ctx = screen.ctx;
     // SCREEN-SHAKE PIENO: tutto il frame (sfondo, sprite, box, banner) trasla
     // insieme su super-efficace/crit. Prima solo il nemico tremava.
@@ -2062,6 +2079,26 @@ export class BattleScene implements Scene {
       ctx.fillRect(0, 0, VIEW_W, VIEW_H);
       ctx.restore();
     }
+  }
+
+  private drawRecruitReceipt(screen: Screen): void {
+    const receipt = this.recruitReceipt!;
+    screen.clear("#101b29");
+    const atlas = sceneImage("battle:recruited", "ui/battle/recruited.png");
+    const frame = this.state.reduceEffects ? 3 : Math.min(3, Math.floor(receipt.elapsed / .3));
+    if (atlas) screen.imageRegion(atlas, frame % 2 * 240, Math.floor(frame / 2) * 135, 240, 135, 0, 0, 240, 135);
+    screen.rect(0, 0, 240, 19, "#17243d");
+    screen.text("RECLUTATO!", 8, 6, "#67e2b4");
+    screen.textRight(`LV${this.foe.mon.level}`, 232, 6, "#fffaf0");
+    drawMonsterSprite(screen, this.foe.mon.speciesId, 27, 27, 82, 66, { memeFormId: this.foe.mon.memeFormId, animationTime: this.state.reduceEffects ? 0 : receipt.elapsed });
+    screen.textFit(this.foeName(), 8, 113, 100, "#fffaf0");
+    screen.textFit(receipt.destination, 120, 82, 112, "#67e2b4");
+    screen.text(receipt.newDex ? "DEX +1" : "DEX GIA' NOTO", 120, 97, "#fffaf0");
+    screen.text(`SONDAGGI +${receipt.polls}`, 120, 112, "#ffe38a");
+    screen.panel(2, 136, 236, 42, "card");
+    screen.textFit(receipt.growth, 8, 141, 224, INK);
+    screen.textFit(receipt.levels, 8, 151, 224, "#26745d");
+    wrapText(receipt.modifiers.join(" · "), 36).slice(0, 2).forEach((line, i) => screen.text(line, 8, 161 + i * 8, "#8c5b12"));
   }
 
   // Velo colorato del "meteo politico": tinge lievemente lo sfondo battaglia

@@ -2,14 +2,102 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { MOVES } from "../../src/data/moves.ts";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "../../src/game/battle/polemica.ts";
-import { MessageBox } from "../../src/ui/widgets.ts";
+import { MessageBox, wrapText } from "../../src/ui/widgets.ts";
 import { TeachScene } from "../../src/scenes/TeachScene.ts";
 import { SceneStack } from "../../src/engine/scene.ts";
 import { BattleScene } from "../../src/game/battle/BattleScene.ts";
-import { createMonster } from "../../src/game/monster.ts";
-import { newGameState } from "../../src/game/state.ts";
+import { createMonster, expForLevel, expYield } from "../../src/game/monster.ts";
+import { newGameState, parseGameState } from "../../src/game/state.ts";
 import { makeCombatant } from "../../src/game/battle/sim.ts";
 import { FIELD_EVENTS } from "../../src/game/battle/fieldEvents.ts";
+
+function withSaveStorage(check: (saved: Map<string,string>) => void): void {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+  const saved = new Map<string,string>();
+  Object.defineProperty(globalThis,"localStorage",{configurable:true,value:{getItem:(k:string)=>saved.get(k)??null,setItem:(k:string,v:string)=>saved.set(k,v)}});
+  try { check(saved); }
+  finally { if(previous)Object.defineProperty(globalThis,"localStorage",previous);else delete (globalThis as any).localStorage; }
+}
+
+test("result commitment consumes only applied campaign boosts once, including rematches and tournaments",()=>{
+  const cases=[
+    ["caught",undefined,false,[2,3,3]], ["win",undefined,false,[2,3,3]],
+    ["win","rival1",false,[2,2,2]], ["win","rival1",true,[2,3,2]],
+    ["win","coppa:test",false,[3,3,2]], ["loss","rival1",false,[3,3,3]],
+    ["run",undefined,false,[3,3,3]]
+  ] as const;
+  for(const [result,id,isRematch,expected] of cases){
+    const b:any=Object.create(BattleScene.prototype),state=newGameState();
+    state.boostExpBattles=state.boostMoneyBattles=state.boostSondBattles=3;
+    Object.assign(b,{state,isRematch,trainer:id?{id}:undefined});b.recordResult(result);
+    const committed=JSON.stringify(state);b.recordResult(result);assert.equal(JSON.stringify(state),committed);
+    assert.deepEqual([state.boostExpBattles,state.boostMoneyBattles,state.boostSondBattles],expected);
+    assert.equal(state.runStats[result==="caught"?"captures":result==="win"?"wins":result==="loss"?"losses":"runs"],1);
+  }
+});
+
+test("recruitment saves capture and growth before the skippable receipt, then keeps learning and evolution", () => withSaveStorage(saved => {
+    const b:any=Object.create(BattleScene.prototype), state=newGameState();
+    const lead=createMonster("ellyna",7), alive=createMonster("salvinott",6), ko=createMonster("grillix",5), foe=createMonster("calendauro",5);
+    ko.hp=0;alive.exp=expForLevel(7)-1;
+    state.party=[lead,alive,ko];state.bag.divisa=1;state.starterId="ellyna";
+    state.flags["opening-v2"]=true;state.defeatedTrainers=["praticante"];state.runStats.captures=1;
+    state.boostExpBattles=2;
+    Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),queue:[],mode:"queue",input:{reset(){}},onEnd() {},finished:false});
+    b.stack={top:b};const choices:string[]=[];
+    b.learnMoveSteps=(id:string,mon=lead)=>[{run:()=>{assert.equal(b.recruitReceipt,null);choices.push(`${mon.speciesId}:${id}`);}}];
+    b.evolveStepsFor=(mon:any,id:string)=>[{run:()=>{assert.equal(b.recruitReceipt,null);choices.push(`evolve:${mon.speciesId}:${id}`);}}];
+    const capture=b.captureSteps();capture[0].run();capture[1].run();
+    assert.equal(state.party.at(-1),foe);assert.equal(state.dex.calendauro,"caught");
+    assert.equal(lead.level,8);assert.equal(foe.level,5);assert.equal(ko.exp,expForLevel(5));
+    assert.equal(alive.level,7);assert.match(b.recruitReceipt.levels,/LV7 > 8.*DIVISA 1x/);
+    assert.equal(b.recruitReceipt.newDex,true);assert.equal(b.recruitReceipt.polls,3);
+    assert.equal(b.recruitReceipt.saved,true);
+    assert.equal(choices.length,0);
+    const restored=[...saved.values()].map(v=>parseGameState(v)).find(s=>s?.party[0].level===8)!;
+    assert.ok(restored);assert.equal(restored.party.length,4);assert.equal(restored.dex.calendauro,"caught");
+    assert.equal(restored.runStats.captures,2);assert.equal(restored.boostExpBattles,1);
+    b.stepTimer=1.8;const skip=b.touchActions[0];skip.run();assert.equal(b.stepTimer,0);
+    const after=JSON.stringify(state);skip.run();assert.equal(JSON.stringify(state),after);
+    while(b.queue.length)b.queue.shift().run?.();
+    assert.equal(state.runStats.captures,2);assert.equal(state.boostExpBattles,1);
+    assert.ok(choices.includes("evolve:ellyna:schleinix"));assert.ok(choices.some(c=>c.startsWith("salvinott:")));
+}));
+
+test("a duplicate goes to the full-party box, restores traded zone credit and pays the zone once", () => withSaveStorage(() => {
+  const b:any=Object.create(BattleScene.prototype),state=newGameState();
+  state.party=Array.from({length:6},()=>createMonster("ellyna",7));state.sondaggi=100;
+  state.dex={salvinott:"caught",grillix:"caught",tajanide:"caught",contemorfo:"caught"};state.flags["dex-trade:contemorfo"]=true;
+  state.zoneRewardsClaimed=[];state.browserSeed=0;
+  Object.assign(b,{state,player:makeCombatant(state.party[0]),foe:makeCombatant(createMonster("contemorfo",5)),queue:[]});
+  b.endBattle=()=>{};b.consensusSteps=()=>[];
+  const money=state.money,balls=state.bag.schedona??0;
+  const first=b.captureSteps();first[0].run();
+  assert.equal(state.party.length,6);assert.equal(state.boxed.length,1);assert.equal(b.recruitReceipt.destination,"NEL BOX: CIRCOLO");
+  assert.equal(b.recruitReceipt.newDex,false);assert.equal(b.recruitReceipt.polls,0);
+  assert.equal(state.flags["dex-trade:contemorfo"],undefined);assert.equal(state.money,money+800);assert.equal(state.bag.schedona,balls+2);
+  first.at(-1).run();assert.match(b.queue[0].text,/BORGO.*2x.*800 FONDI/);
+  b.foe=makeCombatant(createMonster("contemorfo",5));
+  b.captureSteps()[0].run();assert.equal(state.money,money+800);assert.equal(state.bag.schedona,balls+2);
+}));
+
+test("quiet recruitment retains combined growth modifiers and fits their explanation in two lines",()=>withSaveStorage(()=>{
+  const b:any=Object.create(BattleScene.prototype),state=newGameState();const lead=createMonster("ellyna",10),foe=createMonster("grillix",5);
+  state.party=[lead];state.sondaggi=80;state.morale.cohesion=80;state.boostExpBattles=2;
+  // Named ministers only apply to living, deployed party members.
+  state.ministri={istruzione:lead.uid,economia:lead.uid,salute:lead.uid};
+  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),queue:[],recruitReceipt:{modifiers:[]}});
+  b.learnMoveSteps=()=>[];b.evolveStepsFor=()=>[];
+  const before=lead.exp;const steps=b.consensusSteps(()=>{},true);
+  assert.ok(steps.every((s:any)=>!s.text));steps[0].run();
+  assert.equal(lead.exp-before,Math.max(1,Math.floor(expYield(foe,false,10)*1.25*1.3*1.15*.87*1.08)));
+  assert.equal(b.recruitReceipt.modifiers.length,5);assert.ok(wrapText(b.recruitReceipt.modifiers.join(" · "),36).length<=2);
+  assert.match(b.recruitReceipt.modifiers.join(" "),/COESIONE.*ONDA.*MANIFESTI.*ISTRUZ.*MIN/);
+  const capped=createMonster("ellyna",55),bench=createMonster("salvinott",55);
+  state.party=[capped,bench];state.bag.divisa=1;b.player=makeCombatant(capped);
+  b.consensusSteps(()=>{},true)[0].run();
+  assert.match(b.recruitReceipt.growth,/\+0 CONSENSO/);assert.doesNotMatch(b.recruitReceipt.levels,/DIVISA/);
+}));
 
 test("move order labels follow announced priority and next-turn phases without mutating combatants", () => {
   const b: any=Object.create(BattleScene.prototype);

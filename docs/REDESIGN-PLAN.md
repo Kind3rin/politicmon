@@ -16,6 +16,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Area | Stato attuale | Prova |
 |---|---|---|
 | Roster | 52 fogli Higgsfield, quattro pose per specie e 62 PNG statici coerenti; caricature testuali rimosse | `shot:monster-frames`, `check:evolutions` |
+| Reclutamento | Nuovo compagno visibile, Dex/squadra/box/EXP in un riepilogo automatico di 1,8 s; crescita, conteggi e boost salvati prima del salto | Calendauro catturato: evoluzione disponibile 6,5 s dal lancio; Schleinix/Gianni quattro turni; Continua con Renzino; offline e 387 test |
 | Battaglie | Polemica, Fuorionda, virale senza schede e copione interrompibile; ordine previsto con priorità/status/campo, avvio diretto dei selvatici e scoperta compatta | Renzilla e Giorgiagon contro Gianni in sei turni; 383 test; otto formati, pulsanti e testi senza tagli; cura 36→42 PV giocata |
 | Boss e prove | Trentuno illustrazioni, dossier e leader persistente; prove facoltative fino alla Consulta, allo Stretto a Offshore e a Bruxelles con livelli distinti per difficoltà | `shot:boss-briefing`, `check:first-campaign` |
 | Morale | Fiducia, coesione, tre promesse con scadenza, otto scelte civiche e memorie nei dialoghi; passerella costruibile | unit test, `shot:morale-satire`, `check:civic-bridge` |

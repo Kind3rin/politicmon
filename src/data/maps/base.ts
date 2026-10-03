@@ -113,7 +113,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         // VERSIONE ESCLUSIVA: testo dinamico gestito in WorldScene.interactNpc
         // (dipende dal browserSeed: GOVERNO/OPPOSIZIONE).
-        id: "sondaggista-versioni", pal: "aide", x: 13, y: 17, facing: "down",
+        id: "sondaggista-versioni", pal: "aide", x: 16, y: 18, facing: "left", wander: false,
         lines: ["SONDAGGISTA: campiono l'erba alta, un comizio alla volta."]
       },
       lucaGuide("BORGO URNE", 17, 8,

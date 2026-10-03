@@ -1,5 +1,8 @@
 # Politicmon: risorse Higgsfield
 
+Reclutamento riuscito: atlante 480×270, quattro fasi del timbro e candidato runtime; job `0181211c-00d6-4fbe-b364-830b7a56b25a`, visto e giocato.
+**1,5 crediti**, saldo **348,97 → 347,47**; prompt, sorgente, SHA e conversione selettiva nel manifest esistente.
+
 Copione di Gianni: atlante 480×270, quattro fasi viste e giocate; job `2cb68c8c-7ee2-497c-8761-79af03fb025e`.
 **1,5 crediti**, saldo **350,47 → 348,97**; sorgente, prompt, SHA e conversione selettiva nel manifest esistente.
 

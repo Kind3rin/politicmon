@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Reclutamento: candidato visibile, Dex/destinazione/crescita in un riepilogo automatico di 1,8 s; dati e conteggi salvati insieme, Continua a tutta larghezza in verticale, mosse/evoluzione dirette. Atlante Higgsfield: 1,5 crediti.
+- Borgo: sondaggista fuori dal tragitto iniziale; nuova campagna giocata da Ellyna a Schleinix e alla vittoria su Gianni, senza saltare catture o crescita.
+
 - Lotte: ordine previsto su ogni mossa touch, con priorità/status/parità e cambio di campo anticipati; pulsanti più alti durante la scelta, anteprima danni dichiarata come stima.
 - Incontri: varianti casuali direttamente nella lotta, senza conferma nel mondo; scoperta nel Dex compatta, senza coprire candidato e PV. Slice giocata anche con Giorgetta fino a Giorgiagon e al primo rivale.
 

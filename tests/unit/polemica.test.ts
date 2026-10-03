@@ -209,6 +209,37 @@ test("replacing a move still lets the player cancel before losing its PP", () =>
   assert.deepEqual(mon.moves, before);
 });
 
+test("touch learning previews two moves, cancels purely and replaces the chosen slot only once", () => {
+  const mon = createMonster("ellyna", 5), stack = new SceneStack(), input = { ...idle, reset() {} } as any;
+  mon.status = "scandalo"; mon.hp = 4; mon.heldItem = "gilet"; mon.moves.forEach((slot, i) => { slot.pp = i + 1; });
+  const before = structuredClone(mon), parent = { update() {}, draw() {} }; stack.push(parent); let learned = 0;
+  const scene = new TeachScene(stack, input, mon, "slogan", () => learned++, { source: "level" }); stack.push(scene);
+  const pick = scene.touchActions[2]; pick.run(); assert.equal(learned, 0); assert.deepEqual(mon, before);
+  scene.touchActions.find(a => a.label === "DETTAGLI")!.run();
+  scene.touchActions.find(a => a.label === "ATTUALE")!.run();
+  scene.touchActions.find(a => a.label === "NUOVA")!.run();
+  scene.touchActions.find(a => a.label === "INDIETRO")!.run();
+  scene.touchActions.find(a => a.label === "RIPENSA")!.run(); assert.deepEqual(mon, before);
+  scene.touchActions[1].run(); pick.run(); // stale pick cannot change the confirmed target
+  const accept = scene.touchActions[0]; accept.run(); accept.run();
+  assert.equal(learned, 1); assert.equal(mon.moves[1].id, "slogan"); assert.equal(mon.moves[1].pp, MOVES.slogan.pp);
+  for (const i of [0, 2, 3]) assert.deepEqual(mon.moves[i], before.moves[i]);
+  assert.equal(mon.hp, before.hp); assert.equal(mon.status, before.status); assert.equal(mon.heldItem, before.heldItem);
+  assert.ok(scene.touchActions.every(a => a.disabled)); scene.update(3); assert.equal(stack.top, parent);
+});
+
+test("touch lessons recheck replaced slots and refuse duplicate or covered commits", () => {
+  const mon = createMonster("ellyna", 5), stack = new SceneStack(), input = { ...idle, reset() {} } as any; let learned = 0;
+  const scene = new TeachScene(stack, input, mon, "slogan", () => learned++); stack.push(scene);
+  const pick = scene.touchActions[0]; mon.moves[0] = { ...mon.moves[0], pp: 1 }; pick.run(); assert.equal(scene.touchActions[0].label, MOVES[mon.moves[0].id].name);
+  scene.touchActions[0].run(); const accept = scene.touchActions[0], before = structuredClone(mon);
+  const overlay = { update() {}, draw() {} }; stack.push(overlay); accept.run(); assert.deepEqual(mon, before); stack.pop();
+  mon.moves[0] = { ...mon.moves[0], pp: 2 }; accept.run(); assert.equal(learned, 0); assert.equal(mon.moves[0].pp, 2);
+  scene.touchActions.find(a => a.label === "RINUNCIA")!.run(); assert.equal(stack.top, undefined);
+  const duplicate = new TeachScene(stack, input, mon, mon.moves[1].id, () => learned++); stack.push(duplicate); duplicate.touchActions[0].run(); duplicate.touchActions[0].run();
+  assert.equal(learned, 0); assert.equal(stack.top, undefined);
+});
+
 test("opening field events rotate and a forecast cannot remove real bonuses", async () => {
   const { chooseFieldEvent, fieldPreview, FIELD_EVENTS } = await import("../../src/game/battle/fieldEvents.ts");
   assert.deepEqual(Array.from({ length: 6 }, (_, i) => chooseFieldEvent(i + 1).id), ["click", "equal", "poll", "click", "equal", "poll"]);

@@ -34,3 +34,15 @@ test("preparation reads actual immunities, PP and defense boosts without consumi
     assert.match(preparationNotes(state, final).join(" "), /NESSUN ATTACCO CON PP/);
   } finally { Math.random = original; }
 });
+
+test("archive touch pages reach earned moves and reject old pages or already learned choices", async () => {
+  const { RecallScene } = await import("../../src/scenes/RecallScene"); const { TeachScene } = await import("../../src/scenes/TeachScene"); const { SceneStack } = await import("../../src/engine/scene");
+  const state = newGameState(), mon = createMonster("renzilla", 28); state.party = [mon]; mon.moves = [{ id: "giravolta", pp: 1 }];
+  const input = { reset() {}, wasPressed() { return false; } }, stack = new SceneStack(), archive = new RecallScene(stack, input as never, state, mon); stack.push(archive);
+  const before = JSON.stringify(state), first = archive.touchActions;
+  assert.equal(first.length, 6); assert.equal(first[4].disabled, false); first[4].run(); first[0].run(); assert.equal(stack.top, archive);
+  const page = archive.touchActions, choice = page[0]; choice.run(); assert.ok(stack.top instanceof TeachScene); assert.equal(JSON.stringify(state), before);
+  choice.run(); assert.ok(stack.top instanceof TeachScene); stack.top.touchActions.find(a => a.label === "RINUNCIA")!.run();
+  const id = archivedMoves(mon)[4]; mon.moves.push({ id, pp: 1 }); choice.run(); assert.equal(stack.top, archive);
+  archive.touchActions[5].run(); assert.equal(stack.top, undefined);
+});

@@ -98,7 +98,7 @@ export class PartyScene implements Scene {
     } });
     return [action("EVOLVI", () => this.openEvolution(mon), !levelEvolution(mon, this.state.sondaggi) || !!this.opts.partyOverride),
       action("MOSSE", () => { this.summaryPage = 1; }), action("DATI", () => { this.summaryPage = 2; }),
-      action("ARCHIVIO", () => this.stack.push(new RecallScene(this.stack, this.input, this.state, mon)), this.opts.mode !== "view" || !!this.opts.partyOverride),
+      action("ARCHIVIO", () => this.stack.push(new RecallScene(this.stack, this.input, this.state, mon)), this.opts.mode !== "view" || !!this.opts.partyOverride || !archivedMoves(mon).length),
       action("DIFESE", () => { this.summaryPage = 4; }), action("SQUADRA", () => { this.summary = null; })];
   }
   update(dt = 0): void {

@@ -28,7 +28,7 @@ Ogni round termina con documentazione, verifiche pertinenti, schermate e pubblic
 | Quartier generale | Titolo, circolo, missioni e archivio rivisti; dossier completi delle 49 missioni | `shot:hq`: 105 viste e prove di trasferimento/tocco |
 | Rete e tipi | Lobby scorrevole, chat completa, 52 offerte leggibili, otto nuovi emblemi; duello e scambio su rete reale | `shot:social-ui`, `check:duel`, `shot-trade` |
 | Campagna politica | Cinque nuovi ambienti, tre scelte con dossier annullabile, effetti reali e riparazione; schede nette, collegi leggibili e scrutinio | `shot:campaign-ui`: 153 viste, unit test e prove di rete |
-| Apprendimento | Stesso confronto da direttiva/livello, rinuncia prima della modifica, PP conservati | `shot:supplies` |
+| Apprendimento | Scelta touch in due tocchi, nuova/sostituita insieme, dettagli facoltativi; archivio diretto e rinuncia senza perdita | Giorgiagon LV9: Fiammatricolore recuperata e giocata, LV10 e 9 PP riaperti offline; 369 test e sei formati senza overflow |
 | Epiloghi e postgame | Quattro finali personali, ricordi nella tessera, monumenti illustrati, ritmo accessibile e favori annullabili | `shot:epilogue`: 214 viste, transazioni e salvataggi |
 | Casinò e Coppa | Tre ambienti, venti PNG, probabilità esplicite, invito giornaliero, leader e save protetto durante i match | `shot:arena`: 843 viste, 272 test |
 | Ingresso, pausa e scorta | Titolo/slot/starter diretti, scheda starter con quattro fatti, pausa con sei azioni, cure con oggetto/scorta/PV anticipati e ritorno automatico | Prova touch: cura 13→21 PV, caffè 6→5; slot protetti; 360 test |

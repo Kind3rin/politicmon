@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Apprendimento: quattro mosse toccabili, confronto nuova/sostituita nella stessa vista e conferma in due tocchi; dettagli completi facoltativi, PP delle altre mosse conservati.
+- Archivio: mosse guadagnate selezionabili direttamente, recupero gratuito e pagine touch; pulsante disabilitato nella squadra quando non ci sono mosse da recuperare.
+
 - Rimpasto: scelta touch diretta di tutte le cinque riserve, PV e costo del turno anticipati; KO e candidato attivo esclusi, annullamento gratuito. Anche i mirror PvP conservano la squadra originale.
 - Tra due avversari la scelta gratuita si apre senza un secondo sì/no; tolta la spiegazione ripetuta dopo il cambio. Elenco squadra allineato alla palette delle schede.
 

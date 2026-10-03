@@ -2,6 +2,9 @@
 
 ## Redesign in corso — 2026-10-03
 
+- Lotte: ordine previsto su ogni mossa touch, con priorità/status/parità e cambio di campo anticipati; pulsanti più alti durante la scelta, anteprima danni dichiarata come stima.
+- Incontri: varianti casuali direttamente nella lotta, senza conferma nel mondo; scoperta nel Dex compatta, senza coprire candidato e PV. Slice giocata anche con Giorgetta fino a Giorgiagon e al primo rivale.
+
 - PWA verticale: console a tutta altezza, barra in alto e controlli vicini al bordo sicuro inferiore; nessun taglio nei formati touch provati, schermo 4:3 conservato.
 - Bar Sport: cura gratuita con un tocco, salvataggio immediato e ricevuta automatica; IA evita rallentamenti e potenziamenti di velocità quando è già prima, senza perdere effetti dannosi delle mosse.
 

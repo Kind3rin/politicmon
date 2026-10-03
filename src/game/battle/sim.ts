@@ -42,6 +42,13 @@ export function effectiveStat(c: Combatant, key: StatKey): number {
   return Math.max(1, Math.floor(value));
 }
 
+/** Same comparison for previews and resolution; only resolution rolls a tie. */
+export function moveOrder(player: Combatant, foe: Combatant, playerMove: Move, foeMove: Move): "player" | "foe" | "tie" {
+  const priority = (playerMove.effect?.priority ?? 0) - (foeMove.effect?.priority ?? 0);
+  const difference = priority || effectiveStat(player, "spd") - effectiveStat(foe, "spd");
+  return difference > 0 ? "player" : difference < 0 ? "foe" : "tie";
+}
+
 // Effetto offensivo (abilità o hold dell'ATTACCANTE) che ha alzato il danno.
 // Serve alla BattleScene per annunciarli come già fa coi difensivi (LODO/GILET).
 export type OffensiveTrigger = "maggioranza" | "opposizione" | "whatever" | "caimano" | "primapagina" | "santino" | "agendarossa";

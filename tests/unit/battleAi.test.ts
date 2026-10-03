@@ -3,11 +3,34 @@ import test from "node:test";
 import { MOVES } from "../../src/data/moves";
 import { DEX_ORDER } from "../../src/data/species";
 import { createMonster, statsOf } from "../../src/game/monster";
-import { chooseFoeMove, foeMoveScore, makeCombatant, type AiProfile } from "../../src/game/battle/sim";
+import { chooseFoeMove, foeMoveScore, makeCombatant, moveOrder, type AiProfile } from "../../src/game/battle/sim";
+import { fieldPreview, FIELD_EVENTS } from "../../src/game/battle/fieldEvents";
 import { BOSS_ART_IDS, trainerAi } from "../../src/game/battle/trainerStyle";
 
 const deliberate: AiProfile = { whiff: 0, canHeal: true, finisher: true };
 const pair = () => [makeCombatant(createMonster("giorgetta", 30)), makeCombatant(createMonster("ellyna", 30))] as const;
+
+test("ordine: priorità prima della velocità, parità esplicita e status considerato", () => {
+  const player=makeCombatant(createMonster("ellyna",9));
+  const foe=makeCombatant({...player.mon,moves:player.mon.moves.map(s=>({...s}))});
+  assert.equal(moveOrder(player,foe,MOVES.comizio,MOVES.comizio),"tie");
+  player.mon.status="indagato";
+  assert.equal(moveOrder(player,foe,MOVES.comizio,MOVES.comizio),"foe");
+  const quick={...MOVES.comizio,effect:{priority:1}};
+  assert.equal(moveOrder(player,foe,quick,MOVES.comizio),"player");
+  assert.equal(moveOrder(player,foe,quick,quick),"foe");
+});
+
+test("ordine: Par Condicio anticipata rimuove il vantaggio senza cambiare lo stato", () => {
+  const player=makeCombatant(createMonster("ellyna",9));
+  const foe=makeCombatant({...player.mon,moves:player.mon.moves.map(s=>({...s}))});
+  player.stages.spd=2;
+  const before=JSON.stringify([player,foe]);
+  assert.equal(moveOrder(player,foe,MOVES.comizio,MOVES.comizio),"player");
+  const [p,f]=fieldPreview(FIELD_EVENTS[1],1,player,foe);
+  assert.equal(moveOrder(p,f,MOVES.comizio,MOVES.comizio),"tie");
+  assert.equal(JSON.stringify([player,foe]),before);
+});
 
 test("IA: valutare danni e immunità non consuma PP o abilità una tantum", () => {
   const foe=makeCombatant(createMonster("salistrobo",30)), target=makeCombatant(createMonster("contemorfo",30));

@@ -1,6 +1,7 @@
 export interface TouchAction {
   label: string;
   hint?: string;
+  order?: "AGISCI PRIMA" | "AGISCI DOPO" | "PARITÀ: 50%";
   disabled?: boolean;
   run: () => void;
 }
@@ -14,6 +15,7 @@ export function renderTouchActions(actions?: readonly TouchAction[]): void {
   if (!document.body.classList.contains("touch")) return;
   current = actions ?? [];
   document.body.classList.toggle("battle-touch", current.length > 0);
+  document.body.classList.toggle("battle-moves", current.some(action => action.order));
   if (!current.length) {
     if (deck) deck.hidden = true;
     signature = "";
@@ -27,7 +29,7 @@ export function renderTouchActions(actions?: readonly TouchAction[]): void {
     document.querySelector("#touch-ui")?.append(deck);
   }
   deck.hidden = false;
-  const next = JSON.stringify(current.map(({ label, hint, disabled }) => [label, hint, disabled]));
+  const next = JSON.stringify(current.map(({ label, hint, order, disabled }) => [label, hint, order, disabled]));
   if (next === signature) return;
   signature = next;
   deck.replaceChildren(...current.map((action, index) => {
@@ -35,6 +37,12 @@ export function renderTouchActions(actions?: readonly TouchAction[]): void {
     const label = document.createElement("strong");
     label.textContent = action.label;
     button.append(label);
+    if (action.order) {
+      const order = document.createElement("span");
+      order.className = "action-order";
+      order.textContent = action.order;
+      button.append(order);
+    }
     if (action.hint) {
       const hint = document.createElement("small");
       hint.textContent = action.hint;

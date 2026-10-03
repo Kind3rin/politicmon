@@ -845,7 +845,8 @@ export class WorldScene implements Scene {
     level: number,
     after?: (result: BattleResult) => void,
     music?: string,
-    legendary = false
+    legendary = false,
+    encounterIntro?: string
   ): void {
     this.queueBattle(() => {
       const foe = createMonster(speciesId, level);
@@ -855,6 +856,7 @@ export class WorldScene implements Scene {
           foeTeam: [foe],
           music,
           legendary,
+          encounterIntro,
           onEnd: (result) => {
             this.onBattleEnd(result);
             after?.(result);
@@ -2689,11 +2691,7 @@ export class WorldScene implements Scene {
             // astensionisti deboli. Un annuncio dà colore al momento.
             const mod = this.rollEncounterFlavor();
             level = firstRecruitLevel(this.state, Math.max(2, level + (mod?.dLevel ?? 0)));
-            if (mod) {
-              this.say([mod.line], () => this.startWildBattle(entry.speciesId, level));
-            } else {
-              this.startWildBattle(entry.speciesId, level);
-            }
+            this.startWildBattle(entry.speciesId, level, undefined, undefined, false, mod?.line);
             return;
           }
         }

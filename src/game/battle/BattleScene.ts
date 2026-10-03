@@ -21,7 +21,7 @@ import {
 } from "../monster";
 import { typeMultiplier } from "../../data/poltypes";
 import {
-  calcDamage, catchChance, chooseFoeMove, effectiveStat, makeCombatant, runChance, statName,
+  calcDamage, catchChance, chooseFoeMove, makeCombatant, moveOrder, runChance, statName,
   type AiProfile, type Combatant, type OffensiveTrigger
 } from "./sim";
 import {
@@ -63,6 +63,7 @@ export interface BattleOptions {
   trainer?: TrainerDef;
   music?: string; // override (es. leggendari)
   legendary?: boolean; // mette in scena l'incontro come "leggendario" (epico)
+  encounterIntro?: string;
   // RIVINCITA (R42 economia): true se è un rematch di un trainer già battuto. Lo
   // SPOT IN PRIME TIME (+50% fondi) è ESCLUSO dai rematch: il bonus resta un
   // acceleratore sui trainer di storia/nuovi, non un faucet sui ribattuti.
@@ -219,7 +220,7 @@ export class BattleScene implements Scene {
       }
       if (this.trainer.id === "algoritmo-sovrano") this.push({ text: `DOTTRINA SNAPSHOT: ${DOCTRINE_LABEL[this.electionDoctrine]}!` });
     } else {
-      this.push({ text: `Un ${this.foeName()} selvatico sbuca dalla campagna elettorale!` });
+      this.push({ text: opts.encounterIntro ?? `Un ${this.foeName()} selvatico sbuca dalla campagna elettorale!` });
     }
     this.pushEntryAbility(this.foe, this.player, `Il nemico ${this.foeName()}`);
     // SONDAGGI COME METEO: annuncio a inizio battaglia quando il gradimento
@@ -339,14 +340,8 @@ export class BattleScene implements Scene {
       slot.pp = Math.max(0, slot.pp - 1);
     }
     const foeMove = this.takeFoeIntent();
-    const pPriority = playerMove.effect?.priority ?? 0;
-    const fPriority = foeMove.effect?.priority ?? 0;
-    const playerFirst =
-      pPriority !== fPriority
-        ? pPriority > fPriority
-        : effectiveStat(this.player, "spd") === effectiveStat(this.foe, "spd")
-          ? Math.random() < 0.5
-          : effectiveStat(this.player, "spd") > effectiveStat(this.foe, "spd");
+    const order = moveOrder(this.player, this.foe, playerMove, foeMove);
+    const playerFirst = order === "tie" ? Math.random() < 0.5 : order === "player";
 
     const first = playerFirst ? "player" : "foe";
     const second = playerFirst ? "foe" : "player";
@@ -512,6 +507,15 @@ export class BattleScene implements Scene {
     this.mode = "recruit";
   }
 
+  private orderLabel(move: Move): TouchAction["order"] {
+    if (!this.foeIntent) return undefined;
+    const [player, previewFoe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
+    const foe = this.trainer?.id === "futuro-anteriore"
+      ? { ...previewFoe, stages: resolveFuturoPhase(previewFoe, this.futuroPhaseTriggered).stages } : previewFoe;
+    const order = moveOrder(player, foe, move, this.foeIntent);
+    return order === "player" ? "AGISCI PRIMA" : order === "foe" ? "AGISCI DOPO" : "PARITÀ: 50%";
+  }
+
   private moveHint(move: Move): string {
     const [player, foe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
     const stat = move.effect?.stat;
@@ -522,7 +526,7 @@ export class BattleScene implements Scene {
     }
     if (move.power > 0) {
       const range = damageRange(player, foe, move, { sondaggi: this.state.sondaggi });
-      return `DANNI ${this.copioneDamage(range.min, move)}-${this.copioneDamage(range.max, move)} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P${this.copione && this.battery > 0 ? " · SCUDO ×½" : ""}`;
+      return `STIMA ${this.copioneDamage(range.min, move)}-${this.copioneDamage(range.max, move)} / +${range.max > 0 ? this.polemica.gainFor(move) : 0} P${this.copione && this.battery > 0 ? " · SCUDO ×½" : ""}`;
     }
     return `${moveSummary(move)} / +${this.polemica.gainFor(move)} P${this.copione && this.battery > 0 && stat ? " · ROMPE COPIONE" : ""}`;
   }
@@ -1369,10 +1373,10 @@ export class BattleScene implements Scene {
       ...this.fightMenu.items.map((item, index) => {
         const slot = this.player.mon.moves[index];
         const move = this.fightFallback ? MOVES.comizio : MOVES[slot.id];
-        return action(move.name, () => {
+        return { ...action(move.name, () => {
           this.mode = "queue";
           this.startTurn(move);
-        }, `${this.moveHint(move)}${this.fightFallback ? "" : ` · ${slot.pp} PP`}`, item.disabled);
+        }, `${this.moveHint(move)}${this.fightFallback ? "" : ` · ${slot.pp} PP`}`, item.disabled), order: this.orderLabel(move) };
       }),
       action("INDIETRO", back),
       action("DOSSIER", () => this.openFightIntel(), "Tipi, effetti e avversario", this.fightFallback)
@@ -1955,8 +1959,8 @@ export class BattleScene implements Scene {
         const nameW = Math.min(move.name.length * 6, 150);
         screen.textFit(move.name, 14, 117, 150, INK);
         screen.rect(14, 125, nameW, 1, TYPE_COLORS[move.type]);
-        // PP restano nelle righe delle mosse; qui rendi scopribile il dossier.
-        screen.textRight("START:INFO", 226, 117, GREY);
+        // L'ordine tiene conto dell'intento annunciato e del prossimo evento.
+        screen.textRight(this.orderLabel(move)?.replace("AGISCI ", "") ?? "START:INFO", 226, 117, GREY);
         // Riga meccanica: cosa fa davvero (danno, buff/debuff, cure, status).
         screen.textFit(this.moveHint(move), 14, 126, 208, INK);
       }
@@ -2141,18 +2145,17 @@ export class BattleScene implements Scene {
       screen.textCenter(label, VIEW_W / 2, y, "#ffd23c", size);
       ctx.restore();
     }
-    // Banner "prima vista" (ciano, per distinguerlo dall'oro leggendario).
+    // La scoperta lascia visibili il candidato e i suoi PV.
     if (this.firstSeenBanner > 0) {
       const prog = 1 - this.firstSeenBanner / 2.2;
       const pop = this.state.reduceEffects ? 1 : Math.min(1, prog / 0.2);
       const fade = prog > 0.8 ? 1 - (prog - 0.8) / 0.2 : 1;
-      const y = 30 + (1 - pop) * -10;
-      const size = pop >= 1 ? 2 : 1;
+      const y = 10 + (1 - pop) * -10;
       ctx.save();
       ctx.globalAlpha = Math.max(0, fade);
-      const label = "UN VOLTO MAI VISTO!";
-      screen.textCenter(label, VIEW_W / 2 + 1, y + 1, "rgba(16,20,31,0.8)", size);
-      screen.textCenter(label, VIEW_W / 2, y, "#4ad0e8", size);
+      screen.rect(134, y, 110, 17, "#101c30");
+      screen.rect(134, y, 110, 2, "#79ddba");
+      screen.textCenter("NUOVO NEL DEX", 189, y + 6, "#79ddba");
       ctx.restore();
     }
   }

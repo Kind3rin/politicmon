@@ -9,6 +9,24 @@ import { BattleScene } from "../../src/game/battle/BattleScene.ts";
 import { createMonster } from "../../src/game/monster.ts";
 import { newGameState } from "../../src/game/state.ts";
 import { makeCombatant } from "../../src/game/battle/sim.ts";
+import { FIELD_EVENTS } from "../../src/game/battle/fieldEvents.ts";
+
+test("move order labels follow announced priority and next-turn phases without mutating combatants", () => {
+  const b: any=Object.create(BattleScene.prototype);
+  b.player=makeCombatant(createMonster("ellyna",9));
+  b.foe=makeCombatant({...b.player.mon,moves:b.player.mon.moves.map((s: any)=>({...s}))});
+  b.fieldTurn=1;b.foeIntent=MOVES.comizio;
+  b.player.stages.spd=2;
+  assert.equal(b.orderLabel(MOVES.comizio),"AGISCI PRIMA");
+  b.field=FIELD_EVENTS[1];
+  const before=JSON.stringify([b.player,b.foe]);
+  assert.equal(b.orderLabel(MOVES.comizio),"PARITÀ: 50%");
+  assert.equal(JSON.stringify([b.player,b.foe]),before);
+  b.trainer={id:"futuro-anteriore"};b.foe.mon.hp=1;b.futuroPhaseTriggered=false;
+  assert.equal(b.orderLabel(MOVES.comizio),"AGISCI DOPO");
+  b.foeIntent=null;
+  assert.equal(b.orderLabel(MOVES.comizio),undefined);
+});
 
 test("a successful setup followed by a different attack unlocks one finisher", () => {
   const meter = new Polemica();

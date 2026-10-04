@@ -67,3 +67,6 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 }
 @media(orientation:portrait){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(330px,40%)}}
 @media(orientation:portrait) and (max-height:700px){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(284px,38%)}}
+.ui-arena-caption{padding:2px 12px}
+.ui-arena-caption .ui-body{white-space:normal;line-height:1.1;max-height:38px;overflow:hidden;text-overflow:clip;display:flex;align-items:center}
+.ui-arena-caption .ui-subtitle{white-space:normal}

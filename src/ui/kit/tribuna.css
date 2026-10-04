@@ -193,3 +193,6 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-row-move .ui-row-name,.ui-row-move .ui-row-right,.ui-row-move .ui-row-level{color:inherit}
 .ui-row-move .ui-row-meta{color:inherit;opacity:.85}
 .ui-row-move[aria-current=true]{box-shadow:4px 4px var(--t-ink),inset 6px 0 var(--t-red)}
+.ui-content.ui-receipt{justify-content:center}
+.ui-content.ui-receipt .ui-card{padding:20px;gap:14px}
+.ui-content.ui-receipt .ui-value{font-size:36px}

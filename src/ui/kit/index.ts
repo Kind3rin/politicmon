@@ -501,6 +501,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   const generation=++panelGeneration;
   const live=()=>generation===panelGeneration;
   const body = element("div", "ui-content");
+  if(panel.primary===0&&panel.actions.length===1&&panel.blocks?.length&&!panel.tabs&&!panel.hero)body.classList.add("ui-receipt");
   if (panel.tabs?.length) {
     const tabs=element("nav","ui-tabs");
     tabs.setAttribute("aria-label",`${panel.title}: sezioni`);

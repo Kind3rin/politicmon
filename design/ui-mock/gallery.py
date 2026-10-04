@@ -1,0 +1,28 @@
+from pathlib import Path
+import json,html
+p=Path(__file__).parent
+refs=json.loads((p/'references.json').read_text());screens=json.loads((p/'manifest.json').read_text())
+titles=['Esplorazione · azione disponibile','Esplorazione · movimento libero','Lotta','Squadra','Scheda compagno','Borsa','Mappa','Imparare una mossa','Menù di pausa','Dialogo']
+refids=[8,5,9,0,1,0,5,1,3,5]
+notes=[
+ 'Stardew distingue meglio il terreno: qui la scena è ancora una composizione di asset esistenti; HUD ridotto a tre icone e una riga, terreno da rifare in Fase 1.',
+ 'Sea of Stars lascia più silenzio visivo: rimossi colonna laterale e pulsante inattivo; resta da verificare sul telefono la leva che appare al tocco.',
+ 'Coromon ha pose di lotta più espressive: aumentati sprite e scena, liberati i corpi dagli HUD; nuove pose e animazioni restano alla Fase 6.',
+ 'HeartGold distingue meglio i sei slot a distanza: aggiunti barra, sprite e stellina senza frasi; il nome lungo rimane leggibile anche a 360 px.',
+ 'Bianco/Nero comprime meglio il riepilogo: separati Mosse, Valori e Storia; ora ogni linguetta entra senza scorrere, con dettaglio su richiesta.',
+ 'La compattezza DS è superiore alla prima griglia: sostituita con otto righe in verticale e 4×2 in orizzontale; destinatari nel foglietto separato.',
+ 'Sea of Stars racconta di più attraverso i luoghi: sostituito l’elenco con costa, strada e segnalini ancorati; illustrazione geografica ancora essenziale.',
+ 'Bianco/Nero mette più chiaramente a confronto le mosse: stessa riga per tutte, nuova mossa a tutta larghezza e timbro collegato; eliminate le istruzioni.',
+ 'Persona 5 ha più energia nella composizione: foglio su mondo scurito, ombra piena e sei icone; animazione di ingresso da valutare dopo approvazione.',
+ 'Sea of Stars usa ritratti più espressivi: aggiunti targhetta e ritratto, separate le scelte; in landscape alzati i personaggi per non coprirli.'
+]
+css='''@font-face{font-family:Barlow;src:url(assets/BarlowCondensed-Bold.ttf)}*{box-sizing:border-box}body{margin:0;padding:28px;background:#F4EEDC;color:#14161F;font:16px/1.5 system-ui}h1,h2{font-family:Barlow;margin:0 0 12px}h1{font-size:44px}h2{font-size:28px}a{color:#1E3A8A}header{max-width:1080px;margin:auto}header p{max-width:75ch}nav{display:flex;gap:16px;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:28px}article{padding:16px;border-top:3px solid #14161F}article img{width:100%;max-height:480px;object-fit:contain;background:#E4DAC0}article p{margin:12px 0}.compare{display:grid;grid-template-columns:minmax(300px,1fr) 250px minmax(300px,1fr);gap:24px;align-items:center;margin:24px auto;max-width:1250px}.compare img{width:100%;max-height:570px;object-fit:contain}.critique{border-top:2px solid #14161F;padding-top:16px;max-width:1250px;margin:auto}.caption{font-size:16px;font-weight:700}.notice{background:#FFD23F;padding:12px 16px;max-width:1080px;margin:16px auto}.overview{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1050px;margin:auto}.overview img{width:100%}@media(max-width:800px){body{padding:16px}.compare{grid-template-columns:1fr}.compare img{max-height:640px}.overview{grid-template-columns:1fr}}'''
+def page(title,body):return '<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><style>'+css+'</style>'+body+'</html>'
+body='<header><h1>Tribuna elettorale</h1><p>Dieci bozze statiche · 4 ottobre 2026. Dati di esempio, sprite reali. La build del gioco non è stata migrata.</p><nav><a href="references.html">Riferimenti studiati</a><a href="panorama.html">Vista d’insieme</a><a href="/artifacts/m2/mock-layout-report.json">Misure delle bozze</a></nav><p>Le pagine mostrano disposizione e stati di dettaglio. Movimento, combattimento, inventario e viaggi sono simulati: non modificano salvataggi.</p></header><div class="notice">Revisione richiesta. La migrazione parte soltanto dopo UI APPROVATA in docs/M2-NOTE-LUCA.md.</div><div class="grid">'
+for i,id in enumerate(screens):
+ r=refs[refids[i]];prefix='/artifacts/m2/mock-'+id
+ body+='<article><h2>'+str(i+1)+'. '+titles[i]+'</h2><a href="'+id+'.html"><img src="'+prefix+'-portrait.png" alt="Bozza '+titles[i]+'"></a><nav><a href="'+id+'.html">Apri bozza</a><a href="compare-'+id+'.html">Confronta riferimento</a><a href="'+prefix+'-landscape.png">Orizzontale</a></nav><p>'+notes[i]+'</p></article>'
+ comparison='<header><h1>'+titles[i]+'</h1><nav><a href="index.html">Tutte le bozze</a><a href="'+id+'.html">Apri pagina statica</a></nav></header><main class="compare"><figure><img src="'+r['image']+'"><figcaption><a href="'+r['source']+'">Riferimento: '+r['name']+'</a></figcaption></figure><figure><img src="'+prefix+'-portrait.png"><figcaption>Bozza · 412×915</figcaption></figure><figure><img src="'+prefix+'-landscape.png"><figcaption>Bozza · 844×390</figcaption></figure></main><p class="critique">'+notes[i]+'</p>'
+ (p/('compare-'+id+'.html')).write_text(page('Confronto · '+titles[i],comparison))
+(p/'index.html').write_text(page('Politicmon · Bozze Tribuna elettorale',body+'</div>'))
+(p/'panorama.html').write_text(page('Tribuna elettorale · Prima revisione','<header><h1>Il gioco torna in primo piano.</h1><p>Esplorazione, lotta e squadra · bozze statiche, in attesa di approvazione.</p></header><main class="overview">'+''.join('<section><h2>'+title+'</h2><img src="/artifacts/m2/mock-'+id+'-portrait.png"></section>' for id,title in [('esplorazione','Esplorazione'),('lotta','Lotta'),('squadra','Squadra')])+'</main>'))

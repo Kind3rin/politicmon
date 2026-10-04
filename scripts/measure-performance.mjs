@@ -10,7 +10,8 @@ import { SPECIES } from "../src/data/species.ts";
 const ROOT = process.cwd();
 const BASELINE_PATH = resolve(ROOT, "docs/performance-baseline.json");
 const audioEnabled = process.env.PERF_AUDIO === "1";
-const REPORT_PATH = resolve(ROOT, `artifacts/reports/performance-${audioEnabled ? "audio" : "latest"}.json`);
+const headed = process.env.PERF_HEADED === "1";
+const REPORT_PATH = resolve(ROOT, `artifacts/reports/performance-${headed ? "headed-" : ""}${audioEnabled ? "audio" : "latest"}.json`);
 const MARKDOWN_PATH = resolve(ROOT, "docs/performance-baseline.md");
 const writeBaseline = process.argv.includes("--write-baseline");
 const checkBaseline = process.argv.includes("--check");
@@ -249,12 +250,12 @@ function assertBudgets(report, baseline) {
   if (failures.length) throw new Error(`Performance budget fallito:\n- ${failures.join("\n- ")}`);
 }
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({headless:!headed});
 let report;
 try {
   report = {
     schemaVersion: 3,
-    profile: { viewport: "390x844", deviceScaleFactor: 2, cpuThrottle: 4, bootNetwork: "40ms/4Mbps", sceneAudio: audioEnabled },
+    profile: { headless:!headed, viewport: "390x844", deviceScaleFactor: 2, cpuThrottle: 4, bootNetwork: "40ms/4Mbps", sceneAudio: audioEnabled },
     boot: await measureBoot(browser), scenes: await measureScenes(browser), sizes: await measureSizes(), save: measureSave()
   };
 } finally { await browser.close(); }

@@ -750,6 +750,17 @@ export class WorldScene implements Scene {
     return civicBridgeTile(this.state, this.map.id, x, y, ch);
   }
 
+  /** Extend visible road mouths beyond the map, without changing collision/warp tiles. */
+  private terrainTileAt(x:number,y:number):string {
+    const rows=this.map.tiles;
+    const edgeY=y<0&&this.map.edges?.north?0:y>=rows.length&&this.map.edges?.south?rows.length-1:null;
+    if(edgeY!==null){
+      const boundary=this.tileAt(x,edgeY),def=TILES[boundary];
+      if(def&&!def.solid&&!def.water)return boundary;
+    }
+    return this.tileAt(x,y);
+  }
+
   private terrainShadows():TerrainShadow[] {
     const shadows:TerrainShadow[]=[];
     this.map.tiles.forEach((row,y)=>[...row].forEach((_,x)=>{
@@ -768,7 +779,7 @@ export class WorldScene implements Scene {
   }
 
   private terrainSample(x:number,y:number):TerrainSample {
-    let ch=this.tileAt(x,y);
+    let ch=this.terrainTileAt(x,y);
     const def=TILES[ch];
     const base=this.map.outdoor?'.':'p';
     const covering=this.buildingCovering(x,y);
@@ -3394,13 +3405,18 @@ export class WorldScene implements Scene {
     const y0 = Math.floor(camY / TILE);
     for (let ty = y0; ty <= y0 + Math.ceil(this.viewHeight / TILE); ty += 1) {
       for (let tx = x0; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
-        const ch = this.tileAt(tx, ty);
+        const ch = this.terrainTileAt(tx, ty);
         const def = TILES[ch];
         if (!def) {
           continue;
         }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
+        if(ch!==this.tileAt(tx,ty)){
+          const image=this.terrainSample(tx,ty).image;
+          if(image)screen.ctx.drawImage(image,dx,dy,TILE,TILE);
+          continue;
+        }
         if(tx>=0 && ty>=0 && ty<this.map.tiles.length && tx<this.map.tiles[ty].length) {
           if(!this.buildingCovering(tx,ty)) {
             const obj=this.objectPng(ch);

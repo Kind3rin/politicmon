@@ -7,6 +7,7 @@ import { Polemica } from "../../src/game/battle/polemica.ts";
 import { makeCombatant } from "../../src/game/battle/sim.ts";
 import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken } from "../../src/game/battle/posture.ts";
 import { createMonster } from "../../src/game/monster.ts";
+import { sharedTypes } from "../../src/game/battle/handoff.ts";
 import { newGameState } from "../../src/game/state.ts";
 
 test("postures trade damage dealt against damage taken, and each has one clear job", () => {
@@ -85,4 +86,24 @@ test("A gaffe followed by a scandal on the same target raises a one-off Bufera w
     drain();
     assert.equal(foe.mon.hp, max - Math.max(1, Math.floor(max / 8)), "it happens only once per fighter");
   } finally { Math.random = realRandom; }
+});
+
+test("handing over to a companion that shares a type brings it in motivated, once per pair", () => {
+  const state = newGameState();
+  const a = createMonster("berlusconix", 20), same = createMonster("mediocrate", 20), other = createMonster("ellyna", 20);
+  assert.ok(sharedTypes(a, same).length > 0, "fixture: same type family");
+  assert.deepEqual(sharedTypes(a, other), [], "fixture: unrelated types");
+  state.party = [a, same, other];
+  const b: any = Object.create(BattleScene.prototype);
+  Object.assign(b, { state, player: makeCombatant(a), foe: makeCombatant(createMonster("giorgetta", 20)), queue: [], finished: false, displayHp: { player: 0, foe: 0 },
+    displayExp: 0, mode: "menu", field: undefined, fieldTurn: 1, foeIntent: null });
+  b.stack = { top: b };
+  b.foeCounterStep = () => ({}); b.endOfTurnSteps = () => [];
+  b.switchTo(same, false);
+  assert.equal(b.player.stages.atk, 1); assert.equal(b.player.stages.spd, 1);
+  assert.ok(b.queue.some((step: any) => /CONSEGNE/.test(step.text ?? "")));
+  b.queue.length = 0; b.switchTo(a, false); b.queue.length = 0; b.switchTo(same, false);
+  assert.equal(b.player.stages.atk, 0, "the same pair does not pay out twice");
+  b.queue.length = 0; b.switchTo(other, false);
+  assert.equal(b.player.stages.atk, 0, "different types: no baton");
 });

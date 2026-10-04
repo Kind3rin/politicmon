@@ -43,6 +43,7 @@ import { moraleExpMultiplier } from "../morale";
 import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
 import { switchPreview, damageRange, replyRange } from "./tactics";
+import { HANDOFF_STAGES, handoffKey, sharedTypes } from "./handoff";
 import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
 import { chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
@@ -115,6 +116,7 @@ export class BattleScene implements Scene {
   private polemica = new Polemica();
   private firstOrder: "player" | "foe" | null = null;
   private buferaDone?: WeakSet<Combatant>;
+  private handoffs?: Set<string>;
   private posture: Posture = "none";
   private turnPosture: Posture = "none";
   private foeIntent: Move | null = null;
@@ -1152,11 +1154,12 @@ export class BattleScene implements Scene {
     this.stack.push(new PartyScene(this.stack, this.input, this.state, {
       mode: forced ? "forced-switch" : "battle-switch", currentUid: this.player.mon.uid, freeSwitch: free,
       switchHint: mon => {
-        if (!this.foeIntent) return "nemico risponde";
+        const baton = !free && !forced && sharedTypes(this.player.mon, mon).length && !this.handoffs?.has(handoffKey(this.player.mon, mon)) ? " · consegne +1" : "";
+        if (!this.foeIntent) return `nemico risponde${baton}`;
         const preview = switchPreview(mon, this.foe);
         const [player, foe] = fieldPreview(this.field, this.fieldTurn, preview.entrant, preview.opponent);
         const range = replyRange(player, foe, this.foeIntent, undefined, { sondaggi: this.state.sondaggi });
-        return this.foeIntent.power ? `risposta stimata ${range.min}-${range.max} PV, senza critico` : `risponde: ${this.foeIntent.name}`;
+        return `${this.foeIntent.power ? `risposta stimata ${range.min}-${range.max} PV, senza critico` : `risponde: ${this.foeIntent.name}`}${baton}`;
       },
       onInspect: mon => this.openSwitchIntel(mon, free), onChoose: mon => this.switchTo(mon, free)
     }));
@@ -1164,6 +1167,7 @@ export class BattleScene implements Scene {
 
   private switchTo(mon: Monster, afterFaint: boolean): void {
     if (this.finished || this.stack.top !== this || !this.state.party.includes(mon) || mon.hp <= 0 || mon.uid === this.player.mon.uid) return;
+    const outgoing = this.player.mon;
     this.player = makeCombatant(mon);
     this.displayHp.player = mon.hp;
     this.displayExp = this.expRatio();
@@ -1178,6 +1182,13 @@ export class BattleScene implements Scene {
       this.player.stages = entryAbility.entrantStages;
       this.foe.stages = entryAbility.opponentStages;
       steps.push({ text: `${this.playerName()} fa TABULA RASA: ogni modifica è azzerata!` });
+    }
+    const handoff = !afterFaint && outgoing.uid !== mon.uid ? handoffKey(outgoing, mon) : "";
+    if (handoff && sharedTypes(outgoing, mon).length && !(this.handoffs ??= new Set()).has(handoff)) {
+      this.handoffs.add(handoff);
+      this.player.stages.atk = Math.min(6, this.player.stages.atk + HANDOFF_STAGES.atk);
+      this.player.stages.spd = Math.min(6, this.player.stages.spd + HANDOFF_STAGES.spd);
+      steps.push({ text: `CONSEGNE DI PARTITO! ${this.playerName()} raccoglie il testimone: GRINTA e VELOCITÀ +1.`, run: () => audio.cursor() });
     }
     if (!afterFaint) {
       // Il cambio consuma il turno: il nemico attacca (col blocco status).

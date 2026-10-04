@@ -175,3 +175,4 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-splash-compact .ui-button{min-height:48px;padding:8px 4px;align-items:center;text-align:center;box-shadow:3px 3px var(--t-ink)}
 .ui-splash-compact .ui-body,.ui-splash-compact .ui-button-icon{display:none}
 .ui-splash-compact .ui-subtitle{font-size:16px}
+.ui-panel .ui-hero{border-radius:0;border:2px solid var(--t-ink)}

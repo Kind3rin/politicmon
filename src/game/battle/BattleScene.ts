@@ -119,6 +119,9 @@ export class BattleScene implements Scene {
   private handoffs?: Set<string>;
   private posture: Posture = "none";
   private turnPosture: Posture = "none";
+  /** The opponent's declared posture for the coming turn, shown beside its intent. */
+  private foePosture: Posture = "none";
+  private turnFoePosture: Posture = "none";
   private foeIntent: Move | null = null;
   private recruitBall = "";
   private battery = 3;
@@ -436,6 +439,7 @@ export class BattleScene implements Scene {
     return {
       run: () => {
         this.turnPosture = "none";
+        this.turnFoePosture = "none";
         if (this.foe.mon.hp > 0) {
           const saved = this.queue;
           this.queue = [];
@@ -483,9 +487,21 @@ export class BattleScene implements Scene {
     return chooseFoeMove(this.foe, this.player, this.ai, Math.random, { sondaggi: this.state.sondaggi });
   }
 
+  private pickFoePosture(intent: Move): Posture {
+    if (!this.trainer || ["rival1", "stagista"].includes(this.trainer.id)) return "none";
+    const hp = this.foe.mon.hp / statsOf(this.foe.mon).hp, style = this.ai.style ?? "balanced";
+    if (hp <= 0.4 && ["fortress", "control", "balanced"].includes(style)) return "smentisci";
+    if (["pressure", "rush"].includes(style) && hp > 0.5 && intent.power > 0) return "attacca";
+    if (style === "setup" && intent.power === 0) return "tempo";
+    return "none";
+  }
+
   private takeFoeIntent(): Move {
+    const declared = this.foeIntent !== null;
     const move = this.foeIntent ?? this.pickFoeIntent();
     this.foeIntent = null;
+    this.turnFoePosture = declared ? this.foePosture : "none";
+    this.foePosture = "none";
     return move;
   }
 
@@ -553,7 +569,7 @@ export class BattleScene implements Scene {
     if (!this.foeIntent) return "—";
     const [player, foe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
     const range = replyRange(player, foe, this.foeIntent, preparation, { sondaggi: this.state.sondaggi });
-    const taken = postureTaken(this.posture);
+    const taken = postureTaken(this.posture) * postureDealt(this.foePosture);
     return taken === 1 ? `${range.min}-${range.max}` : `${postureDamage(range.min, taken)}-${postureDamage(range.max, taken)}`;
   }
 
@@ -609,7 +625,7 @@ export class BattleScene implements Scene {
       pause: .18
     });
 
-    if (side === "foe") {
+    if (side === "foe" && !postureKeepsPP(this.turnFoePosture)) {
       const slot = attacker.mon.moves.find((s) => s.id === move.id);
       if (slot) {
         slot.pp = Math.max(0, slot.pp - 1);
@@ -630,7 +646,8 @@ export class BattleScene implements Scene {
       const civicFavored = this.electionDoctrine === "lista_civica" && side === "foe"
         && ((this.electionTurn % 2 === 1 && move.category === "fisico") || (this.electionTurn % 2 === 0 && move.category === "speciale"));
       const baseDamage = side === "player" ? this.copioneDamage(result.damage, move) : civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
-      const postureFactor = move.id === FUORIONDA.id ? 1 : side === "player" ? postureDealt(this.turnPosture) : postureTaken(this.turnPosture);
+      const postureFactor = move.id === FUORIONDA.id ? 1 : side === "player"
+        ? postureDealt(this.turnPosture) * postureTaken(this.turnFoePosture) : postureDealt(this.turnFoePosture) * postureTaken(this.turnPosture);
       const appliedDamage = postureFactor === 1 ? baseDamage : postureDamage(baseDamage, postureFactor);
       steps.push({
         run: () => {
@@ -778,8 +795,9 @@ export class BattleScene implements Scene {
       ? { ...effect.statusIfFirst, chance: festivalScandaloChance(actedFirst) }
       : undefined;
     const statusEffect = effect?.status ?? conditionalStatus;
-    if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0 && side === "foe" && postureBlocksStatus(this.turnPosture)) {
-      steps.push({ text: "SMENTITA PRONTA: lo status viene respinto!", run: () => audio.abilityBlock() });
+    const denied = side === "foe" ? postureBlocksStatus(this.turnPosture) : postureBlocksStatus(this.turnFoePosture);
+    if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0 && denied) {
+      steps.push({ text: side === "foe" ? "SMENTITA PRONTA: lo status viene respinto!" : "SMENTITA NEMICA: lo status viene respinto!", run: () => audio.abilityBlock() });
     } else if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0) {
       // TEFLON (e GARANZIA COSTITUZIONALE): immune agli status (guard PRIMA del
       // tiro di chance, come in duelsim). TELECAMERA (hold): previene solo la GAFFE.
@@ -1440,7 +1458,7 @@ export class BattleScene implements Scene {
       const estimate=damageRange(player,foe,move,{sondaggi:this.state.sondaggi});
       const tactical=this.moveHint(move);
       const blocked=/^(BLOCCATA|STATISTICA)/.test(tactical);
-      const dealt=postureDealt(this.posture),hint=blocked?readableCopy(tactical):move.power?`Danno stimato: ${postureDamage(this.copioneDamage(estimate.min,move),dealt)}–${postureDamage(this.copioneDamage(estimate.max,move),dealt)} PV.`:moveCardDescription(move);
+      const dealt=postureDealt(this.posture)*postureTaken(this.foePosture),hint=blocked?readableCopy(tactical):move.power?`Danno stimato: ${postureDamage(this.copioneDamage(estimate.min,move),dealt)}–${postureDamage(this.copioneDamage(estimate.max,move),dealt)} PV.`:moveCardDescription(move);
       return {...action(readableCopy(move.name),()=>{
         if(!fallback && (this.player.mon.moves[index]!==slot || slot.pp<=0))return;
         this.fightMenu.index=index;this.mode="queue";this.startTurn(move);
@@ -1476,7 +1494,7 @@ export class BattleScene implements Scene {
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
       message:{title,body},notice,moveCount:moves.length,postureCount:postures.length,
-      polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status"}:undefined,
+      polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status",posture:this.foePosture!=="none"?{label:POSTURES[this.foePosture].label,rule:POSTURES[this.foePosture].rule}:undefined}:undefined,
       finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined
     }};
   }
@@ -1551,7 +1569,7 @@ export class BattleScene implements Scene {
           // A blocked Click Day expires with its round; no retroactive bonus.
           if (this.field?.id === "click" && this.fieldTurn >= 2) this.fieldResolved = true;
           this.mainMenu.index = 0;
-          this.foeIntent ??= this.pickFoeIntent();
+          if (!this.foeIntent) { this.foeIntent = this.pickFoeIntent(); this.foePosture = this.pickFoePosture(this.foeIntent); }
           this.actionCaption = null;
           this.mode = "menu";
         }

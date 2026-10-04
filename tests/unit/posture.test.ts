@@ -29,14 +29,14 @@ test("posture damage never rounds a hit to nothing and never invents damage from
   assert.equal(postureDamage(20, 0.55), 11);
 });
 
-function fight(posture: "none" | "attacca" | "smentisci" | "tempo", side: "player" | "foe", move: Move) {
+function fight(posture: "none" | "attacca" | "smentisci" | "tempo", side: "player" | "foe", move: Move, foePosture: "none" | "attacca" | "smentisci" | "tempo" = "none") {
   const realRandom = Math.random; Math.random = () => 0.5;
   try {
     const state = newGameState(), player = makeCombatant(createMonster("berlusconix", 20)), foe = makeCombatant(createMonster("mediocrate", 20));
     state.sondaggi = 50;
     const b: any = Object.create(BattleScene.prototype);
     Object.assign(b, { state, player, foe, queue: [], field: undefined, fieldTurn: 1, fieldResolved: true, fx: { onHit() {}, telegraph: null }, polemica: new Polemica(),
-      announcedOffensive: new Set(), turnPosture: posture, posture: "none", actionCaption: null, copione: false, battery: 0, trainer: undefined, electionTurn: 1 });
+      announcedOffensive: new Set(), turnPosture: posture, turnFoePosture: foePosture, posture: "none", actionCaption: null, copione: false, battery: 0, trainer: undefined, electionTurn: 1 });
     const attacker = side === "player" ? player : foe, defender = side === "player" ? foe : player;
     defender.mon.hp = 9999;
     const hp = defender.mon.hp;
@@ -106,4 +106,18 @@ test("handing over to a companion that shares a type brings it in motivated, onc
   assert.equal(b.player.stages.atk, 0, "the same pair does not pay out twice");
   b.queue.length = 0; b.switchTo(other, false);
   assert.equal(b.player.stages.atk, 0, "different types: no baton");
+});
+
+test("the opponent's declared posture works the same way against the player", () => {
+  const strike = MOVES.editoriale;
+  const playerBase = fight("none", "player", strike).lost, foeBase = fight("none", "foe", strike).lost;
+  assert.equal(fight("none", "foe", strike, "attacca").lost, postureDamage(foeBase, 1.3), "an aggressive foe hits harder");
+  assert.equal(fight("none", "player", strike, "attacca").lost, postureDamage(playerBase, 1.3), "and takes more");
+  assert.equal(fight("none", "player", strike, "smentisci").lost, postureDamage(playerBase, 0.55), "a foe that denies soaks the blow");
+  assert.equal(fight("none", "foe", strike, "smentisci").lost, postureDamage(foeBase, 0.8), "and hits less");
+  assert.equal(fight("attacca", "player", strike, "smentisci").lost, postureDamage(playerBase, 1.3 * 0.55), "postures multiply across both sides");
+  const smear: Move = { id: "test-smear2", name: "Dossier", type: "MEDIA", category: "status", power: 0, accuracy: 100, pp: 5, flavor: "",
+    effect: { status: { id: "scandalo", chance: 100, target: "foe" } } };
+  assert.equal(fight("none", "player", smear).status, "scandalo");
+  assert.equal(fight("none", "player", smear, "smentisci").status, null, "the foe's denial blocks the player's status");
 });

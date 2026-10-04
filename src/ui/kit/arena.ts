@@ -6,7 +6,7 @@ import { kit, type UiPanel } from './index';
 export interface UiArenaCombatant { name:string; level:number; hp:number; maxHp:number; status?:string; form?:string; exp?:number }
 export interface UiArena {
   polemica?:number;
-  intent?:{label:string;kind:"attack"|"status"};
+  intent?:{label:string;kind:"attack"|"status";posture?:{label:string;rule:string}};
   finisher?:TouchAction;
   player:UiArenaCombatant;
   foe:UiArenaCombatant;
@@ -64,11 +64,14 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
   dots.hidden=arena.polemica===undefined;
   dots.textContent=[0,1,2].map(i=>i<(arena.polemica??0)?'●':'○').join(' ');dots.setAttribute('aria-label',`Polemica ${arena.polemica??0} su 3`);
   let intent=root.querySelector<HTMLElement>('.ui-intent');
-  if(!intent){intent=node('button','ui-intent');intent.onclick=()=>openUiSheet('Intenzione avversaria',live?.arena?.intent?.label??'');root.querySelector('.ui-arena-view')!.append(intent);}
+  if(!intent){intent=node('button','ui-intent');intent.onclick=()=>{const now=live?.arena?.intent;openUiSheet('Intenzione avversaria',[now?.label??'',now?.posture?`Postura: ${now.posture.label}. ${now.posture.rule}`:''].filter(Boolean).join('\n\n'));};root.querySelector('.ui-arena-view')!.append(intent);}
   intent.hidden=!arena.intent;
   const kind=arena.intent?.kind??'status';
   if(intent.dataset.kind!==kind){intent.dataset.kind=kind;intent.innerHTML=`<svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round">${kind==='attack'?'<path d="M5 19 19 5V2h-3L5 13M3 11l10 10M3 21l4-4"/>':'<path d="m4 10 15-6v16L4 14zM4 10H1v4h3m3 1 2 7h4l-3-6"/>'}</svg>`;}
-  intent.setAttribute('aria-label',`Intenzione: ${arena.intent?.label??''}`);intent.title=arena.intent?.label??'';
+  intent.setAttribute('aria-label',`Intenzione: ${arena.intent?.label??''}${arena.intent?.posture?`, postura ${arena.intent.posture.label}`:''}`);intent.title=arena.intent?.label??'';
+  let tag=root.querySelector<HTMLElement>('.ui-intent-posture');
+  if(!tag){tag=node('span','ui-intent-posture');tag.setAttribute('aria-hidden','true');root.querySelector('.ui-arena-view')!.append(tag);}
+  tag.hidden=!arena.intent?.posture;tag.textContent=arena.intent?.posture?.label??'';
   const notice=root.querySelector<HTMLElement>('.ui-arena-notice')!;notice.hidden=true;notice.textContent='';
   const layer=root.querySelector<HTMLElement>('.ui-arena-impacts')!;
   const impacts=arena.impacts??[];

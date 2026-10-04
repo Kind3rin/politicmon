@@ -18,6 +18,7 @@ import {BagScene} from '../src/scenes/BagScene';
 import {TeachScene} from '../src/scenes/TeachScene';
 import {WorldMapScene} from '../src/scenes/WorldMapScene';
 import {BAG_ORDER} from '../src/data/items';
+import {TRAINERS} from '../src/data/trainers';
 import {QuestScene} from '../src/scenes/QuestScene';
 import {ShopScene} from '../src/scenes/ShopScene';
 import {DexScene} from '../src/scenes/DexScene';
@@ -54,7 +55,7 @@ state.money=9320;state.sondaggi=100;
 state.party[2].hp=0;state.party[0].hp=64;state.party[3].hp=40;state.party[4].hp=20;
 if(requested.startsWith('lotta')){
  if(requested==='lotta-esaurita')state.party[0].moves[0].pp=0;
- const battle=new BattleScene(stack,input,{state,foeTeam:[createMonster('mediocrate',24)],onEnd:()=>{stack.pop();stack.push(new WorldScene(stack,input,state));}});
+ const battle=new BattleScene(stack,input,{state,foeTeam:[createMonster('mediocrate',24)],trainer:requested==='lotta-allenatore'?TRAINERS.tycoon:undefined,onEnd:()=>{stack.pop();stack.push(new WorldScene(stack,input,state));}});
  if(requested==='lotta-finale')(battle as unknown as {polemica:{value:number}}).polemica.value=3;
  stack.push(battle);
 }else if(['squadra','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo'].includes(requested)){

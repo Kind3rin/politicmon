@@ -1,0 +1,22 @@
+/* Conversation stays over the world; no reserved controller or header region. */
+body:is(.ui-dialog-open,.ui-conversation-open) #app{padding:0}
+body:is(.ui-dialog-open,.ui-conversation-open) #console-shell{display:block;width:100%;height:100%;max-width:none;max-height:none}
+body:is(.ui-dialog-open,.ui-conversation-open) #screen-stage{position:absolute;inset:0;display:block;padding:0;border:0;border-radius:0;max-height:none;aspect-ratio:auto}
+body:is(.ui-dialog-open,.ui-conversation-open) #screen-frame{display:block!important;position:absolute;inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;border:0;border-radius:0}
+body:is(.ui-dialog-open,.ui-conversation-open) :is(#console-top,#touch-ui,#shell-hint,.ui-world-hud){display:none!important}
+.ui-dialog{position:absolute;z-index:20;left:max(12px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-height:120px;max-height:28dvh;padding:24px 48px 16px 16px;display:flex;align-items:center;background:#F4EEDC;color:#14161F;border:2px solid #14161F;border-radius:2px;box-shadow:4px 4px #14161F;pointer-events:auto;font-family:PoliticmonBody,sans-serif}
+.ui-dialog.has-portrait{padding-left:72px}
+.ui-dialog-speaker{position:absolute;left:12px;top:-18px;max-width:calc(100% - 24px);padding:4px 8px;background:#174A7E;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;transform:rotate(-2deg)}
+.ui-dialog-text{font:400 16px/1.4 PoliticmonBody,sans-serif;margin:0;white-space:normal;overflow-wrap:normal;word-break:normal}
+.ui-dialog-portrait{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:64px;height:64px;object-fit:contain;image-rendering:pixelated}
+.ui-dialog-next{position:absolute;bottom:4px;right:0;width:44px;height:44px;padding:0;border:0;background:transparent;color:#D7263D;font:700 20px/1 Tribuna,sans-serif;touch-action:manipulation}
+.ui-dialog-next:focus-visible{outline:3px solid #174A7E;outline-offset:-4px}
+.ui-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+.ui-panel.ui-conversation{display:block;inset:0;padding:0;border:0;border-radius:0;background:transparent;pointer-events:none}
+.ui-dialog-choices{position:absolute;left:24px;right:24px;bottom:calc(28dvh + 40px);max-height:calc(72dvh - 64px);display:grid;gap:8px;overflow:auto;padding:0 4px 4px 0;pointer-events:auto}
+.ui-dialog-choices .ui-button{min-height:44px;padding:8px 12px;border:2px solid #14161F;border-radius:2px;box-shadow:4px 4px #14161F;background:#F4EEDC;color:#14161F;font:400 16px/1.4 PoliticmonBody,sans-serif}
+.ui-dialog-choices .ui-button[aria-current=true]{background:#FFD23F}
+.ui-dialog-choices .ui-command-group{display:none}
+.ui-dialog-choices .ui-subtitle{font:700 16px/1.4 PoliticmonBody,sans-serif}
+@media(orientation:landscape){.ui-dialog{left:12%;right:12%;min-height:92px;padding-top:16px;padding-bottom:8px}.ui-dialog.has-portrait{padding-left:84px}.ui-dialog-portrait{left:12px}.ui-dialog-choices{left:12%;right:12%;grid-template-columns:repeat(2,minmax(0,1fr));bottom:calc(28dvh + 32px)}}
+@media(prefers-reduced-motion:reduce){.ui-dialog-speaker{transform:none}}

@@ -7,7 +7,7 @@ import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
 import {FieldGuideScene} from "../../scenes/FieldGuideScene";
 import {welcomeGuide, controlLesson} from "../onboarding";
 import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
-import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
+import { playerImage, ferryImage, vehicleImage, NPC_WITH_PNG, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { approach } from "../battle/view";
 import { TILE, TILES, tileImage, terrainVariantImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
@@ -496,13 +496,13 @@ export class WorldScene implements Scene {
   get uiPanel():UiPanel|undefined {
     if (this.remoteMenu) {
       const menu=this.remoteMenu;
-      return {title:"Giocatore online",subtitle:readableCopy(this.askLabel),selected:menu.index,
+      return {conversation:{speaker:"Giocatore online"},title:"Giocatore online",subtitle:readableCopy(this.askLabel),selected:menu.index,
         actions:menu.items.slice(0,4).map((item,i)=>({label:item.label.charAt(0)+item.label.slice(1).toLocaleLowerCase("it"),run:()=>{if(this.remoteMenu===menu)this.chooseRemote(i);}})),
         back:{label:"Indietro",run:()=>{if(this.remoteMenu===menu)this.chooseRemote();}}};
     }
     if (this.askMenu) {
       const menu = this.askMenu;
-      return {title:"Scegli",subtitle:readableCopy(this.askLabel),selected:menu.index,
+      return {conversation:{speaker:this.msg.speaker,portrait:this.msg.portrait},title:"Scegli",subtitle:readableCopy(this.askLabel),selected:menu.index,
         actions:menu.items.map((item,i) => ({label:item.label.charAt(0)+item.label.slice(1).toLocaleLowerCase("it"),disabled:item.disabled,run:() => {if(this.askMenu===menu)this.chooseAsk(i);}})),
         back:{label:"Indietro",run:() => {if(this.askMenu===menu)this.chooseAsk();}}};
     }
@@ -1008,7 +1008,7 @@ export class WorldScene implements Scene {
       const callback = this.afterMsg;
       this.afterMsg = null;
       callback?.();
-    }, auto, caption);
+    }, auto, caption, !auto&&speaker&&NPC_WITH_PNG.has(speaker.pal)?`/sprites/chars/npc_${speaker.pal}_south.png`:undefined);
   }
 
   // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il

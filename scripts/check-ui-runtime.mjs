@@ -3,14 +3,15 @@ import fs from 'node:fs/promises';
 const base=process.env.UI_LAYOUT_URL||'http://127.0.0.1:4190';
 const browser=await chromium.launch(),results=[],errors=[];
 try{
- for(const viewport of [{width:360,height:740},{width:412,height:915},{width:844,height:390},{width:360,height:640}])for(const screen of ['esplorazione','lotta','lotta-finale','lotta-esaurita']){
+ for(const viewport of [{width:360,height:740},{width:412,height:915},{width:844,height:390},{width:360,height:640}])for(const screen of ['esplorazione','lotta','lotta-finale','lotta-esaurita','dialogo','dialogo-scelte']){
   const page=await browser.newPage({viewport,deviceScaleFactor:2,isMobile:true,hasTouch:true});page.on('pageerror',e=>errors.push(e.message));
   await page.goto(`${base}/scripts/m2-ui-review.html?screen=${screen}`);
-  await page.locator(screen.startsWith('lotta')?'.ui-arena-secondary button:has-text("Cambio")':'#world-ui').waitFor();
+  await page.locator(screen==='dialogo'?'#game-dialog':screen==='dialogo-scelte'?'.ui-conversation':screen.startsWith('lotta')?'.ui-arena-secondary button:has-text("Cambio")':'#world-ui').waitFor();
   await page.evaluate(()=>document.fonts.ready);
   // Ready art, not placeholders or the opening fade.
   await page.waitForFunction(()=>document.querySelector('canvas')?.dataset[document.body.classList.contains('ui-arena-open')?'foeBounds':'worldPlayerBounds']);
   if(screen==='esplorazione')await page.waitForFunction(()=>document.querySelector('canvas')?.dataset.worldReady==='true');
+  if(screen==='dialogo')await page.getByRole('button',{name:'Continua',exact:true}).waitFor();
   const report=await page.evaluate(screen=>{
    const issues=[],w=innerWidth,h=innerHeight;
    const visible=e=>e.checkVisibility({checkVisibilityCSS:true,checkOpacity:true});
@@ -34,6 +35,12 @@ try{
    if(screen==='esplorazione'){
     if(c.width*c.height/(w*h)<.95)issues.push('world under 95%');
     const player=painted('worldPlayerBounds');if([...controls,...document.querySelectorAll('.ui-world-hud > *')].filter(visible).some(e=>overlap(box(e),player)))issues.push('interface covers player');
+   }else if(screen.startsWith('dialogo')){
+    const dialog=document.querySelector('.ui-dialog:not([hidden])'),r=box(dialog);
+    if(r.height/h>.281)issues.push('dialog above 28%');
+    if(c.width*c.height/(w*h)<.95)issues.push('dialog shrinks world');
+    for(const e of dialog.querySelectorAll('.ui-dialog-text,.ui-dialog-speaker,img')){if(!visible(e))continue;const b=box(e);if(b.right>r.right||b.left<r.left||b.bottom>r.bottom)issues.push('dialog content clipped');}
+    const text=dialog.querySelector('.ui-dialog-text');if(text.scrollHeight>text.clientHeight+1)issues.push('dialog text overflow');
    }else{
     const scene=box(document.querySelector('.ui-arena-view'));if(h>w&&scene.height/h<.48)issues.push('battle under 48%');
     for(const [key,minimum] of [['foeBounds',.30],['playerBounds',.36]]){
@@ -57,6 +64,14 @@ try{
     await page.getByRole('button',{name:'···',exact:true}).click();
     if(!await page.getByRole('button',{name:'Fuga',exact:true}).isVisible())errors.push('More menu missing escape');
     await page.keyboard.press('Escape');
+  }else if(screen==='dialogo'){
+    await page.getByRole('button',{name:'Continua',exact:true}).click();
+    await page.locator('#game-dialog .ui-sr-only').filter({hasText:'Il programma'}).waitFor({state:'attached'});
+    await page.getByRole('button',{name:'Continua',exact:true}).waitFor();
+    if(!(await page.locator('#game-dialog .ui-dialog-text').innerText()).includes('Il programma'))errors.push('Dialog did not advance');
+  }else if(screen==='dialogo-scelte'){
+    await page.getByRole('button',{name:'Fammi una domanda.',exact:true}).click();
+    await page.locator('#game-dialog').waitFor();if(await page.locator('.ui-conversation:visible').count())errors.push('Choice stayed open');
   }else{
     const quest=page.locator('.ui-world-objective');await quest.click();if(await quest.getAttribute('aria-expanded')!=='false')errors.push('Quest did not collapse');
     const session=await page.context().newCDPSession(page);
@@ -69,6 +84,6 @@ try{
   await page.close();
  }
 }finally{await browser.close();}
-await fs.writeFile('artifacts/m2/ui-runtime-layout.json',JSON.stringify({scope:'First migration checkpoint: exploration and battle. Remaining screens pending human review.',results,errors},null,2));
+await fs.writeFile('artifacts/m2/ui-runtime-layout.json',JSON.stringify({scope:'First migration checkpoint: exploration and battle. Dialogue included; remaining menus pending migration.',results,errors},null,2));
 if(errors.length)throw Error(errors.join('\n'));
-console.log(`${results.length} runtime layouts green: exploration and battle. Remaining screens pending migration.`);
+console.log(`${results.length} runtime layouts green: exploration, battle and dialogue. Remaining screens pending migration.`);

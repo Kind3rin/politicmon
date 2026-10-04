@@ -190,6 +190,7 @@ export function wrapText(text: string, maxChars: number): string[] {
 // Box messaggi in stile Pokémon con effetto macchina da scrivere.
 export class MessageBox {
   speaker = "Politicmon";
+  portrait?:string;
   private pages: string[][] = [];
   private pageIndex = 0;
   private chars = 0;
@@ -228,9 +229,10 @@ export class MessageBox {
   }
 
   // Accoda messaggi; ogni stringa diventa una o più pagine da 2 righe.
-  show(messages: string[], onFinished?: () => void, autoAdvance = false, speaker = "Politicmon"): void {
+  show(messages: string[], onFinished?: () => void, autoAdvance = false, speaker = "Politicmon", portrait?:string): void {
     this.speaker = speaker;
-    this.pages = dialoguePages(messages);
+    this.portrait = portrait;
+    this.pages = dialoguePages(messages,24);
     this.pageIndex = 0;
     this.autoAdvance = autoAdvance;
     this.autoElapsed = 0;
@@ -298,7 +300,7 @@ export class MessageBox {
   draw(_screen: Screen): void {
     if (!this.isOpen) return;
     const total = this.pages[this.pageIndex].join("").length;
-    renderUiDialog(readableCopy(this.visibleText), () => { if (this.isOpen) this.advance(); }, this.chars >= total, this.speaker);
+    renderUiDialog(readableCopy(this.visibleText), () => { if (this.isOpen) this.advance(); }, this.chars >= total, this.speaker, this.portrait, readableCopy(this.pageText));
   }
 
 }

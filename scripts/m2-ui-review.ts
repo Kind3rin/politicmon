@@ -12,6 +12,8 @@ import {coreTerrainEntries} from '../src/art/tiles';
 import {preloadSprites,waitForSprites} from '../src/engine/assets';
 import {audio} from '../src/engine/audio';
 import {mp} from '../src/net/mp';
+import {MessageBox} from '../src/ui/widgets';
+import type {UiPanel} from '../src/ui/kit';
 // Isolated realm: production constructors may autosave, but no fixture may write.
 Storage.prototype.setItem=()=>{};Storage.prototype.removeItem=()=>{};
 audio.enabled=false;mp.setEnabled(false);
@@ -31,15 +33,23 @@ if(requested.startsWith('lotta')){
  if(requested==='lotta-finale')(battle as unknown as {polemica:{value:number}}).polemica.value=3;
  stack.push(battle);
 }else stack.push(new WorldScene(stack,input,state));
+const conversation=new MessageBox();
+let choosing=false;
+const speaker='Mara · cronista',portrait='/sprites/chars/npc_journalist_south.png';
+const startConversation=()=>{if(requested==='dialogo-scelte')choosing=true;if(requested==='dialogo')conversation.show(['Una promessa in tre parole. La quarta la paghiamo noi.','Il programma è lungo. La memoria degli elettori, dice il consulente, no.'],undefined,false,speaker,portrait);};
+setTimeout(startConversation,600);
+const choicePanel=():UiPanel=>({title:'Scegli',subtitle:'Una promessa in tre parole. La quarta la paghiamo noi.',conversation:{speaker,portrait},actions:[{label:'Fammi una domanda.',run:()=>{choosing=false;conversation.show(['Chi paga le promesse quando scade la garanzia?'],undefined,false,speaker,portrait);}},{label:'Passo oltre.',run:()=>{choosing=false;}}],back:{label:'Indietro',run:()=>{choosing=false;}}});
 let previous=performance.now();
 function frame(){
  const now=performance.now(),dt=Math.min(.05,(now-previous)/1000);previous=now;
- input.pollGamepads();updateUiInput(stack.top?.uiPanel,input);stack.update(dt);beginUiFrame();
- const panel=stack.top?.uiPanel,native=renderUiPanel(panel);
- renderUiWorld(native?undefined:stack.top?.uiWorld,!native&&Boolean(stack.top?.uiWorldPending));
+ input.pollGamepads();updateUiInput(choosing?choicePanel():stack.top?.uiPanel,input);
+ if(conversation.isOpen)conversation.update(dt,input,screen.viewHeight);else if(!choosing)stack.update(dt);beginUiFrame();
+ const panel=choosing?choicePanel():stack.top?.uiPanel,native=renderUiPanel(panel);
+ renderUiWorld(native||conversation.isOpen?undefined:stack.top?.uiWorld,!native&&Boolean(stack.top?.uiWorldPending));
  renderUiFeedback(native?undefined:stack.top?.uiFeedback);
  screen.configureViewport(Boolean(stack.top?.expandedViewport));
- if(!native||panel?.arena)stack.draw(screen);
+ if(!native||panel?.arena||panel?.conversation)stack.draw(screen);
+ conversation.draw(screen);
  if(routeReview)routeStatus.textContent=`${state.pos.mapId} · ${state.pos.x},${state.pos.y} · ${state.stepsTotal} passi`;
  endUiFrame();input.endFrame();requestAnimationFrame(frame);
 }frame();

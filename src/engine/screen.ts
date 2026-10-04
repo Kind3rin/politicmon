@@ -59,7 +59,7 @@ export class Screen {
     const stage = document.querySelector<HTMLElement>(document.body.classList.contains('ui-arena-open')?'.ui-arena-view':'#screen-stage');
     this.viewHeight = worldViewportHeight(stage?.clientWidth ?? 0, stage?.clientHeight ?? 0,
       this.expandedViewport && document.body.classList.contains('touch') && window.matchMedia('(orientation: portrait)').matches);
-    if (this.expandedViewport && (document.body.classList.contains('ui-world-open') || document.body.classList.contains('ui-arena-open')) && stage?.clientWidth && stage.clientHeight) {
+    if (this.expandedViewport && ((document.body.classList.contains('ui-world-open')||document.body.classList.contains('ui-dialog-open')||document.body.classList.contains('ui-conversation-open')) || document.body.classList.contains('ui-arena-open')) && stage?.clientWidth && stage.clientHeight) {
       this.viewHeight = Math.max(96, Math.round(stage.clientHeight * VIEW_W / stage.clientWidth));
     }
     document.querySelector<HTMLElement>('#screen-frame')?.style.setProperty('--view-height', String(this.viewHeight));
@@ -79,7 +79,7 @@ export class Screen {
     // World art follows the logical 240-pixel grid; labels live in the DOM.
     // Render that surface at integral CSS-pixel density to avoid quadrupling
     // full-screen blending on Retina displays. UI text keeps native density.
-    const pixelWorld=this.expandedViewport&&document.body.classList.contains('ui-world-open');
+    const pixelWorld=this.expandedViewport&&(document.body.classList.contains('ui-world-open')||document.body.classList.contains('ui-dialog-open')||document.body.classList.contains('ui-conversation-open'));
     const backScale = Math.max(1, Math.ceil(rawScale * (pixelWorld?1:dpr)));
     const bw = VIEW_W * backScale;
     const bh = this.viewHeight * backScale;

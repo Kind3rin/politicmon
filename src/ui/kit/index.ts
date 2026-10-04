@@ -45,6 +45,7 @@ export interface UiTiming {
 }
 export interface UiPanel {
   directInput?:boolean;
+  conversation?: {speaker:string;portrait?:string};
   timing?:UiTiming;
   arena?: UiArena;
   title: string;
@@ -209,9 +210,9 @@ export function endUiFrame(): void {
 
 /** A crisp text layer above pixel artwork; the continue button stays mounted
  * while text is revealing, so a finger press cannot lose its click target. */
-export function renderUiDialog(text: string, advance: () => void, complete: boolean, speaker = "Politicmon"): void {
+export function renderUiDialog(text: string, advance: () => void, complete: boolean, speaker = "Politicmon", portrait?:string, fullText=text): void {
   if (typeof document === "undefined") return;
-  const stage = document.querySelector("#touch-ui");
+  const stage = document.querySelector("#screen-stage");
   if (!stage) return;
   dialogSeen = true;
   continueDialog = advance;
@@ -220,13 +221,23 @@ export function renderUiDialog(text: string, advance: () => void, complete: bool
     dialog.id = "game-dialog";
     dialog.tabIndex = -1;
     dialog.setAttribute("aria-label", "Dialogo");
-    dialog.append(element("h2", "ui-subtitle"), element("p", "ui-body"), kit.button({ label: "Continua", run: advance }, () => continueDialog?.(), true));
+    const picture=element("img","ui-dialog-portrait");picture.alt="";
+    const body=element("p","ui-dialog-text");body.setAttribute("aria-hidden","true");
+    const announcement=element("p","ui-sr-only");announcement.setAttribute("role","status");announcement.setAttribute("aria-live","polite");
+    const next=element("button","ui-dialog-next");next.type="button";next.textContent="▸";
+    next.addEventListener("click",()=>{continueDialog?.();dialog?.focus({preventScroll:true});});
+    dialog.append(element("h2", "ui-dialog-speaker"),picture,body,announcement,next);
     stage.append(dialog);
   }
   dialog.hidden = false;
   dialog.querySelector("h2")!.textContent = speaker;
-  dialog.querySelector("p")!.textContent = text;
-  dialog.querySelector("strong")!.textContent = complete ? "Continua" : "Mostra tutto";
+  dialog.querySelector(".ui-dialog-text")!.textContent = text;
+  const announcement=dialog.querySelector(".ui-sr-only")!;
+  if(announcement.textContent!==fullText)announcement.textContent=fullText;
+  const picture=dialog.querySelector("img")!;picture.hidden=!portrait;
+  if(portrait&&picture.getAttribute("src")!==portrait)picture.src=portrait;
+  dialog.classList.toggle("has-portrait",Boolean(portrait));
+  dialog.querySelector("button")!.setAttribute("aria-label",complete?"Continua":"Mostra tutto");
 }
 
 /** One keyboard/controller contract for every native panel. Scene updates still
@@ -276,6 +287,7 @@ export function updateUiInput(panel:UiPanel|undefined,input:Input):void {
 export function renderUiPanel(panel?: UiPanel): boolean {
   current = panel;
   document.body.classList.toggle("ui-arena-open",Boolean(panel?.arena));
+  document.body.classList.toggle("ui-conversation-open",Boolean(panel?.conversation));
   if(!panel?.arena)leaveArena(root);
   document.body.classList.toggle("ui-panel-open", Boolean(panel));
   if (!panel) {
@@ -298,6 +310,17 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   const next = JSON.stringify({...panel,timing:panel.timing?{...panel.timing,progress:0}:undefined,field:panel.field?{...panel.field,value:panel.field.readOnly?panel.field.value:""}:undefined,selected:displayedIndex}, (_key, value) => typeof value === "function" ? undefined : value);
   if (next === signature) {if(panel.timing)updateTiming(root,panel.timing);return true;}
   signature = next;
+  root.classList.toggle('ui-conversation',Boolean(panel.conversation));
+  if(panel.conversation){
+    const choices=element('div','ui-dialog-choices');
+    panel.actions.forEach((action,i)=>{const button=kit.button(action,()=>current?.actions[i]?.run());button.setAttribute('aria-current',String(i===displayedIndex));choices.append(button);});
+    const box=element('section','ui-dialog');
+    box.append(element('h2','ui-dialog-speaker',panel.conversation.speaker));
+    if(panel.conversation.portrait){const image=element('img','ui-dialog-portrait');image.src=panel.conversation.portrait;image.alt='';box.append(image);box.classList.add('has-portrait');}
+    box.append(element('p','ui-dialog-text',panel.subtitle??panel.title));
+    if(panel.back){const close=element('button','ui-dialog-next','×');close.type='button';close.setAttribute('aria-label','Chiudi dialogo');close.onclick=()=>current?.back?.run();box.append(close);}
+    root.replaceChildren(choices,box);return true;
+  }
   const scrollKey=JSON.stringify([panel.title,panel.selectedTab,panel.actions.map(action=>action.label),panel.field?.label]);
   const retainedScroll=scrollIdentity===scrollKey?root.querySelector<HTMLElement>('.ui-content')?.scrollTop:undefined;
   scrollIdentity=scrollKey;

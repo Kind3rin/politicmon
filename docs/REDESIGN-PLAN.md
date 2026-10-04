@@ -3,7 +3,7 @@
 | Fase | Stato | Prova / criterio aperto |
 |---|---|---|
 | 0 — sistema comandi, menu e testo | Riaperta: BOZZE PRONTE, Tribuna elettorale | 10 HTML, 20 screenshot e confronti in design/ui-mock; 40 layout statici verdi. Attesa UI APPROVATA; build POCO respinta. |
-| 1 — terreno | Avviata in attesa della revisione UI | Fondale esterno integrato, texture/bordi/ombre/chiome; prima-dopo Borgo/Percorso 1. 408 test e perf verdi; acqua, luce, camera e passi aperti. |
+| 1 — terreno | Avviata in attesa della revisione UI | Fondale esterno integrato, texture/bordi/ombre/chiome; prima-dopo Borgo/Percorso 1. 414 test e perf verdi; acqua, luce, meteo, camera e passi implementati. Restano materiali urbani, lampioni e prova giocata; 60 fps non ancora dimostrati. |
 
 # Politicmon: piano del redesign completo
 

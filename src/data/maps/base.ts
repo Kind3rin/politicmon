@@ -398,6 +398,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
   // sull'edge nord di MEDIOPOLI (mai lato route: niente trappole).
   route2: {
     id: "route2",
+    weather:"nebbia",
     name: "PERCORSO 2",
     tiles: ROUTE2_TILES,
     outdoor: true,
@@ -572,6 +573,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
   // Il gate a 2 medaglie resta sull'edge nord di EUROTOWN.
   route3: {
     id: "route3",
+    weather:"pioggia",
     name: "PERCORSO 3",
     tiles: ROUTE3_TILES,
     outdoor: true,
@@ -673,6 +675,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
 
   capitale: {
     id: "capitale",
+    weather:"afa",
     name: "CAPUT MUNDI",
     tiles: CAPITALE_TILES,
     outdoor: true,

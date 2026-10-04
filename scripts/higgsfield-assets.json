@@ -777,6 +777,41 @@
         "prompt": "Production pixel-art game terrain atlas for Politicmon, Italian satirical top-down handheld JRPG. EXACT 4 columns by 5 rows, twenty edge-to-edge equal square cells, NO gutters, NO outlines, NO labels, NO text, NO perspective, no objects. Entire image square. Each row contains four subtle variants of the SAME seamless flat texture with matching boundary color, designed to be reduced to 16x16 pixels per cell. Row 1 meadow grass: muted sage green #668b65, sparse clusters in #7c9b6c and dark #527852, avoid bright neon. Row 2 warm ochre dirt path: #c6a375, delicate grain and tiny pebbles. Row 3 pale beach sand: #dbc190, few short wind ripples. Row 4 dark bluish asphalt #555b68, faint cracks, no road markings. Row 5 warm wooden interior floor #a18565, horizontal small planks with subtle alternate knots. Flat overhead orthographic textures, crisp deliberate large pixel clusters, 16-bit console craftsmanship. No bevels, no platforms, no shadows around tiles, no vegetation tufts taller than the surface. Four variants each row should be recognizably varied but tile next to each other without seams. Gentle northwest light. Restrained 5-color palette per material. This is a technical texture sheet, not a landscape illustration.",
         "aspect_ratio": "1:1"
       }
+    },
+    {
+      "id": "m2-water-animation",
+      "jobId": "82f24191-0f0a-4bf1-9959-a0b4b7b1f05e",
+      "params": {
+        "model": "gpt_image_2_5",
+        "aspect_ratio": "1:1",
+        "count": 1,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Technical pixel art sprite sheet for a top-down 16-bit Italian RPG. EXACT 2 columns x 2 rows, four equal square cells, touching edge to edge, no gutters, no grid lines, no borders, no text or labels. All four cells show the SAME flat seamless teal pond water texture at FOUR successive animation times, reading left-right then down. Base color #559b9e, dark reflection #438487, pale small ripples #9dc9bc. Deliberately sparse, crisp chunky pixel clusters, suitable for reduction to a 16x16 tile. Frame 1 two short curved ripples, frame 2 ripples drift slightly right and spread, frame 3 spread and fade, frame 4 contract gently for a looping cycle. Small surface shimmer, no shore, no islands, no objects, no fish, no perspective, no horizon, no reflections of sky or scenery. Boundaries must all use exactly the same flat teal color so every frame tiles seamlessly. Uniform overhead lighting, matte restrained palette, no gradients, no bevel, no 3D. Production animation texture, not illustration."
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261004_101206_82f24191-0f0a-4bf1-9959-a0b4b7b1f05e.png",
+      "sourceFile": "artifacts/m2/water-source.png",
+      "sourceSha256": "6cf4c0e548086cdc7767da63b31b7a26d6cf1c3cc70992086d6a773cf322998b",
+      "credits": 0.25,
+      "processing": "scripts/prepare-m2-water.py; 2x2 source cells, four 16px frames, shared five-color palette and matching edges",
+      "outputs": [
+        {
+          "path": "public/sprites/tiles/m2/water-0.png",
+          "sha256": "2288892139308f0c775d00dd2e2882dcb391e5f1eaf35bcc2e4ae242367b621d"
+        },
+        {
+          "path": "public/sprites/tiles/m2/water-1.png",
+          "sha256": "b591218934deeb9974b5e0fb561c99d0ab36002896c71dab9e2d31b87b3123e4"
+        },
+        {
+          "path": "public/sprites/tiles/m2/water-2.png",
+          "sha256": "d3c56909476d83ee457cbd8dd5fd120e7c421648225f056f0195f9ad7f358bae"
+        },
+        {
+          "path": "public/sprites/tiles/m2/water-3.png",
+          "sha256": "42f8a7323f353eb90a7bb8ce61b06d38e11be2456731ed20b0b565a90dba6c45"
+        }
+      ],
+      "status": "integrated in default outdoor water; reduced effects freeze to first frame"
     }
   ],
   "m2StyleReference": {

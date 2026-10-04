@@ -319,3 +319,6 @@ Piazza del dibattito vista e integrata dietro gli starter: 480×270, 48 colori; 
 
 M2 terreno, 4 ottobre 2026: foglio 4×5 visto, job `65bc2fa0-2741-480a-b262-d571f356b5f3`.
 Saldo **338,47 → 338,22** (0,25 crediti). Venti varianti 16px in tiles/m2; erba, sterrato e sabbia nel fondale esterno. Pavimento/asfalto preparati, integrazione ancora aperta. Sorgente e checksum nel manifest; preparazione ripetibile con prepare-m2-terrain.py.
+
+M2 acqua, 4 ottobre 2026: quattro fotogrammi visti, job `82f24191-0f0a-4bf1-9959-a0b4b7b1f05e`.
+Saldo **338,22 → 337,97** (0,25 crediti). Frame 16px in tiles/m2, ciclo a 4 Hz; Riduci effetti congela il primo. Sorgente, parametri e checksum nel manifest.

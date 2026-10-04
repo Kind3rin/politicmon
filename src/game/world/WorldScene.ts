@@ -1,3 +1,4 @@
+import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosphere";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
 import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
@@ -39,7 +40,7 @@ import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import type { TouchAction } from "../../engine/touchActions";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import {worldCameraAxis} from "../../engine/worldCamera";
+import {worldCameraAxis,followCamera,unzoomWorldPoint} from "../../engine/worldCamera";
 import { Menu, MessageBox, INK, setReduceMotion } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
@@ -206,6 +207,7 @@ export class WorldScene implements Scene {
   private readonly atto3Controller: Atto3Controller = createAtto3Controller();
   private map!: MapDef;
   private readonly terrain = new TerrainRenderer();
+  private readonly atmosphere = new WorldAtmosphere();
   private npcs: RuntimeNpc[] = [];
   private msg = new MessageBox();
   private starterDeck = true;
@@ -217,7 +219,12 @@ export class WorldScene implements Scene {
   private tapRoute: {x:number;y:number}[] = [];
   private tapTarget: {x:number;y:number;npcId?:string} | undefined;
   private npcTapAreas: {id:string;x:number;y:number;width:number;height:number}[] = [];
-  private tapCamera = {x:0,y:0};
+  private tapCamera = {x:0,y:0,zoom:1};
+  private cameraPosition:{x:number;y:number}|null=null;
+  private cameraDt=1/60;
+  private dialogueFocus=false;
+  private dialogueZoom=1;
+  private nextBump=0;
   private tapNotice: {text:string;until:number} | undefined;
 
   // Offset di centratura sulla porta, INTERPOLATO. Prima l'offset saltava da ±8
@@ -301,7 +308,7 @@ export class WorldScene implements Scene {
   // DIALOGO 1:1 lato ricevente: stessa disciplina mailbox del duello.
   private pendingTalkInvite: { peerId: string; talkId: string; nick: string; at: number } | null = null;
 
-  constructor(private stack: SceneStack, private input: Input, private state: GameState) {
+  constructor(private stack: SceneStack, private input: Input, private state: GameState, private readonly localClock:()=>Date=()=>new Date()) {
     // Registra lo stato come "attivo" per il salvataggio su chiusura/background
     // (gestito a livello globale in main.ts).
     setActiveState(this.state);
@@ -520,6 +527,8 @@ export class WorldScene implements Scene {
     }
     this.map = MAPS[mapId];
     this.terrain.invalidate();
+    this.atmosphere.reset();
+    this.cameraPosition=null;this.dialogueZoom=1;
     this.starterDeck = true;
     this.justEnteredMap = true;
     // ENCORE di BERLUSCONIX: il flag che mostra l'NPC magnate-encore va
@@ -770,8 +779,8 @@ export class WorldScene implements Scene {
     else if(special)ch=ch==='N'||this.map.tileOverrides?.['=']==='tiles/snow_path.png'?'i':base;
     const kind:TerrainKind=ch==='w'?'water':ch==='='?'path':ch==='z'?'sand':ch==='.'?'grass':ch==='j'?'asphalt':'floor';
     if(!covering&&!def?.overlay&&def?.overWater) return {kind:'water',image:this.tilePng('w'),layers:[this.tilePng(ch)],decorate:false};
-    const authored=!this.map.tileOverrides?.[ch]&&'.=zp'.includes(ch);
-    return {kind,image:authored?terrainVariantImage(ch,terrainHash(this.map.id,x,y)%4):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
+    const authored=!this.map.tileOverrides?.[ch]&&'.=zpw'.includes(ch);
+    return {kind,image:authored?terrainVariantImage(ch,ch==='w'?0:terrainHash(this.map.id,x,y)%4):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
   }
 
   // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
@@ -976,6 +985,7 @@ export class WorldScene implements Scene {
     this.stopTapRoute();
     const facing = DIR_DELTA[this.state.pos.facing];
     const speaker = this.visibleNpcs().find(npc => npc.x === this.state.pos.x + facing.dx && npc.y === this.state.pos.y + facing.dy);
+    this.dialogueFocus=Boolean(!auto&&speaker&&(speaker.trainerId||speaker.gift||speaker.legendary||speaker.id==='professor'||speaker.id==='opening-rival'));
     const name = auto ? "Notifica" : speaker?.id === "professor" ? "Prof. Quirino" : speaker?.id === "opening-rival" ? "Gianni" : speaker?.dialogueName ?? (speaker?.trainerId ? TRAINERS[speaker.trainerId]?.name : speaker?.nameplate);
     const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : undefined;
     const caption = name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? "Abitante" : "Politicmon");
@@ -1048,6 +1058,7 @@ export class WorldScene implements Scene {
     // Lampeggio in stile Game Boy prima della battaglia.
     audio.encounterSting();
     this.encounterFlash = 0.55;
+    if(!this.state.reduceEffects)this.shake=.18;
     this.pendingBattle = start;
     // In lotta = occupato: inviti scambio/duello ricevono auto-decline.
     mp.duelBusy = true;
@@ -2751,6 +2762,11 @@ export class WorldScene implements Scene {
 
   private onStepComplete(): void {
     const pos = this.state.pos;
+    const surface=footSurface(this.tileAt(pos.x,pos.y),this.map.weather??'sereno');
+    if(!this.state.vehicle){
+      this.atmosphere.step(pos.x*TILE+8,pos.y*TILE+14,surface,this.state.stepsTotal,this.state.reduceEffects);
+      audio.footstep(surface);
+    }
 
     // Imbarco/sbarco automatico sul TRAGHETTO (su acqua) prima di tutto il resto.
     this.syncFerryVehicle();
@@ -2992,6 +3008,11 @@ export class WorldScene implements Scene {
   private drawShadow(screen: Screen, footX: number, footY: number, rx = 6): void {
     const ctx = screen.ctx;
     ctx.save();
+    if(this.map.outdoor){
+      ctx.fillStyle='rgba(20,30,37,.18)';ctx.beginPath();
+      ctx.moveTo(Math.round(footX-rx),Math.round(footY));ctx.lineTo(Math.round(footX+rx),Math.round(footY));
+      ctx.lineTo(Math.round(footX+rx+9),Math.round(footY+6));ctx.lineTo(Math.round(footX-rx+9),Math.round(footY+6));ctx.closePath();ctx.fill();
+    }
     ctx.globalAlpha = 0.4;
     // Ellisse scura schiacciata: rx orizzontale, ry ~40% (prospettiva 3/4).
     for (let dy = -3; dy <= 3; dy += 1) {
@@ -3014,6 +3035,8 @@ export class WorldScene implements Scene {
       return;
     }
     this.time += dt;
+    this.cameraDt=dt;
+    this.atmosphere.update(dt,this.state.reduceEffects);
     // Insegue l'offset di centratura porta con un lerp esponenziale (indipendente
     // dal frame rate): da fermo tende a ±8, appena parti il target è 0 e lo smooth
     // rientra dolcemente invece di scattare di lato. ~12/s = quasi completo in un passo.
@@ -3206,7 +3229,8 @@ export class WorldScene implements Scene {
 
     const pos = this.state.pos;
 
-    const tap = this.input.consumeTap();
+    const rawTap = this.input.consumeTap();
+    const tap=rawTap?unzoomWorldPoint(rawTap.x,rawTap.y,VIEW_W,this.viewHeight,this.tapCamera.zoom):undefined;
     if (dir || this.input.wasPressed("b")) this.stopTapRoute();
     else if (tap) {
       this.input.clearTap();
@@ -3285,6 +3309,7 @@ export class WorldScene implements Scene {
     }
 
     if (this.isBlocked(nx, ny)) {
+      if(!this.state.reduceEffects&&this.time>=this.nextBump){this.shake=.18;this.nextBump=this.time+.3;}
       return;
     }
     // Con MONOPATTINO o AUTO si va sempre veloci all'aperto; B resta la corsa.
@@ -3323,18 +3348,27 @@ export class WorldScene implements Scene {
         if (frame.height>0) this.hudInset=Math.max(0,Math.min(Math.floor(this.viewHeight*.4),Math.ceil((hud.getBoundingClientRect().bottom-frame.top+12)*this.viewHeight/frame.height)));
       }
     }
-    let camX = worldCameraAxis(playerPx + TILE / 2,mapW,VIEW_W);
-    let camY = worldCameraAxis(playerPy + TILE / 2,mapH,this.viewHeight-this.hudInset)-this.hudInset;
+    const facing=DIR_DELTA[pos.facing],lead=this.moving&&!this.state.reduceEffects?5:0;
+    const targetX=worldCameraAxis(playerPx+TILE/2+facing.dx*lead,mapW,VIEW_W);
+    const targetY=worldCameraAxis(playerPy+TILE/2+facing.dy*lead,mapH,this.viewHeight-this.hudInset)-this.hudInset;
+    if(!this.cameraPosition)this.cameraPosition={x:targetX,y:targetY};
+    this.cameraPosition.x=followCamera(this.cameraPosition.x,targetX,this.cameraDt,this.state.reduceEffects);
+    this.cameraPosition.y=followCamera(this.cameraPosition.y,targetY,this.cameraDt,this.state.reduceEffects);
+    let camX=Math.round(this.cameraPosition.x),camY=Math.round(this.cameraPosition.y);
+    const zoomTarget=this.dialogueFocus&&this.msg.isOpen&&!this.state.reduceEffects?1.1:1;
+    this.dialogueZoom=followCamera(this.dialogueZoom,zoomTarget,this.cameraDt,this.state.reduceEffects);
     // Scossone (RUSPA): sposta la camera di qualche pixel, dà peso all'impatto.
     if (this.shake > 0 && !this.state.reduceEffects) {
-      const amp = this.shake * 4;
+      const amp = Math.max(1.5,this.shake * 5);
       camX += Math.round((Math.random() - 0.5) * amp);
       camY += Math.round((Math.random() - 0.5) * amp);
     }
 
-    this.tapCamera = {x:camX,y:camY};
+    this.tapCamera = {x:camX,y:camY,zoom:this.dialogueZoom};
     this.npcTapAreas = [];
     screen.clear("#10141f");
+    screen.ctx.save();
+    screen.ctx.translate(VIEW_W/2,this.viewHeight/2);screen.ctx.scale(this.dialogueZoom,this.dialogueZoom);screen.ctx.translate(-VIEW_W/2,-this.viewHeight/2);
 
     // The substrate is baked once per map and invalidated by visible world edits.
     // UI migration remains gated separately by DESIGN-UI.
@@ -3346,6 +3380,9 @@ export class WorldScene implements Scene {
       shadows:()=>this.terrainShadows()
     },camX,camY);
 
+    if(this.map.outdoor)this.terrain.drawWater(screen.ctx,terrainVariantImage('w',waterFrame(this.time,this.state.reduceEffects)),camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects);
+    const windowLights:Array<{x:number;y:number}>=[];
+    this.atmosphere.drawSteps(screen.ctx,camX,camY,this.state.reduceEffects);
     const treeTrunks:Array<{baseY:number;draw:()=>void}>=[];
     const canopies:Array<()=>void>=[];
     const x0 = Math.floor(camX / TILE);
@@ -3374,6 +3411,12 @@ export class WorldScene implements Scene {
                 if(px+12>left&&px+4<left+width&&py+16>top&&py-12<top+crownHeight)ctx.globalAlpha=.45;
                 ctx.drawImage(obj,bounds.x,bounds.y,bounds.w,cut,left,top,width,crownHeight);ctx.restore();
               });
+            } else if(obj && ch==='~') {
+              const b=screen.imageBounds(obj),scale=16/Math.max(b.w,b.h),cut=Math.floor(b.h*.55);
+              const offset=grassBend(this.time,terrainHash(this.map.id,tx,ty),this.state.reduceEffects,Math.abs(tx*TILE-playerPx)<14&&Math.abs(ty*TILE-playerPy)<14,tx*TILE-playerPx);
+              const left=Math.round(dx+8-b.w*scale/2),top=Math.round(dy+16-b.h*scale),width=Math.round(b.w*scale),upper=Math.round(cut*scale);
+              screen.ctx.drawImage(obj,b.x,b.y,b.w,cut,left+offset,top,width,upper);
+              screen.ctx.drawImage(obj,b.x,b.y+cut,b.w,b.h-cut,left,top+upper,width,Math.round((b.h-cut)*scale));
             } else if(obj)drawWorldObjectPng(screen,ch,obj,dx,dy,this.map.objectSizes?.[ch]);
             else if('ORSN'.includes(ch)) {
               const img=this.tilePng(ch);if(img)drawWorldTilePng(screen,img,dx,dy);
@@ -3489,6 +3532,10 @@ export class WorldScene implements Scene {
         const dy = ty * TILE - camY;
         const dw = fp.w * TILE;
         const dh = fp.h * TILE;
+        if(['r','H','v','o','e','Q','!','?'].includes(ch)&&!override){
+          windowLights.push({x:tx*TILE+Math.round(dw*.2),y:ty*TILE+Math.round(dh*.7)});
+          windowLights.push({x:tx*TILE+Math.round(dw*.75),y:ty*TILE+Math.round(dh*.7)});
+        }
         const bImg = build;
         const bScaleX = dw / bImg.width;
         const bScaleY = dh / bImg.height;
@@ -3786,6 +3833,8 @@ export class WorldScene implements Scene {
       screen.rect(rx + 6, ry + 13 + phase, 3, 2, "#3f8a2a");
     }
 
+    const now=this.localClock();
+    this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights);
     const quest = currentQuest(this.state);
 
     // Modalità guidata: freccia gialla che punta verso l'obiettivo. La
@@ -3804,6 +3853,7 @@ export class WorldScene implements Scene {
       this.drawGuideArrow(screen, quest.target, playerPx, playerPy, camX, camY);
     }
 
+    screen.ctx.restore();
     this.msg.draw(screen);
 
     if (this.encounterFlash > 0 && !this.state.reduceEffects) {

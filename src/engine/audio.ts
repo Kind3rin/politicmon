@@ -61,6 +61,12 @@ class AudioEngine {
     if (this.ctx.state === "suspended") void this.ctx.resume().catch(() => undefined);
     return this.ctx;
   }
+  footstep(surface:'dirt'|'sand'|'wet'|'grass'|'wood'|'stone'):void {
+    if(surface==='wet'){this.noise(.045,.025,1800);this.tone(180,.035,{vol:.014,sweepTo:90});}
+    else if(surface==='wood')this.tone(135,.035,{vol:.023,type:'triangle',sweepTo:80});
+    else if(surface==='stone')this.tone(300,.025,{vol:.02,type:'triangle',sweepTo:140});
+    else this.noise(.035,surface==='grass'?.012:.02,surface==='sand'?700:1100);
+  }
   unlock(): void { this.unlocked = true; this.ensure(); this.restartIfNeeded(); }
   toggle(): boolean {
     this.enabled = !this.enabled; storeAudioPreferences(this.preferences);

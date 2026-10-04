@@ -59,6 +59,7 @@ export class TerrainRenderer {
   private complete = false;
   private builds = 0;
   private assetRevision: number | undefined;
+  private waterCells:TerrainCell[]=[];
   constructor(private makeCanvas = () => document.createElement('canvas')) {}
   invalidate(): void { this.key=''; this.complete=false; }
   stats(): { builds: number; pixels: number; complete: boolean } {
@@ -74,9 +75,11 @@ export class TerrainRenderer {
     const ctx=canvas.getContext('2d');
     if(!ctx) throw new Error('Canvas 2D non disponibile per il terreno');
     ctx.imageSmoothingEnabled=false;
+    this.waterCells=[];
     this.complete=true; this.key=key; this.assetRevision=source.assetRevision; this.builds++;
     for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) {
       const sample=source.sample(x,y), cell=terrainCell(source,x,y);
+      if(cell.kind==='water'&&sample.decorate!==false)this.waterCells.push(cell);
       if(!sample.image) { this.complete=false; continue; }
       const px=x*TILE,py=y*TILE;
       ctx.drawImage(sample.image,px,py,TILE,TILE);
@@ -101,6 +104,27 @@ export class TerrainRenderer {
   }
   draw(ctx: CanvasRenderingContext2D, source: TerrainSource, cameraX: number, cameraY: number): void {
     ctx.drawImage(this.prepare(source),-Math.round(cameraX),-Math.round(cameraY));
+  }
+  drawWater(ctx:CanvasRenderingContext2D,image:CanvasImageSource|null,camX:number,camY:number,width:number,height:number,time:number,reduced:boolean):void {
+    if(!image||reduced)return;
+    ctx.save();
+    for(const cell of this.waterCells){
+      const x=cell.x*TILE-camX,y=cell.y*TILE-camY;
+      if(x < -TILE||y < -TILE||x>width||y>height)continue;
+      const top=cell.edges&1?3:0,right=cell.edges&2?3:0,bottom=cell.edges&4?3:0,left=cell.edges&8?3:0;
+      ctx.save();ctx.beginPath();ctx.rect(Math.round(x+left),Math.round(y+top),TILE-left-right,TILE-top-bottom);ctx.clip();
+      ctx.drawImage(image,Math.round(x),Math.round(y),TILE,TILE);
+      // Shaded shore reflection and sparse, slowly shifting foam stay at the bank.
+      if(top){ctx.fillStyle='rgba(27,74,61,.25)';ctx.fillRect(Math.round(x),Math.round(y+3),TILE,2);}
+      ctx.fillStyle='rgba(189,220,194,.5)';
+      const offset=(Math.floor(time*2)+cell.variant*3)%10+3;
+      if(top)ctx.fillRect(Math.round(x+offset),Math.round(y+4),3,1);
+      if(bottom)ctx.fillRect(Math.round(x+offset),Math.round(y+12),3,1);
+      if(left)ctx.fillRect(Math.round(x+3),Math.round(y+offset),1,3);
+      if(right)ctx.fillRect(Math.round(x+12),Math.round(y+offset),1,3);
+      ctx.restore();
+    }
+    ctx.restore();
   }
   private drawEdges(ctx:CanvasRenderingContext2D,source:TerrainSource,cell:TerrainCell):void {
     if(!['path','sand','water'].includes(cell.kind))return;

@@ -24,6 +24,7 @@ function walk(dir) {
 
 const files = walk(spriteRoot);
 const fullTileTerrain = new Set([
+  ...["grass","path","sand","asphalt","floor","water"].flatMap(kind=>Array.from({length:4},(_,i)=>`tiles/m2/${kind}-${i}.png`)),
   "tiles/grass_flat.png",
   "tiles/path_flat.png",
   "tiles/sand.png",

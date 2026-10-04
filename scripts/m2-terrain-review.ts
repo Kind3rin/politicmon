@@ -22,14 +22,18 @@ function select(mapId:string){
  open.sort((a,b)=>Math.abs(a.x-aims.x)+Math.abs(a.y-aims.y)-Math.abs(b.x-aims.x)-Math.abs(b.y-aims.y));
  state.pos={mapId,...open[0],facing:'down'};
  state.reduceEffects=(document.querySelector('#reduce') as HTMLInputElement).checked;
- world=new WorldScene(new SceneStack(),input,state);
+ world=new WorldScene(new SceneStack(),input,state,()=>new Date(2026,9,4,Number((document.querySelector('#hour') as HTMLSelectElement).value)));
+ applyWeather();
  (world as unknown as {fadeT:number;bannerFlash:number;banner:unknown}).fadeT=0;
  (world as unknown as {bannerFlash:number;banner:unknown}).bannerFlash=0;
  (world as unknown as {banner:unknown}).banner=null;
  document.querySelector('#status')!.textContent=map.name+' · dati di prova, nessun salvataggio modificato';
 }
+function applyWeather(){(world as unknown as {map:typeof MAPS[string]}).map={...MAPS[state.pos.mapId],weather:(document.querySelector('#weather') as HTMLSelectElement).value as 'sereno'|'pioggia'|'nebbia'|'afa'};}
+document.querySelector('#weather')!.addEventListener('change',applyWeather);
 document.querySelectorAll<HTMLButtonElement>('[data-map]').forEach(b=>b.onclick=()=>select(b.dataset.map!));
 document.querySelector('#reduce')!.addEventListener('change',()=>state.reduceEffects=(document.querySelector('#reduce') as HTMLInputElement).checked);
+document.querySelector('#houses')!.addEventListener('click',()=>{select('borgo');state.pos.x=22;state.pos.y=14;});
 document.querySelector('#trees')!.addEventListener('click',()=>{
  select('route1');const map=MAPS.route1;
  for(let y=1;y<map.tiles.length-1;y++)for(let x=1;x<map.tiles[y].length-1;x++){
@@ -38,5 +42,6 @@ document.querySelector('#trees')!.addEventListener('click',()=>{
  }
 });
 select('borgo');
-// Draw only: this review fixture never calls update or touches persistent saves.
-function frame(){world.draw(screen);const cache=(world as unknown as {terrain?:{stats():{builds:number;complete:boolean;pixels:number}}}).terrain?.stats()??{builds:0,complete:true,pixels:0};document.querySelector("#status")!.textContent=MAPS[state.pos.mapId].name+` · Cache: ${cache.builds} costruzioni, ${cache.complete?"pronta":"asset in attesa"}, ${cache.pixels} pixel · Nessun salvataggio modificato`;requestAnimationFrame(frame)}frame();
+// Advance visual time only, never game updates, encounters or persistent saves.
+let previous=performance.now();
+function frame(){const now=performance.now(),dt=Math.min(.05,(now-previous)/1000);previous=now;const visual=world as unknown as {time:number;atmosphere:{update(dt:number,reduced:boolean):void}};const frameChoice=(document.querySelector('#water-frame') as HTMLSelectElement).value;visual.time=frameChoice==='auto'?visual.time+dt:Number(frameChoice)/4;visual.atmosphere.update(dt,state.reduceEffects);world.draw(screen);const cache=(world as unknown as {terrain?:{stats():{builds:number;complete:boolean;pixels:number}}}).terrain?.stats()??{builds:0,complete:true,pixels:0};document.querySelector("#status")!.textContent=MAPS[state.pos.mapId].name+` · Cache: ${cache.builds} costruzioni, ${cache.complete?"pronta":"asset in attesa"}, ${cache.pixels} pixel · Nessun salvataggio modificato`;requestAnimationFrame(frame)}frame();

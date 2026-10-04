@@ -36,7 +36,7 @@ export function tileImage(ch: string): HTMLImageElement | null {
   return getSpriteImage(`tile:${ch}`, path);
 }
 
-const TERRAIN_VARIANTS:Record<string,string>={'.':'grass','=':'path',z:'sand',p:'floor'};
+const TERRAIN_VARIANTS:Record<string,string>={'.':'grass','=':'path',z:'sand',p:'floor',w:'water'};
 export function terrainVariantImage(ch:string,variant:number):HTMLImageElement|null {
   const kind=TERRAIN_VARIANTS[ch];
   return kind?getSpriteImage(`terrain:${kind}:${variant}`,`tiles/m2/${kind}-${variant}.png`):tileImage(ch);
@@ -121,7 +121,7 @@ const BUILDING_FOOTPRINT_PNG: Record<string, Record<string, string>> = {
 // The deck and Atto3 furniture retain their lazy/background loading policy.
 export function coreTerrainEntries():Record<string,string>{
  return Object.fromEntries([
-  ...["grass","path","sand","asphalt","floor"].flatMap(kind=>Array.from({length:4},(_,i)=>[`terrain:${kind}:${i}`,`tiles/m2/${kind}-${i}.png`])),
+  ...["grass","path","sand","asphalt","floor","water"].flatMap(kind=>Array.from({length:4},(_,i)=>[`terrain:${kind}:${i}`,`tiles/m2/${kind}-${i}.png`])),
   ...Object.entries(TILE_PNG).filter(([ch])=>ch!=='q').map(([ch,path])=>[`tile:${ch}`,path]),
   ...Object.entries(OBJECT_PNG).filter(([ch])=>ch!=='X'&&!/^\d$/.test(ch)).map(([ch,path])=>[`obj:${ch}`,path]),
   ...Object.entries(BUILDING_PNG).flatMap(([ch,path])=>[path,...Object.values(BUILDING_FOOTPRINT_PNG[ch]??{})].map(file=>[`build:${ch}:${file}`,file]))

@@ -51,6 +51,20 @@ export const ROUTE1_TILES = [
   "TT..~~~~~...====...~~~~~...TT",
   "TT..~~~~~...====...........TT",
   "TT..~~~~~...====...~~~~~~..TT",
+  "TT..~~~~~...=====..~~~~~~..TT",
+  "TT.,,,......=====..fff..~~.TT",
+  "TT%%%%%%%%%.=====.%%%%%%%%.TT",
+  "TT..~~~~~~..=====..~~~~~~~.TT",
+  "TT..~~~~~~..=====..~~~~~~~,TT",
+  "TT...~~~....=====..~~~~~...TT",
+  "TTwwwwwwwwwwqqqqqwwwwwwwwwwTT",
+  "TTwwwwwwwwwwqqqqqwwwwwwwwwwTT",
+  "TTzzzzzzzzzz=====zzzzzzzzzzTT",
+  "TT.TTTT.,,..=====..,,,..TT.TT",
+  "TT.TTT......=====s.~~~~~~..TT",
+  "TT.TT...~~..=====..~~~~~~..TT",
+  "TT%%%%%%%%%.=====..,,......TT",
+  "TT..~~~~~~..=====...~~~....TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
 
@@ -121,6 +135,20 @@ export const ROUTE2_TILES = [
   "TT..,,,,.....====s.........TT",
   "TT...........====..........TT",
   "TT...........====.~~~~~~~..TT",
+  "TT.,,,,.....=====..,,......TT",
+  "TT..~~~~~~..=====..fffffff.TT",
+  "TT%%%%%%%%%.=====..%%%%%%%%TT",
+  "TT..~~~~~~..=====..,,,,,,,.TT",
+  "TT..~~~~~~..=====...~~~~~..TT",
+  "TT.zzzzzzz..=====...TTTTT..TT",
+  "TT.zwwwwwz..=====...TTTTT..TT",
+  "TT.zwwwwwz..=====...TT.....TT",
+  "TT.zwwwwwz..=====...TTT....TT",
+  "TT.zzzzzzz..=====...,,,....TT",
+  "TT..........=====s.~~~~~~~.TT",
+  "TT..~~~~....=====..~~~~~~~.TT",
+  "TT%%%%%%%%%.=====..%%%%%%%%TT",
+  "TT..~~~~~~..=====...~~~....TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
 
@@ -147,6 +175,19 @@ export const ROUTE3_TILES = [
   "TT...........====.~~~~~~~~.TT",
   "TT...........====..........TT",
   "TT...........====..........TT",
+  "TT.,,,......=====...,,.....TT",
+  "TT%%%%%%%%%.=====..%%%%%%%%TT",
+  "TT..~~~~~~..=====..~~~~~~~.TT",
+  "TT..~~~~~~..=====..~~~~~~~.TT",
+  "TT...~~~....=====..~~~~~...TT",
+  "TTwwwwwwwwwwqqqqqwwwwwwwwwwTT",
+  "TTwwwwwwwwwwqqqqqwwwwwwwwwwTT",
+  "TTzzzzzzzzzz=====zzzzzzzzzzTT",
+  "TT.TTTTT....=====..,,,.....TT",
+  "TT.TTTT.....=====s..~~~~~..TT",
+  "TT.TT...,,..=====...~~~~~..TT",
+  "TT%%%%%%%%%.=====..%%%%%%%%TT",
+  "TT..~~~~~...=====...~~~....TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
 

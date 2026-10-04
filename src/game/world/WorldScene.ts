@@ -1146,7 +1146,7 @@ export class WorldScene implements Scene {
     if (contact) { this.startRoamerBattle(contact); return; }
     if (!this.roamerHinted && !roamerHintShown && this.roamers.roamers.some(r => Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) <= 8)) {
       this.roamerHinted = true; roamerHintShown = true;
-      this.tapNotice = { text: "Candidato in vista: sorprendilo!", until: this.time + 5 };
+      this.tapNotice = { text: "Sorprendilo alle spalle!", until: this.time + 5 };
     }
   }
 

@@ -152,12 +152,15 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { speciesId: "calendauro", weight: 16, minLv: 6, maxLv: 7 }
     ],
     signs: [
-      { x: 17, y: 7, lines: ["PERCORSO 1", "Nord: MEDIOPOLI. Sud: BORGO URNE.", "L'erba alta pullula di candidati. La GROTTA a est nasconde qualcosa."] }
+      { x: 17, y: 7, lines: ["PERCORSO 1", "Nord: MEDIOPOLI. Sud: BORGO URNE.", "L'erba alta pullula di candidati. La GROTTA a est nasconde qualcosa."] },
+      { x: 17, y: 26, lines: ["PONTE SUL RIO LENTO", "Inaugurato tre volte. Collaudato mai.", "Le scarpate si scendono saltando, ma non si risalgono: per tornare su c'è il varco."] }
     ],
     pickups: [
       // The civic footbridge offers early access; otherwise return by ferry.
       { id: "pk-r1-isola", x: 6, y: 6, itemId: "schedona", qty: 2 },
-      { id: "pk-r1", x: 24, y: 9, itemId: "caffe", qty: 2 }
+      { id: "pk-r1", x: 24, y: 9, itemId: "caffe", qty: 2 },
+      { id: "pk-r1-riva", x: 24, y: 24, itemId: "caffe", qty: 2 },
+      { id: "pk-r1-bosco", x: 2, y: 27, itemId: "spritz", qty: 1, hidden: true }
     ],
     npcs: [
       {
@@ -168,6 +171,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         id: "viandante-r1", pal: "granny", x: 9, y: 8, facing: "right", nameplate: "UMARELL",
         lines: ["Tre inaugurazioni. La passerella è ancora un allegato.", "L'isola ha due SCHEDE BLINDATE. Il nastro non ti ci porta."]
+      },
+      {
+        id: "pescatore-r1", pal: "granny", x: 21, y: 24, facing: "left", nameplate: "PESCATORE",
+        lines: ["Due anni di cantiere per attraversare tre metri d'acqua.", "Pesco in attesa dei fondi europei. Abboccano solo le promesse."]
       }
     ]
   },
@@ -431,6 +438,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         x: 17, y: 14,
         lines: ["PERCORSO 2", "Nord: EUROTOWN. Sud: MEDIOPOLI.", "Gli ospiti sfidano con A. Il bar di EUROTOWN recupera anche i PP."]
+      },
+      {
+        x: 17, y: 27,
+        lines: ["LAGO DEL SECONDO TURNO", "Qui si pesca in diretta. I pesci sono tutti ospiti fissi.", "Le scarpate si scendono saltando; per risalire c'è il varco accanto alla strada."]
       }
     ],
     pickups: [
@@ -438,6 +449,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { id: "pk-r2-isola", x: 5, y: 6, itemId: "schedona", qty: 2 },
       { id: "pk-r2", x: 24, y: 10, itemId: "maalox", qty: 1 },
       { id: "pk-r2-hide", x: 4, y: 15, itemId: "spritz", qty: 2, hidden: true },
+      { id: "pk-r2-lago", x: 9, y: 24, itemId: "caffe", qty: 2 },
       // Pickup raro Round 39: un hold item gratis per far scoprire la meccanica.
       { id: "pk-r2-santino", x: 23, y: 10, itemId: "santino", qty: 1, hidden: true }
     ],
@@ -460,6 +472,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         id: "spettatore-r2", pal: "granny", x: 20, y: 15, facing: "down",
         lines: ["Ho rifiutato il sondaggio. Mi hanno contato tra gli indecisi: fa più grafico che assente."]
+      },
+      {
+        id: "cameraman-r2", pal: "journalist", x: 18, y: 26, facing: "left", nameplate: "TROUPE",
+        lines: ["Riprendo il lago: fa più ascolti delle idee.", "Se passi in campo, saluta: il montaggio ti taglia comunque."]
       }
     ]
   },
@@ -605,10 +621,15 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         x: 17, y: 2,
         lines: ["PERCORSO 3", "Nord: CAPUT MUNDI. Sud: EUROTOWN.", "Sfide con A. ARCHIVIO a est: DIRETTIVA DECRETO. Il bar è in città."]
+      },
+      {
+        x: 17, y: 28,
+        lines: ["PONTE DELLA CONCERTAZIONE", "Quattro tavoli, sei sigle, un solo cantiere.", "Le scarpate si scendono saltando. Per tornare su c'è il varco."]
       }
     ],
     pickups: [
       { id: "pk-r3", x: 4, y: 14, itemId: "schedona", qty: 2 },
+      { id: "pk-r3-ponte", x: 24, y: 26, itemId: "caffe", qty: 2 },
       { id: "pk-r3-hide", x: 25, y: 13, itemId: "caffe", qty: 2, hidden: true },
       // Pickup raro Round 39: hold item speciale nascosto sul percorso.
       { id: "pk-r3-agenda", x: 5, y: 14, itemId: "agendarossa", qty: 1, hidden: true }
@@ -632,6 +653,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         id: "benzinaio-r3", pal: "barista", x: 9, y: 16, facing: "right",
         lines: ["Alla pompa è arrivato il cartello nuovo. Lo sconto no.", "Il pendolare ha un turno alle sei. Il comunicato esce alle nove."]
+      },
+      {
+        id: "camionista-r3", pal: "guard", x: 21, y: 26, facing: "left", nameplate: "CAMIONISTA",
+        lines: ["Il ponte nuovo regge. Le accise no.", "Con questo prezzo al litro, il viaggio costa più della merce."]
       }
     ]
   },

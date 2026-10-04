@@ -1,5 +1,5 @@
 import {lastSuccessfulSaveAt} from "../state";
-import {worldLabel} from "../../ui/kit/worldLabels";
+import {worldLabel,setWorldLabelZoom} from "../../ui/kit/worldLabels";
 import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosphere";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
@@ -3457,11 +3457,16 @@ export class WorldScene implements Scene {
       camY += Math.round((Math.random() - 0.5) * amp);
     }
 
-    this.tapCamera = {x:camX,y:camY,zoom:this.dialogueZoom};
+    // Small rooms are enlarged to fill the screen instead of floating in a void.
+    const roomFit=Math.min(VIEW_W/mapW,this.viewHeight/mapH);
+    const roomZoom=this.map.outdoor?1:Math.max(1,Math.min(2,Math.floor(roomFit*4)/4));
+    const zoom=this.dialogueZoom*roomZoom;
+    setWorldLabelZoom(zoom);
+    this.tapCamera = {x:camX,y:camY,zoom};
     this.npcTapAreas = [];
     screen.clear("#10141f");
     screen.ctx.save();
-    screen.ctx.translate(VIEW_W/2,this.viewHeight/2);screen.ctx.scale(this.dialogueZoom,this.dialogueZoom);screen.ctx.translate(-VIEW_W/2,-this.viewHeight/2);
+    screen.ctx.translate(VIEW_W/2,this.viewHeight/2);screen.ctx.scale(zoom,zoom);screen.ctx.translate(-VIEW_W/2,-this.viewHeight/2);
 
     // The substrate is baked once per map and invalidated by visible world edits.
     // UI migration remains gated separately by DESIGN-UI.

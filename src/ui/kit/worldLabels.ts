@@ -1,8 +1,12 @@
 let layer:HTMLElement|undefined;
 let count=0;
+let zoom=1;
+/** The world is drawn scaled around the screen centre; labels follow it. */
+export function setWorldLabelZoom(value:number):void {zoom=value;}
 export function beginWorldLabels():void {count=0;}
 export function worldLabel(text:string,x:number,y:number,viewHeight:number):void {
  const frame=document.querySelector<HTMLElement>('#screen-frame');if(!frame)return;
+ if(zoom!==1){x=120+(x-120)*zoom;y=viewHeight/2+(y-viewHeight/2)*zoom;}
  if(!layer){layer=document.createElement('div');layer.className='ui-world-labels';}
  if(layer.parentElement!==frame)frame.append(layer);
  let label=layer.children[count++] as HTMLElement|undefined;

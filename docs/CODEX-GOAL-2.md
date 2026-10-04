@@ -5,6 +5,14 @@ file (slice prima dell'ampiezza, si gioca e non si certifica, budget
 burocratico, niente acquisti Higgsfield) restano valide. Rileggi questo file a
 ogni ripresa. Se contraddice `PIANO.md` o `REDESIGN-PLAN.md`, vince questo.
 
+## STATO al 5 ottobre 2026 (leggi prima di ripartire)
+
+Fatto e pubblicato: Fase 0 (interfaccia Tribuna su tutte le schermate a pannello, controlli `check:ui-panels` e `check:ui-flows`); Fase 1 (terreno, acqua, luce, camera); Fase 2 in parte (scarpate a salto su Percorsi 1-3, niente altezze a più livelli); Fase 4.1 (selvatici visibili con umore e vantaggio); Fase 5 in parte (intenzione dichiarata, posture per giocatore e allenatori, consegne, BUFERA).
+
+Da fare: Fase 2 completa (strato `heights`, ponti a due livelli, scorci); Fase 3 (Borgo, Mediopoli, interni: livelli ridisegnati); Fase 4.2-4.6 (campo visivo dei capi, abitudini dei PNG, azioni dei compagni sulla mappa, carburante, eventi di strada); Fase 5.7-5.10 (capi a fasi, ribilanciare la durata delle lotte, IA più furba, duello in rete con le stesse regole: il duello PvP NON ha posture); Fase 6 (animazioni di mossa, regia, pubblico); Fase 7.
+
+Script da riscrivere perché superati dall'interfaccia nativa: `check:first-campaign`, `check:world-layout`.
+
 ## 0. Dove siamo (verificato sul repo il 3 ottobre 2026)
 
 Dopo il mandato 1 ci sono stati 20 commit. Quasi tutti riguardano **layout

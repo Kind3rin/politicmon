@@ -196,3 +196,8 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-content.ui-receipt{justify-content:center}
 .ui-content.ui-receipt .ui-card{padding:20px;gap:14px}
 .ui-content.ui-receipt .ui-value{font-size:36px}
+
+/* Schermi larghi: il pannello resta una colonna leggibile al centro. */
+@media(min-width:900px) and (min-height:541px){
+  .ui-panel:where(:not(.ui-arena,.ui-pause,.ui-conversation,.ui-splash)){left:max(0px,calc(50% - 360px));right:max(0px,calc(50% - 360px));border-inline:3px solid var(--t-ink);box-shadow:0 0 0 100vmax #0E1220}
+}

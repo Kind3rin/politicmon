@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — secondo giro — 2026-10-05
+
+- Percorsi 1-3 allungati verso sud con un ponte di legno sul rio (1 e 3) o un laghetto con riva di sabbia (2), terrazze con scarpata, un cartello, un oggetto in vista, uno nascosto e un parlante per percorso. Le coordinate esistenti non cambiano.
+- Selvatici visibili con il loro umore; sorprenderli dà la prima mossa. Controllo `check:roamers` su una WorldScene reale.
+- Lotta: anche gli allenatori dichiarano una postura, mostrata accanto alla loro intenzione; stima del danno e della risposta tengono conto di entrambe. Consegne tra compagni dello stesso tipo (GRINTA e VELOCITÀ +1, una volta per coppia) e BUFERA (gaffe poi scandalo sullo stesso bersaglio: un ottavo dei PV, una volta). 13 test nuovi.
+- Interfaccia: scelta del primo compagno in tre tessere, poi scheda con Profilo/Mosse/Difese e un solo pulsante rosso; stanze piccole ingrandite fino alla larghezza dello schermo; didascalie di lotta su due righe; ricevute centrate; colonna centrale su schermi larghi.
+
 ## Mandato 2 — Fase 0 chiusa, Fasi 2 e 5 avviate — 2026-10-05
 
 - Interfaccia: tutte le schermate a pannello passano alla pelle Tribuna (carta, inchiostro, ombra piena) con un solo pulsante di chiusura e nessun testo «N di M» a vista. Squadra in sei righe con barre e stemmi, scheda compagno a tre linguette, borsa a categorie con destinatario e anteprima dell'effetto, apprendimento in un tocco, mappa disegnata con luoghi cliccabili, titolo a tutto schermo con una sola azione principale. Negozio, Politicdex, Circolo e Traguardi diventano elenchi compatti. Controlli: `check:ui-panels` (20 schermate × 4 viewport) e `check:ui-flows` (tocco e tastiera).

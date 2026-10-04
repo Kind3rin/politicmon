@@ -43,3 +43,11 @@ Dislivelli: casella % (scarpata), salto verso sud, muro negli altri versi. Sui P
 Selvatici visibili: roamers.ts con 4 umori, vantaggio sul primo turno, tiro invisibile solo tutorial/grotte. 7 test.
 Posture: Attacca/Smentisci/Temporeggia, anteprime coerenti, 4 test. L'IA nemica non le usa ancora.
 Crediti Higgsfield: nessun consumo in questo round.
+
+## Secondo giro — 5 ottobre 2026
+Prima/dopo: artifacts/m2/panel-starter-412x915.png, panel-titolo-412x915.png, battle-2.png (postura), r-bridge.png.
+Si nota subito: scelta del compagno a tre tessere; ponte e terrazze sui percorsi; selvatici che si muovono; due righe di posture sotto le mosse; postura nemica accanto all'intenzione.
+Ancora non convince: Borgo e Mediopoli restano piatti (Fase 3 non iniziata); mosse e animazioni di lotta invariate (Fase 6); l'IA sceglie posture con regole semplici, non legge il giocatore.
+Crediti Higgsfield: nessun consumo, saldo 337,97.
+Prove: 428 test, check-ui-runtime 28, check-ui-panels 20×4, check-ui-flows, check-roamers, map-consistency, map-exit, building-doors.
+check:first-campaign e check:world-layout falliscono già a 81abfd4 (ultimo commit di Codex) per passi di input che l'interfaccia nativa non usa più: da riscrivere, non dipendono da questo giro.

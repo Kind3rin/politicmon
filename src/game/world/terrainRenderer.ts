@@ -58,18 +58,31 @@ export class TerrainRenderer {
   private key = '';
   private complete = false;
   private builds = 0;
+  private lastBuildMs=0;
+  private maxBuildMs=0;
   private assetRevision: number | undefined;
   private waterCells:TerrainCell[]=[];
   constructor(private makeCanvas = () => document.createElement('canvas')) {}
   invalidate(): void { this.key=''; this.complete=false; }
-  stats(): { builds: number; pixels: number; complete: boolean } {
-    return { builds:this.builds, pixels:(this.canvas?.width??0)*(this.canvas?.height??0), complete:this.complete };
+  stats(): { builds: number; pixels: number; complete: boolean; lastBuildMs:number; maxBuildMs:number } {
+    return { builds:this.builds,lastBuildMs:this.lastBuildMs,maxBuildMs:this.maxBuildMs, pixels:(this.canvas?.width??0)*(this.canvas?.height??0), complete:this.complete };
   }
   prepare(source: TerrainSource): HTMLCanvasElement {
     const rows=source.map.tiles;
     const w=Math.max(1,...rows.map(row=>row.length))*TILE, h=Math.max(1,rows.length)*TILE;
     const key=`${source.map.id}:${source.revision}:${w}:${h}`;
     if(this.canvas && key===this.key && (this.complete || (source.assetRevision!==undefined && source.assetRevision===this.assetRevision))) return this.canvas;
+    const started=performance.now();
+    // Snapshot each coordinate once, including the one-cell halo used by autotiles.
+    // Asset availability stays consistent throughout this synchronous build.
+    const samples=new Map<string,TerrainSample>();
+    const snapshot:TerrainSource={...source,sample:(x,y)=>{
+      const key=`${x}:${y}`;
+      let sample=samples.get(key);
+      if(!sample){sample=source.sample(x,y);samples.set(key,sample);}
+      return sample;
+    }};
+    const cells:TerrainCell[][]=rows.map((row,y)=>[...row].map((_,x)=>terrainCell(snapshot,x,y)));
     const canvas=this.canvas??this.makeCanvas(); this.canvas=canvas;
     canvas.width=w; canvas.height=h;
     const ctx=canvas.getContext('2d');
@@ -78,7 +91,7 @@ export class TerrainRenderer {
     this.waterCells=[];
     this.complete=true; this.key=key; this.assetRevision=source.assetRevision; this.builds++;
     for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) {
-      const sample=source.sample(x,y), cell=terrainCell(source,x,y);
+      const sample=snapshot.sample(x,y), cell=cells[y][x];
       if(cell.kind==='water'&&sample.decorate!==false)this.waterCells.push(cell);
       if(!sample.image) { this.complete=false; continue; }
       const px=x*TILE,py=y*TILE;
@@ -88,9 +101,9 @@ export class TerrainRenderer {
     }
     // Borders are a second pass: every base tile is already opaque.
     for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) {
-      const sample=source.sample(x,y); if(sample.decorate===false)continue;
-      const cell=terrainCell(source,x,y);
-      this.drawEdges(ctx,source,cell);
+      const sample=snapshot.sample(x,y); if(sample.decorate===false)continue;
+      const cell=cells[y][x];
+      this.drawEdges(ctx,snapshot,cell);
       if(cell.scatter) this.drawScatter(ctx,cell);
     }
     ctx.save();ctx.fillStyle='rgba(20,30,37,.19)';
@@ -100,6 +113,8 @@ export class TerrainRenderer {
       ctx.lineTo(x+width+reach,y+reach*.65);ctx.lineTo(x+reach,y+reach*.65);ctx.closePath();ctx.fill();
     }
     ctx.restore();
+    this.lastBuildMs=performance.now()-started;
+    this.maxBuildMs=Math.max(this.maxBuildMs,this.lastBuildMs);
     return canvas;
   }
   draw(ctx: CanvasRenderingContext2D, source: TerrainSource, cameraX: number, cameraY: number): void {

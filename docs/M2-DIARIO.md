@@ -15,7 +15,7 @@ Verifica: check-ui-layout.mjs --mock, 40 layout verdi; non certifica la UI runti
 Gate: attesa UI APPROVATA in M2-NOTE-LUCA.md. Nessun credito speso nelle bozze.
 
 ## Fase 1 — terreno — in corso, 4 ottobre 2026
-Fondale esterno/interno in cache; asset tardivi invalidano senza ricostruzioni per frame.
+Fondale in cache; materiali/vicini risolti una volta per ricostruzione, misurata in 8,5–13,4 ms con CPU ×4.
 Cinque materiali × quattro varianti Higgsfield; asfalto a Mediopoli/Capitale, legno negli interni.
 Bordi erba/acqua/sabbia e cordoli stradali con angoli; grotte e ponti conservano i materiali propri.
 Ombre statiche/mobili; tronchi ordinati e chiome trasparenti sopra il giocatore.
@@ -26,6 +26,6 @@ Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png, 1-lamp
 Nuove prove: 1-mediopoli-asfalto.png, 1-laboratorio-pavimento.png, 1-grotta-materiali.png.
 Input reali: 38 passi, Percorso 1 ↔ Mediopoli e arrivo a Borgo; cache completa. Prove 1-percorso-*.png.
 Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalto/pavimenti.
-414 test/build verdi; perf M2 rosso anche con finestra: p95 17,6 ms come idle; Capitale ha uno stallo >100 ms.
+414 test/build verdi; ultima prova senza stalli >100 ms, ma perf M2 rosso: p95 18,5–18,6 ms, idle 18,5 ms.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
 Corretto il falso muro di alberi oltre l’uscita: 1-uscita-sud-aperta.png. Restano giro slice/ascolto telefono e 60 fps; UI non approvata.

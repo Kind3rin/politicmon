@@ -1,3 +1,4 @@
+import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
 import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
 import {FieldGuideScene} from "../../scenes/FieldGuideScene";
@@ -6,8 +7,8 @@ import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
 import { playerImage, ferryImage, vehicleImage, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { approach } from "../battle/view";
-import { TILE, TILES, tileImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
-import { sceneImage, getSpriteImage } from "../../engine/assets";
+import { TILE, TILES, tileImage, terrainVariantImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
+import { sceneImage, getSpriteImage, spriteAssetRevision } from "../../engine/assets";
 import { CIVIC_EVENTS, CIVIC_NPCS } from "../../data/civicEvents";
 import { CivicScene } from "../../scenes/CivicScene";
 import { BossBriefingScene } from "../../scenes/BossBriefingScene";
@@ -204,6 +205,7 @@ export class WorldScene implements Scene {
   private viewHeight = VIEW_H;
   private readonly atto3Controller: Atto3Controller = createAtto3Controller();
   private map!: MapDef;
+  private readonly terrain = new TerrainRenderer();
   private npcs: RuntimeNpc[] = [];
   private msg = new MessageBox();
   private starterDeck = true;
@@ -517,6 +519,7 @@ export class WorldScene implements Scene {
       this.state.pos.mapId = "borgo";
     }
     this.map = MAPS[mapId];
+    this.terrain.invalidate();
     this.starterDeck = true;
     this.justEnteredMap = true;
     // ENCORE di BERLUSCONIX: il flag che mostra l'NPC magnate-encore va
@@ -736,6 +739,39 @@ export class WorldScene implements Scene {
       return this.map.outdoor ? "." : "p";
     }
     return civicBridgeTile(this.state, this.map.id, x, y, ch);
+  }
+
+  private terrainShadows():TerrainShadow[] {
+    const shadows:TerrainShadow[]=[];
+    this.map.tiles.forEach((row,y)=>[...row].forEach((_,x)=>{
+      const ch=this.tileAt(x,y),group=buildingKey(ch);
+      if(group) {
+        if(buildingKey(this.tileAt(x-1,y))===group||buildingKey(this.tileAt(x,y-1))===group)return;
+        const fp=this.buildingFootprint(x,y,ch);
+        shadows.push({x:x*TILE,y:(y+fp.h)*TILE-3,width:fp.w*TILE,height:fp.h*TILE});
+      } else if(TILES[ch]?.overlay&&!this.buildingCovering(x,y)&&!['f',',','~'].includes(ch)) {
+        const h=this.map.objectSizes?.[ch]??WORLD_OBJECT_TARGET_PX[ch]??TILE;
+        shadows.push({x:x*TILE+3,y:(y+1)*TILE-2,width:ch==='T'?12:10,height:h});
+      }
+    }));
+    return shadows;
+  }
+
+  private terrainSample(x:number,y:number):TerrainSample {
+    let ch=this.tileAt(x,y);
+    const def=TILES[ch];
+    const base=this.map.outdoor?'.':'p';
+    const covering=this.buildingCovering(x,y);
+    const obj=this.objectPng(ch);
+    const special='ORSN'.includes(ch);
+    if(covering)ch=base;
+    else if(def?.overlay)ch=def.overWater?'w':base;
+    else if(obj)ch=base;
+    else if(special)ch=ch==='N'||this.map.tileOverrides?.['=']==='tiles/snow_path.png'?'i':base;
+    const kind:TerrainKind=ch==='w'?'water':ch==='='?'path':ch==='z'?'sand':ch==='.'?'grass':ch==='j'?'asphalt':'floor';
+    if(!covering&&!def?.overlay&&def?.overWater) return {kind:'water',image:this.tilePng('w'),layers:[this.tilePng(ch)],decorate:false};
+    const authored=!this.map.tileOverrides?.[ch]&&'.=zp'.includes(ch);
+    return {kind,image:authored?terrainVariantImage(ch,terrainHash(this.map.id,x,y)%4):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
   }
 
   // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
@@ -3300,6 +3336,18 @@ export class WorldScene implements Scene {
     this.npcTapAreas = [];
     screen.clear("#10141f");
 
+    // The substrate is baked once per map and invalidated by visible world edits.
+    // UI migration remains gated separately by DESIGN-UI.
+    if(this.map.outdoor) this.terrain.draw(screen.ctx,{
+      map:this.map,
+      assetRevision:spriteAssetRevision(),
+      revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|'),
+      sample:(x,y)=>this.terrainSample(x,y),
+      shadows:()=>this.terrainShadows()
+    },camX,camY);
+
+    const treeTrunks:Array<{baseY:number;draw:()=>void}>=[];
+    const canopies:Array<()=>void>=[];
     const x0 = Math.floor(camX / TILE);
     const y0 = Math.floor(camY / TILE);
     for (let ty = y0; ty <= y0 + Math.ceil(this.viewHeight / TILE); ty += 1) {
@@ -3311,6 +3359,28 @@ export class WorldScene implements Scene {
         }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
+        if(this.map.outdoor && tx>=0 && ty>=0 && ty<this.map.tiles.length && tx<this.map.tiles[ty].length) {
+          if(!this.buildingCovering(tx,ty)) {
+            const obj=this.objectPng(ch);
+            if(obj && ch==='T') {
+              const bounds=screen.imageBounds(obj),target=this.map.objectSizes?.[ch]??WORLD_OBJECT_TARGET_PX.T;
+              const scale=target/Math.max(bounds.w,bounds.h),cut=Math.floor(bounds.h*.72);
+              const left=Math.round(dx+TILE/2-bounds.w*scale/2),top=Math.round(dy+TILE-bounds.h*scale);
+              const width=Math.round(bounds.w*scale),crownHeight=Math.round(cut*scale);
+              treeTrunks.push({baseY:(ty+1)*TILE,draw:()=>screen.ctx.drawImage(obj,bounds.x,bounds.y+cut,bounds.w,bounds.h-cut,left,top+crownHeight,width,Math.round((bounds.h-cut)*scale))});
+              canopies.push(()=>{
+                const ctx=screen.ctx;ctx.save();
+                const px=playerPx-camX,py=playerPy-camY;
+                if(px+12>left&&px+4<left+width&&py+16>top&&py-12<top+crownHeight)ctx.globalAlpha=.45;
+                ctx.drawImage(obj,bounds.x,bounds.y,bounds.w,cut,left,top,width,crownHeight);ctx.restore();
+              });
+            } else if(obj)drawWorldObjectPng(screen,ch,obj,dx,dy,this.map.objectSizes?.[ch]);
+            else if('ORSN'.includes(ch)) {
+              const img=this.tilePng(ch);if(img)drawWorldTilePng(screen,img,dx,dy);
+            }
+          }
+          continue;
+        }
         // EDIFICI: se questo tile è un tetto/facciata di un edificio con asset
         // PixelLab, disegno solo il terreno base qui (l'edificio intero
         // è disegnato in un secondo passo, scalato sulla footprint, così copre
@@ -3396,7 +3466,7 @@ export class WorldScene implements Scene {
     // (es. il player dietro la casa quando è sopra di essa), risolvendo il
     // "personaggio sopra il tetto". Gli edifici di mappa ora passano solo dai PNG
     // PixelLab caricati dal preload: niente vecchie pixmap di recupero in world.
-    const tall: Array<{ baseY: number; draw: () => void }> = [];
+    const tall: Array<{ baseY: number; draw: () => void }> = [...treeTrunks];
 
     for (let ty = y0 - 4; ty <= y0 + Math.ceil(this.viewHeight / TILE) + 1; ty += 1) {
       for (let tx = x0 - 10; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
@@ -3667,6 +3737,8 @@ export class WorldScene implements Scene {
     for (const e of tall) {
       e.draw();
     }
+
+    for(const drawCanopy of canopies)drawCanopy();
 
     // USCITE DI VIAGGIO: alcune rotte sono su acqua e non hanno una porta o un
     // molo distinguibile. Il marker resta ancorato alla casella che attiva il

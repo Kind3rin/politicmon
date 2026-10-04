@@ -112,6 +112,8 @@ export interface MapDef {
   name: string;
   tiles: string[];
   outdoor: boolean;
+  scatter?: { kind: string; density: number }[]; // 0..1, decorative only
+  weather?: "sereno" | "pioggia" | "nebbia" | "afa";
   warps: WarpDef[];
   npcs: NpcDef[];
   signs: SignDef[];

@@ -679,6 +679,104 @@
       "sourceSha256": "cc8fb9c7a23c97ce32a9dfc2fb02d0f0a3a197c318b4e7f1537716fb0ff74fa7",
       "sha256": "e115b9468e18e44bb6b5ea0098a02d9c786f7eeea6353a799baea2062f2618b6",
       "bytes": 12440
+    },
+    {
+      "id": "m2-terrain-variants",
+      "jobId": "65bc2fa0-2741-480a-b262-d571f356b5f3",
+      "model": "gpt_image_2_5",
+      "date": "2026-10-04",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261004_100018_65bc2fa0-2741-480a-b262-d571f356b5f3.png",
+      "sourceFile": "artifacts/m2/terrain-atlas-source.png",
+      "sourceSha256": "c57905c78bc8eda33627516d460f7a89b9422e4f15cd144e6c07f3fabcd868af",
+      "credits": 0.25,
+      "processing": "scripts/prepare-m2-terrain.py; 4x5 cells, 16px, six colors/material, matched perimeter",
+      "outputs": [
+        {
+          "path": "public/sprites/tiles/m2/asphalt-0.png",
+          "sha256": "ea7989861677d9cbc0fa3db6c9de215442b54ceafabbb414b04b39fd05f533ff"
+        },
+        {
+          "path": "public/sprites/tiles/m2/asphalt-1.png",
+          "sha256": "5827e3d023630820119c663e0d6afc81df45a725a3968c7b554bccce3b44ded2"
+        },
+        {
+          "path": "public/sprites/tiles/m2/asphalt-2.png",
+          "sha256": "d3339e27499d59bfe1f0f395253fdd01c1a3e4069cc9ee86c6bc9e66db9387b3"
+        },
+        {
+          "path": "public/sprites/tiles/m2/asphalt-3.png",
+          "sha256": "c317e194b412aa084a941b36c69daa890a2e823743e66cb32fac2dfb65fa5f2a"
+        },
+        {
+          "path": "public/sprites/tiles/m2/floor-0.png",
+          "sha256": "9b57fe663ad8800c6a1089d13871e2ace118fc810ba4cc9abe6a23c7d7755ac3"
+        },
+        {
+          "path": "public/sprites/tiles/m2/floor-1.png",
+          "sha256": "126beb6a10ace82912e6efaa8f96515c8799a496b906e135851fdf1a5645fa9b"
+        },
+        {
+          "path": "public/sprites/tiles/m2/floor-2.png",
+          "sha256": "e74570e1186e2f7fd3f5b145bff03e846b6e47bc1a33b5a415eaf2c6858f8fcc"
+        },
+        {
+          "path": "public/sprites/tiles/m2/floor-3.png",
+          "sha256": "0a63006d90cb7e2faa119199ef88349c920082d9b16efc1dad23d2267f5a7d64"
+        },
+        {
+          "path": "public/sprites/tiles/m2/grass-0.png",
+          "sha256": "73123a6bb4220d4a27777d210b28cd2ce52461da90de181d40fa553c67a14d59"
+        },
+        {
+          "path": "public/sprites/tiles/m2/grass-1.png",
+          "sha256": "2b9a5552331c02d55bea7975fdf075ee4fa667e2ced21ffad6d2f8c1969ab4c2"
+        },
+        {
+          "path": "public/sprites/tiles/m2/grass-2.png",
+          "sha256": "5e344bbdaf8ac5bf8caf21c5e1c4277ffc5ed6333b02e7e98bc332c20c0dcf3e"
+        },
+        {
+          "path": "public/sprites/tiles/m2/grass-3.png",
+          "sha256": "f8b8a2d9c644ce8f2064a7c3c0e3933e75abbb05cf8eced0968f449bb440882e"
+        },
+        {
+          "path": "public/sprites/tiles/m2/path-0.png",
+          "sha256": "4af618b4f7f1c685cf93958514be0d00c7996cf66c960b5d5bf62ee3c6e9717d"
+        },
+        {
+          "path": "public/sprites/tiles/m2/path-1.png",
+          "sha256": "1c34a20ca657a4bc0b16d738b19ffc96b66629ee713970b55ef384d35ccbf540"
+        },
+        {
+          "path": "public/sprites/tiles/m2/path-2.png",
+          "sha256": "8d78a044ab26190b16675fdb563fc83a7cd9d637382e5635c1a9fe30bad543f7"
+        },
+        {
+          "path": "public/sprites/tiles/m2/path-3.png",
+          "sha256": "230dfe36df34ba5d1b95d517a1eda85e440e334804a7883d7e7648a791560ad9"
+        },
+        {
+          "path": "public/sprites/tiles/m2/sand-0.png",
+          "sha256": "f9181d51ee722b0f9f195a6e6b6d58dc140858fb912fdbbbe6d8b294f3c595c0"
+        },
+        {
+          "path": "public/sprites/tiles/m2/sand-1.png",
+          "sha256": "4b4b872b338c90639c1e123858b9183cb6f6344ec6720c954cb74e26351e719e"
+        },
+        {
+          "path": "public/sprites/tiles/m2/sand-2.png",
+          "sha256": "7991684f917d7ec004f3049febe4eebd11d0d9a42b5ab8c0b2c5747b37276a74"
+        },
+        {
+          "path": "public/sprites/tiles/m2/sand-3.png",
+          "sha256": "d2bd152682f9fc1c3fce7502fe4490f88706762b72572754bc19bd6931e2faec"
+        }
+      ],
+      "status": "grass/path/sand used by outdoor substrate; floor/asphalt prepared, integration pending",
+      "params": {
+        "prompt": "Production pixel-art game terrain atlas for Politicmon, Italian satirical top-down handheld JRPG. EXACT 4 columns by 5 rows, twenty edge-to-edge equal square cells, NO gutters, NO outlines, NO labels, NO text, NO perspective, no objects. Entire image square. Each row contains four subtle variants of the SAME seamless flat texture with matching boundary color, designed to be reduced to 16x16 pixels per cell. Row 1 meadow grass: muted sage green #668b65, sparse clusters in #7c9b6c and dark #527852, avoid bright neon. Row 2 warm ochre dirt path: #c6a375, delicate grain and tiny pebbles. Row 3 pale beach sand: #dbc190, few short wind ripples. Row 4 dark bluish asphalt #555b68, faint cracks, no road markings. Row 5 warm wooden interior floor #a18565, horizontal small planks with subtle alternate knots. Flat overhead orthographic textures, crisp deliberate large pixel clusters, 16-bit console craftsmanship. No bevels, no platforms, no shadows around tiles, no vegetation tufts taller than the surface. Four variants each row should be recognizably varied but tile next to each other without seams. Gentle northwest light. Restrained 5-color palette per material. This is a technical texture sheet, not a landscape illustration.",
+        "aspect_ratio": "1:1"
+      }
     }
   ],
   "m2StyleReference": {

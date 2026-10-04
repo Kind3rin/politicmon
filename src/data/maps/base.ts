@@ -4,6 +4,8 @@ import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TIL
 export const BASE_MAPS: Record<string, MapDef> = {
   borgo: {
     id: "borgo",
+    scatter: [{kind:"flowers",density:.06},{kind:"leaflets",density:.025}],
+    weather:"sereno",
     name: "BORGO URNE",
     tiles: BORGO_TILES,
     outdoor: true,
@@ -126,6 +128,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
   // un LAGHETTO con isoletta-tesoro (solo col TRAGHETTO) e una GROTTA opzionale.
   route1: {
     id: "route1",
+    scatter: [{kind:"tufts",density:.12},{kind:"flowers",density:.055},{kind:"stones",density:.025}],
+    weather:"sereno",
     name: "PERCORSO 1",
     tiles: ROUTE1_TILES,
     outdoor: true,

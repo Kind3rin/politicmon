@@ -16,6 +16,8 @@ interface Entry {
 }
 
 const registry = new Map<string, Entry>();
+let spriteRevision = 0;
+export function spriteAssetRevision(): number { return spriteRevision; }
 const SPRITE_VERSION = APP_BUILD_ID;
 
 export interface SpriteRegistryStats {
@@ -70,9 +72,11 @@ export function loadSprite(id: string, path: string): void {
   img.onload = () => {
     entry.img = img;
     entry.status = "ready";
+    spriteRevision++;
   };
   img.onerror = () => {
     entry.status = "missing";
+    spriteRevision++;
   };
   img.src = spriteUrl(path);
 }

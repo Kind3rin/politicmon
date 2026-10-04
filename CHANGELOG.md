@@ -1,4 +1,10 @@
 # Changelog
+
+## Mandato 2 — Fase 0 riaperta — 2026-10-04
+
+- Bozze statiche Tribuna elettorale: dieci pagine, venti schermate, confronti con riferimenti e verifica di 40 layout. UI di produzione non migrata: attesa della riga UI APPROVATA in M2-NOTE-LUCA.md.
+- Fase 1 in corso: fondale esterno con cache invalidabile, quattro texture per erba/sterrato/sabbia, bordi e dettagli, ombre statiche e chiome separate. Nessuna migrazione UI. Prove Borgo/Percorso 1 e benchmark con cache effettivamente pronta; altri effetti ancora da realizzare.
+
 Retrobottega portato al kit con anteprima separata di benefici, costi e conseguenze reali, ricevuta prima/dopo e protezione dalle conferme ripetute; probabilità e importi invariati. Duello PvP con quattro mosse dirette, dettagli a pressione lunga e HUD nativo, senza modifica del simulatore. Pausa: riepilogo unico e sei destinazioni visibili a 412×915 senza scorrere. Il controllo automatico copre 49/49 scene; Duello completo provato con due peer in una stanza QA privata; prova hardware del controller e usabilità sul POCO restano aperte.
 
 ## Mandato 2 — Fase 0 in corso — 2026-10-03

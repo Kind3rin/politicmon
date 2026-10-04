@@ -1,15 +1,27 @@
-## Fase 0 — Comandi, menù e testi — 3 ottobre 2026 — in corso
-Prima/dopo: artifacts/m2/0-{dialogo,pausa,squadra,compagno,borsa,lotta,apprendimento}-{prima,dopo}.png. Dialogo e apprendimento confrontati con il widget/scena HEAD in fixture isolati, stesso testo e punto nel Borgo / ELLYNA LV5, 412×915.
-Inventario prima: movimento 1/croce; parla 1/A; menu 1/Menu; mossa 2/Lotta → mossa; cambio 2/Squadra → compagno.
-Oggetto prima 3+/Pausa → Altro → Borsa → oggetto → destinatario; cura 3/Pausa → Cura → compagno; Salva 3/Pausa → Altro → Salva.
-Mappa prima 3/Pausa → Altro → Mappa; squadra 2/Pausa → Squadra; Indietro 1/B ambiguo; testo 1 per completare e 1 per avanzare/A o B.
-Dopo: movimento, Parla, Menu, mossa, Mappa, Squadra, Salva, Indietro e ciascun passo del testo 1; cambio in lotta 2; oggetto in lotta 2; cura nel mondo Borsa → destinatario 2. Equipaggiamento, anche sostituzione, 2 dalla mappa.
-Oggetti avanzati: oggetto/destinatario/compatibilità insieme; direttive con quattro sostituzioni e PP prima → dopo nella borsa; evoluzioni con forma/valori/tipi/abilità e consumo prima del tocco. Entrambe in due tocchi dalla mappa, senza conferma aggiuntiva.
-Regressioni di F0: pulsante contestuale aggiorna anche blocco del click e aria-disabled dopo Avvicinati → Parla; nomi delle 78 mosse in forma normale, identità/regole/effetti e 52 specie invariati. Inviti/scelte e frasi rapide coerenti con il testo visualizzato. Audit contenuti: abilità con minuscole/effetti precisi e statistiche coerenti; frasi/emote in gruppi, Bella partita/Va bene espliciti. Profili DRAGHIMON/VERDOLINO e gruppi QA a 412×915; Galleggiamento in due paragrafi di due righe. Kit unico: 49/49 scene senza testo/riquadri a coordinate; font OFL offline, quattro livelli, dati etichetta/valore, tipi a stemma, dialoghi 2–3 righe e speaker esplicito (Sindacalista, Mara, Sua Emittenza), Indietro singolo, pausa con sei destinazioni. Audit helper: ritirati HUD, numeri e banner bitmap inutilizzati della lotta; cura/avvisi del mondo nel kit senza sovrapporsi alla missione, forme meme nominate nel HUD nativo.
-Browser naturale: promessa bus e finanziamento 180 €, ricevuta morale; negozio acquisto 320 → 220 €, caffè 6 → 8; import annullato/codice errato, guide, trasporto annullato, Circolo e nome invalidi provati. Studio 5 → Mediopoli → bar: cura e avviso nativi; Mediopoli → Percorso 1 a tocco sul bordo, CALENDAURO LV5 reclutato e Nino battuto, GIORGETTA LV6 → 7. Secondo CALENDAURO reclutato, GIORGETTA → GIORGIAGON LV8, Gianni battuto in cinque turni → LV9 e Fiamma tricolore al posto di Comizio; altri PP e slot conservati alla riapertura. Divisa ricevuta, bar curato 16 → 43 PV, Studio 5 a tocco; Mara battuta in cinque turni, GIORGIAGON LV9 → 12, Giravolta nelle due riserve con spazio libero; missione passa a Sua Emittenza e persiste.
-Lotta locale: mosse dirette, dossier senza PP/turni, pressione lunga e cura; GIORGETTA PV 26 → 20 → 26, caffè 7 → 6. Archivio naturale: Comizio recuperabile, scelta e annullamento senza mutazione. QA isolato: equipaggiamento e restituzione, Z sulla scelta ZTL applica PIAZZA, tessera avvia evoluzione e ritorna con CAPITANONE. Verifiche pure: callback singola, stock/mosse/PP/PV/status/oggetto conservati; comandi coperti/obsoleti rifiutati.
-Duello reale con due peer in stanza QA privata: invito/accettazione, un tocco per mossa, turni coerenti, resa, ritorno, record vittoria/sconfitta e stato campagna C9 invariato; Confronto e scambio provati con input reali in due origini QA e stanza MQTT privata: invito/accettazione, messaggio accentato/risposta/cronologia/chiusura; offerta cambiata revoca le conferme, scambio completato e squadre persistenti al riavvio. Screenshot 0-confronto-cronologia / 0-scambio-ricevuta.
-Comandi: tastiera provata, focus nativo e conferma Z ora concordano; controller standard simulato (pressioni, stick, blur, disconnessione), non hardware. Campagna 2 naturale: movimento → Parla → Menu/Indietro, suggerimenti ritirati e persistenti; campagna 1 conservata.
-Sua Emittenza battuta in nove turni con rimpasto gratuito, cambio e tre mosse diverse; GIORGIAGON LV15, due CALENDAURO LV11, una medaglia e prossima tappa Lady Direttiva persistenti alla riapertura. Posizioni dei compagni visibili in squadra/cambio/borsa/apprendimento e ricevute: DOSSIERAGGIO appreso separatamente da 2 e 3. Prove 412×915 e 844×390 emulati, desktop/tastiera; transizioni del mondo senza ritorno ai tasti A/B, landscape corretto anche senza puntatore touch, personaggio sotto HUD e pulsanti ≥48 px; screenshot in artifacts/m2. 402 test, build e kit verdi; PWA Chromium offline verde: nove font/icone, 798 asset, 19 tracce, migrazione e resume; perf p95 18,6/18,6/18,4 ms, iniziale 192,0 KiB, totale 370,6 KiB.
-Crediti 341,47 → 338,47, nessun acquisto; riserva 10. Style-reference.png e sei icone ispezionati; job 4240b27d… / 998d9de2… nel manifest. Nessuna spesa in questo giro.
-CONTROLLO UMANO RICHIESTO: sette coppie prima/dopo indicate sopra; prova della PWA sul POCO in verticale/orizzontale e dieci minuti di orientamento ancora da verificare. Dossier pre-sfida migrato a stime strutturate: compagni omonimi distinti, mossa/PP/danno/precisione e difesa prima → dopo; KO/PP esauriti espliciti. Prima/dopo 0-dossier-{prima,dopo}.png e landscape 844×390, Indietro torna agli avversari. Kit: dato singolo a piena larghezza e ritratto sopra il titolo in landscape, senza sovrapporre paragrafi. Hardware controller non provato. Sistema b02289e, regressioni 4cc1946 e contenuti fe4cd39 pubblicati su politicmon.vercel.app; CI 37153159641 e tre deploy Vercel riusciti, abilità e gruppi verificati nell’entrypoint pubblico. F0 aperta, F1 non iniziata.
+## Fase 0 — riaperta dopo prova POCO — 4 ottobre 2026
+BOZZE PRONTE: Tribuna elettorale; build precedente respinta, nessuna scena migrata.
+artifacts/m2/mock-esplorazione-{portrait,landscape}.png
+artifacts/m2/mock-esplorazione-orizzontale-{portrait,landscape}.png
+artifacts/m2/mock-lotta-{portrait,landscape}.png
+artifacts/m2/mock-squadra-{portrait,landscape}.png
+artifacts/m2/mock-compagno-{portrait,landscape}.png
+artifacts/m2/mock-borsa-{portrait,landscape}.png
+artifacts/m2/mock-mappa-{portrait,landscape}.png
+artifacts/m2/mock-impara-{portrait,landscape}.png
+artifacts/m2/mock-menu-{portrait,landscape}.png
+artifacts/m2/mock-dialogo-{portrait,landscape}.png
+Galleria: design/ui-mock/index.html; dieci confronti con riferimenti e autocritica.
+Verifica: check-ui-layout.mjs --mock, 40 layout verdi; non certifica la UI runtime.
+Gate: attesa UI APPROVATA in M2-NOTE-LUCA.md. Nessun credito speso nelle bozze.
+
+## Fase 1 — terreno — in corso, 4 ottobre 2026
+Fondale esterno in terrainRenderer.ts: cache per mappa/revisione; asset tardivi invalidano senza ricostruire ogni frame.
+Erba, sterrato e sabbia: quattro varianti Higgsfield, bordi cardinali e angoli interni; dettagli per mappa.
+Ombre statiche di edifici/arredi; tronchi ordinati per Y e chiome trasparenti quando coprono il giocatore.
+Prima/dopo: artifacts/m2/1-{borgo,route1}-{prima,dopo}.png; occlusione: 1-chioma-dopo.png.
+Higgsfield 338,47 → 338,22: job 65bc2fa0…; venti texture 16px, pavimento/asfalto ancora da integrare.
+408 test e build verdi. perf:check verde: draw p95 Borgo/Percorso 1 1,5 ms, intervallo 17,6 ms (CPU ×4).
+Cache pronta: Borgo/Percorso 1 una costruzione, Capitale due; 60 fps su dispositivo reale non ancora provati.
+Errore QA: primo banco sovrascriveva lo slot locale 4190. Ora scritture e multiplayer bloccati; prove ripetute.
+Restano pavimenti/asfalto, acqua/vento, luce/meteo, camera/passi, ombre mobili e verifica completa. Fase aperta.
+UI non migrata: manca ancora UI APPROVATA.

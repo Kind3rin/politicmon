@@ -154,14 +154,25 @@ async function measureScenes(browser) {
       worldState.flags["intro-done"] = true; worldState.flags["dex-received"] = true;
       worldState.party = [monsterMod.createMonster("giorgiagon", 30), monsterMod.createMonster("renzilla", 30)];
       worldState.pos = { mapId: "capitale", x: 15, y: 14, facing: "down" };
-      const world = await sample(new WorldScene(stack, input, worldState));
+      const worldScene = new WorldScene(stack, input, worldState);
+      const world = await sample(worldScene);
+      world.terrain = worldScene.terrain.stats();
+      if(!world.terrain.complete)throw new Error('Capitale: fondale ancora incompleto dopo il warm-up');
+      const terrainMaps = {};
+      for(const [mapId,x,y] of [['borgo',12,10],['route1',7,8]]) {
+        const state=stateMod.newGameState();state.flags['intro-done']=true;
+        state.party=[monsterMod.createMonster('giorgiagon',30)];state.pos={mapId,x,y,facing:'down'};
+        const scene=new WorldScene(stack,input,state);
+        terrainMaps[mapId]=await sample(scene);terrainMaps[mapId].terrain=scene.terrain.stats();
+        if(!terrainMaps[mapId].terrain.complete)throw new Error(`${mapId}: fondale incompleto`);
+      }
       const battleState = stateMod.newGameState(); battleState.flags["intro-done"] = true;
       battleState.party = [monsterMod.createMonster("giorgiagon", 30), monsterMod.createMonster("renzilla", 29)];
       const battle = await sample(new BattleScene(stack, input, { state: battleState, foeTeam: [monsterMod.createMonster("mattarellux", 32)], onEnd: () => undefined }));
       const dexState = stateMod.newGameState();
       for (const id of Object.keys(speciesMod.SPECIES)) dexState.dex[id] = "caught";
       const dex = await sample(new DexScene(stack, input, dexState));
-      return { world, battle, dex, spriteRegistry: assetsMod.spriteRegistryStats(), rasterCache: screen.cacheStats() };
+      return { world, terrainMaps, battle, dex, spriteRegistry: assetsMod.spriteRegistryStats(), rasterCache: screen.cacheStats() };
     }, {withAudio:audioEnabled,shellMarkup});
     for (const scene of ["world", "battle", "dex"]) for (const group of ["work", "interval"]) for (const key of ["meanMs", "p50Ms", "p95Ms", "p99Ms", "maxMs"]) result[scene][group][key] = Number(result[scene][group][key].toFixed(3));
     await context.close();

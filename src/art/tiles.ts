@@ -36,6 +36,12 @@ export function tileImage(ch: string): HTMLImageElement | null {
   return getSpriteImage(`tile:${ch}`, path);
 }
 
+const TERRAIN_VARIANTS:Record<string,string>={'.':'grass','=':'path',z:'sand',p:'floor'};
+export function terrainVariantImage(ch:string,variant:number):HTMLImageElement|null {
+  const kind=TERRAIN_VARIANTS[ch];
+  return kind?getSpriteImage(`terrain:${kind}:${variant}`,`tiles/m2/${kind}-${variant}.png`):tileImage(ch);
+}
+
 // Oggetti OVERLAY (alberi, segnali, recinti, fiori): PNG ~32px disegnati sopra il
 // terreno e ancorati in BASSO al tile (così la chioma dell'albero sborda verso
 // l'alto, stile Pokémon). Fallback al Pixmap dell'overlay finché il PNG non c'è.
@@ -115,6 +121,7 @@ const BUILDING_FOOTPRINT_PNG: Record<string, Record<string, string>> = {
 // The deck and Atto3 furniture retain their lazy/background loading policy.
 export function coreTerrainEntries():Record<string,string>{
  return Object.fromEntries([
+  ...["grass","path","sand","asphalt","floor"].flatMap(kind=>Array.from({length:4},(_,i)=>[`terrain:${kind}:${i}`,`tiles/m2/${kind}-${i}.png`])),
   ...Object.entries(TILE_PNG).filter(([ch])=>ch!=='q').map(([ch,path])=>[`tile:${ch}`,path]),
   ...Object.entries(OBJECT_PNG).filter(([ch])=>ch!=='X'&&!/^\d$/.test(ch)).map(([ch,path])=>[`obj:${ch}`,path]),
   ...Object.entries(BUILDING_PNG).flatMap(([ch,path])=>[path,...Object.values(BUILDING_FOOTPRINT_PNG[ch]??{})].map(file=>[`build:${ch}:${file}`,file]))

@@ -316,3 +316,6 @@ Atlante 480×360 con quattro vignette viste; vignette conservate nel manifest; g
 
 Lotto titolo — saldo **352,22 → 351,97** (0,25 crediti), job `48e93be5-9b8e-4c21-9a3e-ad05942887c2`.
 Piazza del dibattito vista e integrata dietro gli starter: 480×270, 48 colori; provenienza e checksum nel manifest.
+
+M2 terreno, 4 ottobre 2026: foglio 4×5 visto, job `65bc2fa0-2741-480a-b262-d571f356b5f3`.
+Saldo **338,47 → 338,22** (0,25 crediti). Venti varianti 16px in tiles/m2; erba, sterrato e sabbia nel fondale esterno. Pavimento/asfalto preparati, integrazione ancora aperta. Sorgente e checksum nel manifest; preparazione ripetibile con prepare-m2-terrain.py.

@@ -21,8 +21,8 @@ export class TitleScene implements Scene {
     return {
       title: this.difficultyMenu ? "Scegli la sfida" : "Politicmon",
       subtitle: this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato.",
-      image: this.difficultyMenu ? undefined : "/sprites/ui/title-stage.png",
-      portraits: this.difficultyMenu ? undefined : ["giorgetta", "ellyna", "renzino"].map(id => ({ src: `/sprites/monsters/${id}.png`, label: id.charAt(0).toUpperCase() + id.slice(1) })),
+      splash: { art: "/title-bg.png", tagline: this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato.",
+        sprites: ["giorgetta", "ellyna", "renzino"].map(id => `/sprites/monsters/${id}.png`), compact: !this.difficultyMenu },
       actions:actions, back:back, primary: 0, selected: this.difficultyMenu?.index ?? this.menu.index
     };
   }

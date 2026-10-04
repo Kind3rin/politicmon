@@ -77,6 +77,8 @@ export interface UiPanel {
   fit?: boolean;
   /** Turns card-like actions (icon, hint, facts) into compact rows. */
   compact?: boolean;
+  /** Full-bleed opening screen: art, logo, tagline and the choices at the bottom. */
+  splash?: { art: string; tagline: string; sprites?: readonly string[]; compact?: boolean };
   /** Drawn map: actions[i] is the node i; positions are percentages. */
   atlas?: UiAtlas;
   /** Labelled values drawn as bars. */
@@ -138,6 +140,7 @@ function prosePages(text:string):string[] {
       else sentences.push(fragment);
     }
     for(const sentence of sentences){
+      if(/^(?:Compagno|Scelta)\s+\d+\s+di\s+\d+\.?$/.test(sentence.trim()))continue;
       if(sentence.length<=84)result.push(sentence);
       else result.push(...dialoguePages([sentence],28).map(page=>page.join(' ')));
     }
@@ -421,6 +424,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   const next = JSON.stringify({...panel,timing:panel.timing?{...panel.timing,progress:0}:undefined,field:panel.field?{...panel.field,value:panel.field.readOnly?panel.field.value:""}:undefined,selected:displayedIndex}, (_key, value) => typeof value === "function" ? undefined : value);
   if (next === signature) {if(panel.timing)updateTiming(root,panel.timing);return true;}
   signature = next;
+  if(!panel.splash&&root.classList.contains('ui-splash'))root.className='ui-panel';
   root.classList.toggle('ui-conversation',Boolean(panel.conversation));
   root.classList.toggle('ui-pause',Boolean(panel.pause));
   root.onclick=panel.pause?event=>{if(event.target===root)current?.back?.run();}:null;
@@ -459,6 +463,25 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     sheet.append(header,strip,content);root.replaceChildren(sheet);content.scrollTop=oldScroll;
     if(enteringPause){root.focus({preventScroll:true});if(!document.body.classList.contains('ui-reduce-effects')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)sheet.animate([{transform:'translateY(24px)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:160,easing:'ease-out'});}
     if(scrollSelection){content.querySelector('[aria-current=true]')?.scrollIntoView({block:'nearest'});scrollSelection=false;}
+    return true;
+  }
+  if(panel.splash){
+    signature=next;
+    root.className="ui-panel ui-splash";
+    const art=element("div","ui-splash-art");art.style.backgroundImage=`url(${panel.splash.art})`;
+    const logo=element("h1","ui-splash-logo",panel.title);
+    const tape=element("p","ui-splash-tape",panel.splash.tagline);
+    const cast=element("div","ui-splash-cast");
+    for(const src of panel.splash.sprites??[]){const image=element("img","");image.src=src;image.alt="";cast.append(image);}
+    const choices=element("nav","ui-splash-actions");choices.setAttribute("aria-label",panel.title);
+    const more=element("div",`ui-splash-more${panel.splash.compact?" ui-splash-compact":""}`);
+    panel.actions.forEach((action,i)=>{
+      const button=kit.button(action,()=>{if(!current?.actions[i]?.disabled)current?.actions[i]?.run();},i===panel.primary);
+      button.dataset.uiIndex=String(i);if(i===displayedIndex)button.setAttribute("aria-current","true");(i===panel.primary?choices:more).append(button);
+    });
+    choices.append(more);
+    if(panel.back){const button=kit.button(panel.back,()=>current?.back?.run());button.dataset.uiIndex=String(panel.actions.length);if(displayedIndex===panel.actions.length)button.setAttribute("aria-current","true");choices.append(button);}
+    root.replaceChildren(art,logo,tape,cast,choices);
     return true;
   }
   const scrollKey=JSON.stringify([panel.title,panel.selectedTab,panel.actions.map(action=>action.label),panel.field?.label]);

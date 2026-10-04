@@ -25,6 +25,14 @@ import {AchievementsScene} from '../src/scenes/AchievementsScene';
 import {AudioScene} from '../src/scenes/AudioScene';
 import {BoxScene} from '../src/scenes/BoxScene';
 import {EvolutionScene} from '../src/scenes/EvolutionScene';
+import {StarterPreviewScene} from '../src/scenes/StarterPreviewScene';
+import {RecallScene} from '../src/scenes/RecallScene';
+import {TypesScene} from '../src/scenes/TypesScene';
+import {MoraleScene} from '../src/scenes/MoraleScene';
+import {SourcesScene} from '../src/scenes/SourcesScene';
+import {BackupScene} from '../src/scenes/BackupScene';
+import {GovScene} from '../src/scenes/GovScene';
+import {TitleScene} from '../src/scenes/TitleScene';
 import {MessageBox} from '../src/ui/widgets';
 import type {UiPanel} from '../src/ui/kit';
 // Isolated realm: production constructors may autosave, but no fixture may write.
@@ -48,7 +56,7 @@ if(requested.startsWith('lotta')){
  const battle=new BattleScene(stack,input,{state,foeTeam:[createMonster('mediocrate',24)],onEnd:()=>{stack.pop();stack.push(new WorldScene(stack,input,state));}});
  if(requested==='lotta-finale')(battle as unknown as {polemica:{value:number}}).polemica.value=3;
  stack.push(battle);
-}else if(['squadra','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione'].includes(requested)){
+}else if(['squadra','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo'].includes(requested)){
  stack.push(new WorldScene(stack,input,state));
  const scene=requested==='squadra'||requested==='compagno'?new PartyScene(stack,input,state,{mode:'view'})
   :requested==='borsa'?new BagScene(stack,input,state,{inBattle:false,fromWorld:true})
@@ -60,6 +68,14 @@ if(requested.startsWith('lotta')){
   :requested==='audio'?new AudioScene(stack,input)
   :requested==='circolo'?new BoxScene(stack,input,state)
   :requested==='evoluzione'?new EvolutionScene(stack,input,'giorgetta','giorgiagon',()=>{},{mon:state.party[1],reduceEffects:true})
+  :requested==='starter'?new StarterPreviewScene(stack,input,'ellyna',()=>{})
+  :requested==='archivio'?new RecallScene(stack,input,state,state.party[0])
+  :requested==='tipi'?new TypesScene(stack,input)
+  :requested==='morale'?new MoraleScene(stack,input,state)
+  :requested==='fonti'?new SourcesScene(stack,input)
+  :requested==='backup'?new BackupScene(stack,input,state)
+  :requested==='governo'?new GovScene(stack,input,state)
+  :requested==='titolo'?new TitleScene(stack,input)
   :new WorldMapScene(stack,input,state);
  if(requested==='compagno'){(scene as unknown as {summary:unknown;summaryPage:number}).summary=state.party[0];(scene as unknown as {summaryPage:number}).summaryPage=0;}
  stack.push(scene);

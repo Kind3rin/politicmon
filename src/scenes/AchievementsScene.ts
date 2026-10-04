@@ -2,6 +2,7 @@ import { ACHIEVEMENTS, isUnlocked, unlockedCount } from "../game/achievements";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
+import type { TouchAction } from "../engine/touchActions";
 import type { Screen } from "../engine/screen";
 import type { GameState } from "../game/state";
 import type { UiPanel } from "../ui/kit";
@@ -20,18 +21,17 @@ export class AchievementsScene implements Scene {
         if (this.stack.top !== this) return;
         this.filter = index; this.input.reset(); audio.cursor();
       } })), selectedTab: this.filter,
-      blocks: visible.length ? visible.map((entry, index) => {
+      blocks: visible.length ? undefined : [{ title: "Ancora da conquistare", body: "Non hai ancora sbloccato traguardi. In Tutti trovi obiettivi e premi." }],
+      actions: visible.map((entry): TouchAction => {
         const unlocked = isUnlocked(this.state, entry.id);
         const body = entry.desc.replace(/POLITICMON/g, "Politicmon").replace(/SONDAGGI/g, "sondaggi")
           .replace(/PLEBISCITO/g, "plebiscito").replace(/FICHE/g, "fiche").replace(/CASINÒ/g, "casinò")
           .replace(/DIRETTIVA/g, "direttiva").replace(/MONOPATTINO/g, "monopattino").replace(/RUSPA/g, "ruspa")
           .replace(/SCAMBIO/g, "scambio").replace(/RIVALE GIANNI/g, "rivale Gianni");
-        return { title: readableCopy(entry.name), body,
-          facts: [{ label: "Stato", value: unlocked ? "Raggiunto" : "Da sbloccare" },
-            { label: unlocked ? "Premio accreditato" : "Premio", value: `${entry.reward} €` },
-            { label: "Posizione", value: `${index + 1} di ${visible.length}` }] };
-      }) : [{ title: "Ancora da conquistare", body: "Non hai ancora sbloccato traguardi. In Tutti trovi obiettivi e premi." }],
-      actions: [], back: { label: "Indietro", run: () => {
+        return { label: readableCopy(entry.name), disabled: !unlocked, run: () => {},
+          row: { kind: "item", right: `${entry.reward} €`, meta: body, stamp: unlocked ? "Raggiunto" : undefined } };
+      }),
+      back: { label: "Indietro", run: () => {
         if (this.stack.top !== this) return;
         this.input.reset(); audio.cancel(); this.stack.pop();
       } }

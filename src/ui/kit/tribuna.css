@@ -150,3 +150,28 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-hero-name{font-size:clamp(26px,8vw,36px)}
 @media(orientation:portrait) and (max-height:700px){.ui-row-move{min-height:56px;margin-bottom:8px}.ui-hero-art{height:clamp(96px,16dvh,220px)}.ui-hero-card{gap:8px}.ui-panel .ui-header{gap:4px}}
 @media(orientation:landscape) and (max-height:540px){.ui-row-move .ui-row-meta{display:none}.ui-hero-name{font-size:28px}}
+
+/* Schermata iniziale. */
+.ui-panel.ui-splash{padding:0;gap:0;display:flex;flex-direction:column;align-items:center;background:#F4EEDC;overflow:hidden}
+.ui-splash-art{position:absolute;inset:0;background-size:cover;background-position:50% 0;image-rendering:pixelated}
+.ui-splash-art::after{content:"";position:absolute;inset:auto 0 0;height:55%;background:linear-gradient(transparent,#F4EEDCf2 62%)}
+.ui-splash-logo{position:relative;margin:max(48px,10dvh) 0 0;padding:6px 18px;background:var(--t-red);color:var(--t-paper);font:700 clamp(44px,15vw,76px)/1 Tribuna,sans-serif;letter-spacing:.04em;text-transform:uppercase;text-shadow:4px 4px var(--t-ink);transform:rotate(-2deg);border:3px solid var(--t-ink);box-shadow:6px 6px var(--t-ink)}
+.ui-splash-tape{position:relative;margin:18px 16px 0;padding:6px 14px;background:var(--t-yellow);color:var(--t-ink);border:2px solid var(--t-ink);font:700 16px/1.3 PoliticmonBody,sans-serif;text-align:center;transform:rotate(1deg);max-width:min(92%,420px)}
+.ui-splash-cast{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:flex-end;justify-content:center;gap:4%;width:100%;padding:0 6%}
+.ui-splash-cast img{height:min(30dvh,260px);max-width:32%;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(4px 6px 0 #14161F55)}
+.ui-splash-actions{position:relative;display:grid;gap:12px;width:min(100%,520px);padding:12px 20px max(20px,env(safe-area-inset-bottom))}
+.ui-splash-actions .ui-primary{min-height:68px}
+.ui-splash-actions .ui-button{min-height:52px}
+.ui-splash-actions .ui-primary .ui-subtitle{font-size:22px}
+@media(orientation:landscape) and (max-height:540px){
+  .ui-splash-art::after{height:100%;background:linear-gradient(90deg,#F4EEDC00 0,#F4EEDCf2 70%)}
+  .ui-panel.ui-splash{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,42%);grid-template-rows:auto auto minmax(0,1fr);column-gap:16px;align-items:start;padding:12px 20px}
+  .ui-splash-logo{grid-column:1;margin:8px 0 0;font-size:56px}.ui-splash-tape{grid-column:1;justify-self:start;margin:12px 0 0}
+  .ui-splash-cast{grid-column:1;grid-row:3;padding:0}.ui-splash-cast img{height:min(30dvh,120px)}
+  .ui-splash-actions{grid-column:2;grid-row:1/4;align-self:center;padding:0}
+}
+.ui-splash-more{display:grid;gap:12px;grid-template-columns:minmax(0,1fr)}
+.ui-splash-compact{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ui-splash-compact .ui-button{min-height:48px;padding:8px 4px;align-items:center;text-align:center;box-shadow:3px 3px var(--t-ink)}
+.ui-splash-compact .ui-body,.ui-splash-compact .ui-button-icon{display:none}
+.ui-splash-compact .ui-subtitle{font-size:16px}

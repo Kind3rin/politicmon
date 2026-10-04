@@ -34,6 +34,8 @@ import {SourcesScene} from '../src/scenes/SourcesScene';
 import {BackupScene} from '../src/scenes/BackupScene';
 import {GovScene} from '../src/scenes/GovScene';
 import {TitleScene} from '../src/scenes/TitleScene';
+import {FuelScene} from '../src/scenes/FuelScene';
+import {TransportScene} from '../src/scenes/TransportScene';
 import {MessageBox} from '../src/ui/widgets';
 import type {UiPanel} from '../src/ui/kit';
 // Isolated realm: production constructors may autosave, but no fixture may write.
@@ -51,14 +53,14 @@ const routeStatus=document.createElement('output');
 if(routeReview){routeStatus.style.cssText='position:fixed;top:64px;right:12px;padding:6px;background:#f4eedc;color:#14161f;z-index:60;font:16px system-ui;pointer-events:none';document.body.append(routeStatus);}
 const requested=new URLSearchParams(location.search).get('screen')??'esplorazione';
 for(const id of BAG_ORDER)state.bag[id]=state.bag[id]??(id==='caffe'?11:3);
-state.money=9320;state.sondaggi=100;
+state.money=9320;state.sondaggi=100;state.fuel=14;state.flags['dex-received']=true;state.badges=['auditel','spread'];state.flags['dex-received']=true;
 state.party[2].hp=0;state.party[0].hp=64;state.party[3].hp=40;state.party[4].hp=20;
 if(requested.startsWith('lotta')){
  if(requested==='lotta-esaurita')state.party[0].moves[0].pp=0;
  const battle=new BattleScene(stack,input,{state,foeTeam:[createMonster('mediocrate',24)],trainer:requested==='lotta-allenatore'?TRAINERS.tycoon:undefined,onEnd:()=>{stack.pop();stack.push(new WorldScene(stack,input,state));}});
  if(requested==='lotta-finale')(battle as unknown as {polemica:{value:number}}).polemica.value=3;
  stack.push(battle);
-}else if(['squadra','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo'].includes(requested)){
+}else if(['squadra','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo','carburante','viaggio'].includes(requested)){
  stack.push(new WorldScene(stack,input,state));
  const scene=requested==='squadra'||requested==='compagno'?new PartyScene(stack,input,state,{mode:'view'})
   :requested==='borsa'?new BagScene(stack,input,state,{inBattle:false,fromWorld:true})
@@ -78,6 +80,8 @@ if(requested.startsWith('lotta')){
   :requested==='backup'?new BackupScene(stack,input,state)
   :requested==='governo'?new GovScene(stack,input,state)
   :requested==='titolo'?new TitleScene(stack,input)
+  :requested==='carburante'?new FuelScene(stack,input,state,'route1')
+  :requested==='viaggio'?new TransportScene(stack,input,state,'borgo',()=>{})
   :new WorldMapScene(stack,input,state);
  if(requested==='compagno'){(scene as unknown as {summary:unknown;summaryPage:number}).summary=state.party[0];(scene as unknown as {summaryPage:number}).summaryPage=0;}
  stack.push(scene);

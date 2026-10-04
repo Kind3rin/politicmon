@@ -2,6 +2,8 @@
 
 ## Mandato 2 — secondo giro — 2026-10-05
 
+- Caro carburante: serbatoio da 40 litri per monopattino e auto (1 litro ogni 14 passi all'aperto; a secco si va a piedi), prezzo al litro del giorno con commento satirico, benzinai su Percorso 1 e 3, «Fai il pieno» da ogni auto blu. L'auto blu costa 6 litri a viaggio. Salvataggi vecchi: 18 litri. 4 test nuovi.
+
 - Percorsi 1-3 allungati verso sud con un ponte di legno sul rio (1 e 3) o un laghetto con riva di sabbia (2), terrazze con scarpata, un cartello, un oggetto in vista, uno nascosto e un parlante per percorso. Le coordinate esistenti non cambiano.
 - Selvatici visibili con il loro umore; sorprenderli dà la prima mossa. Controllo `check:roamers` su una WorldScene reale.
 - Lotta: anche gli allenatori dichiarano una postura, mostrata accanto alla loro intenzione; stima del danno e della risposta tengono conto di entrambe. Consegne tra compagni dello stesso tipo (GRINTA e VELOCITÀ +1, una volta per coppia) e BUFERA (gaffe poi scandalo sullo stesso bersaglio: un ottavo dei PV, una volta). 13 test nuovi.

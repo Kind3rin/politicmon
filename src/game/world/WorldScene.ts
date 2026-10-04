@@ -53,6 +53,8 @@ import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, loca
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordHealerVisit, recordRunStep } from "../runstats";
 import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge, firstRecruitLevel } from "./explorationInterrupts";
+import { FuelScene } from "../../scenes/FuelScene";
+import { RIDE_STEPS_PER_LITRE, ridesOnFuel } from "../fuel";
 import { RoamerField, roamerTarget, type Contact as RoamerContact } from "./roamers";
 import { monsterImage } from "../../art/monsters";
 import { resolveTransportDestination, type TransportDestination } from "./transport";
@@ -251,6 +253,7 @@ export class WorldScene implements Scene {
   private time = 0;
   private rustles: Rustle[] = [];
   private encounterFlash = 0;
+  private rideSteps = 0;
   private hop = false;
   private roamers: RoamerField | null = null;
   private roamerMap = "";
@@ -1551,6 +1554,12 @@ export class WorldScene implements Scene {
 
     if (route.kind === "transport") {
       this.openTransport();
+      return;
+    }
+
+    if (route.kind === "pump") {
+      this.input.reset();
+      this.stack.push(new FuelScene(this.stack, this.input, this.state, this.map.id));
       return;
     }
 
@@ -2858,6 +2867,14 @@ export class WorldScene implements Scene {
     // Contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA. NON
     // sostituisce stepCount (privato, la cura del Min. Salute usa il suo %6).
     this.state.stepsTotal += 1;
+    if (this.map.outdoor && ridesOnFuel(this.state.vehicle) && this.state.fuel > 0) {
+      this.rideSteps += 1;
+      if (this.rideSteps % RIDE_STEPS_PER_LITRE === 0) {
+        this.state.fuel = Math.max(0, this.state.fuel - 1);
+        if (this.state.fuel === 4) this.tapNotice = { text: "Riserva: 4 litri.", until: this.time + 4 };
+        if (this.state.fuel === 0) this.tapNotice = { text: "Serbatoio vuoto: si va a piedi.", until: this.time + 5 };
+      }
+    }
     recordRunStep(this.state);
     // Missione giornaliera "CAMMINA 300 PASSI": conteggio in dailyQuestsDone
     // ("steps300:N"), niente save per passo (salvano warp/battaglie/completamento).
@@ -3327,7 +3344,7 @@ export class WorldScene implements Scene {
 
     if (this.moving) {
       // Monopattino e auto sono più veloci della semplice corsa (B): si sente.
-      const fast = this.map.outdoor ? this.state.vehicle : null;
+      const fast = this.map.outdoor && (!ridesOnFuel(this.state.vehicle) || this.state.fuel > 0) ? this.state.vehicle : null;
       const factor =
         fast === "auto"
           ? AUTO_FACTOR
@@ -3414,7 +3431,7 @@ export class WorldScene implements Scene {
     }
     // Con MONOPATTINO o AUTO si va sempre veloci all'aperto; B resta la corsa.
     const onVehicle =
-      (this.state.vehicle === "monopattino" || this.state.vehicle === "auto") && this.map.outdoor;
+      (this.state.vehicle === "monopattino" || this.state.vehicle === "auto") && this.map.outdoor && this.state.fuel > 0;
     this.running = this.runToggled || this.input.isHeld("b") || onVehicle;
     this.fromX = pos.x;
     this.fromY = pos.y;

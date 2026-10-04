@@ -18,6 +18,7 @@ export interface NpcDef {
   box?: boolean; // COMPUTER DI PARTITO: apre il box (CIRCOLO DI PARTITO)
   mafia?: boolean;
   transport?: boolean;
+  pump?: boolean; // BENZINAIO: vende carburante a prezzo del giorno
   gift?: { itemId: string; qty: number; flag: string; lines: string[] };
   vehicleGift?: {
     vehicle: "monopattino" | "ruspa" | "auto" | "traghetto";

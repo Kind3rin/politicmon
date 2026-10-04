@@ -8,6 +8,7 @@ export type NpcInteractionRoute =
   | { kind: "trainer"; availability: Exclude<RematchAvailability, "never"> }
   | { kind: "guide" }
   | { kind: "transport" }
+  | { kind: "pump" }
   | { kind: "daily" }
   | { kind: "tournament" }
   | { kind: "openScene"; scene: WorldSceneId }
@@ -26,6 +27,7 @@ export function routeNpcInteraction(state: GameState, npc: NpcDef): NpcInteracti
   }
   if (npc.guide) return { kind: "guide" };
   if (npc.transport) return { kind: "transport" };
+  if (npc.pump) return { kind: "pump" };
   if (npc.daily) return { kind: "daily" };
   if (npc.coppa) return { kind: "tournament" };
   if (npc.shop) return { kind: "openScene", scene: "shop" };

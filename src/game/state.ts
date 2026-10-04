@@ -38,6 +38,7 @@ export interface GameState {
   stepsTotal: number; // contatore passi PERSISTENTE: orologio dei cooldown di RIVINCITA
   trainerRematch: Record<string, number>; // trainerId -> stepsTotal all'ultima vittoria (cooldown rematch)
   lastDailyDate: string; // data LOCALE YYYY-MM-DD dell'ultima SFIDA DEL GIORNO vinta ("" = mai)
+  fuel: number; // litri nel serbatoio di monopattino e auto (0-40)
   repellentSteps: number; // passi rimanenti di repellente attivo (SPRAY ANTI-COMIZIO)
   dailyStreak: number; // giorni consecutivi di SFIDA DEL GIORNO vinte
   duelWins: number; // duelli PvP vinti (scritti a duello CHIUSO, mai durante)
@@ -208,6 +209,7 @@ export function newGameState(): GameState {
     stepsTotal: 0,
     trainerRematch: {},
     lastDailyDate: "",
+    fuel: 18,
     repellentSteps: 0,
     dailyStreak: 0,
     duelWins: 0,
@@ -417,6 +419,7 @@ export function parseGameState(
         ? parsed.trainerRematch
         : {};
     parsed.lastDailyDate = typeof parsed.lastDailyDate === "string" ? parsed.lastDailyDate : "";
+    parsed.fuel = typeof parsed.fuel === "number" && Number.isFinite(parsed.fuel) ? Math.max(0, Math.min(40, Math.floor(parsed.fuel))) : 18;
     parsed.repellentSteps =
       typeof parsed.repellentSteps === "number" && !Number.isNaN(parsed.repellentSteps)
         ? Math.max(0, parsed.repellentSteps)

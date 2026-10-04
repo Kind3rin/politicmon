@@ -59,7 +59,7 @@ export interface UiHero {
 export interface UiPanel {
   directInput?:boolean;
   conversation?: {speaker:string;portrait?:string};
-  pause?: {money:number;polls:number;grid:boolean};
+  pause?: {money:number;polls:number;grid:boolean;fuel?:number};
   timing?:UiTiming;
   arena?: UiArena;
   title: string;
@@ -95,6 +95,7 @@ export interface UiPanel {
 }
 
 /** A card-like action condensed to one row: icon, name, first sentence, the one value that matters. */
+const STAMPED = /^(ko|indagat|scandal|gaff|raggiunt|sbloccat|completat)/i;
 export function deriveRow(action: TouchAction): UiRow {
   const facts = action.facts ?? [];
   const fact = (pattern: RegExp) => facts.find(entry => pattern.test(entry.label));
@@ -108,8 +109,8 @@ export function deriveRow(action: TouchAction): UiRow {
     types: types?.value.split(" · ").filter(type => type in TYPE_COLORS),
     bar: numbers && numbers.length >= 2 ? { now: numbers[0], max: numbers[1], text: `${numbers[0]}/${numbers[1]}` } : undefined,
     right: price?.value ?? (number ? `n. ${number.value}` : kind === "item" ? spare?.value : undefined),
-    meta: first || undefined,
-    stamp: state && !/forma|ok/i.test(state.value) ? state.value : undefined
+    meta: first || (state && !/^(forma|ok|disponibile)$/i.test(state.value) && !STAMPED.test(state.value) ? state.value : undefined),
+    stamp: state && STAMPED.test(state.value) ? state.value : undefined
   };
 }
 
@@ -447,7 +448,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     const header=element('header','ui-pause-header');header.append(element('h1','ui-pause-title',panel.title));
     const close=element('button','ui-pause-close','×');close.type='button';close.dataset.uiIndex=String(panel.actions.length);close.setAttribute('aria-label',panel.pause.grid?'Torna al gioco':'Indietro');close.onclick=()=>current?.back?.run();header.append(close);
     const strip=element('div','ui-pause-stats');
-    for(const [icon,label,value] of [['€','Fondi',panel.pause.money.toLocaleString('it-IT')],['↗','Sondaggi',`${panel.pause.polls}%`]]){
+    for(const [icon,label,value] of [['€','Fondi',panel.pause.money.toLocaleString('it-IT')],...(panel.pause.fuel!==undefined?[['⛽','Carburante',`${panel.pause.fuel} L`]]:[]),['↗','Sondaggi',`${panel.pause.polls}%`]]){
       const stat=element('span','');stat.setAttribute('aria-label',`${label}: ${value}`);const mark=element('b','',icon);mark.setAttribute('aria-hidden','true');stat.append(mark,element('span','',value));strip.append(stat);
     }
     const content=element('div','ui-pause-content');content.classList.toggle('ui-pause-grid',panel.pause.grid);

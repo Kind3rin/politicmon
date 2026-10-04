@@ -173,6 +173,9 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Tre inaugurazioni. La passerella è ancora un allegato.", "L'isola ha due SCHEDE BLINDATE. Il nastro non ti ci porta."]
       },
       {
+        id: "benzinaio-r1", pal: "barista", x: 18, y: 25, facing: "left", pump: true, nameplate: "BENZINAIO", lines: ["Il prezzo cambia ogni giorno. Il cartello, ogni tanto."]
+      },
+      {
         id: "pescatore-r1", pal: "granny", x: 21, y: 24, facing: "left", nameplate: "PESCATORE",
         lines: ["Due anni di cantiere per attraversare tre metri d'acqua.", "Pesco in attesa dei fondi europei. Abboccano solo le promesse."]
       }
@@ -651,7 +654,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Abbiamo pubblicato gli incontri. Le cene restano conviviali."]
       },
       {
-        id: "benzinaio-r3", pal: "barista", x: 9, y: 16, facing: "right",
+        id: "benzinaio-r3", pal: "barista", x: 9, y: 16, facing: "right", pump: true, nameplate: "BENZINAIO",
         lines: ["Alla pompa è arrivato il cartello nuovo. Lo sconto no.", "Il pendolare ha un turno alle sei. Il comunicato esce alle nove."]
       },
       {

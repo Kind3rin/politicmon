@@ -1,18 +1,20 @@
-## Fase 0 — riaperta dopo prova POCO — 4 ottobre 2026
-BOZZE PRONTE: Tribuna elettorale; build precedente respinta, nessuna scena migrata.
-artifacts/m2/mock-esplorazione-{portrait,landscape}.png
-artifacts/m2/mock-esplorazione-orizzontale-{portrait,landscape}.png
-artifacts/m2/mock-lotta-{portrait,landscape}.png
-artifacts/m2/mock-squadra-{portrait,landscape}.png
-artifacts/m2/mock-compagno-{portrait,landscape}.png
-artifacts/m2/mock-borsa-{portrait,landscape}.png
-artifacts/m2/mock-mappa-{portrait,landscape}.png
-artifacts/m2/mock-impara-{portrait,landscape}.png
-artifacts/m2/mock-menu-{portrait,landscape}.png
-artifacts/m2/mock-dialogo-{portrait,landscape}.png
-Galleria: design/ui-mock/index.html; dieci confronti con riferimenti e autocritica.
-Verifica: check-ui-layout.mjs --mock, 40 layout verdi; non certifica la UI runtime.
-Gate: attesa UI APPROVATA in M2-NOTE-LUCA.md. Nessun credito speso nelle bozze.
+CONTROLLO UMANO RICHIESTO — esplorazione e lotta: design/ui-mock/migration-review.html
+
+## Fase 0 — Tribuna: prime due scene migrate — 4 ottobre 2026
+BOZZE PRONTE e UI APPROVATA: consenso esplicito registrato in M2-NOTE-LUCA.md.
+Bozze: artifacts/m2/mock-{esplorazione,esplorazione-orizzontale,lotta,squadra,compagno}-{portrait,landscape}.png.
+Bozze: artifacts/m2/mock-{borsa,mappa,impara,menu,dialogo}-{portrait,landscape}.png; 40 layout già verificati.
+Confronto bozza/runtime e prova senza salvataggi: design/ui-mock/migration-review.html.
+Esplorazione: scena intera, tre accessi rapidi, leva flottante, azione contestuale, obiettivo ripiegabile.
+Luogo/avvisi temporanei, segnale di salvataggio, etichette DOM; rimossa la vecchia riserva HUD dalla camera.
+Lotta: sprite ritagliati sui pixel visibili, barre, quattro mosse, dettagli su pressione lunga, azioni su una fila.
+Intenzione consultabile; Polemica a pallini, finale nella cronaca; menù secondario per Dossier/Fuga.
+Prove: artifacts/m2/0-{esplorazione,lotta,lotta-finale,lotta-esaurita}-{360x740,412x915,844x390,360x640}.png.
+Check UI: 16 layout runtime; verifica anche pressione lunga senza consumo, leva e ripiegamento obiettivo.
+Input reali: tastiera, foglietti, turno con PP 20→19 e nemico 86→43 PV; nessuna scrittura/rete nel banco.
+Build e 414 test verdi. Perf dopo ottimizzazione canvas: circa 60 fps medi; p95 18,4–18,5 ms, criterio M2 ancora rosso.
+Restano controllo POCO, prestazioni p95 e migrazione dialogo → menù → squadra → borsa → impara → mappa → resto.
+Crediti: nessun consumo aggiuntivo. Commit: 0fc4d5e.
 
 ## Fase 1 — terreno — in corso, 4 ottobre 2026
 Fondale in cache; materiali/vicini risolti una volta per ricostruzione, misurata in 8,5–13,4 ms con CPU ×4.
@@ -26,6 +28,6 @@ Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png, 1-lamp
 Nuove prove: 1-mediopoli-asfalto.png, 1-laboratorio-pavimento.png, 1-grotta-materiali.png.
 Input reali: 38 passi, Percorso 1 ↔ Mediopoli e arrivo a Borgo; cache completa. Prove 1-percorso-*.png.
 Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalto/pavimenti.
-414 test/build verdi; ultima prova senza stalli >100 ms, ma perf M2 rosso: p95 18,5–18,6 ms, idle 18,5 ms.
+Prima della migrazione UI: 414 test/build verdi, nessuno stallo >100 ms; perf M2 rosso: p95 18,5–18,6 ms, idle 18,5 ms.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
-Corretto il falso muro di alberi oltre l’uscita: 1-uscita-sud-aperta.png. Restano giro slice/ascolto telefono e 60 fps; UI non approvata.
+Corretto il falso muro di alberi oltre l’uscita: 1-uscita-sud-aperta.png. Restano giro slice/ascolto telefono e 60 fps; UI approvata, migrazione avviata.

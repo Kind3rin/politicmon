@@ -2,7 +2,6 @@ import { earnedEndingSouvenirs, ENDING_SOUVENIRS } from "../game/atto3Ending";
 import { MONUMENT_TITLE } from "./MonumentScene";
 import { FieldGuideScene } from "./FieldGuideScene";
 import { welcomeGuide } from "../game/onboarding";
-import { currentQuest } from "../data/quests";
 import type { TouchAction } from "../engine/touchActions";
 import type { UiPanel } from "../ui/kit";
 import { AudioScene } from "./AudioScene";
@@ -44,7 +43,8 @@ interface SubMenu {
 }
 
 export class PauseScene implements Scene {
-  readonly transparent = false;
+  readonly transparent = true;
+  readonly expandedViewport = true;
   private menu: Menu;
   private more = false;
   private primaryIndex = 0;
@@ -64,11 +64,11 @@ export class PauseScene implements Scene {
   }
 
   get uiPanel(): UiPanel | undefined {
-    if (this.msg.isOpen) return { title: "La tua campagna", blocks: [{ title: "Avviso", body: this.msg.pageText }], actions: [{ label: "Continua", run: () => { if (this.stack.top === this && this.msg.isOpen) { this.input.reset(); this.msg.advancePage(); } } }], primary: 0, back:{label:"Indietro",run:()=>{if(this.stack.top!==this)return;this.input.reset();this.msg.close();audio.cancel();}} };
+    if (this.msg.isOpen) return { pause:{money:this.state.money,polls:this.state.sondaggi,grid:false}, title: "La tua campagna", blocks: [{ title: "Avviso", body: this.msg.pageText }], actions: [{ label: "Continua", run: () => { if (this.stack.top === this && this.msg.isOpen) { this.input.reset(); this.msg.advancePage(); } } }], primary: 0, back:{label:"Indietro",run:()=>{if(this.stack.top!==this)return;this.input.reset();this.msg.close();audio.cancel();}} };
     if (this.showCard) {
       const earned = earnedEndingSouvenirs(this.state);
       const souvenir = earned.length ? ENDING_SOUVENIRS[earned[this.souvenirIndex % earned.length]] : undefined;
-      return { title: this.cardAwards ? "Ricordi della campagna" : "Tessera candidato", blocks: [{ title: loadNick() || "Onorevole", facts: [{ label: "Sondaggi", value: `${this.state.sondaggi}%` }, { label: "Medaglie", value: `${this.state.badges.length}/3` }] }, { title: souvenir?.name ?? "I ricordi si conquistano giocando", body: this.state.monumentLevel === 3 ? MONUMENT_TITLE : `Monumento: livello ${this.state.monumentLevel} di 3.` }], actions: [], back: { label: "Indietro", run: () => { if (this.stack.top === this) { this.input.reset(); this.showCard = false; } } } };
+      return { pause:{money:this.state.money,polls:this.state.sondaggi,grid:false}, title: this.cardAwards ? "Ricordi della campagna" : "Tessera candidato", blocks: [{ title: loadNick() || "Onorevole", facts: [{ label: "Sondaggi", value: `${this.state.sondaggi}%` }, { label: "Medaglie", value: `${this.state.badges.length}/3` }] }, { title: souvenir?.name ?? "I ricordi si conquistano giocando", body: this.state.monumentLevel === 3 ? MONUMENT_TITLE : `Monumento: livello ${this.state.monumentLevel} di 3.` }], actions: [], back: { label: "Indietro", run: () => { if (this.stack.top === this) { this.input.reset(); this.showCard = false; } } } };
     }
     const sub = this.sub, more = this.more;
     const labels: Record<string, string> = { SQUADRA: "Squadra", BORSA: "Borsa", MISSIONI: "Missioni", MAPPA: "Mappa", POLITICDEX: "Politicdex", ALTRO: "Altro", SALVA: "Salva partita", CURA: "Cura squadra", MORALE: "Morale", OPZIONI: "Opzioni", TESSERA: "Tessera", ONLINE: "Gioco online", EXTRA: "Guide e archivi", GOVERNO: "Governo ombra", COALIZIONE: "Coalizione", CHIUDI: "Torna al gioco" };
@@ -102,11 +102,7 @@ export class PauseScene implements Scene {
         }
       }
     }
-    const quest = currentQuest(this.state);
-    const landscape = window.matchMedia("(orientation: landscape) and (max-height: 540px)").matches;
-    return { title: sub ? (sub.kind === "opzioni" ? "Opzioni" : sub.kind === "online" ? "Gioco online" : "Guide e archivi") : this.more ? "Altro" : "Menu",
-      subtitle: primary && landscape ? quest?.step : undefined,
-      blocks: primary && !landscape ? [{ title: "La tua campagna", body: quest?.step ?? "La campagna continua.", facts: [{ label: "Fondi", value: `${this.state.money} €` }, { label: "Sondaggi", value: `${this.state.sondaggi}%` }] }] : undefined,
+    return { pause:{money:this.state.money,polls:this.state.sondaggi,grid:primary}, title: sub ? (sub.kind === "opzioni" ? "Opzioni" : sub.kind === "online" ? "Gioco online" : "Guide e archivi") : this.more ? "Altro" : "Menu",
       actions, columns: primary ? 2 : 1, selected: primary ? this.primaryIndex : !sub ? this.moreIndex : menu.index,
       back: action("Indietro", () => { if (this.sub) this.sub = null; else if (this.more) this.more = false; else {
         if(this.state.flags["controls-intro"]&&!this.state.flags["controls-returned"]){this.state.flags["controls-returned"]=true;saveGame(this.state);}
@@ -429,5 +425,5 @@ export class PauseScene implements Scene {
     saveGame(this.state);
   }
 
-  draw(screen: Screen): void { screen.clear("#101c30"); }
+  draw(_screen: Screen): void {}
 }

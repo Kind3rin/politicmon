@@ -1,6 +1,6 @@
 CONTROLLO UMANO RICHIESTO — esplorazione e lotta: design/ui-mock/migration-review.html
 
-## Fase 0 — Tribuna: esplorazione, lotta e dialoghi migrati — 4 ottobre 2026
+## Fase 0 — Tribuna: esplorazione, lotta, dialoghi e pausa migrati — 4 ottobre 2026
 BOZZE PRONTE e UI APPROVATA: consenso esplicito registrato in M2-NOTE-LUCA.md.
 Bozze: artifacts/m2/mock-{esplorazione,esplorazione-orizzontale,lotta,squadra,compagno}-{portrait,landscape}.png.
 Bozze: artifacts/m2/mock-{borsa,mappa,impara,menu,dialogo}-{portrait,landscape}.png; 40 layout già verificati.
@@ -10,11 +10,11 @@ Luogo/avvisi temporanei, segnale di salvataggio, etichette DOM; rimossa la vecch
 Lotta: sprite ritagliati sui pixel visibili, barre, quattro mosse, dettagli su pressione lunga, azioni su una fila.
 Dialoghi: riquadro ≤28%, targhetta e ritratto; scelte sopra la scena, testo progressivo e annuncio accessibile per pagina.
 Prove: artifacts/m2/0-{esplorazione,lotta,lotta-finale,lotta-esaurita}-{360x740,412x915,844x390,360x640}.png.
-Check UI: 24 layout runtime verdi; dialoghi/scelte: 0-dialogo{,-scelte}-{360x740,412x915,844x390,360x640}.png.
-Input reali: tastiera, foglietti, turno con PP 20→19 e nemico 86→43 PV; nessuna scrittura/rete nel banco.
+Check UI: 28 layout runtime verdi; nuove prove 0-{dialogo,dialogo-scelte,menu,menu-altro}-<dimensioni>.png.
+Pausa: foglio sulla mappa, griglia 3×2, Altro compatto; provati frecce, scelta, Esc e chiusura fuori. Banco senza scritture/rete.
 Build e 414 test verdi; scelta e avanzamento provati nel browser. Perf: 60 fps medi, p95 17,5–17,6 ms, criterio M2 rosso.
-Restano controllo POCO, prestazioni p95 e migrazione menù → squadra → borsa → impara → mappa → resto.
-Crediti: nessun consumo aggiuntivo. Commit iniziale UI: 0fc4d5e; terreno/cache: 483753d.
+Restano controllo POCO, prestazioni p95 e migrazione squadra → borsa → impara → mappa → resto.
+Crediti: nessun consumo aggiuntivo. Commit iniziale UI: 0fc4d5e; dialoghi: 60ce687; terreno/cache: 483753d.
 
 ## Fase 1 — terreno — in corso, 4 ottobre 2026
 Fondale in cache; materiali/vicini risolti una volta per ricostruzione, misurata in 8,5–13,4 ms con CPU ×4.

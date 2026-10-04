@@ -1,0 +1,22 @@
+body.ui-pause-open #app{padding:0}
+body.ui-pause-open #console-shell{display:block;width:100%;height:100%;max-width:none;max-height:none}
+body.ui-pause-open #screen-stage{position:absolute;inset:0;display:block;padding:0;border:0;border-radius:0;max-height:none;aspect-ratio:auto}
+body.ui-pause-open #screen-frame{display:block!important;position:absolute;inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;border:0;border-radius:0}
+body.ui-pause-open :is(#console-top,#touch-ui,#shell-hint,.ui-world-hud){display:none!important}
+.ui-panel.ui-pause{display:flex;align-items:end;justify-content:center;padding:0;inset:0;border:0;border-radius:0;background:#0E122099;color:#14161F}
+.ui-panel.ui-pause:focus{outline:none}
+.ui-pause-sheet{width:100%;max-width:640px;max-height:90dvh;display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:20px;padding:24px 20px max(28px,env(safe-area-inset-bottom));background:#F4EEDC;border-top:2px solid #14161F;box-shadow:0 -4px #14161F;font:400 16px/1.4 PoliticmonBody,sans-serif}
+.ui-pause-header{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.ui-pause-title{margin:0;font:700 32px/1.1 Tribuna,sans-serif}
+.ui-pause-close{flex:0 0 44px;width:44px;height:44px;background:transparent;color:#14161F;border:0;padding:0;font:700 32px/1 Tribuna,sans-serif}
+.ui-pause-stats{display:flex;justify-content:space-between;gap:16px;border-block:2px solid #14161F;padding:12px 0;font-weight:700}
+.ui-pause-stats>span{display:flex;gap:8px;align-items:center}.ui-pause-stats b{font:700 20px/1 Tribuna,sans-serif}
+.ui-pause-content{min-height:0;overflow:auto;overscroll-behavior:contain;display:grid;grid-template-columns:1fr;align-content:start;gap:8px;padding:0 4px 4px 0}
+.ui-pause-content.ui-pause-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 8px;overflow:visible}
+.ui-pause-entry{min-width:0;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;text-align:left;border:0;border-bottom:1px solid #14161F55;background:transparent;color:#14161F;font:400 16px/1.4 PoliticmonBody,sans-serif;touch-action:manipulation}
+.ui-pause-grid .ui-pause-entry{min-height:100px;flex-direction:column;justify-content:center;gap:12px;padding:12px 4px;background:#E7DFC9;border:2px solid #14161F;border-radius:4px;box-shadow:4px 4px #14161F;text-align:center}
+.ui-pause-grid strong{font:700 20px/1 Tribuna,sans-serif}.ui-pause-entry img{width:36px;height:36px;object-fit:contain;image-rendering:pixelated}
+.ui-pause-entry[aria-current=true]{background:#FFD23F}.ui-pause-entry:disabled{opacity:.55}.ui-pause-entry:focus-visible,.ui-pause-close:focus-visible{outline:3px solid #174A7E;outline-offset:-3px}
+.ui-pause-value{display:flex;flex-wrap:wrap;justify-content:end;gap:4px 8px;max-width:58%;text-align:right;color:#174A7E;font-weight:700}.ui-pause-fact{white-space:nowrap}.ui-pause-group,.ui-pause-summary h2{font:700 20px/1.2 Tribuna,sans-serif;margin:12px 0 0}.ui-pause-summary p{margin:8px 0;line-height:1.4;max-width:45ch}
+@media(orientation:landscape) and (max-height:540px){.ui-pause-sheet{padding:12px 20px max(16px,env(safe-area-inset-bottom));gap:12px;max-height:96dvh}.ui-pause-stats{padding:6px 0}.ui-pause-grid .ui-pause-entry{min-height:76px;flex-direction:row;gap:8px}.ui-pause-entry img{width:28px;height:28px}.ui-pause-content.ui-pause-grid{gap:8px 12px}}
+@media(orientation:portrait) and (max-height:700px){.ui-pause-grid .ui-pause-entry{min-height:88px}}

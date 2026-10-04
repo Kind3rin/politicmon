@@ -273,7 +273,7 @@ function frame(now: number): void {
     renderUiWorld(nativePanel ? undefined : stack.top?.uiWorld, !nativePanel && Boolean(stack.top?.uiWorldPending));
     renderTouchActions(nativePanel ? undefined : stack.top?.touchActions, nativePanel ? undefined : stack.top?.touchLayout);
     screen.configureViewport(Boolean(stack.top?.expandedViewport));
-    if (!nativePanel || panel?.arena || panel?.conversation) stack.draw(screen);
+    if (!nativePanel || panel?.arena || panel?.conversation || panel?.pause) stack.draw(screen);
     endUiFrame();
     input.endFrame();
     if (firstReadyFrame) {

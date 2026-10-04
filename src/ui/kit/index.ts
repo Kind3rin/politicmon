@@ -46,6 +46,7 @@ export interface UiTiming {
 export interface UiPanel {
   directInput?:boolean;
   conversation?: {speaker:string;portrait?:string};
+  pause?: {money:number;polls:number;grid:boolean};
   timing?:UiTiming;
   arena?: UiArena;
   title: string;
@@ -262,17 +263,19 @@ export function updateUiInput(panel:UiPanel|undefined,input:Input):void {
   if(key!==navigationKey){navigationKey=key;navigationIndex=(panel.selected??panel.primary??0)+tabCount;if(!entries[navigationIndex]||entries[navigationIndex].disabled){const activeTab=panel.selectedTab;navigationIndex=activeTab!==undefined&&activeTab<tabCount&&!entries[activeTab]?.disabled?activeTab:entries.findIndex(action=>!action.disabled);}}
   const reading=Boolean(panel.blocks?.length)&&panel.actions.every((_,index)=>index===panel.primary);
   if(reading&&(input.wasPressed('down')||input.wasPressed('up'))){
-    const content=root?.querySelector<HTMLElement>('.ui-content');
+    const content=root?.querySelector<HTMLElement>('.ui-content,.ui-pause-content');
     if(content)content.scrollBy({top:(input.wasPressed('down')?1:-1)*Math.max(80,Math.floor(content.clientHeight*.65)),behavior:'instant'});
     input.reset();return;
   }
   const focused=document.activeElement instanceof HTMLElement&&root?.contains(document.activeElement)?document.activeElement.closest<HTMLElement>('[data-ui-index]'):null;
   const focusedIndex=focused?Number(focused.dataset.uiIndex):-1;
   const commandIndex=Number.isInteger(focusedIndex)&&entries[focusedIndex]?focusedIndex:navigationIndex;
-  const delta=input.wasPressed('down')||input.wasPressed('right')?1:input.wasPressed('up')||input.wasPressed('left')?-1:0;
+  const stride=panel.pause?.grid?3:1;
+  const delta=input.wasPressed('down')?stride:input.wasPressed('up')?-stride:input.wasPressed('right')?1:input.wasPressed('left')?-1:0;
   if(delta&&entries.length){
-    navigationIndex=commandIndex;
-    for(let i=0;i<entries.length;i++){navigationIndex=(navigationIndex+delta+entries.length)%entries.length;if(!entries[navigationIndex].disabled)break;}
+    const count=panel.pause?.grid?panel.actions.length:entries.length;
+    navigationIndex=(commandIndex+delta+count)%count;
+    for(let i=0;i<count&&entries[navigationIndex].disabled;i++)navigationIndex=(navigationIndex+Math.sign(delta)+count)%count;
     audio.cursor();scrollSelection=true;input.reset();
   }else if(input.wasPressed('b')||input.wasPressed('start')){
     input.reset();if(panel.back&&!panel.back.disabled){audio.cancel();panel.back.run();}
@@ -285,9 +288,11 @@ export function updateUiInput(panel:UiPanel|undefined,input:Input):void {
 
 /** Reconcile visible content only; callbacks refresh without rebuilding each frame. */
 export function renderUiPanel(panel?: UiPanel): boolean {
+  const enteringPause=Boolean(panel?.pause)&&!current?.pause;
   current = panel;
   document.body.classList.toggle("ui-arena-open",Boolean(panel?.arena));
   document.body.classList.toggle("ui-conversation-open",Boolean(panel?.conversation));
+  document.body.classList.toggle("ui-pause-open",Boolean(panel?.pause));
   if(!panel?.arena)leaveArena(root);
   document.body.classList.toggle("ui-panel-open", Boolean(panel));
   if (!panel) {
@@ -304,6 +309,8 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   }
   root.hidden = false;
   root.setAttribute("aria-label",panel.title);
+  root.setAttribute("role",panel.pause?"dialog":"region");
+  if(panel.pause)root.setAttribute("aria-modal","true");else root.removeAttribute("aria-modal");
   if(panel.arena){signature="";renderArena(root,panel,navigationIndex<0?(panel.selected??0):navigationIndex);return true;}
   const tabCount=panel.tabs?.length??0;
   const displayedIndex=navigationIndex<0?(panel.selected??0)+tabCount:navigationIndex;
@@ -311,15 +318,44 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   if (next === signature) {if(panel.timing)updateTiming(root,panel.timing);return true;}
   signature = next;
   root.classList.toggle('ui-conversation',Boolean(panel.conversation));
+  root.classList.toggle('ui-pause',Boolean(panel.pause));
+  root.onclick=panel.pause?event=>{if(event.target===root)current?.back?.run();}:null;
   if(panel.conversation){
     const choices=element('div','ui-dialog-choices');
-    panel.actions.forEach((action,i)=>{const button=kit.button(action,()=>current?.actions[i]?.run());button.setAttribute('aria-current',String(i===displayedIndex));choices.append(button);});
+    panel.actions.forEach((action,i)=>{const button=kit.button(action,()=>current?.actions[i]?.run());button.dataset.uiIndex=String(i);button.setAttribute('aria-current',String(i===displayedIndex));choices.append(button);});
     const box=element('section','ui-dialog');
     box.append(element('h2','ui-dialog-speaker',panel.conversation.speaker));
     if(panel.conversation.portrait){const image=element('img','ui-dialog-portrait');image.src=panel.conversation.portrait;image.alt='';box.append(image);box.classList.add('has-portrait');}
     box.append(element('p','ui-dialog-text',panel.subtitle??panel.title));
-    if(panel.back){const close=element('button','ui-dialog-next','×');close.type='button';close.setAttribute('aria-label','Chiudi dialogo');close.onclick=()=>current?.back?.run();box.append(close);}
+    if(panel.back){const close=element('button','ui-dialog-next','×');close.type='button';close.dataset.uiIndex=String(panel.actions.length);close.setAttribute('aria-label','Chiudi dialogo');close.onclick=()=>current?.back?.run();box.append(close);}
     root.replaceChildren(choices,box);return true;
+  }
+  if(panel.pause){
+    const oldScroll=root.querySelector('.ui-pause-content')?.scrollTop??0;
+    const sheet=element('section','ui-pause-sheet');
+    const header=element('header','ui-pause-header');header.append(element('h1','ui-pause-title',panel.title));
+    const close=element('button','ui-pause-close','×');close.type='button';close.dataset.uiIndex=String(panel.actions.length);close.setAttribute('aria-label',panel.pause.grid?'Torna al gioco':'Indietro');close.onclick=()=>current?.back?.run();header.append(close);
+    const strip=element('div','ui-pause-stats');
+    for(const [icon,label,value] of [['€','Fondi',panel.pause.money.toLocaleString('it-IT')],['↗','Sondaggi',`${panel.pause.polls}%`]]){
+      const stat=element('span','');stat.setAttribute('aria-label',`${label}: ${value}`);const mark=element('b','',icon);mark.setAttribute('aria-hidden','true');stat.append(mark,element('span','',value));strip.append(stat);
+    }
+    const content=element('div','ui-pause-content');content.classList.toggle('ui-pause-grid',panel.pause.grid);
+    if(!panel.pause.grid)for(const block of panel.blocks??[]){const section=element('section','ui-pause-summary');section.append(element('h2','',block.title));if(block.body)section.append(element('p','',block.body));if(block.facts)section.append(element('p','',block.facts.map(f=>`${f.label}: ${f.value}`).join(' · ')));content.append(section);}
+    let group='';
+    panel.actions.forEach((action,i)=>{
+      if(!panel.pause!.grid&&action.group&&action.group!==group){group=action.group;content.append(element('h2','ui-pause-group',group));}
+      const button=element('button','ui-pause-entry');button.type='button';button.dataset.uiIndex=String(i);button.disabled=Boolean(action.disabled);
+      button.setAttribute('aria-current',String(i===displayedIndex));button.setAttribute('aria-label',[action.label,action.hint,...(action.facts?.map(f=>`${f.label}: ${f.value}`)??[])].filter(Boolean).join('. '));
+      if(action.icon){const image=element('img','');image.src=action.icon;image.alt='';button.append(image);}
+      button.append(element('strong','',action.label));
+      if(!panel.pause!.grid&&action.facts?.length){const value=element('span','ui-pause-value');for(const fact of action.facts)value.append(element('span','ui-pause-fact',action.facts.length>1?`${fact.label} ${fact.value}`:fact.value));button.append(value);}
+      button.onclick=()=>{if(!current?.actions[i]?.disabled){current?.actions[i]?.run();root?.focus({preventScroll:true});}};
+      content.append(button);
+    });
+    sheet.append(header,strip,content);root.replaceChildren(sheet);content.scrollTop=oldScroll;
+    if(enteringPause){root.focus({preventScroll:true});if(!document.body.classList.contains('ui-reduce-effects')&&!matchMedia('(prefers-reduced-motion: reduce)').matches)sheet.animate([{transform:'translateY(24px)',opacity:0},{transform:'translateY(0)',opacity:1}],{duration:160,easing:'ease-out'});}
+    if(scrollSelection){content.querySelector('[aria-current=true]')?.scrollIntoView({block:'nearest'});scrollSelection=false;}
+    return true;
   }
   const scrollKey=JSON.stringify([panel.title,panel.selectedTab,panel.actions.map(action=>action.label),panel.field?.label]);
   const retainedScroll=scrollIdentity===scrollKey?root.querySelector<HTMLElement>('.ui-content')?.scrollTop:undefined;

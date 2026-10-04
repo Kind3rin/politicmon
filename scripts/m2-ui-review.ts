@@ -12,6 +12,7 @@ import {coreTerrainEntries} from '../src/art/tiles';
 import {preloadSprites,waitForSprites} from '../src/engine/assets';
 import {audio} from '../src/engine/audio';
 import {mp} from '../src/net/mp';
+import {PauseScene} from '../src/scenes/PauseScene';
 import {MessageBox} from '../src/ui/widgets';
 import type {UiPanel} from '../src/ui/kit';
 // Isolated realm: production constructors may autosave, but no fixture may write.
@@ -36,7 +37,7 @@ if(requested.startsWith('lotta')){
 const conversation=new MessageBox();
 let choosing=false;
 const speaker='Mara · cronista',portrait='/sprites/chars/npc_journalist_south.png';
-const startConversation=()=>{if(requested==='dialogo-scelte')choosing=true;if(requested==='dialogo')conversation.show(['Una promessa in tre parole. La quarta la paghiamo noi.','Il programma è lungo. La memoria degli elettori, dice il consulente, no.'],undefined,false,speaker,portrait);};
+const startConversation=()=>{if(requested==='menu')stack.push(new PauseScene(stack,input,state));if(requested==='dialogo-scelte')choosing=true;if(requested==='dialogo')conversation.show(['Una promessa in tre parole. La quarta la paghiamo noi.','Il programma è lungo. La memoria degli elettori, dice il consulente, no.'],undefined,false,speaker,portrait);};
 setTimeout(startConversation,600);
 const choicePanel=():UiPanel=>({title:'Scegli',subtitle:'Una promessa in tre parole. La quarta la paghiamo noi.',conversation:{speaker,portrait},actions:[{label:'Fammi una domanda.',run:()=>{choosing=false;conversation.show(['Chi paga le promesse quando scade la garanzia?'],undefined,false,speaker,portrait);}},{label:'Passo oltre.',run:()=>{choosing=false;}}],back:{label:'Indietro',run:()=>{choosing=false;}}});
 let previous=performance.now();
@@ -48,7 +49,7 @@ function frame(){
  renderUiWorld(native||conversation.isOpen?undefined:stack.top?.uiWorld,!native&&Boolean(stack.top?.uiWorldPending));
  renderUiFeedback(native?undefined:stack.top?.uiFeedback);
  screen.configureViewport(Boolean(stack.top?.expandedViewport));
- if(!native||panel?.arena||panel?.conversation)stack.draw(screen);
+ if(!native||panel?.arena||panel?.conversation||panel?.pause)stack.draw(screen);
  conversation.draw(screen);
  if(routeReview)routeStatus.textContent=`${state.pos.mapId} · ${state.pos.x},${state.pos.y} · ${state.stepsTotal} passi`;
  endUiFrame();input.endFrame();requestAnimationFrame(frame);

@@ -4,6 +4,7 @@ import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TIL
 export const BASE_MAPS: Record<string, MapDef> = {
   borgo: {
     id: "borgo",
+    lamps: [{ x: 10, y: 6 }, { x: 19, y: 6 }],
     scatter: [{kind:"flowers",density:.06},{kind:"leaflets",density:.025}],
     weather:"sereno",
     name: "BORGO URNE",
@@ -270,6 +271,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
 
   mediopoli: {
     id: "mediopoli",
+    lamps: [{ x: 11, y: 5 }, { x: 18, y: 5 }],
     groundMaterials: { "=": "asphalt" },
     name: "MEDIOPOLI",
     tiles: MEDIOPOLI_TILES,

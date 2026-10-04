@@ -763,6 +763,7 @@ export class WorldScene implements Scene {
         shadows.push({x:x*TILE+3,y:(y+1)*TILE-2,width:ch==='T'?12:10,height:h});
       }
     }));
+    for(const lamp of this.map.lamps??[])shadows.push({x:lamp.x*TILE+6,y:(lamp.y+1)*TILE-2,width:4,height:30});
     return shadows;
   }
 
@@ -3383,7 +3384,7 @@ export class WorldScene implements Scene {
     },camX,camY);
 
     if(this.map.outdoor)this.terrain.drawWater(screen.ctx,terrainVariantImage('w',waterFrame(this.time,this.state.reduceEffects)),camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects);
-    const windowLights:Array<{x:number;y:number}>=[];
+    const windowLights:Array<{x:number;y:number;lamp?:boolean}>=(this.map.lamps??[]).map(p=>({x:p.x*TILE+6,y:p.y*TILE-12,lamp:true}));
     this.atmosphere.drawSteps(screen.ctx,camX,camY,this.state.reduceEffects);
     const treeTrunks:Array<{baseY:number;draw:()=>void}>=[];
     const canopies:Array<()=>void>=[];
@@ -3512,6 +3513,19 @@ export class WorldScene implements Scene {
     // "personaggio sopra il tetto". Gli edifici di mappa ora passano solo dai PNG
     // PixelLab caricati dal preload: niente vecchie pixmap di recupero in world.
     const tall: Array<{ baseY: number; draw: () => void }> = [...treeTrunks];
+    for(const lamp of this.map.lamps??[]){
+      const x=Math.round(lamp.x*TILE+8-camX),y=Math.round((lamp.y+1)*TILE-camY);
+      if(x < -8 || x > VIEW_W+8 || y < 0 || y > this.viewHeight+34)continue;
+      tall.push({baseY:(lamp.y+1)*TILE,draw:()=>{
+        const ctx=screen.ctx;
+        ctx.fillStyle='#202d32';ctx.fillRect(x-3,y-3,6,3);ctx.fillRect(x-1,y-28,2,27);
+        ctx.fillRect(x-4,y-31,8,2);ctx.fillRect(x-3,y-29,6,7);ctx.fillRect(x-4,y-23,8,2);
+        ctx.fillStyle='#8b997e';ctx.fillRect(x,y-21,1,17);
+        ctx.fillStyle='#bdc5a6';ctx.fillRect(x-2,y-28,4,5);
+        ctx.fillStyle='#202d32';ctx.fillRect(x-1,y-33,2,2);
+      }});
+    }
+
 
     for (let ty = y0 - 4; ty <= y0 + Math.ceil(this.viewHeight / TILE) + 1; ty += 1) {
       for (let tx = x0 - 10; tx <= x0 + Math.ceil(VIEW_W / TILE); tx += 1) {
@@ -3548,14 +3562,11 @@ export class WorldScene implements Scene {
         const doorRow = ty + fp.h - 1;
         const stepY = ty + fp.h;
         const drawThreshold = (): void => {
-          const pathImg = this.tilePng("=");
-          if (!pathImg) {
-            return;
-          }
           for (let xx = tx; xx < tx + fp.w; xx += 1) {
             const fc = this.tileAt(xx, doorRow);
             if ((fc === "d" || fc === "D" || fc === "g") && this.tileAt(xx, stepY) === "=") {
-              drawWorldTilePng(screen, pathImg, xx * TILE - camX, stepY * TILE - camY);
+              const pathImg=this.map.tileOverrides?.['=']?this.tilePng('='):terrainVariantImage('=',terrainHash(this.map.id,xx,stepY)%4,this.map.groundMaterials?.['=']);
+              if(pathImg)drawWorldTilePng(screen, pathImg, xx * TILE - camX, stepY * TILE - camY);
             }
           }
         };

@@ -35,6 +35,7 @@ function applyWeather(){(world as unknown as {map:typeof MAPS[string]}).map={...
 document.querySelector('#weather')!.addEventListener('change',applyWeather);
 document.querySelectorAll<HTMLButtonElement>('[data-map]').forEach(b=>b.onclick=()=>select(b.dataset.map!));
 document.querySelector('#reduce')!.addEventListener('change',()=>state.reduceEffects=(document.querySelector('#reduce') as HTMLInputElement).checked);
+document.querySelector('#lamps')!.addEventListener('click',()=>{select('borgo');state.pos.x=14;state.pos.y=8;});
 document.querySelector('#houses')!.addEventListener('click',()=>{select('borgo');state.pos.x=22;state.pos.y=14;});
 document.querySelector('#trees')!.addEventListener('click',()=>{
  select('route1');const map=MAPS.route1;

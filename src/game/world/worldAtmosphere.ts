@@ -49,7 +49,7 @@ export class WorldAtmosphere {
     }
     ctx.restore();
   }
-  draw(ctx:CanvasRenderingContext2D,map:MapDef,camX:number,camY:number,width:number,height:number,time:number,reduced:boolean,hour:number,lights:readonly {x:number;y:number}[]):void {
+  draw(ctx:CanvasRenderingContext2D,map:MapDef,camX:number,camY:number,width:number,height:number,time:number,reduced:boolean,hour:number,lights:readonly {x:number;y:number;lamp?:boolean}[]):void {
     if(!map.outdoor)return;
     const light=daylightAt(hour);
     ctx.save();
@@ -58,6 +58,12 @@ export class WorldAtmosphere {
     if(light.lamps){
       for(const lamp of lights){
         const x=Math.round(lamp.x-camX),y=Math.round(lamp.y-camY);
+        if(lamp.lamp){
+          // The pool is below the lantern; subtle enough to keep actors legible.
+          ctx.fillStyle='rgba(255,211,113,.08)';ctx.beginPath();
+          ctx.moveTo(x+2,y+4);ctx.lineTo(x+15,y+32);ctx.lineTo(x-11,y+32);ctx.closePath();ctx.fill();
+          ctx.fillStyle='rgba(255,211,113,.12)';ctx.beginPath();ctx.ellipse(x+2,y+32,13,5,0,0,Math.PI*2);ctx.fill();
+        }
         ctx.fillStyle='rgba(255,211,113,.1)';ctx.fillRect(x-4,y-3,12,11);
         ctx.fillStyle='#edc570';ctx.fillRect(x,y,4,4);
       }

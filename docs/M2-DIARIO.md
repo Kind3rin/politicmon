@@ -19,13 +19,13 @@ Fondale esterno/interno in cache; asset tardivi invalidano senza ricostruzioni p
 Cinque materiali × quattro varianti Higgsfield; asfalto a Mediopoli/Capitale, legno negli interni.
 Bordi erba/acqua/sabbia e cordoli stradali con angoli; grotte e ponti conservano i materiali propri.
 Ombre statiche/mobili; tronchi ordinati e chiome trasparenti sopra il giocatore.
-Acqua a quattro frame, vento, particelle, luce oraria, finestre e meteo; reduceEffects verificato.
+Acqua a quattro frame, vento, particelle, luce oraria, finestre/lampioni e meteo; reduceEffects verificato.
 Camera con inseguimento/anticipo, scossa e zoom; passi con polvere, schizzi, impronte e suoni.
 Prima/dopo: 1-{borgo,route1}-{prima,dopo}.png; 1-chioma-dopo.png in artifacts/m2.
-Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png.
+Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png, 1-lampioni-{giorno,notte,riduci}.png.
 Nuove prove: 1-mediopoli-asfalto.png, 1-laboratorio-pavimento.png, 1-grotta-materiali.png.
 Frecce reali: attraversato bordo erba/strada, cache stabile; giro completo e ascolto ancora da fare.
 Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalto/pavimenti.
 414 test, build e perf verdi; intervallo p95 18,5 ms: 60 fps non dimostrati.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
-Restano lampioni, cache arredi, giro completo e 60 fps. UI ferma senza UI APPROVATA.
+Lampioni su quattro pali già solidi; soglie coerenti col terreno. Restano giro completo/audio e 60 fps. UI non approvata.

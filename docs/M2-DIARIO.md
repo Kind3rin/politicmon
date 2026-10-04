@@ -20,12 +20,12 @@ Cinque materiali × quattro varianti Higgsfield; asfalto a Mediopoli/Capitale, l
 Bordi erba/acqua/sabbia e cordoli stradali con angoli; grotte e ponti conservano i materiali propri.
 Ombre statiche/mobili; tronchi ordinati e chiome trasparenti sopra il giocatore.
 Acqua a quattro frame, vento, particelle, luce oraria, finestre/lampioni e meteo; reduceEffects verificato.
-Camera con inseguimento/anticipo, scossa e zoom; passi con polvere, schizzi, impronte e suoni.
+Camera con inseguimento/anticipo, scossa e zoom; passi per materiale, corretta la grotta che suonava come legno.
 Prima/dopo: 1-{borgo,route1}-{prima,dopo}.png; 1-chioma-dopo.png in artifacts/m2.
 Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png, 1-lampioni-{giorno,notte,riduci}.png.
 Nuove prove: 1-mediopoli-asfalto.png, 1-laboratorio-pavimento.png, 1-grotta-materiali.png.
-Frecce reali: attraversato bordo erba/strada, cache stabile; giro completo e ascolto ancora da fare.
+Input reali: 22 passi e Percorso 1 ↔ Mediopoli; cache 1→2→3, completa. Prove 1-percorso-mediopoli-{arrivo,ritorno}.png.
 Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalto/pavimenti.
 414 test, build e perf verdi; intervallo p95 18,5 ms: 60 fps non dimostrati.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
-Lampioni su quattro pali già solidi; soglie coerenti col terreno. Restano giro completo/audio e 60 fps. UI non approvata.
+Lampioni su quattro pali solidi; banco con dialoghi e ascolto sei passi. Restano giro slice/ascolto telefono e 60 fps; UI non approvata.

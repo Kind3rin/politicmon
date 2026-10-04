@@ -1,3 +1,5 @@
+import '../src/ui/kit/kit.css';
+import {beginUiFrame,endUiFrame,renderUiPanel,updateUiInput} from '../src/ui/kit';
 import {Screen} from '../src/engine/screen';
 import {SceneStack} from '../src/engine/scene';
 import {Input} from '../src/engine/input';
@@ -9,6 +11,7 @@ import {preloadSprites,waitForSprites} from '../src/engine/assets';
 import {MAPS} from '../src/data/maps';
 import {audio} from '../src/engine/audio';
 import {mp} from '../src/net/mp';
+import type {FootSurface} from '../src/game/world/worldAtmosphere';
 audio.enabled=false;mp.setEnabled(false);
 // WorldScene auto-saves on construction: isolate writes in this fixture realm.
 Storage.prototype.setItem=()=>{};Storage.prototype.removeItem=()=>{};
@@ -32,6 +35,15 @@ function select(mapId:string){
  document.querySelector('#status')!.textContent=map.name+' · dati di prova, nessun salvataggio modificato';
 }
 function applyWeather(){(world as unknown as {map:typeof MAPS[string]}).map={...MAPS[state.pos.mapId],weather:(document.querySelector('#weather') as HTMLSelectElement).value as 'sereno'|'pioggia'|'nebbia'|'afa'};}
+document.querySelector('#audio')!.addEventListener('change',()=>{
+ audio.enabled=(document.querySelector('#audio') as HTMLInputElement).checked;
+ if(audio.enabled){audio.setVolume('music',0);audio.setVolume('effects',70);audio.unlock();}
+});
+document.querySelector('#audition')!.addEventListener('click',()=>{
+ (document.querySelector('#audio') as HTMLInputElement).checked=true;
+ audio.enabled=true;audio.setVolume('music',0);audio.setVolume('effects',70);audio.unlock();
+ audio.footstep((document.querySelector('#surface') as HTMLSelectElement).value as FootSurface);
+});
 document.querySelector('#weather')!.addEventListener('change',applyWeather);
 document.querySelectorAll<HTMLButtonElement>('[data-map]').forEach(b=>b.onclick=()=>select(b.dataset.map!));
 document.querySelector('#reduce')!.addEventListener('change',()=>state.reduceEffects=(document.querySelector('#reduce') as HTMLInputElement).checked);
@@ -50,14 +62,17 @@ let previous=performance.now();
 function frame(){
  const now=performance.now(),dt=Math.min(.05,(now-previous)/1000);previous=now;
  const playing=(document.querySelector('#play') as HTMLInputElement).checked;
- if(playing){input.pollGamepads();stack.update(dt);input.endFrame();}
+ if(playing){input.pollGamepads();updateUiInput(stack.top?.uiPanel,input);stack.update(dt);input.endFrame();}
  else {
   const visual=world as unknown as {time:number;atmosphere:{update(dt:number,reduced:boolean):void}};
   const frameChoice=(document.querySelector('#water-frame') as HTMLSelectElement).value;
   visual.time=frameChoice==='auto'?visual.time+dt:Number(frameChoice)/4;
   visual.atmosphere.update(dt,state.reduceEffects);
  }
- stack.draw(screen);
+ beginUiFrame();
+ const nativePanel=renderUiPanel(playing?stack.top?.uiPanel:undefined);
+ if(!nativePanel||stack.top?.uiPanel?.arena)stack.draw(screen);
+ endUiFrame();
  const cache=(world as unknown as {terrain?:{stats():{builds:number;complete:boolean;pixels:number}}}).terrain?.stats()??{builds:0,complete:true,pixels:0};
  document.querySelector('#status')!.textContent=MAPS[state.pos.mapId].name+` · Posizione ${state.pos.x},${state.pos.y} · Passi ${state.stepsTotal} · Cache: ${cache.builds} costruzioni, ${cache.complete?'pronta':'asset in attesa'}, ${cache.pixels} pixel · Nessun salvataggio modificato`;
  requestAnimationFrame(frame);

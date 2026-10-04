@@ -16,8 +16,9 @@ export function grassBend(time:number,seed:number,reduced:boolean,nearPlayer=fal
   return nearPlayer?2*Math.sign(direction||1):Math.round(Math.sin(time*1.8+(seed%31)));
 }
 export type FootSurface='dirt'|'sand'|'wet'|'grass'|'wood'|'stone';
-export function footSurface(tile:string,weather:Weather):FootSurface {
+export function footSurface(tile:string,weather:Weather,material?:'grass'|'sand'|'path'|'asphalt'|'floor'|'stone'):FootSurface {
   if(tile==='w'||weather==='pioggia')return 'wet';
+  if(material)return material==='path'?'dirt':material==='floor'?'wood':material==='asphalt'?'stone':material;
   return tile==='z'?'sand':tile==='='?'dirt':tile==='p'||tile==='q'?'wood':tile==='.'||tile==='~'?'grass':'stone';
 }
 type Footmark={x:number;y:number;surface:FootSurface;age:number;life:number;side:number};

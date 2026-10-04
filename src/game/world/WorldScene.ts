@@ -2765,7 +2765,9 @@ export class WorldScene implements Scene {
   private onStepComplete(): void {
     const pos = this.state.pos;
     const stepTile=this.tileAt(pos.x,pos.y);
-    const surface=footSurface(this.map.groundMaterials?.[stepTile]==='asphalt'?'j':stepTile,this.map.weather??'sereno');
+    const floorOverride=this.map.tileOverrides?.[stepTile];
+    const material=floorOverride?.includes('cave_')?'stone':this.map.groundMaterials?.[stepTile];
+    const surface=footSurface(stepTile,this.map.outdoor?(this.map.weather??'sereno'):'sereno',material);
     if(!this.state.vehicle){
       this.atmosphere.step(pos.x*TILE+8,pos.y*TILE+14,surface,this.state.stepsTotal,this.state.reduceEffects);
       audio.footstep(surface);

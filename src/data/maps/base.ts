@@ -270,6 +270,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
 
   mediopoli: {
     id: "mediopoli",
+    groundMaterials: { "=": "asphalt" },
     name: "MEDIOPOLI",
     tiles: MEDIOPOLI_TILES,
     outdoor: true,
@@ -675,6 +676,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
 
   capitale: {
     id: "capitale",
+    groundMaterials: { "=": "asphalt" },
     weather:"afa",
     name: "CAPUT MUNDI",
     tiles: CAPITALE_TILES,

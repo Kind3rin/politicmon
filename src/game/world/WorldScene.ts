@@ -777,10 +777,11 @@ export class WorldScene implements Scene {
     else if(def?.overlay)ch=def.overWater?'w':base;
     else if(obj)ch=base;
     else if(special)ch=ch==='N'||this.map.tileOverrides?.['=']==='tiles/snow_path.png'?'i':base;
-    const kind:TerrainKind=ch==='w'?'water':ch==='='?'path':ch==='z'?'sand':ch==='.'?'grass':ch==='j'?'asphalt':'floor';
+    const material=this.map.groundMaterials?.[ch];
+    const kind:TerrainKind=material??(ch==='w'?'water':ch==='='?'path':ch==='z'?'sand':ch==='.'?'grass':ch==='j'?'asphalt':'floor');
     if(!covering&&!def?.overlay&&def?.overWater) return {kind:'water',image:this.tilePng('w'),layers:[this.tilePng(ch)],decorate:false};
     const authored=!this.map.tileOverrides?.[ch]&&'.=zpw'.includes(ch);
-    return {kind,image:authored?terrainVariantImage(ch,ch==='w'?0:terrainHash(this.map.id,x,y)%4):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
+    return {kind,image:authored?terrainVariantImage(ch,ch==='w'?0:terrainHash(this.map.id,x,y)%4,material):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
   }
 
   // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
@@ -2762,7 +2763,8 @@ export class WorldScene implements Scene {
 
   private onStepComplete(): void {
     const pos = this.state.pos;
-    const surface=footSurface(this.tileAt(pos.x,pos.y),this.map.weather??'sereno');
+    const stepTile=this.tileAt(pos.x,pos.y);
+    const surface=footSurface(this.map.groundMaterials?.[stepTile]==='asphalt'?'j':stepTile,this.map.weather??'sereno');
     if(!this.state.vehicle){
       this.atmosphere.step(pos.x*TILE+8,pos.y*TILE+14,surface,this.state.stepsTotal,this.state.reduceEffects);
       audio.footstep(surface);
@@ -3372,12 +3374,12 @@ export class WorldScene implements Scene {
 
     // The substrate is baked once per map and invalidated by visible world edits.
     // UI migration remains gated separately by DESIGN-UI.
-    if(this.map.outdoor) this.terrain.draw(screen.ctx,{
+    this.terrain.draw(screen.ctx,{
       map:this.map,
       assetRevision:spriteAssetRevision(),
       revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|'),
       sample:(x,y)=>this.terrainSample(x,y),
-      shadows:()=>this.terrainShadows()
+      shadows:()=>this.map.outdoor?this.terrainShadows():[]
     },camX,camY);
 
     if(this.map.outdoor)this.terrain.drawWater(screen.ctx,terrainVariantImage('w',waterFrame(this.time,this.state.reduceEffects)),camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects);
@@ -3396,7 +3398,7 @@ export class WorldScene implements Scene {
         }
         const dx = tx * TILE - camX;
         const dy = ty * TILE - camY;
-        if(this.map.outdoor && tx>=0 && ty>=0 && ty<this.map.tiles.length && tx<this.map.tiles[ty].length) {
+        if(tx>=0 && ty>=0 && ty<this.map.tiles.length && tx<this.map.tiles[ty].length) {
           if(!this.buildingCovering(tx,ty)) {
             const obj=this.objectPng(ch);
             if(obj && ch==='T') {

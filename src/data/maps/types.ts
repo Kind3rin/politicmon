@@ -112,6 +112,7 @@ export interface MapDef {
   name: string;
   tiles: string[];
   outdoor: boolean;
+  groundMaterials?: Record<string, "grass" | "sand" | "path" | "asphalt" | "floor">; // visual only; preserves movement tiles
   scatter?: { kind: string; density: number }[]; // 0..1, decorative only
   weather?: "sereno" | "pioggia" | "nebbia" | "afa";
   warps: WarpDef[];

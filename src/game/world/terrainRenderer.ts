@@ -127,6 +127,7 @@ export class TerrainRenderer {
     ctx.restore();
   }
   private drawEdges(ctx:CanvasRenderingContext2D,source:TerrainSource,cell:TerrainCell):void {
+    if(cell.kind==='asphalt'){this.drawCurb(ctx,source,cell);return;}
     if(!['path','sand','water'].includes(cell.kind))return;
     const px=cell.x*TILE,py=cell.y*TILE;
     directions.forEach(([dx,dy],side)=>{
@@ -150,6 +151,31 @@ export class TerrainRenderer {
       for(let i=0;i<3;i++)ctx.rect(px+(dx>0?TILE-1-i:i),py+(dy>0?TILE-3+i:0),1,3-i);
       ctx.clip();ctx.drawImage(neighbor.image,px,py,TILE,TILE);ctx.restore();
     });
+  }
+  private drawCurb(ctx:CanvasRenderingContext2D,source:TerrainSource,cell:TerrainCell):void {
+    const px=cell.x*TILE,py=cell.y*TILE;
+    // A narrow paved shoulder stays inside the road cell: no topology changes.
+    // Cardinal masks join continuous strips; diagonal cut-ins close inside bends.
+    let curbEdges=0;
+    ctx.fillStyle='#c6c0ab';
+    directions.forEach(([dx,dy],side)=>{
+      const neighbor=source.sample(cell.x+dx,cell.y+dy);
+      if(!(cell.edges&(1<<side))||neighbor.kind==='water')return;
+      curbEdges|=1<<side;
+      if(side===0)ctx.fillRect(px,py,TILE,3);
+      if(side===1)ctx.fillRect(px+13,py,3,TILE);
+      if(side===2)ctx.fillRect(px,py+13,TILE,3);
+      if(side===3)ctx.fillRect(px,py,3,TILE);
+    });
+    diagonals.forEach(([dx,dy],corner)=>{
+      if(!(cell.corners&(1<<corner))||source.sample(cell.x+dx,cell.y+dy).kind==='water')return;
+      for(let i=0;i<3;i++)ctx.fillRect(px+(dx>0?15-i:i),py+(dy>0?13+i:0),1,3-i);
+    });
+    ctx.fillStyle='#827e73';
+    if(curbEdges&1)ctx.fillRect(px+7,py,1,3);
+    if(curbEdges&2)ctx.fillRect(px+13,py+7,3,1);
+    if(curbEdges&4)ctx.fillRect(px+7,py+13,1,3);
+    if(curbEdges&8)ctx.fillRect(px,py+7,3,1);
   }
   private drawScatter(ctx:CanvasRenderingContext2D,cell:TerrainCell):void {
     const x=cell.x*TILE+4+cell.variant*2,y=cell.y*TILE+6+cell.variant;

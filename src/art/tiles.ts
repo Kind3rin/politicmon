@@ -37,8 +37,8 @@ export function tileImage(ch: string): HTMLImageElement | null {
 }
 
 const TERRAIN_VARIANTS:Record<string,string>={'.':'grass','=':'path',z:'sand',p:'floor',w:'water'};
-export function terrainVariantImage(ch:string,variant:number):HTMLImageElement|null {
-  const kind=TERRAIN_VARIANTS[ch];
+export function terrainVariantImage(ch:string,variant:number,material?:string):HTMLImageElement|null {
+  const kind=material??TERRAIN_VARIANTS[ch];
   return kind?getSpriteImage(`terrain:${kind}:${variant}`,`tiles/m2/${kind}-${variant}.png`):tileImage(ch);
 }
 

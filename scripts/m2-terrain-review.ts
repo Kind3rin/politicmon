@@ -14,7 +14,7 @@ audio.enabled=false;mp.setEnabled(false);
 Storage.prototype.setItem=()=>{};Storage.prototype.removeItem=()=>{};
 const entries=coreTerrainEntries();preloadSprites(entries);await waitForSprites(Object.keys(entries),10000);
 const screen=new Screen(document.querySelector('canvas')!),input=new Input();
-let state=newGameState(),world:WorldScene;
+let state=newGameState(),world:WorldScene,stack=new SceneStack();
 function select(mapId:string){
  state=newGameState();state.flags['intro-done']=true;state.party=[createMonster('giorgetta',12)];
  const map=MAPS[mapId];const aims=mapId==='route1'?{x:7,y:8}:{x:12,y:10};
@@ -22,7 +22,9 @@ function select(mapId:string){
  open.sort((a,b)=>Math.abs(a.x-aims.x)+Math.abs(a.y-aims.y)-Math.abs(b.x-aims.x)-Math.abs(b.y-aims.y));
  state.pos={mapId,...open[0],facing:'down'};
  state.reduceEffects=(document.querySelector('#reduce') as HTMLInputElement).checked;
- world=new WorldScene(new SceneStack(),input,state,()=>new Date(2026,9,4,Number((document.querySelector('#hour') as HTMLSelectElement).value)));
+ stack=new SceneStack();
+ world=new WorldScene(stack,input,state,()=>new Date(2026,9,4,Number((document.querySelector('#hour') as HTMLSelectElement).value)));
+ stack.push(world);input.reset();
  applyWeather();
  (world as unknown as {fadeT:number;bannerFlash:number;banner:unknown}).fadeT=0;
  (world as unknown as {bannerFlash:number;banner:unknown}).bannerFlash=0;
@@ -42,6 +44,20 @@ document.querySelector('#trees')!.addEventListener('click',()=>{
  }
 });
 select('borgo');
-// Advance visual time only, never game updates, encounters or persistent saves.
+// Explicit opt-in drives the production input/update loop; writes/network remain isolated.
 let previous=performance.now();
-function frame(){const now=performance.now(),dt=Math.min(.05,(now-previous)/1000);previous=now;const visual=world as unknown as {time:number;atmosphere:{update(dt:number,reduced:boolean):void}};const frameChoice=(document.querySelector('#water-frame') as HTMLSelectElement).value;visual.time=frameChoice==='auto'?visual.time+dt:Number(frameChoice)/4;visual.atmosphere.update(dt,state.reduceEffects);world.draw(screen);const cache=(world as unknown as {terrain?:{stats():{builds:number;complete:boolean;pixels:number}}}).terrain?.stats()??{builds:0,complete:true,pixels:0};document.querySelector("#status")!.textContent=MAPS[state.pos.mapId].name+` · Cache: ${cache.builds} costruzioni, ${cache.complete?"pronta":"asset in attesa"}, ${cache.pixels} pixel · Nessun salvataggio modificato`;requestAnimationFrame(frame)}frame();
+function frame(){
+ const now=performance.now(),dt=Math.min(.05,(now-previous)/1000);previous=now;
+ const playing=(document.querySelector('#play') as HTMLInputElement).checked;
+ if(playing){input.pollGamepads();stack.update(dt);input.endFrame();}
+ else {
+  const visual=world as unknown as {time:number;atmosphere:{update(dt:number,reduced:boolean):void}};
+  const frameChoice=(document.querySelector('#water-frame') as HTMLSelectElement).value;
+  visual.time=frameChoice==='auto'?visual.time+dt:Number(frameChoice)/4;
+  visual.atmosphere.update(dt,state.reduceEffects);
+ }
+ stack.draw(screen);
+ const cache=(world as unknown as {terrain?:{stats():{builds:number;complete:boolean;pixels:number}}}).terrain?.stats()??{builds:0,complete:true,pixels:0};
+ document.querySelector('#status')!.textContent=MAPS[state.pos.mapId].name+` · Posizione ${state.pos.x},${state.pos.y} · Passi ${state.stepsTotal} · Cache: ${cache.builds} costruzioni, ${cache.complete?'pronta':'asset in attesa'}, ${cache.pixels} pixel · Nessun salvataggio modificato`;
+ requestAnimationFrame(frame);
+}frame();

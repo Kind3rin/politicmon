@@ -111,7 +111,8 @@
     "check:opening:release": "node scripts/check-opening-release.mjs",
     "check:ui-kit": "node scripts/check-ui-kit.mjs",
     "check:ui-panels": "node scripts/check-ui-panels.mjs",
-    "check:ui-flows": "node scripts/check-ui-flows.mjs"
+    "check:ui-flows": "node scripts/check-ui-flows.mjs",
+    "check:roamers": "node scripts/check-roamers.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

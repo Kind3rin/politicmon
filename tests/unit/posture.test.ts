@@ -64,3 +64,25 @@ test("only Smentisci stops a status aimed at the player; the player's own status
   assert.equal(fight("smentisci", "foe", smear).status, null, "the denial blocks it");
   assert.equal(fight("smentisci", "player", smear).status, "scandalo", "it never protects the opponent");
 });
+
+test("A gaffe followed by a scandal on the same target raises a one-off Bufera worth an eighth of its health", () => {
+  const realRandom = Math.random; Math.random = () => 0.2;
+  try {
+    const scandal: Move = { id: "test-scandal", name: "Scandalo", type: "MEDIA", category: "status", power: 0, accuracy: 100, pp: 5, flavor: "",
+      effect: { status: { id: "scandalo", chance: 100, target: "foe" } } };
+    const state = newGameState(), player = makeCombatant(createMonster("berlusconix", 20)), foe = makeCombatant(createMonster("mediocrate", 20));
+    const b: any = Object.create(BattleScene.prototype);
+    Object.assign(b, { state, player, foe, queue: [], field: undefined, fieldTurn: 1, fieldResolved: true, fx: { onHit() {}, telegraph: null }, polemica: new Polemica(),
+      announcedOffensive: new Set(), turnPosture: "none", posture: "none", actionCaption: null, copione: false, battery: 0, trainer: undefined, electionTurn: 1,
+      buferaDone: new WeakSet(), displayHp: { player: 0, foe: 0 } });
+    foe.gaffeTurns = 3;
+    const max = foe.mon.hp, drain = () => { while (b.queue.length) b.queue.shift().run?.(); };
+    for (const step of b.moveSteps("player", player, foe, scandal, "A", true)) step.run?.();
+    drain();
+    assert.equal(foe.mon.status, "scandalo", "the scandal landed on top of the gaffe");
+    assert.equal(foe.mon.hp, max - Math.max(1, Math.floor(max / 8)), "bufera took an eighth");
+    for (const step of b.moveSteps("player", player, foe, { ...scandal, id: "test-scandal-2" }, "A", true)) step.run?.();
+    drain();
+    assert.equal(foe.mon.hp, max - Math.max(1, Math.floor(max / 8)), "it happens only once per fighter");
+  } finally { Math.random = realRandom; }
+});

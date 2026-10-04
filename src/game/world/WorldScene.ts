@@ -204,6 +204,9 @@ function drawWorldTilePng(screen: Screen, img: HTMLImageElement, dx: number, dy:
   screen.imageSprite(img, dx, dy, { scaleX: TILE / img.width, scaleY: TILE / img.height });
 }
 
+/** The first-sighting hint is shown once per session and never written to the save. */
+let roamerHintShown = false;
+
 export class WorldScene implements Scene {
   readonly expandedViewport = true;
   private viewHeight = VIEW_H;
@@ -1141,8 +1144,8 @@ export class WorldScene implements Scene {
     if (this.roamerGrace > 0) return;
     const contact = this.roamers.contact(player, scared);
     if (contact) { this.startRoamerBattle(contact); return; }
-    if (!this.roamerHinted && !this.state.flags["roamers-hint"] && this.roamers.roamers.some(r => Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) <= 8)) {
-      this.roamerHinted = true; this.state.flags["roamers-hint"] = true;
+    if (!this.roamerHinted && !roamerHintShown && this.roamers.roamers.some(r => Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) <= 8)) {
+      this.roamerHinted = true; roamerHintShown = true;
       this.tapNotice = { text: "Candidato in vista: sorprendilo!", until: this.time + 5 };
     }
   }

@@ -114,6 +114,7 @@ export class BattleScene implements Scene {
   private actionCaption: { actor: string; move: string; result: string } | null = null;
   private polemica = new Polemica();
   private firstOrder: "player" | "foe" | null = null;
+  private buferaDone?: WeakSet<Combatant>;
   private posture: Posture = "none";
   private turnPosture: Posture = "none";
   private foeIntent: Move | null = null;
@@ -554,6 +555,20 @@ export class BattleScene implements Scene {
     return taken === 1 ? `${range.min}-${range.max}` : `${postureDamage(range.min, taken)}-${postureDamage(range.max, taken)}`;
   }
 
+  /** Scandalo + gaffe on the same target: one-off storm that costs an eighth of its health. */
+  private buferaStep(defender: Combatant, defenderName: string, defenderSide: "player" | "foe"): Step {
+    return { run: () => {
+      const done = (this.buferaDone ??= new WeakSet<Combatant>());
+      if (defender.mon.hp <= 0 || done.has(defender) || defender.mon.status !== "scandalo" || defender.gaffeTurns <= 0) return;
+      done.add(defender);
+      const loss = Math.max(1, Math.floor(statsOf(defender.mon).hp / 8));
+      this.pushFront([
+        { text: `BUFERA! Scandalo e gaffe insieme: ${defenderName} perde ${loss} PV.`, run: () => { defender.mon.hp = Math.max(0, defender.mon.hp - loss); audio.hit(); }, waitHp: true },
+        ...this.koCheckSteps(defenderSide)
+      ]);
+    } };
+  }
+
   private moveSteps(
     side: "player" | "foe",
     attacker: Combatant,
@@ -799,6 +814,7 @@ export class BattleScene implements Scene {
       }
     }
 
+    steps.push(this.buferaStep(defender, defenderName, side === "player" ? "foe" : "player"));
     if (side === "player") steps.push({ run: () => {
       const changed = defender.mon.hp < before.hp || defender.mon.status !== before.status || defender.gaffeTurns !== before.gaffe ||
         (Object.keys(before.own) as Array<keyof typeof before.own>).some(key => attacker.stages[key] !== before.own[key] || defender.stages[key] !== before.foe[key]);

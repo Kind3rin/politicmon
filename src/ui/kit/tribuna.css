@@ -201,3 +201,8 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 @media(min-width:900px) and (min-height:541px){
   .ui-panel:where(:not(.ui-arena,.ui-pause,.ui-conversation,.ui-splash)){left:max(0px,calc(50% - 360px));right:max(0px,calc(50% - 360px));border-inline:3px solid var(--t-ink);box-shadow:0 0 0 100vmax #0E1220}
 }
+
+/* Un pulsante-scheda si riconosce dalla freccia; una scheda informativa no. */
+.ui-panel:where(:not(.ui-arena,.ui-pause,.ui-conversation,.ui-splash)) .ui-actions>.ui-button:not(.ui-primary){position:relative;padding-right:40px}
+.ui-panel:where(:not(.ui-arena,.ui-pause,.ui-conversation,.ui-splash)) .ui-actions>.ui-button:not(.ui-primary)::after{content:"›";position:absolute;right:14px;top:50%;transform:translateY(-52%);font:700 32px/1 Tribuna,sans-serif;color:var(--t-ink)}
+.ui-panel .ui-actions>.ui-button:not(.ui-primary):disabled::after{opacity:.35}

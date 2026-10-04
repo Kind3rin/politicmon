@@ -34,7 +34,7 @@ try{
  await page.locator('.ui-dialog:not([hidden])').waitFor({timeout:3000}).catch(()=>errors.push('no heal receipt'));
  await page.close();
  page=await open('borsa');
- await page.getByRole('button',{name:'Strumenti'}).tap();
+ await page.getByRole('button',{name:'Kit'}).tap();
  expect(await page.locator('.ui-row').count()>0,'tools tab has items');
  await page.close();
  // Map: nodes are real buttons; a tap opens the place and Indietro returns.

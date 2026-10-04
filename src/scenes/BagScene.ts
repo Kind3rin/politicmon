@@ -419,7 +419,7 @@ export class BagScene implements Scene {
       }
       return {title:this.nice(id),subtitle:this.gist(id),fit:true,actions:this.recipientRows(id),selected:0,back};
     }
-    const tabs:TouchAction[]=['Cure','Schede','Strumenti','Chiave'].map((label,i)=>({label,run:()=>{if(this.stack.top===this){this.tab=i;audio.cursor();}}}));
+    const tabs:TouchAction[]=['Cure','Schede','Kit','Chiave'].map((label,i)=>({label,run:()=>{if(this.stack.top===this){this.tab=i;audio.cursor();}}}));
     const visible=ids.filter(id=>this.categoryOf(id)===this.tab);
     const rows=visible.map((id):TouchAction=>({label:this.nice(id),run:()=>{
       if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();audio.cursor();

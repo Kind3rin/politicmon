@@ -23,6 +23,6 @@ test('shared dossier focus still requires visible A/B hints',()=>{
 test('native starter panel requires a selected action and named back command',()=>{
  const source=readFileSync(new URL('../../src/scenes/StarterPreviewScene.ts',import.meta.url),'utf8');
  assert.deepEqual(inputContract(source),{focus:true,aHint:true,bHint:true});
- assert.equal(inputContract(source.replace('selected:0','selection:0'))?.focus,false);
+ assert.equal(inputContract(source.replace(/\bselected:/,'selection:'))?.focus,false);
  assert.equal(inputContract(source.replace('back:this.action','exit:this.action'))?.focus,false);
 });

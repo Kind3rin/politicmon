@@ -519,9 +519,8 @@ export class WorldScene implements Scene {
     }
     const commands=this.touchActions;
     if(!commands)return undefined;
-    return {title:'Il primo compagno',subtitle:'Quirino: le promesse si somigliano. Le mosse no. Apri una scheda prima di scegliere.',
-      image:'/sprites/ui/starter-stage.png',portraits:STARTERS.map(id=>({src:`/sprites/monsters/${id}.png`,label:SPECIES[id].name})),
-      actions:commands.slice(0,3).map((action,i)=>({...action,hint:'Apri la scheda: non scegli ancora.',facts:[{label:'Tipo',value:SPECIES[STARTERS[i]].types.join(' · ')},{label:'Livello iniziale',value:'5'}]})),selected:0,
+    return {title:'Il primo compagno',subtitle:'Quirino: le promesse si somigliano. Le mosse no.',tiles:true,
+      actions:commands.slice(0,3).map((action,i)=>({...action,hint:undefined,facts:undefined,row:{kind:'tile' as const,icon:`/sprites/monsters/${STARTERS[i]}.png`,types:SPECIES[STARTERS[i]].types,meta:'Apri la scheda'}})),selected:0,
       back:{...commands[4],label:'Indietro',hint:'Esplora il laboratorio. Potrai scegliere parlando con Quirino.'}};
   }
 

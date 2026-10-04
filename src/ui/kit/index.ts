@@ -75,6 +75,8 @@ export interface UiPanel {
   hero?: UiHero;
   /** Rows share the free height instead of scrolling. */
   fit?: boolean;
+  /** Rows become large tiles side by side: a few candidates to choose among. */
+  tiles?: boolean;
   /** Turns card-like actions (icon, hint, facts) into compact rows. */
   compact?: boolean;
   /** Full-bleed opening screen: art, logo, tagline and the choices at the bottom. */
@@ -223,7 +225,7 @@ export const kit = {
     const row=action.row as UiRow;
     const button=element("button","ui-row");button.type="button";
     button.classList.add(`ui-row-${row.kind??"companion"}`);
-    if(row.tone&&row.tone in TYPE_COLORS)button.style.setProperty("--tone",TYPE_COLORS[row.tone as PolType]);
+    if(row.tone&&row.tone in TYPE_COLORS){button.style.setProperty("--tone",TYPE_COLORS[row.tone as PolType]);button.style.setProperty("--tone-ink",typeLabelColor(row.tone as PolType));}
     if(row.stamp)button.classList.add("ui-row-stamped");
     button.disabled=Boolean(action.disabled&&!action.onInspect);
     if(action.disabled)button.setAttribute("aria-disabled","true");
@@ -592,7 +594,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   if (panel.columns === 2) list.classList.add("ui-grid");
   if (panel.actions.some(action=>action.route)) list.classList.add("ui-route");
   list.setAttribute("aria-label", panel.title);
-  if(panel.compact||panel.actions.some(action=>action.row)){list.classList.add("ui-rows");if(panel.fit)list.classList.add("ui-fit");}
+  if(panel.compact||panel.actions.some(action=>action.row)){list.classList.add("ui-rows");if(panel.fit)list.classList.add("ui-fit");if(panel.tiles)list.classList.add("ui-tiles");}
   let group="";
   panel.actions.forEach((action, i) => {
     if(i===panel.primary)return;

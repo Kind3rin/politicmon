@@ -176,3 +176,20 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-splash-compact .ui-body,.ui-splash-compact .ui-button-icon{display:none}
 .ui-splash-compact .ui-subtitle{font-size:16px}
 .ui-panel .ui-hero{border-radius:0;border:2px solid var(--t-ink)}
+
+/* Candidati affiancati. */
+.ui-rows.ui-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-content:center;flex:1 1 auto}
+.ui-tiles .ui-row{flex-direction:column;justify-content:center;gap:10px;min-height:0;padding:16px 6px 14px;border:2px solid var(--t-ink);border-radius:4px;box-shadow:4px 4px var(--t-ink);text-align:center}
+.ui-tiles .ui-row:first-child{border-top-width:2px}
+.ui-tiles .ui-row:active{transform:translate(4px,4px);box-shadow:none}
+.ui-tiles .ui-row[aria-current=true]{box-shadow:4px 4px var(--t-ink),inset 0 6px var(--t-red)}
+.ui-tiles .ui-row-art{width:100%;height:clamp(88px,18dvh,150px)}
+.ui-tiles .ui-row-main{align-items:center}.ui-tiles .ui-row-head{justify-content:center}
+.ui-tiles .ui-row-name{font-size:22px}
+@media(orientation:landscape) and (max-height:540px){.ui-tiles .ui-row-art{height:clamp(64px,26dvh,110px)}}
+.ui-tiles .ui-row-art img{width:100%;height:100%}
+.ui-tiles .ui-row-art{height:clamp(110px,24dvh,200px)}
+.ui-row-move{color:var(--tone-ink,var(--t-ink))}
+.ui-row-move .ui-row-name,.ui-row-move .ui-row-right,.ui-row-move .ui-row-level{color:inherit}
+.ui-row-move .ui-row-meta{color:inherit;opacity:.85}
+.ui-row-move[aria-current=true]{box-shadow:4px 4px var(--t-ink),inset 6px 0 var(--t-red)}

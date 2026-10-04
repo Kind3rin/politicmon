@@ -16,7 +16,7 @@ export interface UiRow {
   tone?: string;
   /** ▲ strong, ▼ weak. */
   arrow?: "up" | "down";
-  kind?: "companion" | "item" | "move";
+  kind?: "companion" | "item" | "move" | "tile";
 }
 
 export interface TouchAction {

@@ -1,0 +1,39 @@
+<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tribuna · prova senza salvataggi</title><body class="touch ctrl-stick">    <div id="app">
+      <div id="console-shell">
+        <div id="console-top">
+          <button class="console-brand" data-key="start" aria-label="Politicmon: apri il quartier generale">
+            <span class="console-mark" aria-hidden="true">✦</span>
+            <span class="console-brand-main">POLITICMON</span>
+          </button>
+          <div class="console-tools">
+            <button id="shell-control-mode" type="button" aria-label="Usa la levetta direzionale" hidden><span aria-hidden="true">✥</span></button>
+            <button id="shell-help" type="button" aria-label="Apri la guida ai comandi" aria-haspopup="dialog"><span aria-hidden="true">?</span><span class="tool-label">COMANDI</span></button>
+            <button id="shell-fullscreen" type="button" aria-label="Apri a schermo intero" hidden><span aria-hidden="true">⛶</span></button>
+          </div>
+        </div>
+        <div id="screen-stage"><div id="screen-frame">
+          <canvas id="game-canvas" width="240" height="180" tabindex="0" aria-label="Schermo di Politicmon" aria-describedby="shell-hint"></canvas>
+        </div></div>
+        <p id="shell-hint">FRECCE / WASD: muovi · Z / INVIO: conferma · X / ESC: torna · P: menu</p>
+        <div id="touch-ui" role="group" aria-label="Controlli di gioco">
+          <div id="touch-move">
+            <div id="touch-dpad">
+              <button data-key="up" class="dpad-btn dpad-up" aria-label="Muovi su">▲</button>
+              <button data-key="left" class="dpad-btn dpad-left" aria-label="Muovi a sinistra">◀</button>
+              <button data-key="right" class="dpad-btn dpad-right" aria-label="Muovi a destra">▶</button>
+              <button data-key="down" class="dpad-btn dpad-down" aria-label="Muovi giù">▼</button>
+            </div>
+            <div id="touch-stick" data-stick aria-label="Levetta direzionale">
+              <div id="touch-stick-base"></div>
+              <div id="touch-stick-cap"></div>
+            </div>
+          </div>
+          <div id="touch-buttons">
+            <button data-key="b" class="ab-btn b-btn" aria-label="B: torna o annulla"><span>B</span><small>INDIETRO</small></button>
+            <button data-key="a" class="ab-btn a-btn" aria-label="A: conferma o parla"><span>A</span><small>CONFERMA</small></button>
+            <button data-key="start" class="start-btn" aria-label="Apri il quartier generale">MENU</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<script type="module" src="/scripts/m2-ui-review.ts"></script></body></html>

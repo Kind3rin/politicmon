@@ -13,7 +13,7 @@ import type { Combatant } from "./sim";
 import { sceneImage } from "../../engine/assets";
 import { BATTLE_BACKDROPS, type BattleBackdrop } from "./backdrop";
 import { TYPE_COLORS, type PolType } from "../../data/poltypes";
-import { drawMonsterFrame, monsterFramesImage, monsterPoseFrame } from "../../art/monsterFrames";
+import { monsterFramesImage, monsterPoseFrame } from "../../art/monsterFrames";
 
 // Stesso renderer in PVE e PVP. Se il tema non è ancora pronto o manca,
 // il prato Higgsfield evita campi vuoti; senza immagini bastano due colori.
@@ -59,8 +59,7 @@ export interface DamageNumber {
 
 // Centro approssimativo dello sprite di un combattente (per le particelle).
 export function battleGeometry(height = VIEW_H): { foeBase: number; playerBase: number; size: number } {
-  const extra = Math.max(0, height - VIEW_H);
-  return { foeBase: 66 + Math.round(extra / 4), playerBase: 116 + extra, size: Math.min(76, 56 + Math.round(extra / 6)) };
+  return { foeBase: Math.round(height * .67), playerBase: Math.round(height * .93), size: 88 };
 }
 
 export function monsterCenter(who: BattleSide, height = VIEW_H): { x: number; y: number } {
@@ -363,6 +362,20 @@ export class BattleFx {
 // - affondo: scatto in avanti + stretch nella direzione del colpo;
 // - mostri chiave (starter/leggendari): bocca urlante durante l'affondo.
 // (cx, by) = centro orizzontale e bordo inferiore del riquadro dello sprite.
+const battleBoundsCache=new WeakMap<HTMLImageElement,{x:number;y:number;w:number;h:number}[]>();
+function battleFrameBounds(image:HTMLImageElement,frame:number){
+ let frames=battleBoundsCache.get(image);
+ if(!frames){
+   const canvas=document.createElement('canvas');canvas.width=256;canvas.height=64;
+   const ctx=canvas.getContext('2d',{willReadFrequently:true})!;ctx.drawImage(image,0,0);
+   const pixels=ctx.getImageData(0,0,256,64).data;
+   frames=Array.from({length:4},(_,f)=>{let left=63,right=0,top=63,bottom=0;
+     for(let y=0;y<64;y++)for(let x=0;x<64;x++)if(pixels[(y*256+f*64+x)*4+3]>8){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+     return {x:f*64+left,y:top,w:Math.max(1,right-left+1),h:Math.max(1,bottom-top+1)};
+   });battleBoundsCache.set(image,frames);
+ }return frames[frame];
+}
+
 export function drawBattleMonster(
   screen: Screen,
   fx: BattleFx,
@@ -441,10 +454,14 @@ export function drawBattleMonster(
   screen.ctx.save();
   if (faintProgress > 0) screen.ctx.globalAlpha = Math.max(0.08, 1 - faintProgress);
   if (frames) {
-    drawW = size * sx; drawH = size * sy;
-    x = cx - drawW / 2 + dx;
-    y = by - drawH + (fx.reduceEffects ? 0 : faintProgress * 13);
-    drawMonsterFrame(screen, frames, monsterPoseFrame(fx.time + (who === "foe" ? 1.3 : 0), lungeT, fx.reduceEffects), x, y, drawW, drawH, flipX);
+    const frame=monsterPoseFrame(fx.time+(who==="foe"?1.3:0),lungeT,fx.reduceEffects);
+    const bounds=battleFrameBounds(frames,frame);
+    drawW=(who==="foe"?76:90)*sx;drawH=drawW*bounds.h/bounds.w*sy/sx;
+    x=cx-drawW/2+dx;y=by-drawH+(fx.reduceEffects?0:faintProgress*13);
+    const ctx=screen.ctx;ctx.save();
+    if(flipX){ctx.translate(Math.round(x)+drawW,Math.round(y));ctx.scale(-1,1);screen.imageRegion(frames,bounds.x,bounds.y,bounds.w,bounds.h,0,0,drawW,drawH);}
+    else screen.imageRegion(frames,bounds.x,bounds.y,bounds.w,bounds.h,x,y,drawW,drawH);
+    ctx.restore();
   } else if (png) {
     const pngScale = size > 56 ? Math.min(size / png.height, (who === "foe" ? 132 : 88) / png.width) : size / png.height;
     drawW = png.width * pngScale * sx;
@@ -461,6 +478,8 @@ export function drawBattleMonster(
     drawMonsterLoading(screen, x, y, drawW, drawH);
   }
   screen.ctx.restore();
+  // Expose the actual painted rectangle for the runtime layout audit.
+  screen.ctx.canvas.dataset[who==='foe'?'foeBounds':'playerBounds']=JSON.stringify({x,y,w:drawW,h:drawH,viewHeight:screen.height});
 
   // Forma meme: aura sottile sopra lo sprite originale, mai un rimpiazzo del
   // volto PixelLab. Anche il bonus tattico resta leggibile senza solo colore.

@@ -281,6 +281,8 @@ export function flushActiveState(): void {
   }
 }
 
+export let lastSuccessfulSaveAt = 0;
+
 export function saveGame(state: GameState): boolean {
   const slot = getActiveSlot();
   const key = slotKey(slot);
@@ -297,6 +299,7 @@ export function saveGame(state: GameState): boolean {
       }
     }
     localStorage.setItem(key, serializeGameState(state));
+    lastSuccessfulSaveAt = Date.now();
     return true;
   } catch (err) {
     // Quota piena o serializzazione fallita: logga una volta (non spammare).

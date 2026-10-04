@@ -1,3 +1,4 @@
+import {beginWorldLabels,endWorldLabels} from "./worldLabels";
 import { renderArena, leaveArena, type UiArena } from "./arena";
 import {TYPE_COLORS,typeLabelColor,type PolType} from "../../data/poltypes";
 import type { TouchAction } from "../../engine/touchActions";
@@ -12,6 +13,7 @@ export interface UiBlock {
   facts?: readonly { label: string; value: string }[];
 }
 export interface UiWorld {
+  saved?:boolean;
   location: string;
   notice?: string;
   messages?: readonly string[];
@@ -170,6 +172,7 @@ export const kit = {
     let holdTimer:ReturnType<typeof setTimeout>|undefined, inspected=false, downX=0, downY=0;
     const cancelHold=()=>{if(holdTimer)clearTimeout(holdTimer);holdTimer=undefined;};
     if(action.onInspect){
+      button.addEventListener('contextmenu',event=>event.preventDefault());
       button.addEventListener('pointerdown',event=>{cancelHold();inspected=false;downX=event.clientX;downY=event.clientY;holdTimer=setTimeout(()=>{inspected=true;haptics.tap();action.onInspect?.();},450);});
       button.addEventListener('pointermove',event=>{if(Math.hypot(event.clientX-downX,event.clientY-downY)>10)cancelHold();});
       button.addEventListener('pointerup',cancelHold);button.addEventListener('pointercancel',cancelHold);button.addEventListener('pointerleave',cancelHold);
@@ -197,8 +200,9 @@ let dialog: HTMLElement | undefined;
 let dialogSeen = false;
 let continueDialog: (() => void) | undefined;
 
-export function beginUiFrame(): void { dialogSeen = false; }
+export function beginUiFrame(): void { dialogSeen = false; beginWorldLabels(); }
 export function endUiFrame(): void {
+  endWorldLabels();
   if (dialog && !dialogSeen) dialog.hidden = true;
   document.body.classList.toggle("ui-dialog-open", dialogSeen);
 }
@@ -228,6 +232,18 @@ export function renderUiDialog(text: string, advance: () => void, complete: bool
 /** One keyboard/controller contract for every native panel. Scene updates still
  * run for timers; consumed navigation never reaches the legacy menu beneath. */
 export function updateUiInput(panel:UiPanel|undefined,input:Input):void {
+  const sheet=document.querySelector<HTMLDialogElement>('#tribuna-sheet[open]');
+  if(sheet){
+    if(input.wasPressed('b')||input.wasPressed('start'))sheet.close();
+    else if(input.wasPressed('a'))(document.activeElement as HTMLButtonElement)?.click?.();
+    else if(input.wasPressed('down')||input.wasPressed('up')||input.wasPressed('left')||input.wasPressed('right')){
+      const buttons=[...sheet.querySelectorAll<HTMLButtonElement>('button:not(:disabled)')];
+      const index=buttons.indexOf(document.activeElement as HTMLButtonElement);
+      const direction=input.wasPressed('up')||input.wasPressed('left')?-1:1;
+      buttons[(index+direction+buttons.length)%buttons.length]?.focus();
+    }
+    input.reset();return;
+  }
   if(!panel||panel.directInput){navigationKey='';navigationIndex=-1;return;}
   const key=JSON.stringify([panel.title,panel.subtitle,panel.tabs?.map(action=>[action.label,action.disabled]),panel.actions.map(action=>[action.label,action.disabled]),panel.back?.label]);
   const tabCount=panel.tabs?.length??0;
@@ -446,42 +462,55 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
   worldRoot.hidden = false;
   if(!worldHud){worldHud=element("aside","ui-world-hud");worldHud.setAttribute("aria-label","La tua campagna");document.querySelector("#screen-stage")?.append(worldHud);}
   worldHud.hidden=false;
-  const hudKey=JSON.stringify([world.location,world.facts,world.objective,world.messages,world.notice,world.lesson]);
+  // Location and notices have independent lifetimes: a changing quest must not
+  // restart them, nor should a still-present server notice flash every frame.
+  const hudKey=JSON.stringify([world.location,world.objective,world.notice,world.messages]);
   if(hudKey!==worldHudSignature){
     worldHudSignature=hudKey;
-    const heading=element("div","ui-world-status");heading.append(element("h2","ui-subtitle",world.location),kit.facts(world.facts));
-    worldHud.replaceChildren(heading);
-    if(world.lesson){
-      const lesson=element("section","ui-world-lesson");lesson.setAttribute("aria-label","Apprendi i comandi");
-      lesson.append(element("h2","ui-subtitle",world.lesson.title));
-      for(const paragraph of prosePages(world.lesson.body))lesson.append(element("p","ui-body",paragraph));
-      worldHud.append(lesson);
+    let location=worldHud.querySelector<HTMLElement>('.ui-world-location');
+    if(!location || location.textContent!==world.location){
+      location?.remove();location=element('div','ui-world-location',world.location);worldHud.prepend(location);
     }
-    if(world.notice){const notice=element("p","ui-world-notice ui-body",world.notice);notice.setAttribute("role","status");worldHud.append(notice);}
-    for(const message of world.messages??[])worldHud.append(element("p","ui-world-chat ui-body",message));
-    if(world.objective){const objective=element("section","ui-world-objective");objective.append(element("h2","ui-note","Prossima tappa"));for(const paragraph of prosePages(world.objective))objective.append(element("p","ui-body",paragraph));worldHud.append(objective);}
+    let objective=worldHud.querySelector<HTMLButtonElement>('.ui-world-objective');
+    if(world.objective){
+      if(!objective){
+        objective=element('button','ui-world-objective');objective.type='button';
+        objective.setAttribute('aria-expanded','true');
+        objective.onclick=()=>{const open=objective!.getAttribute('aria-expanded')!=='true';objective!.setAttribute('aria-expanded',String(open));};
+        worldHud.append(objective);
+      }
+      objective.textContent=world.objective;objective.setAttribute('aria-label',`Obiettivo: ${world.objective}`);
+    }else objective?.remove();
+    const noticeText=[world.notice,...world.messages??[]].filter(Boolean).join(' · ');
+    const oldNotice=worldHud.querySelector('.ui-world-notice');
+    if(oldNotice?.textContent!==noticeText){oldNotice?.remove();if(noticeText){const notice=element('p','ui-world-notice',noticeText);notice.setAttribute('role','status');worldHud.append(notice);}}
   }
-  const next = JSON.stringify([world.actions.map(a => [a.label,a.disabled]),world.save?.label]);
-  if (worldContext && worldRun) {
-    worldContext.querySelector("strong")!.textContent = world.context.label;
-    worldContext.disabled = Boolean(world.context.disabled);
-    if (world.context.disabled) worldContext.setAttribute("aria-disabled", "true");
-    else worldContext.removeAttribute("aria-disabled");
-    worldRun.querySelector("strong")!.textContent = world.run.label;
-    worldRun.setAttribute("aria-pressed",String(world.running));
+  let saved=worldHud.querySelector<HTMLElement>('.ui-save-flash');
+  if(!saved){saved=element('span','ui-save-flash','✓ Salvato');saved.setAttribute('role','status');worldHud.append(saved);}
+  saved.hidden=!world.saved;
+  const next=JSON.stringify(world.actions.map(a=>[a.label,a.icon,a.disabled]));
+  if(next!==worldSignature){
+    worldSignature=next;
+    const nav=element('nav','ui-world-nav');nav.setAttribute('aria-label','Accessi rapidi');
+    world.actions.forEach((action,i)=>{
+      const button=kit.button(action,()=>worldCurrent?.actions[i]?.run());
+      button.setAttribute('aria-label',action.label);button.title=action.label;nav.append(button);
+    });
+    const controls=element('div','ui-world-controls');
+    worldContext=kit.button(world.context,()=>worldCurrent?.context.run(),true,()=>!worldCurrent||Boolean(worldCurrent.context.disabled));
+    worldRun=kit.button(world.run,()=>worldCurrent?.run.run());
+    controls.append(worldContext,worldRun);worldRoot.replaceChildren(nav,controls);
   }
-  if (next === worldSignature) return;
-  worldSignature = next;
-  const nav = element("nav", "ui-world-nav"); nav.setAttribute("aria-label", "Accessi rapidi");
-  world.actions.forEach((action,i) => nav.append(kit.button(action, () => worldCurrent?.actions[i]?.run())));
-  const controls = element("div", "ui-world-controls");
-  worldContext = kit.button(world.context, () => worldCurrent?.context.run(),true,
-    () => !worldCurrent || Boolean(worldCurrent.context.disabled));
-  controls.append(worldContext);
-  const run = worldRun = kit.button(world.run, () => worldCurrent?.run.run());
-  run.setAttribute("aria-pressed", String(world.running)); controls.append(run);
-  if(world.save) controls.append(kit.button(world.save, () => worldCurrent?.save?.run()));
-  worldRoot.replaceChildren(nav,controls);
+  if(worldContext&&worldRun){
+    worldContext.hidden=Boolean(world.context.disabled);
+    worldContext.disabled=Boolean(world.context.disabled);
+    if(world.context.disabled)worldContext.setAttribute("aria-disabled","true");else worldContext.removeAttribute("aria-disabled");
+    worldContext.querySelector('strong')!.textContent=world.context.label;
+    worldContext.setAttribute('aria-label',world.context.label);
+    worldRun.querySelector('strong')!.textContent='»';
+    worldRun.setAttribute('aria-label',world.running?'Cammina':'Corri');
+    worldRun.setAttribute('aria-pressed',String(world.running));
+  }
 }
 
 /** Update only the native cursor while a timed action is running. */

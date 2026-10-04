@@ -1,0 +1,41 @@
+@font-face{font-family:Tribuna;src:url('/fonts/barlow-condensed-bold.ttf') format('truetype');font-weight:700;font-display:swap}
+/* The world is a single surface. Controls never reserve a row or a column. */
+body.ui-world-open #app{padding:0}
+body.ui-world-open #console-shell{display:block;width:100%;height:100%;max-width:none;max-height:none}
+body.ui-world-open #console-top,body.ui-world-open #shell-hint,body.ui-world-open #touch-buttons{display:none}
+body.ui-world-open #screen-stage{position:absolute;inset:0;display:block;padding:0;border:0;border-radius:0;max-height:none}
+body.ui-world-open #screen-frame{position:absolute;inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;border:0;border-radius:0}
+body.ui-world-open #touch-ui{position:absolute;inset:0;display:block;padding:0;pointer-events:none}
+body.ui-world-open .ui-world{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
+body.ui-world-open .ui-world-nav{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;gap:8px;pointer-events:auto}
+body.ui-world-open .ui-world .ui-button{padding:0;min-height:44px;border:2px solid #14161F;border-radius:4px;box-shadow:4px 4px #14161F;background:#F4EEDC;color:#14161F;align-items:center;justify-content:center}
+body.ui-world-open .ui-world-nav .ui-button{width:44px;height:44px}
+body.ui-world-open .ui-world-nav strong,body.ui-world-open .ui-world .ui-command-group{display:none}
+body.ui-world-open .ui-world-nav .ui-button-icon{width:28px;height:28px}
+body.ui-world-open .ui-world-controls{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:end;gap:16px;pointer-events:none}
+body.ui-world-open .ui-world-controls .ui-button{pointer-events:auto;width:48px;height:48px;background:#F4EEDCe6}
+body.ui-world-open .ui-world-controls .ui-primary{width:88px;height:72px;background:#D7263D;color:#F4EEDC}
+body.ui-world-open .ui-world-controls strong{font:700 20px/1.2 Tribuna,sans-serif}
+body.ui-world-open .ui-world-controls [aria-pressed=true]{background:#FFD23F}
+body.ui-world-open .ui-world .ui-button:active{transform:translate(4px,4px);box-shadow:none}
+body.ui-world-open .ui-world-hud{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
+.ui-world-location{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 184px);padding:8px;background:#1E3A8A;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;animation:world-location 2s forwards}
+body.ui-world-open .ui-world-objective{position:absolute;top:68px;left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 28px);height:44px;min-width:44px;padding:0 12px;border:0;border-radius:0;background:#F4EEDCe6;color:#14161F;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;font:16px/1.4 PoliticmonBody,sans-serif}
+body.ui-world-open .ui-world-objective:before{content:'▾';margin-right:8px}
+body.ui-world-open .ui-world-objective[aria-expanded=false]{width:44px;font-size:0;padding:0;text-align:center}
+body.ui-world-open .ui-world-objective[aria-expanded=false]:before{content:'▸';font-size:20px;margin:0}
+body.ui-world-open .ui-world-hud:has(.ui-world-notice) .ui-world-location{display:none}
+body.ui-world-open .ui-world-notice{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 184px);height:44px;line-height:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
+body.ui-world-open #touch-move{position:absolute;inset:0;pointer-events:none;display:block}
+body.ui-world-open #touch-stick{display:none}
+body.ui-world-open #touch-stick.floating-stick{display:flex;position:fixed;transform:translate(-50%,-50%);z-index:40;pointer-events:none;width:120px;height:120px}
+body.ui-world-open #touch-stick-base{width:112px;height:112px;background:#F4EEDC88;border:2px solid #14161F}
+body.ui-world-open #touch-stick-base:before,body.ui-world-open #touch-stick-base:after{background:#14161F55}
+body.ui-world-open #touch-stick-cap{width:48px;height:48px;background:#F4EEDC;border:2px solid #14161F}
+body.ui-world-open #touch-dpad{position:absolute;bottom:20px;left:20px;pointer-events:auto;--pad:44px}
+@keyframes world-location{0%,85%{opacity:1}100%{opacity:0;visibility:hidden}}
+@keyframes world-notice{0%,90%{opacity:1}100%{opacity:0;visibility:hidden}}
+.ui-world-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ui-world-labels span{position:absolute;transform:translate(-50%,-100%);padding:3px 6px;white-space:nowrap;background:#1E3A8A;color:#F4EEDC;font:700 16px/1.2 Tribuna,sans-serif}
+.ui-save-flash{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:16px;padding:4px 8px;background:#F4EEDC;color:#14161F;font:16px/1.4 PoliticmonBody,sans-serif}
+body.ui-reduce-effects.ui-world-open .ui-world .ui-button:active{transform:none}

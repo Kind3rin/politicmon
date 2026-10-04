@@ -1,3 +1,4 @@
+import {openUiSheet} from "../../ui/kit/sheet";
 import {memeForm} from "../memeForms";
 import { TeachScene } from "../../scenes/TeachScene";
 import { openingRecruitmentExp } from "../firstCampaign";
@@ -1400,28 +1401,32 @@ export class BattleScene implements Scene {
       },hint,!ready||(!fallback&&slot.pp<=0)),
         facts:[{label:"Tipo",value:move.type},{label:"Potenza",value:move.power?String(move.power):"—"},{label:"PP",value:fallback?"Riserva":`${slot.pp}/${move.pp}`},{label:"Efficacia",value:blocked?"No":move.power?`×${estimate.typeMult}`:"—"}],
         order:ready?this.orderLabel(move):undefined,
-        onInspect:ready&&!fallback?()=>{if(this.stack.top!==this||this.mode!==mode||this.finished)return;this.fightMenu.index=index;this.openFightIntel();}:undefined
+        onInspect:ready&&!fallback?()=>{if(this.stack.top!==this||this.mode!==mode||this.finished)return;this.fightMenu.index=index;openUiSheet(readableCopy(move.name),`${moveDescription(move)}\nPotenza ${move.power||"—"} · Precisione ${move.accuracy}%\n${hint}\n${this.orderLabel(move)}`);}:undefined
       };
     });
     while(moves.length<4)moves.push({label:"Spazio libero",hint:"Impara una nuova mossa.",disabled:true,run:()=>{}});
-    const secondary:TouchAction[]=ready?[
-      action("Cambio",()=>this.openParty(false),"Il nemico risponde.",!this.hasBenchAlive()),
-      action("Borsa",()=>this.openBag()),
-      ...(!this.trainer?[action("Recluta",()=>this.openRecruit())]:[]),
-      action("Fuorionda",()=>this.useFuorionda(),`${this.polemica.value} di 3 Polemica`,this.polemica.value<3),
+    const more:TouchAction[]=[
       ...(this.trainer?[action("Campagna",()=>this.openCampaignMenu())]:[]),
-      action("Dossier",()=>this.openFightIntel(),"Leggi mosse e campo.",fallback),
+      action("Dossier",()=>this.openFightIntel(),undefined,fallback),
       ...(!this.trainer?[action("Fuga",()=>this.tryRun())]:[])
+    ];
+    const secondary:TouchAction[]=ready?[
+      action("Cambio",()=>this.openParty(false),undefined,!this.hasBenchAlive()),
+      action("Borsa",()=>this.openBag()),
+      action("Recluta",()=>this.openRecruit(),undefined,Boolean(this.trainer)),
+      action("···",()=>openUiSheet("Altre azioni","",more))
     ]:[action(this.msg.isOpen?"Continua":"Turno in corso",()=>this.msg.advance(),undefined,!this.msg.isOpen)];
     const intent=this.foeIntent;
     const title=this.msg.isOpen?"In lotta":this.actionCaption?`${readableCopy(this.actionCaption.actor)}: ${readableCopy(this.actionCaption.move)}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
-    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":`Polemica: ${this.polemica.value} di 3${this.copione?(this.battery>0?` · Copione: ${this.battery} turni`:" · Copione rotto"):""}${this.field?` · ${readableCopy(this.field.name)}${this.fieldResolved?"":" al turno 2"}`:""}`;
+    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":undefined;
     return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...secondary],arena:{
       impacts:this.fx.damageNumbers.map(d=>({label:`−${d.val}`,x:d.x/VIEW_W*100,y:d.y/this.viewHeight*100,opacity:this.state.reduceEffects?1:Math.min(1,Math.max(0,(1-d.life/d.max)/.34)),kind:d.crit?"crit":d.super?"super":"normal"})),
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
-      message:{title,body},notice,moveCount:moves.length
+      message:{title,body},notice,moveCount:moves.length,
+      polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status"}:undefined,
+      finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined
     }};
   }
 

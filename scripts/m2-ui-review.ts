@@ -1,0 +1,40 @@
+import '../src/styles.css';
+import '../src/ui/kit/kit.css';
+import {beginUiFrame,endUiFrame,renderUiWorld,renderUiPanel,renderUiFeedback,updateUiInput} from '../src/ui/kit';
+import {Screen} from '../src/engine/screen';
+import {SceneStack} from '../src/engine/scene';
+import {Input} from '../src/engine/input';
+import {WorldScene} from '../src/game/world/WorldScene';
+import {BattleScene} from '../src/game/battle/BattleScene';
+import {newGameState} from '../src/game/state';
+import {createMonster} from '../src/game/monster';
+import {coreTerrainEntries} from '../src/art/tiles';
+import {preloadSprites,waitForSprites} from '../src/engine/assets';
+import {audio} from '../src/engine/audio';
+import {mp} from '../src/net/mp';
+// Isolated realm: production constructors may autosave, but no fixture may write.
+Storage.prototype.setItem=()=>{};Storage.prototype.removeItem=()=>{};
+audio.enabled=false;mp.setEnabled(false);
+const entries=coreTerrainEntries();preloadSprites(entries);await waitForSprites(Object.keys(entries),10000);
+const screen=new Screen(document.querySelector('canvas')!),input=new Input(),stack=new SceneStack();
+const state=newGameState();state.flags['intro-done']=true;state.flags['opening-v2']=true;
+state.party=['berlusconix','giorgetta','ellyna','salvinator','draghimon','movimenton'].map(id=>createMonster(id,26));
+state.pos={mapId:'route1',x:7,y:8,facing:'down'};state.reduceEffects=true;
+const requested=new URLSearchParams(location.search).get('screen')??'esplorazione';
+if(requested.startsWith('lotta')){
+ if(requested==='lotta-esaurita')state.party[0].moves[0].pp=0;
+ const battle=new BattleScene(stack,input,{state,foeTeam:[createMonster('mediocrate',24)],onEnd:()=>{stack.pop();stack.push(new WorldScene(stack,input,state));}});
+ if(requested==='lotta-finale')(battle as unknown as {polemica:{value:number}}).polemica.value=3;
+ stack.push(battle);
+}else stack.push(new WorldScene(stack,input,state));
+let previous=performance.now();
+function frame(){
+ const now=performance.now(),dt=Math.min(.05,(now-previous)/1000);previous=now;
+ input.pollGamepads();updateUiInput(stack.top?.uiPanel,input);stack.update(dt);beginUiFrame();
+ const panel=stack.top?.uiPanel,native=renderUiPanel(panel);
+ renderUiWorld(native?undefined:stack.top?.uiWorld,!native&&Boolean(stack.top?.uiWorldPending));
+ renderUiFeedback(native?undefined:stack.top?.uiFeedback);
+ screen.configureViewport(Boolean(stack.top?.expandedViewport));
+ if(!native||panel?.arena)stack.draw(screen);
+ endUiFrame();input.endFrame();requestAnimationFrame(frame);
+}frame();

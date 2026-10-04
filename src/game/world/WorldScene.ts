@@ -1,3 +1,5 @@
+import {lastSuccessfulSaveAt} from "../state";
+import {worldLabel} from "../../ui/kit/worldLabels";
 import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosphere";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
@@ -41,7 +43,7 @@ import type { Scene, SceneStack } from "../../engine/scene";
 import type { TouchAction } from "../../engine/touchActions";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import {worldCameraAxis,followCamera,unzoomWorldPoint} from "../../engine/worldCamera";
-import { Menu, MessageBox, INK, setReduceMotion } from "../../ui/widgets";
+import { Menu, MessageBox, setReduceMotion } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
 import { beginTemporaryParty, markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
@@ -61,7 +63,6 @@ import { isGuideOn } from "../../engine/controls";
 import { PartyScene } from "../../scenes/PartyScene";
 import { WorldMapScene } from "../../scenes/WorldMapScene";
 import { PauseScene } from "../../scenes/PauseScene";
-import { BagScene } from "../../scenes/BagScene";
 import { TradeScene } from "../../scenes/TradeScene";
 import { DuelLobbyScene } from "../../scenes/DuelLobbyScene";
 import { PvpBattleScene } from "../battle/PvpBattleScene";
@@ -215,7 +216,6 @@ export class WorldScene implements Scene {
 
   private moving = false;
   private runToggled = false;
-  private hudInset = 0;
   private tapRoute: {x:number;y:number}[] = [];
   private tapTarget: {x:number;y:number;npcId?:string} | undefined;
   private npcTapAreas: {id:string;x:number;y:number;width:number;height:number}[] = [];
@@ -370,7 +370,6 @@ export class WorldScene implements Scene {
       body: "PV e PP recuperati. Gli stati sono rimossi.",
       facts: this.healSnapshot.map(s => ({label: SPECIES[s.mon.speciesId].name, value: `${s.from} → ${s.to} PV`}))
     }];
-    if (this.banner && !this.msg.isOpen) return [{title:this.banner.text,body:this.banner.sub}];
     return undefined;
   }
 
@@ -388,13 +387,13 @@ export class WorldScene implements Scene {
     if(mp.isEnabled()&&mp.onlineCount>0)facts.push({label:"Online",value:String(mp.onlineCount+1)});
     if((this.map.id==="campo_largo"||this.map.id==="retropalco_campo")&&this.state.election.phase!=="inactive")facts.push({label:"Consenso locale",value:`${this.state.election.districts.find(d=>d.id==="centro")?.localConsensus??38}%`});
     return {
-      notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:undefined,
+      saved:Date.now()-lastSuccessfulSaveAt<1800,
+      notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:this.banner?`${this.banner.text} · ${this.banner.sub}`:undefined,
       messages:mp.chat.filter(c=>performance.now()-c.t<6000).slice(-2).map(c=>`${mp.chatNick(c)}: ${c.text}`),
       lesson:controlLesson(this.state,context),
       location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it"),facts,
       objective:quest?`${this.map.id==="borgo"&&quest.target?.mapId==="route1"?"Esci a nord. ":""}${quest.step}`:this.state.party.length?undefined:"Vai al laboratorio con il tetto blu.",
       actions: [command("Squadra", () => this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:"view"})),"/sprites/ui/kit/team.png"),
-        command("Borsa", () => this.stack.push(new BagScene(this.stack,this.input,this.state,{inBattle:false,fromWorld:true})),"/sprites/ui/kit/bag.png"),
         command("Mappa", () => this.stack.push(new WorldMapScene(this.stack,this.input,this.state)),"/sprites/ui/kit/map.png"),
         {...command("Menu", () => this.stack.push(new PauseScene(this.stack,this.input,this.state)),"/sprites/ui/kit/more.png"),command:"start"}],
       context: {...command(context ?? "Avvicinati", () => { if (!followingRoute && !this.moving) this.interact(); }), disabled: !context || (this.moving && !followingRoute)},
@@ -3354,19 +3353,12 @@ export class WorldScene implements Scene {
     const playerPx = this.moving ? px : pos.x * TILE;
     const playerPy = this.moving ? py : pos.y * TILE;
 
-    // Reserve the native HUD's space: entering a short map from the north
-    // must not place the player beneath its mission card. Retain the inset
-    // during dialogue/healing so hiding commands does not move the world.
-    if (typeof document !== "undefined") {
-      const hud=document.querySelector<HTMLElement>(".ui-world-hud");
-      if (hud && !hud.hidden) {
-        const frame=screen.ctx.canvas.getBoundingClientRect();
-        if (frame.height>0) this.hudInset=Math.max(0,Math.min(Math.floor(this.viewHeight*.4),Math.ceil((hud.getBoundingClientRect().bottom-frame.top+12)*this.viewHeight/frame.height)));
-      }
-    }
+    // The HUD no longer reserves map space. Only keep the player clear of
+    // the short top strip when entering from a northern edge.
+    const topClearance=Math.ceil(116*VIEW_W/Math.max(1,screen.ctx.canvas.clientWidth||VIEW_W));
     const facing=DIR_DELTA[pos.facing],lead=this.moving&&!this.state.reduceEffects?5:0;
     const targetX=worldCameraAxis(playerPx+TILE/2+facing.dx*lead,mapW,VIEW_W);
-    const targetY=worldCameraAxis(playerPy+TILE/2+facing.dy*lead,mapH,this.viewHeight-this.hudInset)-this.hudInset;
+    const targetY=Math.min(worldCameraAxis(playerPy+TILE/2+facing.dy*lead,mapH,this.viewHeight),playerPy-topClearance);
     if(!this.cameraPosition)this.cameraPosition={x:targetX,y:targetY};
     this.cameraPosition.x=followCamera(this.cameraPosition.x,targetX,this.cameraDt,this.state.reduceEffects);
     this.cameraPosition.y=followCamera(this.cameraPosition.y,targetY,this.cameraDt,this.state.reduceEffects);
@@ -3633,11 +3625,9 @@ export class WorldScene implements Scene {
         const ey = w.y * TILE - camY;
         const blink = this.state.reduceEffects || Math.floor(this.time * 2) % 2 === 0;
         const label = "USCITA";
-        const lw = label.length * 6 + 4;
-        screen.rect(cxPx - lw / 2, ey - 9, lw, 8, "rgba(16,20,31,0.85)");
-        screen.text(label, cxPx - lw / 2 + 2, ey - 8, "#f0c040");
+        worldLabel(label,cxPx,ey-2,screen.height);
         if (blink) {
-          screen.text("▼", cxPx - 2, ey + 4, "#f0c040");
+          worldLabel("▼",cxPx,ey+12,screen.height);
         }
       }
     }
@@ -3698,28 +3688,22 @@ export class WorldScene implements Scene {
             screen.imageSpriteCropped(rImg, sx + 8 - rdw / 2, sy + 15 - rb.h * rs, { scaleX: rs, scaleY: rs });
           }
           // Targhetta col nickname sopra la testa (+ record duelli dichiarato).
-          const w = rNick.length * 6 + 4;
-          screen.rect(sx + 8 - w / 2, sy - 9, w, 8, "rgba(16,20,31,0.8)");
-          screen.text(rNick, sx + 8 - w / 2 + 2, sy - 8, "#9cd8e8");
+          worldLabel(rNick,sx+8,sy-5,screen.height);
           // Tag duelli: ★N (oro); a 10+ vittorie diventa "PORTAVOCE".
           if (r.duelWins > 0 && !rEmote) {
             const tag = r.duelWins >= 10 ? "PORTAVOCE" : `★${r.duelWins}`;
-            const tw = tag.length * 6 + 4;
-            screen.rect(sx + 8 - tw / 2, sy - 17, tw, 8, "rgba(16,20,31,0.8)");
-            screen.text(tag, sx + 8 - tw / 2 + 2, sy - 16, "#f0c040");
+            worldLabel(tag,sx+8,sy-16,screen.height);
           }
           // Bolla emote.
           if (rEmote) {
             // Bolla adattata a 1-2 caratteri (emote tipo "GG"/"OK").
             const e = rEmote.slice(0, 2);
-            screen.panel(sx + 6, sy - 22, 10 + e.length * 6, 13);
-            screen.text(e, sx + 10, sy - 19, INK);
+            worldLabel(e,sx+8,sy-18,screen.height);
           } else if (adjacent) {
             // Doppia freccia "!!" lampeggiante: premi A per interagire.
             const blink = this.state.reduceEffects || Math.floor(this.time * 2) % 2 === 0;
             if (blink) {
-              screen.rect(sx + 3, sy - 22, 12, 10, "rgba(24,60,120,0.9)");
-              screen.text("!!", sx + 5, sy - 20, "#9cd8e8");
+              worldLabel("!!",sx+8,sy-18,screen.height);
             }
           }
         }
@@ -3737,6 +3721,8 @@ export class WorldScene implements Scene {
     const doorOffset = this.doorOffsetSmooth;
     const baseX = Math.round(playerPx - camX + doorOffset);
     const baseY = Math.round(playerPy) - camY - 2;
+    screen.ctx.canvas.dataset.worldReady=String(this.fadeT<=0);
+    screen.ctx.canvas.dataset.worldPlayerBounds=JSON.stringify({x:baseX,y:baseY-6,w:16,h:24,viewHeight:screen.height});
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.
     const vehicle = this.state.vehicle as VehicleId | null;
@@ -3832,12 +3818,7 @@ export class WorldScene implements Scene {
       }
       const pulse = this.state.reduceEffects || Math.floor(this.time * 3) % 2 === 0;
       const color = pulse ? "#fff0a0" : "#e8c84a";
-      const labelW = Math.min(VIEW_W - 4, warp.markerLabel.length * 6 + 8);
-      const labelX = Math.max(2, Math.min(VIEW_W - labelW - 2, Math.round(wx + TILE / 2 - labelW / 2)));
-      const labelY = Math.max(15, wy - 14);
-      screen.rect(labelX, labelY, labelW, 11, "rgba(16,20,31,0.92)");
-      screen.textFit(warp.markerLabel, labelX + 4, labelY + 2, labelW - 8, color);
-      screen.text("▼", wx + 5, wy - 2, color);
+      worldLabel(warp.markerLabel,wx+TILE/2,wy-6,screen.height);
       screen.rect(wx + 1, wy + 1, TILE - 2, 1, color);
       screen.rect(wx + 1, wy + TILE - 2, TILE - 2, 1, color);
       screen.rect(wx + 1, wy + 1, 1, TILE - 2, color);

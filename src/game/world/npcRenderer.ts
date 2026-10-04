@@ -1,3 +1,4 @@
+import {worldLabel} from "../../ui/kit/worldLabels";
 import { npcImage, type Facing } from "../../art/characters";
 import { getSpriteImage } from "../../engine/assets";
 import type { NpcDef } from "../../data/maps";
@@ -88,11 +89,7 @@ export function buildNpcDrawCommand(options: {
         screen.rect(x, ny - 11, width, 9, "rgba(40,20,60,0.92)");
         screen.text(label, x + 2, ny - 10, Math.floor(effectTime * 2) % 2 === 0 ? "#ffe870" : "#f0c040");
       }
-      const nameplate = npc.nameplate ? npcNameplateLayout(npc.nameplate, nx, ny) : null;
-      if (npc.nameplate && nameplate) {
-        screen.rect(nameplate.x, nameplate.y, nameplate.width, 8, "rgba(16,20,31,0.85)");
-        screen.text(npc.nameplate, nameplate.x + 2, nameplate.y + 1, "#f0c040");
-      }
+      if(npc.nameplate)worldLabel(npc.nameplate,nx+8,ny-9,screen.height);
       if (exclaim || rematchReady) {
         screen.panel(nx + 2, ny - 13, 12, 13);
         screen.text("!", nx + 5, ny - 10, exclaim ? INK : "#c89a1a");

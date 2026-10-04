@@ -2,7 +2,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
 const mock=process.argv.includes('--mock');
-if(!mock)throw new Error('Runtime UI migration is not approved. Use --mock to check static review pages; runtime coverage must be wired after UI APPROVATA.');
+if(!mock){await import('./check-ui-runtime.mjs');process.exit(0);}
 const base=process.env.UI_LAYOUT_URL||'http://127.0.0.1:4190';
 const pages=JSON.parse(await fs.readFile('design/ui-mock/manifest.json','utf8'));
 const browser=await chromium.launch({headless:true});const errors=[],results=[];

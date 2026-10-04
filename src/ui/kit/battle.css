@@ -26,7 +26,7 @@ body.ui-panel-open.ui-arena-open #screen-frame{display:block!important;position:
 .ui-arena .ui-button:active{transform:translate(4px,4px);box-shadow:none;filter:none}
 .ui-arena .ui-button[aria-current=true]{outline:2px solid #14161F;outline-offset:2px}
 .ui-arena .ui-button[aria-disabled=true]{opacity:.45}
-.ui-arena .ui-move-card[aria-disabled=true] strong{text-decoration:line-through}
+.ui-arena .ui-move-card[data-empty=true] strong{text-decoration:line-through}
 .ui-arena .ui-subtitle{font:700 20px/1.2 Tribuna,sans-serif;text-transform:uppercase}
 .ui-arena .ui-command-group{display:none}
 .ui-move-meta{display:flex;align-items:center;gap:8px;font-size:16px;width:100%;line-height:1}

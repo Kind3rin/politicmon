@@ -44,7 +44,8 @@ const state=newGameState();state.flags['intro-done']=true;state.flags['opening-v
 state.party=['berlusconix','giorgetta','ellyna','salvinator','draghimon','movimenton'].map(id=>createMonster(id,26));
 const params=new URLSearchParams(location.search);
 const routeReview=params.has('routeReview');
-state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:'route1',x:7,y:8,facing:'down'};state.reduceEffects=true;
+if(params.has('roamers'))state.flags['opening-encountered']=true;
+state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:params.get('map')??'route1',x:Number(params.get('x')??7),y:Number(params.get('y')??8),facing:(params.get('face')??'down') as 'down'};state.reduceEffects=true;
 const routeStatus=document.createElement('output');
 if(routeReview){routeStatus.style.cssText='position:fixed;top:64px;right:12px;padding:6px;background:#f4eedc;color:#14161f;z-index:60;font:16px system-ui;pointer-events:none';document.body.append(routeStatus);}
 const requested=new URLSearchParams(location.search).get('screen')??'esplorazione';

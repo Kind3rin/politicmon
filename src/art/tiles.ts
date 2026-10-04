@@ -185,9 +185,14 @@ export function buildingKey(ch: string): string | null {
 
 // Collision, encounter and substrate metadata only. The world renderer uses
 // PNGs; historical text textures were never read and needlessly shipped.
-export interface TileDef { solid: boolean; overlay?: boolean; encounter?: boolean; water?: boolean; overWater?: boolean }
+export interface TileDef { solid: boolean; ledge?: boolean; overlay?: boolean; encounter?: boolean; water?: boolean; overWater?: boolean }
 
 export const TILES: Record<string, TileDef> = {
+  // Cornice di un dislivello: si scende saltando verso sud, mai in altre direzioni.
+  "%": {
+    "solid": false,
+    "ledge": true
+  },
   "1": {
     "solid": true,
     "overlay": true

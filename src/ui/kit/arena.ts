@@ -89,7 +89,7 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
       const efficacy=Number(action.facts?.find(f=>f.label==='Efficacia')?.value.replace('×',''));
       const meta=node('span','ui-move-meta');
       if(type&&type in TYPE_COLORS){button.style.background=TYPE_COLORS[type];button.style.color=typeLabelColor(type);const icon=document.createElement('img');icon.src=`/sprites/ui/type_${type.toLowerCase()}.png`;icon.alt=type;meta.append(icon);}
-      const count=node('span','ui-move-pp');count.textContent=pp;meta.append(count);
+      const count=node('span','ui-move-pp');count.textContent=pp;meta.append(count);if(/^0\s*[/d]/.test(pp))button.dataset.empty='true';
       const arrow=node('span','ui-efficacy');arrow.textContent=efficacy>1?'▲':efficacy<1?'▼':'';meta.append(arrow);button.append(meta);
       button.setAttribute('aria-label',`${action.label}, ${type??''}, PP ${pp}${efficacy>1?', superefficace':efficacy<1?', poco efficace':''}`);
     }

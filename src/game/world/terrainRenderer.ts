@@ -106,6 +106,8 @@ export class TerrainRenderer {
       this.drawEdges(ctx,snapshot,cell);
       if(cell.scatter) this.drawScatter(ctx,cell);
     }
+    // Dislivelli: una scarpata a strati, con l'ombra che cade sul terreno più in basso.
+    for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) if(rows[y][x]==='%') this.drawLedge(ctx,x,y,cells[y][x].variant,rows[y+1]?.[x]==='%');
     ctx.save();ctx.fillStyle='rgba(20,30,37,.19)';
     for(const shadow of source.shadows?.()??[]) {
       const {x,y,width,height}=shadow,reach=Math.max(3,Math.round(height*.45));
@@ -166,6 +168,22 @@ export class TerrainRenderer {
       for(let i=0;i<3;i++)ctx.rect(px+(dx>0?TILE-1-i:i),py+(dy>0?TILE-3+i:0),1,3-i);
       ctx.clip();ctx.drawImage(neighbor.image,px,py,TILE,TILE);ctx.restore();
     });
+  }
+  private drawLedge(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean):void {
+    const px=x*TILE,py=y*TILE;
+    ctx.save();
+    // Labbro d'erba in alto, parete di roccia con strati, base scura.
+    ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,TILE,4);
+    ctx.fillStyle='#a6c47f';ctx.fillRect(px,py,TILE,1);
+    ctx.fillStyle='#5f7f56';ctx.fillRect(px,py+3,TILE,1);
+    ctx.fillStyle='#9a7a56';ctx.fillRect(px,py+4,TILE,9);
+    ctx.fillStyle='#b69168';ctx.fillRect(px,py+4,TILE,2);
+    ctx.fillStyle='#7b5f43';ctx.fillRect(px,py+8,TILE,1);ctx.fillRect(px,py+11,TILE,1);
+    const crack=(variant*5+x*3)%11+2;ctx.fillStyle='#664d36';ctx.fillRect(px+crack,py+5,1,3);ctx.fillRect(px+(crack+6)%13+1,py+9,1,2);
+    ctx.fillStyle='#4a392a';ctx.fillRect(px,py+13,TILE,3);
+    if(!continues){ctx.fillStyle='rgba(20,30,37,.28)';ctx.fillRect(px,py+16,TILE,4);}
+    ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+16,TILE,3);
+    ctx.restore();
   }
   private drawCurb(ctx:CanvasRenderingContext2D,source:TerrainSource,cell:TerrainCell):void {
     const px=cell.x*TILE,py=cell.y*TILE;

@@ -53,6 +53,8 @@ import { buildDailyTrainer, dailyBoostSpeciesId, dailyRewardItem, hashDate, loca
 import { bumpDailyQuest, consumeDailyToast } from "../dailyquests";
 import { recordHealerVisit, recordRunStep } from "../runstats";
 import { MIN_FREE_STEPS, newWandererCadence, planWanderingChallenge, firstRecruitLevel } from "./explorationInterrupts";
+import { RoamerField, roamerTarget, type Contact as RoamerContact } from "./roamers";
+import { monsterImage } from "../../art/monsters";
 import { resolveTransportDestination, type TransportDestination } from "./transport";
 import { buildNpcDrawCommand, type RuntimeNpc } from "./npcRenderer";
 import { recordDuelResult } from "../duelrecord";
@@ -246,6 +248,12 @@ export class WorldScene implements Scene {
   private time = 0;
   private rustles: Rustle[] = [];
   private encounterFlash = 0;
+  private hop = false;
+  private roamers: RoamerField | null = null;
+  private roamerMap = "";
+  private roamerCount = 0;
+  private roamerGrace = 0;
+  private roamerHinted = false;
   private fadeT = 0; // dissolvenza d'ingresso mappa
   private fadeOut = 0; // dissolvenza d'USCITA prima di un warp
   private pendingWarp: (() => void) | null = null;
@@ -710,7 +718,7 @@ export class WorldScene implements Scene {
   // un altro NPC, né un warp o un pickup visibile (per non bloccare il giocatore).
   private npcCanEnter(x: number, y: number, self: RuntimeNpc): boolean {
     const tile = TILES[this.tileAt(x, y)];
-    if (!tile || tile.solid || tile.encounter) {
+    if (!tile || tile.solid || tile.encounter || tile.ledge) {
       return false; // niente erba alta: eviterebbe trigger strani e sembra più sensato
     }
     if (this.state.pos.x === x && this.state.pos.y === y) {
@@ -781,6 +789,7 @@ export class WorldScene implements Scene {
     let ch=this.terrainTileAt(x,y);
     const def=TILES[ch];
     const base=this.map.outdoor?'.':'p';
+    if(def?.ledge)ch=base;
     const covering=this.buildingCovering(x,y);
     const obj=this.objectPng(ch);
     const special='ORSN'.includes(ch);
@@ -933,7 +942,7 @@ export class WorldScene implements Scene {
 
   private isBlocked(x: number, y: number): boolean {
     const tile = TILES[this.tileAt(x, y)];
-    if (!tile) {
+    if (!tile || tile.ledge) {
       return true;
     }
     // MN TRAGHETTO: con la mossa macchina sbloccata, l'acqua diventa
@@ -1099,13 +1108,67 @@ export class WorldScene implements Scene {
     return pool[Math.floor(Math.random() * pool.length)];
   }
 
+  // ---- Candidati selvatici visibili nell'erba alta ----
+
+  private roamerEligible(): boolean {
+    const tutorial = Boolean(this.state.flags["opening-v2"]) && !this.state.flags["opening-encountered"];
+    return this.map.outdoor && Boolean(this.map.encounters?.length) && !tutorial && (this.map.encounterRate ?? 0.18) > 0
+      && this.state.party.some(mon => mon.hp > 0);
+  }
+
+  private roamerOpen(x: number, y: number): boolean {
+    return !this.isBlocked(x, y) && !this.map.warps.some(warp => warp.x === x && warp.y === y);
+  }
+
+  private syncRoamers(dt: number): void {
+    if (!this.roamerEligible()) { this.roamers = null; this.roamerMap = ""; return; }
+    const pos = this.state.pos, player = { x: pos.x, y: pos.y, facing: pos.facing };
+    if (!this.roamers || this.roamerMap !== this.map.id) {
+      const table = this.effectiveEncounters(), boost = this.todaysBoostId();
+      const rows = this.map.tiles, height = rows.length, width = rows[0]?.length ?? 0;
+      let grass = 0;
+      for (let y = 0; y < height; y += 1) for (let x = 0; x < width; x += 1) if (TILES[this.tileAt(x, y)]?.encounter) grass += 1;
+      this.roamerCount = roamerTarget(grass);
+      this.roamers = new RoamerField({ width, height, isGrass: (x, y) => Boolean(TILES[this.tileAt(x, y)]?.encounter), isOpen: (x, y) => this.roamerOpen(x, y) },
+        table.map(entry => ({ speciesId: entry.speciesId, minLv: entry.minLv, maxLv: entry.maxLv, weight: entry.speciesId === boost ? entry.weight * DAILY_BOOST_MULT : entry.weight })));
+      this.roamers.fill(this.roamerCount, player);
+      this.roamerMap = this.map.id;
+      this.roamerHinted = false;
+    }
+    const scared = this.state.repellentSteps > 0;
+    this.roamers.update(dt, player, scared, this.roamerCount);
+    this.roamerGrace = Math.max(0, this.roamerGrace - dt);
+    if (this.roamerGrace > 0) return;
+    const contact = this.roamers.contact(player, scared);
+    if (contact) { this.startRoamerBattle(contact); return; }
+    if (!this.roamerHinted && !this.state.flags["roamers-hint"] && this.roamers.roamers.some(r => Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) <= 8)) {
+      this.roamerHinted = true; this.state.flags["roamers-hint"] = true;
+      this.tapNotice = { text: "Candidato in vista: sorprendilo!", until: this.time + 5 };
+    }
+  }
+
+  private startRoamerBattle(contact: RoamerContact): void {
+    const { roamer, advantage } = contact;
+    this.roamers?.remove(roamer);
+    this.stopTapRoute();
+    const mod = advantage ? null : this.rollEncounterFlavor();
+    const level = firstRecruitLevel(this.state, Math.max(2, roamer.level + (mod?.dLevel ?? 0)));
+    const name = SPECIES[roamer.speciesId]?.name ?? "Il candidato";
+    const intro = advantage === "player" ? (roamer.mood === "sleep" ? `${name} dorme: agisci per primo!` : "Colto di spalle: agisci per primo!")
+      : advantage === "foe" ? `${name} ti ha preso alle spalle!` : mod?.line.replace("\n", " ");
+    this.state.flags["opening-encountered"] = true;
+    this.roamerGrace = 3;
+    this.startWildBattle(roamer.speciesId, level, undefined, undefined, false, intro, advantage);
+  }
+
   private startWildBattle(
     speciesId: string,
     level: number,
     after?: (result: BattleResult) => void,
     music?: string,
     legendary = false,
-    encounterIntro?: string
+    encounterIntro?: string,
+    advantage?: "player" | "foe"
   ): void {
     this.queueBattle(() => {
       const foe = createMonster(speciesId, level);
@@ -1116,6 +1179,7 @@ export class WorldScene implements Scene {
           music,
           legendary,
           encounterIntro,
+          advantage,
           onEnd: (result) => {
             this.onBattleEnd(result);
             after?.(result);
@@ -2925,6 +2989,8 @@ export class WorldScene implements Scene {
     const tile = TILES[this.tileAt(pos.x, pos.y)];
     if (tile?.encounter) {
       this.rustles.push({ x: pos.x, y: pos.y, t: 0.4 });
+      // Fuori dal tutorial i selvatici si vedono sulla mappa: niente tiro invisibile nell'erba all'aperto.
+      if (this.map.outdoor && (this.map.encounterRate ?? 0.18) > 0 && !(this.state.flags["opening-v2"] && !this.state.flags["opening-encountered"])) return;
       if (repellentActive || onCooldown) {
         return; // SPRAY ANTI-COMIZIO: niente incontri wild finché dura
       }
@@ -3195,6 +3261,8 @@ export class WorldScene implements Scene {
       return;
     }
 
+    if (!this.msg.isOpen) this.syncRoamers(dt);
+    if (this.encounterFlash > 0 || this.pendingBattle) return;
     let dir = this.input.heldDirection() ?? (["up", "down", "left", "right"] as const).find(key => this.input.wasPressed(key));
     if (this.msg.isOpen) {
       if (!dir || !this.msg.dismissNotification()) {
@@ -3266,9 +3334,10 @@ export class WorldScene implements Scene {
             : this.running
               ? RUN_FACTOR
               : 1;
-      this.moveT += (dt / STEP_TIME) * factor;
+      this.moveT += (dt / STEP_TIME) * (this.hop ? 0.6 : factor);
       if (this.moveT >= 1) {
         this.moving = false;
+        this.hop = false;
         this.moveT = 0;
         this.onStepComplete();
         if (!this.canUseWorldControls()) this.stopTapRoute();
@@ -3323,6 +3392,20 @@ export class WorldScene implements Scene {
       return;
     }
 
+    if (TILES[this.tileAt(nx, ny)]?.ledge) {
+      const landing = { x: nx, y: ny + 1 };
+      if (facing === "down" && !this.isBlocked(landing.x, landing.y) && !this.map.warps.some(warp => warp.x === landing.x && warp.y === landing.y)) {
+        this.running = false;
+        this.hop = true;
+        this.fromX = pos.x; this.fromY = pos.y;
+        pos.x = landing.x; pos.y = landing.y;
+        this.moving = true; this.moveT = 0;
+        haptics.tap();
+        return;
+      }
+      if(!this.state.reduceEffects&&this.time>=this.nextBump){this.shake=.18;this.nextBump=this.time+.3;}
+      return;
+    }
     if (this.isBlocked(nx, ny)) {
       if(!this.state.reduceEffects&&this.time>=this.nextBump){this.shake=.18;this.nextBump=this.time+.3;}
       return;
@@ -3523,6 +3606,23 @@ export class WorldScene implements Scene {
     // "personaggio sopra il tetto". Gli edifici di mappa ora passano solo dai PNG
     // PixelLab caricati dal preload: niente vecchie pixmap di recupero in world.
     const tall: Array<{ baseY: number; draw: () => void }> = [...treeTrunks];
+    for (const roamer of this.roamers?.roamers ?? []) {
+      const ease = roamer.t < 1 ? roamer.t : 1;
+      const px = (roamer.fromX + (roamer.x - roamer.fromX) * ease) * TILE, py = (roamer.fromY + (roamer.y - roamer.fromY) * ease) * TILE;
+      const rx = Math.round(px - camX), ry = Math.round(py - camY);
+      if (rx < -24 || rx > VIEW_W + 24 || ry < -24 || ry > this.viewHeight + 24) continue;
+      tall.push({ baseY: py + TILE, draw: () => {
+        const hop = roamer.t < 1 ? Math.abs(Math.sin(roamer.t * Math.PI)) * 3 : roamer.mood === "sleep" || this.state.reduceEffects ? 0 : (Math.floor(this.time * 3 + roamer.id) % 4 === 0 ? 1 : 0);
+        this.drawShadow(screen, rx + 8, ry + 14, 5);
+        const image = monsterImage(roamer.speciesId);
+        if (image) {
+          const bounds = screen.imageBounds(image), scale = 20 / bounds.h, dw = bounds.w * scale;
+          screen.imageSpriteCropped(image, rx + 8 - dw / 2, ry + 15 - bounds.h * scale - hop, { scaleX: scale, scaleY: scale });
+        }
+        if (roamer.alert > 0) { screen.rect(rx + 4, ry - 20, 9, 11, "#d7263d"); screen.text("!", rx + 7, ry - 18, "#fffaf0"); }
+        else if (roamer.mood === "sleep") screen.text("z", rx + 12, ry - 8 - (Math.floor(this.time * 2) % 2), "#fffaf0");
+      } });
+    }
     for(const lamp of this.map.lamps??[]){
       const x=Math.round(lamp.x*TILE+8-camX),y=Math.round((lamp.y+1)*TILE-camY);
       if(x < -8 || x > VIEW_W+8 || y < 0 || y > this.viewHeight+34)continue;
@@ -3720,7 +3820,8 @@ export class WorldScene implements Scene {
     // niente più scatto laterale al primo passo, il player scivola dolce.
     const doorOffset = this.doorOffsetSmooth;
     const baseX = Math.round(playerPx - camX + doorOffset);
-    const baseY = Math.round(playerPy) - camY - 2;
+    const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * 9) : 0;
+    const baseY = Math.round(playerPy) - camY - 2 - hopLift;
     screen.ctx.canvas.dataset.worldReady=String(this.fadeT<=0);
     screen.ctx.canvas.dataset.worldPlayerBounds=JSON.stringify({x:baseX,y:baseY-6,w:16,h:24,viewHeight:screen.height});
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":

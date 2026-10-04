@@ -66,6 +66,8 @@ export interface BattleOptions {
   music?: string; // override (es. leggendari)
   legendary?: boolean; // mette in scena l'incontro come "leggendario" (epico)
   encounterIntro?: string;
+  /** Who moves first on turn one: a candidate caught asleep, or one that caught the player. */
+  advantage?: "player" | "foe";
   // RIVINCITA (R42 economia): true se è un rematch di un trainer già battuto. Lo
   // SPOT IN PRIME TIME (+50% fondi) è ESCLUSO dai rematch: il bonus resta un
   // acceleratore sui trainer di storia/nuovi, non un faucet sui ribattuti.
@@ -110,6 +112,7 @@ export class BattleScene implements Scene {
   private msg = new MessageBox();
   private actionCaption: { actor: string; move: string; result: string } | null = null;
   private polemica = new Polemica();
+  private firstOrder: "player" | "foe" | null = null;
   private foeIntent: Move | null = null;
   private recruitBall = "";
   private battery = 3;
@@ -174,6 +177,8 @@ export class BattleScene implements Scene {
     this.trainer = opts.trainer;
     this.copione = opts.trainer?.id === "rival1" && Boolean(this.state.flags["opening-v2"]);
     if (this.copione) { this.battery = 2; sceneImage("battle:copione", "ui/battle/copione.png"); }
+    this.firstOrder = opts.advantage ?? null;
+    if (opts.advantage === "player") this.polemica.value = 1;
     this.isRematch = opts.isRematch ?? false;
     this.isLegendary = opts.legendary ?? false;
     this.electionDoctrine = opts.electionDoctrine ?? "none";
@@ -345,7 +350,9 @@ export class BattleScene implements Scene {
       slot.pp = Math.max(0, slot.pp - 1);
     }
     const foeMove = this.takeFoeIntent();
-    const order = moveOrder(this.player, this.foe, playerMove, foeMove);
+    const forced = this.firstOrder;
+    this.firstOrder = null;
+    const order = forced ?? moveOrder(this.player, this.foe, playerMove, foeMove);
     const playerFirst = order === "tie" ? Math.random() < 0.5 : order === "player";
 
     const first = playerFirst ? "player" : "foe";
@@ -513,7 +520,7 @@ export class BattleScene implements Scene {
     const [player, previewFoe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
     const foe = this.trainer?.id === "futuro-anteriore"
       ? { ...previewFoe, stages: resolveFuturoPhase(previewFoe, this.futuroPhaseTriggered).stages } : previewFoe;
-    const order = moveOrder(player, foe, move, this.foeIntent);
+    const order = this.firstOrder ?? moveOrder(player, foe, move, this.foeIntent);
     return order === "player" ? "AGISCI PRIMA" : order === "foe" ? "AGISCI DOPO" : "PARITÀ: 50%";
   }
 

@@ -43,6 +43,7 @@ import { moraleExpMultiplier } from "../morale";
 import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
 import { switchPreview, damageRange, replyRange } from "./tactics";
+import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
 import { chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
 import type { TouchAction } from "../../engine/touchActions";
@@ -113,6 +114,8 @@ export class BattleScene implements Scene {
   private actionCaption: { actor: string; move: string; result: string } | null = null;
   private polemica = new Polemica();
   private firstOrder: "player" | "foe" | null = null;
+  private posture: Posture = "none";
+  private turnPosture: Posture = "none";
   private foeIntent: Move | null = null;
   private recruitBall = "";
   private battery = 3;
@@ -328,6 +331,9 @@ export class BattleScene implements Scene {
   // ---- Turn building ----
 
   private startTurn(playerMove: Move): void {
+    this.turnPosture = playerMove.id === FUORIONDA.id ? "none" : this.posture;
+    this.posture = "none";
+    if (posturePolemica(this.turnPosture) && this.polemica.value < 3) this.polemica.value += 1;
     this.advanceField();
     this.electionTurn += 1;
     this.drainBattery();
@@ -346,7 +352,7 @@ export class BattleScene implements Scene {
       }
     }
     const slot = this.player.mon.moves.find((s) => s.id === playerMove.id);
-    if (slot) {
+    if (slot && !postureKeepsPP(this.turnPosture)) {
       slot.pp = Math.max(0, slot.pp - 1);
     }
     const foeMove = this.takeFoeIntent();
@@ -426,6 +432,7 @@ export class BattleScene implements Scene {
   private foeCounterStep(): Step {
     return {
       run: () => {
+        this.turnPosture = "none";
         if (this.foe.mon.hp > 0) {
           const saved = this.queue;
           this.queue = [];
@@ -543,7 +550,8 @@ export class BattleScene implements Scene {
     if (!this.foeIntent) return "—";
     const [player, foe] = fieldPreview(this.field, this.fieldTurn, this.player, this.foe);
     const range = replyRange(player, foe, this.foeIntent, preparation, { sondaggi: this.state.sondaggi });
-    return `${range.min}-${range.max}`;
+    const taken = postureTaken(this.posture);
+    return taken === 1 ? `${range.min}-${range.max}` : `${postureDamage(range.min, taken)}-${postureDamage(range.max, taken)}`;
   }
 
   private moveSteps(
@@ -604,7 +612,9 @@ export class BattleScene implements Scene {
         : calcDamage(attacker, defender, move, Math.random, { sondaggi: this.state.sondaggi });
       const civicFavored = this.electionDoctrine === "lista_civica" && side === "foe"
         && ((this.electionTurn % 2 === 1 && move.category === "fisico") || (this.electionTurn % 2 === 0 && move.category === "speciale"));
-      const appliedDamage = side === "player" ? this.copioneDamage(result.damage, move) : civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
+      const baseDamage = side === "player" ? this.copioneDamage(result.damage, move) : civicFavored ? Math.max(1, Math.round(result.damage * 1.15)) : result.damage;
+      const postureFactor = move.id === FUORIONDA.id ? 1 : side === "player" ? postureDealt(this.turnPosture) : postureTaken(this.turnPosture);
+      const appliedDamage = postureFactor === 1 ? baseDamage : postureDamage(baseDamage, postureFactor);
       steps.push({
         run: () => {
           const lost = Math.min(defender.mon.hp, appliedDamage);
@@ -751,7 +761,9 @@ export class BattleScene implements Scene {
       ? { ...effect.statusIfFirst, chance: festivalScandaloChance(actedFirst) }
       : undefined;
     const statusEffect = effect?.status ?? conditionalStatus;
-    if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0) {
+    if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0 && side === "foe" && postureBlocksStatus(this.turnPosture)) {
+      steps.push({ text: "SMENTITA PRONTA: lo status viene respinto!", run: () => audio.abilityBlock() });
+    } else if (statusEffect && statusEffect.chance > 0 && defender.mon.hp > 0) {
       // TEFLON (e GARANZIA COSTITUZIONALE): immune agli status (guard PRIMA del
       // tiro di chance, come in duelsim). TELECAMERA (hold): previene solo la GAFFE.
       const statusBlock = statusBlockReason(defender.mon, statusEffect.id);
@@ -1401,7 +1413,7 @@ export class BattleScene implements Scene {
       const estimate=damageRange(player,foe,move,{sondaggi:this.state.sondaggi});
       const tactical=this.moveHint(move);
       const blocked=/^(BLOCCATA|STATISTICA)/.test(tactical);
-      const hint=blocked?readableCopy(tactical):move.power?`Danno stimato: ${this.copioneDamage(estimate.min,move)}–${this.copioneDamage(estimate.max,move)} PV.`:moveCardDescription(move);
+      const dealt=postureDealt(this.posture),hint=blocked?readableCopy(tactical):move.power?`Danno stimato: ${postureDamage(this.copioneDamage(estimate.min,move),dealt)}–${postureDamage(this.copioneDamage(estimate.max,move),dealt)} PV.`:moveCardDescription(move);
       return {...action(readableCopy(move.name),()=>{
         if(!fallback && (this.player.mon.moves[index]!==slot || slot.pp<=0))return;
         this.fightMenu.index=index;this.mode="queue";this.startTurn(move);
@@ -1424,14 +1436,19 @@ export class BattleScene implements Scene {
       action("···",()=>openUiSheet("Altre azioni","",more))
     ]:[action(this.msg.isOpen?"Continua":"Turno in corso",()=>this.msg.advance(),undefined,!this.msg.isOpen)];
     const intent=this.foeIntent;
+    const postures:TouchAction[]=ready?(Object.keys(POSTURES) as Array<Exclude<Posture,"none">>).map(id=>{
+      const info=POSTURES[id],chosen=this.posture===id;
+      const describe=()=>openUiSheet(info.label,`${info.rule}\n\n${info.tip}`);
+      return {...action(info.label,()=>{this.posture=chosen?"none":id;},info.rule),pressed:chosen,onInspect:describe};
+    }):[];
     const title=this.msg.isOpen?"In lotta":this.actionCaption?`${readableCopy(this.actionCaption.actor)}: ${readableCopy(this.actionCaption.move)}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
     const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":undefined;
-    return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...secondary],arena:{
+    return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...postures,...secondary],arena:{
       impacts:this.fx.damageNumbers.map(d=>({label:`−${d.val}`,x:d.x/VIEW_W*100,y:d.y/this.viewHeight*100,opacity:this.state.reduceEffects?1:Math.min(1,Math.max(0,(1-d.life/d.max)/.34)),kind:d.crit?"crit":d.super?"super":"normal"})),
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
-      message:{title,body},notice,moveCount:moves.length,
+      message:{title,body},notice,moveCount:moves.length,postureCount:postures.length,
       polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status"}:undefined,
       finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined
     }};

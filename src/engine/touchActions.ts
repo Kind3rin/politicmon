@@ -31,6 +31,8 @@ export interface TouchAction {
   facts?: readonly { label: string; value: string }[];
   order?: "AGISCI PRIMA" | "AGISCI DOPO" | "PARITÀ: 50%";
   disabled?: boolean;
+  /** A toggle: drawn as pressed when true, as released when false. */
+  pressed?: boolean;
   /** Tribuna row: the visual form of a list entry (companion, item, move). */
   row?: UiRow;
   onInspect?: () => void;

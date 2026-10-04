@@ -257,6 +257,7 @@ export const kit = {
     button.type = "button";
     button.disabled = Boolean(action.disabled && !action.onInspect);
     if(action.disabled)button.setAttribute("aria-disabled","true");
+    if(action.pressed!==undefined)button.setAttribute("aria-pressed",String(action.pressed));
     const heading = element("span", "ui-button-heading");
     if (action.icon) {
       const icon = element("img", "ui-button-icon");

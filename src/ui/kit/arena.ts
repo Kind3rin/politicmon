@@ -13,6 +13,8 @@ export interface UiArena {
   message?:{title:string;body:string};
   notice?:string;
   moveCount:number;
+  /** Posture toggles that follow the moves in actions[]. */
+  postureCount?:number;
   impacts?:readonly {label:string;x:number;y:number;opacity:number;kind:"normal"|"super"|"crit"}[];
 }
 let owner:HTMLElement|undefined;
@@ -47,7 +49,7 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
     const notice=node('div','ui-arena-notice ui-note');
     const impacts=node('div','ui-arena-impacts');impacts.setAttribute("aria-hidden","true");view.append(impacts,notice);
     const caption=node('section','ui-arena-caption');caption.append(node('h2','ui-subtitle'),node('p','ui-body'));
-    const deck=node('div','ui-arena-deck');deck.append(node('div','ui-arena-moves'),node('div','ui-arena-secondary'));
+    const deck=node('div','ui-arena-deck');deck.append(node('div','ui-arena-moves'),node('div','ui-arena-postures'),node('div','ui-arena-secondary'));
     view.append(hud);root.replaceChildren(view,caption,deck);
   }
   root.setAttribute('aria-label',panel.title);
@@ -94,11 +96,15 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
       button.setAttribute('aria-label',`${action.label}, ${type??''}, PP ${pp}${efficacy>1?', superefficace':efficacy<1?', poco efficace':''}`);
     }
     button.dataset.uiIndex=String(index+(panel.tabs?.length??0));
-    button.classList.add(index<arena.moveCount?'ui-move-card':'ui-secondary-action');
+    button.classList.add(index<arena.moveCount?'ui-move-card':index<arena.moveCount+(arena.postureCount??0)?'ui-posture':'ui-secondary-action');
     button.setAttribute('aria-current',String(index===selected));return button;
   });
+  const postureEnd=arena.moveCount+(arena.postureCount??0);
   root.querySelector('.ui-arena-moves')!.replaceChildren(...buttons.slice(0,arena.moveCount));
-  root.querySelector('.ui-arena-secondary')!.replaceChildren(...buttons.slice(arena.moveCount));
+  const postures=root.querySelector<HTMLElement>('.ui-arena-postures')!;
+  postures.replaceChildren(...buttons.slice(arena.moveCount,postureEnd));postures.hidden=postureEnd===arena.moveCount;
+  root.querySelector('.ui-arena-deck')!.classList.toggle('ui-has-postures',!postures.hidden);
+  root.querySelector('.ui-arena-secondary')!.replaceChildren(...buttons.slice(postureEnd));
 }
 /** Keep the canvas outside a menu before removing an arena subtree. */
 export function leaveArena(root?:HTMLElement):void {

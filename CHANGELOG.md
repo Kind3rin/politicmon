@@ -1,5 +1,11 @@
 # Changelog
 
+## Mandato 2 — Fase 0 chiusa, Fasi 2 e 5 avviate — 2026-10-05
+
+- Interfaccia: tutte le schermate a pannello passano alla pelle Tribuna (carta, inchiostro, ombra piena) con un solo pulsante di chiusura e nessun testo «N di M» a vista. Squadra in sei righe con barre e stemmi, scheda compagno a tre linguette, borsa a categorie con destinatario e anteprima dell'effetto, apprendimento in un tocco, mappa disegnata con luoghi cliccabili, titolo a tutto schermo con una sola azione principale. Negozio, Politicdex, Circolo e Traguardi diventano elenchi compatti. Controlli: `check:ui-panels` (20 schermate × 4 viewport) e `check:ui-flows` (tocco e tastiera).
+- Mondo: i candidati selvatici si vedono nell'erba alta e hanno un carattere (girovagano, scappano, inseguono, dormono). Sorprendere chi dorme o guarda altrove dà la prima mossa e 1 Polemica; farsi prendere alle spalle la dà a lui. Il tiro invisibile resta solo per l'incontro del tutorial e nelle grotte. Percorsi 1-3 con dislivelli: si scende saltando una scarpata verso sud, nelle altre direzioni è un muro.
+- Lotta: tre posture a scelta ogni turno (Attacca, Smentisci, Temporeggia), lette contro l'intenzione dichiarata dell'avversario. Stime di danno e risposta prevista tengono conto della postura. Mosse a PP esauriti barrate, quelle solo in attesa no.
+
 ## Mandato 2 — Fase 0 riaperta — 2026-10-04
 
 - Bozze statiche Tribuna elettorale: dieci pagine, venti schermate, confronti con riferimenti e verifica di 40 layout. UI di produzione non migrata: attesa della riga UI APPROVATA in M2-NOTE-LUCA.md.

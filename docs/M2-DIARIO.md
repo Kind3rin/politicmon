@@ -31,3 +31,15 @@ Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalt
 Cache atmosfera: disegno identico in 8.448 casi; 414 test/build verdi. Perf M2 rosso: p95 17,5–17,6 ms, idle 17,5 ms; media 60 fps.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
 Corretto il falso muro di alberi oltre l’uscita: 1-uscita-sud-aperta.png. Restano giro slice/ascolto telefono e 60 fps; UI approvata, migrazione avviata.
+
+## Fase 0 — chiusa — 5 ottobre 2026
+Prima/dopo: artifacts/m2/panel-*-412x915.png (squadra, compagno, borsa, impara, mappa, negozio, dex, circolo, titolo e altre).
+Si nota subito: squadra e borsa a righe dense; titolo a tutto schermo; mappa disegnata; nessuno scorrimento in squadra, scheda, apprendimento e mappa.
+Ancora non convince: schermate di campagna/diplomazia restano a schede; la ricevuta di crescita è una scheda sola in un foglio vuoto.
+Prove: check:ui-panels 20×4, check:ui-flows, check-ui-runtime 28, 425 test.
+
+## Fase 2 (avvio) e Fase 4/5 (primi elementi) — 5 ottobre 2026
+Dislivelli: casella % (scarpata), salto verso sud, muro negli altri versi. Sui Percorsi 1-3; non ancora i livelli a più altezze di DESIGN M2.
+Selvatici visibili: roamers.ts con 4 umori, vantaggio sul primo turno, tiro invisibile solo tutorial/grotte. 7 test.
+Posture: Attacca/Smentisci/Temporeggia, anteprime coerenti, 4 test. L'IA nemica non le usa ancora.
+Crediti Higgsfield: nessun consumo in questo round.

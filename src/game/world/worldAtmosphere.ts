@@ -24,6 +24,16 @@ export function footSurface(tile:string,weather:Weather,material?:'grass'|'sand'
 type Footmark={x:number;y:number;surface:FootSurface;age:number;life:number;side:number};
 export class WorldAtmosphere {
   private steps:Footmark[]=[];
+  private ambientMap?:{id:string;tiles:MapDef['tiles'];coastal:boolean;width:number;height:number;motifs:readonly number[];rain:readonly number[]};
+  private ambientFor(map:MapDef){
+    if(!this.ambientMap||this.ambientMap.id!==map.id||this.ambientMap.tiles!==map.tiles){
+      this.ambientMap={id:map.id,tiles:map.tiles,coastal:map.tiles.some(row=>row.includes('w')),
+        width:map.tiles[0].length*16,height:map.tiles.length*16,
+        motifs:Array.from({length:24},(_,i)=>terrainHash(map.id,i,0,15)),
+        rain:Array.from({length:30},(_,i)=>terrainHash(map.id,i,1))};
+    }
+    return this.ambientMap;
+  }
   reset():void {this.steps=[];}
   update(dt:number,reduced:boolean):void {
     if(reduced){this.reset();return;}
@@ -71,10 +81,11 @@ export class WorldAtmosphere {
     }
     if(!reduced){
       // Three ambient motifs, anchored to map coordinates; bounded draw cost.
-      const spanX=Math.max(width,map.tiles[0].length*16),spanY=Math.max(height,map.tiles.length*16);
-      const coastal=map.tiles.some(row=>row.includes('w'));
+      const ambient=this.ambientFor(map);
+      const spanX=Math.max(width,ambient.width),spanY=Math.max(height,ambient.height);
+      const coastal=ambient.coastal;
       for(let i=0;i<24;i++){
-        const seed=terrainHash(map.id,i,0,15),kind=i%3;
+        const seed=ambient.motifs[i],kind=i%3;
         const x=Math.round(((seed%spanX+time*(kind===2?9:3))%spanX)-camX);
         const y=Math.round((((seed>>>12)%spanY+time*(kind===0?2:1))%spanY)-camY);
         if(x<0||y<0||x>width||y>height)continue;
@@ -87,7 +98,7 @@ export class WorldAtmosphere {
       if(weather==='pioggia'){
         ctx.strokeStyle='rgba(179,210,220,.45)';ctx.lineWidth=1;ctx.beginPath();
         for(let i=0;i<30;i++){
-          const seed=terrainHash(map.id,i,1),x=Math.round((seed%width+time*22)%width),y=Math.round(((seed>>>10)%height+time*85)%height);
+          const seed=ambient.rain[i],x=Math.round((seed%width+time*22)%width),y=Math.round(((seed>>>10)%height+time*85)%height);
           ctx.moveTo(x,y);ctx.lineTo(x-2,y+6);
         }ctx.stroke();
       } else if(weather==='nebbia'){

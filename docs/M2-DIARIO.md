@@ -26,8 +26,8 @@ Camera con inseguimento/anticipo, scossa e zoom; passi per materiale, corretta l
 Prima/dopo: 1-{borgo,route1}-{prima,dopo}.png; 1-chioma-dopo.png in artifacts/m2.
 Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png, 1-lampioni-{giorno,notte,riduci}.png.
 Nuove prove: 1-mediopoli-asfalto.png, 1-laboratorio-pavimento.png, 1-grotta-materiali.png.
-Input reali: 38 passi, Percorso 1 ↔ Mediopoli e arrivo a Borgo; cache completa. Prove 1-percorso-*.png.
+Input reali con Tribuna: 40 passi Borgo → Percorso 1 → Mediopoli → Borgo, senza blocchi. Prove 1-tribuna-percorso-*.png.
 Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalto/pavimenti.
-Prima della migrazione UI: 414 test/build verdi, nessuno stallo >100 ms; perf M2 rosso: p95 18,5–18,6 ms, idle 18,5 ms.
+Cache atmosfera: disegno identico in 8.448 casi; 414 test/build verdi. Perf M2 rosso: p95 17,5–17,6 ms, idle 17,5 ms; media 60 fps.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
 Corretto il falso muro di alberi oltre l’uscita: 1-uscita-sud-aperta.png. Restano giro slice/ascolto telefono e 60 fps; UI approvata, migrazione avviata.

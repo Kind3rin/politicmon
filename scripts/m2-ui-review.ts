@@ -19,7 +19,11 @@ const entries=coreTerrainEntries();preloadSprites(entries);await waitForSprites(
 const screen=new Screen(document.querySelector('canvas')!),input=new Input(),stack=new SceneStack();
 const state=newGameState();state.flags['intro-done']=true;state.flags['opening-v2']=true;
 state.party=['berlusconix','giorgetta','ellyna','salvinator','draghimon','movimenton'].map(id=>createMonster(id,26));
-state.pos={mapId:'route1',x:7,y:8,facing:'down'};state.reduceEffects=true;
+const params=new URLSearchParams(location.search);
+const routeReview=params.has('routeReview');
+state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:'route1',x:7,y:8,facing:'down'};state.reduceEffects=true;
+const routeStatus=document.createElement('output');
+if(routeReview){routeStatus.style.cssText='position:fixed;top:64px;right:12px;padding:6px;background:#f4eedc;color:#14161f;z-index:60;font:16px system-ui;pointer-events:none';document.body.append(routeStatus);}
 const requested=new URLSearchParams(location.search).get('screen')??'esplorazione';
 if(requested.startsWith('lotta')){
  if(requested==='lotta-esaurita')state.party[0].moves[0].pp=0;
@@ -36,5 +40,6 @@ function frame(){
  renderUiFeedback(native?undefined:stack.top?.uiFeedback);
  screen.configureViewport(Boolean(stack.top?.expandedViewport));
  if(!native||panel?.arena)stack.draw(screen);
+ if(routeReview)routeStatus.textContent=`${state.pos.mapId} · ${state.pos.x},${state.pos.y} · ${state.stepsTotal} passi`;
  endUiFrame();input.endFrame();requestAnimationFrame(frame);
 }frame();

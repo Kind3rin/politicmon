@@ -17,6 +17,7 @@ import type { GameState } from "../game/state";
 import {wrapText} from "../ui/widgets";
 import type {UiPanel,UiBlock} from "../ui/kit";
 import {moveDescription} from "../ui/kit/moveContent";
+import {openUiSheet} from "../ui/kit/sheet";
 
 export interface PartyOptions {
   mode: "view" | "battle-switch" | "forced-switch" | "use-item";
@@ -238,41 +239,69 @@ export class PartyScene implements Scene {
     const party=this.opts.partyOverride??this.state.party,mon=this.summary;
     const actions=this.touchActions??[];
     if(!mon){
-      return {title:this.opts.title??(this.opts.mode==='forced-switch'?'Scegli chi continua':this.opts.mode==='use-item'?'Scegli un compagno':'La tua squadra'),
-        subtitle:this.opts.mode==='view'?`${party.length} di 6 compagni. Il capofila entra per primo in lotta.`:this.opts.mode==='forced-switch'?'Il compagno in campo è KO. Serve una riserva.':this.opts.mode==='use-item'?'Controlla l’effetto prima di scegliere. I compagni incompatibili sono disattivati.':'Scegli chi entra in campo. Il costo del cambio è indicato sotto il nome.',
+      const bench=this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?party.filter(target=>target.uid!==this.opts.currentUid):party;
+      const rows=actions.filter(action=>!['INDIETRO','ESCI','ALTRI'].includes(action.label)).map((action,i):TouchAction=>{
+        const target=bench[i];if(!target)return {...action,label:'Nessun compagno'};
+        const stats=statsOf(target),preview=this.opts.mode==='use-item'?this.opts.itemPreview?.(target):undefined;
+        const incompatible=!!this.opts.directiveMoveId&&!canLearnMove(target,this.opts.directiveMoveId);
+        const meta=this.opts.mode==='use-item'?(incompatible?'Non può impararla':preview?.disabled?preview.hint.split('\n')[0]:undefined)
+          :this.opts.mode==='battle-switch'||this.opts.mode==='forced-switch'?(target.hp<=0?'KO: non può entrare':this.opts.switchHint?.(target)):undefined;
+        const right=preview&&!preview.disabled?preview.facts?.find(fact=>fact.label==='PV'||fact.label==='Stato')?.value:undefined;
+        return {...action,label:speciesOf(target).name,hint:undefined,facts:undefined,onInspect:this.opts.mode==='view'?undefined:action.onInspect,
+          row:{kind:'companion',icon:`/sprites/monsters/${target.speciesId}.png`,level:`Lv${target.level}`,types:speciesOf(target).types,
+            star:this.opts.mode==='view'&&party[0]===target,bar:{now:Math.max(0,target.hp),max:stats.hp,text:`${Math.max(0,target.hp)}/${stats.hp}`},
+            stamp:target.hp<=0?'KO':target.status?STATUS_LABELS[target.status]:undefined,meta,right}};
+      });
+      return {title:this.opts.title??(this.opts.mode==='forced-switch'?'Chi continua?':this.opts.mode==='use-item'?'Su chi?':'Squadra'),
+        subtitle:this.opts.mode==='forced-switch'?'Il compagno in campo è KO.':undefined,fit:true,
         blocks:party.length?undefined:[{title:'Squadra vuota',body:'Vai da Quirino nel laboratorio per scegliere il primo compagno.'}],
-        actions:actions.filter(action=>!['INDIETRO','ESCI','ALTRI'].includes(action.label)).map(action=>({...action,label:action.label==='—'?'Nessun compagno':action.label})),
-        selected:this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?Math.max(0,party.filter(target=>target.uid!==this.opts.currentUid).indexOf(party[this.index])):this.index,back:{label:'Indietro',disabled:this.opts.mode==='forced-switch',run:()=>{if(this.stack.top!==this||this.opts.mode==='forced-switch')return;this.input.reset();audio.cancel();this.stack.pop();}}};
+        actions:rows,
+        selected:this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?Math.max(0,bench.indexOf(party[this.index])):this.index,
+        back:{label:'Indietro',disabled:this.opts.mode==='forced-switch',run:()=>{if(this.stack.top!==this||this.opts.mode==='forced-switch')return;this.input.reset();audio.cancel();this.stack.pop();}}};
     }
     const species=speciesOf(mon),stats=statsOf(mon),ability=abilityOf(mon),held=heldItemOf(mon),blocks:UiBlock[]=[];
-    if(this.summaryPage===0)blocks.push({title:'Pronto per la lotta',facts:[{label:'Livello',value:String(mon.level)},{label:'PV',value:`${mon.hp} di ${stats.hp}`},{label:'Tipo',value:species.types.join(' · ')},{label:'Stato',value:mon.hp<=0?'KO':mon.status??'In forma'}]});
-    if(this.summaryPage===1)for(const slot of mon.moves){const move=MOVES[slot.id];blocks.push({title:move.name,body:moveDescription(move),facts:[{label:'Tipo',value:move.type},{label:'PP',value:`${slot.pp} di ${move.pp}`},{label:'Potenza',value:move.power?String(move.power):'—'},{label:'Precisione',value:`${move.accuracy}%`}]});}
-    if(this.summaryPage===0||this.summaryPage===2){
+    const page=this.summaryPage,tab=page<=1?0:page===2?1:2;
+    const guard=(run:()=>void)=>()=>{if(this.stack.top!==this||this.summary!==mon||this.summaryPage!==page)return;this.input.reset();audio.confirm();run();};
+    const tabs:TouchAction[]=[{label:'Mosse',run:()=>{this.summaryPage=0;this.summaryScroll=0;audio.cursor();}},
+      {label:'Valori',run:()=>{this.summaryPage=2;this.summaryScroll=0;audio.cursor();}},
+      {label:'Storia',run:()=>{this.summaryPage=3;this.summaryScroll=0;audio.cursor();}}];
+    let rows:TouchAction[]=[],statRows:UiPanel['stats'];
+    if(tab===0){
+      rows=Array.from({length:4},(_,i):TouchAction=>{
+        const slot=mon.moves[i],move=slot&&MOVES[slot.id];
+        if(!move)return {label:'Libera',disabled:true,run:()=>{},row:{kind:'move',right:'—'}};
+        const detail=()=>openUiSheet(move.name,`${moveDescription(move)}\n\nTipo ${move.type} · Potenza ${move.power||'—'} · Precisione ${move.accuracy}% · PP ${slot.pp}/${move.pp}`);
+        return {label:move.name,run:detail,onInspect:detail,row:{kind:'move',tone:move.type,types:[move.type],right:`${slot.pp}/${move.pp}`}};
+      });
+    }else if(tab===1){
+      const max=Math.max(160,stats.hp,stats.atk,stats.def,stats.spc,stats.spd);
+      statRows=[['PV',stats.hp],['Grinta',stats.atk],['Faccia tosta',stats.def],['Retorica',stats.spc],['Opportunismo',stats.spd]].map(([label,value])=>({label:String(label),value:Number(value),max}));
       blocks.push({title:ability?.name??'Abilità passiva',body:ability?.desc??'Nessuna abilità passiva.'});
-      if(this.summaryPage===2)blocks.push({title:'Statistiche',facts:[{label:'Grinta',value:String(stats.atk)},{label:'Faccia tosta',value:String(stats.def)},{label:'Retorica',value:String(stats.spc)},{label:'Opportunismo',value:String(stats.spd)},{label:'Esperienza',value:String(mon.exp)}]});
-      blocks.push({title:'Oggetto tenuto',body:held?.desc??'Nessun oggetto equipaggiato.',facts:held?[{label:'Oggetto',value:held.name}]:undefined});
-    }
-    if(this.summaryPage===3){
+      blocks.push({title:held?.name??'Nessun oggetto',body:held?.desc??'Nessun oggetto equipaggiato.'});
+      if(!this.opts.partyOverride){
+        if(party.length>1)rows.push({label:'Metti in testa',disabled:party[0]===mon,hint:party[0]===mon?'È già il capofila.':undefined,run:guard(()=>{const at=party.indexOf(mon);if(at<=0)return;party.splice(at,1);party.unshift(mon);this.index=0;saveGame(this.state);})});
+        if(held)rows.push({label:`Riprendi ${held.name}`,run:guard(()=>{if(heldItemOf(mon)?.id!==held.id)return;delete mon.heldItem;this.state.bag[held.id]=(this.state.bag[held.id]??0)+1;saveGame(this.state);})});
+      }
+    }else{
       const rules=species.evolutions??[];
-      blocks.push({title:'Sondaggi attuali',facts:[{label:'Gradimento',value:`${this.state.sondaggi}%`}]});
       for(const [i,rule] of rules.entries()){
         const condition=evolutionCondition(rule,rules.slice(0,i));
         blocks.push({title:speciesOf({...mon,speciesId:rule.id}).name,body:condition.charAt(0)+condition.slice(1).toLocaleLowerCase('it')});
       }
       if(!rules.length)blocks.push({title:'Forma finale',body:'Questo compagno non evolve.'});
-      blocks.push({title:'La scelta resta tua',body:this.opts.partyOverride?'Le evoluzioni si gestiscono nella squadra originale.':'Puoi rinviare e tornare qui. Le condizioni vengono rivalutate quando scegli.'});
+      blocks.push({title:'Difese',facts:defensiveMatchups(mon.speciesId).filter(match=>match.mult!==1).map(match=>({label:match.type,value:`×${String(match.mult).replace('.',',')}`}))});
+      const ready=levelEvolution(mon,this.state.sondaggi)&&!this.opts.partyOverride;
+      if(ready)rows.push({label:'Evolvi',run:guard(()=>this.openEvolution(mon))});
+      if(!this.opts.partyOverride&&archivedMoves(mon).length)rows.push({label:'Archivio mosse',hint:'Recupera gratis le mosse della forma attuale.',run:guard(()=>this.stack.push(new RecallScene(this.stack,this.input,this.state,mon)))});
     }
-    if(this.summaryPage===4)blocks.push({title:'Danno ricevuto',body:'×2 indica debolezza, ×0,5 resistenza. Abilità e oggetti possono modificare il risultato.',facts:defensiveMatchups(mon.speciesId).map(match=>({label:match.type,value:`×${match.mult}`}))});
-    if(this.summaryPage===5)blocks.push({title:'Archivio delle mosse',body:'Puoi riprendere gratuitamente le mosse della forma attuale fino al tuo livello.',facts:archivedMoves(mon).map(id=>({label:'Mossa disponibile',value:MOVES[id].name}))});
-    const visible=this.summaryPage===1?[]:actions.filter(action=>!['SCORRI','SQUADRA','PROFILO'].includes(action.label)&&!action.disabled);
-    if(this.summaryPage===0)visible.push({label:'Crescita',hint:'Evoluzioni e condizioni, anche prima di raggiungerle.',run:()=>{if(this.stack.top!==this||this.summary!==mon||this.summaryPage!==0)return;this.input.reset();this.summaryPage=3;audio.cursor();}});
-    if(this.summaryPage===0&&!this.opts.partyOverride){
-      if(party.length>1)visible.push({label:'Metti in testa',hint:'Diventa il primo compagno a entrare in lotta.',disabled:party[0]===mon,run:()=>{if(this.stack.top!==this||this.summary!==mon||!party.includes(mon))return;party.splice(party.indexOf(mon),1);party.unshift(mon);this.index=0;saveGame(this.state);audio.confirm();}});
-      if(held)visible.push({label:'Riprendi oggetto',hint:`${held.name} torna nella borsa.`,run:()=>{if(this.stack.top!==this||this.summary!==mon||heldItemOf(mon)?.id!==held.id)return;delete mon.heldItem;this.state.bag[held.id]=(this.state.bag[held.id]??0)+1;saveGame(this.state);audio.confirm();}});
-    }
-    return {title:species.name,portrait:{src:`/sprites/monsters/${mon.speciesId}.png`,label:species.name},subtitle:`${this.index+1} di ${party.length} · ${['Profilo','Mosse','Statistiche e oggetto','Carriera','Difese','Archivio'][this.summaryPage]}`,
-      blocks,actions:visible.map(action=>({...action,label:action.label==='DATI'?'Statistiche':action.label.charAt(0)+action.label.slice(1).toLocaleLowerCase('it')})),primary:levelEvolution(mon,this.state.sondaggi)&&!this.opts.partyOverride?visible.findIndex(action=>action.label==='EVOLVI'):undefined,
-      back:{label:'Indietro',hint:this.summaryPage?'Torna al profilo.':'Torna alla squadra.',run:()=>{if(this.stack.top!==this||this.summary!==mon)return;this.input.reset();audio.cancel();if(this.summaryPage)this.summaryPage=0;else this.summary=null;}}};
+    const isLead=party[0]===mon;
+    const evolveAt=tab===2&&rows.findIndex(row=>row.label==='Evolvi');
+    return {title:species.name,
+      hero:{src:`/sprites/monsters/${mon.speciesId}.png`,title:species.name,level:`Lv${mon.level}`,types:species.types,
+        bar:{now:Math.max(0,mon.hp),max:stats.hp,text:`${Math.max(0,mon.hp)}/${stats.hp}`},stamp:mon.hp<=0?'KO':isLead?'Eletto':mon.status?STATUS_LABELS[mon.status]:undefined},
+      tabs,selectedTab:tab,stats:statRows,blocks:blocks.length?blocks:undefined,actions:rows,
+      primary:evolveAt!==false&&evolveAt>=0?evolveAt:undefined,
+      back:{label:'Indietro',run:()=>{if(this.stack.top!==this||this.summary!==mon)return;this.input.reset();audio.cancel();this.summary=null;this.summaryPage=0;this.summaryScroll=0;}}};
   }
   draw(screen:Screen):void {screen.clear('#101b32');}
 

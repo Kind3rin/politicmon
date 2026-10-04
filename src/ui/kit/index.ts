@@ -1,7 +1,7 @@
 import {beginWorldLabels,endWorldLabels} from "./worldLabels";
 import { renderArena, leaveArena, type UiArena } from "./arena";
 import {TYPE_COLORS,typeLabelColor,type PolType} from "../../data/poltypes";
-import type { TouchAction } from "../../engine/touchActions";
+import type { TouchAction, UiRow } from "../../engine/touchActions";
 import type {Input} from "../../engine/input";
 import {audio} from "../../engine/audio";
 import { commandHint } from "../../engine/inputDevice";
@@ -43,6 +43,19 @@ export interface UiTiming {
   windowStart:number;
   windowEnd:number;
 }
+export interface UiAtlas {
+  nodes: readonly { x: number; y: number; label: string; state: "here" | "open" | "locked" | "optional"; next?: boolean }[];
+  links: readonly { from: number; to: number; dashed?: boolean }[];
+}
+export interface UiHero {
+  src: string;
+  title: string;
+  level?: string;
+  types?: readonly string[];
+  bar?: { now: number; max: number; text: string };
+  stamp?: string;
+  meta?: string;
+}
 export interface UiPanel {
   directInput?:boolean;
   conversation?: {speaker:string;portrait?:string};
@@ -58,6 +71,16 @@ export interface UiPanel {
   portraits?: readonly { src: string; label: string }[];
   blocks?: readonly UiBlock[];
   field?: UiTextField;
+  /** Large sprite header: companion sheet, item sheet. */
+  hero?: UiHero;
+  /** Rows share the free height instead of scrolling. */
+  fit?: boolean;
+  /** Turns card-like actions (icon, hint, facts) into compact rows. */
+  compact?: boolean;
+  /** Drawn map: actions[i] is the node i; positions are percentages. */
+  atlas?: UiAtlas;
+  /** Labelled values drawn as bars. */
+  stats?: readonly { label: string; value: number; max: number }[];
   tabs?: readonly TouchAction[];
   selectedTab?: number;
   actions: readonly TouchAction[];
@@ -65,6 +88,25 @@ export interface UiPanel {
   back?: TouchAction;
   primary?: number;
   columns?: 1 | 2;
+}
+
+/** A card-like action condensed to one row: icon, name, first sentence, the one value that matters. */
+export function deriveRow(action: TouchAction): UiRow {
+  const facts = action.facts ?? [];
+  const fact = (pattern: RegExp) => facts.find(entry => pattern.test(entry.label));
+  const number = fact(/^numero$/i), price = fact(/prezzo|costo|spesa/i), level = fact(/^livello$/i), hp = fact(/^pv$/i), types = fact(/^tipo$/i), state = fact(/^stato$/i);
+  const numbers = hp?.value.match(/\d+/g)?.map(Number);
+  const first = (action.hint ?? "").split(/(?<=[.!?])\s/)[0].replace(/\s+/g, " ");
+  const kind = action.icon?.includes("/monsters/") ? "companion" : "item";
+  const spare = facts.find(entry => entry !== number && entry !== price && entry !== level && entry !== hp && entry !== types && entry !== state && entry.value.length <= 12);
+  return {
+    kind, icon: action.icon, level: level ? `Lv${level.value}` : undefined,
+    types: types?.value.split(" · ").filter(type => type in TYPE_COLORS),
+    bar: numbers && numbers.length >= 2 ? { now: numbers[0], max: numbers[1], text: `${numbers[0]}/${numbers[1]}` } : undefined,
+    right: price?.value ?? (number ? `n. ${number.value}` : kind === "item" ? spare?.value : undefined),
+    meta: first || undefined,
+    stamp: state && !/forma|ok/i.test(state.value) ? state.value : undefined
+  };
 }
 
 /** Paragraph pages for the shared dialogue: wrap at words, keep up to three
@@ -112,10 +154,11 @@ const element = <K extends keyof HTMLElementTagNameMap>(tag: K, className: strin
 
 /** Shared native components. The game canvas keeps the pixel artwork only. */
 export const kit = {
-  header(title: string, subtitle?: string, portrait?:UiPanel["portrait"]): HTMLElement {
+  header(title: string, subtitle?: string, portrait?:UiPanel["portrait"], close?:HTMLElement): HTMLElement {
     const header = element("header", "ui-header");
     if(portrait){const avatar=element("img","ui-avatar");avatar.src=portrait.src;avatar.alt=portrait.label;header.append(avatar);}
-    header.append(element("h1", "ui-title", title));
+    const heading=element("h1", "ui-title", title);
+    if(close){const row=element("div","ui-title-row");row.append(heading,close);header.append(row);}else header.append(heading);
     if (subtitle) for(const paragraph of prosePages(subtitle)) header.append(element("p", "ui-body", paragraph));
     return header;
   },
@@ -143,6 +186,67 @@ export const kit = {
     if (block.body) for (const paragraph of prosePages(block.body)) card.append(element("p", "ui-body", paragraph));
     if (block.facts) card.append(kit.facts(block.facts));
     return card;
+  },
+  bar(bar:{now:number;max:number;text:string}):HTMLElement {
+    const wrap=element("div","ui-meter");
+    const track=element("div","ui-bar");track.setAttribute("role","progressbar");
+    track.setAttribute("aria-valuemin","0");track.setAttribute("aria-valuemax",String(bar.max));track.setAttribute("aria-valuenow",String(bar.now));
+    const fill=element("div","ui-bar-fill");const ratio=bar.max>0?Math.max(0,Math.min(1,bar.now/bar.max)):0;
+    fill.style.width=`${ratio*100}%`;fill.style.background=ratio<.25?"#D7263D":ratio<.5?"#FFD23F":"#1B998B";
+    track.append(fill);wrap.append(track,element("span","ui-meter-text",bar.text));return wrap;
+  },
+  types(types:readonly string[]):HTMLElement {
+    const list=element("span","ui-glyphs");
+    for(const type of types){
+      const glyph=element("span","ui-glyph");glyph.title=type;glyph.setAttribute("role","img");glyph.setAttribute("aria-label",type);
+      if(type in TYPE_COLORS)glyph.style.background=TYPE_COLORS[type as PolType];
+      const icon=element("img","");icon.src=`/sprites/ui/type_${type.toLowerCase()}.png`;icon.alt="";glyph.append(icon);list.append(glyph);
+    }
+    return list;
+  },
+  hero(hero:UiHero):HTMLElement {
+    const box=element("section","ui-hero-card");
+    const art=element("div","ui-hero-art");const image=element("img","");image.src=hero.src;image.alt="";art.append(image);
+    const text=element("div","ui-hero-text");text.append(element("h2","ui-hero-name",hero.title));
+    if(hero.level)text.append(element("span","ui-hero-level",hero.level));
+    if(hero.types?.length)text.append(kit.types(hero.types));
+    if(hero.bar)text.append(kit.bar(hero.bar));
+    if(hero.meta)text.append(element("span","ui-note",hero.meta));
+    box.append(art,text);
+    if(hero.stamp)box.append(element("span","ui-stamp",hero.stamp));
+    return box;
+  },
+  row(action:TouchAction, run:()=>void):HTMLButtonElement {
+    const row=action.row as UiRow;
+    const button=element("button","ui-row");button.type="button";
+    button.classList.add(`ui-row-${row.kind??"companion"}`);
+    if(row.tone&&row.tone in TYPE_COLORS)button.style.setProperty("--tone",TYPE_COLORS[row.tone as PolType]);
+    if(row.stamp)button.classList.add("ui-row-stamped");
+    button.disabled=Boolean(action.disabled&&!action.onInspect);
+    if(action.disabled)button.setAttribute("aria-disabled","true");
+    button.setAttribute("aria-label",[action.label,row.level,row.bar?.text,row.right,row.meta,row.stamp,action.hint,...(action.facts?.map(f=>`${f.label}: ${f.value}`)??[])].filter(Boolean).join(". "));
+    if(row.star){const star=element("span","ui-row-star","★");star.setAttribute("aria-hidden","true");button.append(star);}
+    if(row.icon){const art=element("span","ui-row-art");const image=element("img","");image.src=row.icon;image.alt="";art.append(image);button.append(art);}
+    const main=element("span","ui-row-main");
+    const head=element("span","ui-row-head");head.append(element("strong","ui-row-name",action.label));
+    if(row.level)head.append(element("span","ui-row-level",row.level));
+    main.append(head);
+    if(row.bar)main.append(kit.bar(row.bar));
+    if(row.meta)main.append(element("span","ui-row-meta",row.meta));
+    button.append(main);
+    if(row.types?.length)button.append(kit.types(row.types));
+    if(row.right||row.arrow){const side=element("span","ui-row-side");if(row.right)side.append(element("span","ui-row-right",row.right));if(row.arrow)side.append(element("span","ui-row-arrow",row.arrow==="up"?"▲":"▼"));button.append(side);}
+    if(row.stamp)button.append(element("span","ui-stamp",row.stamp));
+    let holdTimer:ReturnType<typeof setTimeout>|undefined,inspected=false,downX=0,downY=0;
+    const cancelHold=()=>{if(holdTimer)clearTimeout(holdTimer);holdTimer=undefined;};
+    if(action.onInspect){
+      button.addEventListener("contextmenu",event=>event.preventDefault());
+      button.addEventListener("pointerdown",event=>{cancelHold();inspected=false;downX=event.clientX;downY=event.clientY;holdTimer=setTimeout(()=>{inspected=true;haptics.tap();action.onInspect?.();},450);});
+      button.addEventListener("pointermove",event=>{if(Math.hypot(event.clientX-downX,event.clientY-downY)>10)cancelHold();});
+      for(const type of ["pointerup","pointercancel","pointerleave"])button.addEventListener(type,cancelHold);
+    }
+    button.onclick=()=>{cancelHold();if(inspected){inspected=false;return;}if(!button.disabled&&!action.disabled){haptics.tap();run();button.closest<HTMLElement>("#game-ui")?.focus({preventScroll:true});}};
+    return button;
   },
   button(action: TouchAction, run: () => void, primary = false, isDisabled = () => Boolean(action.disabled)): HTMLButtonElement {
     const button = element("button", primary ? "ui-button ui-primary" : "ui-button");
@@ -410,6 +514,15 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     const track=element('div','ui-timing-track');track.setAttribute('role','progressbar');track.setAttribute('aria-label',panel.timing.label);track.setAttribute('aria-valuemin','0');track.setAttribute('aria-valuemax','100');
     track.append(element('span','ui-timing-window'),element('span','ui-timing-cursor'));timing.append(track);body.append(timing);
   }
+  if(panel.stats){
+    const box=element("section","ui-stats");
+    for(const stat of panel.stats){
+      const row=element("div","ui-stat");row.append(element("span","",stat.label));
+      const track=element("div","ui-bar");const fill=element("div","ui-bar-fill");fill.style.width=`${Math.min(100,stat.value/stat.max*100)}%`;track.append(fill);
+      row.append(track,element("b","",String(stat.value)));box.append(row);
+    }
+    body.append(box);
+  }
   for (const block of panel.blocks ?? []) body.append(kit.card(block));
   let fieldMarker:HTMLElement|undefined;
   if(panel.field){
@@ -425,10 +538,37 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     if(!retainedField)field.append(textarea);
     fieldMarker=field;body.append(field);
   }
+  if(panel.atlas){
+    const atlas=element("div","ui-atlas");atlas.setAttribute("aria-label",panel.title);
+    const NS="http://www.w3.org/2000/svg";
+    const svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 100 100");svg.setAttribute("preserveAspectRatio","none");svg.setAttribute("aria-hidden","true");svg.classList.add("ui-atlas-lines");
+    for(const link of panel.atlas.links){
+      const a=panel.atlas.nodes[link.from],b=panel.atlas.nodes[link.to];if(!a||!b)continue;
+      const line=document.createElementNS(NS,"line");line.setAttribute("x1",String(a.x));line.setAttribute("y1",String(a.y));line.setAttribute("x2",String(b.x));line.setAttribute("y2",String(b.y));
+      if(link.dashed)line.setAttribute("class","ui-dashed");svg.append(line);
+    }
+    atlas.append(svg);
+    panel.atlas.nodes.forEach((node,i)=>{
+      const button=element("button",`ui-atlas-node ui-atlas-${node.state}`);button.type="button";
+      button.style.left=`${node.x}%`;button.style.top=`${node.y}%`;
+      button.dataset.uiIndex=String(i+tabCount);
+      button.setAttribute("aria-label",[panel.actions[i]?.label,node.state==="here"?"Sei qui":node.state==="locked"?"Da sbloccare":node.state==="optional"?"Deviazione":"",node.next?"Prossima tappa":""].filter(Boolean).join(". "));
+      if(i+tabCount===displayedIndex)button.setAttribute("aria-current","true");
+      button.append(element("span","ui-atlas-pin"));
+      const label=element("span","ui-atlas-label",node.state==="locked"?"???":panel.actions[i]?.label??"");button.append(label);
+      if(node.state==="here")button.append(element("span","ui-atlas-tag","Sei qui"));
+      else if(node.next)button.append(element("span","ui-atlas-tag ui-atlas-next","Prossima"));
+      button.onclick=()=>{if(live()&&!current?.actions[i]?.disabled){haptics.tap();current?.actions[i]?.run();}};
+      atlas.append(button);
+    });
+    body.append(atlas);
+  }
   const list = element("nav", "ui-actions");
+  if(panel.atlas)list.hidden=true;
   if (panel.columns === 2) list.classList.add("ui-grid");
   if (panel.actions.some(action=>action.route)) list.classList.add("ui-route");
   list.setAttribute("aria-label", panel.title);
+  if(panel.compact||panel.actions.some(action=>action.row)){list.classList.add("ui-rows");if(panel.fit)list.classList.add("ui-fit");}
   let group="";
   panel.actions.forEach((action, i) => {
     if(i===panel.primary)return;
@@ -437,9 +577,10 @@ export function renderUiPanel(panel?: UiPanel): boolean {
       if(action.groupHint)for(const paragraph of prosePages(action.groupHint))list.append(element("p","ui-body",paragraph));
       if(action.groupFacts)list.append(kit.facts(action.groupFacts));
     }
-    const button = kit.button(action, () => { if (live()&&!current?.actions[i]?.disabled) current?.actions[i]?.run(); }, i === panel.primary);
+    const shown = !action.row&&panel.compact&&i!==panel.primary ? {...action,row:deriveRow(action)} : action;
+    const button = shown.row?kit.row(shown,()=>{if(live()&&!current?.actions[i]?.disabled)current?.actions[i]?.run();})
+      :kit.button(action, () => { if (live()&&!current?.actions[i]?.disabled) current?.actions[i]?.run(); }, i === panel.primary);
     button.dataset.uiIndex=String(i+tabCount);
-    if (panel.actions.length > 7 || (panel.positioned && panel.actions.length > 1)) button.append(element("span", "ui-note", `Scelta ${i + 1} di ${panel.actions.length}`));
     if (i+tabCount === displayedIndex) button.setAttribute("aria-current", "true");
     list.append(button);
   });
@@ -452,8 +593,11 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     if(index+tabCount===displayedIndex)button.setAttribute("aria-current","true");
     footer.append(button);
   }
-  if (panel.back) {const button=kit.button(panel.back, () => {if(live())current?.back?.run();});button.dataset.uiIndex=String(panel.actions.length+tabCount);if(displayedIndex===panel.actions.length+tabCount)button.setAttribute("aria-current","true");footer.append(button);}
-  const header=kit.header(panel.title,panel.subtitle,panel.portrait);
+  let closeButton:HTMLButtonElement|undefined;
+  if (panel.back) {const button=element("button","ui-close","✕");button.type="button";button.setAttribute("aria-label",panel.back.label==="Indietro"?"Indietro":panel.back.label);button.onclick=()=>{if(live()){haptics.tap();current?.back?.run();}};closeButton=button;button.dataset.uiIndex=String(panel.actions.length+tabCount);if(displayedIndex===panel.actions.length+tabCount)button.setAttribute("aria-current","true");}
+  footer.hidden=footer.childElementCount===0;
+  const header=kit.header(panel.title,panel.subtitle,panel.portrait,closeButton);
+  if(panel.hero)header.append(kit.hero(panel.hero));
   const mountedBody=root.querySelector<HTMLElement>('.ui-content');
   if(retainedField&&fieldMarker&&mountedBody){
     // The editable node stays connected, preserving focus, caret and IME.

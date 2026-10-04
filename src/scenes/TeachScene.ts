@@ -1,4 +1,4 @@
-import { companionHint, companionPosition } from "../ui/kit/companionContent";
+import { companionPosition } from "../ui/kit/companionContent";
 import { MOVES } from "../data/moves";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -8,8 +8,9 @@ import type { Screen } from "../engine/screen";
 import { learnMoveIntoSlot, speciesOf, type Monster } from "../game/monster";
 import { moveNotes } from "../game/supplyGuide";
 import { Menu, MessageBox, wrapText } from "../ui/widgets";
-import type {UiPanel,UiBlock} from "../ui/kit";
+import type {UiPanel} from "../ui/kit";
 import {moveDescription} from "../ui/kit/moveContent";
+import {openUiSheet} from "../ui/kit/sheet";
 
 export class TeachScene implements Scene {
   readonly expandedViewport = true;
@@ -85,34 +86,30 @@ export class TeachScene implements Scene {
     const action = this.mon.moves.length >= 4 ? this.menu.update(this.input) : this.input.wasPressed("a") ? "select" : this.input.wasPressed("b") ? "cancel" : null;
     if (action === "cancel") this.close(); if (action === "select") this.choose();
   }
-  private moveCard(id:string,pp:number,title:string):UiBlock {
+  private sheet(id:string,pp:number,heading:string):()=>void {
     const move=MOVES[id];
-    return {title:`${title}: ${move.name}`,body:moveDescription(move),facts:[{label:'Tipo',value:move.type},{label:'Potenza',value:move.power?String(move.power):'—'},{label:'PP',value:`${pp} di ${move.pp}`},{label:'Precisione',value:`${move.accuracy}%`}]};
+    return ()=>openUiSheet(`${heading}: ${move.name}`,`${moveDescription(move)}\n\nTipo ${move.type} · Potenza ${move.power||'—'} · Precisione ${move.accuracy}% · PP ${pp}/${move.pp}`);
   }
   get uiPanel():UiPanel|undefined {
     if(this.msg.isOpen)return undefined;
-    const phase=this.phase,old=this.old;
-    const blocks=[this.moveCard(this.moveId,MOVES[this.moveId].pp,'Nuova mossa')];
-    if(this.confirm&&old)blocks.push(this.moveCard(old.id,old.pp,'Mossa sostituita'));
-    if(this.inspect&&this.page===1&&old)blocks.splice(0,1,this.moveCard(old.id,old.pp,'Mossa attuale'));
-    let actions=this.touchActions.filter(action=>!['RINUNCIA','RIPENSA','INDIETRO','SU','GIÙ'].includes(action.label)).map(action=>({...action,label:action.label==='APPRENDI'?'Impara la mossa':action.label.charAt(0)+action.label.slice(1).toLocaleLowerCase('it'),hint:action.hint?.replace('Gli altri PP restano','Le altre mosse mantengono i loro PP.').replace('Nessuna perdita','Le mosse attuali restano.')}));
-    // The native list is itself the comparison: the outgoing move and its
-    // remaining PP are shown before the decision, so no second approval page.
-    if(!this.inspect&&!this.confirm&&this.mon.moves.length>=4){
-      actions=this.mon.moves.map((slot,index)=>({
-        label:`Sostituisci ${MOVES[slot.id].name}`,hint:moveDescription(MOVES[slot.id]),
-        facts:[{label:'Tipo',value:MOVES[slot.id].type},{label:'Potenza',value:MOVES[slot.id].power ? String(MOVES[slot.id].power) : "—"},
-          {label:'PP persi',value:`${slot.pp} di ${MOVES[slot.id].pp}`}],disabled:this.done,
-        run:()=>{
-          if(this.done||this.stack.top!==this||phase!==this.phase||this.mon.moves[index]!==slot)return;
-          this.input.reset();this.menu.index=index;this.replacement=slot;this.confirm=true;this.learn();
-        }
-      }));
-    }
-    return {title:`${speciesOf(this.mon).name}: ${MOVES[this.moveId].name}`,
-      subtitle:companionHint(this.mon, this.options.party ?? [], this.inspect?`Leggi gli effetti prima di scegliere. ${this.options.source==='archive'?'Archivio gratuito.':this.options.source==='level'?'Appresa salendo di livello.':'Direttiva riutilizzabile.'}`:this.confirm?'Perderai solo la mossa indicata sotto.':this.mon.moves.length>=4?'Scegli quale mossa sostituire. Il tocco applica la scelta; le altre mosse e i loro PP restano.':'C’è un posto libero. Non perdi nessuna mossa.'),
-      blocks,actions:actions,selected:this.confirm||this.inspect?0:this.menu.index,primary:this.confirm||this.mon.moves.length<4?0:undefined,
-      back:{label:'Indietro',hint:this.confirm?'Scegli un’altra mossa.':this.inspect?'Torna alla scelta.':'Rinuncia: nessuna mossa cambia.',run:()=>{if(this.done||this.stack.top!==this||phase!==this.phase||old!==this.old)return;this.input.reset();audio.cancel();if(this.inspect)this.inspect=false;else if(this.confirm)this.confirm=false;else this.close();}}};
+    const phase=this.phase,old=this.old,fresh=MOVES[this.moveId],species=speciesOf(this.mon);
+    const guard=(run:()=>void)=>()=>{if(this.done||this.stack.top!==this||phase!==this.phase||old!==this.old)return;this.input.reset();run();};
+    const source=this.options.source==='archive'?'Archivio gratuito':this.options.source==='level'?'Appresa salendo di livello':'Direttiva riutilizzabile';
+    const showNew=this.sheet(this.moveId,fresh.pp,'Nuova');
+    const rows:TouchAction[]=[{label:fresh.name,run:showNew,onInspect:showNew,
+      row:{kind:'move',tone:fresh.type,types:[fresh.type],right:`${fresh.pp}/${fresh.pp}`,stamp:'Nuova'}}];
+    const replacing=this.mon.moves.length>=4;
+    if(replacing){
+      this.mon.moves.forEach((slot,index)=>{
+        const current=MOVES[slot.id],show=this.sheet(slot.id,slot.pp,'Attuale');
+        rows.push({label:current.name,group:index===0?'Quale mossa lasci?':undefined,disabled:this.done,onInspect:show,
+          row:{kind:'move',tone:current.type,types:[current.type],right:`${slot.pp}/${current.pp}`,meta:'Tocca per sostituire'},
+          run:guard(()=>{if(this.mon.moves[index]!==slot)return;this.menu.index=index;this.replacement=slot;this.confirm=true;this.learn();})});
+      });
+    }else rows.push({label:'Impara la mossa',run:guard(()=>this.choose())});
+    return {title:'Nuova mossa',subtitle:`${species.name} Lv${this.mon.level} · ${source}`,portrait:{src:`/sprites/monsters/${this.mon.speciesId}.png`,label:species.name},
+      actions:rows,selected:replacing?this.menu.index+1:rows.length-1,primary:replacing?undefined:rows.length-1,
+      back:{label:'Non imparare',run:guard(()=>this.close())}};
   }
   draw(screen:Screen):void {screen.clear('#101b32');if(this.msg.isOpen)this.msg.draw(screen);}
 }

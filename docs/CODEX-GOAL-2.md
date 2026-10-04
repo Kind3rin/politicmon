@@ -60,6 +60,15 @@ poi cambia **il motore della mappa** e **le regole della lotta**.
 
 ## 1bis. Fase 0 — Comandi, menù e testi (per prima)
 
+> **RIAPERTA il 4 ottobre 2026.** La prima consegna (kit `src/ui/kit/`) è stata
+> provata da Luca su telefono: ingiocabile. Ha reso il testo nitido ma ha
+> trasformato il gioco in un modulo web. **Leggi `docs/DESIGN-UI.md` prima di
+> tutto:** contiene il verdetto, la direzione artistica, lo schema di ogni
+> schermata, le regole numeriche e l'elenco delle regole qui sotto che sono
+> ritirate. Dove i due file divergono vince `DESIGN-UI.md`. Bozze statiche
+> prima del codice, e approvazione di Luca (`UI APPROVATA` in
+> `docs/M2-NOTE-LUCA.md`) prima di migrare le scene.
+
 Riscontro diretto di Luca dopo aver giocato: **i comandi e i menù sono
 macchinosi e non ci si trova; i testi sono tutti attaccati, riga sotto riga,
 non si capisce dove una cosa inizia e finisce, manca la formattazione.**

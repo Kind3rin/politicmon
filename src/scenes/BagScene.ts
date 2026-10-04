@@ -339,16 +339,95 @@ export class BagScene implements Scene {
     });
   }
 
+  private tab = 0;
+  private picked?: string;
+  private pickedMon?: Monster;
+  private nice(id: string): string { const name = ITEMS[id].name; return name.charAt(0) + name.slice(1).toLocaleLowerCase("it"); }
+  private gist(id: string): string {
+    return ITEMS[id].desc.replace(/^Da tenere: /, "").split(/(?<=[.!?])\s/)[0];
+  }
+  private categoryOf(id: string): number {
+    const kind = ITEMS[id].kind;
+    return kind === "heal" || kind === "cure" ? 0 : kind === "ball" ? 1 : kind === "key" ? 3 : 2;
+  }
+  private companionRow(mon: Monster, run: () => void, disabled: boolean, right?: string, meta?: string): TouchAction {
+    const stats = statsOf(mon);
+    return { label: speciesOf(mon).name, disabled, run, row: { kind: "companion", icon: `/sprites/monsters/${mon.speciesId}.png`, level: `Lv${mon.level}`,
+      types: speciesOf(mon).types, bar: { now: Math.max(0, mon.hp), max: stats.hp, text: `${Math.max(0, mon.hp)}/${stats.hp}` },
+      right, meta, stamp: mon.hp <= 0 ? "KO" : undefined } };
+  }
+  /** One row per companion for the picked item; the effect is previewed in the row itself. */
+  private recipientRows(id: string): TouchAction[] {
+    const item = ITEMS[id], party = this.state.party;
+    const actions = this.fieldActions([id]);
+    if (item.kind === "tm" && item.moveId) {
+      const moveId = item.moveId;
+      return party.map(mon => {
+        const ready = canLearnMove(mon, moveId);
+        const meta = ready ? undefined : mon.moves.some(slot => slot.id === moveId) ? "La conosce già" : "Tipo non compatibile";
+        return this.companionRow(mon, () => { if (ready && this.stack.top === this && !this.msg.isOpen) { this.input.reset(); audio.cursor(); this.pickedMon = mon; } }, !ready, undefined, meta);
+      });
+    }
+    return party.map((mon, i) => {
+      const action = actions[i];
+      let right: string | undefined, meta: string | undefined;
+      if (item.kind === "heal") { const quote = healingQuote(this.state, mon, id); right = quote ? `${quote.before} → ${quote.after}` : undefined; meta = quote ? undefined : this.quickHint(mon, null); }
+      else if (item.kind === "cure") { right = mon.status ? `${STATUS_LABELS[mon.status]} → ok` : undefined; meta = mon.status ? undefined : "In forma"; }
+      else if (item.kind === "hold") { const held = heldItemOf(mon); meta = held?.id === id ? "Lo tiene già" : held ? `Sostituisce ${held.name}` : "Nessun oggetto"; }
+      else if (item.kind === "evo") { const target = itemEvolution(mon, id); meta = target ? undefined : "Non evolve con questa"; right = target ? `→ ${speciesOf(evolutionPreview(mon, target)).name}` : undefined; }
+      return this.companionRow(mon, action?.run ?? (() => {}), Boolean(action?.disabled), right, meta);
+    });
+  }
+  private slotRows(id: string, mon: Monster): TouchAction[] {
+    const slots = mon.moves.length >= 4 ? mon.moves : [undefined];
+    const actions = this.fieldActions([id]).filter(action => action.group?.includes(`· ${speciesOf(mon).name} · `));
+    return slots.map((slot, i) => {
+      const old = slot && MOVES[slot.id];
+      return { label: old ? old.name : "Posto libero", run: actions[i]?.run ?? (() => {}), disabled: !actions[i] || Boolean(actions[i].disabled),
+        row: { kind: "move", tone: old?.type, types: old ? [old.type] : undefined, right: old && slot ? `${slot.pp}/${old.pp}` : "nuova", meta: old ? "Sostituisci" : "Impara qui" } };
+    });
+  }
   get uiPanel():UiPanel|undefined {
     if(this.msg.isOpen)return undefined;
-    const back:TouchAction={label:'Indietro',run:()=>{if(this.stack.top!==this)return;this.input.reset();audio.cancel();if(this.view.inspect)this.view.inspect=false;else this.stack.pop();}};
-    if(this.quick)return {title:'Cura rapida',subtitle:'Recupera PV usando le cure in borsa. Per PP, status e KO vai al bar.',actions:this.state.party.map(mon=>{const quote=healingQuote(this.state,mon);return {label:speciesOf(mon).name,hint:quote?`${ITEMS[quote.id].name}: ${quote.quantity} dosi.`:this.quickHint(mon,null),facts:quote?[{label:'PV',value:`${quote.before} → ${quote.after}`},{label:'PV massimi',value:String(quote.max)}]:[{label:'PV',value:`${mon.hp} di ${statsOf(mon).hp}`}],disabled:!quote,run:()=>{if(this.stack.top!==this||!this.quick||this.msg.isOpen||!this.state.party.includes(mon)||!quote)return;this.input.reset();this.healQuick(mon,quote);}};}),back};
+    const party=this.state.party;
+    const back:TouchAction={label:'Indietro',run:()=>{
+      if(this.stack.top!==this)return;this.input.reset();audio.cancel();
+      if(this.pickedMon)this.pickedMon=undefined;else if(this.picked)this.picked=undefined;else this.stack.pop();
+    }};
+    if(this.quick){
+      return {title:'Cura rapida',fit:true,back:{label:'Indietro',run:()=>{if(this.stack.top===this){this.input.reset();audio.cancel();this.stack.pop();}}},
+        actions:[...party.map(mon=>{const quote=healingQuote(this.state,mon);
+          return this.companionRow(mon,()=>{if(quote&&this.stack.top===this&&!this.msg.isOpen){this.input.reset();this.healQuick(mon,quote);}},!quote,
+            quote?`${quote.before} → ${quote.after}`:undefined,quote?`${ITEMS[quote.id].name} ×${quote.quantity}`:this.quickHint(mon,null));}),
+          {label:'Altri oggetti',run:()=>{if(this.stack.top===this){this.input.reset();this.opts.quickHeal=false;audio.cursor();}}}]};
+    }
     this.refresh();
-    const ids=this.view.ids,selected=this.view.selected;
-    if(this.view.inspect&&selected){const item=ITEMS[selected];return {title:item.name,blocks:[{title:'Effetto',body:item.desc,facts:[{label:'In borsa',value:String(this.state.bag[selected]??0)}]}],actions:[{label:this.opts.inBattle?'Usa in lotta':'Usa oggetto',hint:this.opts.battleItem?.(selected).hint,disabled:this.opts.battleItem?.(selected).disabled,run:()=>{this.input.reset();this.activate(selected);}}],primary:0,back};}
-    if (!this.opts.inBattle) return {title:'La tua borsa',subtitle:ids.length ? 'Scegli oggetto e compagno insieme. Effetto e consumo sono indicati prima del tocco.' : 'La borsa è vuota.',actions:this.fieldActions(ids),back};
-    return {title:this.opts.inBattle?'Borsa in lotta':'La tua borsa',subtitle:ids.length?`${ids.length} oggetti disponibili. Scegli cosa usare.`:'La borsa è vuota.',
-      actions:[...ids.map(id=>{const item=ITEMS[id],info=this.opts.inBattle?this.opts.battleItem?.(id):undefined;return {label:item.name.charAt(0)+item.name.slice(1).toLocaleLowerCase("it"),icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,hint:info?.hint??item.desc,disabled:info?.disabled,facts:[{label:'Quantità',value:String(this.state.bag[id])}],run:()=>{if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();this.view.menu.index=this.view.ids.indexOf(id);this.activate(id);}};}),...(this.opts.inBattle&&this.opts.onCampaign?[{label:'Campagna',hint:'Azioni che spendono sondaggi.',run:()=>{if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();audio.confirm();this.stack.pop();this.opts.onCampaign?.();}}]:[])],selected:this.view.menu.index,back};
+    const ids=this.view.ids;
+    if(this.opts.inBattle){
+      const rows=ids.map((id):TouchAction=>{const info=this.opts.battleItem?.(id);
+        return {label:this.nice(id),disabled:Boolean(info?.disabled),run:()=>{if(this.stack.top===this&&!info?.disabled){this.input.reset();this.useBattleItem(id);}},
+          row:{kind:'item',icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,right:`×${this.state.bag[id]}`,meta:info?.hint??this.gist(id)}};});
+      if(this.opts.onCampaign)rows.push({label:'Campagna',hint:'Azioni che spendono sondaggi',run:()=>{if(this.stack.top===this){this.stack.pop();this.opts.onCampaign?.();}}});
+      return {title:'Borsa',blocks:ids.length?undefined:[{title:'Borsa vuota',body:'Niente da usare in lotta.'}],actions:rows,back};
+    }
+    if(this.picked&&(this.state.bag[this.picked]??0)<1){this.picked=undefined;this.pickedMon=undefined;}
+    if(this.picked){
+      const id=this.picked,item=ITEMS[id];
+      if(this.pickedMon&&item.kind==='tm'){
+        const move=MOVES[item.moveId!];
+        return {title:move.name,subtitle:'Quale mossa sostituire?',actions:this.slotRows(id,this.pickedMon),back};
+      }
+      return {title:this.nice(id),subtitle:this.gist(id),fit:true,actions:this.recipientRows(id),selected:0,back};
+    }
+    const tabs:TouchAction[]=['Cure','Schede','Strumenti','Chiave'].map((label,i)=>({label,run:()=>{if(this.stack.top===this){this.tab=i;audio.cursor();}}}));
+    const visible=ids.filter(id=>this.categoryOf(id)===this.tab);
+    const rows=visible.map((id):TouchAction=>({label:this.nice(id),run:()=>{
+      if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();audio.cursor();
+      const kind=ITEMS[id].kind;
+      if(["heal","cure","hold","evo","tm"].includes(kind)&&party.length)this.picked=id;
+      else{this.view.menu.index=ids.indexOf(id);this.activate(id);}
+    },row:{kind:'item',icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,right:`×${this.state.bag[id]}`,meta:this.gist(id)}}));
+    return {title:'Borsa',tabs,selectedTab:this.tab,blocks:visible.length?undefined:[{title:'Vuoto',body:'Nessun oggetto in questa sezione.'}],actions:rows,selected:0,back};
   }
   draw(screen:Screen):void {screen.clear('#101b32');if(this.msg.isOpen)this.msg.draw(screen);}
 }

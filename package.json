@@ -109,7 +109,9 @@
     "shot:palace": "node scripts/shot-palace.mjs",
     "check:world-navigation:release": "node --import tsx scripts/check-world-navigation-release.mjs",
     "check:opening:release": "node scripts/check-opening-release.mjs",
-    "check:ui-kit": "node scripts/check-ui-kit.mjs"
+    "check:ui-kit": "node scripts/check-ui-kit.mjs",
+    "check:ui-panels": "node scripts/check-ui-panels.mjs",
+    "check:ui-flows": "node scripts/check-ui-flows.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

@@ -20,7 +20,7 @@ export class ShopScene implements Scene {
   private receiptBody: string | undefined;
   private receiptFacts:NonNullable<UiBlock["facts"]>=[];
   private quote: { id: string; quantity: number; price: number } | null = null;
-  constructor(private stack: SceneStack, private input: Input, private state: GameState, private greeting?: string) {}
+  constructor(private stack: SceneStack, private input: Input, private state: GameState, _greeting?: string) {}
 
   private openQuote(id: string): void {
     if (this.stack.top !== this || this.quote || this.receiptBody!==undefined || !shopStock(this.state).includes(id)) return;
@@ -65,11 +65,10 @@ export class ShopScene implements Scene {
           {label:"Dieci in più",disabled:quote.quantity>=max,run:()=>adjust(10)}],selected:0,primary:0,back:back};
     }
     const ids=shopStock(this.state).filter(id=>supplyMatches(ITEMS[id],this.filter));
-    return {title:"Discount elettorale",positioned:true,subtitle:this.greeting ?? "Prezzi piccoli. Scontrini lunghi.",
-      blocks:[{title:"Fondi disponibili",facts:[{label:"Fondi",value:`${this.state.money} €`}]},
-        ...(!ids.length?[{title:"Nessun prodotto",body:"Scegli un’altra categoria per vedere le scorte."}]:[])],
+    return {title:"Discount elettorale",compact:true,subtitle:`${this.state.money} € disponibili`,
+      blocks:!ids.length?[{title:"Nessun prodotto",body:"Scegli un’altra categoria per vedere le scorte."}]:undefined,
       tabs:FILTERS.map((label,i)=>({label,run:()=>{if(this.stack.top!==this||this.quote||this.receiptBody!==undefined)return;this.filter=i;audio.cursor();}})),selectedTab:this.filter,
-      actions:ids.map(id=>({label:readableCopy(ITEMS[id].name),icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,hint:ITEMS[id].desc,group:"Prodotti disponibili",
+      actions:ids.map(id=>({label:readableCopy(ITEMS[id].name),icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,hint:ITEMS[id].desc,
         facts:[{label:"Prezzo unitario",value:`${shopPrice(this.state,ITEMS[id])} €`},{label:"In borsa",value:String(this.state.bag[id]??0)}],
         run:()=>this.openQuote(id)})),selected:Math.max(0,ids.indexOf(this.selectedId)),back:back};
   }

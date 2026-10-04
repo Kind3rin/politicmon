@@ -9,7 +9,6 @@ import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
 import type { GameState } from "../game/state";
 import { wrapText } from "../ui/widgets";
-import { zoneProgress } from "../data/dexzones";
 import { formsForSpecies } from "../game/memeForms";
 import { runtimeFeatures } from "../game/features";
 import { defensiveMatchups, dexHabitats, dexAcquisitionNotes, dexSummary, dexMatches, DEX_FILTERS, DEX_FILTER_LABELS, evolutionCondition, reachableDexMaps, type DexFilter } from "../game/dexGuide";
@@ -167,16 +166,13 @@ export class DexScene implements Scene {
       actions:[action("Ogni tipo",()=>{this.typeFilter=null;this.selectFirst();this.filterOpen=false;}),...TYPE_ORDER.map(type=>({...action(type,()=>{this.typeFilter=type;this.selectFirst();this.filterOpen=false;}),icon:`/sprites/ui/type_${type.toLocaleLowerCase('it')}.png`,group:"Tipi avvistati"}))],selected:this.typeFilter?TYPE_ORDER.indexOf(this.typeFilter)+1:0,back:back};
     if(!detail){
       const seenCount=DEX_ORDER.filter(candidate=>this.state.dex[candidate]).length,caught=DEX_ORDER.filter(candidate=>this.state.dex[candidate]==="caught").length,target=DEX_ORDER.length;
-      const zones=zoneProgress(this.state.dex,this.state.flags,this.state.browserSeed),here=zones.find(progress=>progress.zone.id===this.state.pos.mapId);
-      return {title:"Politicdex",subtitle:ids.length?`${ids.length} specie nel filtro. Tocca una voce per aprire la scheda.`:this.filter==="here"?"Qui non ci sono incontri selvatici.":"Il filtro non contiene specie.",
+      return {title:"Politicdex",compact:true,subtitle:ids.length?`Eletti ${caught} di ${target} · Avvistati ${seenCount}`:this.filter==="here"?"Qui non ci sono incontri selvatici.":"Il filtro non contiene specie.",
         tabs:[...DEX_FILTERS.map(filter=>action(this.readable(DEX_FILTER_LABELS[filter]),()=>{this.filter=filter;this.selectFirst();})),action("Tipo",()=>{this.filterOpen=true;},false,this.typeFilter??"Ogni tipo")],selectedTab:DEX_FILTERS.indexOf(this.filter),
-        blocks:[{title:"La collezione",facts:[{label:"Avvistati",value:String(seenCount)},{label:"Eletti",value:`${caught} di ${target}`} ]},
-          ...(here?[{title:this.readable(here.zone.name),facts:[{label:"Eletti nella zona",value:`${here.caught} di ${here.total}`},{label:"Premio",value:`${here.zone.reward.money} €`}]}]:[{title:"Zone completate",facts:[{label:"Progressi",value:`${zones.filter(progress=>progress.done).length} di ${zones.length}`}]}]),
-          ...(!ids.length?[{title:"Nessuna specie nel filtro",body:"Scegli Tutti o rimuovi il filtro per tipo."}]:[])],
+        blocks:!ids.length?[{title:"Nessuna specie nel filtro",body:"Scegli Tutti o rimuovi il filtro per tipo."}]:undefined,
         actions:ids.map(candidate=>{
           const known=!!this.state.dex[candidate],entry=SPECIES[candidate];
-          return {...action(known?entry.name:"Da scoprire",()=>{this.index=DEX_ORDER.indexOf(candidate);this.detail=true;this.page=-1;},false,this.state.dex[candidate]==="caught"?"Eletto nella tua collezione":known?"Avvistato":"Consulta l’habitat per cercarlo."),
-            icon:known?`/sprites/monsters/${candidate}.png`:undefined,group:"Specie",facts:[{label:"Numero",value:String(entry.dexNum).padStart(2,"0")},...(known?[{label:"Tipo",value:entry.types.join(" · ")}]:[])]};
+          return {...action(known?entry.name:"Da scoprire",()=>{this.index=DEX_ORDER.indexOf(candidate);this.detail=true;this.page=-1;},false,this.state.dex[candidate]==="caught"?"Eletto nella tua collezione":known?"Avvistato":undefined),
+            icon:known?`/sprites/monsters/${candidate}.png`:undefined,facts:[{label:"Numero",value:String(entry.dexNum).padStart(2,"0")},...(known?[{label:"Tipo",value:entry.types.join(" · ")}]:[])]};
         }),selected:Math.max(0,ids.indexOf(id)),back:back};
     }
     const blocks:UiBlock[]=[];

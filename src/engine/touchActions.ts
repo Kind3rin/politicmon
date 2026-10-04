@@ -1,3 +1,24 @@
+export interface UiRow {
+  /** Pixel icon or sprite shown at the left. */
+  icon?: string;
+  /** Short mark above the name: a lead star, for instance. */
+  star?: boolean;
+  level?: string;
+  types?: readonly string[];
+  bar?: { now: number; max: number; text: string };
+  /** Value pinned at the right edge: quantity, PP, a change "64 → 95". */
+  right?: string;
+  /** Small second line under the name. */
+  meta?: string;
+  /** Rotated stamp, as KO or NEW. */
+  stamp?: string;
+  /** Colour family: a political type name tints the card. */
+  tone?: string;
+  /** ▲ strong, ▼ weak. */
+  arrow?: "up" | "down";
+  kind?: "companion" | "item" | "move";
+}
+
 export interface TouchAction {
   command?: "a" | "b" | "start" | "inspect";
   label: string;
@@ -10,6 +31,8 @@ export interface TouchAction {
   facts?: readonly { label: string; value: string }[];
   order?: "AGISCI PRIMA" | "AGISCI DOPO" | "PARITÀ: 50%";
   disabled?: boolean;
+  /** Tribuna row: the visual form of a list entry (companion, item, move). */
+  row?: UiRow;
   onInspect?: () => void;
   run: () => void;
 }

@@ -3,10 +3,9 @@ import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import type { Screen } from "../engine/screen";
 import type { GameState } from "../game/state";
-import type { UiPanel } from "../ui/kit";
+import type { UiPanel, UiAtlas } from "../ui/kit";
 import { currentQuest } from "../data/quests";
 import { MAPS } from "../data/maps";
-import { MAP_NAMES } from "../data/maps/names";
 import { reachableDexMaps } from "../game/dexGuide";
 import { runtimeFeatures } from "../game/features";
 
@@ -76,6 +75,14 @@ const ATTO3_NODES: readonly MapNode[] = [
     id: "genova", label: "GENOVA TECHNO", maps: ["genova_techno"], unlocked: (state) => Boolean(state.flags.diplomacyComplete), optional: true
   }
 ];
+
+// Posizioni disegnate sulla cartina (percentuali): la geografia è satirica, l'ordine è quello del viaggio.
+const ATLAS_POSITIONS: Record<string, readonly [number, number]> = {
+  borgo: [24, 90], route1: [32, 77], grotta1: [72, 76], mediopoli: [46, 65], route2: [64, 53], eurotown: [34, 44], route3: [56, 34],
+  grotta2: [82, 33], capitale: [36, 21], colle: [62, 8],
+  stretto: [30, 74], offshore: [68, 46], bruxelles: [36, 18],
+  campo: [28, 88], futuro: [68, 74], diplomacy: [30, 58], tour: [68, 42], "palazzo-feed": [34, 26], genova: [78, 10]
+};
 
 const PAGES: readonly MapPage[] = [
   { id: "italietta", tab: "ITALIETTA", nodes: ITALIETTA_NODES },
@@ -180,9 +187,18 @@ export class WorldMapScene implements Scene {
         {title:"Passaggio",body:this.isUnlocked(selected)?selected.optional?"Deviazione facoltativa. Non serve per proseguire la storia.":"Segui i passaggi nel mondo. La cartina non consuma risorse.":"Il passaggio si apre proseguendo la campagna."},
         ...(selected.id===current?.id?[{title:"Prossimo passo",body:currentQuest(this.state)?.step??"Esplora le attività rimaste."}]:[])],
       actions:[],back:{label:"Indietro",hint:"Torna alla cartina.",run:close}};
-    return {title:"Mappa",subtitle:`Sei a ${name(MAP_NAMES[this.state.pos.mapId]??current?.label??"Italietta")}.`,
+    const atlas:UiAtlas={
+      nodes:nodes.map(node=>{const at=ATLAS_POSITIONS[node.id]??[50,50];
+        return {x:at[0],y:at[1],label:node.label,state:node.id===current?.id?"here":!this.isUnlocked(node)?"locked":node.optional?"optional":"open",
+          next:node.id!==current?.id&&this.isUnlocked(node)&&!node.optional&&nodes.filter(candidate=>!candidate.optional&&this.isUnlocked(candidate)).slice(-1)[0]?.id===node.id};}),
+      links:nodes.flatMap((node,index)=>{
+        if(node.optional){const parent=this.connections(node).map(candidate=>nodes.indexOf(candidate)).find(i=>i>=0&&!nodes[i].optional);return parent===undefined?[]:[{from:parent,to:index,dashed:true}];}
+        const before=nodes.slice(0,index).map((candidate,i)=>({candidate,i})).filter(entry=>!entry.candidate.optional).pop();
+        return before?[{from:before.i,to:index}]:[];
+      })};
+    return {title:"Mappa",atlas,
       tabs:PAGES.map((region,index)=>({label:name(region.tab),run:()=>{if(this.stack.top!==this||this.detail)return;this.input.reset();this.pageIndex=index;this.selectedId=this.currentNode()?.id??region.nodes[0].id;if(!region.nodes.some(node=>node.id===this.selectedId))this.selectedId=region.nodes[0].id;audio.cursor();}})),selectedTab:this.pageIndex,
-      blocks:[{title:"Prossima tappa",body:currentQuest(this.state)?.step??"La campagna continua."}],
+      blocks:undefined,
       actions:nodes.map(node=>({label:name(node.label),group:"Percorso della campagna",route:node.optional?"branch":"main",hint:node.id===current?.id?"Sei qui":node.optional?"Deviazione facoltativa":undefined,
         facts:!this.isUnlocked(node)?[{label:"Passaggio",value:"Da sbloccare"}]:undefined,run:()=>{if(this.stack.top!==this||this.detail||this.page!==page)return;this.input.reset();this.selectedId=node.id;this.detail=true;audio.confirm();}})),
       selected:Math.max(0,nodes.findIndex(node=>node.id===this.selectedId)),back:{label:"Indietro",run:close}};

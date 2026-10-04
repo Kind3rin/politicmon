@@ -123,10 +123,10 @@ async function measureScenes(browser) {
         kit.endUiFrame();input.endFrame();
       }
       async function sample(scene) {
-        stack.replace(scene);
-        for (let i = 0; i < 30; i += 1) { drawFrame(); }
+        if(scene)stack.replace(scene);
+        for (let i = 0; i < 30; i += 1) { if(scene)drawFrame(); }
         await new Promise((resolveWait) => setTimeout(resolveWait, 800));
-        if (withAudio) {
+        if (withAudio && scene) {
           const deadline = performance.now() + 5000;
           while (audioMod.audio.musicState !== "playing" && performance.now() < deadline) await new Promise(r => setTimeout(r, 50));
           if (audioMod.audio.musicState !== "playing") throw new Error(`Music not playing: ${audioMod.audio.trackTitle}`);
@@ -140,16 +140,17 @@ async function measureScenes(browser) {
             if (previous) intervals.push(now - previous);
             previous = now;
             const start = performance.now();
-            drawFrame();
+            if(scene)drawFrame();
             work.push(performance.now() - start);
             frames += 1;
             if (frames >= 240) resolveFrames(); else requestAnimationFrame(tick);
           };
           requestAnimationFrame(tick);
         });
-        return { work: summarize(work), interval: summarize(intervals), framesOver100ms: intervals.filter((value) => value > 100).length,
+        return { fps:1000/(intervals.reduce((a,b)=>a+b,0)/intervals.length), frameBudgetMs:1000/60, framesOver60Budget:intervals.filter(value=>value>16.7).length, work: summarize(work), interval: summarize(intervals), framesOver100ms: intervals.filter((value) => value > 100).length,
           audio: { enabled: audioMod.audio.enabled, state: audioMod.audio.musicState, title: audioMod.audio.trackTitle } };
       }
+      const idle=await sample(null);
       const worldState = stateMod.newGameState();
       worldState.flags["intro-done"] = true; worldState.flags["dex-received"] = true;
       worldState.party = [monsterMod.createMonster("giorgiagon", 30), monsterMod.createMonster("renzilla", 30)];
@@ -172,7 +173,7 @@ async function measureScenes(browser) {
       const dexState = stateMod.newGameState();
       for (const id of Object.keys(speciesMod.SPECIES)) dexState.dex[id] = "caught";
       const dex = await sample(new DexScene(stack, input, dexState));
-      return { world, terrainMaps, battle, dex, spriteRegistry: assetsMod.spriteRegistryStats(), rasterCache: screen.cacheStats() };
+      return { idle, world, terrainMaps, battle, dex, spriteRegistry: assetsMod.spriteRegistryStats(), rasterCache: screen.cacheStats() };
     }, {withAudio:audioEnabled,shellMarkup});
     for (const scene of ["world", "battle", "dex"]) for (const group of ["work", "interval"]) for (const key of ["meanMs", "p50Ms", "p95Ms", "p99Ms", "maxMs"]) result[scene][group][key] = Number(result[scene][group][key].toFixed(3));
     await context.close();
@@ -226,7 +227,7 @@ function measureSave() {
 
 function markdown(report) {
   const mb = (bytes) => (bytes / 1024 / 1024).toFixed(2);
-  return `# Baseline prestazioni R0\n\nProfilo: Chromium mobile 390×844, DPR 2, CPU ×4; boot con latenza 40 ms e download 4 Mbps.\n\n| Metrica | Valore |\n|---|---:|\n| Boot asset critici | ${report.boot.assetsReadyMs.toFixed(1)} ms |\n| Primo frame pronto | ${report.boot.firstFrameMs.toFixed(1)} ms |\n| World intervallo p95 / max | ${report.scenes.world.interval.p95Ms} / ${report.scenes.world.interval.maxMs} ms |\n| Battle intervallo p95 / max | ${report.scenes.battle.interval.p95Ms} / ${report.scenes.battle.interval.maxMs} ms |\n| Dex intervallo p95 / max | ${report.scenes.dex.interval.p95Ms} / ${report.scenes.dex.interval.maxMs} ms |\n| World/Battle/Dex costo draw p95 | ${report.scenes.world.work.p95Ms} / ${report.scenes.battle.work.p95Ms} / ${report.scenes.dex.work.p95Ms} ms |\n| Working set sprite decoded | ${mb(report.scenes.spriteRegistry.decodedBytesEstimate)} MiB |\n| Tutti gli sprite decoded (worst-case) | ${mb(report.sizes.spriteDecodedBytesEstimate)} MiB |\n| Cache raster | ${report.scenes.rasterCache.rasterizedSprites} sprite / ${report.scenes.rasterCache.rasterizedPixels} px; ${report.scenes.rasterCache.cachedGlyphs} glifi |\n| Bundle iniziale gzip | ${mb(report.sizes.initialCodeGzipBytes)} MiB |\n| Bundle totale gzip | ${mb(report.sizes.codeGzipBytes)} MiB |\n| Sprite compressi | ${mb(report.sizes.spriteCompressedBytes)} MiB (${report.sizes.spriteFiles} file) |\n| Save parse / serialize | ${report.save.parseMeanMs} / ${report.save.serializeMeanMs} ms |\n\nBudget automatici locali: intervallo rAF p95 ≤33,4 ms, nessun frame >100 ms, parse/serialize ≤10 ms, bundle iniziale ≤250 KiB e totale ≤476 KiB. Conferma finale FPS richiesta su device reale.\n`;
+  return `# Baseline prestazioni R0\n\nProfilo: Chromium mobile 390×844, DPR 2, CPU ×4; boot con latenza 40 ms e download 4 Mbps.\n\n| Metrica | Valore |\n|---|---:|\n| Boot asset critici | ${report.boot.assetsReadyMs.toFixed(1)} ms |\n| Primo frame pronto | ${report.boot.firstFrameMs.toFixed(1)} ms |\n| World intervallo p95 / max | ${report.scenes.world.interval.p95Ms} / ${report.scenes.world.interval.maxMs} ms |\n| Battle intervallo p95 / max | ${report.scenes.battle.interval.p95Ms} / ${report.scenes.battle.interval.maxMs} ms |\n| Dex intervallo p95 / max | ${report.scenes.dex.interval.p95Ms} / ${report.scenes.dex.interval.maxMs} ms |\n| World/Battle/Dex costo draw p95 | ${report.scenes.world.work.p95Ms} / ${report.scenes.battle.work.p95Ms} / ${report.scenes.dex.work.p95Ms} ms |\n| Working set sprite decoded | ${mb(report.scenes.spriteRegistry.decodedBytesEstimate)} MiB |\n| Tutti gli sprite decoded (worst-case) | ${mb(report.sizes.spriteDecodedBytesEstimate)} MiB |\n| Cache raster | ${report.scenes.rasterCache.rasterizedSprites} sprite / ${report.scenes.rasterCache.rasterizedPixels} px; ${report.scenes.rasterCache.cachedGlyphs} glifi |\n| Bundle iniziale gzip | ${mb(report.sizes.initialCodeGzipBytes)} MiB |\n| Bundle totale gzip | ${mb(report.sizes.codeGzipBytes)} MiB |\n| Sprite compressi | ${mb(report.sizes.spriteCompressedBytes)} MiB (${report.sizes.spriteFiles} file) |\n| Save parse / serialize | ${report.save.parseMeanMs} / ${report.save.serializeMeanMs} ms |\n\nBudget automatici locali: Borgo e Percorso 1 rAF p95 ≤16,7 ms e lavoro p95 ≤16,667 ms (M2); altre scene rAF p95 ≤33,4 ms, nessun frame >100 ms, parse/serialize ≤10 ms, bundle iniziale ≤250 KiB e totale ≤476 KiB. Conferma finale FPS richiesta su device reale.\n`;
 }
 
 function assertBudgets(report, baseline) {
@@ -235,6 +236,13 @@ function assertBudgets(report, baseline) {
     if (report.scenes[scene].interval.p95Ms > 33.4) failures.push(`${scene} intervallo p95 ${report.scenes[scene].interval.p95Ms}ms > 33.4ms`);
     if (report.scenes[scene].interval.maxMs > 100 || report.scenes[scene].framesOver100ms > 0) failures.push(`${scene} ha frame >100ms`);
   }
+  // M2 requires 60 fps: 16.7 ms includes only timestamp rounding, not a 30 fps allowance.
+  for(const [name,scene] of Object.entries(report.scenes.terrainMaps)) {
+    if(scene.interval.p95Ms>16.7||scene.work.p95Ms>1000/60)
+      failures.push(`${name}: obiettivo 60 fps non verificato; rAF p95 ${scene.interval.p95Ms.toFixed(2)}ms, lavoro p95 ${scene.work.p95Ms.toFixed(2)}ms, media ${scene.fps.toFixed(2)}fps`);
+  }
+  if(failures.length&&report.scenes.idle.interval.p95Ms>16.7)
+    failures.push(`Controllo senza gioco: rAF p95 ${report.scenes.idle.interval.p95Ms.toFixed(2)}ms. Anche l'ambiente supera 16.7ms; questo non rende superato il criterio M2.`);
   if (report.save.parseMeanMs > 10 || report.save.serializeMeanMs > 10) failures.push("save parse/serialize >10ms");
   if (report.sizes.initialCodeGzipBytes > 250 * 1024) failures.push("bundle iniziale gzip oltre 250 KiB");
   if (report.sizes.codeGzipBytes > 476 * 1024) failures.push("bundle totale gzip oltre 476 KiB");
@@ -245,7 +253,7 @@ const browser = await chromium.launch();
 let report;
 try {
   report = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     profile: { viewport: "390x844", deviceScaleFactor: 2, cpuThrottle: 4, bootNetwork: "40ms/4Mbps", sceneAudio: audioEnabled },
     boot: await measureBoot(browser), scenes: await measureScenes(browser), sizes: await measureSizes(), save: measureSave()
   };
@@ -259,4 +267,4 @@ if (writeBaseline) {
   await writeFile(BASELINE_PATH, `${JSON.stringify(report, null, 2)}\n`);
   await writeFile(MARKDOWN_PATH, markdown(report));
 }
-console.log(`PERF OK — interval p95 world ${report.scenes.world.interval.p95Ms}ms, battle ${report.scenes.battle.interval.p95Ms}ms, dex ${report.scenes.dex.interval.p95Ms}ms, bundle iniziale ${(report.sizes.initialCodeGzipBytes / 1024).toFixed(1)}KiB / totale ${(report.sizes.codeGzipBytes / 1024).toFixed(1)}KiB.`);
+console.log(`PERF OK — M2 60fps verificati su Borgo/Percorso 1; interval p95 world ${report.scenes.world.interval.p95Ms}ms, battle ${report.scenes.battle.interval.p95Ms}ms, dex ${report.scenes.dex.interval.p95Ms}ms, bundle iniziale ${(report.sizes.initialCodeGzipBytes / 1024).toFixed(1)}KiB / totale ${(report.sizes.codeGzipBytes / 1024).toFixed(1)}KiB.`);

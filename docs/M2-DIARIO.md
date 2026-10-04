@@ -26,6 +26,6 @@ Prove: 1-water-frame-{1,2,3,4}.png, 1-notte-{pioggia,riduci-effetti}.png, 1-lamp
 Nuove prove: 1-mediopoli-asfalto.png, 1-laboratorio-pavimento.png, 1-grotta-materiali.png.
 Input reali: 22 passi e Percorso 1 ↔ Mediopoli; cache 1→2→3, completa. Prove 1-percorso-mediopoli-{arrivo,ritorno}.png.
 Higgsfield 338,47 → 337,97: 0,50 crediti; nessun consumo aggiuntivo per asfalto/pavimenti.
-414 test, build e perf verdi; intervallo p95 18,5 ms: 60 fps non dimostrati.
+414 test/build verdi; perf M2 ora rosso: Borgo 59,50 fps, Percorso 1 59,99; p95 17,6/17,5 ms, idle 17,5 ms.
 Errore QA precedente: slot locale 4190 sovrascritto; banco ora senza scritture/rete.
 Lampioni su quattro pali solidi; banco con dialoghi e ascolto sei passi. Restano giro slice/ascolto telefono e 60 fps; UI non approvata.

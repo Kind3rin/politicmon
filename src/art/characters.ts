@@ -87,6 +87,111 @@ export function dialoguePortrait(palId: string, spriteSet?: string): string | un
   return NPC_WITH_PNG.has(palId) ? `/sprites/portraits/${palId}.png` : undefined;
 }
 
+// Busts of the named opponents (public/sprites/portraits/trainer-<id>.png): each is its own person built on the role sprite it walks as.
+export const TRAINER_PORTRAITS = new Set<string>([
+  "aide", "algoritmo-sovrano", "archivista", "boss",
+  "bunkerista", "campo-claque", "campo-debate", "campo-photographer",
+  "citofonista", "claqueur", "commercialista", "commissione",
+  "diplomatico", "district-centro", "district-feed", "district-isole",
+  "district-nord", "district-sud", "djpapeete", "eminenza",
+  "emittenza", "eu-commissario", "eu-eurodeputato", "eu-lobby",
+  "eu-relatore", "funzionario", "futuro-anteriore", "garante",
+  "geometra", "giudice1", "giudice2", "giudice3",
+  "ilcapitano", "influencer", "journalist", "ladydirettiva",
+  "lobbista", "noponte", "oligarca", "opinionista",
+  "partner-perfetto", "praticante", "prestanome", "protocollista",
+  "stagista", "telelobbista", "tesoriere", "tycoon",
+  "usciere"
+]);
+
+/** The face an opponent shows while speaking in battle: its own bust, else the bust of its role. */
+export function trainerPortrait(id: string, palId: string): string | undefined {
+  return TRAINER_PORTRAITS.has(id) ? `/sprites/portraits/trainer-${id}.png` : dialoguePortrait(palId);
+}
+
+// Townsfolk with a bust of their own (public/sprites/portraits/npc-<key>.png): map NPC id -> [bust, label].
+// The same kind of person (the blue-car escort, the petrol attendant, the vendor) shares one face across towns.
+export const NPC_BUSTS: Record<string, readonly [string, string]> = {
+  "ambulante-bruxelles": ["ambulante", "Ambulante"],
+  "ambulante-cap": ["ambulante", "Ambulante"],
+  "ambulante-offshore": ["ambulante", "Ambulante"],
+  "architetto-cap": ["architetto", "Architetto di corte"],
+  "attico-influencer": ["attico-influencer", "Influencer"],
+  "autista-cap": ["autista", "Autista"],
+  "banditore-coppa": ["banditore", "Banditore"],
+  "bar-borgo-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "bar-bruxelles-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "bar-cap-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "bar-euro-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "bar-medio-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "bar-offshore-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "bar-stretto-pc": ["circolo-operatore", "Ufficio Circolo"],
+  "benzinaio-r1": ["benzinaio", "Benzinaio"],
+  "benzinaio-r3": ["benzinaio", "Benzinaio"],
+  "cameraman-r2": ["cameraman", "Cameraman"],
+  "camionista-r3": ["camionista", "Camionista"],
+  "campo-capo-campagna": ["capocampagna", "Capocampagna"],
+  "chiosco-oste": ["oste", "Oste"],
+  "circolo-anziano": ["anziano", "Anziano del Circolo"],
+  "circolo-tesserato": ["tesserato", "Tesserato"],
+  "contabile-pentito": ["contabile", "Contabile pentito"],
+  "corazziere": ["corazziere", "Corazziere"],
+  "croupier": ["croupier", "Croupier"],
+  "egg-complotto": ["complottista", "Complottista"],
+  "egg-pensionato": ["egg-pensionato", "Pensionato"],
+  "elevato": ["elevato", "L'Elevato"],
+  "euroburocrate": ["euroburocrate", "Euroburocrate"],
+  "evasore-offshore": ["evasore", "Evasore"],
+  "fan-tv": ["fan-tv", "Fan della TV"],
+  "fan-ue": ["fan-ue", "Fan dell'UE"],
+  "granny": ["nonna", "Nonna"],
+  "habitue": ["habitue", "Habitué"],
+  "home-mom": ["mamma", "Mamma"],
+  "hostess-ue": ["hostess", "Hostess"],
+  "influencer-cap": ["influencer-cap", "Influencer"],
+  "ingegnere": ["ingegnere", "Ingegnere"],
+  "lobby-capo": ["lobby-capo", "Capo lobbista"],
+  "luca-guida": ["luca-guida", "Luca - guida"],
+  "magnate-encore": ["magnate", "Magnate"],
+  "marinaio-cap": ["marinaio", "Marinaio"],
+  "market1-clerk": ["commesso", "Commesso"],
+  "market2-clerk": ["commesso", "Commesso"],
+  "medico-oblast": ["medico", "Medico da campo"],
+  "opinionista-daily": ["opinionista", "Opinionista"],
+  "pensionato-euro": ["pensionato-euro", "Pensionato"],
+  "pescatore-r1": ["pescatore", "Pescatore"],
+  "redaz-direttore": ["direttore", "Direttore"],
+  "redaz-stagista": ["stagista", "Stagista"],
+  "retro-cronista": ["cronista", "Cronista"],
+  "rider-monopattino": ["rider", "Rider"],
+  "ruspista": ["ruspista", "Ruspista"],
+  "salotto-trombato": ["trombato", "Ex ministro"],
+  "salotto-vip": ["vip", "Ospite VIP"],
+  "scorta-borgo": ["scorta", "Scorta auto blu"],
+  "scorta-cap": ["scorta", "Scorta auto blu"],
+  "scorta-euro": ["scorta", "Scorta auto blu"],
+  "scorta-medio": ["scorta", "Scorta auto blu"],
+  "scorta-stretto": ["scorta", "Scorta auto blu"],
+  "sherpa-ue": ["sherpa", "Sherpa UE"],
+  "sindacalista": ["sindacalista", "Sindacalista"],
+  "sondaggista-versioni": ["sondaggista", "Sondaggista"],
+  "talkshow-fan": ["talkshow-fan", "Fan del talk show"],
+  "tipografo": ["tipografo", "Tipografo"],
+  "turista-cap": ["turista", "Turista"],
+  "viandante-r1": ["umarell", "Umarell"]
+};
+
+// Named story opponents who also stand around in later maps keep the face they fought with.
+const NPC_TRAINER_FACES: Record<string, string> = { "capitano-after": "ilcapitano", "boss-after": "boss", "garante-after": "garante" };
+
+/** Bust and label of a map NPC without a story sprite set; undefined when it only has its role. */
+export function npcBust(npcId: string): { portrait: string; label?: string } | undefined {
+  const face = NPC_TRAINER_FACES[npcId];
+  if (face) return { portrait: `/sprites/portraits/trainer-${face}.png` };
+  const entry = NPC_BUSTS[npcId];
+  return entry ? { portrait: `/sprites/portraits/npc-${entry[0]}.png`, label: entry[1] } : undefined;
+}
+
 // Archetipi NPC con frame di camminata Higgsfield disponibili (chars/npc_<pal>_<dir>_w<n>.png).
 export const NPC_WALK = new Set<string>([
   "granny", "guard", "kid", "aide", "barista", "professor", "journalist", "boss",

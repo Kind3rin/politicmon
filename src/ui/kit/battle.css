@@ -75,3 +75,11 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 .ui-arena-caption .ui-subtitle{white-space:normal}
 .ui-intent-posture{position:absolute;right:16%;top:56px;padding:2px 8px;background:#D7263D;color:#F4EEDC;font:700 16px/1.2 PoliticmonBody,sans-serif;border:2px solid #14161F;transform:rotate(-3deg);pointer-events:none}
 .ui-intent-posture[hidden]{display:none}
+
+.ui-arena-trainer{position:absolute;right:10px;top:60px;z-index:2;width:92px;pointer-events:none;display:flex;flex-direction:column;align-items:center;animation:arena-trainer-in .28s ease-out}
+.ui-arena-trainer[hidden]{display:none}
+.ui-arena-trainer img{width:92px;height:92px;image-rendering:pixelated;filter:drop-shadow(0 3px 0 #14161F66)}
+.ui-arena-trainer-name{position:relative;z-index:1;margin-top:-12px;width:max-content;max-width:164px;padding:2px 8px;background:#14161F;color:#F4EEDC;font:700 14px/1.2 Tribuna,sans-serif;text-transform:uppercase;letter-spacing:.04em;text-align:center}
+@keyframes arena-trainer-in{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+@media(prefers-reduced-motion:reduce){.ui-arena-trainer{animation:none}}
+body.ui-reduce-effects .ui-arena-trainer{animation:none}

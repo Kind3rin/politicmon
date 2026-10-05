@@ -6,6 +6,7 @@ import { healingQuote } from "../supplyGuide";
 import { ITEMS } from "../../data/items";
 import { MOVES, STATUS_NAMES, moveSummary, type Move } from "../../data/moves";
 import type { TrainerDef } from "../../data/trainers";
+import { trainerPortrait } from "../../art/characters";
 import { audio } from "../../engine/audio";
 import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
@@ -1502,7 +1503,7 @@ export class BattleScene implements Scene {
       impacts:this.fx.damageNumbers.map(d=>({label:`−${d.val}`,x:d.x/VIEW_W*100,y:d.y/this.viewHeight*100,opacity:this.state.reduceEffects?1:Math.min(1,Math.max(0,(1-d.life/d.max)/.34)),kind:d.crit?"crit":d.super?"super":"normal"})),
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
-      message:{title,body},notice,moveCount:moves.length,postureCount:postures.length,
+      message:{title,body},notice,trainer:this.trainer&&this.msg.isOpen?{name:readableCopy(this.trainer.name),portrait:trainerPortrait(this.trainer.id,this.trainer.pal)}:undefined,moveCount:moves.length,postureCount:postures.length,
       polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status",posture:this.foePosture!=="none"?{label:POSTURES[this.foePosture].label,rule:POSTURES[this.foePosture].rule}:undefined}:undefined,
       finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined
     }};

@@ -2,6 +2,8 @@
 
 ## Mandato 2 — piacere di gioco — 2026-10-05
 
+- Allenatori: tutti i 49 hanno un volto proprio (prima i ruoli erano dieci). In lotta il busto compare sul campo, con il nome, mentre l'allenatore parla (presentazione, «manda in campo», sconfitta); nei dialoghi sulla mappa parla con la sua faccia.
+- Gente: 53 tipi di abitanti hanno il loro volto e il loro nome in italiano al posto di «Abitante» (Tipografo, Umarell, Benzinaio, Scorta auto blu, Corazziere, Cronista…). Lo stesso tipo condivide il volto tra le città. Restano con quello del ruolo solo banconisti dei bar, creature leggendarie e quattro personaggi minori; l'elenco è fissato da un test.
 - Ricompensa: nella ricevuta «Consenso ottenuto» la barra parte da dove stava e scorre fino al nuovo valore (la crescita si vede, non si legge); salendo di livello compare il timbro «Livello su!». Rispetta «Riduci effetti».
 - Lotta: la didascalia del turno dice «Ellyna usa Corteo» / «Salvinott avversario usa …» invece di «Tu · ellyna: Corteo» (il nome in minuscolo era un effetto collaterale della leggibilità sui titoli in maiuscolo).
 - Mondo: gli avvisi in giallo («Sorprendilo alle spalle!») vanno a capo su due righe invece di troncarsi con i puntini.

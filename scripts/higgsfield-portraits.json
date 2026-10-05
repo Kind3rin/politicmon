@@ -152,6 +152,329 @@
         "player"
       ],
       "prompt": "Six busts, 3x2: red parrot host, crested parrot guest, alpaca monitor, bear monitor, navy studio monster, and the player protagonist."
+    },
+    {
+      "file": "trainers-a.png",
+      "job": "97c4413b-aeec-4700-9587-ca063a110a54",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142332_97c4413b-aeec-4700-9587-ca063a110a54.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-algoritmo-sovrano",
+        "trainer-futuro-anteriore",
+        "trainer-partner-perfetto",
+        "trainer-district-sud",
+        "trainer-emittenza",
+        "trainer-tycoon"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the boss refs (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-b.png",
+      "job": "99f69c98-a53b-4d13-828d-4f406b594c96",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142336_99f69c98-a53b-4d13-828d-4f406b594c96.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-ilcapitano",
+        "trainer-tesoriere",
+        "trainer-commissione",
+        "trainer-garante",
+        "trainer-boss",
+        "trainer-praticante"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the boss+kid refs (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-c.png",
+      "job": "bed08773-d31f-4428-94ec-f2811d64eb93",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142334_bed08773-d31f-4428-94ec-f2811d64eb93.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-district-nord",
+        "trainer-district-isole",
+        "trainer-aide",
+        "trainer-lobbista",
+        "trainer-telelobbista",
+        "trainer-funzionario"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the aide ref (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-d.png",
+      "job": "646db9c6-db54-4cfa-b4d2-52e447b51f9d",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142335_646db9c6-db54-4cfa-b4d2-52e447b51f9d.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-oligarca",
+        "trainer-eminenza",
+        "trainer-archivista",
+        "trainer-bunkerista",
+        "trainer-commercialista",
+        "trainer-eu-relatore"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the aide ref (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-e.png",
+      "job": "a19e48c3-90e0-4e54-88c1-cf41a259b217",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142337_a19e48c3-90e0-4e54-88c1-cf41a259b217.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-citofonista",
+        "trainer-giudice2",
+        "trainer-diplomatico",
+        "trainer-usciere",
+        "trainer-geometra",
+        "trainer-eu-commissario"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the aide+guard refs (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-f.png",
+      "job": "3b6eda48-ef0b-4f99-bb5f-eef24727aa77",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142336_3b6eda48-ef0b-4f99-bb5f-eef24727aa77.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-campo-debate",
+        "trainer-campo-photographer",
+        "trainer-district-centro",
+        "trainer-journalist",
+        "trainer-stagista",
+        "trainer-opinionista"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the journalist ref (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-g.png",
+      "job": "2a44cf8c-fafc-4e54-998e-84c13b16b421",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142333_2a44cf8c-fafc-4e54-998e-84c13b16b421.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-noponte",
+        "trainer-eu-eurodeputato",
+        "trainer-giudice3",
+        "trainer-ladydirettiva",
+        "trainer-protocollista",
+        "trainer-giudice1"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the journalist+granny refs (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "trainers-h.png",
+      "job": "9fb3ecb9-5cb9-4482-84bd-c1c222e5838a",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142335_9fb3ecb9-5cb9-4482-84bd-c1c222e5838a.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-campo-claque",
+        "trainer-district-feed",
+        "trainer-influencer",
+        "trainer-claqueur",
+        "trainer-djpapeete",
+        "trainer-prestanome"
+      ],
+      "prompt": "Six trainer busts, 3x2, each a distinct person built on the influencer ref (role sprite from npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-1.png",
+      "job": "6f4d452f-e3b7-49a9-a9da-6c736cebc827",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142758_6f4d452f-e3b7-49a9-a9da-6c736cebc827.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-scorta",
+        "npc-corazziere",
+        "npc-marinaio",
+        "npc-autista",
+        "npc-camionista",
+        "npc-benzinaio"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-2.png",
+      "job": "02ea5a80-5e03-47d3-8999-fb569152d187",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142759_02ea5a80-5e03-47d3-8999-fb569152d187.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-ambulante",
+        "npc-sindacalista",
+        "npc-oste",
+        "npc-croupier",
+        "npc-magnate",
+        "npc-lobby-capo"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-3.png",
+      "job": "103ae331-ec50-4b52-a38e-ebca80eb87bf",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142759_103ae331-ec50-4b52-a38e-ebca80eb87bf.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-banditore",
+        "trainer-eu-lobby",
+        "npc-influencer-cap",
+        "npc-evasore",
+        "npc-attico-influencer",
+        "npc-vip"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-4.png",
+      "job": "f1c41e7a-581b-4d62-8b50-b60c7c7b97c0",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142758_f1c41e7a-581b-4d62-8b50-b60c7c7b97c0.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-egg-pensionato",
+        "npc-umarell",
+        "npc-pescatore",
+        "npc-medico",
+        "npc-fan-tv",
+        "npc-pensionato-euro"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-5.png",
+      "job": "47353e81-1da3-4a3e-83ba-0be834937e96",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142757_47353e81-1da3-4a3e-83ba-0be834937e96.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-hostess",
+        "npc-mamma",
+        "npc-anziano",
+        "npc-nonna",
+        "npc-tipografo",
+        "npc-ingegnere"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-6.png",
+      "job": "a0969816-73cd-472f-b27d-37dc1aa97940",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142759_a0969816-73cd-472f-b27d-37dc1aa97940.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-rider",
+        "npc-turista",
+        "npc-commesso",
+        "npc-stagista",
+        "npc-luca-guida",
+        "npc-elevato"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-7.png",
+      "job": "4797c732-f017-4784-b561-d5d9ab843a17",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142827_4797c732-f017-4784-b561-d5d9ab843a17.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-sherpa",
+        "npc-cameraman",
+        "npc-fan-ue",
+        "npc-talkshow-fan",
+        "npc-opinionista",
+        "npc-habitue"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-8.png",
+      "job": "f7506a52-2d18-4449-90d9-afdc1b767c14",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142758_f7506a52-2d18-4449-90d9-afdc1b767c14.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-direttore",
+        "npc-cronista",
+        "npc-complottista",
+        "npc-euroburocrate",
+        "npc-ruspista",
+        "npc-architetto"
+      ],
+      "prompt": "Six busts of unnamed townsfolk, 3x2, each built on the role sprite reference (npc_<role>_south.png)."
+    },
+    {
+      "file": "npcs-9.png",
+      "job": "5736af1d-948a-4550-b60c-b5ce5b2696c0",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_142758_5736af1d-948a-4550-b60c-b5ce5b2696c0.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-contabile",
+        "npc-tesserato",
+        "npc-trombato",
+        "npc-sondaggista",
+        "npc-capocampagna",
+        "npc-circolo-operatore"
+      ],
+      "prompt": "Six busts of unnamed political aides, 3x2, built on the aide role sprite."
     }
   ]
 }

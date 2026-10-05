@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
-import { NPC_WITH_PNG, PORTRAIT_SETS, PLAYER_PORTRAIT, SET_NAMES, dialoguePortrait } from "../../src/art/characters";
+import { NPC_WITH_PNG, PORTRAIT_SETS, PLAYER_PORTRAIT, SET_NAMES, TRAINER_PORTRAITS, NPC_BUSTS, dialoguePortrait, trainerPortrait, npcBust } from "../../src/art/characters";
 
 test("every character with a dialogue bust has its file, and the files are real transparent PNGs", () => {
   const paths = [...NPC_WITH_PNG].map(pal => `public/sprites/portraits/${pal}.png`)
@@ -33,4 +33,39 @@ test("every sprite set used by a map NPC has a bust", async () => {
 test("every story character with a face also has a name for the dialogue label", () => {
   assert.deepEqual([...PORTRAIT_SETS].filter(set => !SET_NAMES[set]), []);
   assert.deepEqual(Object.keys(SET_NAMES).filter(set => !PORTRAIT_SETS.has(set)), []);
+});
+
+test("every named opponent has its own bust, and the file is a real 96x96 PNG", async () => {
+  const { TRAINERS } = await import("../../src/data/trainers");
+  const missing = Object.values(TRAINERS).filter(trainer => !TRAINER_PORTRAITS.has(trainer.id)).map(trainer => trainer.id);
+  assert.deepEqual(missing, [], "opponents shown with the face of their role");
+  for (const id of TRAINER_PORTRAITS) {
+    const header = readFileSync(`public/sprites/portraits/trainer-${id}.png`).subarray(0, 33);
+    assert.equal(header.readUInt32BE(16), 96);
+    assert.equal(header[25], 6);
+  }
+  assert.equal(trainerPortrait("tycoon", "boss"), "/sprites/portraits/trainer-tycoon.png");
+  assert.equal(trainerPortrait("coppa:someone", "aide"), "/sprites/portraits/aide.png", "a tournament ghost falls back to its role");
+});
+
+// Counters, legends and the lab keep the face of their role on purpose; every other townsperson has their own.
+const ROLE_ONLY = [
+  "bar-borgo-barista", "bar-bruxelles-barista", "bar-cap-barista", "bar-euro-barista", "bar-medio-barista", "bar-offshore-barista", "bar-stretto-barista",
+  "berlusconix-legend", "bistrot-funz", "campo-circolo", "campo-medico", "covo-padrino", "covo-picciotto", "draghimon-legend",
+  "legend-bunkerput", "mattarellux-legend", "professor", "spettatore-r2"
+];
+
+test("townsfolk busts point at real map NPCs and real files, and only the deliberate few keep their role's face", async () => {
+  const { MAPS } = await import("../../src/data/maps");
+  const all = new Map<string, { spriteSet?: string; trainerId?: string }>();
+  for (const map of Object.values(MAPS)) for (const npc of map.npcs) all.set(npc.id, npc);
+  const unknown = Object.keys(NPC_BUSTS).filter(id => !all.has(id));
+  assert.deepEqual(unknown, [], "ids that match no NPC");
+  for (const [id] of Object.entries(NPC_BUSTS)) {
+    const bust = npcBust(id)!;
+    assert.ok(existsSync(`public${bust.portrait}`), `${bust.portrait} exists`);
+    assert.ok(bust.label, `${id} has a label`);
+  }
+  const roleOnly = [...all].filter(([id, npc]) => !npc.spriteSet && !npc.trainerId && !npcBust(id)).map(([id]) => id).sort();
+  assert.deepEqual(roleOnly, ROLE_ONLY, "a role-only NPC that is not on the list of deliberate exceptions");
 });

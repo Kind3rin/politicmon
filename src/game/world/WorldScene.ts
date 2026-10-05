@@ -7,7 +7,7 @@ import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
 import {FieldGuideScene} from "../../scenes/FieldGuideScene";
 import {welcomeGuide, controlLesson} from "../onboarding";
 import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
-import { playerImage, ferryImage, vehicleImage, dialoguePortrait, SET_NAMES, type Facing } from "../../art/characters";
+import { playerImage, ferryImage, vehicleImage, dialoguePortrait, trainerPortrait, npcBust, SET_NAMES, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { approach } from "../battle/view";
 import { TILE, TILES, tileImage, terrainVariantImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
@@ -1038,7 +1038,7 @@ export class WorldScene implements Scene {
     const CAST_PALS: Record<string, string> = { QUIRINO: "professor", "PROF. QUIRINO": "professor", LUCA: "professor", GIANNI: "rival", MARA: "journalist" };
     const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : lines[0]?.match(cast);
     const caption = (!speaker || auto) && prefix ? prefix[1].charAt(0).toLocaleUpperCase("it") + prefix[1].slice(1).toLocaleLowerCase("it")
-      : name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? (speaker.spriteSet && SET_NAMES[speaker.spriteSet]) || "Abitante" : "Politicmon");
+      : name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? (speaker.spriteSet && SET_NAMES[speaker.spriteSet]) || npcBust(speaker.id)?.label || "Abitante" : "Politicmon");
     const castPortrait = (!speaker || auto) && prefix ? dialoguePortrait(CAST_PALS[prefix[1].toUpperCase()] ?? "") : undefined;
     const stripped = prefix ? lines[0].slice(prefix[0].length) : "";
     const text = prefix ? [stripped.charAt(0).toLocaleUpperCase("it") + stripped.slice(1), ...lines.slice(1)].filter(Boolean) : lines;
@@ -1047,7 +1047,7 @@ export class WorldScene implements Scene {
       const callback = this.afterMsg;
       this.afterMsg = null;
       callback?.();
-    }, auto, caption, !auto&&speaker?dialoguePortrait(speaker.pal,speaker.spriteSet):castPortrait);
+    }, auto, caption, !auto&&speaker?(speaker.trainerId?trainerPortrait(speaker.trainerId,speaker.pal):(speaker.spriteSet?undefined:npcBust(speaker.id)?.portrait)??dialoguePortrait(speaker.pal,speaker.spriteSet)):castPortrait);
   }
 
   // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il

@@ -12,6 +12,8 @@ export interface UiArena {
   foe:UiArenaCombatant;
   message?:{title:string;body:string};
   notice?:string;
+  /** The opponent who is speaking: shown as a bust over the field while the lines run. */
+  trainer?:{name:string;portrait?:string};
   moveCount:number;
   /** Posture toggles that follow the moves in actions[]. */
   postureCount?:number;
@@ -50,10 +52,22 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
     const impacts=node('div','ui-arena-impacts');impacts.setAttribute("aria-hidden","true");view.append(impacts,notice);
     const caption=node('section','ui-arena-caption');caption.append(node('h2','ui-subtitle'),node('p','ui-body'));
     const deck=node('div','ui-arena-deck');deck.append(node('div','ui-arena-moves'),node('div','ui-arena-postures'),node('div','ui-arena-secondary'));
+    const trainer=node('div','ui-arena-trainer');trainer.hidden=true;trainer.setAttribute('aria-hidden','true');view.append(trainer);
     view.append(hud);root.replaceChildren(view,caption,deck);
   }
   root.setAttribute('aria-label',panel.title);
   const cards=root.querySelectorAll<HTMLElement>('.ui-combatant');refreshCombatant(cards[0],arena.foe);refreshCombatant(cards[1],arena.player);
+  const trainer=root.querySelector<HTMLElement>('.ui-arena-trainer');
+  if(trainer){
+    const key=arena.trainer?JSON.stringify(arena.trainer):'';
+    if(trainer.dataset.content!==key){
+      trainer.dataset.content=key;trainer.replaceChildren();trainer.hidden=!arena.trainer;
+      if(arena.trainer){
+        if(arena.trainer.portrait){const face=document.createElement('img');face.src=arena.trainer.portrait;face.alt='';trainer.append(face);}
+        const name=node('span','ui-arena-trainer-name');name.textContent=arena.trainer.name;trainer.append(name);
+      }
+    }
+  }
   const caption=root.querySelector<HTMLElement>('.ui-arena-caption')!;caption.hidden=false;
   const captionKey=JSON.stringify([arena.finisher?.label,arena.message,arena.notice]);
   if(caption.dataset.content!==captionKey){caption.dataset.content=captionKey;caption.replaceChildren();

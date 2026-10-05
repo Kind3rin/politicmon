@@ -3,6 +3,10 @@ export interface UiRow {
   icon?: string;
   /** Short mark above the name: a lead star, for instance. */
   star?: boolean;
+  /** Place in an ordered list, shown at the left edge while the list is being reordered. */
+  slot?: string;
+  /** The row picked up for a move. */
+  held?: boolean;
   level?: string;
   types?: readonly string[];
   bar?: { now: number; max: number; text: string };

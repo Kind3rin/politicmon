@@ -7,6 +7,7 @@ import type { Scene, SceneStack } from "../engine/scene";
 import type {Screen} from "../engine/screen";
 import { abilityOf, canLearnMove, heldItemOf, evolve, levelEvolution, speciesOf, statsOf, type Monster } from "../game/monster";
 import { markCaught, markSeen, saveGame } from "../game/state";
+import { moveCompanion, placeLabel } from "../game/partyOrder";
 import type { TouchAction } from "../engine/touchActions";
 import { careerNotes } from "../game/evolutionGuide";
 import { evolutionCondition, defensiveMatchups } from "../game/dexGuide";
@@ -41,6 +42,11 @@ export class PartyScene implements Scene {
   private index = 0;
   private summary: Monster | null = null;
   private moveFrom: number | null = null; // slot "preso" per lo scambio (mode view)
+  /** Native list in reorder mode: taps pick and place, rows can also be dragged. */
+  private reordering = false;
+  private movedNote = "";
+  /** After switching mode the keyboard cursor stays on the Riordina/Fatto button instead of jumping to the top. */
+  private cursorOnToggle = false;
   // Cursore nel DETTAGLIO: scorre le voci ispezionabili (mosse + abilità) per
   // mostrarne la descrizione in basso. -1 = nessuna selezione (vista neutra).
   private detailIndex = 0;
@@ -82,6 +88,33 @@ export class PartyScene implements Scene {
     this.index = (this.index + 1) % party.length;
     this.summary = party[this.index]; this.detailIndex = 0; this.summaryScroll = 0;
   }
+  private canReorder(): boolean {
+    return this.opts.mode === "view" && !this.opts.partyOverride && this.state.party.length > 1;
+  }
+
+  /** One rule for a tap on a place, a drag released over a row and the START chord. */
+  private placeCompanion(from: number, to: number): boolean {
+    const party = this.state.party, mon = party[from];
+    if (!this.canReorder() || !moveCompanion(party, from, to)) return false;
+    this.index = to; this.moveFrom = null; this.cursorOnToggle = false;
+    this.movedNote = `${speciesOf(mon).name} ora è ${placeLabel(to)}.`;
+    saveGame(this.state);
+    return true;
+  }
+
+  private toggleReorder(): void {
+    if (!this.canReorder()) return;
+    this.reordering = !this.reordering; this.moveFrom = null; this.movedNote = ""; this.cursorOnToggle = true;
+  }
+
+  /** Tap while reordering: the first tap picks a companion up, the second puts it down there. */
+  private reorderTap(index: number): void {
+    this.cursorOnToggle = false;
+    if (this.moveFrom === null) { this.moveFrom = index; this.movedNote = ""; this.index = index; return; }
+    if (this.moveFrom === index) { this.moveFrom = null; return; }
+    if (!this.placeCompanion(this.moveFrom, index)) this.moveFrom = null;
+  }
+
   get touchActions(): readonly TouchAction[] | undefined {
     const mon = this.summary;
     if (!mon && (this.opts.mode === "battle-switch" || this.opts.mode === "forced-switch")) {
@@ -182,12 +215,9 @@ export class PartyScene implements Scene {
         this.moveFrom = null;
         audio.cancel();
       } else {
-        const tmp = party[this.moveFrom];
-        party[this.moveFrom] = party[this.index];
-        party[this.index] = tmp;
+        const from = this.moveFrom;
         this.moveFrom = null;
-        audio.confirm();
-        saveGame(this.state);
+        if (this.placeCompanion(from, this.index)) audio.confirm(); else audio.cancel();
       }
       return;
     }
@@ -240,6 +270,7 @@ export class PartyScene implements Scene {
     const actions=this.touchActions??[];
     if(!mon){
       const bench=this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?party.filter(target=>target.uid!==this.opts.currentUid):party;
+      const reorderable=this.opts.mode==="view"&&this.canReorder(),reordering=reorderable&&this.reordering;
       const rows=actions.filter(action=>!['INDIETRO','ESCI','ALTRI'].includes(action.label)).map((action,i):TouchAction=>{
         const target=bench[i];if(!target)return {...action,label:'Nessun compagno'};
         const stats=statsOf(target),preview=this.opts.mode==='use-item'?this.opts.itemPreview?.(target):undefined;
@@ -247,17 +278,36 @@ export class PartyScene implements Scene {
         const meta=this.opts.mode==='use-item'?(incompatible?'Non può impararla':preview?.disabled?preview.hint.split('\n')[0]:undefined)
           :this.opts.mode==='battle-switch'||this.opts.mode==='forced-switch'?(target.hp<=0?'KO: non può entrare':this.opts.switchHint?.(target)):undefined;
         const right=preview&&!preview.disabled?preview.facts?.find(fact=>fact.label==='PV'||fact.label==='Stato')?.value:undefined;
+        const bar={now:Math.max(0,target.hp),max:stats.hp,text:`${Math.max(0,target.hp)}/${stats.hp}`};
+        if(reordering){
+          const held=this.moveFrom===i,holding=this.moveFrom!==null;
+          return {label:speciesOf(target).name,run:()=>{if(this.stack.top!==this||this.summary||!this.reordering)return;this.input.reset();audio.confirm();this.reorderTap(i);},
+            row:{kind:'companion',icon:`/sprites/monsters/${target.speciesId}.png`,level:`Lv${target.level}`,slot:String(i+1),held,bar,
+              meta:held?'In mano':holding?'Metti qui':target.hp<=0?'KO':undefined}};
+        }
         return {...action,label:speciesOf(target).name,hint:undefined,facts:undefined,onInspect:this.opts.mode==='view'?undefined:action.onInspect,
           row:{kind:'companion',icon:`/sprites/monsters/${target.speciesId}.png`,level:`Lv${target.level}`,types:speciesOf(target).types,
-            star:this.opts.mode==='view'&&party[0]===target,bar:{now:Math.max(0,target.hp),max:stats.hp,text:`${Math.max(0,target.hp)}/${stats.hp}`},
+            star:this.opts.mode==='view'&&party[0]===target,bar,
             stamp:target.hp<=0?'KO':target.status?STATUS_LABELS[target.status]:undefined,meta,right}};
       });
+      const holdingName=this.moveFrom!==null&&party[this.moveFrom]?speciesOf(party[this.moveFrom]).name:"";
+      const subtitle=this.opts.mode==='forced-switch'?'Il compagno in campo è KO.'
+        :reordering?(this.moveFrom!==null?`Dove metto ${holdingName}? Tocca il suo nuovo posto.`
+          :this.movedNote?`${this.movedNote} Tocca un altro compagno o premi Fatto.`:'Tocca chi vuoi spostare, poi il suo nuovo posto. Oppure trascinalo.')
+        :reorderable?'Il primo della lista entra per primo in lotta.':undefined;
+      const toggle:TouchAction={label:reordering?'Fatto':'Riordina',run:()=>{if(this.stack.top!==this||this.summary)return;this.input.reset();audio.confirm();this.toggleReorder();}};
       return {title:this.opts.title??(this.opts.mode==='forced-switch'?'Chi continua?':this.opts.mode==='use-item'?'Su chi?':'Squadra'),
-        subtitle:this.opts.mode==='forced-switch'?'Il compagno in campo è KO.':undefined,fit:true,
+        subtitle,fit:true,
         blocks:party.length?undefined:[{title:'Squadra vuota',body:'Vai da Quirino nel laboratorio per scegliere il primo compagno.'}],
-        actions:rows,
-        selected:this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?Math.max(0,bench.indexOf(party[this.index])):this.index,
-        back:{label:'Indietro',disabled:this.opts.mode==='forced-switch',run:()=>{if(this.stack.top!==this||this.opts.mode==='forced-switch')return;this.input.reset();audio.cancel();this.stack.pop();}}};
+        actions:reorderable?[...rows,toggle]:rows,primary:reorderable?rows.length:undefined,
+        drag:reordering?{move:(from:number,to:number)=>{if(this.stack.top!==this||this.summary||!this.reordering)return;if(this.placeCompanion(from,to))audio.confirm();}}:undefined,
+        selected:this.opts.mode==="battle-switch"||this.opts.mode==="forced-switch"?Math.max(0,bench.indexOf(party[this.index])):reorderable&&this.cursorOnToggle?rows.length:this.index,
+        back:{label:'Indietro',disabled:this.opts.mode==='forced-switch',run:()=>{
+          if(this.stack.top!==this||this.opts.mode==='forced-switch')return;
+          this.input.reset();audio.cancel();
+          if(reordering){if(this.moveFrom!==null)this.moveFrom=null;else{this.reordering=false;this.movedNote='';}return;}
+          this.stack.pop();
+        }}};
     }
     const species=speciesOf(mon),stats=statsOf(mon),ability=abilityOf(mon),held=heldItemOf(mon),blocks:UiBlock[]=[];
     const page=this.summaryPage,tab=page<=1?0:page===2?1:2;

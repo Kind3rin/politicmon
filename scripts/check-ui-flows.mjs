@@ -71,6 +71,46 @@ try{
  await page.locator('#tribuna-sheet[open]').waitFor({timeout:3000}).catch(()=>errors.push('Altro did not open'));
  expect(/Dossier/.test(await page.locator('#tribuna-sheet').innerText()),'Altro lists the other actions');
  await page.close();
+ // Squad order: pick and place with taps, drag with a finger, and the keyboard.
+ {
+  const start='BERLUSCONIX,GIORGETTA,ELLYNA,SALVINATOR,DRAGHIMON,MOVIMENTON';
+  const order=p=>p.locator('.ui-row-name').allInnerTexts().then(names=>names.join(','));
+  page=await open('squadra');
+  expect(await order(page)===start,'the squad starts in its fixture order');
+  expect(/primo della lista/i.test(await text(page)),'the squad says the first one fights first');
+  await page.getByRole('button',{name:'Riordina'}).tap();await page.waitForTimeout(250);
+  expect(await page.locator('.ui-row-slot').count()===6,'every place is numbered while reordering');
+  await page.locator('.ui-row',{hasText:'DRAGHIMON'}).tap();await page.waitForTimeout(200);
+  expect(/Dove metto DRAGHIMON/.test(await text(page)),'the picked companion is named');
+  expect(await page.locator('.ui-row-held').count()===1,'one companion is held');
+  await page.locator('.ui-row',{hasText:'GIORGETTA'}).tap();await page.waitForTimeout(250);
+  expect(await order(page)==='BERLUSCONIX,DRAGHIMON,GIORGETTA,ELLYNA,SALVINATOR,MOVIMENTON',`pick and place (${await order(page)})`);
+  expect(/DRAGHIMON ora è 2º/.test(await text(page)),'the move is announced');
+  await page.locator('.ui-row',{hasText:'ELLYNA'}).tap();await page.locator('.ui-row',{hasText:'ELLYNA'}).tap();await page.waitForTimeout(200);
+  expect(await page.locator('.ui-row-held').count()===0,'tapping the held companion puts it back');
+  // A finger drags a row over another.
+  const cdp=await page.context().newCDPSession(page);
+  const box=async name=>page.locator('.ui-row',{hasText:name}).boundingBox();
+  const from=await box('MOVIMENTON'),to=await box('BERLUSCONIX'),x=from.x+from.width/2;
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y:from.y+from.height/2,id:0}]});
+  for(let i=1;i<=10;i++){await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y:from.y+from.height/2+(to.y+to.height/2-from.y-from.height/2)*i/10,id:0}]});await page.waitForTimeout(25);}
+  expect(await page.locator('.ui-row-dragging').count()===1,'a dragged row is lifted');
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(300);
+  expect(await order(page)==='MOVIMENTON,BERLUSCONIX,DRAGHIMON,GIORGETTA,ELLYNA,SALVINATOR',`drag to the first place (${await order(page)})`);
+  expect(await page.locator('.ui-row-held').count()===0,'a drag does not leave a companion held');
+  // The close button leaves reorder mode first, the squad second.
+  await page.getByRole('button',{name:'Indietro'}).tap();await page.waitForTimeout(250);
+  expect(await page.getByRole('button',{name:'Riordina'}).count()===1,'the first close leaves reorder mode');
+  await page.close();
+  page=await open('squadra',{width:844,height:390});
+  const press=async(key,n=1)=>{for(let i=0;i<n;i++){await page.keyboard.press(key);await page.waitForTimeout(120);}};
+  await press('ArrowDown',6);await press('KeyZ');
+  expect(await page.getByRole('button',{name:'Fatto'}).count()===1,'the keyboard turns reordering on');
+  await press('ArrowUp',2);await press('KeyZ');
+  await press('ArrowUp',3);await press('KeyZ');await page.waitForTimeout(200);
+  expect(await order(page)==='BERLUSCONIX,DRAGHIMON,GIORGETTA,ELLYNA,SALVINATOR,MOVIMENTON',`keyboard pick and place (${await order(page)})`);
+  await page.close();
+ }
  // Keyboard: arrows move the cursor, Enter opens, Escape returns.
  page=await open('squadra',{width:844,height:390});
  await page.waitForTimeout(400);

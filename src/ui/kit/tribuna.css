@@ -219,3 +219,11 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 
 .ui-header:has(.ui-hero-titled) .ui-title{position:static;width:auto;height:auto;overflow:visible;clip-path:none;white-space:normal;font-size:22px;text-transform:uppercase;letter-spacing:.04em}
 .ui-header:has(.ui-hero-titled) .ui-title-row{justify-content:space-between}
+/* Reordering a list: a number for each place, the picked row lifted, a bar where it will land. */
+.ui-row-slot{flex:0 0 32px;width:32px;height:32px;display:grid;place-items:center;border:2px solid var(--t-ink);background:var(--t-paper);color:var(--t-ink);font:700 22px/1 Tribuna,sans-serif}
+.ui-rows .ui-row.ui-row-held{background:var(--t-yellow);box-shadow:inset 6px 0 var(--t-red)}
+.ui-reordering .ui-row{touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none}
+.ui-row.ui-row-dragging{position:relative;z-index:6;cursor:grabbing;background:var(--t-yellow);box-shadow:6px 8px var(--t-ink);transition:none;opacity:.92}
+.ui-row.ui-row-drop{box-shadow:inset 0 8px var(--t-red)}
+.ui-row.ui-row-drop-after{box-shadow:inset 0 -8px var(--t-red)}
+.ui-reordering .ui-row-art img{pointer-events:none}

@@ -5,6 +5,7 @@ import type { TouchAction, UiRow } from "../../engine/touchActions";
 import type {Input} from "../../engine/input";
 import {audio} from "../../engine/audio";
 import { commandHint } from "../../engine/inputDevice";
+import { enableRowDrag } from "./reorder";
 import { haptics } from "../../engine/haptics";
 
 export interface UiBlock {
@@ -87,6 +88,8 @@ export interface UiPanel {
   atlas?: UiAtlas;
   /** Labelled values drawn as bars. */
   stats?: readonly { label: string; value: number; max: number }[];
+  /** Rows can be dragged to another place; `move(from, to)` receives action indices. */
+  drag?: { move: (from: number, to: number) => void };
   tabs?: readonly TouchAction[];
   selectedTab?: number;
   actions: readonly TouchAction[];
@@ -234,6 +237,8 @@ export const kit = {
     if(action.disabled)button.setAttribute("aria-disabled","true");
     button.setAttribute("aria-label",[action.label,row.level,row.bar?.text,row.right,row.meta,row.stamp,action.hint,...(action.facts?.map(f=>`${f.label}: ${f.value}`)??[])].filter(Boolean).join(". "));
     if(row.star){const star=element("span","ui-row-star","★");star.setAttribute("aria-hidden","true");button.append(star);}
+    if(row.held){button.classList.add("ui-row-held");button.setAttribute("aria-pressed","true");}
+    if(row.slot){const slot=element("span","ui-row-slot",row.slot);slot.setAttribute("aria-hidden","true");button.append(slot);}
     if(row.icon){const art=element("span","ui-row-art");const image=element("img","");image.src=row.icon;image.alt="";art.append(image);button.append(art);}
     const main=element("span","ui-row-main");
     const head=element("span","ui-row-head");head.append(element("strong","ui-row-name",action.label));
@@ -618,6 +623,10 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     list.append(button);
   });
   body.append(list);
+  if(panel.drag){
+    const rows=[...list.querySelectorAll<HTMLElement>(":scope > .ui-row")];
+    enableRowDrag(list,rows,(from,to)=>{if(live())current?.drag?.move(from,to);});
+  }
   const footer = element("footer", "ui-footer");
   if(panel.primary!==undefined&&panel.actions[panel.primary]){
     const index=panel.primary;

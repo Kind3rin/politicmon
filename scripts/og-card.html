@@ -1,0 +1,25 @@
+<!doctype html><html lang="it"><meta charset="utf-8"><title>Politicmon · scheda social</title>
+<style>
+@font-face{font-family:Tribuna;src:url('/fonts/barlow-condensed-bold.ttf') format('truetype');font-weight:700}
+@font-face{font-family:Body;src:url('/fonts/nunito-sans.woff2') format('woff2')}
+*{box-sizing:border-box;margin:0}
+body{width:1200px;height:630px;overflow:hidden;background:#0E1220;font-family:Body,system-ui,sans-serif;position:relative}
+.plaza{position:absolute;inset:0;background:url('/title-bg.png') center/cover;image-rendering:pixelated;filter:saturate(1.05)}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,#0E1220cc 0%,#0E122000 62%)}
+.logo{position:absolute;left:64px;top:70px;padding:12px 38px 4px;background:#D7263D;color:#F4EEDC;border:6px solid #14161F;box-shadow:12px 12px #14161F;font:700 150px/1 Tribuna,sans-serif;letter-spacing:.01em;transform:rotate(-2.5deg)}
+.tape{position:absolute;left:86px;top:300px;padding:10px 26px;background:#FFD23F;color:#14161F;border:5px solid #14161F;box-shadow:8px 8px #14161F;font:700 46px/1.1 Tribuna,sans-serif;text-transform:uppercase;letter-spacing:.02em;transform:rotate(1deg)}
+.cast{position:absolute;right:30px;bottom:0;display:flex;align-items:flex-end;gap:0}
+.cast img{image-rendering:pixelated;height:240px;filter:drop-shadow(8px 8px 0 #14161F99)}
+.cast img.bust{height:330px;margin-left:-70px}
+.url{position:absolute;left:64px;bottom:40px;color:#F4EEDC;font:700 34px/1 Tribuna,sans-serif;letter-spacing:.04em}
+.url span{background:#14161F;padding:8px 18px;border-radius:2px}
+</style>
+<div class="plaza"></div><div class="shade"></div>
+<div class="logo">POLITICMON</div>
+<div class="tape">Catturali tutti, prima che ti tassino.</div>
+<div class="url"><span>politicmon.vercel.app</span></div>
+<div class="cast">
+  <img src="/sprites/monsters/giorgetta.png" alt="">
+  <img src="/sprites/monsters/ellyna.png" alt="">
+  <img src="/sprites/monsters/renzino.png" alt="">
+</div>

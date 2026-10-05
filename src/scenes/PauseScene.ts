@@ -1,4 +1,6 @@
-import { earnedEndingSouvenirs, ENDING_SOUVENIRS } from "../game/atto3Ending";
+import { ATTO3_ENDINGS, earnedEndingSouvenirs, ENDING_SOUVENIRS, type Atto3EndingId } from "../game/atto3Ending";
+import { readableCopy } from "../ui/kit/copy";
+import { openUiSheet } from "../ui/kit/sheet";
 import { MONUMENT_TITLE } from "./MonumentScene";
 import { FieldGuideScene } from "./FieldGuideScene";
 import { welcomeGuide } from "../game/onboarding";
@@ -70,8 +72,21 @@ export class PauseScene implements Scene {
     if (this.msg.isOpen) return { pause:{money:this.state.money,fuel:fuelShown(this.state),polls:this.state.sondaggi,grid:false}, title: "La tua campagna", blocks: [{ title: "Avviso", body: this.msg.pageText }], actions: [{ label: "Continua", run: () => { if (this.stack.top === this && this.msg.isOpen) { this.input.reset(); this.msg.advancePage(); } } }], primary: 0, back:{label:"Indietro",run:()=>{if(this.stack.top!==this)return;this.input.reset();this.msg.close();audio.cancel();}} };
     if (this.showCard) {
       const earned = earnedEndingSouvenirs(this.state);
-      const souvenir = earned.length ? ENDING_SOUVENIRS[earned[this.souvenirIndex % earned.length]] : undefined;
-      return { pause:{money:this.state.money,fuel:fuelShown(this.state),polls:this.state.sondaggi,grid:false}, title: this.cardAwards ? "Ricordi della campagna" : "Tessera candidato", blocks: [{ title: loadNick() || "Onorevole", facts: [{ label: "Sondaggi", value: `${this.state.sondaggi}%` }, { label: "Medaglie", value: `${this.state.badges.length}/3` }] }, { title: souvenir?.name ?? "I ricordi si conquistano giocando", body: this.state.monumentLevel === 3 ? MONUMENT_TITLE : `Monumento: livello ${this.state.monumentLevel} di 3.` }], actions: [], back: { label: "Indietro", run: () => { if (this.stack.top === this) { this.input.reset(); this.showCard = false; } } } };
+      // The shelf of keepsakes: the four endings, earned ones in colour, the others as a goal.
+      const shelf = (Object.keys(ENDING_SOUVENIRS) as Atto3EndingId[]).map((id): TouchAction => {
+        const keepsake = ENDING_SOUVENIRS[id], ending = ATTO3_ENDINGS[id], owned = earned.includes(id);
+        const name = readableCopy(keepsake.name), title = readableCopy(ending.title), how = readableCopy(ending.subtitle);
+        const detail = () => owned
+          ? openUiSheet(name, `${title}.\n\n${readableCopy(ending.lines.join(" "))}\n\nÈ un ricordo cosmetico: non cambia le lotte.`)
+          : openUiSheet("Ricordo da conquistare", `Si ottiene chiudendo la campagna con ${how.charAt(0).toLocaleLowerCase("it")}${how.slice(1)}.\n\nÈ un ricordo cosmetico: non cambia le lotte.`);
+        return { label: owned ? name : "Ricordo da conquistare", disabled: !owned, onInspect: detail,
+          run: () => { if (this.stack.top === this && owned) { this.input.reset(); audio.confirm(); detail(); } },
+          row: { kind: "item", icon: `/sprites/ui/epilogue/${keepsake.image}.png`, meta: owned ? title : how } };
+      });
+      return { title: "Tessera candidato",
+        subtitle: earned.length ? `${earned.length} ricord${earned.length === 1 ? "o" : "i"} su ${shelf.length}. Tocca un ricordo per leggerne la storia.` : "I ricordi si conquistano chiudendo la campagna.",
+        blocks: [{ title: loadNick() || "Onorevole", facts: [{ label: "Sondaggi", value: `${this.state.sondaggi}%` }, { label: "Medaglie", value: `${this.state.badges.length}/3` }] }, { title: "Monumento", ...(this.state.monumentLevel === 3 ? { body: MONUMENT_TITLE } : { facts: [{ label: "Livello", value: `${this.state.monumentLevel}/3` }] }) }],
+        actions: shelf, back: { label: "Indietro", run: () => { if (this.stack.top === this) { this.input.reset(); this.showCard = false; } } } };
     }
     const sub = this.sub, more = this.more;
     const labels: Record<string, string> = { SQUADRA: "Squadra", BORSA: "Borsa", MISSIONI: "Missioni", MAPPA: "Mappa", POLITICDEX: "Politicdex", ALTRO: "Altro", SALVA: "Salva partita", CURA: "Cura squadra", MORALE: "Morale", OPZIONI: "Opzioni", TESSERA: "Tessera", ONLINE: "Gioco online", EXTRA: "Guide e archivi", GOVERNO: "Governo ombra", COALIZIONE: "Coalizione", CHIUDI: "Torna al gioco" };

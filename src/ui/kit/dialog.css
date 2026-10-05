@@ -6,6 +6,9 @@ body:is(.ui-dialog-open,.ui-conversation-open) #screen-frame{display:block!impor
 body:is(.ui-dialog-open,.ui-conversation-open) :is(#console-top,#touch-ui,#shell-hint,.ui-world-hud){display:none!important}
 .ui-dialog{position:absolute;z-index:20;left:max(12px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));min-height:120px;max-height:28dvh;padding:24px 48px 16px 16px;display:flex;align-items:center;background:#F4EEDC;color:#14161F;border:2px solid #14161F;border-radius:2px;box-shadow:4px 4px #14161F;pointer-events:auto;font-family:PoliticmonBody,sans-serif}
 .ui-dialog.has-portrait{padding-left:72px}
+.ui-dialog.has-bust{padding-left:112px}
+.ui-dialog.has-bust .ui-dialog-portrait{left:8px;width:96px;height:96px}
+.ui-dialog.has-bust .ui-dialog-speaker{left:112px}
 .ui-dialog-speaker{position:absolute;left:12px;top:-18px;max-width:calc(100% - 24px);padding:4px 8px;background:#174A7E;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;transform:rotate(-2deg)}
 .ui-dialog-text{font:400 16px/1.4 PoliticmonBody,sans-serif;margin:0;white-space:normal;overflow-wrap:normal;word-break:normal}
 .ui-dialog-portrait{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:64px;height:64px;object-fit:contain;image-rendering:pixelated}
@@ -19,5 +22,5 @@ body:is(.ui-dialog-open,.ui-conversation-open) :is(#console-top,#touch-ui,#shell
 .ui-dialog-choices .ui-button[aria-current=true]{background:#FFD23F}
 .ui-dialog-choices .ui-command-group{display:none}
 .ui-dialog-choices .ui-subtitle{font:700 16px/1.4 PoliticmonBody,sans-serif}
-@media(orientation:landscape){.ui-dialog{left:12%;right:12%;min-height:92px;padding-top:16px;padding-bottom:8px}.ui-dialog.has-portrait{padding-left:84px}.ui-dialog-portrait{left:12px}.ui-dialog-choices{left:12%;right:12%;grid-template-columns:repeat(2,minmax(0,1fr));bottom:calc(28dvh + 32px)}}
+@media(orientation:landscape){.ui-dialog{left:12%;right:12%;min-height:92px;padding-top:16px;padding-bottom:8px}.ui-dialog.has-portrait{padding-left:84px}.ui-dialog.has-bust{padding-left:108px}.ui-dialog.has-bust .ui-dialog-portrait{width:84px;height:84px}.ui-dialog.has-bust .ui-dialog-speaker{left:104px}.ui-dialog-portrait{left:12px}.ui-dialog-choices{left:12%;right:12%;grid-template-columns:repeat(2,minmax(0,1fr));bottom:calc(28dvh + 32px)}}
 @media(prefers-reduced-motion:reduce){.ui-dialog-speaker{transform:none}}

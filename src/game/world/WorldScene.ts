@@ -7,7 +7,7 @@ import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
 import {FieldGuideScene} from "../../scenes/FieldGuideScene";
 import {welcomeGuide, controlLesson} from "../onboarding";
 import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
-import { playerImage, ferryImage, vehicleImage, NPC_WITH_PNG, type Facing } from "../../art/characters";
+import { playerImage, ferryImage, vehicleImage, dialoguePortrait, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { approach } from "../battle/view";
 import { TILE, TILES, tileImage, terrainVariantImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
@@ -230,6 +230,7 @@ export class WorldScene implements Scene {
   private cameraPosition:{x:number;y:number}|null=null;
   /** Which half of the screen is free of the player, so a coach card never hides them. */
   private lessonAt:"top"|"bottom"="bottom";
+  private stageWidth=0;
   private cameraDt=1/60;
   private dialogueFocus=false;
   private dialogueZoom=1;
@@ -1017,9 +1018,11 @@ export class WorldScene implements Scene {
     const name = auto ? "Notifica" : speaker?.id === "professor" ? "Prof. Quirino" : speaker?.id === "opening-rival" ? "Gianni" : speaker?.dialogueName ?? (speaker?.trainerId ? TRAINERS[speaker.trainerId]?.name : speaker?.nameplate);
     // A named character speaking from afar (a hand-off after a menu) still gets their own label.
     const cast = /^(QUIRINO|PROF\. QUIRINO|GIANNI|LUCA|MARA):\s*/i;
+    const CAST_PALS: Record<string, string> = { QUIRINO: "professor", "PROF. QUIRINO": "professor", LUCA: "professor", GIANNI: "rival", MARA: "journalist" };
     const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : lines[0]?.match(cast);
     const caption = (!speaker || auto) && prefix ? prefix[1].charAt(0).toLocaleUpperCase("it") + prefix[1].slice(1).toLocaleLowerCase("it")
       : name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? "Abitante" : "Politicmon");
+    const castPortrait = (!speaker || auto) && prefix ? dialoguePortrait(CAST_PALS[prefix[1].toUpperCase()] ?? "") : undefined;
     const stripped = prefix ? lines[0].slice(prefix[0].length) : "";
     const text = prefix ? [stripped.charAt(0).toLocaleUpperCase("it") + stripped.slice(1), ...lines.slice(1)].filter(Boolean) : lines;
     this.afterMsg = after ?? null;
@@ -1027,7 +1030,7 @@ export class WorldScene implements Scene {
       const callback = this.afterMsg;
       this.afterMsg = null;
       callback?.();
-    }, auto, caption, !auto&&speaker&&NPC_WITH_PNG.has(speaker.pal)?`/sprites/chars/npc_${speaker.pal}_south.png`:undefined);
+    }, auto, caption, !auto&&speaker?dialoguePortrait(speaker.pal):castPortrait);
   }
 
   // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il
@@ -3462,7 +3465,10 @@ export class WorldScene implements Scene {
 
     // The HUD no longer reserves map space. Only keep the player clear of
     // the short top strip when entering from a northern edge.
-    const canvas=screen.ctx.canvas,stageWidth=canvas.clientWidth||VIEW_W;
+    // A hidden canvas (a panel is open) reports no width: keep the last real one so the zoom does not jump.
+    const canvas=screen.ctx.canvas;
+    if(canvas.clientWidth>0)this.stageWidth=canvas.clientWidth;
+    const stageWidth=this.stageWidth||VIEW_W;
     const topClearance=Math.ceil(116*VIEW_W/Math.max(1,stageWidth));
     // Small rooms are enlarged to fill the screen instead of floating in a void;
     // anything larger than the screen follows the player at a phone-friendly scale.

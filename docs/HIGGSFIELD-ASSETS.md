@@ -1,5 +1,7 @@
 # Politicmon: risorse Higgsfield
 
+M2, ritratti per i dialoghi, 5 ottobre 2026: due fogli 3×2 di mezzbusti, job `0215515f-f334-4795-9e2b-e6538bef33b1` (Quirino, Gianni, Mara, barista, guardia, aiutante) e `f4d2415d-e38c-44a6-9a04-39ccbcfb8a37` (capo, influencer, nonna, bambino, sindaco, funzionario della Commissione). `gpt_image_2_5`, qualità high, 1k, 3:2, sei sprite del gioco come riferimento per foglio; visti e integrati nei dialoghi. **3 crediti**, saldo **337,97 → 334,97**. Dodici PNG 96×96 trasparenti in `public/sprites/portraits/` (11–14 kB ciascuno), tagliati con `scripts/prepare-portraits.py` (sfondo crema rimosso, 56 colori, nessun dithering); provenienza, URL e ordine delle celle in `scripts/higgsfield-portraits.json`. Chi non ha un busto usa ancora lo sprite che cammina.
+
 M2, sei icone della pausa: job `998d9de2-e21e-4db3-bed1-fea11dd75118`, riferimento del lotto precedente, alpha verificato; 6 PNG 96×96 / 14.942 B totali. **1,5 crediti**, saldo **339,97 → 338,47**, sorgente/parametri/SHA nel manifest e conversione selettiva esistente.
 
 M2, riferimento di stile visto: `4240b27d-6f5a-4ff7-9ad3-047d7aef2cb3`, originale in `artifacts/m2/style-reference.png`; allegato al lotto icone successivo. **1,5 crediti**, saldo verificato **341,47 → 339,97**.

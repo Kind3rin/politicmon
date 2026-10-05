@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — volti e ricordi — 2026-10-05
+
+- Dialoghi: i dieci ruoli di base, il sindaco e il funzionario della Commissione hanno un mezzobusto illustrato (Higgsfield, 3 crediti) al posto dello sprite che cammina; il nome sta a fianco del volto. Anche le battute di Quirino, Gianni, Mara e Luca dette «da lontano» mostrano il loro volto.
+- Tessera: il menu «Ricordi» era scomparso. Ora è una mensola dei quattro ricordi del finale con la loro arte (quelli non conquistati in grigio, con il finale che li sblocca); toccando uno conquistato si legge la sua storia.
+- Scheda social 1200×630 (`public/og.png`, composta con l'arte del gioco, zero crediti) e tag Open Graph: il link condiviso mostra logo, slogan e i tre compagni. Non entra nella precache offline.
+- Telefono: il tocco sulla mappa non fa più saltare lo zoom quando un pannello nasconde lo schermo.
+
 ## Mandato 2 — squadra e primi minuti — 2026-10-05
 
 - Squadra: il riordino era sparito con l'interfaccia nuova (restava solo «Metti in testa», in fondo alla scheda «Valori»). Ora la lista ha «Riordina»: si tocca chi spostare e poi il suo nuovo posto, oppure si trascina la riga con un dito; i posti sono numerati, la riga in mano si solleva, lo spostamento è annunciato e salvato. «Indietro» esce prima dalla modalità, la tastiera tiene il cursore sul pulsante. Il Circolo porta alla stessa schermata con «Riordina la squadra». Una sola regola (`moveCompanion`) per tocco, trascinamento e vecchio START-START.

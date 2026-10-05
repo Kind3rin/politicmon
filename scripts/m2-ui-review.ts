@@ -48,6 +48,7 @@ state.party=['berlusconix','giorgetta','ellyna','salvinator','draghimon','movime
 const params=new URLSearchParams(location.search);
 const routeReview=params.has('routeReview');
 if(params.has('roamers'))state.flags['opening-encountered']=true;
+if(params.has('souvenirs')){state.flags['cosmetic-fascia-governo']=true;state.flags['cosmetic-megafono-opposizione']=true;}
 if(params.has('lesson')){state.flags['controls-intro']=true;state.stepsTotal=0;}
 state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:params.get('map')??'route1',x:Number(params.get('x')??7),y:Number(params.get('y')??8),facing:(params.get('face')??'down') as 'down'};state.reduceEffects=true;
 const routeStatus=document.createElement('output');
@@ -91,8 +92,8 @@ if(requested.startsWith('lotta')){
 }else stack.push(new WorldScene(stack,input,state));
 const conversation=new MessageBox();
 let choosing=false;
-const speaker='Mara · cronista',portrait='/sprites/chars/npc_journalist_south.png';
-const startConversation=()=>{if(requested==='menu')stack.push(new PauseScene(stack,input,state));if(requested==='dialogo-scelte')choosing=true;if(requested==='dialogo')conversation.show(['Una promessa in tre parole. La quarta la paghiamo noi.','Il programma è lungo. La memoria degli elettori, dice il consulente, no.'],undefined,false,speaker,portrait);};
+const speaker='Mara · cronista',portrait='/sprites/portraits/journalist.png';
+const startConversation=()=>{if(requested==='menu')stack.push(new PauseScene(stack,input,state));if(requested==='tessera'){const pause=new PauseScene(stack,input,state);(pause as unknown as {showCard:boolean}).showCard=true;stack.push(pause);}if(requested==='dialogo-scelte')choosing=true;if(requested==='dialogo')conversation.show(['Una promessa in tre parole. La quarta la paghiamo noi.','Il programma è lungo. La memoria degli elettori, dice il consulente, no.'],undefined,false,speaker,portrait);};
 setTimeout(startConversation,600);
 const choicePanel=():UiPanel=>({title:'Scegli',subtitle:'Una promessa in tre parole. La quarta la paghiamo noi.',conversation:{speaker,portrait},actions:[{label:'Fammi una domanda.',run:()=>{choosing=false;conversation.show(['Chi paga le promesse quando scade la garanzia?'],undefined,false,speaker,portrait);}},{label:'Passo oltre.',run:()=>{choosing=false;}}],back:{label:'Indietro',run:()=>{choosing=false;}}});
 let previous=performance.now();

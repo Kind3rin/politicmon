@@ -3,7 +3,7 @@
 import {chromium} from 'playwright';
 import fs from 'node:fs/promises';
 const base=process.env.UI_LAYOUT_URL||'http://127.0.0.1:4190';
-const screens=['squadra','compagno','borsa','impara','mappa','negozio','dex','circolo','missioni','evoluzione','titolo','starter','archivio','governo','tipi','morale','fonti','backup','traguardi','audio','carburante','viaggio','lotta-crescita'];
+const screens=['squadra','compagno','borsa','impara','mappa','negozio','dex','circolo','missioni','evoluzione','titolo','starter','archivio','governo','tipi','morale','fonti','backup','traguardi','audio','carburante','viaggio','lotta-crescita','tessera'];
 const fixed=['squadra','compagno','impara','mappa'];
 const viewports=[{width:360,height:740},{width:412,height:915},{width:844,height:390},{width:360,height:640}];
 const browser=await chromium.launch(),errors=[];

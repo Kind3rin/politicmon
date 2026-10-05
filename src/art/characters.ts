@@ -50,6 +50,15 @@ export const NPC_WITH_PNG = new Set<string>([
   "influencer", "aide", "barista"
 ]);
 
+// Chest-up busts for dialogue (public/sprites/portraits): the ten base roles, the mayor and the Commission official.
+export const PORTRAIT_PALS = new Set<string>([...NPC_WITH_PNG, "civic-mayor", "commissione"]);
+
+/** A bust when there is one, the walking sprite otherwise, nothing for characters without art. */
+export function dialoguePortrait(palId: string): string | undefined {
+  if (PORTRAIT_PALS.has(palId)) return `/sprites/portraits/${palId}.png`;
+  return NPC_WITH_PNG.has(palId) ? `/sprites/chars/npc_${palId}_south.png` : undefined;
+}
+
 // Archetipi NPC con frame di camminata Higgsfield disponibili (chars/npc_<pal>_<dir>_w<n>.png).
 export const NPC_WALK = new Set<string>([
   "granny", "guard", "kid", "aide", "barista", "professor", "journalist", "boss",

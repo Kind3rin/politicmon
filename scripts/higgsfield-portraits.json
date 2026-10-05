@@ -1,0 +1,23 @@
+{
+  "note": "Dialogue busts for the ten base NPC palettes plus the mayor and the Commission official. gpt_image_2_5, quality high, 1k, 3:2, six sprite references per sheet.",
+  "sheets": [
+    {
+      "file": "sheet-a.png",
+      "job": "0215515f-f334-4795-9e2b-e6538bef33b1",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_120333_0215515f-f334-4795-9e2b-e6538bef33b1.png",
+      "credits": 1.5,
+      "grid": [3, 2],
+      "cells": ["professor", "rival", "journalist", "barista", "guard", "aide"],
+      "prompt": "Six dialogue-portrait busts, 3x2, chest-up, pixel art, cream background; Quirino (professor), Gianni (rival), Mara (journalist), barista, guard, aide; each kept faithful to its sprite reference."
+    },
+    {
+      "file": "sheet-b.png",
+      "job": "f4d2415d-e38c-44a6-9a04-39ccbcfb8a37",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_120536_f4d2415d-e38c-44a6-9a04-39ccbcfb8a37.png",
+      "credits": 1.5,
+      "grid": [3, 2],
+      "cells": ["boss", "influencer", "granny", "kid", "civic-mayor", "commissione"],
+      "prompt": "Six dialogue-portrait busts, 3x2, chest-up, pixel art, cream background; boss, influencer, granny, kid, town mayor, Commission official; each kept faithful to its sprite reference."
+    }
+  ]
+}

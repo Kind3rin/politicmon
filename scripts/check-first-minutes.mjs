@@ -27,13 +27,15 @@ try{
  await rows.filter({hasText:'ELLYNA'}).tap();
  await page.getByRole('button',{name:/Scegli questo compagno/}).tap({timeout:4000}).catch(()=>failures.push('the choose button is missing'));
  await page.waitForTimeout(1000);
- const speakers=[];
+ const speakers=[];let bust=false;
  for(let i=0;i<6;i++){
   const box=await page.locator('.ui-dialog:not([hidden])').boundingBox().catch(()=>null);if(!box)break;
   speakers.push(await page.locator('.ui-dialog-speaker').innerText());
+  bust=bust||await page.evaluate(()=>document.querySelector('.ui-dialog.has-bust .ui-dialog-portrait')?.getAttribute('src')?.includes('/portraits/professor')??false);
   await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);await page.waitForTimeout(500);
  }
  expect(speakers.length>=2,'the hand-off takes at least two taps on the dialogue box');
+ expect(bust,'the hand-off shows Quirino as a bust, not a walking sprite');
  expect(speakers.every(s=>/quirino/i.test(s)),`the hand-off is spoken by Quirino (${speakers})`);
  await page.waitForTimeout(800);
  let state=await game.state();

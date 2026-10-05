@@ -358,6 +358,7 @@ export function renderUiDialog(text: string, advance: () => void, complete: bool
   const picture=dialog.querySelector("img")!;picture.hidden=!portrait;
   if(portrait&&picture.getAttribute("src")!==portrait)picture.src=portrait;
   dialog.classList.toggle("has-portrait",Boolean(portrait));
+  dialog.classList.toggle("has-bust",Boolean(portrait?.includes("/portraits/")));
   dialog.querySelector("button")!.setAttribute("aria-label",complete?"Continua":"Mostra tutto");
 }
 
@@ -447,7 +448,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     panel.actions.forEach((action,i)=>{const button=kit.button(action,()=>current?.actions[i]?.run());button.dataset.uiIndex=String(i);button.setAttribute('aria-current',String(i===displayedIndex));choices.append(button);});
     const box=element('section','ui-dialog');
     box.append(element('h2','ui-dialog-speaker',panel.conversation.speaker));
-    if(panel.conversation.portrait){const image=element('img','ui-dialog-portrait');image.src=panel.conversation.portrait;image.alt='';box.append(image);box.classList.add('has-portrait');}
+    if(panel.conversation.portrait){const image=element('img','ui-dialog-portrait');image.src=panel.conversation.portrait;image.alt='';box.append(image);box.classList.add('has-portrait');if(panel.conversation.portrait.includes('/portraits/'))box.classList.add('has-bust');}
     box.append(element('p','ui-dialog-text',panel.subtitle??panel.title));
     if(panel.back){const close=element('button','ui-dialog-next','×');close.type='button';close.dataset.uiIndex=String(panel.actions.length);close.setAttribute('aria-label','Chiudi dialogo');close.onclick=()=>current?.back?.run();box.append(close);}
     root.replaceChildren(choices,box);return true;

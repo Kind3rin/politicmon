@@ -4,7 +4,8 @@
 
 - Squadra: il riordino era sparito con l'interfaccia nuova (restava solo «Metti in testa», in fondo alla scheda «Valori»). Ora la lista ha «Riordina»: si tocca chi spostare e poi il suo nuovo posto, oppure si trascina la riga con un dito; i posti sono numerati, la riga in mano si solleva, lo spostamento è annunciato e salvato. «Indietro» esce prima dalla modalità, la tastiera tiene il cursore sul pulsante. Il Circolo porta alla stessa schermata con «Riordina la squadra». Una sola regola (`moveCompanion`) per tocco, trascinamento e vecchio START-START.
 - Righe: una squadra corta non si stira più su tutto lo schermo (altezza massima per riga). Le carte delle campagne scrivono il luogo in minuscolo.
-- Primi minuti giocati a tocchi sul gioco vero: scelta del compagno in schede larghe con la categoria, ricevuta di crescita con compagno e barra verso il livello, battute di Quirino con il suo nome, suggerimenti che si ritirano con la distanza. `npm run check:first-minutes` li rigioca; `scripts/lib/phone-play.mjs` guida il gioco con tocchi e levetta e può saltare avanti modificando il salvataggio vivo.
+- Reclutamento: un'opzione non disponibile dice perché e cosa fare («Servono 3 Polemica: ne mancano 2. Alterna mosse riuscite per caricarla.»; «Non ne hai più: si comprano al Discount.»). I livelli nelle ricevute si scrivono «Lv9», non «lv9».
+- Primi minuti giocati a tocchi sul gioco vero: scelta del compagno in schede larghe con la categoria, ricevuta di crescita con compagno e barra verso il livello, battute di Quirino con il suo nome, suggerimenti che si ritirano con la distanza. `npm run check:first-minutes` li rigioca e `npm run check:recruit` rigioca il reclutamento fino all'evoluzione; `scripts/lib/phone-play.mjs` guida il gioco con tocchi e levetta e può saltare avanti modificando il salvataggio vivo.
 
 ## Mandato 2 — comandi — 2026-10-05
 

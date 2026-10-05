@@ -21,7 +21,10 @@ export async function openPhone(base,{width=375,height=812}={}){
   /** Tap the tile `dx,dy` away from the player. Only tiles on screen can be tapped. */
   tapTile:async(dx,dy)=>{
    const b=await page.evaluate(()=>{const c=document.querySelector('canvas'),r=c.getBoundingClientRect(),p=JSON.parse(c.dataset.worldPlayerBounds);return {tile:p.w/240*r.width,x:r.left+(p.x+p.w/2)/240*r.width,y:r.top+(p.y+p.h)/p.viewHeight*r.height};});
-   await page.touchscreen.tap(b.x+dx*b.tile,b.y-b.tile*.5+dy*b.tile);
+   // Keep clear of the shortcuts at the top and of the stick and run toggle at the bottom: a tap there is not a tap on the map.
+   const size=page.viewportSize();
+   const x=Math.max(12,Math.min(size.width-12,b.x+dx*b.tile)),y=Math.max(130,Math.min(size.height-170,b.y-b.tile*.5+dy*b.tile));
+   await page.touchscreen.tap(x,y);
   },
   /** Wait until the player stops moving. */
   settle:async(limit=4000)=>{

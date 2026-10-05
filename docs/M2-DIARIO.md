@@ -66,4 +66,5 @@ Ripensamento: la funzione c'era (START prende, START scambia) ma la tastiera nat
 Ancora non convince: «Metti in testa» resta nella scheda «Valori»; la Tessera non mostra i ricordi; il duello con Gianni non parte parlandogli prima della prima lotta (da rivedere con il flusso della storia).
 Prove: partyOrder (6 test), check:ui-flows con tocco, trascinamento e tastiera, check:ui-panels 23×4, check-ui-runtime 28, check:first-minutes, 444 test.
 Crediti Higgsfield: nessun consumo, saldo 337,97.
+Reclutamento giocato a tocchi (jump al salvataggio dopo il tirocinio, candidato visibile, Recluta, ricevuta, scelta di carriera): leggibile e senza errori. Trovato giocando: un tocco sulla mappa sotto i pulsanti in alto a destra apre Squadra invece di camminare (limite del disegno, non corretto), il tasto virale spento non diceva cosa mancava (ora sì). check:recruit passa 9 volte su 10 prima dell'attesa dopo un tentativo fallito, vedi la riga di esito nel commit.
 

@@ -52,3 +52,9 @@ test("a dragged row lands on the row its centre is over, clamped at both ends", 
   assert.equal(dropIndex(999, rests), 3);
   assert.equal(dropIndex(10, []), 0);
 });
+
+import { readableCopy } from "../../src/ui/kit/copy";
+test("legacy capitals keep levels and abbreviations familiar", () => {
+  assert.equal(readableCopy("ELLYNA +236 CONSENSO\nLV9 > LV10"), "Ellyna +236 consenso\nLv9 > Lv10");
+  assert.equal(readableCopy("PV 12/30 · KO"), "PV 12/30 · KO");
+});

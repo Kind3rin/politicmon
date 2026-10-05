@@ -1450,8 +1450,8 @@ export class BattleScene implements Scene {
       title:"Recluta",subtitle:"Se il tentativo fallisce, l’avversario risponde.",
       blocks:[{title:this.foeName(),body:"Ridurre i PV e infliggere uno status aiuta il reclutamento. Un avversario KO non può essere reclutato."}],
       actions:[
-        {...action(readableCopy(ITEMS[this.recruitBall]?.name??"Scheda"),()=>this.throwBall(this.recruitBall),"Consuma una scheda.",!this.state.bag[this.recruitBall]||this.foe.mon.hp<=0),facts:[{label:"Probabilità",value:`${Math.round(this.catchEstimate(this.recruitBall)*100)}%`},{label:"Scorte",value:String(this.state.bag[this.recruitBall]??0)}]},
-        {...action("Reclutamento virale",()=>this.throwBall("scheda",true),"Consuma 3 Polemica; nessuna scheda.",this.polemica.value<3||this.foe.mon.hp<=0),facts:[{label:"Probabilità",value:`${Math.round(this.catchEstimate("scheda",true)*100)}%`},{label:"Polemica",value:`${this.polemica.value} di 3`}]},
+        {...action(readableCopy(ITEMS[this.recruitBall]?.name??"Scheda"),()=>this.throwBall(this.recruitBall),!this.state.bag[this.recruitBall]?"Non ne hai più: si comprano al Discount.":this.foe.mon.hp<=0?"Un avversario KO non può essere reclutato.":"Consuma una scheda.",!this.state.bag[this.recruitBall]||this.foe.mon.hp<=0),facts:[{label:"Probabilità",value:`${Math.round(this.catchEstimate(this.recruitBall)*100)}%`},{label:"Scorte",value:String(this.state.bag[this.recruitBall]??0)}]},
+        {...action("Reclutamento virale",()=>this.throwBall("scheda",true),this.foe.mon.hp<=0?"Un avversario KO non può essere reclutato.":this.polemica.value<3?`Servono 3 Polemica: ${3-this.polemica.value===1?"ne manca 1":`ne mancano ${3-this.polemica.value}`}. Alterna mosse riuscite per caricarla.`:"Consuma 3 Polemica; nessuna scheda.",this.polemica.value<3||this.foe.mon.hp<=0),facts:[{label:"Probabilità",value:`${Math.round(this.catchEstimate("scheda",true)*100)}%`},{label:"Polemica",value:`${this.polemica.value} di 3`}]},
         action("Borsa",()=>{this.mode="menu";this.openBag();},"Scegli un’altra scheda.")
       ],back
     };

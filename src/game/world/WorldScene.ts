@@ -42,7 +42,7 @@ import type { Input } from "../../engine/input";
 import type { Scene, SceneStack } from "../../engine/scene";
 import type { TouchAction } from "../../engine/touchActions";
 import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
-import {worldCameraAxis,followCamera,unzoomWorldPoint} from "../../engine/worldCamera";
+import {followCamera,unzoomWorldPoint,phoneWorldZoom,zoomedCameraAxis,clearanceCeiling} from "../../engine/worldCamera";
 import { Menu, MessageBox, setReduceMotion } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
 import { createMonster, healMonster, statsOf, type Monster } from "../monster";
@@ -3432,7 +3432,7 @@ export class WorldScene implements Scene {
     // Con MONOPATTINO o AUTO si va sempre veloci all'aperto; B resta la corsa.
     const onVehicle =
       (this.state.vehicle === "monopattino" || this.state.vehicle === "auto") && this.map.outdoor && this.state.fuel > 0;
-    this.running = this.runToggled || this.input.isHeld("b") || onVehicle;
+    this.running = this.runToggled || this.input.isHeld("b") || onVehicle || this.tapRoute.length >= 7;
     this.fromX = pos.x;
     this.fromY = pos.y;
     pos.x = nx;
@@ -3457,10 +3457,17 @@ export class WorldScene implements Scene {
 
     // The HUD no longer reserves map space. Only keep the player clear of
     // the short top strip when entering from a northern edge.
-    const topClearance=Math.ceil(116*VIEW_W/Math.max(1,screen.ctx.canvas.clientWidth||VIEW_W));
+    const canvas=screen.ctx.canvas,stageWidth=canvas.clientWidth||VIEW_W;
+    const topClearance=Math.ceil(116*VIEW_W/Math.max(1,stageWidth));
+    // Small rooms are enlarged to fill the screen instead of floating in a void;
+    // anything larger than the screen follows the player at a phone-friendly scale.
+    const roomFit=Math.min(VIEW_W/mapW,this.viewHeight/mapH);
+    const fitZoom=Math.max(1,Math.min(2,Math.floor(roomFit*4)/4));
+    const phoneZoom=phoneWorldZoom(stageWidth,document.body.classList.contains("touch"),canvas.clientHeight>canvas.clientWidth);
+    const baseZoom=!this.map.outdoor&&roomFit>=1?fitZoom:phoneZoom;
     const facing=DIR_DELTA[pos.facing],lead=this.moving&&!this.state.reduceEffects?5:0;
-    const targetX=worldCameraAxis(playerPx+TILE/2+facing.dx*lead,mapW,VIEW_W);
-    const targetY=Math.min(worldCameraAxis(playerPy+TILE/2+facing.dy*lead,mapH,this.viewHeight),playerPy-topClearance);
+    const targetX=zoomedCameraAxis(playerPx+TILE/2+facing.dx*lead,mapW,VIEW_W,baseZoom);
+    const targetY=Math.min(zoomedCameraAxis(playerPy+TILE/2+facing.dy*lead,mapH,this.viewHeight,baseZoom),clearanceCeiling(playerPy,this.viewHeight,baseZoom,topClearance));
     if(!this.cameraPosition)this.cameraPosition={x:targetX,y:targetY};
     this.cameraPosition.x=followCamera(this.cameraPosition.x,targetX,this.cameraDt,this.state.reduceEffects);
     this.cameraPosition.y=followCamera(this.cameraPosition.y,targetY,this.cameraDt,this.state.reduceEffects);
@@ -3474,10 +3481,7 @@ export class WorldScene implements Scene {
       camY += Math.round((Math.random() - 0.5) * amp);
     }
 
-    // Small rooms are enlarged to fill the screen instead of floating in a void.
-    const roomFit=Math.min(VIEW_W/mapW,this.viewHeight/mapH);
-    const roomZoom=this.map.outdoor?1:Math.max(1,Math.min(2,Math.floor(roomFit*4)/4));
-    const zoom=this.dialogueZoom*roomZoom;
+    const zoom=this.dialogueZoom*baseZoom;
     setWorldLabelZoom(zoom);
     this.tapCamera = {x:camX,y:camY,zoom};
     this.npcTapAreas = [];

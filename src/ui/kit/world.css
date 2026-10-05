@@ -7,28 +7,39 @@ body.ui-world-open #screen-stage{position:absolute;inset:0;display:block;padding
 body.ui-world-open #screen-frame{position:absolute;inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;border:0;border-radius:0}
 body.ui-world-open #touch-ui{position:absolute;inset:0;display:block;padding:0;pointer-events:none}
 body.ui-world-open .ui-world{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
-body.ui-world-open .ui-world-nav{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;gap:8px;pointer-events:auto}
+body.ui-world-open .ui-world-nav{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;gap:10px;pointer-events:auto}
 body.ui-world-open .ui-world .ui-button{padding:0;min-height:44px;border:2px solid #14161F;border-radius:4px;box-shadow:4px 4px #14161F;background:#F4EEDC;color:#14161F;align-items:center;justify-content:center}
-body.ui-world-open .ui-world-nav .ui-button{width:44px;height:44px}
-body.ui-world-open .ui-world-nav strong,body.ui-world-open .ui-world .ui-command-group{display:none}
+body.ui-world-open .ui-world-nav .ui-button{width:60px;height:60px;padding:4px 0 2px}
+body.ui-world-open .ui-world-nav .ui-button-heading{flex-direction:column;gap:0}
+body.ui-world-open .ui-world-nav strong{display:block;font:700 14px/1.1 Tribuna,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+body.ui-world-open .ui-world .ui-command-group{display:none}
+body:not([data-input-device=touch]).ui-world-open .ui-world .ui-command-group{display:flex;margin:0}
+body.ui-world-open .ui-world .ui-command-key{font:700 14px/1.2 PoliticmonBody,sans-serif}
 body.ui-world-open .ui-world-nav .ui-button-icon{width:28px;height:28px}
-body.ui-world-open .ui-world-controls{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:end;gap:16px;pointer-events:none}
-body.ui-world-open .ui-world-controls .ui-button{pointer-events:auto;width:48px;height:48px;background:#F4EEDCe6}
-body.ui-world-open .ui-world-controls .ui-primary{width:88px;height:72px;background:#D7263D;color:#F4EEDC}
-body.ui-world-open .ui-world-controls strong{font:700 20px/1.2 Tribuna,sans-serif}
+body.ui-world-open .ui-world-nav .ui-command-group{position:absolute;top:-9px;right:-6px;background:#14161F;color:#F4EEDC;border-radius:4px;padding:0 4px}
+body.ui-world-open .ui-world-nav .ui-command-key{display:inline-block;border:0;color:inherit;padding:1px 2px}
+body.ui-world-open .ui-world-controls{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:end;gap:12px;pointer-events:none}
+body.ui-world-open .ui-world-controls .ui-button{pointer-events:auto;width:76px;height:48px;background:#F4EEDCe6}
+body.ui-world-open .ui-world-controls .ui-primary{min-width:112px;width:auto;max-width:200px;height:80px;padding:0 16px;background:#D7263D;color:#F4EEDC}
+body.ui-world-open .ui-world-controls .ui-primary .ui-button-heading{flex-direction:column;gap:2px}
+body.ui-world-open .ui-world-controls .ui-primary .ui-command-key{border:1px solid currentColor;color:#F4EEDC}
+body.ui-world-open .ui-world-controls strong{font:700 16px/1.2 Tribuna,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+body.ui-world-open .ui-world-controls .ui-primary strong{font-size:22px;letter-spacing:0}
 body.ui-world-open .ui-world-controls [aria-pressed=true]{background:#FFD23F}
+body.ui-world-open .ui-world-controls [aria-pressed=true] strong:after{content:' ✓'}
 body.ui-world-open .ui-world .ui-button:active{transform:translate(4px,4px);box-shadow:none}
 body.ui-world-open .ui-world-hud{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
-.ui-world-location{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 184px);padding:8px;background:#1E3A8A;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;animation:world-location 2s forwards}
-body.ui-world-open .ui-world-objective{position:absolute;top:68px;left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 28px);height:44px;min-width:44px;padding:0 12px;border:0;border-radius:0;background:#F4EEDCe6;color:#14161F;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;font:16px/1.4 PoliticmonBody,sans-serif}
+.ui-world-location{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 232px);padding:8px;background:#1E3A8A;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;animation:world-location 2s forwards}
+body.ui-world-open .ui-world-objective{position:absolute;top:92px;left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 28px);height:44px;min-width:44px;padding:0 12px;border:0;border-radius:0;background:#F4EEDCe6;color:#14161F;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;font:16px/1.4 PoliticmonBody,sans-serif}
 body.ui-world-open .ui-world-objective:before{content:'▾';margin-right:8px}
 body.ui-world-open .ui-world-objective[aria-expanded=false]{width:44px;font-size:0;padding:0;text-align:center}
 body.ui-world-open .ui-world-objective[aria-expanded=false]:before{content:'▸';font-size:20px;margin:0}
 body.ui-world-open .ui-world-hud:has(.ui-world-notice) .ui-world-location{display:none}
-body.ui-world-open .ui-world-notice{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 184px);height:44px;line-height:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
+body.ui-world-open .ui-world-notice{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 232px);height:44px;line-height:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
 body.ui-world-open #touch-move{position:absolute;inset:0;pointer-events:none;display:block}
 body.ui-world-open #touch-stick{display:none}
-body.ui-world-open #touch-stick.floating-stick{display:flex;position:fixed;transform:translate(-50%,-50%);z-index:40;pointer-events:none;width:120px;height:120px}
+body.touch.ctrl-stick.ui-world-open #touch-stick{display:flex;position:absolute;left:max(20px,env(safe-area-inset-left));bottom:max(24px,env(safe-area-inset-bottom));width:120px;height:120px;opacity:.75;pointer-events:auto;touch-action:none}
+body.touch.ctrl-stick.ui-world-open #touch-stick.floating-stick{position:fixed;bottom:auto;transform:translate(-50%,-50%);z-index:40;pointer-events:none;opacity:1}
 body.ui-world-open #touch-stick-base{width:112px;height:112px;background:#F4EEDC88;border:2px solid #14161F}
 body.ui-world-open #touch-stick-base:before,body.ui-world-open #touch-stick-base:after{background:#14161F55}
 body.ui-world-open #touch-stick-cap{width:48px;height:48px;background:#F4EEDC;border:2px solid #14161F}
@@ -37,5 +48,14 @@ body.ui-world-open #touch-dpad{position:absolute;bottom:20px;left:20px;pointer-e
 @keyframes world-notice{0%,90%{opacity:1}100%{opacity:0;visibility:hidden}}
 .ui-world-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .ui-world-labels span{position:absolute;transform:translate(-50%,-100%);padding:3px 6px;white-space:nowrap;background:#1E3A8A;color:#F4EEDC;font:700 16px/1.2 Tribuna,sans-serif}
-.ui-save-flash{position:absolute;bottom:max(20px,env(safe-area-inset-bottom));left:16px;padding:4px 8px;background:#F4EEDC;color:#14161F;font:16px/1.4 PoliticmonBody,sans-serif}
+.ui-save-flash{position:absolute;top:max(76px,calc(env(safe-area-inset-top) + 64px));right:16px;padding:4px 8px;background:#F4EEDC;color:#14161F;font:16px/1.4 PoliticmonBody,sans-serif}
 body.ui-reduce-effects.ui-world-open .ui-world .ui-button:active{transform:none}
+
+/* A coach card: one gesture at a time, retired once the player has used it. */
+.ui-world-lesson{position:absolute;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:calc(max(24px,env(safe-area-inset-bottom)) + 144px);display:grid;grid-template-columns:minmax(0,1fr) 44px;column-gap:8px;align-items:start;padding:12px;border:2px solid #14161F;border-radius:4px;background:#FFD23F;box-shadow:4px 4px #14161F;color:#14161F;pointer-events:auto;max-width:420px;margin:0 auto}
+.ui-world-lesson strong{grid-column:1;font:700 22px/1.1 Tribuna,sans-serif;text-transform:uppercase}
+.ui-world-lesson p{grid-column:1;margin:4px 0 0;font:16px/1.4 PoliticmonBody,sans-serif}
+.ui-world-lesson button{grid-column:2;grid-row:1/3;width:44px;height:44px;border:2px solid #14161F;border-radius:4px;background:#F4EEDC;color:#14161F;font:700 16px/1 PoliticmonBody,sans-serif}
+body:not(.touch).ui-world-open .ui-world-lesson{bottom:calc(max(24px,env(safe-area-inset-bottom)) + 96px)}
+/* Desktop: the keys are written on screen, not hidden in a dialog. */
+body.ui-world-open:not(.touch) #shell-hint{display:block;position:absolute;left:12px;bottom:12px;z-index:5;max-width:calc(100% - 160px);padding:6px 10px;border-radius:4px;background:#14161Fcc;color:#F4EEDC;font:14px/1.3 PoliticmonBody,sans-serif;pointer-events:none}

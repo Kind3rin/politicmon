@@ -21,3 +21,29 @@ export function followCamera(current:number,target:number,dt:number,reduced=fals
 export function unzoomWorldPoint(x:number,y:number,width:number,height:number,zoom:number):{x:number;y:number} {
   return {x:(x-width/2)/zoom+width/2,y:(y-height/2)/zoom+height/2};
 }
+
+/**
+ * Phones in portrait show 15 tiles across at 1x: characters are 24 px tall and a
+ * tile is smaller than a fingertip. Zoom in so a tile is about 36 CSS pixels.
+ * Steps of a quarter keep every art pixel an integer number of backing pixels.
+ */
+export function phoneWorldZoom(stageWidth:number,touch:boolean,portrait:boolean):number{
+  if(!touch||!portrait||!Number.isFinite(stageWidth)||stageWidth<=0||stageWidth>560)return 1;
+  return Math.max(1,Math.min(1.75,Math.round(36/(stageWidth/15)*4)/4));
+}
+
+/**
+ * Camera for a view that is scaled about its own centre. The visible window is
+ * `view/zoom` wide, so it must be clamped to the map as such; the returned origin
+ * is the one the 240-pixel drawing space expects before the zoom is applied.
+ */
+export function zoomedCameraAxis(center:number,span:number,view:number,zoom:number):number{
+  const window=view/zoom;
+  return worldCameraAxis(center,span,window)-(view-window)/2;
+}
+
+/** Highest camera origin that still leaves `clearance` screen pixels above the player. */
+export function clearanceCeiling(playerAxis:number,view:number,zoom:number,clearance:number):number{
+  const middle=view/2;
+  return playerAxis-middle-(clearance-middle)/zoom;
+}

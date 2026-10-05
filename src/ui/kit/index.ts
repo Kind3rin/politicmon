@@ -338,6 +338,8 @@ export function renderUiDialog(text: string, advance: () => void, complete: bool
     const announcement=element("p","ui-sr-only");announcement.setAttribute("role","status");announcement.setAttribute("aria-live","polite");
     const next=element("button","ui-dialog-next");next.type="button";next.textContent="▸";
     next.addEventListener("click",()=>{continueDialog?.();dialog?.focus({preventScroll:true});});
+    // The whole box is the target: a 44px arrow in the corner is a bad thing to hunt for on every line.
+    dialog.addEventListener("click",event=>{if(!(event.target as Element).closest(".ui-dialog-next")){continueDialog?.();dialog?.focus({preventScroll:true});}});
     dialog.append(element("h2", "ui-dialog-speaker"),picture,body,announcement,next);
     stage.append(dialog);
   }
@@ -404,6 +406,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   document.body.classList.toggle("ui-arena-open",Boolean(panel?.arena));
   document.body.classList.toggle("ui-conversation-open",Boolean(panel?.conversation));
   document.body.classList.toggle("ui-pause-open",Boolean(panel?.pause));
+  document.body.classList.toggle("ui-splash-open",Boolean(panel?.splash));
   if(!panel?.arena)leaveArena(root);
   document.body.classList.toggle("ui-panel-open", Boolean(panel));
   if (!panel) {
@@ -678,6 +681,8 @@ let worldSignature = "";
 let worldContext: HTMLButtonElement | undefined;
 let worldRun: HTMLButtonElement | undefined;
 let worldCurrent: UiWorld | undefined;
+/** A coach card is closed for the session once the player dismisses it. */
+let lessonDismissed = "";
 /** World commands share the panel buttons, while leaving the map interactive. */
 export function renderUiWorld(world?: UiWorld, pending = false): void {
   worldCurrent = world;
@@ -695,9 +700,17 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
   worldHud.hidden=false;
   // Location and notices have independent lifetimes: a changing quest must not
   // restart them, nor should a still-present server notice flash every frame.
-  const hudKey=JSON.stringify([world.location,world.objective,world.notice,world.messages]);
+  const lesson=world.lesson&&world.lesson.title!==lessonDismissed?world.lesson:undefined;
+  const hudKey=JSON.stringify([world.location,world.objective,world.notice,world.messages,lesson]);
   if(hudKey!==worldHudSignature){
     worldHudSignature=hudKey;
+    worldHud.querySelector('.ui-world-lesson')?.remove();
+    if(lesson){
+      const card=element('aside','ui-world-lesson');card.setAttribute('role','status');
+      const close=element('button','',"✕");close.type='button';close.setAttribute('aria-label','Nascondi il suggerimento');
+      close.onclick=()=>{lessonDismissed=lesson.title;worldHudSignature="";card.remove();};
+      card.append(element('strong','',lesson.title),element('p','',lesson.body),close);worldHud.append(card);
+    }
     let location=worldHud.querySelector<HTMLElement>('.ui-world-location');
     if(!location || location.textContent!==world.location){
       location?.remove();location=element('div','ui-world-location',world.location);worldHud.prepend(location);
@@ -738,8 +751,8 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     if(world.context.disabled)worldContext.setAttribute("aria-disabled","true");else worldContext.removeAttribute("aria-disabled");
     worldContext.querySelector('strong')!.textContent=world.context.label;
     worldContext.setAttribute('aria-label',world.context.label);
-    worldRun.querySelector('strong')!.textContent='»';
-    worldRun.setAttribute('aria-label',world.running?'Cammina':'Corri');
+    worldRun.querySelector('strong')!.textContent='Corri';
+    worldRun.setAttribute('aria-label','Corri');
     worldRun.setAttribute('aria-pressed',String(world.running));
   }
 }

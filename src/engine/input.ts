@@ -1,5 +1,6 @@
 import { VIEW_H, VIEW_W } from "./screen";
 import { setInputDevice, refreshInputHints } from "./inputDevice";
+import { stickDirection } from "./stick";
 
 export type Button = "up" | "down" | "left" | "right" | "a" | "b" | "start" | "inspect";
 
@@ -200,7 +201,6 @@ export class Input {
     if (!stick) {
       return;
     }
-    const DEADZONE = 14; // px prima che la levetta registri una direzione
     const MAX = 40; // corsa massima visiva del cappuccio
     let pointerId: number | null = null;
     let originX = 0;
@@ -227,15 +227,11 @@ export class Input {
     const onMove = (clientX: number, clientY: number) => {
       const dx = clientX - originX;
       const dy = clientY - originY;
-      if (Math.hypot(dx, dy) < DEADZONE) {
-        setDir(null);
-        moveCap(dx, dy);
-        return;
-      }
-      // Asse dominante -> direzione cardinale (no diagonali).
-      const dir: Button =
-        Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : dy > 0 ? "down" : "up";
-      this.stickDragged = true;
+      // Asse dominante -> direzione cardinale (no diagonali). L'asse scelto si
+      // mantiene finché l'altro non lo supera nettamente: un pollice che
+      // trema non deve far balbettare il personaggio.
+      const dir = stickDirection(dx, dy, stickDir as "up" | "down" | "left" | "right" | null);
+      if (dir) this.stickDragged = true;
       setDir(dir);
       moveCap(dx, dy);
     };

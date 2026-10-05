@@ -9,6 +9,7 @@ body:is(.ui-dialog-open,.ui-conversation-open) :is(#console-top,#touch-ui,#shell
 .ui-dialog-speaker{position:absolute;left:12px;top:-18px;max-width:calc(100% - 24px);padding:4px 8px;background:#174A7E;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;transform:rotate(-2deg)}
 .ui-dialog-text{font:400 16px/1.4 PoliticmonBody,sans-serif;margin:0;white-space:normal;overflow-wrap:normal;word-break:normal}
 .ui-dialog-portrait{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:64px;height:64px;object-fit:contain;image-rendering:pixelated}
+.ui-dialog{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ui-dialog-next{position:absolute;bottom:4px;right:0;width:44px;height:44px;padding:0;border:0;background:transparent;color:#D7263D;font:700 20px/1 Tribuna,sans-serif;touch-action:manipulation}
 .ui-dialog-next:focus-visible{outline:3px solid #174A7E;outline-offset:-4px}
 .ui-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}

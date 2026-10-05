@@ -98,6 +98,8 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
       const arrow=node('span','ui-efficacy');arrow.textContent=efficacy>1?'▲':efficacy<1?'▼':'';meta.append(arrow);button.append(meta);
       button.setAttribute('aria-label',`${action.label}, ${type??''}, PP ${pp}${efficacy>1?', superefficace':efficacy<1?', poco efficace':''}`);
     }
+    const note=action.facts?.find(f=>f.label==='Effetto')?.value;
+    if(note){const line=node('span','ui-posture-note');line.textContent=note;button.append(line);}
     button.dataset.uiIndex=String(index+(panel.tabs?.length??0));
     button.classList.add(index<arena.moveCount?'ui-move-card':index<arena.moveCount+(arena.postureCount??0)?'ui-posture':'ui-secondary-action');
     button.setAttribute('aria-current',String(index===selected));return button;

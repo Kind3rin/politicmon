@@ -1478,15 +1478,16 @@ export class BattleScene implements Scene {
       action("Cambio",()=>this.openParty(false),undefined,!this.hasBenchAlive()),
       action("Borsa",()=>this.openBag()),
       action("Recluta",()=>this.openRecruit(),undefined,Boolean(this.trainer)),
-      action("···",()=>openUiSheet("Altre azioni","",more))
+      action("Altro",()=>openUiSheet("Altre azioni","",more))
     ]:[action(this.msg.isOpen?"Continua":"Turno in corso",()=>this.msg.advance(),undefined,!this.msg.isOpen)];
     const intent=this.foeIntent;
     const postures:TouchAction[]=ready?(Object.keys(POSTURES) as Array<Exclude<Posture,"none">>).map(id=>{
       const info=POSTURES[id],chosen=this.posture===id;
       const describe=()=>openUiSheet(info.label,`${info.rule}\n\n${info.tip}`);
-      return {...action(info.label,()=>{this.posture=chosen?"none":id;},info.rule),pressed:chosen,onInspect:describe};
+      return {...action(info.label,()=>{this.posture=chosen?"none":id;},info.rule),facts:[{label:"Effetto",value:info.short}],pressed:chosen,onInspect:describe};
     }):[];
-    const title=this.msg.isOpen?"In lotta":this.actionCaption?`${readableCopy(this.actionCaption.actor)}: ${readableCopy(this.actionCaption.move)}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
+    const chosenPosture=ready&&this.posture!=="none"?POSTURES[this.posture]:undefined;
+    const title=this.msg.isOpen?"In lotta":this.actionCaption?`${readableCopy(this.actionCaption.actor)}: ${readableCopy(this.actionCaption.move)}`:chosenPosture?`${chosenPosture.label}: ${chosenPosture.rule}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
     const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":undefined;
     return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...postures,...secondary],arena:{

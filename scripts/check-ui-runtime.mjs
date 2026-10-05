@@ -65,7 +65,7 @@ try{
     if(await first.getAttribute('aria-label')!==before)errors.push('Inspect consumed a move');
     const text=await page.locator('#tribuna-sheet').innerText();if(!/Precisione.*100%/.test(text)||!text.includes('Danno stimato'))errors.push('Move detail missing estimates');
     await page.getByRole('button',{name:'Chiudi dettaglio'}).click();
-    await page.getByRole('button',{name:'···',exact:true}).click();
+    await page.getByRole('button',{name:'Altro',exact:true}).click();
     if(!await page.getByRole('button',{name:'Fuga',exact:true}).isVisible())errors.push('More menu missing escape');
     await page.keyboard.press('Escape');
   }else if(screen==='menu'){
@@ -87,11 +87,11 @@ try{
   }else{
     const quest=page.locator('.ui-world-objective');await quest.click();if(await quest.getAttribute('aria-expanded')!=='false')errors.push('Quest did not collapse');
     const session=await page.context().newCDPSession(page);
-    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:80,y:viewport.height-140}]});
-    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:115,y:viewport.height-140}]});
+    await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:80,y:viewport.height*0.45}]});
+    await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:115,y:viewport.height*0.45}]});
     if(!await page.locator('#touch-stick.floating-stick').isVisible())errors.push('Floating joystick did not appear');
     await session.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-    if(await page.locator('#touch-stick').isVisible())errors.push('Floating joystick remained after release');
+    if(await page.locator('#touch-stick.floating-stick').count())errors.push('Floating joystick remained after release');
   }
   await page.close();
  }

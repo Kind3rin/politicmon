@@ -51,3 +51,11 @@ Ancora non convince: Borgo e Mediopoli restano piatti (Fase 3 non iniziata); mos
 Crediti Higgsfield: nessun consumo, saldo 337,97.
 Prove: 428 test, check-ui-runtime 28, check-ui-panels 20×4, check-ui-flows, check-roamers, map-consistency, map-exit, building-doors.
 check:first-campaign e check:world-layout falliscono già a 81abfd4 (ultimo commit di Codex) per passi di input che l'interfaccia nativa non usa più: da riscrivere, non dipendono da questo giro.
+
+## Comandi — 5 ottobre 2026
+Prima/dopo: giocato su telefono emulato (375×812) dalla nuova campagna fino al dialogo con Luca. Prima: nessun comando visibile in esplorazione (solo tre icone), levetta invisibile finché non si tocca, «»» senza nome, suggerimento sul movimento calcolato ma mai mostrato, dialogo avanzabile solo dalla freccia in basso a destra, avviso di installazione sopra il pulsante principale.
+Si nota subito: nomi sotto le icone, levetta e «Corri» sempre a vista, scheda gialla «Muoviti» che sparisce dopo i primi passi, mondo più grande, posture con la loro spiegazione.
+Ancora non convince: la scheda di aiuto copre un po' di strada nei primi secondi; chi vuole la croce al posto della levetta la trova solo in Menu → Opzioni → Tasti; il percorso verso un personaggio che cammina può spostarsi mentre lo si raggiunge (8 prove su 8 riuscite, ma resta il caso limite).
+Prove: check:world-controls (nuovo), check:ui-flows con la lotta, check-ui-runtime 28, check:ui-panels 22×4, 437 test.
+Crediti Higgsfield: nessun consumo, saldo 337,97.
+

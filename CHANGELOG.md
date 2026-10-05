@@ -1,5 +1,15 @@
 # Changelog
 
+## Mandato 2 — comandi — 2026-10-05
+
+- Esplorazione: i tre accessi (Squadra, Mappa, Menu) portano il nome sotto l'icona; «Corri» è un interruttore con nome e segno di spunta al posto del simbolo «»»; la levetta è disegnata in basso a sinistra prima di ogni tocco e si sposta comunque dove si appoggia il pollice nella metà sinistra; il pollice che trema non fa più balbettare il personaggio (l'asse scelto resta finché l'altro non lo supera nettamente). Su desktop la legenda dei tasti è scritta in gioco e i pulsanti mostrano il tasto (P, Z).
+- Il suggerimento sul movimento era calcolato ma mai disegnato: ora è una scheda gialla chiudibile (Muoviti → Parla con qualcuno → Trova le tue cose), sul pavimento in orizzontale.
+- Telefoni in verticale: il mondo è ingrandito (caselle da ~36 px, prima ~25 px) con la fotocamera ricalcolata sui bordi della mappa; i percorsi lunghi toccati sulla mappa si fanno di corsa.
+- Dialoghi: tutta la casella avanza di una riga, non più solo la freccia da 44 px nell'angolo.
+- Lotta: ogni postura dice cosa fa («più danno», «meno danni», «senza PP»), la scelta spiega la regola nella didascalia e si toglie ritoccandola; «···» diventa «Altro».
+- L'invito a installare l'app compare solo nel titolo, in stile Tribuna, e non copre più i comandi.
+- Nuovo controllo `check:world-controls` (tocchi reali con CDP su 375, 320 e 1280 px).
+
 ## Mandato 2 — secondo giro — 2026-10-05
 
 - Caro carburante: serbatoio da 40 litri per monopattino e auto (1 litro ogni 14 passi all'aperto; a secco si va a piedi), prezzo al litro del giorno con commento satirico, benzinai su Percorso 1 e 3, «Fai il pieno» da ogni auto blu. L'auto blu costa 6 litri a viaggio. Salvataggi vecchi: 18 litri. 4 test nuovi.

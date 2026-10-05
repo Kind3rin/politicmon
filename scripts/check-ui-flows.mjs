@@ -6,7 +6,7 @@ const open=async(screen,viewport={width:412,height:915})=>{
  const page=await browser.newPage({viewport,isMobile:true,hasTouch:true});
  page.on('pageerror',e=>errors.push(`${screen}: ${e.message}`));
  await page.goto(`${base}/scripts/m2-ui-review.html?screen=${screen}`);
- await page.locator('#game-ui:not([hidden]) .ui-header').waitFor();await page.waitForTimeout(200);return page;
+ await page.locator(screen.startsWith('lotta')?'.ui-arena':'#game-ui:not([hidden]) .ui-header').waitFor();await page.waitForTimeout(200);return page;
 };
 const expect=(ok,message)=>{if(!ok)errors.push(message);};
 const text=page=>page.locator('#game-ui').innerText();
@@ -52,6 +52,25 @@ try{
  await page.locator('.ui-row',{hasText:'EDITORIALE'}).tap();
  await page.waitForTimeout(400);
  await page.close();
+ // Battle: postures say what they do, the chosen one explains itself, "Altro" holds the rest.
+ page=await open('lotta-allenatore');
+ for(let i=0;i<6&&!await page.locator('.ui-posture').first().isVisible();i++){
+  await page.getByRole('button',{name:'Continua',exact:true}).tap({timeout:2500}).catch(()=>{});await page.waitForTimeout(500);
+ }
+ await page.locator('.ui-posture').first().waitFor({timeout:6000}).catch(()=>errors.push('postures never appeared'));
+ const chips=await page.locator('.ui-posture').allInnerTexts();
+ expect(chips.length===3&&chips.every(t=>t.trim().split('\n').length>=2),`each posture explains itself (${JSON.stringify(chips)})`);
+ const caption=()=>page.locator('.ui-arena-caption').innerText();
+ const before=await caption();
+ await page.locator('.ui-posture',{hasText:'Smentisci'}).tap();await page.waitForTimeout(250);
+ expect(/Subisci/.test(await caption()),`the chosen posture's rule is shown (${await caption()})`);
+ expect(await page.locator('.ui-posture[aria-pressed=true]').count()===1,'one posture is marked as chosen');
+ await page.locator('.ui-posture',{hasText:'Smentisci'}).tap();await page.waitForTimeout(250);
+ expect(await caption()===before,'choosing it again takes the posture back');
+ await page.getByRole('button',{name:'Altro',exact:true}).tap();
+ await page.locator('#tribuna-sheet[open]').waitFor({timeout:3000}).catch(()=>errors.push('Altro did not open'));
+ expect(/Dossier/.test(await page.locator('#tribuna-sheet').innerText()),'Altro lists the other actions');
+ await page.close();
  // Keyboard: arrows move the cursor, Enter opens, Escape returns.
  page=await open('squadra',{width:844,height:390});
  await page.waitForTimeout(400);
@@ -60,4 +79,4 @@ try{
  await page.close();
 }finally{await browser.close();}
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}
-console.log('UI flows: squadra, compagno, borsa, mappa, impara e tastiera verificati.');
+console.log('UI flows: squadra, compagno, borsa, mappa, impara, lotta e tastiera verificati.');

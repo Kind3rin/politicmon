@@ -54,6 +54,8 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 .ui-arena-postures[hidden]{display:none}
 .ui-arena .ui-posture{min-height:44px;padding:4px 6px;align-items:center;justify-content:center;background:#E4DAC0;border-width:0 0 3px;box-shadow:none;border-radius:0}
 .ui-arena .ui-posture:active{transform:none}
+.ui-arena .ui-posture{flex-direction:column;gap:0}
+.ui-posture-note{font:14px/1.1 PoliticmonBody,sans-serif;color:inherit;opacity:.85;white-space:nowrap}
 .ui-arena .ui-posture .ui-subtitle{font:700 16px/1 PoliticmonBody,sans-serif;text-transform:none}
 .ui-arena .ui-posture[aria-pressed=true]{background:#D7263D;color:#F4EEDC}
 .ui-arena .ui-posture[aria-pressed=true] .ui-subtitle{color:#F4EEDC}
@@ -63,6 +65,7 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
   .ui-arena-moves{gap:8px}
   .ui-arena .ui-move-card{padding:5px 8px;gap:2px}
   .ui-arena .ui-move-card .ui-subtitle{font-size:18px}
+  .ui-posture-note{font-size:16px;line-height:1}
   .ui-move-meta img{width:20px;height:20px}
 }
 @media(orientation:portrait){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(330px,40%)}}

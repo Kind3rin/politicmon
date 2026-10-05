@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { RoamerField, roamerTarget, facingToward, type RoamerWorld } from "../../src/game/world/roamers.ts";
+import { RoamerField, roamerTarget, facingToward, isRareRoamer, type RoamerWorld } from "../../src/game/world/roamers.ts";
 
 const seeded = (seed = 7) => () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
 const meadow = (grass: (x: number, y: number) => boolean = () => true): RoamerWorld => ({ width: 12, height: 12, isGrass: grass, isOpen: () => true });
@@ -85,4 +85,17 @@ test("facingToward picks the dominant axis", () => {
   assert.equal(facingToward(0, 0, 3, 1), "right");
   assert.equal(facingToward(0, 0, -1, -4), "up");
   assert.equal(facingToward(5, 5, 5, 6), "down");
+});
+
+test("about one candidate in twelve is rare: fixed by its id, always fleeing, and never a change to the random sequence", () => {
+  const rare = Array.from({ length: 2000 }, (_, i) => i + 1).filter(isRareRoamer).length;
+  assert.ok(rare > 100 && rare < 220, `${rare} rare of 2000`);
+  const field = new RoamerField(meadow(), table, seeded(3));
+  for (let i = 0; i < 400; i += 1) field.spawnOne({ x: 0, y: 0, facing: "down" }, 0);
+  const marked = field.roamers.filter(r => r.rare);
+  assert.ok(marked.length > 0, "a long run of spawns includes rare ones");
+  assert.ok(marked.every(r => r.mood === "flee"), "rare ones run away");
+  const plain = new RoamerField(meadow(), table, seeded(3)), same = new RoamerField(meadow(), table, seeded(3));
+  plain.spawnOne({ x: 0, y: 0, facing: "down" }, 0); same.spawnOne({ x: 0, y: 0, facing: "down" }, 0);
+  assert.deepEqual([plain.roamers[0].x, plain.roamers[0].y], [same.roamers[0].x, same.roamers[0].y]);
 });

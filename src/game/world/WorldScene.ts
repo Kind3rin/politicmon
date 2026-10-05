@@ -208,6 +208,7 @@ function drawWorldTilePng(screen: Screen, img: HTMLImageElement, dx: number, dy:
 
 /** The first-sighting hint is shown once per session and never written to the save. */
 let roamerHintShown = false;
+let rareHintShown = false;
 
 /** Indoor maps carry a ring of blank wall ("A"): a room is sized and framed by what is drawn inside it. */
 interface RoomBounds { x: number; y: number; w: number; h: number }
@@ -1171,6 +1172,10 @@ export class WorldScene implements Scene {
     if (this.roamerGrace > 0) return;
     const contact = this.roamers.contact(player, scared);
     if (contact) { this.startRoamerBattle(contact); return; }
+    if (!rareHintShown && this.roamers.roamers.some(r => r.rare && Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) <= 9)) {
+      rareHintShown = true;
+      this.tapNotice = { text: "★ Candidato raro: scappa, ma vale doppio", until: this.time + 6 };
+    }
     if (!this.roamerHinted && !roamerHintShown && this.roamers.roamers.some(r => Math.abs(r.x - pos.x) + Math.abs(r.y - pos.y) <= 8)) {
       this.roamerHinted = true; roamerHintShown = true;
       this.tapNotice = { text: "Sorprendilo alle spalle!", until: this.time + 5 };
@@ -1182,13 +1187,21 @@ export class WorldScene implements Scene {
     this.roamers?.remove(roamer);
     this.stopTapRoute();
     const mod = advantage ? null : this.rollEncounterFlavor();
-    const level = firstRecruitLevel(this.state, Math.max(2, roamer.level + (mod?.dLevel ?? 0)));
+    const level = firstRecruitLevel(this.state, Math.max(2, roamer.level + (roamer.rare ? 2 : (mod?.dLevel ?? 0))));
     const name = SPECIES[roamer.speciesId]?.name ?? "Il candidato";
-    const intro = advantage === "player" ? (roamer.mood === "sleep" ? `${name} dorme: agisci per primo!` : "Colto di spalle: agisci per primo!")
+    const intro = roamer.rare ? `${name} RARO! Brilla di consenso: se lo convinci, il premio è doppio.`
+      : advantage === "player" ? (roamer.mood === "sleep" ? `${name} dorme: agisci per primo!` : "Colto di spalle: agisci per primo!")
       : advantage === "foe" ? `${name} ti ha preso alle spalle!` : mod?.line.replace("\n", " ");
     this.state.flags["opening-encountered"] = true;
     this.roamerGrace = 3;
-    this.startWildBattle(roamer.speciesId, level, undefined, undefined, false, intro, advantage);
+    const bonus = roamer.rare ? 120 + level * 12 : 0;
+    this.startWildBattle(roamer.speciesId, level, bonus ? result => {
+      if (result !== "win" && result !== "caught") return;
+      const extra = result === "caught" ? bonus * 2 : bonus;
+      this.state.money += extra;
+      this.state.bag.scheda = (this.state.bag.scheda ?? 0) + (result === "caught" ? 2 : 1);
+      this.tapNotice = { text: `Candidato raro: +${extra} € e schede`, until: this.time + 5 };
+    } : undefined, undefined, false, intro, advantage);
   }
 
   private startWildBattle(
@@ -3673,12 +3686,19 @@ export class WorldScene implements Scene {
       tall.push({ baseY: py + TILE, draw: () => {
         const hop = roamer.t < 1 ? Math.abs(Math.sin(roamer.t * Math.PI)) * 3 : roamer.mood === "sleep" || this.state.reduceEffects ? 0 : (Math.floor(this.time * 3 + roamer.id) % 4 === 0 ? 1 : 0);
         this.drawShadow(screen, rx + 8, ry + 14, 5);
+        if (roamer.rare) {
+          // A rare candidate glows gold under its feet and twinkles above its head.
+          const pulse = this.state.reduceEffects ? .5 : .5 + .5 * Math.sin(this.time * 5 + roamer.id);
+          screen.ctx.save(); screen.ctx.globalAlpha = .25 + .25 * pulse; screen.ctx.fillStyle = "#ffd23f";
+          screen.ctx.beginPath(); screen.ctx.ellipse(rx + 8, ry + 13, 9 + pulse * 2, 4 + pulse, 0, 0, Math.PI * 2); screen.ctx.fill(); screen.ctx.restore();
+        }
         const image = monsterImage(roamer.speciesId);
         if (image) {
           const bounds = screen.imageBounds(image), scale = 20 / bounds.h, dw = bounds.w * scale;
           screen.imageSpriteCropped(image, rx + 8 - dw / 2, ry + 15 - bounds.h * scale - hop, { scaleX: scale, scaleY: scale });
         }
         if (roamer.alert > 0) { screen.rect(rx + 4, ry - 20, 9, 11, "#d7263d"); screen.text("!", rx + 7, ry - 18, "#fffaf0"); }
+        else if (roamer.rare) screen.text("★", rx + 4, ry - 12 - (this.state.reduceEffects ? 0 : Math.floor(this.time * 3 + roamer.id) % 2), "#ffd23f");
         else if (roamer.mood === "sleep") screen.text("z", rx + 12, ry - 8 - (Math.floor(this.time * 2) % 2), "#fffaf0");
       } });
     }

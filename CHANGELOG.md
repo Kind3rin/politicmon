@@ -2,6 +2,7 @@
 
 ## Mandato 2 — piacere di gioco — 2026-10-05
 
+- Candidati rari: circa uno su dodici nell'erba è raro. Si vede (stella dorata che lampeggia e alone sotto i piedi), scappa sempre, si presenta con due livelli in più e paga: vincendo +120 € più 12 € a livello e una scheda, reclutandolo il doppio e due schede. Un avviso compare la prima volta che ne vedi uno. La rarità dipende dall'id, quindi non cambia la sequenza casuale dei selvatici.
 - Negozio: la pagina d'acquisto era un muro di testo e i pulsanti «Una in più» / «Dieci in più» stavano a 900–1080 px su uno schermo alto 812, fuori vista. Ora quantità, totale, fondi e «Compra N · prezzo» stanno in una schermata, con i pulsanti della quantità sopra; effetti e formazione del prezzo si aprono in «Dettagli e prezzo».
 - Borsa: una cura che un solo compagno può ricevere si usa con un tocco (prima: oggetto, poi compagno). Se i candidati sono più d'uno, la scelta resta.
 - Lotta: tasto «×1/×2» sempre visibile nella striscia della lotta per cambiare il ritmo (prima stava solo in Menu → Opzioni).

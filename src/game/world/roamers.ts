@@ -19,6 +19,8 @@ export interface Roamer {
   /** Seconds left of the "!" bubble that shows a chaser noticed the player. */
   alert: number;
   noticed: boolean;
+  /** A rare candidate: golden, always runs away, pays well when caught. Fixed per individual. */
+  rare?: boolean;
 }
 
 export interface RoamerWorld {
@@ -53,6 +55,8 @@ export interface Contact {
 const STEP: Record<Facing, [number, number]> = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
 const FACINGS: Facing[] = ["up", "down", "left", "right"];
 const MOODS: RoamerMood[] = ["wander", "wander", "wander", "flee", "chase", "sleep"];
+/** About one candidate in twelve is rare. A function of the id, so it never disturbs the random sequence. */
+export function isRareRoamer(id: number): boolean { return (Math.imul(id, 2654435761) >>> 0) % 100 < 8; }
 export const CHASE_RANGE = 5;
 export const FLEE_RANGE = 4;
 
@@ -99,11 +103,12 @@ export class RoamerField {
       const x = Math.floor(this.rng() * this.world.width), y = Math.floor(this.rng() * this.world.height);
       if (!this.world.isGrass(x, y) || !this.world.isOpen(x, y) || this.occupied(x, y)) continue;
       if (distance(x, y, player.x, player.y) < minDistance) continue;
+      const id = this.nextId++, rare = isRareRoamer(id);
       const roamer: Roamer = {
-        id: this.nextId++, speciesId: entry.speciesId,
+        id, rare, speciesId: entry.speciesId,
         level: entry.minLv + Math.floor(this.rng() * (entry.maxLv - entry.minLv + 1)),
         x, y, fromX: x, fromY: y, t: 1, facing: FACINGS[Math.floor(this.rng() * 4)],
-        mood: MOODS[Math.floor(this.rng() * MOODS.length)], wait: 0.4 + this.rng() * 1.6, alert: 0, noticed: false
+        mood: rare ? "flee" : MOODS[Math.floor(this.rng() * MOODS.length)], wait: 0.4 + this.rng() * 1.6, alert: 0, noticed: false
       };
       this.roamers.push(roamer);
       return roamer;

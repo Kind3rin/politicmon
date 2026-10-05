@@ -1,5 +1,8 @@
 import { audio } from "../engine/audio";
 import { MAP_NAMES } from "../data/maps/names";
+
+/** Map names are stored in capitals for the pixel font; a card reads them as a sentence. */
+const placeName = (mapId: string): string => { const name = MAP_NAMES[mapId] ?? mapId; return name.charAt(0) + name.slice(1).toLocaleLowerCase("it"); };
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { Screen } from "../engine/screen";
@@ -31,7 +34,7 @@ export class SlotScene implements Scene {
     const slot = this.pendingOverwrite >= 0 ? this.pendingOverwrite : this.pendingDelete;
     const actions = this.touchActions.filter(action => action.label !== "INDIETRO" && action.label !== "ANNULLA").map((action, i) => ({ ...action,
       label: pending ? "Conferma" : action.label === "CANCELLA" ? "Gestisci campagne" : `${this.deleting ? "Cancella " : "Campagna "}${i + 1}`,
-      hint: pending ? undefined : i < SLOT_COUNT ? (this.summaries[i].exists ? MAP_NAMES[this.summaries[i].mapId] : "Nessuna partita salvata") : "Scegli quale eliminare",
+      hint: pending ? undefined : i < SLOT_COUNT ? (this.summaries[i].exists ? placeName(this.summaries[i].mapId) : "Nessuna partita salvata") : "Scegli quale eliminare",
       facts: !pending && i < SLOT_COUNT && this.summaries[i].exists ? [{ label: "Livello", value: String(this.summaries[i].level) }, { label: "Medaglie", value: String(this.summaries[i].badges) }] : undefined
     }));
     return { title: pending ? "Conferma la scelta" : this.deleting ? "Gestisci campagne" : "Le tue campagne", subtitle: pending ? `La campagna ${slot + 1} sarà ${this.pendingDelete >= 0 ? "cancellata" : "sostituita"}. Il salvataggio attuale andrà perso.` : "Tre campagne. Il quarto mandato non c’è.", actions, selected: this.menu.index,

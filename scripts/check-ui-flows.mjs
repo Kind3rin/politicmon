@@ -102,6 +102,14 @@ try{
   await page.getByRole('button',{name:'Indietro'}).tap();await page.waitForTimeout(250);
   expect(await page.getByRole('button',{name:'Riordina'}).count()===1,'the first close leaves reorder mode');
   await page.close();
+  // The Circolo leads to the same reordering.
+  page=await open('circolo');
+  await page.getByRole('button',{name:'Riordina la squadra'}).tap();
+  await page.getByRole('button',{name:'Fatto'}).waitFor({timeout:3000}).catch(()=>errors.push('the Circolo opens the squad ready to reorder'));
+  expect(await page.locator('.ui-row-slot').count()===6,'the squad opened from the Circolo numbers its places');
+  await page.getByRole('button',{name:'Fatto'}).tap();await page.getByRole('button',{name:'Indietro'}).tap();
+  await page.locator('.ui-tabs').waitFor({timeout:3000}).catch(()=>errors.push('closing the squad returns to the Circolo'));
+  await page.close();
   page=await open('squadra',{width:844,height:390});
   const press=async(key,n=1)=>{for(let i=0;i<n;i++){await page.keyboard.press(key);await page.waitForTimeout(120);}};
   await press('ArrowDown',6);await press('KeyZ');

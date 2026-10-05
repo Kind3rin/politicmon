@@ -48,6 +48,18 @@ export async function openPhone(base,{width=375,height=812}={}){
    await page.waitForTimeout(ms);
    await game.cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await page.waitForTimeout(150);
   },
+  /** Jump ahead for a review: edit the live save with a snippet (`state`, `createMonster`), reload and continue it. */
+  jump:async code=>{
+   await page.evaluate(async source=>{
+    const {getActiveState,saveGame}=await import('/src/game/state.ts'),{createMonster}=await import('/src/game/monster.ts');
+    const state=getActiveState();new Function('state','createMonster',source)(state,createMonster);saveGame(state);
+   },code);
+   await page.reload();
+   await page.getByRole('button',{name:/Continua/}).first().tap();
+   await page.getByRole('button',{name:/Campagna 1/}).first().tap();
+   await page.waitForFunction(()=>document.body.classList.contains('ui-world-open'),null,{timeout:10000});
+   await page.waitForTimeout(800);
+  },
   shot:async name=>{await page.screenshot({path:`artifacts/m2/${name}.png`});},
   close:()=>browser.close()
  };

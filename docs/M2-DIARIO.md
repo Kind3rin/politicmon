@@ -59,3 +59,11 @@ Ancora non convince: la scheda di aiuto copre un po' di strada nei primi secondi
 Prove: check:world-controls (nuovo), check:ui-flows con la lotta, check-ui-runtime 28, check:ui-panels 22×4, 437 test.
 Crediti Higgsfield: nessun consumo, saldo 337,97.
 
+## Squadra — 5 ottobre 2026
+Prima/dopo: artifacts/m2/party-before-375.png, party-order-{0..3}-375.png, party-drag-375.png, mid-squad-reorder.png.
+Si nota subito: «Riordina» in fondo alla squadra, posti numerati, la riga in mano gialla e sollevata; trascinando una riga compare la barra rossa dove atterra.
+Ripensamento: la funzione c'era (START prende, START scambia) ma la tastiera nativa consuma START come «indietro», quindi nessuno poteva raggiungerla. Ho cercato le altre funzioni rimaste dietro combinazioni di tasti: il Politicdex ha il filtro per tipo come scheda, la Tessera ha perso solo il carosello dei ricordi (nessuna immagine nella versione nativa, da decidere con l'arte).
+Ancora non convince: «Metti in testa» resta nella scheda «Valori»; la Tessera non mostra i ricordi; il duello con Gianni non parte parlandogli prima della prima lotta (da rivedere con il flusso della storia).
+Prove: partyOrder (6 test), check:ui-flows con tocco, trascinamento e tastiera, check:ui-panels 23×4, check-ui-runtime 28, check:first-minutes, 444 test.
+Crediti Higgsfield: nessun consumo, saldo 337,97.
+

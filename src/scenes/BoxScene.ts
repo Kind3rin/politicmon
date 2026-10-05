@@ -5,6 +5,7 @@ import type { Screen } from "../engine/screen";
 import { speciesOf, statsOf, type Monster } from "../game/monster";
 import { saveGame, type GameState } from "../game/state";
 import type { UiPanel, UiBlock } from "../ui/kit";
+import { PartyScene } from "./PartyScene";
 
 export class BoxScene implements Scene {
   private side: "party" | "box" = "party";
@@ -44,16 +45,18 @@ export class BoxScene implements Scene {
       actions: [{ label: side === "party" ? "Manda al Circolo" : "Aggiungi alla squadra", disabled: !this.canMove(side) || !this.list(side).includes(mon),
         run: () => this.move(mon, side) }], primary: 0, back
     };
-    const list = this.list(side);
+    const list = this.list(side), reorderable = side === "party" && this.state.party.length > 1;
     return { title: "Circolo", compact: true, subtitle: side === "party" ? "Tocca un compagno per mandarlo al Circolo." : "Tocca un compagno per portarlo in squadra.",
       tabs: [{ label: `Squadra ${this.state.party.length}/6`, run: () => { if (this.stack.top !== this || this.selected) return; this.side = "party"; this.notice = undefined; this.input.reset(); audio.cursor(); } },
         { label: `Circolo · ${this.state.boxed.length}`, run: () => { if (this.stack.top !== this || this.selected) return; this.side = "box"; this.notice = undefined; this.input.reset(); audio.cursor(); } }], selectedTab: side === "party" ? 0 : 1,
       blocks: [...(this.notice ? [this.notice] : []), ...(!list.length ? [{ title: "Circolo vuoto", body: "Quando la squadra è piena, i nuovi compagni arrivano qui. Puoi anche spostarli dalla squadra." }] : [])],
-      actions: list.map(mon => ({ label: speciesOf(mon).name, icon: `/sprites/monsters/${mon.speciesId}.png`,
+      actions: [...list.map(mon => ({ label: speciesOf(mon).name, icon: `/sprites/monsters/${mon.speciesId}.png`,
         hint: !this.canMove(side) ? side === "party" ? "È il tuo ultimo compagno. Deve restare in squadra." : "La squadra è piena. Prima manda un compagno al Circolo." : undefined,
         facts: [{ label: "Livello", value: String(mon.level) }, { label: "PV", value: `${mon.hp} di ${statsOf(mon).hp}` },
           { label: "Tipo", value: speciesOf(mon).types.join(" · ") }, { label: "Stato", value: mon.status ?? "In forma" }], disabled: !this.canMove(side),
-        run: () => { if (this.stack.top !== this || this.selected || this.side !== side || !this.list(side).includes(mon) || !this.canMove(side)) return; this.selected = mon; this.input.reset(); audio.confirm(); } })), back
+        run: () => { if (this.stack.top !== this || this.selected || this.side !== side || !this.list(side).includes(mon) || !this.canMove(side)) return; this.selected = mon; this.input.reset(); audio.confirm(); } })),
+        ...(reorderable ? [{ label: "Riordina la squadra", run: () => { if (this.stack.top !== this || this.selected || this.side !== "party") return; this.input.reset(); audio.confirm(); this.stack.push(new PartyScene(this.stack, this.input, this.state, { mode: "view", startReordering: true })); } }] : [])], back,
+      ...(reorderable ? { primary: list.length } : {})
     };
   }
   update(): void {}

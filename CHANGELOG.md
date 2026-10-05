@@ -1,5 +1,11 @@
 # Changelog
 
+## Mandato 2 — squadra e primi minuti — 2026-10-05
+
+- Squadra: il riordino era sparito con l'interfaccia nuova (restava solo «Metti in testa», in fondo alla scheda «Valori»). Ora la lista ha «Riordina»: si tocca chi spostare e poi il suo nuovo posto, oppure si trascina la riga con un dito; i posti sono numerati, la riga in mano si solleva, lo spostamento è annunciato e salvato. «Indietro» esce prima dalla modalità, la tastiera tiene il cursore sul pulsante. Il Circolo porta alla stessa schermata con «Riordina la squadra». Una sola regola (`moveCompanion`) per tocco, trascinamento e vecchio START-START.
+- Righe: una squadra corta non si stira più su tutto lo schermo (altezza massima per riga). Le carte delle campagne scrivono il luogo in minuscolo.
+- Primi minuti giocati a tocchi sul gioco vero: scelta del compagno in schede larghe con la categoria, ricevuta di crescita con compagno e barra verso il livello, battute di Quirino con il suo nome, suggerimenti che si ritirano con la distanza. `npm run check:first-minutes` li rigioca; `scripts/lib/phone-play.mjs` guida il gioco con tocchi e levetta e può saltare avanti modificando il salvataggio vivo.
+
 ## Mandato 2 — comandi — 2026-10-05
 
 - Esplorazione: i tre accessi (Squadra, Mappa, Menu) portano il nome sotto l'icona; «Corri» è un interruttore con nome e segno di spunta al posto del simbolo «»»; la levetta è disegnata in basso a sinistra prima di ogni tocco e si sposta comunque dove si appoggia il pollice nella metà sinistra; il pollice che trema non fa più balbettare il personaggio (l'asse scelto resta finché l'altro non lo supera nettamente). Su desktop la legenda dei tasti è scritta in gioco e i pulsanti mostrano il tasto (P, Z).

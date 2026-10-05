@@ -33,6 +33,8 @@ export interface PartyOptions {
   switchHint?: (mon: Monster) => string;
   itemPreview?: (mon: Monster) => { hint: string; facts?: TouchAction["facts"]; disabled?: boolean };
   freeSwitch?: boolean;
+  /** Open the squad already in reorder mode (from the Circolo). */
+  startReordering?: boolean;
   onChoose?: (mon: Monster) => void;
 }
 
@@ -63,6 +65,7 @@ export class PartyScene implements Scene {
     if (opts.mode === "battle-switch" || opts.mode === "forced-switch") {
       this.index = Math.max(0, (opts.partyOverride ?? state.party).findIndex(mon => mon.hp > 0 && mon.uid !== opts.currentUid));
     }
+    if (opts.startReordering && this.canReorder()) { this.reordering = true; this.cursorOnToggle = true; }
   }
 
   private chooseSwitch(mon: Monster): void {

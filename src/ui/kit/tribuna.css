@@ -48,7 +48,7 @@ body[data-input-device=touch] .ui-panel .ui-button[aria-current=true]{outline:0}
 /* Righe: compagni, oggetti, mosse. */
 .ui-rows{display:flex;flex-direction:column;gap:0;margin:0}
 .ui-rows.ui-fit{flex:1 1 auto;min-height:0}
-.ui-rows.ui-fit .ui-row{flex:1 1 0;min-height:64px}
+.ui-rows.ui-fit .ui-row{flex:1 1 0;min-height:64px;max-height:132px}
 .ui-row{position:relative;display:flex;align-items:center;gap:12px;width:100%;min-width:0;min-height:64px;padding:8px 12px;background:var(--t-card);color:var(--t-ink);border:0;border-bottom:2px solid var(--t-ink);border-radius:0;text-align:left;font-family:PoliticmonBody,sans-serif;touch-action:manipulation}
 .ui-row:first-child{border-top:2px solid var(--t-ink)}
 .ui-row:active{filter:brightness(.94)}

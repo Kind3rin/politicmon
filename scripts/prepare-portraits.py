@@ -49,6 +49,9 @@ def fetch(sheet):
 
 OUT.mkdir(parents=True, exist_ok=True)
 for sheet in MANIFEST["sheets"]:
+    if sheet["url"] == "PENDING" and not (SOURCES / sheet["file"]).exists():
+        print(f"skipping {sheet['file']}: not generated yet")
+        continue
     image = Image.open(fetch(sheet)).convert("RGB")
     cols, rows = sheet["grid"]
     for index, name in enumerate(sheet["cells"]):

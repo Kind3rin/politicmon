@@ -1,13 +1,23 @@
 {
-  "note": "Dialogue busts for the ten base NPC palettes plus the mayor and the Commission official. gpt_image_2_5, quality high, 1k, 3:2, six sprite references per sheet.",
+  "note": "Dialogue busts: ten base roles, then every story sprite set and the player. gpt_image_2_5, quality high, 1k, 3:2, six sprite references per sheet.",
   "sheets": [
     {
       "file": "sheet-a.png",
       "job": "0215515f-f334-4795-9e2b-e6538bef33b1",
       "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_120333_0215515f-f334-4795-9e2b-e6538bef33b1.png",
       "credits": 1.5,
-      "grid": [3, 2],
-      "cells": ["professor", "rival", "journalist", "barista", "guard", "aide"],
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "professor",
+        "rival",
+        "journalist",
+        "barista",
+        "guard",
+        "aide"
+      ],
       "prompt": "Six dialogue-portrait busts, 3x2, chest-up, pixel art, cream background; Quirino (professor), Gianni (rival), Mara (journalist), barista, guard, aide; each kept faithful to its sprite reference."
     },
     {
@@ -15,9 +25,133 @@
       "job": "f4d2415d-e38c-44a6-9a04-39ccbcfb8a37",
       "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_120536_f4d2415d-e38c-44a6-9a04-39ccbcfb8a37.png",
       "credits": 1.5,
-      "grid": [3, 2],
-      "cells": ["boss", "influencer", "granny", "kid", "civic-mayor", "commissione"],
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "boss",
+        "influencer",
+        "granny",
+        "kid",
+        "civic-mayor",
+        "commissione"
+      ],
       "prompt": "Six dialogue-portrait busts, 3x2, chest-up, pixel art, cream background; boss, influencer, granny, kid, town mayor, Commission official; each kept faithful to its sprite reference."
+    },
+    {
+      "file": "sheet-c.png",
+      "job": "1eea59fc-ee47-472f-b898-dbc4eef4a284",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_122545_1eea59fc-ee47-472f-b898-dbc4eef4a284.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "offshore-treasurer",
+        "campo-secretary",
+        "quantum-centrist",
+        "campo-photographer",
+        "future-reception",
+        "future-reporter"
+      ],
+      "prompt": "Six dialogue busts, 3x2, pixel art, cream background: offshore treasurer, Campo Largo secretary, quantum centrist, press photographer, reception clerk, reporter; faithful to the sprite references."
+    },
+    {
+      "file": "sheet-d.png",
+      "job": "eeacaba4-52f6-499c-8d31-24600c990798",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_122544_eeacaba4-52f6-499c-8d31-24600c990798.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "future-treasurer",
+        "future-split",
+        "future-brand",
+        "future-guard",
+        "future-secretary",
+        "diplomacy-host"
+      ],
+      "prompt": "Six dialogue busts, 3x2: Futuro Anteriore treasurer, splitter, branding consultant, guard, secretary, and the diplomatic hostess."
+    },
+    {
+      "file": "sheet-e.png",
+      "job": "24415b44-3513-483a-89a0-103437cc1894",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_122541_24415b44-3513-483a-89a0-103437cc1894.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "diplomacy-loyalist",
+        "diplomacy-mediator",
+        "diplomacy-producer",
+        "diplomacy-partner",
+        "genova-dj",
+        "genova-stagehand"
+      ],
+      "prompt": "Six dialogue busts, 3x2: loyalist, mediator, TV producer, blue-bird partner, seal DJ, octopus stagehand."
+    },
+    {
+      "file": "sheet-f.png",
+      "job": "26d88e13-3b27-43d5-b6a1-68ff69f63e21",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_122544_26d88e13-3b27-43d5-b6a1-68ff69f63e21.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "genova-accountant",
+        "tour-hub",
+        "tour-nord",
+        "tour-centro",
+        "tour-sud",
+        "tour-isole"
+      ],
+      "prompt": "Six anthropomorphic animal busts, 3x2: crab accountant, lynx hub guide, beaver, fox, lizard worker, gull captain."
+    },
+    {
+      "file": "sheet-g.png",
+      "job": "15099fa8-9d66-4635-a001-405af3493ea1",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_122544_15099fa8-9d66-4635-a001-405af3493ea1.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "tour-feed",
+        "palace-reception",
+        "palace-algorithm-a",
+        "palace-algorithm-b",
+        "palace-factcheck-a",
+        "palace-factcheck-b"
+      ],
+      "prompt": "Six anthropomorphic animal busts, 3x2: penguin, barn owl, spider, mouse, magpie, badger."
+    },
+    {
+      "file": "sheet-h.png",
+      "job": "9ef3c177-01ab-4968-8ac6-80c76a9cf0a9",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261005_122541_9ef3c177-01ab-4968-8ac6-80c76a9cf0a9.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "palace-talkshow-a",
+        "palace-talkshow-b",
+        "palace-silence-a",
+        "palace-silence-b",
+        "palace-studio",
+        "player"
+      ],
+      "prompt": "Six busts, 3x2: red parrot host, crested parrot guest, alpaca monitor, bear monitor, navy studio monster, and the player protagonist."
     }
   ]
 }

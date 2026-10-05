@@ -1030,7 +1030,7 @@ export class WorldScene implements Scene {
       const callback = this.afterMsg;
       this.afterMsg = null;
       callback?.();
-    }, auto, caption, !auto&&speaker?dialoguePortrait(speaker.pal):castPortrait);
+    }, auto, caption, !auto&&speaker?dialoguePortrait(speaker.pal,speaker.spriteSet):castPortrait);
   }
 
   // Prompt SÌ/NO riusabile (inviti scambio/duello, rivincite...). Usa il

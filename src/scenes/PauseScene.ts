@@ -1,5 +1,6 @@
 import { ATTO3_ENDINGS, earnedEndingSouvenirs, ENDING_SOUVENIRS, type Atto3EndingId } from "../game/atto3Ending";
 import { readableCopy } from "../ui/kit/copy";
+import { PLAYER_PORTRAIT } from "../art/characters";
 import { openUiSheet } from "../ui/kit/sheet";
 import { MONUMENT_TITLE } from "./MonumentScene";
 import { FieldGuideScene } from "./FieldGuideScene";
@@ -83,7 +84,7 @@ export class PauseScene implements Scene {
           run: () => { if (this.stack.top === this && owned) { this.input.reset(); audio.confirm(); detail(); } },
           row: { kind: "item", icon: `/sprites/ui/epilogue/${keepsake.image}.png`, meta: owned ? title : how } };
       });
-      return { title: "Tessera candidato",
+      return { title: "Tessera candidato", portrait: { src: PLAYER_PORTRAIT, label: loadNick() || "Onorevole" },
         subtitle: earned.length ? `${earned.length} ricord${earned.length === 1 ? "o" : "i"} su ${shelf.length}. Tocca un ricordo per leggerne la storia.` : "I ricordi si conquistano chiudendo la campagna.",
         blocks: [{ title: loadNick() || "Onorevole", facts: [{ label: "Sondaggi", value: `${this.state.sondaggi}%` }, { label: "Medaglie", value: `${this.state.badges.length}/3` }] }, { title: "Monumento", ...(this.state.monumentLevel === 3 ? { body: MONUMENT_TITLE } : { facts: [{ label: "Livello", value: `${this.state.monumentLevel}/3` }] }) }],
         actions: shelf, back: { label: "Indietro", run: () => { if (this.stack.top === this) { this.input.reset(); this.showCard = false; } } } };

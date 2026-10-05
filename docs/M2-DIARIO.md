@@ -71,7 +71,7 @@ Reclutamento giocato a tocchi (jump al salvataggio dopo il tirocinio, candidato 
 ## Volti e ricordi — 5 ottobre 2026
 Prima/dopo: artifacts/m2/portraits/ (fogli originali e anteprima), dialog-bust-phone.png, dialog-bust-land.png, tessera-earned.png, public/og.png.
 Si nota subito: i dialoghi hanno un volto che reagisce (Mara con il taccuino, Gianni sornione) invece dello sprite 32×32; la Tessera mostra i quattro ricordi.
-Ancora non convince: i personaggi speciali (circa quaranta palette) usano ancora lo sprite; molti aiutanti condividono lo stesso volto; le stanze piccole restano un diorama in un fondo scuro in verticale.
-Crediti Higgsfield: 3 usati (337,97 → 334,97), nessun acquisto.
+Ancora non convince: molti aiutanti condividono lo stesso volto (uno per ruolo); alcuni personaggi di storia si presentano come «Abitante» perché non hanno un nome nel dato; le stanze piccole restano un diorama in un fondo scuro in verticale.
+Crediti Higgsfield: 12 usati (337,97 → 325,97), nessun acquisto. Giocato: la lince del tour mostra la sua faccia, Quirino la sua.
 Prove: 2 test sui ritratti (file, dimensioni, ordine di ripiego), check-first-minutes con il volto di Quirino, check:ui-panels 24×4 con la Tessera, check-precache-build.
 

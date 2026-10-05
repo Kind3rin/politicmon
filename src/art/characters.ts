@@ -50,13 +50,24 @@ export const NPC_WITH_PNG = new Set<string>([
   "influencer", "aide", "barista"
 ]);
 
-// Chest-up busts for dialogue (public/sprites/portraits): the ten base roles, the mayor and the Commission official.
-export const PORTRAIT_PALS = new Set<string>([...NPC_WITH_PNG, "civic-mayor", "commissione"]);
+// Chest-up busts for dialogue (public/sprites/portraits): one per base role, one per story sprite set, one for the player.
+export const PORTRAIT_SETS = new Set<string>([
+  "civic-mayor", "commissione", "offshore-treasurer", "campo-secretary", "quantum-centrist", "campo-photographer",
+  "future-reception", "future-reporter", "future-treasurer", "future-split", "future-brand", "future-guard", "future-secretary",
+  "diplomacy-host", "diplomacy-loyalist", "diplomacy-mediator", "diplomacy-producer", "diplomacy-partner",
+  "genova-dj", "genova-stagehand", "genova-accountant", "tour-hub", "tour-nord", "tour-centro", "tour-sud", "tour-isole", "tour-feed",
+  "palace-reception", "palace-algorithm-a", "palace-algorithm-b", "palace-factcheck-a", "palace-factcheck-b",
+  "palace-talkshow-a", "palace-talkshow-b", "palace-silence-a", "palace-silence-b", "palace-studio"
+]);
+export const PLAYER_PORTRAIT = "/sprites/portraits/player.png";
 
-/** A bust when there is one, the walking sprite otherwise, nothing for characters without art. */
-export function dialoguePortrait(palId: string): string | undefined {
-  if (PORTRAIT_PALS.has(palId)) return `/sprites/portraits/${palId}.png`;
-  return NPC_WITH_PNG.has(palId) ? `/sprites/chars/npc_${palId}_south.png` : undefined;
+/**
+ * Who a speaker looks like in a dialogue. A character with its own sprite set is drawn from that set
+ * (never from the generic role it falls back to); the bust is used when it exists, the walking sprite otherwise.
+ */
+export function dialoguePortrait(palId: string, spriteSet?: string): string | undefined {
+  if (spriteSet) return PORTRAIT_SETS.has(spriteSet) ? `/sprites/portraits/${spriteSet}.png` : `/sprites/chars/npc_${spriteSet}_south.png`;
+  return NPC_WITH_PNG.has(palId) ? `/sprites/portraits/${palId}.png` : undefined;
 }
 
 // Archetipi NPC con frame di camminata Higgsfield disponibili (chars/npc_<pal>_<dir>_w<n>.png).

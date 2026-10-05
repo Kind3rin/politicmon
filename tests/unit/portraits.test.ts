@@ -1,23 +1,31 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
-import { NPC_WITH_PNG, PORTRAIT_PALS, dialoguePortrait } from "../../src/art/characters";
+import { NPC_WITH_PNG, PORTRAIT_SETS, PLAYER_PORTRAIT, dialoguePortrait } from "../../src/art/characters";
 
-test("every role with a dialogue bust has its file, and the files are real transparent PNGs", () => {
-  for (const pal of PORTRAIT_PALS) {
-    const path = `public/sprites/portraits/${pal}.png`;
-    assert.ok(existsSync(path), `${pal} has a bust`);
+test("every character with a dialogue bust has its file, and the files are real transparent PNGs", () => {
+  const paths = [...NPC_WITH_PNG].map(pal => `public/sprites/portraits/${pal}.png`)
+    .concat([...PORTRAIT_SETS].map(set => `public/sprites/portraits/${set}.png`), [`public${PLAYER_PORTRAIT}`]);
+  for (const path of paths) {
+    assert.ok(existsSync(path), `${path} exists`);
     const header = readFileSync(path).subarray(0, 33);
     assert.equal(header.subarray(1, 4).toString(), "PNG");
-    assert.equal(header.readUInt32BE(16), 96, `${pal} is 96 wide`);
-    assert.equal(header.readUInt32BE(20), 96, `${pal} is 96 tall`);
-    assert.equal(header[25], 6, `${pal} keeps an alpha channel`);
+    assert.equal(header.readUInt32BE(16), 96, `${path} is 96 wide`);
+    assert.equal(header.readUInt32BE(20), 96, `${path} is 96 tall`);
+    assert.equal(header[25], 6, `${path} keeps an alpha channel`);
   }
 });
 
-test("a speaker gets the bust, then the walking sprite, then nothing", () => {
+test("a speaker is drawn from its own sprite set, then its role, then nothing", () => {
   assert.equal(dialoguePortrait("professor"), "/sprites/portraits/professor.png");
-  assert.equal(dialoguePortrait("civic-mayor"), "/sprites/portraits/civic-mayor.png");
-  assert.equal(dialoguePortrait("tour-hub"), undefined);
-  assert.ok([...NPC_WITH_PNG].every(pal => PORTRAIT_PALS.has(pal)), "all ten base roles have a bust");
+  assert.equal(dialoguePortrait("aide", "future-brand"), "/sprites/portraits/future-brand.png", "a story character is not shown as the role it falls back to");
+  assert.equal(dialoguePortrait("aide", "a-set-without-a-bust"), "/sprites/chars/npc_a-set-without-a-bust_south.png");
+  assert.equal(dialoguePortrait("unknown-role"), undefined);
+});
+
+test("every sprite set used by a map NPC has a bust", async () => {
+  const { MAPS } = await import("../../src/data/maps");
+  const used = new Set<string>();
+  for (const map of Object.values(MAPS)) for (const npc of map.npcs) if (npc.spriteSet) used.add(npc.spriteSet);
+  assert.deepEqual([...used].filter(set => !PORTRAIT_SETS.has(set)), []);
 });

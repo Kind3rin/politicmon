@@ -113,7 +113,8 @@
     "check:ui-panels": "node scripts/check-ui-panels.mjs",
     "check:ui-flows": "node scripts/check-ui-flows.mjs",
     "check:roamers": "node scripts/check-roamers.mjs",
-    "check:world-controls": "node scripts/check-world-controls.mjs"
+    "check:world-controls": "node scripts/check-world-controls.mjs",
+    "check:first-minutes": "node scripts/check-first-minutes.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

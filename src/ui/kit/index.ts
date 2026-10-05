@@ -19,7 +19,7 @@ export interface UiWorld {
   messages?: readonly string[];
   facts: readonly {label:string;value:string}[];
   objective?: string;
-  lesson?: {title:string;body:string};
+  lesson?: {title:string;body:string;at?:"top"|"bottom"};
   actions: readonly TouchAction[];
   context: TouchAction;
   run: TouchAction;
@@ -706,7 +706,7 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     worldHudSignature=hudKey;
     worldHud.querySelector('.ui-world-lesson')?.remove();
     if(lesson){
-      const card=element('aside','ui-world-lesson');card.setAttribute('role','status');
+      const card=element('aside','ui-world-lesson');card.setAttribute('role','status');card.dataset.at=lesson.at??'bottom';
       const close=element('button','',"✕");close.type='button';close.setAttribute('aria-label','Nascondi il suggerimento');
       close.onclick=()=>{lessonDismissed=lesson.title;worldHudSignature="";card.remove();};
       card.append(element('strong','',lesson.title),element('p','',lesson.body),close);worldHud.append(card);

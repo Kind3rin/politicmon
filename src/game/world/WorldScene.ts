@@ -228,6 +228,8 @@ export class WorldScene implements Scene {
   private npcTapAreas: {id:string;x:number;y:number;width:number;height:number}[] = [];
   private tapCamera = {x:0,y:0,zoom:1};
   private cameraPosition:{x:number;y:number}|null=null;
+  /** Which half of the screen is free of the player, so a coach card never hides them. */
+  private lessonAt:"top"|"bottom"="bottom";
   private cameraDt=1/60;
   private dialogueFocus=false;
   private dialogueZoom=1;
@@ -404,7 +406,7 @@ export class WorldScene implements Scene {
       saved:Date.now()-lastSuccessfulSaveAt<1800,
       notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:this.banner?`${this.banner.text} · ${this.banner.sub}`:undefined,
       messages:mp.chat.filter(c=>performance.now()-c.t<6000).slice(-2).map(c=>`${mp.chatNick(c)}: ${c.text}`),
-      lesson:controlLesson(this.state,context),
+      lesson:(lesson=>lesson&&{...lesson,at:this.lessonAt})(controlLesson(this.state,context)),
       location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it"),facts,
       objective:quest?`${this.map.id==="borgo"&&quest.target?.mapId==="route1"?"Esci a nord. ":""}${quest.step}`:this.state.party.length?undefined:"Vai al laboratorio con il tetto blu.",
       actions: [command("Squadra", () => this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:"view"})),"/sprites/ui/kit/team.png"),
@@ -3482,6 +3484,8 @@ export class WorldScene implements Scene {
     }
 
     const zoom=this.dialogueZoom*baseZoom;
+    const playerRatio=(this.viewHeight/2+(playerPy+TILE/2-camY-this.viewHeight/2)*zoom)/this.viewHeight;
+    if(playerRatio>.58)this.lessonAt="top";else if(playerRatio<.42)this.lessonAt="bottom";
     setWorldLabelZoom(zoom);
     this.tapCamera = {x:camX,y:camY,zoom};
     this.npcTapAreas = [];
@@ -3851,7 +3855,10 @@ export class WorldScene implements Scene {
     const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * 9) : 0;
     const baseY = Math.round(playerPy) - camY - 2 - hopLift;
     screen.ctx.canvas.dataset.worldReady=String(this.fadeT<=0);
-    screen.ctx.canvas.dataset.worldPlayerBounds=JSON.stringify({x:baseX,y:baseY-6,w:16,h:24,viewHeight:screen.height});
+    // Bounds are published as the player sees them: after the zoom about the screen centre.
+    const seen=(x:number,y:number)=>({x:VIEW_W/2+(x-VIEW_W/2)*zoom,y:screen.height/2+(y-screen.height/2)*zoom});
+    const corner=seen(baseX,baseY-6);
+    screen.ctx.canvas.dataset.worldPlayerBounds=JSON.stringify({x:corner.x,y:corner.y,w:16*zoom,h:24*zoom,viewHeight:screen.height});
     // Se sei su un veicolo, lo disegniamo SOTTO e ti alziamo "in sella":
     // così si vede chiaramente che ci sei sopra.
     const vehicle = this.state.vehicle as VehicleId | null;

@@ -81,6 +81,22 @@ try{
  await page.locator('#game-ui:not([hidden]) .ui-header').waitFor({timeout:3000}).catch(()=>errors.push('Squadra did not open'));
  await page.close();
 
+ // ---- The coach card never hides the player, wherever the camera leaves them ----
+ for(const [map,x,y] of [['borgo',14,3],['borgo',14,8],['borgo',14,13],['borgo',14,17],['route1',7,8],['route1',7,24]]){
+  page=await browser.newPage({viewport:{width:375,height:812},isMobile:true,hasTouch:true,deviceScaleFactor:2});
+  page.on('pageerror',e=>errors.push(`card ${map}: ${e.message}`));
+  await page.goto(`${base}/scripts/m2-ui-review.html?screen=esplorazione&map=${map}&x=${x}&y=${y}&lesson=1`);
+  await page.locator('.ui-world-lesson').waitFor();await page.waitForTimeout(900);
+  const hidden=await page.evaluate(()=>{
+   const canvas=document.querySelector('canvas'),c=canvas.getBoundingClientRect(),b=JSON.parse(canvas.dataset.worldPlayerBounds);
+   const p={left:c.left+b.x/240*c.width,top:c.top+b.y/b.viewHeight*c.height,right:c.left+(b.x+b.w)/240*c.width,bottom:c.top+(b.y+b.h)/b.viewHeight*c.height};
+   const card=document.querySelector('.ui-world-lesson').getBoundingClientRect();
+   return Math.min(card.right,p.right)-Math.max(card.left,p.left)>1&&Math.min(card.bottom,p.bottom)-Math.max(card.top,p.top)>1;
+  });
+  expect(!hidden,`the coach card covers the player at ${map} ${x},${y}`);
+  await page.close();
+ }
+
  // ---- Dialogue: the whole box is the button ----
  page=await browser.newPage({viewport:{width:375,height:812},isMobile:true,hasTouch:true,deviceScaleFactor:2});
  page.on('pageerror',e=>errors.push(`dialogue: ${e.message}`));

@@ -2,6 +2,9 @@
 
 ## Mandato 2 — piacere di gioco — 2026-10-05
 
+- Negozio: la pagina d'acquisto era un muro di testo e i pulsanti «Una in più» / «Dieci in più» stavano a 900–1080 px su uno schermo alto 812, fuori vista. Ora quantità, totale, fondi e «Compra N · prezzo» stanno in una schermata, con i pulsanti della quantità sopra; effetti e formazione del prezzo si aprono in «Dettagli e prezzo».
+- Borsa: una cura che un solo compagno può ricevere si usa con un tocco (prima: oggetto, poi compagno). Se i candidati sono più d'uno, la scelta resta.
+- Lotta: tasto «×1/×2» sempre visibile nella striscia della lotta per cambiare il ritmo (prima stava solo in Menu → Opzioni).
 - Allenatori: tutti i 49 hanno un volto proprio (prima i ruoli erano dieci). In lotta il busto compare sul campo, con il nome, mentre l'allenatore parla (presentazione, «manda in campo», sconfitta); nei dialoghi sulla mappa parla con la sua faccia.
 - Gente: 53 tipi di abitanti hanno il loro volto e il loro nome in italiano al posto di «Abitante» (Tipografo, Umarell, Benzinaio, Scorta auto blu, Corazziere, Cronista…). Lo stesso tipo condivide il volto tra le città. Restano con quello del ruolo solo banconisti dei bar, creature leggendarie e quattro personaggi minori; l'elenco è fissato da un test.
 - Ricompensa: nella ricevuta «Consenso ottenuto» la barra parte da dove stava e scorre fino al nuovo valore (la crescita si vede, non si legge); salendo di livello compare il timbro «Livello su!». Rispetta «Riduci effetti».

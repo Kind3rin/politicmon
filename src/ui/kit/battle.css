@@ -83,3 +83,7 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 @keyframes arena-trainer-in{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
 @media(prefers-reduced-motion:reduce){.ui-arena-trainer{animation:none}}
 body.ui-reduce-effects .ui-arena-trainer{animation:none}
+
+.ui-arena-speed{flex:0 0 auto;margin-left:8px;min-width:44px;min-height:44px;padding:0 8px;border:2px solid #14161F;background:#F4EEDC;color:#14161F;font:700 16px/1 Tribuna,sans-serif;cursor:pointer}
+.ui-arena-speed:active{transform:translateY(1px)}
+.ui-arena-caption .ui-body{flex:1 1 auto;min-width:0}

@@ -424,6 +424,11 @@ export class BagScene implements Scene {
     const rows=visible.map((id):TouchAction=>({label:this.nice(id),run:()=>{
       if(this.stack.top!==this||this.msg.isOpen)return;this.input.reset();audio.cursor();
       const kind=ITEMS[id].kind;
+      // A cure with a single companion who can take it needs no question: the tap is the use.
+      if(["heal","cure"].includes(kind)&&party.length){
+        const usable=this.fieldActions([id]).filter(action=>!action.disabled);
+        if(usable.length===1){usable[0].run();return;}
+      }
       if(["heal","cure","hold","evo","tm"].includes(kind)&&party.length)this.picked=id;
       else{this.view.menu.index=ids.indexOf(id);this.activate(id);}
     },row:{kind:'item',icon:itemIconPath(id)?`/sprites/${itemIconPath(id)}`:undefined,right:`×${this.state.bag[id]}`,meta:this.gist(id)}}));

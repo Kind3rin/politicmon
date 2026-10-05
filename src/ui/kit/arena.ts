@@ -8,6 +8,8 @@ export interface UiArena {
   polemica?:number;
   intent?:{label:string;kind:"attack"|"status";posture?:{label:string;rule:string}};
   finisher?:TouchAction;
+  /** Pace toggle kept at hand in the caption strip: x1 / x2. */
+  speed?:TouchAction;
   player:UiArenaCombatant;
   foe:UiArenaCombatant;
   message?:{title:string;body:string};
@@ -69,10 +71,11 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
     }
   }
   const caption=root.querySelector<HTMLElement>('.ui-arena-caption')!;caption.hidden=false;
-  const captionKey=JSON.stringify([arena.finisher?.label,arena.message,arena.notice]);
+  const captionKey=JSON.stringify([arena.finisher?.label,arena.message,arena.notice,arena.speed?.label]);
   if(caption.dataset.content!==captionKey){caption.dataset.content=captionKey;caption.replaceChildren();
   if(arena.finisher){const button=kit.button(arena.finisher,()=>live?.arena?.finisher?.run());button.classList.add('ui-finisher');caption.append(button);}
-  else if(arena.message){const text=node('p','ui-body');text.textContent=arena.notice||(['In lotta','Duello','Esito del duello','Scelta inviata'].includes(arena.message.title)?arena.message.body:arena.message.title);caption.append(text);}}
+  else if(arena.message){const text=node('p','ui-body');text.textContent=arena.notice||(['In lotta','Duello','Esito del duello','Scelta inviata'].includes(arena.message.title)?arena.message.body:arena.message.title);caption.append(text);}
+  if(!arena.finisher&&arena.speed){const pace=document.createElement('button');pace.type='button';pace.className='ui-arena-speed';pace.textContent=arena.speed.label;pace.setAttribute('aria-label',arena.speed.hint??'Ritmo della lotta');pace.onclick=()=>live?.arena?.speed?.run();caption.append(pace);}}
   let dots=cards[1].querySelector<HTMLElement>('.ui-polemica');
   if(!dots){dots=node('span','ui-polemica');cards[1].append(dots);}
   dots.hidden=arena.polemica===undefined;

@@ -7,7 +7,7 @@ import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
 import {FieldGuideScene} from "../../scenes/FieldGuideScene";
 import {welcomeGuide, controlLesson} from "../onboarding";
 import {PalaceArchiveScene} from "../../scenes/PalaceArchiveScene";
-import { playerImage, ferryImage, vehicleImage, dialoguePortrait, type Facing } from "../../art/characters";
+import { playerImage, ferryImage, vehicleImage, dialoguePortrait, SET_NAMES, type Facing } from "../../art/characters";
 import { mp } from "../../net/mp";
 import { approach } from "../battle/view";
 import { TILE, TILES, tileImage, terrainVariantImage, objectImage, isRoof, isFacade, buildingImage, buildingKey, buildingPath } from "../../art/tiles";
@@ -208,6 +208,23 @@ function drawWorldTilePng(screen: Screen, img: HTMLImageElement, dx: number, dy:
 
 /** The first-sighting hint is shown once per session and never written to the save. */
 let roamerHintShown = false;
+
+/** Indoor maps carry a ring of blank wall ("A"): a room is sized and framed by what is drawn inside it. */
+interface RoomBounds { x: number; y: number; w: number; h: number }
+const roomContentCache = new Map<string, RoomBounds>();
+function roomContent(mapId: string, tiles: readonly string[]): RoomBounds {
+  const known = roomContentCache.get(mapId);
+  if (known) return known;
+  let minX = Infinity, maxX = -1, minY = Infinity, maxY = -1;
+  tiles.forEach((row, y) => [...row].forEach((tile, x) => {
+    if (tile === "A") return;
+    minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+  }));
+  const content = maxX < 0 ? { x: 0, y: 0, w: tiles[0].length * TILE, h: tiles.length * TILE }
+    : { x: minX * TILE, y: minY * TILE, w: (maxX - minX + 1) * TILE, h: (maxY - minY + 1) * TILE };
+  roomContentCache.set(mapId, content);
+  return content;
+}
 
 export class WorldScene implements Scene {
   readonly expandedViewport = true;
@@ -1021,7 +1038,7 @@ export class WorldScene implements Scene {
     const CAST_PALS: Record<string, string> = { QUIRINO: "professor", "PROF. QUIRINO": "professor", LUCA: "professor", GIANNI: "rival", MARA: "journalist" };
     const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : lines[0]?.match(cast);
     const caption = (!speaker || auto) && prefix ? prefix[1].charAt(0).toLocaleUpperCase("it") + prefix[1].slice(1).toLocaleLowerCase("it")
-      : name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? "Abitante" : "Politicmon");
+      : name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? (speaker.spriteSet && SET_NAMES[speaker.spriteSet]) || "Abitante" : "Politicmon");
     const castPortrait = (!speaker || auto) && prefix ? dialoguePortrait(CAST_PALS[prefix[1].toUpperCase()] ?? "") : undefined;
     const stripped = prefix ? lines[0].slice(prefix[0].length) : "";
     const text = prefix ? [stripped.charAt(0).toLocaleUpperCase("it") + stripped.slice(1), ...lines.slice(1)].filter(Boolean) : lines;
@@ -3472,13 +3489,14 @@ export class WorldScene implements Scene {
     const topClearance=Math.ceil(116*VIEW_W/Math.max(1,stageWidth));
     // Small rooms are enlarged to fill the screen instead of floating in a void;
     // anything larger than the screen follows the player at a phone-friendly scale.
-    const roomFit=Math.min(VIEW_W/mapW,this.viewHeight/mapH);
+    const inner: RoomBounds=this.map.outdoor?{x:0,y:0,w:mapW,h:mapH}:roomContent(this.map.id,this.map.tiles);
+    const roomFit=Math.min(VIEW_W/inner.w,this.viewHeight/inner.h);
     const fitZoom=Math.max(1,Math.min(2,Math.floor(roomFit*4)/4));
     const phoneZoom=phoneWorldZoom(stageWidth,document.body.classList.contains("touch"),canvas.clientHeight>canvas.clientWidth);
     const baseZoom=!this.map.outdoor&&roomFit>=1?fitZoom:phoneZoom;
     const facing=DIR_DELTA[pos.facing],lead=this.moving&&!this.state.reduceEffects?5:0;
-    const targetX=zoomedCameraAxis(playerPx+TILE/2+facing.dx*lead,mapW,VIEW_W,baseZoom);
-    const targetY=Math.min(zoomedCameraAxis(playerPy+TILE/2+facing.dy*lead,mapH,this.viewHeight,baseZoom),clearanceCeiling(playerPy,this.viewHeight,baseZoom,topClearance));
+    const targetX=zoomedCameraAxis(playerPx+TILE/2+facing.dx*lead-inner.x,inner.w,VIEW_W,baseZoom)+inner.x;
+    const targetY=Math.min(zoomedCameraAxis(playerPy+TILE/2+facing.dy*lead-inner.y,inner.h,this.viewHeight,baseZoom)+inner.y,clearanceCeiling(playerPy,this.viewHeight,baseZoom,topClearance));
     if(!this.cameraPosition)this.cameraPosition={x:targetX,y:targetY};
     this.cameraPosition.x=followCamera(this.cameraPosition.x,targetX,this.cameraDt,this.state.reduceEffects);
     this.cameraPosition.y=followCamera(this.cameraPosition.y,targetY,this.cameraDt,this.state.reduceEffects);

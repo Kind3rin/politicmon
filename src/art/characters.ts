@@ -61,6 +61,23 @@ export const PORTRAIT_SETS = new Set<string>([
 ]);
 export const PLAYER_PORTRAIT = "/sprites/portraits/player.png";
 
+/** What a story character is called in a dialogue when the map gives no name: the look implies the job. */
+export const SET_NAMES: Readonly<Record<string, string>> = {
+  "civic-mayor": "Il Sindaco", "commissione": "La Commissione", "offshore-treasurer": "Il Tesoriere",
+  "campo-secretary": "Segretaria di Campo Largo", "quantum-centrist": "Il Centrista quantistico", "campo-photographer": "Il Fotografo",
+  "future-reception": "Accoglienza", "future-reporter": "Cronista", "future-treasurer": "Tesoriera", "future-split": "Ufficio Scissioni",
+  "future-brand": "Ufficio Rebrand", "future-guard": "Guardia della sede", "future-secretary": "Segretario",
+  "diplomacy-host": "Cerimoniera", "diplomacy-loyalist": "Il Lealista", "diplomacy-mediator": "Mediatrice",
+  "diplomacy-producer": "Il Produttore", "diplomacy-partner": "Il Partner perfetto",
+  "genova-dj": "DJ", "genova-stagehand": "Macchinista", "genova-accountant": "Contabile",
+  "tour-hub": "Guida del tour", "tour-nord": "Chiosco Nord", "tour-centro": "Chiosco Centro", "tour-sud": "Chiosco Sud",
+  "tour-isole": "Chiosco Isole", "tour-feed": "Chiosco Feed",
+  "palace-reception": "Portineria", "palace-algorithm-a": "Algoritmo A", "palace-algorithm-b": "Algoritmo B",
+  "palace-factcheck-a": "Fact-checker A", "palace-factcheck-b": "Fact-checker B",
+  "palace-talkshow-a": "Conduttore", "palace-talkshow-b": "Ospite", "palace-silence-a": "Custode del silenzio A",
+  "palace-silence-b": "Custode del silenzio B", "palace-studio": "Regia"
+};
+
 /**
  * Who a speaker looks like in a dialogue. A character with its own sprite set is drawn from that set
  * (never from the generic role it falls back to); the bust is used when it exists, the walking sprite otherwise.

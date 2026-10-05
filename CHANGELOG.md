@@ -3,6 +3,7 @@
 ## Mandato 2 — volti e ricordi — 2026-10-05
 
 - Dialoghi: quarantotto mezzibusti illustrati (Higgsfield, 12 crediti) al posto dello sprite che cammina: i dieci ruoli di base, tutti i 37 personaggi dei capitoli di storia con il loro aspetto (animali compresi: lince, castoro, gufo, pappagalli…) e il protagonista. Prima i personaggi con sprite proprio mostravano il ritratto del ruolo generico di ripiego; ora ognuno ha il suo. Il nome sta a fianco del volto. Anche le battute di Quirino, Gianni, Mara e Luca dette «da lontano» mostrano il loro volto, e la Tessera mostra la faccia del candidato.
+- Stanze: sul telefono si dimensionano e si inquadrano su ciò che è disegnato dentro il muro (prima contava anche l'anello vuoto): il bar passa da 1,25× a 1,5× e riempie la larghezza dello schermo, senza seguire il giocatore di lato. I personaggi di storia senza nome nel dato hanno un'etichetta dal loro ruolo («Guida del tour», «Il Sindaco») invece di «Abitante».
 - Tessera: il menu «Ricordi» era scomparso. Ora è una mensola dei quattro ricordi del finale con la loro arte (quelli non conquistati in grigio, con il finale che li sblocca); toccando uno conquistato si legge la sua storia.
 - Scheda social 1200×630 (`public/og.png`, composta con l'arte del gioco, zero crediti) e tag Open Graph: il link condiviso mostra logo, slogan e i tre compagni. Non entra nella precache offline.
 - Telefono: il tocco sulla mappa non fa più saltare lo zoom quando un pannello nasconde lo schermo.

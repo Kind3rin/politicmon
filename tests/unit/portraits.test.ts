@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
-import { NPC_WITH_PNG, PORTRAIT_SETS, PLAYER_PORTRAIT, dialoguePortrait } from "../../src/art/characters";
+import { NPC_WITH_PNG, PORTRAIT_SETS, PLAYER_PORTRAIT, SET_NAMES, dialoguePortrait } from "../../src/art/characters";
 
 test("every character with a dialogue bust has its file, and the files are real transparent PNGs", () => {
   const paths = [...NPC_WITH_PNG].map(pal => `public/sprites/portraits/${pal}.png`)
@@ -28,4 +28,9 @@ test("every sprite set used by a map NPC has a bust", async () => {
   const used = new Set<string>();
   for (const map of Object.values(MAPS)) for (const npc of map.npcs) if (npc.spriteSet) used.add(npc.spriteSet);
   assert.deepEqual([...used].filter(set => !PORTRAIT_SETS.has(set)), []);
+});
+
+test("every story character with a face also has a name for the dialogue label", () => {
+  assert.deepEqual([...PORTRAIT_SETS].filter(set => !SET_NAMES[set]), []);
+  assert.deepEqual(Object.keys(SET_NAMES).filter(set => !PORTRAIT_SETS.has(set)), []);
 });

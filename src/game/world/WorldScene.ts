@@ -524,8 +524,8 @@ export class WorldScene implements Scene {
     }
     const commands=this.touchActions;
     if(!commands)return undefined;
-    return {title:'Il primo compagno',subtitle:'Quirino: le promesse si somigliano. Le mosse no.',tiles:true,
-      actions:commands.slice(0,3).map((action,i)=>({...action,hint:undefined,facts:undefined,row:{kind:'tile' as const,icon:`/sprites/monsters/${STARTERS[i]}.png`,types:SPECIES[STARTERS[i]].types,meta:'Apri la scheda'}})),selected:0,
+    return {title:'Il primo compagno',subtitle:'Quirino: le promesse si somigliano. Le mosse no. Tocca un compagno per leggere la sua scheda.',tiles:true,
+      actions:commands.slice(0,3).map((action,i)=>({...action,hint:undefined,facts:undefined,row:{kind:'tile' as const,icon:`/sprites/monsters/${STARTERS[i]}.png`,types:SPECIES[STARTERS[i]].types,meta:SPECIES[STARTERS[i]].category.charAt(0)+SPECIES[STARTERS[i]].category.slice(1).toLocaleLowerCase('it')}})),selected:0,
       back:{...commands[4],label:'Indietro',hint:'Esplora il laboratorio. Potrai scegliere parlando con Quirino.'}};
   }
 
@@ -1015,8 +1015,11 @@ export class WorldScene implements Scene {
     const speaker = this.visibleNpcs().find(npc => npc.x === this.state.pos.x + facing.dx && npc.y === this.state.pos.y + facing.dy);
     this.dialogueFocus=Boolean(!auto&&speaker&&(speaker.trainerId||speaker.gift||speaker.legendary||speaker.id==='professor'||speaker.id==='opening-rival'));
     const name = auto ? "Notifica" : speaker?.id === "professor" ? "Prof. Quirino" : speaker?.id === "opening-rival" ? "Gianni" : speaker?.dialogueName ?? (speaker?.trainerId ? TRAINERS[speaker.trainerId]?.name : speaker?.nameplate);
-    const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : undefined;
-    const caption = name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? "Abitante" : "Politicmon");
+    // A named character speaking from afar (a hand-off after a menu) still gets their own label.
+    const cast = /^(QUIRINO|PROF\. QUIRINO|GIANNI|LUCA|MARA):\s*/i;
+    const prefix = speaker && !auto ? lines[0]?.match(/^([A-ZÀÈÉÌÒÙ][A-ZÀÈÉÌÒÙ .'-]{1,28}):\s*/) : lines[0]?.match(cast);
+    const caption = (!speaker || auto) && prefix ? prefix[1].charAt(0).toLocaleUpperCase("it") + prefix[1].slice(1).toLocaleLowerCase("it")
+      : name ?? (prefix ? prefix[1].charAt(0) + prefix[1].slice(1).toLocaleLowerCase("it") : speaker ? "Abitante" : "Politicmon");
     const stripped = prefix ? lines[0].slice(prefix[0].length) : "";
     const text = prefix ? [stripped.charAt(0).toLocaleUpperCase("it") + stripped.slice(1), ...lines.slice(1)].filter(Boolean) : lines;
     this.afterMsg = after ?? null;

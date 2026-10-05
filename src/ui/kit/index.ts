@@ -55,6 +55,8 @@ export interface UiHero {
   bar?: { now: number; max: number; text: string };
   stamp?: string;
   meta?: string;
+  /** Keep the panel title above the hero (a receipt says what happened before who it happened to). */
+  titled?: boolean;
 }
 export interface UiPanel {
   directInput?:boolean;
@@ -211,7 +213,7 @@ export const kit = {
     return list;
   },
   hero(hero:UiHero):HTMLElement {
-    const box=element("section","ui-hero-card");
+    const box=element("section","ui-hero-card");if(hero.titled)box.classList.add("ui-hero-titled");
     const art=element("div","ui-hero-art");const image=element("img","");image.src=hero.src;image.alt="";art.append(image);
     const text=element("div","ui-hero-text");text.append(element("h2","ui-hero-name",hero.title));
     if(hero.level)text.append(element("span","ui-hero-level",hero.level));

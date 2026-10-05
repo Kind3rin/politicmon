@@ -60,6 +60,8 @@ if(requested.startsWith('lotta')){
  if(requested==='lotta-esaurita')state.party[0].moves[0].pp=0;
  const battle=new BattleScene(stack,input,{state,foeTeam:[createMonster('mediocrate',24)],trainer:requested==='lotta-allenatore'?TRAINERS.tycoon:undefined,onEnd:()=>{stack.pop();stack.push(new WorldScene(stack,input,state));}});
  if(requested==='lotta-finale')(battle as unknown as {polemica:{value:number}}).polemica.value=3;
+ if(requested==='lotta-crescita'){const b=battle as unknown as {growthReceipt:unknown;stepTimer:number;player:{mon:{exp:number}};state:{party:{exp:number;level:number}[]}};
+  const lead=state.party[0];lead.exp+=30;b.growthReceipt={elapsed:0,previousLevel:lead.level,previousExp:lead.exp-80,gained:80,shared:'Divisa 2 alleati +40',modifiers:[]};b.stepTimer=30;}
  stack.push(battle);
 }else if(['squadra','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo','carburante','viaggio'].includes(requested)){
  stack.push(new WorldScene(stack,input,state));

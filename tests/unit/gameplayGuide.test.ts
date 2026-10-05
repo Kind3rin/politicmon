@@ -238,3 +238,23 @@ test("battle switches charge one counter only; next foe opens a free choice with
   battle.queue = []; free.touchActions[0].run(); assert.equal(battle.player.mon, state.party[0]);
   assert.ok(!battle.queue.some((step: any) => step.text === "COUNTER" || step.text === "END"));
 });
+
+import {controlLesson} from '../../src/game/onboarding';
+import {newGameState} from '../../src/game/state';
+test('control lessons follow the player, then retire instead of nagging for the whole route', () => {
+  const state = newGameState();
+  assert.equal(controlLesson(state), undefined, 'nothing before the tutorial flag');
+  state.flags['controls-intro'] = true;
+  assert.match(controlLesson(state)!.title, /Muoviti/i);
+  state.stepsTotal = 5;
+  assert.match(controlLesson(state)!.title, /Parla/i);
+  state.stepsTotal = 40;
+  assert.match(controlLesson(state)!.title, /cose/i, 'a talk lesson nobody needed gives way to the menu lesson');
+  state.flags['controls-interacted'] = true;
+  assert.match(controlLesson(state)!.title, /cose/i);
+  state.flags['controls-returned'] = true;
+  assert.equal(controlLesson(state), undefined);
+  state.flags['controls-returned'] = false;
+  state.stepsTotal = 75;
+  assert.equal(controlLesson(state), undefined, 'no lesson survives a long walk');
+});

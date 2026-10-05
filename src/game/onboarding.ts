@@ -38,7 +38,9 @@ export function controlLesson(state: GameState, context?: string): {title:string
  if (state.stepsTotal<2) return {title:'Muoviti',body:device==='touch'
   ? 'Trascina la levetta o tocca un punto della mappa: ci cammini da solo.'
   : device==='controller' ? 'Muovi la leva sinistra o usa la croce. Rilascia per fermarti.' : 'Muoviti con le frecce o WASD. Rilascia per fermarti.'};
- if (!state.flags['controls-interacted']) return {title:'Parla con qualcuno',body:context==='Parla'
+ // A lesson that nobody needed must not nag for the whole route: each one retires with distance.
+ if (state.stepsTotal>=60) return undefined;
+ if (!state.flags['controls-interacted'] && state.stepsTotal<30) return {title:'Parla con qualcuno',body:context==='Parla'
   ? device==='touch' ? 'Tocca Parla. Un tocco completa il testo; il successivo continua.' : `Premi ${commandHint('a')} per parlare. Una pressione completa il testo; la successiva continua.`
   : device==='touch' ? 'Tocca un personaggio: ti avvicini e gli parli.' : 'Avvicinati a un personaggio. Il pulsante in basso diventerà Parla.'};
  if(state.flags['controls-returned'])return undefined;

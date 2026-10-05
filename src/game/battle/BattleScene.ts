@@ -1425,8 +1425,13 @@ export class BattleScene implements Scene {
     const recruit=this.recruitReceipt, growth=this.growthReceipt;
     if(recruit || growth){
       const receipt=recruit??growth!;
+      const lead=this.player.mon,leadSpecies=speciesOf(lead);
+      const floor=expForLevel(lead.level),ceiling=lead.level>=LEVEL_CAP?floor:expForLevel(lead.level+1),into=Math.max(0,lead.exp-floor),span=Math.max(1,ceiling-floor);
       return {
-        title:recruit?"Reclutamento riuscito":"Consenso ottenuto",subtitle:recruit?this.foeName():this.playerName(),
+        title:recruit?"Reclutamento riuscito":"Consenso ottenuto",subtitle:recruit?this.foeName():undefined,
+        hero:recruit?undefined:{titled:true,src:`/sprites/monsters/${lead.speciesId}.png`,title:leadSpecies.name,level:`Lv${lead.level}`,types:leadSpecies.types,
+          bar:{now:lead.level>=LEVEL_CAP?1:into,max:lead.level>=LEVEL_CAP?1:span,text:lead.level>=LEVEL_CAP?"Max":`${into}/${span}`},
+          meta:lead.level>=LEVEL_CAP?"Livello massimo":`Consenso verso il livello ${lead.level+1}`},
         blocks:recruit?[
           {title:"Nuovo compagno",facts:[{label:"Destinazione",value:readableCopy(recruit.destination)},{label:"Politicdex",value:recruit.newDex?"Nuova specie":"Già conosciuta"},{label:"Sondaggi",value:`+${recruit.polls} punti`}]},
           {title:"Crescita",body:readableCopy([recruit.growth,recruit.levels,...recruit.modifiers].filter(Boolean).join("\n\n"))}

@@ -1,5 +1,11 @@
 # Changelog
 
+## Mandato 2 — piacere di gioco — 2026-10-05
+
+- Ricompensa: nella ricevuta «Consenso ottenuto» la barra parte da dove stava e scorre fino al nuovo valore (la crescita si vede, non si legge); salendo di livello compare il timbro «Livello su!». Rispetta «Riduci effetti».
+- Lotta: la didascalia del turno dice «Ellyna usa Corteo» / «Salvinott avversario usa …» invece di «Tu · ellyna: Corteo» (il nome in minuscolo era un effetto collaterale della leggibilità sui titoli in maiuscolo).
+- Mondo: gli avvisi in giallo («Sorprendilo alle spalle!») vanno a capo su due righe invece di troncarsi con i puntini.
+
 ## Mandato 2 — volti e ricordi — 2026-10-05
 
 - Dialoghi: quarantotto mezzibusti illustrati (Higgsfield, 12 crediti) al posto dello sprite che cammina: i dieci ruoli di base, tutti i 37 personaggi dei capitoli di storia con il loro aspetto (animali compresi: lince, castoro, gufo, pappagalli…) e il protagonista. Prima i personaggi con sprite proprio mostravano il ritratto del ruolo generico di ripiego; ora ognuno ha il suo. Il nome sta a fianco del volto. Anche le battute di Quirino, Gianni, Mara e Luca dette «da lontano» mostrano il loro volto, e la Tessera mostra la faccia del candidato.

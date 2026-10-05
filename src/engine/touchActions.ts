@@ -9,7 +9,7 @@ export interface UiRow {
   held?: boolean;
   level?: string;
   types?: readonly string[];
-  bar?: { now: number; max: number; text: string };
+  bar?: { now: number; max: number; text: string; from?: number };
   /** Value pinned at the right edge: quantity, PP, a change "64 → 95". */
   right?: string;
   /** Small second line under the name. */

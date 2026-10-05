@@ -35,7 +35,7 @@ body.ui-world-open .ui-world-objective:before{content:'▾';margin-right:8px}
 body.ui-world-open .ui-world-objective[aria-expanded=false]{width:44px;font-size:0;padding:0;text-align:center}
 body.ui-world-open .ui-world-objective[aria-expanded=false]:before{content:'▸';font-size:20px;margin:0}
 body.ui-world-open .ui-world-hud:has(.ui-world-notice) .ui-world-location{display:none}
-body.ui-world-open .ui-world-notice{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 232px);height:44px;line-height:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:4px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
+body.ui-world-open .ui-world-notice{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 232px);min-height:44px;max-height:64px;line-height:1.15;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;box-sizing:border-box;padding:6px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
 body.ui-world-open #touch-move{position:absolute;inset:0;pointer-events:none;display:block}
 body.ui-world-open #touch-stick{display:none}
 body.touch.ctrl-stick.ui-world-open #touch-stick{display:flex;position:absolute;left:max(20px,env(safe-area-inset-left));bottom:max(24px,env(safe-area-inset-bottom));width:120px;height:120px;opacity:.75;pointer-events:auto;touch-action:none}

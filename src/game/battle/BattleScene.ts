@@ -96,6 +96,8 @@ function battleMusic(opts: BattleOptions): string {
   return opts.trainer.badge ? "battle-gym" : "battle-trainer";
 }
 
+const sentence=(text:string)=>{const plain=readableCopy(text);return plain.charAt(0).toLocaleUpperCase("it")+plain.slice(1);};
+
 export class BattleScene implements Scene {
   private readonly backdrop: BattleBackdrop;
   private state: GameState;
@@ -616,7 +618,7 @@ export class BattleScene implements Scene {
     // Name and wind-up share the impact's caption instead of a separate page.
     steps.push({
       run: () => {
-        this.actionCaption = { actor: `${side === "player" ? "TU" : "NEMICO"} · ${side === "player" ? this.playerName() : this.foeName()}`, move: move.name, result: "" };
+        this.actionCaption = { actor: side === "player" ? this.playerName() : `${this.foeName()} avversario`, move: move.name, result: "" };
         if (side === "foe") {
           const color = move.category === "fisico" ? "#e85a5a" : move.category === "speciale" ? "#5a9ae8" : "#b86ad8";
           this.fx.telegraph = { side, color, t: .35, max: .35 };
@@ -1430,7 +1432,8 @@ export class BattleScene implements Scene {
       return {
         title:recruit?"Reclutamento riuscito":"Consenso ottenuto",subtitle:recruit?this.foeName():undefined,
         hero:recruit?undefined:{titled:true,src:`/sprites/monsters/${lead.speciesId}.png`,title:leadSpecies.name,level:`Lv${lead.level}`,types:leadSpecies.types,
-          bar:{now:lead.level>=LEVEL_CAP?1:into,max:lead.level>=LEVEL_CAP?1:span,text:lead.level>=LEVEL_CAP?"Max":`${into}/${span}`},
+          stamp:growth!.previousLevel<lead.level?"Livello su!":undefined,
+          bar:{now:lead.level>=LEVEL_CAP?1:into,max:lead.level>=LEVEL_CAP?1:span,text:lead.level>=LEVEL_CAP?"Max":`${into}/${span}`,from:growth!.previousLevel<lead.level||lead.level>=LEVEL_CAP?0:Math.max(0,growth!.previousExp-floor)},
           meta:lead.level>=LEVEL_CAP?"Livello massimo":`Consenso verso il livello ${lead.level+1}`},
         blocks:recruit?[
           {title:"Nuovo compagno",facts:[{label:"Destinazione",value:readableCopy(recruit.destination)},{label:"Politicdex",value:recruit.newDex?"Nuova specie":"Già conosciuta"},{label:"Sondaggi",value:`+${recruit.polls} punti`}]},
@@ -1492,7 +1495,7 @@ export class BattleScene implements Scene {
       return {...action(info.label,()=>{this.posture=chosen?"none":id;},info.rule),facts:[{label:"Effetto",value:info.short}],pressed:chosen,onInspect:describe};
     }):[];
     const chosenPosture=ready&&this.posture!=="none"?POSTURES[this.posture]:undefined;
-    const title=this.msg.isOpen?"In lotta":this.actionCaption?`${readableCopy(this.actionCaption.actor)}: ${readableCopy(this.actionCaption.move)}`:chosenPosture?`${chosenPosture.label}: ${chosenPosture.rule}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
+    const title=this.msg.isOpen?"In lotta":this.actionCaption?`${sentence(this.actionCaption.actor)} usa ${readableCopy(this.actionCaption.move)}`:chosenPosture?`${chosenPosture.label}: ${chosenPosture.rule}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
     const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":undefined;
     return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...postures,...secondary],arena:{

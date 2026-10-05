@@ -53,7 +53,7 @@ export interface UiHero {
   title: string;
   level?: string;
   types?: readonly string[];
-  bar?: { now: number; max: number; text: string };
+  bar?: { now: number; max: number; text: string; from?: number };
   stamp?: string;
   meta?: string;
   /** Keep the panel title above the hero (a receipt says what happened before who it happened to). */
@@ -198,12 +198,18 @@ export const kit = {
     if (block.facts) card.append(kit.facts(block.facts));
     return card;
   },
-  bar(bar:{now:number;max:number;text:string}):HTMLElement {
+  bar(bar:{now:number;max:number;text:string;from?:number}):HTMLElement {
     const wrap=element("div","ui-meter");
     const track=element("div","ui-bar");track.setAttribute("role","progressbar");
     track.setAttribute("aria-valuemin","0");track.setAttribute("aria-valuemax",String(bar.max));track.setAttribute("aria-valuenow",String(bar.now));
     const fill=element("div","ui-bar-fill");const ratio=bar.max>0?Math.max(0,Math.min(1,bar.now/bar.max)):0;
-    fill.style.width=`${ratio*100}%`;fill.style.background=ratio<.25?"#D7263D":ratio<.5?"#FFD23F":"#1B998B";
+    const colour=(value:number)=>value<.25?"#D7263D":value<.5?"#FFD23F":"#1B998B";
+    fill.style.width=`${ratio*100}%`;fill.style.background=colour(ratio);
+    // A reward fills from where the bar stood before: the gain is seen, not read.
+    if(bar.from!==undefined&&bar.max>0&&bar.from<bar.now&&!document.body.classList.contains('ui-reduce-effects')&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const start=Math.max(0,Math.min(1,bar.from/bar.max));fill.style.width=`${start*100}%`;fill.style.background=colour(start);
+      setTimeout(()=>{fill.style.transition="width .85s cubic-bezier(.2,.8,.2,1)";fill.style.width=`${ratio*100}%`;fill.style.background=colour(ratio);},220);
+    }
     track.append(fill);wrap.append(track,element("span","ui-meter-text",bar.text));return wrap;
   },
   types(types:readonly string[]):HTMLElement {

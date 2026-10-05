@@ -440,7 +440,7 @@ test("impact keeps critical and self-type satire together, reports actual PV, an
   const random = Math.random; Math.random = () => 0;
   try {
     const steps = b.moveSteps("player", b.player, b.foe, MOVES.corteo, "ELLYNA", true);
-    steps[0].run(); assert.match(b.actionCaption.actor, /^TU/); assert.equal(b.foe.mon.hp, 1);
+    steps[0].run(); assert.doesNotMatch(b.actionCaption.actor, /avversario/); assert.equal(b.foe.mon.hp, 1);
     steps[1].run();
     assert.equal(b.foe.mon.hp, 0); assert.equal(visibleDamage, 1);
     assert.match(b.actionCaption.result, /-1 PV.*CRITICO.*SCISSIONE x1\.7/);
@@ -459,7 +459,7 @@ test("a missed enemy announcement preserves PV, consumes one PP, and remains rea
     const steps = b.moveSteps("foe", b.foe, b.player, { ...MOVES.comizio, accuracy: 1 }, "GIORGETTA", true);
     steps.forEach((s: any) => s.run?.());
     assert.equal(b.player.mon.hp, hp); assert.equal(slot.pp, pp - 1);
-    assert.match(b.actionCaption.actor, /^NEMICO/); assert.match(b.actionCaption.result, /ANNUNCIO A VUOTO.*MANCATO/);
+    assert.match(b.actionCaption.actor, / avversario$/); assert.match(b.actionCaption.result, /ANNUNCIO A VUOTO.*MANCATO/);
     assert.ok(steps.some((s: any) => s.pause >= .8)); assert.ok(steps.every((s: any) => !s.text));
   } finally { Math.random = random; }
 });

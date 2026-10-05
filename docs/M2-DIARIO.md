@@ -75,3 +75,6 @@ Ancora non convince: molti aiutanti condividono lo stesso volto (uno per ruolo);
 Crediti Higgsfield: 12 usati (337,97 → 325,97), nessun acquisto. Giocato: la lince del tour mostra la sua faccia, Quirino la sua.
 Prove: 2 test sui ritratti (file, dimensioni, ordine di ripiego), check-first-minutes con il volto di Quirino, check:ui-panels 24×4 con la Tessera, check-precache-build.
 
+## Campagna automatica — 5 ottobre 2026
+`playtest:campaign:native` falliva subito («New game did not open actual slot selector»). Adattato all'avvio nuovo (slot libero preso da solo, nickname facoltativo, i due flag di onboarding, import lento del mondo, carte del laboratorio per il primo compagno, tasti delle schede native passati dal kit). Ora il giro arriva fino al primo boss in palestra (debutto, Mediopoli, cura) e si ferma lì: la parte di lotta e le scene di acquisto/coalizione/distretto pilotano ancora i menu a tavolo (`mainMenu`, `view.menu`) che nell'interfaccia nativa non esistono più. Da riscrivere pilotando le azioni dei pannelli (`uiPanel.actions[i].run()`), non i tasti.
+

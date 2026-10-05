@@ -1,13 +1,13 @@
 # Audit visuale professionale
 
-Generato: 2026-10-05T12:21:04.231Z
+Generato: 2026-10-05T12:57:16.838Z
 
 ## Sintesi
 
 - Scene: 51
 - Scene con evidenza screenshot: 51/51
 - Chiamate di clipping residue: 0
-- Ellissi esplicite nelle scene: 209
+- Ellissi esplicite nelle scene: 210
 - Politicmon PNG: 52
 - PNG action di fallback: 10/52. Questo conteggio non misura le animazioni principali: i 52 fogli a quattro pose hanno priorità nel renderer e sono verificati da rosterSprites.test.ts e check:roster-animations.
 
@@ -50,7 +50,7 @@ Nessuna.
 - `src/scenes/WorldMapScene.ts`: clip 0, ellissi 4
 - `src/game/battle/BattleScene.ts`: clip 0, ellissi 51
 - `src/game/battle/PvpBattleScene.ts`: clip 0, ellissi 5
-- `src/game/world/WorldScene.ts`: clip 0, ellissi 34
+- `src/game/world/WorldScene.ts`: clip 0, ellissi 35
 
 ## Gate
 

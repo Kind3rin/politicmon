@@ -44,6 +44,9 @@ try{
   const {seededRng}=await import('/src/game/tournament.ts'),{audio}=await import('/src/engine/audio.ts');audio.enabled=false;Math.random=seededRng(seed);
   const {mp}=await import('/src/net/mp.ts');mp.setEnabled(false); // Local campaign; relay timing must not consume the seeded RNG.
   const {archivedMoves}=await import('/src/game/moveArchive.ts');
+  const {STARTERS}=await import('/src/data/species.ts');
+  // Native panels take their keys from the kit, exactly as the game loop does before it updates the scene.
+  const {updateUiInput}=await import('/src/ui/kit/index.ts');
   const {TILES}=await import('/src/art/tiles.ts'),{tickRunStats}=await import('/src/game/runstats.ts'),{spriteRegistryStats}=await import('/src/engine/assets.ts');
   const canvas=document.createElement('canvas');canvas.id='game-canvas';document.body.append(canvas);const screen=new Screen(canvas),input=new Input(),stack=new SceneStack();
   const code={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',a:'KeyZ',b:'KeyX',start:'KeyP'};
@@ -57,14 +60,11 @@ try{
    initialFlow.push('title');launchPress('a');
    if(hard)launchPress('down');
    initialFlow.push(hard?'difficulty:hard':'difficulty:normal');launchPress('a');
-   if(stack.top?.constructor.name!=='SlotScene')throw Error('New game did not open actual slot selector');
-   initialFlow.push('empty-slot');launchPress('a');
-   if(stack.top?.constructor.name!=='NicknameScene')throw Error('Fresh game did not open nickname');
-   // Desktop nickname grid: A, six rows down, right to FINE. No profile/save injection.
-   initialFlow.push('nickname-grid');launchPress('a');for(let n=0;n<6;n++)launchPress('down');launchPress('right');launchPress('a');
-   for(let n=0;n<100&&!stack.scenes.some(s=>s instanceof WorldScene);n++)await new Promise(r=>setTimeout(r,10));
+   // A free slot is taken automatically and the online nickname is optional: the world opens straight after the difficulty.
+   initialFlow.push('free-slot');
+   for(let n=0;n<1500&&!stack.scenes.some(s=>s instanceof WorldScene);n++)await new Promise(r=>setTimeout(r,10));
    world=stack.scenes.find(s=>s instanceof WorldScene);state=world?.state;
-   if(!state||state.hardMode!==hard||state.money!==500||state.party.length||state.badges.length||Object.keys(state.flags).length)throw Error('Actual new-game flow did not produce untouched starting resources/difficulty: '+JSON.stringify({scene:stack.top?.constructor.name,state:state&&{hardMode:state.hardMode,money:state.money,party:state.party,badges:state.badges,flags:state.flags}}));
+   if(!state||state.hardMode!==hard||state.money!==500||state.party.length||state.badges.length||Object.keys(state.flags).some(flag=>!['intro-done','controls-intro'].includes(flag)))throw Error('Actual new-game flow did not produce untouched starting resources/difficulty: '+JSON.stringify({scene:stack.top?.constructor.name,state:state&&{hardMode:state.hardMode,money:state.money,party:state.party,badges:state.badges,flags:state.flags}}));
    initialFlow.push('welcome-briefing');
   }
   if(!state||(resumeCode&&!state.flags['garante-beaten']))throw Error('Resume must be an earned post-Garante save');
@@ -83,6 +83,8 @@ try{
     const end=top.onEnd;top.onEnd=result=>{record.outcome=result;record.recipientUid=top.player.mon.uid;record.after={party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,uid:m.uid})),bag:{...state.bag},money:state.money};trace('battle-end',{trainer:record.trainer,outcome:result});end(result);};
    }
    if(top?.constructor.name==='BattleScene'){const record=battles.get(top),mon=top.player.mon;if(!record.deployed.some(m=>m.uid===mon.uid))record.deployed.push({uid:mon.uid,id:mon.speciesId,level:mon.level});}
+   // Battles are driven through the fight menu itself; every other panel takes its keys from the kit.
+   if(button&&stack.top?.constructor.name!=='BattleScene')updateUiInput(stack.top?.uiPanel,input);
    stack.update(.1);tickRunStats(state,.1,true);input.endFrame();
    if(button)document.dispatchEvent(new KeyboardEvent('keyup',{code:code[button],bubbles:true,cancelable:true}));
    if(frames%50===0)stack.draw(screen);
@@ -422,7 +424,9 @@ try{
   try{
    if(!resumeCode){
    settle();enterMap('lab');
-   const starter=STARTER_SPOTS.find(s=>s.speciesId===id);interact(starter.x,starter.y);settle();
+   // The lab opens on the three-card choice of the first companion; walking is for later.
+   const deck=world.touchActions;if(!deck)throw Error('The lab did not offer the first-companion cards');
+   deck[STARTERS.indexOf(id)].run();settle();
    for(let attempt=0;!state.flags['dex-received']&&attempt<3;attempt++)interact(9,4);
    if(!state.flags['dex-received'])throw Error('Tutorial policy could not obtain Dex');await milestone('debut');
    walkTo(5,7);settle();

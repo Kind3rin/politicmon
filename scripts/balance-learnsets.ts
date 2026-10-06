@@ -32,7 +32,7 @@ const learners = new Map<string, number>();
 for (const sp of Object.values(SPECIES) as any[]) for (const [, id] of sp.learnset) learners.set(id, (learners.get(id) ?? 0) + 1);
 const pool = Object.values(MOVES).filter((m: any) => m.power > 0 && m.accuracy >= 90 && !m.effect?.recoilRatio && (learners.get(m.id) ?? 0) >= 2) as any[];
 
-const capFor = (level: number) => level < 10 ? 56 : level < 18 ? 65 : level < 28 ? 80 : 100;
+const capFor = (level: number) => level < 10 ? 45 : level < 18 ? 65 : level < 28 ? 80 : 100;
 const reach = (type: PolType) => new Set(TYPE_ORDER.filter(d => typeMultiplier(type, [d]) > 1));
 
 function damaging(speciesId: string, level: number) {

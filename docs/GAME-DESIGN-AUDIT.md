@@ -25,13 +25,18 @@ della specie e che colpisca ciò che il suo tipo non colpisce, con una penalità
 
 ## Dopo
 
-| Misura | Lv 10 | Lv 25 | Lv 40 |
-|---|---|---|---|
-| La mossa migliore dipende dall'avversario | 29,6% | 24,3% | 35,9% |
-| Turni al primo KO | 3,3 | 3,3 | 3,2 |
-| Scontri a senso unico | 10,4% | 10,4% | 11,7% |
+| Misura | Lv 10 | Lv 25 |
+|---|---|---|
+| La mossa migliore dipende dall'avversario | 25,3% | 21,2% |
+| Turni al primo KO | 3,5 | 3,5 |
+| Scontri a senso unico | 11,6% | 10,9% |
 
 Specie con repertorio povero: 33 → 2 (due creature di storia incontrate solo oltre la soglia). Il rivale scriptato non cambia: usa mosse esplicite.
+
+**Correzione di rotta.** La prima versione aggiungeva mosse da 55 di potenza sotto il livello 10 e rendeva i selvatici iniziali molto più pericolosi
+(Tajanide a Lv 5 stendeva il compagno in 2 turni invece di 7). Simulando i tre compagni iniziali contro ogni selvatico di Borgo e Percorso 1,
+il tetto di potenza sotto il livello 10 è stato portato a 45: i selvatici portano tipi nuovi senza colpire più forte, e la minaccia iniziale
+resta vicina a prima (da 9–13 turni quasi innocui a 4–5). Resta da giudicare giocando se l'inizio sia ora troppo duro per chi è nuovo.
 
 ## Leve ancora aperte
 

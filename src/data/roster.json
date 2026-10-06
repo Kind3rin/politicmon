@@ -1105,11 +1105,11 @@
         ],
         [
           7,
-          "moralsuasion"
+          "grafico"
         ],
         [
           7,
-          "citofonata"
+          "monopattino"
         ],
         [
           11,
@@ -1159,7 +1159,7 @@
         ],
         [
           7,
-          "moralsuasion"
+          "grafico"
         ],
         [
           9,
@@ -1279,7 +1279,7 @@
         ],
         [
           7,
-          "greenwashing"
+          "comizio"
         ],
         [
           9,
@@ -1348,11 +1348,11 @@
         ],
         [
           7,
-          "dossier"
+          "grafico"
         ],
         [
           7,
-          "grafico"
+          "tweet"
         ],
         [
           11,
@@ -1403,11 +1403,11 @@
         ],
         [
           7,
-          "dossier"
+          "grafico"
         ],
         [
           7,
-          "moralsuasion"
+          "comizio"
         ],
         [
           9,
@@ -1460,11 +1460,11 @@
         ],
         [
           3,
-          "radici"
+          "tweet"
         ],
         [
           3,
-          "tweet"
+          "monopattino"
         ],
         [
           7,
@@ -1516,7 +1516,7 @@
         ],
         [
           7,
-          "radici"
+          "tweet"
         ],
         [
           15,
@@ -1528,15 +1528,15 @@
         ],
         [
           21,
+          "radici"
+        ],
+        [
+          21,
           "comizio"
         ],
         [
           21,
           "editoriale"
-        ],
-        [
-          21,
-          "gazzetta"
         ],
         [
           23,
@@ -1579,7 +1579,7 @@
         ],
         [
           4,
-          "radici"
+          "inciucio"
         ],
         [
           5,
@@ -1639,7 +1639,7 @@
         ],
         [
           4,
-          "citofonata"
+          "tweet"
         ],
         [
           6,
@@ -1754,7 +1754,7 @@
         ],
         [
           6,
-          "moralsuasion"
+          "monopattino"
         ],
         [
           7,
@@ -1809,7 +1809,7 @@
         ],
         [
           4,
-          "giravolta"
+          "monopattino"
         ],
         [
           5,
@@ -1996,7 +1996,7 @@
         ],
         [
           7,
-          "giravolta"
+          "inciucio"
         ],
         [
           14,
@@ -2054,11 +2054,11 @@
         ],
         [
           7,
-          "dossier"
+          "grafico"
         ],
         [
           7,
-          "citofonata"
+          "inciucio"
         ],
         [
           16,
@@ -2108,7 +2108,7 @@
         ],
         [
           7,
-          "radici"
+          "tweet"
         ],
         [
           16,
@@ -2158,7 +2158,7 @@
         ],
         [
           7,
-          "giravolta"
+          "inciucio"
         ],
         [
           10,
@@ -2166,7 +2166,7 @@
         ],
         [
           13,
-          "decreto"
+          "citofonata"
         ],
         [
           16,
@@ -2266,7 +2266,7 @@
         ],
         [
           7,
-          "dossier"
+          "grafico"
         ],
         [
           14,
@@ -2311,11 +2311,11 @@
         ],
         [
           7,
-          "radici"
+          "tweet"
         ],
         [
           7,
-          "giravolta"
+          "inciucio"
         ],
         [
           16,
@@ -2409,7 +2409,7 @@
         ],
         [
           7,
-          "dossier"
+          "grafico"
         ],
         [
           7,
@@ -2462,7 +2462,7 @@
         ],
         [
           6,
-          "moralsuasion"
+          "monopattino"
         ],
         [
           14,
@@ -2513,7 +2513,7 @@
         ],
         [
           7,
-          "greenwashing"
+          "comizio"
         ],
         [
           22,
@@ -2629,7 +2629,7 @@
         ],
         [
           7,
-          "radici"
+          "tweet"
         ],
         [
           7,
@@ -2679,11 +2679,11 @@
         ],
         [
           7,
-          "citofonata"
+          "comizio"
         ],
         [
           7,
-          "giravolta"
+          "inciucio"
         ],
         [
           30,
@@ -2841,7 +2841,7 @@
         ],
         [
           7,
-          "citofonata"
+          "comizio"
         ],
         [
           18,
@@ -3042,7 +3042,7 @@
         ],
         [
           7,
-          "dossier"
+          "comizio"
         ],
         [
           24,
@@ -3161,11 +3161,11 @@
         ],
         [
           7,
-          "citofonata"
+          "monopattino"
         ],
         [
           7,
-          "radici"
+          "comizio"
         ],
         [
           26,
@@ -3223,11 +3223,11 @@
         ],
         [
           7,
-          "greenwashing"
+          "monopattino"
         ],
         [
           7,
-          "monopattino"
+          "comizio"
         ],
         [
           24,
@@ -3243,11 +3243,11 @@
         ],
         [
           31,
-          "quorum"
+          "transizione"
         ],
         [
           31,
-          "transizione"
+          "quorum"
         ]
       ],
       "evolutions": [
@@ -3295,15 +3295,15 @@
         ],
         [
           7,
-          "greenwashing"
+          "monopattino"
+        ],
+        [
+          7,
+          "inciucio"
         ],
         [
           7,
           "comizio"
-        ],
-        [
-          7,
-          "monopattino"
         ],
         [
           32,
@@ -3365,7 +3365,7 @@
         ],
         [
           7,
-          "radici"
+          "monopattino"
         ],
         [
           24,
@@ -3433,11 +3433,11 @@
         ],
         [
           7,
-          "moralsuasion"
+          "tweet"
         ],
         [
           31,
-          "exit_poll"
+          "staisereno"
         ],
         [
           32,
@@ -3583,7 +3583,7 @@
         ],
         [
           7,
-          "giravolta"
+          "inciucio"
         ],
         [
           28,
@@ -3695,7 +3695,7 @@
         ],
         [
           7,
-          "giravolta"
+          "inciucio"
         ],
         [
           18,
@@ -3749,7 +3749,7 @@
         ],
         [
           7,
-          "citofonata"
+          "monopattino"
         ],
         [
           18,
@@ -3893,7 +3893,7 @@
         ],
         [
           7,
-          "greenwashing"
+          "grafico"
         ],
         [
           24,
@@ -3946,7 +3946,7 @@
         ],
         [
           7,
-          "greenwashing"
+          "grafico"
         ],
         [
           24,

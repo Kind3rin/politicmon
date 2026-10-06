@@ -79,7 +79,8 @@ try{
    const top=stack.top;
    if(top?.constructor.name==='BattleScene'&&!battles.has(top)){
     const record={trainer:top.trainer?.id??null,foes:top.foeTeam.map(m=>({id:m.speciesId,level:m.level,exp:m.exp,uid:m.uid})),deployed:[],before:{party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,uid:m.uid})),bag:{...state.bag},money:state.money},outcome:null};battles.set(top,record);trace('battle-start',record);
-    const consensus=top.consensusSteps.bind(top);top.consensusSteps=(...args)=>{const steps=consensus(...args);record.announcedConsensus=(record.announcedConsensus??0)+Number(steps.find(s=>/guadagna \d+ PUNTI CONSENSO/.test(s.text??''))?.text.match(/guadagna (\d+)/)?.[1]??0);return steps;};
+    // The reward is announced by the receipt card now ("NOME +N CONSENSO" on a recruitment, `gained` after a fight).
+    const consensus=top.consensusSteps.bind(top);top.consensusSteps=(...args)=>{const steps=consensus(...args);for(const step of steps)if(step.run){const run=step.run;step.run=()=>{run();const said=top.recruitReceipt?.growth?.match(/\+(\d+) CONSENSO/)?.[1]??top.growthReceipt?.gained;record.announcedConsensus=(record.announcedConsensus??0)+Number(said??0);};}return steps;};
     const end=top.onEnd;top.onEnd=result=>{record.outcome=result;record.recipientUid=top.player.mon.uid;record.after={party:state.party.map(m=>({id:m.speciesId,level:m.level,hp:m.hp,exp:m.exp,uid:m.uid})),bag:{...state.bag},money:state.money};trace('battle-end',{trainer:record.trainer,outcome:result});end(result);};
    }
    if(top?.constructor.name==='BattleScene'){const record=battles.get(top),mon=top.player.mon;if(!record.deployed.some(m=>m.uid===mon.uid))record.deployed.push({uid:mon.uid,id:mon.speciesId,level:mon.level});}

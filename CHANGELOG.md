@@ -2,6 +2,7 @@
 
 ## Mandato 2 — passo e porte — 2026-10-06
 
+- Driver della campagna nativa: il controllo «ricompensa annunciata = ricompensa data» leggeva un testo che non esiste più (la ricevuta di battaglia l'ha sostituito) e falliva alla prima cattura; ora legge la ricevuta. Con `END_AT=dazio RUN_PLAN=prepared` la campagna attraversa Percorso 1-2, Eurotown e Percorso 3 con i cancelli nuovi fino a Caput Mundi. Con la squadra sottile del driver (3 Politicmon, Lv 25) la terza palestra non si vince: è un limite del piano di prova, non una misura di bilanciamento.
 - Ingressi centrati: le porte degli edifici sono larghe due caselle ma il personaggio ne occupa una, per cui entrava di lato, mezza casella a sinistra della porta. Ora, salendo sulla porta, il disegno scivola di mezza casella fino al centro e, entrando o uscendo, compari già al centro della porta (dentro sopra il tappetino, fuori sotto il portone). Passando per strada davanti a una porta non succede nulla. Vale per tutte le 38 porte percorribili (`check:doors`).
 - Passo senza inceppi: a ogni casella c'erano due fotogrammi fermi (17 su 200 tenendo premuto, circa un decimo del tempo) e il resto del tempo del passo si perdeva. Ora il passo dopo parte nello stesso fotogramma, con il tempo avanzato, anche con un frame rate ballerino; la camera non perde più il suo «anticipo» tra una casella e l'altra.
 - Gambe: la camminata faceva due cicli completi a casella (circa 11 al secondo); ora un fotogramma ogni mezza casella e le gambe si alternano passo dopo passo.

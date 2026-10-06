@@ -264,11 +264,15 @@ export class WorldScene implements Scene {
   private nextBump=0;
   private tapNotice: {text:string;until:number} | undefined;
 
-  // Offset di centratura sulla porta, INTERPOLATO. Prima l'offset saltava da ±8
-  // a 0 nell'istante in cui partivi (era gated su !moving), causando lo "scatto
-  // laterale" appena ti muovevi. Ora insegue il target con un lerp per-frame, così
-  // il player scivola dolcemente al/dal centro invece di teletrasportarsi.
-  private doorOffsetSmooth = 0;
+  // Le porte sono larghe 2 caselle ma il personaggio ne occupa una: il disegno
+  // scivola di mezzo tile verso il centro della porta mentre ci entri e quando
+  // arrivi da una porta (vedi doorShiftNow). `doorArrival` ricorda la cella di
+  // arrivo finché non ti muovi.
+  private doorArrival: { mapId: string; x: number; y: number; shift: number } | null = null;
+  // Fase dell'andatura: +1 a ogni casella, così le gambe si alternano passo dopo passo.
+  private stride = 0;
+  // Se un tap-route lungo è iniziato di corsa, resta di corsa fino all'arrivo.
+  private tapRun = false;
   // True subito dopo loadMap: gli eventi "d'ingresso mappa" (hint one-shot,
   // CRISI DI GOVERNO) si valutano solo al primo frame idle dopo l'arrivo, non a
   // ogni frame in cui sei fermo (così restare sulla porta prima di un warp non
@@ -434,6 +438,7 @@ export class WorldScene implements Scene {
     if (typeof found === "string") { this.tapNotice = { text: found, until: this.time + 2.5 }; return; }
     this.stopTapRoute();
     this.tapRoute = found.route;
+    this.tapRun = found.route.length >= 7;
     this.tapNotice = { text: `Ti accompagno: ${place.label}`, until: this.time + 3 };
   }
 
@@ -523,7 +528,7 @@ export class WorldScene implements Scene {
     };
   }
 
-  private stopTapRoute(): void { this.tapRoute = []; this.tapTarget = undefined; }
+  private stopTapRoute(): void { this.tapRoute = []; this.tapTarget = undefined; this.tapRun = false; }
 
   /** Search uses the same collisions as a manual step. Intermediate doors
    * cannot divert the player onto another map before reaching the destination. */
@@ -545,18 +550,27 @@ export class WorldScene implements Scene {
       mp.remotePlayers().some(n=>n.x===x&&n.y===y);
     const start = {x:this.state.pos.x,y:this.state.pos.y};
     const key = (point:{x:number;y:number})=>point.y*width+point.x;
-    const queue = [start], parents = new Map<number,{x:number;y:number}>();
-    const visited = new Set([key(start)]);
+    // Shortest way, and among the shortest the one with the fewest turns: a stair of
+    // zig-zags across an open square looks lost, a straight run and one corner does not.
+    const best = new Map<number,number>(), parents = new Map<number,{x:number;y:number}>(), heading = new Map<number,Facing>();
+    const heap: {cost:number;x:number;y:number}[] = [{cost:0,x:start.x,y:start.y}];
+    const push = (item:{cost:number;x:number;y:number}) => { heap.push(item); for (let i=heap.length-1;i>0;){const up=(i-1)>>1;if(heap[up].cost<=heap[i].cost)break;[heap[up],heap[i]]=[heap[i],heap[up]];i=up;} };
+    const pop = () => { const top=heap[0],last=heap.pop()!; if(heap.length){heap[0]=last;for(let i=0;;){let m=i;const l=2*i+1,r=l+1;if(l<heap.length&&heap[l].cost<heap[m].cost)m=l;if(r<heap.length&&heap[r].cost<heap[m].cost)m=r;if(m===i)break;[heap[m],heap[i]]=[heap[i],heap[m]];i=m;}} return top; };
+    best.set(key(start),0);
     let found: {x:number;y:number} | undefined;
-    for (let i=0;i<queue.length;i++) {
-      const point = queue[i];
+    while (heap.length) {
+      const point = pop();
+      if (point.cost>(best.get(key(point))??Infinity)) continue;
       if (target ? Math.abs(point.x-x)+Math.abs(point.y-y)===1 : point.x===x&&point.y===y) {found=point;break;}
+      const facing = heading.get(key(point)) ?? this.state.pos.facing;
       for (const direction of FACINGS) {
         const delta=DIR_DELTA[direction], next={x:point.x+delta.dx,y:point.y+delta.dy};
-        if(next.x<0||next.y<0||next.x>=width||next.y>=height||visited.has(key(next))||this.isBlocked(next.x,next.y))continue;
+        if(next.x<0||next.y<0||next.x>=width||next.y>=height||this.isBlocked(next.x,next.y))continue;
         const warp=this.map.warps.find(w=>w.x===next.x&&w.y===next.y);
         if(warp&&(target||next.x!==x||next.y!==y||(this.isOutdoorDoorWarp(warp)&&direction!=="up")))continue;
-        visited.add(key(next));parents.set(key(next),point);queue.push(next);
+        const cost=point.cost+100+(direction===facing?0:1);
+        if(cost>=(best.get(key(next))??Infinity))continue;
+        best.set(key(next),cost);parents.set(key(next),point);heading.set(key(next),direction);push({cost,x:next.x,y:next.y});
       }
     }
     if (!found) return "Non c’è un percorso libero verso quel punto.";
@@ -571,7 +585,7 @@ export class WorldScene implements Scene {
     this.stopTapRoute(); this.tapNotice = undefined;
     const found=this.searchRoute(x,y,npcId);
     if(typeof found==="string"){this.tapNotice={text:found,until:this.time+2.5};return;}
-    this.tapRoute=found.route;
+    this.tapRoute=found.route;this.tapRun=found.route.length>=7;
     if(found.target)this.tapTarget=found.target;
   }
 
@@ -953,37 +967,41 @@ export class WorldScene implements Scene {
     return {kind,image:authored?terrainVariantImage(ch,ch==='w'?0:terrainHash(this.map.id,x,y)%4,material):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
   }
 
-  // Terreni PixelLab cartoon: erba/sentiero/sabbia/acqua restano tile top-down
-  // pieni. I Wang grass/path provati sembravano rilievi attraversabili.
-  // Offset di disegno (px) per centrare il player DAVANTI a una PORTA larga 2 tile.
-  // Le porte (doormat interni `cc`, portoni edifici `dd`/`DD`, porta dorata `gg`)
-  // sono 2 celle, ma il player ne occupa 1 e si ferma sulla colonna SINISTRA o
-  // DESTRA → appare spostato a lato. Da FERMO, se la cella SOTTO di lui è metà di
-  // una porta 2 tile, spostiamo SOLO lo sprite di mezzo tile verso il centro della
-  // coppia (la camera non si muove). Vale sia dentro (davanti al doormat) sia fuori
-  // (davanti al portone). Appena cammina via, l'offset sparisce da sé.
-  private doorCenteringOffset(): number {
-    if (this.moving || this.state.vehicle) {
-      return 0;
-    }
-    const { x, y } = this.state.pos;
-    const isDoor = (ch: string): boolean =>
-      this.map.outdoor ? ch === "d" || ch === "D" || ch === "g" : ch === "c";
-    // La porta può stare SOTTO il player (interni: davanti al doormat d'uscita in
-    // basso) o SOPRA (esterni: davanti al portone in fondo all'edificio). Controlla
-    // entrambe le righe adiacenti e centra sulla coppia trovata.
+  // Mezzo tile verso il centro di una porta larga più caselle (`cc` dentro,
+  // `dd`/`DD`/`gg` fuori). 0 se la cella non è una porta. Mai oltre ±8: sul
+  // portone più largo si scivola solo di mezza casella.
+  private doorPairShift(x: number, y: number): number {
+    const isDoor = (ch: string): boolean => this.map.outdoor ? ch === "d" || ch === "D" || ch === "g" : ch === "c";
+    if (!isDoor(this.tileAt(x, y))) return 0;
+    let a = x, b = x;
+    while (isDoor(this.tileAt(a - 1, y))) a -= 1;
+    while (isDoor(this.tileAt(b + 1, y))) b += 1;
+    if (a === b) return 0;
+    return Math.max(-8, Math.min(8, ((a + b) / 2 - x) * TILE));
+  }
+
+  // Chi arriva da una porta (dentro: davanti al doormat in basso; fuori: sotto il
+  // portone) compare già al centro della porta, non di lato.
+  private frontDoorShift(x: number, y: number): number {
     for (const dy of [1, -1]) {
-      if (!isDoor(this.tileAt(x, y + dy))) {
-        continue;
-      }
-      if (isDoor(this.tileAt(x + 1, y + dy))) {
-        return 8; // colonna sinistra della porta → sposta verso destra (centro)
-      }
-      if (isDoor(this.tileAt(x - 1, y + dy))) {
-        return -8; // colonna destra della porta → sposta verso sinistra (centro)
-      }
+      const shift = this.doorPairShift(x, y + dy);
+      if (shift) return shift;
     }
     return 0;
+  }
+
+  private doorShiftAt(x: number, y: number): number {
+    const arrival = this.doorArrival;
+    return arrival && arrival.mapId === this.map.id && arrival.x === x && arrival.y === y ? arrival.shift : this.doorPairShift(x, y);
+  }
+
+  /** Where the player is drawn, sideways, to stay centred on a two-tile door: it glides with the step instead of jumping. */
+  private doorShiftNow(): number {
+    if (this.state.vehicle) return 0;
+    const to = this.doorShiftAt(this.state.pos.x, this.state.pos.y);
+    if (!this.moving) return to;
+    const from = this.doorShiftAt(this.fromX, this.fromY), t = Math.min(1, this.moveT);
+    return from + (to - from) * t * t * (3 - 2 * t);
   }
 
   // Texture PNG di un tile per la mappa corrente: prima l'override di mappa
@@ -3175,10 +3193,12 @@ export class WorldScene implements Scene {
         // (che fa il suo fade-in). Niente più stacco secco a ogni porta/scala.
         audio.confirm();
         haptics.warp();
-        this.fadeOut = 0.22;
+        this.fadeOut = 0.16;
         this.pendingWarp = () => {
           this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
           this.loadMap(warp.toMap);
+          const shift = this.frontDoorShift(warp.toX, warp.toY);
+          this.doorArrival = shift ? { mapId: warp.toMap, x: warp.toX, y: warp.toY, shift } : null;
         };
       };
       // Warp con conferma (es. la DARSENA di ritorno dallo Stretto): chiedi SÌ/NO
@@ -3426,17 +3446,6 @@ export class WorldScene implements Scene {
     this.time += dt;
     this.cameraDt=dt;
     this.atmosphere.update(dt,this.state.reduceEffects);
-    // Insegue l'offset di centratura porta con un lerp esponenziale (indipendente
-    // dal frame rate): da fermo tende a ±8, appena parti il target è 0 e lo smooth
-    // rientra dolcemente invece di scattare di lato. ~12/s = quasi completo in un passo.
-    {
-      const target = this.doorCenteringOffset();
-      const k = 1 - Math.exp(-16 * dt);
-      this.doorOffsetSmooth += (target - this.doorOffsetSmooth) * k;
-      if (Math.abs(this.doorOffsetSmooth - target) < 0.3) {
-        this.doorOffsetSmooth = target;
-      }
-    }
     this.shake = Math.max(0, this.shake - dt);
     this.fadeT = Math.max(0, this.fadeT - dt);
     this.bannerFlash = Math.max(0, this.bannerFlash - dt);
@@ -3658,11 +3667,20 @@ export class WorldScene implements Scene {
               : 1;
       this.moveT += (dt / STEP_TIME) * (this.hop ? 0.6 : factor);
       if (this.moveT >= 1) {
+        // Il resto del tempo non si butta e, se tieni premuto, il passo dopo parte
+        // subito: niente fotogramma fermo a ogni casella.
+        const carry = Math.min(this.moveT - 1, .5);
         this.moving = false;
         this.hop = false;
         this.moveT = 0;
+        this.stride += 1;
         this.onStepComplete();
-        if (!this.canUseWorldControls()) this.stopTapRoute();
+        if (this.doorArrival && (this.doorArrival.x !== pos.x || this.doorArrival.y !== pos.y)) this.doorArrival = null;
+        if (!this.canUseWorldControls() || this.pendingBattle) this.stopTapRoute();
+        else if (!this.moving && this.stack.top === this) {
+          const next = dir ?? this.tapDirection();
+          if (next) this.tryStep(next as Facing, carry);
+        }
       }
       return;
     }
@@ -3681,7 +3699,12 @@ export class WorldScene implements Scene {
 
     if (!dir) dir = this.tapDirection();
     if (!dir || !this.canUseWorldControls()) return;
-    const facing = dir as Facing;
+    this.tryStep(dir as Facing, 0);
+  }
+
+  /** Start a step towards `facing`; `carry` is the part of the last step that was already walked. */
+  private tryStep(facing: Facing, carry: number): void {
+    const pos = this.state.pos;
     pos.facing = facing;
     const delta = DIR_DELTA[facing];
     const nx = pos.x + delta.dx;
@@ -3721,7 +3744,7 @@ export class WorldScene implements Scene {
         this.hop = true;
         this.fromX = pos.x; this.fromY = pos.y;
         pos.x = landing.x; pos.y = landing.y;
-        this.moving = true; this.moveT = 0;
+        this.moving = true; this.moveT = carry;
         haptics.tap();
         return;
       }
@@ -3735,13 +3758,13 @@ export class WorldScene implements Scene {
     // Con MONOPATTINO o AUTO si va sempre veloci all'aperto; B resta la corsa.
     const onVehicle =
       (this.state.vehicle === "monopattino" || this.state.vehicle === "auto") && this.map.outdoor && this.state.fuel > 0;
-    this.running = this.runToggled || this.input.isHeld("b") || onVehicle || this.tapRoute.length >= 7;
+    this.running = this.runToggled || this.input.isHeld("b") || onVehicle || this.tapRun;
     this.fromX = pos.x;
     this.fromY = pos.y;
     pos.x = nx;
     pos.y = ny;
     this.moving = true;
-    this.moveT = 0;
+    this.moveT = carry;
   }
 
   // ---- Draw ----
@@ -4159,14 +4182,8 @@ export class WorldScene implements Scene {
     }
 
     const frame = this.moving ? (Math.floor(this.moveT * 2) % 2 === 0 ? 1 : 0) : 0;
-    // Centratura sulla PORTA degli interni: la porta è un doormat largo 2 tile
-    // (`cc`), ma il player occupa 1 tile e vi atterra sulla cella di sinistra →
-    // appare spostato a lato. Quando è FERMO su una di quelle 2 celle, spostiamo
-    // SOLO il disegno di mezzo tile verso il centro della coppia (la camera non si
-    // muove). Appena cammina via, l'offset sparisce da sé (la cella non è più `c+c`).
-    // Offset di centratura porta INTERPOLATO (vedi doorOffsetSmooth in update):
-    // niente più scatto laterale al primo passo, il player scivola dolce.
-    const doorOffset = this.doorOffsetSmooth;
+    // Porte larghe 2 caselle: il disegno resta al centro della porta (vedi doorShiftNow).
+    const doorOffset = this.doorShiftNow();
     const baseX = Math.round(playerPx - camX + doorOffset);
     const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * 9) : 0;
     // Sui gradini il passo sale: mezzo tile di altezza, interpolato tra una casella e l'altra.
@@ -4185,7 +4202,7 @@ export class WorldScene implements Scene {
     // ancorato in basso).
     // Frame di camminata: alterna i fotogrammi walk mentre il player si muove,
     // così non "scivola". `walkCycle` è un indice 0..3 derivato dal tempo di passo.
-    const walkCycle = this.moving ? Math.floor(this.moveT * 8) % 4 : 0;
+    const walkCycle = this.moving ? Math.floor((this.stride + Math.min(1, this.moveT)) * 2) % 4 : 0;
     const playerImg = playerImage(pos.facing, walkCycle, this.moving);
     const drawPlayer = (px: number, py: number): void => {
       // Ombra ai piedi del player (prima dello sprite).
@@ -4339,7 +4356,7 @@ export class WorldScene implements Scene {
     }
     // Dissolvenza d'uscita prima del warp: oscura crescente fino al nero.
     if (this.fadeOut > 0) {
-      screen.dim((1 - this.fadeOut / 0.22) * 0.95);
+      screen.dim((1 - this.fadeOut / 0.16) * 0.95);
     }
 
     // Effetto di cura sopra tutto (velo verde, anelli, scintille, barre HP).

@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — passo e porte — 2026-10-06
+
+- Ingressi centrati: le porte degli edifici sono larghe due caselle ma il personaggio ne occupa una, per cui entrava di lato, mezza casella a sinistra della porta. Ora, salendo sulla porta, il disegno scivola di mezza casella fino al centro e, entrando o uscendo, compari già al centro della porta (dentro sopra il tappetino, fuori sotto il portone). Passando per strada davanti a una porta non succede nulla. Vale per tutte le 38 porte percorribili (`check:doors`).
+- Passo senza inceppi: a ogni casella c'erano due fotogrammi fermi (17 su 200 tenendo premuto, circa un decimo del tempo) e il resto del tempo del passo si perdeva. Ora il passo dopo parte nello stesso fotogramma, con il tempo avanzato, anche con un frame rate ballerino; la camera non perde più il suo «anticipo» tra una casella e l'altra.
+- Gambe: la camminata faceva due cicli completi a casella (circa 11 al secondo); ora un fotogramma ogni mezza casella e le gambe si alternano passo dopo passo.
+- Percorsi a tocco: tra i percorsi più corti sceglie quello con meno curve (una corsa dritta e un angolo, non una scala a zig-zag) e, se parte di corsa, corre fino all'arrivo (prima rallentava sugli ultimi 6 passi). Dissolvenza d'uscita dalla porta più corta (0,16 s).
+
 ## Mandato 2 — la strada gira — 2026-10-06
 
 - La strada principale non va più solo a nord. Mediopoli, Eurotown e Caput Mundi aprono un cancello est; il Percorso 2 diventa una «C» orizzontale (46×34) attorno al lago, con molo, isola, cove e un'unica salita; il Percorso 3 sale e poi esce a ovest verso Caput Mundi. Il Percorso 1 resta verticale (è il tutorial). Atlante, cancello della prima medaglia e battute di blocco restano com'erano. Dettagli e limiti in `docs/PERCORSI-IMMERSIVI.md`.

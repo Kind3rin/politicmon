@@ -34,3 +34,12 @@ Nel round [Genova](GENOVA-VERBALE.md) la stessa cornice supera inoltre otto perc
 
 Camminare toccando la mappa partiva per sbaglio quando si usavano i tasti o lo stick. Ora un tocco vale solo se è *deliberato* (`Input.tapDeliberate()` in `src/engine/input.ts`): niente se una direzione è tenuta o è stata rilasciata da meno di 350 ms (1,5 s con tastiera e mouse), niente se un altro dito sta già premendo o muovendo lo stick, niente per il primo click dopo che la finestra ha ripreso il focus, niente per i tocchi lunghi (oltre 0,55 s: pollice appoggiato) e per i pulsanti diversi dal primo. Lo stick fluttuante non annulla i propri tocchi. Verificato in `check:world-controls` (stick poi tocco, seconda dita, tasto poi click, attesa e tocco valido).
 
+
+## Passo e porte (6 ottobre 2026)
+
+Segnalazione: sugli ingressi il personaggio non entra mai al centro dell'edificio e alcune animazioni di movimento «impacciano».
+
+- **Porte.** Le porte esterne (`dd`, `DD`, `gg`) e i tappetini interni (`cc`) sono larghe 2 caselle. Il disegno del giocatore scivola di mezzo tile (mai oltre ±8 px) verso il centro della porta durante il passo che ci sale (`doorShiftNow`, interpolato con il passo, non con il tempo) e all'arrivo da una porta (`doorArrival`, fissato al cambio mappa e sciolto al primo passo). Collisioni, camera e warp non cambiano. Camminando lungo la via davanti a una porta il disegno non si sposta.
+- **Passo.** `update` non ritorna più sul fotogramma di fine passo: se c'è ancora una direzione (tasto, stick, percorso a tocco) il passo successivo parte subito con il tempo avanzato (`tryStep(facing, carry)`, al massimo mezzo passo). Prima erano due fotogrammi fermi per casella e la camera perdeva l'anticipo a ogni passo. `walkCycle` è ora `(stride + moveT) × 2`: due fotogrammi a casella, gambe alternate (prima 8 a casella).
+- **Percorsi a tocco.** Ricerca a costo (100 per passo + 1 per curva): stessa lunghezza, meno zig-zag. `tapRun` fissa la corsa all'inizio del percorso se è lungo almeno 7 passi.
+- **Verifica.** `npm run check:doors` (38 porte percorribili dentro e fuori, nessun fotogramma fermo tenendo premuto a 60 Hz e con frame rate irregolare, percorso senza zig-zag). Limite: l'ho visto in fotogrammi catturati e nei numeri, non con il pollice su un telefono vero.

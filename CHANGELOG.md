@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — i poteri — 2026-10-06
+
+- Nuovo sistema di poteri sul campo, le «MN» di Politicmon, senza mosse da insegnare né slot sprecati (`src/game/powers.ts`): li sblocca la storia (medaglie) e li usa il primo compagno in forze col tipo giusto. Servono a trovare cose, non a passare. Un pulsante **Poteri** compare vicino a «Corri» appena ce n'è uno; l'elenco dice chi lo usa, dove serve e come si ottiene.
+- Ogni potere entra in scena con una sequenza «cut-in» (banda in diagonale, il Politicmon che si sporge, il nome che piomba dal lato, linee di velocità) e ha il suo suono; con «Riduci effetti» resta un banner.
+- Primi quattro: **Comizio** (subito: attira uno o due selvatici dall'erba vicina, che accorrono col punto esclamativo e ti lasciano la prima mossa; 30 passi di pausa), **Riflettori** (medaglia Auditel: le grotte ora sono buie, vedi circa due caselle; con i riflettori un fascio largo e i tesori nascosti brillano), **Dimissioni lampo** (Auditel: da grotte ed edifici ti porta all'ingresso con una nuvola di fumo), **Volo di Stato** (Spread: scegli una città già vista, nessuna benzina, e un volo al tramonto con gag a bordo; Stretto, Offshore e Bruxelles si aggiungono dopo la prima visita).
+- Nuove luci per le grotte (`dark` sulla mappa) e nuovi effetti nel mondo (`powerFx.ts`).
+
 ## Mandato 2 — la luce — 2026-10-06
 
 - Illuminazione vera all'aperto (`src/game/world/lighting.ts`): la luce cambia dolcemente con l'ora (alba rosata, giorno limpido, tramonto arancio, notte blu: niente più salti alle 17:00 né il velo marrone di prima). Di sera si ritagliano pozze di luce nel buio (lampioni, finestre degli edifici, porte, statue, fontane) con un bagliore caldo sopra, e il giocatore porta una piccola lanterna che lo tiene leggibile. Vignettatura leggera su tutte le mappe.

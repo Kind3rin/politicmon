@@ -19,6 +19,9 @@ body.ui-world-open .ui-world-nav .ui-button-icon{width:28px;height:28px}
 body.ui-world-open .ui-world-nav .ui-command-group{position:absolute;top:-9px;right:-6px;background:#14161F;color:#F4EEDC;border-radius:4px;padding:0 4px}
 body.ui-world-open .ui-world-nav .ui-command-key{display:inline-block;border:0;color:inherit;padding:1px 2px}
 body.ui-world-open .ui-world-controls{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:end;gap:12px;pointer-events:none}
+body.ui-world-open .ui-world-row{display:flex;gap:10px;align-items:center;pointer-events:none}
+body.ui-world-open .ui-world-controls .ui-button.ui-world-power{background:#1E3A8A;color:#F4EEDC}
+body.ui-world-open .ui-world-controls .ui-button.ui-world-power strong{color:#F4EEDC}
 body.ui-world-open .ui-world-controls .ui-button{pointer-events:auto;width:76px;height:48px;background:#F4EEDCe6}
 body.ui-world-open .ui-world-controls .ui-primary{min-width:112px;width:auto;max-width:200px;height:80px;padding:0 16px;background:#D7263D;color:#F4EEDC}
 body.ui-world-open .ui-world-controls .ui-primary .ui-button-heading{flex-direction:column;gap:2px}

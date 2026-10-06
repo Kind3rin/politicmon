@@ -34,3 +34,15 @@ export function transportRequirement(state:GameState,currentMapId:string,dest:Tr
  if(dest.requires&&!dest.requires(state))return dest.requirement??"TRATTA NON ANCORA AUTORIZZATA.";
  return "TRATTA AUTORIZZATA. COSTO PER TE: 0€. A LEGGE IL DOSSIER PRIMA DI PARTIRE.";
 }
+
+/** The state flight: the four cities plus the places beyond, wherever you have already been. */
+export const FLIGHT_EXTRAS: readonly TransportDestination[] = [
+  { label: "STRETTO DI MESSINA", mapId: "stretto", x: 14, y: 8, facing: "up", requirement: "SERVONO TRE MEDAGLIE.", requires: (state) => state.badges.length >= 3 && Boolean(state.flags["visited-stretto"]) },
+  { label: "PARADISO OFFSHORE", mapId: "offshore", x: 3, y: 9, facing: "right", requirement: "NON CI SEI ANCORA STATO.", requires: (state) => Boolean(state.flags["garante-beaten"]) && Boolean(state.flags["visited-offshore"]) },
+  { label: "BRUXELLES", mapId: "bruxelles", x: 14, y: 13, facing: "up", requirement: "NON CI SEI ANCORA STATO.", requires: (state) => Boolean(state.flags["garante-beaten"]) && Boolean(state.flags["visited-bruxelles"]) }
+];
+
+export function flightDestinations(state: GameState, currentMapId: string): { destination: TransportDestination; open: boolean }[] {
+  const all = [...TRANSPORT_DESTINATIONS, ...FLIGHT_EXTRAS];
+  return all.filter(d => d.mapId !== currentMapId).map(destination => ({ destination, open: Boolean(state.flags["dex-received"]) && (!destination.requires || destination.requires(state)) }));
+}

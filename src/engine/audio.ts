@@ -261,6 +261,55 @@ class AudioEngine {
     [392, 330, 262].forEach((f, i) => this.tone(f, 0.09, { delaySec: i * 0.06, vol: 0.035, type: "triangle" }));
   }
 
+  // ---- Poteri sul campo: ogni potere ha il suo suono, tutti brevi e sotto .14 di volume ----
+  /** The cut-in: a rising swell and a bright stab as the name slams in. */
+  powerEntrance(): void {
+    this.tone(180, .32, { type: "sawtooth", vol: .05, sweepTo: 640 });
+    this.tone(523, .12, { type: "square", vol: .05, delaySec: .22 }); this.tone(784, .2, { type: "square", vol: .05, delaySec: .28 });
+    this.tone(1046, .34, { type: "triangle", vol: .06, delaySec: .3 });
+    haptics.confirm();
+  }
+  /** Scissors through ribbon: a high zip and a tick. */
+  powerSlash(): void {
+    this.noise(.14, .12, 6000); this.tone(1800, .16, { type: "sawtooth", vol: .05, sweepTo: 300 });
+    setTimeout(() => this.tone(220, .05, { type: "square", vol: .06 }), 130); haptics.hitSuper();
+  }
+  /** Shoulder into stone. */
+  powerThud(): void {
+    this.noise(.2, .2, 900); this.tone(96, .24, { sweepTo: 38, vol: .18 }); haptics.hitSuper();
+  }
+  /** A plank put down: a wooden knock with a little pitch each time. */
+  powerPlank(step: number): void {
+    this.noise(.05, .1, 1600); this.tone(260 + step * 36, .07, { type: "square", vol: .06 });
+  }
+  /** The flash bulbs of a press room, then a warm swell. */
+  powerFlash(): void {
+    [0, 70, 150, 210].forEach((ms, i) => setTimeout(() => { this.noise(.05, .09, 7000); this.tone(2400 + i * 200, .03, { type: "square", vol: .03 }); }, ms));
+    this.tone(330, .5, { type: "triangle", vol: .06, sweepTo: 660, delaySec: .1 });
+  }
+  /** Climbing: short rising ticks. */
+  powerClimb(): void {
+    [392, 440, 494, 587].forEach((f, i) => this.tone(f, .07, { type: "square", vol: .05, delaySec: i * .07 }));
+  }
+  /** A puff of smoke and a slide whistle down. */
+  powerPuff(): void {
+    this.noise(.22, .14, 1800); this.tone(900, .3, { type: "triangle", vol: .06, sweepTo: 120 });
+  }
+  /** The engines: a long whoosh that climbs and drops. */
+  powerFlight(): void {
+    this.noise(.25, .12, 2400); this.tone(140, .9, { type: "sawtooth", vol: .045, sweepTo: 420 });
+    this.tone(420, .6, { type: "sawtooth", vol: .04, sweepTo: 90, delaySec: .9 });
+  }
+  /** The loudspeaker squeal and its answer. */
+  powerHorn(): void {
+    this.tone(220, .18, { type: "square", vol: .05, sweepTo: 262 }); this.tone(330, .16, { type: "square", vol: .045, delaySec: .1 });
+    this.tone(2200, .08, { type: "sine", vol: .03, delaySec: .3 }); haptics.event();
+  }
+  /** Something stirs: low rustle. */
+  powerRustle(): void {
+    this.noise(.2, .1, 3200); setTimeout(() => this.noise(.18, .08, 2600), 140);
+  }
+
   private noise(duration: number, volume: number, cutoff: number): void {
     const ctx = this.ensure();
     if (!ctx || !this.effectsGain || !this.enabled || !this.preferences.effects) return;

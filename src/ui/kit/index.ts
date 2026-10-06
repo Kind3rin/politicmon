@@ -26,6 +26,8 @@ export interface UiWorld {
   actions: readonly TouchAction[];
   context: TouchAction;
   run: TouchAction;
+  /** The list of field powers, once there is one. */
+  power?: TouchAction;
   save?: TouchAction;
   running: boolean;
 }
@@ -755,7 +757,7 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
   let saved=worldHud.querySelector<HTMLElement>('.ui-save-flash');
   if(!saved){saved=element('span','ui-save-flash','✓ Salvato');saved.setAttribute('role','status');worldHud.append(saved);}
   saved.hidden=!world.saved;
-  const next=JSON.stringify(world.actions.map(a=>[a.label,a.icon,a.disabled]));
+  const next=JSON.stringify([world.actions.map(a=>[a.label,a.icon,a.disabled]),Boolean(world.power)]);
   if(next!==worldSignature){
     worldSignature=next;
     const nav=element('nav','ui-world-nav');nav.setAttribute('aria-label','Accessi rapidi');
@@ -766,7 +768,11 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     const controls=element('div','ui-world-controls');
     worldContext=kit.button(world.context,()=>worldCurrent?.context.run(),true,()=>!worldCurrent||Boolean(worldCurrent.context.disabled));
     worldRun=kit.button(world.run,()=>worldCurrent?.run.run());
-    controls.append(worldContext,worldRun);worldRoot.replaceChildren(nav,controls);
+    if(world.power){
+      const power=kit.button(world.power,()=>worldCurrent?.power?.run());power.classList.add('ui-world-power');power.setAttribute('aria-label','Poteri');
+      const row=element('div','ui-world-row');row.append(power,worldRun);controls.append(worldContext,row);
+    }else controls.append(worldContext,worldRun);
+    worldRoot.replaceChildren(nav,controls);
   }
   if(worldContext&&worldRun){
     worldContext.hidden=Boolean(world.context.disabled);

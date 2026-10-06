@@ -117,6 +117,8 @@ export interface MapDef {
   name: string;
   tiles: string[];
   outdoor: boolean;
+  /** 0..1: how dark it is underground. Without the field lights you see about two tiles around you. */
+  dark?: number;
   lamps?: { x: number; y: number }[]; // attached to existing solid posts; no collision change
   groundMaterials?: Record<string, "grass" | "sand" | "path" | "asphalt" | "floor">; // visual only; preserves movement tiles
   scatter?: { kind: string; density: number }[]; // 0..1, decorative only

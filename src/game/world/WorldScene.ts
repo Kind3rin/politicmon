@@ -3,6 +3,11 @@ import {worldLabel,setWorldLabelZoom} from "../../ui/kit/worldLabels";
 import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosphere";
 import {ambientLight, drawRoomFrame, drawVignette, type Light} from "./lighting";
 import {drawInteriorWall, WALL_HEIGHT} from "./interiorWalls";
+import {PowerCutIn, WorldFx} from "./powerFx";
+import {POWERS, powerStatus, unlockedPowers, type PowerId} from "../powers";
+import {PowersScene} from "../../scenes/PowersScene";
+import {FlightListScene, FlightScene} from "../../scenes/FlightScene";
+import {drawLighting} from "./lighting";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
 import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
@@ -49,7 +54,7 @@ import { Screen, VIEW_H, VIEW_W } from "../../engine/screen";
 import {followCamera,unzoomWorldPoint,phoneWorldZoom,zoomedCameraAxis,clearanceCeiling} from "../../engine/worldCamera";
 import { Menu, MessageBox, setReduceMotion } from "../../ui/widgets";
 import { BattleScene, BOSS_TRAINER_IDS, type BattleResult } from "../battle/BattleScene";
-import { createMonster, healMonster, statsOf, type Monster } from "../monster";
+import { createMonster, healMonster, speciesOf, statsOf, type Monster } from "../monster";
 import { beginTemporaryParty, markCaught, markSeen, saveGame, setActiveState, type GameState } from "../state";
 import { addSondaggi, assignedMinisteri, bumpSondaggi, curaPassiva, hasMinistro, MINISTERI, scaricaUnMinistro } from "../governo";
 import { adaptiveGymRoster, buildRematchDef, markRematchClock, rematchAvailability } from "../rematch";
@@ -307,6 +312,12 @@ export class WorldScene implements Scene {
   private pendingInvite: RuntimeNpc | null = null;
   /** The first time you reach a place its name sweeps across the screen. */
   private titleCard: { t: number; name: string; sub?: string } | null = null;
+  // Poteri sul campo: scena d'annuncio, effetti nel mondo, riflettori accesi su questa mappa.
+  private readonly powerFx = new WorldFx();
+  private cutIn: PowerCutIn | null = null;
+  private afterCut: (() => void) | null = null;
+  private spot = false;
+  private comizioAt = -999;
   /** A civic decision reshaping the map right now (tiles change one by one, people step in). */
   private reveal: CivicReveal | null = null;
   /** The civic scenes already in the world on this map, so a new one plays exactly once. */
@@ -468,7 +479,7 @@ export class WorldScene implements Scene {
 
   private canUseWorldControls(): boolean {
     return this.stack.top === this && !this.msg.isOpen && !this.askMenu && !this.remoteMenu &&
-      !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.exclaimNpc && !this.healFx;
+      !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.exclaimNpc && !this.healFx && !this.cutIn;
   }
 
   private contextLabel(): string | undefined {
@@ -523,6 +534,7 @@ export class WorldScene implements Scene {
         {...command("Menu", () => this.stack.push(new PauseScene(this.stack,this.input,this.state)),"/sprites/ui/kit/more.png"),command:"start"}],
       context: {...command(context ?? "Avvicinati", () => { if (!followingRoute && !this.moving) this.interact(); }), disabled: !context || (this.moving && !followingRoute)},
       run: command(this.runToggled ? "Cammina" : "Corri", () => { this.runToggled = !this.runToggled; },undefined,true), running: this.runToggled,
+      power: unlockedPowers(this.state).length ? command("Poteri", () => this.stack.push(new PowersScene(this.stack, this.input, this.state, id => this.usePower(id)))) : undefined,
       save: command("Salva", () => {
         const saved=saveGame(this.state);
         this.tapNotice={text:saved?"Partita salvata nello slot attuale.":"Salvataggio non riuscito. Riprova o esporta una copia dal menu.",until:this.time+4};
@@ -715,10 +727,12 @@ export class WorldScene implements Scene {
     this.reveal = null;
     this.civicActive = new Set(civicScenesFor(this.state, mapId).map(scene => scene.decision));
     for (const def of civicSceneNpcs(this.state, mapId)) this.npcs.push(this.makeRuntimeNpc(def));
-    if (this.map.outdoor && !this.state.reduceEffects && !this.state.flags[`visited-${mapId}`] && this.state.flags["intro-done"] && mapId !== "borgo") {
+    this.spot = false;
+    this.titleCard = null;
+    if (this.map.outdoor && !this.state.flags[`visited-${mapId}`] && this.state.flags["intro-done"]) {
       this.state.flags[`visited-${mapId}`] = true;
-      this.titleCard = { t: 0, name: this.map.name, sub: this.zoneName(this.state.pos.x, this.state.pos.y) };
-    } else this.titleCard = null;
+      if (!this.state.reduceEffects && mapId !== "borgo") this.titleCard = { t: 0, name: this.map.name, sub: this.zoneName(this.state.pos.x, this.state.pos.y) };
+    }
     const rite = RITES.find(entry => entry.sacrario === mapId);
     if (rite && !this.state.flags[`sacrario-${mapId}`]) {
       this.state.flags[`sacrario-${mapId}`] = true;
@@ -1280,6 +1294,99 @@ export class WorldScene implements Scene {
       return pool[1];
     }
     return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  // ---- Poteri sul campo ----
+
+  /** The cut-in, then `perform`. With "Riduci effetti" the cut-in becomes a banner and the effect is immediate. */
+  private beginPower(id: PowerId, user: Monster, perform: () => void): void {
+    const def = POWERS[id], name = speciesOf(user).name;
+    this.stopTapRoute(); this.input.reset();
+    if (this.state.reduceEffects) { this.showBanner(def.name, `${name} · ${def.tagline}`, "#f2c230"); perform(); return; }
+    this.cutIn = new PowerCutIn(id, user.speciesId, name);
+    this.afterCut = perform;
+    audio.powerEntrance();
+  }
+
+  private playerCenter(): { x: number; y: number } { return { x: this.state.pos.x * TILE + 8, y: this.state.pos.y * TILE + 8 }; }
+
+  /** Entry point from the Poteri list. Powers that need a target are explained instead. */
+  private usePower(id: PowerId): void {
+    if (!this.canUseWorldControls()) return;
+    const status = powerStatus(this.state, id), def = POWERS[id];
+    if (status.kind === "locked") { this.say([`${def.name}: non ce l'hai ancora.`, def.unlock]); return; }
+    if (status.kind === "nobody") { this.say([`Nessuno in squadra può usare ${def.name} adesso.`, `Serve un compagno ${status.need.map(t => t.toLocaleLowerCase("it")).join(", ")} in forze.`]); return; }
+    switch (id) {
+      case "comizio": this.powerComizio(status.user); return;
+      case "riflettori": this.powerRiflettori(status.user); return;
+      case "scappatoia": this.powerScappatoia(status.user); return;
+      case "volo": this.powerVolo(status.user); return;
+      default: this.say([`${def.name} si usa davanti all'ostacolo giusto.`, def.where]);
+    }
+  }
+
+  private grassNear(radius: number): number {
+    const { x, y } = this.state.pos; let n = 0;
+    for (let ty = y - radius; ty <= y + radius; ty++) for (let tx = x - radius; tx <= x + radius; tx++) if (TILES[this.tileAt(tx, ty)]?.encounter) n++;
+    return n;
+  }
+
+  private powerComizio(user: Monster): void {
+    if (!this.map.outdoor || !this.map.encounters?.length) { this.say(["Qui non c'è nessuno da convincere.", "Un comizio serve nell'erba alta, fuori città."]); return; }
+    const wait = 30 - (this.state.stepsTotal - this.comizioAt);
+    if (wait > 0) { this.say(["Il pubblico è ancora stanco del comizio di prima.", `Riprova tra ${wait} passi.`]); return; }
+    if (this.grassNear(8) < 4) { this.say(["Qui intorno non c'è erba alta: il comizio andrebbe deserto.", "Avvicinati a un prato."]); return; }
+    this.comizioAt = this.state.stepsTotal;
+    this.beginPower("comizio", user, () => {
+      const c = this.playerCenter(), fx = this.powerFx;
+      audio.powerHorn();
+      for (let i = 0; i < 3; i++) setTimeout(() => { fx.ring(c.x, c.y, 34 + i * 26, i % 2 ? "#fff2c4" : "#d88030", .6, 3); }, i * 140);
+      fx.burst(c.x, c.y, ["#d88030", "#fff2c4", "#ffd23f"], 26, 120, { w: 3, h: 1, grav: 0, drag: .9 });
+      if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .3);
+      if (!this.roamers) this.syncRoamers(0);
+      const pos = this.state.pos, arrived = this.roamers?.lure({ x: pos.x, y: pos.y, facing: pos.facing }, Math.random() < .4 ? 2 : 1) ?? [];
+      if (!arrived.length) { this.say(["Il comizio va deserto. Neanche un candidato."]); return; }
+      setTimeout(() => audio.powerRustle(), 500);
+      this.tapNotice = { text: arrived.length > 1 ? "Due candidati accorrono!" : "Un candidato accorre!", until: this.time + 4 };
+    });
+  }
+
+  private powerRiflettori(user: Monster): void {
+    if (!this.map.dark) { this.say(["Qui c'è già luce.", "I riflettori li tengo per le grotte."]); return; }
+    if (this.spot) { this.say(["I riflettori sono già accesi."]); return; }
+    this.beginPower("riflettori", user, () => {
+      const c = this.playerCenter(), fx = this.powerFx;
+      this.spot = true; audio.powerFlash(); fx.pulse("255,255,255", .8);
+      fx.ring(c.x, c.y, 90, "#fff4d6", .7, 3);
+      for (let i = 0; i < 7; i++) fx.beam(c.x, c.y - 70, Math.PI / 2 + (i - 3) * .09, 90, "rgba(255,244,214,.8)", .5, 4);
+      fx.burst(c.x, c.y - 10, ["#fff6c8", "#ffffff"], 18, 90, { w: 2, h: 2, grav: 20 });
+      this.showBanner("RIFLETTORI", "Si vede lontano. I tesori brillano.", "#f2c230");
+    });
+  }
+
+  private powerScappatoia(user: Monster): void {
+    if (this.map.outdoor) { this.say(["Sei già all'aperto.", "Nessuno ti crederebbe dimissionario."]); return; }
+    const exit = this.map.warps.find(w => MAPS[w.toMap]?.outdoor) ?? this.map.warps[0];
+    if (!exit) { this.say(["Da qui non si esce nemmeno dimettendosi."]); return; }
+    this.beginPower("scappatoia", user, () => {
+      const c = this.playerCenter(), fx = this.powerFx;
+      audio.powerPuff(); fx.pulse("230,230,240", .5);
+      fx.burst(c.x, c.y, ["#e8e8f0", "#c8c8d8", "#ffffff"], 30, 70, { w: 4, h: 4, grav: -20, drag: .94 });
+      this.fadeOut = .3;
+      this.pendingWarp = () => { this.state.pos = { mapId: exit.toMap, x: exit.toX, y: exit.toY, facing: exit.facing }; this.loadMap(exit.toMap); this.doorArrival = null; };
+    });
+  }
+
+  private powerVolo(user: Monster): void {
+    if (!this.map.outdoor) { this.say(["Dentro un edificio non si vola.", "Esci all'aperto e riprova."]); return; }
+    this.stack.push(new FlightListScene(this.stack, this.input, this.state, this.map.id, dest => {
+      this.beginPower("volo", user, () => {
+        this.stack.push(new FlightScene(this.stack, this.input, this.map.name, dest.label, this.state.reduceEffects, () => {
+          this.state.pos = { mapId: dest.mapId, x: dest.x, y: dest.y, facing: dest.facing };
+          this.loadMap(dest.mapId); this.doorArrival = null; saveGame(this.state);
+        }));
+      });
+    }));
   }
 
   // ---- Candidati selvatici visibili nell'erba alta ----
@@ -3446,6 +3553,12 @@ export class WorldScene implements Scene {
       return;
     }
     this.time += dt;
+    this.powerFx.update(dt);
+    if (this.cutIn) {
+      this.cutIn.update(dt);
+      if (this.cutIn.done) { const next = this.afterCut; this.cutIn = null; this.afterCut = null; next?.(); }
+      return;
+    }
     this.cameraDt=dt;
     this.atmosphere.update(dt,this.state.reduceEffects);
     this.shake = Math.max(0, this.shake - dt);
@@ -4339,6 +4452,17 @@ export class WorldScene implements Scene {
       glows.push({kind:'player',x:playerPx+8+this.doorShiftNow(),y:playerPy+6});
     }
     this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights,glows);
+    if(this.map.dark){
+      const cave:Light[]=this.map.warps.map(w=>({kind:'door' as const,x:w.x*TILE+8-camX,y:w.y*TILE+8-camY}));
+      cave.push({kind:this.spot?'spot':'cave',x:playerPx+8+this.doorShiftNow()-camX,y:playerPy+6-camY});
+      drawLighting(screen.ctx,VIEW_W,this.viewHeight,12,cave,this.time,this.state.reduceEffects,{rgb:[3,5,16],alpha:this.map.dark});
+      if(this.spot&&!this.state.reduceEffects)for(const p of this.map.pickups){
+        if(!p.hidden||this.state.pickedItems.includes(p.id))continue;
+        if(Math.abs(p.x-pos.x)+Math.abs(p.y-pos.y)>7)continue;
+        const tw=Math.floor(this.time*6+p.x*3)%4,x=p.x*TILE+8-camX,y=p.y*TILE+8-camY;
+        screen.ctx.fillStyle=tw<2?'#fff6c8':'#ffd23f';screen.ctx.fillRect(Math.round(x)-1,Math.round(y)-(tw?3:2),2,tw?6:4);screen.ctx.fillRect(Math.round(x)-(tw?3:2),Math.round(y)-1,tw?6:4,2);
+      }
+    }
     if(!this.map.outdoor&&roomFit>=1)drawRoomFrame(screen.ctx,inner,camX,camY,hasWall?WALL_HEIGHT:0);
     drawVignette(screen.ctx,VIEW_W,this.viewHeight,this.map.outdoor?.2:.3);
     const quest = currentQuest(this.state);
@@ -4361,8 +4485,11 @@ export class WorldScene implements Scene {
     }
 
     this.reveal?.draw(screen.ctx, camX, camY);
+    if(!this.state.reduceEffects)this.powerFx.draw(screen.ctx, camX, camY);
     screen.ctx.restore();
+    if(!this.state.reduceEffects)this.powerFx.drawFlash(screen.ctx,VIEW_W,this.viewHeight);
     this.drawTitleCard(screen);
+    this.cutIn?.draw(screen,this.viewHeight);
     this.msg.draw(screen);
 
     if (this.encounterFlash > 0 && !this.state.reduceEffects) {

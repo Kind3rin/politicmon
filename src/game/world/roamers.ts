@@ -21,6 +21,8 @@ export interface Roamer {
   noticed: boolean;
   /** A rare candidate: golden, always runs away, pays well when caught. Fixed per individual. */
   rare?: boolean;
+  /** Drawn here by a rally: it comes straight at the player and the player keeps the first move. */
+  lured?: boolean;
 }
 
 export interface RoamerWorld {
@@ -116,6 +118,27 @@ export class RoamerField {
     return null;
   }
 
+  /** A rally: put candidates on grass close by (`near` to `far` tiles away); they come straight over. Returns how many arrived. */
+  lure(player: PlayerSpot, count: number, near = 3, far = 8): Roamer[] {
+    const spots: [number, number][] = [];
+    for (let y = Math.max(0, player.y - far); y <= Math.min(this.world.height - 1, player.y + far); y += 1)
+      for (let x = Math.max(0, player.x - far); x <= Math.min(this.world.width - 1, player.x + far); x += 1) {
+        const d = distance(x, y, player.x, player.y);
+        if (d >= near && d <= far && this.world.isGrass(x, y) && this.world.isOpen(x, y) && !this.occupied(x, y)) spots.push([x, y]);
+      }
+    const arrived: Roamer[] = [];
+    for (let i = 0; i < count && spots.length; i += 1) {
+      const entry = this.pickSpecies();
+      if (!entry) break;
+      const [x, y] = spots.splice(Math.floor(this.rng() * spots.length), 1)[0];
+      const id = this.nextId++;
+      const roamer: Roamer = { id, speciesId: entry.speciesId, level: entry.minLv + Math.floor(this.rng() * (entry.maxLv - entry.minLv + 1)),
+        x, y, fromX: x, fromY: y, t: 1, facing: facingToward(x, y, player.x, player.y), mood: "chase", wait: .35 + i * .3, alert: 1.1, noticed: true, lured: true };
+      this.roamers.push(roamer); arrived.push(roamer);
+    }
+    return arrived;
+  }
+
   fill(count: number, player: PlayerSpot): void {
     while (this.roamers.length < count && this.spawnOne(player, 5)) { /* grass may run out: stop quietly */ }
   }
@@ -162,7 +185,7 @@ export class RoamerField {
         roamer.wait = 0.15;
         continue;
       }
-      if (roamer.mood === "chase" && near <= CHASE_RANGE) {
+      if (roamer.mood === "chase" && (near <= CHASE_RANGE || roamer.lured)) {
         if (!roamer.noticed) { roamer.noticed = true; roamer.alert = 0.9; roamer.wait = 0.5; continue; }
         this.stepToward(roamer, player, false, player);
         roamer.wait = 0.05;
@@ -198,7 +221,7 @@ export class RoamerField {
       const playerFacesIt = player.facing === towardRoamer;
       const itFacesAway = roamer.facing === towardRoamer;
       let advantage: Advantage | undefined;
-      if (roamer.mood === "sleep" || (playerFacesIt && itFacesAway && roamer.mood !== "chase")) advantage = "player";
+      if (roamer.lured || roamer.mood === "sleep" || (playerFacesIt && itFacesAway && roamer.mood !== "chase")) advantage = "player";
       else if (roamer.mood === "chase" && roamer.noticed && !playerFacesIt) advantage = "foe";
       best = { roamer, advantage };
     }

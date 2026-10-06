@@ -1,5 +1,5 @@
 /** Light over the open air: a tint that moves smoothly with the hour, pools of light cut out of the dark and a warm glow over them. */
-export type LightKind = "lamp" | "window" | "door" | "statue" | "fountain" | "player";
+export type LightKind = "lamp" | "window" | "door" | "statue" | "fountain" | "player" | "cave" | "spot";
 export interface Light { x: number; y: number; kind: LightKind }
 export interface Ambient { rgb: [number, number, number]; alpha: number }
 
@@ -33,15 +33,17 @@ const LOOK: Record<LightKind, { r: number; glow: string; cut: number; core: numb
   door: { r: 26, glow: "255,198,112", cut: .85, core: .26 },
   statue: { r: 32, glow: "255,226,172", cut: .7, core: .16 },
   fountain: { r: 30, glow: "146,218,236", cut: .7, core: .18 },
-  player: { r: 34, glow: "255,226,172", cut: .5, core: .06 }
+  player: { r: 34, glow: "255,226,172", cut: .5, core: .06 },
+  cave: { r: 34, glow: "255,214,150", cut: .96, core: .12 }, // the only light you carry underground
+  spot: { r: 92, glow: "255,244,214", cut: 1, core: .16 } // the field lights: wide, white, steady
 };
 
 let scratch: HTMLCanvasElement | null = null;
 
-export function drawLighting(ctx: CanvasRenderingContext2D, width: number, height: number, hour: number, lights: readonly Light[], time: number, reduced: boolean): void {
-  const ambient = ambientLight(hour);
+export function drawLighting(ctx: CanvasRenderingContext2D, width: number, height: number, hour: number, lights: readonly Light[], time: number, reduced: boolean, fixed?: Ambient): void {
+  const ambient = fixed ?? ambientLight(hour);
   if (ambient.alpha < .02) return;
-  const need = lightNeed(ambient);
+  const need = fixed ? 1 : lightNeed(ambient);
   scratch ??= document.createElement("canvas");
   const w = Math.ceil(width), h = Math.ceil(height);
   if (scratch.width !== w || scratch.height !== h) { scratch.width = w; scratch.height = h; }

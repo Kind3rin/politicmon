@@ -211,6 +211,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
   // secondaria verso l'OBLAST DEL MEME.
   grotta1: {
     id: "grotta1",
+    dark: .78,
     name: "GROTTA DEL CONSENSO",
     tiles: GROTTA1_TILES,
     outdoor: false,
@@ -767,6 +768,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
   // DECRETO sepolta in fondo all'archivio.
   grotta2: {
     id: "grotta2",
+    dark: .78,
     name: "ARCHIVIO DI STATO",
     tiles: GROTTA2_TILES,
     outdoor: false,

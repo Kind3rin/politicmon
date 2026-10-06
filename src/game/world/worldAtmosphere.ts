@@ -100,7 +100,7 @@ export class WorldAtmosphere {
           const x=Math.round(((seed%spanX)+Math.sin(time*.5+i*1.9)*16+Math.sin(time*1.3+i)*4)-camX),y=Math.round((((seed>>>12)%spanY)+Math.cos(time*.43+i*2.3)*12)-camY);
           if(x<-4||y<-4||x>width+4||y>height+4)continue;
           const pulse=.35+.65*Math.max(0,Math.sin(time*1.7+i*2.7));
-          ctx.fillStyle=`rgba(200,255,120,${(.2*pulse*need).toFixed(3)})`;ctx.fillRect(x-3,y-3,8,8);
+          const glow=ctx.createRadialGradient(x+1,y+1,0,x+1,y+1,6);glow.addColorStop(0,`rgba(200,255,120,${(.5*pulse*need).toFixed(3)})`);glow.addColorStop(1,'rgba(200,255,120,0)');ctx.fillStyle=glow;ctx.fillRect(x-5,y-5,12,12);
           ctx.fillStyle=`rgba(236,255,170,${(1*pulse*need).toFixed(3)})`;ctx.fillRect(x,y,2,2);
         }
         ctx.restore();

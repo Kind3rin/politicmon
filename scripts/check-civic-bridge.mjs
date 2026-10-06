@@ -27,7 +27,12 @@ try {
   input.wasPressed = button => pressed === button; input.heldDirection = () => direction; input.isHeld = () => false;
   const world = new WorldScene(stack, input, state); stack.push(world); world.msg.close(); world.justEnteredMap = false; world.fadeT = 0;
   const snapshots = {}, check = (value, label) => { if (!value) throw Error(label); };
-  const press = (scene, button) => { pressed = button; scene.update(.02); pressed = ''; };
+  // Civic dossiers are native panels now: A runs the selected action, B the back action.
+  const press = (scene, button) => {
+   const panel = scene.uiPanel;
+   if (panel) { const action = button === 'b' ? panel.back : panel.actions[panel.selected ?? panel.primary ?? 0]; action?.run(); return; }
+   pressed = button; scene.update(.02); pressed = '';
+  };
   const capture = (name, scene) => { scene.draw(screen); snapshots[name] = screen.ctx.canvas.toDataURL('image/png'); };
   const before = JSON.stringify(state);
   check(world.isBlocked(7, 7), 'water crossing open before public works');
@@ -36,7 +41,7 @@ try {
   check(stack.top === world && JSON.stringify(state) === before, 'B changed funds or decisions');
   press(world, 'a'); const civic = stack.top; press(civic, 'a');
   check(state.money === 0 && state.morale.decisions.includes('cantiere:build'), 'choice not committed exactly once');
-  for (let n = 0; n < 50 && civic.msg.isOpen; n++) { civic.update(10); press(civic, 'a'); }
+  for (let n = 0; n < 50 && stack.top === civic; n++) press(civic, 'a');
   check(stack.top === world && !world.isBlocked(7, 7), 'same world did not open bridge immediately');
   state.pos = { mapId: 'route1', x: 8, y: 7, facing: 'left' }; world.moving = false;
   for (const x of [7, 6]) {

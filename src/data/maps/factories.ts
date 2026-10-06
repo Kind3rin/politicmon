@@ -117,38 +117,39 @@ export const OBLAST_MEME_TILES = [
 // Route verticale a tema TALK SHOW/lobbying: il LAGHETTO DELL'AUDITEL a ovest
 // nasconde un'isoletta-tesoro (solo col TRAGHETTO), erba alta su entrambi i
 // lati e tre allenatori televisivi. Strada ==== a col 13-16 come le città.
+// Percorso 2, Lungolago: the road swings east round a lake, a pier crosses to an islet, one plateau at the north.
 export const ROUTE2_TILES = [
   "TTTTTTTTTTTTT====TTTTTTTTTTTT",
   "TT...........====..........TT",
-  "TT.,,,,......====.~~~~~~...TT",
-  "TT.,,,,......====.~~~~~~...TT",
+  "TT..,,,,.....====..~~~~~~..TT",
+  "TT..,,,,.....====..~~~~~~..TT",
   "TT.wwwwww....====..........TT",
-  "TT.wwwwww....====..........TT",
-  "TT.ww.www....====..........TT",
-  "TT.wwwwww....====..........TT",
-  "TT.wwwwww....====.s%%%%%%%.TT",
-  "TT.~~~~~~~~..====..........TT",
-  "TT.~~~~~~~~..====..~~~~~~..TT",
-  "TT.~~~~~~~~..====..~~~~~~..TT",
-  "TT.~~~~~~~~..====..........TT",
-  "TT...........====..........TT",
-  "TT..,,,,.....====s.........TT",
-  "TT...........====..........TT",
-  "TT...........====.~~~~~~~..TT",
-  "TT.,,,,.....=====..,,......TT",
-  "TT..~~~~~~..=====..fffffff.TT",
-  "TT%%%%%%%%%%EEEEE%%%%%%%%%%TT",
-  "TT..~~~~~~..=====..,,,,,,,.TT",
-  "TT..~~~~~~..=====...~~~~~..TT",
-  "TT.zzzzzzz..=====...TTTTT..TT",
-  "TT.zwwwwwz..=====...TTTTT..TT",
-  "TT.zwwwwwz..=====...TT.....TT",
-  "TT.zwwwwwz..=====...TTT....TT",
-  "TT.zzzzzzz..=====...,,,....TT",
-  "TT..........=====s.~~~~~~~.TT",
-  "TT..~~~~....=====..~~~~~~~.TT",
-  "TT%%%%%%%%%%EEEEE%%%%%%%%%%TT",
-  "TT..~~~~~~..=====...~~~....TT",
+  "TT.wwwwww....=====...fff...TT",
+  "TT.ww.wwws...=====.........TT",
+  "TT.wwwwww.....=====........TT",
+  "TT.wwwwww......=====.......TT",
+  "TT.~~~~~~~~.....=====~~~~..TT",
+  "TT.~~~~~~~~.....=====~~~~..TT",
+  "TT.~~~~~~~~......=====.....TT",
+  "TT.~~~~~~~~......=====.....TT",
+  "TT%%%%%%%%%%%%%%%%EEEEE%%%%TT",
+  "TT.zzzzzzz.......s=====....TT",
+  "TT.wwwwwwwzz......=====....TT",
+  "TTwwwwwwwwwwzz....=====~~~~TT",
+  "TTwwwwwwwwwwwzz..=====.~~~~TT",
+  "TTwwzzzzwwwwwzz..=====.~~~~TT",
+  "TTwwz..zwwwwwwzz=====..~~~~TT",
+  "TTwwz..zqqqqqqzz=====..~~~~TT",
+  "TTwwz..zwwwwwwz=====...~~~~TT",
+  "TTwwzzzzwwwwwws====TTT.....TT",
+  "TTwwwwwwwwwwwz=====TTT.....TT",
+  "TTwwwwwwwwwwzz=====........TT",
+  "TT.wwwwwwwwzz=====.....~~~~TT",
+  "TT..wwwwwzz..=====.....~~~~TT",
+  "TT..zzzzzz...=====..TTT~~~~TT",
+  "TT...........=====..TTT~~~~TT",
+  "TT..~~~~~~...=====..TTT....TT",
+  "TT..~~~~~~...=====.........TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
 
@@ -156,38 +157,39 @@ export const ROUTE2_TILES = [
 // Route verticale a tema POTERE/burocrazia: bocca della GROTTA2 "ARCHIVIO DI
 // STATO" a nord-est (pattern route1), checkpoint di recinzioni a metà strada
 // e campi d'erba alta con funzionari in agguato.
+// Percorso 3, La Cava: a quarry of sand and boulders, lanes that switch back, one stair on the west and a new asphalt bridge.
 export const ROUTE3_TILES = [
   "TTTTTTTTTTTTT====TTTTTTTTTTTT",
-  "TT...........====..........TT",
-  "TT...........====s...ROR...TT",
-  "TT...........====....ROR...TT",
-  "TT...........==========....TT",
-  "TT.~~~~~~~~..====..........TT",
-  "TT.~~~~~~~~..====..........TT",
-  "TT.~~~~~~~~..====..........TT",
-  "TT.~RR~~~~~..====..........TT",
-  "TT...........====.%%%%%%%%.TT",
-  "TT.........f.====f.........TT",
-  "TT...........====..........TT",
-  "TT...........====.,,,,~~~~.TT",
-  "TT...........====.~~~~~~~~.TT",
-  "TT...........====.~.~~~~~~.TT",
-  "TT...........====.~~~~~~~~.TT",
-  "TT...........====..........TT",
-  "TT...........====..........TT",
-  "TT.,,,......=====...,,.....TT",
-  "TT%%%%%%%%%%EEEEE%%%%%%%%%%TT",
-  "TT..~~~~~~..=====..~~~~~~~.TT",
-  "TT..~~~~~~..=====..~~~~~~~.TT",
-  "TT...~~~....=====..~~~~~...TT",
-  "TTwwwwwwwwwwqqqqqwwwwwwwwwwTT",
-  "TTwwwwwwwwwwqqqqqwwwwwwwwwwTT",
-  "TTzzzzzzzzzz=====zzzzzzzzzzTT",
-  "TT.TTTTT....=====..,,,.....TT",
-  "TT.TTTT.....=====s..~~~~~..TT",
-  "TT.TT...,,..=====...~~~~~..TT",
-  "TT%%%%%%%%%%EEEEE%%%%%%%%%%TT",
-  "TT..~~~~~...=====...~~~....TT",
+  "TTzzzzzzzzzzz====zzzzzzzzzzTT",
+  "TTzzzzzzzzzzz====szzzROR~~~TT",
+  "TTzzzzzzzzzzz====zzzzROR~~~TT",
+  "TTRRRRRRRRRRz====zzzzzzzzzzTT",
+  "TTRRRRRRRRRRz====zzzzzzzzzzTT",
+  "TTzz~~~~~~~zz====zzzzzzzzzzTT",
+  "TTzz~~~~~~~zz====zzzzzzzzzzTT",
+  "TTzz~~~~~~~zz============zzTT",
+  "TTzz~~~~~~~zz============zzTT",
+  "TTRRRRRRRRRRRRRRRRRRR====RRTT",
+  "TTRRRRRRRRRRRRRRRRRRR====RRTT",
+  "TTRR~~~~~zzzzzzzzzzzz====~~TT",
+  "TTRR~~~~~zzzzzzzzzzzz====~~TT",
+  "TTzzz====================~~TT",
+  "TTzzz====================~~TT",
+  "TTzzz====RRRRRRRRRRRRRRRRRRTT",
+  "TTzzz====RRRRRRRRRRRRRRRRRRTT",
+  "TTzzz====z~~~~~~~~~zzzzzzzzTT",
+  "TTzzz====z~~~~~~~~~zzzzzzzzTT",
+  "TT...====..................TT",
+  "TT%%%EEEE%%%%%%%%%%%%%%%%%%TT",
+  "TT...====.~~~~~~~~~~..~~~~~TT",
+  "TT...====.~~~~~~~~~~..~~~~~TT",
+  "TT...============.....~~~~~TT",
+  "TT...============..........TT",
+  "TTwwwwwwwwwwwjjjjwwwwwwwwwwTT",
+  "TTwwwwwwwwwwwjjjjwwwwwwwwwwTT",
+  "TT...........====s..~~~~~~.TT",
+  "TT.~~~~~~....====...~~~~~~.TT",
+  "TT.~~~~~~....====...TT.....TT",
   "TTTTTTTTTTTTT====TTTTTTTTTTTT"
 ];
 
@@ -424,6 +426,51 @@ export const GYM_TILES = [
   "AAAAAAAAAA"
 ];
 
+// STUDIO 5: a stage three rows up behind a stone lip, an audience of benches on the floor.
+export const GYMTV_TILES = [
+  "AAAAAAAAAA",
+  "AkppppppkA",
+  "AppppppppA",
+  "A&&&EE&&&A",
+  "AppppppppA",
+  "AUUppppUUA",
+  "AUUppppUUA",
+  "AppppccppA",
+  "AAAAAAAAAA"
+];
+
+// PALESTRA UE: an emicycle in three tiers; the stairs zig-zag, right then left, so the room is crossed rather than walked up.
+export const GYMUE_TILES = [
+  "AAAAAAAAAAAA",
+  "AkppppppppkA",
+  "AppppppppppA",
+  "A&&EE&&&&&&A",
+  "AppppppppppA",
+  "AppppppppppA",
+  "A&&&&&&&EE&A",
+  "AUUpppppppUA",
+  "AUUpppppppUA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+
+// GLOBAL TOWER: a narrow tower of three floors, stairs on the right and then on the left, statues in the lobby.
+export const GYMGLOBAL_TILES = [
+  "AAAAAAAA",
+  "AkppppkA",
+  "AppppppA",
+  "A&&&&EEA",
+  "AppppppA",
+  "AppppppA",
+  "AppppppA",
+  "AEE&&&&A",
+  "AppppppA",
+  "AppppppA",
+  "AYppppYA",
+  "AppccppA",
+  "AAAAAAAA"
+];
+
 export const MARKET_TILES = [
   "AAAAAAAAAA",
   "AbbbbbbbbA",
@@ -461,6 +508,9 @@ export const PALAZZO_TILES = [
   "AAAAAAAAAAAA"
 ];
 
+export interface GymRoom { tiles: string[]; signX?: readonly [number, number]; zones?: MapDef["zones"]; }
+const DEFAULT_GYM: GymRoom = { tiles: GYM_TILES };
+
 export function gymMap(
   id: string,
   name: string,
@@ -468,25 +518,24 @@ export function gymMap(
   doorX: number,
   doorY: number,
   npcs: NpcDef[],
-  signLines: string[]
+  signLines: string[],
+  room: GymRoom = DEFAULT_GYM
 ): MapDef {
+  // The door mats `cc` on the second-to-last row are the way out.
+  const exitY = room.tiles.length - 2;
+  const exits = [...room.tiles[exitY]].flatMap((ch, x) => ch === "c" ? [x] : []);
+  const [leftSign, rightSign] = room.signX ?? [3, 6];
   return {
     id,
     name,
-    tiles: GYM_TILES,
+    tiles: room.tiles,
+    zones: room.zones,
     outdoor: false,
     music: "interior",
-    warps: [
-      // Allineati ai tappeti `cc` della riga 7 ("AppppccppA" → x 5 e 6): prima
-      // erano a 4/5 e il tappeto destro non faceva uscire.
-      { x: 5, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" },
-      { x: 6, y: 7, toMap: city, toX: doorX, toY: doorY, facing: "down" }
-    ],
-    // Cartelli sul muro di fondo, sopra una cella di pavimento: prima erano a
-    // (0,1)/(9,1), fiancheggiati dalle macchine `k` e dai muri `A` su tutti i
-    // lati ortogonali → illeggibili. (3,0)/(6,0) hanno pavimento sotto: si
-    // leggono stando a (3,1)/(6,1) rivolti in alto.
-    signs: [{ x: 3, y: 0, lines: signLines }, { x: 6, y: 0, lines: signLines }],
+    warps: exits.map(x => ({ x, y: exitY, toMap: city, toX: doorX, toY: doorY, facing: "down" as const })),
+    // Cartelli sul muro di fondo, sopra una cella di pavimento: si leggono
+    // stando sotto, rivolti in alto (illeggibili se fiancheggiati da macchine).
+    signs: [{ x: leftSign, y: 0, lines: signLines }, { x: rightSign, y: 0, lines: signLines }],
     pickups: [],
     npcs
   };
@@ -619,6 +668,9 @@ export const LAB_ENTRY = insideEntry(LAB_TILES);
 export const GROTTA1_ENTRY = insideEntry(GROTTA1_TILES);
 export const GROTTA2_ENTRY = insideEntry(GROTTA2_TILES);
 export const GYM_ENTRY = insideEntry(GYM_TILES);
+export const GYMTV_ENTRY = insideEntry(GYMTV_TILES);
+export const GYMUE_ENTRY = insideEntry(GYMUE_TILES);
+export const GYMGLOBAL_ENTRY = insideEntry(GYMGLOBAL_TILES);
 export const MARKET_ENTRY = insideEntry(MARKET_TILES);
 export const HOUSE_ENTRY_A = insideEntry(HOUSE_TILES_A);
 export const HOUSE_ENTRY_B = insideEntry(HOUSE_TILES_B);

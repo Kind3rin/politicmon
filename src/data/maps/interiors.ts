@@ -1,5 +1,5 @@
 import type { MapDef } from "./types";
-import { LAB_TILES, MARKET_TILES, COLLE_TILES, PALAZZO_TILES, gymMap, marketMap, houseMap, barMap } from "./factories";
+import { LAB_TILES, MARKET_TILES, COLLE_TILES, PALAZZO_TILES, GYMTV_TILES, GYMUE_TILES, GYMGLOBAL_TILES, gymMap, marketMap, houseMap, barMap } from "./factories";
 
 export const INTERIOR_MAPS: Record<string, MapDef> = {
   lab: {
@@ -72,7 +72,8 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
         lines: ["Il maxischermo è spento. Sembra aspettare lo share giusto."]
       }
     ],
-    ["REGOLAMENTO DELLO STUDIO:", "sorridere sempre, contraddire mai."]
+    ["REGOLAMENTO DELLO STUDIO:", "sorridere sempre, contraddire mai."],
+    { tiles: GYMTV_TILES, zones: [{ name: "Palco", x: 0, y: 0, w: 10, h: 4 }, { name: "Platea", x: 0, y: 4, w: 10, h: 5 }] }
   ),
 
   gymue: gymMap(
@@ -84,12 +85,13 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
         lines: ["Verifica chiusa. Per i PP esci dal tappeto a sud: il bar è aperto."]
       },
       {
-        id: "gym2-capo", pal: "granny", x: 4, y: 1, facing: "down",
+        id: "gym2-capo", pal: "granny", x: 5, y: 1, facing: "down",
         trainerId: "ladydirettiva",
         lines: ["Il risultato è registrato. La clausola vale anche quando vinci tu."]
       }
     ],
-    ["PALESTRA UE: Hans offre una verifica facoltativa.", "Il bar recupera PV, PP e status. Puoi uscire prima del boss."]
+    ["PALESTRA UE: Hans offre una verifica facoltativa.", "Il bar recupera PV, PP e status. Puoi uscire prima del boss."],
+    { tiles: GYMUE_TILES, zones: [{ name: "Banco della Presidenza", x: 0, y: 0, w: 12, h: 3 }, { name: "Emiciclo", x: 0, y: 3, w: 12, h: 3 }, { name: "Platea", x: 0, y: 6, w: 12, h: 5 }] }
   ),
 
   gymglobal: gymMap(
@@ -101,17 +103,18 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
         lines: ["Il tavolo adesso serve a parlare. Per i PP puoi tornare al bar."]
       },
       {
-        id: "gym3-allievo2", pal: "aide", x: 7, y: 3, facing: "left",
+        id: "gym3-allievo2", pal: "aide", x: 5, y: 6, facing: "left",
         trainerId: "oligarca", nameplate: "CAPITALE A",
         lines: ["Il conto è arrivato. La trattativa sulla mia quota è finita."]
       },
       {
-        id: "gym3-capo", pal: "boss", x: 4, y: 1, facing: "down",
+        id: "gym3-capo", pal: "boss", x: 3, y: 1, facing: "down",
         trainerId: "tycoon",
         lines: ["Sul conto compare il mio nome. Per una volta devo pagarlo io."]
       }
     ],
-    ["GLOBAL TOWER: due prove facoltative. A inizia, B annulla.", "Tycoon: tre avversari. Puoi uscire e curare PV e PP al bar."]
+    ["GLOBAL TOWER: due prove facoltative. A inizia, B annulla.", "Tycoon: tre avversari. Puoi uscire e curare PV e PP al bar."],
+    { tiles: GYMGLOBAL_TILES, signX: [2, 5], zones: [{ name: "Attico", x: 0, y: 0, w: 8, h: 3 }, { name: "Sala delle trattative", x: 0, y: 3, w: 8, h: 5 }, { name: "Atrio", x: 0, y: 8, w: 8, h: 5 }] }
   ),
 
   market1: marketMap("market1", "mediopoli", 22, 11),

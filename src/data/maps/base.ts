@@ -1,5 +1,5 @@
 import type { MapDef } from "./types";
-import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYM_ENTRY, MARKET_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, BAR_ENTRY, lucaGuide } from "./factories";
+import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYMTV_ENTRY, GYMUE_ENTRY, GYMGLOBAL_ENTRY, MARKET_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, BAR_ENTRY, lucaGuide } from "./factories";
 
 export const BASE_MAPS: Record<string, MapDef> = {
   borgo: {
@@ -327,8 +327,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
       south: { toMap: "route1", offsetX: 0 }
     },
     warps: [
-      { x: 7, y: 10, toMap: "gymtv", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
-      { x: 6, y: 10, toMap: "gymtv", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
+      { x: 7, y: 10, toMap: "gymtv", toX: GYMTV_ENTRY.x, toY: GYMTV_ENTRY.y, facing: "up" },
+      { x: 6, y: 10, toMap: "gymtv", toX: GYMTV_ENTRY.x, toY: GYMTV_ENTRY.y, facing: "up" },
       { x: 21, y: 10, toMap: "market1", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 22, y: 10, toMap: "market1", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 5, y: 18, toMap: "attico", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
@@ -444,8 +444,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
     name: "PERCORSO 2",
     tiles: ROUTE2_TILES,
     zones: [
-      { name: "Colline del talk show", x: 0, y: 0, w: 29, h: 19 },
-      { name: "Valle dello stagno", x: 0, y: 19, w: 29, h: 10 },
+      { name: "Colline del talk show", x: 0, y: 0, w: 29, h: 14 },
+      { name: "Lungolago dell'Auditel", x: 0, y: 14, w: 29, h: 15 },
       { name: "Piana di Mediopoli", x: 0, y: 29, w: 29, h: 3 }
     ],
     outdoor: true,
@@ -469,7 +469,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     signs: [
       {
-        x: 18, y: 8,
+        x: 9, y: 6,
         lines: ["LAGHETTO DELL'AUDITEL", "Il pubblico è spontaneo. Gli applausi hanno un capoturno.", "L'isola si raggiunge col TRAGHETTO."]
       },
       {
@@ -477,16 +477,16 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["PERCORSO 2", "Nord: EUROTOWN. Sud: MEDIOPOLI.", "Gli ospiti sfidano con A. Il bar di EUROTOWN recupera anche i PP."]
       },
       {
-        x: 17, y: 27,
-        lines: ["LAGO DEL SECONDO TURNO", "Qui si pesca in diretta. I pesci sono tutti ospiti fissi.", "Le scarpate si scendono saltando; per risalire c'è il varco accanto alla strada."]
+        x: 14, y: 22,
+        lines: ["LAGO DEL SECONDO TURNO", "Qui si pesca in diretta. I pesci sono tutti ospiti fissi.", "Il molo porta all'isolotto. Chi sale sul palco viene ripreso."]
       }
     ],
     pickups: [
       // Tesoro sull'isoletta del LAGHETTO: ci si arriva solo col TRAGHETTO.
       { id: "pk-r2-isola", x: 5, y: 6, itemId: "schedona", qty: 2 },
       { id: "pk-r2", x: 24, y: 10, itemId: "maalox", qty: 1 },
-      { id: "pk-r2-hide", x: 4, y: 15, itemId: "spritz", qty: 2, hidden: true },
-      { id: "pk-r2-lago", x: 9, y: 24, itemId: "caffe", qty: 2 },
+      { id: "pk-r2-hide", x: 5, y: 12, itemId: "spritz", qty: 2, hidden: true },
+      { id: "pk-r2-lago", x: 6, y: 22, itemId: "caffe", qty: 2 },
       // Pickup raro Round 39: un hold item gratis per far scoprire la meccanica.
       { id: "pk-r2-santino", x: 23, y: 10, itemId: "santino", qty: 1, hidden: true }
     ],
@@ -497,17 +497,17 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Hanno applaudito a luce spenta. Non era a budget."]
       },
       {
-        id: "tr-telelobbista", pal: "aide", x: 10, y: 11, facing: "right",
+        id: "tr-telelobbista", pal: "aide", x: 6, y: 20, facing: "right",
         trainerId: "telelobbista", nameplate: "CONFRONTO A",
         lines: ["Il pubblico risponde. Non è nel pacchetto."]
       },
       {
-        id: "tr-opinionista", pal: "journalist", x: 18, y: 12, facing: "left",
+        id: "tr-opinionista", pal: "journalist", x: 16, y: 12, facing: "right",
         trainerId: "opinionista", nameplate: "PARERE A",
         lines: ["La prossima opinione parte dai fatti."]
       },
       {
-        id: "spettatore-r2", pal: "granny", x: 20, y: 15, facing: "down",
+        id: "spettatore-r2", pal: "granny", x: 22, y: 17, facing: "down",
         lines: ["Ho rifiutato il sondaggio. Mi hanno contato tra gli indecisi: fa più grafico che assente."]
       },
       {
@@ -539,8 +539,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
       south: { toMap: "route2", offsetX: 0 }
     },
     warps: [
-      { x: 7, y: 5, toMap: "gymue", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
-      { x: 6, y: 5, toMap: "gymue", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
+      { x: 7, y: 5, toMap: "gymue", toX: GYMUE_ENTRY.x, toY: GYMUE_ENTRY.y, facing: "up" },
+      { x: 6, y: 5, toMap: "gymue", toX: GYMUE_ENTRY.x, toY: GYMUE_ENTRY.y, facing: "up" },
       { x: 21, y: 5, toMap: "market2", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 22, y: 5, toMap: "market2", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 5, y: 9, toMap: "lobbystudio", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
@@ -638,8 +638,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
     name: "PERCORSO 3",
     tiles: ROUTE3_TILES,
     zones: [
-      { name: "Altopiano del Protocollo", x: 0, y: 0, w: 29, h: 19 },
-      { name: "Valle del fiume", x: 0, y: 19, w: 29, h: 10 },
+      { name: "Cava del Protocollo", x: 0, y: 0, w: 29, h: 21 },
+      { name: "Valle del fiume", x: 0, y: 21, w: 29, h: 8 },
       { name: "Piana di Eurotown", x: 0, y: 29, w: 29, h: 3 }
     ],
     outdoor: true,
@@ -671,15 +671,15 @@ export const BASE_MAPS: Record<string, MapDef> = {
       },
       {
         x: 17, y: 28,
-        lines: ["PONTE DELLA CONCERTAZIONE", "Quattro tavoli, sei sigle, un solo cantiere.", "Le scarpate si scendono saltando. Per tornare su c'è il varco."]
+        lines: ["PONTE DELLA CONCERTAZIONE", "Quattro tavoli, sei sigle, un solo cantiere.", "Le scarpate si scendono saltando. Per tornare su c'è la scalinata a ovest."]
       }
     ],
     pickups: [
       { id: "pk-r3", x: 4, y: 14, itemId: "schedona", qty: 2 },
-      { id: "pk-r3-ponte", x: 24, y: 26, itemId: "caffe", qty: 2 },
+      { id: "pk-r3-ponte", x: 24, y: 24, itemId: "caffe", qty: 2 },
       { id: "pk-r3-hide", x: 25, y: 13, itemId: "caffe", qty: 2, hidden: true },
       // Pickup raro Round 39: hold item speciale nascosto sul percorso.
-      { id: "pk-r3-agenda", x: 5, y: 14, itemId: "agendarossa", qty: 1, hidden: true }
+      { id: "pk-r3-agenda", x: 6, y: 8, itemId: "agendarossa", qty: 1, hidden: true }
     ],
     npcs: [
       {
@@ -688,21 +688,29 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Ti avevo messo in attesa. È diverso dal riceverti."]
       },
       {
-        id: "tr-protocollista", pal: "granny", x: 12, y: 10, facing: "right",
+        id: "tr-protocollista", pal: "granny", x: 12, y: 12, facing: "right",
         trainerId: "protocollista", nameplate: "AUDIT A",
         lines: ["L'allegato indica chi paga. Ecco perché non lo proiettavano."]
       },
       {
-        id: "tr-eminenza", pal: "aide", x: 19, y: 14, facing: "left",
+        id: "tr-eminenza", pal: "aide", x: 19, y: 12, facing: "right",
         trainerId: "eminenza", nameplate: "CONTATTI A",
         lines: ["Abbiamo pubblicato gli incontri. Le cene restano conviviali."]
       },
       {
-        id: "benzinaio-r3", pal: "barista", x: 9, y: 16, facing: "right", pump: true, nameplate: "BENZINAIO",
+        id: "benzinaio-r3", pal: "barista", x: 4, y: 17, facing: "right", pump: true, nameplate: "BENZINAIO",
         lines: ["Alla pompa è arrivato il cartello nuovo. Lo sconto no.", "Il pendolare ha un turno alle sei. Il comunicato esce alle nove."]
       },
       {
-        id: "camionista-r3", pal: "guard", x: 21, y: 26, facing: "left", nameplate: "CAMIONISTA",
+        id: "geologa-r3", pal: "aide", x: 19, y: 6, facing: "down", nameplate: "GEOLOGA",
+        lines: ["Ho sondato il terreno tre volte. La roccia è stabile.", "A franare, ogni inverno, è l'impegno di spesa."]
+      },
+      {
+        id: "cavatore-r3", pal: "kid", x: 9, y: 13, facing: "down", nameplate: "CAVATORE",
+        lines: ["Estraggo sabbia dal 2009. Il progetto prevedeva ghiaia.", "La ghiaia è prevista dal progetto successivo."]
+      },
+      {
+        id: "camionista-r3", pal: "guard", x: 21, y: 24, facing: "left", nameplate: "CAMIONISTA",
         lines: ["Il ponte nuovo regge. Le accise no.", "Con questo prezzo al litro, il viaggio costa più della merce."]
       }
     ]
@@ -764,8 +772,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
     music: "capitale",
     edges: { south: { toMap: "route3", offsetX: 0 } },
     warps: [
-      { x: 7, y: 11, toMap: "gymglobal", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
-      { x: 6, y: 11, toMap: "gymglobal", toX: GYM_ENTRY.x, toY: GYM_ENTRY.y, facing: "up" },
+      { x: 7, y: 11, toMap: "gymglobal", toX: GYMGLOBAL_ENTRY.x, toY: GYMGLOBAL_ENTRY.y, facing: "up" },
+      { x: 6, y: 11, toMap: "gymglobal", toX: GYMGLOBAL_ENTRY.x, toY: GYMGLOBAL_ENTRY.y, facing: "up" },
       { x: 22, y: 11, toMap: "casino", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 21, y: 11, toMap: "casino", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 23, y: 7, toMap: "bar-cap", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },

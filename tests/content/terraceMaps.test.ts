@@ -11,12 +11,15 @@ const TERRACED: Record<string, { from: readonly [number, number]; top: readonly 
   borgo: { from: [6, 13], top: [14, 0], levels: 2 },
   capitale: { from: [6, 12], top: [14, 5], levels: 1 },
   mediopoli: { from: [6, 11], top: [15, 0], levels: 1 },
+  gymtv: { from: [5, 7], top: [4, 1], levels: 1 },
+  gymue: { from: [5, 9], top: [5, 1], levels: 2 },
+  gymglobal: { from: [3, 11], top: [3, 1], levels: 2 },
   palazzo: { from: [5, 7], top: [5, 1], levels: 1 },
   colle: { from: [5, 7], top: [5, 1], levels: 1 },
   eurotown: { from: [6, 13], top: [15, 0], levels: 1 },
   route1: { from: [14, 29], top: [14, 1], levels: 2, ferry: ["pk-r1-isola"] },
-  route2: { from: [14, 30], top: [14, 1], levels: 2, ferry: ["pk-r2-isola", "pk-r2-lago"] },
-  route3: { from: [14, 30], top: [14, 1], levels: 2 }
+  route2: { from: [14, 30], top: [14, 1], levels: 1, ferry: ["pk-r2-isola"] },
+  route3: { from: [14, 30], top: [14, 1], levels: 1 }
 };
 
 type TerracedMap = { tiles: string[] };

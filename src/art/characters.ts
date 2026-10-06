@@ -144,6 +144,8 @@ export const NPC_BUSTS: Record<string, readonly [string, string]> = {
   "evasore-offshore": ["evasore", "Evasore"],
   "fan-tv": ["fan-tv", "Fan della TV"],
   "fan-ue": ["fan-ue", "Fan dell'UE"],
+  "geologa-r3": ["geologa", "Geologa"],
+  "cavatore-r3": ["cavatore", "Cavatore"],
   "granny": ["nonna", "Nonna"],
   "habitue": ["habitue", "Habitué"],
   "home-mom": ["mamma", "Mamma"],

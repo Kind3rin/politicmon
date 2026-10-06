@@ -60,3 +60,42 @@ test("bridge respects its four water tiles and never leaks to other maps or bull
     assert.equal(civicBridgeTile(state, map, x, y, raw), raw);
   }
 });
+
+function climb(state: ReturnType<typeof newGameState>): number {
+  // Steps on foot from the top of the quarry stairs on Route 3 to its north exit.
+  const map = MAPS.route3, start = { x: 6, y: 20, d: 0 }, seen = new Set<string>(), queue = [start];
+  while (queue.length) {
+    const p = queue.shift()!, key = `${p.x},${p.y}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const raw = map.tiles[p.y]?.[p.x];
+    if (!raw) continue;
+    const tile = TILES[civicBridgeTile(state, map.id, p.x, p.y, raw)];
+    if (!tile || tile.solid || tile.water || tile.ledge) continue;
+    if (p.y === 0) return p.d;
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) queue.push({ x: p.x + dx, y: p.y + dy, d: p.d + 1 });
+  }
+  return Infinity;
+}
+
+test("quarry gap: only opening it shortens the climb on Route 3, and it never leaks to other maps", () => {
+  const long = climb(newGameState());
+  assert.ok(long >= 40, `the round-about climb is ${long} steps`);
+  for (const index of [1, 2]) {
+    const state = newGameState(); state.money = 500;
+    assert.equal(resolveCivicChoice(state, "cava", index).ok, true);
+    assert.equal(climb(state), long, "reporting or inaugurating leaves the wall shut");
+  }
+  const state = newGameState(); state.money = 220;
+  const tiles = [...MAPS.route3.tiles];
+  assert.equal(resolveCivicChoice(state, "cava", 0).ok, true);
+  assert.equal(state.money, 0);
+  assert.ok(climb(state) <= long - 12, `the gap saves a dozen steps (${long} → ${climb(state)})`);
+  assert.equal(climb(parseGameState(JSON.stringify(state))!), climb(state), "survives save import");
+  assert.deepEqual(MAPS.route3.tiles, tiles);
+  assert.equal(civicBridgeTile(state, "route3", 14, 10, "R"), "=");
+  for (const [map, x, y, raw] of [["route2", 14, 10, "R"], ["route3", 12, 10, "R"], ["route3", 14, 12, "R"], ["route3", 14, 10, "z"]] as const) assert.equal(civicBridgeTile(state, map, x, y, raw), raw);
+  assert.match(civicNpcReply(state, "cavatore-r3")!.join(" "), /varco regge/);
+  const poor = newGameState(); poor.money = 219;
+  assert.equal(resolveCivicChoice(poor, "cava", 0).ok, false);
+});

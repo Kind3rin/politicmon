@@ -475,6 +475,21 @@
         "npc-circolo-operatore"
       ],
       "prompt": "Six busts of unnamed political aides, 3x2, built on the aide role sprite."
+    },
+    {
+      "file": "npcs-10.png",
+      "job": "6a24c36a-bc7f-44e3-a73a-23c0d44e2f02",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_112822_6a24c36a-bc7f-44e3-a73a-23c0d44e2f02.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "npc-geologa",
+        "npc-cavatore"
+      ],
+      "prompt": "Geologist and quarryman busts for Percorso 3, 3x2 sheet with four empty cells, style reference npcs-9.png."
     }
   ]
 }

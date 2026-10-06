@@ -73,6 +73,15 @@ export const CIVIC_EVENTS: Readonly<Record<string, CivicEvent>> = {
       { id: "ribbon", label: "INAUGURA IL PLASTICO", cost: 0, polls: 9, trust: -12, cohesion: -5, lines: ["Tagli il nastro del modello.", "La coda applaude per educazione.", "Poi perde un'altra coincidenza."] }
     ]
   },
+  cava: {
+    id: "cava", title: "LA GHIAIA DEL PROGETTO", art: "cantiere",
+    lines: ["Il progetto prevedeva ghiaia.", "La cava consegna sabbia dal 2009.", "Il varco nel muro è ancora a disegno."],
+    choices: [
+      { id: "open", label: "APRI IL VARCO", cost: 220, polls: -2, trust: 8, cohesion: 9, lines: ["Due ruspe e un permesso firmato.", "Il muro ha ora un'apertura.", "Chi sale non fa più il giro largo."] },
+      { id: "estimate", label: "PUBBLICA LA STIMA", cost: 0, polls: -1, trust: 6, cohesion: 4, lines: ["La stima è su carta e su schermo.", "Il varco costa quanto un anno di sabbia.", "Il giro largo resta, ma ha un prezzo."] },
+      { id: "gravel", label: "INAUGURA LA GHIAIA", cost: 60, polls: 8, trust: -8, cohesion: -4, lines: ["La ghiaia arriva in un sacchetto.", "Il nastro è più grande del sacchetto.", "Il muro resta dov'è. Gli applausi no."] }
+    ]
+  },
   volunteers: {
     id: "volunteers", title: "A CAMERE SPENTE", art: "verbale",
     lines: ["Il comizio ha riempito la piazza.", "A piegare le sedie sono in due.", "Il social manager li taglia dalla foto."],
@@ -86,5 +95,5 @@ export const CIVIC_EVENTS: Readonly<Record<string, CivicEvent>> = {
 
 export const CIVIC_NPCS: Readonly<Record<string, string>> = {
   "egg-pensionato": "bus", "talkshow-fan": "remix", "pensionato-euro": "sportello",
-  "influencer-cap": "citofono", ingegnere: "traghetto", "campo-capo-campagna": "volunteers", "benzinaio-r3": "pompa", "viandante-r1": "cantiere"
+  "influencer-cap": "citofono", ingegnere: "traghetto", "campo-capo-campagna": "volunteers", "benzinaio-r3": "pompa", "viandante-r1": "cantiere", "cavatore-r3": "cava"
 };

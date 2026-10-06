@@ -1,7 +1,8 @@
 import {lastSuccessfulSaveAt} from "../state";
 import {worldLabel,setWorldLabelZoom} from "../../ui/kit/worldLabels";
 import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosphere";
-import {drawRoomFrame, drawVignette, type Light} from "./lighting";
+import {ambientLight, drawRoomFrame, drawVignette, type Light} from "./lighting";
+import {drawInteriorWall, WALL_HEIGHT} from "./interiorWalls";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
 import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
@@ -3841,6 +3842,7 @@ export class WorldScene implements Scene {
       shadows:()=>this.map.outdoor?this.terrainShadows():[]
     },camX,camY);
 
+    const hasWall=!this.map.outdoor&&roomFit>=1&&!this.map.tileOverrides?.A;
     if(this.map.outdoor)this.terrain.drawWater(screen.ctx,terrainVariantImage('w',waterFrame(this.time,this.state.reduceEffects)),camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects);
     this.drawRoutePreview(screen.ctx,camX,camY);
     const windowLights:Array<{x:number;y:number;lamp?:boolean}>=(this.map.lamps??[]).map(p=>({x:p.x*TILE+6,y:p.y*TILE-12,lamp:true}));
@@ -4276,6 +4278,7 @@ export class WorldScene implements Scene {
     tall.push({ baseY: playerPy + TILE, draw: drawPlayerAndVehicle });
 
     // Disegna tutti gli oggetti "alti" ordinati per Y (chi è più in alto va dietro).
+    if(hasWall)drawInteriorWall(screen.ctx,inner,camX,camY,this.map.id,1-ambientLight(this.localClock().getHours()+this.localClock().getMinutes()/60).alpha/.64,this.time,this.state.reduceEffects);
     tall.sort((a, b) => a.baseY - b.baseY);
     for (const e of tall) {
       e.draw();
@@ -4336,7 +4339,7 @@ export class WorldScene implements Scene {
       glows.push({kind:'player',x:playerPx+8+this.doorShiftNow(),y:playerPy+6});
     }
     this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights,glows);
-    if(!this.map.outdoor&&roomFit>=1)drawRoomFrame(screen.ctx,inner,camX,camY);
+    if(!this.map.outdoor&&roomFit>=1)drawRoomFrame(screen.ctx,inner,camX,camY,hasWall?WALL_HEIGHT:0);
     drawVignette(screen.ctx,VIEW_W,this.viewHeight,this.map.outdoor?.2:.3);
     const quest = currentQuest(this.state);
     if (!this.msg.isOpen && !this.askMenu && !this.remoteMenu) this.drawPlaceSigns(camX, camY, quest?.target);

@@ -83,12 +83,13 @@ export function drawVignette(ctx: CanvasRenderingContext2D, width: number, heigh
 }
 
 /** An interior floats in the dark: everything outside the room goes to near-black and the walls cast a soft shadow inwards. */
-export function drawRoomFrame(ctx: CanvasRenderingContext2D, room: { x: number; y: number; w: number; h: number }, camX: number, camY: number): void {
+export function drawRoomFrame(ctx: CanvasRenderingContext2D, room: { x: number; y: number; w: number; h: number }, camX: number, camY: number, wallHeight = 0): void {
   const x = Math.round(room.x - camX), y = Math.round(room.y - camY), r = x + room.w, b = y + room.h;
   ctx.save();
   ctx.fillStyle = "rgba(5,7,16,.94)";
   const pad = 400;
-  ctx.fillRect(x - pad, y - pad, room.w + pad * 2, pad + 0); // above
+  ctx.fillRect(x - pad, y - pad - wallHeight, room.w + pad * 2, pad); // above (the back wall stays)
+  ctx.fillRect(x - pad, y - wallHeight, pad, wallHeight); ctx.fillRect(r, y - wallHeight, pad, wallHeight);
   ctx.fillRect(x - pad, b, room.w + pad * 2, pad); // below
   ctx.fillRect(x - pad, y, pad, room.h); // left
   ctx.fillRect(r, y, pad, room.h); // right

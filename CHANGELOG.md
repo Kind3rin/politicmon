@@ -4,6 +4,7 @@
 
 - Illuminazione vera all'aperto (`src/game/world/lighting.ts`): la luce cambia dolcemente con l'ora (alba rosata, giorno limpido, tramonto arancio, notte blu: niente più salti alle 17:00 né il velo marrone di prima). Di sera si ritagliano pozze di luce nel buio (lampioni, finestre degli edifici, porte, statue, fontane) con un bagliore caldo sopra, e il giocatore porta una piccola lanterna che lo tiene leggibile. Vignettatura leggera su tutte le mappe.
 - Interni: la stanza ora «galleggia» nel buio (fuori dalle mura quasi nero, ombra morbida dei muri verso l'interno) invece di mostrare muro ripetuto fino ai bordi dello schermo.
+- Gli interni hanno una parete di fondo (`src/game/world/interiorWalls.ts`): carta da parati a righe in sei toni (intonaco, salvia, blu, bordeaux, ardesia, crema scelti per mappa), zoccolo con cornice, finestre che mostrano il cielo dell'ora e fasci di luce obliqui sul pavimento con pulviscolo. Le palestre, il palazzo e le stanze con parete propria restano come erano.
 - `scripts/m2-ui-review.html` accetta `&fx=1` per rivedere gli effetti (di default resta «Riduci effetti»). Test `lighting`.
 
 ## Mandato 2 — passo e porte — 2026-10-06

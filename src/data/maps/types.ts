@@ -42,6 +42,8 @@ export interface NpcDef {
   };
   showIfFlag?: string;
   hideIfFlag?: string;
+  /** Only about during these slots of the schedule (and only once the schedule is open). */
+  slots?: readonly SlotId[];
   setFlag?: string; // flag impostato quando ci parli (per le quest "hai parlato con...")
   wander?: boolean; // se true, l'NPC cammina attorno alla sua posizione iniziale
   daily?: boolean; // SFIDA DEL GIORNO: apre la sfida quotidiana (e non vaga mai)

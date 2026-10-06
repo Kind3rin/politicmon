@@ -49,7 +49,7 @@ test('the low-HP tip needs a way to help and a companion still standing', () => 
 
 test('the world tips wait for a calm moment, and the cards tip only once recruiting has begun', () => {
   const state = newGameState();
-  const here = { calm: true, hurt: false, cards: 2, recruiting: true };
+  const here = { calm: true, hurt: false, cards: 2, recruiting: true, polled: false };
   assert.equal(nextWorldTip(state, here), undefined);
   assert.equal(nextWorldTip(state, { ...here, hurt: true, calm: false }), undefined);
   assert.equal(nextWorldTip(state, { ...here, hurt: true })?.id, 'tired');
@@ -60,6 +60,9 @@ test('the world tips wait for a calm moment, and the cards tip only once recruit
   assert.equal(nextWorldTip(state, { ...here, hurt: true, cards: 0 })?.id, 'cards');
   markTip(state, 'cards');
   assert.equal(nextWorldTip(state, { ...here, hurt: true, cards: 0 }), undefined);
+  assert.equal(nextWorldTip(state, { ...here, polled: true })?.id, 'sondaggi');
+  markTip(state, 'sondaggi');
+  assert.equal(nextWorldTip(state, { ...here, polled: true }), undefined);
 });
 
 test('every tip fits the card: a short title and a body of three lines at most', () => {

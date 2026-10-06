@@ -28,13 +28,17 @@ Quattro fasce, ognuna con due tipi «in onda» (tutti gli otto tipi compaiono un
 - **Politicdex**: l'habitat dice «solo di notte» e il dossier ha il campo «Quando».
 - **Annuncio**: al cambio di fascia un banner con i tipi in onda; la prima volta una spiegazione in tre battute.
 
+- **Le persone dell'ora** (`src/data/maps/slotNpcs.ts`, `NpcDef.slots`): a Borgo, Mediopoli, Eurotown e Caput Mundi (14 persone, almeno tre fasce ciascuna) qualcuno compare solo in una fascia: il fornaio all'alba, il consigliere la sera, il nottambulo, il televenditore... Cambiare fascia cambia chi c'è in piazza. Cinque di loro danno un oggetto la prima volta (flag `slot-gift-*`), come motivo per guardare l'orologio. Stanno fermi, su caselle libere lontane da porte e scale; il test verifica che con tutti presenti ogni porta e ogni apertura del bordo restano raggiungibili. Portano il volto del loro ruolo (nessun busto nuovo: è folla di passaggio).
+- **Missioni giornaliere** (`dailyquests.ts`): due nuove, solo a palinsesto aperto: *Recluta un candidato del tipo in onda* (300 €) e *Vinci contro un tipo in onda* (200 €).
+- Nel Palinsesto i candidati «solo qui» non ancora visti compaiono col tipo («un candidato verde»), il nome solo dopo averli incontrati.
+
 ## Coach
 
 `src/game/coach.ts`: funzione pura `nextBattleTip(state, situazione)`. Ogni consiglio è un flag `tip-<id>` nel salvataggio: letto, chiuso o semplicemente usato, non torna più.
 
 In lotta, una scheda gialla sopra il campo (tutta la scheda è il tasto per chiuderla), un solo consiglio per turno, mai due di seguito dopo una chiusura. Ordine quando ne valgono più d'uno: Fuorionda pronto, compagno in difficoltà (≤ 30% PV, e c'è un caffè o un panchinaro), recluta (selvatico ≤ 50% PV, vivo, con schede), frecce, Polemica, intenzione del rivale. Nella prima lotta: frecce al primo turno, Polemica al secondo, intenzione al terzo.
 
-Nel mondo (solo all'aperto, a mondo fermo): *Squadra stanca* (qualcuno sotto un terzo dei PV) e *Schede finite*; spariscono da sole dopo 14 secondi. Si spegne tutto con l'opzione «Guida e suggerimenti» (la stessa che governa la freccia verso la meta).
+Nel mondo (solo all'aperto, a mondo fermo): *Squadra stanca* (qualcuno sotto un terzo dei PV), *Schede finite* e *I Sondaggi* (la prima volta che la percentuale si muove); spariscono da sole dopo 14 secondi. Si spegne tutto con l'opzione «Guida e suggerimenti» (la stessa che governa la freccia verso la meta).
 
 ## Non verificato
 

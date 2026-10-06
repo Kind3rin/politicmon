@@ -1,5 +1,6 @@
 import { hashDate, localDateKey } from "./daily";
 import { saveGame, type GameState } from "./state";
+import { palinsestoOpen } from "./palinsesto";
 
 // -------------------------------------------------- MISSIONI GIORNALIERE
 // Pool di micro-missioni; ogni giorno 3 vengono pescate deterministicamente
@@ -13,6 +14,7 @@ export interface DailyQuestDef {
   title: string; // ITALIANO MAIUSCOLO, breve (entra nella QuestScene)
   target: number; // quante volte va ripetuta l'azione
   reward: number; // € accreditati al completamento
+  needs?: "palinsesto"; // fa parte del pool solo dopo la prima sfida con Gianni
 }
 
 export const DAILY_QUEST_POOL: DailyQuestDef[] = [
@@ -21,22 +23,25 @@ export const DAILY_QUEST_POOL: DailyQuestDef[] = [
   { id: "steps300", title: "CAMMINA 300 PASSI", target: 300, reward: 150 },
   { id: "slot1", title: "VINCI ALLE SLOT 1 VOLTA", target: 1, reward: 200 },
   { id: "social1", title: "FAI 1 SCAMBIO O DUELLO", target: 1, reward: 300 },
-  { id: "item1", title: "USA 1 OGGETTO IN LOTTA", target: 1, reward: 150 }
+  { id: "item1", title: "USA 1 OGGETTO IN LOTTA", target: 1, reward: 150 },
+  { id: "onair", title: "RECLUTA UN CANDIDATO DEL TIPO IN ONDA", target: 1, reward: 300, needs: "palinsesto" },
+  { id: "onairwin", title: "VINCI CONTRO UN TIPO IN ONDA", target: 1, reward: 200, needs: "palinsesto" }
 ];
 
 // Le 3 missioni del giorno: indici DISTINTI pescati dall'hash della data
 // (stesso schema a sonda lineare della SFIDA DEL GIORNO in daily.ts).
-export function todaysDailyQuests(dateKey = localDateKey()): DailyQuestDef[] {
+export function todaysDailyQuests(dateKey = localDateKey(), withPalinsesto = true): DailyQuestDef[] {
+  const pool = withPalinsesto ? DAILY_QUEST_POOL : DAILY_QUEST_POOL.filter((q) => !q.needs);
   const h = hashDate(`${dateKey}:missioni`);
   const picks: number[] = [];
   for (const seed of [h, Math.floor(h / 7), Math.floor(h / 13)]) {
-    let i = seed % DAILY_QUEST_POOL.length;
+    let i = seed % pool.length;
     while (picks.includes(i)) {
-      i = (i + 1) % DAILY_QUEST_POOL.length;
+      i = (i + 1) % pool.length;
     }
     picks.push(i);
   }
-  return picks.map((i) => DAILY_QUEST_POOL[i]);
+  return picks.map((i) => pool[i]);
 }
 
 // Reset a mezzanotte locale: azzera i progressi e aggiorna la data. Chiamata
@@ -68,7 +73,7 @@ export interface DailyQuestStatus {
 // Stato delle 3 missioni di oggi (per la QuestScene).
 export function dailyQuestStatus(state: GameState): DailyQuestStatus[] {
   ensureDailyQuestReset(state);
-  return todaysDailyQuests().map((quest) => {
+  return todaysDailyQuests(undefined, palinsestoOpen(state)).map((quest) => {
     const e = parseEntry(state, quest.id);
     return { quest, count: e.done ? quest.target : Math.min(quest.target, e.count), done: e.done };
   });
@@ -87,7 +92,7 @@ export function consumeDailyToast(): { title: string; sub: string } | null {
 // il toast "MISSIONE COMPLETATA".
 export function bumpDailyQuest(state: GameState, questId: string, amount = 1): boolean {
   ensureDailyQuestReset(state);
-  const quest = todaysDailyQuests().find((q) => q.id === questId);
+  const quest = todaysDailyQuests(undefined, palinsestoOpen(state)).find((q) => q.id === questId);
   if (!quest) {
     return false;
   }

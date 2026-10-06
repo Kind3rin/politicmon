@@ -956,6 +956,9 @@ export class WorldScene implements Scene {
       if (npc.showIfFlag && !this.state.flags[npc.showIfFlag]) {
         return false;
       }
+      if (npc.slots && !(palinsestoOpen(this.state) && npc.slots.includes(this.slotNow().id))) {
+        return false;
+      }
       if (npc.hideIfFlag && this.state.flags[npc.hideIfFlag]) {
         return false;
       }
@@ -3748,7 +3751,7 @@ export class WorldScene implements Scene {
     if (!isGuideOn() || !this.state.party.length || !this.state.flags["intro-done"] || !this.state.flags["opening-encountered"]) return;
     const calm = this.map.outdoor && !this.msg.isOpen && !this.askMenu && !this.remoteMenu && !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.pendingBattle && !this.cutIn && !this.reveal && !this.banner && !this.moving;
     const cards = Object.entries(this.state.bag).reduce((n, [id, qty]) => n + (ITEMS[id]?.kind === "ball" ? qty : 0), 0);
-    this.worldTipNow = nextWorldTip(this.state, { calm, hurt: this.state.party.some((mon) => mon.hp < statsOf(mon).hp * .34), cards, recruiting: true });
+    this.worldTipNow = nextWorldTip(this.state, { calm, hurt: this.state.party.some((mon) => mon.hp < statsOf(mon).hp * .34), cards, recruiting: true, polled: this.state.sondaggi !== 50 });
     if (this.worldTipNow) this.worldTipSince = this.time;
   }
 

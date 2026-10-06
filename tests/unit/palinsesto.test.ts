@@ -104,3 +104,17 @@ test('the clock shift is saved, defaults to zero and is clamped to a day', () =>
   assert.equal(load(undefined), 0);
   assert.equal(load(Number.NaN), 0);
 });
+
+test('the daily quests about the types on the air only exist once the schedule is open, and always come three and distinct', async () => {
+  const { todaysDailyQuests, DAILY_QUEST_POOL } = await import('../../src/game/dailyquests');
+  assert.ok(DAILY_QUEST_POOL.some(q => q.needs === 'palinsesto'));
+  for (let day = 1; day <= 60; day++) {
+    const key = `2026-11-${String(day % 28 + 1).padStart(2, '0')}`;
+    for (const open of [false, true]) {
+      const quests = todaysDailyQuests(key, open);
+      assert.equal(new Set(quests.map(q => q.id)).size, 3);
+      if (!open) assert.ok(quests.every(q => !q.needs), `${key}: a closed schedule is never asked for`);
+    }
+  }
+  assert.ok(Array.from({ length: 60 }, (_, d) => todaysDailyQuests(`2026-12-${String(d % 28 + 1).padStart(2, '0')}`, true)).some(q => q.some(x => x.needs)), 'they do come up');
+});

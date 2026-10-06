@@ -23,10 +23,14 @@ export class PalinsestoScene implements Scene {
     this.closed = true; this.input.reset(); this.stack.pop();
   }
 
-  /** The candidates of this map that are only seen in `slot`, by name once the player has met them. */
-  private onlyHere(slot: SlotDef): { count: number; known: string[] } {
+  /** The candidates of this map that are only seen in `slot`: the name once the player has met them, the type before. */
+  private onlyHere(slot: SlotDef): { count: number; known: string[]; hints: string[] } {
     const mine = (MAPS[this.state.pos.mapId]?.encounters ?? []).filter(entry => entry.slots?.includes(slot.id));
-    return { count: mine.length, known: mine.filter(entry => this.state.dex[entry.speciesId]).map(entry => SPECIES[entry.speciesId].name) };
+    return {
+      count: mine.length,
+      known: mine.filter(entry => this.state.dex[entry.speciesId]).map(entry => SPECIES[entry.speciesId].name),
+      hints: mine.filter(entry => !this.state.dex[entry.speciesId]).map(entry => SPECIES[entry.speciesId].types.map(t => t.toLocaleLowerCase("it")).join("/"))
+    };
   }
 
   private tune(slot: SlotDef): void {
@@ -40,7 +44,7 @@ export class PalinsestoScene implements Scene {
     const now = gameClock(this.state, this.clock()), slot = slotAtHour(hourOf(now));
     const actions = SLOTS.map((entry): TouchAction => {
       const here = this.onlyHere(entry), current = entry.id === slot.id;
-      const exclusive = here.count ? `Qui, solo a quest'ora: ${here.count === 1 ? "un candidato" : `${here.count} candidati`}${here.known.length ? ` (${here.known.join(", ")})` : ""}.` : "";
+      const exclusive = here.count ? `Qui, solo a quest'ora: ${[...here.known, ...here.hints.map(type => `un candidato ${type}`)].join(", ")}.` : "";
       const detail = () => openUiSheet(`${entry.name} · ${readableCopy(entry.show)}`, [
         entry.blurb, `In onda: ${entry.types.map(t => t.toLocaleLowerCase("it")).join(" e ")}: nell'erba se ne incontrano il doppio.`,
         "Alcuni candidati e alcuni sfidanti si vedono solo in questa fascia.", exclusive

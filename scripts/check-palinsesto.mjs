@@ -44,6 +44,24 @@ try{
  expect(sample.length>0,'some species change weight between morning and evening');
  expect(sample.every(k=>evening[k]===morning[k]*2||evening[k]*2===morning[k]),'a type on the air weighs exactly double');
 
+ // The people of the hour: only the ones of the slot on the air stand in the square, and their gift is given once.
+ await game.jump(SETUP.replace("mapId:'route1',x:12,y:20","mapId:'borgo',x:11,y:12")+`state.flags['rival1-beaten']=true;state.flags['palinsesto-seen']=true;state.bag.caffe=0;`);
+ const here=()=>page.evaluate(()=>window.stack.top.visibleNpcs().filter(n=>n.id.startsWith('slot-')).map(n=>n.id));
+ await shiftTo(9);await page.waitForTimeout(300);
+ expect(JSON.stringify(await here())===JSON.stringify(['slot-borgo-fornaio']),`only the baker is out in the morning (${await here()})`);
+ await shiftTo(20);await page.waitForTimeout(300);
+ expect(JSON.stringify(await here())===JSON.stringify(['slot-borgo-consigliere']),`only the councillor is out in the evening (${await here()})`);
+ await shiftTo(14.5);await page.waitForTimeout(300);
+ expect((await here()).length===0,'nobody of the hour at midday in Borgo');
+ await shiftTo(9);await page.waitForTimeout(600);
+ await page.waitForFunction(()=>!document.querySelector('.ui-dialog:not([hidden])'),null,{timeout:3000}).catch(()=>{});
+ await page.getByRole('button',{name:'Parla',exact:true}).tap({timeout:3000}).catch(()=>failures.push('the baker can be talked to'));
+ await closeDialogs();
+ const gift=await page.evaluate(async()=>{const {getActiveState}=await import('/src/game/state.ts');const s=getActiveState();return {caffe:s.bag.caffe,flag:Boolean(s.flags['slot-gift-borgo-fornaio'])};});
+ expect(gift.caffe===2&&gift.flag,`the baker gives two coffees once (${JSON.stringify(gift)})`);
+ await page.getByRole('button',{name:'Parla',exact:true}).tap({timeout:3000}).catch(()=>{});await closeDialogs();
+ expect((await page.evaluate(async()=>{const {getActiveState}=await import('/src/game/state.ts');return getActiveState().bag.caffe;}))===2,'the gift is not given twice');
+
  // The schedule: the chip opens it, a row opens a sheet with the remote control, tuning moves the clock and says so.
  await shiftTo(23.5);await page.waitForTimeout(1500);
  await page.locator('.ui-world-clock').tap();await page.waitForTimeout(600);

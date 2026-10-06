@@ -47,6 +47,7 @@ import { switchPreview, damageRange, replyRange } from "./tactics";
 import { HANDOFF_STAGES, handoffKey, sharedTypes } from "./handoff";
 import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
 import { isGuideOn } from "../../engine/controls";
+import { currentSlot, palinsestoOpen, typesOnAir } from "../palinsesto";
 import { typeMultiplier } from "../../data/poltypes";
 import { markTip, nextBattleTip, type CoachTip } from "../coach";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
@@ -350,6 +351,8 @@ export class BattleScene implements Scene {
     this.resultRecorded = true;
     recordBattleResult(this.state, result);
     const won = result === "win";
+    // Daily quests of the schedule: a candidate or an opponent of a type that is on the air right now.
+    if ((won || result === "caught") && palinsestoOpen(this.state) && typesOnAir(currentSlot(this.state), this.foe.mon.speciesId)) bumpDailyQuest(this.state, result === "caught" ? "onair" : "onairwin");
     const coppa = this.trainer?.id.startsWith("coppa:") ?? false;
     // EXP: KO and recruitment; tournament EXP belongs to its temporary team.
     if ((won || result === "caught") && !coppa && this.state.boostExpBattles > 0) this.state.boostExpBattles -= 1;

@@ -57,6 +57,7 @@ export function nextBattleTip(state: Pick<GameState, "flags">, s: BattleSituatio
 
 export const WORLD_TIPS = {
   tired: { id: "tired", title: "Squadra stanca", body: "In ogni città il Bar Sport cura tutti i compagni, gratis. Fermati lì prima di una sfida: la Mappa ti dice dove." },
+  sondaggi: { id: "sondaggi", title: "I Sondaggi", body: "La percentuale nel Menu sale con le vittorie e scende con le sconfitte. Cambia i prezzi, l'esperienza e come evolvono i tuoi compagni." },
   cards: { id: "cards", title: "Schede finite", body: "Senza schede non si recluta. Le compri al Discount di una città: le trovi sulla Mappa." }
 } as const satisfies Record<string, CoachTip>;
 
@@ -70,11 +71,14 @@ export interface WorldSituation {
   cards: number;
   /** The player has already met a candidate: only then do the cards matter. */
   recruiting: boolean;
+  /** The approval rating has moved from where it started. */
+  polled: boolean;
 }
 
 export function nextWorldTip(state: Pick<GameState, "flags">, s: WorldSituation): CoachTip | undefined {
   if (!s.calm) return undefined;
   if (s.hurt && !tipSeen(state, "tired")) return WORLD_TIPS.tired;
   if (s.recruiting && s.cards <= 0 && !tipSeen(state, "cards")) return WORLD_TIPS.cards;
+  if (s.polled && !tipSeen(state, "sondaggi")) return WORLD_TIPS.sondaggi;
   return undefined;
 }

@@ -67,6 +67,7 @@ test("townsfolk busts point at real map NPCs and real files, and only the delibe
     assert.ok(existsSync(`public${bust.portrait}`), `${bust.portrait} exists`);
     assert.ok(bust.label, `${id} has a label`);
   }
-  const roleOnly = [...all].filter(([id, npc]) => !npc.spriteSet && !npc.trainerId && !npcBust(id)).map(([id]) => id).sort();
+  // The people of the hour (src/data/maps/slotNpcs.ts) are a passing crowd: they wear the face of their role.
+  const roleOnly = [...all].filter(([id, npc]) => !npc.spriteSet && !npc.trainerId && !npcBust(id) && !id.startsWith("slot-")).map(([id]) => id).sort();
   assert.deepEqual(roleOnly, ROLE_ONLY, "a role-only NPC that is not on the list of deliberate exceptions");
 });

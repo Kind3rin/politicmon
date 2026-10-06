@@ -125,6 +125,38 @@ class AudioEngine {
     this.tone(190, .22, { sweepTo: 45, vol: .17 });
     haptics.hitSuper();
   }
+  /** A short, quiet accent that tells the political types apart by ear; it sits under the generic hit, never replaces it.
+   * `power` is 1 for a heavy hit, .6 otherwise. Each cue stays under ~0.25 s and a volume of .09. */
+  typeAccent(type: string, power = .6): void {
+    const v = (x: number) => x * (.7 + .3 * power);
+    const later = (ms: number, run: () => void) => { setTimeout(run, ms); };
+    switch (type) {
+      case "POPULISMO": // a loudspeaker horn
+        this.tone(220, .13, { type: "square", vol: v(.035), sweepTo: 262 }); this.tone(330, .11, { type: "square", vol: v(.03), delaySec: .06 });
+        break;
+      case "MEDIA": // two camera shutters
+        this.noise(.03, v(.07), 7000); this.tone(2600, .02, { type: "square", vol: v(.03) }); later(55, () => this.noise(.03, v(.06), 5000));
+        break;
+      case "TECNO": // a glitch: four torn blips
+        [880, 330, 1320, 440].forEach((f, i) => this.tone(f, .035, { type: "square", vol: v(.035), delaySec: i * .035 }));
+        break;
+      case "DESTRA": // a flame whoosh
+        this.noise(.22, v(.07), 2600); this.tone(110, .2, { type: "sawtooth", vol: v(.03), sweepTo: 240 });
+        break;
+      case "SINISTRA": // a protest drum, twice
+        this.tone(96, .15, { vol: v(.09), sweepTo: 54 }); this.tone(96, .15, { vol: v(.08), sweepTo: 54, delaySec: .13 });
+        break;
+      case "VERDE": // leaves rustling
+        this.noise(.2, v(.05), 3500); this.tone(660, .06, { type: "triangle", vol: v(.025), sweepTo: 900 });
+        break;
+      case "CENTRO": // a two-note bell
+        this.tone(660, .2, { type: "triangle", vol: v(.05) }); this.tone(990, .22, { type: "triangle", vol: v(.04), delaySec: .07 });
+        break;
+      case "ISTITUZIONE": // a gavel: knock, knock
+        this.tone(140, .07, { type: "triangle", vol: v(.09), sweepTo: 90 }); this.noise(.03, v(.08), 1600); later(95, () => { this.tone(130, .07, { type: "triangle", vol: v(.08), sweepTo: 85 }); this.noise(.03, v(.07), 1500); });
+        break;
+    }
+  }
   hitWeak(): void {
     this.tone(620, .055, { vol: .065, type: "triangle" });
   }

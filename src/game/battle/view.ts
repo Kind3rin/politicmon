@@ -180,6 +180,7 @@ export class BattleFx {
       if (moveType) {
         this.moveFx = { side: attacker, type: moveType, t: .4 };
         this.signature(defSide, moveType, superHit || crit ? 1 : .6);
+        audio.typeAccent(moveType, superHit || crit ? 1 : .6);
       }
       if (superHit || crit) {
         this.punch = 1;

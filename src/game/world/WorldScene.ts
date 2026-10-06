@@ -3512,8 +3512,10 @@ export class WorldScene implements Scene {
 
     const pos = this.state.pos;
 
+    // A tap that is only a by-product of steering (a thumb coming off the stick, a click that refocuses the window) is not an order to walk.
     const rawTap = this.input.consumeTap();
-    const tap=rawTap?unzoomWorldPoint(rawTap.x,rawTap.y,VIEW_W,this.viewHeight,this.tapCamera.zoom):undefined;
+    if (rawTap && !this.input.tapDeliberate()) this.input.clearTap();
+    const tap=rawTap&&this.input.tapDeliberate()?unzoomWorldPoint(rawTap.x,rawTap.y,VIEW_W,this.viewHeight,this.tapCamera.zoom):undefined;
     if (dir || this.input.wasPressed("b")) this.stopTapRoute();
     else if (tap) {
       this.input.clearTap();

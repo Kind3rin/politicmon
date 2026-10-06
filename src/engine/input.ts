@@ -35,6 +35,16 @@ function isNativeControlTarget(target: EventTarget | null, code: string): boolea
   return tag === "input" || tag === "textarea" || (tag === "button" && !(el.closest("#game-ui, #world-ui, #game-dialog") && code !== "Enter" && code !== "Space")) || tag === "select" || tag === "a" || el.isContentEditable === true || Boolean(document.querySelector('dialog[open]'));
 }
 
+const isDirection = (button: Button | null | undefined): boolean =>
+  button === "up" || button === "down" || button === "left" || button === "right";
+
+/** Steering stays "busy" this long after the last direction, so a thumb or key that has just let go cannot also tap. */
+export const STEER_QUIET_MS = 350;
+/** Keyboard players have a mouse under the other hand: it takes longer to mean a click. */
+export const KEY_QUIET_MS = 1500;
+/** A tap that lingers is a resting finger, not a choice. */
+export const TAP_MAX_MS = 550;
+
 // Punto in coordinate interne dello schermo (240x180).
 export interface ScreenPoint {
   x: number;
@@ -52,6 +62,12 @@ export class Input {
   private releaseStick:()=>void=()=>{};
   private releaseCanvas:()=>void=()=>{};
   private stickDragged = false;
+  // A tap on the map walks there. It must be a choice, not a side effect of steering:
+  // thumbs landing after the stick, a second finger, a click that only refocuses the window.
+  private directionAt = -Infinity;
+  private focusedAt = -Infinity;
+  private stickPointer: number | null = null;
+  private tapDeliberateNow = true;
   // Physical pad state survives reset: a held confirmation cannot fire again
   // when a scene changes or a menu consumes its first press.
   private gamepadState = new Map<string, Button>();
@@ -89,7 +105,7 @@ export class Input {
     this.bindStick();
     this.bindCanvas();
     window.addEventListener('blur',()=>{this.focused=false;this.reset();});
-    window.addEventListener('focus',()=>{this.focused=true;this.reset();});
+    window.addEventListener('focus',()=>{this.focused=true;this.focusedAt=performance.now();this.reset();});
     document.addEventListener('visibilitychange',()=>{if(document.hidden)this.reset();});
   }
 
@@ -114,11 +130,15 @@ export class Input {
       return { x, y };
     };
 
+    let downAt = 0;
+    let downBusy = false;
     canvas.addEventListener("pointerdown", (event) => {
       this.stickDragged = false;
       downId = event.pointerId;
       downClientX = event.clientX;
       downClientY = event.clientY;
+      downAt = performance.now();
+      downBusy = this.steering(event.pointerType, downAt, event.pointerId) || (event.pointerType === "mouse" && (event.button !== 0 || downAt - this.focusedAt < 400));
     });
     const lift = (event: PointerEvent) => {
       if (event.pointerId !== downId) {
@@ -130,6 +150,7 @@ export class Input {
       const threshold = (rect.width / VIEW_W) * 6;
       if (moved <= threshold && !this.stickDragged) {
         this.tapNow = toInternal(event.clientX, event.clientY);
+        this.tapDeliberateNow = !downBusy && performance.now() - downAt <= TAP_MAX_MS && !this.steering(event.pointerType, performance.now(), event.pointerId);
       }
       downId = null;
     };
@@ -143,6 +164,7 @@ export class Input {
   private setSource(source: string, button: Button | null): void {
     const previous = this.sources.get(source);
     if (previous === button) return;
+    if (isDirection(button) || isDirection(previous)) this.directionAt = performance.now();
     const fresh = button && !this.isHeld(button);
     this.sources.delete(source);
     if (button) this.sources.set(source, button);
@@ -237,7 +259,7 @@ export class Input {
     };
 
     const release = () => {
-      pointerId = null;
+      pointerId = null; this.stickPointer = null;
       stick.classList.remove("floating-stick");
       stick.style.removeProperty("left"); stick.style.removeProperty("top");
       setDir(null);
@@ -250,7 +272,7 @@ export class Input {
     stick.addEventListener("pointerdown", (event) => {
       if (pointerId !== null || document.querySelector('dialog[open]')) return;
       event.preventDefault();
-      pointerId = event.pointerId;
+      pointerId = event.pointerId; this.stickPointer = pointerId;
       stick.setPointerCapture(event.pointerId);
       const rect = stick.getBoundingClientRect();
       // Origine al centro della levetta (così il primo tocco non scatta).
@@ -282,7 +304,7 @@ export class Input {
           !document.body.classList.contains("ctrl-stick") || document.querySelector('dialog[open]')) return;
       const rect = canvas.getBoundingClientRect();
       if (event.clientX >= rect.left + rect.width / 2) return;
-      event.preventDefault(); pointerId = event.pointerId;
+      event.preventDefault(); pointerId = event.pointerId; this.stickPointer = pointerId;
       originX = event.clientX; originY = event.clientY;
       stick.classList.add("floating-stick");
       stick.style.left = `${originX}px`; stick.style.top = `${originY}px`;
@@ -339,6 +361,17 @@ export class Input {
     return null;
   }
 
+  /** Are the hands steering? A direction is held or just released, or a finger is on the stick or the cross. */
+  private steering(pointerType: string, now: number, own: number): boolean {
+    if ((this.stickPointer !== null && this.stickPointer !== own) || this.pointers.size > 0 || this.heldDirection() !== null) return true;
+    return now - this.directionAt < (pointerType === "mouse" ? KEY_QUIET_MS : STEER_QUIET_MS);
+  }
+
+  /** The tap in this frame was a choice, not a by-product of steering. Menus do not ask: only the world does. */
+  tapDeliberate(): boolean {
+    return this.tapDeliberateNow;
+  }
+
   // Tap rilasciato sul canvas in questo frame (coord. interne 240x180), o null.
   consumeTap(): ScreenPoint | null {
     return this.tapNow;
@@ -363,6 +396,7 @@ export class Input {
 
   // Da chiamare a fine frame.
   endFrame(): void {
+    if (this.heldDirection() !== null) this.directionAt = performance.now();
     this.pressedNow.clear();
     this.tapNow = null;
   }

@@ -130,9 +130,14 @@ try{
      const teamLimit=islandRecruit||campoRecruit||futureRecruit||strettoRecruit?6:euroPlan==='tactical'&&state.badges.includes('auditel')?4:3;
      const wantCatch=!s.trainer&&state.party.length<teamLimit&&(!futureRecruit||s.foe.mon.speciesId==='vannaccix')&&!state.party.some(m=>m.speciesId===s.foe.mon.speciesId)&&balls.length&&(s.foe.mon.hp<=statsOf(s.foe.mon).hp*.65||damage.score/200>=s.foe.mon.hp);
      const wantHeal=s.player.mon.hp<hpMax*.35&&heal;
-     itemPending=wantHeal?heal:wantCatch?balls[0]:null;grid(s.mainMenu,itemPending?1:0);return true;
+     itemPending=wantHeal?heal:wantCatch?balls[0]:null;
+     // The fight is a native panel now: moves, postures and the shortcuts are its actions.
+     const acts=s.uiPanel.actions;
+     if(itemPending){acts.find(a=>a.label==='Borsa').run();tick();return true;}
+     const pick=combatMove(s),first=s.player.mon.moves.findIndex(m=>m.pp>0&&MOVES[m.id].power>0),fallbackPick=s.player.mon.moves.findIndex(m=>m.pp>0);
+     const index=pick>=0?pick:first>=0?first:fallbackPick>=0?fallbackPick:0;
+     acts[index].run();tick();return true;
     }
-    if(s.mode==='fight'){const best=combatMove(s);if(best>=0&&!s.fightFallback){if(s.fightMenu.index!==best){press(s.fightMenu.index<best?'down':'up');return true;}}press('a');return true;}
     if(s.mode==='ask'&&finalTactics()&&s.askText.startsWith('Rimpasto?')){
      const index=bestCandidate(s.foe,s.player.mon.uid),preview=index>=0?switchPreview(state.party[index],s.foe):null;
      const target=preview&&candidateScore(preview.entrant,preview.opponent)>candidateScore(s.player,s.foe)*1.12?0:1;
@@ -150,6 +155,8 @@ try{
     }
     if(s.msg.isOpen){press('a');return true;}
     const target=s.view.ids.indexOf(itemPending);if(target<0)throw Error('Missing planned bag item '+itemPending);
+    // In a fight the bag is a native list of the usable items; the tap is the use.
+    if(s.opts?.inBattle){s.uiPanel.actions[target].run();tick();return true;}
     linear(s.view.menu,target);return true;
    }
    if(name==='MoraleScene'&&repairPending){
@@ -175,7 +182,10 @@ try{
    if(name==='TeachScene'){
     if(!lessons.has(s)){const lesson={uid:s.mon.uid,id:s.mon.speciesId,move:s.moveId,level:s.mon.level};lessons.set(s,lesson);trace('learn',lesson);}
     const powers=s.mon.moves.map(slot=>MOVES[slot.id].power),target=archivePending?archivePending.replace:powers.indexOf(Math.min(...powers));
-    if(!s.confirm&&!s.msg.isOpen&&s.mon.moves.length>=4&&s.menu.index!==target)press('down');else press('a');return true;
+    // The lesson is a native list now: the replaced move (or the single learn row) is the action to run.
+    if(s.msg.isOpen){press('a');return true;}
+    const rows=s.uiPanel?.actions;if(!rows){press('a');return true;}
+    (s.mon.moves.length>=4?rows[1+target]:rows[rows.length-1]).run();tick();return true;
    }
    if(name==='RecallScene'){
     if(state.party.find(m=>m.uid===archivePending.uid).moves.some(s=>s.id===archivePending.move)){archivePending.done=true;press('b');return true;}
@@ -265,7 +275,7 @@ try{
    if(['FieldGuideScene','StarterPreviewScene','EvolutionScene','BossBriefingScene','SliceEndingScene','ElectionResultsScene','Atto3EndingScene'].includes(name)){press('a');return true;}
    throw Error('Unhandled scene '+name);
   }
-  function settle(){let n=0;while(action()){if(n++>10000)throw Error('Scene did not settle '+stack.top?.constructor.name);}}
+  function settle(){let n=0;while(action()){if(n++>10000){const t=stack.top;throw Error('Scene did not settle '+t?.constructor.name+' '+JSON.stringify({mode:t?.mode,msg:t?.msg?.isOpen,queue:t?.queue?.length,ask:t?.askText,stepTimer:t?.stepTimer,ui:Boolean(t?.uiPanel),postureMenu:Boolean(t?.postureMenu)}));}}}
   const dirs=[['up',0,-1],['left',-1,0],['right',1,0],['down',0,1]];
   function pathTo(tx,ty){
    const from=[state.pos.x,state.pos.y],key=(x,y)=>x+','+y,q=[from],parents=new Map([[key(...from),null]]);let found=null;

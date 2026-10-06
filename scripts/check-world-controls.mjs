@@ -64,11 +64,37 @@ try{
  expect(after.y<before.y,'floating stick walks too');
  expect(await page.locator('#touch-stick.floating-stick').count()===0,'the floating stick is released');
 
- // Tapping the map walks there by itself.
+ // Tapping the map walks there by itself (once the thumb has had time to leave the stick).
+ await page.waitForTimeout(600);
  before=await where(page);
  await page.touchscreen.tap(250,430);await page.waitForTimeout(1600);
  after=await where(page);
  expect(after.x!==before.x||after.y!==before.y,'tapping the map walks the player');
+
+ // ---- Steering must not tap: a tap only walks when it is a choice ----
+ const idle=async()=>{await page.waitForTimeout(2200);return where(page);};
+ // `act` steers however it likes, calls `mark()` just before the tap that must not walk, then taps.
+ const stillAfter=async(act,message)=>{
+  await idle();let from;await act(async()=>{await page.waitForTimeout(260);from=await where(page);});
+  await page.waitForTimeout(1500);const to=await where(page);
+  expect(to.x===from.x&&to.y===from.y,`${message} (${from.x},${from.y} → ${to.x},${to.y})`);
+ };
+ // A thumb that just came off the stick and lands again on the map.
+ await stillAfter(async mark=>{await drag(page,[70,400],[70,380],120);await mark();await page.touchscreen.tap(300,330);},'a tap right after steering does not walk');
+ // A thumb resting on the floating stick without moving is not a tap.
+ await stillAfter(async mark=>{await mark();await touch(page,'touchStart',[[70,430]]);await page.waitForTimeout(900);await touch(page,'touchEnd',[]);},'a resting thumb does not walk');
+ // A second finger touching the map while the first steers: no route may be planned.
+ await idle();
+ await touch(page,'touchStart',[[70,420]]);await touch(page,'touchMove',[[70,400]]);await page.waitForTimeout(500);
+ await touch(page,'touchStart',[[70,400],[300,330]]);await page.waitForTimeout(80);await touch(page,'touchEnd',[[70,400]]);
+ await page.waitForTimeout(80);await touch(page,'touchEnd',[]);await page.waitForTimeout(120);
+ const planned=await page.getByRole('button',{name:'Fermati',exact:true}).count();
+ expect(planned===0,'a second finger on the map plans no route (the context button says Fermati)');
+ // A quick, deliberate tap on the left half still walks (that half is also the floating stick).
+ before=await idle();
+ await page.touchscreen.tap(90,380);await page.waitForTimeout(1500);
+ after=await where(page);
+ expect(after.x!==before.x||after.y!==before.y,'a quick tap on the left half still walks');
 
  // The run toggle shows its state with more than colour.
  const run=page.getByRole('button',{name:'Corri',exact:true});
@@ -126,6 +152,18 @@ try{
  expect(await page.locator('#touch-stick').isHidden(),'no touch stick on desktop');
  await page.keyboard.down('ArrowUp');await page.waitForTimeout(500);await page.keyboard.up('ArrowUp');
  expect((await where(page)).steps>0,'arrow keys walk');
+ // Keys in one hand, a mouse in the other: a click right after steering is an accident, a click later is an order.
+ await page.waitForTimeout(2200);
+ let desk=await where(page);
+ await page.keyboard.down('ArrowUp');await page.waitForTimeout(250);await page.keyboard.up('ArrowUp');
+ const afterKey=await where(page);
+ await page.mouse.click(760,520);await page.waitForTimeout(1500);
+ desk=await where(page);
+ expect(desk.x===afterKey.x&&desk.y===afterKey.y,`a click just after the arrow keys does not walk (${afterKey.x},${afterKey.y} → ${desk.x},${desk.y})`);
+ await page.waitForTimeout(2000);
+ await page.mouse.click(760,520);await page.waitForTimeout(1800);
+ const later=await where(page);
+ expect(later.x!==desk.x||later.y!==desk.y,'a click when the keys are quiet walks there');
  await page.close();
 }finally{await browser.close();}
 if(errors.length){console.error(errors.join('\n'));process.exit(1);}

@@ -1495,6 +1495,33 @@ export class WorldScene implements Scene {
     }
   }
 
+  /** The wild encounter: a white flash, the picture leaning in, speed lines from the player and an iris closing on them. The battle opens with the matching iris. */
+  private drawEncounterWipe(screen: Screen, cx: number, cy: number): void {
+    const total = 0.55, p = Math.min(1, Math.max(0, 1 - this.encounterFlash / total)), ctx = screen.ctx, h = this.viewHeight, w = VIEW_W;
+    const ease = 1 - Math.pow(1 - p, 3), zoom = 1 + .16 * ease;
+    // The frame leans in towards the player: the canvas drawn over itself, bigger.
+    if (zoom > 1.001) {
+      const sw = w / zoom, sh = h / zoom, sx = Math.max(0, Math.min(w - sw, cx - sw * (cx / w))), sy = Math.max(0, Math.min(h - sh, cy - sh * (cy / h)));
+      ctx.drawImage(ctx.canvas, sx * (ctx.canvas.width / w), sy * (ctx.canvas.height / h), sw * (ctx.canvas.width / w), sh * (ctx.canvas.height / h), 0, 0, w, h);
+    }
+    ctx.save();
+    // Speed lines: dark and light wedges radiating out of the player, growing and turning.
+    const rays = 26, reach = Math.hypot(w, h);
+    for (let i = 0; i < rays; i++) {
+      const a = (i / rays) * Math.PI * 2 + this.time * .6, inner = 26 + (i % 3) * 14 + (1 - ease) * 60, wide = .035 + (i % 4) * .008;
+      ctx.globalAlpha = Math.min(.8, p * 1.8) * (i % 2 ? .55 : .85); ctx.fillStyle = i % 2 ? "#fff6d6" : "#10141f";
+      ctx.beginPath(); ctx.moveTo(cx + Math.cos(a - wide) * inner, cy + Math.sin(a - wide) * inner); ctx.lineTo(cx + Math.cos(a) * reach, cy + Math.sin(a) * reach); ctx.lineTo(cx + Math.cos(a + wide) * inner, cy + Math.sin(a + wide) * inner); ctx.closePath(); ctx.fill();
+    }
+    // The first instants: a white flash.
+    if (p < .22) { ctx.globalAlpha = (1 - p / .22) * .75; ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, w, h); }
+    // Then the iris closes on the player.
+    if (p > .5) {
+      const k = (p - .5) / .5, radius = Math.max(0, reach * .56 * (1 - Math.pow(k, 1.15)));
+      ctx.globalAlpha = 1; ctx.fillStyle = "#10141f"; ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.arc(cx, cy, radius, 0, Math.PI * 2, true); ctx.fill("evenodd");
+    }
+    ctx.restore();
+  }
+
   private grassNear(radius: number): number {
     const { x, y } = this.state.pos; let n = 0;
     for (let ty = y - radius; ty <= y + radius; ty++) for (let tx = x - radius; tx <= x + radius; tx++) if (TILES[this.tileAt(tx, ty)]?.encounter) n++;
@@ -4711,10 +4738,8 @@ export class WorldScene implements Scene {
     this.msg.draw(screen);
 
     if (this.encounterFlash > 0 && !this.state.reduceEffects) {
-      const phase = Math.floor(this.encounterFlash * 12) % 2;
-      if (phase === 0) {
-        screen.dim(0.85);
-      }
+      const at = seen(baseX + 8, baseY + 8);
+      this.drawEncounterWipe(screen, at.x, at.y);
     }
 
     // Dissolvenza d'ingresso nella nuova mappa (più dolce dei cambi secchi).

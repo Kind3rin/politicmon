@@ -56,6 +56,16 @@ try {
     check(world.contextLabel() === 'Decreto', 'no bridge label: ' + world.contextLabel());
     world.interact(); run(2.5); check(world.tileAt(27, 21) === 'q' && !world.isBlocked(27, 21), 'the bridge is missing');
     world.loadMap('capitale'); check(world.tileAt(27, 21) === 'w', 'the bridge outlived the map'); log.push('ponte'); }
+  // Every obstacle on every map can be reached from some side and says what to do about it.
+  { const { MAPS } = await import('/src/data/maps.ts'); let seen = 0;
+    for (const map of Object.values(MAPS)) for (const spot of map.spots ?? []) {
+      const dirs = [['up', 0, 1], ['down', 0, -1], ['left', 1, 0], ['right', -1, 0]];
+      const way = dirs.map(([facing, dx, dy]) => ({ facing, x: spot.x + dx, y: spot.y + dy })).find(c => { const ch = map.tiles[c.y]?.[c.x]; return ch === '.' || ch === '=' || ch === 'z' || ch === '~'; });
+      check(way, `${spot.id}: no open tile beside it`);
+      const { world } = boot(map.id, way.x, way.y, way.facing);
+      const label = world.contextLabel(); check(label === (spot.kind === 'tape' ? 'Taglia' : 'Spalla'), `${spot.id}: context label ${label}`);
+      check(world.isBlocked(spot.x, spot.y), `${spot.id} does not block`); seen++; }
+    check(seen >= 6, 'too few obstacles checked: ' + seen); log.push(seen + ' obstacles'); }
   // The state ferry's water is not a ditch: a lake is not bridged.
   { const { world } = boot('route1', 3, 6, 'right'); check(world.bridgeInFront() === null || world.bridgeInFront().tiles.length <= 3, 'a lake got bridged'); }
   // COMIZIO: someone comes running; again at once is refused.

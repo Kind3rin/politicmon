@@ -28,7 +28,7 @@ I veicoli (monopattino, ruspa, auto blu, traghetto) restano come sono: i poteri 
 
 ## Dove si trovano i luoghi
 
-`src/data/maps/powerSites.ts` ritaglia radure e nicchie nei boschi (quattro per ora: due in Percorso 2, due in Caput Mundi), ciascuna sigillata da un solo ostacolo e con un premio: direttive di partito (FIAMMA, MULTA UE, SCIOPERO, INCIUCIO), schede, mojito, maalox, caffè. Gli ostacoli sono `MapDef.spots` (`tape`, `boulder`); i tesori hanno `PickupDef.power`.
+`src/data/maps/powerSites.ts` ritaglia radure e nicchie nei boschi (dieci): due in Percorso 2, due in Caput Mundi e sei nicchie lungo i bordi delle mappe più vecchie (Borgo, Percorso 1, Mediopoli, Eurotown, Percorso 3, Colle dell'Antenna: il Volo di Stato rende breve il ritorno). Ciascuna è sigillata da un solo ostacolo e ha un premio: direttive di partito (FIAMMA, MULTA UE, SCIOPERO, INCIUCIO, WHATEVER, PIAZZA, GREEN), oggetti da tenere (telecamera, sondaggio truccato, agenda rossa, caffettiera), schede, mojito, maalox, caffè. Sotto un masso il tesoro è nascosto: lo trovi spostandolo e calpestando la casella. Gli ostacoli sono `MapDef.spots` (`tape`, `boulder`); i tesori hanno `PickupDef.power`.
 
 ## Come si aggiunge un luogo
 
@@ -42,6 +42,6 @@ I veicoli (monopattino, ruspa, auto blu, traghetto) restano come sono: i poteri 
 
 ## Limiti dichiarati
 
-- I luoghi sono pochi (quattro) rispetto alla promessa: servono più nicchie in altre mappe, e un luogo per Riflettori che non sia solo «le grotte sono buie».
+- I luoghi sono pochi (dieci) rispetto alla promessa: servono più nicchie in altre mappe, e un luogo per Riflettori che non sia solo «le grotte sono buie».
 - Il Volo parte da tre città e da tre luoghi lontani una volta visitati; mancano Campo Largo e i capitoli del terzo atto.
 - Nessun playtest a mano su telefono.

@@ -6,7 +6,7 @@ import { POWER_SITES } from "../../src/data/maps/powerSites.ts";
 import { bridgePlan, climbLanding } from "../../src/game/world/powerWorld.ts";
 
 const DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0]] as const;
-const FROM: Record<string, [number, number]> = { route2: [1, 28], capitale: [6, 12], route1: [14, 29] };
+const FROM: Record<string, [number, number]> = { route2: [1, 28], capitale: [6, 12], route1: [14, 29], borgo: [6, 13], mediopoli: [6, 11], eurotown: [6, 13], route3: [14, 30], antenna: [14, 25] };
 
 /** What can be reached on foot, with some powers: tape cut, boulders pushed away, ditches bridged, banks climbed. */
 function reach(mapId: string, powers: { taglio?: boolean; spallata?: boolean; ponte?: boolean; scalata?: boolean }) {

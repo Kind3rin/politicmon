@@ -20,6 +20,8 @@ export type TerrainSource = {
   shadows?: () => TerrainShadow[];
   /** Heights read off the map; ground above the valley floor gets a little more light. */
   terraces?: Terraces;
+  /** Stairs carpeted in red for a hall, stone for everywhere else. */
+  stairStyle?: 'stone' | 'carpet';
 };
 
 /** Coordinate seed: stable through camera movement, reloads and negative coordinates. */
@@ -114,9 +116,10 @@ export class TerrainRenderer {
       const ch=rows[y][x];
       if(!isFace(ch)&&ch!=='E')continue;
       const join={left:isFace(rows[y][x-1])||isStair(rows[y][x-1]),right:isFace(rows[y][x+1])||isStair(rows[y][x+1])};
-      if(ch==='E')this.drawStairs(ctx,x,y,cells[y][x].variant,rows[y][x-1],rows[y][x+1]);
-      else if(ch==='&')this.drawWall(ctx,x,y,cells[y][x].variant,isFace(rows[y+1]?.[x]),join);
-      else this.drawLedge(ctx,x,y,cells[y][x].variant,isFace(rows[y+1]?.[x]),join);
+      const above=isFace(rows[y-1]?.[x]);
+      if(ch==='E')this.drawStairs(ctx,x,y,cells[y][x].variant,rows[y][x-1],rows[y][x+1],source.stairStyle==='carpet');
+      else if(ch==='&')this.drawWall(ctx,x,y,cells[y][x].variant,isFace(rows[y+1]?.[x]),join,above);
+      else this.drawLedge(ctx,x,y,cells[y][x].variant,isFace(rows[y+1]?.[x]),join,above);
     }
     // Quota: ogni gradino salito aggiunge luce, così le terrazze alte si leggono prima ancora di arrivarci.
     if(source.terraces&&source.terraces.top>0){
@@ -189,60 +192,67 @@ export class TerrainRenderer {
       ctx.clip();ctx.drawImage(neighbor.image,px,py,TILE,TILE);ctx.restore();
     });
   }
-  private drawLedge(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean,join:{left:boolean;right:boolean}={left:true,right:true}):void {
+  private drawLedge(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean,join:{left:boolean;right:boolean}={left:true,right:true},above=false):void {
     const px=x*TILE+(join.left?0:2),py=y*TILE,w=TILE-(join.left?0:2)-(join.right?0:2);
     ctx.save();
     // Labbro d'erba in alto, parete di terra con strati, base scura. Alle estremità la scarpata si arrotonda e dà un fianco.
-    ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,w,4);
-    ctx.fillStyle='#a6c47f';ctx.fillRect(px,py,w,1);
-    ctx.fillStyle='#5f7f56';ctx.fillRect(px,py+3,w,1);
-    ctx.fillStyle='#9a7a56';ctx.fillRect(px,py+4,w,9);
-    ctx.fillStyle='#b69168';ctx.fillRect(px,py+4,w,2);
+    if(above){ctx.fillStyle='#9a7a56';ctx.fillRect(px,py,w,13);}
+    else{
+      ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,w,4);
+      ctx.fillStyle='#a6c47f';ctx.fillRect(px,py,w,1);
+      ctx.fillStyle='#5f7f56';ctx.fillRect(px,py+3,w,1);
+      ctx.fillStyle='#9a7a56';ctx.fillRect(px,py+4,w,9);
+      ctx.fillStyle='#b69168';ctx.fillRect(px,py+4,w,2);
+    }
     ctx.fillStyle='#7b5f43';ctx.fillRect(px,py+8,w,1);ctx.fillRect(px,py+11,w,1);
     const crack=(variant*5+x*3)%11+2;ctx.fillStyle='#664d36';ctx.fillRect(px+Math.min(crack,w-2),py+5,1,3);ctx.fillRect(px+Math.min((crack+6)%13+1,w-2),py+9,1,2);
-    ctx.fillStyle='#4a392a';ctx.fillRect(px,py+13,w,3);
-    if(!join.left){ctx.fillStyle='#664d36';ctx.fillRect(px,py+4,1,12);ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,1,4);}
-    if(!join.right){ctx.fillStyle='#664d36';ctx.fillRect(px+w-1,py+4,1,12);ctx.fillStyle='#7ea46f';ctx.fillRect(px+w-1,py,1,4);}
+    if(!continues){ctx.fillStyle='#4a392a';ctx.fillRect(px,py+13,w,3);}else{ctx.fillStyle='#9a7a56';ctx.fillRect(px,py+13,w,3);}
+    if(!join.left){ctx.fillStyle='#664d36';ctx.fillRect(px,py+(above?0:4),1,16-(above?0:4));if(!above){ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,1,4);}}
+    if(!join.right){ctx.fillStyle='#664d36';ctx.fillRect(px+w-1,py+(above?0:4),1,16-(above?0:4));if(!above){ctx.fillStyle='#7ea46f';ctx.fillRect(px+w-1,py,1,4);}}
     if(!continues){ctx.fillStyle='rgba(20,30,37,.28)';ctx.fillRect(px,py+16,w,4);}
     ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+16,w,3);
     ctx.restore();
   }
-  /** Muro di sostegno: coronamento chiaro, due corsi di blocchi sfalsati, zoccolo scuro. */
-  private drawWall(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean,join:{left:boolean;right:boolean}):void {
+  /** Muro di sostegno: coronamento chiaro, due corsi di blocchi sfalsati, zoccolo scuro. Un muro alto più righe ha un solo coronamento e un solo zoccolo. */
+  private drawWall(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean,join:{left:boolean;right:boolean},above=false):void {
     const px=x*TILE+(join.left?0:1),py=y*TILE,w=TILE-(join.left?0:1)-(join.right?0:1);
     const tones=['#bcae90','#b3a487','#c3b597','#ae9f83'];
     ctx.save();
-    ctx.fillStyle='#e3dac0';ctx.fillRect(px,py,w,3);
-    ctx.fillStyle='#f1e9d2';ctx.fillRect(px,py,w,1);
-    ctx.fillStyle='#a99878';ctx.fillRect(px,py+2,w,1);
-    for(let course=0;course<2;course++){
-      const top=py+3+course*5,shift=course?4:0;
-      ctx.fillStyle=tones[(variant+course)%4];ctx.fillRect(px,top,w,5);
-      ctx.fillStyle='#8f8068';ctx.fillRect(px,top+4,w,1);
-      for(let bx=shift;bx<TILE;bx+=8){ctx.fillStyle='#8f8068';ctx.fillRect(x*TILE+bx,top,1,4);}
+    if(!above){
+      ctx.fillStyle='#e3dac0';ctx.fillRect(px,py,w,3);
+      ctx.fillStyle='#f1e9d2';ctx.fillRect(px,py,w,1);
+      ctx.fillStyle='#a99878';ctx.fillRect(px,py+2,w,1);
+    }
+    const first=above?0:3;
+    for(let course=0;course<(above?3:2);course++){
+      const top=py+first+course*5,shift=(course+(above?1:0))%2?4:0,height=Math.min(5,py+13-top);
+      if(height<=0)break;
+      ctx.fillStyle=tones[(variant+course)%4];ctx.fillRect(px,top,w,height);
+      ctx.fillStyle='#8f8068';ctx.fillRect(px,top+height-1,w,1);
+      for(let bx=shift;bx<TILE;bx+=8){ctx.fillStyle='#8f8068';ctx.fillRect(x*TILE+bx,top,1,height-1);}
       ctx.fillStyle='rgba(255,246,222,.28)';ctx.fillRect(px,top,w,1);
     }
-    ctx.fillStyle='#6f6350';ctx.fillRect(px,py+13,w,3);
-    ctx.fillStyle='#8a7c64';ctx.fillRect(px,py+13,w,1);
-    if(!join.left){ctx.fillStyle='#6f6350';ctx.fillRect(px,py+3,1,13);}
-    if(!join.right){ctx.fillStyle='#6f6350';ctx.fillRect(px+w-1,py+3,1,13);}
+    if(continues){ctx.fillStyle=tones[(variant+2)%4];ctx.fillRect(px,py+13,w,3);ctx.fillStyle='#8f8068';ctx.fillRect(px,py+15,w,1);}
+    else{ctx.fillStyle='#6f6350';ctx.fillRect(px,py+13,w,3);ctx.fillStyle='#8a7c64';ctx.fillRect(px,py+13,w,1);}
+    const edge=above?0:3;
+    if(!join.left){ctx.fillStyle='#6f6350';ctx.fillRect(px,py+edge,1,16-edge);}
+    if(!join.right){ctx.fillStyle='#6f6350';ctx.fillRect(px+w-1,py+edge,1,16-edge);}
     if(!continues){ctx.fillStyle='rgba(20,30,37,.28)';ctx.fillRect(px,py+16,w,4);}
     ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+16,w,3);
     ctx.restore();
   }
-  /** Scalinata: quattro gradini, alzata in ombra sotto ogni pedata chiara; fianchi se accanto c'è un muro. */
-  private drawStairs(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,left:string|undefined,right:string|undefined):void {
+  /** Scalinata: quattro gradini, alzata in ombra sotto ogni pedata chiara; fianchi se accanto c'è un muro. In una sala è un tappeto rosso. */
+  private drawStairs(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,left:string|undefined,right:string|undefined,carpet=false):void {
     const px=x*TILE,py=y*TILE;
     ctx.save();
-    ctx.fillStyle='#8a7c64';ctx.fillRect(px,py,TILE,TILE);
+    ctx.fillStyle=carpet?'#7a1424':'#8a7c64';ctx.fillRect(px,py,TILE,TILE);
+    const tones=carpet?['#f0586a','#d7263d','#a31d2f','#6f1220']:['#f6edd2','#dccfae','#b3a381','#6f634b'];
     for(let step=0;step<4;step++){
       const top=py+step*4;
-      ctx.fillStyle='#f6edd2';ctx.fillRect(px,top,TILE,1);
-      ctx.fillStyle='#dccfae';ctx.fillRect(px,top+1,TILE,1);
-      ctx.fillStyle='#b3a381';ctx.fillRect(px,top+2,TILE,1);
-      ctx.fillStyle='#6f634b';ctx.fillRect(px,top+3,TILE,1);
+      for(let line=0;line<4;line++){ctx.fillStyle=tones[line];ctx.fillRect(px,top+line,TILE,1);}
     }
-    const mark=(variant*3+x)%5;if(mark===0){ctx.fillStyle='#7a6d55';ctx.fillRect(px+5,py+9,1,1);}
+    if(!carpet){const mark=(variant*3+x)%5;if(mark===0){ctx.fillStyle='#7a6d55';ctx.fillRect(px+5,py+9,1,1);}}
+    else{ctx.fillStyle='#FFD23F';ctx.fillRect(px,py,1,TILE);ctx.fillRect(px+TILE-1,py,1,TILE);}
     const cheek=(side:string|undefined,at:number)=>{
       if(!isFace(side))return;
       ctx.fillStyle='#6f6350';ctx.fillRect(px+at,py,2,TILE);

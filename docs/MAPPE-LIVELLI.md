@@ -32,7 +32,19 @@ Tre quote nello spazio che prima era piatto, senza toccare porte, edifici e tutt
 - **Campagna** (righe 5-8): prima terrazza, erba alta, due sfidanti, una scarpata sul fronte con la scalinata al centro. La tasca a sinistra si raggiunge anche saltando dal belvedere.
 - **Belvedere** (righe 0-4): muro di pietra con la scalinata al centro, panchina, il Monumento al Candidato Ignoto (testo che indica il laboratorio, casa e bar dall'alto), l'uscita verso il Percorso 1 e un tesoro nascosto.
 
-Il nome della zona compare in alto quando ci entri (`MapDef.zones`). `tests/content/borgoTerraces.test.ts` fissa che tutto sia raggiungibile a piedi dalla porta del laboratorio, che senza scale la cima non si raggiunga e che nessuno stia su un muro o blocchi una scala.
+Il nome della zona compare in alto quando ci entri (`MapDef.zones`). Le regole di raggiungibilità sono in `tests/content/terraceMaps.test.ts` (vedi sotto).
+
+### Caput Mundi, Mediopoli, Il Colle
+
+Stesse regole, tre disegni diversi, nessuna porta spostata.
+
+- **Caput Mundi** (una quota): il Palazzo, i suoi prati e la fascia davanti all'ingresso stanno su un colle; una gradinata larga sei caselle (riga 7, sopra il viale) lo collega al viale dei Poteri. Il bar è incassato nel muro: il tetto è in cima, la porta si apre sul viale. Il ritorno dal Palazzo atterra sulla fascia in cima, non sulle scale. Zone: Colle del Palazzo, Viale dei Poteri, Porto.
+- **Mediopoli** (una quota): la collina dello studio televisivo, con erba alta, lampioni e il sindacalista, sta dietro un muro alto **due righe** (righe 6-7) con una scalinata larga quattro caselle. Un muro doppio non si salta, si sale solo dalle scale; per questo la collina si legge più alta di quella di Borgo. Il sindacalista (e il suo obiettivo) è salito di due righe, il rivale aspetta in piazza a (19,9) con lo sguardo sul muro del Discount, come prima non agguanta nessuno: si parla con lui, nessun agguato in più. Zone: Collina della TV, Piazza dei Salotti.
+- **Il Colle** (sala, una quota): il Garante siede su un palco in cima a una scalinata di tappeto rosso (`stairStyle: "carpet"`) al posto della soglia di prima; il giudice 3 e le due creature leggendarie sono sul palco, il cartello delle Prove si legge dal palco. Zone: Scranno del Garante, Aula.
+
+Un muro alto più righe ha un solo coronamento e un solo zoccolo (il disegno riconosce la riga sopra). Il livello di una zona si legge da come ci si arriva, partendo da una sola porta: il portone del Palazzo è «in alto» perché ci si sale.
+
+`tests/content/terraceMaps.test.ts` ripete per Borgo, Caput Mundi, Mediopoli e Colle: tutto raggiungibile a piedi dall'ingresso, senza scale la cima no, nessuno su un muro o su una scala, quote come disegnate, zone che coprono ogni riga.
 
 ## Dove sei e dove puoi andare
 

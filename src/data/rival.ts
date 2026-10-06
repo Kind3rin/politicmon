@@ -24,7 +24,7 @@ export interface RivalStage {
 // nel flusso starter; qui partiamo dalla 1.
 export const RIVAL_STAGES: RivalStage[] = [
   {
-    id: "rival-mediopoli", mapId: "mediopoli", x: 22, y: 7, facing: "down",
+    id: "rival-mediopoli", mapId: "mediopoli", x: 19, y: 9, facing: "right",
     sightRange: 4, showAfterWins: 1, level: 12, size: 2,
     intro: [
       "GIANNI: ho chiesto ai miei follower chi ha vinto il nostro dibattito. Cento per cento per me.",

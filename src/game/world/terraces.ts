@@ -56,20 +56,17 @@ export function terraceLevels(map: TerraceSource): Terraces {
           // A stair belongs to its lower side. Leaving it to the north is the climb; entering it from the north is the descent.
           const up = dy === -1 && onStair && !isStair(next), down = dy === 1 && isStair(next) && !onStair;
           set(nx, ny, here + (up ? 1 : 0) - (down ? 1 : 0));
-        } else if (isFace(next) && dy === 1) {
-          // Hop: the face is one row, the landing is the row under it.
-          let ly = ny; while (isFace(ch(nx, ly))) ly += 1;
-          if (walkable(ch(nx, ly))) { set(nx, ly, here - (ly - ny)); }
-        } else if (isFace(next) && dy === -1) {
-          // From below, a face tells us the ground behind it is one level up per face row.
-          let ly = ny; while (isFace(ch(nx, ly))) ly -= 1;
-          if (walkable(ch(nx, ly))) set(nx, ly, here + (ny - ly));
+        } else if (isFace(next) && dy === 1 && walkable(ch(nx, ny + 1)) && !isFace(ch(nx, ny + 1))) {
+          // Hop: a single face, the landing is the row under it. A taller wall cannot be hopped, only taken by the stairs.
+          set(nx, ny + 1, here - 1);
         }
       }
     }
   };
-  for (const warp of map.warps) if (walkable(ch(warp.x, warp.y))) set(warp.x, warp.y, 0);
-  if (map.edges?.south) for (let x = 0; x < width; x++) if (walkable(ch(x, height - 1))) set(x, height - 1, 0);
+  // One seed is enough: doors can sit on any terrace (the palace door is up the stairs), so the level is read from how you got there.
+  const first = map.warps.find(warp => walkable(ch(warp.x, warp.y)));
+  if (first) set(first.x, first.y, 0);
+  else if (map.edges?.south) { const x = Array.from({ length: width }, (_, i) => i).find(i => walkable(ch(i, height - 1))); if (x !== undefined) set(x, height - 1, 0); }
   run();
   // Ground nothing led to (a closed field behind trees) takes the level of its first reached neighbour, else 0.
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) if (level[key(x, y)] === UNSET && walkable(ch(x, y))) { set(x, y, 0); run(); }

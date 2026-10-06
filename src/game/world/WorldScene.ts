@@ -3684,6 +3684,7 @@ export class WorldScene implements Scene {
       revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|'),
       sample:(x,y)=>this.terrainSample(x,y),
       terraces:this.terraces,
+      stairStyle:this.map.stairStyle==='carpet'?'carpet':'stone',
       shadows:()=>this.map.outdoor?this.terrainShadows():[]
     },camX,camY);
 

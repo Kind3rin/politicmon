@@ -303,6 +303,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
     groundMaterials: { "=": "asphalt" },
     name: "MEDIOPOLI",
     tiles: MEDIOPOLI_TILES,
+    // La città bassa con i suoi studi e, su una gradinata alta due righe, la collina dello studio televisivo.
+    zones: [
+      { name: "Collina della TV", x: 0, y: 0, w: 30, h: 8 },
+      { name: "Piazza dei Salotti", x: 0, y: 8, w: 30, h: 13 }
+    ],
     outdoor: true,
     music: "mediopoli",
     edges: {
@@ -340,7 +345,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     signs: [
       {
-        x: 6, y: 6,
+        x: 6, y: 5,
         lines: ["MEDIOPOLI", "La città che decide cosa pensi. In onda dal 1980."]
       },
       {
@@ -392,7 +397,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
         ]
       },
       {
-        id: "sindacalista", dialogueName: "Sindacalista", pal: "barista", x: 15, y: 7, facing: "down",
+        id: "sindacalista", dialogueName: "Sindacalista", pal: "barista", x: 15, y: 5, facing: "down",
         gift: {
           itemId: "divisa", qty: 1, flag: "gift-divisa",
           lines: [
@@ -415,7 +420,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Il MONOPATTINO te l'ho già dato. Pedala, anzi... spingi."]
       },
       {
-        id: "talkshow-fan", pal: "journalist", x: 3, y: 7, facing: "right",
+        id: "talkshow-fan", pal: "journalist", x: 3, y: 5, facing: "right",
         lines: [
           "La regia voleva un'opinione diversa. Mi ha dato la risposta per essere sicura."
         ]
@@ -728,6 +733,12 @@ export const BASE_MAPS: Record<string, MapDef> = {
     weather:"afa",
     name: "CAPUT MUNDI",
     tiles: CAPITALE_TILES,
+    // Il Palazzo sta in cima a una gradinata: il viale resta in basso con palestra, casinò e porto.
+    zones: [
+      { name: "Colle del Palazzo", x: 0, y: 0, w: 30, h: 7 },
+      { name: "Viale dei Poteri", x: 0, y: 7, w: 30, h: 13 },
+      { name: "Porto", x: 0, y: 20, w: 30, h: 5 }
+    ],
     outdoor: true,
     music: "capitale",
     edges: { south: { toMap: "route3", offsetX: 0 } },

@@ -70,7 +70,7 @@ export const QUESTS: QuestDef[] = [
     hint: "Il sindacalista è a nord della piazza di Mediopoli. La Divisa è passiva; i KO non crescono.",
     step: "Ritira la Divisa Equa a Mediopoli.",
     isDone: (s) => (s.bag.divisa ?? 0) > 0 || s.badges.includes("auditel"),
-    target: { mapId: "mediopoli", x: 15, y: 7 }
+    target: { mapId: "mediopoli", x: 15, y: 5 }
   },
   {
     id: "gym1",

@@ -216,6 +216,12 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     id: "colle",
     name: "IL COLLE",
     tiles: COLLE_TILES,
+    // Il Garante siede su un palco in cima a quattro gradini di tappeto rosso.
+    stairStyle: "carpet",
+    zones: [
+      { name: "Scranno del Garante", x: 0, y: 0, w: 12, h: 4 },
+      { name: "Aula", x: 0, y: 4, w: 12, h: 6 }
+    ],
     outdoor: false,
     music: "palazzo",
     warps: [
@@ -224,7 +230,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     ],
     signs: [
       {
-        x: 0, y: 3,
+        x: 0, y: 2,
         lines: ["PROVE DELLA CONSULTA:", "tre sfide facoltative: regole, competenze, diritti. A apre il briefing, B annulla.", "Puoi scendere dal Palazzo e recuperare PV e PP al bar di Capitale, anche fra le prove."]
       },
       {

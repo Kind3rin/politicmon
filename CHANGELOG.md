@@ -1,5 +1,11 @@
 # Changelog
 
+## Mandato 2 — il mondo risponde — 2026-10-06
+
+- Eventi civici con conseguenze visibili: ogni scelta dei nove eventi lascia ora un segno sulla mappa (`CIVIC_SCENES` in `src/game/world/civicBridge.ts`): 25 scene tra passerella o nastro teso sul lago, varco o cerimonia della ghiaia alla cava, fermata con panchina o cartello alla pompa, bus e fotografo a Borgo, statua o titoli di coda a Mediopoli, sportello e analista a Eurotown, operatore, residente o attore al citofono di Caput Mundi, rampa e plastico a Stretto, palco o sedie lasciate al campo largo. Chi promette una data e poi paga dal menu Morale vede la stessa scena di chi paga subito.
+- Animazione «il mondo cambia»: quando decidi, la telecamera va sul luogo, il titolo compare e le caselle cambiano una alla volta con polvere, scintille, anello di luce e un piccolo scossone; poi le persone nuove entrano sotto un fascio di luce con coriandoli. Durano 2-4 secondi, i comandi aspettano, «Riduci effetti» le sostituisce col solo titolo. `check:civic-reveal`.
+- Test `civicScenes`: ogni scena appartiene a una scelta vera, le caselle modificate sono quelle della mappa, le persone stanno su terreno libero e nessuna decisione chiude una strada.
+
 ## Mandato 2 — varietà e ritmo — 2026-10-06
 
 - Tocco involontario: una mappa non parte più se tocchi subito dopo una direzione (tasti, croce o stick), con un secondo dito, con il pollice appoggiato o con il click che riporta il focus alla finestra. Il tocco deve durare meno di 0,55 s ed essere isolato. Casi nuovi in `check:world-controls`.

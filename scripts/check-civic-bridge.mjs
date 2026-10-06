@@ -43,6 +43,7 @@ try {
   check(state.money === 0 && state.morale.decisions.includes('cantiere:build'), 'choice not committed exactly once');
   for (let n = 0; n < 50 && stack.top === civic; n++) press(civic, 'a');
   check(stack.top === world && !world.isBlocked(7, 7), 'same world did not open bridge immediately');
+  world.update(.02); for (let n = 0; n < 120 && world.reveal; n++) world.update(.05); // the decision plays out before the player can move again
   state.pos = { mapId: 'route1', x: 8, y: 7, facing: 'left' }; world.moving = false;
   for (const x of [7, 6]) {
    direction = 'left'; world.update(.02); direction = null;

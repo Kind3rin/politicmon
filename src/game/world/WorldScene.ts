@@ -18,7 +18,8 @@ import { BossBriefingScene } from "../../scenes/BossBriefingScene";
 import { trainerStyle } from "../battle/trainerStyle";
 import { changeMorale, moraleEpilogue } from "../morale";
 import { civicNpcReply } from "../civicChoices";
-import { civicBridgeTile } from "./civicBridge";
+import { civicBridgeTile, civicSceneNpcs, civicScenesFor } from "./civicBridge";
+import { CivicReveal } from "./civicReveal";
 
 // Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
 function drawBallot(screen: Screen, dx: number, dy: number): void {
@@ -297,6 +298,10 @@ export class WorldScene implements Scene {
   private pendingTrainer: TrainerDef | null = null;
   /** The trainer who offered a duel from a distance; on-sight duels need the player's yes. */
   private pendingInvite: RuntimeNpc | null = null;
+  /** A civic decision reshaping the map right now (tiles change one by one, people step in). */
+  private reveal: CivicReveal | null = null;
+  /** The civic scenes already in the world on this map, so a new one plays exactly once. */
+  private civicActive = new Set<string>();
   /** Trainers the player said "not now" to on this visit: they do not ask again until the map is reloaded. */
   private declinedInvites = new Set<string>();
   private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
@@ -688,6 +693,9 @@ export class WorldScene implements Scene {
         lines: ["GIANNI: ehi! Sì, dico a te."]
       }));
     }
+    this.reveal = null;
+    this.civicActive = new Set(civicScenesFor(this.state, mapId).map(scene => scene.decision));
+    for (const def of civicSceneNpcs(this.state, mapId)) this.npcs.push(this.makeRuntimeNpc(def));
     this.rustles = [];
     // Cambio mappa = cambio room: qualunque handshake duello in corso muore.
     if (this.duelWait) {
@@ -862,6 +870,9 @@ export class WorldScene implements Scene {
 
   private visibleNpcs(): RuntimeNpc[] {
     return this.npcs.filter((npc) => {
+      if (this.reveal?.holdsNpc(npc.id)) {
+        return false;
+      }
       if (npc.showIfFlag && !this.state.flags[npc.showIfFlag]) {
         return false;
       }
@@ -878,7 +889,7 @@ export class WorldScene implements Scene {
     if (ch === "T" && isBulldozed(this.state, this.map.id, x, y)) {
       return this.map.outdoor ? "." : "p";
     }
-    return civicBridgeTile(this.state, this.map.id, x, y, ch);
+    return civicBridgeTile(this.state, this.map.id, x, y, ch, this.reveal ? (hx, hy) => this.reveal!.holds(hx, hy) : undefined);
   }
 
   /** Extend visible road mouths beyond the map, without changing collision/warp tiles. */
@@ -3298,6 +3309,29 @@ export class WorldScene implements Scene {
     this.healSparks = this.healSparks.filter((s) => s.life < s.max);
   }
 
+  /** Ask for the art of the new tiles now, so it has arrived by the time they appear. */
+  private warmCivicTiles(edits: readonly { to: string }[] | undefined): void {
+    for (const edit of edits ?? []) { tileImage(edit.to); objectImage(edit.to); terrainVariantImage(edit.to, 0); }
+  }
+
+  /** A decision just changed this map: add its people and play the change (or just announce it with "Riduci effetti"). */
+  private watchCivicWorks(): void {
+    if (this.reveal) return;
+    const now = civicScenesFor(this.state, this.map.id);
+    const fresh = now.find(scene => !this.civicActive.has(scene.decision));
+    if (!fresh) return;
+    for (const scene of now) this.civicActive.add(scene.decision);
+    for (const def of fresh.npcs ?? []) if (!this.npcs.some(npc => npc.id === def.id)) this.npcs.push(this.makeRuntimeNpc(def));
+    this.stopTapRoute();
+    this.warmCivicTiles(fresh.tiles);
+    this.showBanner(fresh.title, "Il verbale lo ricorda", "#f2c230");
+    if (this.state.reduceEffects) return;
+    this.reveal = new CivicReveal(fresh, {
+      sound: kind => { if (kind === "tile") audio.hitSuper(); else if (kind === "person") audio.catchJingle(); else audio.badgeFanfare(); },
+      shake: seconds => { this.shake = Math.max(this.shake, seconds); }
+    }, false);
+  }
+
   // Mostra un banner "evento" (traguardo, breaking news) con entrata a molla.
   private showBanner(text: string, sub: string, color: string): void {
     this.banner = { text:readableCopy(text), sub:readableCopy(sub), t: 0, color };
@@ -3362,6 +3396,13 @@ export class WorldScene implements Scene {
       s.y += s.vy * dt;
     }
     this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
+    this.watchCivicWorks();
+    if (this.reveal) {
+      this.reveal.update(dt);
+      if (this.reveal.done) this.reveal = null;
+      if (this.banner) { this.banner.t += dt; if (this.banner.t > 2.4) this.banner = null; }
+      return;
+    }
     if (this.banner) {
       this.banner.t += dt;
       if (this.banner.t > 2.4) this.banner = null;
@@ -3679,8 +3720,9 @@ export class WorldScene implements Scene {
     const phoneZoom=phoneWorldZoom(stageWidth,document.body.classList.contains("touch"),canvas.clientHeight>canvas.clientWidth);
     const baseZoom=!this.map.outdoor&&roomFit>=1?fitZoom:phoneZoom;
     const facing=DIR_DELTA[pos.facing],lead=this.moving&&!this.state.reduceEffects?5:0;
-    const targetX=zoomedCameraAxis(playerPx+TILE/2+facing.dx*lead-inner.x,inner.w,VIEW_W,baseZoom)+inner.x;
-    const targetY=Math.min(zoomedCameraAxis(playerPy+TILE/2+facing.dy*lead-inner.y,inner.h,this.viewHeight,baseZoom)+inner.y,clearanceCeiling(playerPy,this.viewHeight,baseZoom,topClearance));
+    const focusX=this.reveal?this.reveal.focus.x*TILE:playerPx,focusY=this.reveal?this.reveal.focus.y*TILE:playerPy;
+    const targetX=zoomedCameraAxis(focusX+TILE/2+(this.reveal?0:facing.dx*lead)-inner.x,inner.w,VIEW_W,baseZoom)+inner.x;
+    const targetY=Math.min(zoomedCameraAxis(focusY+TILE/2+(this.reveal?0:facing.dy*lead)-inner.y,inner.h,this.viewHeight,baseZoom)+inner.y,clearanceCeiling(focusY,this.viewHeight,baseZoom,topClearance));
     if(!this.cameraPosition)this.cameraPosition={x:targetX,y:targetY};
     this.cameraPosition.x=followCamera(this.cameraPosition.x,targetX,this.cameraDt,this.state.reduceEffects);
     this.cameraPosition.y=followCamera(this.cameraPosition.y,targetY,this.cameraDt,this.state.reduceEffects);
@@ -3709,7 +3751,7 @@ export class WorldScene implements Scene {
     this.terrain.draw(screen.ctx,{
       map:this.map,
       assetRevision:spriteAssetRevision(),
-      revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|'),
+      revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|')+':'+this.state.morale.promises.map(p=>p.status[0]).join('')+':'+(this.reveal?`r${this.reveal.progress}`:'f'),
       sample:(x,y)=>this.terrainSample(x,y),
       terraces:this.terraces,
       stairStyle:this.map.stairStyle==='carpet'?'carpet':'stone',
@@ -4226,6 +4268,7 @@ export class WorldScene implements Scene {
       this.drawGuideArrow(screen, quest.target, playerPx, playerPy, camX, camY);
     }
 
+    this.reveal?.draw(screen.ctx, camX, camY);
     screen.ctx.restore();
     this.msg.draw(screen);
 

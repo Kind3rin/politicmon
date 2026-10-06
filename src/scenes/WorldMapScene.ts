@@ -29,6 +29,7 @@ const ITALIETTA_NODES: readonly MapNode[] = [
   { id: "route1", label: "PERCORSO 1", maps: ["route1"] },
   { id: "grotta1", label: "GROTTA DEL CONSENSO", maps: ["grotta1"], optional: true },
   { id: "mediopoli", label: "MEDIOPOLI", maps: ["mediopoli", "market", "gymtv", "bar-medio"] },
+  { id: "antenna", label: "COLLE DELL'ANTENNA", maps: ["antenna"], optional: true },
   { id: "route2", label: "PERCORSO 2", maps: ["route2"] },
   { id: "eurotown", label: "EUROTOWN", maps: ["eurotown", "gymue", "market2", "lobbystudio", "bistrot", "bar-euro"] },
   { id: "route3", label: "PERCORSO 3", maps: ["route3"] },
@@ -79,7 +80,7 @@ const ATTO3_NODES: readonly MapNode[] = [
 
 // Posizioni disegnate sulla cartina (percentuali): la geografia è satirica, l'ordine è quello del viaggio.
 const ATLAS_POSITIONS: Record<string, readonly [number, number]> = {
-  borgo: [24, 90], route1: [32, 77], grotta1: [72, 76], mediopoli: [46, 65], route2: [64, 53], eurotown: [34, 44], route3: [56, 34],
+  borgo: [24, 90], route1: [32, 77], grotta1: [72, 76], mediopoli: [46, 65], antenna: [76, 58], route2: [64, 53], eurotown: [34, 44], route3: [56, 34],
   grotta2: [82, 33], capitale: [36, 21], colle: [62, 8],
   stretto: [30, 74], offshore: [68, 46], bruxelles: [36, 18],
   campo: [28, 88], futuro: [68, 74], diplomacy: [30, 58], tour: [68, 42], "palazzo-feed": [34, 26], genova: [78, 10]

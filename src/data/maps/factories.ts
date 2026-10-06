@@ -119,38 +119,40 @@ export const OBLAST_MEME_TILES = [
 // lati e tre allenatori televisivi. Strada ==== a col 13-16 come le città.
 // Percorso 2, Lungolago: the road swings east round a lake, a pier crosses to an islet, one plateau at the north.
 export const ROUTE2_TILES = [
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
-  "TT...........====..........TT",
-  "TT..,,,,.....====..~~~~~~..TT",
-  "TT..,,,,.....====..~~~~~~..TT",
-  "TT.wwwwww....====..........TT",
-  "TT.wwwwww....=====...fff...TT",
-  "TT.ww.wwws...=====.........TT",
-  "TT.wwwwww.....=====........TT",
-  "TT.wwwwww......=====.......TT",
-  "TT.~~~~~~~~.....=====~~~~..TT",
-  "TT.~~~~~~~~.....=====~~~~..TT",
-  "TT.~~~~~~~~......=====.....TT",
-  "TT.~~~~~~~~......=====.....TT",
-  "TT%%%%%%%%%%%%%%%%EEEEE%%%%TT",
-  "TT.zzzzzzz.......s=====....TT",
-  "TT.wwwwwwwzz......=====....TT",
-  "TTwwwwwwwwwwzz....=====~~~~TT",
-  "TTwwwwwwwwwwwzz..=====.~~~~TT",
-  "TTwwzzzzwwwwwzz..=====.~~~~TT",
-  "TTwwz..zwwwwwwzz=====..~~~~TT",
-  "TTwwz..zqqqqqqzz=====..~~~~TT",
-  "TTwwz..zwwwwwwz=====...~~~~TT",
-  "TTwwzzzzwwwwwws====TTT.....TT",
-  "TTwwwwwwwwwwwz=====TTT.....TT",
-  "TTwwwwwwwwwwzz=====........TT",
-  "TT.wwwwwwwwzz=====.....~~~~TT",
-  "TT..wwwwwzz..=====.....~~~~TT",
-  "TT..zzzzzz...=====..TTT~~~~TT",
-  "TT...........=====..TTT~~~~TT",
-  "TT..~~~~~~...=====..TTT....TT",
-  "TT..~~~~~~...=====.........TT",
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT"
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TT............=================.............TT",
+  "==========================================..TT",
+  "==========================================..TT",
+  "===============...............============..TT",
+  "TTT....TTTT...~~~~~~~T..~~~~~~.T.....=====..TT",
+  "TTT....Tzzzzzzzzzzzwwzzzzzzzzzzz~~~~.=====.~TT",
+  "TTT....Tzzzzzzzzzzwwwwzzzzzzzzzz~~~~.=====.~TT",
+  "TTT~~~.Tzzzzwwwwwwwwwwwwwwwwzzzz~~~~.=====.~TT",
+  "TTT~~~.Tzzzwwwwwwwwwwwwwwwwwwzzz~~~~.=====.~TT",
+  "TTT~~~.Tzzwwwwwwwwwwwwwwwwwwwwzz~~~~.=====..TT",
+  "TTT....Tzzwwwwzzzzwwwwwwwwwwwwzz~~~~.=====..TT",
+  "TTT....Tzzwwwwzzzzwwwwwwwwwwwwzz.....=====..TT",
+  "TTT....Tzzwwwwzzzzwwwqqqwwwwwwzf....f=====f.TT",
+  "TTTTTTTTwwwwwwwwwwwwwqqqwwwwww%%%%%%%EEEEE%%TT",
+  "TTTTTTTTzzwwwwwwwwwwwwqwwwwwwwzz.....=====..TT",
+  "TTTTTTTTzzwwwwwwwwwwwwqwwwwwwwzz.....=====..TT",
+  "TTTTTTTTzzwwwwwwwwwwwwqwwwwwwwzz~~~~.=====..TT",
+  "TTT~~~~Tzzzwwwwwwwwwwwqwwwwwwzzz~~~~.=====..TT",
+  "TTT~~~~Tzzzzwwwwwwwwwwqwwwwwzzzz~~~~.=====..TT",
+  "TTT~~~~Tzzzzzzzzzzzzzzqzzzzzzzzz~~~~.=====..TT",
+  "TTT~~~~~zzzzzzzzzzzzzzzzzzzzzzzz~~~~.=====..TT",
+  "TTT~~~~~TTT......,.U.....U~~~~~~~~~~.=====..TT",
+  "===============.............==============..TT",
+  "==========================================..TT",
+  "==========================================..TT",
+  "TT...,........===============....TT..=====..TT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
 ];
 
 // -------------------------------------------- PERCORSO 3 (EUROTOWN-CAPITALE)
@@ -159,10 +161,10 @@ export const ROUTE2_TILES = [
 // e campi d'erba alta con funzionari in agguato.
 // Percorso 3, La Cava: a quarry of sand and boulders, lanes that switch back, one stair on the west and a new asphalt bridge.
 export const ROUTE3_TILES = [
-  "TTTTTTTTTTTTT====TTTTTTTTTTTT",
-  "TTzzzzzzzzzzz====zzzzzzzzzzTT",
-  "TTzzzzzzzzzzz====szzzROR~~~TT",
-  "TTzzzzzzzzzzz====zzzzROR~~~TT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+  "=================zzzzzzzzzzTT",
+  "=================szzzROR~~~TT",
+  "=================zzzzROR~~~TT",
   "TTRRRRRRRRRRz====zzzzzzzzzzTT",
   "TTRRRRRRRRRRz====zzzzzzzzzzTT",
   "TTzz~~~~~~~zz====zzzzzzzzzzTT",
@@ -217,7 +219,7 @@ export const GROTTA2_TILES = [
 // ---------------------------------------------------------------- MEDIOPOLI
 
 export const MEDIOPOLI_TILES = [
-  "TTTTTTTTTTTTT====TTTTTTTTTTTTT",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
   "TT...........====...........TT",
   "TT..~~~~~....====....~~~~~..TT",
   "TT..~~~~~....====....~~~~~..TT",
@@ -228,9 +230,9 @@ export const MEDIOPOLI_TILES = [
   "TT..yyyyyy...====...HHHH....TT",
   "TT..yyyyyy...====...HHHH....TT",
   "TT..mmddmm...====...mddm....TT",
-  "TT..========================TT",
-  "TT....=..W...====...Y==.....TT",
-  "TT....======================TT",
+  "TT..==========================",
+  "TT....=..W...====...Y==.....==",
+  "TT....========================",
   "TT...eQQe....====....oooo...TT",
   "TT...mddm....====....oooo...TT",
   "TT...===========.....mddm...TT",
@@ -255,10 +257,10 @@ export const EUROTOWN_TILES = [
   "TT..mddm.....====...mddm....TT",
   "TT..========================TT",
   "TT....eQQe...====....~~~~~..TT",
-  "TT....mddm...====....~~~~~..TT",
-  "TT..========================TT",
-  "TT....W......====......Y....TT",
-  "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
+  "TT....mddm...====....~~~~~..==",
+  "TT..==========================",
+  "TT....W......====......Y....==",
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
 ];
 
 // ------------------------------------------------------------- CAPUT MUNDI
@@ -282,9 +284,9 @@ export const CAPITALE_TILES = [
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..xxxxxx...====..$$$$$$...TT",
   "TT..mmddmm...====..mmddmm...TT",
-  "TT..========================TT",
-  "TT....=..W..s====...Y==.....TT",
-  "TT..========================TT",
+  "TT..==========================",
+  "TT....=..W..s====...Y==.....==",
+  "TT..==========================",
   "TT..~~~~~....====....~~~~~..TT",
   "TT.HHHH~~....====....~~vvvv.TT",
   "TT.HHHH~~....====....~~vvvv.TT",
@@ -294,7 +296,7 @@ export const CAPITALE_TILES = [
   "TT.wwXqwwwwz.====TTTTTTTTTTTTT",
   "TT.wwwwwwwwz.====TTTTTTTTTTTTT",
   "TT.wwwwwwwwz.====TTTTTTTTTTTTT",
-  "TTTTTTTTTTTTT====TTTTTTTTTTTTT"
+  "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
 ];
 
 // ---------------------------------------------------- STRETTO DI MESSINA

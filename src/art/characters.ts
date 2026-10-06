@@ -162,6 +162,7 @@ export const NPC_BUSTS: Record<string, readonly [string, string]> = {
   "opinionista-daily": ["opinionista", "Opinionista"],
   "pensionato-euro": ["pensionato-euro", "Pensionato"],
   "pescatore-r1": ["pescatore", "Pescatore"],
+  "pescatore-r2": ["pescatore", "Pescatore"],
   "redaz-direttore": ["direttore", "Direttore"],
   "redaz-stagista": ["stagista", "Stagista"],
   "retro-cronista": ["cronista", "Cronista"],
@@ -180,6 +181,7 @@ export const NPC_BUSTS: Record<string, readonly [string, string]> = {
   "talkshow-fan": ["talkshow-fan", "Fan del talk show"],
   "tipografo": ["tipografo", "Tipografo"],
   "turista-cap": ["turista", "Turista"],
+  "turista-r2": ["turista", "Turista"],
   "viandante-r1": ["umarell", "Umarell"]
 };
 

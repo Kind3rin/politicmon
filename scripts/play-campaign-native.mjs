@@ -325,6 +325,13 @@ try{
    const map=world.map,y=dir==='up'?0:map.tiles.length-1,candidates=Array.from({length:map.tiles[y].length},(_,x)=>({x,path:pathTo(x,y)})).filter(c=>c.path).sort((a,b)=>a.path.length-b.path.length);
    if(!candidates.length)throw Error('No '+dir+' exit '+map.id);if(!walkTo(candidates[0].x,y))return false;face(dir);press(dir);settle();if(state.pos.mapId===map.id)throw Error(dir+' exit blocked '+map.id);return true;
   }
+  // The roads are no longer all vertical: the cities open side gates, Percorso 2 goes round the lake.
+  function crossTo(target){
+   const gates=world.map.warps.filter(w=>w.toMap===target).map(w=>({w,path:pathTo(w.x,w.y)})).filter(c=>c.path||state.pos.x===c.w.x&&state.pos.y===c.w.y).sort((a,b)=>(a.path?.length??0)-(b.path?.length??0));
+   if(!gates.length)throw Error('No gate to '+target+' from '+world.map.id);
+   const map=world.map.id;walkTo(gates[0].w.x,gates[0].w.y);settle();
+   if(state.pos.mapId===map)throw Error('Gate to '+target+' blocked at '+state.pos.x+','+state.pos.y);
+  }
   function heal(){
    while(state.pos.mapId.startsWith('palazzo_'))enterMap(state.pos.mapId==='palazzo_feed'?'tour_feed':'palazzo_feed');
    if(state.pos.mapId.startsWith('district_'))enterMap('tour_feed');
@@ -337,7 +344,7 @@ try{
     const exit=world.map.warps.find(w=>w.toMap!== 'colle');walkTo(exit.x,exit.y);settle();
    }
    if(state.pos.mapId==='stretto'&&!state.flags['ponte-beaten'])enterMap('capitale');
-   if(['route1','route2','route3'].includes(state.pos.mapId))cross('up');
+   if(state.pos.mapId==='route1')cross('up');else if(state.pos.mapId==='route2')crossTo('mediopoli');else if(state.pos.mapId==='route3')crossTo('capitale');
    if(state.pos.mapId==='campo_largo'){const healer=world.visibleNpcs().find(n=>n.healer);interact(healer.x,healer.y);return;}
    const bar={borgo:'bar-borgo',mediopoli:'bar-medio',eurotown:'bar-euro',capitale:'bar-cap',stretto:'bar-stretto',offshore:'bar-offshore',bruxelles:'bar-bruxelles'}[state.pos.mapId];
    if(!bar)throw Error('No planned healer for '+state.pos.mapId);enterMap(bar);
@@ -461,13 +468,13 @@ try{
    await milestone('studio-result');
    if(endAt!=='auditel'&&state.badges.includes('auditel')){
     if(state.pos.mapId==='gymtv'){walkTo(world.map.warps[0].x,world.map.warps[0].y);settle();}
-    heal();cross('up');
+    heal();crossTo('route2');
     if(euroPlan==='tactical'){
      const startWild=[...battles.values()].filter(b=>!b.trainer).length;
      for(let n=0;state.party.length<4&&n<2500&&[...battles.values()].filter(b=>!b.trainer).length-startWild<15;n++){
       const lead=state.party[0];
       if(state.pos.mapId!=='route2'||lead.hp<statsOf(lead).hp*.5||!lead.moves.some(s=>s.pp>0&&MOVES[s.id].power>0)){
-       heal();cross(state.pos.mapId==='eurotown'?'down':'up');
+       heal();crossTo('route2');
       }
       const cells=world.map.tiles.flatMap((row,y)=>[...row].flatMap((ch,x)=>TILES[ch]?.encounter&&!world.isBlocked(x,y)?[{x,y,path:pathTo(x,y)}]:[])).filter(c=>c.path?.length).sort((a,b)=>a.path.length-b.path.length);
       if(!cells.length)throw Error('No reachable route2 recruitment grass');walkTo(cells[0].x,cells[0].y);
@@ -478,8 +485,8 @@ try{
      const guest=world.visibleNpcs().find(n=>n.trainerId==='telelobbista');interact(guest.x,guest.y);await milestone('route2-confront');
     }
     for(let n=0;state.pos.mapId!=='eurotown'&&n<4;n++){
-     if(state.pos.mapId==='mediopoli'){heal();cross('up');}
-     if(state.pos.mapId==='route2')cross('up');
+     if(state.pos.mapId==='mediopoli'){heal();crossTo('route2');}
+     if(state.pos.mapId==='route2')crossTo('eurotown');
     }
     if(state.pos.mapId!=='eurotown')throw Error('Eurotown not reached');
     await milestone('eurotown');heal();enterMap('gymue');
@@ -503,7 +510,7 @@ try{
     }
     for(let n=0;state.pos.mapId!=='capitale'&&n<5;n++){
      if(state.pos.mapId==='eurotown'){heal();cross('up');}
-     if(state.pos.mapId==='route3')cross('up');
+     if(state.pos.mapId==='route3')crossTo('capitale');
     }
     if(state.pos.mapId!=='capitale')throw Error('Capitale not reached');
     await milestone('capitale');heal();enterMap('gymglobal');

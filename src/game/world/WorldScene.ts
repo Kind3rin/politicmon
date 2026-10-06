@@ -422,9 +422,9 @@ export class WorldScene implements Scene {
     if (goal.mapId === this.map.id) return this.places.find(place => place.kind !== "exit" && place.x <= goal.x && goal.x <= place.x2 && Math.abs(place.y - goal.y) <= 1);
     const direct = this.places.find(place => place.to === goal.mapId);
     if (direct) return direct;
-    const hint = this.mapHintDir(goal.mapId);
-    if (hint && hint.dy !== 0) return this.places.find(place => place.kind === "exit" && place.edge === (hint.dy < 0 ? "north" : "south"));
-    return undefined;
+    const hop = this.nextHop(goal.mapId);
+    if (!hop) return undefined;
+    return hop.edge ? this.places.find(place => place.kind === "exit" && place.edge === hop.edge) : this.places.find(place => place.to === hop.map);
   }
 
   private goToPlace(place: Place): void {
@@ -2833,39 +2833,40 @@ export class WorldScene implements Scene {
     return Object.values(DIR_DELTA).some(d => !this.isBlocked(x + d.dx, y + d.dy) && !seen.has(key(x + d.dx, y + d.dy)));
   }
 
-  // Direzione approssimata (in pixel mondo) verso un'altra mappa, per la guida
-  // quando il bersaglio non è sulla mappa corrente. La progressione è quasi
-  // sempre verso nord; le mappe interne si raggiungono dalla città relativa.
-  private mapHintDir(targetMap: string): { dx: number; dy: number } | null {
-    if (targetMap === this.map.id) {
-      return null;
-    }
-    // Mappa città -> direzione cardinale verso la prossima tappa a nord
-    // (route incluse: senza, la freccia GUIDA spariva sui percorsi).
-    const northChain = ["borgo", "route1", "mediopoli", "route2", "eurotown", "route3", "capitale"];
-    const here = northChain.indexOf(this.map.id);
-    const there = northChain.indexOf(targetMap);
-    if (here !== -1 && there !== -1) {
-      return there > here ? { dx: 0, dy: -1 } : { dx: 0, dy: 1 };
-    }
-    // Catena marittima post-game: stretto/offshore/bruxelles si raggiungono
-    // SALPANDO dalla capitale (hub degli imbarchi). Se il bersaglio è oltremare
-    // e non siamo ancora alla capitale, guida prima verso la capitale (che è la
-    // cima della northChain, quindi a nord). Dalla capitale il fallback warp-based
-    // sotto punta all'imbarco giusto.
-    const maritime = ["stretto", "offshore", "bruxelles"];
-    if (maritime.includes(targetMap) && this.map.id !== "capitale") {
-      if (here !== -1) {
-        return { dx: 0, dy: -1 }; // risali la northChain verso la capitale
+  /** The first step of the shortest way to another map: the road edge or the door/gate to take from here. */
+  private nextHop(targetMap: string): { map: string; edge?: "north" | "south"; warp?: { x: number; y: number } } | null {
+    if (targetMap === this.map.id || !MAPS[targetMap]) return null;
+    type Link = { map: string; edge?: "north" | "south"; warp?: { x: number; y: number } };
+    const links = (id: string): Link[] => {
+      const map = MAPS[id];
+      if (!map) return [];
+      return [
+        ...(["north", "south"] as const).flatMap(edge => map.edges?.[edge] ? [{ map: map.edges[edge]!.toMap, edge }] : []),
+        ...map.warps.map(warp => ({ map: warp.toMap, warp: { x: warp.x, y: warp.y } }))
+      ];
+    };
+    const first = new Map<string, Link>(), queue: string[] = [this.map.id], seen = new Set([this.map.id]);
+    for (let i = 0; i < queue.length; i++) {
+      for (const link of links(queue[i])) {
+        if (seen.has(link.map)) continue;
+        seen.add(link.map);
+        first.set(link.map, queue[i] === this.map.id ? link : first.get(queue[i])!);
+        if (link.map === targetMap) return first.get(link.map)!;
+        queue.push(link.map);
       }
     }
-    // Interni (lab/palazzo/colle): se sono il bersaglio e siamo nella città
-    // giusta, punta verso il warp d'ingresso corrispondente sulla mappa.
-    const warp = this.map.warps.find((w) => w.toMap === targetMap);
-    if (warp) {
-      return { dx: Math.sign(warp.x - this.state.pos.x), dy: Math.sign(warp.y - this.state.pos.y) };
-    }
     return null;
+  }
+
+  // Direzione approssimata (in pixel mondo) verso un'altra mappa, per la guida
+  // quando il bersaglio non è sulla mappa corrente: segue il grafo vero dei luoghi
+  // (strade e porte), così i percorsi possono andare in qualunque direzione.
+  private mapHintDir(targetMap: string): { dx: number; dy: number } | null {
+    const hop = this.nextHop(targetMap);
+    if (!hop) return null;
+    if (hop.edge) return { dx: 0, dy: hop.edge === "north" ? -1 : 1 };
+    const warp = hop.warp!, pos = this.state.pos;
+    return { dx: Math.sign(warp.x - pos.x), dy: Math.sign(warp.y - pos.y) };
   }
 
   /** Signs over the doors and roads near the player: what is where, without having to walk up to read it. */

@@ -302,17 +302,16 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     outdoor: true,
     music: "mediopoli",
-    edges: {
-      north: {
-        toMap: "route2", offsetX: 0, requiresBadges: 1,
+    edges: { south: { toMap: "route1", offsetX: 0 } },
+    warps: [
+      // Il cancello est: la strada per EUROTOWN gira attorno al lago, non sale più in verticale.
+      ...[11, 12, 13].map(y => ({
+        x: 29, y, toMap: "route2", toX: 1, toY: 16 + y, facing: "right" as const, requiresBadges: 1,
         lockedLines: [
           "La strada per EUROTOWN è presidiata dai gazebo.",
           "\"Senza la MEDAGLIA AUDITEL non si passa: prima conquista la palestra di MEDIOPOLI.\""
         ]
-      },
-      south: { toMap: "route1", offsetX: 0 }
-    },
-    warps: [
+      })),
       { x: 7, y: 10, toMap: "gymtv", toX: GYMTV_ENTRY.x, toY: GYMTV_ENTRY.y, facing: "up" },
       { x: 6, y: 10, toMap: "gymtv", toX: GYMTV_ENTRY.x, toY: GYMTV_ENTRY.y, facing: "up" },
       { x: 21, y: 10, toMap: "market1", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
@@ -422,27 +421,28 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ]
   },
 
-  // PERCORSO 2: route tra MEDIOPOLI (sud) e EUROTOWN (nord). Tema talk show:
+  // PERCORSO 2: route tra MEDIOPOLI (cancello ovest, in basso) ed EUROTOWN (cancello ovest, in alto): una "C" attorno al lago. Tema talk show:
   // il LAGHETTO DELL'AUDITEL con isoletta-tesoro (solo TRAGHETTO), erba alta
   // e tre professionisti del salotto televisivo. Il gate a 1 medaglia resta
-  // sull'edge nord di MEDIOPOLI (mai lato route: niente trappole).
+  // sul cancello est di MEDIOPOLI (mai lato route: niente trappole).
   route2: {
     id: "route2",
     weather:"nebbia",
     name: "PERCORSO 2",
     tiles: ROUTE2_TILES,
+    // Una "C" attorno al lago: si entra da ovest in basso (Mediopoli), si sale lungo il crinale a est
+    // e si torna a ovest in alto (Eurotown). Un solo dislivello, alla salita.
     zones: [
-      { name: "Colline del talk show", x: 0, y: 0, w: 29, h: 14 },
-      { name: "Lungolago dell'Auditel", x: 0, y: 14, w: 29, h: 15 },
-      { name: "Piana di Mediopoli", x: 0, y: 29, w: 29, h: 3 }
+      { name: "Crinale dei dibattiti", x: 0, y: 0, w: 46, h: 18 },
+      { name: "Lungolago dell'Auditel", x: 0, y: 18, w: 46, h: 9 },
+      { name: "Porta di Mediopoli", x: 0, y: 27, w: 46, h: 7 }
     ],
     outdoor: true,
     music: "mediopoli",
-    edges: {
-      north: { toMap: "eurotown", offsetX: 0 },
-      south: { toMap: "mediopoli", offsetX: 0 }
-    },
-    warps: [],
+    warps: [
+      ...[27, 28, 29].map(y => ({ x: 0, y, toMap: "mediopoli", toX: 27, toY: y - 16, facing: "left" as const })),
+      ...[6, 7, 8].map(y => ({ x: 0, y, toMap: "eurotown", toX: 27, toY: y + 6, facing: "left" as const }))
+    ],
     encounterRate: 0.14,
     // Ponte tra MEDIOPOLI (8-12) ed EUROTOWN (12-15): media italiani in uscita,
     // primi leader europei in anteprima.
@@ -456,51 +456,51 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { speciesId: "verdolino", weight: 8, minLv: 11, maxLv: 13 }
     ],
     signs: [
-      {
-        x: 9, y: 6,
-        lines: ["LAGHETTO DELL'AUDITEL", "Il pubblico è spontaneo. Gli applausi hanno un capoturno.", "L'isola si raggiunge col TRAGHETTO."]
-      },
-      {
-        x: 17, y: 14,
-        lines: ["PERCORSO 2", "Nord: EUROTOWN. Sud: MEDIOPOLI.", "Gli ospiti sfidano con A. Il bar di EUROTOWN recupera anche i PP."]
-      },
-      {
-        x: 14, y: 22,
-        lines: ["LAGO DEL SECONDO TURNO", "Qui si pesca in diretta. I pesci sono tutti ospiti fissi.", "Il molo porta all'isolotto. Chi sale sul palco viene ripreso."]
-      }
+      { x: 3, y: 30, lines: ["PERCORSO 2", "Ovest: MEDIOPOLI. La strada gira attorno al lago e sale a est.", "In alto, di nuovo a ovest: EUROTOWN."] },
+      { x: 12, y: 9, lines: ["LAGHETTO DELL'AUDITEL", "Il pubblico è spontaneo. Gli applausi hanno un capoturno.", "L'isola si raggiunge col TRAGHETTO."] },
+      { x: 23, y: 26, lines: ["LAGO DEL SECONDO TURNO", "Qui si pesca in diretta. I pesci sono tutti ospiti fissi.", "Il molo porta alla piattaforma. Chi sale sul palco viene ripreso."] },
+      { x: 3, y: 5, lines: ["PERCORSO 2", "Ovest: EUROTOWN. Gli ospiti sfidano con A.", "Il bar di EUROTOWN recupera anche i PP."] }
     ],
     pickups: [
-      // Tesoro sull'isoletta del LAGHETTO: ci si arriva solo col TRAGHETTO.
-      { id: "pk-r2-isola", x: 5, y: 6, itemId: "schedona", qty: 2 },
-      { id: "pk-r2", x: 24, y: 10, itemId: "maalox", qty: 1 },
-      { id: "pk-r2-hide", x: 5, y: 12, itemId: "spritz", qty: 2, hidden: true },
-      { id: "pk-r2-lago", x: 6, y: 22, itemId: "caffe", qty: 2 },
+      // Tesoro sull'isola del LAGHETTO: ci si arriva solo col TRAGHETTO.
+      { id: "pk-r2-isola", x: 15, y: 16, itemId: "schedona", qty: 2 },
+      { id: "pk-r2", x: 34, y: 16, itemId: "maalox", qty: 1 },
+      { id: "pk-r2-hide", x: 4, y: 16, itemId: "spritz", qty: 2, hidden: true },
+      { id: "pk-r2-lago", x: 23, y: 17, itemId: "caffe", qty: 2 },
       // Pickup raro Round 39: un hold item gratis per far scoprire la meccanica.
-      { id: "pk-r2-santino", x: 23, y: 10, itemId: "santino", qty: 1, hidden: true }
+      { id: "pk-r2-santino", x: 43, y: 14, itemId: "santino", qty: 1, hidden: true }
     ],
     npcs: [
       {
-        id: "tr-claqueur", pal: "influencer", x: 19, y: 5, facing: "left",
+        id: "tr-claqueur", pal: "influencer", x: 35, y: 20, facing: "right",
         trainerId: "claqueur", inviteRange: 3, nameplate: "APPLAUSI A",
         lines: ["Hanno applaudito a luce spenta. Non era a budget."]
       },
       {
-        id: "tr-telelobbista", pal: "aide", x: 6, y: 20, facing: "right",
+        id: "tr-telelobbista", pal: "aide", x: 22, y: 17, facing: "down",
         trainerId: "telelobbista", nameplate: "CONFRONTO A",
         lines: ["Il pubblico risponde. Non è nel pacchetto."]
       },
       {
-        id: "tr-opinionista", pal: "journalist", x: 16, y: 12, facing: "right",
+        id: "tr-opinionista", pal: "journalist", x: 23, y: 9, facing: "up",
         trainerId: "opinionista", inviteRange: 3, nameplate: "PARERE A",
         lines: ["La prossima opinione parte dai fatti."]
       },
       {
-        id: "spettatore-r2", pal: "granny", x: 22, y: 17, facing: "down",
+        id: "spettatore-r2", pal: "granny", x: 20, y: 26, facing: "up",
         lines: ["Ho rifiutato il sondaggio. Mi hanno contato tra gli indecisi: fa più grafico che assente."]
       },
       {
-        id: "cameraman-r2", pal: "journalist", x: 18, y: 26, facing: "left", nameplate: "TROUPE",
+        id: "cameraman-r2", pal: "journalist", x: 26, y: 27, facing: "up", nameplate: "TROUPE",
         lines: ["Riprendo il lago: fa più ascolti delle idee.", "Se passi in campo, saluta: il montaggio ti taglia comunque."]
+      },
+      {
+        id: "pescatore-r2", pal: "guard", x: 12, y: 26, facing: "up",
+        lines: ["Pesco da ore. Tre ospiti fissi, nessuna idea nuova.", "Il lago ha una sola corrente: quella dell'audience."]
+      },
+      {
+        id: "turista-r2", pal: "kid", x: 30, y: 9, facing: "left",
+        lines: ["Il navigatore dice di proseguire a est e poi a ovest.", "È la prima strada d'Italia con un giro di boa."]
       }
     ]
   },
@@ -524,9 +524,9 @@ export const BASE_MAPS: Record<string, MapDef> = {
           "\"Per accedere serve la MEDAGLIA SPREAD: torna quando avrai vinto a EUROTOWN.\""
         ]
       },
-      south: { toMap: "route2", offsetX: 0 }
     },
     warps: [
+      ...[12, 13, 14].map(y => ({ x: 29, y, toMap: "route2", toX: 1, toY: y - 6, facing: "right" as const })),
       { x: 7, y: 5, toMap: "gymue", toX: GYMUE_ENTRY.x, toY: GYMUE_ENTRY.y, facing: "up" },
       { x: 6, y: 5, toMap: "gymue", toX: GYMUE_ENTRY.x, toY: GYMUE_ENTRY.y, facing: "up" },
       { x: 21, y: 5, toMap: "market2", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
@@ -616,7 +616,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ]
   },
 
-  // PERCORSO 3: route tra EUROTOWN (sud) e CAPUT MUNDI (nord). Tema potere e
+  // PERCORSO 3: route tra EUROTOWN (sud) e CAPUT MUNDI (uscita ovest, in alto). Tema potere e
   // burocrazia: checkpoint di recinzioni a metà strada, funzionari in agguato
   // e la bocca della GROTTA2 "ARCHIVIO DI STATO" a nord-est (pattern route1).
   // Il gate a 2 medaglie resta sull'edge nord di EUROTOWN.
@@ -633,10 +633,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "eurotown",
     edges: {
-      north: { toMap: "capitale", offsetX: 0 },
       south: { toMap: "eurotown", offsetX: 0 }
     },
     warps: [
+      ...[1, 2, 3].map(y => ({ x: 0, y, toMap: "capitale", toX: 27, toY: y + 11, facing: "left" as const })),
       { x: 22, y: 3, toMap: "grotta2", toX: GROTTA2_ENTRY.x, toY: GROTTA2_ENTRY.y, facing: "up" }
     ],
     encounterRate: 0.14,
@@ -655,7 +655,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     signs: [
       {
         x: 17, y: 2,
-        lines: ["PERCORSO 3", "Nord: CAPUT MUNDI. Sud: EUROTOWN.", "Sfide con A. ARCHIVIO a est: DIRETTIVA DECRETO. Il bar è in città."]
+        lines: ["PERCORSO 3", "Ovest, in alto: CAPUT MUNDI. Sud: EUROTOWN.", "Sfide con A. ARCHIVIO a est: DIRETTIVA DECRETO. Il bar è in città."]
       },
       {
         x: 17, y: 28,
@@ -758,8 +758,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     outdoor: true,
     music: "capitale",
-    edges: { south: { toMap: "route3", offsetX: 0 } },
     warps: [
+      ...[12, 13, 14].map(y => ({ x: 29, y, toMap: "route3", toX: 1, toY: y - 11, facing: "right" as const })),
       { x: 7, y: 11, toMap: "gymglobal", toX: GYMGLOBAL_ENTRY.x, toY: GYMGLOBAL_ENTRY.y, facing: "up" },
       { x: 6, y: 11, toMap: "gymglobal", toX: GYMGLOBAL_ENTRY.x, toY: GYMGLOBAL_ENTRY.y, facing: "up" },
       { x: 22, y: 11, toMap: "casino", toX: CASINO_ENTRY.x, toY: CASINO_ENTRY.y, facing: "up" },

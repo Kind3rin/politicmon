@@ -81,13 +81,15 @@ export function mapPlaces(map: MapDef, maps: Readonly<Record<string, MapDef>>): 
     const door = ["d", "D", "g"].includes(rows[warp.y]?.[warp.x] ?? "");
     const inside = Boolean(target && !target.outdoor) || !map.outdoor;
     const leaving = !map.outdoor && Boolean(target?.outdoor);
+    // A road that leaves by the side of the map is a gate, not a door: say which way it goes.
+    const gate = map.outdoor && target?.outdoor && !door && group.every(w => w.x === 0) ? "◀ " : map.outdoor && target?.outdoor && !door && group.every(w => w.x === width - 1) ? "▶ " : "";
     const marker = warp.markerLabel ? sentence(warp.markerLabel.replace(/^(ROTTA|TRAGHETTO|VERTICE):\s*/i, "")) : undefined;
     // A building: climb from the door through facade and roof to find where its sign belongs.
     let top = warp.y;
     while (door && top > 0 && (isFacade(rows[top - 1]?.[warp.x] ?? "") || isRoof(rows[top - 1]?.[warp.x] ?? ""))) top -= 1;
     places.push({
       id: `${warp.toMap}@${warp.x},${warp.y}`, kind: door || inside ? "door" : "dock",
-      label: marker ?? (leaving ? "Esci" : placeName(warp.toMap)), detail: leaving ? placeName(warp.toMap) : inside && map.outdoor ? placeDetail(target) : undefined,
+      label: marker ?? (leaving ? "Esci" : `${gate}${placeName(warp.toMap)}`), detail: leaving ? placeName(warp.toMap) : inside && map.outdoor ? placeDetail(target) : undefined,
       x: warp.x, y: warp.y, x2, y2, signX: (warp.x + x2 + 1) / 2, signY: top, to: warp.toMap,
       requiresBadges: warp.requiresBadges
     });

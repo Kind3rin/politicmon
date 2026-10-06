@@ -172,6 +172,12 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     id: "palazzo",
     name: "IL PALAZZO",
     tiles: PALAZZO_TILES,
+    // Il Presidente Ombra riceve in cima a due file di gradini: chi arriva dal viale sale, chi esce dal Colle atterra già sul palco.
+    stairStyle: "carpet",
+    zones: [
+      { name: "Studio del Presidente", x: 0, y: 0, w: 12, h: 4 },
+      { name: "Anticamera", x: 0, y: 4, w: 12, h: 5 }
+    ],
     outdoor: false,
     music: "palazzo",
     warps: [

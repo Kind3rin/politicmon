@@ -448,13 +448,14 @@ export const COLLE_TILES = [
   "AAAAAggAAAAA"
 ];
 
+// The President's study sits on a dais three rows high: two courses of wall, a red carpet up the middle.
 export const PALAZZO_TILES = [
   "AAAAAggAAAAA",
   "AkpppccpppkA",
   "AppppccppppA",
   "AppppccppppA",
-  "AppppccppppA",
-  "AppppccppppA",
+  "A&&&&EE&&&&A",
+  "A&&&&EE&&&&A",
   "AppppccppppA",
   "AppppccppppA",
   "AAAAAAAAAAAA"

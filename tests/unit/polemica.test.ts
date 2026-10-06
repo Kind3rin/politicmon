@@ -453,10 +453,10 @@ test("impact keeps critical and self-type satire together, reports actual PV, an
 test("a missed enemy announcement preserves PV, consumes one PP, and remains readable without a separate page", () => {
   const b = Object.create(BattleScene.prototype) as any;
   b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 8)); b.fx = {};
-  const hp = b.player.mon.hp, slot = b.foe.mon.moves.find((s: any) => s.id === "comizio"), pp = slot.pp;
+  const hp = b.player.mon.hp, slot = b.foe.mon.moves.find((s: any) => MOVES[s.id].power > 0), pp = slot.pp;
   const random = Math.random; Math.random = () => .99;
   try {
-    const steps = b.moveSteps("foe", b.foe, b.player, { ...MOVES.comizio, accuracy: 1 }, "GIORGETTA", true);
+    const steps = b.moveSteps("foe", b.foe, b.player, { ...MOVES[slot.id], accuracy: 1 }, "GIORGETTA", true);
     steps.forEach((s: any) => s.run?.());
     assert.equal(b.player.mon.hp, hp); assert.equal(slot.pp, pp - 1);
     assert.match(b.actionCaption.actor, / avversario$/); assert.match(b.actionCaption.result, /ANNUNCIO A VUOTO.*MANCATO/);
@@ -651,6 +651,8 @@ test("copione shields real damage and its preview; successful setup removes it w
   const fixture = (shield: boolean) => {
     const b = Object.create(BattleScene.prototype) as any;
     b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 9));
+    // The scripted rival carries explicit moves (tutorialRivalMoves), never the learnset pick.
+    b.foe.mon.moves = [{ id: "comizio", pp: MOVES.comizio.pp }, { id: "slogan", pp: MOVES.slogan.pp }];
     b.state = { sondaggi: 50, reduceEffects: true }; b.copione = shield; b.battery = 2; b.foe.stages.atk = shield ? 2 : 0;
     b.polemica = new Polemica(); b.koCheckSteps = () => []; b.pushFront = () => {}; b.fx = { onHit() {} };
     return b;

@@ -11,6 +11,7 @@ function canonical(value:unknown):unknown {
 }
 
 test('catalog identity deduplication preserves all 78 moves and 52 species fields',()=>{
+  // The digest also pins the learnset variety pass (scripts/balance-learnsets.ts): re-run it and update the digest together.
   // Normalize the six deliberate opening-pacing edits; all other canonical fields, including the F0 sentence-case move names, remain pinned.
   const species = structuredClone(SPECIES);
   for (const id of ['giorgetta','ellyna','renzino']) {
@@ -22,6 +23,6 @@ test('catalog identity deduplication preserves all 78 moves and 52 species field
     assert.ok(next); next[0] = 16;
   }
   const digest=createHash('sha256').update(JSON.stringify(canonical({MOVES,SPECIES:species}))).digest('hex');
-  assert.equal(digest,'ecd0efee2429903de87c057fdd121275b7c3d9286b6359d08466b4e0d913ee54');
+  assert.equal(digest,'3f8b8875e2c6a5c95bf9c31bf4fbafcbe55333f26b2f9a4c9f4ca74336a8982c');
   for(const [id,entry]of Object.entries({...MOVES,...SPECIES}))assert.equal(id,entry.id);
 });

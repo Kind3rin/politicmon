@@ -227,3 +227,16 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-row.ui-row-drop{box-shadow:inset 0 8px var(--t-red)}
 .ui-row.ui-row-drop-after{box-shadow:inset 0 -8px var(--t-red)}
 .ui-reordering .ui-row-art img{pointer-events:none}
+
+/* Title: the logo drops in with a bounce, the cast breathes out of step, the tape sways. All of it off under reduced effects. */
+@keyframes splash-drop{0%{transform:translateY(-120%) rotate(-8deg);opacity:0}55%{transform:translateY(8%) rotate(1deg);opacity:1}75%{transform:translateY(-3%) rotate(-3deg)}100%{transform:rotate(-2deg)}}
+@keyframes splash-tape{from{transform:rotate(1deg) translateX(-6px)}to{transform:rotate(-.6deg) translateX(6px)}}
+@keyframes splash-rise{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@keyframes splash-bob{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-6px) scale(1.01,.99)}}
+.ui-splash .ui-splash-logo{animation:splash-drop .9s cubic-bezier(.2,.9,.3,1) both}
+.ui-splash .ui-splash-tape{animation:splash-rise .5s .55s both,splash-tape 4.5s 1.1s ease-in-out infinite alternate}
+.ui-splash .ui-splash-cast img{animation:splash-rise .6s .7s both,splash-bob 2.6s 1.4s ease-in-out infinite}
+.ui-splash .ui-splash-cast img:nth-child(2){animation-delay:.85s,1.9s}
+.ui-splash .ui-splash-cast img:nth-child(3){animation-delay:1s,2.4s}
+@media(prefers-reduced-motion:reduce){.ui-splash .ui-splash-logo,.ui-splash .ui-splash-tape,.ui-splash .ui-splash-cast img{animation:none}}
+body.ui-reduce-effects .ui-splash .ui-splash-logo,body.ui-reduce-effects .ui-splash .ui-splash-tape,body.ui-reduce-effects .ui-splash .ui-splash-cast img{animation:none}

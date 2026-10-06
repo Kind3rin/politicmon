@@ -3702,6 +3702,16 @@ export class WorldScene implements Scene {
     this.tryStep(dir as Facing, 0);
   }
 
+  /** The road leaves the map: the same short fade as a door, not a hard cut. */
+  private crossEdge(pos: typeof this.state.pos): void {
+    this.fadeOut = 0.16;
+    this.pendingWarp = () => {
+      this.state.pos = pos;
+      this.loadMap(pos.mapId);
+      this.doorArrival = null;
+    };
+  }
+
   /** Start a step towards `facing`; `carry` is the part of the last step that was already walked. */
   private tryStep(facing: Facing, carry: number): void {
     const pos = this.state.pos;
@@ -3720,10 +3730,7 @@ export class WorldScene implements Scene {
         return;
       }
       const target = MAPS[edge.toMap];
-      this.state.pos = {
-        mapId: edge.toMap, x: nx + edge.offsetX, y: target.tiles.length - 1, facing
-      };
-      this.loadMap(edge.toMap);
+      this.crossEdge({ mapId: edge.toMap, x: nx + edge.offsetX, y: target.tiles.length - 1, facing });
       return;
     }
     if (ny >= mapH && this.map.edges?.south) {
@@ -3732,8 +3739,7 @@ export class WorldScene implements Scene {
         this.say(edge.lockedLines ?? ["La strada è ancora chiusa."]);
         return;
       }
-      this.state.pos = { mapId: edge.toMap, x: nx + edge.offsetX, y: 0, facing };
-      this.loadMap(edge.toMap);
+      this.crossEdge({ mapId: edge.toMap, x: nx + edge.offsetX, y: 0, facing });
       return;
     }
 

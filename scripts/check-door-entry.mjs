@@ -52,6 +52,10 @@ try {
   }
   check(doors >= 12, 'too few doors checked: ' + doors);
   log.push(`${doors} doors`);
+  // The road between two zones fades like a door and keeps walking if the direction is still held.
+  { const { state, world } = boot('borgo', 14, 1); world.input.heldDirection = () => 'up'; let dark = false, crossed = false;
+    for (let i = 0; i < 120; i++) { world.update(1 / 60); if (world.fadeOut > 0) dark = true; if (state.pos.mapId === 'route1') crossed = true; }
+    check(dark && crossed, `leaving Borgo by the road: fade ${dark}, crossed ${crossed}`); check(state.pos.y < MAPS.route1.tiles.length - 1, 'did not keep walking after the crossing'); }
   // Walking along the street past a door does not make the sprite hesitate or lean.
   { const { world, hold } = boot('borgo', 3, 13, 'right'); let seen = 0; hold('right', 1.6, 1 / 60, () => { seen = Math.max(seen, Math.abs(world.doorShiftNow())); }); check(seen === 0, 'walking along the street leaned towards a door: ' + seen); }
   // Holding a direction never stops between tiles, at a steady or a jittery frame rate.

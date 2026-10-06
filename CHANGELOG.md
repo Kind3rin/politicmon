@@ -6,6 +6,7 @@
 - Passo senza inceppi: a ogni casella c'erano due fotogrammi fermi (17 su 200 tenendo premuto, circa un decimo del tempo) e il resto del tempo del passo si perdeva. Ora il passo dopo parte nello stesso fotogramma, con il tempo avanzato, anche con un frame rate ballerino; la camera non perde più il suo «anticipo» tra una casella e l'altra.
 - Gambe: la camminata faceva due cicli completi a casella (circa 11 al secondo); ora un fotogramma ogni mezza casella e le gambe si alternano passo dopo passo.
 - Percorsi a tocco: tra i percorsi più corti sceglie quello con meno curve (una corsa dritta e un angolo, non una scala a zig-zag) e, se parte di corsa, corre fino all'arrivo (prima rallentava sugli ultimi 6 passi). Dissolvenza d'uscita dalla porta più corta (0,16 s).
+- Strade tra una zona e l'altra: uscendo da un percorso o da una città dal bordo nord o sud non c'è più lo stacco secco, ma la stessa dissolvenza breve delle porte; se tieni premuto, dopo il cambio continui a camminare.
 
 ## Mandato 2 — la strada gira — 2026-10-06
 

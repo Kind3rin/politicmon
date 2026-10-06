@@ -43,3 +43,15 @@ resta vicina a prima (da 9–13 turni quasi innocui a 4–5). Resta da giudicare
 - Le lotte durano poco (3,2-3,3 turni al primo KO, 22-29% in due turni o meno): poco spazio per posture e stati. Vale una prova con un fattore di danno globale o PV più alti, con ribilanciamento dei capi.
 - Mosse di stato: molte specie ne portano 1-2 che non cambiano mai l'esito; vanno viste con una simulazione che le includa.
 - Alcune specie a pari livello perdono quasi sempre (4-16%): sono davvero scelte per il reclutamento? Verificare con il livello a cui si incontrano.
+
+## Curva di difficoltà simulata (`npm run sim:trainers`)
+
+Ogni allenatore contro tre compagni fissi (Schleinix, Giorgiagon, Renzilla) a livello −2 / 0 / +3 rispetto alla media del suo gruppo, mossa più dannosa
+da entrambe le parti. Ignora stati, statistiche, oggetti, posture e cambi: misura la pressione grezza di statistiche e tipi, per confrontare modifiche ai dati
+(mosse, statistiche) prima e dopo. Non prevede un giocatore reale.
+
+- A pari livello quasi tutti gli allenatori sono vinti al 100%: la difficoltà viene dal ritmo di crescita e dalle risorse, non dalla singola lotta.
+- I capi finali sono molto duri in termini grezzi: Algoritmo Sovrano 0% anche a +3, Commissione ~10% a +3, Distretto Isole 55% a +3, Garante 82% a +3. Sono pensati per essere affrontati con preparazione (vedi i documenti di preparazione), ma vale tenerli d'occhio se qualcuno li trova un muro.
+- Effetto della variazione dei repertori (prima/dopo): solo 6 allenatori si spostano di più di 12 punti, in direzioni opposte (Boss +22 a −2, Tesoriere +19, Distretto Feed −13). Nessuna deriva generale.
+
+Le due soglie sono state viste con 120 simulazioni per riga; il rumore è di pochi punti.

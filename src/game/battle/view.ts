@@ -43,7 +43,15 @@ export interface ImpactParticle {
   max: number;
   color: string;
   size: number;
+  /** Per-particle physics and shape: omitted means the classic falling spark. */
+  grav?: number;
+  drag?: number;
+  w?: number;
+  h?: number;
 }
+
+/** An expanding ring or square: the shockwave of a hit. */
+export interface ImpactRing { x: number; y: number; from: number; to: number; t: number; max: number; color: string; width: number; square?: boolean }
 
 // Numero di danno flottante: nasce nel punto colpito, sale e svanisce.
 // Colore/scala cambiano su critico (bianco/rosso, grande) e super-efficace (oro).
@@ -110,6 +118,11 @@ export class BattleFx {
   effFx: { kind: "super" | "weak" | "crit"; t: number } | null = null;
   telegraph: { side: BattleSide; color: string; t: number; max: number } | null = null;
   moveFx: { side: BattleSide; type: PolType; t: number } | null = null;
+  rings: ImpactRing[] = [];
+  /** Full-frame colour that fades after a heavy hit. */
+  tint: { color: string; t: number; max: number } | null = null;
+  /** 0..1, decays quickly: the frame leans in on a super effective or critical hit. */
+  punch = 0;
 
   update(dt: number): void {
     this.time += dt;
@@ -132,6 +145,10 @@ export class BattleFx {
     this.koFlash = Math.max(0, this.koFlash - dt);
     this.updateParticles(dt);
     this.updateDamageNumbers(dt);
+    this.punch = Math.max(0, this.punch - dt * 4.5);
+    if (this.tint) { this.tint.t -= dt; if (this.tint.t <= 0) this.tint = null; }
+    for (const ring of this.rings) ring.t -= dt;
+    this.rings = this.rings.filter(ring => ring.t > 0);
     if (this.effFx) {
       this.effFx.t -= dt;
       if (this.effFx.t <= 0) {
@@ -160,7 +177,14 @@ export class BattleFx {
     this.knockback[defSide] = this.reduceEffects ? 0 : superHit ? 1 : 0.55;
     if (!this.reduceEffects) {
       this.spawnImpact(defSide, typeMult, crit);
-      if (moveType) this.moveFx = { side: attacker, type: moveType, t: .4 };
+      if (moveType) {
+        this.moveFx = { side: attacker, type: moveType, t: .4 };
+        this.signature(defSide, moveType, superHit || crit ? 1 : .6);
+      }
+      if (superHit || crit) {
+        this.punch = 1;
+        this.tint = crit && !superHit ? { color: "255,255,255", t: .16, max: .16 } : { color: moveType ? hexToRgb(TYPE_COLORS[moveType]) : "255,210,63", t: .2, max: .2 };
+      } else this.punch = Math.max(this.punch, .3);
     }
     if (damage > 0) {
       this.spawnDamageNumber(defSide, damage, typeMult > 1, crit);
@@ -177,6 +201,91 @@ export class BattleFx {
       }
       audio.hit();
     }
+  }
+
+  /** The look of each political type on impact: one shockwave plus a burst that tells the types apart.
+   * `power` is 1 for a heavy hit (super effective or critical), .6 otherwise. All of it is cosmetic. */
+  signature(defSide: BattleSide, type: PolType, power: number): void {
+    const c = monsterCenter(defSide, this.viewHeight);
+    const color = TYPE_COLORS[type];
+    const count = Math.round(20 * power);
+    // Bigger and denser than first drawn: at phone scale a 3 px speck is a 5 px speck, and it has to read at a glance.
+    const push = (n: number, make: (i: number) => Partial<ImpactParticle> & { vx: number; vy: number; color: string }) => {
+      for (let i = 0; i < Math.round(n * 1.4); i += 1) {
+        const p = { x: c.x, y: c.y, life: 0, max: .5, size: 1, ...make(i) } as ImpactParticle;
+        if (p.w) p.w = Math.round(p.w * 1.6); if (p.h) p.h = Math.max(1, Math.round(p.h * 1.6));
+        this.particles.push(p);
+      }
+    };
+    this.rings.push({ x: c.x, y: c.y, from: 4, to: 30 + 28 * power, t: .4, max: .4, color, width: 3 + power * 3, square: type === "ISTITUZIONE" });
+    switch (type) {
+      case "POPULISMO": // a loudspeaker burst: fast rays and a second ring
+        this.rings.push({ x: c.x, y: c.y, from: 2, to: 14 + 14 * power, t: .26, max: .26, color: "#fff2c4", width: 2 });
+        push(count, i => { const a = (Math.PI * 2 * i) / count; return { vx: Math.cos(a) * 150, vy: Math.sin(a) * 150, color: i % 2 ? color : "#fff2c4", grav: 0, drag: .86, w: 5, h: 1, max: .3 }; });
+        break;
+      case "MEDIA": // flash bulbs
+        this.tint ??= { color: "255,255,255", t: .1, max: .1 };
+        push(Math.round(8 * power), i => ({ vx: (Math.random() - .5) * 90, vy: -30 - Math.random() * 60, color: i % 2 ? "#ffffff" : color, grav: 40, drag: .93, w: 3, h: 3, max: .5 }));
+        break;
+      case "TECNO": // a glitch: torn horizontal slices
+        push(Math.round(10 * power), i => ({ x: c.x + (Math.random() - .5) * 34, y: c.y + (Math.random() - .5) * 34, vx: 0, vy: 0, color: i % 2 ? "#3ad7e8" : "#e63ad7", grav: 0, drag: 1, w: 8 + Math.random() * 16, h: 1 + Math.floor(Math.random() * 2), max: .22 + Math.random() * .15 }));
+        break;
+      case "DESTRA": // flames rising
+        push(Math.round(16 * power), i => ({ x: c.x + (Math.random() - .5) * 22, y: c.y + 6, vx: (Math.random() - .5) * 30, vy: -50 - Math.random() * 60, color: ["#ffd23c", "#ff8a24", "#e8412c"][i % 3], grav: -60, drag: .95, w: 3, h: 3, max: .55 }));
+        break;
+      case "SINISTRA": // red streamers thrown up
+        push(Math.round(14 * power), i => ({ x: c.x + (Math.random() - .5) * 20, vx: (Math.random() - .5) * 60, vy: -80 - Math.random() * 50, color: i % 3 ? color : "#ffd23c", grav: 140, drag: .96, w: 2, h: 6, max: .7 }));
+        break;
+      case "VERDE": // a gust of leaves
+        push(Math.round(14 * power), i => ({ vx: (i % 2 ? 1 : -1) * (20 + Math.random() * 70), vy: -40 - Math.random() * 50, color: i % 3 ? color : "#d7efd2", grav: 60, drag: .94, w: 3, h: 2, max: .8 }));
+        break;
+      case "CENTRO": // a spiral
+        push(Math.round(14 * power), i => { const a = (Math.PI * 2 * i) / Math.max(1, Math.round(14 * power)); return { vx: -Math.sin(a) * 110 + Math.cos(a) * 30, vy: Math.cos(a) * 110 + Math.sin(a) * 30, color: i % 2 ? color : "#ffffff", grav: 0, drag: .9, w: 2, h: 2, max: .45 }; });
+        break;
+      case "ISTITUZIONE": // a stamp coming down: dust off the seal
+        this.rings.push({ x: c.x, y: c.y, from: 24, to: 8, t: .2, max: .2, color: "#ffffff", width: 2, square: true });
+        push(Math.round(12 * power), i => ({ x: c.x + (i % 2 ? 1 : -1) * 12, y: c.y + 10, vx: (i % 2 ? 1 : -1) * (30 + Math.random() * 60), vy: -10 - Math.random() * 20, color: "#d8d2c0", grav: 80, drag: .9, w: 3, h: 2, max: .5 }));
+        break;
+    }
+  }
+
+  /** Victory confetti, falling from the top of the frame. */
+  celebrate(count = 70): void {
+    if (this.reduceEffects) return;
+    const palette = ["#ffd23f", "#d7263d", "#1b998b", "#f4eedc", "#4aa0e8"];
+    for (let i = 0; i < count; i += 1) {
+      this.particles.push({
+        x: Math.random() * VIEW_W, y: -6 - Math.random() * 30, vx: (Math.random() - .5) * 40, vy: 20 + Math.random() * 50,
+        life: 0, max: 1.8 + Math.random() * 1.2, color: palette[i % palette.length], size: 1,
+        grav: 50, drag: .99, w: 5, h: 3
+      });
+    }
+  }
+
+  drawRings(screen: Screen): void {
+    if (this.reduceEffects) return;
+    const ctx = screen.ctx;
+    for (const ring of this.rings) {
+      const k = 1 - ring.t / ring.max, r = ring.from + (ring.to - ring.from) * (1 - (1 - k) * (1 - k));
+      ctx.save(); ctx.globalAlpha = Math.max(0, 1 - k) * .9; ctx.strokeStyle = ring.color; ctx.lineWidth = Math.max(1, ring.width * (1 - k * .6));
+      if (ring.square) ctx.strokeRect(Math.round(ring.x - r), Math.round(ring.y - r), Math.round(r * 2), Math.round(r * 2));
+      else { ctx.beginPath(); ctx.arc(ring.x, ring.y, Math.max(1, r), 0, Math.PI * 2); ctx.stroke(); }
+      ctx.restore();
+    }
+  }
+
+  /** A short, heavy colour wash over the whole frame. */
+  drawTint(screen: Screen): void {
+    if (!this.tint || this.reduceEffects) return;
+    const ctx = screen.ctx;
+    ctx.save(); ctx.fillStyle = `rgba(${this.tint.color},${.3 * this.tint.t / this.tint.max})`; ctx.fillRect(0, 0, VIEW_W, screen.height); ctx.restore();
+  }
+
+  /** The frame leans in on a heavy hit: scale about the middle of the fight. */
+  applyPunch(ctx: CanvasRenderingContext2D, height: number): void {
+    if (this.reduceEffects || this.punch <= 0) return;
+    const s = 1 + .05 * this.punch * this.punch, cx = VIEW_W / 2, cy = height * .55;
+    ctx.translate(cx, cy); ctx.scale(s, s); ctx.translate(-cx, -cy);
   }
 
   // Esplosione di scintille nel punto colpito. Colore e quantità scalano con
@@ -216,8 +325,9 @@ export class BattleFx {
       p.life += dt;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
-      p.vy += 220 * dt; // gravità
-      p.vx *= 0.92;
+      p.vy += (p.grav ?? 220) * dt; // gravità
+      p.vx *= p.drag ?? 0.92;
+      if (p.drag !== undefined) p.vy *= Math.pow(p.drag, dt * 60 / 2);
     }
     this.particles = this.particles.filter((p) => p.life < p.max);
   }
@@ -233,7 +343,7 @@ export class BattleFx {
       ctx.save();
       ctx.globalAlpha = Math.min(1, a * 1.4);
       ctx.fillStyle = p.color;
-      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size + 1, p.size + 1);
+      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.w ?? p.size + 1, p.h ?? p.size + 1);
       ctx.restore();
     }
   }
@@ -502,3 +612,8 @@ export function drawBattleMonster(
 
 // Riesportato per comodità delle scene (VIEW_H serve al pannello testo).
 export { VIEW_H, VIEW_W };
+
+function hexToRgb(hex: string): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;
+}

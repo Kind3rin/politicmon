@@ -718,7 +718,7 @@ export class PvpBattleScene implements Scene {
     if (this.finished || !this.view) return;
     this.viewHeight = screen.height; this.fx.viewHeight = screen.height;
     const ctx = screen.ctx, shake = this.fx.shakeOffset(), g = battleGeometry(screen.height);
-    ctx.save(); ctx.translate(shake.x, shake.y);
+    ctx.save(); ctx.translate(shake.x, shake.y); this.fx.applyPunch(ctx, screen.height);
     screen.clear("#f0f0e0"); drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
     const slide = this.fx.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - .25) / .6));
     const foeSlide = Math.round((1 - slide) * 90), playerSlide = Math.round((1 - slide) * -90);
@@ -731,6 +731,6 @@ export class PvpBattleScene implements Scene {
         drawBattleMonster(screen, this.fx, c, side === "foe" ? 162 + foeSlide : 56 + playerSlide,
           side === "foe" ? g.foeBase : g.playerBase, this.fx.lungeT[side], side === "player", side);
     }
-    this.fx.drawMoveFx(screen); this.fx.drawParticles(screen); ctx.restore();
+    this.fx.drawMoveFx(screen); this.fx.drawRings(screen); this.fx.drawParticles(screen); this.fx.drawTint(screen); ctx.restore();
   }
 }

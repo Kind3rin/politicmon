@@ -171,6 +171,7 @@ export class BattleScene implements Scene {
   private growthReceipt: { elapsed: number; previousLevel: number; previousExp: number; gained: number; shared: string; modifiers: string[] } | null = null;
   private stepTimer = 0;
   private introT = 0; // apertura a cerchio + slide degli sprite
+  private splashT = 0; // schermata «sfida» dell'allenatore: dopo l'iride, prima delle battute
   // Effetti visivi condivisi (shake, affondi, particelle, banner, telegrafia):
   // estratti in view.ts per il riuso nella PvpBattleScene.
   private fx = new BattleFx();
@@ -187,6 +188,11 @@ export class BattleScene implements Scene {
     if (this.backdrop.path === "ui/battle_bg.png") sceneImage("battle:bg:prato-portrait", "ui/battle/prato-portrait.png");
     this.foeTeam = opts.foeTeam;
     this.trainer = opts.trainer;
+    if (opts.trainer && !opts.state.reduceEffects) {
+      this.splashT = 1.7;
+      const face = trainerPortrait(opts.trainer.id, opts.trainer.pal);
+      if (face) sceneImage("battle:trainer-splash", face.replace(/^\/sprites\//, ""));
+    }
     this.copione = opts.trainer?.id === "rival1" && Boolean(this.state.flags["opening-v2"]);
     if (this.copione) { this.battery = 2; sceneImage("battle:copione", "ui/battle/copione.png"); }
     this.firstOrder = opts.advantage ?? null;
@@ -883,6 +889,8 @@ export class BattleScene implements Scene {
           this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
           this.fx.koFlash = 0.5;
           this.fx.faintT.foe = 0.55;
+          // The last opponent down is a win worth a shower of confetti (bigger for a badge fight).
+          if (!(this.trainer && this.foeIndex < this.foeTeam.length - 1)) this.fx.celebrate(this.trainer ? (this.trainer.badge ? 110 : 70) : 28);
         },
         pause: 0.15
       }
@@ -1348,6 +1356,7 @@ export class BattleScene implements Scene {
             // Reclutato: il mostro è "dentro la tessera", non va più disegnato in
             // campo (altrimenti ricompare e sembra essere evaso).
             this.captured = true;
+            this.fx.celebrate(60);
             this.pushFront(this.captureSteps());
           } else {
             this.pushFront([
@@ -1550,6 +1559,12 @@ export class BattleScene implements Scene {
         return; // il cerchio si sta ancora aprendo
       }
     }
+    // The opponent's entrance: a beat of staging before the first line, skippable.
+    if (this.splashT > 0) {
+      this.splashT = Math.max(0, this.splashT - dt);
+      if (this.input.wasPressed("a") || this.input.wasPressed("b")) this.splashT = Math.min(this.splashT, 0.3);
+      if (this.splashT > 0.3) return;
+    }
 
     // Anima barre HP ed EXP.
     const speed = dt * 60;
@@ -1721,6 +1736,7 @@ export class BattleScene implements Scene {
     const shake = this.fx.shakeOffset();
     ctx.save();
     ctx.translate(shake.x, shake.y);
+    this.fx.applyPunch(ctx, screen.height);
     screen.clear("#f0f0e0");
     drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
 
@@ -1769,7 +1785,9 @@ export class BattleScene implements Scene {
 
     // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
     this.fx.drawMoveFx(screen);
+    this.fx.drawRings(screen);
     this.fx.drawParticles(screen);
+    this.fx.drawTint(screen);
     // Numeri di danno flottanti (sopra le scintille, sotto le barre HP).
 
 
@@ -1827,6 +1845,8 @@ export class BattleScene implements Scene {
       ctx.restore();
     }
 
+    this.drawTrainerSplash(screen);
+
     // Apertura a cerchio in stile Game Boy.
     if (this.introT < 0.55) {
       const ctx = screen.ctx;
@@ -1854,6 +1874,38 @@ export class BattleScene implements Scene {
       // Piazza in fermento: velo freddo/rosso-piazza, più intenso in basso.
       this.drawTintGradient(screen, "216,72,72", 0.14 + (40 - sond) / 40 * 0.08, true);
     }
+  }
+
+  /** "Sfida": a diagonal band across the field, the opponent's bust sliding in from the right and the name from the left. */
+  private drawTrainerSplash(screen: Screen): void {
+    if (!this.trainer || this.splashT <= 0 || this.state.reduceEffects) return;
+    const total = 1.7, elapsed = total - this.splashT;
+    const slide = Math.min(1, elapsed / 0.35), ease = 1 - (1 - slide) * (1 - slide);
+    const fade = Math.min(1, this.splashT / 0.3);
+    const ctx = screen.ctx, h = screen.height, cy = Math.round(h * 0.4);
+    ctx.save();
+    ctx.globalAlpha = fade;
+    ctx.translate(VIEW_W / 2, cy); ctx.rotate(-0.1);
+    ctx.fillStyle = "rgba(20,22,31,.94)"; ctx.fillRect(-VIEW_W, -46, VIEW_W * 2, 92);
+    ctx.fillStyle = "#d7263d"; ctx.fillRect(-VIEW_W, -50, VIEW_W * 2, 4); ctx.fillRect(-VIEW_W, 46, VIEW_W * 2, 4);
+    ctx.fillStyle = "#ffd23f"; ctx.fillRect(-VIEW_W, -53, VIEW_W * 2, 2);
+    ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = fade;
+    const face = sceneImage("battle:trainer-splash", trainerPortrait(this.trainer.id, this.trainer.pal)?.replace(/^\/sprites\//, "") ?? "");
+    if (face) {
+      // The bust rises out of the band: everything above the band's lower edge shows, nothing below it.
+      ctx.save(); ctx.translate(VIEW_W / 2, cy); ctx.rotate(-0.1); ctx.beginPath(); ctx.rect(-VIEW_W, -h, VIEW_W * 2, h + 46); ctx.restore(); ctx.clip();
+      ctx.imageSmoothingEnabled = false;
+      const size = 132, x = VIEW_W - size - 6 + (1 - ease) * 150, y = cy - size + 64;
+      ctx.drawImage(face, Math.round(x), Math.round(y), size, size);
+    }
+    const name = readableCopy(this.trainer.name).toUpperCase();
+    ctx.fillStyle = "#f4eedc"; ctx.font = "700 17px Tribuna, sans-serif"; ctx.textBaseline = "middle";
+    ctx.fillText(name.length > 20 ? name.slice(0, 19) + "…" : name, Math.round(8 - (1 - ease) * 160), cy + 2, 122);
+    ctx.fillStyle = "#ffd23f"; ctx.font = "700 11px Tribuna, sans-serif";
+    ctx.fillText(this.trainer.badge ? "CAPO DI PALAZZO" : "TI SFIDA!", Math.round(8 - (1 - ease) * 160), cy + 22);
+    ctx.restore();
   }
 
   private drawTintGradient(screen: Screen, rgb: string, alpha: number, fromBottom = false): void {

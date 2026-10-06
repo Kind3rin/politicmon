@@ -812,6 +812,116 @@
         }
       ],
       "status": "integrated in default outdoor water; reduced effects freeze to first frame"
+    },
+    {
+      "id": "lago",
+      "jobId": "acafa0a9-71d1-4d12-a166-2a0cd632a889",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_114147_acafa0a9-71d1-4d12-a166-2a0cd632a889.png",
+      "path": "public/sprites/ui/battle/lago.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Percorso 2: calm Italian lake shore with ferry, reeds and a campanile hamlet (full scene text in the generation job; prompt prefix shared with piazza).",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "cava",
+      "jobId": "0cbff2a9-f062-430b-be62-35e1ab1c72ed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_114112_0cbff2a9-f062-430b-be62-35e1ab1c72ed.png",
+      "path": "public/sprites/ui/battle/cava.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Percorso 3: gravel quarry with conveyor, excavator and warning tape (full scene text in the generation job; prompt prefix shared with piazza).",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "viale",
+      "jobId": "825d4afc-b26c-403c-9e53-9eda5ce123b7",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_114112_825d4afc-b26c-403c-9e53-9eda5ce123b7.png",
+      "path": "public/sprites/ui/battle/viale.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Eurotown: Brussels-style boulevard with flags and a tram stop (full scene text in the generation job; prompt prefix shared with piazza).",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "tv",
+      "jobId": "2818938e-9952-46ca-aade-4710ba1476ea",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_114111_2818938e-9952-46ca-aade-4710ba1476ea.png",
+      "path": "public/sprites/ui/battle/tv.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Mediopoli: TV backlot with blank LED billboards and a satellite truck (full scene text in the generation job; prompt prefix shared with piazza).",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "foro",
+      "jobId": "f7acba30-2ab1-4cbf-9359-6b90d85f1f55",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_114111_f7acba30-2ab1-4cbf-9359-6b90d85f1f55.png",
+      "path": "public/sprites/ui/battle/foro.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm sandstone, muted olive greens, pale cyan sky, navy outlines sparingly. Wide 16:9 horizontal view for a turn-based battle. Camera at waist height, straight-on view. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple color areas, extremely sparse texture; it MUST be empty for game characters and UI. Especially reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no interface, no text, no drawn battle platforms. SCENE: Caput Mundi: ancient-Roman-meets-ministry forum with a broken colonnade and a neoclassical palace facade (full scene text in the generation job; prompt prefix shared with piazza).",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
     }
   ],
   "m2StyleReference": {

@@ -17,7 +17,12 @@ export const BATTLE_BACKDROPS = {
   costa: { spriteId: "battle:bg:costa", path: "ui/battle/costa.png", sky: "#9ad5df", ground: "#f0dcba", foePlatform: "#dcc89f", playerPlatform: "#d2bb8e" },
   neve: { spriteId: "battle:bg:neve", path: "ui/battle/neve.png", sky: "#9bcee0", ground: "#dceef5", foePlatform: "#b6d5e4", playerPlatform: "#aacadb" },
   rete: { spriteId: "battle:bg:rete", path: "ui/battle/rete.png", sky: "#a5b4d9", ground: "#bdc4e6", foePlatform: "#a4add4", playerPlatform: "#959ec6" },
-  grotta: { spriteId: "battle:bg:grotta", path: "ui/battle/grotta.png", sky: "#79768c", ground: "#bfb4a3", foePlatform: "#a49b8c", playerPlatform: "#938a7d" }
+  grotta: { spriteId: "battle:bg:grotta", path: "ui/battle/grotta.png", sky: "#79768c", ground: "#bfb4a3", foePlatform: "#a49b8c", playerPlatform: "#938a7d" },
+  lago: { spriteId: "battle:bg:lago", path: "ui/battle/lago.png", sky: "#82d3ea", ground: "#f1ddb6", foePlatform: "#e0cda9", playerPlatform: "#d4c2a0" },
+  cava: { spriteId: "battle:bg:cava", path: "ui/battle/cava.png", sky: "#8dd6e8", ground: "#f2dcb4", foePlatform: "#e1cca7", playerPlatform: "#d4c19e" },
+  viale: { spriteId: "battle:bg:viale", path: "ui/battle/viale.png", sky: "#90c9df", ground: "#cecbc8", foePlatform: "#bfbcba", playerPlatform: "#b5b2b0" },
+  foro: { spriteId: "battle:bg:foro", path: "ui/battle/foro.png", sky: "#82cee4", ground: "#efdcb6", foePlatform: "#decca9", playerPlatform: "#d2c1a0" },
+  tv: { spriteId: "battle:bg:tv", path: "ui/battle/tv.png", sky: "#7ad1ea", ground: "#dacfbd", foePlatform: "#cac0af", playerPlatform: "#bfb6a6" }
 } as const satisfies Record<string, BattleBackdrop>;
 
 export type BattleBackdropId = keyof typeof BATTLE_BACKDROPS;

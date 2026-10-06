@@ -6,7 +6,7 @@ import { BATTLE_BACKDROPS, battleBackdropForMap, battleBackdropId } from "../../
 
 test("gli incontri mantengono l'ambiente della mappa, inclusi interni e postgame", () => {
   const cases = {
-    borgo: "piazza", route1: "prato", route2: "prato", route3: "prato",
+    borgo: "piazza", route1: "prato", route2: "lago", route3: "cava", eurotown: "viale", capitale: "foro", mediopoli: "tv",
     grotta1: "grotta", grotta2: "grotta", "oblast-meme": "neve",
     gymtv: "studio", gymue: "palazzo", gymglobal: "palazzo",
     palazzo: "palazzo", colle: "palazzo", commissione: "palazzo",
@@ -36,7 +36,7 @@ test("gli sfondi hanno chiavi distinte, PNG nativi e un peso adatto all'offline 
     assert.equal(png.readUInt32BE(20), 136, id);
     generatedBytes += png.length;
   }
-  assert.ok(generatedBytes < 150_000, `${generatedBytes} byte di nuovi sfondi`);
+  assert.ok(generatedBytes < 230_000, `${generatedBytes} byte di nuovi sfondi`);
 });
 
 

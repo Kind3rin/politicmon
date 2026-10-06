@@ -47,7 +47,7 @@ import { switchPreview, damageRange, replyRange } from "./tactics";
 import { HANDOFF_STAGES, handoffKey, sharedTypes } from "./handoff";
 import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
-import { chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
+import { chooseAreaEvent, chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
 import type { TouchAction } from "../../engine/touchActions";
 import type { UiPanel } from "../../ui/kit";
 import { readableCopy } from "../../ui/kit/copy";
@@ -209,6 +209,8 @@ export class BattleScene implements Scene {
     recordBattleStarted(this.state);
     if (!this.state.badges.length && ["borgo", "route1"].includes(this.state.pos.mapId) && this.state.runStats.captures > 0 && !opts.legendary && !this.copione) {
       this.field = chooseFieldEvent(this.state.runStats.battles);
+    } else if (this.state.badges.length && !this.trainer?.badge && !opts.legendary && !this.copione) {
+      this.field = chooseAreaEvent(this.state.pos.mapId, this.state.runStats.battles);
     }
     // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
     // (screen-shake) e la usa la scena per i lampi (KO/level/cattura/leggendario).
@@ -1507,7 +1509,7 @@ export class BattleScene implements Scene {
     const chosenPosture=ready&&this.posture!=="none"?POSTURES[this.posture]:undefined;
     const title=this.msg.isOpen?"In lotta":this.actionCaption?`${sentence(this.actionCaption.actor)} usa ${readableCopy(this.actionCaption.move)}`:chosenPosture?`${chosenPosture.label}: ${chosenPosture.rule}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
-    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":undefined;
+    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":this.field&&!this.fieldResolved?readableCopy(`${this.field.name}: ${this.field.rule}`):undefined;
     return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...postures,...secondary],arena:{
       impacts:this.fx.damageNumbers.map(d=>({label:`−${d.val}`,x:d.x/VIEW_W*100,y:d.y/this.viewHeight*100,opacity:this.state.reduceEffects?1:Math.min(1,Math.max(0,(1-d.life/d.max)/.34)),kind:d.crit?"crit":d.super?"super":"normal"})),
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},

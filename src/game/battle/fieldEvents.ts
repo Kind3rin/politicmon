@@ -6,7 +6,28 @@ export const FIELD_EVENTS = [
   { id: "equal", name: "PAR CONDICIO", rule: "BONUS ALLE STATISTICHE AZZERATI", cue: "BONUS A ZERO", frame: 1 },
   { id: "poll", name: "SONDAGGIO LAMPO", rule: "CHI HA MENO PV% RECUPERA IL 10%", cue: "MENO PV% +10%", frame: 2 }
 ] as const;
-export type BattleField = typeof FIELD_EVENTS[number];
+/** Area events: after the first badge each part of the country has its own rule of the day. */
+export const AREA_EVENTS = [
+  { id: "taglio", name: "TAGLIO LINEARE", rule: "TUTTI PERDONO L'8% DEI PV", cue: "PV -8%", frame: 3 },
+  { id: "diretta", name: "DIRETTA TV", rule: "GRINTA +1 A ENTRAMBI", cue: "GRINTA +1", frame: 3 },
+  { id: "standard", name: "STANDARD CE", rule: "LE STATISTICHE TORNANO TRA -1 E +1", cue: "STAT ±1", frame: 3 },
+  { id: "cantiere", name: "CANTIERE APERTO", rule: "VELOCITÀ -1 A ENTRAMBI", cue: "VEL -1", frame: 3 }
+] as const;
+export type BattleField = typeof FIELD_EVENTS[number] | typeof AREA_EVENTS[number];
+
+const AREA_OF: Record<string, BattleField["id"]> = {
+  capitale: "taglio", palazzo: "taglio", colle: "taglio", casino: "taglio",
+  mediopoli: "diretta", route2: "diretta", gymtv: "diretta", redazione: "diretta", salotto: "diretta",
+  eurotown: "standard", bruxelles: "standard", gymue: "standard", commissione: "standard",
+  route3: "cantiere", grotta2: "cantiere", stretto: "cantiere", offshore: "cantiere", "oblast-meme": "cantiere"
+};
+
+/** Every third fight that is not a gym leader, a legend or a scripted duel gets the rule of the place it is fought in. */
+export function chooseAreaEvent(mapId: string, battles: number): BattleField | undefined {
+  if (battles % 3 !== 0) return undefined;
+  const id = AREA_OF[mapId];
+  return AREA_EVENTS.find(event => event.id === id);
+}
 
 export function chooseFieldEvent(battles: number): BattleField {
   return FIELD_EVENTS[Math.max(0, battles - 1) % FIELD_EVENTS.length];
@@ -17,6 +38,26 @@ export function applyFieldEvent(field: BattleField, player: Combatant, foe: Comb
   if (field.id === "equal") {
     for (const c of [player, foe]) for (const key of ["atk", "def", "spc", "spd"] as const) c.stages[key] = Math.min(0, c.stages[key]);
     return "BONUS AZZERATI.\nI MALUS RESTANO IN ONDA.";
+  }
+  if (field.id === "taglio") {
+    for (const c of [player, foe]) {
+      if (c.mon.hp <= 0) continue;
+      const cut = Math.max(1, Math.floor(statsOf(c.mon).hp * .08));
+      c.mon.hp = Math.max(1, c.mon.hp - cut);
+    }
+    return "TAGLIO LINEARE: -8% PV A TUTTI.\nNESSUNO VA KO, TUTTI PROTESTANO.";
+  }
+  if (field.id === "diretta") {
+    for (const c of [player, foe]) c.stages.atk = Math.min(6, c.stages.atk + 1);
+    return "IN DIRETTA SI ALZANO I TONI.\nGRINTA +1 A ENTRAMBI.";
+  }
+  if (field.id === "standard") {
+    for (const c of [player, foe]) for (const key of ["atk", "def", "spc", "spd"] as const) c.stages[key] = Math.max(-1, Math.min(1, c.stages[key]));
+    return "STANDARD CE: STATISTICHE\nRIPORTATE TRA -1 E +1.";
+  }
+  if (field.id === "cantiere") {
+    for (const c of [player, foe]) c.stages.spd = Math.max(-6, c.stages.spd - 1);
+    return "CANTIERE APERTO SULLA STRADA.\nVELOCITÀ -1 A ENTRAMBI.";
   }
   if (field.id === "poll") {
     const pMax = statsOf(player.mon).hp, fMax = statsOf(foe.mon).hp;

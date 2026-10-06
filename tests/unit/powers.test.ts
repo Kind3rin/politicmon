@@ -11,10 +11,10 @@ const withParty = (ids: string[], badges: string[] = [], flags: Record<string, b
 };
 const starters = Object.keys(SPECIES).slice(0, 3);
 
-test('the powers open with the story, in order, and the first one is there from the Politicdex', () => {
+test('the powers open with the story, in order, and the first one after the first duel with Gianni', () => {
   const state = withParty(starters);
   assert.deepEqual(unlockedPowers(state), []);
-  state.flags['dex-received'] = true;
+  state.flags['rival1-beaten'] = true;
   assert.deepEqual(unlockedPowers(state), ['comizio']);
   state.badges = ['auditel'];
   assert.deepEqual(unlockedPowers(state), ['comizio', 'riflettori', 'scappatoia']);
@@ -36,7 +36,7 @@ test('every power can be used by a good share of the roster, so no team is shut 
 });
 
 test('the user is the first healthy member with a fitting type; a fainted one does not count', () => {
-  const comizio = withParty(starters, [], { 'dex-received': true });
+  const comizio = withParty(starters, [], { 'rival1-beaten': true });
   assert.equal(powerUsers(comizio, 'comizio').length, 3);
   comizio.party[0].hp = 0;
   const status = powerStatus(comizio, 'comizio');

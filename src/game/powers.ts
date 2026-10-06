@@ -34,8 +34,8 @@ export interface PowerDef {
 }
 
 export const POWERS: Record<PowerId, PowerDef> = {
-  comizio: { id: "comizio", name: "COMIZIO", verb: "Comizio", type: "POPULISMO", users: "any", flag: "dex-received",
-    tagline: "UN COMIZIO A SORPRESA", does: "Attira un Politicmon selvatico nell'erba alta vicina.", where: "Erba alta: quando cerchi qualcuno da reclutare.", unlock: "Subito, col Politicdex." },
+  comizio: { id: "comizio", name: "COMIZIO", verb: "Comizio", type: "POPULISMO", users: "any", flag: "rival1-beaten",
+    tagline: "UN COMIZIO A SORPRESA", does: "Attira un Politicmon selvatico nell'erba alta vicina.", where: "Erba alta: quando cerchi qualcuno da reclutare.", unlock: "Dopo la prima sfida con Gianni." },
   scappatoia: { id: "scappatoia", name: "DIMISSIONI LAMPO", verb: "Dimettiti", type: "CENTRO", users: ["CENTRO", "ISTITUZIONE", "MEDIA", "DESTRA"], badges: "auditel",
     tagline: "MI DIMETTO. ANZI, GIÀ FATTO", does: "Ti porta fuori dalla grotta o dall'edificio in cui sei, all'ingresso.", where: "Grotte, interni, rovine.", unlock: "Medaglia Auditel." },
   riflettori: { id: "riflettori", name: "RIFLETTORI", verb: "Riflettori", type: "MEDIA", users: ["MEDIA", "TECNO", "POPULISMO"], badges: "auditel",

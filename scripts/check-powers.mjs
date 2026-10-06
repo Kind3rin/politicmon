@@ -18,7 +18,7 @@ try {
   await preloadCoreSprites();
   const check = (value, label) => { if (!value) throw Error(label); };
   const boot = (mapId, x, y, facing, { badges = ['auditel', 'spread', 'dazio'], party = ['berlusconix', 'giorgetta', 'ellyna', 'salvinator', 'draghimon', 'movimenton'], effects = false } = {}) => {
-   const state = newGameState(); state.party = party.map(id => createMonster(id, 26)); state.flags['intro-done'] = true; state.flags['dex-received'] = true; state.badges = badges; state.reduceEffects = !effects; state.pos = { mapId, x, y, facing };
+   const state = newGameState(); state.party = party.map(id => createMonster(id, 26)); state.flags['intro-done'] = true; state.flags['dex-received'] = true; state.flags['rival1-beaten'] = true; state.badges = badges; state.reduceEffects = !effects; state.pos = { mapId, x, y, facing };
    const stack = new SceneStack(), input = new Input(); input.wasPressed = () => false; input.heldDirection = () => null; input.isHeld = () => false;
    const world = new WorldScene(stack, input, state); stack.push(world); world.msg.close(); world.justEnteredMap = false; world.fadeT = 0;
    const run = (seconds = 3) => { for (let t = 0; t < seconds; t += .05) world.update(.05); };

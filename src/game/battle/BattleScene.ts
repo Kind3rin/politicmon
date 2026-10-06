@@ -47,7 +47,8 @@ import { switchPreview, damageRange, replyRange } from "./tactics";
 import { HANDOFF_STAGES, handoffKey, sharedTypes } from "./handoff";
 import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
-import { chooseAreaEvent, chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
+import { hasRelic, RELIC_EFFECTS, riteForSpecies } from "../legends";
+import { AREA_EVENTS, chooseAreaEvent, chooseLegendEvent, chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
 import type { TouchAction } from "../../engine/touchActions";
 import type { UiPanel } from "../../ui/kit";
 import { readableCopy } from "../../ui/kit/copy";
@@ -180,6 +181,9 @@ export class BattleScene implements Scene {
   private legendBanner = 0; // tempo del banner "LEGGENDARIO!" all'ingresso
   private firstSeenBanner = 0; // banner "UN VOLTO MAI VISTO!" alla scoperta
   private legendIntroFlash = 0; // lampo d'apertura drammatico
+  /** La leggenda in squadra può evocare una volta per lotta la regola del suo rito. */
+  private legendRuleUsed = false;
+  private legendEntry = 0; // tempo dell'entrata in campo di una leggenda nostra
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
     this.state = opts.state;
@@ -211,6 +215,8 @@ export class BattleScene implements Scene {
       this.field = chooseFieldEvent(this.state.runStats.battles);
     } else if (this.state.badges.length && !this.trainer?.badge && !opts.legendary && !this.copione) {
       this.field = chooseAreaEvent(this.state.pos.mapId, this.state.runStats.battles);
+    } else if (opts.legendary && this.foeTeam[0]) {
+      this.field = chooseLegendEvent(this.foeTeam[0].speciesId);
     }
     // Accessibilità: RIDUCI EFFETTI azzera shake/flash. Passa la scelta a BattleFx
     // (screen-shake) e la usa la scena per i lampi (KO/level/cattura/leggendario).
@@ -228,6 +234,7 @@ export class BattleScene implements Scene {
     this.player = makeCombatant(lead);
     this.foe = makeCombatant(this.foeTeam[0]);
     if (this.copione) this.foe.stages.atk = 2;
+    if (riteForSpecies(lead.speciesId)) this.legendEntry = this.state.reduceEffects ? 0 : 1.6;
     this.displayHp.player = lead.hp;
     this.displayHp.foe = this.foe.mon.hp;
     this.displayExp = this.expRatio();
@@ -523,8 +530,22 @@ export class BattleScene implements Scene {
     this.startTurn(FUORIONDA);
   }
 
+  /** The legend in your party calls the rule of its rite, once per fight, for the price of nothing but the moment. */
+  private evokeLegendRule(): void {
+    const rite = riteForSpecies(this.player.mon.speciesId);
+    if (!rite || this.legendRuleUsed || this.player.mon.hp <= 0 || this.finished) return;
+    const field = AREA_EVENTS.find(event => event.id === rite.field);
+    if (!field) return;
+    this.legendRuleUsed = true;
+    this.mode = "queue";
+    audio.badgeFanfare();
+    this.push({ text: `${this.playerName()} evoca: ${field.name}!`, run: () => { this.legendEntry = this.state.reduceEffects ? 0 : 1.2; } });
+    this.push({ run: () => { this.fieldNotice = applyFieldEvent(field, this.player, this.foe); this.fieldFxT = 1.8; this.legendIntroFlash = this.state.reduceEffects ? 0 : .8; }, pause: .6, waitHp: true });
+  }
+
   private catchEstimate(itemId: string, viral = false): number {
-    return recruitmentChance(catchChance(this.foe.mon, itemId, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0), this.catchBoost, viral);
+    const chance = recruitmentChance(catchChance(this.foe.mon, itemId, hasMinistro(this.state, "propaganda") ? 1.25 : 1, this.foe.gaffeTurns > 0), this.catchBoost, viral);
+    return hasRelic(this.state, "penna") ? Math.min(1, chance * RELIC_EFFECTS.recruit) : chance;
   }
 
   private supplyInfo(itemId: string): { hint: string; disabled: boolean } {
@@ -910,7 +931,7 @@ export class BattleScene implements Scene {
     const sond = this.state.sondaggi;
     const wave = this.state.hardMode ? 1 : sond >= 70 ? 1.25 : sond >= 40 ? 1 : 0.92;
     // MANIFESTI OVUNQUE (boost campagna): +30% EXP finché restano battaglie.
-    const manifestiBonus = this.state.boostExpBattles > 0 ? 1.3 : 1;
+    const manifestiBonus = (this.state.boostExpBattles > 0 ? 1.3 : 1) * (hasRelic(this.state, "agendadoro") ? RELIC_EFFECTS.exp : 1);
     const gained = openingRecruitmentExp(this.state, this.player.mon, Math.max(
       1,
       Math.floor(base * (istruzione ? 1.15 : 1) * wave * manifestiBonus * expMalus(this.state) * moraleExpMultiplier(this.state.morale))
@@ -919,7 +940,8 @@ export class BattleScene implements Scene {
     const modifiers = [
       ...(teamwork !== 1 ? [teamwork > 1 ? "COESIONE +8%" : "COESIONE -8%"] : []),
       ...(wave !== 1 ? [wave > 1 ? "ONDA +25%" : "ONDA -8%"] : []),
-      ...(manifestiBonus > 1 ? ["MANIFESTI +30%"] : []),
+      ...(this.state.boostExpBattles > 0 ? ["MANIFESTI +30%"] : []),
+      ...(hasRelic(this.state, "agendadoro") ? ["AGENDA D'ORO +15%"] : []),
       ...(istruzione ? ["ISTRUZ.+15%"] : []),
       ...(expMalus(this.state) < 1 ? [`MIN.-${Math.round((1 - expMalus(this.state)) * 100)}%`] : [])
     ];
@@ -1205,6 +1227,9 @@ export class BattleScene implements Scene {
     const steps: Step[] = [];
     if (!afterFaint) this.state.flags["seen-switch-tip"] = true;
     steps.push({ text: `Tocca a te, ${this.playerName()}!` });
+    if (riteForSpecies(mon.speciesId)) {
+      steps.push({ run: () => { this.legendEntry = this.state.reduceEffects ? 0 : 1.6; audio.encounterSting(); }, text: `LEGGENDA IN CAMPO: ${this.playerName()}!` });
+    }
     if (abilityOf(mon)?.id === "voltagabbana") {
       steps.push({ text: `${this.playerName()} cambia casacca al volo: OPPORTUNISMO sale!` });
     }
@@ -1492,13 +1517,17 @@ export class BattleScene implements Scene {
     const more:TouchAction[]=[
       ...(this.trainer?[action("Campagna",()=>this.openCampaignMenu())]:[]),
       action("Dossier",()=>this.openFightIntel(),undefined,fallback),
-      ...(!this.trainer?[action("Fuga",()=>this.tryRun())]:[])
+      ...(!this.trainer?[action("Fuga",()=>this.tryRun())]:[]),
     ];
     const secondary:TouchAction[]=ready?[
       action("Cambio",()=>this.openParty(false),undefined,!this.hasBenchAlive()),
       action("Borsa",()=>this.openBag()),
       action("Recluta",()=>this.openRecruit(),undefined,Boolean(this.trainer)),
-      action("Altro",()=>openUiSheet("Altre azioni","",more))
+      action("Altro",()=>openUiSheet("Altre azioni","",more)),
+      ...(riteForSpecies(this.player.mon.speciesId)&&!this.legendRuleUsed?[(()=>{
+        const rite=riteForSpecies(this.player.mon.speciesId)!,field=AREA_EVENTS.find(event=>event.id===rite.field)!;
+        return action("Leggenda",()=>this.evokeLegendRule(),`Una volta per lotta: ${readableCopy(field.name)} — ${readableCopy(field.rule)}.`);
+      })()]:[])
     ]:[action(this.msg.isOpen?"Continua":"Turno in corso",()=>this.msg.advance(),undefined,!this.msg.isOpen)];
     const intent=this.foeIntent;
     const postures:TouchAction[]=ready?(Object.keys(POSTURES) as Array<Exclude<Posture,"none">>).map(id=>{
@@ -1509,7 +1538,7 @@ export class BattleScene implements Scene {
     const chosenPosture=ready&&this.posture!=="none"?POSTURES[this.posture]:undefined;
     const title=this.msg.isOpen?"In lotta":this.actionCaption?`${sentence(this.actionCaption.actor)} usa ${readableCopy(this.actionCaption.move)}`:chosenPosture?`${chosenPosture.label}: ${chosenPosture.rule}`:intent?`${readableCopy(this.foeName())}: ${readableCopy(intent.name)}`:"Turno in corso";
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
-    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":this.field&&!this.fieldResolved?readableCopy(`${this.field.name}: ${this.field.rule}`):undefined;
+    const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.legendEntry>0?`Leggenda in campo: ${readableCopy(this.playerName())}`:this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":this.field&&!this.fieldResolved?readableCopy(`${this.field.name}: ${this.field.rule}`):undefined;
     return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...postures,...secondary],arena:{
       impacts:this.fx.damageNumbers.map(d=>({label:`−${d.val}`,x:d.x/VIEW_W*100,y:d.y/this.viewHeight*100,opacity:this.state.reduceEffects?1:Math.min(1,Math.max(0,(1-d.life/d.max)/.34)),kind:d.crit?"crit":d.super?"super":"normal"})),
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
@@ -1548,6 +1577,12 @@ export class BattleScene implements Scene {
         size: 1
       });
     }
+    if (!this.state.reduceEffects && this.player.mon.hp > 0 && riteForSpecies(this.player.mon.speciesId) && Math.random() < 0.2) {
+      const c = monsterCenter("player", this.viewHeight);
+      const ang = Math.random() * Math.PI * 2;
+      this.fx.particles.push({ x: c.x + Math.cos(ang) * 24, y: c.y + Math.sin(ang) * 18, vx: Math.cos(ang) * 8, vy: -12 - Math.random() * 10, life: 0, max: 0.6 + Math.random() * 0.4, color: ["#ffe98a", "#ffd23c", "#fff4c0"][Math.floor(Math.random() * 3)], size: 1 });
+    }
+    this.legendEntry = Math.max(0, this.legendEntry - dt);
     this.fx.update(dt);
     // Hit-stop: congela l'avanzamento della battaglia per pochi centesimi,
     // dando "peso" al colpo. Animazioni cosmetiche (sopra) continuano.
@@ -1781,6 +1816,7 @@ export class BattleScene implements Scene {
 
     // Player (di spalle: specchiato e più grande).
     const playerBlink = this.fx.flashT.player > 0 && Math.floor(this.fx.flashT.player * 16) % 2 === 0;
+    if (this.player.mon.hp > 0 && riteForSpecies(this.player.mon.speciesId)) this.drawLegendaryAura(screen, 56 + playerSlide, g.playerBase - 16);
     if ((this.player.mon.hp > 0 || this.fx.faintT.player > 0) && !playerBlink) {
       drawBattleMonster(screen, this.fx, this.player, 56 + playerSlide, g.playerBase, this.fx.lungeT.player, true, "player", g.size);
     }
@@ -1961,6 +1997,26 @@ export class BattleScene implements Scene {
       ctx.save();
       ctx.fillStyle = `rgba(255, 246, 200, ${0.7 * this.legendIntroFlash})`;
       ctx.fillRect(0, 0, VIEW_W, screen.height);
+      ctx.restore();
+    }
+    // Entrata di una leggenda nostra: raggi che si aprono dal compagno, anello di luce, velo dorato ai bordi.
+    if (this.legendEntry > 0 && !this.state.reduceEffects) {
+      const p = 1 - this.legendEntry / 1.6, c = monsterCenter("player", this.viewHeight);
+      const fade = Math.min(1, this.legendEntry / .5), open = Math.min(1, p * 3);
+      ctx.save();
+      const vignette = ctx.createRadialGradient(c.x, c.y, 20, VIEW_W / 2, screen.height / 2, VIEW_W * .75);
+      vignette.addColorStop(0, "rgba(255,226,120,0)"); vignette.addColorStop(1, `rgba(255,200,60,${.35 * fade})`);
+      ctx.fillStyle = vignette; ctx.fillRect(0, 0, VIEW_W, screen.height);
+      ctx.translate(c.x, c.y);
+      ctx.rotate(p * 1.1);
+      ctx.fillStyle = `rgba(255,244,176,${.34 * fade})`;
+      for (let i = 0; i < 12; i++) {
+        const a = i * Math.PI / 6, len = (30 + 190 * open), half = .075;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(a - half) * len, Math.sin(a - half) * len); ctx.lineTo(Math.cos(a + half) * len, Math.sin(a + half) * len); ctx.closePath(); ctx.fill();
+      }
+      ctx.rotate(-p * 1.1);
+      ctx.strokeStyle = `rgba(255,250,210,${.9 * fade})`; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(0, 0, 8 + p * 90, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     }
   }

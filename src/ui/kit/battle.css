@@ -32,7 +32,7 @@ body.ui-panel-open.ui-arena-open #screen-frame{display:block!important;position:
 .ui-move-meta{display:flex;align-items:center;gap:8px;font-size:16px;width:100%;line-height:1}
 .ui-move-meta img{width:24px;height:24px;image-rendering:pixelated}
 .ui-efficacy{margin-left:auto}
-.ui-arena-secondary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;min-height:0}
+.ui-arena-secondary{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;min-height:0}
 .ui-arena-secondary .ui-button{padding:4px;align-items:center;border-width:0 0 2px;box-shadow:none}
 .ui-arena-secondary .ui-button:only-child{grid-column:1/-1}
 .ui-arena-caption:has(.ui-finisher){padding:0;border:0}

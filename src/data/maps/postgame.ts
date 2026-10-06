@@ -227,8 +227,7 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
       { speciesId: "xipanda", weight: 14, minLv: 33, maxLv: 39 },
       { speciesId: "muskrat", weight: 12, minLv: 31, maxLv: 37 },
       { speciesId: "pontimax", weight: 10, minLv: 40, maxLv: 44 },
-      { speciesId: "conteblob", weight: 5, minLv: 36, maxLv: 41 },
-      { speciesId: "mattarellux", weight: 1, minLv: 44, maxLv: 45 }
+      { speciesId: "conteblob", weight: 5, minLv: 36, maxLv: 41 }
     ],
     signs: [
       {
@@ -303,7 +302,8 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         lines: [
           "SHERPA UE: le boe a est portano a BRUXELLES. Il Tesoriere non timbra il biglietto.",
           "Il CAFFÈ SCHUMAN cura PV e PP. Prima della Commissione ci sono quattro prove.",
-          "Qui spostano gli utili. Là spostano gli emendamenti. Chiedi sempre dove finiscono."
+          "Qui spostano gli utili. Là spostano gli emendamenti. Chiedi sempre dove finiscono.",
+          "Un'ultima cosa: al Colle c'è un archivio dei bilanci. Si apre a chi ha aperto uno sportello e mantenuto una promessa."
         ]
       }
     ]

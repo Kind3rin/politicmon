@@ -1,5 +1,11 @@
 # Changelog
 
+## Mandato 2 — le leggende — 2026-10-06
+
+- I quattro Politicmon leggendari non sono più in una stanza o nell'erba: ognuno ha un rito di tre passi (Missioni e Politicdex ne mostrano i progressi), una porta che si apre a rito compiuto e un sacrario tutto suo (La Regia segreta, L'Archivio dei bilanci, Lo Studio presidenziale, Il Bunker). Bunkerput e Mattarellux sono usciti dall'erba. Dettagli in `docs/LEGGENDE.md`.
+- Valore del Politicmon: reclutare una leggenda lascia un cimelio che agisce da solo (Telecomando d'Oro, Agenda d'Oro, Penna del Garante, Kit del Bunker; quattro icone Higgsfield, 1,5 crediti); in lotta ha l'aura dorata, un'entrata in campo con raggi e anello di luce e un pulsante «Leggenda» che evoca una volta la regola del suo rito (Diretta TV, Standard CE, Taglio lineare, Cantiere aperto). Anche nemica, combatte sotto quella regola.
+- Nuovi `check:legends` e test `legends`; il controllo dei comandi chiude da solo il benvenuto di Luca prima di cercare i pulsanti (era una causa di instabilità nota).
+
 ## Mandato 2 — il mondo risponde — 2026-10-06
 
 - Eventi civici con conseguenze visibili: ogni scelta dei nove eventi lascia ora un segno sulla mappa (`CIVIC_SCENES` in `src/game/world/civicBridge.ts`): 25 scene tra passerella o nastro teso sul lago, varco o cerimonia della ghiaia alla cava, fermata con panchina o cartello alla pompa, bus e fotografo a Borgo, statua o titoli di coda a Mediopoli, sportello e analista a Eurotown, operatore, residente o attore al citofono di Caput Mundi, rampa e plastico a Stretto, palco o sedie lasciate al campo largo. Chi promette una data e poi paga dal menu Morale vede la stessa scena di chi paga subito.

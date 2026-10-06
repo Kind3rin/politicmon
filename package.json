@@ -119,7 +119,8 @@
     "check:first-minutes": "node scripts/check-first-minutes.mjs",
     "check:recruit": "node scripts/check-recruit.mjs",
     "check:trainer-invite": "node scripts/check-trainer-invite.mjs",
-    "check:civic-reveal": "node scripts/check-civic-reveal.mjs"
+    "check:civic-reveal": "node scripts/check-civic-reveal.mjs",
+    "check:legends": "node scripts/check-legends.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

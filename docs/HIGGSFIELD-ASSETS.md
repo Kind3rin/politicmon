@@ -330,3 +330,6 @@ M2 acqua, 4 ottobre 2026: quattro fotogrammi visti, job `82f24191-0f0a-4bf1-9959
 Saldo **338,22 → 337,97** (0,25 crediti). Frame 16px in tiles/m2, ciclo a 4 Hz; Riduci effetti congela il primo. Sorgente, parametri e checksum nel manifest.
 
 Varietà, 6 ottobre 2026: un foglio busti (`npcs-10`: geologa e cavatore del Percorso 3, 1,5 crediti) e cinque fondali di lotta 240×136 (`lago`, `cava`, `viale`, `foro`, `tv`, stesso prompt di `piazza` più scena e `piazza.png` come riferimento; quantizzati a 48 colori con `prepare-higgsfield-assets.py`). Un invio fallito (lago) è stato rigenerato. Job e prompt in `scripts/higgsfield-assets.json` e `scripts/higgsfield-portraits.json`.
+
+Leggende, 6 ottobre 2026: un foglio 2×2 di cimeli (`relics-1`: Telecomando d'Oro, Agenda d'Oro, Penna del Garante, Kit del Bunker; 1,5 crediti, riferimenti `divisa.png` e `telecamera.png`), ritagliati con `scripts/prepare-relics.py` (telecomando e penna ruotati in diagonale per riempire i 32×32). Saldo 289,72 → 288,22. Manifest in `scripts/higgsfield-relics.json`.
+

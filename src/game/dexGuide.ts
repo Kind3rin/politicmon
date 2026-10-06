@@ -1,4 +1,5 @@
 import { ABILITIES } from "../data/abilities";
+import { riteForSpecies, riteProgress } from "./legends";
 import { MAPS } from "../data/maps";
 import { SPECIES, STARTERS, type EvolutionRule } from "../data/species";
 import { ITEMS } from "../data/items";
@@ -74,6 +75,11 @@ export function dexAcquisitionNotes(id: string, state: GameState, reachable = re
     notes.push("INCONTRI SELVATICI ACCESSIBILI:");
     for (const h of locations) notes.push(`${h.name}: LV ${h.minLv}-${h.maxLv}, ${h.share < .05 ? "RARISSIMO" : h.share < .15 ? "RARO" : h.share < .3 ? "REGOLARE" : "COMUNE"}.`);
     notes.push("LA RARITÀ È NEL POOL, NON LA PROBABILITÀ PER PASSO.");
+  }
+  const rite = riteForSpecies(id);
+  if (rite) {
+    const progress = riteProgress(state, rite);
+    notes.push(progress.complete ? "LEGGENDA GIÀ RECLUTATA." : !progress.unlocked ? `LEGGENDA: PRIMA ${rite.prerequisite.label.toUpperCase()}` : `RITO «${rite.title}»: ${progress.doneCount}/${rite.steps.length} PASSI. LI TROVI IN MISSIONI.`);
   }
   for (const map of Object.values(MAPS)) if (reachable.has(map.id)) for (const npc of map.npcs) {
     const legend = npc.legendary;

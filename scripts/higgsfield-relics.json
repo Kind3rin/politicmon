@@ -1,0 +1,11 @@
+{
+  "note": "Legendary relics: one 2x2 gpt_image_2_5 sheet (1.5 credits), style references items/divisa.png and items/telecamera.png. scripts/prepare-relics.py repeats the cut without credits.",
+  "sheet": {
+    "file": "relics-1.png",
+    "job": "5e223fbe-25af-49a6-96cc-0eff6383896c",
+    "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_123928_5e223fbe-25af-49a6-96cc-0eff6383896c.png",
+    "credits": 1.5,
+    "grid": [2, 2],
+    "cells": ["telecomando", "agendadoro", "penna", "bunkerkit"]
+  }
+}

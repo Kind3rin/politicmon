@@ -66,5 +66,9 @@ export const MAP_NAMES: Readonly<Record<string, string>> = Object.assign(Object.
   "palazzo_talkshow": "ARCHIVIO TALK SHOW",
   "palazzo_silenzio": "SILENZIO STAMPA",
   "palazzo_feed_studio": "STUDIO ELETTORALE",
-  "palazzo_feed_terrazza": "TERRAZZA DEL DOPO"
+  "palazzo_feed_terrazza": "TERRAZZA DEL DOPO",
+  "regia": "LA REGIA SEGRETA",
+  "archivio": "L'ARCHIVIO DEI BILANCI",
+  "studio": "LO STUDIO PRESIDENZIALE",
+  "bunker": "IL BUNKER"
 });

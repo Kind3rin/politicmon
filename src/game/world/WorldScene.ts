@@ -20,6 +20,7 @@ import { changeMorale, moraleEpilogue } from "../morale";
 import { civicNpcReply } from "../civicChoices";
 import { civicBridgeTile, civicSceneNpcs, civicScenesFor } from "./civicBridge";
 import { CivicReveal } from "./civicReveal";
+import { RITES, syncRites } from "../legends";
 
 // Pickup "scheda elettorale": PNG PixelLab 14px centrato nella cella.
 function drawBallot(screen: Screen, dx: number, dy: number): void {
@@ -696,6 +697,13 @@ export class WorldScene implements Scene {
     this.reveal = null;
     this.civicActive = new Set(civicScenesFor(this.state, mapId).map(scene => scene.decision));
     for (const def of civicSceneNpcs(this.state, mapId)) this.npcs.push(this.makeRuntimeNpc(def));
+    const rite = RITES.find(entry => entry.sacrario === mapId);
+    if (rite && !this.state.flags[`sacrario-${mapId}`]) {
+      this.state.flags[`sacrario-${mapId}`] = true;
+      this.bannerFlash = .9;
+      if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .6);
+      this.showBanner("SACRARIO", readableCopy(this.map.name), "#f2c230");
+    }
     this.rustles = [];
     // Cambio mappa = cambio room: qualunque handshake duello in corso muore.
     if (this.duelWait) {
@@ -2527,8 +2535,12 @@ export class WorldScene implements Scene {
         // (evita di perderlo per sempre + autosave, se lo battevi senza catturarlo).
         if (result === "caught") {
           this.state.flags[legendary.flag] = true;
+          const relic = legendary.relic && !(this.state.bag[legendary.relic] > 0) ? legendary.relic : undefined;
+          if (relic) this.state.bag[relic] = 1;
           saveGame(this.state);
-          this.say(legendary.afterGoneLines ?? [`${SPECIES[legendary.speciesId].name} entra nella leggenda.`]);
+          const gone = legendary.afterGoneLines ?? [`${SPECIES[legendary.speciesId].name} entra nella leggenda.`];
+          if (relic) { audio.badgeFanfare(); this.showBanner("CIMELIO LEGGENDARIO", ITEMS[relic].name, "#f2c230"); }
+          this.say(relic ? [...gone, `Ricevi: ${ITEMS[relic].name}!`, ITEMS[relic].desc] : gone);
           return;
         }
         // KO ("win") o fuga ("run"): il leggendario resta disponibile.
@@ -3309,6 +3321,19 @@ export class WorldScene implements Scene {
     this.healSparks = this.healSparks.filter((s) => s.life < s.max);
   }
 
+  /** The last step of a rite opens a door somewhere: say so once, when nothing else is on screen. */
+  private watchRites(): void {
+    if (this.msg.isOpen || this.askMenu || this.remoteMenu || this.encounterFlash > 0 || this.pendingBattle || this.exclaimT > 0) return;
+    const opened = syncRites(this.state);
+    if (!opened.length) return;
+    saveGame(this.state);
+    const rite = opened[0];
+    audio.badgeFanfare();
+    this.showBanner("RITO COMPIUTO", readableCopy(rite.title), "#f2c230");
+    if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .5);
+    this.say([`Il rito «${rite.title}» è compiuto.`, `Si è aperta ${rite.door}.`, "Le Missioni dicono dove."]);
+  }
+
   /** Ask for the art of the new tiles now, so it has arrived by the time they appear. */
   private warmCivicTiles(edits: readonly { to: string }[] | undefined): void {
     for (const edit of edits ?? []) { tileImage(edit.to); objectImage(edit.to); terrainVariantImage(edit.to, 0); }
@@ -3397,6 +3422,7 @@ export class WorldScene implements Scene {
     }
     this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
     this.watchCivicWorks();
+    this.watchRites();
     if (this.reveal) {
       this.reveal.update(dt);
       if (this.reveal.done) this.reveal = null;

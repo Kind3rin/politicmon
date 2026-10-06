@@ -1,4 +1,5 @@
 import { BADGE_TEASER, type TrainerDef } from "../../data/trainers";
+import { hasRelic, RELIC_EFFECTS } from "../legends";
 import { hasMinistro, moneyMalus } from "../governo";
 import type { GameState } from "../state";
 import { coalitionBonuses } from "../coalition";
@@ -42,7 +43,7 @@ export function buildTrainerVictoryPlan(
   const economyBonus = hasMinistro(state, "economia");
   const spotBonus = state.boostMoneyBattles > 0 && !isRematch;
   const coalition = coalitionBonuses(state.coalition);
-  const payout = Math.round(trainer.money * (economyBonus ? 1.25 : 1) * (spotBonus ? 1.5 : 1) * moneyMalus(state)
+  const payout = Math.round(trainer.money * (economyBonus ? 1.25 : 1) * (spotBonus ? 1.5 : 1) * (hasRelic(state, "telecomando") ? RELIC_EFFECTS.money : 1) * moneyMalus(state)
     * (1 + (coalition.bonus.funds + coalition.malus.funds) / 100));
   // Story only: the battle adds the receipt when committing its payout.
   const introLines = [`Hai sconfitto ${trainer.name}!`, ...trainer.defeat];
@@ -61,7 +62,7 @@ export function buildTrainerVictoryPlan(
   const drop = random() < 0.3 ? rollVictoryLoot(random) : null;
   return {
     payout,
-    sondaggiGain: Math.round((state.boostSondBattles > 0 ? 12 : 6) * (1 + (coalition.bonus.sondaggiGain + coalition.malus.sondaggiGain) / 100)),
+    sondaggiGain: Math.round((state.boostSondBattles > 0 ? 12 : 6) * (1 + (coalition.bonus.sondaggiGain + coalition.malus.sondaggiGain) / 100)) + (hasRelic(state, "bunkerkit") ? RELIC_EFFECTS.polls : 0),
     economyBonus,
     spotBonus,
     introLines,

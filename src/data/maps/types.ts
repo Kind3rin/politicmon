@@ -36,6 +36,8 @@ export interface NpcDef {
     lines: string[];
     afterRunLines?: string[];
     afterGoneLines?: string[];
+    /** A key item that joins the bag when the legend is recruited (src/game/legends.ts says what it does). */
+    relic?: string;
   };
   showIfFlag?: string;
   hideIfFlag?: string;

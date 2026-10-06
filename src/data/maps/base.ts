@@ -1,4 +1,5 @@
 import type { MapDef } from "./types";
+import { SACRARIO_ENTRY } from "./legends";
 import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYMTV_ENTRY, GYMUE_ENTRY, GYMGLOBAL_ENTRY, MARKET_ENTRY, CASINO_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, HOUSE_ENTRY_D, HOUSE_ENTRY_E, HOUSE_ENTRY_H, HOUSE_ENTRY_I, HOUSE_ENTRY_J, BAR_ENTRY, lucaGuide } from "./factories";
 
 export const BASE_MAPS: Record<string, MapDef> = {
@@ -229,8 +230,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     encounters: [
       { speciesId: "muskrat", weight: 28, minLv: 5, maxLv: 7 },
       { speciesId: "grillix", weight: 22, minLv: 5, maxLv: 7 },
-      { speciesId: "contemorfo", weight: 18, minLv: 6, maxLv: 8 },
-      { speciesId: "bunkerput", weight: 10, minLv: 7, maxLv: 9 }
+      { speciesId: "contemorfo", weight: 18, minLv: 6, maxLv: 8 }
     ],
     signs: [
       { x: 14, y: 3, lines: ["BUNKER DEL CONSENSO", "Il corridoio gira, rigira e poi sbuca in un posto freddissimo.", "Se senti un tavolo troppo lungo, non è eco."] }
@@ -263,7 +263,6 @@ export const BASE_MAPS: Record<string, MapDef> = {
     encounterRate: 0.14,
     encounters: [
       { speciesId: "putingrad", weight: 26, minLv: 9, maxLv: 11 },
-      { speciesId: "bunkerput", weight: 22, minLv: 8, maxLv: 11 },
       { speciesId: "bojoon", weight: 16, minLv: 8, maxLv: 10 },
       { speciesId: "muskrat", weight: 14, minLv: 8, maxLv: 10 }
     ],
@@ -279,26 +278,13 @@ export const BASE_MAPS: Record<string, MapDef> = {
         // MEDICO DA CAMPO: l'OBLAST era un vicolo cieco senza cura né respawn
         // (rischio soft-lock: KO contro il leggendario lv10 e risveglio a Borgo).
         // Una crocerossina meme cura la squadra prima/dopo BUNKERPUT.
-        id: "medico-oblast", pal: "granny", x: 5, y: 13, facing: "down", healer: true,
+        id: "medico-oblast", pal: "granny", x: 5, y: 13, facing: "down", healer: true, setFlag: "leg-bunkerput-medico",
         lines: [
           "MEDICO DA CAMPO: questa è zona di guerre social, candidato.",
-          "Siediti: ti rimetto in sesto la squadra prima del BUNKER."
+          "Siediti: ti rimetto in sesto la squadra prima del BUNKER.",
+          "Sotto il cemento, a est, c'è un portone che nessuno ha mai aperto.",
+          "Lo apre chi ha battuto il Bunkerista sul Percorso 1 e chiuso il caso del citofono a Caput Mundi."
         ]
-      },
-      {
-        id: "legend-bunkerput", pal: "boss", x: 18, y: 10, facing: "left",
-        legendary: {
-          speciesId: "bunkerput",
-          level: 10,
-          flag: "legend-bunkerput-gone",
-          lines: [
-            "Dal fondo della taiga arriva un tavolo lunghissimo.",
-            "BUNKERPUT emerge dal meme e pretende distanza di sicurezza."
-          ],
-          afterRunLines: ["BUNKERPUT si richiude nel bunker. Il tavolo resta apparecchiato."],
-          afterGoneLines: ["Il bunker si svuota. Resta solo un eco: 'riunione da remoto'."]
-        },
-        lines: ["Il bunker è chiuso. Dentro qualcuno misura la stanza col righello."]
       }
     ]
   },
@@ -397,9 +383,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["Ho reso visibile la scritta sponsor. Il marchio ha chiesto di togliere il video."]
       },
       {
-        id: "fan-tv", pal: "granny", x: 18, y: 14, facing: "left",
+        id: "fan-tv", pal: "granny", x: 18, y: 14, facing: "left", setFlag: "leg-berlusconix-fan",
         lines: [
-          "Mara ti lascia provare prima della diretta. Il conduttore ti lascia spiegare dopo la pubblicità."
+          "Mara ti lascia provare prima della diretta. Il conduttore ti lascia spiegare dopo la pubblicità.",
+          "Io c'ero, la sera della discesa in campo: un telecomando d'oro, un sorriso, nessuna domanda.",
+          "Dicono che dietro la regia dello Studio 5 ci sia ancora una porta. Servono tre racconti per trovarla."
         ]
       },
       {
@@ -815,8 +803,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { speciesId: "putingrad", weight: 16, minLv: 18, maxLv: 18 },
       { speciesId: "xipanda", weight: 16, minLv: 18, maxLv: 18 },
       { speciesId: "trumpon", weight: 14, minLv: 18, maxLv: 18 },
-      { speciesId: "zelenskir", weight: 14, minLv: 16, maxLv: 18 },
-      { speciesId: "mattarellux", weight: 1, minLv: 20, maxLv: 20 }
+      { speciesId: "zelenskir", weight: 14, minLv: 16, maxLv: 18 }
     ],
     signs: [
       {
@@ -970,3 +957,9 @@ export const BASE_MAPS: Record<string, MapDef> = {
   },
 
 };
+
+// The bunker door in the snow: three boulders around it, closed until the rite in MISSIONI is complete.
+BASE_MAPS["oblast-meme"].warps.push({
+  markerLabel: "BUNKER", x: 18, y: 10, toMap: "bunker", toX: SACRARIO_ENTRY.x, toY: SACRARIO_ENTRY.y, facing: "up", requiresFlag: "rito-bunkerput-open",
+  lockedLines: ["Un portone di cemento, sigillato dall'interno.", "Chi lo apre ha tre cose da fare. Le trovi nelle Missioni."]
+});

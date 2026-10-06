@@ -3,6 +3,7 @@ import { BASE_MAPS } from "./base";
 import { POSTGAME_MAPS } from "./postgame";
 import { INTERIOR_MAPS } from "./interiors";
 import { ATTO3_MAPS } from "./atto3";
+import { LEGEND_MAPS } from "./legends";
 
 export type * from "./types";
 
@@ -22,7 +23,7 @@ function composeMapRegistry(groups: ReadonlyArray<Record<string, MapDef>>): Reco
   return registry;
 }
 
-export const MAPS = composeMapRegistry([BASE_MAPS, POSTGAME_MAPS, INTERIOR_MAPS, ATTO3_MAPS]);
+export const MAPS = composeMapRegistry([BASE_MAPS, POSTGAME_MAPS, INTERIOR_MAPS, ATTO3_MAPS, LEGEND_MAPS]);
 
 export const BAR_RESPAWN: Record<string, { x: number; y: number }> = {
   borgo: { x: 21, y: 18 },

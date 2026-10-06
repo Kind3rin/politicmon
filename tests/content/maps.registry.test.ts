@@ -4,8 +4,8 @@ import { MAPS } from "../../src/data/maps";
 import { MAP_NAMES } from "../../src/data/maps/names";
 
 const EXPECTED_MAP_IDS = [
-  "attico", "bar-borgo", "bar-bruxelles", "bar-cap", "bar-euro", "bar-medio",
-  "bar-offshore", "bar-stretto", "bistrot", "borgo", "bruxelles", "campo_largo", "capitale",
+  "archivio", "attico", "bar-borgo", "bar-bruxelles", "bar-cap", "bar-euro", "bar-medio",
+  "bar-offshore", "bar-stretto", "bistrot", "borgo", "bruxelles", "bunker", "campo_largo", "capitale",
   "casino", "chiosco", "circolo", "colle", "commissione", "covo",
   "diplomacy_autonomy", "diplomacy_home", "diplomacy_lobby", "diplomacy_loyalty", "diplomacy_terrace",
   "district_centro", "district_feed", "district_isole", "district_nord", "district_sud",
@@ -14,11 +14,11 @@ const EXPECTED_MAP_IDS = [
   "genova_techno", "grotta1", "grotta2", "gymglobal", "gymtv", "gymue", "home", "lab",
   "lobbystudio", "market1", "market2", "mediopoli", "oblast-meme", "offshore",
   "palazzo", "palazzo_algoritmo", "palazzo_factcheck", "palazzo_feed", "palazzo_feed_studio", "palazzo_feed_terrazza",
-  "palazzo_silenzio", "palazzo_talkshow", "redazione", "retropalco_campo", "retroscena", "route1", "route2", "route3", "salotto",
-  "stretto", "tour_feed"
+  "palazzo_silenzio", "palazzo_talkshow", "redazione", "regia", "retropalco_campo", "retroscena", "route1", "route2", "route3", "salotto",
+  "stretto", "studio", "tour_feed"
 ];
 
-test("registry mappe: conserva le 40 mappe baseline e le 26 mappe Atto 3 approvate", () => {
+test("registry mappe: conserva le 40 mappe baseline, le 26 mappe Atto 3 approvate e i 4 sacrari delle leggende", () => {
   assert.deepEqual(Object.keys(MAPS).sort(), EXPECTED_MAP_IDS);
 });
 

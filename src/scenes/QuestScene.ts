@@ -35,8 +35,16 @@ export class QuestScene implements Scene {
   }
   const quest=QUESTS[this.index],done=quest.isDone(this.state),current=currentQuest(this.state);
   return {title:label(quest.title),subtitle:`${quest.side?'Missione facoltativa':'Campagna'} · ${done?'Completata':current?.id===quest.id?'Obiettivo corrente':'Da svolgere'}`,
-   blocks:[{title:'Prossimo passo',body:quest.step},{title:'Dove andare',body:quest.hint},{title:'Obiettivo',body:quest.desc}],
+   blocks:this.blocksFor(quest,done),
    actions:[command('Elenco delle missioni',()=>{this.detailPage=-1;this.fromList=false;},'Campagna e obiettivi facoltativi.'),command('Missioni del giorno',()=>{this.detailPage=-2;},'Progresso e ricompense dei tre obiettivi.')],selected:0,back:back};
+ }
+ private blocksFor(quest:(typeof QUESTS)[number],done:boolean){
+  const steps=quest.progress?.(this.state);
+  if(!steps)return [{title:'Prossimo passo',body:quest.step},{title:'Dove andare',body:quest.hint},{title:'Obiettivo',body:quest.desc}];
+  const blocked=quest.prerequisite?.(this.state),next=steps.find(step=>!step.done);
+  return [{title:'Prossimo passo',body:done?'Leggenda reclutata.':blocked?`Prima: ${blocked}`:next?next.label:'Il rito è compiuto: la porta è aperta.'},
+   {title:'Il rito',body:steps.map(step=>`${step.done?'✔':'○'} ${step.label}${step.done||blocked?'':` — ${step.hint}`}`).join('\n')},
+   {title:'Obiettivo',body:quest.desc}];
  }
  update():void{if(this.input.wasPressed('b'))this.back();}
  draw(screen:Screen):void{screen.clear('#101b32');}

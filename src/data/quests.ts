@@ -1,6 +1,7 @@
 import type { GameState } from "../game/state";
 import type { BranchingQuestDef } from "../game/questFlow";
 import { firstEvolutionDone, OPENING_QUEST_ORDER } from "../game/firstCampaign";
+import { RITES, riteProgress } from "../game/legends";
 
 export interface QuestDef {
   id: string;
@@ -11,6 +12,8 @@ export interface QuestDef {
   isDone: (state: GameState) => boolean;
   side?: boolean; // missione secondaria: non guida l'HUD "prossimo passo"
   target?: { mapId: string; x: number; y: number }; // bersaglio per la modalità guidata
+  progress?: (state: GameState) => { label: string; hint: string; done: boolean }[]; // passi di una missione a più tappe (i riti delle leggende)
+  prerequisite?: (state: GameState) => string | null; // cosa serve prima di poterla iniziare, se manca
   flow?: BranchingQuestDef; // opzionale: le quest storiche restano lineari e compatibili
 }
 
@@ -427,6 +430,17 @@ export const QUESTS: QuestDef[] = [
 ];
 
 // L'obiettivo dell'HUD segue solo le missioni principali (non le secondarie).
+// The four legends: each has a rite of three steps; when it is done a door opens and the legend waits behind it.
+QUESTS.push(...RITES.map((rite): QuestDef => ({
+  id: `leggenda-${rite.id}`, side: true, title: `LEGGENDA: ${rite.title}`,
+  desc: `Compi i tre passi del rito: si apre ${rite.door}.`,
+  hint: `Il rito apre ${rite.door}. Dietro c'è una leggenda e, se la recluti, un cimelio che resta con te.`,
+  step: "Compi i tre passi del rito.",
+  isDone: state => Boolean(state.flags[rite.goneFlag]),
+  prerequisite: state => rite.prerequisite.met(state) ? null : rite.prerequisite.label,
+  progress: state => riteProgress(state, rite).steps.map(({ step, done }) => ({ label: step.label, hint: step.hint, done }))
+})));
+
 export function currentQuest(state: GameState): QuestDef | null {
   if (state.flags["opening-v2"] && !state.flags["rival1-beaten"] && !state.badges.includes("auditel")) {
     const opening = OPENING_QUEST_ORDER.map(id => QUESTS.find(q => q.id === id)!).find(q => !q.isDone(state));

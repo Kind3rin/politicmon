@@ -1,4 +1,5 @@
 import type { MapDef } from "./types";
+import { SACRARIO_ENTRY } from "./legends";
 import { LAB_TILES, CASINO_TILES, COLLE_TILES, PALAZZO_TILES, GYMTV_TILES, GYMUE_TILES, GYMGLOBAL_TILES, gymMap, marketMap, houseMap, barMap } from "./factories";
 
 export const INTERIOR_MAPS: Record<string, MapDef> = {
@@ -46,30 +47,6 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
         id: "gym1-capo", dialogueName: "Sua Emittenza", pal: "boss", x: 4, y: 1, facing: "down",
         trainerId: "emittenza",
         lines: ["Torna quando vuoi: la pubblicità paga comunque."]
-      },
-      {
-        id: "berlusconix-legend", pal: "boss", x: 7, y: 1, facing: "down",
-        showIfFlag: "legend-berlusconix-ready",
-        hideIfFlag: "legend-berlusconix-gone",
-        legendary: {
-          speciesId: "berlusconix",
-          level: 18,
-          flag: "legend-berlusconix-gone",
-          lines: [
-            "Dietro le quinte lampeggia un telecomando d'oro.",
-            "SUA EMITTENZA: hai conquistato l'AUDITEL. Ora puoi vedere il vero ospite della serata.",
-            "BERLUSCONIX emerge dal maxischermo: sorriso a trentadue denti e sigla anni novanta."
-          ],
-          afterRunLines: [
-            "BERLUSCONIX rientra nello schermo ridendo.",
-            "Il telecomando d'oro resta acceso: puoi ritentare quando vuoi."
-          ],
-          afterGoneLines: [
-            "Il maxischermo si spegne. In studio resta solo un applauso registrato.",
-            "BERLUSCONIX è diventato una leggenda nel tuo POLITICDEX."
-          ]
-        },
-        lines: ["Il maxischermo è spento. Sembra aspettare lo share giusto."]
       }
     ],
     ["REGOLAMENTO DELLO STUDIO:", "sorridere sempre, contraddire mai."],
@@ -270,55 +247,13 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
         lines: []
       },
       {
-        id: "garante-after", pal: "boss", x: 2, y: 1, facing: "down", showIfFlag: "garante-beaten",
+        id: "garante-after", pal: "boss", x: 2, y: 1, facing: "down", showIfFlag: "garante-beaten", setFlag: "leg-mattarellux-garante",
         lines: [
           "GARANTE: il mandato è firmato. Le promesse non si archiviano con la stessa penna.",
-          "START > MORALE conserva le date. Il cittadino aspetta il servizio, non questa cerimonia."
+          "START > MORALE conserva le date. Il cittadino aspetta il servizio, non questa cerimonia.",
+          "In fondo all'aula, a destra, c'è uno studio dove sette anni sono durati molto più di sette.",
+          "Si apre a chi ha la fiducia della gente, cinque dossier decisi e la mia benedizione. La hai."
         ]
-      },
-      {
-        id: "draghimon-legend", pal: "guard", x: 9, y: 1, facing: "down",
-        showIfFlag: "garante-beaten", hideIfFlag: "legend-draghimon-gone",
-        legendary: {
-          speciesId: "draghimon",
-          level: 30,
-          flag: "legend-draghimon-gone",
-          lines: [
-            "USCIERE: avevamo scritto stabile. Il grafico ha chiesto rispetto per la sua carriera.",
-            "DRAGHIMON esce dai bilanci. Non applaude: vuole sapere come hai pagato le sedie."
-          ],
-          afterRunLines: [
-            "DRAGHIMON riapre il grafico. L'usciere: torna pure, il confronto resta disponibile."
-          ],
-          afterGoneLines: [
-            "La sala dei bilanci è vuota. Lo spread riposa.",
-            "DRAGHIMON è registrato nel tuo POLITICDEX."
-          ]
-        },
-        lines: ["La sala dei bilanci è sigillata. Si apre solo nelle crisi."]
-      },
-      {
-        // MATTARELLUX (Round 40): il GARANTE SUPREMO in persona, catturabile solo
-        // dopo aver superato il garante. Prima era nel dex ma di fatto irraggiungibile.
-        id: "mattarellux-legend", pal: "boss", x: 2, y: 4, facing: "down",
-        showIfFlag: "garante-beaten", hideIfFlag: "legend-mattarellux-gone",
-        legendary: {
-          speciesId: "mattarellux",
-          level: 49,
-          flag: "legend-mattarellux-gone",
-          lines: [
-            "MATTARELLUX ha preparato la valigia. Sopra c'è una pratica urgente: è diventata una scrivania.",
-            "Vuole un confronto. Il livello 49 spiega perché la valigia aspetta ancora."
-          ],
-          afterRunLines: [
-            "MATTARELLUX rimette la pratica sulla valigia. Puoi tornare a sfidarlo."
-          ],
-          afterGoneLines: [
-            "La sala presidenziale è di nuovo silenziosa e ordinata.",
-            "MATTARELLUX è registrato nel tuo POLITICDEX. Con tutti gli onori."
-          ]
-        },
-        lines: ["Questa sala si apre solo per chi ha già garantito la Costituzione."]
       }
     ]
   },
@@ -444,9 +379,11 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
   // CAPUT MUNDI — covo dei retroscenisti.
   retroscena: houseMap("retroscena", "COVO DEI RETROSCENISTI", "capitale", 25, 19, [
     {
-      id: "retro-cronista", pal: "journalist", x: 5, y: 2, facing: "down",
+      id: "retro-cronista", pal: "journalist", x: 5, y: 2, facing: "down", setFlag: "leg-berlusconix-retro",
       lines: [
-        "La fonte chiede anonimato. Poi mi corregge perché dalla foto non si capisce chi è."
+        "La fonte chiede anonimato. Poi mi corregge perché dalla foto non si capisce chi è.",
+        "Retroscena vero: nello Studio 5 la regia ha una porta. La chiave è un telecomando d'oro.",
+        "Chi ha chiuso il caso del Ritornello e ascoltato la tifosa di Mediopoli può entrare. Io non c'ero."
       ]
     }
   ], {
@@ -502,3 +439,16 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
     objectOverrides: { t: "tiles/commissione_table.png" }
   }
 };
+
+// The doors of the legends' rooms: closed until the rite in MISSIONI is complete.
+INTERIOR_MAPS.gymtv.warps.push({
+  markerLabel: "REGIA", x: 1, y: 2, toMap: "regia", toX: SACRARIO_ENTRY.x, toY: SACRARIO_ENTRY.y, facing: "up", requiresFlag: "rito-berlusconix-open",
+  lockedLines: ["Una porta della regia, chiusa a chiave.", "Chi la apre ha ascoltato tre racconti. Li trovi nelle Missioni."]
+});
+INTERIOR_MAPS.colle.warps.push({
+  markerLabel: "ARCHIVIO", x: 1, y: 8, toMap: "archivio", toX: SACRARIO_ENTRY.x, toY: SACRARIO_ENTRY.y, facing: "up", requiresFlag: "rito-draghimon-open",
+  lockedLines: ["L'archivio dei bilanci è sigillato.", "Si apre con tre passaggi. Il verbale delle Missioni li elenca."]
+}, {
+  markerLabel: "STUDIO", x: 10, y: 8, toMap: "studio", toX: SACRARIO_ENTRY.x, toY: SACRARIO_ENTRY.y, facing: "up", requiresFlag: "rito-mattarellux-open",
+  lockedLines: ["Lo studio presidenziale è chiuso.", "Si apre a chi ha la fiducia della gente. Dettagli nelle Missioni."]
+});

@@ -44,6 +44,7 @@ export const DEX_ZONES: DexZone[] = [
   },
   {
     id: "oblast", name: "OBLAST",
+    // bunkerput non è più nell'erba: vive nel bunker, che si apre con il rito (src/game/legends.ts).
     species: ["bunkerput"],
     reward: { itemId: "caffe", qty: 3, money: 1200 }
   },

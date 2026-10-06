@@ -50,9 +50,10 @@ test("every named opponent has its own bust, and the file is a real 96x96 PNG", 
 
 // Counters, legends and the lab keep the face of their role on purpose; every other townsperson has their own.
 const ROLE_ONLY = [
-  "bar-borgo-barista", "bar-bruxelles-barista", "bar-cap-barista", "bar-euro-barista", "bar-medio-barista", "bar-offshore-barista", "bar-stretto-barista",
-  "berlusconix-legend", "bistrot-funz", "campo-circolo", "campo-medico", "covo-padrino", "covo-picciotto", "draghimon-legend",
-  "legend-bunkerput", "mattarellux-legend", "professor", "spettatore-r2"
+  "archivio-usciere", "bar-borgo-barista", "bar-bruxelles-barista", "bar-cap-barista", "bar-euro-barista", "bar-medio-barista",
+  "bar-offshore-barista", "bar-stretto-barista", "berlusconix-legend", "bistrot-funz", "bunker-sentinella", "campo-circolo",
+  "campo-medico", "covo-padrino", "covo-picciotto", "draghimon-legend", "legend-bunkerput", "mattarellux-legend",
+  "professor", "regia-tecnico", "spettatore-r2", "studio-corazziere"
 ];
 
 test("townsfolk busts point at real map NPCs and real files, and only the deliberate few keep their role's face", async () => {

@@ -97,6 +97,8 @@ try{
  expect(after.x!==before.x||after.y!==before.y,'a quick tap on the left half still walks');
 
  // The run toggle shows its state with more than colour.
+ // The walk may end beside Luca, whose welcome opens by itself: close whatever dialogue is open before looking for the buttons.
+ for(let i=0;i<8&&!(await page.getByRole('button',{name:'Corri',exact:true}).isVisible().catch(()=>false));i++){await page.keyboard.press('Enter');await page.waitForTimeout(150);await page.keyboard.press('Escape');await page.waitForTimeout(250);}
  const run=page.getByRole('button',{name:'Corri',exact:true});
  await run.tap();await page.waitForTimeout(150);
  expect(await run.getAttribute('aria-pressed')==='true','run toggles on');

@@ -1,5 +1,6 @@
 import { statsOf } from "../monster";
 import type { Combatant } from "./sim";
+import { riteForSpecies } from "../legends";
 
 export const FIELD_EVENTS = [
   { id: "click", name: "CLICK DAY", rule: "SE AGISCI PRIMA: POLEMICA +1", cue: "PRIMO +1 P", frame: 0 },
@@ -31,6 +32,12 @@ export function chooseAreaEvent(mapId: string, battles: number): BattleField | u
 
 export function chooseFieldEvent(battles: number): BattleField {
   return FIELD_EVENTS[Math.max(0, battles - 1) % FIELD_EVENTS.length];
+}
+
+/** Each legend fights under the rule of its own rite. */
+export function chooseLegendEvent(speciesId: string): BattleField | undefined {
+  const rite = riteForSpecies(speciesId);
+  return rite ? AREA_EVENTS.find(event => event.id === rite.field) : undefined;
 }
 
 /** A scheduled event belongs to the battle, never to a species or real person. */

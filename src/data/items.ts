@@ -55,6 +55,24 @@ export const ITEMS: Record<string, Item> = {
     desc: "Spartisce i PUNTI CONSENSO con tutta la squadra. Anche chi è in panchina porta a casa la pagnotta."
   },
 
+  // ---- CIMELI LEGGENDARI: restano nella borsa e agiscono da soli (src/game/legends.ts) ----
+  telecomando: {
+    id: "telecomando", name: "TELECOMANDO D'ORO", kind: "key",
+    desc: "Il canale uno lo ha tenuto lui per anni. Ogni premio in denaro delle lotte vale il 25% in più."
+  },
+  agendadoro: {
+    id: "agendadoro", name: "AGENDA D'ORO", kind: "key",
+    desc: "Ogni appuntamento era già fissato. Chi combatte guadagna il 15% di esperienza in più."
+  },
+  penna: {
+    id: "penna", name: "PENNA DEL GARANTE", kind: "key",
+    desc: "Firma poco, ma firma bene. Le possibilità di reclutare un candidato crescono del 12%."
+  },
+  bunkerkit: {
+    id: "bunkerkit", name: "KIT DEL BUNKER", kind: "key",
+    desc: "Scorte per un lungo inverno di sondaggi. Ogni vittoria su un allenatore vale 2 punti di consenso in più."
+  },
+
   // ---- DIRETTIVE DI PARTITO (le "MT" di Politicmon) ----
   // Insegnano una mossa a chi ne condivide il tipo. Riutilizzabili.
   dirVaffa: {
@@ -163,7 +181,7 @@ export const BAG_ORDER = [
   "scheda", "schedona", "caffe", "spritz", "mojito", "maalox", "spray", "rimborso",
   "manifesti", "spotprimetime", "comizio",
   "gilet", "telecamera", "sondtruccato", "caffettiera", "agendarossa", "santino",
-  "tessera", "tessera_futuro", "divisa",
+  "tessera", "tessera_futuro", "divisa", "telecomando", "agendadoro", "penna", "bunkerkit",
   "dirVaffa", "dirDecreto", "dirWhatever", "dirFiamma", "dirSciopero",
   "dirInciucio", "dirBunga", "dirGreen", "dirMulta", "dirPiazza"
 ];

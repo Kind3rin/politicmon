@@ -4,6 +4,8 @@
 
 - I quattro Politicmon leggendari non sono più in una stanza o nell'erba: ognuno ha un rito di tre passi (Missioni e Politicdex ne mostrano i progressi), una porta che si apre a rito compiuto e un sacrario tutto suo (La Regia segreta, L'Archivio dei bilanci, Lo Studio presidenziale, Il Bunker). Bunkerput e Mattarellux sono usciti dall'erba. Dettagli in `docs/LEGGENDE.md`.
 - Valore del Politicmon: reclutare una leggenda lascia un cimelio che agisce da solo (Telecomando d'Oro, Agenda d'Oro, Penna del Garante, Kit del Bunker; quattro icone Higgsfield, 1,5 crediti); in lotta ha l'aura dorata, un'entrata in campo con raggi e anello di luce e un pulsante «Leggenda» che evoca una volta la regola del suo rito (Diretta TV, Standard CE, Taglio lineare, Cantiere aperto). Anche nemica, combatte sotto quella regola.
+- Cerimonia della medaglia: dopo un capo palestra la scena si abbassa, raggi dorati si aprono dietro una medaglia con stella e nastro tricolore che gira su se stessa, coriandoli dall'alto (3 secondi, nessuno col «Riduci effetti»).
+- Cartello d'arrivo: la prima volta che raggiungi un luogo all'aperto il suo nome (e la zona) scorre in grande sullo schermo, resta e riparte, senza fermare il gioco.
 - Nuovi `check:legends` e test `legends`; il controllo dei comandi chiude da solo il benvenuto di Luca prima di cercare i pulsanti (era una causa di instabilità nota).
 
 ## Mandato 2 — il mondo risponde — 2026-10-06

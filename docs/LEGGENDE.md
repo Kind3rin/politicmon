@@ -1,6 +1,6 @@
 # Le leggende: un rito, un luogo, un cimelio, una regola
 
-Prima i quattro Politicmon leggendari (Berlusconix, Draghimon, Mattarellux, Bunkerput) stavano fermi in una stanza, o addirittura nell'erba: Bunkerput era il selvatico più comune dell'Oblast e Mattarellux uscisse con l'1% a Caput Mundi e a Offshore. Bastava arrivarci. Ora sono una missione.
+Prima i quattro Politicmon leggendari (Berlusconix, Draghimon, Mattarellux, Bunkerput) stavano fermi in una stanza, o addirittura nell'erba: Bunkerput era il selvatico più comune dell'Oblast e Mattarellux usciva con l'1% a Caput Mundi e a Offshore. Bastava arrivarci. Ora sono una missione.
 
 ## Il rito (`src/game/legends.ts`)
 
@@ -24,4 +24,4 @@ Il rito usa i sistemi che già c'erano: gli eventi civici, la fiducia e le prome
 
 ## Cosa non so
 
-Non ho giocato i riti a mano: i test verificano che ogni passo si compia nel mondo, che la porta si apra una volta, che il sacrario sia percorribile e che relitto, regola e aura funzionino (`tests/content/legends.test.ts`, `npm run check:legends`). Gli effetti dei cimeli sono piccoli e non bilanciati su una campagna intera.
+Non ho giocato i riti a mano: i test verificano che ogni passo si compia nel mondo, che la porta si apra una volta, che il sacrario sia percorribile e che cimelio, regola e aura funzionino (`tests/content/legends.test.ts`, `npm run check:legends`). Gli effetti dei cimeli sono piccoli e non bilanciati su una campagna intera.

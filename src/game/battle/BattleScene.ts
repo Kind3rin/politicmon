@@ -184,6 +184,7 @@ export class BattleScene implements Scene {
   /** La leggenda in squadra può evocare una volta per lotta la regola del suo rito. */
   private legendRuleUsed = false;
   private legendEntry = 0; // tempo dell'entrata in campo di una leggenda nostra
+  private badgeCeremony = 0; // cerimonia della medaglia: raggi, medaglia che gira, coriandoli
 
   constructor(private stack: SceneStack, private input: Input, opts: BattleOptions) {
     this.state = opts.state;
@@ -1114,6 +1115,7 @@ export class BattleScene implements Scene {
         steps.push({
           text: `Conquisti la MEDAGLIA ${badgeName}!`,
           run: () => {
+            this.badgeCeremony = this.state.reduceEffects ? 0 : 3.2;
             if (!this.state.badges.includes(trainer.badge!)) {
               this.state.badges.push(trainer.badge!);
             }
@@ -1583,6 +1585,12 @@ export class BattleScene implements Scene {
       this.fx.particles.push({ x: c.x + Math.cos(ang) * 24, y: c.y + Math.sin(ang) * 18, vx: Math.cos(ang) * 8, vy: -12 - Math.random() * 10, life: 0, max: 0.6 + Math.random() * 0.4, color: ["#ffe98a", "#ffd23c", "#fff4c0"][Math.floor(Math.random() * 3)], size: 1 });
     }
     this.legendEntry = Math.max(0, this.legendEntry - dt);
+    if (this.badgeCeremony > 0) {
+      this.badgeCeremony = Math.max(0, this.badgeCeremony - dt);
+      if (!this.state.reduceEffects && this.badgeCeremony > .5) for (let i = 0; i < 2; i++) {
+        this.fx.particles.push({ x: Math.random() * VIEW_W, y: -4, vx: (Math.random() - .5) * 16, vy: 34 + Math.random() * 30, life: 0, max: 1.5 + Math.random() * .6, color: ["#3da35d", "#ffffff", "#d64545", "#f2c230", "#58a6e0"][Math.floor(Math.random() * 5)], size: 2 });
+      }
+    }
     this.fx.update(dt);
     // Hit-stop: congela l'avanzamento della battaglia per pochi centesimi,
     // dando "peso" al colpo. Animazioni cosmetiche (sopra) continuano.
@@ -1997,6 +2005,37 @@ export class BattleScene implements Scene {
       ctx.save();
       ctx.fillStyle = `rgba(255, 246, 200, ${0.7 * this.legendIntroFlash})`;
       ctx.fillRect(0, 0, VIEW_W, screen.height);
+      ctx.restore();
+    }
+    // Cerimonia della medaglia: la scena si abbassa, i raggi si aprono dietro una medaglia dorata che gira su se stessa.
+    if (this.badgeCeremony > 0 && !this.state.reduceEffects) {
+      const total = 3.2, p = 1 - this.badgeCeremony / total, fadeIn = Math.min(1, p * 5), fadeOut = Math.min(1, this.badgeCeremony / .6), a = Math.min(fadeIn, fadeOut);
+      const cx = VIEW_W / 2, cy = screen.height * .42, drop = Math.min(1, p * 4), y = cy - (1 - drop) * 70 + Math.sin(this.fx.time * 3) * 1.5;
+      ctx.save();
+      ctx.fillStyle = `rgba(10,14,31,${.68 * a})`; ctx.fillRect(0, 0, VIEW_W, screen.height);
+      ctx.translate(cx, y);
+      ctx.scale(1.35, 1.35);
+      ctx.rotate(this.fx.time * .5);
+      ctx.fillStyle = `rgba(255,236,150,${.18 * a})`;
+      for (let i = 0; i < 16; i++) {
+        const ang = i * Math.PI / 8, half = .06 + (i % 2) * .03, len = 150;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(Math.cos(ang - half) * len, Math.sin(ang - half) * len); ctx.lineTo(Math.cos(ang + half) * len, Math.sin(ang + half) * len); ctx.closePath(); ctx.fill();
+      }
+      ctx.rotate(-this.fx.time * .5);
+      ctx.globalAlpha = a;
+      // Nastro tricolore.
+      ctx.fillStyle = "#3da35d"; ctx.fillRect(-14, 10, 9, 30); ctx.fillStyle = "#ffffff"; ctx.fillRect(-5, 10, 10, 30); ctx.fillStyle = "#d64545"; ctx.fillRect(5, 10, 9, 30);
+      // Medaglia: il disco si gira (scala orizzontale) con un luccichio sul bordo.
+      const w = .5 + .5 * Math.abs(Math.cos(this.fx.time * 2.4));
+      ctx.scale(w, 1);
+      ctx.fillStyle = "#10141f"; ctx.beginPath(); ctx.arc(0, 0, 19, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#f2c230"; ctx.beginPath(); ctx.arc(0, 0, 17, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#fff0a6"; ctx.beginPath(); ctx.arc(-4, -5, 8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#f2c230"; ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#b8860b"; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(0, 0, 12, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = "#10141f"; ctx.beginPath();
+      for (let i = 0; i < 10; i++) { const r = i % 2 ? 4 : 10, ang = -Math.PI / 2 + i * Math.PI / 5; ctx.lineTo(Math.cos(ang) * r, Math.sin(ang) * r); }
+      ctx.closePath(); ctx.fill();
       ctx.restore();
     }
     // Entrata di una leggenda nostra: raggi che si aprono dal compagno, anello di luce, velo dorato ai bordi.

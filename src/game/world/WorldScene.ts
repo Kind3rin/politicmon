@@ -299,6 +299,8 @@ export class WorldScene implements Scene {
   private pendingTrainer: TrainerDef | null = null;
   /** The trainer who offered a duel from a distance; on-sight duels need the player's yes. */
   private pendingInvite: RuntimeNpc | null = null;
+  /** The first time you reach a place its name sweeps across the screen. */
+  private titleCard: { t: number; name: string; sub?: string } | null = null;
   /** A civic decision reshaping the map right now (tiles change one by one, people step in). */
   private reveal: CivicReveal | null = null;
   /** The civic scenes already in the world on this map, so a new one plays exactly once. */
@@ -697,6 +699,10 @@ export class WorldScene implements Scene {
     this.reveal = null;
     this.civicActive = new Set(civicScenesFor(this.state, mapId).map(scene => scene.decision));
     for (const def of civicSceneNpcs(this.state, mapId)) this.npcs.push(this.makeRuntimeNpc(def));
+    if (this.map.outdoor && !this.state.reduceEffects && !this.state.flags[`visited-${mapId}`] && this.state.flags["intro-done"] && mapId !== "borgo") {
+      this.state.flags[`visited-${mapId}`] = true;
+      this.titleCard = { t: 0, name: this.map.name, sub: this.zoneName(this.state.pos.x, this.state.pos.y) };
+    } else this.titleCard = null;
     const rite = RITES.find(entry => entry.sacrario === mapId);
     if (rite && !this.state.flags[`sacrario-${mapId}`]) {
       this.state.flags[`sacrario-${mapId}`] = true;
@@ -3321,6 +3327,25 @@ export class WorldScene implements Scene {
     this.healSparks = this.healSparks.filter((s) => s.life < s.max);
   }
 
+  /** First arrival: a dark band slides in across the screen with the name in large letters, holds, and slides out. */
+  private drawTitleCard(screen: Screen): void {
+    const card = this.titleCard;
+    if (!card || this.state.reduceEffects) return;
+    const total = 2.8, inT = Math.min(1, card.t / .45), outT = Math.min(1, Math.max(0, (total - card.t) / .45)), k = Math.min(inT, outT);
+    const ease = 1 - Math.pow(1 - k, 3), ctx = screen.ctx, h = 40, y = Math.round(this.viewHeight * .3 - h / 2);
+    const slide = (1 - ease) * VIEW_W;
+    ctx.save();
+    ctx.globalAlpha = .9 * Math.min(1, ease * 1.4);
+    ctx.fillStyle = "#10141f"; ctx.fillRect(-slide, y, VIEW_W, h);
+    ctx.globalAlpha = Math.min(1, ease * 1.4);
+    ctx.fillStyle = "#f2c230"; ctx.fillRect(-slide, y - 2, VIEW_W, 2);
+    ctx.fillStyle = "#3da35d"; ctx.fillRect(-slide, y + h, VIEW_W / 3, 2); ctx.fillStyle = "#ffffff"; ctx.fillRect(-slide + VIEW_W / 3, y + h, VIEW_W / 3, 2); ctx.fillStyle = "#d64545"; ctx.fillRect(-slide + 2 * VIEW_W / 3, y + h, VIEW_W / 3, 2);
+    const name = card.name.toUpperCase(), scale = name.length > 14 ? 1 : 2, width = name.length * 6 * scale;
+    screen.text(name, Math.round((VIEW_W - width) / 2 - slide * 1.4), y + (card.sub ? 8 : 14), "#fff6d6", scale);
+    if (card.sub) { const sub = card.sub.toUpperCase(), sw = sub.length * 6; screen.text(sub, Math.round((VIEW_W - sw) / 2 - slide * 1.8), y + 26, "#f2c230"); }
+    ctx.restore();
+  }
+
   /** The last step of a rite opens a door somewhere: say so once, when nothing else is on screen. */
   private watchRites(): void {
     if (this.msg.isOpen || this.askMenu || this.remoteMenu || this.encounterFlash > 0 || this.pendingBattle || this.exclaimT > 0) return;
@@ -3423,6 +3448,7 @@ export class WorldScene implements Scene {
     this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
     this.watchCivicWorks();
     this.watchRites();
+    if (this.titleCard) { this.titleCard.t += dt; if (this.titleCard.t > 2.8) this.titleCard = null; }
     if (this.reveal) {
       this.reveal.update(dt);
       if (this.reveal.done) this.reveal = null;
@@ -4296,6 +4322,7 @@ export class WorldScene implements Scene {
 
     this.reveal?.draw(screen.ctx, camX, camY);
     screen.ctx.restore();
+    this.drawTitleCard(screen);
     this.msg.draw(screen);
 
     if (this.encounterFlash > 0 && !this.state.reduceEffects) {

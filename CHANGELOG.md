@@ -1,5 +1,15 @@
 # Changelog
 
+## Mandato 2 — varietà e ritmo — 2026-10-06
+
+- Tocco involontario: una mappa non parte più se tocchi subito dopo una direzione (tasti, croce o stick), con un secondo dito, con il pollice appoggiato o con il click che riporta il focus alla finestra. Il tocco deve durare meno di 0,55 s ed essere isolato. Casi nuovi in `check:world-controls`.
+- Palazzo: studio del Presidente su un palco dietro un muro a due corsi e una scalinata di tappeto; tre palestre con piante diverse (studio TV, Parlamento UE, Attico globale) a due quote.
+- Percorsi 2 e 3 riprogettati: non sono più copie del Percorso 1 (caselle uguali scese dal 55-68% al 27-44%). Lungolago con isola e traghetto; cava con un muro che chiude la scorciatoia, geologa e cavatore nuovi (con busto Higgsfield, 1,5 crediti) e nuovo evento civico «La ghiaia del progetto» che apre davvero il varco.
+- Nove interni con pianta propria (redazione, bistrot, retrobottega, chiosco, studio di lobbying, covo dei retroscenisti, salotto, casinò): 38 piante diverse su 45 interni (erano 28); bar sport e discount restano uguali di proposito.
+- Eventi di campo per area dopo la prima medaglia (Taglio lineare, Diretta TV, Standard CE, Cantiere aperto), una lotta su tre, mai in palestra, contro leggende o duelli scritti; la regola del giorno compare nell'arena finché non scatta.
+- Cinque fondali di lotta nuovi (lago, cava, viale europeo, foro, piazzale TV; un job fallito e rigenerato; con il foglio busti 7,75 crediti in tutto, saldo 297,47 → 289,72): Percorso 2 e 3, Eurotown, Caput Mundi e Mediopoli non combattono più sul prato o sulla piazza comune.
+- Controlli: `check:civic-bridge` pilota di nuovo il dossier civico dal pannello nativo (era rotto dalla migrazione). Nuovi test `worldVariety` e `areaEvents`; analisi e limiti in `docs/RITMO-E-VARIETA.md`.
+
 ## Mandato 2 — terrazze e orientamento — 2026-10-06
 
 - Borgo Urne a tre quote: la piazza in basso (invariata: porte, edifici, strade), la campagna sulla prima terrazza (erba alta, due sfidanti) e il belvedere in cima (muro di pietra, panchina, Monumento al Candidato Ignoto che indica dall'alto laboratorio, casa e bar, tesoro nascosto, uscita verso il Percorso 1). Si sale con due scalinate al centro, si scende anche saltando dai muri; la tasca a sinistra della campagna si raggiunge pure saltando dal belvedere. Il nome della zona compare in alto quando ci entri.

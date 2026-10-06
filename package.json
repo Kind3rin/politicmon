@@ -117,7 +117,8 @@
     "check:roamers": "node scripts/check-roamers.mjs",
     "check:world-controls": "node scripts/check-world-controls.mjs",
     "check:first-minutes": "node scripts/check-first-minutes.mjs",
-    "check:recruit": "node scripts/check-recruit.mjs"
+    "check:recruit": "node scripts/check-recruit.mjs",
+    "check:trainer-invite": "node scripts/check-trainer-invite.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

@@ -189,7 +189,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-route1", pal: "kid", x: 20, y: 9, facing: "left",
-        trainerId: "praticante", nameplate: "PRATICA A",
+        trainerId: "praticante", inviteRange: 5, nameplate: "PRATICA A",
         lines: ["Pratica chiusa. Sono ancora in fila, ma per la macchinetta del caffè."]
       },
       {
@@ -493,7 +493,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-claqueur", pal: "influencer", x: 19, y: 5, facing: "left",
-        trainerId: "claqueur", nameplate: "APPLAUSI A",
+        trainerId: "claqueur", inviteRange: 3, nameplate: "APPLAUSI A",
         lines: ["Hanno applaudito a luce spenta. Non era a budget."]
       },
       {
@@ -503,7 +503,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
       },
       {
         id: "tr-opinionista", pal: "journalist", x: 16, y: 12, facing: "right",
-        trainerId: "opinionista", nameplate: "PARERE A",
+        trainerId: "opinionista", inviteRange: 3, nameplate: "PARERE A",
         lines: ["La prossima opinione parte dai fatti."]
       },
       {
@@ -684,17 +684,17 @@ export const BASE_MAPS: Record<string, MapDef> = {
     npcs: [
       {
         id: "tr-usciere", pal: "guard", x: 11, y: 6, facing: "right",
-        trainerId: "usciere", nameplate: "AGENDA A",
+        trainerId: "usciere", inviteRange: 3, nameplate: "AGENDA A",
         lines: ["Ti avevo messo in attesa. È diverso dal riceverti."]
       },
       {
         id: "tr-protocollista", pal: "granny", x: 12, y: 12, facing: "right",
-        trainerId: "protocollista", nameplate: "AUDIT A",
+        trainerId: "protocollista", inviteRange: 6, nameplate: "AUDIT A",
         lines: ["L'allegato indica chi paga. Ecco perché non lo proiettavano."]
       },
       {
         id: "tr-eminenza", pal: "aide", x: 19, y: 12, facing: "right",
-        trainerId: "eminenza", nameplate: "CONTATTI A",
+        trainerId: "eminenza", inviteRange: 4, nameplate: "CONTATTI A",
         lines: ["Abbiamo pubblicato gli incontri. Le cene restano conviviali."]
       },
       {

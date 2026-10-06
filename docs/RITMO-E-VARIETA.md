@@ -18,6 +18,7 @@ Richiesta: «il gioco lo trovo noioso e monotono, analizza bene». Qui sta cosa 
 - **Palestre**: studio TV (palco rialzato), Parlamento UE (banco della presidenza e emiciclo, due quote), Attico globale (due quote); stesso principio del Palazzo e del Colle.
 - **Nove interni nuovi**: redazione (muro di monitor), bistrot (bancone), retrobottega (casseforti e tavolo lungo), chiosco, studio di lobbying, covo dei retroscenisti, salotto romano (statue), casinò (slot e roulette).
 - **Eventi di campo per area dopo la prima medaglia** (`AREA_EVENTS`): una lotta su tre, escluse palestre, leggende e duelli scritti, prende la regola del luogo — Caput Mundi e Colle *Taglio lineare* (−8% PV a tutti, mai KO), Mediopoli e Percorso 2 *Diretta TV* (Grinta +1 a entrambi), Eurotown e Bruxelles *Standard CE* (statistiche riportate tra −1 e +1), Percorso 3, Stretto, Offshore e Oblast *Cantiere aperto* (Velocità −1 a entrambi). Nell'arena la regola compare come avviso finché non scatta (al secondo turno).
+- **Sfida a vista con consenso** (`NpcDef.inviteRange`): sei dei sette allenatori dei Percorsi (Pratica, Applausi, Parere, Agenda, Audit, Contatti) ti chiamano quando entri nella loro linea di vista lungo la direzione in cui guardano (3–6 caselle, tarata sulla strada): punto esclamativo, poi «Accetti il duello?» con *Accetto* / *Non ora*. «Non ora» (o Indietro) è gratuito e vale fino a quando lasci la mappa; si può sempre andare a parlargli. Nessun agguato: gli sguardi che costringono (rivale, bunkerista) sono rimasti com'erano. Il telelobbista sul molo del Percorso 2 non chiama: guarda il molo, non la strada. `npm run check:trainer-invite`.
 - **Tocco involontario**: dopo una direzione, da un secondo dito, da un pollice appoggiato o da un click di rifocalizzazione la mappa non parte più (`docs/MOBILE-CONTROLS.md`).
 - **Guardia permanente**: `tests/content/worldVariety.test.ts` (percorsi con meno del 60% di caselle uguali, sfondi e nomi di zona distinti, nessun interno con la stessa pianta fuori dalle catene, tutti raggiungibili dalla porta) e `tests/unit/areaEvents.test.ts`.
 
@@ -30,6 +31,5 @@ Richiesta: «il gioco lo trovo noioso e monotono, analizza bene». Qui sta cosa 
 ## Leve ancora aperte
 
 - Lotte brevi (3-4 turni nel primo tratto): fattore di danno globale o PV più alti, da provare insieme a un ribilanciamento dei capi (`docs/GAME-DESIGN-AUDIT.md`).
-- «Sfida a vista» per gli allenatori dei Percorsi, con consenso: oggi si parla con loro, non entrano nel tragitto.
 - Altri eventi civici con conseguenze visibili sul mondo (oggi: cantiere, cava).
 - Nuove specie selvatiche per percorso (richiedono arte).

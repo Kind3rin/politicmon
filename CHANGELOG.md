@@ -8,6 +8,7 @@
 - Nove interni con pianta propria (redazione, bistrot, retrobottega, chiosco, studio di lobbying, covo dei retroscenisti, salotto, casinò): 38 piante diverse su 45 interni (erano 28); bar sport e discount restano uguali di proposito.
 - Eventi di campo per area dopo la prima medaglia (Taglio lineare, Diretta TV, Standard CE, Cantiere aperto), una lotta su tre, mai in palestra, contro leggende o duelli scritti; la regola del giorno compare nell'arena finché non scatta.
 - Cinque fondali di lotta nuovi (lago, cava, viale europeo, foro, piazzale TV; un job fallito e rigenerato; con il foglio busti 7,75 crediti in tutto, saldo 297,47 → 289,72): Percorso 2 e 3, Eurotown, Caput Mundi e Mediopoli non combattono più sul prato o sulla piazza comune.
+- Sfida a vista con consenso per gli allenatori dei Percorsi (Pratica, Applausi, Parere, Agenda, Audit, Contatti): quando entri nella loro linea di vista un punto esclamativo e «Accetti il duello?» con *Accetto* / *Non ora*; il rifiuto è gratuito e dura fino a quando lasci la mappa. Il rivale e il bunkerista continuano a sfidare a vista come prima. Nuovo `check:trainer-invite`; la campagna nativa fino alla prima medaglia passa senza blocchi.
 - Controlli: `check:civic-bridge` pilota di nuovo il dossier civico dal pannello nativo (era rotto dalla migrazione). Nuovi test `worldVariety` e `areaEvents`; analisi e limiti in `docs/RITMO-E-VARIETA.md`.
 
 ## Mandato 2 — terrazze e orientamento — 2026-10-06

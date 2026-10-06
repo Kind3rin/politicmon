@@ -295,6 +295,10 @@ export class WorldScene implements Scene {
   private exclaimNpc: RuntimeNpc | null = null;
   private exclaimT = 0;
   private pendingTrainer: TrainerDef | null = null;
+  /** The trainer who offered a duel from a distance; on-sight duels need the player's yes. */
+  private pendingInvite: RuntimeNpc | null = null;
+  /** Trainers the player said "not now" to on this visit: they do not ask again until the map is reloaded. */
+  private declinedInvites = new Set<string>();
   private wanderNpc: RuntimeNpc | null = null; // sprite temporaneo del PG vagante
   private wanderTrainer: TrainerDef | null = null; // sfida facoltativa associata
   // COPPA DELLE POLTRONE: stato del torneo in corso (SESSIONE SINGOLA, mai salvato).
@@ -672,6 +676,8 @@ export class WorldScene implements Scene {
     this.wanderNpc = null;
     this.wanderTrainer = null;
     this.exclaimNpc = null;
+    this.pendingInvite = null;
+    this.declinedInvites.clear();
     // RIVALE GIANNI ricorrente: se la tappa corrente è su questa mappa e non
     // l'hai ancora battuta, aggiungi il suo NPC (con linea di vista).
     const stage = rivalStageFor(this.state.rivalWins);
@@ -2683,23 +2689,28 @@ export class WorldScene implements Scene {
   private checkTrainerSight(): boolean {
     const pos = this.state.pos;
     for (const npc of this.visibleNpcs()) {
-      if (!npc.trainerId || !npc.sightRange) {
+      const range = npc.sightRange ?? npc.inviteRange;
+      if (!npc.trainerId || !range) {
         continue;
       }
       if (this.state.defeatedTrainers.includes(npc.trainerId)) {
+        continue;
+      }
+      if (!npc.sightRange && this.declinedInvites.has(npc.id)) {
         continue;
       }
       if (this.state.party.length === 0) {
         continue;
       }
       const delta = DIR_DELTA[npc.facing];
-      for (let step = 1; step <= npc.sightRange; step += 1) {
+      for (let step = 1; step <= range; step += 1) {
         const sx = npc.x + delta.dx * step;
         const sy = npc.y + delta.dy * step;
         if (sx === pos.x && sy === pos.y) {
           this.exclaimNpc = npc;
           this.exclaimT = 0.7;
           this.pendingTrainer = this.trainerForId(npc.trainerId);
+          this.pendingInvite = npc.sightRange ? null : npc;
           audio.encounterSting();
           return true;
         }
@@ -2710,6 +2721,18 @@ export class WorldScene implements Scene {
       }
     }
     return false;
+  }
+
+  /** A route trainer calls from a distance: the player picks. Saying no is free and lasts until the map is left. */
+  private offerDuel(npc: RuntimeNpc, def: TrainerDef): void {
+    this.input.reset();
+    this.askChoice(`${def.name} ti sfida.\nAccetti il duello?`, ["ACCETTO", "NON ORA"], index => {
+      if (index === 0) { this.startTrainerFight(def); return; }
+      this.declinedInvites.add(npc.id);
+      this.say([`${def.name}: va bene, come vuoi.`, "Se cambi idea, vieni a parlarmi."]);
+    }, () => {
+      this.declinedInvites.add(npc.id);
+    });
   }
 
   // ---- Incontri PG casuali su strada ----
@@ -3441,8 +3464,11 @@ export class WorldScene implements Scene {
       if (this.exclaimT <= 0 && this.pendingTrainer) {
         const def = this.pendingTrainer;
         this.pendingTrainer = null;
+        const inviter = this.pendingInvite;
+        this.pendingInvite = null;
         this.exclaimNpc = null;
-        this.startTrainerFight(def);
+        if (inviter) this.offerDuel(inviter, def);
+        else this.startTrainerFight(def);
       }
       return;
     }

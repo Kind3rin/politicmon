@@ -12,6 +12,8 @@ export interface NpcDef {
   lines?: string[];
   trainerId?: string;
   sightRange?: number;
+  /** Route trainers: stepping into this line of sight (tiles, along their facing) offers a duel. The player can say "not now"; nobody is ambushed. */
+  inviteRange?: number;
   healer?: boolean;
   shop?: boolean;
   casino?: boolean;

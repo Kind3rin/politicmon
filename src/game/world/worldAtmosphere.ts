@@ -63,11 +63,11 @@ export class WorldAtmosphere {
   }
   draw(ctx:CanvasRenderingContext2D,map:MapDef,camX:number,camY:number,width:number,height:number,time:number,reduced:boolean,hour:number,lights:readonly {x:number;y:number;lamp?:boolean}[],extra:readonly Light[]=[]):void {
     if(!map.outdoor)return;
-    const ambient=ambientLight(hour);
-    if(ambient.alpha>=.02){
+    const mood=ambientLight(hour);
+    if(mood.alpha>=.02){
       const lit:Light[]=[...lights.map(l=>({kind:l.lamp?'lamp' as const:'window' as const,x:l.x+2-camX,y:l.y+2-camY})),...extra.map(l=>({kind:l.kind,x:l.x-camX,y:l.y-camY}))];
       drawLighting(ctx,width,height,hour,lit,time,reduced);
-      if(lightNeed(ambient)>.3){
+      if(lightNeed(mood)>.3){
         for(const lamp of lights){
           if(!lamp.lamp)continue;
           const x=Math.round(lamp.x-camX),y=Math.round(lamp.y-camY);
@@ -90,6 +90,31 @@ export class WorldAtmosphere {
         else if(kind===1){ctx.fillStyle='rgba(225,204,156,.45)';ctx.fillRect(x,y,1,1);}
         else if(coastal){ctx.fillStyle='rgba(17,35,40,.28)';const wing=Math.floor(time*3+i)%2;ctx.fillRect(x-3,y+wing,3,1);ctx.fillRect(x+1,y+wing,3,1);ctx.fillRect(x,y+1,1,1);}
         else {ctx.fillStyle='#d8cfb3';ctx.fillRect(x,y,2,3);ctx.fillStyle='#aa6353';ctx.fillRect(x,y+1,1,1);}
+      }
+      // Life in the air: fireflies when it is dark, butterflies by day. Anchored to the map, never more than a dozen.
+      const need=lightNeed(mood);
+      if(need>.25){
+        ctx.save();ctx.globalCompositeOperation='lighter';
+        for(let i=0;i<14;i++){
+          const seed=ambient.motifs[(i*5)%24]^terrainHash(map.id,i,5);
+          const x=Math.round(((seed%spanX)+Math.sin(time*.5+i*1.9)*16+Math.sin(time*1.3+i)*4)-camX),y=Math.round((((seed>>>12)%spanY)+Math.cos(time*.43+i*2.3)*12)-camY);
+          if(x<-4||y<-4||x>width+4||y>height+4)continue;
+          const pulse=.35+.65*Math.max(0,Math.sin(time*1.7+i*2.7));
+          ctx.fillStyle=`rgba(200,255,120,${(.2*pulse*need).toFixed(3)})`;ctx.fillRect(x-3,y-3,8,8);
+          ctx.fillStyle=`rgba(236,255,170,${(1*pulse*need).toFixed(3)})`;ctx.fillRect(x,y,2,2);
+        }
+        ctx.restore();
+      } else if(mood.alpha<.12){
+        const palette=['#f4e04d','#f2f2ff','#ff9ad5'];
+        for(let i=0;i<4;i++){
+          const seed=ambient.motifs[(i*7+3)%24]^terrainHash(map.id,i,9);
+          const x=Math.round(((seed%spanX)+Math.sin(time*.7+i*2.1)*22+Math.sin(time*2.3+i)*5)-camX),y=Math.round((((seed>>>12)%spanY)+Math.cos(time*.6+i*1.7)*14+Math.sin(time*3.1+i)*3)-camY);
+          if(x<-4||y<-4||x>width+4||y>height+4)continue;
+          const flap=Math.floor(time*8+i)%2;
+          ctx.fillStyle=palette[i%palette.length];
+          if(flap){ctx.fillRect(x-2,y-1,2,2);ctx.fillRect(x+1,y-1,2,2);}else{ctx.fillRect(x-1,y-2,2,3);ctx.fillRect(x+1,y-2,2,3);}
+          ctx.fillStyle='#3a3040';ctx.fillRect(x,y-1,1,3);
+        }
       }
       const weather=map.weather??'sereno';
       if(weather==='pioggia'){

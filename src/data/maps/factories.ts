@@ -605,7 +605,88 @@ export const HOUSE_TILES_C = [
   "AAAAAAAAAAAA"
 ];
 
-export const HOUSE_LAYOUTS = [HOUSE_TILES_A, HOUSE_TILES_B, HOUSE_TILES_C];
+// Un piano per ogni locale che non sia di catena (bar sport e discount restano uguali di proposito).
+export const HOUSE_TILES_D = [ // redazione: scrivanie e muro di monitor
+  "AAAAAAAAAAAA",
+  "AkkkpppbbbbA",
+  "AppppppppppA",
+  "AppttpppttpA",
+  "AppppppppppA",
+  "ApttpppppPpA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+export const HOUSE_TILES_E = [ // bistrot: bancone, scaffale e tavolini
+  "AAAAAAAAAAAA",
+  "AbbbbpppppPA",
+  "AhhhhppppppA",
+  "AppppppppppA",
+  "ApttppppptpA",
+  "ApppppppppPA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+export const HOUSE_TILES_F = [ // retrobottega: casseforti, tavolo lungo
+  "AAAAAAAAAAAA",
+  "AbbbpppppbbA",
+  "AppppppppppA",
+  "ApppppptttpA",
+  "ApppppppppPA",
+  "AkkppppppkkA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+export const HOUSE_TILES_G = [ // chiosco: bancone corto
+  "AAAAAAAAAA",
+  "AbbppppppA",
+  "AphhhhpppA",
+  "AppppppppA",
+  "ApttpppppA",
+  "AppPpppppA",
+  "AppppccppA",
+  "AAAAAAAAAA"
+];
+export const HOUSE_TILES_H = [ // studio di lobbying: reception e scrivanie
+  "AAAAAAAAAAAA",
+  "AkkpppppppPA",
+  "AppppppppppA",
+  "AppttpppttpA",
+  "AppppppppppA",
+  "ApPppppppPpA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+export const HOUSE_TILES_I = [ // covo dei retroscenisti: panche lungo i muri
+  "AAAAAAAAAAAA",
+  "AUUppppppUUA",
+  "AppppppppppA",
+  "AppppttppppA",
+  "ApppppppppPA",
+  "AUppppppppUA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+export const HOUSE_TILES_J = [ // salotto romano: statue e tavolo basso
+  "AAAAAAAAAAAA",
+  "AbbppppppbbA",
+  "AppYppppYppA",
+  "AppppppppppA",
+  "ApppppttpppA",
+  "APppppppppPA",
+  "AppppccppppA",
+  "AAAAAAAAAAAA"
+];
+export const CASINO_TILES = [
+  "AAAAAAAAAA",
+  "AkkkpppkkA",
+  "AppppppppA",
+  "ApppttpppA",
+  "ApPppppPpA",
+  "AppppccppA",
+  "AAAAAAAAAA"
+];
+
+export const HOUSE_LAYOUTS = [HOUSE_TILES_A, HOUSE_TILES_B, HOUSE_TILES_C, HOUSE_TILES_D, HOUSE_TILES_E, HOUSE_TILES_F, HOUSE_TILES_G, HOUSE_TILES_H, HOUSE_TILES_I, HOUSE_TILES_J];
 
 export function insideEntry(tiles: string[]): { x: number; y: number } {
   const exitY = tiles.length - 2;
@@ -672,9 +753,17 @@ export const GYMTV_ENTRY = insideEntry(GYMTV_TILES);
 export const GYMUE_ENTRY = insideEntry(GYMUE_TILES);
 export const GYMGLOBAL_ENTRY = insideEntry(GYMGLOBAL_TILES);
 export const MARKET_ENTRY = insideEntry(MARKET_TILES);
+export const CASINO_ENTRY = insideEntry(CASINO_TILES);
 export const HOUSE_ENTRY_A = insideEntry(HOUSE_TILES_A);
 export const HOUSE_ENTRY_B = insideEntry(HOUSE_TILES_B);
 export const HOUSE_ENTRY_C = insideEntry(HOUSE_TILES_C);
+export const HOUSE_ENTRY_D = insideEntry(HOUSE_TILES_D);
+export const HOUSE_ENTRY_E = insideEntry(HOUSE_TILES_E);
+export const HOUSE_ENTRY_F = insideEntry(HOUSE_TILES_F);
+export const HOUSE_ENTRY_G = insideEntry(HOUSE_TILES_G);
+export const HOUSE_ENTRY_H = insideEntry(HOUSE_TILES_H);
+export const HOUSE_ENTRY_I = insideEntry(HOUSE_TILES_I);
+export const HOUSE_ENTRY_J = insideEntry(HOUSE_TILES_J);
 export const BAR_ENTRY = insideEntry(BAR_TILES);
 
 // Genera l'interno di un BAR SPORT con il barista che cura al bancone.

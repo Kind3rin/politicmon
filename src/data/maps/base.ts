@@ -1,5 +1,5 @@
 import type { MapDef } from "./types";
-import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYMTV_ENTRY, GYMUE_ENTRY, GYMGLOBAL_ENTRY, MARKET_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, BAR_ENTRY, lucaGuide } from "./factories";
+import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYMTV_ENTRY, GYMUE_ENTRY, GYMGLOBAL_ENTRY, MARKET_ENTRY, CASINO_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, HOUSE_ENTRY_D, HOUSE_ENTRY_E, HOUSE_ENTRY_H, HOUSE_ENTRY_I, HOUSE_ENTRY_J, BAR_ENTRY, lucaGuide } from "./factories";
 
 export const BASE_MAPS: Record<string, MapDef> = {
   borgo: {
@@ -333,8 +333,8 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { x: 22, y: 10, toMap: "market1", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 5, y: 18, toMap: "attico", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
       { x: 6, y: 18, toMap: "attico", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
-      { x: 22, y: 16, toMap: "redazione", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
-      { x: 23, y: 16, toMap: "redazione", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 22, y: 16, toMap: "redazione", toX: HOUSE_ENTRY_D.x, toY: HOUSE_ENTRY_D.y, facing: "up" },
+      { x: 23, y: 16, toMap: "redazione", toX: HOUSE_ENTRY_D.x, toY: HOUSE_ENTRY_D.y, facing: "up" },
       { x: 6, y: 15, toMap: "bar-medio", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       { x: 7, y: 15, toMap: "bar-medio", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
@@ -543,10 +543,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
       { x: 6, y: 5, toMap: "gymue", toX: GYMUE_ENTRY.x, toY: GYMUE_ENTRY.y, facing: "up" },
       { x: 21, y: 5, toMap: "market2", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
       { x: 22, y: 5, toMap: "market2", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
-      { x: 5, y: 9, toMap: "lobbystudio", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
-      { x: 6, y: 9, toMap: "lobbystudio", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
-      { x: 21, y: 9, toMap: "bistrot", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
-      { x: 22, y: 9, toMap: "bistrot", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 5, y: 9, toMap: "lobbystudio", toX: HOUSE_ENTRY_H.x, toY: HOUSE_ENTRY_H.y, facing: "up" },
+      { x: 6, y: 9, toMap: "lobbystudio", toX: HOUSE_ENTRY_H.x, toY: HOUSE_ENTRY_H.y, facing: "up" },
+      { x: 21, y: 9, toMap: "bistrot", toX: HOUSE_ENTRY_E.x, toY: HOUSE_ENTRY_E.y, facing: "up" },
+      { x: 22, y: 9, toMap: "bistrot", toX: HOUSE_ENTRY_E.x, toY: HOUSE_ENTRY_E.y, facing: "up" },
       { x: 7, y: 12, toMap: "bar-euro", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       { x: 8, y: 12, toMap: "bar-euro", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],
@@ -774,14 +774,14 @@ export const BASE_MAPS: Record<string, MapDef> = {
     warps: [
       { x: 7, y: 11, toMap: "gymglobal", toX: GYMGLOBAL_ENTRY.x, toY: GYMGLOBAL_ENTRY.y, facing: "up" },
       { x: 6, y: 11, toMap: "gymglobal", toX: GYMGLOBAL_ENTRY.x, toY: GYMGLOBAL_ENTRY.y, facing: "up" },
-      { x: 22, y: 11, toMap: "casino", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
-      { x: 21, y: 11, toMap: "casino", toX: MARKET_ENTRY.x, toY: MARKET_ENTRY.y, facing: "up" },
+      { x: 22, y: 11, toMap: "casino", toX: CASINO_ENTRY.x, toY: CASINO_ENTRY.y, facing: "up" },
+      { x: 21, y: 11, toMap: "casino", toX: CASINO_ENTRY.x, toY: CASINO_ENTRY.y, facing: "up" },
       { x: 23, y: 7, toMap: "bar-cap", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       { x: 24, y: 7, toMap: "bar-cap", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
-      { x: 4, y: 18, toMap: "salotto", toX: HOUSE_ENTRY_C.x, toY: HOUSE_ENTRY_C.y, facing: "up" },
-      { x: 5, y: 18, toMap: "salotto", toX: HOUSE_ENTRY_C.x, toY: HOUSE_ENTRY_C.y, facing: "up" },
-      { x: 24, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
-      { x: 25, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
+      { x: 4, y: 18, toMap: "salotto", toX: HOUSE_ENTRY_J.x, toY: HOUSE_ENTRY_J.y, facing: "up" },
+      { x: 5, y: 18, toMap: "salotto", toX: HOUSE_ENTRY_J.x, toY: HOUSE_ENTRY_J.y, facing: "up" },
+      { x: 24, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_I.x, toY: HOUSE_ENTRY_I.y, facing: "up" },
+      { x: 25, y: 18, toMap: "retroscena", toX: HOUSE_ENTRY_I.x, toY: HOUSE_ENTRY_I.y, facing: "up" },
       {
         // IMBARCO per la SICILIA: sulla PUNTA del MOLO di legno del PORTO (12,21),
         // ultima cella calpestabile prima della darsena d'acqua. Ci arrivi a piedi

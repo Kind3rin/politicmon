@@ -1,5 +1,5 @@
 import type { MapDef } from "./types";
-import { LAB_TILES, MARKET_TILES, COLLE_TILES, PALAZZO_TILES, GYMTV_TILES, GYMUE_TILES, GYMGLOBAL_TILES, gymMap, marketMap, houseMap, barMap } from "./factories";
+import { LAB_TILES, CASINO_TILES, COLLE_TILES, PALAZZO_TILES, GYMTV_TILES, GYMUE_TILES, GYMGLOBAL_TILES, gymMap, marketMap, houseMap, barMap } from "./factories";
 
 export const INTERIOR_MAPS: Record<string, MapDef> = {
   lab: {
@@ -123,7 +123,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
   casino: {
     id: "casino",
     name: "CASINÒ DI PALAZZO",
-    tiles: MARKET_TILES,
+    tiles: CASINO_TILES,
     outdoor: false,
     music: "interior",
     warps: [
@@ -400,7 +400,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       id: "redaz-stagista", pal: "kid", x: 6, y: 3, facing: "left",
       lines: ["Sono lo stagista. Scrivo i titoli, firmano gli altri. Il giornalismo!"]
     }
-  ], { variant: 1 }),
+  ], { variant: 3 }),
 
   // EUROTOWN — ufficio del lobbista.
   lobbystudio: houseMap("lobbystudio", "STUDIO DI LOBBYING", "eurotown", 6, 10, [
@@ -411,7 +411,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
         "Scelta libera: la fatica di rifiutare non entra nella slide."
       ]
     }
-  ], { variant: 0 }),
+  ], { variant: 7 }),
 
   // EUROTOWN — bistrot della burocrazia.
   bistrot: houseMap("bistrot", "BISTROT DELLE DIRETTIVE", "eurotown", 22, 10, [
@@ -423,7 +423,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       ]
     }
   ], {
-    variant: 1,
+    variant: 4,
     pickups: [{ id: "bistrot-pk", x: 8, y: 4, itemId: "maalox", qty: 1 }]
   }),
 
@@ -439,7 +439,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       id: "salotto-trombato", pal: "aide", x: 2, y: 4, facing: "right",
       lines: ["Mi invitano come ex-ministro. Quando ero in carica volevano il mio autista."]
     }
-  ], { variant: 2 }),
+  ], { variant: 9 }),
 
   // CAPUT MUNDI — covo dei retroscenisti.
   retroscena: houseMap("retroscena", "COVO DEI RETROSCENISTI", "capitale", 25, 19, [
@@ -450,7 +450,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       ]
     }
   ], {
-    variant: 0,
+    variant: 8,
     pickups: [{ id: "retro-pk", x: 8, y: 4, itemId: "scheda", qty: 3 }]
   }),
 
@@ -469,7 +469,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       lines: ["Il PADRINO riceve tutti. Anche chi poi se ne pente. Specialmente quelli."]
     }
   ], {
-    variant: 1,
+    variant: 5,
     signs: [{ x: 8, y: 1, lines: ["'Una mano lava l'altra.'", "Qui ce ne sono parecchie, di mani."] }]
   }),
 
@@ -483,7 +483,7 @@ export const INTERIOR_MAPS: Record<string, MapDef> = {
       ]
     }
   ], {
-    variant: 1,
+    variant: 6,
     pickups: [{ id: "chiosco-pk", x: 8, y: 4, itemId: "mojito", qty: 1 }]
   }),
 

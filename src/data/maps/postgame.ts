@@ -1,5 +1,5 @@
 import type { MapDef } from "./types";
-import { STRETTO_TILES, OFFSHORE_TILES, BRUXELLES_TILES, COMMISSIONE_TILES, HOUSE_ENTRY_A, HOUSE_ENTRY_B, BAR_ENTRY, lucaGuide } from "./factories";
+import { STRETTO_TILES, OFFSHORE_TILES, BRUXELLES_TILES, COMMISSIONE_TILES, HOUSE_ENTRY_F, HOUSE_ENTRY_G, BAR_ENTRY, lucaGuide } from "./factories";
 
 export const POSTGAME_MAPS: Record<string, MapDef> = {
 
@@ -34,10 +34,10 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
         lockedLines: ["Acque internazionali. Una motovedetta ti rimbalza.", "'Prima la CONTROFIRMA del COLLE, poi i paradisi.'"],
         confirm: "SALPARE PER IL PARADISO OFFSHORE?"
       },
-      { x: 10, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
-      { x: 11, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_A.x, toY: HOUSE_ENTRY_A.y, facing: "up" },
-      { x: 20, y: 2, toMap: "covo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
-      { x: 21, y: 2, toMap: "covo", toX: HOUSE_ENTRY_B.x, toY: HOUSE_ENTRY_B.y, facing: "up" },
+      { x: 10, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_G.x, toY: HOUSE_ENTRY_G.y, facing: "up" },
+      { x: 11, y: 2, toMap: "chiosco", toX: HOUSE_ENTRY_G.x, toY: HOUSE_ENTRY_G.y, facing: "up" },
+      { x: 20, y: 2, toMap: "covo", toX: HOUSE_ENTRY_F.x, toY: HOUSE_ENTRY_F.y, facing: "up" },
+      { x: 21, y: 2, toMap: "covo", toX: HOUSE_ENTRY_F.x, toY: HOUSE_ENTRY_F.y, facing: "up" },
       { x: 14, y: 4, toMap: "bar-stretto", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" },
       { x: 15, y: 4, toMap: "bar-stretto", toX: BAR_ENTRY.x, toY: BAR_ENTRY.y, facing: "up" }
     ],

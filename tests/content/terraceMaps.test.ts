@@ -10,7 +10,8 @@ const TERRACED = {
   borgo: { from: [6, 13], top: [14, 0], levels: 2 },
   capitale: { from: [6, 12], top: [14, 5], levels: 1 },
   mediopoli: { from: [6, 11], top: [15, 0], levels: 1 },
-  colle: { from: [5, 7], top: [5, 1], levels: 1 }
+  colle: { from: [5, 7], top: [5, 1], levels: 1 },
+  eurotown: { from: [6, 13], top: [15, 0], levels: 1 }
 } as const;
 
 type TerracedMap = { tiles: string[] };
@@ -91,6 +92,14 @@ test("the signs that moved with the redraw are drawn where they are read", () =>
   assert.equal(MAPS.borgo.tiles[7][9], "s");
   assert.deepEqual([MAPS.borgo.signs.find(sign => sign.lines[0] === "CAMPAGNA ELETTORALE NORD")!.x, MAPS.borgo.signs.find(sign => sign.lines[0] === "CAMPAGNA ELETTORALE NORD")!.y], [9, 7]);
   assert.equal(MAPS.mediopoli.tiles[5][6], "s");
+});
+
+test("Eurotown: the gym and the market stand on the terrace, the stairs are eight wide, the guide waits at their foot", () => {
+  const map = MAPS.eurotown, t = terraceLevels(map);
+  assert.equal(map.tiles[7].slice(11, 19), "EEEEEEEE");
+  for (const door of map.warps.filter(warp => warp.toMap === "gymue" || warp.toMap === "market2")) assert.equal(t.at(door.x, door.y), 1);
+  for (const door of map.warps.filter(warp => !["gymue", "market2"].includes(warp.toMap))) assert.equal(t.at(door.x, door.y), 0);
+  assert.equal(map.npcs.find(npc => npc.id === "luca-guida")!.y, 8);
 });
 
 test("Il Colle: the Garante sits on a dais behind the carpet stairs", () => {

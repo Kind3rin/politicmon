@@ -510,6 +510,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
     id: "eurotown",
     name: "EUROTOWN",
     tiles: EUROTOWN_TILES,
+    // La terrazza delle istituzioni (palestra e mercato) sta in alto, raggiunta da una scalinata larga otto caselle.
+    zones: [
+      { name: "Terrazza d'Europa", x: 0, y: 0, w: 30, h: 7 },
+      { name: "Strada dei Vertici", x: 0, y: 7, w: 30, h: 9 }
+    ],
     outdoor: true,
     music: "eurotown",
     edges: {
@@ -572,7 +577,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     npcs: [
       lucaGuide(
-        "EUROTOWN", 15, 7,
+        "EUROTOWN", 15, 8,
         [
           "Hans verifica la squadra. Il consulente fattura la verifica.",
           "Le DIRETTIVE insegnano mosse per tipo; non si consumano. Controlla resistenze e PP."

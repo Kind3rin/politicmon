@@ -248,7 +248,7 @@ export const EUROTOWN_TILES = [
   "TT..BBBBBB...====...HHHH....TT",
   "TT..mmddmm...====...mddm....TT",
   "TT..========================TT",
-  "TT..========================TT",
+  "TT&&&&&&&&&EEEEEEEE&&&&&&&&&TT",
   "TT..xxxx.....====...yyyy....TT",
   "TT..mddm.....====...mddm....TT",
   "TT..========================TT",

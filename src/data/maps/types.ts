@@ -1,5 +1,6 @@
 import type { Facing } from "../../art/characters";
 import type { FeatureId } from "../../game/features";
+import type { SlotId } from "../../game/palinsesto";
 
 export interface NpcDef {
   spriteSet?: string; // optional directional appearance, independent of gameplay role
@@ -113,6 +114,8 @@ export interface EncounterEntry {
   minLv: number;
   maxLv: number;
   requiresFlag?: string;
+  /** Only seen in these slots of the schedule (see game/palinsesto.ts); absent means any time. */
+  slots?: readonly SlotId[];
 }
 
 export interface EdgeDef {

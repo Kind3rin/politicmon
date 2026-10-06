@@ -14,6 +14,8 @@ export interface UiArena {
   foe:UiArenaCombatant;
   message?:{title:string;body:string};
   notice?:string;
+  /** A one-time tip for what is on screen; tapping it (or choosing a move) retires it. */
+  coach?:{title:string;body:string;dismiss:()=>void};
   /** The opponent who is speaking: shown as a bust over the field while the lines run. */
   trainer?:{name:string;portrait?:string};
   moveCount:number;
@@ -89,6 +91,17 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
   let tag=root.querySelector<HTMLElement>('.ui-intent-posture');
   if(!tag){tag=node('span','ui-intent-posture');tag.setAttribute('aria-hidden','true');root.querySelector('.ui-arena-view')!.append(tag);}
   tag.hidden=!arena.intent?.posture;tag.textContent=arena.intent?.posture?.label??'';
+  let coach=root.querySelector<HTMLButtonElement>('.ui-arena-coach');
+  if(arena.coach){
+    if(!coach){coach=node('button','ui-arena-coach') as HTMLButtonElement;coach.type='button';coach.setAttribute('role','status');coach.onclick=()=>live?.arena?.coach?.dismiss();root.querySelector('.ui-arena-view')!.append(coach);}
+    if(coach.dataset.key!==arena.coach.title){
+      coach.dataset.key=arena.coach.title;
+      const title=node('strong','ui-arena-coach-title'),body=node('span','ui-arena-coach-body'),close=node('span','ui-arena-coach-close');
+      title.textContent=arena.coach.title;body.textContent=arena.coach.body;close.textContent='✕';close.setAttribute('aria-hidden','true');
+      coach.replaceChildren(title,body,close);coach.setAttribute('aria-label',`${arena.coach.title}. ${arena.coach.body} Tocca per chiudere.`);
+    }
+    coach.hidden=false;
+  }else if(coach){coach.hidden=true;coach.dataset.key='';}
   const notice=root.querySelector<HTMLElement>('.ui-arena-notice')!;notice.hidden=true;notice.textContent='';
   const layer=root.querySelector<HTMLElement>('.ui-arena-impacts')!;
   const impacts=arena.impacts??[];

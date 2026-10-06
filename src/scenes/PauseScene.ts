@@ -5,6 +5,8 @@ import { openUiSheet } from "../ui/kit/sheet";
 import { MONUMENT_TITLE } from "./MonumentScene";
 import { FieldGuideScene } from "./FieldGuideScene";
 import { welcomeGuide } from "../game/onboarding";
+import { palinsestoOpen } from "../game/palinsesto";
+import { PalinsestoScene } from "./PalinsestoScene";
 import type { TouchAction } from "../engine/touchActions";
 import type { UiPanel } from "../ui/kit";
 import { AudioScene } from "./AudioScene";
@@ -104,7 +106,7 @@ export class PauseScene implements Scene {
         if (sub) this.handleSub(sub, item.label); else this.handleMain(item.label);
       }, Boolean(item.disabled), item.rightLabel));
     if (this.more && !sub) {
-      const names: Record<string, string> = { "GUIDA CAMPAGNA": "Come giocare", CONTENUTI: "Contenuti della campagna", TRAGUARDI: "Traguardi", "GUIDA TIPI": "Efficacia dei tipi", "FONTI SATIRA": "Fonti della satira", "CHAT DI ZONA": "Chat di zona", "DUELLO PVP": "Duello online", BACKUP: "Esporta e importa salvataggi", "INSTALLA APP": "Installa app" };
+      const names: Record<string, string> = { "GUIDA CAMPAGNA": "Come giocare", CONTENUTI: "Contenuti della campagna", TRAGUARDI: "Traguardi", "GUIDA TIPI": "Efficacia dei tipi", PALINSESTO: "Palinsesto e telecomando", "FONTI SATIRA": "Fonti della satira", "CHAT DI ZONA": "Chat di zona", "DUELLO PVP": "Duello online", BACKUP: "Esporta e importa salvataggi", "INSTALLA APP": "Installa app" };
       const extras = this.menu.items.filter(item => !["OPZIONI", "ONLINE", "EXTRA", "CHIUDI"].includes(item.label));
       actions = extras.map(item => ({ ...action(item.label.startsWith("VEICOLO") ? "Mezzo di trasporto" : labels[item.label] ?? item.label, () => { this.moreIndex = extras.indexOf(item); this.handleMain(item.label); }), group: "Campagna",
         hint: item.label === "SALVA" ? "Salva i progressi nello slot attuale." : item.label === "CURA" ? "Scegli il compagno e controlla la cura." : undefined,
@@ -112,7 +114,7 @@ export class PauseScene implements Scene {
       for (const section of [this.buildOptionsMenu(), this.buildOnlineMenu(), this.buildExtraMenu()]) {
         for (const item of section.menu.items.filter(item => item.label !== "INDIETRO")) {
           const raw = item.label, split = raw.indexOf(":"), prefix = split >= 0 ? raw.slice(0, split) : raw;
-          const settingNames: Record<string, string> = { TESTO: "Velocità del testo", GUIDA: "Guida sul campo", AUDIO: "Audio e volume", "RITMO LOTTE": "Ritmo delle lotte", "RIDUCI EFFETTI": "Riduci effetti", VIBRA: "Vibrazione", TASTI: "Comandi di movimento" };
+          const settingNames: Record<string, string> = { TESTO: "Velocità del testo", GUIDA: "Guida e suggerimenti", AUDIO: "Audio e volume", "RITMO LOTTE": "Ritmo delle lotte", "RIDUCI EFFETTI": "Riduci effetti", VIBRA: "Vibrazione", TASTI: "Comandi di movimento" };
           const values: Record<string, string> = { "SÌ": "Attiva", NO: "Disattiva", ISTANTANEO: "Istantaneo", NORMALE: "Normale", RAPIDO: "Rapido", LEVETTA: "Leva virtuale", CROCE: "Croce fissa" };
           const index = actions.length;
           actions.push({ ...action(settingNames[prefix] ?? names[raw] ?? raw, () => { this.moreIndex = index; this.handleSub(section, raw); }, !!item.disabled, prefix === "AUDIO" ? "Musica, effetti e volumi." : item.disabled ? "Serve un altro giocatore connesso." : undefined),
@@ -197,7 +199,7 @@ export class PauseScene implements Scene {
   // Sotto-menu EXTRA: consultazione non essenziale. La TESSERA è nel menu
   // principale perché il giocatore la deve ritrovare subito.
   private buildExtraMenu(): SubMenu {
-    const entries = ["GUIDA CAMPAGNA", "CONTENUTI", "TRAGUARDI", "GUIDA TIPI", "FONTI SATIRA", "INDIETRO"];
+    const entries = ["GUIDA CAMPAGNA", "CONTENUTI", "TRAGUARDI", "GUIDA TIPI", ...(palinsestoOpen(this.state) ? ["PALINSESTO"] : []), "FONTI SATIRA", "INDIETRO"];
     return { kind: "extra", title: "EXTRA", entries, menu: new Menu(entries.map((label) => ({ label }))) };
   }
 
@@ -377,6 +379,8 @@ export class PauseScene implements Scene {
         this.stack.push(new AchievementsScene(this.stack, this.input, this.state));
       } else if (label === "GUIDA TIPI") {
         this.stack.push(new TypesScene(this.stack, this.input));
+      } else if (label === "PALINSESTO") {
+        this.stack.push(new PalinsestoScene(this.stack, this.input, this.state));
       } else if (label === "FONTI SATIRA") {
         this.stack.push(new SourcesScene(this.stack, this.input));
       }

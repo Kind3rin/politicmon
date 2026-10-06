@@ -2724,6 +2724,10 @@
           "giravolta"
         ],
         [
+          6,
+          "comizio"
+        ],
+        [
           8,
           "conferenza"
         ],
@@ -3624,6 +3628,14 @@
         [
           1,
           "raccoltadifferenziata"
+        ],
+        [
+          4,
+          "tweet"
+        ],
+        [
+          4,
+          "grafico"
         ],
         [
           7,

@@ -75,3 +75,11 @@ body.ui-world-open:not(.touch) #shell-hint{display:block;position:absolute;left:
   body:not(.touch).ui-world-open .ui-world-lesson{bottom:max(52px,calc(env(safe-area-inset-bottom) + 44px))}
   .ui-world-lesson strong{font-size:16px}
 }
+
+/* The day's schedule: a clock under the objective. */
+body.ui-world-open .ui-world-clock{position:absolute;top:140px;left:max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:6px;height:40px;padding:0 10px;border:2px solid #14161F;border-radius:4px;background:#F4EEDCe6;color:#14161F;font:700 16px/1 Tribuna,sans-serif;letter-spacing:.04em;pointer-events:auto;box-shadow:3px 3px #14161F}
+body.ui-world-open .ui-world-clock[data-slot=mattina]{background:#E4F3C8}
+body.ui-world-open .ui-world-clock[data-slot=giorno]{background:#FBEBA6}
+body.ui-world-open .ui-world-clock[data-slot=sera]{background:#F7C9A8}
+body.ui-world-open .ui-world-clock[data-slot=notte]{background:#2A3358;color:#F4EEDC}
+body.ui-world-open .ui-world-clock:active{transform:translate(3px,3px);box-shadow:none}

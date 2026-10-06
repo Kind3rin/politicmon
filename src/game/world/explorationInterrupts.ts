@@ -1,4 +1,5 @@
 import type { Facing } from "../../art/characters";
+import type { SlotId } from "../palinsesto";
 import { pickWanderer, wandererLevel, type WanderingDef } from "../../data/encounters";
 import type { TrainerDef } from "../../data/trainers";
 import { firstEvolutionDone } from "../firstCampaign";
@@ -62,7 +63,8 @@ export function planWanderingChallenge(
   enabled: boolean,
   hasActiveProposal: boolean,
   findSpot: () => WandererSpot | null,
-  random: () => number = Math.random
+  random: () => number = Math.random,
+  slot?: SlotId
 ): WandererPlan | null {
   if (!enabled || hasActiveProposal || state.party.length === 0 || !state.party.some((mon) => mon.hp > 0)) {
     return null;
@@ -72,7 +74,7 @@ export function planWanderingChallenge(
     return null;
   }
   if (random() > WANDERER_CHANCE) return null;
-  const def = pickWanderer(state, cadence.recentIds, random());
+  const def = pickWanderer(state, cadence.recentIds, random(), slot);
   if (!def) return null;
   const spot = findSpot();
   if (!spot) return null;

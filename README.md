@@ -64,6 +64,8 @@ piazza a urlare.
 | 🏛️ **GOVERNO OMBRA** | 6 ministeri assegnabili ai tuoi mostri, ognuno con un bonus passivo |
 | 📜 **DIRETTIVE DI PARTITO** | Le "MT": insegnano mosse per tipo, riutilizzabili all'infinito |
 | 🗺️ **Storia in 3 atti** | Borgo, palestre, Palazzo e Colle; poi campagna internazionale e finale che riflette anche le scelte civiche |
+| 📺 **Palinsesto** | Quattro fasce TV: ogni ora mette in onda due tipi, porta candidati e sfidanti solo suoi e si cambia col telecomando ([docs](docs/PALINSESTO.md)) |
+| 💡 **Coach** | Un consiglio breve al momento giusto, una volta sola, in lotta e nel mondo |
 | 🎰 **Contenuti extra** | Ponte sullo Stretto, CASINÒ DI PALAZZO, veicoli (MONOPATTINO / RUSPA), rivale ricorrente |
 | 📱 **Mobile & PWA** | Croce trascinabile, A/B grandi, controlli laterali in orizzontale, **3 slot di salvataggio**, installabile e giocabile offline |
 | 🎚️ **Regia audio** | 19 nuovi temi stereo, volumi separati di musica ed effetti, preferenze persistenti e riproduzione offline |

@@ -22,10 +22,12 @@ export interface UiWorld {
   messages?: readonly string[];
   facts: readonly {label:string;value:string}[];
   objective?: string;
-  lesson?: {title:string;body:string;at?:"top"|"bottom"};
+  lesson?: {title:string;body:string;at?:"top"|"bottom";/** Called when the player closes the card: a tip that is gone for good. */dismiss?:()=>void};
   actions: readonly TouchAction[];
   context: TouchAction;
   run: TouchAction;
+  /** The clock of the day's schedule, once it is open; tapping it opens the schedule. */
+  clock?: TouchAction & {slot:string;text:string};
   /** The list of field powers, once there is one. */
   power?: TouchAction;
   save?: TouchAction;
@@ -708,6 +710,13 @@ let worldRun: HTMLButtonElement | undefined;
 let worldCurrent: UiWorld | undefined;
 /** A coach card is closed for the session once the player dismisses it. */
 let lessonDismissed = "";
+/** Four small pictures for the four slots: sunrise, sun, sunset, moon. */
+const SLOT_ICONS: Record<string,string>={
+  mattina:'<path d="M3 18h18M7 18a5 5 0 0 1 10 0M12 5v4M5 10l2 2M19 10l-2 2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/>',
+  giorno:'<circle cx="12" cy="12" r="4.5" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/>',
+  sera:'<path d="M3 19h18M6 19a6 6 0 0 1 12 0M12 8v3M4 13l2 1M20 13l-2 1" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/><path d="M7 9h10" stroke="currentColor" stroke-width="2.4"/>',
+  notte:'<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/>'
+};
 /** World commands share the panel buttons, while leaving the map interactive. */
 export function renderUiWorld(world?: UiWorld, pending = false): void {
   worldCurrent = world;
@@ -733,7 +742,7 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     if(lesson){
       const card=element('aside','ui-world-lesson');card.setAttribute('role','status');card.dataset.at=lesson.at??'bottom';
       const close=element('button','',"✕");close.type='button';close.setAttribute('aria-label','Nascondi il suggerimento');
-      close.onclick=()=>{lessonDismissed=lesson.title;worldHudSignature="";card.remove();};
+      close.onclick=()=>{lessonDismissed=lesson.title;lesson.dismiss?.();worldHudSignature="";card.remove();};
       card.append(element('strong','',lesson.title),element('p','',lesson.body),close);worldHud.append(card);
     }
     let location=worldHud.querySelector<HTMLElement>('.ui-world-location');
@@ -754,6 +763,18 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     const oldNotice=worldHud.querySelector('.ui-world-notice');
     if(oldNotice?.textContent!==noticeText){oldNotice?.remove();if(noticeText){const notice=element('p','ui-world-notice',noticeText);notice.setAttribute('role','status');worldHud.append(notice);}}
   }
+  // The day's schedule: a small clock under the objective, tapped to read the schedule and change channel.
+  let clock=worldHud.querySelector<HTMLButtonElement>('.ui-world-clock');
+  if(world.clock){
+    if(!clock){clock=element('button','ui-world-clock');clock.type='button';clock.onclick=()=>worldCurrent?.clock?.run();worldHud.append(clock);}
+    if(clock.dataset.text!==world.clock.text){
+      clock.dataset.text=world.clock.text;clock.dataset.slot=world.clock.slot;
+      const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('width','22');icon.setAttribute('height','22');icon.setAttribute('aria-hidden','true');
+      icon.innerHTML=SLOT_ICONS[world.clock.slot]??SLOT_ICONS.giorno;
+      clock.replaceChildren(icon,element('span','',world.clock.text));
+      clock.setAttribute('aria-label',`${world.clock.label}. Tocca per leggere il palinsesto`);
+    }
+  }else clock?.remove();
   let saved=worldHud.querySelector<HTMLElement>('.ui-save-flash');
   if(!saved){saved=element('span','ui-save-flash','✓ Salvato');saved.setAttribute('role','status');worldHud.append(saved);}
   saved.hidden=!world.saved;

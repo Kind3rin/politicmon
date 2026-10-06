@@ -46,6 +46,9 @@ import { trainerAi, trainerStyle } from "./trainerStyle";
 import { switchPreview, damageRange, replyRange } from "./tactics";
 import { HANDOFF_STAGES, handoffKey, sharedTypes } from "./handoff";
 import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
+import { isGuideOn } from "../../engine/controls";
+import { typeMultiplier } from "../../data/poltypes";
+import { markTip, nextBattleTip, type CoachTip } from "../coach";
 import { Polemica, FUORIONDA, fuoriondaDamage, recruitmentChance } from "./polemica";
 import { hasRelic, RELIC_EFFECTS, riteForSpecies } from "../legends";
 import { AREA_EVENTS, chooseAreaEvent, chooseLegendEvent, chooseFieldEvent, applyFieldEvent, fieldPreview, type BattleField } from "./fieldEvents";
@@ -118,6 +121,10 @@ export class BattleScene implements Scene {
   private msg = new MessageBox();
   private actionCaption: { actor: string; move: string; result: string } | null = null;
   private polemica = new Polemica();
+  /** The tip on screen, if any: chosen when the player is asked to act, retired when they do. */
+  private coach?: CoachTip;
+  /** A tip was just closed: the next one waits for the next turn. */
+  private coachSpent = false;
   private firstOrder: "player" | "foe" | null = null;
   private buferaDone?: WeakSet<Combatant>;
   private handoffs?: Set<string>;
@@ -1453,6 +1460,26 @@ export class BattleScene implements Scene {
 
   // ---- Update ----
 
+  private retireCoach(): void {
+    if (this.coach) { markTip(this.state, this.coach.id); this.coach = undefined; this.coachSpent = true; }
+  }
+
+  /** While the player is asked to act, show the tip that fits; as soon as they act (or look elsewhere) it is spent. */
+  private updateCoach(): void {
+    const ready = (this.mode === "menu" || this.mode === "fight") && !this.msg.isOpen;
+    if (!ready) { this.retireCoach(); this.coachSpent = false; return; }
+    if (this.coach || this.coachSpent || !isGuideOn()) return;
+    const own = this.player.mon, foe = this.foe.mon, foeTypes = speciesOf(foe).types;
+    this.coach = nextBattleTip(this.state, {
+      wild: !this.trainer,
+      ownRatio: own.hp / statsOf(own).hp, foeRatio: foe.hp / statsOf(foe).hp,
+      arrows: own.moves.some(slot => { const move = MOVES[slot.id]; return slot.pp > 0 && move.power > 0 && typeMultiplier(move.type, foeTypes) !== 1; }),
+      polemica: this.polemica.value, intent: Boolean(this.foeIntent),
+      cards: this.state.bag[this.recruitBall] ?? 0,
+      help: (this.state.bag.caffe ?? 0) > 0 || this.hasBenchAlive()
+    });
+  }
+
   get uiPanel(): UiPanel {
     const mode = this.mode;
     const ready = mode === "menu" || mode === "fight";
@@ -1547,7 +1574,8 @@ export class BattleScene implements Scene {
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
       message:{title,body},notice,speed:{label:this.state.battleSpeed===2?"×2":"×1",hint:this.state.battleSpeed===2?"Ritmo rapido: tocca per tornare al normale.":"Ritmo normale: tocca per velocizzare le lotte.",run:()=>{this.state.battleSpeed=this.state.battleSpeed===2?1:2;audio.cursor();saveGame(this.state);}},trainer:this.trainer&&this.msg.isOpen?{name:readableCopy(this.trainer.name),portrait:trainerPortrait(this.trainer.id,this.trainer.pal)}:undefined,moveCount:moves.length,postureCount:postures.length,
       polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status",posture:this.foePosture!=="none"?{label:POSTURES[this.foePosture].label,rule:POSTURES[this.foePosture].rule}:undefined}:undefined,
-      finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined
+      finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined,
+      coach:ready&&this.coach?{title:this.coach.title,body:this.coach.body,dismiss:()=>this.retireCoach()}:undefined
     }};
   }
 
@@ -1555,6 +1583,7 @@ export class BattleScene implements Scene {
     if (this.finished) {
       return;
     }
+    this.updateCoach();
     dt *= this.state.battleSpeed === 2 ? 2 : 1;
     if (this.recruitReceipt) this.recruitReceipt.elapsed += dt;
     if (this.growthReceipt) this.growthReceipt.elapsed += dt;

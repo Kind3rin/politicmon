@@ -1,5 +1,15 @@
 # Changelog
 
+## Mandato 2 — palinsesto e coach — 2026-10-06
+
+- **Giocato davvero, da telefono, dall'inizio.** Cosa è emerso: la lotta funziona ma non spiega nulla a chi comincia (le frecce ▲▼ sulle carte, i tre cerchi della Polemica, l'icona dell'intenzione del rivale erano spiegati solo nel testo della guida), le prime ore hanno pochi tipi diversi nell'erba (quasi tutto Populismo; Verde, Media e Istituzione arrivano tardi) e l'ora del giorno cambiava solo i colori.
+- **Palinsesto** (`src/game/palinsesto.ts`, `docs/PALINSESTO.md`): la giornata è divisa in quattro fasce televisive, MATTINA (Rassegna stampa), GIORNO (Telegiornale), SERA (Talk show) e NOTTE (Televendite). Ognuna mette in onda due tipi (nell'erba se ne incontrano il doppio), porta alcuni candidati che si vedono solo a quell'ora (13 voci in 8 mappe, specie già nel gioco: Verdolino al mattino sui primi percorsi, Mediocrate di giorno, Bojoon di notte) e alcuni sfidanti vaganti che girano solo a certe ore (il complottista di notte, il portaborse in orario d'ufficio). Si apre dopo la prima sfida con Gianni, così l'inizio resta pulito.
+- Orologio sempre visibile in alto a sinistra (icona e ora); un tocco apre il **Palinsesto**, che mostra le quattro fasce e i candidati «solo qui», e il **telecomando** per cambiare fascia quando vuoi (l'orologio del gioco si sposta di un numero intero di ore, salvato: chi gioca solo di pomeriggio non perde nulla). Anche in Menu > Extra. Quando la fascia cambia compare un banner con i tipi in onda; la prima volta una breve spiegazione. Luci, lampioni e finestre degli interni seguono l'orologio del gioco.
+- Il Politicdex dice quando si trova un candidato («Solo di notte», campo «Quando»). `clockShift` nel salvataggio (default 0, tenuto tra 0 e 23).
+- **Coach** (`src/game/coach.ts`): suggerimenti brevi al momento giusto, una volta sola ciascuno. In lotta una scheda gialla sopra il campo, un solo consiglio per turno e mai due di fila: *Scegli una mossa* (frecce), *La Polemica*, *Cosa farà il rivale* (spada/megafono e posture), *Ora puoi reclutarlo* (avversario sotto metà PV con schede in borsa), *Compagno in difficoltà* (sotto un terzo dei PV), *Fuorionda pronto*. Nel mondo: *Squadra stanca* (Bar Sport) e *Schede finite* (Discount). Tutta la scheda è il tasto per chiuderla; scegliere una mossa la esaurisce. Si spegne con l'opzione «Guida e suggerimenti».
+- Le mosse mancanti per le nuove specie nei primi percorsi sono state aggiunte con `scripts/balance-learnsets.ts` (3 mosse, 2 specie).
+- Test `palinsesto` e `coach`; `npm run check:palinsesto` e `npm run check:coach` giocano il flusso da telefono.
+
 ## Mandato 2 — i poteri — 2026-10-06
 
 - Nuovo sistema di poteri sul campo, le «MN» di Politicmon, senza mosse da insegnare né slot sprecati (`src/game/powers.ts`): li sblocca la storia (medaglie) e li usa il primo compagno in forze col tipo giusto. Servono a trovare cose, non a passare. Un pulsante **Poteri** compare vicino a «Corri» appena ce n'è uno; l'elenco dice chi lo usa, dove serve e come si ottiene.

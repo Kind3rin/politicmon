@@ -5,6 +5,7 @@ import { INTERIOR_MAPS } from "./interiors";
 import { ATTO3_MAPS } from "./atto3";
 import { LEGEND_MAPS } from "./legends";
 import { applyPowerSites } from "./powerSites";
+import { applySlotEncounters } from "./slotEncounters";
 
 export type * from "./types";
 
@@ -26,6 +27,7 @@ function composeMapRegistry(groups: ReadonlyArray<Record<string, MapDef>>): Reco
 
 export const MAPS = composeMapRegistry([BASE_MAPS, POSTGAME_MAPS, INTERIOR_MAPS, ATTO3_MAPS, LEGEND_MAPS]);
 applyPowerSites(MAPS);
+applySlotEncounters(MAPS);
 
 export const BAR_RESPAWN: Record<string, { x: number; y: number }> = {
   borgo: { x: 21, y: 18 },

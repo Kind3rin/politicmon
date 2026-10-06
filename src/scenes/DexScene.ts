@@ -11,6 +11,7 @@ import type { GameState } from "../game/state";
 import { wrapText } from "../ui/widgets";
 import { formsForSpecies } from "../game/memeForms";
 import { runtimeFeatures } from "../game/features";
+import { slotsLabel } from "../game/palinsesto";
 import { defensiveMatchups, dexHabitats, dexAcquisitionNotes, dexSummary, dexMatches, DEX_FILTERS, DEX_FILTER_LABELS, evolutionCondition, reachableDexMaps, type DexFilter } from "../game/dexGuide";
 
 import type { UiPanel, UiBlock } from "../ui/kit";
@@ -181,7 +182,7 @@ export class DexScene implements Scene {
       blocks.push({title:"Scheda",facts:[{label:"Numero",value:String(species.dexNum).padStart(2,"0")},{label:"Collezione",value:this.state.dex[id]==="caught"?"Eletto":seen?"Avvistato":"Da scoprire"},...(seen?[{label:"Tipo",value:species.types.join(" · ")}]:[])]});
       if(seen){const ability=species.ability?ABILITIES[species.ability]:undefined;blocks.push({title:ability?.name??"Abilità passiva",body:ability?.desc??"Nessuna abilità passiva."});}
       const habitat=dexHabitats(id,this.state,this.reachable)[0];
-      blocks.push({title:"Dove cercare",body:habitat?`${this.readable(habitat.name)}. Livelli ${habitat.minLv}–${habitat.maxLv}.`:this.readable(dexAcquisitionNotes(id,this.state,this.reachable)[0])});
+      blocks.push({title:"Dove cercare",body:habitat?`${this.readable(habitat.name)}. Livelli ${habitat.minLv}–${habitat.maxLv}.${habitat.slots?` Solo ${this.readable(slotsLabel(habitat.slots))}: guarda il Palinsesto.`:''}`:this.readable(dexAcquisitionNotes(id,this.state,this.reachable)[0])});
     }else if(!seen&&page!==3)blocks.push({title:"Dossier da aprire",body:"Avvista questa specie per scoprirne le caratteristiche. L’habitat ti aiuta a cercarla."});
     else if(page===0)blocks.push({title:"Storia",body:species.dexLine});
     else if(page===1){
@@ -191,7 +192,7 @@ export class DexScene implements Scene {
     else if(page===3){
       const habitats=dexHabitats(id,this.state,this.reachable),notes=dexAcquisitionNotes(id,this.state,this.reachable);
       if(habitats.length)blocks.push({title:"Incontri accessibili",body:"La rarità indica la presenza tra i selvatici della zona, non la probabilità di incontrarlo a ogni passo."});
-      for(const habitat of habitats)blocks.push({title:this.readable(habitat.name),facts:[{label:"Livelli",value:`${habitat.minLv}–${habitat.maxLv}`},{label:"Rarità",value:habitat.share<.05?"Rarissimo":habitat.share<.15?"Raro":habitat.share<.3?"Regolare":"Comune"}]});
+      for(const habitat of habitats)blocks.push({title:this.readable(habitat.name),facts:[{label:"Livelli",value:`${habitat.minLv}–${habitat.maxLv}`},{label:"Rarità",value:habitat.share<.05?"Rarissimo":habitat.share<.15?"Raro":habitat.share<.3?"Regolare":"Comune"},...(habitat.slots?[{label:"Quando",value:this.readable(slotsLabel(habitat.slots))}]:[])]});
       for(const note of notes.slice(habitats.length?habitats.length+2:0))blocks.push({title:"Come trovarlo",body:this.readable(note)});
     }else if(page===4){
       for(const [i,rule] of (species.evolutions??[]).entries())blocks.push({title:SPECIES[rule.id].name,body:this.readable(evolutionCondition(rule,species.evolutions?.slice(0,i)))});

@@ -123,7 +123,9 @@
     "check:legends": "node scripts/check-legends.mjs",
     "check:gates": "node scripts/check-gates.mjs",
     "check:doors": "node scripts/check-door-entry.mjs",
-    "check:powers": "node scripts/check-powers.mjs"
+    "check:powers": "node scripts/check-powers.mjs",
+    "check:palinsesto": "node scripts/check-palinsesto.mjs",
+    "check:coach": "node scripts/check-coach.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

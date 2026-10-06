@@ -67,6 +67,8 @@ export interface GameState {
   weeklyCampaign: WeeklyCampaignState;
   // ---- v18: FORME MEME ottenute; la forma resta dopo la scadenza ----
   unlockedMemeForms: string[];
+  // ---- PALINSESTO: ore di cui il telecomando ha spostato l'orologio del gioco (0..23) ----
+  clockShift: number;
 }
 
 // Seed "di installazione": generato una volta e persistito nel save. Divide i
@@ -233,7 +235,8 @@ export function newGameState(): GameState {
     coalition: newCoalitionState(),
     election: newElectionState(),
     weeklyCampaign: newWeeklyCampaignState(),
-    unlockedMemeForms: []
+    unlockedMemeForms: [],
+    clockShift: 0
   };
 }
 
@@ -476,6 +479,7 @@ export function parseGameState(
     parsed.unlockedMemeForms = Array.isArray(parsed.unlockedMemeForms)
       ? [...new Set(parsed.unlockedMemeForms.filter((id): id is string => typeof id === "string"))].slice(0, 64)
       : [];
+    parsed.clockShift = typeof parsed.clockShift === "number" && Number.isFinite(parsed.clockShift) ? ((Math.floor(parsed.clockShift) % 24) + 24) % 24 : 0;
     if (!hadRunStats) {
       markHistoricalCheckpoints(parsed);
     }

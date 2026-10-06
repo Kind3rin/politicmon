@@ -7,6 +7,7 @@ import { TYPE_ORDER, typeMultiplier } from "../data/poltypes";
 import type { FeatureId } from "./features";
 import type { GameState } from "./state";
 import { speciesAvailable } from "./version";
+import { palinsestoOpen, slotsLabel } from "./palinsesto";
 
 export type DexFilter = "all" | "seen" | "caught" | "missing" | "here";
 export const DEX_FILTERS: readonly DexFilter[] = ["all", "seen", "caught", "missing", "here"];
@@ -35,11 +36,14 @@ export function dexHabitats(id: string, state: GameState, reachable = reachableD
   if (!speciesAvailable(id, state.browserSeed)) return [];
   return Object.values(MAPS).flatMap((map) => {
     if (!reachable.has(map.id)) return [];
-    const pool = (map.encounters ?? []).filter((e) => e.weight > 0 && speciesAvailable(e.speciesId, state.browserSeed));
+    // The candidates of one hour of the schedule are listed only once the schedule is open, and say which hour.
+    const open = palinsestoOpen(state);
+    const pool = (map.encounters ?? []).filter((e) => e.weight > 0 && (open || !e.slots) && speciesAvailable(e.speciesId, state.browserSeed));
     const hits = pool.filter((e) => e.speciesId === id);
     if (!hits.length) return [];
     const weight = hits.reduce((n, e) => n + e.weight, 0);
-    return [{ mapId: map.id, name: map.name, minLv: Math.min(...hits.map((e) => e.minLv)), maxLv: Math.max(...hits.map((e) => e.maxLv)), share: weight / pool.reduce((n, e) => n + e.weight, 0) }];
+    const slots = hits.every((e) => e.slots) ? [...new Set(hits.flatMap((e) => e.slots!))] : undefined;
+    return [{ mapId: map.id, name: map.name, minLv: Math.min(...hits.map((e) => e.minLv)), maxLv: Math.max(...hits.map((e) => e.maxLv)), share: weight / pool.reduce((n, e) => n + e.weight, 0), slots }];
   }).sort((a, b) => Number(b.mapId === state.pos.mapId) - Number(a.mapId === state.pos.mapId) || b.share - a.share);
 }
 
@@ -47,7 +51,7 @@ export function dexMatches(id: string, filter: DexFilter, state: GameState): boo
   if (filter === "seen") return !!state.dex[id];
   if (filter === "caught") return state.dex[id] === "caught";
   if (filter === "missing") return state.dex[id] !== "caught";
-  if (filter === "here") return speciesAvailable(id, state.browserSeed) && !!MAPS[state.pos.mapId]?.encounters?.some((e) => e.speciesId === id && e.weight > 0);
+  if (filter === "here") return speciesAvailable(id, state.browserSeed) && !!MAPS[state.pos.mapId]?.encounters?.some((e) => e.speciesId === id && e.weight > 0 && (!e.slots || palinsestoOpen(state)));
   return true;
 }
 
@@ -73,7 +77,7 @@ export function dexAcquisitionNotes(id: string, state: GameState, reachable = re
   const notes: string[] = [];
   if (locations.length) {
     notes.push("INCONTRI SELVATICI ACCESSIBILI:");
-    for (const h of locations) notes.push(`${h.name}: LV ${h.minLv}-${h.maxLv}, ${h.share < .05 ? "RARISSIMO" : h.share < .15 ? "RARO" : h.share < .3 ? "REGOLARE" : "COMUNE"}.`);
+    for (const h of locations) notes.push(`${h.name}: LV ${h.minLv}-${h.maxLv}, ${h.share < .05 ? "RARISSIMO" : h.share < .15 ? "RARO" : h.share < .3 ? "REGOLARE" : "COMUNE"}${h.slots ? `, SOLO DI ${slotsLabel(h.slots)}` : ""}.`);
     notes.push("LA RARITÀ È NEL POOL, NON LA PROBABILITÀ PER PASSO.");
   }
   const rite = riteForSpecies(id);

@@ -6,6 +6,9 @@ import {drawInteriorWall, WALL_HEIGHT} from "./interiorWalls";
 import {PowerCutIn, WorldFx} from "./powerFx";
 import {POWERS, newPowers, powerStatus, unlockedPowers, type PowerId} from "../powers";
 import {PowersScene} from "../../scenes/PowersScene";
+import {markTip, nextWorldTip, tipSeen, type CoachTip} from "../coach";
+import {PalinsestoScene} from "../../scenes/PalinsestoScene";
+import {SLOTS, clockText, gameClock, hourOf, onAirLine, palinsestoOpen, slotAtHour, slotWeight, type SlotDef, type SlotId} from "../palinsesto";
 import {FlightListScene, FlightScene} from "../../scenes/FlightScene";
 import {drawLighting} from "./lighting";
 import {bridgePlan, climbLanding, pushTarget, type BridgePlan} from "./powerWorld";
@@ -299,6 +302,8 @@ export class WorldScene implements Scene {
   private hop = false;
   private roamers: RoamerField | null = null;
   private roamerMap = "";
+  private roamerSlot: SlotId | "" = "";
+  private slotSeen: SlotId | "" = "";
   private roamerCount = 0;
   private roamerGrace = 0;
   private roamerHinted = false;
@@ -541,7 +546,7 @@ export class WorldScene implements Scene {
       saved:Date.now()-lastSuccessfulSaveAt<1800,
       notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:this.banner?`${this.banner.text} · ${this.banner.sub}`:undefined,
       messages:mp.chat.filter(c=>performance.now()-c.t<6000).slice(-2).map(c=>`${mp.chatNick(c)}: ${c.text}`),
-      lesson:(lesson=>lesson&&{...lesson,at:this.lessonAt})(controlLesson(this.state,context)),
+      lesson:(lesson=>lesson&&{...lesson,at:this.lessonAt})(controlLesson(this.state,context)??(this.worldTipNow&&{title:this.worldTipNow.title,body:this.worldTipNow.body,dismiss:()=>{markTip(this.state,this.worldTipNow!.id);this.worldTipNow=undefined;}})),
       location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it")+(this.zoneName(this.state.pos.x,this.state.pos.y)?` · ${this.zoneName(this.state.pos.x,this.state.pos.y)}`:""),facts,
       objective:quest?`${this.map.id==="borgo"&&quest.target?.mapId==="route1"?"Esci a nord. ":""}${quest.step}`:this.state.party.length?undefined:"Vai al laboratorio con il tetto blu.",
       actions: [command("Squadra", () => this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:"view"})),"/sprites/ui/kit/team.png"),
@@ -549,6 +554,7 @@ export class WorldScene implements Scene {
         {...command("Menu", () => this.stack.push(new PauseScene(this.stack,this.input,this.state)),"/sprites/ui/kit/more.png"),command:"start"}],
       context: {...command(context ?? "Avvicinati", () => { if (!followingRoute && !this.moving) this.interact(); }), disabled: !context || (this.moving && !followingRoute)},
       run: command(this.runToggled ? "Cammina" : "Corri", () => { this.runToggled = !this.runToggled; },undefined,true), running: this.runToggled,
+      clock: palinsestoOpen(this.state) ? (slot => ({ ...command(`Palinsesto: ${slot.name}`, () => this.stack.push(new PalinsestoScene(this.stack, this.input, this.state, this.localClock))), slot: slot.id, text: `${slot.name} ${clockText(this.clockNow())}` }))(this.slotNow()) : undefined,
       power: unlockedPowers(this.state).length ? command("Poteri", () => this.stack.push(new PowersScene(this.stack, this.input, this.state, id => this.usePower(id)))) : undefined,
       save: command("Salva", () => {
         const saved=saveGame(this.state);
@@ -834,13 +840,26 @@ export class WorldScene implements Scene {
 
   // Respect chapter gates and early version exclusives. An explicitly earned
   // cross-version recruitment is available to both browser versions.
-  private effectiveEncounters() {
+  private baseEncounters() {
     return (this.map.encounters ?? []).filter((e) => (!e.requiresFlag || this.state.flags[e.requiresFlag]) && (e.anyVersion || speciesAvailable(e.speciesId, this.state.browserSeed)));
   }
 
-  // Specie "avvistata" oggi in questa zona (weight x4), null se non ci sono incontri.
+  /** The player's clock: the real one, moved by the remote control. */
+  private clockNow(): Date { return gameClock(this.state, this.localClock()); }
+  private slotNow(): SlotDef { return slotAtHour(hourOf(this.clockNow())); }
+
+  // The table of the hour: the palinsesto doubles the types on the air and adds the candidates of that slot,
+  // but only once it is open (after the first duel), so the opening never meets a surprise.
+  private effectiveEncounters() {
+    const base = this.baseEncounters();
+    if (!palinsestoOpen(this.state)) return base.filter((e) => !e.slots);
+    const slot = this.slotNow();
+    return base.flatMap((e) => { const weight = slotWeight(e, slot); return weight > 0 ? [{ ...e, weight }] : []; });
+  }
+
+  // Specie "avvistata" oggi in questa zona (weight x4), null se non ci sono incontri. Non dipende dall'ora.
   private todaysBoostId(): string | null {
-    return dailyBoostSpeciesId(this.map.id, this.effectiveEncounters());
+    return dailyBoostSpeciesId(this.map.id, this.baseEncounters().filter((e) => !e.slots));
   }
 
   // Crea lo stato runtime di un NPC. Decide se può vagare: esplicito via
@@ -1609,7 +1628,9 @@ export class WorldScene implements Scene {
   private syncRoamers(dt: number): void {
     if (!this.roamerEligible()) { this.roamers = null; this.roamerMap = ""; return; }
     const pos = this.state.pos, player = { x: pos.x, y: pos.y, facing: pos.facing };
-    if (!this.roamers || this.roamerMap !== this.map.id) {
+    const slotId = this.slotNow().id;
+    if (!this.roamers || this.roamerMap !== this.map.id || this.roamerSlot !== slotId) {
+      this.roamerSlot = slotId;
       const table = this.effectiveEncounters(), boost = this.todaysBoostId();
       const rows = this.map.tiles, height = rows.length, width = rows[0]?.length ?? 0;
       let grass = 0;
@@ -3108,7 +3129,9 @@ export class WorldScene implements Scene {
       this.wanderCadence,
       this.map.outdoor && this.map.allowWanderers !== false && Boolean(this.state.flags["dex-received"]),
       Boolean(this.wanderNpc),
-      () => this.freeAdjacentSpot()
+      () => this.freeAdjacentSpot(),
+      Math.random,
+      palinsestoOpen(this.state) ? this.slotNow().id : undefined
     );
     if (!plan) return false;
     // Crea uno sfidante visibile e fermo. Niente dialogo o lotta automatica:
@@ -3714,6 +3737,43 @@ export class WorldScene implements Scene {
     this.say(lines);
   }
 
+  /** Tips for the moments when a player gets stuck: a hurt team, no cards left. One at a time, gone for good once seen. */
+  private worldTipNow?: CoachTip;
+  private worldTipSince = 0;
+  private watchTips(): void {
+    if (this.worldTipNow) {
+      if (this.time - this.worldTipSince > 14 || tipSeen(this.state, this.worldTipNow.id)) { markTip(this.state, this.worldTipNow.id); this.worldTipNow = undefined; }
+      return;
+    }
+    if (!isGuideOn() || !this.state.party.length || !this.state.flags["intro-done"] || !this.state.flags["opening-encountered"]) return;
+    const calm = this.map.outdoor && !this.msg.isOpen && !this.askMenu && !this.remoteMenu && !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.pendingBattle && !this.cutIn && !this.reveal && !this.banner && !this.moving;
+    const cards = Object.entries(this.state.bag).reduce((n, [id, qty]) => n + (ITEMS[id]?.kind === "ball" ? qty : 0), 0);
+    this.worldTipNow = nextWorldTip(this.state, { calm, hurt: this.state.party.some((mon) => mon.hp < statsOf(mon).hp * .34), cards, recruiting: true });
+    if (this.worldTipNow) this.worldTipSince = this.time;
+  }
+
+  /** The slot changed (the clock moved on, or the remote control): say so, and the first time explain the whole idea. */
+  private watchPalinsesto(): void {
+    const slot = this.slotNow();
+    if (!palinsestoOpen(this.state)) { this.slotSeen = slot.id; return; }
+    if (this.slotSeen === slot.id) return;
+    if (this.msg.isOpen || this.askMenu || this.remoteMenu || this.encounterFlash > 0 || this.pendingBattle || this.exclaimT > 0 || this.cutIn || this.titleCard || this.reveal) return;
+    // Another slot's banner is simply replaced; any other banner is let finish first.
+    if (this.banner && !SLOTS.some((entry) => readableCopy(entry.name) === this.banner!.text)) return;
+    if (!this.state.party.length || !this.state.flags["intro-done"]) return;
+    const quiet = this.slotSeen === "";
+    this.slotSeen = slot.id;
+    if (!this.state.flags["palinsesto-seen"]) {
+      this.state.flags["palinsesto-seen"] = true; saveGame(this.state);
+      this.say(["La giornata ha un palinsesto: MATTINA, GIORNO, SERA e NOTTE.", "Ogni fascia mette in onda due tipi, che nell'erba si incontrano il doppio, e porta candidati e sfidanti che si vedono solo a quell'ora.", `Adesso è ${slot.name}, ${readableCopy(slot.show)}. ${onAirLine(slot)}`, "L'orologio in alto a sinistra apre il palinsesto: lì il telecomando cambia fascia quando vuoi."]);
+      return;
+    }
+    if (quiet) return;
+    audio.cursor();
+    this.powerFx.pulse("255,255,255", .35);
+    this.showBanner(slot.name, onAirLine(slot), slot.color);
+  }
+
   /** Ask for the art of the new tiles now, so it has arrived by the time they appear. */
   private warmCivicTiles(edits: readonly { to: string }[] | undefined): void {
     for (const edit of edits ?? []) { tileImage(edit.to); objectImage(edit.to); terrainVariantImage(edit.to, 0); }
@@ -3805,6 +3865,8 @@ export class WorldScene implements Scene {
     this.watchCivicWorks();
     this.watchRites();
     this.watchPowers();
+    this.watchPalinsesto();
+    this.watchTips();
     if (this.titleCard) { this.titleCard.t += dt; if (this.titleCard.t > 2.8) this.titleCard = null; }
     if (this.reveal) {
       this.reveal.update(dt);
@@ -4640,7 +4702,7 @@ export class WorldScene implements Scene {
       const k = b.t * b.t * (3 - 2 * b.t), x = (b.fromX + (b.x - b.fromX) * k) * TILE - camX, y = (b.fromY + (b.y - b.fromY) * k) * TILE - camY;
       tall.push({ baseY: (b.fromY + (b.y - b.fromY) * k + 1) * TILE, draw: () => this.drawBoulder(screen.ctx, Math.round(x), Math.round(y), b.t < 1 ? b.t : 1) });
     }
-    if(hasWall)drawInteriorWall(screen.ctx,inner,camX,camY,this.map.id,1-ambientLight(this.localClock().getHours()+this.localClock().getMinutes()/60).alpha/.64,this.time,this.state.reduceEffects);
+    if(hasWall)drawInteriorWall(screen.ctx,inner,camX,camY,this.map.id,1-ambientLight(hourOf(this.clockNow())).alpha/.64,this.time,this.state.reduceEffects);
     tall.sort((a, b) => a.baseY - b.baseY);
     for (const e of tall) {
       e.draw();
@@ -4689,7 +4751,7 @@ export class WorldScene implements Scene {
       screen.rect(rx + 6, ry + 13 + phase, 3, 2, "#3f8a2a");
     }
 
-    const now=this.localClock();
+    const now=this.clockNow();
     const glows:Light[]=[];
     if(this.map.outdoor){
       for(let ty=Math.floor(camY/TILE)-2;ty<=Math.floor(camY/TILE)+Math.ceil(this.viewHeight/TILE)+2;ty++)for(let tx=Math.floor(camX/TILE)-2;tx<=Math.floor(camX/TILE)+Math.ceil(VIEW_W/TILE)+2;tx++){

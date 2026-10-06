@@ -87,3 +87,14 @@ body.ui-reduce-effects .ui-arena-trainer{animation:none}
 .ui-arena-speed{flex:0 0 auto;margin-left:8px;min-width:44px;min-height:44px;padding:0 8px;border:2px solid #14161F;background:#F4EEDC;color:#14161F;font:700 16px/1 Tribuna,sans-serif;cursor:pointer}
 .ui-arena-speed:active{transform:translateY(1px)}
 .ui-arena-caption .ui-body{flex:1 1 auto;min-width:0}
+
+/* A one-time tip over the sky of the field: the whole card is the dismiss button. */
+.ui-arena-coach{position:absolute;left:8px;right:8px;top:92px;z-index:3;display:grid;grid-template-columns:minmax(0,1fr) 28px;column-gap:8px;align-items:start;padding:10px 12px;border:2px solid #14161F;border-radius:4px;background:#FFD23F;box-shadow:4px 4px #14161F;color:#14161F;text-align:left;cursor:pointer;animation:arena-coach-in .22s ease-out}
+.ui-arena-coach[hidden]{display:none}
+.ui-arena-coach-title{grid-column:1;font:700 20px/1.1 Tribuna,sans-serif;text-transform:uppercase}
+.ui-arena-coach-body{grid-column:1;margin-top:4px;font:15px/1.35 PoliticmonBody,sans-serif}
+.ui-arena-coach-close{grid-column:2;grid-row:1/3;align-self:start;justify-self:end;font:700 18px/1 PoliticmonBody,sans-serif}
+@keyframes arena-coach-in{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+@media(orientation:landscape){.ui-arena-coach{max-width:420px;left:8px;right:auto}}
+@media(prefers-reduced-motion:reduce){.ui-arena-coach{animation:none}}
+body.ui-reduce-effects .ui-arena-coach{animation:none}

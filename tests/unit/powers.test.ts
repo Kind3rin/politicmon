@@ -19,7 +19,7 @@ test('the powers open with the story, in order, and the first one is there from 
   state.badges = ['auditel'];
   assert.deepEqual(unlockedPowers(state), ['comizio', 'riflettori', 'scappatoia']);
   state.badges = ['auditel', 'spread'];
-  assert.ok(['taglio', 'volo', 'scalata'].every(id => powerUnlocked(state, id as never)));
+  assert.ok(['taglio', 'volo', 'scalata', 'sondaggio'].every(id => powerUnlocked(state, id as never)));
   assert.ok(!powerUnlocked(state, 'ponte') && !powerUnlocked(state, 'spallata'));
   state.badges.push('dazio');
   assert.equal(unlockedPowers(state).length, POWER_ORDER.length);

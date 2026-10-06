@@ -305,6 +305,10 @@ class AudioEngine {
     this.tone(220, .18, { type: "square", vol: .05, sweepTo: 262 }); this.tone(330, .16, { type: "square", vol: .045, delaySec: .1 });
     this.tone(2200, .08, { type: "sine", vol: .03, delaySec: .3 }); haptics.event();
   }
+  /** A radar pulse: a soft ping that rises and fades. */
+  powerRadar(): void {
+    [0, 180, 360].forEach((ms, i) => setTimeout(() => this.tone(660 + i * 110, .25 - i * .05, { type: "sine", vol: .06 - i * .012, sweepTo: 880 + i * 140 }), ms));
+  }
   /** Something stirs: low rustle. */
   powerRustle(): void {
     this.noise(.2, .1, 3200); setTimeout(() => this.noise(.18, .08, 2600), 140);

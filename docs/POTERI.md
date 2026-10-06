@@ -16,6 +16,7 @@ Le «MN» di Politicmon, ripensate. Ricerca e punto di partenza: i giochi recent
 |---|---|---|---|---|
 | **Comizio** | Politicdex | tutti | Attira uno o due selvatici dall'erba vicina: accorrono col «!» e ti lasciano la prima mossa. 30 passi di pausa. | Erba alta |
 | **Riflettori** | Auditel | Media, Tecno, Populismo | Nelle grotte buie accende un fascio largo; i tesori nascosti brillano. | Grotta del Consenso, Archivio di Stato |
+| **Sondaggio lampo** | Spread | Media, Centro, Tecno | Per quindici secondi mostra i tesori nascosti entro nove caselle e segna dove sono i candidati (oro se rari). | Ovunque |
 | **Dimissioni lampo** | Auditel | Centro, Istituzione, Media, Destra | Da grotte ed edifici ti porta all'ingresso, in una nuvola di fumo. | Interni |
 | **Taglio lineare** | Spread | Destra, Istituzione, Tecno | Taglia i nastri rossi e bianchi. Per sempre. | Boschi di Percorso 2 |
 | **Volo di Stato** | Spread | Destra, Centro, Media | Scegli una città già vista; volo al tramonto con gag a bordo; nessuna benzina. | Fuori da edifici e grotte |

@@ -62,6 +62,8 @@ try {
   { const { state, world, run } = boot('route1', 14, 20, 'up');
     world.usePower('comizio'); run(2); check(world.roamers.roamers.some(r => r.lured), 'nobody came');
     const first = state.stepsTotal; world.usePower('comizio'); run(.3); check(world.msg.isOpen, 'a second rally at once was not refused'); log.push('comizio'); }
+  // SONDAGGIO: a fifteen-second radar, and not twice at once.
+  { const { world, run } = boot('route1', 14, 20, 'up'); world.usePower('sondaggio'); run(.5); check(world.poll > 10, 'no poll'); world.usePower('sondaggio'); run(.2); check(world.msg.isOpen, 'a second poll was not refused'); world.msg.close?.(); run(16); check(world.poll === 0, 'the poll never ended'); log.push('sondaggio'); }
   // RIFLETTORI: only in the dark; DIMISSIONI LAMPO: only indoors and it leads outside.
   { const { world, run } = boot('route1', 14, 20, 'up'); world.usePower('riflettori'); run(.3); check(world.msg.isOpen && !world.spot, 'floodlights on in daylight'); }
   { const { world, run } = boot('grotta1', 5, 3, 'down'); world.usePower('riflettori'); run(2); check(world.spot, 'floodlights did not come on');

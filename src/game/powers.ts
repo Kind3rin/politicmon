@@ -9,7 +9,7 @@ import type { GameState } from "./state";
  * il primo compagno in forze della squadra che ha uno dei tipi giusti. Servono a trovare cose, non a passare:
  * la strada principale non dipende mai da un potere.
  */
-export type PowerId = "comizio" | "scappatoia" | "riflettori" | "taglio" | "volo" | "scalata" | "ponte" | "spallata";
+export type PowerId = "comizio" | "scappatoia" | "riflettori" | "sondaggio" | "taglio" | "volo" | "scalata" | "ponte" | "spallata";
 
 export interface PowerDef {
   id: PowerId;
@@ -40,6 +40,8 @@ export const POWERS: Record<PowerId, PowerDef> = {
     tagline: "MI DIMETTO. ANZI, GIÀ FATTO", does: "Ti porta fuori dalla grotta o dall'edificio in cui sei, all'ingresso.", where: "Grotte, interni, rovine.", unlock: "Medaglia Auditel." },
   riflettori: { id: "riflettori", name: "RIFLETTORI", verb: "Riflettori", type: "MEDIA", users: ["MEDIA", "TECNO", "POPULISMO"], badges: "auditel",
     tagline: "SI GIRA!", does: "Accende i riflettori: le grotte buie si vedono lontano e i tesori nascosti brillano.", where: "Grotte e luoghi bui.", unlock: "Medaglia Auditel." },
+  sondaggio: { id: "sondaggio", name: "SONDAGGIO LAMPO", verb: "Sondaggio", type: "MEDIA", users: ["MEDIA", "CENTRO", "TECNO"], badges: "spread",
+    tagline: "IL CAMPIONE È RAPPRESENTATIVO", does: "Per quindici secondi vedi i tesori nascosti e dove stanno i candidati nei dintorni.", where: "Ovunque: erba alta, boschi, grotte.", unlock: "Medaglia Spread." },
   taglio: { id: "taglio", name: "TAGLIO LINEARE", verb: "Taglia", type: "DESTRA", users: ["DESTRA", "ISTITUZIONE", "TECNO"], badges: "spread",
     tagline: "TUTTO IL RESTO, A META", does: "Taglia i nastri della burocrazia che sbarrano un passaggio.", where: "Nastri rossi e bianchi: nascondigli e scorciatoie.", unlock: "Medaglia Spread." },
   volo: { id: "volo", name: "VOLO DI STATO", verb: "Vola", type: "DESTRA", users: ["DESTRA", "CENTRO", "MEDIA"], badges: "spread",
@@ -52,7 +54,7 @@ export const POWERS: Record<PowerId, PowerDef> = {
     tagline: "UNA SPALLATA ALLA MAGGIORANZA", does: "Sposta di una casella i massi pesanti che bloccano la strada.", where: "Grotte e cantieri: massi.", unlock: "Medaglia Dazio." }
 };
 
-export const POWER_ORDER: readonly PowerId[] = ["comizio", "riflettori", "scappatoia", "taglio", "volo", "scalata", "ponte", "spallata"];
+export const POWER_ORDER: readonly PowerId[] = ["comizio", "riflettori", "scappatoia", "sondaggio", "taglio", "volo", "scalata", "ponte", "spallata"];
 
 export function powerUnlocked(state: GameState, id: PowerId): boolean {
   const power = POWERS[id];

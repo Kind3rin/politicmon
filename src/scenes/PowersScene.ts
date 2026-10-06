@@ -11,7 +11,7 @@ import type { TouchAction } from "../engine/touchActions";
 import type { UiPanel } from "../ui/kit";
 
 /** Powers that are used from the list; the others work on what is in front of you. */
-export const MENU_POWERS: readonly PowerId[] = ["comizio", "riflettori", "scappatoia", "volo"];
+export const MENU_POWERS: readonly PowerId[] = ["comizio", "riflettori", "scappatoia", "sondaggio", "volo"];
 
 export class PowersScene implements Scene {
   readonly transparent = false;

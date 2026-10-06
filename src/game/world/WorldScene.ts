@@ -319,6 +319,8 @@ export class WorldScene implements Scene {
   private afterCut: (() => void) | null = null;
   private spot = false;
   private comizioAt = -999;
+  private poll = 0;
+  private pollRing = 0;
   private powerTiles = new Map<string, string>();
   private powerRevision = 0;
   private boulders: { id: string; x: number; y: number; fromX: number; fromY: number; t: number }[] = [];
@@ -1339,6 +1341,7 @@ export class WorldScene implements Scene {
       case "riflettori": this.powerRiflettori(status.user); return;
       case "scappatoia": this.powerScappatoia(status.user); return;
       case "volo": this.powerVolo(status.user); return;
+      case "sondaggio": this.powerSondaggio(status.user); return;
       default: this.say([`${def.name} si usa davanti all'ostacolo giusto.`, def.where]);
     }
   }
@@ -1481,6 +1484,17 @@ export class WorldScene implements Scene {
     ctx.restore();
   }
 
+  /** Hidden treasures twinkle while the floodlights or a poll show them. */
+  private drawGlints(screen: Screen, camX: number, camY: number, radius: number, pos: { x: number; y: number }): void {
+    for (const p of this.map.pickups) {
+      if (!p.hidden || this.state.pickedItems.includes(p.id)) continue;
+      if (Math.abs(p.x - pos.x) + Math.abs(p.y - pos.y) > radius) continue;
+      const tw = Math.floor(this.time * 6 + p.x * 3) % 4, x = Math.round(p.x * TILE + 8 - camX), y = Math.round(p.y * TILE + 8 - camY);
+      screen.ctx.fillStyle = tw < 2 ? "#fff6c8" : "#ffd23f";
+      screen.ctx.fillRect(x - 1, y - (tw ? 3 : 2), 2, tw ? 6 : 4); screen.ctx.fillRect(x - (tw ? 3 : 2), y - 1, tw ? 6 : 4, 2);
+    }
+  }
+
   private grassNear(radius: number): number {
     const { x, y } = this.state.pos; let n = 0;
     for (let ty = y - radius; ty <= y + radius; ty++) for (let tx = x - radius; tx <= x + radius; tx++) if (TILES[this.tileAt(tx, ty)]?.encounter) n++;
@@ -1530,6 +1544,14 @@ export class WorldScene implements Scene {
       fx.burst(c.x, c.y, ["#e8e8f0", "#c8c8d8", "#ffffff"], 30, 70, { w: 4, h: 4, grav: -20, drag: .94 });
       this.fadeOut = .3;
       this.pendingWarp = () => { this.state.pos = { mapId: exit.toMap, x: exit.toX, y: exit.toY, facing: exit.facing }; this.loadMap(exit.toMap); this.doorArrival = null; };
+    });
+  }
+
+  private powerSondaggio(user: Monster): void {
+    if (this.poll > 0) { this.say(["Il sondaggio è già in corso.", "Aspetta che i risultati si esauriscano."]); return; }
+    this.beginPower("sondaggio", user, () => {
+      this.poll = 15; this.pollRing = 0; audio.powerRadar();
+      this.showBanner("SONDAGGIO LAMPO", "Campione: tutto il territorio.", "#f2c230");
     });
   }
 
@@ -3736,6 +3758,10 @@ export class WorldScene implements Scene {
       return;
     }
     this.updateBuild(dt);
+    if (this.poll > 0) {
+      this.poll = Math.max(0, this.poll - dt); this.pollRing -= dt;
+      if (this.pollRing <= 0 && this.poll > 0) { this.pollRing = 1.4; const c = this.playerCenter(); this.powerFx.ring(c.x, c.y, 110, "#f2c230", 1.1, 2); }
+    }
     for (const b of this.boulders) if (b.t < 1) b.t = Math.min(1, b.t + dt * 6);
     this.cameraDt=dt;
     this.atmosphere.update(dt,this.state.reduceEffects);
@@ -4293,6 +4319,11 @@ export class WorldScene implements Scene {
           const bounds = screen.imageBounds(image), scale = 20 / bounds.h, dw = bounds.w * scale;
           screen.imageSpriteCropped(image, rx + 8 - dw / 2, ry + 15 - bounds.h * scale - hop, { scaleX: scale, scaleY: scale });
         }
+        if (this.poll > 0 && Math.abs(roamer.x - this.state.pos.x) + Math.abs(roamer.y - this.state.pos.y) <= 14) {
+          const bob = this.state.reduceEffects ? 0 : Math.floor(this.time * 4 + roamer.id) % 2, c = screen.ctx;
+          c.fillStyle = roamer.rare ? "#ffd23f" : "#f4eedc"; c.fillRect(rx + 6, ry - 15 - bob, 4, 4); c.fillStyle = "#10141f"; c.fillRect(rx + 7, ry - 14 - bob, 2, 2);
+          c.fillStyle = roamer.rare ? "#ffd23f" : "#f4eedc"; c.fillRect(rx + 7, ry - 11 - bob, 2, 2);
+        }
         if (roamer.alert > 0) { screen.rect(rx + 4, ry - 20, 9, 11, "#d7263d"); screen.text("!", rx + 7, ry - 18, "#fffaf0"); }
         else if (roamer.rare) screen.text("★", rx + 4, ry - 12 - (this.state.reduceEffects ? 0 : Math.floor(this.time * 3 + roamer.id) % 2), "#ffd23f");
         else if (roamer.mood === "sleep") screen.text("z", rx + 12, ry - 8 - (Math.floor(this.time * 2) % 2), "#fffaf0");
@@ -4647,13 +4678,9 @@ export class WorldScene implements Scene {
       const cave:Light[]=this.map.warps.map(w=>({kind:'door' as const,x:w.x*TILE+8-camX,y:w.y*TILE+8-camY}));
       cave.push({kind:this.spot?'spot':'cave',x:playerPx+8+this.doorShiftNow()-camX,y:playerPy+6-camY});
       drawLighting(screen.ctx,VIEW_W,this.viewHeight,12,cave,this.time,this.state.reduceEffects,{rgb:[3,5,16],alpha:this.map.dark});
-      if(this.spot&&!this.state.reduceEffects)for(const p of this.map.pickups){
-        if(!p.hidden||this.state.pickedItems.includes(p.id))continue;
-        if(Math.abs(p.x-pos.x)+Math.abs(p.y-pos.y)>7)continue;
-        const tw=Math.floor(this.time*6+p.x*3)%4,x=p.x*TILE+8-camX,y=p.y*TILE+8-camY;
-        screen.ctx.fillStyle=tw<2?'#fff6c8':'#ffd23f';screen.ctx.fillRect(Math.round(x)-1,Math.round(y)-(tw?3:2),2,tw?6:4);screen.ctx.fillRect(Math.round(x)-(tw?3:2),Math.round(y)-1,tw?6:4,2);
-      }
+      if((this.spot||this.poll>0)&&!this.state.reduceEffects)this.drawGlints(screen,camX,camY,this.poll>0?9:7,pos);
     }
+    if(this.poll>0&&!this.state.reduceEffects&&!this.map.dark)this.drawGlints(screen,camX,camY,9,pos);
     if(!this.map.outdoor&&roomFit>=1)drawRoomFrame(screen.ctx,inner,camX,camY,hasWall?WALL_HEIGHT:0);
     drawVignette(screen.ctx,VIEW_W,this.viewHeight,this.map.outdoor?.2:.3);
     const quest = currentQuest(this.state);

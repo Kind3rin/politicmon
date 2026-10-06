@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — la strada gira — 2026-10-06
+
+- La strada principale non va più solo a nord. Mediopoli, Eurotown e Caput Mundi aprono un cancello est; il Percorso 2 diventa una «C» orizzontale (46×34) attorno al lago, con molo, isola, cove e un'unica salita; il Percorso 3 sale e poi esce a ovest verso Caput Mundi. Il Percorso 1 resta verticale (è il tutorial). Atlante, cancello della prima medaglia e battute di blocco restano com'erano. Dettagli e limiti in `docs/PERCORSI-IMMERSIVI.md`.
+- Colle dell'Antenna: nuovo ramo facoltativo a nord di Mediopoli (due terrazze, cima con statua, tre sfidanti nuovi con busto Higgsfield — 1,5 crediti, saldo 288,22 → 286,72 —, selvatici propri, tre oggetti). Nuovi sfondi e regole di campo (Diretta TV) per l'area.
+- La guida non segue più una catena «verso nord» ma la strada più breve nel grafo vero di strade e porte (`nextHop`); i cancelli laterali sono avvisi come «◀ Mediopoli»; nuovo `check:gates` e driver della campagna nativa aggiornato (`crossTo`), percorso verificato fino alla palestra di Eurotown.
+- `check:world-controls` meno fragile: i tempi dei tocchi lasciano margine e un benvenuto di Luca che mangia un tocco viene chiuso e il tocco ripetuto.
+
 ## Mandato 2 — le leggende — 2026-10-06
 
 - I quattro Politicmon leggendari non sono più in una stanza o nell'erba: ognuno ha un rito di tre passi (Missioni e Politicdex ne mostrano i progressi), una porta che si apre a rito compiuto e un sacrario tutto suo (La Regia segreta, L'Archivio dei bilanci, Lo Studio presidenziale, Il Bunker). Bunkerput e Mattarellux sono usciti dall'erba. Dettagli in `docs/LEGGENDE.md`.

@@ -18,7 +18,7 @@ export type BattleField = typeof FIELD_EVENTS[number] | typeof AREA_EVENTS[numbe
 
 const AREA_OF: Record<string, BattleField["id"]> = {
   capitale: "taglio", palazzo: "taglio", colle: "taglio", casino: "taglio",
-  mediopoli: "diretta", route2: "diretta", gymtv: "diretta", redazione: "diretta", salotto: "diretta",
+  mediopoli: "diretta", antenna: "diretta", route2: "diretta", gymtv: "diretta", redazione: "diretta", salotto: "diretta",
   eurotown: "standard", bruxelles: "standard", gymue: "standard", commissione: "standard",
   route3: "cantiere", grotta2: "cantiere", stretto: "cantiere", offshore: "cantiere", "oblast-meme": "cantiere"
 };

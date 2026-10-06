@@ -75,7 +75,7 @@ try{
  const idle=async()=>{await page.waitForTimeout(2200);return where(page);};
  // `act` steers however it likes, calls `mark()` just before the tap that must not walk, then taps.
  const stillAfter=async(act,message)=>{
-  await idle();let from;await act(async()=>{await page.waitForTimeout(260);from=await where(page);});
+  await idle();let from;await act(async()=>{await page.waitForTimeout(120);from=await where(page);});
   await page.waitForTimeout(1500);const to=await where(page);
   expect(to.x===from.x&&to.y===from.y,`${message} (${from.x},${from.y} → ${to.x},${to.y})`);
  };
@@ -94,6 +94,10 @@ try{
  before=await idle();
  await page.touchscreen.tap(90,380);await page.waitForTimeout(1500);
  after=await where(page);
+ if(after.x===before.x&&after.y===before.y){ // a welcome dialogue from an earlier walk may have eaten the tap: close it and tap again
+  await page.keyboard.press('Escape');await page.waitForTimeout(400);before=await where(page);
+  await page.touchscreen.tap(90,380);await page.waitForTimeout(1500);after=await where(page);
+ }
  expect(after.x!==before.x||after.y!==before.y,'a quick tap on the left half still walks');
 
  // The run toggle shows its state with more than colour.

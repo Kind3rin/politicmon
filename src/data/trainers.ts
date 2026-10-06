@@ -144,6 +144,28 @@ export const TRAINERS: Record<string, TrainerDef> = {
     defeat: ["Pratica chiusa. Non serve un altro modulo per riconoscere che hai vinto."],
     money: 260, reward: { itemId: "scheda", qty: 3 }
   },
+  // ---- COLLE DELL'ANTENNA (facoltativo, a nord di Mediopoli) ----
+  ripetitorista: {
+    id: "ripetitorista", name: "RIPETITORISTA", pal: "guard",
+    team: [["mediocrate", 9], ["vannaccix", 9]],
+    intro: ["Io ripeto il segnale. Chi lo produce non ripete mai gli stessi errori.", "Sali pure: la discesa la fanno gli ascolti."],
+    defeat: ["Segnale perso. Succede quando qualcuno dice una cosa vera in diretta."],
+    money: 300, reward: { itemId: "scheda", qty: 2 }
+  },
+  radioamatore: {
+    id: "radioamatore", name: "RADIOAMATORE", pal: "professor",
+    team: [["calendauro", 10], ["tajanide", 10]],
+    intro: ["Ascolto frequenze che nessun palinsesto ha mai occupato.", "Se mi senti, rispondi: è la prima volta che qualcuno risponde."],
+    defeat: ["Silenzio radio. Avevo dimenticato quanto fa bene."],
+    money: 340, reward: { itemId: "spritz", qty: 1 }
+  },
+  meteo: {
+    id: "meteo", name: "METEOROLOGO DEI SONDAGGI", pal: "journalist",
+    team: [["vannaccix", 11], ["calendauro", 11], ["mediocrate", 12]],
+    intro: ["Oggi: schiarite al centro, rovesci di promesse a nord, vento di sondaggi variabile.", "Previsione per te: sconfitta, salvo errore di campionamento."],
+    defeat: ["Errore di campionamento. Ricalcolo il margine: era dentro, come sempre."],
+    money: 480, reward: { itemId: "schedona", qty: 1 }
+  },
   // ---- PERCORSO 2 (Mediopoli-Eurotown) ----
   opinionista: {
     id: "opinionista", name: "OPINIONISTA PERENNE", pal: "journalist",
@@ -437,6 +459,7 @@ export const REMATCHABLE_TRAINERS = new Set([
   "noponte", "geometra",
   // Percorsi 2/3 + grotta2
   "opinionista", "claqueur", "telelobbista", "usciere", "protocollista",
+  "ripetitorista", "radioamatore", "meteo",
   "eminenza", "archivista",
   // Paradiso offshore
   "commercialista", "prestanome"

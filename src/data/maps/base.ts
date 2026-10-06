@@ -1,6 +1,6 @@
 import type { MapDef } from "./types";
 import { SACRARIO_ENTRY } from "./legends";
-import { BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYMTV_ENTRY, GYMUE_ENTRY, GYMGLOBAL_ENTRY, MARKET_ENTRY, CASINO_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, HOUSE_ENTRY_D, HOUSE_ENTRY_E, HOUSE_ENTRY_H, HOUSE_ENTRY_I, HOUSE_ENTRY_J, BAR_ENTRY, lucaGuide } from "./factories";
+import { ANTENNA_TILES, BORGO_TILES, ROUTE1_TILES, GROTTA1_TILES, OBLAST_MEME_TILES, ROUTE2_TILES, ROUTE3_TILES, GROTTA2_TILES, MEDIOPOLI_TILES, EUROTOWN_TILES, CAPITALE_TILES, LAB_ENTRY, GROTTA1_ENTRY, GROTTA2_ENTRY, GYMTV_ENTRY, GYMUE_ENTRY, GYMGLOBAL_ENTRY, MARKET_ENTRY, CASINO_ENTRY, HOUSE_ENTRY_A, HOUSE_ENTRY_B, HOUSE_ENTRY_C, HOUSE_ENTRY_D, HOUSE_ENTRY_E, HOUSE_ENTRY_H, HOUSE_ENTRY_I, HOUSE_ENTRY_J, BAR_ENTRY, lucaGuide } from "./factories";
 
 export const BASE_MAPS: Record<string, MapDef> = {
   borgo: {
@@ -302,7 +302,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     outdoor: true,
     music: "mediopoli",
-    edges: { south: { toMap: "route1", offsetX: 0 } },
+    edges: { north: { toMap: "antenna", offsetX: 0 }, south: { toMap: "route1", offsetX: 0 } },
     warps: [
       // Il cancello est: la strada per EUROTOWN gira attorno al lago, non sale più in verticale.
       ...[11, 12, 13].map(y => ({
@@ -425,6 +425,64 @@ export const BASE_MAPS: Record<string, MapDef> = {
   // il LAGHETTO DELL'AUDITEL con isoletta-tesoro (solo TRAGHETTO), erba alta
   // e tre professionisti del salotto televisivo. Il gate a 1 medaglia resta
   // sul cancello est di MEDIOPOLI (mai lato route: niente trappole).
+  // COLLE DELL'ANTENNA: ramo facoltativo a nord di MEDIOPOLI. Due terrazze, tre sfidanti, un belvedere
+  // e un tesoro: si sale per curiosità, non per obbligo.
+  antenna: {
+    id: "antenna",
+    name: "COLLE DELL'ANTENNA",
+    tiles: ANTENNA_TILES,
+    zones: [
+      { name: "Cima dell'antenna", x: 0, y: 0, w: 30, h: 9 },
+      { name: "Terrazza delle frequenze", x: 0, y: 9, w: 30, h: 8 },
+      { name: "Piano dei ripetitori", x: 0, y: 17, w: 30, h: 9 }
+    ],
+    outdoor: true,
+    music: "mediopoli",
+    edges: { south: { toMap: "mediopoli", offsetX: 0 } },
+    warps: [],
+    encounterRate: 0.13,
+    encounters: [
+      { speciesId: "mediocrate", weight: 28, minLv: 9, maxLv: 11 },
+      { speciesId: "vannaccix", weight: 24, minLv: 9, maxLv: 11 },
+      { speciesId: "tajanide", weight: 20, minLv: 9, maxLv: 11 },
+      { speciesId: "calendauro", weight: 14, minLv: 10, maxLv: 12 }
+    ],
+    signs: [
+      { x: 12, y: 24, lines: ["COLLE DELL'ANTENNA", "Tre terrazze, tre frequenze. Si sale per curiosità.", "Il segnale in cima è ottimo: l'unico posto d'Italia dove nessuno commenta."] },
+      { x: 13, y: 4, lines: ["RIPETITORE N. 1", "Ripete i comunicati. Non ha mai ripetuto una smentita."] }
+    ],
+    pickups: [
+      { id: "pk-ant-scheda", x: 4, y: 8, itemId: "schedona", qty: 1 },
+      { id: "pk-ant-dir", x: 23, y: 2, itemId: "dirGreen", qty: 1 },
+      { id: "pk-ant-hide", x: 26, y: 6, itemId: "spritz", qty: 2, hidden: true }
+    ],
+    npcs: [
+      {
+        id: "tr-ripetitorista", pal: "guard", x: 9, y: 20, facing: "right",
+        trainerId: "ripetitorista", inviteRange: 5, nameplate: "SEGNALE A",
+        lines: ["Il segnale è ripetuto. Il contenuto no."]
+      },
+      {
+        id: "tr-radioamatore", pal: "professor", x: 15, y: 13, facing: "right",
+        trainerId: "radioamatore", inviteRange: 3, nameplate: "FREQUENZA A",
+        lines: ["Sto ascoltando. Parla pure dopo il segnale."]
+      },
+      {
+        id: "tr-meteo", pal: "journalist", x: 19, y: 3, facing: "down",
+        trainerId: "meteo", inviteRange: 5, nameplate: "PREVISIONE A",
+        lines: ["Domani nuvolosità variabile con aumento dei sondaggi."]
+      },
+      {
+        id: "antenna-ingegnere", pal: "aide", x: 12, y: 3, facing: "left",
+        lines: ["La statua è il Segnale Ignoto: nessuno sa chi l'ha ritrasmesso.", "L'antenna regge. Il palinsesto, a occhio, no."]
+      },
+      {
+        id: "antenna-escursionista", pal: "granny", x: 21, y: 7, facing: "down",
+        lines: ["Qui il cellulare prende benissimo e il pensiero pure.", "Giù a Mediopoli applaudono a comando. Quassù l'eco risponde da sola."]
+      }
+    ]
+  },
+
   route2: {
     id: "route2",
     weather:"nebbia",

@@ -89,7 +89,7 @@ export function dialoguePortrait(palId: string, spriteSet?: string): string | un
 
 // Busts of the named opponents (public/sprites/portraits/trainer-<id>.png): each is its own person built on the role sprite it walks as.
 export const TRAINER_PORTRAITS = new Set<string>([
-  "aide", "algoritmo-sovrano", "archivista", "boss",
+  "aide", "algoritmo-sovrano", "archivista", "boss", "meteo", "radioamatore", "ripetitorista",
   "bunkerista", "campo-claque", "campo-debate", "campo-photographer",
   "citofonista", "claqueur", "commercialista", "commissione",
   "diplomatico", "district-centro", "district-feed", "district-isole",
@@ -163,6 +163,8 @@ export const NPC_BUSTS: Record<string, readonly [string, string]> = {
   "pensionato-euro": ["pensionato-euro", "Pensionato"],
   "pescatore-r1": ["pescatore", "Pescatore"],
   "pescatore-r2": ["pescatore", "Pescatore"],
+  "antenna-ingegnere": ["ingegnere", "Ingegnere"],
+  "antenna-escursionista": ["turista", "Turista"],
   "redaz-direttore": ["direttore", "Direttore"],
   "redaz-stagista": ["stagista", "Stagista"],
   "retro-cronista": ["cronista", "Cronista"],

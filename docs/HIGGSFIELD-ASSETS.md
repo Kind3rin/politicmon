@@ -333,3 +333,5 @@ Varietà, 6 ottobre 2026: un foglio busti (`npcs-10`: geologa e cavatore del Per
 
 Leggende, 6 ottobre 2026: un foglio 2×2 di cimeli (`relics-1`: Telecomando d'Oro, Agenda d'Oro, Penna del Garante, Kit del Bunker; 1,5 crediti, riferimenti `divisa.png` e `telecamera.png`), ritagliati con `scripts/prepare-relics.py` (telecomando e penna ruotati in diagonale per riempire i 32×32). Saldo 289,72 → 288,22. Manifest in `scripts/higgsfield-relics.json`.
 
+Colle dell'Antenna, 6 ottobre 2026: un foglio 3×2 di busti per i tre sfidanti (`trainers-i`: Ripetitorista, Radioamatore, Meteorologo dei sondaggi; 1,5 crediti, riferimenti npcs-9 e gli sprite guard, professor, journalist). Saldo 288,22 → 286,72.
+

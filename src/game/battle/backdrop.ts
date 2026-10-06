@@ -5,7 +5,7 @@ export { BATTLE_BACKDROPS, type BattleBackdrop, type BattleBackdropId } from "./
 
 const MAP_BACKDROPS: Readonly<Record<string, BattleBackdropId>> = {
   borgo: "piazza", mediopoli: "tv", eurotown: "viale", capitale: "foro", bruxelles: "viale",
-  route2: "lago", route3: "cava",
+  route2: "lago", route3: "cava", antenna: "tv",
   grotta1: "grotta", grotta2: "grotta", "oblast-meme": "neve",
   gymtv: "studio", redazione: "studio", retroscena: "studio", attico: "studio",
   stretto: "costa", offshore: "costa", chiosco: "costa", "bar-stretto": "costa", "bar-offshore": "costa",

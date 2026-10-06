@@ -4,7 +4,7 @@ import { MAPS } from "../../src/data/maps";
 import { MAP_NAMES } from "../../src/data/maps/names";
 
 const EXPECTED_MAP_IDS = [
-  "archivio", "attico", "bar-borgo", "bar-bruxelles", "bar-cap", "bar-euro", "bar-medio",
+  "antenna", "archivio", "attico", "bar-borgo", "bar-bruxelles", "bar-cap", "bar-euro", "bar-medio",
   "bar-offshore", "bar-stretto", "bistrot", "borgo", "bruxelles", "bunker", "campo_largo", "capitale",
   "casino", "chiosco", "circolo", "colle", "commissione", "covo",
   "diplomacy_autonomy", "diplomacy_home", "diplomacy_lobby", "diplomacy_loyalty", "diplomacy_terrace",
@@ -18,7 +18,7 @@ const EXPECTED_MAP_IDS = [
   "stretto", "studio", "tour_feed"
 ];
 
-test("registry mappe: conserva le 40 mappe baseline, le 26 mappe Atto 3 approvate e i 4 sacrari delle leggende", () => {
+test("registry mappe: conserva le 40 mappe baseline, le 26 mappe Atto 3 approvate i 4 sacrari delle leggende e il Colle dell'Antenna", () => {
   assert.deepEqual(Object.keys(MAPS).sort(), EXPECTED_MAP_IDS);
 });
 

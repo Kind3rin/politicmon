@@ -6,6 +6,7 @@ export const MAP_NAMES: Readonly<Record<string, string>> = Object.assign(Object.
   "grotta1": "GROTTA DEL CONSENSO",
   "oblast-meme": "OBLAST DEL MEME",
   "mediopoli": "MEDIOPOLI",
+  "antenna": "COLLE DELL'ANTENNA",
   "route2": "PERCORSO 2",
   "eurotown": "EUROTOWN",
   "route3": "PERCORSO 3",

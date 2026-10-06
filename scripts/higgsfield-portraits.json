@@ -490,6 +490,22 @@
         "npc-cavatore"
       ],
       "prompt": "Geologist and quarryman busts for Percorso 3, 3x2 sheet with four empty cells, style reference npcs-9.png."
+    },
+    {
+      "file": "trainers-i.png",
+      "job": "69a8a502-7170-4baf-ac49-9786d4590cab",
+      "url": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261006_142413_69a8a502-7170-4baf-ac49-9786d4590cab.png",
+      "credits": 1.5,
+      "grid": [
+        3,
+        2
+      ],
+      "cells": [
+        "trainer-ripetitorista",
+        "trainer-radioamatore",
+        "trainer-meteo"
+      ],
+      "prompt": "Three busts for the Colle dell'Antenna trainers (antenna technician, radio amateur, poll forecaster), style reference npcs-9.png plus the guard, professor and journalist role sprites."
     }
   ]
 }

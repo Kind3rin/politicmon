@@ -9,6 +9,7 @@ const DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0]] as const;
 // `ferry`: treasures on islands, which need the ferry rather than a walk.
 const TERRACED: Record<string, { from: readonly [number, number]; top: readonly [number, number]; levels: number; ferry?: string[] }> = {
   borgo: { from: [6, 13], top: [14, 0], levels: 2 },
+  antenna: { from: [14, 25], top: [14, 2], levels: 2 },
   capitale: { from: [6, 12], top: [14, 5], levels: 1 },
   mediopoli: { from: [6, 11], top: [14, 1], levels: 1 },
   gymtv: { from: [5, 7], top: [4, 1], levels: 1 },

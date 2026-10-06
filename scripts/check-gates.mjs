@@ -16,9 +16,10 @@ try {
   const { audio } = await import('/src/engine/audio.ts'); audio.enabled = false;
   const { preloadCoreSprites } = await import('/src/engine/preload.ts');
   await preloadCoreSprites();
+  const { POWER_ORDER } = await import('/src/game/powers.ts');
   const check = (value, label) => { if (!value) throw Error(label); };
   const boot = (mapId, x, y, badges) => {
-   const state = newGameState(); state.party = [createMonster('giorgetta', 20)]; state.flags['intro-done'] = true; state.badges = badges; state.reduceEffects = true;
+   const state = newGameState(); state.party = [createMonster('giorgetta', 20)]; state.flags['intro-done'] = true; state.badges = badges; state.reduceEffects = true; for (const id of POWER_ORDER) state.flags['power-seen-' + id] = true;
    state.pos = { mapId, x, y, facing: 'right' };
    const stack = new SceneStack(), input = new Input(); let direction = null;
    input.wasPressed = () => false; input.heldDirection = () => direction; input.isHeld = () => false;

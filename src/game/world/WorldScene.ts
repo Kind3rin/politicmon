@@ -4,10 +4,11 @@ import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosp
 import {ambientLight, drawRoomFrame, drawVignette, type Light} from "./lighting";
 import {drawInteriorWall, WALL_HEIGHT} from "./interiorWalls";
 import {PowerCutIn, WorldFx} from "./powerFx";
-import {POWERS, powerStatus, unlockedPowers, type PowerId} from "../powers";
+import {POWERS, newPowers, powerStatus, unlockedPowers, type PowerId} from "../powers";
 import {PowersScene} from "../../scenes/PowersScene";
 import {FlightListScene, FlightScene} from "../../scenes/FlightScene";
 import {drawLighting} from "./lighting";
+import {bridgePlan, climbLanding, pushTarget, type BridgePlan} from "./powerWorld";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
 import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
@@ -318,6 +319,13 @@ export class WorldScene implements Scene {
   private afterCut: (() => void) | null = null;
   private spot = false;
   private comizioAt = -999;
+  private powerTiles = new Map<string, string>();
+  private powerRevision = 0;
+  private boulders: { id: string; x: number; y: number; fromX: number; fromY: number; t: number }[] = [];
+  private buildQueue: { plan: BridgePlan; i: number; wait: number } | null = null;
+  private hopHeight = 9;
+  /** The cut-in plays once per map for the powers you use again and again. */
+  private powerSeen = new Set<string>();
   /** A civic decision reshaping the map right now (tiles change one by one, people step in). */
   private reveal: CivicReveal | null = null;
   /** The civic scenes already in the world on this map, so a new one plays exactly once. */
@@ -479,7 +487,7 @@ export class WorldScene implements Scene {
 
   private canUseWorldControls(): boolean {
     return this.stack.top === this && !this.msg.isOpen && !this.askMenu && !this.remoteMenu &&
-      !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.exclaimNpc && !this.healFx && !this.cutIn;
+      !this.fadeOut && !this.pendingWarp && !this.encounterFlash && !this.exclaimNpc && !this.healFx && !this.cutIn && !this.buildQueue && !this.boulders.some(b => b.t < 1);
   }
 
   private contextLabel(): string | undefined {
@@ -490,6 +498,11 @@ export class WorldScene implements Scene {
     if (this.map.signs.some(n => n.x === x && n.y === y)) return "Leggi";
     if (this.map.decoratives?.some(n => n.x === x && n.y === y)) return "Esamina";
     if (this.map.pickups.some(n => !n.hidden && n.x === x && n.y === y && !this.state.pickedItems.includes(n.id))) return "Raccogli";
+    const front = this.spotAt(x, y);
+    if (front?.kind === "tape") return powerStatus(this.state, "taglio").kind === "ready" ? "Taglia" : "Esamina";
+    if (front?.kind === "boulder") return powerStatus(this.state, "spallata").kind === "ready" ? "Spalla" : "Esamina";
+    if (powerStatus(this.state, "scalata").kind === "ready" && this.climbInFront()) return "Scala";
+    if (powerStatus(this.state, "ponte").kind === "ready" && this.bridgeInFront()) return "Decreto";
     if (this.tileAt(x,y) === "T" && this.state.vehicle === "ruspa") return "Abbatti";
     if (this.map.warps.some(n => n.x === x && n.y === y && (!this.isOutdoorDoorWarp(n) || pos.facing === "up")) && !this.isBlocked(x,y)) return "Entra";
     return undefined;
@@ -688,6 +701,8 @@ export class WorldScene implements Scene {
       this.state.pos.mapId = "borgo";
     }
     this.map = MAPS[mapId];
+    this.powerTiles.clear(); this.powerRevision += 1; this.buildQueue = null;
+    this.boulders = (this.map.spots ?? []).filter(spot => spot.kind === "boulder").map(spot => ({ id: spot.id, x: spot.x, y: spot.y, fromX: spot.x, fromY: spot.y, t: 1 }));
     this.terraces = terraceLevels(this.map);
     this.places = mapPlaces(this.map, MAPS);
     this.terrain.invalidate();
@@ -933,6 +948,8 @@ export class WorldScene implements Scene {
     if (ch === "T" && isBulldozed(this.state, this.map.id, x, y)) {
       return this.map.outdoor ? "." : "p";
     }
+    const planked = this.powerTiles.get(`${x},${y}`);
+    if (planked) return planked;
     return civicBridgeTile(this.state, this.map.id, x, y, ch, this.reveal ? (hx, hy) => this.reveal!.holds(hx, hy) : undefined);
   }
 
@@ -1137,6 +1154,7 @@ export class WorldScene implements Scene {
     } else if (tile.solid) {
       return true;
     }
+    if (this.spotAt(x, y)) return true;
     if (this.visibleNpcs().some((npc) => npc.x === x && npc.y === y)) {
       return true;
     }
@@ -1323,6 +1341,144 @@ export class WorldScene implements Scene {
       case "volo": this.powerVolo(status.user); return;
       default: this.say([`${def.name} si usa davanti all'ostacolo giusto.`, def.where]);
     }
+  }
+
+  /** A tape not yet cut, or a boulder, standing on this tile. */
+  private spotAt(x: number, y: number): { kind: "tape"; id: string } | { kind: "boulder"; id: string } | null {
+    for (const spot of this.map.spots ?? []) if (spot.kind === "tape" && spot.x === x && spot.y === y && !this.state.flags[`cut-${spot.id}`]) return { kind: "tape", id: spot.id };
+    const boulder = this.boulders.find(b => (b.x === x && b.y === y) || (b.t < 1 && b.fromX === x && b.fromY === y));
+    return boulder ? { kind: "boulder", id: boulder.id } : null;
+  }
+
+  private powerGrid() {
+    return {
+      width: this.map.tiles[0].length, height: this.map.tiles.length,
+      water: (x: number, y: number) => Boolean(TILES[this.tileAt(x, y)]?.water),
+      open: (x: number, y: number) => !this.isBlocked(x, y) && !TILES[this.tileAt(x, y)]?.water && !this.map.warps.some(w => w.x === x && w.y === y)
+    };
+  }
+
+  private bridgeInFront(): BridgePlan | null {
+    const pos = this.state.pos, d = DIR_DELTA[pos.facing];
+    if (TILES[this.tileAt(pos.x, pos.y)]?.water || this.state.vehicle === "traghetto") return null;
+    return bridgePlan(this.powerGrid(), pos, d.dx, d.dy);
+  }
+
+  private climbInFront(): { x: number; y: number } | null {
+    const pos = this.state.pos;
+    if (pos.facing !== "up" || !TILES[this.tileAt(pos.x, pos.y - 1)]?.ledge) return null;
+    return climbLanding(this.powerGrid(), pos);
+  }
+
+  /** The power is needed: say what is in the way if it cannot be used, run it (after the cut-in) if it can. */
+  private tryPower(id: PowerId, intro: string[], perform: (user: Monster) => void, quick = false): void {
+    const status = powerStatus(this.state, id), def = POWERS[id];
+    if (status.kind === "locked") { this.say([...intro, `Servirebbe ${def.name}.`, def.unlock]); return; }
+    if (status.kind === "nobody") { this.say([...intro, `${def.name} lo sai fare, ma nessuno in squadra ha la forza giusta.`, `Serve un compagno ${status.need.map(t => t.toLocaleLowerCase("it")).join(", ")} in forze.`]); return; }
+    const key = `${id}:${this.map.id}`;
+    if (quick && this.powerSeen.has(key)) { this.input.reset(); perform(status.user); return; }
+    this.powerSeen.add(key);
+    this.beginPower(id, status.user, () => perform(status.user));
+  }
+
+  /** Whatever a power can do about the tile in front. Returns true if it took over the action. */
+  private useFrontPower(tx: number, ty: number): boolean {
+    const spot = this.spotAt(tx, ty);
+    if (spot?.kind === "tape") {
+      this.tryPower("taglio", ["Un nastro rosso e bianco sbarra il passo.", "«Inaugurazione in corso. Non toccare.»"], () => this.cutTape(spot.id, tx, ty));
+      return true;
+    }
+    if (spot?.kind === "boulder") {
+      this.tryPower("spallata", ["Un masso enorme. Pesa come un decreto."], () => this.pushBoulder(spot.id), true);
+      return true;
+    }
+    const climb = this.climbInFront();
+    if (climb && powerStatus(this.state, "scalata").kind === "ready") { this.tryPower("scalata", [], () => this.climbBank(climb), true); return true; }
+    const bridge = this.bridgeInFront();
+    if (bridge && powerStatus(this.state, "ponte").kind === "ready") { this.tryPower("ponte", [], () => this.buildBridge(bridge)); return true; }
+    return false;
+  }
+
+  private cutTape(id: string, tx: number, ty: number): void {
+    const fx = this.powerFx, cx = tx * TILE + 8, cy = ty * TILE + 8;
+    audio.powerSlash(); fx.pulse("255,255,255", .45);
+    fx.beam(cx - 16, cy - 10, .62, 36, "#ffffff", .24, 3); fx.beam(cx + 16, cy - 10, Math.PI - .62, 36, "#ffd23f", .24, 2);
+    fx.burst(cx, cy, ["#d7263d", "#f4eedc", "#d7263d", "#ffffff"], 22, 80, { w: 4, h: 2, grav: 220, drag: .94 });
+    fx.ring(cx, cy, 26, "#f4eedc", .35, 2);
+    if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .25);
+    this.state.flags[`cut-${id}`] = true; saveGame(this.state);
+    this.tapNotice = { text: "Nastro tagliato: tutto il resto, a metà.", until: this.time + 4 };
+  }
+
+  private pushBoulder(id: string): void {
+    const boulder = this.boulders.find(b => b.id === id);
+    if (!boulder) return;
+    const pos = this.state.pos, d = DIR_DELTA[pos.facing], to = pushTarget(this.powerGrid(), boulder, d.dx, d.dy);
+    const fx = this.powerFx, cx = boulder.x * TILE + 8, cy = boulder.y * TILE + 12;
+    if (!to) { audio.powerThud(); if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .3); fx.burst(cx, cy, ["#b9bcc7", "#8b8f9a"], 8, 40, { w: 2, h: 2 }); this.tapNotice = { text: "Il masso non si sposta: dietro c'è qualcosa.", until: this.time + 3 }; return; }
+    audio.powerThud(); if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .35);
+    boulder.fromX = boulder.x; boulder.fromY = boulder.y; boulder.x = to.x; boulder.y = to.y; boulder.t = 0;
+    fx.burst(cx, cy, ["#d9c9a3", "#b9a77f", "#8b8f9a"], 16, 60, { w: 3, h: 2, grav: 60, drag: .9 });
+    fx.ring(cx, cy, 18, "#f4eedc", .3, 2);
+  }
+
+  private climbBank(landing: { x: number; y: number }): void {
+    const pos = this.state.pos, fx = this.powerFx;
+    audio.powerClimb();
+    fx.burst(pos.x * TILE + 8, pos.y * TILE + 12, ["#f4eedc", "#d9c9a3"], 10, 50, { w: 2, h: 2, grav: 80 });
+    this.fromX = pos.x; this.fromY = pos.y; pos.x = landing.x; pos.y = landing.y;
+    this.running = false; this.hop = true; this.hopHeight = 15; this.moving = true; this.moveT = 0;
+    this.shake = 0;
+  }
+
+  private buildBridge(plan: BridgePlan): void {
+    this.buildQueue = { plan, i: 0, wait: .05 };
+    this.tapNotice = { text: "Decreto firmato. Collaudo: rimandato.", until: this.time + 4 };
+  }
+
+  private updateBuild(dt: number): void {
+    const q = this.buildQueue;
+    if (!q) return;
+    q.wait -= dt;
+    if (q.wait > 0) return;
+    const tile = q.plan.tiles[q.i];
+    this.powerTiles.set(`${tile.x},${tile.y}`, "q"); this.powerRevision += 1;
+    const cx = tile.x * TILE + 8, cy = tile.y * TILE + 8;
+    audio.powerPlank(q.i);
+    this.powerFx.ring(cx, cy, 14, "#f2c230", .3, 2, true);
+    this.powerFx.burst(cx, cy, ["#d9b27a", "#f4eedc", "#f2c230"], 9, 55, { w: 2, h: 2, grav: 90 });
+    if (!this.state.reduceEffects) this.shake = Math.max(this.shake, .12);
+    q.i += 1; q.wait = this.state.reduceEffects ? .02 : .15;
+    if (q.i >= q.plan.tiles.length) this.buildQueue = null;
+  }
+
+  /** Red-and-white barrier tape between two posts, fluttering a little. */
+  private drawTape(ctx: CanvasRenderingContext2D, dx: number, dy: number, seed: number): void {
+    const t = this.state.reduceEffects ? 0 : this.time;
+    ctx.save();
+    ctx.fillStyle = "rgba(16,20,31,.3)"; ctx.fillRect(dx + 2, dy + 14, 12, 2);
+    for (const px of [dx + 1, dx + 12]) { ctx.fillStyle = "#3a4054"; ctx.fillRect(px, dy + 3, 3, 12); ctx.fillStyle = "#d7263d"; ctx.fillRect(px, dy + 2, 3, 3); ctx.fillStyle = "#f4eedc"; ctx.fillRect(px + 1, dy + 3, 1, 1); }
+    for (const [base, phase] of [[6, 0], [10, 1.7]] as const) {
+      for (let x = 4; x < 12; x++) {
+        const sag = Math.round(Math.sin(((x - 4) / 7) * Math.PI) * 1.5 + Math.sin(t * 3 + x * .7 + phase + seed) * .6);
+        ctx.fillStyle = Math.floor((x + (base === 6 ? 0 : 1)) / 2) % 2 ? "#f4eedc" : "#d7263d"; ctx.fillRect(dx + x, dy + base + sag, 1, 3);
+      }
+    }
+    ctx.fillStyle = "#f2c230"; ctx.fillRect(dx + 6, dy + 8, 4, 4); ctx.fillStyle = "#10141f"; ctx.fillRect(dx + 7, dy + 9, 2, 1); ctx.fillRect(dx + 7, dy + 11, 2, 1);
+    ctx.restore();
+  }
+
+  /** A grey boulder, lit from the upper left. `settle` is 0 as it starts to slide and 1 when it rests. */
+  private drawBoulder(ctx: CanvasRenderingContext2D, x: number, y: number, settle: number): void {
+    ctx.save();
+    ctx.fillStyle = "rgba(16,20,31,.35)"; ctx.fillRect(x + 1, y + 13, 14, 2);
+    const wob = settle < 1 ? Math.round(Math.sin(settle * Math.PI * 4)) : 0;
+    ctx.translate(0, wob);
+    const rock = (color: string, rx: number, ry: number, rw: number, rh: number) => { ctx.fillStyle = color; ctx.beginPath(); ctx.ellipse(x + rx, y + ry, rw, rh, 0, 0, Math.PI * 2); ctx.fill(); };
+    rock("#4b4f5c", 8, 9, 7.5, 6); rock("#7b8090", 7.5, 8, 6.8, 5.2); rock("#a3a8b6", 6, 6, 4, 2.8);
+    ctx.fillStyle = "#c7cbd6"; ctx.fillRect(x + 4, y + 5, 3, 1);
+    ctx.fillStyle = "#4b4f5c"; ctx.fillRect(x + 9, y + 8, 1, 3); ctx.fillRect(x + 10, y + 10, 2, 1);
+    ctx.restore();
   }
 
   private grassNear(radius: number): number {
@@ -1679,6 +1835,8 @@ export class WorldScene implements Scene {
       this.askLabel = `${remote.nick}: Cosa vuoi fare?`;
       return;
     }
+
+    if (this.useFrontPower(tx, ty)) return;
 
     // RUSPA: abbatte l'albero davanti (apre scorciatoie). Solo se attiva.
     const raw = this.map.tiles[ty]?.[tx];
@@ -3489,6 +3647,24 @@ export class WorldScene implements Scene {
     this.say([`Il rito «${rite.title}» è compiuto.`, `Si è aperta ${rite.door}.`, "Le Missioni dicono dove."]);
   }
 
+  /** A power that has just opened is announced once, when nothing else is on screen. */
+  private watchPowers(): void {
+    if (this.msg.isOpen || this.askMenu || this.remoteMenu || this.encounterFlash > 0 || this.pendingBattle || this.exclaimT > 0 || this.cutIn || this.titleCard || this.reveal) return;
+    if (!this.state.party.length || !this.state.flags["intro-done"]) return;
+    const fresh = newPowers(this.state);
+    if (!fresh.length) return;
+    // The very first time, a save that is already far along gets all of its powers explained in one go.
+    for (const id of fresh) this.state.flags[`power-seen-${id}`] = true;
+    saveGame(this.state);
+    const def = POWERS[fresh[0]];
+    audio.badgeFanfare();
+    this.showBanner("NUOVO POTERE", def.name, "#f2c230");
+    const lines = fresh.length > 1
+      ? [`Nuovi poteri: ${fresh.map(id => POWERS[id].name).join(", ")}.`, "Li trovi sotto «Poteri», vicino a «Corri». Li usa il primo compagno in forze col tipo giusto."]
+      : [`Nuovo potere: ${def.name}.`, def.does, `Dove serve: ${def.where}`, "Lo trovi sotto «Poteri», vicino a «Corri»."];
+    this.say(lines);
+  }
+
   /** Ask for the art of the new tiles now, so it has arrived by the time they appear. */
   private warmCivicTiles(edits: readonly { to: string }[] | undefined): void {
     for (const edit of edits ?? []) { tileImage(edit.to); objectImage(edit.to); terrainVariantImage(edit.to, 0); }
@@ -3559,6 +3735,8 @@ export class WorldScene implements Scene {
       if (this.cutIn.done) { const next = this.afterCut; this.cutIn = null; this.afterCut = null; next?.(); }
       return;
     }
+    this.updateBuild(dt);
+    for (const b of this.boulders) if (b.t < 1) b.t = Math.min(1, b.t + dt * 6);
     this.cameraDt=dt;
     this.atmosphere.update(dt,this.state.reduceEffects);
     this.shake = Math.max(0, this.shake - dt);
@@ -3573,6 +3751,7 @@ export class WorldScene implements Scene {
     this.stepSparks = this.stepSparks.filter((s) => s.life < s.max);
     this.watchCivicWorks();
     this.watchRites();
+    this.watchPowers();
     if (this.titleCard) { this.titleCard.t += dt; if (this.titleCard.t > 2.8) this.titleCard = null; }
     if (this.reveal) {
       this.reveal.update(dt);
@@ -3863,6 +4042,7 @@ export class WorldScene implements Scene {
       if (facing === "down" && !this.isBlocked(landing.x, landing.y) && !this.map.warps.some(warp => warp.x === landing.x && warp.y === landing.y)) {
         this.running = false;
         this.hop = true;
+        this.hopHeight = 9;
         this.fromX = pos.x; this.fromY = pos.y;
         pos.x = landing.x; pos.y = landing.y;
         this.moving = true; this.moveT = carry;
@@ -3873,6 +4053,8 @@ export class WorldScene implements Scene {
       return;
     }
     if (this.isBlocked(nx, ny)) {
+      const hit = this.spotAt(nx, ny);
+      if (hit && !(this.tapNotice && this.time < this.tapNotice.until)) this.tapNotice = { text: hit.kind === "tape" ? "Un nastro sbarra il passo." : "Un masso enorme sbarra il passo.", until: this.time + 2.5 };
       if(!this.state.reduceEffects&&this.time>=this.nextBump){this.shake=.18;this.nextBump=this.time+.3;}
       return;
     }
@@ -3948,7 +4130,7 @@ export class WorldScene implements Scene {
     this.terrain.draw(screen.ctx,{
       map:this.map,
       assetRevision:spriteAssetRevision(),
-      revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|')+':'+this.state.morale.promises.map(p=>p.status[0]).join('')+':'+(this.reveal?`r${this.reveal.progress}`:'f'),
+      revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|')+':'+this.state.morale.promises.map(p=>p.status[0]).join('')+':'+(this.reveal?`r${this.reveal.progress}`:'f')+':p'+this.powerRevision,
       sample:(x,y)=>this.terrainSample(x,y),
       terraces:this.terraces,
       stairStyle:this.map.stairStyle==='carpet'?'carpet':'stone',
@@ -4307,7 +4489,7 @@ export class WorldScene implements Scene {
     // Porte larghe 2 caselle: il disegno resta al centro della porta (vedi doorShiftNow).
     const doorOffset = this.doorShiftNow();
     const baseX = Math.round(playerPx - camX + doorOffset);
-    const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * 9) : 0;
+    const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * this.hopHeight) : 0;
     // Sui gradini il passo sale: mezzo tile di altezza, interpolato tra una casella e l'altra.
     const stairLift=(x:number,y:number)=>isStair(this.tileAt(x,y))?4:0;
     const lift=this.moving?stairLift(this.fromX,this.fromY)+(stairLift(pos.x,pos.y)-stairLift(this.fromX,this.fromY))*Math.min(1,this.moveT):stairLift(pos.x,pos.y);
@@ -4391,6 +4573,15 @@ export class WorldScene implements Scene {
     tall.push({ baseY: playerPy + TILE, draw: drawPlayerAndVehicle });
 
     // Disegna tutti gli oggetti "alti" ordinati per Y (chi è più in alto va dietro).
+    for (const spot of this.map.spots ?? []) {
+      if (spot.kind !== "tape" || this.state.flags[`cut-${spot.id}`]) continue;
+      const dx = spot.x * TILE - camX, dy = spot.y * TILE - camY;
+      tall.push({ baseY: (spot.y + 1) * TILE, draw: () => this.drawTape(screen.ctx, dx, dy, spot.x * 3 + spot.y) });
+    }
+    for (const b of this.boulders) {
+      const k = b.t * b.t * (3 - 2 * b.t), x = (b.fromX + (b.x - b.fromX) * k) * TILE - camX, y = (b.fromY + (b.y - b.fromY) * k) * TILE - camY;
+      tall.push({ baseY: (b.fromY + (b.y - b.fromY) * k + 1) * TILE, draw: () => this.drawBoulder(screen.ctx, Math.round(x), Math.round(y), b.t < 1 ? b.t : 1) });
+    }
     if(hasWall)drawInteriorWall(screen.ctx,inner,camX,camY,this.map.id,1-ambientLight(this.localClock().getHours()+this.localClock().getMinutes()/60).alpha/.64,this.time,this.state.reduceEffects);
     tall.sort((a, b) => a.baseY - b.baseY);
     for (const e of tall) {

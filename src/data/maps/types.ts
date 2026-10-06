@@ -87,6 +87,14 @@ export interface DecorativeDef {
   lines: string[];
 }
 
+/** An obstacle that a field power deals with. `tape` is cut for good; a `boulder` is pushed and is back where it was whenever you come in again. */
+export interface PowerSpot {
+  id: string;
+  kind: "tape" | "boulder";
+  x: number;
+  y: number;
+}
+
 export interface PickupDef {
   id: string;
   x: number;
@@ -94,6 +102,8 @@ export interface PickupDef {
   itemId: string;
   qty: number;
   hidden?: boolean; // tesoro segreto: non disegnato, si trova esaminando il tile
+  /** Behind an obstacle that this power deals with: the road never leads here without it. */
+  power?: "taglio" | "scalata" | "spallata" | "ponte";
 }
 
 export interface EncounterEntry {
@@ -119,6 +129,8 @@ export interface MapDef {
   outdoor: boolean;
   /** 0..1: how dark it is underground. Without the field lights you see about two tiles around you. */
   dark?: number;
+  /** Tape to cut and boulders to push: the places where the field powers matter. */
+  spots?: PowerSpot[];
   lamps?: { x: number; y: number }[]; // attached to existing solid posts; no collision change
   groundMaterials?: Record<string, "grass" | "sand" | "path" | "asphalt" | "floor">; // visual only; preserves movement tiles
   scatter?: { kind: string; density: number }[]; // 0..1, decorative only

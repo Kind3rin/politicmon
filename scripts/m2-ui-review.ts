@@ -2,6 +2,9 @@ import '../src/styles.css';
 import '../src/ui/kit/kit.css';
 import {beginUiFrame,endUiFrame,renderUiWorld,renderUiPanel,renderUiFeedback,updateUiInput} from '../src/ui/kit';
 import {Screen} from '../src/engine/screen';
+import {PowersScene} from '../src/scenes/PowersScene';
+import {POWER_ORDER} from '../src/game/powers';
+import {FlightListScene} from '../src/scenes/FlightScene';
 import {SceneStack} from '../src/engine/scene';
 import {Input} from '../src/engine/input';
 import {WorldScene} from '../src/game/world/WorldScene';
@@ -56,7 +59,7 @@ const routeStatus=document.createElement('output');
 if(routeReview){routeStatus.style.cssText='position:fixed;top:64px;right:12px;padding:6px;background:#f4eedc;color:#14161f;z-index:60;font:16px system-ui;pointer-events:none';document.body.append(routeStatus);}
 const requested=new URLSearchParams(location.search).get('screen')??'esplorazione';
 for(const id of BAG_ORDER)state.bag[id]=state.bag[id]??(id==='caffe'?11:3);
-state.money=9320;state.sondaggi=100;state.fuel=14;state.flags['dex-received']=true;state.badges=['auditel','spread'];state.flags['dex-received']=true;
+state.money=9320;state.sondaggi=100;state.fuel=14;state.flags['dex-received']=true;state.badges=['auditel','spread'];state.flags['dex-received']=true;if(!params.has('newpowers'))for(const id of POWER_ORDER)state.flags['power-seen-'+id]=true;
 state.party[2].hp=0;state.party[0].hp=64;state.party[3].hp=40;state.party[4].hp=20;
 if(requested.startsWith('lotta')){
  if(requested==='lotta-esaurita')state.party[0].moves[0].pp=0;
@@ -65,7 +68,7 @@ if(requested.startsWith('lotta')){
  if(requested==='lotta-crescita'){const b=battle as unknown as {growthReceipt:unknown;stepTimer:number;player:{mon:{exp:number}};state:{party:{exp:number;level:number}[]}};
   const lead=state.party[0];lead.exp+=30;b.growthReceipt={elapsed:0,previousLevel:lead.level,previousExp:lead.exp-80,gained:80,shared:'Divisa 2 alleati +40',modifiers:[]};b.stepTimer=30;}
  stack.push(battle);
-}else if(['squadra','squadra-riordina','compagno','borsa','impara','mappa','pianta','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo','carburante','viaggio'].includes(requested)){
+}else if(['squadra','squadra-riordina','compagno','borsa','impara','mappa','pianta','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo','carburante','viaggio','poteri','volo'].includes(requested)){
  stack.push(new WorldScene(stack,input,state));
  const scene=requested==='squadra'||requested==='compagno'||requested==='squadra-riordina'?new PartyScene(stack,input,state,{mode:'view',startReordering:requested==='squadra-riordina'})
   :requested==='borsa'?new BagScene(stack,input,state,{inBattle:false,fromWorld:true})
@@ -85,6 +88,8 @@ if(requested.startsWith('lotta')){
   :requested==='backup'?new BackupScene(stack,input,state)
   :requested==='governo'?new GovScene(stack,input,state)
   :requested==='titolo'?new TitleScene(stack,input)
+  :requested==='poteri'?new PowersScene(stack,input,state,()=>{})
+  :requested==='volo'?new FlightListScene(stack,input,state,'borgo',()=>{})
   :requested==='carburante'?new FuelScene(stack,input,state,'route1')
   :requested==='viaggio'?new TransportScene(stack,input,state,'borgo',()=>{})
   :(requested==='mappa'&&registerLocalMap(null),new WorldMapScene(stack,input,state));

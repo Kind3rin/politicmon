@@ -23,11 +23,11 @@ const TERRACED: Record<string, { from: readonly [number, number]; top: readonly 
   route3: { from: [14, 30], top: [1, 2], levels: 1 }
 };
 
-type TerracedMap = { tiles: string[] };
+type TerracedMap = { tiles: string[]; spots?: { x: number; y: number }[] };
 function reach(map: TerracedMap, from: readonly [number, number]) {
   const walkable = (x: number, y: number) => {
     const tile = TILES[map.tiles[y]?.[x] ?? ""];
-    return Boolean(tile && !tile.solid && !tile.water && !tile.ledge);
+    return Boolean(tile && !tile.solid && !tile.water && !tile.ledge) && !map.spots?.some(spot => spot.x === x && spot.y === y);
   };
   const seen = new Set([`${from[0]},${from[1]}`]), queue: [number, number][] = [[from[0], from[1]]];
   while (queue.length) {
@@ -44,7 +44,7 @@ for (const [id, spec] of Object.entries(TERRACED)) {
     const seen = reach(map, spec.from);
     assert.ok(seen.has(`${spec.top[0]},${spec.top[1]}`), "the top of the climb is reachable");
     for (const npc of map.npcs) assert.ok(DIRS.some(([dx, dy]) => seen.has(`${npc.x + dx},${npc.y + dy}`)), `${npc.id} can be talked to`);
-    for (const pickup of map.pickups.filter(pickup => !spec.ferry?.includes(pickup.id))) assert.ok(seen.has(`${pickup.x},${pickup.y}`), `${pickup.id} can be picked up`);
+    for (const pickup of map.pickups.filter(pickup => !spec.ferry?.includes(pickup.id) && !pickup.power)) assert.ok(seen.has(`${pickup.x},${pickup.y}`), `${pickup.id} can be picked up`);
     for (const sign of map.signs) assert.ok(DIRS.some(([dx, dy]) => seen.has(`${sign.x + dx},${sign.y + dy}`)), `sign at ${sign.x},${sign.y} can be read`);
     for (const door of map.warps) assert.ok(seen.has(`${door.x},${door.y}`), `door to ${door.toMap} at ${door.x},${door.y} can be reached`);
   });

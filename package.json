@@ -122,7 +122,8 @@
     "check:civic-reveal": "node scripts/check-civic-reveal.mjs",
     "check:legends": "node scripts/check-legends.mjs",
     "check:gates": "node scripts/check-gates.mjs",
-    "check:doors": "node scripts/check-door-entry.mjs"
+    "check:doors": "node scripts/check-door-entry.mjs",
+    "check:powers": "node scripts/check-powers.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

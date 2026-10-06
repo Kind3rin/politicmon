@@ -61,6 +61,11 @@ export function powerUnlocked(state: GameState, id: PowerId): boolean {
   return true;
 }
 
+/** Powers that are open and have not been announced yet. */
+export function newPowers(state: GameState): PowerId[] {
+  return POWER_ORDER.filter(id => powerUnlocked(state, id) && !state.flags[`power-seen-${id}`]);
+}
+
 export function unlockedPowers(state: GameState): PowerId[] {
   return POWER_ORDER.filter(id => powerUnlocked(state, id));
 }

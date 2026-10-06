@@ -1,5 +1,7 @@
 import {beginWorldLabels,endWorldLabels} from "./worldLabels";
 import { renderArena, leaveArena, type UiArena } from "./arena";
+import { renderPlan, type UiPlan } from "./plan";
+export type { UiPlan } from "./plan";
 import {TYPE_COLORS,typeLabelColor,type PolType} from "../../data/poltypes";
 import type { TouchAction, UiRow } from "../../engine/touchActions";
 import type {Input} from "../../engine/input";
@@ -86,6 +88,8 @@ export interface UiPanel {
   splash?: { art: string; tagline: string; sprites?: readonly string[]; compact?: boolean };
   /** Drawn map: actions[i] is the node i; positions are percentages. */
   atlas?: UiAtlas;
+  /** Plan of the place you are in: tiles drawn from the map itself. */
+  plan?: UiPlan;
   /** Labelled values drawn as bars. */
   stats?: readonly { label: string; value: number; max: number }[];
   /** Rows can be dragged to another place; `move(from, to)` receives action indices. */
@@ -608,6 +612,7 @@ export function renderUiPanel(panel?: UiPanel): boolean {
     });
     body.append(atlas);
   }
+  if(panel.plan)body.append(renderPlan(panel.plan,panel.title));
   const list = element("nav", "ui-actions");
   if(panel.atlas)list.hidden=true;
   if (panel.columns === 2) list.classList.add("ui-grid");

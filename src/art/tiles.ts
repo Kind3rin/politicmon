@@ -193,6 +193,15 @@ export const TILES: Record<string, TileDef> = {
     "solid": false,
     "ledge": true
   },
+  // Muro di sostegno in pietra: stessa regola della scarpata, materiale da terrazza.
+  "&": {
+    "solid": false,
+    "ledge": true
+  },
+  // Scalinata: si sale e si scende, taglia la scarpata o il muro nella sua colonna.
+  "E": {
+    "solid": false
+  },
   "1": {
     "solid": true,
     "overlay": true

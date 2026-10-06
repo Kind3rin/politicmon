@@ -39,7 +39,7 @@ Ancora non convince: schermate di campagna/diplomazia restano a schede; la ricev
 Prove: check:ui-panels 20×4, check:ui-flows, check-ui-runtime 28, 425 test.
 
 ## Fase 2 (avvio) e Fase 4/5 (primi elementi) — 5 ottobre 2026
-Dislivelli: casella % (scarpata), salto verso sud, muro negli altri versi. Sui Percorsi 1-3; non ancora i livelli a più altezze di DESIGN M2.
+Dislivelli: casella % (scarpata), salto verso sud, muro negli altri versi. Sui Percorsi 1-3. I livelli a più altezze (muri, scalinate, quote) sono arrivati a Borgo: vedi MAPPE-LIVELLI.md.
 Selvatici visibili: roamers.ts con 4 umori, vantaggio sul primo turno, tiro invisibile solo tutorial/grotte. 7 test.
 Posture: Attacca/Smentisci/Temporeggia, anteprime coerenti, 4 test. L'IA nemica non le usa ancora.
 Crediti Higgsfield: nessun consumo in questo round.

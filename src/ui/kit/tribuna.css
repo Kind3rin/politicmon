@@ -146,6 +146,8 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-atlas-lines line.ui-dashed{stroke-dasharray:10 8}
 .ui-panel .ui-tabs{flex-wrap:wrap}
 .ui-panel .ui-tabs .ui-button{flex:1 1 30%;min-height:44px}
+.ui-panel .ui-tabs:has(> :nth-child(4):last-child) .ui-button{flex:1 1 0;padding:8px 2px}
+.ui-panel .ui-tabs:has(> :nth-child(4):last-child) .ui-button .ui-subtitle{font-size:20px}
 .ui-panel .ui-tabs .ui-button .ui-subtitle{font-size:22px}
 .ui-hero-name{font-size:clamp(26px,8vw,36px)}
 @media(orientation:portrait) and (max-height:700px){.ui-row-move{min-height:56px;margin-bottom:8px}.ui-hero-art{height:clamp(96px,16dvh,220px)}.ui-hero-card{gap:8px}.ui-panel .ui-header{gap:4px}}
@@ -240,3 +242,11 @@ body.ui-reduce-effects .ui-atlas-here .ui-atlas-pin{animation:none}
 .ui-splash .ui-splash-cast img:nth-child(3){animation-delay:1s,2.4s}
 @media(prefers-reduced-motion:reduce){.ui-splash .ui-splash-logo,.ui-splash .ui-splash-tape,.ui-splash .ui-splash-cast img{animation:none}}
 body.ui-reduce-effects .ui-splash .ui-splash-logo,body.ui-reduce-effects .ui-splash .ui-splash-tape,body.ui-reduce-effects .ui-splash .ui-splash-cast img{animation:none}
+
+/* Plan of the place: the whole map in one block, then the places in it as rows below. */
+.ui-plan{margin:4px 0 12px;padding:0;display:flex;flex-direction:column;gap:8px}
+.ui-plan-canvas{display:block;width:auto;height:auto;max-width:100%;max-height:46vh;margin:0 auto;background:var(--t-paper);border:3px solid var(--t-ink);box-shadow:4px 4px var(--t-ink)}
+.ui-plan-key{display:flex;flex-wrap:wrap;gap:4px 12px;margin:0;font:16px/1.3 PoliticmonBody,sans-serif;color:var(--t-ink)}
+.ui-plan-key span::first-letter{color:var(--t-ink)}
+.ui-plan-key .tone-red::first-letter{color:var(--t-red)}
+.ui-plan-key .tone-yellow::first-letter{color:#E0A800}

@@ -8,6 +8,7 @@ import { currentQuest } from "../data/quests";
 import { MAPS } from "../data/maps";
 import { reachableDexMaps } from "../game/dexGuide";
 import { runtimeFeatures } from "../game/features";
+import { currentLocalMap, type LocalMap } from "../game/world/localMap";
 
 interface MapNode {
   id: string;
@@ -99,8 +100,15 @@ export class WorldMapScene implements Scene {
   private selectedId: string;
   private detail = false;
   private reachable: Set<string>;
+  /** The plan of the place you stand in comes first: it answers "where am I" before the whole country does. */
+  private readonly local: LocalMap | null;
+  private localView: boolean;
+  private row = 0;
 
   constructor(private stack: SceneStack, private input: Input, private state: GameState) {
+    this.local = currentLocalMap();
+    this.localView = Boolean(this.local);
+    this.row = Math.max(0, this.local?.rows.findIndex(row => row.goal) ?? 0);
     this.reachable = reachableDexMaps(state, runtimeFeatures());
     const pageId = worldMapPageFor(state.pos.mapId);
     this.pageIndex = Math.max(0, PAGES.findIndex((page) => page.id === pageId));
@@ -122,6 +130,10 @@ export class WorldMapScene implements Scene {
     }
     if (this.input.wasPressed("down")) {
       this.stepSelection(1);
+      return;
+    }
+    if (this.localView && this.local && this.input.wasPressed("a") && this.local.rows[this.row]) {
+      this.goTo(this.row);
       return;
     }
     if (this.input.wasPressed("a") || this.input.wasPressed("b") || this.input.wasPressed("start")) {
@@ -147,7 +159,27 @@ export class WorldMapScene implements Scene {
     return this.page.nodes.filter((node) => this.isUnlocked(node));
   }
 
+  private goTo(index: number): void {
+    const row = this.local?.rows[index];
+    if (!row || row.locked || !row.reachable || this.stack.top !== this) return;
+    this.input.reset(); audio.confirm();
+    this.local!.go(row.place);
+  }
+
   private changePage(direction: -1 | 1): void {
+    if (this.local) {
+      // The plan is the tab before the first page of the atlas.
+      const slot = (this.localView ? 0 : this.pageIndex + 1) + direction, total = PAGES.length + 1;
+      const next = (slot + total) % total;
+      this.localView = next === 0;
+      if (next > 0) this.pageIndex = next - 1;
+      if (!this.localView) {
+        const current = this.currentNode();
+        this.selectedId = current && this.page.nodes.includes(current) ? current.id : this.selectableNodes()[0]?.id ?? this.page.nodes[0].id;
+      }
+      audio.cursor();
+      return;
+    }
     this.pageIndex = (this.pageIndex + direction + PAGES.length) % PAGES.length;
     const current = this.currentNode();
     this.selectedId = current && this.page.nodes.includes(current)
@@ -157,6 +189,11 @@ export class WorldMapScene implements Scene {
   }
 
   private stepSelection(direction: -1 | 1): void {
+    if (this.localView && this.local) {
+      if (this.local.rows.length) this.row = (this.row + direction + this.local.rows.length) % this.local.rows.length;
+      audio.cursor();
+      return;
+    }
     const nodes = this.selectableNodes();
     if (nodes.length === 0) return;
     const found = nodes.findIndex((node) => node.id === this.selectedId);
@@ -178,7 +215,32 @@ export class WorldMapScene implements Scene {
     return main.flatMap(node=>[node,...this.page.nodes.filter(branch=>branch.optional&&this.connections(branch).some(parent=>parent.id===node.id))]);
   }
 
+  private get localPanel(): UiPanel {
+    const local = this.local!;
+    const close = () => { if (this.stack.top !== this) return; this.input.reset(); audio.cancel(); this.stack.pop(); };
+    const tab = (label: string, run: () => void) => ({ label, run: () => { if (this.stack.top !== this) return; this.input.reset(); run(); audio.cursor(); } });
+    const tabs = [tab("Qui", () => { this.localView = true; }),
+      ...PAGES.map((region, index) => tab(region.tab.charAt(0) + region.tab.slice(1).toLocaleLowerCase("it"), () => {
+        this.localView = false; this.pageIndex = index;
+        const current = this.currentNode();
+        this.selectedId = current && region.nodes.includes(current) ? current.id : region.nodes.find(node => this.isUnlocked(node))?.id ?? region.nodes[0].id;
+      }))];
+    return {
+      title: "Mappa", subtitle: local.zone ? `${local.name} · ${local.zone}` : local.name,
+      plan: local.plan, tabs, selectedTab: 0,
+      actions: local.rows.map((row, i) => ({
+        label: `${row.n} · ${row.place.label}`, group: local.inside ? "Uscite" : "Dove puoi andare",
+        hint: row.locked ?? [row.goal ? "Obiettivo" : undefined, row.where, row.place.detail].filter(Boolean).join(" · "),
+        disabled: Boolean(row.locked) || !row.reachable,
+        run: () => this.goTo(i)
+      })),
+      selected: Math.min(this.row, Math.max(0, local.rows.length - 1)),
+      back: { label: "Indietro", run: close }
+    };
+  }
+
   get uiPanel(): UiPanel {
+    if (this.localView && this.local) return this.localPanel;
     const page=this.page,nodes=this.routeNodes(),selected=this.page.nodes.find(node=>node.id===this.selectedId)??this.page.nodes[0],current=this.currentNode();
     const name=(value:string)=>value.charAt(0)+value.slice(1).toLocaleLowerCase("it");
     const close=()=>{if(this.stack.top!==this)return;this.input.reset();audio.cancel();if(this.detail)this.detail=false;else this.stack.pop();};
@@ -197,7 +259,7 @@ export class WorldMapScene implements Scene {
         return before?[{from:before.i,to:index}]:[];
       })};
     return {title:"Mappa",atlas,
-      tabs:PAGES.map((region,index)=>({label:name(region.tab),run:()=>{if(this.stack.top!==this||this.detail)return;this.input.reset();this.pageIndex=index;this.selectedId=this.currentNode()?.id??region.nodes[0].id;if(!region.nodes.some(node=>node.id===this.selectedId))this.selectedId=region.nodes[0].id;audio.cursor();}})),selectedTab:this.pageIndex,
+      tabs:[...(this.local?[{label:"Qui",run:()=>{if(this.stack.top!==this||this.detail)return;this.input.reset();this.localView=true;audio.cursor();}}]:[]),...PAGES.map((region,index)=>({label:name(region.tab),run:()=>{if(this.stack.top!==this||this.detail)return;this.input.reset();this.pageIndex=index;this.selectedId=this.currentNode()?.id??region.nodes[0].id;if(!region.nodes.some(node=>node.id===this.selectedId))this.selectedId=region.nodes[0].id;audio.cursor();}}))],selectedTab:this.pageIndex+(this.local?1:0),
       blocks:undefined,
       actions:nodes.map(node=>({label:name(node.label),group:"Percorso della campagna",route:node.optional?"branch":"main",hint:node.id===current?.id?"Sei qui":node.optional?"Deviazione facoltativa":undefined,
         facts:!this.isUnlocked(node)?[{label:"Passaggio",value:"Da sbloccare"}]:undefined,run:()=>{if(this.stack.top!==this||this.detail||this.page!==page)return;this.input.reset();this.selectedId=node.id;this.detail=true;audio.confirm();}})),

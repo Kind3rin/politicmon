@@ -17,6 +17,7 @@ import {PartyScene} from '../src/scenes/PartyScene';
 import {BagScene} from '../src/scenes/BagScene';
 import {TeachScene} from '../src/scenes/TeachScene';
 import {WorldMapScene} from '../src/scenes/WorldMapScene';
+import {registerLocalMap} from '../src/game/world/localMap';
 import {BAG_ORDER} from '../src/data/items';
 import {TRAINERS} from '../src/data/trainers';
 import {QuestScene} from '../src/scenes/QuestScene';
@@ -64,7 +65,7 @@ if(requested.startsWith('lotta')){
  if(requested==='lotta-crescita'){const b=battle as unknown as {growthReceipt:unknown;stepTimer:number;player:{mon:{exp:number}};state:{party:{exp:number;level:number}[]}};
   const lead=state.party[0];lead.exp+=30;b.growthReceipt={elapsed:0,previousLevel:lead.level,previousExp:lead.exp-80,gained:80,shared:'Divisa 2 alleati +40',modifiers:[]};b.stepTimer=30;}
  stack.push(battle);
-}else if(['squadra','squadra-riordina','compagno','borsa','impara','mappa','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo','carburante','viaggio'].includes(requested)){
+}else if(['squadra','squadra-riordina','compagno','borsa','impara','mappa','pianta','missioni','negozio','dex','traguardi','audio','circolo','evoluzione','starter','archivio','tipi','morale','fonti','backup','governo','titolo','carburante','viaggio'].includes(requested)){
  stack.push(new WorldScene(stack,input,state));
  const scene=requested==='squadra'||requested==='compagno'||requested==='squadra-riordina'?new PartyScene(stack,input,state,{mode:'view',startReordering:requested==='squadra-riordina'})
   :requested==='borsa'?new BagScene(stack,input,state,{inBattle:false,fromWorld:true})
@@ -86,7 +87,7 @@ if(requested.startsWith('lotta')){
   :requested==='titolo'?new TitleScene(stack,input)
   :requested==='carburante'?new FuelScene(stack,input,state,'route1')
   :requested==='viaggio'?new TransportScene(stack,input,state,'borgo',()=>{})
-  :new WorldMapScene(stack,input,state);
+  :(requested==='mappa'&&registerLocalMap(null),new WorldMapScene(stack,input,state));
  if(requested==='squadra-riordina')(scene as unknown as {moveFrom:number}).moveFrom=2;
  if(requested==='compagno'){(scene as unknown as {summary:unknown;summaryPage:number}).summary=state.party[0];(scene as unknown as {summaryPage:number}).summaryPage=0;}
  stack.push(scene);

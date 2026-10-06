@@ -112,6 +112,11 @@ import { DISTRICT_CONTENT, districtActionCount } from "../districtCampaign";
 import { electionDoctrine, type ElectionDoctrine } from "../electionDoctrine";
 import { resolveWeeklyStage } from "../weeklyCampaign";
 import type { WorldCommand } from "./worldContext";
+import { isStair, terraceLevels, type Terraces } from "./terraces";
+import { compass, mapPlaces, type Place } from "./places";
+import { registerLocalMap, type LocalMap } from "./localMap";
+import { planOf } from "./localPlan";
+import type { UiPlanMark } from "../../ui/kit/plan";
 
 const STEP_TIME = 0.18;
 const RUN_FACTOR = 1.85;
@@ -246,6 +251,8 @@ export class WorldScene implements Scene {
   private npcTapAreas: {id:string;x:number;y:number;width:number;height:number}[] = [];
   private tapCamera = {x:0,y:0,zoom:1};
   private cameraPosition:{x:number;y:number}|null=null;
+  private terraces: Terraces = terraceLevels({tiles:[],warps:[]});
+  private places: Place[] = [];
   /** Which half of the screen is free of the player, so a coach card never hides them. */
   private lessonAt:"top"|"bottom"="bottom";
   private stageWidth=0;
@@ -355,7 +362,71 @@ export class WorldScene implements Scene {
     this.loadMap(this.state.pos.mapId);
   }
 
+  onExit(): void { registerLocalMap(null); }
+
+  /** The place you stand in, as the map screen shows it: plan, doors, roads, and how to walk to each. */
+  private buildLocalMap(): LocalMap {
+    const pos = this.state.pos, height = this.map.tiles.length;
+    const goal = currentQuest(this.state)?.target;
+    const goalAt = goal && goal.mapId === this.map.id ? goal : undefined;
+    const goalPlace = this.goalPlace(goal);
+    const rows = this.places.map(place => {
+      const gated = place.requiresBadges && this.state.badges.length < place.requiresBadges
+        ? `Serve ${place.requiresBadges === 1 ? "una medaglia" : `${place.requiresBadges} medaglie`}` : undefined;
+      const found = this.searchRoute(place.x, place.kind === "exit" ? (place.edge === "north" ? -1 : height) : place.y);
+      const steps = typeof found === "string" ? undefined : found.route.length;
+      const where = place.kind === "exit"
+        ? `${place.edge === "north" ? "Strada a nord" : "Strada a sud"}${steps !== undefined ? ` · ${steps} passi` : ""}`
+        : `${compass(pos.x, pos.y, place.x, place.y).replace(/^./, c => c.toUpperCase())}${steps !== undefined ? `, ${steps} passi` : ""}`;
+      return { place, where, goal: place === goalPlace, locked: gated, reachable: steps !== undefined, steps: steps ?? 9999 };
+    }).sort((a, b) => Number(b.goal) - Number(a.goal) || a.steps - b.steps)
+      .map((row, i) => ({ place: row.place, n: i + 1, where: row.where, goal: row.goal, locked: row.locked, reachable: row.reachable }));
+    const marks: UiPlanMark[] = [
+      ...this.visibleNpcs().map(npc => ({ kind: (npc.trainerId && !this.state.defeatedTrainers.includes(npc.trainerId) ? "trainer" : "npc") as UiPlanMark["kind"], x: npc.x, y: npc.y })),
+      ...rows.map(row => ({ kind: (row.place.kind === "exit" ? "road" : "door") as UiPlanMark["kind"], x: row.place.kind === "exit" ? row.place.x : Math.floor((row.place.x + row.place.x2) / 2), y: row.place.y, n: row.n, edge: row.place.edge, goal: row.goal })),
+      ...(goalAt && !goalPlace ? [{ kind: "goal" as const, x: goalAt.x, y: goalAt.y }] : []),
+      { kind: "here", x: pos.x, y: pos.y }
+    ];
+    const key = [{ text: "● Sei qui", tone: "red" as const }, ...(goal && (goalAt || goalPlace) ? [{ text: "★ Obiettivo", tone: "yellow" as const }] : []),
+      ...(marks.some(mark => mark.kind === "trainer") ? [{ text: "● Sfidante", tone: "red" as const }] : []),
+      ...(this.map.tiles.some(row => /[El]/.test(row)) ? [{ text: "≡ Scale" }] : []),
+      ...(this.map.tiles.some(row => /[%&]/.test(row)) ? [{ text: "▬ Si salta giù" }] : []),
+      ...(this.terraces.top > 0 ? [{ text: "Più chiaro = più in alto" }] : [])];
+    return {
+      name: this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it"), zone: this.zoneName(pos.x, pos.y), inside: !this.map.outdoor,
+      plan: planOf(this.map, this.terraces, marks, key), rows,
+      go: place => this.goToPlace(place)
+    };
+  }
+
+  private zoneName(x: number, y: number): string | undefined {
+    return this.map.zones?.find(zone => x >= zone.x && x < zone.x + zone.w && y >= zone.y && y < zone.y + zone.h)?.name;
+  }
+
+  /** Which door or road leads towards the current goal. */
+  private goalPlace(goal?: { mapId: string; x: number; y: number }): Place | undefined {
+    // Indoors the way out is never the goal: you are where the next step happens.
+    if (!goal || (!this.map.outdoor && goal.mapId !== this.map.id)) return undefined;
+    if (goal.mapId === this.map.id) return this.places.find(place => place.kind !== "exit" && place.x <= goal.x && goal.x <= place.x2 && Math.abs(place.y - goal.y) <= 1);
+    const direct = this.places.find(place => place.to === goal.mapId);
+    if (direct) return direct;
+    const hint = this.mapHintDir(goal.mapId);
+    if (hint && hint.dy !== 0) return this.places.find(place => place.kind === "exit" && place.edge === (hint.dy < 0 ? "north" : "south"));
+    return undefined;
+  }
+
+  private goToPlace(place: Place): void {
+    for (let i = 0; i < 6 && this.stack.top !== this; i++) this.stack.pop();
+    this.input.reset();
+    const found = this.searchRoute(place.x, place.kind === "exit" ? (place.edge === "north" ? -1 : this.map.tiles.length) : place.y);
+    if (typeof found === "string") { this.tapNotice = { text: found, until: this.time + 2.5 }; return; }
+    this.stopTapRoute();
+    this.tapRoute = found.route;
+    this.tapNotice = { text: `Ti accompagno: ${place.label}`, until: this.time + 3 };
+  }
+
   onEnter(): void {
+    registerLocalMap(() => this.buildLocalMap());
     if (!this.state.flags["intro-done"]) {
       this.state.flags["intro-done"] = true;
       this.state.flags["controls-intro"] = true;
@@ -426,7 +497,7 @@ export class WorldScene implements Scene {
       notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:this.banner?`${this.banner.text} · ${this.banner.sub}`:undefined,
       messages:mp.chat.filter(c=>performance.now()-c.t<6000).slice(-2).map(c=>`${mp.chatNick(c)}: ${c.text}`),
       lesson:(lesson=>lesson&&{...lesson,at:this.lessonAt})(controlLesson(this.state,context)),
-      location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it"),facts,
+      location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it")+(this.zoneName(this.state.pos.x,this.state.pos.y)?` · ${this.zoneName(this.state.pos.x,this.state.pos.y)}`:""),facts,
       objective:quest?`${this.map.id==="borgo"&&quest.target?.mapId==="route1"?"Esci a nord. ":""}${quest.step}`:this.state.party.length?undefined:"Vai al laboratorio con il tetto blu.",
       actions: [command("Squadra", () => this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:"view"})),"/sprites/ui/kit/team.png"),
         command("Mappa", () => this.stack.push(new WorldMapScene(this.stack,this.input,this.state)),"/sprites/ui/kit/map.png"),
@@ -444,8 +515,7 @@ export class WorldScene implements Scene {
 
   /** Search uses the same collisions as a manual step. Intermediate doors
    * cannot divert the player onto another map before reaching the destination. */
-  private planTapRoute(x:number,y:number,npcId?:string): void {
-    this.stopTapRoute(); this.tapNotice = undefined;
+  private searchRoute(x:number,y:number,npcId?:string): {route:{x:number;y:number}[];exit?:{x:number;y:number};target?:{x:number;y:number;npcId?:string}}|string {
     const width = this.map.tiles[0].length, height = this.map.tiles.length;
     // A road reaching the map border remains a destination. The final step
     // uses the normal zone transition, including its badge/locked-road gate.
@@ -453,7 +523,7 @@ export class WorldScene implements Scene {
       (y===-1 && this.map.edges?.north || y===height && this.map.edges?.south)
       ? {x,y} : undefined;
     if (exit) y=Math.max(0,Math.min(height-1,y));
-    if (x<0 || y<0 || x>=width || y>=height) {this.tapNotice={text:"Tocca un punto dentro la mappa.",until:this.time+2.5};return;}
+    if (x<0 || y<0 || x>=width || y>=height) return "Tocca un punto dentro la mappa.";
     const npc = this.visibleNpcs().find(n=>npcId?n.id===npcId:n.x===x&&n.y===y);
     if(npc){x=npc.x;y=npc.y;}
     const target = Boolean(npc) ||
@@ -477,12 +547,20 @@ export class WorldScene implements Scene {
         visited.add(key(next));parents.set(key(next),point);queue.push(next);
       }
     }
-    if (!found) {this.tapNotice={text:"Non c’è un percorso libero verso quel punto.",until:this.time+2.5};return;}
+    if (!found) return "Non c’è un percorso libero verso quel punto.";
     const route:{x:number;y:number}[]=[];
     for(let point=found;key(point)!==key(start);point=parents.get(key(point))!)route.push(point);
-    this.tapRoute=route.reverse();
-    if(exit)this.tapRoute.push(exit);
-    if(target)this.tapTarget={x,y,npcId:npc?.id};
+    route.reverse();
+    if(exit)route.push(exit);
+    return {route,exit,target:target?{x,y,npcId:npc?.id}:undefined};
+  }
+
+  private planTapRoute(x:number,y:number,npcId?:string): void {
+    this.stopTapRoute(); this.tapNotice = undefined;
+    const found=this.searchRoute(x,y,npcId);
+    if(typeof found==="string"){this.tapNotice={text:found,until:this.time+2.5};return;}
+    this.tapRoute=found.route;
+    if(found.target)this.tapTarget=found.target;
   }
 
   private tapDirection(): Facing | undefined {
@@ -548,6 +626,17 @@ export class WorldScene implements Scene {
       back:{...commands[4],label:'Indietro',hint:'Esplora il laboratorio. Potrai scegliere parlando con Quirino.'}};
   }
 
+  /** A save made before a map was redrawn can sit inside a wall or on a bank: step to the nearest free ground. */
+  private unstick(): void {
+    const pos = this.state.pos, here = TILES[this.tileAt(pos.x, pos.y)];
+    if (!here || (!here.solid && !here.ledge)) return;
+    for (let radius = 1; radius <= 8; radius++) for (let dy = -radius; dy <= radius; dy++) for (let dx = -radius; dx <= radius; dx++) {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) !== radius) continue;
+      const x = pos.x + dx, y = pos.y + dy, tile = TILES[this.tileAt(x, y)];
+      if (tile && !tile.water && !this.isBlocked(x, y) && !this.map.warps.some(warp => warp.x === x && warp.y === y)) { pos.x = x; pos.y = y; return; }
+    }
+  }
+
   private loadMap(mapId: string): void {
     this.stopTapRoute();
     // Hardening: un save importato/manomesso con un mapId inesistente farebbe
@@ -559,6 +648,8 @@ export class WorldScene implements Scene {
       this.state.pos.mapId = "borgo";
     }
     this.map = MAPS[mapId];
+    this.terraces = terraceLevels(this.map);
+    this.places = mapPlaces(this.map, MAPS);
     this.terrain.invalidate();
     this.atmosphere.reset();
     this.cameraPosition=null;this.dialogueZoom=1;
@@ -626,6 +717,7 @@ export class WorldScene implements Scene {
     mp.setDuelWins(this.state.duelWins);
     // ISPEZIONA: espongo agli altri l'anteprima della mia squadra (solo specie).
     mp.setPartyPreview(this.state.party.map((mon) => mon.speciesId));
+    this.unstick();
     const p = this.state.pos;
     mp.joinMap(mapId, p.x, p.y, p.facing);
     // Se lo spawn è su ACQUA (arrivo navale allo Stretto), attiva subito il
@@ -815,7 +907,7 @@ export class WorldScene implements Scene {
     let ch=this.terrainTileAt(x,y);
     const def=TILES[ch];
     const base=this.map.outdoor?'.':'p';
-    if(def?.ledge)ch=base;
+    if(def?.ledge||ch==='E')ch=base;
     const covering=this.buildingCovering(x,y);
     const obj=this.objectPng(ch);
     const special='ORSN'.includes(ch);
@@ -2724,6 +2816,68 @@ export class WorldScene implements Scene {
     return null;
   }
 
+  /** Signs over the doors and roads near the player: what is where, without having to walk up to read it. */
+  private drawPlaceSigns(camX: number, camY: number, goal?: { mapId: string; x: number; y: number }): void {
+    const pos = this.state.pos, h = this.map.tiles.length;
+    const nearest = this.places.map(place => ({ place, distance: Math.hypot(place.signX - 0.5 - pos.x, place.signY - pos.y) }))
+      .filter(entry => entry.distance <= 8.5).sort((a, b) => a.distance - b.distance).slice(0, 5);
+    const goalPlace = this.goalPlace(goal);
+    for (const { place } of nearest) {
+      const goalHere = place === goalPlace;
+      if (place.kind === "exit") {
+        const arrow = place.edge === "north" ? "▲" : "▼";
+        const locked = place.requiresBadges && this.state.badges.length < place.requiresBadges;
+        worldLabel(`${arrow} ${place.label}${locked ? " · chiuso" : ""}`, place.signX * TILE - camX, (place.edge === "north" ? 1.2 : h - 0.3) * TILE - camY, this.viewHeight, goalHere ? "goal" : "road");
+      } else {
+        worldLabel(`${goalHere ? "▶ " : ""}${place.label}`, place.signX * TILE - camX, place.signY * TILE - camY - 1, this.viewHeight, goalHere ? "goal" : "place");
+      }
+    }
+  }
+
+  /** Where a tap or a "take me there" is going: a dotted trail on the ground and a ring where it ends. */
+  private drawRoutePreview(ctx: CanvasRenderingContext2D, camX: number, camY: number): void {
+    const route = this.tapRoute, last = route[route.length - 1];
+    if (!route.length || !last) return;
+    ctx.save();
+    route.forEach((step, i) => {
+      if (i === route.length - 1) return;
+      const x = step.x * TILE - camX + TILE / 2, y = step.y * TILE - camY + TILE / 2;
+      if (x < -TILE || x > VIEW_W + TILE || y < -TILE || y > this.viewHeight + TILE) return;
+      ctx.fillStyle = "#14161F"; ctx.fillRect(Math.round(x) - 2, Math.round(y) - 2, 4, 4);
+      ctx.fillStyle = "#FFD23F"; ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 2, 2);
+    });
+    const x = last.x * TILE - camX + TILE / 2, y = Math.max(last.y, 0) * TILE - camY + TILE / 2;
+    const pulse = this.state.reduceEffects ? 0 : Math.sin(this.time * 6) * 1.2;
+    ctx.lineWidth = 2; ctx.strokeStyle = "#14161F"; ctx.beginPath(); ctx.arc(x, y, 6.5 + pulse, 0, Math.PI * 2); ctx.stroke();
+    ctx.lineWidth = 1; ctx.strokeStyle = "#FFD23F"; ctx.beginPath(); ctx.arc(x, y, 6.5 + pulse, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+
+  private guideCache: { key: string; vector: { dx: number; dy: number } | null } | null = null;
+
+  /** Which way to step: along the walkable route (stairs and banks included), not through the wall. */
+  private guideVector(target: { mapId: string; x: number; y: number }): { dx: number; dy: number } | null {
+    const pos = this.state.pos;
+    const key = `${this.map.id}|${pos.x},${pos.y}|${target.mapId},${target.x},${target.y}`;
+    if (this.guideCache?.key === key) return this.guideCache.vector;
+    let vector: { dx: number; dy: number } | null = null;
+    const same = target.mapId === this.map.id;
+    if (same && Math.abs(target.x - pos.x) <= 1 && Math.abs(target.y - pos.y) <= 1) { this.guideCache = { key, vector: null }; return null; }
+    const place = same ? undefined : this.goalPlace(target);
+    const tx = same ? target.x : place?.x, ty = same ? target.y : place ? (place.kind === "exit" ? (place.edge === "north" ? -1 : this.map.tiles.length) : place.y) : undefined;
+    const found = tx === undefined || ty === undefined ? undefined : this.searchRoute(tx, ty);
+    if (found && typeof found !== "string" && found.route.length) {
+      const ahead = found.route[Math.min(found.route.length - 1, 2)];
+      vector = { dx: ahead.x - pos.x, dy: ahead.y - pos.y };
+    } else if (same) {
+      vector = { dx: target.x - pos.x, dy: target.y - pos.y };
+    } else {
+      vector = this.mapHintDir(target.mapId);
+    }
+    this.guideCache = { key, vector };
+    return vector;
+  }
+
   private drawGuideArrow(
     screen: Screen,
     target: { mapId: string; x: number; y: number },
@@ -2732,22 +2886,11 @@ export class WorldScene implements Scene {
     camX: number,
     camY: number
   ): void {
-    let dx: number;
-    let dy: number;
-    if (target.mapId === this.map.id) {
-      dx = target.x - this.state.pos.x;
-      dy = target.y - this.state.pos.y;
-      if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
-        return; // già arrivato: niente freccia
-      }
-    } else {
-      const hint = this.mapHintDir(target.mapId);
-      if (!hint) {
-        return;
-      }
-      dx = hint.dx;
-      dy = hint.dy;
+    const vector = this.guideVector(target);
+    if (!vector) {
+      return;
     }
+    const { dx, dy } = vector;
     const ang = Math.atan2(dy, dx);
     // Centro del giocatore sullo schermo.
     const cx = playerPx - camX + TILE / 2;
@@ -3540,10 +3683,12 @@ export class WorldScene implements Scene {
       assetRevision:spriteAssetRevision(),
       revision:this.state.bulldozed.join('|')+':'+this.state.morale.decisions.join('|'),
       sample:(x,y)=>this.terrainSample(x,y),
+      terraces:this.terraces,
       shadows:()=>this.map.outdoor?this.terrainShadows():[]
     },camX,camY);
 
     if(this.map.outdoor)this.terrain.drawWater(screen.ctx,terrainVariantImage('w',waterFrame(this.time,this.state.reduceEffects)),camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects);
+    this.drawRoutePreview(screen.ctx,camX,camY);
     const windowLights:Array<{x:number;y:number;lamp?:boolean}>=(this.map.lamps??[]).map(p=>({x:p.x*TILE+6,y:p.y*TILE-12,lamp:true}));
     this.atmosphere.drawSteps(screen.ctx,camX,camY,this.state.reduceEffects);
     const treeTrunks:Array<{baseY:number;draw:()=>void}>=[];
@@ -3900,7 +4045,10 @@ export class WorldScene implements Scene {
     const doorOffset = this.doorOffsetSmooth;
     const baseX = Math.round(playerPx - camX + doorOffset);
     const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * 9) : 0;
-    const baseY = Math.round(playerPy) - camY - 2 - hopLift;
+    // Sui gradini il passo sale: mezzo tile di altezza, interpolato tra una casella e l'altra.
+    const stairLift=(x:number,y:number)=>isStair(this.tileAt(x,y))?4:0;
+    const lift=this.moving?stairLift(this.fromX,this.fromY)+(stairLift(pos.x,pos.y)-stairLift(this.fromX,this.fromY))*Math.min(1,this.moveT):stairLift(pos.x,pos.y);
+    const baseY = Math.round(playerPy) - camY - 2 - hopLift - Math.round(lift);
     screen.ctx.canvas.dataset.worldReady=String(this.fadeT<=0);
     // Bounds are published as the player sees them: after the zoom about the screen centre.
     const seen=(x:number,y:number)=>({x:VIEW_W/2+(x-VIEW_W/2)*zoom,y:screen.height/2+(y-screen.height/2)*zoom});
@@ -4031,6 +4179,7 @@ export class WorldScene implements Scene {
     const now=this.localClock();
     this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights);
     const quest = currentQuest(this.state);
+    if (!this.msg.isOpen && !this.askMenu && !this.remoteMenu) this.drawPlaceSigns(camX, camY, quest?.target);
 
     // Modalità guidata: freccia gialla che punta verso l'obiettivo. La
     // nascondiamo quando siamo in un INTERNO (es. il LAB) ma il target è la

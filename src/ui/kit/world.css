@@ -51,6 +51,9 @@ body.ui-world-open .dpad-btn[data-held]{background:#FFD23F;transform:translate(3
 @keyframes world-notice{0%,90%{opacity:1}100%{opacity:0;visibility:hidden}}
 .ui-world-labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .ui-world-labels span{position:absolute;transform:translate(-50%,-100%);padding:3px 6px;white-space:nowrap;background:#1E3A8A;color:#F4EEDC;font:700 16px/1.2 Tribuna,sans-serif}
+.ui-world-labels span.place{background:#F4EEDC;color:#14161F;border:2px solid #14161F;padding:1px 6px;box-shadow:2px 2px #14161F}
+.ui-world-labels span.goal{background:#FFD23F;color:#14161F;border:2px solid #14161F;padding:1px 6px;box-shadow:2px 2px #14161F}
+.ui-world-labels span.road{background:#14161F;color:#FFD23F;padding:1px 8px}
 .ui-save-flash{position:absolute;top:max(76px,calc(env(safe-area-inset-top) + 64px));right:16px;padding:4px 8px;background:#F4EEDC;color:#14161F;font:16px/1.4 PoliticmonBody,sans-serif}
 body.ui-reduce-effects.ui-world-open .ui-world .ui-button:active{transform:none}
 

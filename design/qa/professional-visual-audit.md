@@ -1,13 +1,13 @@
 # Audit visuale professionale
 
-Generato: 2026-10-05T12:57:16.838Z
+Generato: 2026-10-06T08:31:57.487Z
 
 ## Sintesi
 
 - Scene: 51
 - Scene con evidenza screenshot: 51/51
 - Chiamate di clipping residue: 0
-- Ellissi esplicite nelle scene: 210
+- Ellissi esplicite nelle scene: 223
 - Politicmon PNG: 52
 - PNG action di fallback: 10/52. Questo conteggio non misura le animazioni principali: i 52 fogli a quattro pose hanno priorità nel renderer e sono verificati da rosterSprites.test.ts e check:roster-animations.
 
@@ -38,7 +38,7 @@ Nessuna.
 - `src/scenes/PauseScene.ts`: clip 0, ellissi 7
 - `src/scenes/QuestScene.ts`: clip 0, ellissi 1
 - `src/scenes/RecallScene.ts`: clip 0, ellissi 1
-- `src/scenes/ShopScene.ts`: clip 0, ellissi 2
+- `src/scenes/ShopScene.ts`: clip 0, ellissi 3
 - `src/scenes/SlotScene.ts`: clip 0, ellissi 2
 - `src/scenes/StarterPreviewScene.ts`: clip 0, ellissi 2
 - `src/scenes/TalkScene.ts`: clip 0, ellissi 2
@@ -47,10 +47,10 @@ Nessuna.
 - `src/scenes/TradeScene.ts`: clip 0, ellissi 2
 - `src/scenes/TransportScene.ts`: clip 0, ellissi 1
 - `src/scenes/WeeklyCampaignScene.ts`: clip 0, ellissi 6
-- `src/scenes/WorldMapScene.ts`: clip 0, ellissi 4
-- `src/game/battle/BattleScene.ts`: clip 0, ellissi 51
+- `src/scenes/WorldMapScene.ts`: clip 0, ellissi 7
+- `src/game/battle/BattleScene.ts`: clip 0, ellissi 52
 - `src/game/battle/PvpBattleScene.ts`: clip 0, ellissi 5
-- `src/game/world/WorldScene.ts`: clip 0, ellissi 35
+- `src/game/world/WorldScene.ts`: clip 0, ellissi 43
 
 ## Gate
 

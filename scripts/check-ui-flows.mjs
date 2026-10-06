@@ -47,6 +47,15 @@ try{
  await page.waitForTimeout(200);
  expect(await page.locator('.ui-atlas-node').count()===3,'routes page has 3 places');
  await page.close();
+ // Plan of the place: drawn first, its doors listed, one tap away from the whole country and back.
+ page=await open('pianta');
+ expect(await page.locator('.ui-plan-canvas').count()===1,'the plan of the place is drawn');
+ expect(await page.locator('.ui-actions .ui-button').count()>=2,'its doors and roads are listed');
+ await page.getByRole('button',{name:'Italietta'}).tap();
+ await page.locator('.ui-atlas').waitFor();
+ await page.getByRole('button',{name:'Qui',exact:true}).tap();
+ await page.locator('.ui-plan-canvas').waitFor();
+ await page.close();
  // New move: one tap on a current move replaces it.
  page=await open('impara');
  await page.locator('.ui-row',{hasText:'EDITORIALE'}).tap();

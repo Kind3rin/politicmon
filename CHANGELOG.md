@@ -1,5 +1,15 @@
 # Changelog
 
+## Mandato 2 — terrazze e orientamento — 2026-10-06
+
+- Borgo Urne a tre quote: la piazza in basso (invariata: porte, edifici, strade), la campagna sulla prima terrazza (erba alta, due sfidanti) e il belvedere in cima (muro di pietra, panchina, Monumento al Candidato Ignoto che indica dall'alto laboratorio, casa e bar, tesoro nascosto, uscita verso il Percorso 1). Si sale con due scalinate al centro, si scende anche saltando dai muri; la tasca a sinistra della campagna si raggiunge pure saltando dal belvedere. Il nome della zona compare in alto quando ci entri.
+- Motore delle altezze senza toccare camera, collisioni o tocco: nuove caselle `&` (muro di sostegno in pietra, si salta giù come la scarpata `%`) ed `E` (scalinata); la quota di ogni terreno si ricava dalla mappa stessa (`src/game/world/terraces.ts`: un gradino salito, un livello) e il terreno più alto prende un velo di luce. Scarpate con fianchi arrotondati, muri a due corsi con coronamento, gradini con l'alzata in ombra; sui gradini il passo sale di mezza casella. Stretto e Offshore (`l`) ne beneficiano senza modifiche. Regole e mappa di Borgo in `docs/MAPPE-LIVELLI.md`.
+- Insegne in mondo: sopra le porte vicine il nome del posto («Laboratorio», «Bar», «Circolo»), sulle strade di confine «▲ Percorso 1» (con «· chiuso» se mancano le medaglie), l'obiettivo della missione in giallo con «▶». Dentro un edificio la porta è «Esci».
+- Mappa → «Qui»: la pianta del luogo in cui sei, disegnata dalle sue caselle: tu in rosso, l'obiettivo in giallo, porte e strade numerate, sfidanti ancora da battere, scale e scarpate; sotto l'elenco «Dove puoi andare» con direzione, passi e a cosa serve («Cura gratis · box squadra»). Toccare una riga ti ci porta a piedi. L'atlante d'Italia resta nelle altre schede; si apre sul luogo, non sul Paese.
+- Cammino automatico: scia di puntini e anello sul punto d'arrivo (prima non si vedeva dove andava); la freccia della guida segue il percorso percorribile, scale comprese, invece della linea d'aria attraverso il muro.
+- Salvataggi: se un luogo viene ridisegnato e il giocatore si trova dentro un muro, al caricamento viene portato sul terreno libero più vicino.
+- Verifiche: nuova schermata `pianta` in `check:ui-panels` (4 formati) e nel flusso `check:ui-flows`; test su livelli, raggiungibilità di Borgo (con e senza scale) e luoghi di tutte le mappe.
+
 ## Mandato 2 — piacere di gioco — 2026-10-05
 
 - Suono dei colpi: sotto il colpo generico ora c'è un accento breve e basso per tipo (tromba di altoparlante, scatto di fotocamera, glitch, soffio di fiamma, tamburo di piazza, foglie, campanella, martelletto). Sintetizzati, mai sopra .09 di volume e sotto i 0,25 s; non sono stati ascoltati da me, solo provati senza errori: se uno suona male si toglie in `typeAccent` (`src/engine/audio.ts`).

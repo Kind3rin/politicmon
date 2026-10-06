@@ -9,6 +9,12 @@ export const BASE_MAPS: Record<string, MapDef> = {
     weather:"sereno",
     name: "BORGO URNE",
     tiles: BORGO_TILES,
+    // Tre quote: la piazza in basso, la campagna sulla prima terrazza, il belvedere in cima.
+    zones: [
+      { name: "Belvedere", x: 0, y: 0, w: 30, h: 5 },
+      { name: "Campagna", x: 0, y: 5, w: 30, h: 4 },
+      { name: "Piazza", x: 0, y: 9, w: 30, h: 15 }
+    ],
     outdoor: true,
     music: "borgo",
     edges: { north: { toMap: "route1", offsetX: 0 } },
@@ -37,7 +43,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
         lines: ["BORGO URNE", "Dove ogni promessa è per sempre. O almeno fino al ballottaggio."]
       },
       {
-        x: 7, y: 8,
+        x: 9, y: 7,
         lines: ["CAMPAGNA ELETTORALE NORD", "Attenti ai candidati selvatici nell'erba alta.", "Dicono che nei vicoli più sperduti qualcuno nasconda 'fondi neri'... esplora gli angoli!", "Prima di MEDIOPOLI: recluta nel PERCORSO 1. Lo STUDIO 5 non offre corsi di recupero."]
       },
       {
@@ -65,6 +71,18 @@ export const BASE_MAPS: Record<string, MapDef> = {
       {
         x: 11, y: 14,
         lines: ["PANCHINA DEI SAGGI.", "Qui si decideva tutto. Ora c'è solo il wifi del bar."]
+      },
+      {
+        x: 18, y: 3,
+        lines: [
+          "MONUMENTO AL CANDIDATO IGNOTO.",
+          "Dal belvedere si vede tutto Borgo: il laboratorio col tetto blu a sinistra, casa tua col tetto rosso a destra, il bar in basso.",
+          "Sotto la targa: \"Ignoto perché non si è mai ripresentato\"."
+        ]
+      },
+      {
+        x: 11, y: 3,
+        lines: ["PANCHINA DEL PANORAMA.", "Tre terrazze, due scalinate, zero ascensori. L'accessibilità è rimandata alla prossima legislatura."]
       }
     ],
     npcs: [
@@ -119,7 +137,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
         id: "sondaggista-versioni", pal: "aide", x: 16, y: 18, facing: "left", wander: false,
         lines: ["SONDAGGISTA: campiono l'erba alta, un comizio alla volta."]
       },
-      lucaGuide("BORGO URNE", 17, 8,
+      lucaGuide("BORGO URNE", 17, 9,
         ["Il tipografo regala SCHEDE. Piero e Rita accettano sfide con A; puoi prepararti prima."],
         ["Recluta nel PERCORSO 1, poi chiedi la DIVISA EQUA al sindacalista di MEDIOPOLI.", "Il bar cura PV, PP e status gratis. Studio 5: prima la prova con Mara, poi la diretta."])
     ]

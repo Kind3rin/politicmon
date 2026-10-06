@@ -126,6 +126,7 @@ export interface MapDef {
   encounters?: EncounterEntry[];
   encounterRate?: number;
   music?: string; // traccia di audio.playMusic (default "borgo")
+  zones?: { name: string; x: number; y: number; w: number; h: number }[]; // quartieri/terrazze: il nome compare in alto quando ci entri
   allowWanderers?: boolean; // false nelle aree narrative dove un PG casuale romperebbe il beat
   // Override texture-tile per questa mappa (char -> file PNG in sprites/tiles/).
   // Permette di riusare gli stessi char con look diverso per ambiente (es. la

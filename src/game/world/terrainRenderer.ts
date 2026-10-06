@@ -1,5 +1,6 @@
 import { TILE } from '../../art/tiles';
 import type { MapDef } from '../../data/maps/types';
+import { isFace, isStair, type Terraces } from './terraces';
 
 export type TerrainKind = 'grass' | 'sand' | 'path' | 'asphalt' | 'floor' | 'water';
 export type TerrainSample = { kind: TerrainKind; image: CanvasImageSource | null; layers?: (CanvasImageSource | null)[]; decorate?: boolean };
@@ -17,6 +18,8 @@ export type TerrainSource = {
   assetRevision?: number;
   sample(x: number, y: number): TerrainSample;
   shadows?: () => TerrainShadow[];
+  /** Heights read off the map; ground above the valley floor gets a little more light. */
+  terraces?: Terraces;
 };
 
 /** Coordinate seed: stable through camera movement, reloads and negative coordinates. */
@@ -106,8 +109,25 @@ export class TerrainRenderer {
       this.drawEdges(ctx,snapshot,cell);
       if(cell.scatter) this.drawScatter(ctx,cell);
     }
-    // Dislivelli: una scarpata a strati, con l'ombra che cade sul terreno più in basso.
-    for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) if(rows[y][x]==='%') this.drawLedge(ctx,x,y,cells[y][x].variant,rows[y+1]?.[x]==='%');
+    // Dislivelli: scarpate, muri di sostegno e scalinate, con l'ombra che cade sul terreno più in basso.
+    for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) {
+      const ch=rows[y][x];
+      if(!isFace(ch)&&ch!=='E')continue;
+      const join={left:isFace(rows[y][x-1])||isStair(rows[y][x-1]),right:isFace(rows[y][x+1])||isStair(rows[y][x+1])};
+      if(ch==='E')this.drawStairs(ctx,x,y,cells[y][x].variant,rows[y][x-1],rows[y][x+1]);
+      else if(ch==='&')this.drawWall(ctx,x,y,cells[y][x].variant,isFace(rows[y+1]?.[x]),join);
+      else this.drawLedge(ctx,x,y,cells[y][x].variant,isFace(rows[y+1]?.[x]),join);
+    }
+    // Quota: ogni gradino salito aggiunge luce, così le terrazze alte si leggono prima ancora di arrivarci.
+    if(source.terraces&&source.terraces.top>0){
+      ctx.save();
+      for(let y=0;y<rows.length;y++) for(let x=0;x<rows[y].length;x++) {
+        const level=source.terraces.at(x,y);
+        if(level<=0||isFace(rows[y][x])||rows[y][x]==='E')continue;
+        ctx.fillStyle=`rgba(255,238,178,${Math.min(.16,.05*level)})`;ctx.fillRect(x*TILE,y*TILE,TILE,TILE);
+      }
+      ctx.restore();
+    }
     ctx.save();ctx.fillStyle='rgba(20,30,37,.19)';
     for(const shadow of source.shadows?.()??[]) {
       const {x,y,width,height}=shadow,reach=Math.max(3,Math.round(height*.45));
@@ -169,20 +189,67 @@ export class TerrainRenderer {
       ctx.clip();ctx.drawImage(neighbor.image,px,py,TILE,TILE);ctx.restore();
     });
   }
-  private drawLedge(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean):void {
+  private drawLedge(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean,join:{left:boolean;right:boolean}={left:true,right:true}):void {
+    const px=x*TILE+(join.left?0:2),py=y*TILE,w=TILE-(join.left?0:2)-(join.right?0:2);
+    ctx.save();
+    // Labbro d'erba in alto, parete di terra con strati, base scura. Alle estremità la scarpata si arrotonda e dà un fianco.
+    ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,w,4);
+    ctx.fillStyle='#a6c47f';ctx.fillRect(px,py,w,1);
+    ctx.fillStyle='#5f7f56';ctx.fillRect(px,py+3,w,1);
+    ctx.fillStyle='#9a7a56';ctx.fillRect(px,py+4,w,9);
+    ctx.fillStyle='#b69168';ctx.fillRect(px,py+4,w,2);
+    ctx.fillStyle='#7b5f43';ctx.fillRect(px,py+8,w,1);ctx.fillRect(px,py+11,w,1);
+    const crack=(variant*5+x*3)%11+2;ctx.fillStyle='#664d36';ctx.fillRect(px+Math.min(crack,w-2),py+5,1,3);ctx.fillRect(px+Math.min((crack+6)%13+1,w-2),py+9,1,2);
+    ctx.fillStyle='#4a392a';ctx.fillRect(px,py+13,w,3);
+    if(!join.left){ctx.fillStyle='#664d36';ctx.fillRect(px,py+4,1,12);ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,1,4);}
+    if(!join.right){ctx.fillStyle='#664d36';ctx.fillRect(px+w-1,py+4,1,12);ctx.fillStyle='#7ea46f';ctx.fillRect(px+w-1,py,1,4);}
+    if(!continues){ctx.fillStyle='rgba(20,30,37,.28)';ctx.fillRect(px,py+16,w,4);}
+    ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+16,w,3);
+    ctx.restore();
+  }
+  /** Muro di sostegno: coronamento chiaro, due corsi di blocchi sfalsati, zoccolo scuro. */
+  private drawWall(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,continues:boolean,join:{left:boolean;right:boolean}):void {
+    const px=x*TILE+(join.left?0:1),py=y*TILE,w=TILE-(join.left?0:1)-(join.right?0:1);
+    const tones=['#bcae90','#b3a487','#c3b597','#ae9f83'];
+    ctx.save();
+    ctx.fillStyle='#e3dac0';ctx.fillRect(px,py,w,3);
+    ctx.fillStyle='#f1e9d2';ctx.fillRect(px,py,w,1);
+    ctx.fillStyle='#a99878';ctx.fillRect(px,py+2,w,1);
+    for(let course=0;course<2;course++){
+      const top=py+3+course*5,shift=course?4:0;
+      ctx.fillStyle=tones[(variant+course)%4];ctx.fillRect(px,top,w,5);
+      ctx.fillStyle='#8f8068';ctx.fillRect(px,top+4,w,1);
+      for(let bx=shift;bx<TILE;bx+=8){ctx.fillStyle='#8f8068';ctx.fillRect(x*TILE+bx,top,1,4);}
+      ctx.fillStyle='rgba(255,246,222,.28)';ctx.fillRect(px,top,w,1);
+    }
+    ctx.fillStyle='#6f6350';ctx.fillRect(px,py+13,w,3);
+    ctx.fillStyle='#8a7c64';ctx.fillRect(px,py+13,w,1);
+    if(!join.left){ctx.fillStyle='#6f6350';ctx.fillRect(px,py+3,1,13);}
+    if(!join.right){ctx.fillStyle='#6f6350';ctx.fillRect(px+w-1,py+3,1,13);}
+    if(!continues){ctx.fillStyle='rgba(20,30,37,.28)';ctx.fillRect(px,py+16,w,4);}
+    ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+16,w,3);
+    ctx.restore();
+  }
+  /** Scalinata: quattro gradini, alzata in ombra sotto ogni pedata chiara; fianchi se accanto c'è un muro. */
+  private drawStairs(ctx:CanvasRenderingContext2D,x:number,y:number,variant:number,left:string|undefined,right:string|undefined):void {
     const px=x*TILE,py=y*TILE;
     ctx.save();
-    // Labbro d'erba in alto, parete di roccia con strati, base scura.
-    ctx.fillStyle='#7ea46f';ctx.fillRect(px,py,TILE,4);
-    ctx.fillStyle='#a6c47f';ctx.fillRect(px,py,TILE,1);
-    ctx.fillStyle='#5f7f56';ctx.fillRect(px,py+3,TILE,1);
-    ctx.fillStyle='#9a7a56';ctx.fillRect(px,py+4,TILE,9);
-    ctx.fillStyle='#b69168';ctx.fillRect(px,py+4,TILE,2);
-    ctx.fillStyle='#7b5f43';ctx.fillRect(px,py+8,TILE,1);ctx.fillRect(px,py+11,TILE,1);
-    const crack=(variant*5+x*3)%11+2;ctx.fillStyle='#664d36';ctx.fillRect(px+crack,py+5,1,3);ctx.fillRect(px+(crack+6)%13+1,py+9,1,2);
-    ctx.fillStyle='#4a392a';ctx.fillRect(px,py+13,TILE,3);
-    if(!continues){ctx.fillStyle='rgba(20,30,37,.28)';ctx.fillRect(px,py+16,TILE,4);}
-    ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+16,TILE,3);
+    ctx.fillStyle='#8a7c64';ctx.fillRect(px,py,TILE,TILE);
+    for(let step=0;step<4;step++){
+      const top=py+step*4;
+      ctx.fillStyle='#f6edd2';ctx.fillRect(px,top,TILE,1);
+      ctx.fillStyle='#dccfae';ctx.fillRect(px,top+1,TILE,1);
+      ctx.fillStyle='#b3a381';ctx.fillRect(px,top+2,TILE,1);
+      ctx.fillStyle='#6f634b';ctx.fillRect(px,top+3,TILE,1);
+    }
+    const mark=(variant*3+x)%5;if(mark===0){ctx.fillStyle='#7a6d55';ctx.fillRect(px+5,py+9,1,1);}
+    const cheek=(side:string|undefined,at:number)=>{
+      if(!isFace(side))return;
+      ctx.fillStyle='#6f6350';ctx.fillRect(px+at,py,2,TILE);
+      ctx.fillStyle='#a99878';ctx.fillRect(px+at+(at?0:1),py,1,TILE);
+    };
+    cheek(left,0);cheek(right,TILE-2);
+    ctx.fillStyle='rgba(20,30,37,.2)';ctx.fillRect(px,py+TILE,TILE,3);
     ctx.restore();
   }
   private drawCurb(ctx:CanvasRenderingContext2D,source:TerrainSource,cell:TerrainCell):void {

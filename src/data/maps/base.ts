@@ -151,6 +151,12 @@ export const BASE_MAPS: Record<string, MapDef> = {
     weather:"sereno",
     name: "PERCORSO 1",
     tiles: ROUTE1_TILES,
+    // Da Borgo a Mediopoli si sale: due scarpate con la scalinata sulla strada.
+    zones: [
+      { name: "Altopiano dei sondaggi", x: 0, y: 0, w: 29, h: 18 },
+      { name: "Valle del lago", x: 0, y: 18, w: 29, h: 10 },
+      { name: "Piana di Borgo", x: 0, y: 28, w: 29, h: 3 }
+    ],
     outdoor: true,
     music: "borgo",
     edges: {
@@ -437,6 +443,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
     weather:"nebbia",
     name: "PERCORSO 2",
     tiles: ROUTE2_TILES,
+    zones: [
+      { name: "Colline del talk show", x: 0, y: 0, w: 29, h: 19 },
+      { name: "Valle dello stagno", x: 0, y: 19, w: 29, h: 10 },
+      { name: "Piana di Mediopoli", x: 0, y: 29, w: 29, h: 3 }
+    ],
     outdoor: true,
     music: "mediopoli",
     edges: {
@@ -626,6 +637,11 @@ export const BASE_MAPS: Record<string, MapDef> = {
     weather:"pioggia",
     name: "PERCORSO 3",
     tiles: ROUTE3_TILES,
+    zones: [
+      { name: "Altopiano del Protocollo", x: 0, y: 0, w: 29, h: 19 },
+      { name: "Valle del fiume", x: 0, y: 19, w: 29, h: 10 },
+      { name: "Piana di Eurotown", x: 0, y: 29, w: 29, h: 3 }
+    ],
     outdoor: true,
     music: "eurotown",
     edges: {

@@ -6,13 +6,17 @@ import { terraceLevels } from "../../src/game/world/terraces.ts";
 
 const DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0]] as const;
 // Where you walk in from, and what only the stairs should open.
-const TERRACED = {
+// `ferry`: treasures on islands, which need the ferry rather than a walk.
+const TERRACED: Record<string, { from: readonly [number, number]; top: readonly [number, number]; levels: number; ferry?: string[] }> = {
   borgo: { from: [6, 13], top: [14, 0], levels: 2 },
   capitale: { from: [6, 12], top: [14, 5], levels: 1 },
   mediopoli: { from: [6, 11], top: [15, 0], levels: 1 },
   colle: { from: [5, 7], top: [5, 1], levels: 1 },
-  eurotown: { from: [6, 13], top: [15, 0], levels: 1 }
-} as const;
+  eurotown: { from: [6, 13], top: [15, 0], levels: 1 },
+  route1: { from: [14, 29], top: [14, 1], levels: 2, ferry: ["pk-r1-isola"] },
+  route2: { from: [14, 30], top: [14, 1], levels: 2, ferry: ["pk-r2-isola", "pk-r2-lago"] },
+  route3: { from: [14, 30], top: [14, 1], levels: 2 }
+};
 
 type TerracedMap = { tiles: string[] };
 function reach(map: TerracedMap, from: readonly [number, number]) {
@@ -35,7 +39,7 @@ for (const [id, spec] of Object.entries(TERRACED)) {
     const seen = reach(map, spec.from);
     assert.ok(seen.has(`${spec.top[0]},${spec.top[1]}`), "the top of the climb is reachable");
     for (const npc of map.npcs) assert.ok(DIRS.some(([dx, dy]) => seen.has(`${npc.x + dx},${npc.y + dy}`)), `${npc.id} can be talked to`);
-    for (const pickup of map.pickups) assert.ok(seen.has(`${pickup.x},${pickup.y}`), `${pickup.id} can be picked up`);
+    for (const pickup of map.pickups.filter(pickup => !spec.ferry?.includes(pickup.id))) assert.ok(seen.has(`${pickup.x},${pickup.y}`), `${pickup.id} can be picked up`);
     for (const sign of map.signs) assert.ok(DIRS.some(([dx, dy]) => seen.has(`${sign.x + dx},${sign.y + dy}`)), `sign at ${sign.x},${sign.y} can be read`);
     for (const door of map.warps) assert.ok(seen.has(`${door.x},${door.y}`), `door to ${door.toMap} at ${door.x},${door.y} can be reached`);
   });

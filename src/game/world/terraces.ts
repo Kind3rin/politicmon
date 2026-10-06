@@ -56,18 +56,26 @@ export function terraceLevels(map: TerraceSource): Terraces {
           // A stair belongs to its lower side. Leaving it to the north is the climb; entering it from the north is the descent.
           const up = dy === -1 && onStair && !isStair(next), down = dy === 1 && isStair(next) && !onStair;
           set(nx, ny, here + (up ? 1 : 0) - (down ? 1 : 0));
-        } else if (isFace(next) && dy === 1 && walkable(ch(nx, ny + 1)) && !isFace(ch(nx, ny + 1))) {
-          // Hop: a single face, the landing is the row under it. A taller wall cannot be hopped, only taken by the stairs.
-          set(nx, ny + 1, here - 1);
         }
       }
     }
+  };
+  // A hop only counts for ground that nothing else leads to: a bank with a road through it is a ramp, not a step.
+  const hops = () => {
+    let any = false;
+    for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
+      const here = level[key(x, y)];
+      if (here === UNSET || !isFace(ch(x, y + 1)) || isFace(ch(x, y + 2)) || !walkable(ch(x, y + 2)) || level[key(x, y + 2)] !== UNSET) continue;
+      set(x, y + 2, here - 1); any = true;
+    }
+    return any;
   };
   // One seed is enough: doors can sit on any terrace (the palace door is up the stairs), so the level is read from how you got there.
   const first = map.warps.find(warp => walkable(ch(warp.x, warp.y)));
   if (first) set(first.x, first.y, 0);
   else if (map.edges?.south) { const x = Array.from({ length: width }, (_, i) => i).find(i => walkable(ch(i, height - 1))); if (x !== undefined) set(x, height - 1, 0); }
   run();
+  while (hops()) run();
   // Ground nothing led to (a closed field behind trees) takes the level of its first reached neighbour, else 0.
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) if (level[key(x, y)] === UNSET && walkable(ch(x, y))) { set(x, y, 0); run(); }
   const lowest = Math.min(0, ...Array.from(level).filter(v => v !== UNSET));

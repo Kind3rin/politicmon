@@ -51,7 +51,7 @@ const routeReview=params.has('routeReview');
 if(params.has('roamers'))state.flags['opening-encountered']=true;
 if(params.has('souvenirs')){state.flags['cosmetic-fascia-governo']=true;state.flags['cosmetic-megafono-opposizione']=true;}
 if(params.has('lesson')){state.flags['controls-intro']=true;state.stepsTotal=0;}
-state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:params.get('map')??'route1',x:Number(params.get('x')??7),y:Number(params.get('y')??8),facing:(params.get('face')??'down') as 'down'};state.reduceEffects=true;
+state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:params.get('map')??'route1',x:Number(params.get('x')??7),y:Number(params.get('y')??8),facing:(params.get('face')??'down') as 'down'};state.reduceEffects=!params.has('fx');
 const routeStatus=document.createElement('output');
 if(routeReview){routeStatus.style.cssText='position:fixed;top:64px;right:12px;padding:6px;background:#f4eedc;color:#14161f;z-index:60;font:16px system-ui;pointer-events:none';document.body.append(routeStatus);}
 const requested=new URLSearchParams(location.search).get('screen')??'esplorazione';

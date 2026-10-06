@@ -1,5 +1,11 @@
 # Changelog
 
+## Mandato 2 — la luce — 2026-10-06
+
+- Illuminazione vera all'aperto (`src/game/world/lighting.ts`): la luce cambia dolcemente con l'ora (alba rosata, giorno limpido, tramonto arancio, notte blu: niente più salti alle 17:00 né il velo marrone di prima). Di sera si ritagliano pozze di luce nel buio (lampioni, finestre degli edifici, porte, statue, fontane) con un bagliore caldo sopra, e il giocatore porta una piccola lanterna che lo tiene leggibile. Vignettatura leggera su tutte le mappe.
+- Interni: la stanza ora «galleggia» nel buio (fuori dalle mura quasi nero, ombra morbida dei muri verso l'interno) invece di mostrare muro ripetuto fino ai bordi dello schermo.
+- `scripts/m2-ui-review.html` accetta `&fx=1` per rivedere gli effetti (di default resta «Riduci effetti»). Test `lighting`.
+
 ## Mandato 2 — passo e porte — 2026-10-06
 
 - Driver della campagna nativa: il controllo «ricompensa annunciata = ricompensa data» leggeva un testo che non esiste più (la ricevuta di battaglia l'ha sostituito) e falliva alla prima cattura; ora legge la ricevuta. Con `END_AT=dazio RUN_PLAN=prepared` la campagna attraversa Percorso 1-2, Eurotown e Percorso 3 con i cancelli nuovi fino a Caput Mundi. Con la squadra sottile del driver (3 Politicmon, Lv 25) la terza palestra non si vince: è un limite del piano di prova, non una misura di bilanciamento.

@@ -1,6 +1,7 @@
 import {lastSuccessfulSaveAt} from "../state";
 import {worldLabel,setWorldLabelZoom} from "../../ui/kit/worldLabels";
 import {WorldAtmosphere, footSurface, grassBend, waterFrame} from "./worldAtmosphere";
+import {drawRoomFrame, drawVignette, type Light} from "./lighting";
 import {TerrainRenderer, type TerrainSample, type TerrainKind, type TerrainShadow, terrainHash} from "./terrainRenderer";
 import {readableCopy} from "../../ui/kit/copy";
 import type {UiPanel,UiWorld,UiBlock} from "../../ui/kit";
@@ -4324,7 +4325,19 @@ export class WorldScene implements Scene {
     }
 
     const now=this.localClock();
-    this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights);
+    const glows:Light[]=[];
+    if(this.map.outdoor){
+      for(let ty=Math.floor(camY/TILE)-2;ty<=Math.floor(camY/TILE)+Math.ceil(this.viewHeight/TILE)+2;ty++)for(let tx=Math.floor(camX/TILE)-2;tx<=Math.floor(camX/TILE)+Math.ceil(VIEW_W/TILE)+2;tx++){
+        const ch=this.tileAt(tx,ty);
+        if(ch==='d'||ch==='D')glows.push({kind:'door',x:tx*TILE+8,y:ty*TILE+10});
+        else if(ch==='Y')glows.push({kind:'statue',x:tx*TILE+8,y:ty*TILE+4});
+        else if(ch==='W')glows.push({kind:'fountain',x:tx*TILE+8,y:ty*TILE+8});
+      }
+      glows.push({kind:'player',x:playerPx+8+this.doorShiftNow(),y:playerPy+6});
+    }
+    this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights,glows);
+    if(!this.map.outdoor&&roomFit>=1)drawRoomFrame(screen.ctx,inner,camX,camY);
+    drawVignette(screen.ctx,VIEW_W,this.viewHeight,this.map.outdoor?.2:.3);
     const quest = currentQuest(this.state);
     if (!this.msg.isOpen && !this.askMenu && !this.remoteMenu) this.drawPlaceSigns(camX, camY, quest?.target);
 

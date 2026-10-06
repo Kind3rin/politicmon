@@ -1,5 +1,6 @@
 import type { MapDef } from '../../data/maps/types';
 import { terrainHash } from './terrainRenderer';
+import { ambientLight, drawLighting, lightNeed, type Light } from './lighting';
 
 export type Weather = NonNullable<MapDef['weather']>;
 export type Daylight = { period:'alba'|'giorno'|'tramonto'|'notte'; color:string; alpha:number; lamps:boolean };
@@ -60,25 +61,21 @@ export class WorldAtmosphere {
     }
     ctx.restore();
   }
-  draw(ctx:CanvasRenderingContext2D,map:MapDef,camX:number,camY:number,width:number,height:number,time:number,reduced:boolean,hour:number,lights:readonly {x:number;y:number;lamp?:boolean}[]):void {
+  draw(ctx:CanvasRenderingContext2D,map:MapDef,camX:number,camY:number,width:number,height:number,time:number,reduced:boolean,hour:number,lights:readonly {x:number;y:number;lamp?:boolean}[],extra:readonly Light[]=[]):void {
     if(!map.outdoor)return;
-    const light=daylightAt(hour);
-    ctx.save();
-    if(light.alpha){ctx.fillStyle=light.color;ctx.globalAlpha=light.alpha;ctx.fillRect(0,0,width,height);}
-    ctx.globalAlpha=1;
-    if(light.lamps){
-      for(const lamp of lights){
-        const x=Math.round(lamp.x-camX),y=Math.round(lamp.y-camY);
-        if(lamp.lamp){
-          // The pool is below the lantern; subtle enough to keep actors legible.
-          ctx.fillStyle='rgba(255,211,113,.08)';ctx.beginPath();
-          ctx.moveTo(x+2,y+4);ctx.lineTo(x+15,y+32);ctx.lineTo(x-11,y+32);ctx.closePath();ctx.fill();
-          ctx.fillStyle='rgba(255,211,113,.12)';ctx.beginPath();ctx.ellipse(x+2,y+32,13,5,0,0,Math.PI*2);ctx.fill();
+    const ambient=ambientLight(hour);
+    if(ambient.alpha>=.02){
+      const lit:Light[]=[...lights.map(l=>({kind:l.lamp?'lamp' as const:'window' as const,x:l.x+2-camX,y:l.y+2-camY})),...extra.map(l=>({kind:l.kind,x:l.x-camX,y:l.y-camY}))];
+      drawLighting(ctx,width,height,hour,lit,time,reduced);
+      if(lightNeed(ambient)>.3){
+        for(const lamp of lights){
+          if(!lamp.lamp)continue;
+          const x=Math.round(lamp.x-camX),y=Math.round(lamp.y-camY);
+          ctx.fillStyle='#fff0b8';ctx.fillRect(x,y,4,4);ctx.fillStyle='#edc570';ctx.fillRect(x+1,y+1,2,2);
         }
-        ctx.fillStyle='rgba(255,211,113,.1)';ctx.fillRect(x-4,y-3,12,11);
-        ctx.fillStyle='#edc570';ctx.fillRect(x,y,4,4);
       }
     }
+    ctx.globalAlpha=1;
     if(!reduced){
       // Three ambient motifs, anchored to map coordinates; bounded draw cost.
       const ambient=this.ambientFor(map);

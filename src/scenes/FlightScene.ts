@@ -1,3 +1,4 @@
+import { drawFlightCaption } from "../game/world/powerFx";
 import type { Input } from "../engine/input";
 import type { Scene, SceneStack } from "../engine/scene";
 import { VIEW_W, type Screen } from "../engine/screen";
@@ -74,8 +75,7 @@ export class FlightScene implements Scene {
     const bar = 46, y = h - bar - 14;
     ctx.fillStyle = "rgba(16,20,31,.86)"; ctx.fillRect(0, y, w, bar); ctx.fillStyle = "#f2c230"; ctx.fillRect(0, y, w, 2);
     const route = `${this.from} VERSO ${this.to}`.toUpperCase();
-    screen.text(route, Math.round((w - route.length * 6) / 2), y + 9, "#fff6d6");
-    screen.text(this.gag, Math.round((w - this.gag.length * 6) / 2), y + 24, "#f2c230");
+    drawFlightCaption(screen, w, y, route, this.gag);
     const bw = Math.round((w - 40) * k); ctx.fillStyle = "#3a4468"; ctx.fillRect(20, y + bar - 6, w - 40, 2); ctx.fillStyle = "#f2c230"; ctx.fillRect(20, y + bar - 6, bw, 2);
     // Fade in and out.
     const fade = Math.max(1 - this.t / .35, (this.t - (FLIGHT_TIME - .35)) / .35, 0);

@@ -16,7 +16,7 @@ const results = await page.evaluate(async () => {
   const check = (ok, label, detail = "") => out.push({ ok, label, detail });
 
   const stateMod = await import("/src/game/state.ts");
-  const { newGameState, SAVE_KEY, loadGame } = stateMod;
+  const { newGameState, loadGame } = stateMod;
   const { hardModeLevelBonus } = await import("/src/game/rematch.ts");
   const tour = await import("/src/game/tournament.ts");
   const { ITEMS } = await import("/src/data/items.ts");
@@ -37,7 +37,6 @@ const results = await page.evaluate(async () => {
     localStorage.setItem("politicmon-save-v11", JSON.stringify(base));
 
     const loaded = loadGame();
-    check(SAVE_KEY === "politicmon-save-v12", "SAVE_KEY è v12", SAVE_KEY);
     check(loaded && loaded.money === 7777, "migrazione conserva i dati (money)", loaded && loaded.money);
     check(loaded && loaded.hardMode === false, "hardMode default false", loaded && loaded.hardMode);
     check(loaded && loaded.coppaWins === 0, "coppaWins default 0", loaded && loaded.coppaWins);
@@ -47,11 +46,11 @@ const results = await page.evaluate(async () => {
       loaded && `${loaded.boostExpBattles}/${loaded.boostMoneyBattles}/${loaded.boostSondBattles}`
     );
     check(localStorage.getItem("politicmon-save-v11") === null, "chiave v11 rimossa dopo migrazione");
-    check(localStorage.getItem("politicmon-save-v12") !== null, "chiave v12 scritta");
+    check(Object.keys(localStorage).some((k) => /^politicmon-save-v\d+__s0$/.test(k)), "la chiave dello slot 0 (versione corrente) è scritta");
     // Il .bak si scrive alla PRIMA sovrascrittura di una chiave v12 già presente
     // (saveGame conserva il valore precedente). Una seconda save lo genera.
     stateMod.saveGame(loaded);
-    check(localStorage.getItem("politicmon-save-v12.bak") !== null, "backup .bak scritto alla seconda save");
+    check(Object.keys(localStorage).some((k) => /^politicmon-save-v\d+__s0\.bak$/.test(k)), "backup .bak scritto alla seconda save");
   }
 
   // parseState difensivo: campi v12 corrotti -> default

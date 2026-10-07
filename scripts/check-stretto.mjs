@@ -28,14 +28,14 @@ try{
   function walk(tx,ty){const map=state.pos.mapId;for(let n=0;n<1000;n++){settle();if(state.pos.mapId!==map)return;if(state.pos.x===tx&&state.pos.y===ty)return;const p=path(tx,ty);check(p?.length,'Missing legal route to '+tx+','+ty);tick(p[0]);if(world.askMenu)return;}throw Error('Walk bound');}
   function shot(name){stack.draw(screen);const c=document.createElement('canvas');c.width=240;c.height=180;c.getContext('2d').drawImage(canvas,0,0,240,180);shots[name]=c.toDataURL();}
   settle();check(world.isBlocked(4,21),'Ferry water was navigable before gift');tick('a');settle();
-  check(state.flags['veh-traghetto'],'Marine did not award ferry through dialogue');walk(6,21);settle();
+  check(state.flags['veh-traghetto'],'Marine did not award ferry through dialogue');walk(6,21);if(world.askMenu)tick('a');settle();
   check(state.pos.mapId==='stretto','Capital embarkation did not arrive at Stretto');check(state.vehicle==='traghetto','Automatic boarding absent');
   check(path(14,5)===null,'North bar bypasses the Captain before victory');check(path(11,14)!==null,'Pre-victory return is blocked');
   for(let n=0;n<30;n++)tick();check(stack.top===world&&!world.pendingBattle,'Arrival auto-started battle');shot('arrival');
   walk(14,13);check(state.vehicle!=='traghetto','Automatic disembarkation absent');tick('up');tick('a');
   for(let n=0;n<1000&&stack.top===world;n++){if(world.msg.isOpen)tick('a');else tick();}
   check(stack.top?.constructor.name==='BossBriefingScene','A did not open Captain briefing');shot('capitano');
-  const before=JSON.stringify(state);tick('right');check(stack.top.page===2,'Preparation page unavailable');shot('preparation');tick('b');
+  const before=JSON.stringify(state);stack.top.uiPanel.tabs[2].run();check(stack.top.page==='foes','Preparation page unavailable');shot('preparation');for(let n=0;n<4&&stack.top!==world;n++)stack.top.uiPanel.back.run();
   check(stack.top===world&&JSON.stringify(state)===before&&!mp.duelBusy,'Cancelling preparation changed rewards, PP, state or network lock');
   walk(11,14);check(world.askMenu,'Darsena has no confirmation');const unchanged=JSON.stringify({party:state.party,bag:state.bag,money:state.money,morale:state.morale});tick('a');settle();
   check(state.pos.mapId==='capitale','Return before victory failed');check(JSON.stringify({party:state.party,bag:state.bag,money:state.money,morale:state.morale})===unchanged,'Return healed or changed rewards/morale');

@@ -66,6 +66,12 @@ const results = await page.evaluate(async () => {
     stack.push(battle);
     const frame = () => { stack.update(1 / 30); stack.draw(screen); input.endFrame(); };
     const press = (code) => {
+      // The fight is driven by the on-screen UI: A advances the message, or presses the single "Continua" of a receipt.
+      if (code === "KeyZ") {
+        if (battle.msg?.isOpen) battle.msg.advance();
+        else { const acts = battle.uiPanel?.actions ?? []; if (acts.length === 1 && !acts[0].disabled) acts[0].run(); }
+        frame(); return;
+      }
       document.dispatchEvent(new KeyboardEvent("keydown", { code, bubbles: true, cancelable: true }));
       frame();
       document.dispatchEvent(new KeyboardEvent("keyup", { code, bubbles: true, cancelable: true }));
@@ -130,8 +136,9 @@ const results = await page.evaluate(async () => {
     state.boostExpBattles = 3;
     const b = bootBattle({ lead: createMonster("giorgetta", 40), state, foeTeam: [createMonster("salvinott", 5)] });
     // Uccidi il wild: LOTTA → prima mossa, ripeti finché finisce.
-    for (let g = 0; g < 400 && !state.__ended; g++) {
-      if (b.battle.mode === "menu") b.battle.startTurn(MOVES.comizio);
+    for (let g = 0; g < 4000 && !state.__ended; g++) {
+      { const top = b.stack?.top; if (top && top !== b.battle) { const p = top.uiPanel; const act = p?.back ?? p?.actions?.[p.primary ?? 0]; act?.run?.(); } }
+      if (b.battle.mode === "menu") { b.battle.mode = "queue"; b.battle.startTurn(MOVES.comizio); };
       if (g % 3 === 0) b.press("KeyZ"); else b.frame();
     }
     check(state.__ended === "win", "boost-wild: la battaglia wild è vinta", `end=${state.__ended}`);
@@ -148,7 +155,8 @@ const results = await page.evaluate(async () => {
     const trainer = { id: "test-t", name: "TESTER", pal: "journalist", team: [["salvinott", 5]], intro: ["."], defeat: ["."], money: 100 };
     const b = bootBattle({ lead: createMonster("giorgetta", 40), state, trainer, foeTeam: [createMonster("salvinott", 5)] });
     for (let g = 0; g < 500 && !state.__ended; g++) {
-      if (b.battle.mode === "menu") b.battle.startTurn(MOVES.comizio);
+      { const top = b.stack?.top; if (top && top !== b.battle) { const p = top.uiPanel; const act = p?.back ?? p?.actions?.[p.primary ?? 0]; act?.run?.(); } }
+      if (b.battle.mode === "menu") { b.battle.mode = "queue"; b.battle.startTurn(MOVES.comizio); };
       if (g % 3 === 0) b.press("KeyZ"); else b.frame();
     }
     check(state.__ended === "win" && state.boostMoneyBattles === 2 && state.boostSondBattles === 2 && state.boostExpBattles === 2,
@@ -201,16 +209,13 @@ const results = await page.evaluate(async () => {
       document.dispatchEvent(new KeyboardEvent("keyup", { code, bubbles: true, cancelable: true }));
       for (let i = 0; i < 3; i++) frame();
     };
-    // Naviga il menu fino a "NUOVA CAMPAGNA" e conferma per aprire il selettore.
-    let guard = 0;
-    while (guard++ < 12 && !(title.menu.items[title.menu.index]?.label ?? "").startsWith("NUOVA")) {
-      press("ArrowDown");
-    }
-    press("KeyZ"); // apre difficultyMenu
-    const labels = (title.difficultyMenu?.items ?? []).map((i) => i.label).join(" | ");
-    check(labels.includes("NORMALE (CONSIGLIATA)"),
-      "onboarding: il selettore DIFFICOLTÀ mostra NORMALE (CONSIGLIATA)", `labels=[${labels}]`);
-    check((title.difficultyMenu?.index ?? -1) === 0, "onboarding: NORMALE è il default (indice 0)", "");
+    // The title is a panel: "Nuova campagna" opens the difficulty choice, whose first action is the recommended one.
+    title.uiPanel.actions.find((a) => /nuova campagna/i.test(a.label)).run();
+    frame();
+    const panel = title.uiPanel, normal = panel.actions[0];
+    check(/normale/i.test(normal?.label ?? "") && /consigliata/i.test(normal?.hint ?? ""),
+      "onboarding: il selettore DIFFICOLTÀ mostra NORMALE come consigliata", `labels=[${panel.actions.map((a) => `${a.label}: ${a.hint ?? ""}`).join(" | ")}]`);
+    check(panel.selected === 0 && panel.primary === 0, "onboarding: NORMALE è il default (indice 0)", `selected=${panel.selected}`);
   }
 
   Math.random = realRandom;

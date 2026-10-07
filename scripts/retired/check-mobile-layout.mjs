@@ -22,7 +22,7 @@ for(const [engine,type] of [['chromium',chromium],['webkit',webkit]]){
  try{
   for(const [name,width,height,dpr,safe] of cases){
    const context=await browser.newContext({viewport:{width,height},hasTouch:true,isMobile:true,deviceScaleFactor:dpr,serviceWorkers:'block'});
-   await context.addInitScript(()=>{sessionStorage.setItem('politicmon-intro-seen','1');Object.defineProperty(navigator,'standalone',{get:()=>true});});
+   await context.addInitScript(()=>{sessionStorage.setItem('politicmon-intro-seen','1');localStorage.setItem('politicmon-control','dpad');Object.defineProperty(navigator,'standalone',{get:()=>true});});
    const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
    await page.goto(base,{waitUntil:'networkidle'});
    await page.waitForFunction(()=>performance.getEntriesByName('politicmon:first-frame').length);

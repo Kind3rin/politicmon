@@ -18,7 +18,7 @@ Dieci ulteriori prove della build compilata controllano guida, focus, annullamen
 
 La versione destinata alla pubblicazione passa 303 test, validator dei contenuti e inventario PWA di 769 risorse esatte. Chromium verifica aggiornamento e riavvio offline; WebKit verifica cache e primo uso offline, mentre Playwright non supporta il suo reload offline. Entrambi verificano 737 asset grafici e 19 tracce AAC. Il limite del codice completo rimane 350 KiB gzip, includendo il chunk del mondo. Nessun credito Higgsfield viene speso per la scocca HTML/CSS.
 
-Ripetere con `npm run check:mobile-layout` sul server di sviluppo oppure `BASE_URL=<url> npm run check:mobile-layout` sulla versione pubblicata; `PREVIEW_URL=<url> npm run check:shell:release` verifica anche i percorsi della guida. La pubblicazione e la dimensione effettiva sono registrate nel proof. Le modifiche al Palazzo restano nel round successivo.
+**Nota (7 ottobre 2026):** `check:mobile-layout` è stato ritirato (misurava i vecchi comandi; vedi `scripts/retired/README.md`): oggi vale `npm run check:ui-layout` insieme a `check:world-controls`. Storico: ripetere con `npm run check:mobile-layout` sul server di sviluppo oppure `BASE_URL=<url> npm run check:mobile-layout` sulla versione pubblicata; `PREVIEW_URL=<url> npm run check:shell:release` verifica anche i percorsi della guida. La pubblicazione e la dimensione effettiva sono registrate nel proof. Le modifiche al Palazzo restano nel round successivo.
 
 ## Pubblicazione
 

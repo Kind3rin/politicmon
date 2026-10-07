@@ -128,3 +128,9 @@ export class WorldFx {
     ctx.save(); ctx.fillStyle = `rgba(${this.flashColor},${Math.min(.85, this.flash)})`; ctx.fillRect(0, 0, width, height); ctx.restore();
   }
 }
+
+/** The two lines of the flight cinematic: where from and to, and the gag on board. Drawn in the cinematic, like the cut-in, not in a panel. */
+export function drawFlightCaption(screen: Screen, width: number, y: number, route: string, gag: string): void {
+  screen.text(route, Math.round((width - route.length * 6) / 2), y + 9, "#fff6d6");
+  screen.text(gag, Math.round((width - gag.length * 6) / 2), y + 24, "#f2c230");
+}

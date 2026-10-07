@@ -28,8 +28,10 @@ const problems = await page.evaluate(async () => {
         out.push(`${id}: cartello (${s.x},${s.y}) COPERTO da un NPC.`);
       }
       const neigh = [[0, -1], [0, 1], [-1, 0], [1, 0]];
+      // A sign in the water is read from the ferry: its neighbours may be water too.
+      const inWater = !!TILES[at(s.x, s.y)]?.water;
       const readable = neigh.some(([dx, dy]) =>
-        standable(at(s.x + dx, s.y + dy)) && !npcSet.has(`${s.x + dx},${s.y + dy}`)
+        (standable(at(s.x + dx, s.y + dy)) || (inWater && !!TILES[at(s.x + dx, s.y + dy)]?.water)) && !npcSet.has(`${s.x + dx},${s.y + dy}`)
       );
       if (!readable) {
         out.push(`${id}: cartello (${s.x},${s.y})='${at(s.x, s.y)}' ILLEGGIBILE (nessuna cella libera attorno).`);

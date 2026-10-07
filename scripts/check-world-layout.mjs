@@ -92,6 +92,7 @@ const runtimeProblems = await page.evaluate(async () => {
   });
   const runStep = (state, dir) => {
     const scene = new WorldScene(stack, makeStepInput(dir), state);
+    stack.replace(scene); // the world only answers to controls while it is the top scene
     scene.update(1 / 60);
     scene.update(1);
     return scene;
@@ -205,32 +206,15 @@ const runtimeProblems = await page.evaluate(async () => {
       }
 
       {
+        // A real step from the road in front of the door goes in (and the warp may already have played out by the end of the long update).
         const state = primeState(mapId, warp.x, warp.y + 1, "up");
         const scene = runStep(state, "up");
-        if (!(scene.fadeOut > 0 || scene.pendingWarp)) {
+        if (!(scene.fadeOut > 0 || scene.pendingWarp || state.pos.mapId !== mapId)) {
           out.push(`${mapId}->${warp.toMap}: passo reale dal centro porta (${warp.x},${warp.y + 1}) non entra`);
         }
       }
-
-      {
-        const state = primeState(mapId, warp.x, warp.y + 1, "down");
-        const scene = new WorldScene(stack, makeStepInput("up"), state);
-        scene.update(1 / 60);
-        if (scene.fadeOut > 0 || scene.pendingWarp || state.pos.x !== warp.x || state.pos.y !== warp.y + 1 || state.pos.facing !== "up") {
-          out.push(`${mapId}->${warp.toMap}: primo input da girato male deve solo voltarsi verso la porta`);
-        }
-      }
-
-      for (const side of [
-        { x: warp.x - 1, y: warp.y, facing: "right", dir: "right" },
-        { x: warp.x + 1, y: warp.y, facing: "left", dir: "left" }
-      ]) {
-        const state = primeState(mapId, side.x, side.y, side.facing);
-        const scene = runStep(state, side.dir);
-        if (scene.fadeOut > 0 || scene.pendingWarp || state.pos.x !== side.x || state.pos.y !== side.y) {
-          out.push(`${mapId}->${warp.toMap}: passo reale laterale da (${side.x},${side.y}) non respinto`);
-        }
-      }
+      // (Retired: "the first input from the wrong facing only turns" and "a sideways step onto a door tile is refused". The player now steps
+      // as soon as a direction is held, and both tiles of a doorway are doors: see check-door-entry.mjs for how doors are entered and left.)
     }
   }
   return out;
@@ -238,7 +222,7 @@ const runtimeProblems = await page.evaluate(async () => {
 
 const problems = [...staticProblems, ...runtimeProblems];
 if (problems.length === 0) {
-  console.log("OK - layout world: edifici ortogonali, ingressi solo dal centro porta, laterali/facing sbagliato respinti, scoglio solo dal gradino.");
+  console.log("OK - layout world: edifici ortogonali, ingressi dal fronte porta, ingressi di lato o da porta non davanti respinti, scoglio solo dal gradino.");
 } else {
   console.log(`TROVATI ${problems.length} problemi world layout:`);
   for (const p of problems) console.log("  " + p);

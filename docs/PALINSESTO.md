@@ -36,7 +36,7 @@ Quattro fasce, ognuna con due tipi «in onda» (tutti gli otto tipi compaiono un
 
 `src/game/coach.ts`: funzione pura `nextBattleTip(state, situazione)`. Ogni consiglio è un flag `tip-<id>` nel salvataggio: letto, chiuso o semplicemente usato, non torna più.
 
-In lotta, una scheda gialla sopra il campo (tutta la scheda è il tasto per chiuderla), un solo consiglio per turno, mai due di seguito dopo una chiusura. Ordine quando ne valgono più d'uno: Fuorionda pronto, compagno in difficoltà (≤ 30% PV, e c'è un caffè o un panchinaro), recluta (selvatico ≤ 50% PV, vivo, con schede), frecce, Polemica, intenzione del rivale. Nella prima lotta: frecce al primo turno, Polemica al secondo, intenzione al terzo.
+In lotta, una striscia gialla al posto della didascalia sopra le mosse (campo e carte non si toccano; tutta la striscia è il tasto per chiuderla; due righe del 16 px dell'arena, niente corpi nuovi), un solo consiglio per turno, mai due di seguito dopo una chiusura. Ordine quando ne valgono più d'uno: compagno in difficoltà (≤ 30% PV, e c'è un caffè o un panchinaro), recluta (selvatico ≤ 50% PV, vivo, con schede), frecce, Polemica, intenzione del rivale. Nella prima lotta: frecce al primo turno, Polemica al secondo, intenzione al terzo.
 
 Nel mondo (solo all'aperto, a mondo fermo): *Squadra stanca* (qualcuno sotto un terzo dei PV), *Schede finite* e *I Sondaggi* (la prima volta che la percentuale si muove); spariscono da sole dopo 14 secondi. Si spegne tutto con l'opzione «Guida e suggerimenti» (la stessa che governa la freccia verso la meta).
 

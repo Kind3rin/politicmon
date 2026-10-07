@@ -1578,7 +1578,7 @@ export class BattleScene implements Scene {
       message:{title,body},notice,speed:{label:this.state.battleSpeed===2?"×2":"×1",hint:this.state.battleSpeed===2?"Ritmo rapido: tocca per tornare al normale.":"Ritmo normale: tocca per velocizzare le lotte.",run:()=>{this.state.battleSpeed=this.state.battleSpeed===2?1:2;audio.cursor();saveGame(this.state);}},trainer:this.trainer&&this.msg.isOpen?{name:readableCopy(this.trainer.name),portrait:trainerPortrait(this.trainer.id,this.trainer.pal)}:undefined,moveCount:moves.length,postureCount:postures.length,
       polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status",posture:this.foePosture!=="none"?{label:POSTURES[this.foePosture].label,rule:POSTURES[this.foePosture].rule}:undefined}:undefined,
       finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined,
-      coach:ready&&this.coach?{title:this.coach.title,body:this.coach.body,dismiss:()=>this.retireCoach()}:undefined
+      coach:ready&&this.coach&&this.posture==="none"?{title:this.coach.title,body:this.coach.body,dismiss:()=>this.retireCoach()}:undefined
     }};
   }
 

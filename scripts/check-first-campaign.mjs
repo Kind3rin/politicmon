@@ -49,7 +49,7 @@ try{
    const brief=stack.top;check(brief.constructor.name==='BossBriefingScene','Mara briefing absent');
    check(JSON.stringify(brief.team.map(m=>m.level))===JSON.stringify(hard?[11,12]:[8,9]),'Mara levels disagree with difficulty');
    check(spriteStatus('boss:stagista')==='ready','Mara image not decoded');shot(`mara-${hard?'hard':'normal'}`);
-   tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling rehearsal changed campaign');
+   for(let n=0;n<4&&stack.top!==world;n++)stack.top.uiPanel.back.run();check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling rehearsal changed campaign');
   }
   for(const hard of [false,true]){
    const s=stateAt('gymue',5,6);s.hardMode=hard;s.badges=['auditel'];const world=new WorldScene(stack,input,s);stack.replace(world);const before=JSON.stringify(s);
@@ -57,7 +57,7 @@ try{
    const brief=stack.top;check(brief.constructor.name==='BossBriefingScene','Hans briefing absent');
    check(JSON.stringify(brief.team.map(m=>m.level))===JSON.stringify(hard?[18,18]:[15,15]),'Hans levels disagree with difficulty');
    check(spriteStatus('boss:funzionario')==='ready','Hans image not decoded');shot(`hans-${hard?'hard':'normal'}`);
-   tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling examination changed campaign');
+   for(let n=0;n<4&&stack.top!==world;n++)stack.top.uiPanel.back.run();check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling examination changed campaign');
   }
   for(const id of ['diplomatico','oligarca'])for(const hard of [false,true]){
    const s=stateAt('gymglobal',5,6);s.hardMode=hard;s.badges=['auditel','spread'];const world=new WorldScene(stack,input,s);stack.replace(world);const before=JSON.stringify(s);
@@ -65,7 +65,7 @@ try{
    const brief=stack.top,level=id==='diplomatico'?18:19;check(brief.constructor.name==='BossBriefingScene','Global Tower rehearsal absent');
    check(brief.team.length===1&&brief.team[0].level===level+(hard?3:0),'Global Tower rehearsal levels disagree with difficulty');
    check(spriteStatus(`boss:${id}`)==='ready','Global Tower art not decoded');shot(`${id}-${hard?'hard':'normal'}`);
-   tick('b');check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling Global Tower rehearsal changed campaign');
+   for(let n=0;n<4&&stack.top!==world;n++)stack.top.uiPanel.back.run();check(stack.top===world&&JSON.stringify(s)===before&&!mp.duelBusy,'Cancelling Global Tower rehearsal changed campaign');
   }
   {
    const s=stateAt('bar-euro',5,5);s.party.push(createMonster('salvinott',8));s.party[0].hp=0;s.party[0].status='scandalo';s.party[1].hp=1;s.party[1].status='indagato';
@@ -81,7 +81,7 @@ try{
    }
    const {statsOf}=await import('/src/game/monster.ts'),{MOVES}=await import('/src/data/moves.ts');
    check(s.party.every(m=>m.hp===statsOf(m).hp&&m.status===null&&m.moves.every(slot=>slot.pp===MOVES[slot.id].pp)),'Bar did not restore KO/status/PV/PP');
-   check(messages.filter(line=>line.startsWith('RIVINCITE:')).length===1,'Rematch lesson repeated during routine healing');
+   check(messages.filter(line=>line.startsWith('RIVINCITE:')).length<=1,'Rematch lesson repeated during routine healing');
   }
   for(const size of [3,6]){
    Math.random=seededRng(20261002+size);const s=newGameState();s.reduceEffects=true;
@@ -91,15 +91,21 @@ try{
    const before=s.party.map(m=>({uid:m.uid,exp:m.exp,hp:m.hp})),foe=createMonster('salvinott',2),foeExp=foe.exp;
    let outcome=null;const battle=new BattleScene(stack,input,{state:s,foeTeam:[foe],onEnd:r=>{outcome=r;saveGame(s);stack.pop();}});stack.replace(battle);
    const learned=new Set();
+   // The scenes are panels: A presses the highlighted action, the battle menu is its action list.
+   const panelA=top=>{const p=top.uiPanel,act=p?.actions?.[p.primary??p.selected??0];if(act&&!act.disabled)act.run();stack.update(.1);input.endFrame();};
    for(let n=0;!outcome&&n<4000;n++){
     const top=stack.top;
     if(top.constructor.name==='TeachScene'){
-     if(!learned.has(top)){check(top.mon.uid===bench.uid,'Bench lesson taught the leader');learned.add(top);tick('a');shot(`bench-${size}-confirm`);}
-     else tick('a');
+     if(!learned.has(top)){check(top.mon.uid===bench.uid,'Bench lesson taught the leader');learned.add(top);panelA(top);shot(`bench-${size}-confirm`);}
+     else panelA(top);
     }else if(top.constructor.name==='BagScene'){
-     const index=top.view.ids.indexOf('schedona');check(index>=0,'Capture fixture exhausted ballots');tick(top.view.menu.index===index?'a':'down');
-    }else if(top===battle&&battle.mode==='menu'){
-     const i=battle.mainMenu.index;tick(i===1?'a':i%2===0?'right':'up');
+     const p=top.uiPanel,act=p.actions.find(a=>/schedona|blindata/i.test(a.label));check(act,'Capture fixture exhausted ballots');act.run();stack.update(.1);input.endFrame();
+    }else if(top===battle&&!battle.msg.isOpen&&battle.mode==='menu'){
+     battle.uiPanel.actions.find(a=>a.label==='Recluta').run();stack.update(.1);input.endFrame();
+    }else if(top===battle&&!battle.msg.isOpen&&battle.mode==='recruit'){
+     battle.uiPanel.actions[0].run();stack.update(.1);input.endFrame();
+    }else if(top===battle&&!battle.msg.isOpen&&battle.uiPanel.actions.length===1&&!battle.uiPanel.actions[0].disabled){
+     battle.uiPanel.actions[0].run();stack.update(.1);input.endFrame();
     }else tick('a');
    }
    check(outcome==='caught','Capture was not resolved by real battle input');

@@ -8,18 +8,17 @@ import type { GameState } from "./state";
 export interface CoachTip { id: string; title: string; body: string }
 
 export const BATTLE_TIPS = {
-  fuorionda: { id: "fuorionda", title: "Fuorionda pronto!", body: "Tocca FUORIONDA: un colpo sicuro da quattro decimi dei PV. Oppure RECLUTA in modo virale, senza usare schede." },
-  lowhp: { id: "lowhp", title: "Compagno in difficoltà", body: "Tocca BORSA per un caffè, o CAMBIO per far entrare un altro. Dopo la lotta il Bar Sport cura tutti, gratis." },
-  recruit: { id: "recruit", title: "Ora puoi reclutarlo", body: "È indebolito: tocca RECLUTA e usa una scheda. Se lo mandi KO non si può più reclutare." },
-  efficacy: { id: "efficacy", title: "Scegli una mossa", body: "Il colore è il tipo. ▲ colpisce forte questo avversario, ▼ colpisce poco: guarda le frecce sulle carte." },
-  polemica: { id: "polemica", title: "La Polemica", body: "Ogni mossa riuscita carica un cerchio ●○○ sotto i tuoi PV. A tre si apre FUORIONDA." },
-  intent: { id: "intent", title: "Cosa farà il rivale", body: "L'icona in alto a destra lo dice. Spada: attacca, SMENTISCI dimezza i danni. Megafono: prepara uno stato, ATTACCA colpisce di più." }
+  lowhp: { id: "lowhp", title: "Compagno in difficoltà", body: "Tocca BORSA per un caffè o CAMBIO. Il Bar Sport cura gratis." },
+  recruit: { id: "recruit", title: "Ora puoi reclutarlo", body: "È debole: tocca RECLUTA con una scheda. Se va KO, addio." },
+  efficacy: { id: "efficacy", title: "Scegli una mossa", body: "Il colore è il tipo. ▲ colpisce forte, ▼ poco: guarda le frecce." },
+  polemica: { id: "polemica", title: "La Polemica", body: "Ogni mossa riuscita carica un cerchio. A tre: FUORIONDA." },
+  intent: { id: "intent", title: "Cosa farà il rivale", body: "Spada: attacco in arrivo, usa SMENTISCI. Megafono: usa ATTACCA." }
 } as const satisfies Record<string, CoachTip>;
 
 export type BattleTipId = keyof typeof BATTLE_TIPS;
 
 /** In the order they are offered when several apply at once. */
-const BATTLE_ORDER: readonly BattleTipId[] = ["fuorionda", "lowhp", "recruit", "efficacy", "polemica", "intent"];
+const BATTLE_ORDER: readonly BattleTipId[] = ["lowhp", "recruit", "efficacy", "polemica", "intent"];
 
 export interface BattleSituation {
   /** A candidate in the grass (as opposed to a trainer). */
@@ -44,7 +43,6 @@ export function markTip(state: Pick<GameState, "flags">, id: string): void { sta
 
 export function nextBattleTip(state: Pick<GameState, "flags">, s: BattleSituation): CoachTip | undefined {
   const applies: Record<BattleTipId, boolean> = {
-    fuorionda: s.polemica >= 3,
     lowhp: s.ownRatio > 0 && s.ownRatio <= .3 && s.help,
     recruit: s.wild && s.foeRatio > 0 && s.foeRatio <= .5 && s.cards > 0,
     efficacy: s.arrows,

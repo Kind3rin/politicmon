@@ -6,7 +6,7 @@ const expect=(ok,message)=>{if(!ok)failures.push(message);};
 const game=await openPhone(`${base}/`);
 const page=game.page;
 const SETUP=`state.party=[createMonster('ellyna',8)];state.starterId='ellyna';state.flags['starter-chosen']=true;state.flags['dex-received']=true;state.flags['opening-encountered']=true;state.flags['controls-intro']=false;state.flags['power-seen-comizio']=true;state.pos={mapId:'route1',x:12,y:20,facing:'up'};`;
-const coach=()=>page.evaluate(()=>{const c=document.querySelector('.ui-arena-coach:not([hidden])');return c?{title:c.querySelector('.ui-arena-coach-title').innerText,box:c.getBoundingClientRect().toJSON()}:null;});
+const coach=()=>page.evaluate(()=>{const c=document.querySelector('.ui-arena-coach:not([hidden])');return c?{title:(c.getAttribute('aria-label')||'').split('.')[0],box:c.getBoundingClientRect().toJSON()}:null;});
 const flags=()=>page.evaluate(async()=>{const {getActiveState}=await import('/src/game/state.ts');const s=getActiveState();return Object.keys(s.flags).filter(k=>k.startsWith('tip-'));});
 /** Play turns until `want` tips have been seen (or the fight ends); returns the titles in order. */
 const fight=async(species,level,turns)=>{
@@ -19,7 +19,7 @@ const fight=async(species,level,turns)=>{
   if(kind==='dialog'){const box=await page.locator('.ui-dialog:not([hidden])').boundingBox();await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);}
   else if(kind==='ready'){
    await page.waitForTimeout(350);const c=await coach();
-   if(c){seen.push(c.title);expect(c.box.left>=0&&c.box.right<=375&&c.box.height<=150,`the tip fits the screen (${JSON.stringify(c.box)})`);}
+   if(c){seen.push(c.title);expect(c.box.left>=0&&c.box.right<=375&&c.box.height<=60,`the tip fits the caption strip (${JSON.stringify(c.box)})`);const foe=await page.evaluate(()=>{const cv=document.querySelector('canvas'),r=cv.getBoundingClientRect(),b=JSON.parse(cv.dataset.foeBounds),k=r.width/240;return {top:r.top+b.y*k,bottom:r.top+(b.y+b.h)*k};});expect(c.box.top>=foe.bottom,`the tip stays below the opponent (${c.box.top} vs ${foe.bottom})`);}
    if(seen.length>=turns)break;
    await page.locator('.ui-move-card:not([disabled])').first().tap();
   }else{const next=page.getByRole('button',{name:'Continua',exact:true});if(await next.count())await next.tap({timeout:600}).catch(()=>{});}
@@ -33,7 +33,7 @@ try{
 
  // The first fights: arrows first, then the Polemica, then the rival's intent; never one twice.
  const first=await fight('salvinott',6,3);
- expect(first[0]==='SCEGLI UNA MOSSA'||first[0]==='Scegli una mossa',`the first tip is about the moves (${first})`);
+ expect(/scegli una mossa/i.test(first[0]),`the first tip is about the moves (${first})`);
  expect(first.length>=2&&new Set(first).size===first.length,`each turn brings a different tip (${first})`);
  // Leave the fight (a tap on a tip retires it; fleeing is fine in the grass).
  await page.evaluate(()=>{window.stack.top.finished=true;});

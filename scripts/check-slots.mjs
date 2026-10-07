@@ -13,19 +13,8 @@ const results = await page.evaluate(async () => {
   const assert = (name, cond) => out.push({ name, ok: !!cond });
 
   const clean = () => {
-    // Azzera tutte le chiavi note prima di ogni scenario.
-    for (let i = 0; i < 3; i++) {
-      localStorage.removeItem(`politicmon-save-v14__s${i}`);
-      localStorage.removeItem(`politicmon-save-v14__s${i}.bak`);
-      localStorage.removeItem(`politicmon-save-v13__s${i}`);
-      localStorage.removeItem(`politicmon-save-v13__s${i}.bak`);
-    }
-    localStorage.removeItem("politicmon-save-v13");
-    localStorage.removeItem("politicmon-save-v13.bak");
-    localStorage.removeItem("politicmon-active-slot");
-    for (const k of ["v12","v11","v10","v9","v8","v7","v6","v5","v4","v3"]) {
-      localStorage.removeItem(`politicmon-save-${k}`);
-    }
+    // Every save key, whatever its version: the game keeps writing a newer one.
+    for (const k of Object.keys(localStorage)) if (k.startsWith("politicmon-save") || k === "politicmon-active-slot") localStorage.removeItem(k);
     // Forza rilettura dello slot attivo dopo aver tolto la chiave.
     S.setActiveSlot(0);
   };
@@ -85,7 +74,7 @@ const results = await page.evaluate(async () => {
   S.setActiveSlot(0);
   const migr = S.loadGame(); // deve migrare la vecchia chiave in __s0
   assert("migrazione mono-slot money 777", migr && migr.money === 777);
-  assert("migrazione riempie __s0", localStorage.getItem("politicmon-save-v14__s0") !== null);
+  assert("migrazione riempie __s0", Object.keys(localStorage).some((k) => /^politicmon-save-v\d+__s0$/.test(k)));
   assert("migrazione rimuove vecchia chiave", localStorage.getItem("politicmon-save-v13") === null);
   assert("slot1 resta vuoto dopo migrazione", S.hasSaveInSlot(1) === false);
 

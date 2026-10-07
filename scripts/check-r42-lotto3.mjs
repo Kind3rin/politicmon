@@ -32,11 +32,13 @@ const results = await page.evaluate(async () => {
     buildRematchDef, REMATCH_COOLDOWN_STEPS
   } = await import("/src/game/rematch.ts");
   const { TRAINERS } = await import("/src/data/trainers.ts");
+  const { shopStock } = await import("/src/game/supplyGuide.ts");
+  const { trainerAi } = await import("/src/game/battle/trainerStyle.ts");
   const {
     COPPA_FEE, COPPA_REPEAT_PRIZE
   } = await import("/src/game/tournament.ts");
   const {
-    MONUMENT_COSTS, MONUMENT_MAX, MonumentScene, monumentDecoLines
+    MONUMENT_COSTS, MONUMENT_MAX, buyMonumentLevel, monumentDecoLines
   } = await import("/src/scenes/MonumentScene.ts");
   const { ShopScene } = await import("/src/scenes/ShopScene.ts");
   const { audio } = await import("/src/engine/audio.ts");
@@ -52,7 +54,8 @@ const results = await page.evaluate(async () => {
   // trainer comune con def.money>0). Prendiamo "salvinott"? No, cerchiamo per id.
   const commonId = Object.keys(TRAINERS).find((id) => {
     const t = TRAINERS[id];
-    return t && !t.badge && t.money > 0 && !["boss", "garante", "ilcapitano", "tesoriere", "commissione"].includes(id);
+    // A common trainer: no badge, and the AI rules do not already treat it as a boss or a gym.
+    return t && !t.badge && t.money > 0 && !trainerAi(id, false, false, 2).canHeal && !id.startsWith("rival") && id !== "stagista";
   });
   const commonDef = TRAINERS[commonId];
 
@@ -132,8 +135,7 @@ const results = await page.evaluate(async () => {
   // ------------------------------------------------ 4) MANIFESTI dal 2° badge
   {
     const has = (state) => {
-      const scene = new ShopScene(new SceneStack(), input, state);
-      return scene.itemIds.includes("manifesti");
+      return shopStock(state).includes("manifesti");
     };
     const s1 = newGameState(); s1.badges = ["a"];
     const s2 = newGameState(); s2.badges = ["a", "b"];
@@ -142,7 +144,7 @@ const results = await page.evaluate(async () => {
     check(has(s2), "manifesti: in vendita dal 2° badge");
     check(has(s3), "manifesti: ancora in vendita post-garante");
     // SPOT resta end-game: col 2° badge NON deve comparire.
-    const spotEarly = new ShopScene(new SceneStack(), input, s2).itemIds.includes("spotprimetime");
+    const spotEarly = shopStock(s2).includes("spotprimetime");
     check(!spotEarly, "manifesti: SPOT resta end-game (non al 2° badge)");
   }
 
@@ -153,22 +155,20 @@ const results = await page.evaluate(async () => {
     const st = newGameState();
     st.money = 100000;
     st.monumentLevel = 0;
-    const scene = new MonumentScene(new SceneStack(), input, st);
     // Compra i 3 livelli invocando build().
-    scene.build(MONUMENT_COSTS[0]);
+    buyMonumentLevel(st, 0);
     check(st.monumentLevel === 1 && st.money === 90000, "monumento: lv1 (-10.000€)", `lv=${st.monumentLevel} money=${st.money}`);
-    scene.build(MONUMENT_COSTS[1]);
+    buyMonumentLevel(st, 1);
     check(st.monumentLevel === 2 && st.money === 65000, "monumento: lv2 (-25.000€)", `lv=${st.monumentLevel} money=${st.money}`);
-    scene.build(MONUMENT_COSTS[2]);
+    buyMonumentLevel(st, 2);
     check(st.monumentLevel === 3 && st.money === 15000, "monumento: lv3 (-50.000€)", `lv=${st.monumentLevel} money=${st.money}`);
     // Fondi insufficienti: nessun addebito oltre il max.
     const before = st.money;
-    scene.build(99999);
+    buyMonumentLevel(st, 3);
     check(st.money === before && st.monumentLevel === 3, "monumento: al max nessun ulteriore addebito", `money=${st.money}`);
     // Fondi insufficienti in un altro stato: niente deduzione.
     const poor = newGameState(); poor.money = 500; poor.monumentLevel = 0;
-    const s2 = new MonumentScene(new SceneStack(), input, poor);
-    s2.build(MONUMENT_COSTS[0]);
+    buyMonumentLevel(poor, 0);
     check(poor.money === 500 && poor.monumentLevel === 0, "monumento: fondi insufficienti → niente addebito", `money=${poor.money}`);
     // Testo overworld cambia col livello.
     const l3 = monumentDecoLines(3).join(" ");

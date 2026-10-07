@@ -73,9 +73,15 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
     }
   }
   const caption=root.querySelector<HTMLElement>('.ui-arena-caption')!;caption.hidden=false;
-  const captionKey=JSON.stringify([arena.finisher?.label,arena.message,arena.notice,arena.speed?.label]);
+  const captionKey=JSON.stringify([arena.finisher?.label,arena.message,arena.notice,arena.speed?.label,arena.finisher?undefined:arena.coach?.title]);
   if(caption.dataset.content!==captionKey){caption.dataset.content=captionKey;caption.replaceChildren();
   if(arena.finisher){const button=kit.button(arena.finisher,()=>live?.arena?.finisher?.run());button.classList.add('ui-finisher');caption.append(button);}
+  else if(arena.coach){
+    // A one-time tip takes the caption strip: the field and the cards stay as they are. The whole strip dismisses it.
+    const tip=node('button','ui-arena-coach') as HTMLButtonElement;tip.type='button';tip.setAttribute('role','status');
+    const text=node('span','ui-arena-coach-body'),close=node('span','ui-arena-coach-close');text.textContent=arena.coach.body;close.textContent='✕';close.setAttribute('aria-hidden','true');
+    tip.append(text,close);tip.setAttribute('aria-label',`${arena.coach.title}. ${arena.coach.body} Tocca per chiudere.`);tip.onclick=()=>live?.arena?.coach?.dismiss();caption.append(tip);
+  }
   else if(arena.message){const text=node('p','ui-body');text.textContent=arena.notice||(['In lotta','Duello','Esito del duello','Scelta inviata'].includes(arena.message.title)?arena.message.body:arena.message.title);caption.append(text);}
   if(!arena.finisher&&arena.speed){const pace=document.createElement('button');pace.type='button';pace.className='ui-arena-speed';pace.textContent=arena.speed.label;pace.setAttribute('aria-label',arena.speed.hint??'Ritmo della lotta');pace.onclick=()=>live?.arena?.speed?.run();caption.append(pace);}}
   let dots=cards[1].querySelector<HTMLElement>('.ui-polemica');
@@ -91,17 +97,6 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
   let tag=root.querySelector<HTMLElement>('.ui-intent-posture');
   if(!tag){tag=node('span','ui-intent-posture');tag.setAttribute('aria-hidden','true');root.querySelector('.ui-arena-view')!.append(tag);}
   tag.hidden=!arena.intent?.posture;tag.textContent=arena.intent?.posture?.label??'';
-  let coach=root.querySelector<HTMLButtonElement>('.ui-arena-coach');
-  if(arena.coach){
-    if(!coach){coach=node('button','ui-arena-coach') as HTMLButtonElement;coach.type='button';coach.setAttribute('role','status');coach.onclick=()=>live?.arena?.coach?.dismiss();root.querySelector('.ui-arena-view')!.append(coach);}
-    if(coach.dataset.key!==arena.coach.title){
-      coach.dataset.key=arena.coach.title;
-      const title=node('strong','ui-arena-coach-title'),body=node('span','ui-arena-coach-body'),close=node('span','ui-arena-coach-close');
-      title.textContent=arena.coach.title;body.textContent=arena.coach.body;close.textContent='✕';close.setAttribute('aria-hidden','true');
-      coach.replaceChildren(title,body,close);coach.setAttribute('aria-label',`${arena.coach.title}. ${arena.coach.body} Tocca per chiudere.`);
-    }
-    coach.hidden=false;
-  }else if(coach){coach.hidden=true;coach.dataset.key='';}
   const notice=root.querySelector<HTMLElement>('.ui-arena-notice')!;notice.hidden=true;notice.textContent='';
   const layer=root.querySelector<HTMLElement>('.ui-arena-impacts')!;
   const impacts=arena.impacts??[];

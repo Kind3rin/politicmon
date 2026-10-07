@@ -80,7 +80,7 @@ const results = await page.evaluate(async () => {
     w.fromX = 27; w.fromY = 9;
     s.pos = { mapId: "offshore", x: 28, y: 9, facing: "right" };
     w.onStepComplete();
-    const opened = Boolean(w.fadeOut > 0 || w.pendingWarp);
+    const opened = Boolean(w.fadeOut > 0 || w.pendingWarp || w.askMenu); // the crossing asks first: SALPARE PER BRUXELLES?
     check(opened, "GATE: BRUXELLES accessibile post-garante (warp attivo)");
   }
 
@@ -116,6 +116,9 @@ const results = await page.evaluate(async () => {
     const w = new WorldScene(stack, input, s);
     stack.push(w);
     const pressA = () => {
+      // Panel scenes (briefing) answer to their on-screen action, not to keys.
+      const panel = stack.top !== w && stack.top?.uiPanel;
+      if (panel) { const act = panel.actions?.[panel.primary ?? panel.selected ?? 0]; if (act && !act.disabled) act.run(); stack.update(1 / 30); stack.draw(screen); input.endFrame(); return; }
       document.dispatchEvent(new KeyboardEvent("keydown", { code: "KeyZ", bubbles: true }));
       stack.update(1 / 30); stack.draw(screen); input.endFrame();
       document.dispatchEvent(new KeyboardEvent("keyup", { code: "KeyZ", bubbles: true }));
@@ -142,7 +145,7 @@ const results = await page.evaluate(async () => {
       battle.endBattle("win");
       for (let i = 0; i < 30; i++) tick();
       // Dopo l'esito, la coda dei dialoghi di vittoria può bloccare: sfogliala.
-      for (let i = 0; i < 20 && !s.flags["ue-beaten"]; i++) pressA();
+      for (let i = 0; i < 600 && !s.flags["ue-beaten"]; i++) pressA();
     }
     check(Boolean(s.flags["ue-beaten"]), "flag ue-beaten impostato dopo la vittoria sul boss");
   }

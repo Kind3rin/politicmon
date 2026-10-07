@@ -691,6 +691,8 @@ export class WorldScene implements Scene {
   private unstick(): void {
     const pos = this.state.pos, here = TILES[this.tileAt(pos.x, pos.y)];
     if (!here || (!here.solid && !here.ledge)) return;
+    // Arriving by sea: with the ferry the water is where you stand, and syncFerryVehicle puts you on board.
+    if (here.water && !here.ledge && this.canFerry()) return;
     for (let radius = 1; radius <= 8; radius++) for (let dy = -radius; dy <= radius; dy++) for (let dx = -radius; dx <= radius; dx++) {
       if (Math.max(Math.abs(dx), Math.abs(dy)) !== radius) continue;
       const x = pos.x + dx, y = pos.y + dy, tile = TILES[this.tileAt(x, y)];

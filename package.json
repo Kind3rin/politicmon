@@ -94,7 +94,6 @@
     "shot:desk": "node scripts/shot-desk.mjs",
     "shot:shell": "node scripts/shot-shell.mjs",
     "check:shell:release": "node scripts/check-shell-release.mjs",
-    "check:mobile-layout": "node scripts/check-mobile-layout.mjs",
     "playtest:campaign:native": "node scripts/play-campaign-native.mjs",
     "sim:trainers": "tsx scripts/sim-trainers.ts",
     "sim:learnsets": "tsx scripts/balance-learnsets.ts",
@@ -125,7 +124,10 @@
     "check:doors": "node scripts/check-door-entry.mjs",
     "check:powers": "node scripts/check-powers.mjs",
     "check:palinsesto": "node scripts/check-palinsesto.mjs",
-    "check:coach": "node scripts/check-coach.mjs"
+    "check:coach": "node scripts/check-coach.mjs",
+    "check:all": "node scripts/run-checks.mjs",
+    "check:items": "node scripts/check-items.mjs",
+    "check:input-keys": "node scripts/check-input-keys.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

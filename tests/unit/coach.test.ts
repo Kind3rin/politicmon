@@ -16,8 +16,7 @@ test('each situation has its tip, and the urgent ones come first', () => {
   assert.equal(nextBattleTip(state, { ...calm, intent: true })?.id, 'intent');
   assert.equal(nextBattleTip(state, { ...calm, foeRatio: .4 })?.id, 'recruit');
   assert.equal(nextBattleTip(state, { ...calm, ownRatio: .2 })?.id, 'lowhp');
-  assert.equal(nextBattleTip(state, { ...calm, polemica: 3 })?.id, 'fuorionda');
-  assert.equal(nextBattleTip(state, { ...calm, arrows: true, polemica: 3, intent: true, ownRatio: .2, foeRatio: .3 })?.id, 'fuorionda');
+  assert.equal(nextBattleTip(state, { ...calm, arrows: true, polemica: 3, intent: true, ownRatio: .2, foeRatio: .3 })?.id, 'lowhp');
   assert.equal(nextBattleTip(state, { ...calm, arrows: true, polemica: 1, intent: true })?.id, 'efficacy');
 });
 
@@ -65,8 +64,12 @@ test('the world tips wait for a calm moment, and the cards tip only once recruit
   assert.equal(nextWorldTip(state, { ...here, polled: true }), undefined);
 });
 
-test('every tip fits the card: a short title and a body of three lines at most', () => {
-  for (const tip of [...Object.values(BATTLE_TIPS), ...Object.values(WORLD_TIPS)]) {
+test('every tip fits its place: two lines in the battle caption, three on the world card', () => {
+  for (const tip of Object.values(BATTLE_TIPS)) {
+    assert.ok(tip.title.length <= 26, `${tip.id} title`);
+    assert.ok(tip.body.length <= 70, `${tip.id} body is ${tip.body.length} characters`);
+  }
+  for (const tip of Object.values(WORLD_TIPS)) {
     assert.ok(tip.title.length <= 26, `${tip.id} title`);
     assert.ok(tip.body.length <= 135, `${tip.id} body is ${tip.body.length} characters`);
   }

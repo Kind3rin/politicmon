@@ -30,7 +30,7 @@ export const DAILY_QUEST_POOL: DailyQuestDef[] = [
 
 // Le 3 missioni del giorno: indici DISTINTI pescati dall'hash della data
 // (stesso schema a sonda lineare della SFIDA DEL GIORNO in daily.ts).
-export function todaysDailyQuests(dateKey = localDateKey(), withPalinsesto = true): DailyQuestDef[] {
+export function todaysDailyQuests(dateKey = localDateKey(), withPalinsesto = false): DailyQuestDef[] {
   const pool = withPalinsesto ? DAILY_QUEST_POOL : DAILY_QUEST_POOL.filter((q) => !q.needs);
   const h = hashDate(`${dateKey}:missioni`);
   const picks: number[] = [];

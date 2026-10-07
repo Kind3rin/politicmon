@@ -56,36 +56,66 @@ function spriteUrl(path: string): string {
 export function getSpriteImage(id: string, path: string): HTMLImageElement | null {
   const existing = registry.get(id);
   if (existing) {
-    return existing.status === "ready" ? existing.img : null;
+    if (existing.status === "ready") return existing.img;
+    promote(id); // a scene is drawing it now: it no longer waits its turn behind the background downloads
+    return null;
   }
   loadSprite(id, path);
   return null;
 }
 
-export function loadSprite(id: string, path: string): void {
+// Background downloads (the art a first frame does not need) go a few at a time and at low priority, so that what the player has just
+// asked for — the world's code, the music of the first town, a sprite a scene is drawing — is not stuck behind hundreds of pictures on a
+// slow connection. A queued sprite that a scene asks for is started at once.
+const BACKGROUND_LIMIT = 4;
+const queued = new Map<string, (low: boolean) => void>();
+const order: string[] = [];
+let running = 0;
+
+function pump(): void {
+  while (running < BACKGROUND_LIMIT && order.length) {
+    const job = queued.get(order.shift()!);
+    if (job) job(true);
+  }
+}
+
+function promote(id: string): void {
+  queued.get(id)?.(false);
+}
+
+export function loadSprite(id: string, path: string, background = false): void {
   if (registry.has(id)) {
+    if (!background) promote(id);
     return;
   }
   const entry: Entry = { status: "loading", img: null };
   registry.set(id, entry);
-  const img = new Image();
-  img.onload = () => {
-    entry.img = img;
-    entry.status = "ready";
-    spriteRevision++;
+  const start = (low: boolean) => {
+    queued.delete(id);
+    if (low) running += 1;
+    const img = new Image();
+    if (low) (img as HTMLImageElement & { fetchPriority?: string }).fetchPriority = "low";
+    const settle = (status: SpriteStatus) => {
+      entry.status = status;
+      spriteRevision++;
+      if (low) { running -= 1; pump(); }
+    };
+    img.onload = () => { entry.img = img; settle("ready"); };
+    img.onerror = () => settle("missing");
+    img.src = spriteUrl(path);
   };
-  img.onerror = () => {
-    entry.status = "missing";
-    spriteRevision++;
-  };
-  img.src = spriteUrl(path);
+  if (!background) { start(false); return; }
+  queued.set(id, start);
+  order.push(id);
+  pump();
 }
 
 // Pre-carica un batch di sprite (id → path). Da chiamare all'avvio per i mostri
 // e i tile, così sono pronti prima della prima battaglia / del primo frame mappa.
-export function preloadSprites(entries: Record<string, string>): void {
+// `background`: in coda, pochi alla volta e a bassa priorità (vedi sopra).
+export function preloadSprites(entries: Record<string, string>, background = false): void {
   for (const [id, path] of Object.entries(entries)) {
-    loadSprite(id, path);
+    loadSprite(id, path, background);
   }
 }
 
@@ -98,6 +128,7 @@ export function waitForSprites(ids: string[], timeoutMs = 2000): Promise<void> {
   return new Promise((resolve) => {
     const tick = () => {
       const done = ids.every((id) => {
+        promote(id); // somebody is waiting for it
         const status = spriteStatus(id);
         return status === "ready" || status === "missing";
       });

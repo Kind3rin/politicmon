@@ -36,61 +36,73 @@ export function criticalSpriteEntries(): Record<string, string> {
     }
   }
 
-  // Il roster è critico: nessuna scena deve arrivare al primo draw mentre un
-  // Politicmon è ancora in decode, altrimenti su mobile compare il placeholder
-  // o lo sprite sparisce durante un attacco/evoluzione.
+  return entries;
+}
+
+// The roster used to be awaited before the title: a hundred and thirty pictures between a new player and the first screen, for a battle
+// that is minutes away. It now opens the background queue (first in line, so it is ready long before the laboratory), and a scene that
+// draws a Politicmon still not loaded starts it at once.
+export function rosterSpriteEntries(): Record<string, string> {
+  const entries: Record<string, string> = {};
   for (const speciesId of MONSTERS_WITH_PNG) {
     entries[`mon:${speciesId}`] = `monsters/${speciesId}.png`;
   }
   for (const speciesId of MONSTERS_WITH_ACTION_PNG) {
     entries[`mon:${speciesId}_action`] = `monsters/${speciesId}_action.png`;
   }
-
   return entries;
 }
 
 // Tutto ciò che NON serve al primo frame: frame di camminata (player+NPC),
 // veicoli, item, mostri. Precaricato in sfondo, mai atteso dal boot.
+// In the order a new game meets them: the player walking, the bag, the people walking, the first backdrops; the big dossiers of the
+// bosses, hours away, come last.
 function deferredSpriteEntries(): Record<string, string> {
   const entries: Record<string, string> = {};
-
-  // Gli ambienti sono piccoli PNG nativi: partono in sfondo senza allungare
-  // il boot e riusano il versionamento/offline del registry degli sprite.
-  for (const backdrop of Object.values(BATTLE_BACKDROPS)) {
-    entries[backdrop.spriteId] = backdrop.path;
-  }
-  for (const art of ["sportello", "studio", "molo", "verbale", "pompa"]) {
-    entries[`civic:${art}`] = `ui/civic/${art}.png`;
-  }
-  for (const id of BOSS_ART_IDS) entries[`boss:${id}`] = `ui/boss/${id}.png`;
-  entries["ui:evolution"] = "ui/evolution.png";
-  entries["ui:evolution-stage"] = "ui/evolution-stage.png";
-  entries["ui:career-portrait"] = "ui/evolution-portrait.png";
-  entries["ui:starter-stage"] = "ui/starter-stage.png";
-  entries["ui:dossier"] = "ui/dossier.png";
-  for (const id of ["bag", "shop", "teach"]) entries[`ui:${id}`] = `ui/${id}.png`;
 
   for (const dir of DIRS) {
     for (let frame = 0; frame < 4; frame += 1) {
       entries[`player:${dir}:w${frame}`] = `chars/player_${dir}_w${frame}.png`;
     }
-    for (const vehicle of VEHICLES) {
-      entries[`veh:${vehicle}:${dir}`] = `chars/${vehicle}_${dir}.png`;
-    }
-    for (const npc of NPCS) {
-      for (let frame = 0; frame < 4; frame += 1) {
-        entries[`npc:${npc}:${dir}:w${frame}`] = `chars/npc_${npc}_${dir}_w${frame}.png`;
-      }
-    }
   }
-
   // Solo gli item con PNG (i nuovi item R39 senza icona userebbero un path 404).
   for (const itemId of BAG_ORDER) {
     if (ITEMS_WITH_PNG.has(itemId)) {
       entries[`item:${itemId}`] = `items/${itemId}.png`;
     }
   }
+  entries["ui:starter-stage"] = "ui/starter-stage.png";
+  for (const id of ["bag", "shop", "teach"]) entries[`ui:${id}`] = `ui/${id}.png`;
+  entries["ui:dossier"] = "ui/dossier.png";
+  // Gli ambienti sono piccoli PNG nativi: partono in sfondo senza allungare
+  // il boot e riusano il versionamento/offline del registry degli sprite.
+  for (const backdrop of Object.values(BATTLE_BACKDROPS)) {
+    entries[backdrop.spriteId] = backdrop.path;
+  }
+  for (const dir of DIRS) {
+    for (const npc of NPCS) {
+      for (let frame = 0; frame < 4; frame += 1) {
+        entries[`npc:${npc}:${dir}:w${frame}`] = `chars/npc_${npc}_${dir}_w${frame}.png`;
+      }
+    }
+    for (const vehicle of VEHICLES) {
+      entries[`veh:${vehicle}:${dir}`] = `chars/${vehicle}_${dir}.png`;
+    }
+  }
+  entries["ui:evolution"] = "ui/evolution.png";
+  entries["ui:evolution-stage"] = "ui/evolution-stage.png";
+  entries["ui:career-portrait"] = "ui/evolution-portrait.png";
+  for (const art of ["sportello", "studio", "molo", "verbale", "pompa"]) {
+    entries[`civic:${art}`] = `ui/civic/${art}.png`;
+  }
+  return entries;
+}
 
+// Heavy and late: the animated sheets, then the boss dossiers.
+function lateSpriteEntries(): Record<string, string> {
+  const entries: Record<string, string> = {};
+  for (const id of ANIMATED_MONSTERS) entries[`mon:frames:${id}`] = `monsters/animated/${id}.png`;
+  for (const id of BOSS_ART_IDS) entries[`boss:${id}`] = `ui/boss/${id}.png`;
   return entries;
 }
 
@@ -99,13 +111,19 @@ const DEFERRED_SPRITES = deferredSpriteEntries();
 
 // Avvia SUBITO il fetch dei deferred (non blocca), da chiamare dopo il primo frame.
 function startDeferredPreload(): void {
-  preloadSprites(DEFERRED_SPRITES);
-  preloadSprites(Object.fromEntries([...ANIMATED_MONSTERS].map((id) => [`mon:frames:${id}`, `monsters/animated/${id}.png`])));
+  preloadSprites(rosterSpriteEntries(), true);
+  preloadSprites(DEFERRED_SPRITES, true);
+  preloadSprites(lateSpriteEntries(), true);
 }
 
+let core: Promise<void> | null = null;
+/** Starts the pictures of the first map (once) and resolves when they are in, or after eight seconds. */
 export function preloadCoreSprites(): Promise<void> {
+  return core ??= loadCore();
+}
+
+function loadCore(): Promise<void> {
   preloadSprites(CRITICAL_SPRITES);
-  // Il boot aspetta solo il set critico (timeout più corto: è un decimo degli asset).
   return waitForSprites(Object.keys(CRITICAL_SPRITES), 8000).finally(() => {
     // Il resto parte in sfondo: se il browser ha requestIdleCallback lo usa,
     // altrimenti un microtask dopo il primo frame.

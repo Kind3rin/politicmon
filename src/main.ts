@@ -158,9 +158,9 @@ const screen = new Screen(canvas);
 const input = new Input();
 const shellGuideOpen=initShell(input);
 const stack = new SceneStack();
-let bootReady = false;
+// The title is text and buttons: it does not wait for the art of the map. The pictures of the first map start downloading now and
+// the campaign waits for them when it opens (TitleScene.start), by which time they have usually arrived.
 void preloadCoreSprites().finally(() => {
-  bootReady = true;
   performance.mark("politicmon:assets-ready");
   performance.measure("politicmon:boot-assets", "politicmon:boot-start", "politicmon:assets-ready");
 });
@@ -223,14 +223,6 @@ window.addEventListener("beforeunload", () => {
 
 let last = performance.now();
 
-function drawBootScreen(now: number): void {
-  screen.clear("#10141f");
-  screen.rect(20, 78, 200, 20, "#20283a");
-  screen.frame(20, 78, 200, 20, "#6f7da8");
-  const dots = ".".repeat((Math.floor(now / 240) % 3) + 1);
-  screen.textCenter(`CARICAMENTO${dots}`, 120, 85, "#f4dd62");
-}
-
 let loopCrashed = false;
 let firstReadyFrame = true;
 
@@ -253,11 +245,6 @@ function frame(now: number): void {
   const raw = (now - last) / 1000;
   const dt = Number.isFinite(raw) ? Math.min(0.1, Math.max(0, raw)) : 0;
   last = now;
-  if (!bootReady) {
-    drawBootScreen(now);
-    requestAnimationFrame(frame);
-    return;
-  }
   try {
     input.pollGamepads();
     const guideOpen = shellGuideOpen();

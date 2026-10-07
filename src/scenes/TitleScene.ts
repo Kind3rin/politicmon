@@ -1,3 +1,4 @@
+import { preloadCoreSprites } from "../engine/preload";
 import { AudioScene } from "./AudioScene";
 import { audio } from "../engine/audio";
 import type { Input } from "../engine/input";
@@ -16,12 +17,14 @@ import type { UiPanel } from "../ui/kit";
 export class TitleScene implements Scene {
   get uiPanel(): UiPanel {
     const labels: Record<string, string> = { CONTINUA: "Continua", "NUOVA CAMPAGNA": "Nuova campagna", NOME: "Nome online", AUDIO: "Audio", "SPOSTA SAVE": "Salvataggi", NORMALE: "Normale", DIFFICILE: "Difficile", INDIETRO: "Indietro" };
-    const actions = this.touchActions.map(action => ({ ...action, label: labels[action.label] ?? action.label }));
+    // On a slow connection the map takes a few seconds to arrive: the screen says so instead of only going dim.
+    const wait = this.starting ? "Carico la campagna…" : null;
+    const actions = this.touchActions.map((action, index) => ({ ...action, label: labels[action.label] ?? action.label, hint: wait && index === 0 ? "Un momento: sto aprendo la mappa" : action.hint }));
     const back = this.difficultyMenu ? actions.pop() : undefined;
     return {
       title: this.difficultyMenu ? "Scegli la sfida" : "Politicmon",
-      subtitle: this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato.",
-      splash: { art: "/title-bg.png", tagline: this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato.",
+      subtitle: wait ?? (this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato."),
+      splash: { art: "/title-bg.png", tagline: wait ?? (this.difficultyMenu ? "La difficoltà vale per tutta la partita." : "Il programma è in allegato. Manca l’allegato."),
         sprites: ["giorgetta", "ellyna", "renzino"].map(id => `/sprites/monsters/${id}.png`), compact: !this.difficultyMenu },
       actions:actions, back:back, primary: 0, selected: this.difficultyMenu?.index ?? this.menu.index
     };
@@ -175,7 +178,8 @@ export class TitleScene implements Scene {
       // Il mondo trascina battaglie, mappe, post-game e scene opzionali. Lo
       // carichiamo soltanto quando il giocatore avvia davvero una campagna:
       // titolo e gestione save restano un bootstrap piccolo e immediato.
-      const { WorldScene } = await import("../game/world/WorldScene");
+      // The pictures of the first map were started at boot; the map opens when both they and its code are here.
+      const [{ WorldScene }] = await Promise.all([import("../game/world/WorldScene"), preloadCoreSprites()]);
       this.stack.replace(new WorldScene(this.stack, this.input, state));
     } catch (error) {
       this.starting = false;

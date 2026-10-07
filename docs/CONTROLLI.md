@@ -16,7 +16,7 @@ node scripts/run-checks.mjs --list
 ## Cosa è fuori dal giro locale
 
 - **`*-release`** (audio, bruxelles, campo, diplomacy, future, genova, government, offshore, opening, palace, shell, tour): giocano campagne salvate sul sito pubblicato, in Chromium **e WebKit**. WebKit non è installato in questo ambiente (`npx playwright install webkit` è un download), quindi non sono stati eseguiti. Vanno lanciati prima di una release, con `PREVIEW_URL`.
-- `check-mp-live`, `check-prod`, `check-precache-build`, `check-err`, `check-terrace-return` (WebKit), `check-world-navigation-release` (anteprima compilata su :4184).
+- `check-precache-build` (serve `npm run build` prima: verifica l'inventario offline della build; passa, 1042 risorse), `check-mp-live`, `check-prod`, `check-err`, `check-terrace-return` (WebKit), `check-world-navigation-release` (anteprima compilata su :4184).
 - `scripts/retired/`: quattro controlli ritirati, con il perché e chi li sostituisce (`scripts/retired/README.md`).
 
 ## Cosa ho trovato
@@ -48,3 +48,8 @@ const tick = b => {                                   // dentro la pagina di pro
     stack.update(.1); input.endFrame(); return; }
   /* ...tasti reali per il mondo... */ };
 ```
+
+## Costo e produzione (7 ottobre 2026)
+
+- Frame del mondo con CPU rallentata 4×: 1,3 ms di giorno, 1,5 sera, 1,4 notte (luci e lucciole incluse). `perf:check` non può dare il verde in questo ambiente perché già il controllo senza gioco supera i 16,7 ms.
+- Il sito pubblicato serve la build corrente (persone dell'ora e palinsesto presenti nel pacchetto).

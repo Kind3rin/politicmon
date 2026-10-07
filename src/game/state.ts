@@ -656,7 +656,7 @@ export interface SlotSummary {
 }
 
 // Riepilogo leggibile di uno slot per la UI (senza caricarlo come partita attiva).
-export function slotSummary(slot: number): SlotSummary {
+export function peekSlot(slot: number): GameState | null {
   const s = clampSlot(slot);
   migratePreviousSlotOnce(s);
   migrateSingleSlotOnce();
@@ -671,7 +671,12 @@ export function slotSummary(slot: number): SlotSummary {
       }
     }
   }
-  const st = parseState(raw ?? lsGet(slotBackupKey(s)));
+  return parseState(raw ?? lsGet(slotBackupKey(s)));
+}
+
+export function slotSummary(slot: number): SlotSummary {
+  const s = clampSlot(slot);
+  const st = peekSlot(s);
   if (!st) {
     return { slot: s, exists: false, level: 0, badges: 0, money: 0, sondaggi: 0, mapId: "", hardMode: false };
   }

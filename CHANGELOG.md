@@ -9,6 +9,7 @@
 - **Coach** (`src/game/coach.ts`): suggerimenti brevi al momento giusto, una volta sola ciascuno. In lotta una scheda gialla sopra il campo, un solo consiglio per turno e mai due di fila: *Scegli una mossa* (frecce), *La Polemica*, *Cosa farà il rivale* (spada/megafono e posture), *Ora puoi reclutarlo* (avversario sotto metà PV con schede in borsa), *Compagno in difficoltà* (sotto un terzo dei PV), *Fuorionda pronto*. Nel mondo: *Squadra stanca* (Bar Sport) e *Schede finite* (Discount). Tutta la scheda è il tasto per chiuderla; scegliere una mossa la esaurisce. Si spegne con l'opzione «Guida e suggerimenti».
 - **Le persone dell'ora**: 14 persone nelle quattro città principali si vedono solo in una fascia (cinque danno un regalo una volta); due missioni giornaliere sui tipi in onda; i candidati «solo qui» non ancora visti compaiono col tipo nel Palinsesto; nuovo consiglio sui Sondaggi. Test `slotNpcs` (posizioni libere, porte raggiungibili con tutti presenti).
 - Le mosse mancanti per le nuove specie nei primi percorsi sono state aggiunte con `scripts/balance-learnsets.ts` (3 mosse, 2 specie).
+- Le schede delle campagne nel «Continua» dicono la **prossima tappa** della storia: tornando dopo giorni si riparte con un obiettivo.
 - Test `palinsesto` e `coach`; `npm run check:palinsesto` e `npm run check:coach` giocano il flusso da telefono.
 
 ## Mandato 2 — i poteri — 2026-10-06

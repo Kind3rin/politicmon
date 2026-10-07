@@ -1,5 +1,7 @@
 import { audio } from "../engine/audio";
 import { MAP_NAMES } from "../data/maps/names";
+import { currentQuest } from "../data/quests";
+import { readableCopy } from "../ui/kit/copy";
 
 /** Map names are stored in capitals for the pixel font; a card reads them as a sentence. */
 const placeName = (mapId: string): string => { const name = MAP_NAMES[mapId] ?? mapId; return name.charAt(0) + name.slice(1).toLocaleLowerCase("it"); };
@@ -11,6 +13,7 @@ import {
   hasSaveInSlot,
   loadGame,
   setActiveSlot,
+  peekSlot,
   slotSummary,
   SLOT_COUNT,
   type GameState,
@@ -34,12 +37,18 @@ export class SlotScene implements Scene {
     const slot = this.pendingOverwrite >= 0 ? this.pendingOverwrite : this.pendingDelete;
     const actions = this.touchActions.filter(action => action.label !== "INDIETRO" && action.label !== "ANNULLA").map((action, i) => ({ ...action,
       label: pending ? "Conferma" : action.label === "CANCELLA" ? "Gestisci campagne" : `${this.deleting ? "Cancella " : "Campagna "}${i + 1}`,
-      hint: pending ? undefined : i < SLOT_COUNT ? (this.summaries[i].exists ? placeName(this.summaries[i].mapId) : "Nessuna partita salvata") : "Scegli quale eliminare",
+      hint: pending ? undefined : i < SLOT_COUNT ? (this.summaries[i].exists ? `${placeName(this.summaries[i].mapId)}${this.nextStep(i) ? ` · Prossima tappa: ${this.nextStep(i)}` : ""}` : "Nessuna partita salvata") : "Scegli quale eliminare",
       facts: !pending && i < SLOT_COUNT && this.summaries[i].exists ? [{ label: "Livello", value: String(this.summaries[i].level) }, { label: "Medaglie", value: String(this.summaries[i].badges) }] : undefined
     }));
     return { title: pending ? "Conferma la scelta" : this.deleting ? "Gestisci campagne" : "Le tue campagne", subtitle: pending ? `La campagna ${slot + 1} sarà ${this.pendingDelete >= 0 ? "cancellata" : "sostituita"}. Il salvataggio attuale andrà perso.` : "Tre campagne. Il quarto mandato non c’è.", actions, selected: this.menu.index,
       back: { label: "Indietro", run: () => { if (this.stack.top !== this) return; this.input.reset(); audio.cancel(); if (pending) { this.pendingOverwrite = -1; this.pendingDelete = -1; } else if (this.deleting) this.deleting = false; else this.stack.pop(); } }
     };
+  }
+  /** Where the story goes next, so coming back after days starts with a goal. Read once per card. */
+  private steps = new Map<number, string>();
+  private nextStep(slot: number): string {
+    if (!this.steps.has(slot)) { const st = peekSlot(slot); const quest = st && st.party.length ? currentQuest(st) : null; this.steps.set(slot, quest ? readableCopy(quest.title) : ""); }
+    return this.steps.get(slot)!;
   }
   private menu: Menu;
   private msg = new MessageBox();
@@ -60,6 +69,7 @@ export class SlotScene implements Scene {
 
   private buildMenu(): Menu {
     this.summaries = [];
+    this.steps.clear();
     const items: Array<{ label: string; rightLabel?: string; disabled?: boolean }> = [];
     for (let s = 0; s < SLOT_COUNT; s += 1) {
       const sum = slotSummary(s);

@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { defineConfig, type Plugin } from "vite";
@@ -63,7 +64,12 @@ function stampServiceWorker(): Plugin {
           const key = JSON.stringify([directory, extension]);
           assetGroups.set(key, [...(assetGroups.get(key) ?? []), name]);
         }
-        const encodedAssets = [...assetGroups].map(([key, names]) => [...JSON.parse(key), names.join("|")]);
+        // A short content hash per file, in the order of the names: the worker copies from the previous release whatever kept its hash.
+        const hashOf = (path: string) => createHash("sha256").update(readFileSync(resolve(distRoot, path.slice(2)))).digest("hex").slice(0, 8);
+        const encodedAssets = [...assetGroups].map(([key, names]) => {
+          const [directory, extension] = JSON.parse(key) as [string, string];
+          return [directory, extension, names.join("|"), names.map((name) => hashOf(directory + name + extension)).join("")];
+        });
         writeFileSync(resolve(distRoot, `precache-runtime-${BUILD_ID}.json`), JSON.stringify(encodedAssets));
         const stamped = src
             .replaceAll("__APP_BUILD_ID__", BUILD_ID);

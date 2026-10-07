@@ -29,7 +29,6 @@ import { inject } from "@vercel/analytics";
 import { injectSpeedInsights } from "@vercel/speed-insights";
 
 const APP_BUILD_KEY = "politicmon-app-build";
-const APP_CACHE_KEY = `politicmon-${APP_BUILD_ID}`;
 performance.mark("politicmon:boot-start");
 
 // Gli endpoint delle metriche esistono sul deploy Vercel, non nell'anteprima
@@ -50,21 +49,22 @@ window.addEventListener("resize", syncControlLayout);
 // Applica la preferenza dei controlli di movimento (levetta vs d-pad).
 applyControlMode(loadControlMode());
 
+// A new build used to delete every older cache here, as soon as its page ran. That threw away the previous release just before the new
+// service worker could copy its unchanged files (a thousand sprites and the music), so every update downloaded the whole game again, and
+// it forced an extra reload. Old caches of the game now belong to the worker alone: it copies what it can and deletes them when it
+// activates. Only caches that are not the game's (left by very old versions) are still removed here.
 async function clearStaticCachesForNewBuild(): Promise<boolean> {
   if (!("caches" in window)) {
     return false;
   }
   try {
-    const previous = localStorage.getItem(APP_BUILD_KEY);
-    if (previous === APP_BUILD_ID) {
+    if (localStorage.getItem(APP_BUILD_KEY) === APP_BUILD_ID) {
       return false;
     }
     localStorage.setItem(APP_BUILD_KEY, APP_BUILD_ID);
-    const keys = await caches.keys();
-    const obsolete = keys.filter((key) => key !== APP_CACHE_KEY);
-    await Promise.all(obsolete.map((key) => caches.delete(key)));
-    navigator.serviceWorker?.controller?.postMessage({ type: "CLEAR_RUNTIME_CACHES" });
-    return obsolete.length > 0 || previous !== null;
+    const foreign = (await caches.keys()).filter((key) => !key.startsWith("politicmon-"));
+    await Promise.all(foreign.map((key) => caches.delete(key)));
+    return foreign.length > 0;
   } catch {
     return false;
   }

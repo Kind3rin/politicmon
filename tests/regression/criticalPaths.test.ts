@@ -50,6 +50,7 @@ test("P7-T08 pulizia PWA conserva sempre la cache della build corrente", () => {
   const sw = readFileSync("public/sw.js", "utf8");
   const main = readFileSync("src/main.ts", "utf8");
   assert.match(sw, /filter\(\(k\) => k !== CACHE\)/);
-  assert.match(main, /APP_CACHE_KEY = `politicmon-\$\{APP_BUILD_ID\}`/);
-  assert.match(main, /filter\(\(key\) => key !== APP_CACHE_KEY\)/);
+  // The page never deletes a cache of the game: the worker copies the unchanged files of the previous release before it removes it.
+  assert.match(main, /filter\(\(key\) => !key\.startsWith\("politicmon-"\)\)/);
+  assert.doesNotMatch(main, /CLEAR_RUNTIME_CACHES/);
 });

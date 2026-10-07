@@ -35,6 +35,44 @@ async function matchCurrentBuild(request) {
   return cache.match(url.href);
 }
 
+// Every release has a cache of its own, but most of a release is the same files as the one before: a thousand sprites and the music.
+// The inventory carries a short content hash for each file (fourth item of a group, eight characters a name). Whatever the previous
+// cache holds under the same path with the same hash is copied across; only what changed is downloaded. Any doubt means "download".
+const HASH = 8;
+async function reuseUnchanged(cache, groups) {
+  const copied = new Set();
+  try {
+    const wanted = new Map();
+    for (const [dir, ext, names, hashes] of groups) {
+      if (typeof hashes !== "string") continue;
+      names.split("|").forEach((name, i) => wanted.set(dir + name + ext, hashes.slice(i * HASH, i * HASH + HASH)));
+    }
+    if (!wanted.size) return copied;
+    const previous = (await caches.keys()).filter((key) => key.startsWith("politicmon-") && key !== CACHE);
+    for (const key of previous) {
+      const old = await caches.open(key);
+      const inventory = (await old.keys()).find((request) => request.url.includes("/precache-runtime-"));
+      const stored = inventory && await old.match(inventory);
+      if (!stored) continue;
+      for (const [dir, ext, names, hashes] of await stored.json()) {
+        if (typeof hashes !== "string") continue;
+        const list = names.split("|");
+        for (let i = 0; i < list.length; i += 1) {
+          const path = dir + list[i] + ext;
+          if (copied.has(path) || wanted.get(path) !== hashes.slice(i * HASH, i * HASH + HASH)) continue;
+          const hit = await old.match(new URL(path, self.location.href).href);
+          if (!hit || !hit.ok) continue;
+          await cache.put(path, hit);
+          copied.add(path);
+        }
+      }
+    }
+  } catch {
+    // The copy is a saving, never a requirement: what was not copied is fetched below.
+  }
+  return copied;
+}
+
 self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil((async () => {
@@ -45,7 +83,8 @@ self.addEventListener("install", (event) => {
     const groups = await response.clone().json();
     const runtime = groups.flatMap(([dir, ext, names]) => names.split("|").map(name => dir + name + ext));
     const cache = await caches.open(CACHE);
-    await cache.addAll([...PRECACHE, ...runtime]);
+    const copied = await reuseUnchanged(cache, groups);
+    await cache.addAll([...PRECACHE, ...runtime.filter((path) => !copied.has(path))]);
     await cache.put(RUNTIME_MANIFEST, response);
   })());
 });

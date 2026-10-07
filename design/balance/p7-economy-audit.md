@@ -6,7 +6,7 @@
 | coppa-first-bounded | OK | prima vittoria 3000€, quota 1500€ |
 | weekly-bounded | OK | premi 800-1800€ per 9 stage |
 | starter-affordability | OK | cura base 50€, fondi iniziali 500€ |
-| trainer-payouts-positive | OK | 48 payout non negativi |
+| trainer-payouts-positive | OK | 52 payout non negativi |
 | rematch-time-cost | OK | cooldown 600/1500 passi |
 | boost-money-sink | OK | spot 3000€ / 10 battaglie |
 

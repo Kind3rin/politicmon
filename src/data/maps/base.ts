@@ -238,7 +238,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     pickups: [
       { id: "pk-grotta1", x: 18, y: 2, itemId: "tessera", qty: 1 },
-      { id: "pk-grotta1b", x: 2, y: 11, itemId: "spritz", qty: 1, hidden: true }
+      { id: "pk-grotta1b", x: 2, y: 11, itemId: "spritz", qty: 1, hidden: true },
+      { id: "pk-grotta1c", x: 1, y: 8, itemId: "schedona", qty: 1, hidden: true },
+      { id: "pk-grotta1d", x: 18, y: 11, itemId: "caffe", qty: 3, hidden: true },
+      { id: "pk-grotta1e", x: 5, y: 3, itemId: "scheda", qty: 3, hidden: true }
     ],
     npcs: [
       {
@@ -793,7 +796,10 @@ export const BASE_MAPS: Record<string, MapDef> = {
     ],
     pickups: [
       { id: "pk-g2", x: 17, y: 2, itemId: "dirDecreto", qty: 1 },
-      { id: "pk-g2-hide", x: 2, y: 11, itemId: "mojito", qty: 1, hidden: true }
+      { id: "pk-g2-hide", x: 2, y: 11, itemId: "mojito", qty: 1, hidden: true },
+      { id: "pk-g2c", x: 1, y: 9, itemId: "schedona", qty: 1, hidden: true },
+      { id: "pk-g2d", x: 18, y: 10, itemId: "caffe", qty: 3, hidden: true },
+      { id: "pk-g2e", x: 1, y: 1, itemId: "spritz", qty: 2, hidden: true }
     ],
     npcs: [
       {

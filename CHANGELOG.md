@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — spazi del POCO e PWA — 2026-10-07
+
+- **Margini sicuri veri.** L'interfaccia attuale legge `env(safe-area-inset-*)` ma nessun controllo li simulava: nuovo `check-pwa-device` (8 profili del POCO F9 ULTRA: installata, bordo a bordo, due zoom, scheda del browser, orizzontale con foro a sinistra e a destra, finestra divisa; 38 schermate ciascuno, più la rotazione), in Chromium e WebKit. Tasti e testi dentro il rettangolo sicuro, bersagli ≥ 44 px, nessuna parola oltre il suo tasto, liste che arrivano sopra la barra dei gesti, niente che copra giocatore o sprite.
+- **Corretti:** lotta e titolo ignoravano i margini in orizzontale; la pila in alto del mondo (obiettivo, orologio, scheda) partiva da pixel fissi e finiva sotto i pulsanti con il foro in alto; «Leggenda» e «Reclutamento» uscivano dal tasto a 393-412 px; etichette della mappa sovrapposte su tutti i formati; orologio del palinsesto da 40 a 44 px.
+- **Lotta in finestra corta (schermo diviso):** gli sprite si ridimensionano con l'altezza della vista, targhette compatte, layout largo solo da 640 px. Prima: sprite tagliati e coperti.
+- **PWA:** manifest con `id`, `lang`, `categories`, `launch_handler` e cinque screenshot (fuori dal precache) per la scheda di installazione estesa.
+
 ## Mandato 2 — consolidamento — 2026-10-07
 
 - Prima di aggiungere altro: tutti i 76 controlli da browser eseguiti contro il server di sviluppo (e contro il commit precedente per distinguere regressioni da controlli vecchi). `docs/CONTROLLI.md` racconta cosa è emerso; `npm run check:all` (`scripts/run-checks.mjs`) li esegue tutti e riassume.

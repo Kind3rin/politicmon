@@ -1,13 +1,24 @@
 {
+  "id": "./",
   "name": "Politicmon",
   "short_name": "Politicmon",
   "description": "Catturali tutti, prima che ti tassino. RPG satirico in stile Game Boy sulla politica italiana.",
+  "lang": "it",
+  "dir": "ltr",
+  "categories": [
+    "games",
+    "entertainment"
+  ],
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#101c30",
   "theme_color": "#101c30",
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
   "icons": [
     {
       "src": "./icon-192.png",
@@ -32,6 +43,43 @@
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "./screenshots/mondo.webp",
+      "sizes": "824x1830",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Esplora Italia a tocchi"
+    },
+    {
+      "src": "./screenshots/lotta.webp",
+      "sizes": "824x1830",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Lotte a carte, una scelta alla volta"
+    },
+    {
+      "src": "./screenshots/dialogo.webp",
+      "sizes": "824x1830",
+      "type": "image/webp",
+      "form_factor": "narrow",
+      "label": "Dialoghi satirici"
+    },
+    {
+      "src": "./screenshots/mondo-largo.webp",
+      "sizes": "1830x824",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "Anche in orizzontale"
+    },
+    {
+      "src": "./screenshots/lotta-largo.webp",
+      "sizes": "1830x824",
+      "type": "image/webp",
+      "form_factor": "wide",
+      "label": "La lotta in orizzontale"
     }
   ]
 }

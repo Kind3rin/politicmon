@@ -32,7 +32,7 @@ import {
 import { festivalScandaloChance } from "./atto3MoveEffects";
 import { Menu, MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry, battleFit
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
@@ -1830,8 +1830,8 @@ export class BattleScene implements Scene {
     const playerSlide = Math.round((1 - slide) * -90);
 
     // Piattaforme.
-    drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, 64, 14, this.backdrop.foePlatform);
-    drawEllipse(screen, 56 + playerSlide, g.playerBase - 2, 76, 16, this.backdrop.playerPlatform);
+    drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, Math.round(64 * battleFit(screen.height)), Math.max(5, Math.round(14 * battleFit(screen.height))), this.backdrop.foePlatform);
+    drawEllipse(screen, 56 + playerSlide, g.playerBase - 2, Math.round(76 * battleFit(screen.height)), Math.max(5, Math.round(16 * battleFit(screen.height))), this.backdrop.playerPlatform);
 
     // Aura dorata pulsante attorno al leggendario: alone "sacro" che lo
     // distingue da un mostro qualsiasi per tutta la durata dello scontro.

@@ -54,6 +54,7 @@ const routeReview=params.has('routeReview');
 if(params.has('roamers'))state.flags['opening-encountered']=true;
 if(params.has('souvenirs')){state.flags['cosmetic-fascia-governo']=true;state.flags['cosmetic-megafono-opposizione']=true;}
 if(params.has('lesson')){state.flags['controls-intro']=true;state.stepsTotal=0;}
+if(params.has('palinsesto')){state.flags['rival1-beaten']=true;state.flags['palinsesto-seen']=true;}
 state.pos=routeReview?{mapId:'borgo',x:14,y:8,facing:'up'}:{mapId:params.get('map')??'route1',x:Number(params.get('x')??7),y:Number(params.get('y')??8),facing:(params.get('face')??'down') as 'down'};state.reduceEffects=!params.has('fx');
 const routeStatus=document.createElement('output');
 if(routeReview){routeStatus.style.cssText='position:fixed;top:64px;right:12px;padding:6px;background:#f4eedc;color:#14161f;z-index:60;font:16px system-ui;pointer-events:none';document.body.append(routeStatus);}
@@ -93,6 +94,7 @@ if(requested.startsWith('lotta')){
   :requested==='carburante'?new FuelScene(stack,input,state,'route1')
   :requested==='viaggio'?new TransportScene(stack,input,state,'borgo',()=>{})
   :(requested==='mappa'&&registerLocalMap(null),new WorldMapScene(stack,input,state));
+ if(requested==='mappa'&&params.has('tab')){for(const flag of ['garante-beaten','ue-beaten','campo-photo-complete','futureResolved','diplomacyComplete','tourComplete','boss-beaten'])state.flags[flag]=true;state.badges=['auditel','spread','dazio'];(scene as unknown as {pageIndex:number}).pageIndex=['italietta','rotte','atto3'].indexOf(params.get('tab')!);}
  if(requested==='squadra-riordina')(scene as unknown as {moveFrom:number}).moveFrom=2;
  if(requested==='compagno'){(scene as unknown as {summary:unknown;summaryPage:number}).summary=state.party[0];(scene as unknown as {summaryPage:number}).summaryPage=0;}
  stack.push(scene);

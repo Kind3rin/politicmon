@@ -17,7 +17,7 @@ body:is(.ui-dialog-open,.ui-conversation-open) :is(#console-top,#touch-ui,#shell
 .ui-dialog-next:focus-visible{outline:3px solid #174A7E;outline-offset:-4px}
 .ui-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
 .ui-panel.ui-conversation{display:block;inset:0;padding:0;border:0;border-radius:0;background:transparent;pointer-events:none}
-.ui-dialog-choices{position:absolute;left:24px;right:24px;bottom:calc(28dvh + 40px);max-height:calc(72dvh - 64px);display:grid;gap:8px;overflow:auto;padding:0 4px 4px 0;pointer-events:auto}
+.ui-dialog-choices{position:absolute;left:max(24px,env(safe-area-inset-left));right:max(24px,env(safe-area-inset-right));bottom:calc(28dvh + 40px);max-height:calc(72dvh - 64px);display:grid;gap:8px;overflow:auto;padding:0 4px 4px 0;pointer-events:auto}
 .ui-dialog-choices .ui-button{min-height:44px;padding:8px 12px;border:2px solid #14161F;border-radius:2px;box-shadow:4px 4px #14161F;background:#F4EEDC;color:#14161F;font:400 16px/1.4 PoliticmonBody,sans-serif}
 .ui-dialog-choices .ui-button[aria-current=true]{background:#FFD23F}
 .ui-dialog-choices .ui-command-group{display:none}

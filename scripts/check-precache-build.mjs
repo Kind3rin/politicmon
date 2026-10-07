@@ -18,7 +18,7 @@ async function install(status=200,body=JSON.stringify(groups)){
 }
 const result=await install();assert.equal(result.error,null);assert.equal(result.requests,1);
 const actual=new Set([...result.added,...result.stored.map(([path])=>path)]);
-const expected=new Set(['./',...all.filter(p=>!['dist/sw.js','dist/intro.mp4','dist/og.png'].includes(p)).map(p=>'./'+p.slice(5))]);
+const expected=new Set(['./',...all.filter(p=>!['dist/sw.js','dist/intro.mp4','dist/og.png'].includes(p)&&!p.startsWith('dist/screenshots/')).map(p=>'./'+p.slice(5))]);
 assert.deepEqual(actual,expected,'Precache lost, duplicated or added build resources');
 assert.equal(result.added.length,new Set(result.added).size);
 assert.equal(result.stored[0][1],JSON.stringify(groups));

@@ -120,6 +120,7 @@
     "check:palinsesto": "node scripts/check-palinsesto.mjs",
     "check:coach": "node scripts/check-coach.mjs",
     "check:all": "node scripts/run-checks.mjs",
+    "check:pwa-device": "node scripts/check-pwa-device.mjs",
     "check:items": "node scripts/check-items.mjs",
     "check:input-keys": "node scripts/check-input-keys.mjs"
   },

@@ -50,7 +50,7 @@ function stampServiceWorker(): Plugin {
           "./politicmon-icon.svg"
         ]);
         const runtimeAssets = collect(distRoot).filter((path) =>
-          path !== "./sw.js" && path !== "./intro.mp4" && path !== "./og.png" && !coreAssets.has(path)
+          path !== "./sw.js" && path !== "./intro.mp4" && path !== "./og.png" && !path.startsWith("./screenshots/") && !coreAssets.has(path)
         );
         // Keep the exact precache inventory, encoding shared directory/extension
         // once per group. The worker reconstructs every original path on load.

@@ -40,4 +40,4 @@ const touchSession = page => {
     async detach() {}
   };
 };
-const withTouch = context => { context.newCDPSession = async page => touchSession(page); return context; };
+const withTouch = context => { context.newCDPSession = async page => touchSession(page); context.__fakeCdp = true; return context; };

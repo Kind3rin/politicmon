@@ -32,7 +32,7 @@ body.ui-panel-open.ui-arena-open #screen-frame{display:block!important;position:
 .ui-move-meta{display:flex;align-items:center;gap:8px;font-size:16px;width:100%;line-height:1}
 .ui-move-meta img{width:24px;height:24px;image-rendering:pixelated}
 .ui-efficacy{margin-left:auto}
-.ui-arena-secondary{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;min-height:0}
+.ui-arena-secondary{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(min-content,1fr);gap:8px;min-height:0}
 .ui-arena-secondary .ui-button{padding:4px;align-items:center;border-width:0 0 2px;box-shadow:none}
 .ui-arena-secondary .ui-button:only-child{grid-column:1/-1}
 .ui-arena-caption:has(.ui-finisher){padding:0;border:0}
@@ -47,7 +47,7 @@ body.ui-panel-open.ui-arena-open #screen-frame{display:block!important;position:
 .tribuna-sheet p{white-space:pre-line;margin:16px 0}
 .tribuna-sheet button{min-width:44px;min-height:44px;padding:8px 12px;background:#E4DAC0;border:2px solid #14161F;color:#14161F;font:700 20px/1.2 Tribuna,sans-serif}
 .tribuna-sheet>button{display:block;width:100%;margin-top:12px}
-@media(orientation:landscape){body.ui-arena-open .ui-panel.ui-arena{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:44px minmax(0,1fr)}.ui-arena-view{grid-column:1;grid-row:1/3}.ui-arena-caption{grid-column:2;grid-row:1}.ui-arena-deck{grid-column:2;grid-row:2;gap:10px;padding:12px 12px 16px}.ui-arena .ui-subtitle{font-size:20px}.ui-combatant{width:48%}}
+@media(orientation:landscape) and (min-width:640px){body.ui-arena-open .ui-panel.ui-arena{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:44px minmax(0,1fr)}.ui-arena-view{grid-column:1;grid-row:1/3}.ui-arena-caption{grid-column:2;grid-row:1}.ui-arena-deck{grid-column:2;grid-row:2;gap:10px;padding:12px 12px 16px}.ui-arena .ui-subtitle{font-size:20px}.ui-combatant{width:48%}}
 body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 .ui-arena-deck.ui-has-postures{grid-template-rows:minmax(0,1fr) 44px 48px;gap:10px}
 .ui-arena-postures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;min-height:0}
@@ -59,7 +59,7 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 .ui-arena .ui-posture .ui-subtitle{font:700 16px/1 PoliticmonBody,sans-serif;text-transform:none}
 .ui-arena .ui-posture[aria-pressed=true]{background:#D7263D;color:#F4EEDC}
 .ui-arena .ui-posture[aria-pressed=true] .ui-subtitle{color:#F4EEDC}
-@media(orientation:portrait) and (max-height:700px){
+@media(orientation:portrait) and (max-height:700px),(max-width:639px) and (max-height:700px){
   .ui-arena-deck{padding:8px 12px max(10px,env(safe-area-inset-bottom));gap:8px}
   .ui-arena-deck.ui-has-postures{grid-template-rows:minmax(0,1fr) 44px 44px;gap:6px}
   .ui-arena-moves{gap:8px}
@@ -68,8 +68,8 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
   .ui-posture-note{font-size:16px;line-height:1}
   .ui-move-meta img{width:20px;height:20px}
 }
-@media(orientation:portrait){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(330px,40%)}}
-@media(orientation:portrait) and (max-height:700px){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(284px,38%)}}
+@media(orientation:portrait),(max-width:639px){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(330px,40%)}}
+@media(orientation:portrait) and (max-height:700px),(max-width:639px) and (max-height:700px){body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(48%,1fr) 44px minmax(284px,38%)}}
 .ui-arena-caption{padding:2px 12px}
 .ui-arena-caption .ui-body{white-space:normal;line-height:1.1;max-height:38px;overflow:hidden;text-overflow:clip;display:flex;align-items:center}
 .ui-arena-caption .ui-subtitle{white-space:normal}
@@ -93,3 +93,37 @@ body.ui-reduce-effects .ui-arena-trainer{animation:none}
 .ui-arena-coach{display:flex;align-items:center;gap:8px;width:100%;min-height:44px;padding:2px 12px;border:0;background:#FFD23F;color:#14161F;text-align:left;cursor:pointer}
 .ui-arena-coach-body{flex:1 1 auto;min-width:0;font:16px/1.1 PoliticmonBody,sans-serif;white-space:normal;max-height:38px;overflow:hidden}
 .ui-arena-coach-close{flex:0 0 auto;font:16px/1 PoliticmonBody,sans-serif}
+
+/* Safe areas: the punch-hole sits on a short or a long edge depending on how the phone is held, and the gesture bar on the bottom.
+   The art may run under them; names, bars, the intent chip, the words and the buttons may not. */
+.ui-combatant:first-child{left:max(8px,env(safe-area-inset-left))}
+.ui-intent{top:max(8px,env(safe-area-inset-top))}
+@media(orientation:portrait),(max-width:639px){
+  .ui-combatant:last-child{right:max(8px,env(safe-area-inset-right))}
+  .ui-arena-deck{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .ui-arena-caption{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+  .ui-arena-caption:is(:has(.ui-finisher),:has(.ui-arena-coach)){padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+}
+@media(orientation:landscape) and (min-width:640px){
+  .ui-combatant:first-child{width:calc(48% - env(safe-area-inset-left))}
+  .ui-combatant:last-child{bottom:max(8px,env(safe-area-inset-bottom))}
+  .ui-arena-deck{padding-right:max(12px,env(safe-area-inset-right));padding-bottom:max(16px,env(safe-area-inset-bottom))}
+  .ui-arena-caption{padding-right:max(12px,env(safe-area-inset-right))}
+  .ui-arena-caption:is(:has(.ui-finisher),:has(.ui-arena-coach)){padding-right:env(safe-area-inset-right)}
+}
+
+/* A short window (split screen, floating window): the art gives way, the four moves and the action rows keep their size. */
+@media(orientation:portrait) and (max-height:560px),(max-width:639px) and (max-height:560px){
+  body.ui-arena-open .ui-panel.ui-arena,body.ui-arena-open .ui-panel.ui-arena:has(.ui-has-postures){grid-template-rows:minmax(96px,1fr) 44px auto}
+  .ui-arena-deck{grid-template-rows:auto 44px;padding-top:8px}
+  .ui-arena-deck.ui-has-postures{grid-template-rows:auto 44px 44px}
+  .ui-arena-moves{grid-template-rows:repeat(2,minmax(44px,auto))}
+  .ui-arena .ui-move-card{padding:4px 8px;gap:0}
+  /* Plates of three tight lines: name and level, health and polemica, bar. */
+  .ui-combatant{width:46%;padding:3px 8px;gap:2px 8px;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"head head" "vals pol" "bar bar"}
+  .ui-combatant-heading{grid-area:head}.ui-combatant-values{grid-area:vals}.ui-combatant .ui-bar{grid-area:bar;height:6px}.ui-combatant .ui-polemica{grid-area:pol;align-self:center}
+  .ui-combatant .ui-subtitle{font-size:20px;line-height:1}.ui-combatant .ui-note,.ui-combatant .ui-body{line-height:1.05}
+  .ui-intent{right:8px;top:max(8px,env(safe-area-inset-top))}
+}
+/* The five small actions keep their words whole: smaller type where the row is narrow (landscape column, narrow phone). */
+@media(orientation:landscape) and (min-width:640px),(max-width:399px){.ui-arena .ui-arena-secondary .ui-subtitle{font-size:16px}}

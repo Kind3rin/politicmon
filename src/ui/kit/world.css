@@ -1,5 +1,6 @@
 @font-face{font-family:Tribuna;src:url('/fonts/barlow-condensed-bold.ttf') format('truetype');font-weight:700;font-display:swap}
 /* The world is a single surface. Controls never reserve a row or a column. */
+body.ui-world-open{--hud-top:max(12px,env(safe-area-inset-top))}
 body.ui-world-open #app{padding:0}
 body.ui-world-open #console-shell{display:block;width:100%;height:100%;max-width:none;max-height:none}
 body.ui-world-open #console-top,body.ui-world-open #shell-hint,body.ui-world-open #touch-buttons{display:none}
@@ -7,7 +8,7 @@ body.ui-world-open #screen-stage{position:absolute;inset:0;display:block;padding
 body.ui-world-open #screen-frame{position:absolute;inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;border:0;border-radius:0}
 body.ui-world-open #touch-ui{position:absolute;inset:0;display:block;padding:0;pointer-events:none}
 body.ui-world-open .ui-world{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
-body.ui-world-open .ui-world-nav{position:absolute;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));display:flex;gap:10px;pointer-events:auto}
+body.ui-world-open .ui-world-nav{position:absolute;top:var(--hud-top);right:max(12px,env(safe-area-inset-right));display:flex;gap:10px;pointer-events:auto}
 body.ui-world-open .ui-world .ui-button{padding:0;min-height:44px;border:2px solid #14161F;border-radius:4px;box-shadow:4px 4px #14161F;background:#F4EEDC;color:#14161F;align-items:center;justify-content:center}
 body.ui-world-open .ui-world-nav .ui-button{width:60px;height:60px;padding:4px 0 2px}
 body.ui-world-open .ui-world-nav .ui-button-heading{flex-direction:column;gap:0}
@@ -32,13 +33,13 @@ body.ui-world-open .ui-world-controls [aria-pressed=true]{background:#FFD23F}
 body.ui-world-open .ui-world-controls [aria-pressed=true] strong:after{content:' ✓'}
 body.ui-world-open .ui-world .ui-button:active{transform:translate(4px,4px);box-shadow:none}
 body.ui-world-open .ui-world-hud{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
-.ui-world-location{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 232px);padding:8px;background:#1E3A8A;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;animation:world-location 2s forwards}
-body.ui-world-open .ui-world-objective{position:absolute;top:92px;left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 28px);height:44px;min-width:44px;padding:0 12px;border:0;border-radius:0;background:#F4EEDCe6;color:#14161F;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;font:16px/1.4 PoliticmonBody,sans-serif}
+.ui-world-location{position:absolute;top:var(--hud-top);left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 232px - env(safe-area-inset-left) - env(safe-area-inset-right));padding:8px;background:#1E3A8A;color:#F4EEDC;font:700 20px/1.2 Tribuna,sans-serif;animation:world-location 2s forwards}
+body.ui-world-open .ui-world-objective{position:absolute;top:calc(var(--hud-top) + 80px);left:max(12px,env(safe-area-inset-left));max-width:calc(100% - 28px);height:44px;min-width:44px;padding:0 12px;border:0;border-radius:0;background:#F4EEDCe6;color:#14161F;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:auto;font:16px/1.4 PoliticmonBody,sans-serif}
 body.ui-world-open .ui-world-objective:before{content:'▾';margin-right:8px}
 body.ui-world-open .ui-world-objective[aria-expanded=false]{width:44px;font-size:0;padding:0;text-align:center}
 body.ui-world-open .ui-world-objective[aria-expanded=false]:before{content:'▸';font-size:20px;margin:0}
 body.ui-world-open .ui-world-hud:has(.ui-world-notice) .ui-world-location{display:none}
-body.ui-world-open .ui-world-notice{position:absolute;top:max(12px,env(safe-area-inset-top));left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 232px);min-height:44px;max-height:64px;line-height:1.15;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;box-sizing:border-box;padding:6px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
+body.ui-world-open .ui-world-notice{position:absolute;top:var(--hud-top);left:max(12px,env(safe-area-inset-left));right:auto;max-width:calc(100% - 232px - env(safe-area-inset-left) - env(safe-area-inset-right));min-height:44px;max-height:64px;line-height:1.15;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow:hidden;box-sizing:border-box;padding:6px 8px;background:#FFD23F;color:#14161F;animation:world-notice 3s forwards}
 body.ui-world-open #touch-move{position:absolute;inset:0;pointer-events:none;display:block}
 body.ui-world-open #touch-stick{display:none}
 body.touch.ctrl-stick.ui-world-open #touch-stick{display:flex;position:absolute;left:max(20px,env(safe-area-inset-left));bottom:max(24px,env(safe-area-inset-bottom));width:120px;height:120px;opacity:.75;pointer-events:auto;touch-action:none}
@@ -57,7 +58,7 @@ body.ui-world-open .dpad-btn[data-held]{background:#FFD23F;transform:translate(3
 .ui-world-labels span.place{background:#F4EEDC;color:#14161F;border:2px solid #14161F;padding:1px 6px;box-shadow:2px 2px #14161F}
 .ui-world-labels span.goal{background:#FFD23F;color:#14161F;border:2px solid #14161F;padding:1px 6px;box-shadow:2px 2px #14161F}
 .ui-world-labels span.road{background:#14161F;color:#FFD23F;padding:1px 8px}
-.ui-save-flash{position:absolute;top:max(76px,calc(env(safe-area-inset-top) + 64px));right:16px;padding:4px 8px;background:#F4EEDC;color:#14161F;font:16px/1.4 PoliticmonBody,sans-serif}
+.ui-save-flash{position:absolute;top:calc(var(--hud-top) + 64px);right:max(16px,env(safe-area-inset-right));padding:4px 8px;background:#F4EEDC;color:#14161F;font:16px/1.4 PoliticmonBody,sans-serif}
 body.ui-reduce-effects.ui-world-open .ui-world .ui-button:active{transform:none}
 
 /* A coach card: one gesture at a time, retired once the player has used it. */
@@ -66,7 +67,7 @@ body.ui-reduce-effects.ui-world-open .ui-world .ui-button:active{transform:none}
 .ui-world-lesson p{grid-column:1;margin:4px 0 0;font:16px/1.4 PoliticmonBody,sans-serif}
 .ui-world-lesson button{grid-column:2;grid-row:1/3;width:44px;height:44px;border:2px solid #14161F;border-radius:4px;background:#F4EEDC;color:#14161F;font:700 16px/1 PoliticmonBody,sans-serif}
 body:not(.touch).ui-world-open .ui-world-lesson{bottom:calc(max(24px,env(safe-area-inset-bottom)) + 96px)}
-.ui-world-lesson[data-at=top]{top:calc(max(12px,env(safe-area-inset-top)) + 140px);bottom:auto}
+.ui-world-lesson[data-at=top]{top:calc(var(--hud-top) + 184px);bottom:auto}
 /* Desktop: the keys are written on screen, not hidden in a dialog. */
 body.ui-world-open:not(.touch) #shell-hint{display:block;position:absolute;left:12px;bottom:12px;z-index:5;max-width:calc(100% - 160px);padding:6px 10px;border-radius:4px;background:#14161Fcc;color:#F4EEDC;font:14px/1.3 PoliticmonBody,sans-serif;pointer-events:none}
 /* Landscape phones: the card sits on the floor, between the stick and the run toggle, clear of the player. */
@@ -77,7 +78,7 @@ body.ui-world-open:not(.touch) #shell-hint{display:block;position:absolute;left:
 }
 
 /* The day's schedule: a clock under the objective. */
-body.ui-world-open .ui-world-clock{position:absolute;top:140px;left:max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:6px;height:40px;padding:0 10px;border:2px solid #14161F;border-radius:4px;background:#F4EEDCe6;color:#14161F;font:700 16px/1 Tribuna,sans-serif;letter-spacing:.04em;pointer-events:auto;box-shadow:3px 3px #14161F}
+body.ui-world-open .ui-world-clock{position:absolute;top:calc(var(--hud-top) + 128px);left:max(12px,env(safe-area-inset-left));display:flex;align-items:center;gap:6px;height:44px;padding:0 10px;border:2px solid #14161F;border-radius:4px;background:#F4EEDCe6;color:#14161F;font:700 16px/1 Tribuna,sans-serif;letter-spacing:.04em;pointer-events:auto;box-shadow:3px 3px #14161F}
 body.ui-world-open .ui-world-clock[data-slot=mattina]{background:#E4F3C8}
 body.ui-world-open .ui-world-clock[data-slot=giorno]{background:#FBEBA6}
 body.ui-world-open .ui-world-clock[data-slot=sera]{background:#F7C9A8}

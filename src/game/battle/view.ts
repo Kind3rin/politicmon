@@ -66,8 +66,15 @@ export interface DamageNumber {
 }
 
 // Centro approssimativo dello sprite di un combattente (per le particelle).
+/** Sprites keep their size down to a view 190 units tall (a phone upright, a phone on its side); in a shorter window (split screen)
+ * they shrink with the view instead of losing their heads. */
+export function battleFit(height = VIEW_H): number {
+  return Math.max(0.42, Math.min(1, height / 190));
+}
+
 export function battleGeometry(height = VIEW_H): { foeBase: number; playerBase: number; size: number } {
-  return { foeBase: Math.round(height * .67), playerBase: Math.round(height * .93), size: 88 };
+  // In a short view the foe stands a little higher: the player's plate takes the bottom right.
+  return { foeBase: Math.round(height * (.67 - .14 * (1 - battleFit(height)))), playerBase: Math.round(height * (.93 + .06 * (1 - battleFit(height)))), size: 88 };
 }
 
 export function monsterCenter(who: BattleSide, height = VIEW_H): { x: number; y: number } {
@@ -507,8 +514,10 @@ export function drawBattleMonster(
   // Respiro idle: ampiezza piccola, opposta su X/Y per conservare il volume.
   // Più marcato quando il giocatore è al menu (il mostro "aspetta").
   const breath = fx.reduceEffects ? 0 : Math.sin(fx.time * 2.4 + (who === "foe" ? 1.3 : 0)) * 0.03;
-  let sx = 1 - breath;
-  let sy = 1 + breath;
+  // In a short view the player's sprite, standing in front, gives up a bit more than the foe's: the foe's plate sits above it.
+  const view = battleFit(screen.height), fit = view * (1 - (who === "player" ? 0.4 : 0.2) * (1 - view));
+  let sx = (1 - breath) * fit;
+  let sy = (1 + breath) * fit;
 
   // Lo scatto schiaccia verticalmente e allunga in avanti (anticipa il colpo).
   sx += lunge * 0.14;

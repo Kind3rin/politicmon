@@ -33,7 +33,7 @@ import {
 import { mp } from "../../net/mp";
 import { MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry
+  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry, battleFit
 } from "./view";
 import type { UiPanel } from "../../ui/kit";
 import type { TouchAction } from "../../engine/touchActions";
@@ -722,8 +722,8 @@ export class PvpBattleScene implements Scene {
     screen.clear("#f0f0e0"); drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
     const slide = this.fx.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - .25) / .6));
     const foeSlide = Math.round((1 - slide) * 90), playerSlide = Math.round((1 - slide) * -90);
-    drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, 64, 14, this.backdrop.foePlatform);
-    drawEllipse(screen, 56 + playerSlide, g.playerBase - 2, 76, 16, this.backdrop.playerPlatform);
+    drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, Math.round(64 * battleFit(screen.height)), Math.max(5, Math.round(14 * battleFit(screen.height))), this.backdrop.foePlatform);
+    drawEllipse(screen, 56 + playerSlide, g.playerBase - 2, Math.round(76 * battleFit(screen.height)), Math.max(5, Math.round(16 * battleFit(screen.height))), this.backdrop.playerPlatform);
     for (const side of ["foe", "player"] as const) {
       const c = side === "foe" ? this.theirs.active : this.mine.active;
       const blink = this.fx.flashT[side] > 0 && Math.floor(this.fx.flashT[side] * 16) % 2 === 0;

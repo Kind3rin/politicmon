@@ -7,6 +7,8 @@
 - **Corretti, tutto con regole di larghezza/altezza/orientamento (non per un modello):** lotta e titolo ignoravano i margini in orizzontale; la pila in alto del mondo partiva da pixel fissi; «Leggenda» e «Reclutamento» uscivano dal tasto a 360-412 px; etichette della mappa sovrapposte (in verticale spostate, di lato disegno a tre colonne a tutta larghezza); orologio del palinsesto da 40 a 44 px; colonna dei comandi della lotta troppo stretta su iPhone SE di lato.
 - **Lotta in finestra bassa (schermo diviso):** sprite e ombre si ridimensionano con l'altezza della vista, targhette compatte, schede mossa a una riga sotto i 440 px, layout largo solo da 640 px. Prima: sprite tagliati e coperti.
 - **PWA:** manifest con `id`, `lang`, `categories`, `launch_handler` e cinque screenshot (fuori dal precache) per la scheda di installazione estesa.
+- **Indietro non chiude più la partita** (solo PWA Android installata): sulla mappa apre il menu, sopra un pannello lo chiude, dal titolo esce (`backGuard.ts`, `check-back-gesture`, 3 test).
+- **Testo grande di Android al 130%** (`check-text-scale`): la riga delle azioni piccole non esce più dallo schermo, i tasti in alto crescono con il testo, schede e nomi della mappa si adattano. Passano POCO, S25 Ultra e iPhone 16; i 360 px con carattere al massimo restano affollati (documentato).
 
 ## Mandato 2 — consolidamento — 2026-10-07
 

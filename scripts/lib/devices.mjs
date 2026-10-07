@@ -38,13 +38,25 @@ export const defaultDevices = () => DEVICES.filter(d => d.id.startsWith('poco-')
 
 /** Make `page` behave like `device`: safe-area insets and the installed display mode. Chromium has real overrides through the DevTools protocol;
  * for other engines every `env(safe-area-inset-*)` in the served styles is rewritten to a custom property set from the profile. */
+/** Chromium's emulated media has no `display-mode`, so the installed mode is made by answering the query: pages that ask get "standalone". */
+export async function forceStandalone(context) {
+  await context.addInitScript(() => {
+    const ask = window.matchMedia.bind(window);
+    window.matchMedia = query => {
+      const result = ask(query);
+      if (!/display-mode\s*:\s*standalone/.test(query)) return result;
+      return new Proxy(result, { get: (target, key) => key === 'matches' ? true : typeof target[key] === 'function' ? target[key].bind(target) : target[key] });
+    };
+  });
+}
+
 export async function applyDevice(context, page, device, { standalone = true } = {}) {
   const { top, bottom, left, right } = device.insets;
+  if (standalone) await forceStandalone(context);
   let cdp = null;
   try { cdp = await context.newCDPSession(page); } catch { /* not Chromium */ }
   if (cdp && !context.__fakeCdp) {
     await cdp.send('Emulation.setSafeAreaInsetsOverride', { insets: { top, bottom, left, right } });
-    if (standalone) await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'display-mode', value: 'standalone' }] });
     return 'cdp';
   }
   await context.addInitScript(i => {

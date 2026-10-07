@@ -19,13 +19,16 @@ const names = readdirSync('scripts').filter(f => /^check-.*\.mjs$/.test(f)).map(
 if (args.includes('--list')) { console.log(names.join('\n')); process.exit(0); }
 
 const results = [];
+// The device matrix and the text-scale pass open hundreds of pages: ten minutes, not five.
+const LONG = new Set(['check-pwa-device', 'check-text-scale']);
 for (const name of names) {
   const started = Date.now();
   const code = await new Promise(resolve => {
     const child = spawn('node', [...extra, `scripts/${name}.mjs`], { env: { ...process.env, BASE_URL: base, UI_LAYOUT_URL: base }, stdio: ['ignore', 'pipe', 'pipe'] });
     let out = '';
     child.stdout.on('data', d => { out += d; }); child.stderr.on('data', d => { out += d; });
-    const timer = setTimeout(() => { child.kill('SIGKILL'); out += '\nTIMEOUT after 300 s'; }, 300_000);
+    const limit = LONG.has(name) ? 600 : 300;
+    const timer = setTimeout(() => { child.kill('SIGKILL'); out += `\nTIMEOUT after ${limit} s`; }, limit * 1000);
     child.on('close', status => { clearTimeout(timer); results.push({ name, status, seconds: Math.round((Date.now() - started) / 1000), out }); resolve(status); });
   });
   const last = results.at(-1);

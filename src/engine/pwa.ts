@@ -23,7 +23,7 @@ const FALLBACK_DELAY_MS = 8000;
 let deferredPrompt: BeforeInstallPromptEvent | null = null;
 let bipSeen = false;
 
-function isStandalone(): boolean {
+export function isStandalone(): boolean {
   return (
     window.matchMedia("(display-mode: standalone)").matches ||
     // iOS Safari

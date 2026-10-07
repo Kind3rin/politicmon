@@ -11,12 +11,13 @@ BASE_URL=http://127.0.0.1:5199 node scripts/run-checks.mjs --only coach,items   
 node scripts/run-checks.mjs --list
 ```
 
-`NODE_ARGS` viene passato a node prima di ogni script (per usare Chrome installato al posto di quello di Playwright: `NODE_ARGS="--import /percorso/chrome-patch.mjs"`). Ogni controllo ha 300 secondi; il riepilogo dice quali falliscono e mostra le ultime righe di ciascuno. I test unitari e di contenuto sono a parte: `npm test`.
+`NODE_ARGS` viene passato a node prima di ogni script (per usare Chrome installato al posto di quello di Playwright: `NODE_ARGS="--import /percorso/chrome-patch.mjs"`). Ogni controllo ha 300 secondi (600 per `check-pwa-device` e `check-text-scale`); il riepilogo dice quali falliscono e mostra le ultime righe di ciascuno. I test unitari e di contenuto sono a parte: `npm test`.
 
 ## Cosa è fuori dal giro locale
 
 - **`bruxelles-release` e `future-release`**: giocano campagne salvate in Chromium **e WebKit**; passano entrambi (WebKit incluso). Gli altri dieci `*-release` e `check-terrace-return` erano legati al titolo su canvas, al salvataggio `v18` e a hash di pixel: ritirati il 7 ottobre 2026 (`scripts/retired/README.md`).
 - **`check-pwa-device`** (23 profili, quelli del POCO F9 ULTRA e dei telefoni più comuni, × 39 schermate, margini sicuri veri; Chromium e WebKit): vedi `docs/MOBILE-PWA-LAYOUT.md`. Di serie il gruppo principale; `DEVICES=all`, `DEVICES=a,b` e `SCREENS=…` per cambiare.
+- **`check-back-gesture`** (gesto «indietro» della PWA Android: mappa → menu, pannello → chiude, titolo → esce) e **`check-text-scale`** (testo al 130%, `SCALE=…`): vedi `docs/MOBILE-PWA-LAYOUT.md`.
 - **La suite attuale sotto WebKit**: `NODE_ARGS="--import ./scripts/lib/webkit-patch.mjs" BASE_URL=http://127.0.0.1:5199 node scripts/run-checks.mjs`. WebKit è installato; **56/56 verdi** (7 ottobre 2026). WebKit non ha il protocollo DevTools, quindi il preload sostituisce `newCDPSession` con un finto che sa solo spedire tocchi come eventi puntatore: i controlli sul tocco (levetta, trascinamento delle righe) girano comunque. La CPU rallentata (`perf:check`) no. Il giro ha trovato una sola cosa: una corsa nel controllo del dialogo (`check-world-controls`), che toccava prima che la macchina da scrivere avesse finito; ora attende il punto finale. Nessun difetto del gioco.
 - `check-precache-build` (serve `npm run build` prima: verifica l'inventario offline della build; passa, 1042 risorse), `check-mp-live`, `check-prod`, `check-err`, `check-world-navigation-release` (anteprima compilata su :4184).
 - `scripts/retired/`: quindici controlli ritirati, con il perché e chi li sostituisce (`scripts/retired/README.md`).

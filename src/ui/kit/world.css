@@ -10,7 +10,7 @@ body.ui-world-open #touch-ui{position:absolute;inset:0;display:block;padding:0;p
 body.ui-world-open .ui-world{position:absolute;inset:0;pointer-events:none;font:16px/1.4 PoliticmonBody,sans-serif;color:#14161F}
 body.ui-world-open .ui-world-nav{position:absolute;top:var(--hud-top);right:max(12px,env(safe-area-inset-right));display:flex;gap:10px;pointer-events:auto}
 body.ui-world-open .ui-world .ui-button{padding:0;min-height:44px;border:2px solid #14161F;border-radius:4px;box-shadow:4px 4px #14161F;background:#F4EEDC;color:#14161F;align-items:center;justify-content:center}
-body.ui-world-open .ui-world-nav .ui-button{width:60px;height:60px;padding:4px 0 2px}
+body.ui-world-open .ui-world-nav .ui-button{width:auto;min-width:60px;height:60px;padding:4px 6px 2px}
 body.ui-world-open .ui-world-nav .ui-button-heading{flex-direction:column;gap:0}
 body.ui-world-open .ui-world-nav strong{display:block;font:700 14px/1.1 Tribuna,sans-serif;text-transform:uppercase;letter-spacing:.04em}
 body.ui-world-open .ui-world .ui-command-group{display:none}

@@ -6,7 +6,8 @@
 import { audio } from "./engine/audio";
 import { applyControlMode, loadControlMode } from "./engine/controls";
 import { playIntro } from "./engine/intro";
-import { initPwaInstall } from "./engine/pwa";
+import { initPwaInstall, isStandalone } from "./engine/pwa";
+import { installBackGuard } from "./engine/backGuard";
 import { mp } from "./net/mp";
 import { loadNick } from "./net/profile";
 import { flushActiveState, getActiveState } from "./game/state";
@@ -194,6 +195,7 @@ const unlock = () => {
 };
 document.addEventListener("pointerdown", unlock);
 document.addEventListener("keydown", unlock);
+installBackGuard(window, isStandalone());
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     // Salva PRIMA di mettere in pausa: su mobile l'OS può uccidere la scheda

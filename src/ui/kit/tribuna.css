@@ -252,7 +252,7 @@ body.ui-reduce-effects .ui-splash .ui-splash-logo,body.ui-reduce-effects .ui-spl
 .ui-plan-key .tone-yellow::first-letter{color:#E0A800}
 
 /* Narrow phones: three tabs share the row by the length of their words, so "Reclutamento" stays whole at the same size. */
-@media(max-width:519px){.ui-panel .ui-tabs:not(:has(> :nth-child(4):last-child)) .ui-button{flex:1 1 auto;min-width:56px}}
+@media(max-width:519px){.ui-panel .ui-tabs .ui-button,.ui-panel .ui-tabs:has(> :nth-child(4):last-child) .ui-button{flex:1 1 auto;min-width:56px}}
 
 /* The map is drawn twice: upright, the stops follow the country; on a wide, short screen (a phone on its side) the map takes the whole width,
    the stops sit in three lanes and the names stand to the right of their pins, so that nothing covers anything. */
@@ -266,3 +266,7 @@ body.ui-reduce-effects .ui-splash .ui-splash-logo,body.ui-reduce-effects .ui-spl
   .ui-atlas-node{left:var(--wx);top:var(--wy);flex-direction:row;gap:6px;transform:translate(-13px,-50%)}
   .ui-atlas-tag{left:0;top:-22px}
 }
+
+/* An upright map on a narrow phone, or with large text: long names break in two lines instead of running off the map or over the next stop. */
+.ui-atlas-label{max-width:112px;white-space:normal;text-align:center;overflow-wrap:anywhere}
+@media(orientation:landscape) and (max-height:520px){.ui-atlas-label{max-width:none;white-space:nowrap;text-align:left}}

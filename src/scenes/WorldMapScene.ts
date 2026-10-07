@@ -80,7 +80,7 @@ const ATTO3_NODES: readonly MapNode[] = [
 
 // Posizioni disegnate sulla cartina (percentuali): la geografia è satirica, l'ordine è quello del viaggio.
 const ATLAS_POSITIONS: Record<string, readonly [number, number]> = {
-  borgo: [24, 90], route1: [32, 77], grotta1: [66, 85], mediopoli: [46, 65], antenna: [80, 63], route2: [64, 53], eurotown: [34, 44], route3: [50, 34],
+  borgo: [24, 90], route1: [32, 77], grotta1: [66, 85], mediopoli: [46, 65], antenna: [82, 68], route2: [64, 53], eurotown: [34, 44], route3: [50, 34],
   grotta2: [82, 33], capitale: [36, 21], colle: [62, 8],
   stretto: [30, 74], offshore: [68, 46], bruxelles: [36, 18],
   campo: [28, 88], futuro: [68, 74], diplomacy: [30, 58], tour: [68, 42], "palazzo-feed": [34, 26], genova: [78, 10]

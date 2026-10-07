@@ -42,6 +42,8 @@ const audit = ({ screen, insets, short }) => {
       if (!n.textContent.trim() || !n.parentElement.checkVisibility({ checkVisibilityCSS: true })) continue;
       const range = document.createRange(); range.selectNodeContents(n);
       const t = range.getBoundingClientRect();
+      const cut = getComputedStyle(e); // a line that ends in an ellipsis is cut on purpose
+      if (cut.textOverflow === 'ellipsis' && cut.overflow !== 'visible') break;
       if (t.width && (t.left < r.left - .5 || t.right > r.right + .5)) { issues.push(`text runs past its button: "${n.textContent.trim().slice(0, 30)}" in ${name(e)} (${Math.round(t.left)}..${Math.round(t.right)} of ${Math.round(r.left)}..${Math.round(r.right)})`); break; }
     }
   }
@@ -101,6 +103,12 @@ try {
       const page = await context.newPage(), errors = [];
       page.on('pageerror', e => errors.push(e.message));
       await applyDevice(context, page, device);
+      if (process.env.TEXT_SCALE) await context.addInitScript(scale => {
+        const px = value => value.replace(/(\d+(?:\.\d+)?)px/g, (_, n) => `${+(n * scale).toFixed(2)}px`);
+        const done = new WeakSet(); const walk = rules => { for (const rule of rules) { if (rule.cssRules) walk(rule.cssRules); const s = rule.style; if (!s || done.has(rule)) continue; done.add(rule); for (const prop of ['font-size']) if (s.getPropertyValue(prop)?.includes('px')) s.setProperty(prop, px(s.getPropertyValue(prop)), s.getPropertyPriority(prop)); } };
+        const apply = () => { for (const sheet of document.styleSheets) { try { walk(sheet.cssRules); } catch { /* cross-origin */ } } };
+        new MutationObserver(apply).observe(document, { childList: true, subtree: true }); setInterval(apply, 150);
+      }, Number(process.env.TEXT_SCALE));
       try {
         await page.goto(`${base}/scripts/m2-ui-review.html?screen=${variants[screen] ?? screen}`);
         await page.locator(waitFor(screen)).first().waitFor({ timeout: 15000 });
@@ -118,7 +126,7 @@ try {
   };
   // A few profiles at a time: the whole matrix has to fit the runner's five minutes.
   const results = [], queue = [...devices];
-  await Promise.all(Array.from({ length: 4 }, async () => { for (let d = queue.shift(); d; d = queue.shift()) results[devices.indexOf(d)] = await runDevice(d); }));
+  await Promise.all(Array.from({ length: 6 }, async () => { for (let d = queue.shift(); d; d = queue.shift()) results[devices.indexOf(d)] = await runDevice(d); }));
   for (const r of results) { summary.push(r.line); failures.push(...r.found); }
   // A rotation in the middle of a game: the same page, resized, must still fit.
   for (const [from, to] of [['poco-bordo-a-bordo', 'poco-orizzontale-sx'], ['poco-orizzontale-dx', 'poco-installata'], ['poco-tre-tasti', 'poco-orizzontale-tre-tasti']]) {

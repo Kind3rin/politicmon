@@ -1,16 +1,16 @@
 /** The player's phone (POCO F9 ULTRA, PWA installed): every screen on every profile of `lib/devices.mjs`, with the real safe-area insets.
  * Everything a finger or an eye needs must sit inside the safe rectangle (window minus punch-hole and gesture bar); targets are at least 44 px;
  * lists must scroll far enough to clear the gesture bar; a rotation in the middle of a game must not leave anything outside.
- * Runs against the review page. `BASE_URL` (default the dev server); `DEVICES=poco-installata,...` limits the profiles; `SCREENS=menu,borsa` the screens. */
+ * Runs against the review page. `BASE_URL` (default the dev server); `DEVICES=all` runs every profile, `DEVICES=poco-installata,...` the named ones (default: the POCO in all its ways and one of each other kind of phone); `SCREENS=menu,borsa` the screens. */
 import { chromium } from 'playwright';
 import fs from 'node:fs/promises';
-import { DEVICES, applyDevice } from './lib/devices.mjs';
+import { DEVICES, applyDevice, defaultDevices } from './lib/devices.mjs';
 
 const base = process.env.BASE_URL || process.env.UI_LAYOUT_URL || 'http://127.0.0.1:5199';
 const runtimeScreens = ['esplorazione', 'lotta', 'lotta-finale', 'lotta-esaurita', 'dialogo', 'dialogo-scelte', 'menu'];
 const panelScreens = ['squadra', 'compagno', 'borsa', 'impara', 'mappa', 'pianta', 'negozio', 'dex', 'circolo', 'missioni', 'evoluzione', 'titolo', 'starter', 'archivio', 'governo', 'tipi', 'morale', 'fonti', 'backup', 'traguardi', 'audio', 'carburante', 'viaggio', 'poteri', 'volo', 'lotta-crescita', 'tessera', 'squadra-riordina'];
 const only = list => (process.env[list] ? process.env[list].split(',') : null);
-const devices = DEVICES.filter(d => !only('DEVICES') || only('DEVICES').includes(d.id));
+const devices = process.env.DEVICES === 'all' ? DEVICES : only('DEVICES') ? DEVICES.filter(d => only('DEVICES').includes(d.id)) : defaultDevices();
 // `name` → harness address. The variants show what the plain screens hide: the clock chip, the coach card, the other map pages.
 const variants = { 'esplorazione-orologio': 'esplorazione&palinsesto', 'esplorazione-lezione': 'esplorazione&palinsesto&lesson', 'mappa-rotte': 'mappa&tab=rotte', 'mappa-atto3': 'mappa&tab=atto3' };
 const screens = [...runtimeScreens, ...panelScreens, ...Object.keys(variants)].filter(s => !only('SCREENS') || only('SCREENS').includes(s));
@@ -121,7 +121,7 @@ try {
   await Promise.all(Array.from({ length: 4 }, async () => { for (let d = queue.shift(); d; d = queue.shift()) results[devices.indexOf(d)] = await runDevice(d); }));
   for (const r of results) { summary.push(r.line); failures.push(...r.found); }
   // A rotation in the middle of a game: the same page, resized, must still fit.
-  for (const [from, to] of [['poco-bordo-a-bordo', 'poco-orizzontale-sx'], ['poco-orizzontale-dx', 'poco-installata']]) {
+  for (const [from, to] of [['poco-bordo-a-bordo', 'poco-orizzontale-sx'], ['poco-orizzontale-dx', 'poco-installata'], ['poco-tre-tasti', 'poco-orizzontale-tre-tasti']]) {
     const a = DEVICES.find(d => d.id === from), b = DEVICES.find(d => d.id === to);
     const context = await browser.newContext({ viewport: { width: a.w, height: a.h }, deviceScaleFactor: 1, isMobile: true, hasTouch: true });
     const page = await context.newPage();

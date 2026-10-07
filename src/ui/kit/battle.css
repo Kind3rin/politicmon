@@ -127,3 +127,20 @@ body.ui-reduce-effects .ui-arena-trainer{animation:none}
 }
 /* The five small actions keep their words whole: smaller type where the row is narrow (landscape column, narrow phone). */
 @media(orientation:landscape) and (min-width:640px),(max-width:399px){.ui-arena .ui-arena-secondary .ui-subtitle{font-size:16px}}
+/* A very short window (the top half of a split screen is about 400 px): the art keeps what the moves do not need.
+   Move cards read name left, uses right, on one row; the posture notes give way to the posture names. */
+@media(max-width:639px) and (max-height:440px){
+  .ui-arena .ui-move-card{flex-direction:row;align-items:center;justify-content:space-between;padding:2px 8px;gap:6px}
+  .ui-arena .ui-move-card .ui-button-heading{flex:1 1 auto;min-width:0}
+  .ui-arena .ui-move-card .ui-subtitle{font-size:16px;line-height:1.05;white-space:normal}
+  .ui-arena .ui-move-card .ui-move-meta{width:auto;flex:0 0 auto;gap:4px}
+  .ui-arena .ui-move-card .ui-move-meta img{display:none}
+  .ui-posture-note{display:none}
+  .ui-arena .ui-posture{min-height:44px}
+  .ui-arena-deck{gap:4px;padding-top:6px;padding-bottom:max(6px,env(safe-area-inset-bottom))}
+  .ui-arena-moves{gap:6px}
+}
+/* A landscape phone only just over 640 px wide (iPhone SE on its side): the deck keeps a column it can fill. */
+@media(orientation:landscape) and (min-width:640px) and (max-width:799px){
+  body.ui-arena-open .ui-panel.ui-arena{grid-template-columns:minmax(0,1fr) 340px}
+}

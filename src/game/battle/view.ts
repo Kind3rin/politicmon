@@ -74,7 +74,7 @@ export function battleFit(height = VIEW_H): number {
 
 export function battleGeometry(height = VIEW_H): { foeBase: number; playerBase: number; size: number } {
   // In a short view the foe stands a little higher: the player's plate takes the bottom right.
-  return { foeBase: Math.round(height * (.67 - .14 * (1 - battleFit(height)))), playerBase: Math.round(height * (.93 + .06 * (1 - battleFit(height)))), size: 88 };
+  return { foeBase: Math.round(height * (.67 - .28 * (1 - battleFit(height)))), playerBase: Math.round(height * (.93 + .06 * (1 - battleFit(height)))), size: 88 };
 }
 
 export function monsterCenter(who: BattleSide, height = VIEW_H): { x: number; y: number } {

@@ -594,16 +594,22 @@ export function renderUiPanel(panel?: UiPanel): boolean {
   if(panel.atlas){
     const atlas=element("div","ui-atlas");atlas.setAttribute("aria-label",panel.title);
     const NS="http://www.w3.org/2000/svg";
-    const svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 100 100");svg.setAttribute("preserveAspectRatio","none");svg.setAttribute("aria-hidden","true");svg.classList.add("ui-atlas-lines");
-    for(const link of panel.atlas.links){
-      const a=panel.atlas.nodes[link.from],b=panel.atlas.nodes[link.to];if(!a||!b)continue;
-      const line=document.createElementNS(NS,"line");line.setAttribute("x1",String(a.x));line.setAttribute("y1",String(a.y));line.setAttribute("x2",String(b.x));line.setAttribute("y2",String(b.y));
-      if(link.dashed)line.setAttribute("class","ui-dashed");svg.append(line);
-    }
-    atlas.append(svg);
+    // Two drawings of the same map: upright (the stops follow the country) and on its side (three lanes, names to the right of the pins, so that nothing covers anything in a short, wide box).
+    const lane=[3,34,65],count=panel.atlas.nodes.length;
+    const wide=(i:number)=>({x:lane[i%3],y:count>1?90-i*74/(count-1):50});
+    const draw=(className:string,at:(i:number)=>{x:number;y:number})=>{
+      const svg=document.createElementNS(NS,"svg");svg.setAttribute("viewBox","0 0 100 100");svg.setAttribute("preserveAspectRatio","none");svg.setAttribute("aria-hidden","true");svg.classList.add("ui-atlas-lines",className);
+      for(const link of panel.atlas!.links){
+        const a=panel.atlas!.nodes[link.from],b=panel.atlas!.nodes[link.to];if(!a||!b)continue;
+        const from=at(link.from),to=at(link.to);
+        const line=document.createElementNS(NS,"line");line.setAttribute("x1",String(from.x));line.setAttribute("y1",String(from.y));line.setAttribute("x2",String(to.x));line.setAttribute("y2",String(to.y));
+        if(link.dashed)line.setAttribute("class","ui-dashed");svg.append(line);
+      }
+      atlas.append(svg);
+    };
+    draw("ui-atlas-upright",i=>panel.atlas!.nodes[i]);draw("ui-atlas-sideways",wide);
     panel.atlas.nodes.forEach((node,i)=>{
-      const button=element("button",`ui-atlas-node ui-atlas-${node.state}`);button.type="button";
-      button.style.left=`${node.x}%`;button.style.top=`${node.y}%`;
+      const button=element("button",`ui-atlas-node ui-atlas-${node.state}`);button.type="button";button.style.setProperty("--x",`${node.x}%`);button.style.setProperty("--y",`${node.y}%`);button.style.setProperty("--wx",`${wide(i).x}%`);button.style.setProperty("--wy",`${wide(i).y}%`);
       button.dataset.uiIndex=String(i+tabCount);
       button.setAttribute("aria-label",[panel.actions[i]?.label,node.state==="here"?"Sei qui":node.state==="locked"?"Da sbloccare":node.state==="optional"?"Deviazione":"",node.next?"Prossima tappa":""].filter(Boolean).join(". "));
       if(i+tabCount===displayedIndex)button.setAttribute("aria-current","true");

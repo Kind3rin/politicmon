@@ -252,4 +252,17 @@ body.ui-reduce-effects .ui-splash .ui-splash-logo,body.ui-reduce-effects .ui-spl
 .ui-plan-key .tone-yellow::first-letter{color:#E0A800}
 
 /* Narrow phones: three tabs share the row by the length of their words, so "Reclutamento" stays whole at the same size. */
-@media(max-width:399px){.ui-panel .ui-tabs:not(:has(> :nth-child(4):last-child)) .ui-button{flex:1 1 auto;min-width:56px}}
+@media(max-width:519px){.ui-panel .ui-tabs:not(:has(> :nth-child(4):last-child)) .ui-button{flex:1 1 auto;min-width:56px}}
+
+/* The map is drawn twice: upright, the stops follow the country; on a wide, short screen (a phone on its side) the map takes the whole width,
+   the stops sit in three lanes and the names stand to the right of their pins, so that nothing covers anything. */
+.ui-atlas-node{left:var(--x);top:var(--y)}
+.ui-atlas-sideways{display:none}
+@media(orientation:landscape) and (max-height:520px){
+  .ui-panel:has(.ui-atlas){grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);row-gap:4px}
+  .ui-panel:has(.ui-atlas) .ui-header{grid-column:1;grid-row:1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .ui-panel:has(.ui-atlas) .ui-content{grid-column:1;grid-row:2;min-height:0}
+  .ui-atlas-upright{display:none}.ui-atlas-sideways{display:block}
+  .ui-atlas-node{left:var(--wx);top:var(--wy);flex-direction:row;gap:6px;transform:translate(-13px,-50%)}
+  .ui-atlas-tag{left:0;top:-22px}
+}

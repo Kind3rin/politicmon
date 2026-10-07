@@ -1,10 +1,11 @@
 # Changelog
 
-## Mandato 2 — spazi del POCO e PWA — 2026-10-07
+## Mandato 2 — spazi dei telefoni e PWA — 2026-10-07
 
-- **Margini sicuri veri.** L'interfaccia attuale legge `env(safe-area-inset-*)` ma nessun controllo li simulava: nuovo `check-pwa-device` (8 profili del POCO F9 ULTRA: installata, bordo a bordo, due zoom, scheda del browser, orizzontale con foro a sinistra e a destra, finestra divisa; 38 schermate ciascuno, più la rotazione), in Chromium e WebKit. Tasti e testi dentro il rettangolo sicuro, bersagli ≥ 44 px, nessuna parola oltre il suo tasto, liste che arrivano sopra la barra dei gesti, niente che copra giocatore o sprite.
-- **Corretti:** lotta e titolo ignoravano i margini in orizzontale; la pila in alto del mondo (obiettivo, orologio, scheda) partiva da pixel fissi e finiva sotto i pulsanti con il foro in alto; «Leggenda» e «Reclutamento» uscivano dal tasto a 393-412 px; etichette della mappa sovrapposte su tutti i formati; orologio del palinsesto da 40 a 44 px.
-- **Lotta in finestra corta (schermo diviso):** gli sprite si ridimensionano con l'altezza della vista, targhette compatte, layout largo solo da 640 px. Prima: sprite tagliati e coperti.
+- **Misure cercate online.** Il POCO F9 ULTRA ha 2608×1200 (416 ppi): viewport CSS 400×869, non i 412×915 ipotizzati. Profili aggiornati e allargati: 23 (POCO installata, schermo intero con gesti o tre tasti, zoom, scheda del browser, orizzontale, schermo diviso 400×405; poi Galaxy S25 e Ultra, Pixel 9, iPhone SE, 16, 16 Pro, 16 Pro Max, iPhone di lato, tablet).
+- **Margini sicuri veri.** L'interfaccia attuale legge `env(safe-area-inset-*)` ma nessun controllo li simulava: nuovo `check-pwa-device` (39 schermate per profilo + rotazioni, Chromium e WebKit). Tasti e testi dentro il rettangolo sicuro, bersagli ≥ 44 px, nessuna parola oltre il suo tasto, liste sopra la barra dei gesti, niente che copra giocatore o sprite.
+- **Corretti, tutto con regole di larghezza/altezza/orientamento (non per un modello):** lotta e titolo ignoravano i margini in orizzontale; la pila in alto del mondo partiva da pixel fissi; «Leggenda» e «Reclutamento» uscivano dal tasto a 360-412 px; etichette della mappa sovrapposte (in verticale spostate, di lato disegno a tre colonne a tutta larghezza); orologio del palinsesto da 40 a 44 px; colonna dei comandi della lotta troppo stretta su iPhone SE di lato.
+- **Lotta in finestra bassa (schermo diviso):** sprite e ombre si ridimensionano con l'altezza della vista, targhette compatte, schede mossa a una riga sotto i 440 px, layout largo solo da 640 px. Prima: sprite tagliati e coperti.
 - **PWA:** manifest con `id`, `lang`, `categories`, `launch_handler` e cinque screenshot (fuori dal precache) per la scheda di installazione estesa.
 
 ## Mandato 2 — consolidamento — 2026-10-07

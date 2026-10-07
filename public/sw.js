@@ -84,7 +84,10 @@ self.addEventListener("install", (event) => {
     const runtime = groups.flatMap(([dir, ext, names]) => names.split("|").map(name => dir + name + ext));
     const cache = await caches.open(CACHE);
     const copied = await reuseUnchanged(cache, groups);
-    await cache.addAll([...PRECACHE, ...runtime.filter((path) => !copied.has(path))]);
+    // What is downloaded bypasses the HTTP cache: the sprites are served as immutable for a year under a path that does not change
+    // when the picture does, and a download that came back from that cache would put the old picture in the new release.
+    const fresh = (path) => (typeof Request === "function" ? new Request(path, { cache: "reload" }) : path);
+    await cache.addAll([...PRECACHE, ...runtime.filter((path) => !copied.has(path))].map(fresh));
     await cache.put(RUNTIME_MANIFEST, response);
   })());
 });

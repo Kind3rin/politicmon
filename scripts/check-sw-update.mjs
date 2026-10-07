@@ -22,8 +22,9 @@ const server = http.createServer((request, response) => {
   const path = decodeURIComponent(new URL(request.url, 'http://x').pathname);
   const file = join(root, path.endsWith('/') ? path + 'index.html' : path);
   if (!file.startsWith(root) || !existsSync(file) || !statSync(file).isFile()) { response.writeHead(404).end(); return; }
-  // No HTTP caching: what is not copied by the worker has to come down in full, as on a phone that evicted it.
-  response.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream', 'cache-control': 'no-store' });
+  // As in production: art, music and bundles are immutable for a year, the page and the worker are always checked.
+  const forever = /^\/(sprites|audio|fonts|assets)\//.test(path);
+  response.writeHead(200, { 'content-type': TYPES[extname(file)] ?? 'application/octet-stream', 'cache-control': forever ? 'public, max-age=31536000, immutable' : 'no-store' });
   createReadStream(file).pipe(response);
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -77,7 +78,7 @@ try {
   assert.deepEqual(fetched.filter(path => path.includes('/sprites/')), ['/' + victim.slice(2)], 'the changed sprite, and only it, comes from the network');
   await page.waitForLoadState('load').catch(() => {});
   const served = await page.evaluate(async path => (await (await caches.match(path)).arrayBuffer()).byteLength, victim);
-  assert.equal(served, statSync(join(three, 'icon-192.png')).size, 'the cache serves the new bytes of the changed sprite');
+  assert.equal(served, statSync(join(three, 'icon-192.png')).size, 'the cache serves the old picture: the download came back from the HTTP cache');
   console.log(`ok   aggiornamento con uno sprite cambiato: scaricato solo ${victim}`);
   await context.close();
 } finally { await browser.close(); server.close(); rmSync(work, { recursive: true, force: true }); }

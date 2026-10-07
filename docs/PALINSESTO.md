@@ -40,6 +40,10 @@ In lotta, una scheda gialla sopra il campo (tutta la scheda è il tasto per chiu
 
 Nel mondo (solo all'aperto, a mondo fermo): *Squadra stanca* (qualcuno sotto un terzo dei PV), *Schede finite* e *I Sondaggi* (la prima volta che la percentuale si muove); spariscono da sole dopo 14 secondi. Si spegne tutto con l'opzione «Guida e suggerimenti» (la stessa che governa la freccia verso la meta).
 
+## Misurato
+
+Simulazione 1 contro 1 (300 prove per riga, mossa migliore da entrambe le parti, `makeDuelSim`) dei tre starter contro ogni selvatico di Borgo e Percorso 1, voci «solo a quell'ora» incluse (starter Lv 5 a Borgo, Lv 8 sul Percorso 1, selvatico al livello massimo). Le voci nuove stanno nella fascia delle vecchie (Verdolino 45–99% di vittorie, Mediocrate 0–97%, come Calendauro 0–100% e Contemorfo 0–100%: dipende dal tipo dello starter). Bojoon di notte a Lv 6–7 era l'unico fuori scala (0% contro due starter su tre): portato a Lv 5–6 (92–100%).
+
 ## Non verificato
 
 - Nessuna partita lunga: l'effetto del doppio peso sul bilanciamento dell'inizio non è stato misurato su una campagna intera (le specie aggiunte nei primi percorsi sono le più deboli del gioco).

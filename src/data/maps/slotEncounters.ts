@@ -11,7 +11,7 @@ const slot = (speciesId: string, minLv: number, maxLv: number, weight: number, s
 
 export const SLOT_ENCOUNTERS: Readonly<Record<string, readonly EncounterEntry[]>> = {
   borgo: [slot("verdolino", 3, 5, 18, ["mattina"])],
-  route1: [slot("verdolino", 5, 6, 16, ["mattina"]), slot("mediocrate", 6, 7, 12, ["giorno"]), slot("bojoon", 6, 7, 10, ["notte"])],
+  route1: [slot("verdolino", 5, 6, 16, ["mattina"]), slot("mediocrate", 6, 7, 12, ["giorno"]), slot("bojoon", 5, 6, 10, ["notte"])],
   mediopoli: [slot("verdolino", 9, 11, 14, ["mattina"]), slot("zelenskir", 11, 12, 10, ["sera"]), slot("bojoon", 10, 12, 14, ["notte"])],
   antenna: [slot("zelenskir", 11, 12, 10, ["sera"]), slot("muskrat", 11, 12, 10, ["notte"])],
   route2: [slot("zelenskir", 13, 15, 10, ["sera"]), slot("pontigor", 14, 15, 10, ["notte"])],

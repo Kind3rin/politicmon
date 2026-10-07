@@ -23,6 +23,6 @@ test('catalog identity deduplication preserves all 78 moves and 52 species field
     assert.ok(next); next[0] = 16;
   }
   const digest=createHash('sha256').update(JSON.stringify(canonical({MOVES,SPECIES:species}))).digest('hex');
-  assert.equal(digest,'e630ab656f0a6c6ad14066bc042c0e4e43915c4d3db501ae72fe31342bc40356');
+  assert.equal(digest,'c83ad96c9f41fbaefa407367c5d2713d675c3b432e4ad616623298ee4e297c5b');
   for(const [id,entry]of Object.entries({...MOVES,...SPECIES}))assert.equal(id,entry.id);
 });

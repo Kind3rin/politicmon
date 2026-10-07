@@ -40,6 +40,29 @@ export const SLOT_NPCS: Readonly<Record<string, readonly NpcDef[]>> = {
     person("eurotown-stagista", "Stagista", "kid", 11, 12, ["notte"],
       ["Sono qui da stamattina. Mi hanno detto 'sei un'opportunità'.", "Alla fine l'opportunità sono io: gratuita, e a notte fonda."])
   ],
+  offshore: [
+    person("offshore-bagnino", "Bagnino", "guard", 12, 7, ["mattina"],
+      ["Alle sei apro il lido e chiudo un occhio. Anzi due: sono in regime di residenza fiscale.", "La Rassegna stampa qui arriva dal largo: sempre in ritardo e già smentita."]),
+    person("offshore-cocco", "Venditore di cocco", "barista", 21, 10, ["giorno"],
+      ["Cocco fresco! Il prezzo è quello di ieri, ma in un'altra valuta.", "Prendi, questo è omaggio: non l'ho dichiarato."],
+      { itemId: "spritz", qty: 2, flag: "slot-gift-offshore-cocco", lines: ["Cocco o spritz? Per i clienti fedeli, spritz."] }),
+    person("offshore-dj", "DJ", "influencer", 14, 12, ["sera"],
+      ["L'aperitivo è il Talk show di chi non vuole parlare.", "Si balla, si firma, si dimentica."]),
+    person("offshore-tesoriere", "Tesoriere insonne", "aide", 16, 10, ["notte"],
+      ["Di notte i conti tornano da soli: basta non guardarli.", "Hai un'aria onesta. Tieni questo, e dimentica dove l'hai avuto."],
+      { itemId: "schedona", qty: 1, flag: "slot-gift-offshore-tesoriere", lines: ["Non siamo mai stati qui. Né io, né il tesoro."] })
+  ],
+  bruxelles: [
+    person("bruxelles-funzionario", "Funzionario CE", "aide", 11, 7, ["mattina"],
+      ["Il caffè è alle nove, la riunione sul caffè è alle nove e un quarto.", "Alle dieci il comitato valuta se valga la pena di valutare."]),
+    person("bruxelles-lobbista", "Lobbista", "guard", 17, 7, ["giorno"],
+      ["Non faccio lobbying, faccio 'dialogo con gli stakeholder'.", "Il pranzo di lavoro è la sede più alta del diritto europeo."]),
+    person("bruxelles-portavoce", "Portavoce", "journalist", 18, 9, ["sera"],
+      ["Prima serata: faccio un comunicato per smentire il comunicato.", "Tieni un rinfresco: viene dal buffet dell'ultima smentita."],
+      { itemId: "spritz", qty: 2, flag: "slot-gift-bruxelles-portavoce", lines: ["Un attimo, devo smentire. Ecco, fatto."] }),
+    person("bruxelles-spazzino", "Spazzino notturno", "granny", 10, 6, ["notte"],
+      ["La notte pulisco i corridoi. Si trovano sempre bozze di regolamento.", "Le bozze di notte sono più oneste: nessuno le guarda."])
+  ],
   capitale: [
     person("capitale-cerimoniere", "Cerimoniere", "guard", 14, 10, ["mattina"],
       ["Il picchetto d'onore è alle otto. Alle otto e un quarto è già un ricordo.", "Il cambio della guardia somiglia al cambio di maggioranza: stessa coreografia."]),

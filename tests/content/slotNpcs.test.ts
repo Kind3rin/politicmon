@@ -7,7 +7,7 @@ import { ITEMS } from "../../src/data/items.ts";
 import { SLOTS } from "../../src/game/palinsesto.ts";
 
 const DIRS = [[0, -1], [0, 1], [-1, 0], [1, 0]] as const;
-const FROM: Record<string, [number, number]> = { capitale: [6, 12], borgo: [6, 13], mediopoli: [6, 11], eurotown: [6, 13] };
+const FROM: Record<string, [number, number]> = { capitale: [6, 12], borgo: [6, 13], mediopoli: [6, 11], eurotown: [6, 13], offshore: [6, 10], bruxelles: [13, 6] };
 
 function walkable(mapId: string, blocked: ReadonlySet<string>) {
   const map = MAPS[mapId], at = (x: number, y: number) => TILES[map.tiles[y]?.[x] ?? ""];

@@ -135,7 +135,7 @@ try{
  await page.goto(`${base}/scripts/m2-ui-review.html?screen=dialogo`);
  await page.locator('.ui-dialog').waitFor();
  const line=()=>page.locator('.ui-dialog-text').innerText();
- await page.waitForFunction(()=>document.querySelector('.ui-dialog-text')?.textContent.includes('paghiamo noi'),null,{timeout:8000});
+ await page.waitForFunction(()=>document.querySelector('.ui-dialog-text')?.textContent.includes('paghiamo noi.'),null,{timeout:8000});
  const dialogBox=await page.locator('.ui-dialog').boundingBox();
  await page.touchscreen.tap(dialogBox.x+dialogBox.width/2,dialogBox.y+dialogBox.height*0.45);await page.waitForTimeout(400);
  expect((await line()).includes('Il programma è lungo'),`tapping the middle of the box shows the next line (${await line()})`);

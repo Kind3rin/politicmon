@@ -9,7 +9,7 @@
 import { spawn } from 'node:child_process';
 import { readdirSync } from 'node:fs';
 
-const NOT_LOCAL = new Set(['check-mp-live', 'check-prod', 'check-precache-build', 'check-err', 'check-terrace-return', 'check-world-navigation-release']);
+const NOT_LOCAL = new Set(['check-mp-live', 'check-prod', 'check-precache-build', 'check-err', 'check-world-navigation-release']);
 const args = process.argv.slice(2), flag = name => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
 const only = flag('--only')?.split(','), skip = new Set(flag('--skip')?.split(',') ?? []);
 const base = process.env.BASE_URL ?? process.env.UI_LAYOUT_URL ?? 'http://127.0.0.1:5199';

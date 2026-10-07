@@ -190,7 +190,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
   },
   emittenza: {
     id: "emittenza", name: "SUA EMITTENZA", pal: "boss",
-    team: [["tajanide", 12], ["berlusconix", 12]],
+    team: [["tajanide", 11], ["berlusconix", 12]],
     intro: [
       "Benvenuto. Hai novanta secondi per una risposta e tre minuti per litigare.",
       "Non censuro nessuno: taglio soltanto i tempi morti. Il fonico e i fatti finiscono spesso lì.",
@@ -274,7 +274,7 @@ export const TRAINERS: Record<string, TrainerDef> = {
     id: "tycoon", name: "MR. TYCOON", pal: "boss",
     // TRUMPON tiene il SONDAGGIO TRUCCATO (PVE): critico più frequente (1/8),
     // "numeri gonfiati ad arte" perfetti per il tycoon (non passa in PvP).
-    team: [["bojoon", 20], ["muskrat", 21], ["trumpon", 23, undefined, "sondtruccato"]],
+    team: [["bojoon", 19], ["muskrat", 20], ["trumpon", 22, undefined, "sondtruccato"]],
     intro: [
       "Ho messo il mio nome sul palazzo. Così ogni riparazione sembra una donazione a me.",
       "Il dazio lo paga chi compra. La conferenza la faccio io. È una divisione del lavoro perfetta.",

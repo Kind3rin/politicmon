@@ -1,5 +1,13 @@
 # Changelog
 
+## Mandato 2 — edifici di Borgo e Mediopoli — 2026-10-08
+
+- **Sei facciate nuove** (Higgsfield, due fogli 3×2 a 1,5 crediti ciascuno, saldo 282,22 → 279,22): lo studio TV di Mediopoli con antenna e parabola (prima aveva la palestra con la corona d'alloro, condivisa con Eurotown), il laboratorio di Borgo largo a due piani con due manometri, la casa tua con la fioriera, la redazione con il tetto verde e il giornale d'oro, il circolo con la tenda bordeaux e il libro, l'attico con il balcone senape. Impronte, porte e warp restano quelli di prima.
+- **Studio di Mediopoli**: nuovo `public/sprites/tiles/mediopoli_studio.png`, registrato come override della famiglia di tetto `y` nella mappa di Mediopoli (`src/data/maps/base.ts`).
+- **Dati**: `scripts/higgsfield-world-environment.json` con `building-3` e `building-4`; le celle sostituite sono marcate `superseded`; `scripts/check-sprite-bounds.mjs` elenca anche lo studio.
+- **Verifica**: `check-building-door-alignment`, `check-sprite-bounds`, `check-map-consistency`, `check-door-warps` e `check-placement` verdi; 603 test unitari, `tsc --noEmit`, `npm run build` e `check-precache-build` (1046 risorse) verdi. Schermate prima/dopo a 375×812 in `artifacts/m2/town-*`.
+- **Non fatto**: le finestre illuminate di notte restano con i bagliori procedurali a posizione fissa, non verificati sui disegni nuovi. Il giro completo dei controlli di gioco non è stato rifatto in questo round.
+
 ## Mandato 2 — spettacolo di lotta — 2026-10-08
 
 - **Efficacia sul campo** (`src/game/battle/view.ts`, `damageImpacts`): un colpo super efficace o poco efficace scrive sopra il numero «Super efficace» o «Poco efficace» in una piastrina scura, e il numero dei colpi deboli è grigio. Prima l'efficacia compariva solo nella didascalia in basso.

@@ -100,3 +100,11 @@ Si nota subito: la piastrina si legge sopra lo sprite a 375 px; l'etichetta comp
 Ancora non convince: la caduta inclinata del KO e il rallentatore sull'ultimo allenatore li ho verificati nel codice e nei test, non a tocchi in gioco. Il colpo non anticipa ancora l'attacco: la forma del colpo arriva dopo il lampo e il numero. La parte d'arte della Fase 6 (fondali a strati, pubblico) non è iniziata.
 Prove: `battleAnimationContract` (quattro test nuovi), 603 test unitari, `tsc --noEmit`, `check-ui-runtime`, `check-ui-layout`, `check-text-scale`, `check-first-rival`, `check-ui-panels`; lotta di prova a 375×812 senza errori in pagina.
 Crediti Higgsfield: nessun consumo, saldo 282,22.
+
+## Borgo e Mediopoli, edifici — 8 ottobre 2026
+Prima/dopo: prima Mediopoli aveva lo studio con la corona d'alloro della palestra, condivisa con Eurotown; ora ha lo studio TV con antenna (artifacts/m2/town-medio-studio-before-375.png e -after2-375.png). Il laboratorio di Borgo passa da un edificio scuro e generico a una facciata a due piani con due manometri (artifacts/m2/town-borgo-lab-before-375.png e -after2-375.png). Casa tua, redazione, circolo e attico hanno un disegno nuovo nelle stesse impronte.
+Si nota subito: a 375×812 le facciate si leggono a distanza, le porte restano al centro sulla strada e le etichette («Studio 5», «Laboratorio», «Circolo», «Attico») non si spostano.
+Ancora non convince: il primo foglio aveva un laboratorio a torre troppo stretta per l'impronta, scartato e rigenerato (job 0fd5ead9…); le finestre illuminate di notte non sono state guardate sui disegni nuovi. Il documento della fase dice «piatti» per Borgo e Mediopoli, ma livelli e terrazze sono già fatti: da chiarire con Luca che cosa intendeva con «piatto» prima di spendere altri crediti.
+Prove: `check-building-door-alignment`, `check-sprite-bounds`, `check-map-consistency`, `check-door-warps`, `check-placement`; 603 test; `tsc --noEmit`; `npm run build`; `check-precache-build` (1046 risorse).
+Crediti Higgsfield: due fogli a 1,5 crediti, saldo 282,22 → 279,22 (un tentativo scartato e rigenerato compreso). Fase 3 aveva 54,44 di quota: restano circa 51.
+CONTROLLO UMANO RICHIESTO: Luca gioca dieci minuti a tocchi in piazza di Borgo e Mediopoli, di giorno e di notte, e dice se le facciate reggono.

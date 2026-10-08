@@ -18,7 +18,9 @@
           "path": "public/sprites/tiles/build_house_front_red.png",
           "width": 64,
           "height": 48,
-          "subject": "small burgundy-roof townhouse, cream plaster, navy shutters"
+          "subject": "small burgundy-roof townhouse, cream plaster, navy shutters",
+          "superseded": true,
+          "supersededBy": "building-3"
         },
         {
           "id": "build_house_front_blue",
@@ -32,7 +34,9 @@
           "path": "public/sprites/tiles/build_house_front_green.png",
           "width": 64,
           "height": 48,
-          "subject": "small forest mint-roof townhouse, cream plaster, burgundy shutters"
+          "subject": "small forest mint-roof townhouse, cream plaster, burgundy shutters",
+          "superseded": true,
+          "supersededBy": "building-3"
         },
         {
           "id": "build_house_front_brick",
@@ -46,14 +50,18 @@
           "path": "public/sprites/tiles/build_circolo_front.png",
           "width": 64,
           "height": 32,
-          "subject": "neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door"
+          "subject": "neighborhood workers' political reading club, burgundy canopy and small golden book emblem above door",
+          "superseded": true,
+          "supersededBy": "building-3"
         },
         {
           "id": "build_apartment_front",
           "path": "public/sprites/tiles/build_apartment_front.png",
           "width": 64,
           "height": 32,
-          "subject": "compact cream civic apartment office with navy roof and mustard balcony"
+          "subject": "compact cream civic apartment office with navy roof and mustard balcony",
+          "superseded": true,
+          "supersededBy": "building-3"
         }
       ],
       "params": {
@@ -119,7 +127,9 @@
           "path": "public/sprites/tiles/build_lab_front.png",
           "width": 64,
           "height": 48,
-          "subject": "eccentric political research laboratory, navy roof, cream wall, mint gauge emblem"
+          "subject": "eccentric political research laboratory, navy roof, cream wall, mint gauge emblem",
+          "superseded": true,
+          "supersededBy": "building-3"
         },
         {
           "id": "build_bar_front",
@@ -1192,6 +1202,142 @@
         "surface": null
       },
       "sourceSha256": "4b757faab0adffdda5c8c20e8c2ee9fa2834c282fde14dc3ee6c95ce70a6c6db"
+    },
+    {
+      "id": "building-3",
+      "index": 3,
+      "kind": "building",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "mediopoli_studio",
+          "path": "public/sprites/tiles/mediopoli_studio.png",
+          "width": 96,
+          "height": 48,
+          "subject": "Mediopoli TV news studio: navy two-storey facade, burgundy awning, golden antenna and satellite dish"
+        },
+        {
+          "id": "build_lab_front",
+          "path": "public/sprites/tiles/build_lab_front.png",
+          "width": 64,
+          "height": 48,
+          "subject": "Borgo research laboratory: tall narrow navy-roof tower, round mint gauge window, gold emblem",
+          "superseded": true,
+          "supersededBy": "building-4"
+        },
+        {
+          "id": "build_house_front_red",
+          "path": "public/sprites/tiles/build_house_front_red.png",
+          "width": 64,
+          "height": 48,
+          "subject": "Borgo townhouse: burgundy roof, cream plaster, navy shutters, flower box"
+        },
+        {
+          "id": "build_house_front_green",
+          "path": "public/sprites/tiles/build_house_front_green.png",
+          "width": 64,
+          "height": 48,
+          "subject": "Mediopoli newsroom office: mint roof, cream plaster, burgundy shutters, gold newspaper emblem"
+        },
+        {
+          "id": "build_circolo_front",
+          "path": "public/sprites/tiles/build_circolo_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "Borgo reading club: burgundy canopy, small golden book emblem"
+        },
+        {
+          "id": "build_apartment_front",
+          "path": "public/sprites/tiles/build_apartment_front.png",
+          "width": 64,
+          "height": 32,
+          "subject": "Mediopoli civic apartment block: navy roof, cream walls, mustard balcony"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "servedAs": "nano_banana_flash",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: wide two-storey broadcast studio for a TV news show, navy facade, burgundy awning, golden antenna and satellite dish on the roof, proportion two to one; TOP CENTER: tall narrow political research laboratory, navy roof, cream wall, round mint gauge window and gold emblem, proportion four to three; TOP RIGHT: townhouse with burgundy roof, cream plaster, navy shutters and a flower box, proportion four to three; BOTTOM LEFT: newsroom office with mint roof, cream plaster, burgundy shutters and a small gold newspaper emblem above the door, proportion four to three; BOTTOM CENTER: neighborhood reading club with burgundy canopy and a small golden book emblem, proportion two to one; BOTTOM RIGHT: compact civic apartment block with navy roof, cream walls and a mustard balcony, proportion two to one. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "b60daebf-c4f7-4d3a-bc21-209eaee48a35",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: wide two-storey broadcast studio for a TV news show, navy facade, burgundy awning, golden antenna and satellite dish on the roof, proportion two to one; TOP CENTER: tall narrow political research laboratory, navy roof, cream wall, round mint gauge window and gold emblem, proportion four to three; TOP RIGHT: townhouse with burgundy roof, cream plaster, navy shutters and a flower box, proportion four to three; BOTTOM LEFT: newsroom office with mint roof, cream plaster, burgundy shutters and a small gold newspaper emblem above the door, proportion four to three; BOTTOM CENTER: neighborhood reading club with burgundy canopy and a small golden book emblem, proportion two to one; BOTTOM RIGHT: compact civic apartment block with navy roof, cream walls and a mustard balcony, proportion two to one. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_134226_b60daebf-c4f7-4d3a-bc21-209eaee48a35.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "fe906bef619187155ec2026a58dbff101aadb79a560b6debc5753f167bdafb57"
+    },
+    {
+      "id": "building-4",
+      "index": 4,
+      "kind": "building",
+      "columns": 3,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "unused-cell-0",
+          "superseded": true,
+          "path": "",
+          "width": 1,
+          "height": 1,
+          "subject": "not used from this sheet; the studio stays from building-3"
+        },
+        {
+          "id": "build_lab_front",
+          "path": "public/sprites/tiles/build_lab_front.png",
+          "width": 64,
+          "height": 48,
+          "subject": "Borgo research laboratory: broad two-storey navy-roof building, two round mint gauge windows, gold emblem"
+        }
+      ],
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true,
+        "skipCells": [
+          0,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "params": {
+        "model": "nano_banana_2",
+        "servedAs": "nano_banana_flash",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "3:2",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: wide two-storey broadcast studio for a TV news show, navy facade, burgundy awning, golden antenna and satellite dish on the roof, proportion two to one; TOP CENTER: BROAD and WIDE two-storey political research laboratory, wider than it is tall, navy roof, cream wall, two round mint gauge windows and a gold emblem, proportion four to three; TOP RIGHT: townhouse with burgundy roof, cream plaster, navy shutters and a flower box, proportion four to three; BOTTOM LEFT: newsroom office with mint roof, cream plaster, burgundy shutters and a small gold newspaper emblem above the door, proportion four to three; BOTTOM CENTER: neighborhood reading club with burgundy canopy and a small golden book emblem, proportion two to one; BOTTOM RIGHT: compact civic apartment block with navy roof, cream walls and a mustard balcony, proportion two to one. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface."
+      },
+      "jobId": "0fd5ead9-0047-4276-8358-2a48d517d393",
+      "status": "completed",
+      "generatedParams": {
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal rectangular cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: wide two-storey broadcast studio for a TV news show, navy facade, burgundy awning, golden antenna and satellite dish on the roof, proportion two to one; TOP CENTER: BROAD and WIDE two-storey political research laboratory, wider than it is tall, navy roof, cream wall, two round mint gauge windows and a gold emblem, proportion four to three; TOP RIGHT: townhouse with burgundy roof, cream plaster, navy shutters and a flower box, proportion four to three; BOTTOM LEFT: newsroom office with mint roof, cream plaster, burgundy shutters and a small gold newspaper emblem above the door, proportion four to three; BOTTOM CENTER: neighborhood reading club with burgundy canopy and a small golden book emblem, proportion two to one; BOTTOM RIGHT: compact civic apartment block with navy roof, cream walls and a mustard balcony, proportion two to one. Every cell contains one isolated object centered with ample pure WHITE margin, no cast shadow or ground plane. Top-down orthographic RPG asset, no isometric scene or 3/4 view. CRITICAL: every building is a STRICT SYMMETRICAL FRONT ELEVATION, horizontal facade, no side wall, roof visible as horizontal tier. Exactly ONE broad dark doorway at the exact horizontal center of the bottom facade, extending to bottom baseline; closed windows elsewhere, no other doors. Entire building visible. No text, letters, numbers, slogans, logos, captions, watermark or game interface.",
+        "aspect_ratio": "3:2",
+        "width": 1264,
+        "height": 848,
+        "resolution": "1k",
+        "batch_size": 1
+      },
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_134921_0fd5ead9-0047-4276-8358-2a48d517d393.png",
+      "sourceSha256": "a130a496a2df150a0a60bdd800081173fc87efc7d0de330739ecf0cb9a955421"
     }
   ]
 }

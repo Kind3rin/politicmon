@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "description": "Battle arena art for Fase 6: audience layer that reacts to the fight, and gag icons for the satirical moves. Sources are recorded here; scripts/prepare-world-assets.py stages them.",
+  "assets": [
+    {
+      "id": "battle-crowd",
+      "index": 0,
+      "kind": "battle-row",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "crowd_neutral",
+          "path": "public/sprites/battle/crowd_neutral.png",
+          "width": 240,
+          "height": 40,
+          "subject": "seven audience members from behind, arms down: neutral reaction"
+        },
+        {
+          "id": "crowd_applause",
+          "path": "public/sprites/battle/crowd_applause.png",
+          "width": 240,
+          "height": 40,
+          "subject": "seven audience members clapping with raised hands"
+        },
+        {
+          "id": "crowd_boo",
+          "path": "public/sprites/battle/crowd_boo.png",
+          "width": 240,
+          "height": 40,
+          "subject": "seven audience members booing, hands cupped at their mouths"
+        },
+        {
+          "id": "crowd_phones",
+          "path": "public/sprites/battle/crowd_phones.png",
+          "width": 240,
+          "height": 40,
+          "subject": "seven audience members holding up glowing smartphones"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "servedAs": "nano_banana_flash",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art style, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: a single wide row of seven audience members seen from behind, heads and shoulders only, standing still with arms down, navy and cream silhouettes with small burgundy and mint details; TOP RIGHT: the same row of seven audience members clapping with raised hands; BOTTOM LEFT: the same row of seven audience members booing, hands cupped at their mouths; BOTTOM RIGHT: the same row of seven audience members holding up smartphones with glowing screens. Each cell contains one wide, low row of figures centered with ample pure WHITE margin on the left, right and top, no cast shadow, no ground plane, no background scene. Flat side-on pixel art, no 3/4 view. No text, letters, numbers, logos, captions, watermark or game interface."
+      },
+      "jobId": "5257553f-6621-465a-98c6-6325b4d23884",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_145813_5257553f-6621-465a-98c6-6325b4d23884.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "911b41394d41ab77d4aab7bca5a2ad5951b55078d919aeac858025a753ca0577"
+    },
+    {
+      "id": "battle-gags",
+      "index": 1,
+      "kind": "battle-icon",
+      "columns": 3,
+      "rows": 1,
+      "outputs": [
+        {
+          "id": "gag_microfono",
+          "path": "public/sprites/battle/gag_microfono.png",
+          "width": 40,
+          "height": 40,
+          "subject": "stage microphone on a stand with a gold tag"
+        },
+        {
+          "id": "gag_tweet",
+          "path": "public/sprites/battle/gag_tweet.png",
+          "width": 40,
+          "height": 40,
+          "subject": "smartphone with an angry speech bubble"
+        },
+        {
+          "id": "gag_decreto",
+          "path": "public/sprites/battle/gag_decreto.png",
+          "width": 40,
+          "height": 40,
+          "subject": "rolled government decree tied with a burgundy ribbon"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "servedAs": "nano_banana_flash",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art style, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 3 equal rectangular cells in a STRICT 3 COLUMN by 1 ROW grid, no labels or separators. LEFT: an old-fashioned stage microphone on a chrome stand with a small gold tag and a burgundy cable; CENTER: a smartphone showing an angry speech bubble with three short scribble lines and three dots, no letters and no logos; RIGHT: a government decree scroll partly rolled up, tied with a burgundy ribbon and a small gold seal. Each cell contains one isolated object centered with ample pure WHITE margin, no cast shadow, no ground plane. Flat orthographic pixel art, no 3/4 view. No text, letters, numbers, logos, captions, watermark or game interface."
+      },
+      "jobId": "651e424f-cb20-4011-8ea7-69eb151f69f2",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_145817_651e424f-cb20-4011-8ea7-69eb151f69f2.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "78bba44a9b1fd3d82aa9ab7424f9f8f7444a139b002edfa23f0912c12b58eb9a"
+    },
+    {
+      "id": "battle-far",
+      "index": 2,
+      "kind": "battle-row",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "far_hills",
+          "path": "public/sprites/battle/far_hills.png",
+          "width": 240,
+          "height": 48,
+          "subject": "distant green hills with cypresses and a village on the ridge"
+        },
+        {
+          "id": "far_city",
+          "path": "public/sprites/battle/far_city.png",
+          "width": 240,
+          "height": 48,
+          "subject": "distant pale city towers and an antenna skyline"
+        },
+        {
+          "id": "far_sea",
+          "path": "public/sprites/battle/far_sea.png",
+          "width": 240,
+          "height": 48,
+          "subject": "distant sea horizon with sailboats and a cliff"
+        },
+        {
+          "id": "far_cave",
+          "path": "public/sprites/battle/far_cave.png",
+          "width": 240,
+          "height": 48,
+          "subject": "distant cave mouth in a grey rock wall"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "servedAs": "nano_banana_flash",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art style, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: a distant band of rolling green hills with a few cypress trees and a small village on the ridge; TOP RIGHT: a distant band of pale city towers and a tall antenna skyline; BOTTOM LEFT: a distant calm sea horizon with a few small sailboats and a cliff edge; BOTTOM RIGHT: a distant cave mouth in a grey rock wall with stalactites. Each cell contains one wide low band of scenery, flat and side-on, the band spans most of the cell width with ample pure WHITE margin on the left and right, the bottom edge of the band sits on the bottom of the cell, no sky colour, no ground plane, no 3/4 view. No text, letters, numbers, logos, captions, watermark or game interface."
+      },
+      "jobId": "550f2139-58b0-4ebc-910b-01e8a5b36f53",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_150322_550f2139-58b0-4ebc-910b-01e8a5b36f53.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "1358b86e52d5ce1532de809d19d7aad22d1777fbc60761f282bf197c4494fcfb"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ import {
 import { festivalScandaloChance } from "./atto3MoveEffects";
 import { Menu, MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, damageImpacts, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry, battleFit
+  approach, audienceReaction, BattleFx, damageImpacts, drawAudience, drawFarLayer, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry, battleFit
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
@@ -665,6 +665,7 @@ export class BattleScene implements Scene {
     steps.push({
       run: () => {
         this.actionCaption = { actor: side === "player" ? this.playerName() : `${this.foeName()} avversario`, move: move.name, result: "" };
+        this.fx.playGag(side, move.id);
         if (side === "foe") {
           const color = move.category === "fisico" ? "#e85a5a" : move.category === "speciale" ? "#5a9ae8" : "#b86ad8";
           this.fx.telegraph = { side, color, t: .35, max: .35 };
@@ -1825,6 +1826,11 @@ export class BattleScene implements Scene {
     this.fx.applyPunch(ctx, screen.height);
     screen.clear("#f0f0e0");
     drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
+    // Fase 6: far scenery, then the audience reacting to how the fight goes (hit points left on each side) and to the Polemica bar.
+    const geometry = battleGeometry(this.viewHeight), crowdTop = Math.max(0, geometry.foeBase - geometry.size - 20);
+    // The far scenery's lower edge hides behind the spectators, so no seam shows across the grass.
+    drawFarLayer(screen, this.backdrop, this.fx.time, this.state.reduceEffects, Math.max(0, crowdTop - 24));
+    drawAudience(screen, audienceReaction(Math.max(0, this.player.mon.hp) / statsOf(this.player.mon).hp, Math.max(0, this.foe.mon.hp) / statsOf(this.foe.mon).hp, this.polemica.value), this.fx.time, this.state.reduceEffects, crowdTop);
 
     // TINT SFONDO METEO (sondaggi-meteo): velo colorato leggero sullo sfondo
     // quando il gradimento attiva il modificatore. Caldo/dorato col GOVERNO in
@@ -1872,6 +1878,7 @@ export class BattleScene implements Scene {
 
     // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
     this.fx.drawMoveFx(screen);
+    this.fx.drawGag(screen);
     this.fx.drawRings(screen);
     this.fx.drawParticles(screen);
     this.fx.drawTint(screen);

@@ -32,6 +32,49 @@ export function drawBattleBackdrop(screen: Screen, backdrop: BattleBackdrop, hei
   }
 }
 
+/** Fase 6 art: the audience reacts to how the fight goes, and the satirical moves fly a gag icon from the attacker. */
+export type AudienceReaction = "neutral" | "applause" | "boo" | "phones";
+export const AUDIENCE_HEIGHT = 40;
+
+/** How the crowd reads the fight: a clear lead on hit points is applause, a clear deficit is booing, and a full Polemica bar
+ * calls the phones out. `playerShare` and `foeShare` are the hit points each active monster has left, as a share of its maximum. */
+export function audienceReaction(playerShare: number, foeShare: number, polemica: number): AudienceReaction {
+  if (polemica >= 3) return "phones";
+  if (playerShare - foeShare >= .25) return "applause";
+  if (foeShare - playerShare >= .25) return "boo";
+  return "neutral";
+}
+
+/** The gag icon of each satirical move, by move id (sprites in public/sprites/battle). */
+export const GAG_ART: Readonly<Record<string, string>> = { piazza_aperta: "gag_microfono", tweet: "gag_tweet", decreto: "gag_decreto" };
+
+/** Far scenery behind the arena, by backdrop: hills, a city skyline, the sea, or a cave wall (sprites in public/sprites/battle). */
+export const FAR_LAYER: Readonly<Record<string, string>> = {
+  "battle:bg": "far_hills", "battle:bg:neve": "far_hills",
+  "battle:bg:piazza": "far_city", "battle:bg:studio": "far_city", "battle:bg:palazzo": "far_city", "battle:bg:foro": "far_city", "battle:bg:viale": "far_city", "battle:bg:tv": "far_city", "battle:bg:rete": "far_city",
+  "battle:bg:costa": "far_sea", "battle:bg:lago": "far_sea",
+  "battle:bg:grotta": "far_cave", "battle:bg:cava": "far_cave"
+};
+export const FAR_HEIGHT = 48;
+
+/** The far layer sits behind the crowd and moves less than it (one pixel against two): the two read as separate planes. */
+export function drawFarLayer(screen: Screen, backdrop: BattleBackdrop, time: number, reduceEffects: boolean, top: number): void {
+  const art = FAR_LAYER[backdrop.spriteId];
+  if (!art) return;
+  const image = sceneImage(`battle:far:${art}`, `battle/${art}.png`);
+  if (!image) return;
+  const drift = reduceEffects ? 0 : Math.round(Math.sin(time * .2));
+  screen.image(image, drift, top, VIEW_W, FAR_HEIGHT);
+}
+
+/** A row of spectators along the top of the arena, behind the fighters. It sways slowly: a drift of the crowd, not a camera parallax. */
+export function drawAudience(screen: Screen, reaction: AudienceReaction, time: number, reduceEffects: boolean, top: number): void {
+  const image = sceneImage(`battle:crowd:${reaction}`, `battle/crowd_${reaction}.png`);
+  if (!image) return;
+  const drift = reduceEffects ? 0 : Math.round(Math.sin(time * .35) * 2);
+  screen.image(image, drift, top, VIEW_W, AUDIENCE_HEIGHT);
+}
+
 export type BattleSide = "player" | "foe";
 
 export interface ImpactParticle {
@@ -154,6 +197,8 @@ export class BattleFx {
   effFx: { kind: "super" | "weak" | "crit"; t: number } | null = null;
   telegraph: { side: BattleSide; color: string; t: number; max: number } | null = null;
   moveFx: { side: BattleSide; type: PolType; t: number } | null = null;
+  /** The gag icon of a satirical move in flight (see GAG_ART). */
+  gagFx: { side: BattleSide; art: string; t: number } | null = null;
   rings: ImpactRing[] = [];
   /** Full-frame colour that fades after a heavy hit. */
   tint: { color: string; t: number; max: number } | null = null;
@@ -168,6 +213,10 @@ export class BattleFx {
     if (this.moveFx) {
       this.moveFx.t -= dt;
       if (this.moveFx.t <= 0) this.moveFx = null;
+    }
+    if (this.gagFx) {
+      this.gagFx.t -= dt;
+      if (this.gagFx.t <= 0) this.gagFx = null;
     }
     this.lungeT.player = Math.max(0, this.lungeT.player - dt);
     this.lungeT.foe = Math.max(0, this.lungeT.foe - dt);
@@ -391,6 +440,29 @@ export class BattleFx {
 
   // Eight visual languages, shared by all damaging moves and by both modes.
   // Bounded to three small shapes; no extra asset decode or simulation state.
+  /** A satirical move starts its gag: the icon leaves the attacker and fades near the other side. Nothing on reduced effects. */
+  playGag(side: BattleSide, moveId: string): void {
+    const art = GAG_ART[moveId];
+    if (!art || this.reduceEffects) return;
+    this.gagFx = { side, art, t: .7 };
+  }
+
+  drawGag(screen: Screen): void {
+    const gag = this.gagFx;
+    if (!gag) return;
+    const image = sceneImage(`battle:gag:${gag.art}`, `battle/${gag.art}.png`);
+    if (!image) return;
+    const from = monsterCenter(gag.side, this.viewHeight);
+    const to = monsterCenter(gag.side === "player" ? "foe" : "player", this.viewHeight);
+    const progress = 1 - gag.t / .7;
+    const x = from.x + (to.x - from.x) * progress;
+    const y = from.y + (to.y - from.y) * progress - Math.sin(progress * Math.PI) * 18;
+    screen.ctx.save();
+    screen.ctx.globalAlpha = progress < .75 ? 1 : (1 - progress) / .25;
+    screen.image(image, Math.round(x - 20), Math.round(y - 20), 40, 40);
+    screen.ctx.restore();
+  }
+
   drawMoveFx(screen: Screen): void {
     const fx = this.moveFx;
     if (!fx || this.reduceEffects) return;

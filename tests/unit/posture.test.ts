@@ -36,7 +36,7 @@ function fight(posture: "none" | "attacca" | "smentisci" | "tempo", side: "playe
     const state = newGameState(), player = makeCombatant(createMonster("berlusconix", 20)), foe = makeCombatant(createMonster("mediocrate", 20));
     state.sondaggi = 50;
     const b: any = Object.create(BattleScene.prototype);
-    Object.assign(b, { state, player, foe, queue: [], field: undefined, fieldTurn: 1, fieldResolved: true, fx: { onHit() {}, telegraph: null }, polemica: new Polemica(),
+    Object.assign(b, { state, player, foe, queue: [], field: undefined, fieldTurn: 1, fieldResolved: true, fx: { onHit() {}, playGag() {}, telegraph: null }, polemica: new Polemica(),
       announcedOffensive: new Set(), turnPosture: posture, turnFoePosture: foePosture, posture: "none", actionCaption: null, copione: false, battery: 0, trainer: undefined, electionTurn: 1 });
     const attacker = side === "player" ? player : foe, defender = side === "player" ? foe : player;
     defender.mon.hp = 9999;
@@ -74,7 +74,7 @@ test("A gaffe followed by a scandal on the same target raises a one-off Bufera w
       effect: { status: { id: "scandalo", chance: 100, target: "foe" } } };
     const state = newGameState(), player = makeCombatant(createMonster("berlusconix", 20)), foe = makeCombatant(createMonster("mediocrate", 20));
     const b: any = Object.create(BattleScene.prototype);
-    Object.assign(b, { state, player, foe, queue: [], field: undefined, fieldTurn: 1, fieldResolved: true, fx: { onHit() {}, telegraph: null }, polemica: new Polemica(),
+    Object.assign(b, { state, player, foe, queue: [], field: undefined, fieldTurn: 1, fieldResolved: true, fx: { onHit() {}, playGag() {}, telegraph: null }, polemica: new Polemica(),
       announcedOffensive: new Set(), turnPosture: "none", posture: "none", actionCaption: null, copione: false, battery: 0, trainer: undefined, electionTurn: 1,
       buferaDone: new WeakSet(), displayHp: { player: 0, foe: 0 } });
     foe.gaffeTurns = 3;

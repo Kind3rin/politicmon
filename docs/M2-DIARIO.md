@@ -108,3 +108,10 @@ Ancora non convince: il primo foglio aveva un laboratorio a torre troppo stretta
 Prove: `check-building-door-alignment`, `check-sprite-bounds`, `check-map-consistency`, `check-door-warps`, `check-placement`; 603 test; `tsc --noEmit`; `npm run build`; `check-precache-build` (1046 risorse).
 Crediti Higgsfield: due fogli a 1,5 crediti, saldo 282,22 → 279,22 (un tentativo scartato e rigenerato compreso). Fase 3 aveva 54,44 di quota: restano circa 51.
 CONTROLLO UMANO RICHIESTO: Luca gioca dieci minuti a tocchi in piazza di Borgo e Mediopoli, di giorno e di notte, e dice se le facciate reggono.
+
+## Arte della Fase 6 — pubblico, fondali, gag — 8 ottobre 2026
+Prima/dopo: prima la lotta aveva lo sfondo e i due sprite; ora dietro i contendenti ci sono il profilo lontano (colline o skyline, mare, grotta) e una fila di spettatori che reagisce (artifacts/m2/audience-start-375.png; in orizzontale artifacts/m2/audience-landscape-844.png).
+Si nota subito: la folla si legge sopra il campo a 375×812 e a 844×390; il bordo del profilo lontano non lascia una riga sul prato, perché sta dietro gli spettatori.
+Ancora non convince: in gioco ho visto solo la reazione «fischi» (la lotta di prova è in svantaggio); applausi e telefoni li ho controllati sui fogli e nei test, non in una lotta vinta. Il volo dei gag è verificato su una pagina di prova: nella lotta di prova nessuna mossa è satirica, quindi il gag non è mai partito in gioco, e il primo uso di una sessione può partire con un ritardo di qualche decimo di secondo mentre l'icona si carica. Il fondale è ancora un'immagine unica per lotta: la parallasse è un leggero scorrimento del profilo lontano, non una vera parallasse di telecamera.
+Prove: 607 test unitari (quattro nuovi su reazioni, gag, avvio ed effetti ridotti), `tsc --noEmit`, `npm run build`, `check-precache-build` (1057 risorse), `check-ui-runtime`, `check-ui-layout`, `check-text-scale`, `check-first-rival`, `check-ui-panels`.
+Crediti Higgsfield: tre fogli a 1,5 crediti, saldo 279,22 → 274,72. La quota della Fase 6 era circa 100: ne restano circa 95.

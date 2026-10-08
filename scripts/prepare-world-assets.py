@@ -52,6 +52,20 @@ def cutout(cell, allow_bottom=False):
     return image.crop(bounds)
 
 
+def finish_cutout(cell, kind):
+    """Battle rows are drawn with white between figures that is not connected to the cell edge: remove pure white everywhere.
+    Cream skin and paper stay opaque (they are not pure white)."""
+    image = cutout(cell, allow_bottom=kind in ('building', 'battle-row'))
+    if kind == 'battle-row':
+        pixels = image.load()
+        for y in range(image.height):
+            for x in range(image.width):
+                r, g, b, a = pixels[x, y]
+                if a and min(r, g, b) >= 244 and max(r, g, b) - min(r, g, b) <= 8:
+                    pixels[x, y] = (r, g, b, 0)
+    return image
+
+
 def fit(image, size, stretch=False, character=False):
     w, h = size
     if stretch:
@@ -120,8 +134,9 @@ def separators(image, count, horizontal):
     return [round(value * original_length / length) for value in bounds + [length]]
 
 
-for name in ('characters', 'environment'):
-    manifest = json.loads((ROOT / f'scripts/higgsfield-world-{name}.json').read_text())
+MANIFESTS = {'characters': 'scripts/higgsfield-world-characters.json', 'environment': 'scripts/higgsfield-world-environment.json', 'battle-art': 'scripts/higgsfield-battle-art.json'}
+for name in MANIFESTS:
+    manifest = json.loads((ROOT / MANIFESTS[name]).read_text())
     if args.download:
         for asset in manifest['assets']:
             source = BASE / f"{asset['id']}-source.png"
@@ -179,7 +194,7 @@ for name in ('characters', 'environment'):
                         continue
                     path, size = entry['path'], (entry['width'], entry['height'])
                 try:
-                    image = fit(cell.convert('RGBA') if kind in ('terrain', 'scene') else cutout(cell, allow_bottom=kind == 'building'), size, stretch=kind in ('terrain', 'scene', 'building'), character=kind == 'character' or asset['id'] == 'schettino')
+                    image = fit(cell.convert('RGBA') if kind in ('terrain', 'scene') else finish_cutout(cell, kind), size, stretch=kind in ('terrain', 'scene', 'building', 'battle-row'), character=kind == 'character' or asset['id'] == 'schettino')
                 except ValueError as error:
                     cell.save(BASE / f"{asset['id']}-rejected-cell-{row}-{column}.png")
                     raise ValueError(f"{asset['id']} row {row} column {column}: {error}") from error

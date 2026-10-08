@@ -33,7 +33,7 @@ import {
 import { mp } from "../../net/mp";
 import { MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, damageImpacts, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry, battleFit
+  approach, audienceReaction, BattleFx, damageImpacts, drawAudience, drawFarLayer, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry, battleFit
 } from "./view";
 import type { UiPanel } from "../../ui/kit";
 import type { TouchAction } from "../../engine/touchActions";
@@ -330,7 +330,7 @@ export class PvpBattleScene implements Scene {
           break;
         case "move":
           moveTypes[ev.side] = MOVES[ev.moveId]?.type;
-          this.push({ text: `${nameOf(ev.side)} usa ${MOVES[ev.moveId]?.name ?? "???"}!`, run: apply });
+          this.push({ text: `${nameOf(ev.side)} usa ${MOVES[ev.moveId]?.name ?? "???"}!`, run: () => { apply(); this.fx.playGag(this.sideKey(ev.side), ev.moveId); } });
           break;
         case "miss":
           this.push({ text: "Ma manca il bersaglio! La piazza fischia." });
@@ -721,6 +721,9 @@ export class PvpBattleScene implements Scene {
     const ctx = screen.ctx, shake = this.fx.shakeOffset(), g = battleGeometry(screen.height);
     ctx.save(); ctx.translate(shake.x, shake.y); this.fx.applyPunch(ctx, screen.height);
     screen.clear("#f0f0e0"); drawBattleBackdrop(screen, this.backdrop, screen.height, 0);
+    // Fase 6: the same far scenery and audience as the computer fight; the duel has no Polemica bar, so the phones are never raised here.
+    drawFarLayer(screen, this.backdrop, this.fx.time, this.fx.reduceEffects, Math.max(0, g.foeBase - g.size - 44));
+    drawAudience(screen, audienceReaction(Math.max(0, this.mine.active.mon.hp) / statsOf(this.mine.active.mon).hp, Math.max(0, this.theirs.active.mon.hp) / statsOf(this.theirs.active.mon).hp, 0), this.fx.time, this.fx.reduceEffects, Math.max(0, g.foeBase - g.size - 20));
     const slide = this.fx.reduceEffects ? 1 : Math.max(0, Math.min(1, (this.introT - .25) / .6));
     const foeSlide = Math.round((1 - slide) * 90), playerSlide = Math.round((1 - slide) * -90);
     drawEllipse(screen, 162 + foeSlide, g.foeBase - 2, Math.round(64 * battleFit(screen.height)), Math.max(5, Math.round(14 * battleFit(screen.height))), this.backdrop.foePlatform);
@@ -736,6 +739,6 @@ export class PvpBattleScene implements Scene {
     if (this.fx.koFlash > 0 && !this.fx.reduceEffects) {
       ctx.save(); ctx.fillStyle = `rgba(255, 255, 255, ${0.6 * this.fx.koFlash / .5})`; ctx.fillRect(0, 0, VIEW_W, screen.height); ctx.restore();
     }
-    this.fx.drawMoveFx(screen); this.fx.drawRings(screen); this.fx.drawParticles(screen); this.fx.drawTint(screen); ctx.restore();
+    this.fx.drawMoveFx(screen); this.fx.drawGag(screen); this.fx.drawRings(screen); this.fx.drawParticles(screen); this.fx.drawTint(screen); ctx.restore();
   }
 }

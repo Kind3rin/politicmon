@@ -1,5 +1,14 @@
 # Changelog
 
+## Mandato 2 — arte della Fase 6: pubblico, fondali e gag — 2026-10-08
+
+- **Pubblico che reagisce** (`src/game/battle/view.ts`, `audienceReaction`): una fila di spettatori dietro la lotta, in quattro reazioni (neutrale, applausi, fischi, telefoni alzati). Applaude chi è avanti di un quarto di PV, fischia chi è indietro, alza i telefoni quando la barra Polemica è piena. Nella lotta in rete non ci sono telefoni, perché il duello non ha la Polemica. Tre sfondi di folla: sprite in `public/sprites/battle/crowd_*.png`.
+- **Fondali a strati**: un profilo lontano per famiglia di sfondo (colline, skyline, mare, grotta), dietro il pubblico. Si muove di un pixel contro i due del pubblico, e il suo bordo basso resta nascosto dietro gli spettatori. Non è una parallasse di telecamera: lo sfondo di ogni lotta è ancora un'immagine unica.
+- **Gag delle mosse satiriche**: Piazza aperta (microfono), Tweet al vetriolo (smartphone con il fumetto), Decreto legge (pergamena). Quando la mossa viene usata, l'icona vola dall'attaccante verso l'altro lato e svanisce. Con «Riduci effetti» non parte.
+- **Crediti**: tre fogli a 1,5 crediti, 4,5 in tutto; saldo 279,22 → 274,72.
+- **Verifica**: quattro test nuovi (reazioni, mappa dei gag, avvio, effetti ridotti) e test di battaglia aggiornati; 607 test unitari, `tsc --noEmit`, `npm run build` e `check-precache-build` (1057 risorse) verdi. `check-ui-runtime`, `check-ui-layout`, `check-text-scale`, `check-first-rival` e `check-ui-panels` verdi. Lotta di prova a 375×812 e 844×390 con pubblico e profilo lontano, senza errori in pagina. Il volo dei gag è verificato su una pagina di prova con lo stesso codice di disegno.
+- **Non fatto**: animazione per mossa oltre i tre gag (6.3), KO, vittoria, recluta ed evoluzione con arte propria (6.5), audio (6.6), sprite a doppia grandezza (6.1), parallasse vera con la telecamera.
+
 ## Mandato 2 — edifici di Borgo e Mediopoli — 2026-10-08
 
 - **Sei facciate nuove** (Higgsfield, due fogli 3×2 a 1,5 crediti ciascuno, saldo 282,22 → 279,22): lo studio TV di Mediopoli con antenna e parabola (prima aveva la palestra con la corona d'alloro, condivisa con Eurotown), il laboratorio di Borgo largo a due piani con due manometri, la casa tua con la fioriera, la redazione con il tetto verde e il giornale d'oro, il circolo con la tenda bordeaux e il libro, l'attico con il balcone senape. Impronte, porte e warp restano quelli di prima.

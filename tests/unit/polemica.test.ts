@@ -14,7 +14,7 @@ import { CivicScene } from "../../src/scenes/CivicScene.ts";
 import { CIVIC_EVENTS } from "../../src/data/civicEvents.ts";
 
 function nativeActions(b:any) {
-  b.msg ??= new MessageBox(); b.polemica ??= new Polemica(); b.fx ??= {damageNumbers:[],effFx:null};
+  b.msg ??= new MessageBox(); b.polemica ??= new Polemica(); b.fx ??= {damageNumbers:[],effFx:null,playGag(){}};
   b.state ??= newGameState(); b.state.party ??= b.player?[b.player.mon]:[]; b.state.bag ??= {};
   b.player ??= makeCombatant(createMonster("ellyna",5)); b.foe ??= makeCombatant(createMonster("giorgetta",4));
   b.displayHp ??= {player:b.player.mon.hp,foe:b.foe.mon.hp};
@@ -150,7 +150,7 @@ test("KO growth has one skippable receipt with real bonuses and preserves bench 
   lead.exp=expForLevel(8)-1;bench.exp=expForLevel(7)-1;dead.hp=0;foe.hp=0;
   state.party=[lead,bench,dead];state.bag.divisa=1;state.sondaggi=80;state.morale.cohesion=80;state.boostExpBattles=2;
   state.ministri={istruzione:lead.uid,economia:lead.uid,salute:lead.uid};
-  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),trainer:{id:"rival1"},queue:[],mode:"queue",input:{reset(){}},fx:{}});b.stack={top:b};
+  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),trainer:{id:"rival1"},queue:[],mode:"queue",input:{reset(){}},fx:{playGag(){}}});b.stack={top:b};
   const choices:string[]=[];let nextFoe=0;
   b.afterFoeDown=()=>nextFoe++;
   b.learnMoveSteps=(id:string,mon=lead)=>[{run:()=>{assert.equal(b.growthReceipt,null);choices.push(`${mon.speciesId}:${id}`);}}];
@@ -413,6 +413,7 @@ test("the live move pipeline rewards changed stages, but not immunity or a cappe
   battle.player = makeCombatant(createMonster("ellyna", 5));
   battle.foe = makeCombatant(createMonster("giorgetta", 5));
   battle.polemica = new Polemica();
+  battle.fx = { playGag() {} };
   battle.koCheckSteps = () => [];
   const apply = (move: typeof MOVES.ztl) => {
     for (const step of battle.moveSteps("player", battle.player, battle.foe, move, "ELLYNA", true)) step.run?.();
@@ -436,7 +437,7 @@ test("impact keeps critical and self-type satire together, reports actual PV, an
   b.player = makeCombatant(createMonster("ellyna", 20)); b.foe = makeCombatant(createMonster("ellyna", 20));
   b.foe.mon.hp = 1; b.announcedOffensive = new Set(); b.polemica = new Polemica(); b.koCheckSteps = () => [];
   let visibleDamage = -1;
-  b.fx = { onHit(_side: string, _mult: number, _crit: boolean, damage: number) { visibleDamage = damage; } };
+  b.fx = { playGag() {}, onHit(_side: string, _mult: number, _crit: boolean, damage: number) { visibleDamage = damage; } };
   const random = Math.random; Math.random = () => 0;
   try {
     const steps = b.moveSteps("player", b.player, b.foe, MOVES.corteo, "ELLYNA", true);
@@ -452,7 +453,7 @@ test("impact keeps critical and self-type satire together, reports actual PV, an
 
 test("a missed enemy announcement preserves PV, consumes one PP, and remains readable without a separate page", () => {
   const b = Object.create(BattleScene.prototype) as any;
-  b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 8)); b.fx = {};
+  b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 8)); b.fx = { playGag() {} };
   const hp = b.player.mon.hp, slot = b.foe.mon.moves.find((s: any) => MOVES[s.id].power > 0), pp = slot.pp;
   const random = Math.random; Math.random = () => .99;
   try {
@@ -654,7 +655,7 @@ test("copione shields real damage and its preview; successful setup removes it w
     // The scripted rival carries explicit moves (tutorialRivalMoves), never the learnset pick.
     b.foe.mon.moves = [{ id: "comizio", pp: MOVES.comizio.pp }, { id: "slogan", pp: MOVES.slogan.pp }];
     b.state = { sondaggi: 50, reduceEffects: true }; b.copione = shield; b.battery = 2; b.foe.stages.atk = shield ? 2 : 0;
-    b.polemica = new Polemica(); b.koCheckSteps = () => []; b.pushFront = () => {}; b.fx = { onHit() {} };
+    b.polemica = new Polemica(); b.koCheckSteps = () => []; b.pushFront = () => {}; b.fx = { onHit() {}, playGag() {} };
     return b;
   };
   const apply = (b: any, move: typeof MOVES.comizio) => {
@@ -683,7 +684,7 @@ test("failed and capped preparations cannot break the script; battery lasts two 
   const b = Object.create(BattleScene.prototype) as any;
   b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("tajanide", 9));
   b.state = { reduceEffects: true }; b.copione = true; b.battery = 2; b.foe.stages.atk = 2;
-  b.polemica = new Polemica(); b.koCheckSteps = () => []; const messages: string[] = [];
+  b.polemica = new Polemica(); b.fx = { playGag() {} }; b.koCheckSteps = () => []; const messages: string[] = [];
   b.pushFront = (steps: any[]) => messages.push(...steps.flatMap(s => s.text ? [s.text] : []));
   const apply = () => { for (const s of b.moveSteps("player", b.player, b.foe, MOVES.ztl, "ELLYNA", true)) s.run?.(); };
   apply(); assert.equal(b.battery, 2); assert.doesNotMatch(b.moveHint(MOVES.ztl), /ROMPE/);

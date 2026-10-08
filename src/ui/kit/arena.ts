@@ -21,7 +21,7 @@ export interface UiArena {
   moveCount:number;
   /** Posture toggles that follow the moves in actions[]. */
   postureCount?:number;
-  impacts?:readonly {label:string;x:number;y:number;opacity:number;kind:"normal"|"super"|"crit"}[];
+  impacts?:readonly {label:string;x:number;y:number;opacity:number;kind:"normal"|"super"|"crit"|"weak"|"tag-super"|"tag-weak"}[];
 }
 let owner:HTMLElement|undefined;
 let controlSignature='';

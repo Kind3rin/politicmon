@@ -93,3 +93,10 @@ Si nota subito: la spiegazione sta nella scatola a 375 px con il ritratto; il ca
 Ancora non convince: «Metti in testa» resta nella scheda Valori. Provata la scheda Mosse: a 844×390 in orizzontale la pagina non entra e `check-ui-panels` lo segnala. La copertura della strada dal cartello non è misurata in pixel, solo verificata a occhio nello screenshot.
 Prove: `check-first-rival` (nuovo), `check-world-controls`, `check-hud-clear`, `check-coach`, `check-first-minutes`, `check-ui-runtime`, `check-ui-flows`, `check-ui-panels` (28 schermate × 4); 599 test unitari; `tsc --noEmit` pulito.
 Crediti Higgsfield: nessun consumo, saldo 282,22.
+
+## Spettacolo di lotta — 8 ottobre 2026
+Prima/dopo: prima l'efficacia era solo nella didascalia e i numeri uscivano scuri (regola del titolo del kit). Ora «POCO EFFICACE» sta sopra un numero grigio, in una piastrina scura (artifacts/m2/spectacle-weak-375.png); i numeri tornano crema.
+Si nota subito: la piastrina si legge sopra lo sprite a 375 px; l'etichetta compare e sparisce in circa 0,7 s.
+Ancora non convince: la caduta inclinata del KO e il rallentatore sull'ultimo allenatore li ho verificati nel codice e nei test, non a tocchi in gioco. Il colpo non anticipa ancora l'attacco: la forma del colpo arriva dopo il lampo e il numero. La parte d'arte della Fase 6 (fondali a strati, pubblico) non è iniziata.
+Prove: `battleAnimationContract` (quattro test nuovi), 603 test unitari, `tsc --noEmit`, `check-ui-runtime`, `check-ui-layout`, `check-text-scale`, `check-first-rival`, `check-ui-panels`; lotta di prova a 375×812 senza errori in pagina.
+Crediti Higgsfield: nessun consumo, saldo 282,22.

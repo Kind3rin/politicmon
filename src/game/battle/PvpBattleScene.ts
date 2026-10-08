@@ -33,7 +33,7 @@ import {
 import { mp } from "../../net/mp";
 import { MessageBox } from "../../ui/widgets";
 import {
-  approach, BattleFx, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry, battleFit
+  approach, BattleFx, damageImpacts, drawBattleBackdrop, drawBattleMonster, drawEllipse, battleGeometry, battleFit
 } from "./view";
 import type { UiPanel } from "../../ui/kit";
 import type { TouchAction } from "../../engine/touchActions";
@@ -362,7 +362,7 @@ export class PvpBattleScene implements Scene {
               const before = this.view[ev.side].active.mon.hp;
               apply();
               const dealt = Math.max(0, before - this.view[ev.side].active.mon.hp);
-              this.fx.onHit(this.sideKey(attacker), ev.typeMult, ev.crit, dealt, moveType);
+              this.fx.onHit(this.sideKey(attacker), ev.typeMult, ev.crit, dealt, moveType, dealt / Math.max(1, statsOf(this.view[ev.side].active.mon).hp));
             },
             waitHp: true,
             pause: 0.25
@@ -433,6 +433,8 @@ export class PvpBattleScene implements Scene {
             run: () => {
               apply();
               audio.faint();
+              this.fx.hitStop = Math.max(this.fx.hitStop, .25);
+              this.fx.koFlash = .5;
               this.fx.faintT[ev.side === this.mySide ? "player" : "foe"] = 0.55;
             },
             waitHp: true
@@ -519,7 +521,7 @@ export class PvpBattleScene implements Scene {
       this.msg.update(dt, this.input, this.viewHeight);
       return;
     }
-    this.fx.update(dt);
+    this.fx.update(dt, this.fx.hitStop > 0);
     if (this.fx.hitStop > 0) {
       this.fx.hitStop = Math.max(0, this.fx.hitStop - dt);
       return;
@@ -709,8 +711,7 @@ export class PvpBattleScene implements Scene {
           ? `In attesa dell’avversario. Tempo rimasto: ${Math.max(0, Math.ceil(this.waitTimer))} secondi.`
           : ready ? "Scegli una mossa. Le scelte sono simultanee; tieni premuta una scheda per leggere il dettaglio." : "Il turno è in corso." },
       moveCount: moves.length,
-      impacts: this.fx.damageNumbers.map(d => ({ label: `−${d.val}`, x: d.x / VIEW_W * 100, y: d.y / this.viewHeight * 100,
-        opacity: this.opts.state.reduceEffects ? 1 : Math.min(1, Math.max(0, (1 - d.life / d.max) / .34)), kind: d.crit ? "crit" : d.super ? "super" : "normal" }))
+      impacts: damageImpacts(this.fx.damageNumbers, this.viewHeight, this.opts.state.reduceEffects)
     } };
   }
 
@@ -730,6 +731,10 @@ export class PvpBattleScene implements Scene {
       if ((c.mon.hp > 0 || this.fx.faintT[side] > 0) && !blink)
         drawBattleMonster(screen, this.fx, c, side === "foe" ? 162 + foeSlide : 56 + playerSlide,
           side === "foe" ? g.foeBase : g.playerBase, this.fx.lungeT[side], side === "player", side);
+    }
+    // The same white flash as a KO against the computer.
+    if (this.fx.koFlash > 0 && !this.fx.reduceEffects) {
+      ctx.save(); ctx.fillStyle = `rgba(255, 255, 255, ${0.6 * this.fx.koFlash / .5})`; ctx.fillRect(0, 0, VIEW_W, screen.height); ctx.restore();
     }
     this.fx.drawMoveFx(screen); this.fx.drawRings(screen); this.fx.drawParticles(screen); this.fx.drawTint(screen); ctx.restore();
   }

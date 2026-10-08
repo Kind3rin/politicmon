@@ -1,5 +1,14 @@
 # Changelog
 
+## Mandato 2 — spettacolo di lotta — 2026-10-08
+
+- **Efficacia sul campo** (`src/game/battle/view.ts`, `damageImpacts`): un colpo super efficace o poco efficace scrive sopra il numero «Super efficace» o «Poco efficace» in una piastrina scura, e il numero dei colpi deboli è grigio. Prima l'efficacia compariva solo nella didascalia in basso.
+- **Regia del colpo**: la pausa di colpo tiene ferme la posa dell'attaccante e le etichette, mentre la scossa si assesta. La scossa cresce con la parte di PV tolta: un graffio trema poco, un colpo che toglie metà barra quanto prima. I numeri fanno un piccolo rimbalzo quando compaiono.
+- **KO**: il mostro che cade si inclina verso il suo lato mentre affonda. L'ultimo KO di un allenatore rallenta per un attimo (`BattleFx.slowT`). Nella lotta in rete il KO ha ora la stessa pausa e lo stesso lampo bianco di quella con il computer.
+- **Correzione**: numeri di danno ed etichette dell'arena uscivano in inchiostro scuro, perché la regola del titolo del kit (`.ui-panel .ui-title`) li coloriva. Ora la regola ha specificità più alta: numeri crema, oro sul super, grigio sul debole (`src/ui/kit/battle.css`).
+- **Non fatto**: il colpo che anticipa l'attacco (lo scatto parte 0,3 s prima della forma), le animazioni per mossa (6.3), i fondali a strati e il pubblico (6.4, arte: rimandata), gli sprite a doppia grandezza (6.1), i ritmi di KO e vittoria differenziati (6.5).
+- **Verifica**: `check-ui-runtime`, `check-ui-layout`, `check-text-scale`, `check-first-rival` e `check-ui-panels` verdi; 603 test unitari e `tsc --noEmit` puliti, con quattro test nuovi su etichette, scossa e pausa di colpo. Lotta di prova a 375×812 giocata a tocchi: compaiono «Poco efficace» e «Super efficace», nessun errore in pagina. Screenshot in `artifacts/m2/spectacle-weak-375.png`.
+
 ## Mandato 2 — primi minuti: Gianni spiega il copione — 2026-10-08
 
 - **Gianni spiega il copione prima del primo duello** (`src/game/world/WorldScene.ts`): la prima volta che gli si parla, due pagine dicono che il copione dimezza i tuoi colpi finché dura, e che una mossa senza danni che cambia qualcosa lo rompe (il suo attacco cala di tre). Poi il duello parte come prima. Una rivincita dopo una sconfitta va diretta al duello (flag `rival1-briefed`).

@@ -63,6 +63,33 @@ export interface DamageNumber {
   max: number;
   crit: boolean;
   super: boolean;
+  /** Not very effective: the number is grey and a short label says why. */
+  weak: boolean;
+  /** "Super efficace" or "Poco efficace", drawn above the number. */
+  tag?: string;
+}
+
+/** One label of the arena's impact layer: the number of a hit, or the efficacy label above it. */
+export interface DamageImpact {
+  label: string;
+  x: number;
+  y: number;
+  opacity: number;
+  kind: "normal" | "super" | "crit" | "weak" | "tag-super" | "tag-weak";
+}
+
+/** The floating numbers as the arena draws them. On reduced effects the numbers stay still; the labels stay with them. */
+export function damageImpacts(numbers: readonly DamageNumber[], viewHeight: number, reduceEffects: boolean): DamageImpact[] {
+  return numbers.flatMap((d): DamageImpact[] => {
+    // A small pop: the number rises a little above its place and settles back within about a third of a second.
+    const p = Math.min(1, d.life / .3);
+    const pop = reduceEffects ? 0 : Math.sin(p * Math.PI * 1.5) * (1 - p) * 5;
+    const opacity = reduceEffects ? 1 : Math.min(1, Math.max(0, (1 - d.life / d.max) / .34));
+    const x = d.x / VIEW_W * 100, y = (d.y - pop) / viewHeight * 100;
+    const out: DamageImpact[] = [{ label: `−${d.val}`, x, y, opacity, kind: d.crit ? "crit" : d.super ? "super" : d.weak ? "weak" : "normal" }];
+    if (d.tag) out.push({ label: d.tag, x, y: (d.y - pop - 20) / viewHeight * 100, opacity, kind: d.super ? "tag-super" : "tag-weak" });
+    return out;
+  });
 }
 
 // Centro approssimativo dello sprite di un combattente (per le particelle).
@@ -115,6 +142,8 @@ export class BattleFx {
   knockback: Record<BattleSide, number> = { player: 0, foe: 0 };
   faintT: Record<BattleSide, number> = { player: 0, foe: 0 };
   hitStop = 0;
+  /** Seconds of slow motion left (the last trainer down): the scene scales its clock by it. */
+  slowT = 0;
   levelFlash = 0;
   catchFlash = 0;
   // KO: freeze-frame + lampo bianco prima che lo sprite svanisca. La scena
@@ -131,13 +160,15 @@ export class BattleFx {
   /** 0..1, decays quickly: the frame leans in on a super effective or critical hit. */
   punch = 0;
 
-  update(dt: number): void {
+  /** `held` is the hit-stop: the shake settles, and the rest of the frame stays where the blow left it. */
+  update(dt: number, held = false): void {
     this.time += dt;
+    this.shake = Math.max(0, this.shake - dt);
+    if (held) return;
     if (this.moveFx) {
       this.moveFx.t -= dt;
       if (this.moveFx.t <= 0) this.moveFx = null;
     }
-    this.shake = Math.max(0, this.shake - dt);
     this.lungeT.player = Math.max(0, this.lungeT.player - dt);
     this.lungeT.foe = Math.max(0, this.lungeT.foe - dt);
     this.flashT.player = Math.max(0, this.flashT.player - dt);
@@ -173,13 +204,15 @@ export class BattleFx {
   // Effetti del colpo andato a segno: shake/hit-stop/knockback/scintille/banner
   // d'efficacia + suono. `attacker` è chi ha colpito. `damage` è puramente
   // cosmetico (il numero flottante): NON entra in alcuna logica.
-  onHit(attacker: BattleSide, typeMult: number, crit: boolean, damage = 0, moveType?: PolType): void {
+  onHit(attacker: BattleSide, typeMult: number, crit: boolean, damage = 0, moveType?: PolType, hpShare = 0): void {
     const defSide: BattleSide = attacker === "player" ? "foe" : "player";
     this.lungeT[attacker] = this.reduceEffects ? 0 : 0.3;
     this.flashT[defSide] = this.reduceEffects ? 0 : 0.45;
     const superHit = typeMult > 1;
     // Lo shake e il contraccolpo scalano col "peso" del colpo.
-    this.shake = superHit || crit ? 0.42 : attacker === "foe" ? 0.22 : 0.16;
+    // A chip of a few HP barely shakes; a hit that takes away most of the bar shakes at the old full strength.
+    const weight = Math.min(1, Math.max(0, hpShare));
+    this.shake = superHit || crit ? 0.3 + 0.13 * weight : (attacker === "foe" ? 0.12 : 0.1) + 0.1 * weight;
     this.hitStop = this.reduceEffects ? 0 : superHit || crit ? 0.09 : 0.05;
     this.knockback[defSide] = this.reduceEffects ? 0 : superHit ? 1 : 0.55;
     if (!this.reduceEffects) {
@@ -195,7 +228,7 @@ export class BattleFx {
       } else this.punch = Math.max(this.punch, .3);
     }
     if (damage > 0) {
-      this.spawnDamageNumber(defSide, damage, typeMult > 1, crit);
+      this.spawnDamageNumber(defSide, damage, typeMult > 1, crit, typeMult > 0 && typeMult < 1);
     }
     if (superHit) {
       this.effFx = { kind: "super", t: 0.9 };
@@ -424,7 +457,7 @@ export class BattleFx {
   }
 
   // Numero di danno flottante: parte dal punto colpito, sale, svanisce.
-  spawnDamageNumber(defSide: BattleSide, damage: number, superHit: boolean, crit: boolean): void {
+  spawnDamageNumber(defSide: BattleSide, damage: number, superHit: boolean, crit: boolean, weak = false): void {
     const c = monsterCenter(defSide, this.viewHeight);
     this.damageNumbers.push({
       x: c.x + (Math.random() - 0.5) * 10,
@@ -433,7 +466,9 @@ export class BattleFx {
       life: 0,
       max: crit || superHit ? 1.0 : 0.85,
       crit,
-      super: superHit
+      super: superHit,
+      weak,
+      tag: superHit ? "Super efficace" : weak ? "Poco efficace" : undefined
     });
     // Tetto di sicurezza: non accumulare mai troppi numeri (perf mobile).
     if (this.damageNumbers.length > 6) {
@@ -573,6 +608,12 @@ export function drawBattleMonster(
   let y: number;
   screen.ctx.save();
   if (faintProgress > 0) screen.ctx.globalAlpha = Math.max(0.08, 1 - faintProgress);
+  // The fainted monster tips toward its own side as it sinks, its feet kept on the ground.
+  if (faintProgress > 0 && !fx.reduceEffects) {
+    screen.ctx.translate(cx, by);
+    screen.ctx.rotate(faintProgress * 0.36 * (who === "foe" ? 1 : -1));
+    screen.ctx.translate(-cx, -by);
+  }
   if (frames) {
     const frame=monsterPoseFrame(fx.time+(who==="foe"?1.3:0),lungeT,fx.reduceEffects);
     const bounds=battleFrameBounds(frames,frame);

@@ -1,11 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { existsSync } from "node:fs";
 import { MOVES } from "../../src/data/moves.ts";
 import type { Move } from "../../src/data/moves.ts";
 import { BattleScene } from "../../src/game/battle/BattleScene.ts";
 import { Polemica } from "../../src/game/battle/polemica.ts";
 import { makeCombatant } from "../../src/game/battle/sim.ts";
-import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken } from "../../src/game/battle/posture.ts";
+import { POSTURES, foePostureFor, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken } from "../../src/game/battle/posture.ts";
 import { createMonster } from "../../src/game/monster.ts";
 import { sharedTypes } from "../../src/game/battle/handoff.ts";
 import { newGameState } from "../../src/game/state.ts";
@@ -120,4 +121,36 @@ test("the opponent's declared posture works the same way against the player", ()
     effect: { status: { id: "scandalo", chance: 100, target: "foe" } } };
   assert.equal(fight("none", "player", smear).status, "scandalo");
   assert.equal(fight("none", "player", smear, "smentisci").status, null, "the foe's denial blocks the player's status");
+});
+
+test("a trainer answers your Attacca with Smentisci, unless it is low on HP, and otherwise keeps its own style", () => {
+  const healthy = { hp: .8, intentAttacks: true, lastPlayer: "attacca" as const };
+  assert.equal(foePostureFor({ ...healthy, style: "fortress" }), "smentisci", "any style answers an Attacca");
+  assert.equal(foePostureFor({ ...healthy, style: "rush" }), "smentisci", "the answer beats the rush's own Attacca");
+  assert.equal(foePostureFor({ hp: .3, style: "pressure", intentAttacks: true, lastPlayer: "attacca" }), "none", "low HP: no answer, no pressure");
+  assert.equal(foePostureFor({ hp: .3, style: "fortress", intentAttacks: true, lastPlayer: "none" }), "smentisci", "low HP keeps the defensive habit");
+  assert.equal(foePostureFor({ hp: .8, style: "pressure", intentAttacks: true, lastPlayer: "smentisci" }), "attacca", "no answer to Smentisci: own style");
+  assert.equal(foePostureFor({ hp: .8, style: "setup", intentAttacks: false, lastPlayer: "tempo" }), "tempo", "setup stalls on a status intent");
+  assert.equal(foePostureFor({ hp: .8, style: "setup", intentAttacks: true, lastPlayer: "none" }), "none");
+});
+
+test("the battle scene asks the rule with the posture you used last turn; rivals stay out of it", () => {
+  const b: any = Object.create(BattleScene.prototype);
+  const attack = Object.values(MOVES).find((m: Move) => m.power > 0)!;
+  Object.assign(b, { trainer: { id: "tycoon" }, ai: { style: "pressure" }, foe: makeCombatant(createMonster("mediocrate", 20)), lastPlayerPosture: "attacca" });
+  assert.equal(b.pickFoePosture(attack), "smentisci");
+  assert.equal(b.foeReadsAttacca, true, "the banner says it saw your Attacca");
+  b.lastPlayerPosture = "none";
+  assert.equal(b.pickFoePosture(attack), "attacca", "without the habit the pressure style attacks");
+  Object.assign(b, { trainer: { id: "rival1" }, lastPlayerPosture: "attacca" });
+  assert.equal(b.pickFoePosture(attack), "none", "the first rival declares no posture");
+});
+
+test("every posture has its own icon, and the file is in the build", () => {
+  const icons = Object.values(POSTURES).map(info => info.icon);
+  assert.equal(new Set(icons).size, 3, "three different icons");
+  for (const icon of icons) {
+    assert.match(icon, /^\/sprites\/ui\/posture\/[a-z]+\.png$/);
+    assert.ok(existsSync(new URL(`../../public${icon}`, import.meta.url)), `${icon} exists under public/`);
+  }
 });

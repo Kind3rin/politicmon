@@ -78,3 +78,11 @@ Prove: 2 test sui ritratti (file, dimensioni, ordine di ripiego), check-first-mi
 ## Campagna automatica — 5 ottobre 2026
 `playtest:campaign:native` falliva subito («New game did not open actual slot selector»). Adattato all'avvio nuovo (slot libero preso da solo, nickname facoltativo, i due flag di onboarding, import lento del mondo, carte del laboratorio per il primo compagno, tasti delle schede native passati dal kit). Ora il giro arriva fino al primo boss in palestra (debutto, Mediopoli, cura) e si ferma lì: la parte di lotta e le scene di acquisto/coalizione/distretto pilotano ancora i menu a tavolo (`mainMenu`, `view.menu`) che nell'interfaccia nativa non esistono più. Da riscrivere pilotando le azioni dei pannelli (`uiPanel.actions[i].run()`), non i tasti.
 
+
+## Posture — l'allenatore legge il tuo Attacca — 8 ottobre 2026
+Prima/dopo: prima l'allenatore sceglieva la postura solo dal suo stile e dai PV, e la scheda dell'intenzione diceva «Attacca» senza altro. Ora risponde Smentisci a un tuo Attacca e lo scrive («Ha visto il tuo Attacca»); la scheda ha l'icona della postura su una piastrina crema. Prova: artifacts/m2/posture-intent-375.png.
+Si nota subito: a 375×812 la scheda con l'icona si legge; le carte restano a 79 px.
+Ancora non convince: l'effetto sulla difficoltà non si conosce (la simulazione non modella le posture); il nemico guarda solo l'ultimo turno; in gioco ho visto solo l'icona di Attacca, quelle di Smentisci e Temporeggia le ho controllate solo come file e come misura.
+Regressione trovata e corretta: l'icona messa sui pulsanti delle posture ha fatto andare a capo la riga (44 → 100 px) e restringere le carte (79 → 51 px). Tolta, riportata a 44 px e 79 px a 360×640; poi `check-ui-layout`, `check-ui-runtime`, `check-pwa-device` e `check-text-scale` verdi (suite4).
+Crediti Higgsfield: tre icone a 1,5 crediti con qualità alta (l'anteprima senza qualità diceva 0,25: il costo reale è 1,5, già nel documento degli asset). Saldo 286,72 → 282,22.
+Prove: `npm test` 598/598; `tsc --noEmit` pulito; `tests/unit/posture.test.ts` 10/10; suite4 quattro controlli verdi; dopo la piastrina `check-ui-runtime` e `check-text-scale` di nuovo verdi (suite5).

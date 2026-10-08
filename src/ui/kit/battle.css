@@ -77,6 +77,8 @@ body.ui-reduce-effects.ui-arena-open .ui-button:active{transform:none}
 .ui-arena-caption .ui-subtitle{white-space:normal}
 .ui-intent-posture{position:absolute;right:16%;top:56px;padding:2px 8px;background:#D7263D;color:#F4EEDC;font:700 16px/1.2 PoliticmonBody,sans-serif;border:2px solid #14161F;transform:rotate(-3deg);pointer-events:none}
 .ui-intent-posture[hidden]{display:none}
+/* The foe's posture emblem sits in its tag, outside the move grid: the buttons keep their size. */
+.ui-intent-posture-icon{width:22px;height:22px;box-sizing:border-box;margin-right:6px;padding:1px;background:#F4EEDC;border:2px solid #14161F;vertical-align:middle;image-rendering:pixelated}
 
 .ui-arena-trainer{position:absolute;right:10px;top:60px;z-index:2;width:92px;pointer-events:none;display:flex;flex-direction:column;align-items:center;animation:arena-trainer-in .28s ease-out}
 .ui-arena-trainer[hidden]{display:none}

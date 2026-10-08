@@ -6,7 +6,7 @@ import { kit, type UiPanel } from './index';
 export interface UiArenaCombatant { name:string; level:number; hp:number; maxHp:number; status?:string; form?:string; exp?:number }
 export interface UiArena {
   polemica?:number;
-  intent?:{label:string;kind:"attack"|"status";posture?:{label:string;rule:string}};
+  intent?:{label:string;kind:"attack"|"status";posture?:{label:string;rule:string;icon?:string}};
   finisher?:TouchAction;
   /** Pace toggle kept at hand in the caption strip: x1 / x2. */
   speed?:TouchAction;
@@ -96,7 +96,9 @@ export function renderArena(root:HTMLElement,panel:UiPanel,selected:number):void
   intent.setAttribute('aria-label',`Intenzione: ${arena.intent?.label??''}${arena.intent?.posture?`, postura ${arena.intent.posture.label}`:''}`);intent.title=arena.intent?.label??'';
   let tag=root.querySelector<HTMLElement>('.ui-intent-posture');
   if(!tag){tag=node('span','ui-intent-posture');tag.setAttribute('aria-hidden','true');root.querySelector('.ui-arena-view')!.append(tag);}
-  tag.hidden=!arena.intent?.posture;tag.textContent=arena.intent?.posture?.label??'';
+  const shown=arena.intent?.posture;tag.hidden=!shown;tag.replaceChildren();
+  if(shown?.icon){const icon=document.createElement('img');icon.className='ui-intent-posture-icon';icon.src=shown.icon;icon.alt='';tag.append(icon);}
+  tag.append(shown?.label??'');
   const notice=root.querySelector<HTMLElement>('.ui-arena-notice')!;notice.hidden=true;notice.textContent='';
   const layer=root.querySelector<HTMLElement>('.ui-arena-impacts')!;
   const impacts=arena.impacts??[];

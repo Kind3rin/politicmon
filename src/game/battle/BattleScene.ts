@@ -45,7 +45,7 @@ import { BattleIntelScene } from "../../scenes/BattleIntelScene";
 import { trainerAi, trainerStyle } from "./trainerStyle";
 import { switchPreview, damageRange, replyRange } from "./tactics";
 import { HANDOFF_STAGES, handoffKey, sharedTypes } from "./handoff";
-import { POSTURES, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
+import { POSTURES, foePostureFor, postureBlocksStatus, postureDamage, postureDealt, postureKeepsPP, posturePolemica, postureTaken, type Posture } from "./posture";
 import { isGuideOn } from "../../engine/controls";
 import { currentSlot, palinsestoOpen, typesOnAir } from "../palinsesto";
 import { typeMultiplier } from "../../data/poltypes";
@@ -131,6 +131,10 @@ export class BattleScene implements Scene {
   private handoffs?: Set<string>;
   private posture: Posture = "none";
   private turnPosture: Posture = "none";
+  /** The posture you used last turn: the trainer reads it when it declares its own (pickFoePosture). */
+  private lastPlayerPosture: Posture = "none";
+  /** True when the trainer declared its posture as an answer to your Attacca; the intent banner says so. */
+  private foeReadsAttacca = false;
   /** The opponent's declared posture for the coming turn, shown beside its intent. */
   private foePosture: Posture = "none";
   private turnFoePosture: Posture = "none";
@@ -367,6 +371,7 @@ export class BattleScene implements Scene {
 
   private startTurn(playerMove: Move): void {
     this.turnPosture = playerMove.id === FUORIONDA.id ? "none" : this.posture;
+    this.lastPlayerPosture = this.turnPosture;
     this.posture = "none";
     if (posturePolemica(this.turnPosture) && this.polemica.value < 3) this.polemica.value += 1;
     this.advanceField();
@@ -517,12 +522,12 @@ export class BattleScene implements Scene {
   }
 
   private pickFoePosture(intent: Move): Posture {
+    this.foeReadsAttacca = false;
     if (!this.trainer || ["rival1", "stagista"].includes(this.trainer.id)) return "none";
-    const hp = this.foe.mon.hp / statsOf(this.foe.mon).hp, style = this.ai.style ?? "balanced";
-    if (hp <= 0.4 && ["fortress", "control", "balanced"].includes(style)) return "smentisci";
-    if (["pressure", "rush"].includes(style) && hp > 0.5 && intent.power > 0) return "attacca";
-    if (style === "setup" && intent.power === 0) return "tempo";
-    return "none";
+    const hp = this.foe.mon.hp / statsOf(this.foe.mon).hp;
+    const posture = foePostureFor({ hp, style: this.ai.style ?? "balanced", intentAttacks: intent.power > 0, lastPlayer: this.lastPlayerPosture });
+    this.foeReadsAttacca = posture === "smentisci" && this.lastPlayerPosture === "attacca" && hp > 0.4;
+    return posture;
   }
 
   private takeFoeIntent(): Move {
@@ -1576,7 +1581,7 @@ export class BattleScene implements Scene {
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
       message:{title,body},notice,speed:{label:this.state.battleSpeed===2?"×2":"×1",hint:this.state.battleSpeed===2?"Ritmo rapido: tocca per tornare al normale.":"Ritmo normale: tocca per velocizzare le lotte.",run:()=>{this.state.battleSpeed=this.state.battleSpeed===2?1:2;audio.cursor();saveGame(this.state);}},trainer:this.trainer&&this.msg.isOpen?{name:readableCopy(this.trainer.name),portrait:trainerPortrait(this.trainer.id,this.trainer.pal)}:undefined,moveCount:moves.length,postureCount:postures.length,
-      polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status",posture:this.foePosture!=="none"?{label:POSTURES[this.foePosture].label,rule:POSTURES[this.foePosture].rule}:undefined}:undefined,
+      polemica:this.polemica.value,intent:intent?{label:readableCopy(intent.name),kind:intent.power?"attack":"status",posture:this.foePosture!=="none"?{label:POSTURES[this.foePosture].label,icon:POSTURES[this.foePosture].icon,rule:this.foeReadsAttacca?`${POSTURES[this.foePosture].rule} Ha visto il tuo Attacca.`:POSTURES[this.foePosture].rule}:undefined}:undefined,
       finisher:ready&&this.polemica.value>=3?action("Fuorionda",()=>this.useFuorionda()):undefined,
       coach:ready&&this.coach&&this.posture==="none"?{title:this.coach.title,body:this.coach.body,dismiss:()=>this.retireCoach()}:undefined
     }};

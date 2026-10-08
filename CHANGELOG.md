@@ -1,5 +1,13 @@
 # Changelog
 
+## Mandato 2 — l'allenatore legge la tua mossa — 2026-10-08
+
+- **L'allenatore risponde al tuo Attacca** (`src/game/battle/posture.ts`, `BattleScene.ts`): se nel turno precedente hai usato Attacca e il suo PV è sopra il 40%, dichiara Smentisci (infligge l'80% e subisce il 55% dei danni, blocca gli stati) e la scheda dell'intenzione dice «Ha visto il tuo Attacca». Con qualsiasi stile, quindi anche quelli offensivi. Sotto il 40% i tipi fortezza, controllo ed equilibrato si difendono con Smentisci; con stile pressione o rapido, sopra la metà dei PV e una mossa offensiva, attaccano; con stile preparazione e una mossa non offensiva scelgono Temporeggia. Rivali e Stagista restano fuori. Regola pura in `foePostureFor`, con test in `tests/unit/posture.test.ts`.
+- **Icone delle posture** (`public/sprites/ui/posture/`): tre immagini generate con Higgsfield (`gpt_image_2_5`, qualità alta, 1,5 crediti ciascuna; saldo 286,72 → 282,22), ripulite a 96×96 con `scripts/prepare-posture-icons.py`. Compaiono nella scheda dell'intenzione del nemico, su una piastrina crema con bordo scuro, non sui pulsanti: un'icona sui pulsanti portava la riga delle posture da 44 a 100 px e restringeva le carte da 79 a 51 px (lo hanno mostrato `check-ui-layout`, `check-ui-runtime`, `check-pwa-device` e `check-text-scale`, poi corretto). Senza piastrina il rosso sul rosso della scheda si leggeva a stento.
+- **Comandi a croce su touch**: la guida di benvenuto ricorda Menu → Opzioni → Tasti a chi usa la levetta e preferisce la croce.
+- **Verifica**: `check-pwa-device`, `check-text-scale`, `check-ui-layout` e `check-ui-runtime` verdi; dopo la piastrina `check-ui-runtime` e `check-text-scale` di nuovo verdi. 598 test unitari e `tsc --noEmit` verdi. Screenshot a 375×812 della lotta con Attacca in `artifacts/m2/posture-intent-375.png`.
+- **Limiti**: l'effetto sulla difficoltà non è misurato, perché la simulazione non modella le posture. Il nemico guarda solo l'ultimo turno, non la storia della lotta; chi ripete Attacca vede sempre Smentisci, da provare a mano.
+
 ## Mandato 2 — titoli in alto e player sempre leggibile — 2026-10-08
 
 - **Difetti confermati da misura** (audit su 63 agenti, ogni difetto verificato da tre controllori): il luogo su quattro righe copriva l'obiettivo a 375 px (4576 px² per circa 1,8 s); il «✓ Salvato» copriva la fine dell'obiettivo a testo 1,3 (circa 1,4 s); la notifica «Prima tessera · +2300€» perdeva la terza riga a testo 1,3, perché la clamp CSS non funzionava. I titoli dei pannelli non avevano nulla da correggere (112 schermate-titolo misurate).

@@ -335,3 +335,5 @@ Leggende, 6 ottobre 2026: un foglio 2×2 di cimeli (`relics-1`: Telecomando d'Or
 
 Colle dell'Antenna, 6 ottobre 2026: un foglio 3×2 di busti per i tre sfidanti (`trainers-i`: Ripetitorista, Radioamatore, Meteorologo dei sondaggi; 1,5 crediti, riferimenti npcs-9 e gli sprite guard, professor, journalist). Saldo 288,22 → 286,72.
 
+
+Icone delle posture, 8 ottobre 2026: tre icone pixel 96×96 per i pulsanti della lotta (Attacca, pugno con fulmine; Smentisci, palmo fermo entro un cerchio; Temporeggia, clessidra). Tre job `gpt_image_2_5` in qualità high, 1024×1024 su fondo navy, riferimento di stile la lotta e le icone della pausa. **Costo reale: 1,5 crediti a immagine** (il preflight con qualità di default dava 0,25: non è il prezzo della high). Saldo **286,72 → 282,22**. Ritaglio del fondo e scala 96 px con `scripts/prepare-posture-icons.py`; i file sono in `public/sprites/ui/posture/` e collegati in `POSTURES` (`src/game/battle/posture.ts`).

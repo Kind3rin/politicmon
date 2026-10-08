@@ -19,6 +19,7 @@ export function welcomeGuide(state:GameState):string[]{
  const quest=currentQuest(state);
  return [
   'Muoversi: Usa la levetta o la croce per camminare. Conferma parla o interagisce; Indietro chiude una pagina.',
+  ...(currentInputDevice()==='touch'?['Preferisci la croce alla levetta? Menu → Opzioni → Tasti.']:[]),
   'Polemica: Alterna mosse riuscite per caricarla. A tre punti puoi usare Fuorionda o tentare una cattura virale.',
   ...(quest?[`Prossima tappa: ${quest.title}.`,quest.step,quest.hint]:['Campagna completata: Consulta la mappa per le attività ancora disponibili.']),
   'Reclutare: Nell’erba, indebolisci il selvatico e usa una scheda elettorale dalla borsa. Se lo mandi KO, perdi l’occasione.',

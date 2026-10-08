@@ -1,5 +1,15 @@
 # Changelog
 
+## Mandato 2 — porte centrate: un tile solo, facciate a larghezza dispari — 2026-10-08
+
+- **Ogni porta è un tile solo, sulla linea centrale.** Le 29 facciate con porta (Borgo, Mediopoli, Eurotown, Capitale, Stretto, Offshore, Bruxelles, Campo largo, Futuro, Diplomazia) passano da 4, 6, 8 o 10 caselle a 3, 5, 7 o 9: la porta sta sulla colonna centrale. Le 49 coppie di tappeti interni diventano un tappeto solo, al centro della stanza (32 stanze allargate di una colonna quando il pavimento era pari).
+- **Logica** (`src/data/maps/doorCentring.ts`, collegata in `src/data/maps/index.ts`): le mappe restano scritte con la coppia di warp, il caricamento le centra. Così i generatori di case, bar e palestre non cambiano, e i warp che puntavano alla casella eliminata passano a quella tenuta.
+- **Il corpo non scivola più.** In `src/game/world/WorldScene.ts` è stata tolta la logica di spostamento laterale (`doorPairShift`, `doorShiftNow`, `doorArrival`). I tappeti `c` che non sono porte (zerbini e tappeti del Palazzo, della Colle, di Commissione) non si fermano più per un passo.
+- **Grafica** (`public/sprites/tiles/`): 21 facciate nuove: sei a 3×3 (lab, tre case, studio della campagna) e quindici su fogli 2×2 (bar, bar costiero, cafe di Bruxelles, circolo, appartamento, studio, bistro, chiosco, palestra, casinò, studio di Mediopoli, sede futura, hotel della diplomazia, palazzi). Registrate in `src/art/tiles.ts` e negli override di Mediopoli, Campo largo, Futuro, Diplomazia, Offshore, Bruxelles. Manifesto `scripts/higgsfield-door-facades.json`, lavorato da `scripts/prepare-world-assets.py` con `--manifest` e l'opzione `allowEdgeTouch`.
+- **Crediti**: sette fogli a 1,5 crediti, 10,5 in tutto; saldo 273,22 → 262,72.
+- **Verifica**: 613 test unitari (quattro nuovi su `doorCentring`, aggiornati quelli su luoghi, palazzo e sprite di avvio); `tsc --noEmit`, `npm run build`, `check-precache-build` (1082 risorse). Controlli browser verdi: `check-building-door-alignment`, `check-door-entry` (riscritto: 28 porte dentro e fuori, 64 tappeti), `check-door-warps`, `check-map-consistency`, `check-placement`, `check-map-exit`, `check-world-layout`, `check-sprite-bounds`, `check-interactables`, `check-roamers`, `check-powers`, `check-coach`, `check-campo`, `check-bruxelles`, `check-offshore`, `check-future`, `check-diplomacy`, `check-first-campaign`, `check-first-minutes`, `check-legends`, `check-palinsesto`, `check-items`, `check-first-rival`, `check-ui-runtime`, `check-ui-layout`, `check-ui-panels`, `check-text-scale`. Gioco a tocchi a 375×812 davanti al Laboratorio: ingresso e uscita con la posizione disegnata ferma (120), nessuno scatto.
+- **Non fatto**: `check-world-navigation-release` (serve una build di anteprima); il Palazzo di Capitale, chiuso dalle medaglie, non è percorso dal controllo delle porte; le altre facciate non sono state viste in gioco una per una, solo il Laboratorio.
+
 ## Mandato 2 — KO, vittoria, reclutamento ed evoluzione (Fase 6.5) — 2026-10-08
 
 - **Quattro momenti con emblema, suono e battuta** (`src/game/battle/view.ts`, `src/game/battle/BattleScene.ts`, `src/scenes/EvolutionScene.ts`):

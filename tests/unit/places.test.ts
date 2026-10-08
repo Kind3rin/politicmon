@@ -10,7 +10,7 @@ test("Borgo's places are its four doors and the road north, named the way people
   const places = mapPlaces(MAPS.borgo, MAPS);
   assert.deepEqual(places.map(place => place.label).sort(), ["Bar", "Casa tua", "Circolo", "Laboratorio", "Percorso 1"]);
   const lab = places.find(place => place.to === "lab")!;
-  assert.equal(lab.x2 - lab.x, 1, "two warps side by side are one door");
+  assert.equal(lab.x2 - lab.x, 0, "one centred door: a single warp tile");
   assert.ok(lab.signY < lab.y, "the sign hangs above the roof");
   const road = places.find(place => place.kind === "exit")!;
   assert.equal(road.edge, "north");

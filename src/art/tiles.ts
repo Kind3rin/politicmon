@@ -108,13 +108,24 @@ const BUILDING_PNG: Record<string, string> = {
   M: "tiles/build_palace.png", // 160x64 (10x4) — palazzo della capitale
 };
 
+// Facciate a larghezza dispari (3, 5, 7, 9 caselle) con una sola porta centrata: ogni
+// edificio con porta ha il PNG della sua impronta esatta (vedi docs/M2-DIARIO.md).
 const BUILDING_FOOTPRINT_PNG: Record<string, Record<string, string>> = {
-  x: {
-    "4x2": "tiles/build_studio_front.png"
-  },
-  y: {
-    "4x2": "tiles/build_bistro_front.png"
-  }
+  u: { "3x3": "tiles/build_lab_front_3x3.png" },
+  r: { "3x3": "tiles/build_house_front_red_3x3.png" },
+  H: { "3x3": "tiles/build_house_front_brick_3x3.png" },
+  o: { "3x3": "tiles/build_house_front_green_3x3.png" },
+  v: { "3x3": "tiles/build_house_front_blue_3x3.png" },
+  e: { "3x2": "tiles/build_bar_front_3x2.png" },
+  Q: { "3x2": "tiles/build_bar_front_3x2.png" },
+  "!": { "3x2": "tiles/build_circolo_front_3x2.png" },
+  "?": { "3x2": "tiles/build_apartment_front_3x2.png" },
+  "@": { "3x2": "tiles/build_kiosk_front_3x2.png" },
+  x: { "3x2": "tiles/build_studio_front_3x2.png", "5x3": "tiles/build_gym_front_5x3.png" },
+  y: { "3x2": "tiles/build_bistro_front_3x2.png" },
+  B: { "5x3": "tiles/build_gym_front_5x3.png" },
+  $: { "5x3": "tiles/build_casino_front_5x3.png" },
+  M: { "9x4": "tiles/build_palace_9x4.png" }
 };
 
 // One canonical asset table serves rendering and the existing boot inventory.
@@ -130,10 +141,10 @@ export function coreTerrainEntries():Record<string,string>{
 
 // I PNG PixelLab hanno la porta al CENTRO della facciata: con footprint a
 // larghezza PARI la porta visiva cavalca i DUE tile centrali (w/2-1 e w/2).
-// Le mappe quindi mettono `d` su entrambi (es. `mddm`, `mmddmm`) con un warp
-// per tile: si entra camminando dritti sulla porta, senza scarto laterale.
-export function centralDoorTiles(w: number): [number, number] {
-  return [w / 2 - 1, w / 2];
+// Una sola porta, sulla colonna centrale di una facciata larga in numero dispari di
+// caselle (3, 5, 7, 9): si entra camminando dritti, senza scarto laterale.
+export function centralDoorTiles(w: number): [number] {
+  return [(w - 1) / 2];
 }
 
 // I char che fanno parte del "tetto" (per il rilevamento del blocco).

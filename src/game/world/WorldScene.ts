@@ -275,11 +275,6 @@ export class WorldScene implements Scene {
   private nextBump=0;
   private tapNotice: {text:string;until:number} | undefined;
 
-  // Le porte sono larghe 2 caselle ma il personaggio ne occupa una: il disegno
-  // scivola di mezzo tile verso il centro della porta mentre ci entri e quando
-  // arrivi da una porta (vedi doorShiftNow). `doorArrival` ricorda la cella di
-  // arrivo finché non ti muovi.
-  private doorArrival: { mapId: string; x: number; y: number; shift: number } | null = null;
   // Fase dell'andatura: +1 a ogni casella, così le gambe si alternano passo dopo passo.
   private stride = 0;
   // Se un tap-route lungo è iniziato di corsa, resta di corsa fino all'arrivo.
@@ -1032,42 +1027,6 @@ export class WorldScene implements Scene {
     return {kind,image:authored?terrainVariantImage(ch,ch==='w'?0:terrainHash(this.map.id,x,y)%4,material):this.tilePng(ch),decorate:!covering&&!this.map.tileOverrides?.[ch]&&'.=zw'.includes(ch)};
   }
 
-  // Mezzo tile verso il centro di una porta larga più caselle (`cc` dentro,
-  // `dd`/`DD`/`gg` fuori). 0 se la cella non è una porta. Mai oltre ±8: sul
-  // portone più largo si scivola solo di mezza casella.
-  private doorPairShift(x: number, y: number): number {
-    const isDoor = (ch: string): boolean => this.map.outdoor ? ch === "d" || ch === "D" || ch === "g" : ch === "c";
-    if (!isDoor(this.tileAt(x, y))) return 0;
-    let a = x, b = x;
-    while (isDoor(this.tileAt(a - 1, y))) a -= 1;
-    while (isDoor(this.tileAt(b + 1, y))) b += 1;
-    if (a === b) return 0;
-    return Math.max(-8, Math.min(8, ((a + b) / 2 - x) * TILE));
-  }
-
-  // Chi arriva da una porta (dentro: davanti al doormat in basso; fuori: sotto il
-  // portone) compare già al centro della porta, non di lato.
-  private frontDoorShift(x: number, y: number): number {
-    for (const dy of [1, -1]) {
-      const shift = this.doorPairShift(x, y + dy);
-      if (shift) return shift;
-    }
-    return 0;
-  }
-
-  private doorShiftAt(x: number, y: number): number {
-    const arrival = this.doorArrival;
-    return arrival && arrival.mapId === this.map.id && arrival.x === x && arrival.y === y ? arrival.shift : this.doorPairShift(x, y);
-  }
-
-  /** Where the player is drawn, sideways, to stay centred on a two-tile door: it glides with the step instead of jumping. */
-  private doorShiftNow(): number {
-    if (this.state.vehicle) return 0;
-    const to = this.doorShiftAt(this.state.pos.x, this.state.pos.y);
-    if (!this.moving) return to;
-    const from = this.doorShiftAt(this.fromX, this.fromY), t = Math.min(1, this.moveT);
-    return from + (to - from) * t * t * (3 - 2 * t);
-  }
 
   // Texture PNG di un tile per la mappa corrente: prima l'override di mappa
   // (es. roccia in grotta), poi il PNG di default (`tileImage`). null = pixmap.
@@ -1600,7 +1559,7 @@ export class WorldScene implements Scene {
       audio.powerPuff(); fx.pulse("230,230,240", .5);
       fx.burst(c.x, c.y, ["#e8e8f0", "#c8c8d8", "#ffffff"], 30, 70, { w: 4, h: 4, grav: -20, drag: .94 });
       this.fadeOut = .3;
-      this.pendingWarp = () => { this.state.pos = { mapId: exit.toMap, x: exit.toX, y: exit.toY, facing: exit.facing }; this.loadMap(exit.toMap); this.doorArrival = null; };
+      this.pendingWarp = () => { this.state.pos = { mapId: exit.toMap, x: exit.toX, y: exit.toY, facing: exit.facing }; this.loadMap(exit.toMap); };
     });
   }
 
@@ -1618,7 +1577,7 @@ export class WorldScene implements Scene {
       this.beginPower("volo", user, () => {
         this.stack.push(new FlightScene(this.stack, this.input, this.map.name, dest.label, this.state.reduceEffects, () => {
           this.state.pos = { mapId: dest.mapId, x: dest.x, y: dest.y, facing: dest.facing };
-          this.loadMap(dest.mapId); this.doorArrival = null; saveGame(this.state);
+          this.loadMap(dest.mapId); saveGame(this.state);
         }));
       });
     }));
@@ -3555,8 +3514,6 @@ export class WorldScene implements Scene {
         this.pendingWarp = () => {
           this.state.pos = { mapId: warp.toMap, x: warp.toX, y: warp.toY, facing: warp.facing };
           this.loadMap(warp.toMap);
-          const shift = this.frontDoorShift(warp.toX, warp.toY);
-          this.doorArrival = shift ? { mapId: warp.toMap, x: warp.toX, y: warp.toY, shift } : null;
         };
       };
       // Warp con conferma (es. la DARSENA di ritorno dallo Stretto): chiedi SÌ/NO
@@ -4067,8 +4024,6 @@ export class WorldScene implements Scene {
       }
     }
 
-    const pos = this.state.pos;
-
     // A tap that is only a by-product of steering (a thumb coming off the stick, a click that refocuses the window) is not an order to walk.
     const rawTap = this.input.consumeTap();
     if (rawTap && !this.input.tapDeliberate()) this.input.clearTap();
@@ -4103,7 +4058,6 @@ export class WorldScene implements Scene {
         this.moveT = 0;
         this.stride += 1;
         this.onStepComplete();
-        if (this.doorArrival && (this.doorArrival.x !== pos.x || this.doorArrival.y !== pos.y)) this.doorArrival = null;
         if (!this.canUseWorldControls() || this.pendingBattle) this.stopTapRoute();
         else if (!this.moving && this.stack.top === this) {
           const next = dir ?? this.tapDirection();
@@ -4136,7 +4090,6 @@ export class WorldScene implements Scene {
     this.pendingWarp = () => {
       this.state.pos = pos;
       this.loadMap(pos.mapId);
-      this.doorArrival = null;
     };
   }
 
@@ -4625,9 +4578,7 @@ export class WorldScene implements Scene {
     }
 
     const frame = this.moving ? (Math.floor(this.moveT * 2) % 2 === 0 ? 1 : 0) : 0;
-    // Porte larghe 2 caselle: il disegno resta al centro della porta (vedi doorShiftNow).
-    const doorOffset = this.doorShiftNow();
-    const baseX = Math.round(playerPx - camX + doorOffset);
+    const baseX = Math.round(playerPx - camX);
     const hopLift = this.hop && this.moving ? Math.round(Math.sin(this.moveT * Math.PI) * this.hopHeight) : 0;
     // Sui gradini il passo sale: mezzo tile di altezza, interpolato tra una casella e l'altra.
     const stairLift=(x:number,y:number)=>isStair(this.tileAt(x,y))?4:0;
@@ -4779,12 +4730,12 @@ export class WorldScene implements Scene {
         else if(ch==='Y')glows.push({kind:'statue',x:tx*TILE+8,y:ty*TILE+4});
         else if(ch==='W')glows.push({kind:'fountain',x:tx*TILE+8,y:ty*TILE+8});
       }
-      glows.push({kind:'player',x:playerPx+8+this.doorShiftNow(),y:playerPy+6});
+      glows.push({kind:'player',x:playerPx+8,y:playerPy+6});
     }
     this.atmosphere.draw(screen.ctx,this.map,camX,camY,VIEW_W,this.viewHeight,this.time,this.state.reduceEffects,now.getHours()+now.getMinutes()/60,windowLights,glows);
     if(this.map.dark){
       const cave:Light[]=this.map.warps.map(w=>({kind:'door' as const,x:w.x*TILE+8-camX,y:w.y*TILE+8-camY}));
-      cave.push({kind:this.spot?'spot':'cave',x:playerPx+8+this.doorShiftNow()-camX,y:playerPy+6-camY});
+      cave.push({kind:this.spot?'spot':'cave',x:playerPx+8-camX,y:playerPy+6-camY});
       drawLighting(screen.ctx,VIEW_W,this.viewHeight,12,cave,this.time,this.state.reduceEffects,{rgb:[3,5,16],alpha:this.map.dark});
       if((this.spot||this.poll>0)&&!this.state.reduceEffects)this.drawGlints(screen,camX,camY,this.poll>0?9:7,pos);
     }

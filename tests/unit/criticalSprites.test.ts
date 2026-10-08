@@ -6,8 +6,9 @@ import {criticalSpriteEntries,rosterSpriteEntries} from '../../src/engine/preloa
 // The roster left the awaited set (it opens the background queue), the tables did not change: together they are the original list.
 test('canonical terrain and character tables preserve every original critical boot key and path',()=>{
  const entries=Object.entries({...criticalSpriteEntries(),...rosterSpriteEntries()}).filter(([key])=>!key.startsWith('terrain:')).sort(([a],[b])=>a<b?-1:a>b?1:0);
- assert.equal(entries.length,159);
- assert.equal(createHash('sha256').update(JSON.stringify(entries)).digest('hex'),'bff869ca7a7f2521e7729ac5f7cf1cb3e44682cc565615f112481579c223f7cd');
+ // Changed on purpose: the odd-width building facades (3, 5, 7 and 9 tiles wide) replace the two-tile ones, see src/art/tiles.ts.
+ assert.equal(entries.length,173);
+ assert.equal(createHash('sha256').update(JSON.stringify(entries)).digest('hex'),'0cb21cb31b542f3aad1113d69af0295eb9c03b692d20b8f6014c578c64b806a6');
 });
 
 test('all twenty-four authored terrain variants are critical boot assets',()=>{

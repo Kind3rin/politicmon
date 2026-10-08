@@ -35,7 +35,7 @@ try{
   const npc=id=>world.visibleNpcs().find(n=>n.id===id);
   function open(id,scene){adjacent(npc(id));tick('a');for(let n=0;n<1000&&stack.top===world;n++)tick(world.msg.isOpen?'a':undefined);check(stack.top?.constructor.name===scene,'Missing '+scene+' from '+id);return stack.top;}
   function talk(id){adjacent(npc(id));tick('a');settle();}
-  function enter(map,door=0){const w=world.map.warps.filter(w=>w.toMap===map)[door];check(w,'Missing warp '+map);if(world.map.outdoor&&!MAPS[map].outdoor&&world.map.tiles[w.y]?.[w.x]==='d'){walk(w.x,w.y+1);if(state.pos.facing!=='up')tick('up');tick('up');}else walk(w.x,w.y);if(world.askMenu)tick('a');settle();check(state.pos.mapId===map,'Warp failed '+map);}
+  function enter(map,door=0){const list=world.map.warps.filter(w=>w.toMap===map);const w=list[Math.min(door,list.length-1)];check(w,'Missing warp '+map);if(world.map.outdoor&&!MAPS[map].outdoor&&world.map.tiles[w.y]?.[w.x]==='d'){walk(w.x,w.y+1);if(state.pos.facing!=='up')tick('up');tick('up');}else walk(w.x,w.y);if(world.askMenu)tick('a');settle();check(state.pos.mapId===map,'Warp failed '+map);}
   await shot('lobby');
   for(const target of ['diplomacy_terrace','tour_feed','genova_techno']){const w=world.map.warps.find(w=>w.toMap===target);const routes=dirs.map(([d,dx,dy])=>({d,x:w.x-dx,y:w.y-dy})).filter(c=>!world.isBlocked(c.x,c.y)&&path(c.x,c.y)&&!world.map.warps.some(v=>v.x===c.x&&v.y===c.y));routes.sort((a,b)=>path(a.x,a.y).length-path(b.x,b.y).length);const c=routes[0];check(c,'Locked approach');walk(c.x,c.y);if(state.pos.facing!==c.d)tick(c.d);tick(c.d);settle();check(state.pos.mapId==='diplomacy_lobby','Early route '+target);}
   talk('diplomacy-host');check(state.flags['diplomacy-checked-in'],'Missing check in');

@@ -40,8 +40,8 @@ try{
   }
   {
    const w=new WorldScene(stack,input,stateAt('capitale',22,8));
-   check(w.cutsOffRoute(21,8),'Narrow corridor/pickup regression did not reproduce');
-   const spot=w.freeAdjacentSpot();check(!spot||spot.x!==21||spot.y!==8,'Challenger blocked the bar corridor');
+   check(w.cutsOffRoute(23,8),'Narrow corridor/pickup regression did not reproduce');
+   const spot=w.freeAdjacentSpot();check(!spot||spot.x!==23||spot.y!==8,'Challenger blocked the bar corridor');
   }
   for(const hard of [false,true]){
    const s=stateAt('gymtv',5,6);s.hardMode=hard;const world=new WorldScene(stack,input,s);stack.replace(world);const before=JSON.stringify(s);

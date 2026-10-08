@@ -42,8 +42,8 @@ try{
   }
   check(state.coalition.members.length===2,'Selection missing');
   open('campo-secretary','CoalitionScene');let before=resources();tick('a');tick('b');check(resources()===before,'Removal cancellation mutated');tick('b');settle();
-  walk(17,12);settle();check(state.pos.mapId==='retropalco_campo','First backstage door');await shot('backstage');walk(7,9);settle();check(state.pos.mapId==='campo_largo','First backstage exit');
-  walk(18,12);settle();check(state.pos.mapId==='retropalco_campo','Second backstage door');walk(8,9);settle();
+  walk(17,12);settle();check(state.pos.mapId==='retropalco_campo','First backstage door');await shot('backstage');walk(8,9);settle();check(state.pos.mapId==='campo_largo','First backstage exit');
+  walk(17,12);settle();check(state.pos.mapId==='retropalco_campo','Second backstage door');walk(8,9);settle();
   let photo=open('campo-fotografo','PhotoChoiceScene');await shot('photo');before=resources();tick('down');tick('a');await shot('photo-dossier');tick('b');tick('b');settle();check(resources()===before&&!state.flags['campo-photo-choice-complete'],'Photo preview/cancel mutated');
   state.money=799;photo=open('campo-fotografo','PhotoChoiceScene');pick(1);before=resources();check(stack.top.uiPanel.actions[0].disabled&&stack.top.uiPanel.blocks.some(b=>/non disponibile/i.test(b.title))&&resources()===before,'Insufficient funds accepted');for(let n=0;n<4&&stack.top!==world;n++)tick('b');settle();state.money=1600;
   photo=open('campo-fotografo','PhotoChoiceScene');pick(1);const coe=state.morale.cohesion,trust=state.morale.trust;for(let n=0;n<30&&!photo.result;n++)tick('a');check(photo.result&&state.flags['atto3-photo-choice:panoramica'],'Panoramic commit missing');

@@ -185,7 +185,7 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
     outdoor: true,
     music: "offshore",
     tileOverrides: { ".": "tiles/sand.png", j: "tiles/deck_wood.png" },
-    buildingOverrides: { e: "tiles/offshore_bar.png", Q: "tiles/offshore_bar.png" },
+    buildingOverrides: { e: "tiles/offshore_bar_3x2.png", Q: "tiles/offshore_bar_3x2.png" },
     objectOverrides: { T: "tiles/offshore_palm.png" },
     warps: [
       // Punta del molo: ritorno in TRAGHETTO allo STRETTO (approdo sul pilone
@@ -319,7 +319,7 @@ export const POSTGAME_MAPS: Record<string, MapDef> = {
     name: "BRUXELLES",
     tiles: BRUXELLES_TILES,
     tileOverrides: { "=": "tiles/commissione_floor.png" },
-    buildingOverrides: { M: "tiles/bruxelles_palace.png", e: "tiles/bruxelles_cafe.png", Q: "tiles/bruxelles_cafe.png" },
+    buildingOverrides: { M: "tiles/bruxelles_palace_9x4.png", e: "tiles/bruxelles_cafe_3x2.png", Q: "tiles/bruxelles_cafe_3x2.png" },
     outdoor: true,
     music: "bruxelles",
     warps: [

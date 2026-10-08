@@ -21,5 +21,5 @@ test('Palazzo: pavimenti distinti, attori dedicati e porte storiche attraversabi
  for(const id of ids){const map=MAPS[id];floors.add(map.tileOverrides?.p);for(const npc of map.npcs)assert.ok(npc.spriteSet?.startsWith('palace-'));for(const warp of map.warps)assert.equal(TILES[map.tiles[warp.y][warp.x]].solid,false);}
  assert.equal(floors.size,7);
  assert.deepEqual(MAPS.palazzo_feed_terrazza.warps.map(w=>[w.x,w.y]),[[5,9],[6,9],[10,11],[11,11]]);
- for(const id of ids.slice(1,5))assert.deepEqual(MAPS[id].warps.map(w=>[w.x,w.y]),[[4,6],[5,6]]);
+ for(const id of ids.slice(1,5))assert.deepEqual(MAPS[id].warps.map(w=>[w.x,w.y]),[[5,6]]);
 });

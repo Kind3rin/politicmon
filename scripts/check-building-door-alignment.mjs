@@ -82,8 +82,8 @@ const problems = await page.evaluate(async () => {
         } catch {
           out.push(`${mapId}: PNG edificio non caricabile ${path}`);
         }
-        // I PNG hanno la porta al centro della facciata: le mappe devono avere
-        // `d` sui DUE tile centrali (w/2-1, w/2), ognuno col suo warp e `=` davanti.
+        // I PNG hanno la porta al centro della facciata (larghezza dispari): la mappa
+        // deve avere `d` su un solo tile centrale ((w-1)/2), col suo warp e `=` davanti.
         const doorY = y + fp.h - 1;
         const expectedXs = centralDoorTiles(fp.w).map((off) => x + off);
         for (const doorX of expectedXs) {

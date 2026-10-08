@@ -36,7 +36,7 @@ try{
   walk(14,4);settle();check(state.pos.mapId==='bar-offshore','First door did not enter Lido');
   adjacent(world.visibleNpcs().find(n=>n.healer));tick('a');settle();
   check(state.party.every(m=>m.hp===statsOf(m).hp),'Lido did not heal');check(state.money===money&&JSON.stringify(state.morale)===morale,'Lido charged or changed morale');
-  const exit=world.map.warps.find(w=>w.toMap==='offshore');check(exit,'Lido exit missing');walk(exit.x,exit.y);settle();check(state.pos.mapId==='offshore','Lido exit failed');walk(15,4);settle();check(state.pos.mapId==='bar-offshore','Second door did not enter');walk(exit.x,exit.y);settle();
+  const exit=world.map.warps.find(w=>w.toMap==='offshore');check(exit,'Lido exit missing');walk(exit.x,exit.y);settle();check(state.pos.mapId==='offshore','Lido exit failed');walk(14,4);settle();check(state.pos.mapId==='bar-offshore','Second door did not enter');walk(exit.x,exit.y);settle();
   for(const id of ['commercialista','prestanome','tesoriere']){
    const npc=world.visibleNpcs().find(n=>n.trainerId===id);check(npc&&!npc.sightRange,'Challenge missing or automatic '+id);
    adjacent(npc);for(let n=0;n<20;n++)tick();check(stack.top===world&&!world.pendingBattle,'Sight started challenge '+id);

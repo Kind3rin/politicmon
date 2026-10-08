@@ -35,7 +35,7 @@ try{
   const npc=id=>world.visibleNpcs().find(n=>n.id===id);
   function open(id,scene){adjacent(npc(id));tick('a');for(let n=0;n<1000&&stack.top===world;n++)tick(world.msg.isOpen?'a':undefined);check(stack.top?.constructor.name===scene,'Missing '+scene+' from '+id);return stack.top;}
   function talk(id){adjacent(npc(id));tick('a');settle();}
-  function enter(map,door=0){const w=world.map.warps.filter(w=>w.toMap===map)[door];check(w,'Missing warp '+map);walk(w.x,w.y);if(world.askMenu)tick('a');settle();check(state.pos.mapId===map,'Warp failed '+map);}
+  function enter(map,door=0){const list=world.map.warps.filter(w=>w.toMap===map);const w=list[Math.min(door,list.length-1)];check(w,'Missing warp '+map);walk(w.x,w.y);if(world.askMenu)tick('a');settle();check(state.pos.mapId===map,'Warp failed '+map);}
   enter('futuro_piazza');check(world.effectiveEncounters().length===0,'Meadow recruits before victory');await shot('piazza');
   const promises=JSON.stringify(state.morale.promises),trust=state.morale.trust;
   walk(2,9);if(state.pos.facing!=='up')tick('up');tick('up');settle();check(state.pos.mapId==='futuro_piazza'&&!state.flags.futureResolved,'Diplomacy unlocked early');

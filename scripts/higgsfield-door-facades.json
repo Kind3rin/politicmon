@@ -1,0 +1,304 @@
+{
+ "version": 1,
+ "note": "Facciate a larghezza dispari (3 caselle) con porta singola centrata: sostituiscono le facciate a due caselle. Sfondo bianco puro per il ritaglio.",
+ "assets": [
+  {
+   "id": "door-facades-a",
+   "index": 0,
+   "kind": "building",
+   "columns": 3,
+   "rows": 2,
+   "outputs": [
+    {
+     "id": "build_lab_front_3x3",
+     "path": "public/sprites/tiles/build_lab_front_3x3.png",
+     "width": 48,
+     "height": 48,
+     "subject": "Borgo research laboratory, single centred door, navy roof, two round mint gauge windows, gold emblem"
+    },
+    {
+     "id": "build_house_front_red_3x3",
+     "path": "public/sprites/tiles/build_house_front_red_3x3.png",
+     "width": 48,
+     "height": 48,
+     "subject": "Borgo townhouse, single centred door, burgundy roof, cream plaster, navy shutters, flower box"
+    },
+    {
+     "id": "build_house_front_brick_3x3",
+     "path": "public/sprites/tiles/build_house_front_brick_3x3.png",
+     "width": 48,
+     "height": 48,
+     "subject": "small warm brick townhouse, single centred door, navy roof, gold window frames"
+    },
+    {
+     "id": "build_house_front_green_3x3",
+     "path": "public/sprites/tiles/build_house_front_green_3x3.png",
+     "width": 48,
+     "height": 48,
+     "subject": "Mediopoli newsroom office, single centred door, mint roof, cream plaster, burgundy shutters, gold newspaper emblem"
+    },
+    {
+     "id": "build_house_front_blue_3x3",
+     "path": "public/sprites/tiles/build_house_front_blue_3x3.png",
+     "width": 48,
+     "height": 48,
+     "subject": "small navy-roof townhouse, single centred door, cream plaster, mint shutters"
+    },
+    {
+     "id": "campo_backstage_3x3",
+     "path": "public/sprites/tiles/campo_backstage_3x3.png",
+     "width": 48,
+     "height": 48,
+     "subject": "political campaign backstage building, single centred door, navy roof, cream plaster, burgundy door frame, gold microphone emblem"
+    }
+   ],
+   "params": {
+    "model": "nano_banana_2",
+    "servedAs": "nano_banana_flash",
+    "resolution": "1k",
+    "aspect_ratio": "3:2",
+    "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal square cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. Every cell has a PURE WHITE background (#FFFFFF) with no coloured background, no shadow, no ground, no border. Each cell shows ONE small building FRONT ELEVATION seen straight on, perfectly symmetrical, with exactly ONE single door placed in the exact middle column of the cell (one door only, never two side by side), windows evenly spaced on both sides of the door, the building filling the cell with a small white margin on all sides. TOP LEFT: broad two-storey research laboratory, navy roof, cream wall, two round mint gauge windows and a small gold emblem above the door; TOP CENTER: townhouse with burgundy roof, cream plaster, navy shutters and a flower box; TOP RIGHT: small warm brick townhouse with navy roof and gold window frames; BOTTOM LEFT: newsroom townhouse with mint roof, cream plaster, burgundy shutters and a small gold newspaper emblem above the door; BOTTOM CENTER: small navy-roof townhouse, cream plaster, mint shutters; BOTTOM RIGHT: political campaign backstage building, navy roof, cream plaster, burgundy door frame and a small gold microphone emblem.",
+    "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+   },
+   "jobId": "d9e1cd59-1c43-4a5d-8353-2051e705964c",
+   "status": "completed",
+   "generatedParams": {
+    "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art game world, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 6 equal square cells in a STRICT 3 COLUMN by 2 ROW grid, no labels or separators. Every cell has a PURE WHITE background (#FFFFFF) with no coloured background, no shadow, no ground, no border. Each cell shows ONE small building FRONT ELEVATION seen straight on, perfectly symmetrical, with exactly ONE single door placed in the exact middle column of the cell (one door only, never two side by side), windows evenly spaced on both sides of the door, the building filling the cell with a small white margin on all sides. TOP LEFT: broad two-storey research laboratory, navy roof, cream wall, two round mint gauge windows and a small gold emblem above the door; TOP CENTER: townhouse with burgundy roof, cream plaster, navy shutters and a flower box; TOP RIGHT: small warm brick townhouse with navy roof and gold window frames; BOTTOM LEFT: newsroom townhouse with mint roof, cream plaster, burgundy shutters and a small gold newspaper emblem above the door; BOTTOM CENTER: small navy-roof townhouse, cream plaster, mint shutters; BOTTOM RIGHT: political campaign backstage building, navy roof, cream plaster, burgundy door frame and a small gold microphone emblem."
+   },
+   "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_164156_d9e1cd59-1c43-4a5d-8353-2051e705964c.png",
+   "processing": {
+    "grid": "uniform",
+    "inset": 0,
+    "stripGridLines": true
+   },
+   "sourceSha256": "a057dc2d701d1f01e17a0a41794666305d1fef1b93afcfac9f9caaa0ba75d800"
+  },
+  {
+   "id": "door-facades-b1",
+   "index": 1,
+   "kind": "building",
+   "columns": 2,
+   "rows": 2,
+   "outputs": [
+    {
+     "id": "build_bar_front_3x2",
+     "path": "public/sprites/tiles/build_bar_front_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "neighbourhood bar, single centred door, mint striped awning, mustard cup emblem"
+    },
+    {
+     "id": "offshore_bar_3x2",
+     "path": "public/sprites/tiles/offshore_bar_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "seaside bar, single centred door, cream walls, navy shutters, mint awning, gold anchor"
+    },
+    {
+     "id": "bruxelles_cafe_3x2",
+     "path": "public/sprites/tiles/bruxelles_cafe_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "Brussels cafe, single centred door, cream stone, navy shutters, mustard awning, gold clock"
+    },
+    {
+     "id": "build_circolo_front_3x2",
+     "path": "public/sprites/tiles/build_circolo_front_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "reading club, single centred door, burgundy canopy, gold book emblem"
+    }
+   ],
+   "params": {
+    "model": "nano_banana_2",
+    "servedAs": "nano_banana_flash",
+    "resolution": "1k",
+    "aspect_ratio": "3:2",
+    "summary": "Bar, bar costiero, cafe di Bruxelles, circolo: facciate basse 3x2, porta singola centrata (rigenerato con margine bianco)",
+    "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+   },
+   "jobId": "6a6bb65a-f167-4b2c-a8bf-00db2381980a",
+   "status": "completed",
+   "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_164826_6a6bb65a-f167-4b2c-a8bf-00db2381980a.png",
+   "processing": {
+    "grid": "uniform",
+    "inset": 8,
+    "stripGridLines": true,
+    "allowEdgeTouch": true,
+    "skipCells": []
+   },
+   "sourceSha256": "5e0f34cf1a12e5ad46adb853b5671b3ab2209913dd57b51d4bd143c1ee22a80b"
+  },
+  {
+   "id": "door-facades-b2",
+   "index": 2,
+   "kind": "building",
+   "columns": 2,
+   "rows": 2,
+   "outputs": [
+    {
+     "id": "build_apartment_front_3x2",
+     "path": "public/sprites/tiles/build_apartment_front_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "civic apartment block, single centred door, navy roof, mustard balcony"
+    },
+    {
+     "id": "build_studio_front_3x2",
+     "path": "public/sprites/tiles/build_studio_front_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "campaign television studio, single centred door, navy facade, burgundy awning, gold camera"
+    },
+    {
+     "id": "build_bistro_front_3x2",
+     "path": "public/sprites/tiles/build_bistro_front_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "cafe-bistro, single centred door, cream wall, burgundy shutters, mint awning"
+    },
+    {
+     "id": "build_kiosk_front_3x2",
+     "path": "public/sprites/tiles/build_kiosk_front_3x2.png",
+     "width": 48,
+     "height": 32,
+     "subject": "newspaper kiosk, single centred door, navy facade, mint roof"
+    }
+   ],
+   "params": {
+    "model": "nano_banana_2",
+    "servedAs": "nano_banana_flash",
+    "resolution": "1k",
+    "aspect_ratio": "3:2",
+    "summary": "Appartamento, studio, bistro, chiosco: facciate basse 3x2, porta singola centrata",
+    "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+   },
+   "jobId": "9495a957-05a2-4af6-b2df-89de901c33ec",
+   "status": "completed",
+   "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_164636_9495a957-05a2-4af6-b2df-89de901c33ec.png",
+   "processing": {
+    "grid": "uniform",
+    "inset": 8,
+    "stripGridLines": true,
+    "allowEdgeTouch": true,
+    "skipCells": []
+   },
+   "sourceSha256": "2271e574aaea258533c40ce8f213f218ace6d5814f49cfd61978b3c0ce1e95f1"
+  },
+  {
+   "id": "door-facades-c1",
+   "index": 3,
+   "kind": "building",
+   "columns": 2,
+   "rows": 2,
+   "outputs": [
+    {
+     "id": "build_gym_front_5x3",
+     "path": "public/sprites/tiles/build_gym_front_5x3.png",
+     "width": 80,
+     "height": 48,
+     "subject": "political debate arena, single centred door, burgundy roof, gold laurel"
+    },
+    {
+     "id": "build_casino_front_5x3",
+     "path": "public/sprites/tiles/build_casino_front_5x3.png",
+     "width": 80,
+     "height": 48,
+     "subject": "political casino, single centred door, dark burgundy facade, navy roof, gold chip"
+    },
+    {
+     "id": "mediopoli_studio_5x3",
+     "path": "public/sprites/tiles/mediopoli_studio_5x3.png",
+     "width": 80,
+     "height": 48,
+     "subject": "Mediopoli TV news studio, single centred door, navy facade, burgundy awning, antenna"
+    },
+    {
+     "id": "future_hq_7x3",
+     "path": "public/sprites/tiles/future_hq_7x3.png",
+     "width": 112,
+     "height": 48,
+     "subject": "political headquarters, single centred door, navy facade, mint glass band, gold sign"
+    }
+   ],
+   "params": {
+    "model": "nano_banana_2",
+    "servedAs": "nano_banana_flash",
+    "resolution": "1k",
+    "aspect_ratio": "3:2",
+    "summary": "Palestra, casino, studio di Mediopoli, sede futura: 5x3 e 7x3 con porta singola centrata",
+    "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+   },
+   "jobId": "bb6e1845-58a5-4581-99a7-c5b62a5ed407",
+   "status": "completed",
+   "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_164641_bb6e1845-58a5-4581-99a7-c5b62a5ed407.png",
+   "processing": {
+    "grid": "uniform",
+    "inset": 8,
+    "stripGridLines": true,
+    "allowEdgeTouch": true,
+    "skipCells": []
+   },
+   "sourceSha256": "caa615c3d34bba14e19439255f84d2779b52a3f0364cc9ff514214575e5222c6"
+  },
+  {
+   "id": "door-facades-c2",
+   "index": 4,
+   "kind": "building",
+   "columns": 2,
+   "rows": 2,
+   "outputs": [
+    {
+     "id": "diplomacy_hotel_7x3",
+     "path": "public/sprites/tiles/diplomacy_hotel_7x3.png",
+     "width": 112,
+     "height": 48,
+     "subject": "diplomacy hotel, single centred door, navy roof, burgundy awning, gold sign"
+    },
+    {
+     "id": "build_palace_9x4",
+     "path": "public/sprites/tiles/build_palace_9x4.png",
+     "width": 144,
+     "height": 64,
+     "subject": "grand institutional palace, single centred door, navy mansard roof, gold windows, banners"
+    },
+    {
+     "id": "bruxelles_palace_9x4",
+     "path": "public/sprites/tiles/bruxelles_palace_9x4.png",
+     "width": 144,
+     "height": 64,
+     "subject": "Brussels palace, single centred door, cream stone, navy roof, mint banners"
+    },
+    {
+     "id": "spare_annex",
+     "path": "public/sprites/tiles/spare_annex.png",
+     "width": 48,
+     "height": 32,
+     "subject": "unused spare cell",
+     "superseded": true
+    }
+   ],
+   "params": {
+    "model": "nano_banana_2",
+    "servedAs": "nano_banana_flash",
+    "resolution": "1k",
+    "aspect_ratio": "3:2",
+    "summary": "Hotel della diplomazia e palazzi: 7x3 e 9x4 con porta singola centrata",
+    "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc"
+   },
+   "jobId": "ddb18c2a-8850-4537-88f2-2f03c4e44daa",
+   "status": "completed",
+   "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_164648_ddb18c2a-8850-4537-88f2-2f03c4e44daa.png",
+   "processing": {
+    "grid": "uniform",
+    "inset": 8,
+    "stripGridLines": true,
+    "allowEdgeTouch": true,
+    "skipCells": [
+     3
+    ]
+   },
+   "sourceSha256": "a425c1be155c75824f5e2860204aef9111d0eeb199712d272320e95f7aee1bdf"
+  }
+ ]
+}

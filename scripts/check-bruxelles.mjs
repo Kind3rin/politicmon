@@ -37,7 +37,7 @@ try{
   adjacent(world.visibleNpcs().find(n=>n.healer));tick('a');settle();
   check(state.party.every(m=>m.hp===statsOf(m).hp)&&state.party.every(m=>m.moves.every(s=>s.pp>1)),'Cafe did not recover HP/PP');
   check(state.money===money&&JSON.stringify(state.morale)===morale,'Cafe charged or changed morale');await shot('cafe-interior');
-  const exit=world.map.warps.find(w=>w.toMap==='bruxelles');walk(exit.x,exit.y);settle();walk(11,11);settle();check(state.pos.mapId==='bar-bruxelles','Second cafe door failed');walk(exit.x,exit.y);settle();
+  const exit=world.map.warps.find(w=>w.toMap==='bruxelles');walk(exit.x,exit.y);settle();walk(10,11);settle();check(state.pos.mapId==='bar-bruxelles','Second cafe door failed');walk(exit.x,exit.y);settle();
   for(const id of ['eu-relatore','eu-eurodeputato','eu-commissario','eu-lobby']){
    const npc=world.visibleNpcs().find(n=>n.trainerId===id);check(npc&&!npc.sightRange,'Challenge missing or automatic '+id);
    adjacent(npc);for(let n=0;n<20;n++)tick();check(stack.top===world&&!world.pendingBattle,'Sight started challenge '+id);
@@ -55,7 +55,7 @@ try{
   // Only directional rendering below changes NPC facing; routes use native input.
   for(const facing of ['up','down','left','right']){npc.currentFacing=facing;await shot('cast-'+facing);}
   check(new Set(used.map(u=>u.split('/').at(-1).split('?')[0])).size===4,'Generic/duplicate directional cast');
-  walk(5,7);settle();check(state.pos.mapId==='bruxelles','First palace exit failed');walk(13,4);settle();check(state.pos.mapId==='commissione','Second palace door failed');walk(6,7);settle();check(state.pos.mapId==='bruxelles','Second palace exit failed');
+  walk(6,7);settle();check(state.pos.mapId==='bruxelles','First palace exit failed');walk(12,4);settle();check(state.pos.mapId==='commissione','Second palace door failed');walk(6,7);settle();check(state.pos.mapId==='bruxelles','Second palace exit failed');
   const beforeReturn=resources();walk(14,14);check(world.askMenu,'Return confirmation missing');tick('b');settle();check(state.pos.mapId==='bruxelles'&&resources()===beforeReturn,'Cancel travelled or changed resources');walk(14,13);walk(14,14);tick('a');settle();check(state.pos.mapId==='offshore'&&resources()===beforeReturn,'Pre-boss return failed/altered resources');
   walk(28,9);check(world.askMenu,'Brussels route confirmation missing');tick('a');settle();check(state.pos.mapId==='bruxelles'&&!state.flags['ue-beaten'],'Return earned boss flag');
   walk(19,13);tick('up');settle();check(!world.askMenu&&state.pos.mapId==='bruxelles'&&!state.flags['atto3Started'],'Pre-boss Campo gate opened');

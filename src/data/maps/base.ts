@@ -298,7 +298,7 @@ export const BASE_MAPS: Record<string, MapDef> = {
     lamps: [{ x: 11, y: 5 }, { x: 18, y: 5 }],
     groundMaterials: { "=": "asphalt" },
     // The studio roof family gets its own TV studio art; the gym keeps its laurel front, shared with Eurotown.
-    buildingOverrides: { y: "tiles/mediopoli_studio.png" },
+    buildingOverrides: { y: "tiles/mediopoli_studio_5x3.png" },
     name: "MEDIOPOLI",
     tiles: MEDIOPOLI_TILES,
     // La città bassa con i suoi studi e, su una gradinata alta due righe, la collina dello studio televisivo.

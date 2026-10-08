@@ -7,6 +7,7 @@ import { LEGEND_MAPS } from "./legends";
 import { applyPowerSites } from "./powerSites";
 import { applySlotEncounters } from "./slotEncounters";
 import { applySlotNpcs } from "./slotNpcs";
+import { centreDoors } from "./doorCentring";
 
 export type * from "./types";
 
@@ -26,7 +27,7 @@ function composeMapRegistry(groups: ReadonlyArray<Record<string, MapDef>>): Reco
   return registry;
 }
 
-export const MAPS = composeMapRegistry([BASE_MAPS, POSTGAME_MAPS, INTERIOR_MAPS, ATTO3_MAPS, LEGEND_MAPS]);
+export const MAPS = centreDoors(composeMapRegistry([BASE_MAPS, POSTGAME_MAPS, INTERIOR_MAPS, ATTO3_MAPS, LEGEND_MAPS]));
 applyPowerSites(MAPS);
 applySlotEncounters(MAPS);
 applySlotNpcs(MAPS);

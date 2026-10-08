@@ -18,10 +18,13 @@ ROOT = Path(__file__).resolve().parent.parent
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--download', action='store_true')
 parser.add_argument('--install', action='store_true')
+parser.add_argument('--manifest', action='append', help='process only this manifest (repeatable); default: all')
 args = parser.parse_args()
 BASE = ROOT / 'artifacts/world-redesign'
 STAGE = BASE / 'staged'
 BASE.mkdir(parents=True, exist_ok=True)
+# Per manifest (processing.allowEdgeTouch): a building whose facade reaches the cell crop by a few pixels is accepted.
+ALLOW_EDGE_TOUCH = False
 
 
 def cutout(cell, allow_bottom=False):
@@ -47,7 +50,7 @@ def cutout(cell, allow_bottom=False):
     bounds = image.getbbox()
     if not bounds or (bounds[2] - bounds[0]) * (bounds[3] - bounds[1]) < w * h * .025:
         raise ValueError('Missing or nearly empty cell')
-    if bounds[0] == 0 or bounds[1] == 0 or bounds[2] == w or (bounds[3] == h and not allow_bottom):
+    if not ALLOW_EDGE_TOUCH and (bounds[0] == 0 or bounds[1] == 0 or bounds[2] == w or (bounds[3] == h and not allow_bottom)):
         raise ValueError('Sprite touches cell edge; inspect/regenerate sheet')
     return image.crop(bounds)
 
@@ -134,7 +137,9 @@ def separators(image, count, horizontal):
     return [round(value * original_length / length) for value in bounds + [length]]
 
 
-MANIFESTS = {'characters': 'scripts/higgsfield-world-characters.json', 'environment': 'scripts/higgsfield-world-environment.json', 'battle-art': 'scripts/higgsfield-battle-art.json'}
+MANIFESTS = {'characters': 'scripts/higgsfield-world-characters.json', 'environment': 'scripts/higgsfield-world-environment.json', 'battle-art': 'scripts/higgsfield-battle-art.json', 'door-facades': 'scripts/higgsfield-door-facades.json'}
+if args.manifest:
+    MANIFESTS = {name: MANIFESTS[name] for name in args.manifest}
 for name in MANIFESTS:
     manifest = json.loads((ROOT / MANIFESTS[name]).read_text())
     if args.download:
@@ -170,6 +175,7 @@ for name in MANIFESTS:
                 if asset.get('outputs') and row * columns + column >= len(asset['outputs']):
                     continue
                 inset = processing.get('inset', 0)
+                ALLOW_EDGE_TOUCH = bool(processing.get('allowEdgeTouch'))
                 bottom = ys[row] + round((ys[row + 1] - ys[row]) * processing.get('cellHeightFraction', 1))
                 cell = original.crop((xs[column] + inset, ys[row] + inset, xs[column + 1] - inset, bottom - inset))
                 if processing.get('stripGridLines'):

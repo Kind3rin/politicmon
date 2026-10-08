@@ -1,4 +1,4 @@
-/** Doors are two tiles wide: the player glides to the middle of the doorway, arrives in the middle, and walking is not interrupted at every tile. */
+/** Every door is one tile on the centre line: the player walks straight in and out of it, and walking is not interrupted at every tile. */
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 
@@ -15,6 +15,8 @@ try {
   const { Input } = await import('/src/engine/input.ts');
   const { audio } = await import('/src/engine/audio.ts'); audio.enabled = false;
   const { preloadCoreSprites } = await import('/src/engine/preload.ts');
+  const { MAPS } = await import('/src/data/maps.ts');
+  const { TILES } = await import('/src/art/tiles.ts');
   await preloadCoreSprites();
   const check = (value, label) => { if (!value) throw Error(label); };
   const boot = (mapId, x, y, facing = 'up') => {
@@ -27,37 +29,49 @@ try {
    const settle = () => { for (let t = 0; t < 40; t++) world.update(.05); };
    return { state, world, hold, settle };
   };
+  const walkable = (map, x, y) => { const ch = map.tiles[y]?.[x]; return ch !== undefined && !TILES[ch]?.solid; };
   const log = [];
-  // Every outdoor two-tile door: entering from either half ends centred, and so does the arrival on both sides.
+  // Every outdoor door: one warp tile, entered straight from the street in front and left straight back out.
   let doors = 0;
-  const { MAPS } = await import('/src/data/maps.ts');
-  for (const mapId of ['borgo', 'mediopoli', 'eurotown', 'capitale']) {
-   const map = MAPS[mapId];
+  for (const [mapId, map] of Object.entries(MAPS)) {
+   if (!map.outdoor) continue;
    for (const warp of map.warps) {
     const target = MAPS[warp.toMap]; if (!target || target.outdoor || !'dDg'.includes(map.tiles[warp.y][warp.x]) || warp.requiresBadges || warp.requiresFlag || warp.requiresFeature || warp.confirm) continue;
+    check(!map.warps.some(w => w.y === warp.y && Math.abs(w.x - warp.x) === 1 && 'dDg'.includes(map.tiles[w.y][w.x])), `${mapId}: the door at ${warp.x},${warp.y} is still two tiles wide`);
+    if (!walkable(map, warp.x, warp.y + 1)) continue;
     const { state, world, hold, settle } = boot(mapId, warp.x, warp.y + 1);
-    check(world.doorShiftNow() === 0, `${mapId}: standing in front of ${warp.toMap} is not shifted`);
-    let widest = 0, monotone = true, last = 0;
-    hold('up', .5, 1 / 60, () => { if (state.pos.mapId !== mapId) return; const shift = Math.abs(world.doorShiftNow()); if (shift + 1e-6 < last) monotone = false; last = shift; widest = Math.max(widest, shift); });
-    settle();
-    check(widest === 8 && monotone, `${mapId}: the step into ${warp.toMap} did not glide to the middle (${widest}, monotone ${monotone})`);
+    hold('up', 1.5); settle();
     check(state.pos.mapId === warp.toMap, `${mapId}: the door to ${warp.toMap} did not open`);
-    check(Math.abs(world.doorShiftNow()) === 8, `${warp.toMap}: arrived off-centre (${world.doorShiftNow()})`);
-    // Walk out through the same door: the way out also lands centred.
-    hold('down', .5); settle();
-    check(state.pos.mapId === mapId, `${warp.toMap}: the way out did not lead back to ${mapId}`);
-    check(Math.abs(world.doorShiftNow()) === 8, `${mapId}: came out off-centre (${world.doorShiftNow()})`);
+    // The way out, where the arrival stands above an exit mat: walking back out lands on the street in front of the door.
+    if (target.tiles[warp.toY + 1]?.[warp.toX] === 'c') {
+     hold('down', 1.5); settle();
+     check(state.pos.mapId === mapId, `${warp.toMap}: the way out did not lead back to ${mapId}`);
+     check(state.pos.x === warp.x && state.pos.y === warp.y + 1, `${mapId}: came out at ${state.pos.x},${state.pos.y}, not in front of the door ${warp.x},${warp.y}`);
+    }
     doors++;
    }
   }
-  check(doors >= 12, 'too few doors checked: ' + doors);
-  log.push(`${doors} doors`);
+  // 28 open doors: the Palazzo of Capitale (14,5) is locked behind badges and is not walked here.
+  check(doors >= 28, 'too few outdoor doors checked: ' + doors);
+  log.push(`${doors} doors in and out`);
+  // Every interior exit mat: walking onto it from the floor above leaves the room.
+  let mats = 0;
+  for (const [mapId, map] of Object.entries(MAPS)) {
+   if (map.outdoor) continue;
+   for (const warp of map.warps) {
+    if (map.tiles[warp.y][warp.x] !== 'c' || !walkable(map, warp.x, warp.y - 1) || warp.requiresBadges || warp.requiresFlag || warp.requiresFeature || warp.confirm) continue;
+    const { state, hold, settle } = boot(mapId, warp.x, warp.y - 1, 'down');
+    hold('down', 1.5); settle();
+    check(state.pos.mapId !== mapId, `${mapId}: the mat at ${warp.x},${warp.y} did not lead out`);
+    mats++;
+   }
+  }
+  check(mats >= 40, 'too few interior mats checked: ' + mats);
+  log.push(`${mats} mats`);
   // The road between two zones fades like a door and keeps walking if the direction is still held.
   { const { state, world } = boot('borgo', 14, 1); world.input.heldDirection = () => 'up'; let dark = false, crossed = false;
     for (let i = 0; i < 120; i++) { world.update(1 / 60); if (world.fadeOut > 0) dark = true; if (state.pos.mapId === 'route1') crossed = true; }
     check(dark && crossed, `leaving Borgo by the road: fade ${dark}, crossed ${crossed}`); check(state.pos.y < MAPS.route1.tiles.length - 1, 'did not keep walking after the crossing'); }
-  // Walking along the street past a door does not make the sprite hesitate or lean.
-  { const { world, hold } = boot('borgo', 3, 13, 'right'); let seen = 0; hold('right', 1.6, 1 / 60, () => { seen = Math.max(seen, Math.abs(world.doorShiftNow())); }); check(seen === 0, 'walking along the street leaned towards a door: ' + seen); }
   // Holding a direction never stops between tiles, at a steady or a jittery frame rate.
   for (const [name, dtOf] of [['steady', () => 1 / 60], ['jitter', i => (i % 3 ? 1 / 75 : 1 / 40)]]) {
    const { state, world } = boot('route1', 14, 29); let direction = 'up'; const input = world.input; input.heldDirection = () => direction;
@@ -75,5 +89,5 @@ try {
   return log;
  });
  assert.deepEqual(errors, []);
- console.log('PASS: doors centred in and out, steady stride, straight routes.', result.join(' · '));
+ console.log('PASS: single centred doors in and out, mats, steady stride, straight routes.', result.join(' · '));
 } finally { await browser.close(); }

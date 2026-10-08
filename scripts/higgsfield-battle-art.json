@@ -159,6 +159,61 @@
         "stripGridLines": true
       },
       "sourceSha256": "1358b86e52d5ce1532de809d19d7aad22d1777fbc60761f282bf197c4494fcfb"
+    },
+    {
+      "id": "battle-moments",
+      "index": 3,
+      "kind": "battle-icon",
+      "columns": 2,
+      "rows": 2,
+      "outputs": [
+        {
+          "id": "moment_ko",
+          "path": "public/sprites/battle/moment_ko.png",
+          "width": 64,
+          "height": 64,
+          "subject": "election ballot crossed out with a burgundy X: KO of the opponent"
+        },
+        {
+          "id": "moment_victoria",
+          "path": "public/sprites/battle/moment_victoria.png",
+          "width": 64,
+          "height": 64,
+          "subject": "gold laurel-wreath medal on a navy ribbon: victory"
+        },
+        {
+          "id": "moment_recluta",
+          "path": "public/sprites/battle/moment_recluta.png",
+          "width": 64,
+          "height": 64,
+          "subject": "ballot slipping into a navy and gold ballot box: recruitment"
+        },
+        {
+          "id": "moment_evoluzione",
+          "path": "public/sprites/battle/moment_evoluzione.png",
+          "width": 64,
+          "height": 64,
+          "subject": "golden upward arrow inside a mint sunburst: evolution"
+        }
+      ],
+      "params": {
+        "model": "nano_banana_2",
+        "servedAs": "nano_banana_flash",
+        "resolution": "1k",
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "aspect_ratio": "16:9",
+        "prompt": "Production game-world asset sheet for POLITICMON, satirical Italian monster RPG. Same handcrafted chunky 16-bit pixel-art style, limited midnight navy, warm cream, mint green, antique gold and muted burgundy palette, strong clean pixel clusters, no photographic or painted gradients. Exactly 4 equal rectangular cells in a STRICT 2 COLUMN by 2 ROW grid, no labels or separators. TOP LEFT: a paper election ballot crossed out with a bold burgundy X stamp, slightly tilted; TOP RIGHT: a gold laurel-wreath medal on a navy ribbon with a small star at the top; BOTTOM LEFT: a paper ballot slipping into a navy and gold ballot box with a small burst of sparkles; BOTTOM RIGHT: a golden upward arrow inside a mint sunburst with small sparkles. Each cell contains one isolated emblem centered with ample pure WHITE margin, no cast shadow, no ground plane, flat orthographic pixel art, no 3/4 view. No text, letters, numbers, logos, captions, watermark or game interface."
+      },
+      "jobId": "05615afa-e5b4-4a69-bd81-9b2faca634d1",
+      "status": "completed",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_152659_05615afa-e5b4-4a69-bd81-9b2faca634d1.png",
+      "processing": {
+        "grid": "uniform",
+        "inset": 0,
+        "stripGridLines": true
+      },
+      "sourceSha256": "dde36ddb6d43f0a0672985604860bcce27ce5f03eaa39d4b715f23d8d3a010b4"
     }
   ]
 }

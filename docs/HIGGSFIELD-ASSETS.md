@@ -347,3 +347,6 @@ Arte Fase 6 (lotta), 8 ottobre 2026: tre fogli 16:9 in `scripts/higgsfield-battl
 - `battle-gags` (job `651e424f-cb20-4011-8ea7-69eb151f69f2`): microfono (`piazza_aperta`), smartphone con fumetto (`tweet`), decreto arrotolato (`decreto`), `gag_*.png` (40×40). Nessun logo, nessuna lettera.
 - `battle-far` (job `550f2139-58b0-4ebc-910b-01e8a5b36f53`): colline, skyline, mare, grotta, `far_*.png` (240×48), uno per famiglia di sfondo.
 `scripts/prepare-world-assets.py` legge il nuovo manifest; i tipi `battle-row` (allargato, ritaglio sul bordo basso permesso) e `battle-icon` (proporzioni mantenute) sono gli unici cambiamenti allo script.
+
+Arte dei momenti (Fase 6.5), 8 ottobre 2026: un foglio 2×2 16:9 in `scripts/higgsfield-battle-art.json` (`battle-moments`, job `05615afa-e5b4-4a69-bd81-9b2faca634d1`), richiesto `nano_banana_2` 1k (servito come `nano_banana_flash`), 1,5 crediti. Saldo **274,72 → 273,22**.
+Quattro emblemi 64×64: `moment_ko` (scheda annullata barrata), `moment_victoria` (medaglia d'alloro), `moment_recluta` (scheda nell'urna), `moment_evoluzione` (freccia dorata nel sole). Nessun testo nell'immagine: le battute sono nel codice.

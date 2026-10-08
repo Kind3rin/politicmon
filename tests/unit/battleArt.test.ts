@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { existsSync } from "node:fs";
 import test from "node:test";
-import { BattleFx, GAG_ART, audienceReaction } from "../../src/game/battle/view";
+import { BattleFx, GAG_ART, MOMENT_ART, MOMENT_LINES, audienceReaction } from "../../src/game/battle/view";
 
 test("the audience reads the fight: applause for a clear lead, booing for a clear deficit, phones on a full Polemica bar", () => {
   assert.equal(audienceReaction(.8, .4, 0), "applause");
@@ -36,4 +36,27 @@ test("reduced effects start no gag", () => {
   fx.reduceEffects = true;
   fx.playGag("foe", "decreto");
   assert.equal(fx.gagFx, null);
+});
+
+test("every moment (KO, victory, recruit) has an emblem in public/sprites/battle and a short line", () => {
+  for (const art of Object.values(MOMENT_ART)) assert.ok(existsSync(`public/sprites/battle/${art}.png`), `${art}.png`);
+  assert.ok(existsSync("public/sprites/battle/moment_evoluzione.png"), "the evolution scene shows its own emblem");
+  for (const line of Object.values(MOMENT_LINES)) {
+    assert.ok(line.length > 0 && line.length <= 60, `"${line}" is one short line`);
+  }
+});
+
+test("a moment starts once, grows, and ends; a ring goes out with it unless effects are reduced", () => {
+  const fx = new BattleFx();
+  fx.startMoment("ko");
+  assert.equal(fx.momentFx?.kind, "ko");
+  assert.equal(fx.rings.length, 1, "one ring with the emblem");
+  fx.update(.5);
+  assert.ok((fx.momentFx?.t ?? 0) < (fx.momentFx?.max ?? 0), "the moment runs down");
+  fx.update(2);
+  assert.equal(fx.momentFx, null, "the moment is over after its time");
+  const quiet = new BattleFx(); quiet.reduceEffects = true;
+  quiet.startMoment("victory");
+  assert.equal(quiet.momentFx?.kind, "victory", "the emblem still shows on reduced effects");
+  assert.equal(quiet.rings.length, 0, "no ring on reduced effects");
 });

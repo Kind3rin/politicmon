@@ -32,7 +32,7 @@ import {
 import { festivalScandaloChance } from "./atto3MoveEffects";
 import { Menu, MessageBox } from "../../ui/widgets";
 import {
-  approach, audienceReaction, BattleFx, damageImpacts, drawAudience, drawFarLayer, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry, battleFit
+  approach, audienceReaction, BattleFx, damageImpacts, drawAudience, drawFarLayer, drawBattleBackdrop, drawBattleMonster, drawEllipse, monsterCenter, battleGeometry, battleFit, MOMENT_LINES
 } from "./view";
 import { PartyScene } from "../../scenes/PartyScene";
 import { BagScene } from "../../scenes/BagScene";
@@ -926,6 +926,7 @@ export class BattleScene implements Scene {
         // svanisca, per dare peso alla sconfitta. Puro effetto: nessuna logica.
         run: () => {
           audio.faint();
+          this.fx.startMoment("ko");
           this.fx.hitStop = Math.max(this.fx.hitStop, 0.25);
           this.fx.koFlash = 0.5;
           this.fx.faintT.foe = 0.55;
@@ -1110,7 +1111,7 @@ export class BattleScene implements Scene {
     if (this.trainer) {
       const trainer = this.trainer;
       const plan = buildTrainerVictoryPlan(this.state, trainer, this.isRematch);
-      steps.push({ run: () => audio.victory() });
+      steps.push({ run: () => { audio.victory(); this.fx.startMoment("victory"); } });
       for (const line of trainer.defeat) steps.push({ text: line });
       let paid = false;
       steps.push({ run: () => {
@@ -1182,12 +1183,22 @@ export class BattleScene implements Scene {
       steps.push({
         run: () => {
           audio.victory();
+          this.fx.startMoment("victory");
           addSondaggi(this.state, 2);
         }
       });
+      // The victory emblem stays on the arena for a moment before the battle closes.
+      steps.push({ pause: this.state.reduceEffects ? 0.9 : 1.6 });
     }
     this.pushFront(steps);
     this.endBattle("win");
+  }
+
+  /** The line of the moment on screen, as a label under its emblem (the arena draws labels, not the canvas). */
+  private momentLabels(): { label: string; x: number; y: number; opacity: number; kind: "moment" }[] {
+    const moment = this.fx.momentFx;
+    if (!moment) return [];
+    return [{ label: MOMENT_LINES[moment.kind], x: 50, y: 58, opacity: Math.min(1, moment.t / (moment.max * .2)), kind: "moment" }];
   }
 
   private playerFaintedSteps(): Step[] {
@@ -1425,6 +1436,7 @@ export class BattleScene implements Scene {
       {
         run: () => {
           audio.catchJingle();
+          this.fx.startMoment("recruit");
           const newDex = this.state.dex[this.foe.mon.speciesId] !== "caught";
           const polls = this.state.sondaggi;
           markCaught(this.state, this.foe.mon.speciesId);
@@ -1464,6 +1476,8 @@ export class BattleScene implements Scene {
       }
     ];
     steps.push({ run: () => this.pushFront(zoneAnnouncements) });
+    // The recruit emblem stays on the arena for a moment before the battle closes.
+    steps.push({ pause: this.state.reduceEffects ? 0.9 : 1.6 });
     this.endBattle("caught");
     return steps;
   }
@@ -1579,7 +1593,7 @@ export class BattleScene implements Scene {
     const body=this.msg.isOpen?readableCopy(this.msg.visibleText):this.actionCaption?readableCopy(this.actionCaption.result):intent?(intent.power?`Risposta prevista: ${this.replyDamage()} PV, senza critico.`:moveDescription(intent).replace(/del nemico/g,"del tuo compagno").replace(/di chi la usa/g,"dell’avversario")):"Le azioni si stanno risolvendo.";
     const notice=this.fx.effFx?({super:"Super efficace",weak:"Poco efficace",crit:"Colpo critico"}[this.fx.effFx.kind]):this.fieldFxT>0?readableCopy(this.fieldNotice):this.legendEntry>0?`Leggenda in campo: ${readableCopy(this.playerName())}`:this.finisherT>0?"Microfono aperto!":this.copioneFxT>0?"Domanda non prevista!":this.legendBanner>0?"Incontro leggendario":this.firstSeenBanner>0?"Nuova specie nel Politicdex":this.field&&!this.fieldResolved?readableCopy(`${this.field.name}: ${this.field.rule}`):undefined;
     return {title:"Lotta",selected:this.fightMenu.index,actions:[...moves,...postures,...secondary],arena:{
-      impacts:damageImpacts(this.fx.damageNumbers,this.viewHeight,this.state.reduceEffects),
+      impacts:[...damageImpacts(this.fx.damageNumbers,this.viewHeight,this.state.reduceEffects),...this.momentLabels()],
       player:{form:memeForm(this.player.mon.memeFormId)?.name,name:this.playerName(),level:this.player.mon.level,hp:this.displayHp.player,maxHp:statsOf(this.player.mon).hp,status:this.player.mon.status?readableCopy(STATUS_NAMES[this.player.mon.status]):undefined},
       foe:{form:memeForm(this.foe.mon.memeFormId)?.name,name:this.foeName(),level:this.foe.mon.level,hp:this.displayHp.foe,maxHp:statsOf(this.foe.mon).hp,status:this.foe.mon.status?readableCopy(STATUS_NAMES[this.foe.mon.status]):undefined},
       message:{title,body},notice,speed:{label:this.state.battleSpeed===2?"×2":"×1",hint:this.state.battleSpeed===2?"Ritmo rapido: tocca per tornare al normale.":"Ritmo normale: tocca per velocizzare le lotte.",run:()=>{this.state.battleSpeed=this.state.battleSpeed===2?1:2;audio.cursor();saveGame(this.state);}},trainer:this.trainer&&this.msg.isOpen?{name:readableCopy(this.trainer.name),portrait:trainerPortrait(this.trainer.id,this.trainer.pal)}:undefined,moveCount:moves.length,postureCount:postures.length,
@@ -1879,6 +1893,7 @@ export class BattleScene implements Scene {
     // Scintille d'impatto (sopra i mostri, sotto le scritte/HUD).
     this.fx.drawMoveFx(screen);
     this.fx.drawGag(screen);
+    this.fx.drawMoment(screen);
     this.fx.drawRings(screen);
     this.fx.drawParticles(screen);
     this.fx.drawTint(screen);

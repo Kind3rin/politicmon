@@ -57,7 +57,7 @@ test("the victory receipt awards funds, poll, reward and same-item loot exactly 
 test("jackpot keeps its celebration without granting the rare item again", () => {
   const battle = Object.create(BattleScene.prototype) as any;
   battle.state = newGameState(); battle.trainer = TRAINERS.aide;
-  battle.foeIndex = 1; battle.foeTeam = [{}, {}]; battle.fx = { catchFlash: 0, particles: [] };
+  battle.foeIndex = 1; battle.foeTeam = [{}, {}]; battle.fx = { catchFlash: 0, particles: [], startMoment() {} };
   const queue: any[] = []; battle.pushFront = (steps: any[]) => queue.push(...steps); battle.endBattle = () => {};
   const random = Math.random; const rolls = [0, .999]; Math.random = () => rolls.shift() ?? .5;
   try { battle.afterFoeDown(); } finally { Math.random = random; }

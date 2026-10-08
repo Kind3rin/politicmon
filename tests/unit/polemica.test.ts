@@ -14,7 +14,7 @@ import { CivicScene } from "../../src/scenes/CivicScene.ts";
 import { CIVIC_EVENTS } from "../../src/data/civicEvents.ts";
 
 function nativeActions(b:any) {
-  b.msg ??= new MessageBox(); b.polemica ??= new Polemica(); b.fx ??= {damageNumbers:[],effFx:null,playGag(){}};
+  b.msg ??= new MessageBox(); b.polemica ??= new Polemica(); b.fx ??= {damageNumbers:[],effFx:null,playGag(){}, startMoment() {}};
   b.state ??= newGameState(); b.state.party ??= b.player?[b.player.mon]:[]; b.state.bag ??= {};
   b.player ??= makeCombatant(createMonster("ellyna",5)); b.foe ??= makeCombatant(createMonster("giorgetta",4));
   b.displayHp ??= {player:b.player.mon.hp,foe:b.foe.mon.hp};
@@ -73,7 +73,7 @@ test("result commitment consumes only applied campaign boosts once, including re
     ["run",undefined,false,[3,3,3]]
   ] as const;
   for(const [result,id,isRematch,expected] of cases){
-    const b:any=Object.create(BattleScene.prototype),state=newGameState();
+    const b:any=Object.create(BattleScene.prototype),state=newGameState(); b.fx={playGag(){},startMoment(){}};
     state.boostExpBattles=state.boostMoneyBattles=state.boostSondBattles=3;
     Object.assign(b,{state,isRematch,trainer:id?{id}:undefined});b.recordResult(result);
     const committed=JSON.stringify(state);b.recordResult(result);assert.equal(JSON.stringify(state),committed);
@@ -83,7 +83,7 @@ test("result commitment consumes only applied campaign boosts once, including re
 });
 
 test("recruitment saves capture and growth before the skippable receipt, then keeps learning and evolution", () => withSaveStorage(saved => {
-    const b:any=Object.create(BattleScene.prototype), state=newGameState();
+    const b:any=Object.create(BattleScene.prototype), state=newGameState(); b.fx={playGag(){},startMoment(){}};
     const lead=createMonster("ellyna",7), alive=createMonster("salvinott",6), ko=createMonster("grillix",5), foe=createMonster("calendauro",5);
     ko.hp=0;alive.exp=expForLevel(7)-1;
     state.party=[lead,alive,ko];state.bag.divisa=1;state.starterId="ellyna";
@@ -112,7 +112,7 @@ test("recruitment saves capture and growth before the skippable receipt, then ke
 
 test("an ally's opening recruitment boosts the living bench starter and saves its evolution without sharing twice", () => withSaveStorage(saved => {
   for (const share of [0, 1]) {
-    const b:any=Object.create(BattleScene.prototype), state=newGameState();
+    const b:any=Object.create(BattleScene.prototype), state=newGameState(); b.fx={playGag(){},startMoment(){}};
     const lead=createMonster("salvinott",5), starter=createMonster("renzino",6), other=createMonster("grillix",5), foe=createMonster("calendauro",5);
     state.party=[lead,starter,other];state.starterId="renzino";state.bag.divisa=share;
     state.flags["opening-v2"]=true;state.defeatedTrainers=["praticante"];state.runStats.captures=1;
@@ -133,7 +133,7 @@ test("an ally's opening recruitment boosts the living bench starter and saves it
 
 test("opening bench momentum never revives a KO starter or affects an old campaign", () => withSaveStorage(() => {
   for (const oldCampaign of [false,true]) {
-    const b:any=Object.create(BattleScene.prototype),state=newGameState();
+    const b:any=Object.create(BattleScene.prototype),state=newGameState(); b.fx={playGag(){},startMoment(){}};
     const lead=createMonster("salvinott",5),starter=createMonster("renzino",6),foe=createMonster("calendauro",5);
     if(!oldCampaign)starter.hp=0;
     state.party=[lead,starter];state.starterId="renzino";state.bag.divisa=0;
@@ -145,12 +145,12 @@ test("opening bench momentum never revives a KO starter or affects an old campai
 }));
 
 test("KO growth has one skippable receipt with real bonuses and preserves bench lessons, evolution and the next foe", () => {
-  const b:any=Object.create(BattleScene.prototype),state=newGameState();
+  const b:any=Object.create(BattleScene.prototype),state=newGameState(); b.fx={playGag(){},startMoment(){}};
   const lead=createMonster("ellyna",7),bench=createMonster("salvinott",6),dead=createMonster("grillix",5),foe=createMonster("calendauro",8);
   lead.exp=expForLevel(8)-1;bench.exp=expForLevel(7)-1;dead.hp=0;foe.hp=0;
   state.party=[lead,bench,dead];state.bag.divisa=1;state.sondaggi=80;state.morale.cohesion=80;state.boostExpBattles=2;
   state.ministri={istruzione:lead.uid,economia:lead.uid,salute:lead.uid};
-  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),trainer:{id:"rival1"},queue:[],mode:"queue",input:{reset(){}},fx:{playGag(){}}});b.stack={top:b};
+  Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),trainer:{id:"rival1"},queue:[],mode:"queue",input:{reset(){}},fx:{playGag(){}, startMoment() {}}});b.stack={top:b};
   const choices:string[]=[];let nextFoe=0;
   b.afterFoeDown=()=>nextFoe++;
   b.learnMoveSteps=(id:string,mon=lead)=>[{run:()=>{assert.equal(b.growthReceipt,null);choices.push(`${mon.speciesId}:${id}`);}}];
@@ -171,7 +171,7 @@ test("KO growth has one skippable receipt with real bonuses and preserves bench 
 });
 
 test("a capped squad skips empty KO growth while preserving pending evolutions and the next foe", () => {
-  const b:any=Object.create(BattleScene.prototype),state=newGameState();
+  const b:any=Object.create(BattleScene.prototype),state=newGameState(); b.fx={playGag(){},startMoment(){}};
   const lead=createMonster("ellyna",55),bench=createMonster("salvinott",55),foe=createMonster("calendauro",5);
   state.party=[lead,bench];state.bag.divisa=1;
   Object.assign(b,{state,player:makeCombatant(lead),foe:makeCombatant(foe),queue:[],growthReceipt:null});
@@ -184,7 +184,7 @@ test("a capped squad skips empty KO growth while preserving pending evolutions a
 });
 
 test("a duplicate goes to the full-party box, restores traded zone credit and pays the zone once", () => withSaveStorage(() => {
-  const b:any=Object.create(BattleScene.prototype),state=newGameState();
+  const b:any=Object.create(BattleScene.prototype),state=newGameState(); b.fx={playGag(){},startMoment(){}};
   state.party=Array.from({length:6},()=>createMonster("ellyna",7));state.sondaggi=100;
   state.dex={salvinott:"caught",grillix:"caught",tajanide:"caught",contemorfo:"caught"};state.flags["dex-trade:contemorfo"]=true;
   state.zoneRewardsClaimed=[];state.browserSeed=0;
@@ -195,13 +195,13 @@ test("a duplicate goes to the full-party box, restores traded zone credit and pa
   assert.equal(state.party.length,6);assert.equal(state.boxed.length,1);assert.equal(b.recruitReceipt.destination,"NEL BOX: CIRCOLO");
   assert.equal(b.recruitReceipt.newDex,false);assert.equal(b.recruitReceipt.polls,0);
   assert.equal(state.flags["dex-trade:contemorfo"],undefined);assert.equal(state.money,money+800);assert.equal(state.bag.schedona,balls+2);
-  first.at(-1).run();assert.match(b.queue[0].text,/BORGO.*2x.*800 FONDI/);
+  first.at(-2).run();assert.match(b.queue[0].text,/BORGO.*2x.*800 FONDI/);
   b.foe=makeCombatant(createMonster("contemorfo",5));
   b.captureSteps()[0].run();assert.equal(state.money,money+800);assert.equal(state.bag.schedona,balls+2);
 }));
 
 test("quiet recruitment retains combined growth modifiers and fits their explanation in two lines",()=>withSaveStorage(()=>{
-  const b:any=Object.create(BattleScene.prototype),state=newGameState();const lead=createMonster("ellyna",10),foe=createMonster("grillix",5);
+  const b:any=Object.create(BattleScene.prototype),state=newGameState(); b.fx={playGag(){},startMoment(){}};const lead=createMonster("ellyna",10),foe=createMonster("grillix",5);
   state.party=[lead];state.sondaggi=80;state.morale.cohesion=80;state.boostExpBattles=2;
   // Named ministers only apply to living, deployed party members.
   state.ministri={istruzione:lead.uid,economia:lead.uid,salute:lead.uid};
@@ -413,7 +413,7 @@ test("the live move pipeline rewards changed stages, but not immunity or a cappe
   battle.player = makeCombatant(createMonster("ellyna", 5));
   battle.foe = makeCombatant(createMonster("giorgetta", 5));
   battle.polemica = new Polemica();
-  battle.fx = { playGag() {} };
+  battle.fx = { playGag() {}, startMoment() {} };
   battle.koCheckSteps = () => [];
   const apply = (move: typeof MOVES.ztl) => {
     for (const step of battle.moveSteps("player", battle.player, battle.foe, move, "ELLYNA", true)) step.run?.();
@@ -437,7 +437,7 @@ test("impact keeps critical and self-type satire together, reports actual PV, an
   b.player = makeCombatant(createMonster("ellyna", 20)); b.foe = makeCombatant(createMonster("ellyna", 20));
   b.foe.mon.hp = 1; b.announcedOffensive = new Set(); b.polemica = new Polemica(); b.koCheckSteps = () => [];
   let visibleDamage = -1;
-  b.fx = { playGag() {}, onHit(_side: string, _mult: number, _crit: boolean, damage: number) { visibleDamage = damage; } };
+  b.fx = { playGag() {}, startMoment() {}, onHit(_side: string, _mult: number, _crit: boolean, damage: number) { visibleDamage = damage; } };
   const random = Math.random; Math.random = () => 0;
   try {
     const steps = b.moveSteps("player", b.player, b.foe, MOVES.corteo, "ELLYNA", true);
@@ -453,7 +453,7 @@ test("impact keeps critical and self-type satire together, reports actual PV, an
 
 test("a missed enemy announcement preserves PV, consumes one PP, and remains readable without a separate page", () => {
   const b = Object.create(BattleScene.prototype) as any;
-  b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 8)); b.fx = { playGag() {} };
+  b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("giorgetta", 8)); b.fx = { playGag() {}, startMoment() {} };
   const hp = b.player.mon.hp, slot = b.foe.mon.moves.find((s: any) => MOVES[s.id].power > 0), pp = slot.pp;
   const random = Math.random; Math.random = () => .99;
   try {
@@ -655,7 +655,7 @@ test("copione shields real damage and its preview; successful setup removes it w
     // The scripted rival carries explicit moves (tutorialRivalMoves), never the learnset pick.
     b.foe.mon.moves = [{ id: "comizio", pp: MOVES.comizio.pp }, { id: "slogan", pp: MOVES.slogan.pp }];
     b.state = { sondaggi: 50, reduceEffects: true }; b.copione = shield; b.battery = 2; b.foe.stages.atk = shield ? 2 : 0;
-    b.polemica = new Polemica(); b.koCheckSteps = () => []; b.pushFront = () => {}; b.fx = { onHit() {}, playGag() {} };
+    b.polemica = new Polemica(); b.koCheckSteps = () => []; b.pushFront = () => {}; b.fx = { onHit() {}, playGag() {}, startMoment() {} };
     return b;
   };
   const apply = (b: any, move: typeof MOVES.comizio) => {
@@ -684,7 +684,7 @@ test("failed and capped preparations cannot break the script; battery lasts two 
   const b = Object.create(BattleScene.prototype) as any;
   b.player = makeCombatant(createMonster("ellyna", 8)); b.foe = makeCombatant(createMonster("tajanide", 9));
   b.state = { reduceEffects: true }; b.copione = true; b.battery = 2; b.foe.stages.atk = 2;
-  b.polemica = new Polemica(); b.fx = { playGag() {} }; b.koCheckSteps = () => []; const messages: string[] = [];
+  b.polemica = new Polemica(); b.fx = { playGag() {}, startMoment() {} }; b.koCheckSteps = () => []; const messages: string[] = [];
   b.pushFront = (steps: any[]) => messages.push(...steps.flatMap(s => s.text ? [s.text] : []));
   const apply = () => { for (const s of b.moveSteps("player", b.player, b.foe, MOVES.ztl, "ELLYNA", true)) s.run?.(); };
   apply(); assert.equal(b.battery, 2); assert.doesNotMatch(b.moveHint(MOVES.ztl), /ROMPE/);

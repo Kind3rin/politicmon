@@ -1,5 +1,17 @@
 # Changelog
 
+## Mandato 2 — KO, vittoria, reclutamento ed evoluzione (Fase 6.5) — 2026-10-08
+
+- **Quattro momenti con emblema, suono e battuta** (`src/game/battle/view.ts`, `src/game/battle/BattleScene.ts`, `src/scenes/EvolutionScene.ts`):
+  - **KO del nemico**: una scheda annullata, barrata in rosso, con il suono di KO e la battuta «Scheda annullata: il dibattito è chiuso.»
+  - **Vittoria** (selvatico o allenatore): una medaglia d'alloro, con la fanfara di vittoria e la battuta «Vince chi resta in onda. Stavolta il conteggio è tuo.» Nella lotta selvatica la lotta aspetta 1,6 s prima di chiudersi, così l'emblema si vede.
+  - **Reclutamento**: una scheda che entra nell'urna, con il jingle di cattura e la battuta «Una scheda in più nell'urna: adesione firmata.» Anche qui la lotta aspetta 1,6 s prima di chiudersi.
+  - **Evoluzione**: una freccia dorata dentro un sole verde, nella fase della nuova carta intestata. Suono e battute di evoluzione erano già presenti.
+- La battuta è un'etichetta dell'arena, come i numeri di danno, così non chiede un tocco in più. Con «Riduci effetti» l'emblema resta fermo e non esce l'anello.
+- **Crediti**: un foglio 2×2 a 1,5 crediti; saldo 274,72 → 273,22.
+- **Verifica**: KO e vittoria verificati in gioco con screenshot (`artifacts/m2/moments-ko-victoria-375.png`); test nuovi su file, battute e avvio del momento; 609 test unitari, `tsc --noEmit`, `npm run build`, `check-precache-build` (1061 risorse); `check-ui-runtime`, `check-ui-layout`, `check-text-scale`, `check-first-rival` e `check-ui-panels` verdi.
+- **Non fatto**: il reclutamento e la fase finale dell'evoluzione non li ho visti in gioco (la cattura non è nelle lotte di prova, e la pagina di revisione non apre la fase finale). I momenti PvP non ne hanno: il duello non ha KO e vittoria con questi emblemi. Nessun suono nuovo: si usano i suoni già nel gioco.
+
 ## Mandato 2 — arte della Fase 6: pubblico, fondali e gag — 2026-10-08
 
 - **Pubblico che reagisce** (`src/game/battle/view.ts`, `audienceReaction`): una fila di spettatori dietro la lotta, in quattro reazioni (neutrale, applausi, fischi, telefoni alzati). Applaude chi è avanti di un quarto di PV, fischia chi è indietro, alza i telefoni quando la barra Polemica è piena. Nella lotta in rete non ci sono telefoni, perché il duello non ha la Polemica. Tre sfondi di folla: sprite in `public/sprites/battle/crowd_*.png`.

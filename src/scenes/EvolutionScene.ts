@@ -68,7 +68,7 @@ export class EvolutionScene implements Scene {
   const id=showNew?this.toId:this.fromId;
   const quotes:Record<string,string>={giorgiagon:'Il leggio è cresciuto.\n\nLa domanda è rimasta.',schleinix:'La riunione è aperta.\n\nIl simbolo è già cambiato.',renzilla:'Nuova sigla.\n\nStesso numero di telefono.'};
   return {title:this.phase===3?'La carriera continua':'Cambio di casacca',subtitle:this.phase===3?to.name:`${from.name} → ${to.name}`,
-   image:'/sprites/ui/starter-stage.png',portraits:[{src:`/sprites/monsters/${id}.png`,label:SPECIES[id].name}],
+   image:this.phase===3?'/sprites/battle/moment_evoluzione.png':'/sprites/ui/starter-stage.png',portraits:[{src:`/sprites/monsters/${id}.png`,label:SPECIES[id].name}],
    blocks:[{title:this.phase===3?'Nuova carta intestata':'Il simbolo cambia',body:this.phase===3?quotes[this.toId]??'Stesso tesserato.\n\nNuova carta intestata.':'I PP non si ricaricano.'}],
    actions:[this.action(this.phase===3?'Continua':'Salta',()=>{if(this.phase===3)this.finish(true);else{this.phase=3;this.phaseT=0;audio.evolveJingle();}})],primary:0,
    back:this.action('Indietro',()=>this.finish(true),this.phase!==3)};

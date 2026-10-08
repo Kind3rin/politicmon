@@ -75,6 +75,16 @@ export function drawAudience(screen: Screen, reaction: AudienceReaction, time: n
   screen.image(image, drift, top, VIEW_W, AUDIENCE_HEIGHT);
 }
 
+/** Fase 6 moments (6.5): an emblem and one short line for a KO, a victory and a recruit. Evolution has its own scene. */
+export type MomentKind = "ko" | "victory" | "recruit";
+export const MOMENT_ART: Readonly<Record<MomentKind, string>> = { ko: "moment_ko", victory: "moment_victoria", recruit: "moment_recluta" };
+export const MOMENT_LINES: Readonly<Record<MomentKind, string>> = {
+  ko: "Scheda annullata: il dibattito è chiuso.",
+  victory: "Vince chi resta in onda. Stavolta il conteggio è tuo.",
+  recruit: "Una scheda in più nell'urna: adesione firmata."
+};
+const MOMENT_COLOR: Readonly<Record<MomentKind, string>> = { ko: "#D7263D", victory: "#FFD23F", recruit: "#79DDBA" };
+
 export type BattleSide = "player" | "foe";
 
 export interface ImpactParticle {
@@ -199,6 +209,8 @@ export class BattleFx {
   moveFx: { side: BattleSide; type: PolType; t: number } | null = null;
   /** The gag icon of a satirical move in flight (see GAG_ART). */
   gagFx: { side: BattleSide; art: string; t: number } | null = null;
+  /** The emblem of a moment on screen; its line is a label in the arena (see BattleScene's impacts). */
+  momentFx: { kind: MomentKind; t: number; max: number } | null = null;
   rings: ImpactRing[] = [];
   /** Full-frame colour that fades after a heavy hit. */
   tint: { color: string; t: number; max: number } | null = null;
@@ -217,6 +229,10 @@ export class BattleFx {
     if (this.gagFx) {
       this.gagFx.t -= dt;
       if (this.gagFx.t <= 0) this.gagFx = null;
+    }
+    if (this.momentFx) {
+      this.momentFx.t -= dt;
+      if (this.momentFx.t <= 0) this.momentFx = null;
     }
     this.lungeT.player = Math.max(0, this.lungeT.player - dt);
     this.lungeT.foe = Math.max(0, this.lungeT.foe - dt);
@@ -445,6 +461,29 @@ export class BattleFx {
     const art = GAG_ART[moveId];
     if (!art || this.reduceEffects) return;
     this.gagFx = { side, art, t: .7 };
+  }
+
+  /** A moment starts: the emblem grows in the middle of the arena and a ring goes out once; reduced effects keep the emblem still. */
+  startMoment(kind: MomentKind): void {
+    const max = this.reduceEffects ? 1.2 : 1.6;
+    this.momentFx = { kind, t: max, max };
+    if (!this.reduceEffects) this.rings.push({ x: VIEW_W / 2, y: this.viewHeight * .4, from: 6, to: 70, t: .5, max: .5, color: MOMENT_COLOR[kind], width: 3 });
+  }
+
+  drawMoment(screen: Screen): void {
+    const moment = this.momentFx;
+    if (!moment) return;
+    const art = MOMENT_ART[moment.kind];
+    const image = sceneImage(`battle:moment:${art}`, `battle/${art}.png`);
+    if (!image) return;
+    const p = 1 - moment.t / moment.max;
+    // Grows with a small overshoot in the first quarter, holds, and fades out over the last fifth.
+    const grow = this.reduceEffects ? 1 : p < .25 ? (p / .25) * 1.12 : p < .35 ? 1.12 - ((p - .25) / .1) * .12 : 1;
+    const size = 56 * grow;
+    screen.ctx.save();
+    screen.ctx.globalAlpha = Math.max(0, Math.min(1, moment.t / (moment.max * .2)));
+    screen.image(image, Math.round(VIEW_W / 2 - size / 2), Math.round(this.viewHeight * .4 - size / 2), size, size);
+    screen.ctx.restore();
   }
 
   drawGag(screen: Screen): void {

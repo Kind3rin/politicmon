@@ -1,4 +1,5 @@
 import {beginWorldLabels,endWorldLabels} from "./worldLabels";
+import { keepPlayerClear } from "./clearOfPlayer";
 import { renderArena, leaveArena, type UiArena } from "./arena";
 import { renderPlan, type UiPlan } from "./plan";
 export type { UiPlan } from "./plan";
@@ -315,7 +316,7 @@ export const kit = {
       cancelHold();if(inspected){inspected=false;return;}
       if (!button.disabled && !isDisabled()) {
         haptics.tap(); run();
-        button.closest<HTMLElement>("#game-ui, #game-dialog, #world-ui")?.focus({ preventScroll: true });
+        button.closest<HTMLElement>("#game-ui, #game-dialog, #world-ui, .ui-world-hud")?.focus({ preventScroll: true });
       }
     };
     return button;
@@ -337,6 +338,7 @@ let continueDialog: (() => void) | undefined;
 export function beginUiFrame(): void { dialogSeen = false; beginWorldLabels(); }
 export function endUiFrame(): void {
   endWorldLabels();
+  keepPlayerClear();
   if (dialog && !dialogSeen) dialog.hidden = true;
   document.body.classList.toggle("ui-dialog-open", dialogSeen);
 }
@@ -736,8 +738,16 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     worldRoot.setAttribute("aria-label", "Esplorazione"); host.append(worldRoot);
   }
   worldRoot.hidden = false;
-  if(!worldHud){worldHud=element("aside","ui-world-hud");worldHud.setAttribute("aria-label","La tua campagna");document.querySelector("#screen-stage")?.append(worldHud);}
+  if(!worldHud){worldHud=element("aside","ui-world ui-world-hud");worldHud.setAttribute("aria-label","La tua campagna");worldHud.tabIndex=-1;document.querySelector("#screen-stage")?.append(worldHud);}
   worldHud.hidden=false;
+  // The HUD is one column from the top (see world.css): the top row with the place name or notice and the menu, the objective, the status row
+  // with the clock and the save flash, then a lesson pinned to the top. The rows keep their nodes between frames; only the text changes them.
+  let hudStack=worldHud.querySelector<HTMLElement>(':scope > .ui-world-stack');
+  if(!hudStack){hudStack=element('div','ui-world-stack');worldHud.append(hudStack);}
+  let topRow=hudStack.querySelector<HTMLElement>(':scope > .ui-world-top');
+  if(!topRow){topRow=element('div','ui-world-top');hudStack.append(topRow);}
+  let statusRow=hudStack.querySelector<HTMLElement>(':scope > .ui-world-status');
+  if(!statusRow){statusRow=element('div','ui-world-status');hudStack.append(statusRow);}
   // Location and notices have independent lifetimes: a changing quest must not
   // restart them, nor should a still-present server notice flash every frame.
   const lesson=world.lesson&&world.lesson.title!==lessonDismissed?world.lesson:undefined;
@@ -749,11 +759,11 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
       const card=element('aside','ui-world-lesson');card.setAttribute('role','status');card.dataset.at=lesson.at??'bottom';
       const close=element('button','',"✕");close.type='button';close.setAttribute('aria-label','Nascondi il suggerimento');
       close.onclick=()=>{lessonDismissed=lesson.title;lesson.dismiss?.();worldHudSignature="";card.remove();};
-      card.append(element('strong','',lesson.title),element('p','',lesson.body),close);worldHud.append(card);
+      card.append(element('strong','',lesson.title),element('p','',lesson.body),close);hudStack.append(card);
     }
-    let location=worldHud.querySelector<HTMLElement>('.ui-world-location');
+    let location=topRow.querySelector<HTMLElement>('.ui-world-location');
     if(!location || location.textContent!==world.location){
-      location?.remove();location=element('div','ui-world-location',world.location);worldHud.prepend(location);
+      location?.remove();location=element('div','ui-world-location',world.location);topRow.prepend(location);
     }
     let objective=worldHud.querySelector<HTMLButtonElement>('.ui-world-objective');
     if(world.objective){
@@ -761,18 +771,18 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
         objective=element('button','ui-world-objective');objective.type='button';
         objective.setAttribute('aria-expanded','true');
         objective.onclick=()=>{const open=objective!.getAttribute('aria-expanded')!=='true';objective!.setAttribute('aria-expanded',String(open));};
-        worldHud.append(objective);
+        statusRow.before(objective);
       }
       objective.textContent=world.objective;objective.setAttribute('aria-label',`Obiettivo: ${world.objective}`);
     }else objective?.remove();
     const noticeText=[world.notice,...world.messages??[]].filter(Boolean).join(' · ');
     const oldNotice=worldHud.querySelector('.ui-world-notice');
-    if(oldNotice?.textContent!==noticeText){oldNotice?.remove();if(noticeText){const notice=element('p','ui-world-notice',noticeText);notice.setAttribute('role','status');worldHud.append(notice);}}
+    if(oldNotice?.textContent!==noticeText){oldNotice?.remove();if(noticeText){const notice=element('p','ui-world-notice',noticeText);notice.setAttribute('role','status');topRow.prepend(notice);}}
   }
   // The day's schedule: a small clock under the objective, tapped to read the schedule and change channel.
   let clock=worldHud.querySelector<HTMLButtonElement>('.ui-world-clock');
   if(world.clock){
-    if(!clock){clock=element('button','ui-world-clock');clock.type='button';clock.onclick=()=>worldCurrent?.clock?.run();worldHud.append(clock);}
+    if(!clock){clock=element('button','ui-world-clock');clock.type='button';clock.onclick=()=>worldCurrent?.clock?.run();statusRow.prepend(clock);}
     if(clock.dataset.text!==world.clock.text){
       clock.dataset.text=world.clock.text;clock.dataset.slot=world.clock.slot;
       const icon=document.createElementNS('http://www.w3.org/2000/svg','svg');icon.setAttribute('viewBox','0 0 24 24');icon.setAttribute('width','22');icon.setAttribute('height','22');icon.setAttribute('aria-hidden','true');
@@ -782,8 +792,10 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
     }
   }else clock?.remove();
   let saved=worldHud.querySelector<HTMLElement>('.ui-save-flash');
-  if(!saved){saved=element('span','ui-save-flash','✓ Salvato');saved.setAttribute('role','status');worldHud.append(saved);}
+  if(!saved){saved=element('span','ui-save-flash','✓ Salvato');saved.setAttribute('role','status');statusRow.append(saved);}
   saved.hidden=!world.saved;
+  // An empty status row takes no room: it is hidden, so the gap above it closes too.
+  statusRow.hidden=!statusRow.querySelector(':scope > :not([hidden])');
   const next=JSON.stringify([world.actions.map(a=>[a.label,a.icon,a.disabled]),Boolean(world.power)]);
   if(next!==worldSignature){
     worldSignature=next;
@@ -799,7 +811,9 @@ export function renderUiWorld(world?: UiWorld, pending = false): void {
       const power=kit.button(world.power,()=>worldCurrent?.power?.run());power.classList.add('ui-world-power');power.setAttribute('aria-label','Poteri');
       const row=element('div','ui-world-row');row.append(power,worldRun);controls.append(worldContext,row);
     }else controls.append(worldContext,worldRun);
-    worldRoot.replaceChildren(nav,controls);
+    // The menu sits in the top row, beside the place name, so a bigger text narrows the name instead of running under the buttons.
+    topRow.querySelector(':scope > .ui-world-nav')?.remove();topRow.append(nav);
+    worldRoot.replaceChildren(controls);
   }
   if(worldContext&&worldRun){
     worldContext.hidden=Boolean(world.context.disabled);

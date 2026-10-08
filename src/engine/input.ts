@@ -32,7 +32,7 @@ function isNativeControlTarget(target: EventTarget | null, code: string): boolea
     return false;
   }
   const tag = el.tagName.toLowerCase();
-  return tag === "input" || tag === "textarea" || (tag === "button" && !(el.closest("#game-ui, #world-ui, #game-dialog") && code !== "Enter" && code !== "Space")) || tag === "select" || tag === "a" || el.isContentEditable === true || Boolean(document.querySelector('dialog[open]'));
+  return tag === "input" || tag === "textarea" || (tag === "button" && !(el.closest("#game-ui, #world-ui, #game-dialog, .ui-world-hud") && code !== "Enter" && code !== "Space")) || tag === "select" || tag === "a" || el.isContentEditable === true || Boolean(document.querySelector('dialog[open]'));
 }
 
 const isDirection = (button: Button | null | undefined): boolean =>

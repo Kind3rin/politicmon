@@ -34,7 +34,7 @@ try{
    const painted=key=>{const b=JSON.parse(canvas.dataset[key]);return {left:c.left+b.x/240*c.width,top:c.top+b.y/b.viewHeight*c.height,right:c.left+(b.x+b.w)/240*c.width,bottom:c.top+(b.y+b.h)/b.viewHeight*c.height,width:b.w/240*c.width};};
    if(screen==='esplorazione'){
     if(c.width*c.height/(w*h)<.95)issues.push('world under 95%');
-    const player=painted('worldPlayerBounds');if([...controls,...document.querySelectorAll('.ui-world-hud > *')].filter(visible).some(e=>overlap(box(e),player)))issues.push('interface covers player');
+    const player=painted('worldPlayerBounds');if([...controls,...document.querySelectorAll('.ui-world-hud :is(.ui-world-top > *, .ui-world-objective, .ui-world-status > *, .ui-world-lesson)')].filter(visible).some(e=>overlap(box(e),player)&&!e.classList.contains('is-over-player')))issues.push('interface covers player');
    }else if(screen==='menu'){
     if(c.width*c.height/(w*h)<.95)issues.push('menu shrinks world');
     if(document.querySelectorAll('.ui-pause-grid .ui-pause-entry').length!==6)issues.push('menu missing entries');

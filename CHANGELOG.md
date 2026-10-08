@@ -1,5 +1,15 @@
 # Changelog
 
+## Mandato 2 — titoli in alto e player sempre leggibile — 2026-10-08
+
+- **Difetti confermati da misura** (audit su 63 agenti, ogni difetto verificato da tre controllori): il luogo su quattro righe copriva l'obiettivo a 375 px (4576 px² per circa 1,8 s); il «✓ Salvato» copriva la fine dell'obiettivo a testo 1,3 (circa 1,4 s); la notifica «Prima tessera · +2300€» perdeva la terza riga a testo 1,3, perché la clamp CSS non funzionava. I titoli dei pannelli non avevano nulla da correggere (112 schermate-titolo misurate).
+- **Colonna unica in alto** (`world.css`, `index.ts`): il luogo o la notifica stanno nella riga in alto, accanto al menu; a testo grande, dove non ci sono 120 px, il menu va a capo sotto il luogo. Sotto ci sono l'obiettivo, la riga di stato (orologio e «Salvato») e la lezione in alto. Niente più offset in pixel fissi: ogni riga prende l'altezza reale di quelle sopra. Luogo e notifica si chiudono in altezza, quindi le righe sotto scendono senza scatti.
+- **Obiettivo a capo** invece dei puntini a testo 1,3: prima la missione si leggeva a metà su un telefono stretto, e il tocco nasconde solo il testo.
+- **Il player non è coperto dal testo** (`clearOfPlayer.ts`): al bordo alto della mappa la camera si ferma e il player cammina sotto la barra dell'obiettivo (misurato: player a 98–154 px, obiettivo a 92–136 px). A ogni frame, ogni scritta sul quadrato del player (righe in alto, pulsanti del menu, lezione, orologio, etichette di persone e luoghi) si attenua al 30%. Resta dov'è e resta tappabile.
+- **Verifica**: nuovo `check-hud-clear` (cinque profili × testo 1 e 1,3 × centro, bordo alto e bordo basso: 30 posizioni). Nessuna riga sovrapposta, nessun testo tagliato nella sua scatola, nulla fuori schermo, tutto ciò che tocca il player attenuato. `check-pwa-device` e `check-ui-runtime` leggono ora le foglie dell'HUD (`.ui-world-hud > *` era lo stack a tutta altezza) e accettano il testo attenuato; i pulsanti non possono coprire il player.
+- **Suite**: 60 controlli. Il primo giro dava 59/60: `check-text-scale` segnalava l'orologio del palinsesto sopra il player, che ora è attenuato, ma il controllo non lo considerava; corretto il controllo (la regola ora è «sopra il player solo se attenuato») e il controllo è verde. 595 test unitari e `tsc --noEmit` verdi.
+- **Limiti**: a testo 1,3 su iPhone SE il blocco in alto arriva al centro dello schermo, quindi orologio e obiettivo si attenuano anche in gioco normale. Le etichette di persone e luoghi che stanno sotto i pulsanti in alto restano visibili sotto di essi (testo del mondo, misurato solo sulle mappe dei controlli). Nessun telefono fisico.
+
 ## Mandato 2 — spazi dei telefoni e PWA — 2026-10-07
 
 - **Misure cercate online.** Il POCO F9 ULTRA ha 2608×1200 (416 ppi): viewport CSS 400×869, non i 412×915 ipotizzati. Profili aggiornati e allargati: 23 (POCO installata, schermo intero con gesti o tre tasti, zoom, scheda del browser, orizzontale, schermo diviso 400×405; poi Galaxy S25 e Ultra, Pixel 9, iPhone SE, 16, 16 Pro, 16 Pro Max, iPhone di lato, tablet).

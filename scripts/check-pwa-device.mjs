@@ -74,8 +74,8 @@ const audit = ({ screen, insets, short }) => {
     if (c.width * c.height / (w * h) < .95) issues.push('the world is smaller than the window');
     const player = painted('worldPlayerBounds');
     if (player.left < safe.left || player.right > safe.right || player.top < safe.top || player.bottom > safe.bottom) issues.push('the player is under a cutout or the gesture bar');
-    // In a window this short the free band between the buttons and the stick is the player's: the coach card, which has a close button, may pass over it.
-    for (const e of [...controls, ...document.querySelectorAll('.ui-world-hud > *')].filter(x => visible(x) && !(short && x.closest('.ui-world-lesson')))) if (overlap(box(e), player)) issues.push(`interface covers the player: ${name(e)}`);
+    // Text over the player's square is faded by `is-over-player` (clearOfPlayer.ts) and may stay where it is; buttons and the stick may not overlap it. In a window this short the free band between the buttons and the stick is the player's: the coach card, which has a close button, may pass over it.
+    for (const e of [...controls, ...document.querySelectorAll('.ui-world-hud :is(.ui-world-top > *, .ui-world-objective, .ui-world-status > *, .ui-world-lesson)')].filter(x => visible(x) && !(short && x.closest('.ui-world-lesson')))) if (overlap(box(e), player) && !e.classList.contains('is-over-player')) issues.push(`interface covers the player: ${name(e)}`);
   } else if (screen.startsWith('lotta') && screen !== 'lotta-crescita') {
     for (const key of ['foeBounds', 'playerBounds']) {
       const s = painted(key);

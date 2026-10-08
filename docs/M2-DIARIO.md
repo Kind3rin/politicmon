@@ -86,3 +86,10 @@ Ancora non convince: l'effetto sulla difficoltà non si conosce (la simulazione 
 Regressione trovata e corretta: l'icona messa sui pulsanti delle posture ha fatto andare a capo la riga (44 → 100 px) e restringere le carte (79 → 51 px). Tolta, riportata a 44 px e 79 px a 360×640; poi `check-ui-layout`, `check-ui-runtime`, `check-pwa-device` e `check-text-scale` verdi (suite4).
 Crediti Higgsfield: tre icone a 1,5 crediti con qualità alta (l'anteprima senza qualità diceva 0,25: il costo reale è 1,5, già nel documento degli asset). Saldo 286,72 → 282,22.
 Prove: `npm test` 598/598; `tsc --noEmit` pulito; `tests/unit/posture.test.ts` 10/10; suite4 quattro controlli verdi; dopo la piastrina `check-ui-runtime` e `check-text-scale` di nuovo verdi (suite5).
+
+## Primi minuti — Gianni e il cartello — 8 ottobre 2026
+Prima/dopo: prima Gianni apriva il duello senza spiegare nulla, e il cartello «Parla con qualcuno» restava per trenta passi anche in strade vuote. Ora Gianni spiega il copione in due pagine e poi parte il duello; il cartello compare solo con un personaggio vicino. Prova: artifacts/m2/first-rival-copione-375.png.
+Si nota subito: la spiegazione sta nella scatola a 375 px con il ritratto; il cartello non compare più nelle strade vuote.
+Ancora non convince: «Metti in testa» resta nella scheda Valori. Provata la scheda Mosse: a 844×390 in orizzontale la pagina non entra e `check-ui-panels` lo segnala. La copertura della strada dal cartello non è misurata in pixel, solo verificata a occhio nello screenshot.
+Prove: `check-first-rival` (nuovo), `check-world-controls`, `check-hud-clear`, `check-coach`, `check-first-minutes`, `check-ui-runtime`, `check-ui-flows`, `check-ui-panels` (28 schermate × 4); 599 test unitari; `tsc --noEmit` pulito.
+Crediti Higgsfield: nessun consumo, saldo 282,22.

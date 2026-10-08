@@ -258,3 +258,11 @@ test('control lessons follow the player, then retire instead of nagging for the 
   state.stepsTotal = 75;
   assert.equal(controlLesson(state), undefined, 'no lesson survives a long walk');
 });
+
+test('the talk lesson waits for a character to be near, so it never covers the road for nothing', () => {
+  const state = newGameState();
+  state.flags['controls-intro'] = true;
+  state.stepsTotal = 5;
+  assert.match(controlLesson(state, undefined, false)!.title, /cose/i, 'nobody near: the menu lesson, not a card over the road');
+  assert.match(controlLesson(state, undefined, true)!.title, /Parla/i, 'someone near: the talk lesson');
+});

@@ -546,7 +546,7 @@ export class WorldScene implements Scene {
       saved:Date.now()-lastSuccessfulSaveAt<1800,
       notice:this.tapNotice&&this.time<this.tapNotice.until?this.tapNotice.text:this.banner?`${this.banner.text} · ${this.banner.sub}`:undefined,
       messages:mp.chat.filter(c=>performance.now()-c.t<6000).slice(-2).map(c=>`${mp.chatNick(c)}: ${c.text}`),
-      lesson:(lesson=>lesson&&{...lesson,at:this.lessonAt})(controlLesson(this.state,context)??(this.worldTipNow&&{title:this.worldTipNow.title,body:this.worldTipNow.body,dismiss:()=>{markTip(this.state,this.worldTipNow!.id);this.worldTipNow=undefined;}})),
+      lesson:(lesson=>lesson&&{...lesson,at:this.lessonAt})(controlLesson(this.state,context,this.npcNear())??(this.worldTipNow&&{title:this.worldTipNow.title,body:this.worldTipNow.body,dismiss:()=>{markTip(this.state,this.worldTipNow!.id);this.worldTipNow=undefined;}})),
       location:this.map.name.charAt(0)+this.map.name.slice(1).toLocaleLowerCase("it")+(this.zoneName(this.state.pos.x,this.state.pos.y)?` · ${this.zoneName(this.state.pos.x,this.state.pos.y)}`:""),facts,
       objective:quest?`${this.map.id==="borgo"&&quest.target?.mapId==="route1"?"Esci a nord. ":""}${quest.step}`:this.state.party.length?undefined:"Vai al laboratorio con il tetto blu.",
       actions: [command("Squadra", () => this.stack.push(new PartyScene(this.stack,this.input,this.state,{mode:"view"})),"/sprites/ui/kit/team.png"),
@@ -948,6 +948,12 @@ export class WorldScene implements Scene {
       return false;
     }
     return true;
+  }
+
+  /** A character within about the width and height of the screen: the only ones a "Parla" card can point at. */
+  private npcNear(): boolean {
+    const {x, y} = this.state.pos;
+    return this.visibleNpcs().some(npc => Math.abs(npc.x - x) <= 7 && Math.abs(npc.y - y) <= 5);
   }
 
   private visibleNpcs(): RuntimeNpc[] {
@@ -1986,6 +1992,14 @@ export class WorldScene implements Scene {
     if (npc.id === "opening-rival") {
       if (!firstRivalReady(this.state)) {
         this.say(["GIANNI: DUE VOCI E UN SIMBOLO NUOVO.\nPRIMA ALLENATI, POI MI TAGGHI."]);
+        return;
+      }
+      // The first time, Gianni explains the script that halves your damage; a retry after a loss goes straight to the duel.
+      if (this.state.flags["opening-v2"] && !this.state.flags["rival1-briefed"]) {
+        this.say(["GIANNI: QUESTO È IL COPIONE. FINCHÉ È IN SCENA, I TUOI COLPI FANNO METÀ DANNO.", "UNA MOSSA CHE NON FA DANNO MA CAMBIA QUALCOSA LO ROMPE: IL SUO ATTACCO CALA DI TRE.\nLO SCUDO SI LEGGE ×½ SOTTO LA MOSSA."], () => {
+          this.state.flags["rival1-briefed"] = true;
+          this.startFirstDebate();
+        });
         return;
       }
       this.startFirstDebate();

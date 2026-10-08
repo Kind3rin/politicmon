@@ -32,16 +32,17 @@ export function firstDebateGuide(state:GameState,id:string):string[]{
  return [`GIANNI PORTA ${rival.name} AL LIVELLO ${level}. IL TUO ${chosen.name} ENTRA AL LIVELLO ${lead?.level??5}.`,...moves.map(slot=>{const m=MOVES[slot.id];return m.power>0?`${m.name}: EFFICACIA ×${typeMultiplier(m.type,rival.types)} CONTRO IL SUO TIPO.`:`${m.name}: ${m.flavor}`;}),'LE QUATTRO MOSSE SONO VISIBILI. SCEGLINE UNA DIRETTAMENTE. TIENI PREMUTA UNA SCHEDA, O PREMI I SULLA TASTIERA, PER LEGGERNE IL DETTAGLIO SENZA CONSUMARE IL TURNO.','GIANNI NON USA CURE IN QUESTO PRIMO DIBATTITO. UNA MOSSA DI STATO COSTA UN TURNO, MA PUÒ CAMBIARE QUELLI SUCCESSIVI.','LA BORSA USA CONSUMABILI. CAMBIARE POLITICMON CONSUMA IL TURNO; CONSULTARE IL DOSSIER NO. CONTRO UN ALLENATORE NON PUOI CATTURARE O FUGGIRE.','SE PERDI QUESTO PRIMO DIBATTITO, QUIRINO TI RIMETTE IN PIEDI SENZA MULTA. POTRAI RIPROVARE GIANNI DAL LABORATORIO.','QUIRINO: GIANNI HA STUDIATO IL TUO CONTRARIO. TU STUDIA LE MOSSE. IL TELEVISORE NON FA LE MOLTIPLICAZIONI.'];
 }
 
-/** Teach one gesture when it is useful, then retire it after actual use. */
-export function controlLesson(state: GameState, context?: string): {title:string;body:string} | undefined {
+/** Teach one gesture when it is useful, then retire it after actual use.
+ *  `npcNear` says a character is close enough to talk to; without one, "Parla con qualcuno" would only cover the road. */
+export function controlLesson(state: GameState, context?: string, npcNear = true): {title:string;body:string} | undefined {
  if (!state.flags['controls-intro']) return undefined;
  const device=currentInputDevice();
  if (state.stepsTotal<2) return {title:'Muoviti',body:device==='touch'
-  ? 'Trascina la levetta o tocca un punto della mappa: ci cammini da solo.'
+  ? 'Trascina la levetta o tocca la mappa.'
   : device==='controller' ? 'Muovi la leva sinistra o usa la croce. Rilascia per fermarti.' : 'Muoviti con le frecce o WASD. Rilascia per fermarti.'};
  // A lesson that nobody needed must not nag for the whole route: each one retires with distance.
  if (state.stepsTotal>=60) return undefined;
- if (!state.flags['controls-interacted'] && state.stepsTotal<30) return {title:'Parla con qualcuno',body:context==='Parla'
+ if (!state.flags['controls-interacted'] && state.stepsTotal<30 && npcNear) return {title:'Parla con qualcuno',body:context==='Parla'
   ? device==='touch' ? 'Tocca Parla. Un tocco completa il testo; il successivo continua.' : `Premi ${commandHint('a')} per parlare. Una pressione completa il testo; la successiva continua.`
   : device==='touch' ? 'Tocca un personaggio: ti avvicini e gli parli.' : 'Avvicinati a un personaggio. Il pulsante in basso diventerà Parla.'};
  if(state.flags['controls-returned'])return undefined;

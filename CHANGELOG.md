@@ -1,5 +1,12 @@
 # Changelog
 
+## Mandato 2 — primi minuti: Gianni spiega il copione — 2026-10-08
+
+- **Gianni spiega il copione prima del primo duello** (`src/game/world/WorldScene.ts`): la prima volta che gli si parla, due pagine dicono che il copione dimezza i tuoi colpi finché dura, e che una mossa senza danni che cambia qualcosa lo rompe (il suo attacco cala di tre). Poi il duello parte come prima. Una rivincita dopo una sconfitta va diretta al duello (flag `rival1-briefed`).
+- **«Parla con qualcuno» solo se c'è qualcuno vicino** (`src/game/onboarding.ts`): il cartello non copre più la strada quando nessun personaggio è nello schermo. Il testo al tocco è più corto: «Trascina la levetta o tocca la mappa.»
+- **Non fatto**: «Metti in testa» resta nella scheda Valori. Lo abbiamo provato nella scheda Mosse, dove si apre un compagno, ma a 844×390 in orizzontale la pagina non entra e `check-ui-panels` segnala lo scorrimento. Da ripensare con un altro punto d'ingresso.
+- **Verifica**: nuovo `check-first-rival` (la spiegazione compare una volta, il duello si apre dopo la seconda pagina, la rivincita va diretta). `check-world-controls`, `check-hud-clear`, `check-coach`, `check-first-minutes`, `check-ui-runtime`, `check-ui-flows` e `check-ui-panels` verdi; 599 test unitari e `tsc --noEmit` puliti.
+
 ## Mandato 2 — l'allenatore legge la tua mossa — 2026-10-08
 
 - **L'allenatore risponde al tuo Attacca** (`src/game/battle/posture.ts`, `BattleScene.ts`): se nel turno precedente hai usato Attacca e il suo PV è sopra il 40%, dichiara Smentisci (infligge l'80% e subisce il 55% dei danni, blocca gli stati) e la scheda dell'intenzione dice «Ha visto il tuo Attacca». Con qualsiasi stile, quindi anche quelli offensivi. Sotto il 40% i tipi fortezza, controllo ed equilibrato si difendono con Smentisci; con stile pressione o rapido, sopra la metà dei PV e una mossa offensiva, attaccano; con stile preparazione e una mossa non offensiva scelgono Temporeggia. Rivali e Stagista restano fuori. Regola pura in `foePostureFor`, con test in `tests/unit/posture.test.ts`.

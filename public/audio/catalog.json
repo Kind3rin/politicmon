@@ -6,11 +6,11 @@
     "seconds": 17.142857142857142,
     "sampleRate": 22050,
     "frames": 378000,
-    "peak": 0.3413344621658325,
-    "rms": 0.08588673174381256,
-    "waveSha256": "8c7ab6b6b312dcce6198ea537d67bb8f2445811740625d8cb4f00b7739577201",
-    "sha256": "d9df02a25e3f45f51a8dd1c71a19849945f9d1c99b709931cf6b881ddd46b15d",
-    "bytes": 181643
+    "peak": 0.4007313847541809,
+    "rms": 0.08590000122785568,
+    "waveSha256": "0150ab30a733f205b36b13f617e20a71e80235958497acddbffe4d4d64770b35",
+    "sha256": "3dfc73f1f6f2a0840172c2ba4104158071afa3754e2e168240e031aa218a0a9a",
+    "bytes": 188656
   },
   "borgo": {
     "title": "IL CIRCOLO APRE PRESTO",
@@ -19,11 +19,11 @@
     "seconds": 20.0,
     "sampleRate": 22050,
     "frames": 441000,
-    "peak": 0.31884491443634033,
-    "rms": 0.06037745252251625,
-    "waveSha256": "bd7a1fb1f2528e5abd172c1cf38afd2454df64198a7a2e76211c35d43f62bac9",
-    "sha256": "98f41358cccb581b49a3dbf138076372d826d012b6d1141f911a6a2bc730e860",
-    "bytes": 233542
+    "peak": 0.3576542139053345,
+    "rms": 0.06039999797940254,
+    "waveSha256": "6f186b7ddb0841553cc0604242a7547284d1b39b26d00cfd468d9ce0a1156f89",
+    "sha256": "570131660782be11d52e1bc25fffbdba30b3d0381f1ac78ddf874764271d8e36",
+    "bytes": 237737
   },
   "mediopoli": {
     "title": "FUORI DAL FUORI ONDA",
@@ -32,11 +32,11 @@
     "seconds": 16.27120181405896,
     "sampleRate": 22050,
     "frames": 358780,
-    "peak": 0.3328893482685089,
-    "rms": 0.05764616280794144,
-    "waveSha256": "d80b8ccc8fde049eee5dcbaedf1c9838f25e1f3c2185c5a90c238ef71c720694",
-    "sha256": "390f7b1784b4bb4f6570068170191aff4f39190fc69af29f23f438670ace1eab",
-    "bytes": 195453
+    "peak": 0.38135525584220886,
+    "rms": 0.0575999990105629,
+    "waveSha256": "11592fed2e640dceb2d8762e222b0252926e5bac1fc525abd078cd0874120967",
+    "sha256": "f7b7df31a4343930cfad495393870a6d8d112fe318d27afdd0847d52c6f1fa53",
+    "bytes": 194025
   },
   "eurotown": {
     "title": "UNA FIRMA IN SINCOPE",
@@ -45,11 +45,11 @@
     "seconds": 18.823537414965987,
     "sampleRate": 22050,
     "frames": 415059,
-    "peak": 0.39292240142822266,
-    "rms": 0.06092119961977005,
-    "waveSha256": "0ed6a2bed6318dd4d093930e92ab0710d05d2f60411b0828a9244103198c8908",
-    "sha256": "8eea6f2dbe9ec5074b8e8520b631fe89a0e5a99139019dbc2d6418e6b6283721",
-    "bytes": 220832
+    "peak": 0.4276552200317383,
+    "rms": 0.0609000027179718,
+    "waveSha256": "1e1d551c5e740c09bf6da789c4871377f79256b0c30d0ec7e65583272f49a66a",
+    "sha256": "6682cdaef32c7a06bff02fe250cf317d8aa21fbabb4f70e6d8bf224fb4ef173b",
+    "bytes": 227315
   },
   "capitale": {
     "title": "LA PORTA ACCANTO AL POTERE",
@@ -58,11 +58,11 @@
     "seconds": 21.333333333333332,
     "sampleRate": 22050,
     "frames": 470400,
-    "peak": 0.3730393648147583,
-    "rms": 0.08943576365709305,
-    "waveSha256": "f2f3672527cc36cf52730b7beac96482cf6ed323a8cf356b6cadd6e7c178b8f7",
-    "sha256": "c7e75df9746e4f3b0cab87aaddee8ccc549217866924e40604524f73f36cab1f",
-    "bytes": 221659
+    "peak": 0.4034470021724701,
+    "rms": 0.08940000087022781,
+    "waveSha256": "77d8f921cdd81e9489de8a2206b558337b75d02dd2ba7e29050e7ee0998af7e7",
+    "sha256": "fa38e920ff95d035d72b3cadf26092a635d858d9429260b3feec203fd7cb2fe9",
+    "bytes": 232304
   },
   "campo_largo": {
     "title": "DUE SEDIE TRE PROGRAMMI",
@@ -71,11 +71,11 @@
     "seconds": 18.113197278911564,
     "sampleRate": 22050,
     "frames": 399396,
-    "peak": 0.3368176817893982,
-    "rms": 0.058274149894714355,
-    "waveSha256": "2f8e70bfcf5a651eabee3e5d051d002be76a5c616fd5bdb97af2833665f52f34",
-    "sha256": "7973c4bd2e8994de8e57d40291947cc5228a4fde7022711f143f7b2e1a244f82",
-    "bytes": 207760
+    "peak": 0.3854164481163025,
+    "rms": 0.05830000713467598,
+    "waveSha256": "d849d46ff18b218a32780095f3d11da8e00e4f464ff1d6d49037ab7203f954f2",
+    "sha256": "55fc63fb637e1c96b19f4ad44a9fffd3448dfd282707cea9fbc75bc0473a74a3",
+    "bytes": 218430
   },
   "social_tension": {
     "title": "LA NOTIFICA NON ASPETTA",
@@ -84,11 +84,11 @@
     "seconds": 14.545442176870749,
     "sampleRate": 22050,
     "frames": 320727,
-    "peak": 0.3388250172138214,
-    "rms": 0.06007922440767288,
-    "waveSha256": "0cbd39c488de74522c71a9ddab40a454d0b07613147b9378a3bce1d2517235c4",
-    "sha256": "095bdf8cfe4491178719a097ba6917c811351152dfabd36049877f07a8ab7224",
-    "bytes": 173797
+    "peak": 0.390565425157547,
+    "rms": 0.060100000351667404,
+    "waveSha256": "107695bfd40d009e5c16f3e75f18ac405b47467a588a028a4deff23da8d5d3f3",
+    "sha256": "1d4906a8f62fbb5a8d8d0e77531aee78e5e8273b91b58d905f87971527557a7d",
+    "bytes": 173351
   },
   "election_night": {
     "title": "I SEGGI ANCORA ACCESI",
@@ -97,11 +97,11 @@
     "seconds": 23.414648526077098,
     "sampleRate": 22050,
     "frames": 516293,
-    "peak": 0.3545982539653778,
-    "rms": 0.059223052114248276,
-    "waveSha256": "5925be8d4d3acc01c056e8bc1aeb7b5bbe0394caa5660f86e4b06643bcbcb6b4",
-    "sha256": "9d01b1d40eb3436d267ced37fba80940b01a6c1a49198082dbd151a695847398",
-    "bytes": 253648
+    "peak": 0.3717842996120453,
+    "rms": 0.05920000001788139,
+    "waveSha256": "467ae2c7594f880916ffb00a07633bd3c0437c4166381dff626e5f0bcfb33dee",
+    "sha256": "5af80d639169eda1a891191642bc89e3a36340d4e9a91e9b2675fe0c37028d8f",
+    "bytes": 269032
   },
   "interior": {
     "title": "IL MODULO AL TAVOLO",
@@ -110,11 +110,11 @@
     "seconds": 21.818185941043083,
     "sampleRate": 22050,
     "frames": 481091,
-    "peak": 0.33658766746520996,
-    "rms": 0.061883699148893356,
-    "waveSha256": "98d5afe06a53a86d25f32f50ece33c3560138aa515f033747a48c5376a168de1",
-    "sha256": "c2f15126579ee751424d746943cd9a5d164a9387cddaf1c4afb3fb72025b75a7",
-    "bytes": 245239
+    "peak": 0.396639883518219,
+    "rms": 0.06189999356865883,
+    "waveSha256": "1ab963c03499ff7317398f3e02271a01bd6794b1f5b4dc4deba370f01b6df27a",
+    "sha256": "d95d789e237f270d0879d0aa9cc2e72c7ec1a1b9f93be668053fe82ec2eb73e4",
+    "bytes": 251560
   },
   "palazzo": {
     "title": "LA CONTROFIRMA RESPIRA",
@@ -123,11 +123,11 @@
     "seconds": 25.263174603174605,
     "sampleRate": 22050,
     "frames": 557053,
-    "peak": 0.3803742825984955,
-    "rms": 0.08660738170146942,
-    "waveSha256": "3ae1f9a89204ab2dea380ea07840bef43b5a2d9efcc9df9a9be4217def9d5f73",
-    "sha256": "c05206f56dd197b5a2c6134c8627a72ba7eebfa9a4e8e612cf727f08f1b42b92",
-    "bytes": 259022
+    "peak": 0.3978271186351776,
+    "rms": 0.08660001307725906,
+    "waveSha256": "e28fdaca287cb3e2aec58b094d8b127f51e9efab557d2b1e0c0c2dc305fae03b",
+    "sha256": "5cc5f15e76f5b7cb11e27d8d76863049e10582acb1b02f1ee691a4fcc33fbbe7",
+    "bytes": 274197
   },
   "stretto": {
     "title": "LA MOKA HA IL COLLAUDO",
@@ -136,11 +136,11 @@
     "seconds": 17.77777777777778,
     "sampleRate": 22050,
     "frames": 392000,
-    "peak": 0.33432450890541077,
-    "rms": 0.061576422303915024,
-    "waveSha256": "c416308e4e6c515a5928f0460783f9930d57ab6a3b935147f319e9a764549304",
-    "sha256": "f236fbe6bdc03788477ddf81a22e4020e388b1bd05812848492a388f7a515e51",
-    "bytes": 208385
+    "peak": 0.4129859209060669,
+    "rms": 0.061600007116794586,
+    "waveSha256": "42acb893d635d807b19d1bf87f6a3abddc8b58801b284c883050a7c730b27db1",
+    "sha256": "1baacd77923480eb697801f977261a78d73f6fffeebb0e7c16caeaac5fcb911a",
+    "bytes": 214953
   },
   "battle-wild": {
     "title": "IL CANDIDATO NELL ERBA",
@@ -149,11 +149,11 @@
     "seconds": 15.483854875283447,
     "sampleRate": 22050,
     "frames": 341419,
-    "peak": 0.35953235626220703,
-    "rms": 0.05811426788568497,
-    "waveSha256": "0ffd26c12b030a45a5d0f5fe7388df109a57c40a39ea4374663b6f78390f7e6e",
-    "sha256": "46ea0d5d8d84e7c2f8f6939a882f153f99fdf70b9731b66a994cbfcfe4b66949",
-    "bytes": 187969
+    "peak": 0.3412894010543823,
+    "rms": 0.05809999629855156,
+    "waveSha256": "146826616b60486a0c2edd10e665830ec89a1e77d3b63835125f1185229874f5",
+    "sha256": "78e350b79c09f5c7bc2952c511affad37bab2c841cf31b81f8ca4d083188564a",
+    "bytes": 187436
   },
   "battle-trainer": {
     "title": "IL MICROFONO PASSA",
@@ -162,11 +162,11 @@
     "seconds": 14.117641723356009,
     "sampleRate": 22050,
     "frames": 311294,
-    "peak": 0.3166615664958954,
-    "rms": 0.057765617966651917,
-    "waveSha256": "389a9cdd34ab32c05dab7b21e09e869d675b954cb05feee98baae2cf387d2e22",
-    "sha256": "60e07ed273bb8cbaee475e4d57d9f888ca498d1ae9a8927da4d4c68b172c7143",
-    "bytes": 165989
+    "peak": 0.37651902437210083,
+    "rms": 0.05779999494552612,
+    "waveSha256": "d4169595458d9f6a627d521e5f5f7d397a333ea597280d89e2bdeb9cb7a877cc",
+    "sha256": "8bb16c1c17917084d4f177b37766c32c922b8bae918d41b8e83a106b7123e32e",
+    "bytes": 170606
   },
   "battle-gym": {
     "title": "LA REGIA NON TAGLIA",
@@ -175,11 +175,11 @@
     "seconds": 13.333333333333334,
     "sampleRate": 22050,
     "frames": 294000,
-    "peak": 0.33990851044654846,
-    "rms": 0.0601697713136673,
-    "waveSha256": "5b6448546dcfcdb36c2764bc245e70ea1f303536fd3fd85e95bdf57d7435e928",
-    "sha256": "78f682312b7c0d3b7b168371b4c033efafc0a689beefe1ce50a250cdb4ff6ba5",
-    "bytes": 158734
+    "peak": 0.4034937620162964,
+    "rms": 0.06019999831914902,
+    "waveSha256": "5b38c35b6d26ee898ddc65b10b4624958519544375290714ee58cea131a839fb",
+    "sha256": "484b98f2ce61b1768d4f919bcdbe7ed2628a24e2ac4cee4777d02bc9be97823f",
+    "bytes": 160439
   },
   "battle-boss": {
     "title": "LA MAGGIORANZA OSCILLA",
@@ -188,11 +188,11 @@
     "seconds": 16.55174603174603,
     "sampleRate": 22050,
     "frames": 364966,
-    "peak": 0.354595422744751,
-    "rms": 0.08973190188407898,
-    "waveSha256": "7167ebc2f456883439c0d09f39669416261def31c99e359b7c56433de3b36c1d",
-    "sha256": "3dab33b21ad1f2ea8dbd400325f609fd65ab150329f9d4a6f4c4a172763fe5b6",
-    "bytes": 182036
+    "peak": 0.3911536633968353,
+    "rms": 0.08969999849796295,
+    "waveSha256": "e961c7540ef11f29f776c3913c025ad6f5dc94e9e34655b005fa0530db64e15e",
+    "sha256": "bc2bc9a79692e66a147457422636f5e073a7b5cbf7e3e1851d8dfe8dbacb6773",
+    "bytes": 190553
   },
   "battle-legend": {
     "title": "IL SIMBOLO RESTA",
@@ -201,11 +201,11 @@
     "seconds": 26.666666666666668,
     "sampleRate": 22050,
     "frames": 588000,
-    "peak": 0.3319779336452484,
-    "rms": 0.0616719089448452,
-    "waveSha256": "916d211485e25f280f442128b8b174a8589464b651fb370606d8e6e2370d0c1c",
-    "sha256": "cf47e4b025518f47494723dd999577460d93630243783b98209cdca77295858d",
-    "bytes": 295671
+    "peak": 0.4180334210395813,
+    "rms": 0.0617000050842762,
+    "waveSha256": "93c7fcd4ad75d4fb9c89466bb9e107d46c9ba06fa911a404ad3cf923201dde2c",
+    "sha256": "60f87cc3d3ea2cf66b537764188cbfc1798f4e849eb2652c71d3a043b1b30161",
+    "bytes": 303983
   },
   "offshore": {
     "title": "LO SCONTRINO AL SOLE",
@@ -214,11 +214,11 @@
     "seconds": 20.425532879818594,
     "sampleRate": 22050,
     "frames": 450383,
-    "peak": 0.3418811857700348,
-    "rms": 0.06176777556538582,
-    "waveSha256": "3b20f00fa1e2bfb35a89e96617a50ca7a57cb8177a5cf8d64fcd134d49df4525",
-    "sha256": "8f42fc9b118e756be97034233e6edfc8b84fd5be4df9218704258511c89288d1",
-    "bytes": 232884
+    "peak": 0.3861061930656433,
+    "rms": 0.061799999326467514,
+    "waveSha256": "a8f9aff9a0e137cd7db600d1fdd12a3fad1c4f7c1800eedb5e6b488e7dba1cff",
+    "sha256": "e041d0e8a05d381af6f893a7ed2030967fffddca114708a76b1310781bcb8bb3",
+    "bytes": 240701
   },
   "bruxelles": {
     "title": "IL CORRIDOIO E UNA PARTITURA",
@@ -227,11 +227,11 @@
     "seconds": 19.2,
     "sampleRate": 22050,
     "frames": 423360,
-    "peak": 0.37033969163894653,
-    "rms": 0.08829111605882645,
-    "waveSha256": "48b826d32ee709a8e245554a2ec36bd5ebe4277bab3bba27866e7e4a02c771ac",
-    "sha256": "4841923c3bfa2d2ae1a427467b94863ad7b8ba5f38fd7034bba4d5bfbdc35330",
-    "bytes": 194243
+    "peak": 0.39917322993278503,
+    "rms": 0.08829999715089798,
+    "waveSha256": "3a0eed2a86b06643bf8a8bc87fc611041356ce9e89cdb020697168b07b119ea9",
+    "sha256": "f31a707b5cf63b19a2e31cd9f3072ea62629a21ad1fd8624ed5553be07200cf0",
+    "bytes": 207055
   },
   "battle-duel": {
     "title": "DUE LINEE IN DIRETTA",
@@ -240,10 +240,10 @@
     "seconds": 12.97297052154195,
     "sampleRate": 22050,
     "frames": 286054,
-    "peak": 0.36202967166900635,
-    "rms": 0.06088210269808769,
-    "waveSha256": "2fe264428c602bb379d90d20a1529bed4f08b189b29d7f34aa190c3b589dc8f3",
-    "sha256": "e66cd49ed3af45fe0044971a1b21806d17b922e8d77523b94f00327f6baf60e2",
-    "bytes": 155111
+    "peak": 0.3736610412597656,
+    "rms": 0.060899995267391205,
+    "waveSha256": "40a7c9465426d2f75bcab6e7974983c788028b2c8ebe4ac0431b8fb28c7e8360",
+    "sha256": "7734d0f422cf1f7e51236a936b4c1467ce35e3cd624127600d0cffe42f229055",
+    "bytes": 156513
   }
 }

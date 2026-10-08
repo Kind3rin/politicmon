@@ -121,3 +121,11 @@ Il reload offline resta verificato solo in Chromium. Sei configurazioni
 della cornice esterna verificano layout, pausa sotto guida e focus.
 
 <img src="img/audio-regia-public.png" width="390" alt="Regia audio realmente aperta sul sito pubblico: musica 40%, effetti 60%">
+
+## Suoni a strati — 8 ottobre 2026
+
+Gli effetti non usano più un oscillatore nudo con inviluppo lineare. Ogni cue passa per una voce con pan, una parte di riverbero condiviso (una stanza sintetica di 1,1 s, con tono che si scurisce nella coda) e, quando serve, un filtro che si chiude sul colpo. I suoni a campana hanno un secondo oscillatore a qualche centesimo di scarto. Il rumore parte da un punto diverso del loop a ogni colpo, così i colpi ripetuti non suonano identici. `bossPhase()` e `finisher()` sono i due stacchi nuovi del piano 6.6.
+
+La musica è rigenerata con gli stessi spartiti: basso con armoniche, tasti a due corde, pad a tre corde, ancia con vibrato, cassa con click, rullante con corpo, hi-hat più brillante, riverbero stereo a sette prese. Ogni brano mantiene l'RMS del catalogo precedente (`TARGET_RMS` in `scripts/compose-soundtrack.py`). Le 19 AAC pesano 4.098.846 byte, circa 125 KB in più di prima; i byte sopra restano quelli del round del 2 ottobre.
+
+Verifica: `scripts/render-sfx.mjs` renderizza offline i 49 cue in `artifacts/sfx/` e misura picco, RMS, coda e larghezza; ogni cue è controllato contro il silenzio, lo 0 dBFS e i 2,5 s. `check-audio-runtime` passa in Chromium. Non è ancora stato ascoltato: il giudizio resta a Luca.

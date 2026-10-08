@@ -8,8 +8,10 @@ test("gli incontri mantengono l'ambiente della mappa, inclusi interni e postgame
   const cases = {
     borgo: "piazza", route1: "prato", route2: "lago", route3: "cava", eurotown: "viale", capitale: "foro", mediopoli: "tv",
     grotta1: "grotta", grotta2: "grotta", "oblast-meme": "neve",
-    gymtv: "studio", gymue: "palazzo", gymglobal: "palazzo",
-    palazzo: "palazzo", colle: "palazzo", commissione: "palazzo",
+    gymtv: "studio", gymue: "palestra", gymglobal: "palestra",
+    "bar-borgo": "bar", home: "casa", market1: "mercato", casino: "casino", lab: "laboratorio", bunker: "bunker",
+    regia: "studio", commissione: "ufficio",
+    palazzo: "palazzo", colle: "palazzo",
     stretto: "costa", offshore: "costa", "bar-stretto": "costa",
     futuro_sede: "rete", district_isole: "costa", palazzo_feed: "rete",
     palazzo_talkshow: "studio", palazzo_feed_terrazza: "piazza"
@@ -36,7 +38,8 @@ test("gli sfondi hanno chiavi distinte, PNG nativi e un peso adatto all'offline 
     assert.equal(png.readUInt32BE(20), 136, id);
     generatedBytes += png.length;
   }
-  assert.ok(generatedBytes < 230_000, `${generatedBytes} byte di nuovi sfondi`);
+  // Nove interni a 16 KB l'uno portano il set a 344 KB: il limite cresce di proposito, non per tollerare un errore.
+  assert.ok(generatedBytes < 360_000, `${generatedBytes} byte di nuovi sfondi`);
 });
 
 

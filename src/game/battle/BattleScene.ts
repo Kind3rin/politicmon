@@ -388,7 +388,7 @@ export class BattleScene implements Scene {
       if (phase.triggered) {
         this.futuroPhaseTriggered = true;
         this.foe.stages = phase.stages;
-        this.push({ text: "PARTITO NUOVO! Il boss azzera i malus e cerca un'ALLEANZA: VELOCITÀ +1!" });
+        this.push({ text: "PARTITO NUOVO! Il boss azzera i malus e cerca un'ALLEANZA: VELOCITÀ +1!", run: () => audio.bossPhase() });
       }
     }
     const slot = this.player.mon.moves.find((s) => s.id === playerMove.id);
@@ -659,7 +659,7 @@ export class BattleScene implements Scene {
     };
 
     if (move.id === FUORIONDA.id) steps.push({
-      run: () => { this.finisherT = this.state.reduceEffects ? 0 : .8; audio.hitSuper(); }, pause: this.state.reduceEffects ? .12 : .8
+      run: () => { this.finisherT = this.state.reduceEffects ? 0 : .8; audio.finisher(); }, pause: this.state.reduceEffects ? .12 : .8
     });
     // Name and wind-up share the impact's caption instead of a separate page.
     steps.push({

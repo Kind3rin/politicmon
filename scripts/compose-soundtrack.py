@@ -33,6 +33,14 @@ SCORES = [
  ('battle-duel','DUE LINEE IN DIRETTA',148,64,'minor',[7,2,0,10,3,7,5,2],[0,5,3,4],'pulse'),
 ]
 
+# RMS level of each loop before the voicing round (catalog of 2 October 2026). The mix stays where it was.
+TARGET_RMS = {
+ 'title':.0859,'borgo':.0604,'mediopoli':.0576,'eurotown':.0609,'capitale':.0894,'campo_largo':.0583,
+ 'social_tension':.0601,'election_night':.0592,'interior':.0619,'palazzo':.0866,'stretto':.0616,
+ 'battle-wild':.0581,'battle-trainer':.0578,'battle-gym':.0602,'battle-boss':.0897,'battle-legend':.0617,
+ 'offshore':.0618,'bruxelles':.0883,'battle-duel':.0609,
+}
+
 def render(score, index):
     name,title,bpm,tonic,mode,motif,degrees,drums = score
     beat = 60/bpm
@@ -49,17 +57,26 @@ def render(score, index):
     def note(midi,at,dur,amp,voice='keys',pan=0):
         t=np.arange(round(dur*RATE))/RATE
         frequency=440*2**((midi-69)/12)
-        signal=np.sin(2*np.pi*frequency*t)
         if voice=='keys':
-            signal+=.3*np.sin(2*np.pi*frequency*2*t)*np.exp(-t*5)+.12*np.sin(2*np.pi*frequency*3*t)*np.exp(-t*8)
+            # A plucked keyboard: two strings a few cents apart, so the chord shimmers; upper partials fade first.
+            signal=(np.sin(2*np.pi*frequency*t)+.5*np.sin(2*np.pi*frequency*1.0035*t))/1.5
+            signal+=.35*np.sin(2*np.pi*frequency*2*t)*np.exp(-t*6)+.14*np.sin(2*np.pi*frequency*3*t)*np.exp(-t*10)
             env=(1-np.exp(-t*600))*np.exp(-t*4/dur)
         elif voice=='reed':
-            signal+=.22*np.sin(2*np.pi*frequency*3*t)+.08*np.sin(2*np.pi*frequency*5*t)
+            # A reed whose vibrato arrives after the attack, so the held note breathes.
+            phase=2*np.pi*frequency*t*(1+.0035*np.sin(2*np.pi*5.2*t)*np.minimum(t/.35,1))
+            signal=np.sin(phase)+.25*np.sin(3*phase)+.09*np.sin(5*phase)
             env=np.minimum(t/.025,1)*np.minimum((dur-t)/.08,1)
         elif voice=='pad':
-            signal+=.2*np.sin(2*np.pi*(frequency*1.003)*t)
+            # Three detuned strings make a wide, slow bed under the keys.
+            signal=(np.sin(2*np.pi*frequency*t)+.6*np.sin(2*np.pi*frequency*1.003*t)+.45*np.sin(2*np.pi*frequency*.997*t))/2.05
             env=np.minimum(t/.15,1)*np.minimum((dur-t)/.3,1)
+        elif voice=='bass':
+            # Round bass: a fundamental with an octave and a twelfth that die quickly, so each note has a body and a clear attack.
+            signal=np.sin(2*np.pi*frequency*t)+.38*np.sin(2*np.pi*frequency*2*t)*np.exp(-t*4)+.14*np.sin(2*np.pi*frequency*3*t)*np.exp(-t*9)
+            env=(1-np.exp(-t*220))*np.exp(-t*2/dur)
         else:
+            signal=np.sin(2*np.pi*frequency*t)
             env=(1-np.exp(-t*180))*np.exp(-t*2/dur)
         add(signal*env*amp,at,pan)
 
@@ -83,23 +100,30 @@ def render(score, index):
             if step in [1,5] and drums in ['brush','bossa']:
                 for interval in [0,3 if minor else 4,7]:note(root+interval,at,beat*.6,.035,'keys',.3)
             if step in [0,4] or (drums=='pulse' and step%2==0):
+                # Kick: a falling sine body with a short click on the beater.
                 t=np.arange(round(.17*RATE))/RATE
-                kick=np.sin(2*np.pi*(48*t+5*(1-np.exp(-t*30))))*np.exp(-t*24)
+                kick=np.sin(2*np.pi*(48*t+5*(1-np.exp(-t*30))))*np.exp(-t*24)+np.sin(2*np.pi*1900*t)*np.exp(-t*700)*.35
                 add(kick*.16,at)
             if step in [2,6]:
+                # Snare: noise over a short tuned body, so it cracks instead of hissing.
                 t=np.arange(round(.12*RATE))/RATE
                 noise=rng.uniform(-1,1,len(t));noise=np.r_[noise[0],np.diff(noise)]
-                add(noise*np.exp(-t*(48 if drums=='brush' else 28))*.045,at,.12)
+                body=np.sin(2*np.pi*185*t)*np.exp(-t*34)*.5
+                add((noise*np.exp(-t*(48 if drums=='brush' else 28))+body)*.045,at,.12)
             if drums!='march' or step%2:
+                # Hi-hat: noise through two differences, so only the bright top remains.
                 t=np.arange(round(.045*RATE))/RATE
-                noise=rng.uniform(-1,1,len(t));noise=np.r_[noise[0],np.diff(noise)]
-                add(noise*np.exp(-t*110)*.012,at,-.3)
-    # Short stereo room, wrapped within the exact loop, retains note tails
-    # across its boundary. Soft saturation and fixed headroom avoid clipping.
-    dry=out.copy()
-    for delay,amp in [(.071,.13),(.139,.08),(.211,.04)]:out+=np.roll(dry,round(delay*RATE),axis=0)[:,::-1]*amp
-    out=np.tanh(out*1.4)
-    out*=.78/max(.78,np.max(np.abs(out)))
+                noise=rng.uniform(-1,1,len(t));noise=np.r_[noise[0],np.diff(noise)];noise=np.r_[noise[0],np.diff(noise)]
+                add(noise*np.exp(-t*110)*.02,at,-.3)
+    # A small stereo room: each side hears reflections from the other at uneven times, so the mix widens
+    # instead of repeating itself. Everything wraps inside the exact loop, so the seam stays clean.
+    dry=out.copy(); room=np.zeros_like(out)
+    for delay,amp,cross in [(.017,.16,0),(.031,.12,1),(.047,.10,0),(.073,.09,1),(.109,.06,0),(.151,.04,1),(.203,.025,0)]:
+        shifted=np.roll(dry,round(delay*RATE),axis=0)
+        room+=(shifted[:,::-1] if cross else shifted)*amp
+    out=np.tanh((dry+room*.9)*1.25)
+    # Each track keeps the loudness it had before the new voices, so the mixer balance does not move.
+    out*=min(TARGET_RMS[name]/np.sqrt(np.mean(out**2)),.8/np.max(np.abs(out)))
     return out.astype(np.float32)
 
 def main():

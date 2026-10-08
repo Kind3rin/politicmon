@@ -922,6 +922,204 @@
           }
         ]
       }
+    },
+    {
+      "id": "battle-casa",
+      "jobId": "0da55c47-bd4a-4942-8f01-15c1528cb42e",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200149_0da55c47-bd4a-4942-8f01-15c1528cb42e.png",
+      "path": "public/sprites/ui/battle/casa.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a cosy Italian living room: a sofa with cushions on the left, a rug, a floor lamp, a bookshelf, a window with curtains and a potted plant, a framed picture on the wall.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-palestra",
+      "jobId": "d66c23ab-3f1b-440d-9307-bcb574bd7942",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200151_d66c23ab-3f1b-440d-9307-bcb574bd7942.png",
+      "path": "public/sprites/ui/battle/palestra.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a municipal gym: blue mats on a wooden floor, a rack of dumbbells against the wall, a large mirror, a stage spotlight hanging from the ceiling, a basket of balls in a corner.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-casino",
+      "jobId": "b9a9013b-2c7b-4e82-9803-e359d3be3969",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200149_b9a9013b-2c7b-4e82-9803-e359d3be3969.png",
+      "path": "public/sprites/ui/battle/casino.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a gambling hall: rows of slot machines with red and gold lights on the left, a green felt roulette table, velvet curtains, a burgundy carpet.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-laboratorio",
+      "jobId": "128fab26-65ea-4dbf-ad3a-0f73d2029350",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200150_128fab26-65ea-4dbf-ad3a-0f73d2029350.png",
+      "path": "public/sprites/ui/battle/laboratorio.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a science lab: benches with flasks and coloured beakers, a glowing screen, a blackboard with abstract diagrams and no legible letters, cabinets with glass doors, a fume hood.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-archivio",
+      "jobId": "f8b3fe49-be24-48f0-b5d2-853b9c150da1",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200150_f8b3fe49-be24-48f0-b5d2-853b9c150da1.png",
+      "path": "public/sprites/ui/battle/archivio.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a government archive: tall wooden shelves full of folders and boxes on the back wall, a reading table in the middle, a green desk lamp, a rolling library ladder.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-ufficio",
+      "jobId": "19047c94-4ced-4f36-b031-9877ed28979c",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200150_19047c94-4ced-4f36-b031-9877ed28979c.png",
+      "path": "public/sprites/ui/battle/ufficio.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: an institutional office: a large wooden desk, a tricolour flag and a European flag on poles, a leather armchair, a tall window with light coming in, a framed map on the wall.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-bunker",
+      "jobId": "8fbcfb81-fd7b-4585-9b61-43d977d44088",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200150_8fbcfb81-fd7b-4585-9b61-43d977d44088.png",
+      "path": "public/sprites/ui/battle/bunker.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a concrete emergency bunker: steel doors with round hatches, caged ceiling lamps, pipes along the back wall, metal crates, a faint teal glow from a control panel.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-mercato",
+      "jobId": "4c6779f3-16e4-4370-828b-7ca717c16b05",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200221_4c6779f3-16e4-4370-828b-7ca717c16b05.png",
+      "path": "public/sprites/ui/battle/mercato.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a covered food market: striped awnings over stalls with crates of fruit and vegetables, a dome of hanging lamps, a marble floor with simple grout lines.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-bar",
+      "jobId": "72812d45-29c3-4f13-861a-c1aef5a5e066",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_200149_72812d45-29c3-4f13-861a-c1aef5a5e066.png",
+      "path": "public/sprites/ui/battle/bar.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Back wall fills the upper 45 percent; the lower 55 percent is an open flat floor with large simple colour areas and very sparse texture, it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a neighbourhood bar: a long wooden counter on the right with stools, bottles on shelves behind it, round tables with chairs, warm amber wall lamps, a small muted TV high on the back wall.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
     }
   ],
   "m2StyleReference": {

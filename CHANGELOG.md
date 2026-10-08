@@ -1,5 +1,16 @@
 # Changelog
 
+## Mandato 2 — suoni a strati e fondali per gli interni — 2026-10-08
+
+- **Effetti sonori più ricchi** (`src/engine/audio.ts`): ogni effetto passa per una voce comune con riverbero di stanza condiviso, pan, inviluppi percussivi, filtri che si chiudono sul colpo, un secondo oscillatore leggermente scordato sui suoni a campana e rumore con punto di partenza variabile, così due colpi uguali non suonano identici. Gli effetti non usano più `setTimeout`: tutto è programmato sul contesto audio, quindi si può renderizzare offline.
+- **Due stacchi nuovi del piano 6.6**: `bossPhase()` per il «PARTITO NUOVO!» del Futuro Anteriore (un crescendo di rumore, un ottone che sale, un accordo che si chiude sul colpo) e `finisher()` per FUORIONDA (lo schiocco del microfono e un motivo breve che cade sul colpo). `src/game/battle/BattleScene.ts` li usa al posto di `hitSuper()` nel caso di FUORIONDA e sulla battuta della fase.
+- **Musica rigenerata** (`scripts/compose-soundtrack.py`): basso con armoniche, tasti con due corde, pad a tre corde, ancia con vibrato, cassa con click, rullante con corpo, hi-hat più brillante, riverbero stereo a sette prese al posto dei tre ritardi. Ogni brano mantiene l'RMS di prima (`TARGET_RMS`), quindi il bilanciamento del mixer non cambia. Le 19 AAC pesano 4.098.846 byte (prima 3.973.617).
+- **Fondali di battaglia per gli interni**: nove fondali nuovi in `public/sprites/ui/battle/` (bar, casa, palestra, mercato, casino, laboratorio, archivio, ufficio, bunker), registrati in `src/game/battle/backdropArt.ts`. Ventuno interni combattevano sotto il palazzo di marmo; ora ciascuno ha il suo ambiente (`src/game/battle/backdrop.ts`). La Regia usa lo studio. Palazzo e Colle restano palazzo.
+- **Crediti Higgsfield**: nove fondali `gpt_image_2_5` in qualità alta, 1,5 crediti ciascuno, 13,5 in tutto; saldo 262,72 → 249,22. Un invio rifiutato per limite di frequenza non ha creato alcun job e non è stato addebitato; il mercato è stato rinviato da solo.
+- **Verifica**: `scripts/render-sfx.mjs` renderizza offline 49 effetti: nessuno muto, nessuno oltre 0 dBFS, code entro 1,5 s. `check-audio-runtime` PASS in Chromium. 613 test unitari. Il limite di peso dei fondali passa da 230 KB a 360 KB, perché il set ora pesa 344 KB. `tsc --noEmit`, `npm run build`, `check-precache-build` (1091 risorse), `shot-battle-backdrops` PASS su 19 scene.
+- **Non verificato**: l'ascolto, perché le misure dicono solo livello, coda e larghezza; il costo in CPU del riverbero su telefono; FUORIONDA e il cambio di fase del Futuro Anteriore giocati a tocchi; `check-audio-runtime` in WebKit.
+- **Non toccato da questo round**: `validate:content` segnala il titolo della missione `leggenda-berlusconix` (29 caratteri contro il limite di 28). Il file non è stato modificato.
+
 ## Mandato 2 — porte centrate: un tile solo, facciate a larghezza dispari — 2026-10-08
 
 - **Ogni porta è un tile solo, sulla linea centrale.** Le 29 facciate con porta (Borgo, Mediopoli, Eurotown, Capitale, Stretto, Offshore, Bruxelles, Campo largo, Futuro, Diplomazia) passano da 4, 6, 8 o 10 caselle a 3, 5, 7 o 9: la porta sta sulla colonna centrale. Le 49 coppie di tappeti interni diventano un tappeto solo, al centro della stanza (32 stanze allargate di una colonna quando il pavimento era pari).

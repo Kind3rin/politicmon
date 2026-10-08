@@ -132,3 +132,10 @@ Prove: 613 test unitari (quattro nuovi su `doorCentring`); `tsc --noEmit`, `npm 
 Non eseguito: `check-world-navigation-release` (serve una build di anteprima sulla porta 4184).
 Crediti Higgsfield: sette fogli a 1,5 crediti, 10,5 in tutto; saldo 273,22 → 262,72.
 CONTROLLO UMANO RICHIESTO: Luca gioca a tocchi su Borgo, Mediopoli e Capitale, entrando e uscendo da qualche porta di ciascuna, e dice se le facciate più strette reggono e se l'ingresso sembra dritto.
+
+## Suoni a strati e fondali per gli interni — 8 ottobre 2026
+Prima/dopo: gli effetti erano oscillatori singoli con inviluppo lineare, senza spazio; le tracce avevano il basso a sinusoide pura e la batteria di solo rumore. Ora gli effetti hanno riverbero, pan, colpi a strati e filtri che si chiudono; le tracce hanno basso con armoniche, batteria con corpo e riverbero stereo. Misure dal render offline: la larghezza stereo passa da zero a 0,07–0,35 sui cue con pan o riverbero; i suoni di lotta si fanno fino a circa 5 dB più pieni (il colpo forte), e la coda di `faint` passa da 0,2 s a 0,6 s. Il livello di ogni brano è quello di prima.
+Il fondale sotto il palazzo di marmo: ventuno interni (bar, circolo, bistrot, casa, salotto, palestre, mercati, casinò, laboratorio, archivio, uffici e diplomazia, studio, bunker) hanno ora un fondale proprio; la Regia usa lo studio. Nove PNG nuovi a 240×136, 1,5 crediti ciascuno, saldo 249,22.
+Il «piatto» di Borgo e Mediopoli, da chiarire in una nota precedente, oggi va letto così: Luca ha scritto che i suoni sono troppo piatti. Resta da capire se intendeva anche il disegno.
+Non ancora ascoltato: lo decide l'orecchio. I file di prova sono `prova-sfx.wav` (sequenza dei cue principali) e i brani Borgo e Battaglia del boss prima e dopo.
+CONTROLLO UMANO RICHIESTO: Luca ascolta i cue e i due brani, e gioca una lotta per ogni tipo di nuovo fondale (bar, casa, palestra, mercato, casinò, laboratorio, archivio, ufficio, bunker) e una lotta con il Futuro Anteriore per sentire il «PARTITO NUOVO!».

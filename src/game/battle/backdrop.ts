@@ -4,12 +4,12 @@ import { BATTLE_BACKDROPS, type BattleBackdrop, type BattleBackdropId } from "./
 export { BATTLE_BACKDROPS, type BattleBackdrop, type BattleBackdropId } from "./backdropArt";
 
 const MAP_BACKDROPS: Readonly<Record<string, BattleBackdropId>> = {
-  borgo: "piazza", mediopoli: "tv", eurotown: "viale", capitale: "foro", bruxelles: "viale",
+  borgo: "piazza", mediopoli: "tv", eurotown: "viale", capitale: "foro", bruxelles: "bruxelles",
   route2: "lago", route3: "cava", antenna: "tv",
   grotta1: "grotta", grotta2: "grotta", "oblast-meme": "neve",
   gymtv: "studio", redazione: "studio", retroscena: "studio", attico: "studio",
-  stretto: "costa", offshore: "costa", chiosco: "costa", "bar-stretto": "costa", "bar-offshore": "costa",
-  campo_largo: "piazza", retropalco_campo: "studio", diplomacy_terrace: "studio", genova_techno: "rete",
+  stretto: "costa", offshore: "offshore", chiosco: "costa", "bar-stretto": "costa", "bar-offshore": "costa",
+  campo_largo: "campo", retropalco_campo: "studio", diplomacy_terrace: "studio", genova_techno: "rete",
   futuro_piazza: "rete", futuro_sede: "rete", futuro_scissione: "rete", futuro_rebrand: "rete", futuro_tesoreria: "rete",
   tour_feed: "studio", district_nord: "piazza", district_centro: "piazza", district_sud: "costa", district_isole: "costa", district_feed: "rete",
   palazzo_feed: "rete", palazzo_algoritmo: "rete", palazzo_factcheck: "rete", palazzo_talkshow: "studio",

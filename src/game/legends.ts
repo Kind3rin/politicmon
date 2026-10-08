@@ -27,7 +27,7 @@ const talked = (flag: string) => (state: GameState) => Boolean(state.flags[flag]
 
 export const RITES: readonly Rite[] = [
   {
-    id: "berlusconix", speciesId: "berlusconix", sacrario: "regia", title: "LA DISCESA IN CAMPO", door: "una porta della regia nello Studio 5, a Mediopoli",
+    id: "berlusconix", speciesId: "berlusconix", sacrario: "regia", title: "DISCESA IN CAMPO", door: "una porta della regia nello Studio 5, a Mediopoli",
     openFlag: "rito-berlusconix-open", goneFlag: "legend-berlusconix-gone", relic: "telecomando", field: "diretta",
     prerequisite: { label: "Batti Sua Emittenza nello Studio 5.", met: state => Boolean(state.flags["legend-berlusconix-ready"] || state.flags["legend-berlusconix-gone"]) },
     steps: [

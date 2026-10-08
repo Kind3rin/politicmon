@@ -34,7 +34,7 @@ try {
       scene.draw(screen);
       shots[name] = screen.ctx.canvas.toDataURL("image/png");
     };
-    for (const [name, mapId] of Object.entries({ prato: "route1", piazza: "borgo", studio: "gymtv", palazzo: "palazzo", costa: "stretto", neve: "oblast-meme", rete: "palazzo_feed", grotta: "grotta1", bar: "bar-borgo", casa: "home", palestra: "gymue", mercato: "market1", casino: "casino", laboratorio: "lab", archivio: "archivio", ufficio: "commissione", bunker: "bunker" })) {
+    for (const [name, mapId] of Object.entries({ prato: "route1", piazza: "borgo", studio: "gymtv", palazzo: "palazzo", costa: "stretto", neve: "oblast-meme", rete: "palazzo_feed", grotta: "grotta1", bar: "bar-borgo", casa: "home", palestra: "gymue", mercato: "market1", casino: "casino", laboratorio: "lab", archivio: "archivio", ufficio: "commissione", bunker: "bunker", offshore: "offshore", bruxelles: "bruxelles", campo: "campo_largo" })) {
       const state = newGameState();
       state.pos.mapId = mapId;
       state.party = [createMonster("giorgetta", 22)];

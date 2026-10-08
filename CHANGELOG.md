@@ -1,5 +1,14 @@
 # Changelog
 
+## Mandato 2 — fondali esterni, titolo di missione, verifiche audio — 2026-10-08
+
+- **Tre fondali esterni dedicati** (`public/sprites/ui/battle/offshore.png`, `bruxelles.png`, `campo.png`): l'isola fiscale di Offshore non combatte più sulla spiaggia dello Stretto, il viale di Bruxelles non è più quello di Eurotown, il campo di Campo largo non è più la piazza di Borgo. Registrati in `src/game/battle/backdropArt.ts` e collegati in `src/game/battle/backdrop.ts`. Il Bar di Offshore resta sulla costa.
+- **Titolo di missione in budget**: «LEGGENDA: LA DISCESA IN CAMPO» misurava 29 caratteri e faceva fallire `validate:content`. Il rito si chiama ora «DISCESA IN CAMPO» (`src/game/legends.ts`). `validate:content` passa: 54 missioni.
+- **Verifiche**: `check-audio-runtime` PASS in WebKit oltre a Chromium; `check-future` PASS (la lotta del Futuro Anteriore arriva al boss senza errori, con i nuovi stacchi nel percorso); `measure-performance --check` con musica: lavoro del thread principale 4,5 ms p95 nel mondo, 1,0 in battaglia, contro 4,5 ms di costo di disegno nella baseline; l'intervallo rAF p95 è 16,8 ms come la baseline. Il controllo di budget resta rosso per il criterio dei 60 fps, perché anche la misura senza gioco supera 16,7 ms su questo ambiente.
+- **Crediti Higgsfield**: tre fondali a 1,5 crediti, 4,5 in tutto; saldo 249,22 → 244,72.
+- **Verifica**: 613 test; `tsc --noEmit`, `npm run build`, `check-precache-build` (1094 risorse), `shot-battle-backdrops` PASS su 22 scene. Il limite di peso dei fondali passa da 360 KB a 420 KB: il set ora pesa circa 395 KB.
+- **Non misurato**: il costo del riverbero sul thread audio. Lo script misura il thread principale, non il motore audio.
+
 ## Mandato 2 — suoni a strati e fondali per gli interni — 2026-10-08
 
 - **Effetti sonori più ricchi** (`src/engine/audio.ts`): ogni effetto passa per una voce comune con riverbero di stanza condiviso, pan, inviluppi percussivi, filtri che si chiudono sul colpo, un secondo oscillatore leggermente scordato sui suoni a campana e rumore con punto di partenza variabile, così due colpi uguali non suonano identici. Gli effetti non usano più `setTimeout`: tutto è programmato sul contesto audio, quindi si può renderizzare offline.

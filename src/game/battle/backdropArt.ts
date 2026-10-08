@@ -32,7 +32,11 @@ export const BATTLE_BACKDROPS = {
   laboratorio: { spriteId: "battle:bg:laboratorio", path: "ui/battle/laboratorio.png", sky: "#485868", ground: "#efddb9", foePlatform: "#e1d0ae", playerPlatform: "#d2c2a3" },
   archivio: { spriteId: "battle:bg:archivio", path: "ui/battle/archivio.png", sky: "#705045", ground: "#efd9b0", foePlatform: "#e1cca6", playerPlatform: "#d2bf9b" },
   ufficio: { spriteId: "battle:bg:ufficio", path: "ui/battle/ufficio.png", sky: "#9a907d", ground: "#f1daaf", foePlatform: "#e2cda4", playerPlatform: "#d4c09a" },
-  bunker: { spriteId: "battle:bg:bunker", path: "ui/battle/bunker.png", sky: "#313a4b", ground: "#dec59d", foePlatform: "#d1ba93", playerPlatform: "#c3ae8a" }
+  bunker: { spriteId: "battle:bg:bunker", path: "ui/battle/bunker.png", sky: "#313a4b", ground: "#dec59d", foePlatform: "#d1ba93", playerPlatform: "#c3ae8a" },
+  // Esterni con un luogo proprio: l'isola fiscale, il viale di Bruxelles e il campo della coalizione.
+  offshore: { spriteId: "battle:bg:offshore", path: "ui/battle/offshore.png", sky: "#81ccde", ground: "#f3dcb1", foePlatform: "#e4cfa7", playerPlatform: "#d6c29c" },
+  bruxelles: { spriteId: "battle:bg:bruxelles", path: "ui/battle/bruxelles.png", sky: "#adb4b4", ground: "#a19d9a", foePlatform: "#979490", playerPlatform: "#8e8a87" },
+  campo: { spriteId: "battle:bg:campo", path: "ui/battle/campo.png", sky: "#77bed8", ground: "#5e9256", foePlatform: "#598a51", playerPlatform: "#53814c" }
 } as const satisfies Record<string, BattleBackdrop>;
 
 export type BattleBackdropId = keyof typeof BATTLE_BACKDROPS;

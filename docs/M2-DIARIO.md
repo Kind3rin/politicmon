@@ -139,3 +139,9 @@ Il fondale sotto il palazzo di marmo: ventuno interni (bar, circolo, bistrot, ca
 Il «piatto» di Borgo e Mediopoli, da chiarire in una nota precedente, oggi va letto così: Luca ha scritto che i suoni sono troppo piatti. Resta da capire se intendeva anche il disegno.
 Non ancora ascoltato: lo decide l'orecchio. I file di prova sono `prova-sfx.wav` (sequenza dei cue principali) e i brani Borgo e Battaglia del boss prima e dopo.
 CONTROLLO UMANO RICHIESTO: Luca ascolta i cue e i due brani, e gioca una lotta per ogni tipo di nuovo fondale (bar, casa, palestra, mercato, casinò, laboratorio, archivio, ufficio, bunker) e una lotta con il Futuro Anteriore per sentire il «PARTITO NUOVO!».
+
+## Fondali esterni, titolo di missione e verifiche audio — 8 ottobre 2026
+Tre fondali esterni nuovi: Offshore, Bruxelles e Campo largo non condividono più il fondale dello Stretto, di Eurotown e di Borgo. Il titolo di missione «LEGGENDA: LA DISCESA IN CAMPO» è accorciato in «DISCESA IN CAMPO», così `validate:content` torna verde.
+Verifiche sull'audio: WebKit passa `check-audio-runtime`, come Chromium. `check-future` passa la lotta del Futuro Anteriore. Le misure a tocchi restano da fare: `measure-performance` non certifica il riverbero sul thread audio, e il budget a 60 fps resta rosso per l'ambiente, non per il gioco.
+Crediti: 4,5 per i tre fondali, saldo 244,72.
+CONTROLLO UMANO RICHIESTO, invariato: ascolto dei cue e dei due brani (file consegnati nel round precedente), e una lotta nei luoghi nuovi.

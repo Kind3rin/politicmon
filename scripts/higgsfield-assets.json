@@ -1120,6 +1120,72 @@
           }
         ]
       }
+    },
+    {
+      "id": "battle-offshore",
+      "jobId": "c5ac44b3-8ce5-494b-9f76-b78a01f3dda9",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_201729_c5ac44b3-8ce5-494b-9f76-b78a01f3dda9.png",
+      "path": "public/sprites/ui/battle/offshore.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple colour areas, extremely sparse texture; it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a sunny offshore tax island: turquoise sea with a wooden jetty on the left, a white villa with a terracotta roof and palm trees on the right, a small bank building with a tall flag, a sea horizon with a sailboat far away.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-bruxelles",
+      "jobId": "179a3477-4112-4a9b-9330-aa8f1db0386a",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_201729_179a3477-4112-4a9b-9330-aa8f1db0386a.png",
+      "path": "public/sprites/ui/battle/bruxelles.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple colour areas, extremely sparse texture; it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a grey-stone European capital boulevard: cream Art Nouveau facades with wrought-iron balconies on both sides receding into the distance, a row of blue flags with a circle of small gold stars on tall poles, a tram rail in the grey cobbled foreground, soft overcast sky.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
+    },
+    {
+      "id": "battle-campo",
+      "jobId": "a5f11600-3f21-4804-9d5c-8f5c99a07639",
+      "sourceUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3F5PWD9lN3VEp30FKpoRRDwvGwG/hf_20261008_201730_a5f11600-3f21-4804-9d5c-8f5c99a07639.png",
+      "path": "public/sprites/ui/battle/campo.png",
+      "params": {
+        "model": "gpt_image_2_5",
+        "quality": "high",
+        "resolution": "1k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "folder_id": "19ab20ff-4be3-48fc-87ab-8238d88f80fc",
+        "prompt": "Production background ONLY for POLITICMON, an Italian political satire handheld monster RPG. Strict authentic 1990s 16-bit pixel art, deliberately low pixel count as if drawn on a 240 by 136 pixel canvas and enlarged nearest-neighbor. Uniform square pixel grid, crisp edges, no gradients, no blur, no painted details, limited cohesive 28-color palette, warm cream, midnight navy, antique gold and muted burgundy accents. Wide 16:9 horizontal view for a turn-based battle, straight-on view at waist height. Background landmarks occupy only the upper 40 percent, distant, with their base at 40 percent image height. Lower 60 percent is quiet open flat ground, large simple colour areas, extremely sparse texture; it MUST be empty for game characters and UI. Reserve clear areas for a foe at x=68%,y=32% and hero at x=23%,y=65%. No people, no creatures, no silhouettes, no letters, no logos, no readable text, no interface, no drawn battle platforms. SCENE: a broad political coalition field: a wide green pitch with white lines seen in perspective, a low row of stands at the far edge, a row of party pennants and two tall flag poles, a sunny sky with a few clouds.",
+        "medias": [
+          {
+            "role": "image_references",
+            "note": "piazza.png"
+          }
+        ]
+      }
     }
   ],
   "m2StyleReference": {

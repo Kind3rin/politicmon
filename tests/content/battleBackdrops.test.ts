@@ -12,7 +12,7 @@ test("gli incontri mantengono l'ambiente della mappa, inclusi interni e postgame
     "bar-borgo": "bar", home: "casa", market1: "mercato", casino: "casino", lab: "laboratorio", bunker: "bunker",
     regia: "studio", commissione: "ufficio",
     palazzo: "palazzo", colle: "palazzo",
-    stretto: "costa", offshore: "costa", "bar-stretto": "costa",
+    stretto: "costa", offshore: "offshore", "bar-stretto": "costa", bruxelles: "bruxelles", campo_largo: "campo",
     futuro_sede: "rete", district_isole: "costa", palazzo_feed: "rete",
     palazzo_talkshow: "studio", palazzo_feed_terrazza: "piazza"
   };
@@ -38,8 +38,8 @@ test("gli sfondi hanno chiavi distinte, PNG nativi e un peso adatto all'offline 
     assert.equal(png.readUInt32BE(20), 136, id);
     generatedBytes += png.length;
   }
-  // Nove interni a 16 KB l'uno portano il set a 344 KB: il limite cresce di proposito, non per tollerare un errore.
-  assert.ok(generatedBytes < 360_000, `${generatedBytes} byte di nuovi sfondi`);
+  // Dodici fondali nuovi a 16-17 KB l'uno portano il set a circa 395 KB: il limite cresce di proposito, non per tollerare un errore.
+  assert.ok(generatedBytes < 420_000, `${generatedBytes} byte di nuovi sfondi`);
 });
 
 
